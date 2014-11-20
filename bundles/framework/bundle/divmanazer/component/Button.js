@@ -36,7 +36,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
 
         getTitle: function () {
             'use strict';
-            return this._element.value;
+            return this.getValue();
         },
 
         /**
@@ -45,7 +45,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
          */
         setTitle: function (title) {
             'use strict';
-            this._element.value = title;
+            this.setValue(title);
         },
 
         getTooltip: function () {
@@ -78,7 +78,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
             if (this._element) {
                 this._element.id = pId;
             } else {
-                console.warn("No UI");
+                Oskari.getSandbox().printWarn("Oskari.userinterface.component.Button.setId: No UI");
             }
         },        
         /**

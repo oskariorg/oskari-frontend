@@ -36,7 +36,8 @@ define([
                 'click .admin-remove-layer': 'removeLayer',
                 'click .admin-remove-sublayer': 'removeLayer',
                 'click .show-edit-layer': 'clickLayerSettings',
-                'click .fetch-wms-button': 'fetchCapabilities',
+                'click .fetch-ws-button': 'fetchCapabilities',
+                // for wfs params editing - phase 3 'click .fetch-wfs-button': 'fetchWfsLayerConfiguration',
                 'click .icon-close': 'clearInput',
                 'change .admin-layer-type': 'createLayerSelect',
                 'click .admin-add-group-ok': 'saveCollectionLayer',
@@ -365,7 +366,8 @@ define([
                     form = element.parents('.admin-add-layer'),
                     data = {},
                     wmsVersion = form.find('#add-layer-interface-version').val(),
-                    createLayer;
+                    createLayer,
+                    admin;
 
                 if (lcId === null || lcId === undefined || !lcId.length) {
                     lcId = me.options.groupId;
@@ -397,6 +399,9 @@ define([
 
                 data.layerName = form.find('#add-layer-layerName').val();
                 data.layerUrl = form.find('#add-layer-url').val();
+                if (typeof data.layerUrl === "undefined") {
+                    data.layerUrl = form.find('#add-layer-interface').val();
+                }
                 if (data.layerUrl !== me.model.getInterfaceUrl() ||
                     data.layerName !== me.model.getLayerName()) {
                     var confirmMsg = me.instance.getLocalization('admin').confirmResourceKeyChange;
@@ -427,10 +432,21 @@ define([
                     data.matrixSetId = form.find('#add-layer-matrixSetId').val();
                     data.matrixSet = form.find('#add-layer-matrixSet').val();
                 }
+                else if(data.layerType === 'wfslayer') {
+                    admin = me.model.getAdmin();
+                    // in insert all wfs properties are behind passthrough
+                    if ((admin)&&(admin.passthrough)) {
+                        _.forEach(admin.passthrough, function (value, key) {
+                            data[key] = form.find("#add-layer-passthrough-"+key).val();
+                        })
+                    }
+                }
                 data.gfiContent = form.find('#add-layer-gfi-content').val();
 
                 data.realtime = form.find('#add-layer-realtime').is(':checked');
                 data.refreshRate = form.find('#add-layer-refreshrate').val();
+
+                data.srs_name = form.find('#add-layer-srs_name').val();
 
                 data.username = form.find('#add-layer-username').val();
                 data.password = form.find('#add-layer-password').val();
@@ -647,11 +663,19 @@ define([
                 e.stopPropagation();
 
                 var serviceURL = form.find('#add-layer-interface').val(),
-                    layerType = form.find('#add-layer-layertype').val();
+                    layerType = form.find('#add-layer-layertype').val(),
+                    user = form.find('#add-layer-username').val(),
+                    pw =  form.find('#add-layer-password').val();
 
                 me.model.set({
                     '_layerUrls': [serviceURL]
                 }, {
+                    silent: true
+                });
+                me.model.set({_admin:{
+                    username: user,
+                    password: pw
+                }}, {
                     silent: true
                 });
 
@@ -659,7 +683,9 @@ define([
                     type: 'POST',
                     data: {
                         url: serviceURL,
-                        type : layerType
+                        type : layerType,
+                        user: user,
+                        pw: pw
                     },
                     url: baseUrl + 'action_route=GetWSCapabilities',
                     success: function (resp) {
@@ -673,8 +699,46 @@ define([
                 });
             },
             /**
+             * Fetch WFS layer configuration. AJAX call to get configuration for given wfs layer id
+             * Only for wfslayer-type
+             * TODO: add this to button click for wfs spesific editing popup
+             *
+             * @method fetchWfsLayerConfiguration
+             */
+            fetchWfsLayerConfiguration: function (e) {
+                var me = this,
+                    //element = jQuery(e.currentTarget),
+                    //form = element.parents('.add-wfs-layer-wrapper'),
+                    baseUrl = me.options.instance.getSandbox().getAjaxUrl();
+
+               // e.stopPropagation();
+
+              /*  var serviceURL = form.find('#add-layer-interface').val(),
+                    layerType = form.find('#add-layer-layertype').val(),
+                    user = form.find('#add-layer-username').val(),
+                    pw =  form.find('#add-layer-password').val();  */
+
+
+                jQuery.ajax({
+                    type: 'POST',
+                    data: {
+                        id: me.model.getId(),
+                        redis : 'no'
+                    },
+                    url: baseUrl + 'action_route=GetWFSLayerConfiguration',
+                    success: function (resp) {
+                        me.model.setWfsConfigurationResponse(resp);
+                    },
+                    error: function (jqXHR, textStatus) {
+                        if (jqXHR.status !== 0) {
+                            alert(me.instance.getLocalization('admin').metadataReadFailure);
+                        }
+                    }
+                });
+            },
+            /**
              * Acts on capabilities response based on layer type
-             * @param  {String} layerType 'wmslayer'/'wmtslayer'
+             * @param  {String} layerType 'wmslayer'/'wmtslayer'/'wfslayer'
              * @param  {String} response  GetWSCapabilities response
              */
             __capabilitiesResponseHandler : function(layerType, response) {
@@ -688,6 +752,8 @@ define([
                     me.model.setOriginalMatrixSetData(caps);
                     me.model.setCapabilitiesResponse(response);
                     //me.model.change();
+                } else if(layerType === 'wfslayer') {
+                    me.model.setCapabilitiesResponse(response);
                 }
             },
             handleCapabilitiesSelection: function (e) {

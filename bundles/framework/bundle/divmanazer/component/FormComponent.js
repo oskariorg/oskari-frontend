@@ -29,16 +29,11 @@ Oskari.clazz.define('Oskari.userinterface.component.FormComponent',
             'use strict';
             this._destroyImpl(cleanup);
             if (!cleanup) {
-                console.log('Real destroy');
                 if (this.getHandler()) {
                     this.getHandler()(undefined);
                 }
-                if (this._element) {
-                    console.log('Has element');
-                    if (this._element.parentNode) {
-                        console.log('Has element parent, removing element');
-                        this._element.parentNode.removeChild(this._element);
-                    }
+                if (this._element && this._element.parentNode) {
+                    this._element.parentNode.removeChild(this._element);
                 }
             }
         },
@@ -198,7 +193,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FormComponent',
          */
         setTitle: function (title) {
             'use strict';
-            debugger;
             throw new Error(
                 this.getClazz() + '.setTitle is unimplemented subclass'
             );

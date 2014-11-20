@@ -131,6 +131,11 @@ Oskari.registerLocalization(
                         "label": "Muutoksen laskenta",
                         "classForPreview": "difference",
                         "tooltip": ""
+                    }, {
+                        "id": "oskari_analyse_spatial_join",
+                        "label": "Ominaisuustietojen yhdistäminen",
+                        "classForPreview": "spatial_join",
+                        "tooltip": ""
                     }]
             },
             "aggregate": {
@@ -204,8 +209,8 @@ Oskari.registerLocalization(
                 "area_count": "Vyöhykkeiden lukumäärä",
                 "area_count_tooltip": "Anna vyöhykkeiden lukumäärä.",
                 "area_size": "Vyöhykkeiden koko",
-                "sector_count": "Sektoreiden lukumäärä",
                 "area_size_tooltip": "Anna vyöhykkeiden koko.",
+                "sector_count": "Sektoreiden lukumäärä",
                 "sector_count_tooltip": "Anna sektoreiden lukumäärä."
             },
             "difference": {

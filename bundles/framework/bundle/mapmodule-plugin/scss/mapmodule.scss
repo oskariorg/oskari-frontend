@@ -53,7 +53,7 @@ div.mapplugins {
                 }
 
                 &.logoplugin {
-                    margin-top: $pluginMargin;
+                    margin-top: $pluginMargin * 2;
                 }
 
                 &.scalebar {
@@ -188,18 +188,11 @@ div.mapplugins {
             .mapplugin {
             
                 &.indexmap {
-                    margin-left: 20px;
-                    margin-right: $pluginMargin * -1;
+                    margin-left: $pluginMargin * 2;
                 }
                 
                 &.logoplugin {
                     clear: both;
-                    margin-right: $pluginMargin * -1;
-                }
-                
-                &.indexmap, &.logoplugin, &.scalebar {
-                    float: right;
-                    display: inline-block;
                 }
                 
             }
@@ -212,17 +205,10 @@ div.mapplugins {
             
                 &.indexmap {
                     margin-right: $pluginMargin * 2;
-                    margin-left: $pluginMargin * -1;
                 }
                 
                 &.logoplugin {
                     clear: both;
-                    margin-left: $pluginMargin * -1;
-                }
-                
-                &.indexmap, &.logoplugin, &.scalebar {
-                    float: left;
-                    display: inline-block;
                 }
                 
             }

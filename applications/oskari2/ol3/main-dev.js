@@ -33,7 +33,7 @@ require(["mainConfig"], function() {
                 sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoRequest', [lon, lat, px.x, px.y]);
             }
 
-            var config = "json!applications/oskari2/ol3/minifierAppSetup.json";
+            var config = "json!applications/oskari2/ol3/appsetupconfig.json";
             if (window.ajaxUrl) {
                 // populate url with possible control parameters
                 var getAppSetupParams = "";
@@ -44,7 +44,7 @@ require(["mainConfig"], function() {
                     }
                 }
 
-                config = "json!" + window.ajaxUrl + "action_route=GetAppSetup" + getAppSetupParams;
+                //config = "json!" + window.ajaxUrl + "action_route=GetAppSetup" + getAppSetupParams;
             }
 
             /* loading configuration */

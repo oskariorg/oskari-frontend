@@ -86,9 +86,14 @@ function(instance) {
     _addLayersToService: function(layers, cb) {
         var me = this;
         _.each(layers, function(layerJson) {
-            me.addLayerToService(layerJson);
+            me.addLayerToService(layerJson, true);
         });
         if (_.isFunction(cb)) cb();
+        if (layers && layers.length > 0) {
+            var event = me.sandbox.getEventBuilder('MapLayerEvent')(null, 'add'); // to-do: check if null is valid parameter here
+            me.sandbox.notifyAll(event); // add user layers programmatically since normal link processing
+        }
+
     },
     /**
      * Adds one layer to the map layer service
@@ -96,15 +101,16 @@ function(instance) {
      * 
      * @method addLayerToService
      * @param {JSON} layerJson
+     * @param {Boolean} skip add maplayer even in map-layer-service
      * @param {Function} cb (optional)
      */
-    addLayerToService: function(layerJson, cb) {
+    addLayerToService: function(layerJson, skipEvent, cb) {
         var mapLayerService = this.sandbox
                 .getService('Oskari.mapframework.service.MapLayerService'),
             // Create the layer model
             mapLayer = mapLayerService.createMapLayer(layerJson);
         // Add the layer to the map layer service
-        mapLayerService.addLayer(mapLayer);
+        mapLayerService.addLayer(mapLayer, skipEvent);
         if (_.isFunction(cb)) cb(mapLayer);
 
         return mapLayer;

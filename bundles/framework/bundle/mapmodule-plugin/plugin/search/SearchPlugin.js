@@ -4,360 +4,211 @@
  * Uses same backend as search bundle:
  * http://www.oskari.org/trac/wiki/DocumentationBundleSearchBackend
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
+Oskari.clazz.define(
+    'Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
     /**
      * @method create called automatically on construction
      * @static
      * @param {Object} config
      *     JSON config with params needed to run the plugin
      */
-    function (config) {
+    function(config) {
         var me = this;
-        me.mapModule = null;
-        me.pluginName = null;
-        me._sandbox = null;
-        me._map = null;
-        me.conf = config;
-        me.element = null;
-        me.loc = null;
+        me._clazz =
+            'Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin';
+        me._defaultLocation = 'top left';
+        me._index = 1;
+        me._name = 'SearchPlugin';
     }, {
 
-        /** @static @property __name plugin name */
-        __name: 'SearchPlugin',
-
-        getClazz: function () {
-            return 'Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin';
-        },
-
         /**
-         * @method getName
-         * @return {String} plugin name
-         */
-        getName: function () {
-            return this.pluginName;
-        },
-
-        /**
-         * @method getMapModule
-         * @return {Oskari.mapframework.ui.module.common.MapModule} reference to map
-         * module
-         */
-        getMapModule: function () {
-            return this.mapModule;
-        },
-
-        /**
-         * @method setMapModule
-         * @param {Oskari.mapframework.ui.module.common.MapModule} reference to map
-         * module
-         */
-        setMapModule: function (mapModule) {
-            this.mapModule = mapModule;
-            if (mapModule) {
-                this.pluginName = mapModule.getName() + this.__name;
-            }
-        },
-
-        getElement: function () {
-            return this.element;
-        },
-        
-        /**
-         * @method hasUI
-         * This plugin has an UI so always returns true
-         * @return {Boolean} true
-         */
-        hasUI: function () {
-            return true;
-        },
-
-        /**
-         * @method init
+         * @private @method _initImpl
          * Interface method for the module protocol.
          * Initializes ui templates and search service.
          *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
+         *
          */
-        init: function (sandbox) {
+        _initImpl: function() {
             var me = this,
-                pluginLoc = me.getMapModule().getLocalization('plugin', true),
                 ajaxUrl = null;
-            me.loc = pluginLoc[me.__name];
 
             me.template = jQuery(
-                '<div class="mapplugin search default-search-div" data-clazz="Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin">' +
-                    '<div class="search-textarea-and-button">' +
-                    '<input placeholder="' + me.loc.placeholder + '" type="text" />' +
-                    '<input type="button" value="' + me.loc.search + '" name="search" />' +
-                    '</div>' +
-                    '<div class="results">' +
-                    '<div class="header">' +
-                    '<div class="close icon-close" title="' + me.loc.close + '"></div>' +
-                    '</div>' +
-                    '<div class="content">&nbsp;</div>' +
-                    '</div>' +
-                    '</div>'
+                '<div class="mapplugin search default-search-div">' +
+                '  <div class="search-textarea-and-button">' +
+                '    <input placeholder="' + me._loc.placeholder + '" type="text" />' +
+                '    <input type="button" value="' + me._loc.search + '" name="search" />' +
+                '  </div>' +
+                '  <div class="results">' +
+                '    <div class="header">' +
+                '      <div class="close icon-close" title="' + me._loc.close + '"></div>' +
+                '    </div>' +
+                '    <div class="content">&nbsp;</div>' +
+                '  </div>' +
+                '</div>'
             );
 
+            // FIXME
+            // - use only this template
+            // - add header to results
+            // - hide header when styled
+            // - search-right is effectively the search button?
             me.styledTemplate = jQuery(
-                '<div class="mapplugin search published-search-div" data-clazz="Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin">' +
-                    '<div class="search-area-div search-textarea-and-button">' +
-                    '<div class="search-left"></div>' +
-                    '<div class="search-middle">' +
-                    '<input class="search-input" placeholder="' + me.loc.placeholder + '" type="text" />' +
-                    '<div class="close-results icon-close" title="' + me.loc.close + '"></div>' +
-                    '</div>' +
-                    '<div class="search-right"></div>' +
-                    '</div>' +
-                    '<div class="results published-search-results">' +
-                    '<div class="content published-search-content"></div>' +
-                    '</div>' +
-                    '</div>'
+                '<div class="mapplugin search published-search-div">' +
+                '  <div class="search-area-div search-textarea-and-button">' +
+                '    <div class="search-left"></div>' +
+                '    <div class="search-middle">' +
+                '      <input class="search-input" placeholder="' + me._loc.placeholder + '" type="text" />' +
+                '      <div class="close-results icon-close" title="' + me._loc.close + '"></div>' +
+                '    </div>' +
+                '    <div class="search-right"></div>' +
+                '  </div>' +
+                '  <div class="results published-search-results">' +
+                '    <div class="content published-search-content"></div>' +
+                '  </div>' +
+                '</div>'
             );
 
-            me.templateResultsTable = jQuery('<table class="search-results"><thead><tr>' +
-                '<th>' + me.loc.column_name + '</th>' + '<th>' + me.loc.column_village + '</th>' + '<th>' + me.loc.column_type +
-                '</th>' + '</tr></thead><tbody></tbody></table>');
+            me.templateResultsTable = jQuery(
+                '<table class="search-results">' +
+                '  <thead>' +
+                '    <tr>' +
+                '      <th>' + me._loc.column_name + '</th>' +
+                '      <th>' + me._loc.column_village + '</th>' +
+                '      <th>' + me._loc.column_type + '</th>' +
+                '    </tr>' +
+                '  </thead>' +
+                '  <tbody></tbody>' +
+                '</table>'
+            );
 
-            me.templateResultsRow = jQuery('<tr><td><a href="JavaScript:void(0);""></a></td><td></td><td></td></tr>');
-
-            if (me.conf && me.conf.url) {
-                ajaxUrl = me.conf.url;
+            me.templateResultsRow = jQuery(
+                '<tr>' +
+                '  <td><a href="JavaScript:void(0);""></a></td>' +
+                '  <td></td>' +
+                '  <td></td>' +
+                '</tr>'
+            );
+            var conf = me.getConfig();
+            if (conf && conf.url) {
+                ajaxUrl = conf.url;
             } else {
-                ajaxUrl = sandbox.getAjaxUrl() + 'action_route=GetSearchResult';
+                ajaxUrl = me.getSandbox().getAjaxUrl() + 'action_route=GetSearchResult';
             }
 
-            me.service = Oskari.clazz.create('Oskari.mapframework.bundle.search.service.SearchService', ajaxUrl);
+            me.service = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.search.service.SearchService',
+                ajaxUrl
+            );
         },
 
-        /**
-         * @method register
-         * Interface method for the plugin protocol
-         */
-        register: function () {
-
-        },
-
-        /**
-         * @method unregister
-         * Interface method for the plugin protocol
-         */
-        unregister: function () {
-
-        },
-
-        /**
-         * @method startPlugin
-         * Interface method for the plugin protocol.
-         * Adds the plugin UI on the map.
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        startPlugin: function (sandbox) {
-            var me = this,
-                p;
-            me._sandbox = sandbox || me.getMapModule().getSandbox();
-            me._map = me.getMapModule().getMap();
-
-            me._sandbox.register(me);
-            for (p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
-                    me._sandbox.registerForEventByName(me, p);
-                }
-            }
-            me._createUI();
-        },
-
-        /**
-         * @method stopPlugin
-         * Interface method for the plugin protocol
-         * Removes the plugin UI from the map.
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        stopPlugin: function (sandbox) {
-            var me = this,
-                p;
-
-            me.element.remove();
-            me.element = null;
-            for (p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
-                    me._sandbox.unregisterFromEventByName(me, p);
-                }
-            }
-
-            me._sandbox.unregister(me);
-            me._map = null;
-            me._sandbox = null;
-        },
-
-        /**
-         * @method start
-         * Interface method for the module protocol
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        start: function (sandbox) {},
-
-        /**
-         * @method stop
-         * Interface method for the module protocol
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        stop: function (sandbox) {},
-
-        /**
-         * @property {Object} eventHandlers
-         * @static
-         */
-        eventHandlers: {
-            LayerToolsEditModeEvent: function (event) {
-                this._setLayerToolsEditMode(event.isInMode());
-            }
-        },
-
-        _setLayerToolsEditMode: function (isInEditMode) {
+        _setLayerToolsEditModeImpl: function() {
             var me = this,
                 overlay;
-            if (me.isInLayerToolsEditMode === isInEditMode) {
-                return;
-            }
-            me.isInLayerToolsEditMode = isInEditMode;
-            if (me.isInLayerToolsEditMode) {
+
+            if (me.inLayerToolsEditMode()) {
                 me._inputField.prop('disabled', true);
                 me._searchButton.prop('disabled', true);
 
                 overlay = jQuery('<div class="search-editmode-overlay">');
-                me.element.find('.search-textarea-and-button')
+                me.getElement().find('.search-textarea-and-button')
                     .css({
                         'position': 'relative'
                     })
                     .append(overlay);
-                overlay.mousedown(function (e) {
+                overlay.mousedown(function(e) {
                     e.preventDefault();
                 });
 
             } else {
                 me._inputField.prop('disabled', false);
                 me._searchButton.prop('disabled', false);
-                me.element.find('.search-editmode-overlay').remove();
+                me.getElement().find('.search-editmode-overlay').remove();
             }
         },
 
         /**
-         * @method onEvent
-         * Event is handled forwarded to correct #eventHandlers if found or discarded
-         * if not.
-         * @param {Oskari.mapframework.event.Event} event a Oskari event object
-         */
-        onEvent: function (event) {
-            return this.eventHandlers[event.getName()].apply(this, [event]);
-        },
-
-        /**
-         * Sets the location of the search.
-         *
-         * @method setLocation
-         * @param {String} location The new location
-         */
-        setLocation: function (location) {
-            var me = this;
-            if (!me.conf) {
-                me.conf = {};
-            }
-            if (!me.conf.location) {
-                me.conf.location = {};
-            }
-            me.conf.location.classes = location;
-
-            if (me.element) {
-                me.getMapModule().setMapControlPlugin(me.element, location, 1);
-            }
-        },
-
-        /**
-         * @method _createUI
-         * @private
+         * @private @method _createControlElement
          * Creates UI for search functionality and places it on the maps
          * div where this plugin registered.
+         *
+         *
          */
-        _createUI: function () {
+        _createControlElement: function() {
             var me = this,
-                content;
+                conf = me.getConfig(),
+                el;
 
-            if (me.conf && me.conf.toolStyle) {
-                content = me.styledTemplate.clone();
-                me.element = content;
-                me._inputField = content.find('input[type=text]');
-                me._searchButton = content.find('input[type=button]');
-                me.changeToolStyle(me.conf.toolStyle, content);
+            if (conf && conf.toolStyle) {
+                el = me.styledTemplate.clone();
+                me._inputField = el.find('input[type=text]');
+                me._searchButton = el.find('input[type=button]');
+                me.changeToolStyle(conf.toolStyle, el);
             } else {
-                content = me.template.clone();
-                me.element = content;
-                me._inputField = content.find('input[type=text]');
-                me._searchButton = content.find('input[type=button]');
+                el = me.template.clone();
+                me._inputField = el.find('input[type=text]');
+                me._searchButton = el.find('input[type=button]');
             }
 
             // bind events
-            me._bindUIEvents();
-
+            me._bindUIEvents(el);
+            return el;
         },
 
-        _bindUIEvents: function () {
+        _bindUIEvents: function(el) {
             var me = this,
                 reqBuilder,
-                sandbox = me._sandbox,
-                content = this.element,
-                containerClasses = 'top left',
-                position = 1;
-            // to text box
-            me._inputField.focus(function () {
-                reqBuilder = sandbox.getRequestBuilder('DisableMapKeyboardMovementRequest');
+                sandbox = me.getSandbox(),
+                content = el || me.getElement();
+            
+            // Toggle map keyboard controls so the user can use arrowkeys in the search...
+            me._inputField.focus(function() {
+                reqBuilder = sandbox.getRequestBuilder(
+                    'DisableMapKeyboardMovementRequest'
+                );
                 if (reqBuilder) {
                     sandbox.request(me.getName(), reqBuilder());
                 }
                 //me._checkForKeywordClear();
             });
-            me._inputField.blur(function () {
-                reqBuilder = sandbox.getRequestBuilder('EnableMapKeyboardMovementRequest');
+            me._inputField.blur(function() {
+                reqBuilder = sandbox.getRequestBuilder(
+                    'EnableMapKeyboardMovementRequest'
+                );
                 if (reqBuilder) {
                     sandbox.request(me.getName(), reqBuilder());
                 }
                 //me._checkForKeywordInsert();
             });
 
-            me._inputField.keypress(function (event) {
+            me._inputField.keypress(function(event) {
                 if (!me.isInLayerToolsEditMode) {
                     me._checkForEnter(event);
                 }
             });
+
+            // FIXME these are the same thing now...
             // to search button
-            me._searchButton.click(function (event) {
+            me._searchButton.click(function(event) {
                 if (!me.isInLayerToolsEditMode) {
                     me._doSearch();
                 }
             });
-            content.find('div.search-right').click(function (event) {
+            content.find('div.search-right').click(function(event) {
                 if (!me.isInLayerToolsEditMode) {
                     me._doSearch();
                 }
             });
+
+
             // to close button
-            content.find('div.close').click(function (event) {
+            content.find('div.close').click(function(event) {
                 if (!me.isInLayerToolsEditMode) {
                     me._hideSearch();
                     me._inputField.val('');
                     // TODO: this should also unbind the TR tag click listeners?
                 }
             });
-            content.find('div.close-results').click(function (event) {
+            content.find('div.close-results').click(function(event) {
                 if (!me.isInLayerToolsEditMode) {
                     me._hideSearch();
                     me._inputField.val('');
@@ -365,27 +216,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             });
             content.find('div.results').hide();
 
-            if (me.conf && me.conf.location) {
-                containerClasses = me.conf.location.classes || containerClasses;
-                position = me.conf.location.position || position;
-            }
-            //parentContainer.append(me.element);
-            me.getMapModule().setMapControlPlugin(content, containerClasses, position);
-
-            if (me.conf && me.conf.font) {
-                me.changeFont(me.conf.font, content);
-            }
             if (me.conf && me.conf.toolStyle) {
                 // Hide the results if esc was pressed or if the field is empty.
-                me._inputField.keyup(function (e) {
+                me._inputField.keyup(function(e) {
                     if (e.keyCode === 27 || (e.keyCode === 8 && !jQuery(this).val())) {
                         me._hideSearch();
                     }
                 });
             }
-            // in case we are already in edit mode when plugin is drawn
-            me._setLayerToolsEditMode(me.getMapModule().isInLayerToolsEditMode());
         },
+
+        refresh: function () {
+            var me = this,
+                conf = me.getConfig(),
+                el = me.getElement();
+
+            if (conf && conf.font) {
+                me.changeFont(conf.font, el);
+            }
+        }, 
 
         /**
          * @method _checkForEnter
@@ -394,7 +243,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
          *      keypress event object from browser
          * Detects if <enter> key was pressed and calls #_doSearch if it was
          */
-        _checkForEnter: function (event) {
+        _checkForEnter: function(event) {
             var keycode;
             if (window.event) {
                 keycode = window.event.keyCode;
@@ -408,11 +257,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
         },
 
         /**
-         * @method _doSearch
-         * @private
+         * @private @method _doSearch
          * Uses SearchService to make the actual search and calls  #_showResults
+         *
+         *
          */
-        _doSearch: function () {
+        _doSearch: function() {
             if (this._searchInProgess) {
                 return;
             }
@@ -420,36 +270,40 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             var me = this;
             me._hideSearch();
             me._searchInProgess = true;
-            var inputField = me.element.find('input[type=text]');
+            var inputField = me.getElement().find('input[type=text]');
             inputField.addClass('search-loading');
             var searchText = inputField.val(),
-                searchCallback = function (msg) {
+                searchCallback = function(msg) {
                     me._showResults(msg);
                     me._enableSearch();
                 },
-                onErrorCallback = function () {
+                onErrorCallback = function() {
                     me._enableSearch();
                 };
             me.service.doSearch(searchText, searchCallback, onErrorCallback);
         },
 
 
-        _setMarker: function (result) {
+        _setMarker: function(result) {
             var me = this,
                 reqBuilder,
-                sandbox = me._sandbox,
+                sandbox = me.getSandbox(),
                 lat = typeof result.lat !== 'number' ? parseFloat(result.lat) : result.lat,
                 lon = typeof result.lon !== 'number' ? parseFloat(result.lon) : result.lon;
 
             // Remove old markers
-            reqBuilder = sandbox.getRequestBuilder('MapModulePlugin.RemoveMarkersRequest');
+            reqBuilder = sandbox.getRequestBuilder(
+                'MapModulePlugin.RemoveMarkersRequest'
+            );
             if (reqBuilder) {
                 sandbox.request(me.getName(), reqBuilder());
             }
             // Add new marker
-            reqBuilder = sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
+            reqBuilder = sandbox.getRequestBuilder(
+                'MapModulePlugin.AddMarkerRequest'
+            );
             if (reqBuilder) {
-                me._sandbox.request(
+                sandbox.request(
                     me.getName(),
                     reqBuilder({
                         color: 'ffde00',
@@ -464,8 +318,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
         },
 
         /**
-         * @method _showResults
-         * @private
+         * @private @method _showResults
+         *
          * Renders the results of the search or shows an error message if nothing was found.
          * Coordinates and zoom level of the searchresult item is written in data-href
          * attribute in the tr tag of search result HTML table. Also binds click listeners to <tr> tags.
@@ -474,11 +328,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
          * @param {Object} msg
          *          Result JSON returned by search functionality
          */
-        _showResults: function (msg) {
+        _showResults: function(msg) {
             // check if there is a problem with search string
             var errorMsg = msg.error,
                 me = this,
-                resultsContainer = me.element.find('div.results'),
+                resultsContainer = me.getElement().find('div.results'),
                 header = resultsContainer.find('div.header'),
                 content = resultsContainer.find('div.content');
 
@@ -497,7 +351,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             me.results = msg.locations;
 
             if (totalCount === 0) {
-                content.html(this.loc.noresults);
+                content.html(this._loc.noresults);
                 resultsContainer.show();
             } else if (totalCount === 1) {
                 // only one result, show it immediately
@@ -505,7 +359,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
                 lat = msg.locations[0].lat;
                 zoom = msg.locations[0].zoomLevel;
 
-                me._sandbox.request(me.getName(), me._sandbox.getRequestBuilder('MapMoveRequest')(lon, lat, zoom, false));
+                me.getSandbox().request(
+                    me.getName(),
+                    me.getSandbox().getRequestBuilder(
+                        'MapMoveRequest'
+                    )(lon, lat, zoom, false)
+                );
                 me._setMarker(msg.locations[0]);
             } else {
 
@@ -513,14 +372,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
                 var table = me.templateResultsTable.clone(),
                     tableBody = table.find('tbody'),
                     i,
-                    clickFunction = function () {
-                        me._resultClicked(me.results[parseInt(jQuery(this).attr('data-location'), 10)]);
+                    clickFunction = function() {
+                        me._resultClicked(
+                            me.results[parseInt(
+                                jQuery(this).attr('data-location'),
+                                10
+                            )]
+                        );
                         return false;
                     };
 
                 for (i = 0; i < totalCount; i += 1) {
                     if (i >= 100) {
-                        tableBody.append('<tr><td class="search-result-too-many" colspan="3">' + me.loc.toomanyresults + '</td></tr>');
+                        tableBody.append(
+                            '<tr>' +
+                            '  <td class="search-result-too-many" colspan="3">' + me._loc.toomanyresults + '</td>' +
+                            '</tr>'
+                        );
                         break;
                     }
                     lon = msg.locations[i].lon;
@@ -557,25 +425,36 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
                 resultsContainer.show();
 
                 // Change the font of the rendered table as well
-                if (me.conf && me.conf.font) {
-                    me.changeFont(me.conf.font, content);
-                }
-                if (me.conf && me.conf.toolStyle) {
-                    header.remove();
-                    me.changeResultListStyle(me.conf.toolStyle, resultsContainer);
+                var conf = me.getConfig();
+                if (conf) {
+                    if (conf.font) {
+                        me.changeFont(conf.font, content);
+                    }
+                    if (conf.toolStyle) {
+                        header.remove();
+                        me.changeResultListStyle(
+                            conf.toolStyle,
+                            resultsContainer
+                        );
+                    }
                 }
             }
         },
 
         /**
-         * @method _resultClicked
+         * @private @method _resultClicked
          * Click event handler for search result HTML table rows.
          * Parses paramStr and sends out Oskari.mapframework.request.common.MapMoveRequest
-         * @private
+         *
          * @param {Object} result
          */
-        _resultClicked: function (result) {
-            this._sandbox.request(this.getName(), this._sandbox.getRequestBuilder('MapMoveRequest')(result.lon, result.lat, result.zoomLevel, false));
+        _resultClicked: function(result) {
+            this.getSandbox().request(
+                this.getName(),
+                this.getSandbox().getRequestBuilder(
+                    'MapMoveRequest'
+                )(result.lon, result.lat, result.zoomLevel, false)
+            );
             this._setMarker(result);
         },
 
@@ -584,21 +463,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
          * Resets the 'search in progress' flag and removes the loading icon
          * @private
          */
-        _enableSearch: function () {
+        _enableSearch: function() {
             this._searchInProgess = false;
             jQuery('#search-string').removeClass('search-loading');
         },
 
         /**
-         * @method _hideSearch
-         * @private
+         * @private @method _hideSearch
          * Hides the search result and sends out Oskari.mapframework.request.common.HideMapMarkerRequest
+         *
+         *
          */
-        _hideSearch: function () {
-            this.element.find('div.results').hide();
+        _hideSearch: function() {
+            this.getElement().find('div.results').hide();
             // Send hide marker request
             // This is done just so the user can get rid of the marker somehow...
-            this._sandbox.request(this.getName(), this._sandbox.getRequestBuilder('HideMapMarkerRequest')());
+            this.getSandbox().request(
+                this.getName(),
+                this.getSandbox().getRequestBuilder('HideMapMarkerRequest')()
+            );
         },
 
         /**
@@ -608,12 +491,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
          * @param {Object} style
          * @param {jQuery} div
          */
-        changeToolStyle: function (style, div) {
+        changeToolStyle: function(style, div) {
             var me = this,
                 removedClass,
                 addedClass,
                 template;
-            div = div || me.element;
+
+            div = div || me.getElement();
 
             if (!style || !div) {
                 return;
@@ -622,35 +506,32 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             // Set the correct template for the style... ugly.
             // FIXME use the same HTML for both of these so we don't have to muck about with the DOM
             if (style.val === null) {
-                me.conf.toolStyle = null;
-                div.removeClass('published-search-div').addClass('default-search-div');
+                // hackhack
+                var conf = me.getConfig();
+                conf.toolStyle = null;
+                me._config = conf;
+                div.removeClass('published-search-div').addClass(
+                    'default-search-div'
+                );
                 div.empty();
                 me.template.children().clone().appendTo(div);
                 me._inputField = div.find('input[type=text]');
                 me._searchButton = div.find('input[type=button]');
                 me._bindUIEvents();
-                // Force edit mode so the tool controls are disabled
-                if (me.isInLayerToolsEditMode) {
-                    me.isInLayerToolsEditMode = false;
-                    me._setLayerToolsEditMode(true);
-                }
                 return;
             }
 
             // Remove the old unstyled search box and create a new one.
             if (div.hasClass('default-search-div')) {
                 // hand replace with styled version so we don't destroy this.element
-                div.removeClass('default-search-div').addClass('published-search-div');
+                div.removeClass('default-search-div').addClass(
+                    'published-search-div'
+                );
                 div.empty();
                 me.styledTemplate.children().clone().appendTo(div);
                 me._inputField = div.find('input[type=text]');
                 me._searchButton = div.find('input[type=button]');
                 me._bindUIEvents();
-                // Force edit mode so the tool controls are disabled
-                if (me.isInLayerToolsEditMode) {
-                    me.isInLayerToolsEditMode = false;
-                    me._setLayerToolsEditMode(true);
-                }
             }
 
             var resourcesPath = this.getMapModule().getImageUrl(),
@@ -708,19 +589,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
                 });
             }
 
-            me._setLayerToolsEditMode(me.getMapModule().isInLayerToolsEditMode());
+            me._setLayerToolsEditMode(
+                me.getMapModule().isInLayerToolsEditMode()
+            );
 
         },
 
         /**
+         * @method changeFont
          * Changes the font used by plugin by adding a CSS class to its DOM elements.
          *
-         * @method changeFont
          * @param {String} fontId
          * @param {jQuery} div
+         *
          */
-        changeFont: function (fontId, div) {
-            div = div || this.element;
+        changeFont: function(fontId, div) {
+            div = div || this.getElement();
 
             if (!div || !fontId) {
                 return;
@@ -734,27 +618,35 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             var classToAdd = 'oskari-publisher-font-' + fontId,
                 testRegex = /oskari-publisher-font-/;
 
-            this.getMapModule().changeCssClasses(classToAdd, testRegex, elements);
+            this.getMapModule().changeCssClasses(
+                classToAdd,
+                testRegex,
+                elements
+            );
         },
 
         /**
+         * @method changeResultListStyle
          * Changes the style of the search result list.
          *
-         * @method changeResultListStyle
          * @param  {Object} toolStyle
          * @param  {jQuery} div
+         *
          * @return {undefined}
          */
-        changeResultListStyle: function (toolStyle, div) {
+        changeResultListStyle: function(toolStyle, div) {
             var cssClass = 'oskari-publisher-search-results-' + toolStyle.val,
                 testRegex = /oskari-publisher-search-results-/;
 
             this.getMapModule().changeCssClasses(cssClass, testRegex, [div]);
         }
     }, {
+        'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
         /**
-         * @property {String[]} protocol array of superclasses as {String}
-         * @static
+         * @static @property {string[]} protocol array of superclasses
          */
-        'protocol': ['Oskari.mapframework.module.Module', 'Oskari.mapframework.ui.module.common.mapmodule.Plugin']
+        'protocol': [
+            'Oskari.mapframework.module.Module',
+            'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
+        ]
     });

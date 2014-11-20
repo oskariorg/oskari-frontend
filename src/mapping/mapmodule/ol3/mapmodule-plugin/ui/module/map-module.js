@@ -14,24 +14,24 @@ define(["bundles/framework/bundle/mapmodule-plugin/ui/module/map-module"], funct
          * Creates a dummy base layer and adds it to the map. Nothing to do with Oskari maplayers really.
          * @private
          */
-        _createBaseLayer: function () {
+        _createBaseLayer: function() {
             // do nothing
         },
 
-        _getMapCenter: function () {
+        _getMapCenter: function() {
             return this._map.getView().getCenter();
         },
-        _getMapZoom: function () {
+        _getMapZoom: function() {
             return this._map.getView().getZoom();
         },
-        _getMapLayersByName: function (layerName) {
+        _getMapLayersByName: function(layerName) {
             // FIXME: Cannot detect Marker layer, which is called Overlays in OL3
             return [];
         },
         getProjection: function() {
             return this._projection;
         },
-        getExtent: function () {
+        getExtent: function() {
             return this._extent;
         },
         /**
@@ -42,19 +42,20 @@ define(["bundles/framework/bundle/mapmodule-plugin/ui/module/map-module"], funct
          */
         _createMapImpl: function() {
 
-            var sandbox = this._sandbox;
+            var me = this;
+            var sandbox = me._sandbox;
             // this is done BEFORE enhancement writes the values to map domain
             // object... so we will move the map to correct location
             // by making a MapMoveRequest in application startup
 
-            var maxExtent = this._maxExtent;
-            var extent = this._extent;
+            var maxExtent = me._maxExtent;
+            var extent = me._extent;
 
-            var projection = ol.proj.get(this._projectionCode);
+            var projection = ol.proj.get(me._projectionCode);
             projection.setExtent(extent);
 
             var projectionExtent = projection.getExtent();
-            this._projection = projection;
+            me._projection = projection;
 
             var map = new ol.Map({
                 extent: projectionExtent,
@@ -68,21 +69,19 @@ define(["bundles/framework/bundle/mapmodule-plugin/ui/module/map-module"], funct
 
             });
 
-            var zoomslider = new ol.control.ZoomSlider({
-                map: map
-            });
+            var resolutions = me._options.resolutions;
+
+            var zoomslider = new ol.control.ZoomSlider();
+            map.addControl(zoomslider);
 
             map.setView(new ol.View({
                 projection: projection,
                 center: [383341, 6673843],
                 zoom: 5,
-                resolutions: this._options.resolutions
+                resolutions: resolutions
             }));
 
-            var me = this;
-
             map.on('moveend', function(evt) {
-
                 var map = evt.map;
                 var extent = map.getView().calculateExtent(map.getSize());
                 var center = map.getView().getCenter();
@@ -98,9 +97,9 @@ define(["bundles/framework/bundle/mapmodule-plugin/ui/module/map-module"], funct
 
             });
 
-            this._map = map;
+            me._map = map;
 
-            return this._map;
+            return me._map;
         },
 
         _calculateScalesImpl: function(resolutions) {
@@ -408,9 +407,7 @@ define(["bundles/framework/bundle/mapmodule-plugin/ui/module/map-module"], funct
         },
 
         _removeLayerImpl: function(layerImpl) {
-
             this._map.removeLayer(layerImpl);
-
         },
 
         setLayerIndex: function(layerImpl, index) {
@@ -449,7 +446,6 @@ define(["bundles/framework/bundle/mapmodule-plugin/ui/module/map-module"], funct
                 }
             }
             return -1;
-
         },
 
         _getMapScale: function() {

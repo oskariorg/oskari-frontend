@@ -126,10 +126,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.service.AnalyseService',
                 layerarr = analysislayersJson.analysislayers,
                 i,
                 analyseJson;
+            this.analyseLayers = [];
 
             for (i in layerarr) {
                 if (layerarr.hasOwnProperty(i)) {
                     analyseJson = layerarr[i];
+                    this.analyseLayers.push(analyseJson);
                     // TODO: Handle WPS results when no FeatureCollection eg. aggregate
                     if (analyseJson.wpsLayerId + '' === "-1") {
                         // no analyse layer case  eg. aggregate wps function
@@ -143,12 +145,23 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.service.AnalyseService',
                     }
                 }
             }
+
             if (layerarr && layerarr.length > 0) {
                 // notify components of added layer if not suppressed
                 var evt = sandbox.getEventBuilder('MapLayerEvent')(null, 'add');
                 sandbox.notifyAll(evt); // add the analysis layers programmatically since normal link processing
             }
         },
+
+        _returnAnalysisOfTypeAggregate: function(cb) {
+            this.analyselayers = [];
+            this._getAnalysisLayers(function (response) {
+                this.analyselayers = response.analysislayers;
+                var analysisOfTypeAggregate = _.where(this.analyselayers, {method: "aggregate"});
+                cb(analysisOfTypeAggregate);
+            });
+        },
+
         /**
          * Get WFS layer properties and property types
          *

@@ -72,10 +72,12 @@ define(["bundles/framework/bundle/mapwmts/service/WmtsLayerModelBuilder"], funct
             layers = capabilities.contents.layers;
             for (i = 0, ilen = layers.length; i < ilen; i++) {
                 layers[i].resourceUrls = {}
-                tile = layers[i].resourceUrl.tile.resourceType;
-                url = layers[i].resourceUrl.tile.template;
-                layers[i].resourceUrls[tile] = {};
-                layers[i].resourceUrls[tile][layers[i].resourceUrl.tile.format] = [url];
+                if (layers[i].resourceUrl && layers[i].resourceUrl.tile) {
+                    tile = layers[i].resourceUrl.tile.resourceType;
+                    url = layers[i].resourceUrl.tile.template;
+                    layers[i].resourceUrls[tile] = {};
+                    layers[i].resourceUrls[tile][layers[i].resourceUrl.tile.format] = [url];
+                }
                 delete layers[i]["supportedCRS"];
                 delete layers[i]["resourceUrl"];
             }
@@ -92,14 +94,15 @@ define(["bundles/framework/bundle/mapwmts/service/WmtsLayerModelBuilder"], funct
                 // fixing bounds
                 capabilities.contents.tileMatrixSets[srs].projection = "EPSG:3067";
                 capabilities.contents.tileMatrixSets[srs].supportedCRS = "EPSG:3067";
-                bounds = [
-                    capabilities.contents.tileMatrixSets[srs].bounds.left,
-                    capabilities.contents.tileMatrixSets[srs].bounds.right,
-                    capabilities.contents.tileMatrixSets[srs].bounds.bottom,
-                    capabilities.contents.tileMatrixSets[srs].bounds.top
-                ];
-
-                capabilities.contents.tileMatrixSets[srs].bounds = bounds;
+                if (capabilities.contents.tileMatrixSets[srs].bounds) {
+                    bounds = [
+                        capabilities.contents.tileMatrixSets[srs].bounds.left,
+                        capabilities.contents.tileMatrixSets[srs].bounds.right,
+                        capabilities.contents.tileMatrixSets[srs].bounds.bottom,
+                        capabilities.contents.tileMatrixSets[srs].bounds.top
+                    ];
+                    capabilities.contents.tileMatrixSets[srs].bounds = bounds;
+                }
             }
 
             layer.setWmtsCaps(capabilities);

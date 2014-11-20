@@ -3,7 +3,8 @@
  * Creates the indicator selection ui and the actual grid where the stats data will be displayed.
  * Handles sending the data out to create a visualization which then can be displayed on the map.
  */
-Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin',
+Oskari.clazz.define(
+    'Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin',
     /**
      * @method create called automatically on construction
      * @params {Object} config
@@ -16,30 +17,32 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
      *
      * @static
      */
-
     function (config, locale) {
-        this.mapModule = null;
-        this.pluginName = null;
-        this._sandbox = null;
-        this._map = null;
-        this._layer = null;
-        this._state = null;
-        this.element = undefined;
-        this.statsService = null;
-        this.userIndicatorsService = undefined;
+        var me = this;
+
+        me._clazz =
+            'Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin';
+        me._name = 'ManageStatsPlugin';
+
+        me._locale = locale || {};
+        me._layer = null;
+        me._state = null;
+        me.statsService = null;
+        me.userIndicatorsService = undefined;
         // indicators (meta data)
-        this.indicators = [];
-        this.stateIndicatorsLoaded = false;
+        me.indicators = [];
+        me.stateIndicatorsLoaded = false;
         // object to hold the data for each indicators.
         // Used in case the user changes the region category.
-        this.indicatorsData = {};
+        me.indicatorsData = {};
         // indicators meta for data sources
-        this.indicatorsMeta = {};
-        this.selectedMunicipalities = {};
-        // Array of open popups so we can easily get rid of them when the UI is hidden.
-        // stored as [{'name': 'somePopup', 'popup': popupObject, 'content', contentElement}]
-        this.popups = [];
-        //    this.conf = config || {};
+        me.indicatorsMeta = {};
+        me.selectedMunicipalities = {};
+        // Array of open popups so we can easily get rid of them when the UI is
+        // hidden. Stored as
+        // [{'name': 'puName', 'popup': puObject, 'content', contentElement}]
+        me.popups = [];
+
         var defaults = {
             'statistics': [{
                 'id': 'min',
@@ -64,26 +67,50 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 'visible': true
             }]
         };
-        this.conf = jQuery.extend(true, config, defaults);
-        this._locale = locale || {};
+
+        // FIXME ugly
+        this._config = jQuery.extend(true, this._config, defaults);
         this.templates = {
-            'csvButton': '<button class="statsgrid-csv-button">csv</button>',
-            'statsgridTotalsVar': '<span class="statsgrid-variable"></span>',
-            'subHeader': '<span class="statsgrid-grid-subheader"></span>',
-            'gridHeaderMenu': '<li><input type="checkbox" /><label></label></li>',
-            'groupingHeader': '<span style="color:green"></span>',
-            'toolbarButton': '<button class="statsgrid-select-municipalities"></button>',
-            'filterPopup': '<div class="indicator-filter-popup"><p class="filter-desc"></p><div class="filter-container"></div></div>',
-            'filterRow': '<div class="filter-row"><div class="filter-label"></div><div class="filter-value"></div></div>',
-            'filterSelect': '<div><select class="filter-select"></select><div class="filter-inputs-container"></div></div>',
-            'filterOption': '<option></option>',
-            'filterInputs': '<input type="text" class="filter-input filter-input1" /><span class="filter-between" style="display:none;">-</span><input type="text" class="filter-input filter-input2" style="display:none;" />',
-            'filterLink': '<a href="javascript:void(0);"></a>',
-            'filterByRegion': '<div id="statsgrid-filter-by-region"><p class="filter-desc"></p><div class="filter-container"></div></div>',
-            'regionCatSelect': '<div class="filter-region-category-select"><select></select></div>',
-            'regionSelect': '<div class="filter-region-select"><select class="filter-region-select" multiple tabindex="3"></select></div>',
-            'addOwnIndicator': '<div class="new-indicator-cont"><input type="button"/></div>',
-            'cannotDisplayIndicator': '<p class="cannot-display-indicator"></p>'
+            csvButton: '<button class="statsgrid-csv-button">csv</button>',
+            statsgridTotalsVar: '<span class="statsgrid-variable"></span>',
+            subHeader: '<span class="statsgrid-grid-subheader"></span>',
+            // FIXME put input inside label
+            gridHeaderMenu: '<li>' +
+                '  <input type="checkbox" /><label></label>' +
+                '</li>',
+            groupingHeader: '<span style="color:green"></span>',
+            toolbarButton: '<button class="statsgrid-select-municipalities"></button>',
+            filterPopup: '<div class="indicator-filter-popup">' +
+                '  <p class="filter-desc"></p>' +
+                '  <div class="filter-container"></div>' +
+                '</div>',
+            filterRow: '<div class="filter-row">' +
+                '  <div class="filter-label"></div>' +
+                '  <div class="filter-value"></div>' +
+                '</div>',
+            filterSelect: '<div>' +
+                '  <select class="filter-select"></select>' +
+                '  <div class="filter-inputs-container"></div>' +
+                '</div>',
+            filterOption: '<option></option>',
+            filterInputs: '<input type="text" class="filter-input filter-input1" />' +
+                '<span class="filter-between" style="display:none;">-</span>' +
+                '<input type="text" class="filter-input filter-input2" style="display:none;" />',
+            filterLink: '<a href="javascript:void(0);"></a>',
+            filterByRegion: '<div id="statsgrid-filter-by-region">' +
+                '  <p class="filter-desc"></p>' +
+                '  <div class="filter-container"></div>' +
+                '</div>',
+            regionCatSelect: '<div class="filter-region-category-select">' +
+                '  <select></select>' +
+                '</div>',
+            regionSelect: '<div class="filter-region-select">' +
+                '  <select class="filter-region-select" multiple tabindex="3"></select>' +
+                '</div>',
+            addOwnIndicator: '<div class="new-indicator-cont">' +
+                '  <input type="button"/>' +
+                '</div>',
+            cannotDisplayIndicator: '<p class="cannot-display-indicator"></p>'
         };
 
         this.regionCategories = {};
@@ -92,141 +119,40 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         this._dataSources = {};
     }, {
         /**
-         * @property __name module name
-         * @static
-         */
-        __name: 'ManageStatsPlugin',
-
-        /**
-         * @method getName
-         * @return {String} plugin name
-         */
-        getName: function () {
-            return this.pluginName;
-        },
-
-        /**
-         * @method getMapModule
-         * Returns reference to map module this plugin is registered to
-         * @return {Oskari.mapframework.ui.module.common.MapModule}
-         */
-        getMapModule: function () {
-            return this.mapModule;
-        },
-
-        /**
-         * @method setMapModule
-         * Sets reference to reference to map module
-         * @param {Oskari.mapframework.ui.module.common.MapModule} mapModule
-         */
-        setMapModule: function (mapModule) {
-            this.mapModule = mapModule;
-            if (mapModule) {
-                this.pluginName = mapModule.getName() + this.__name;
-            }
-        },
-
-        /**
-         * @method register
-         * Interface method for the module protocol
-         */
-        register: function () {},
-
-        /**
-         * @method unregister
-         * Interface method for the module protocol
-         */
-        unregister: function () {},
-
-        /**
-         * @method init
-         * Interface method for the module protocol. Initializes the request
-         * handlers/templates.
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        init: function (sandbox) {},
-
-        /**
-         * @method startPlugin
+         * @private @method startPlugin
          *
          * Interface method for the plugin protocol. Should registers requesthandlers and
          * eventlisteners.
          *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        startPlugin: function (sandbox) {
-            this._sandbox = sandbox;
-            this._map = this.getMapModule().getMap();
-            sandbox.register(this);
-            var p;
-            for (p in this.eventHandlers) {
-                if (this.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.registerForEventByName(this, p);
-                }
-            }
-
-            this.statsService = sandbox
-                .getService('Oskari.statistics.bundle.statsgrid.StatisticsService');
-            this.userIndicatorsService = sandbox
-                .getService('Oskari.statistics.bundle.statsgrid.UserIndicatorsService');
-            this._published = (this.conf.published || false);
-            this._state = (this.conf.state || {});
-            this._layer = (this.conf.layer || null);
-            this.selectMunicipalitiesMode = false;
-        },
-
-        /**
-         * @method stopPlugin
          *
-         * Interface method for the plugin protocol. Should unregisters requesthandlers and
-         * eventlisteners.
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
          */
-        stopPlugin: function (sandbox) {
-            var p;
-            for (p in this.eventHandlers) {
-                if (this.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.unregisterFromEventByName(this, p);
-                }
-            }
+        _startPluginImpl: function () {
+            var me = this,
+                config = me.getConfig();
 
-            sandbox.unregister(this);
-
-            // remove ui
-            if (this.element) {
-                this.element.remove();
-                this.element = undefined;
-                delete this.element;
-            }
+            me.statsService = me.getSandbox().getService(
+                'Oskari.statistics.bundle.statsgrid.StatisticsService'
+            );
+            me.userIndicatorsService = me.getSandbox().getService(
+                'Oskari.statistics.bundle.statsgrid.UserIndicatorsService'
+            );
+            me._published = (config.published || false);
+            me._state = (config.state || {});
+            me._layer = (config.layer || null);
+            me.selectMunicipalitiesMode = false;
         },
 
-        /**
-         * @property {Object} eventHandlers
-         * @static
-         */
-        eventHandlers: {
-            'MapStats.FeatureHighlightedEvent': function (event) {
-                if (this.selectMunicipalitiesMode) {
-                    this._featureSelectedEvent(event);
-                } else {
-                    this._featureHighlightedEvent(event);
+        _createEventHandlers: function () {
+            var me = this;
+            return {
+                'MapStats.FeatureHighlightedEvent': function (event) {
+                    if (me.selectMunicipalitiesMode) {
+                        me._featureSelectedEvent(event);
+                    } else {
+                        me._featureHighlightedEvent(event);
+                    }
                 }
-            }
-        },
-
-        /**
-         * @method onEvent
-         * @param {Oskari.mapframework.event.Event} event a Oskari event object
-         * Event is handled forwarded to correct #eventHandlers if found or discarded
-         * if not.
-         */
-        onEvent: function (event) {
-            return this.eventHandlers[event.getName()].apply(this, [event]);
+            };
         },
 
         /**
@@ -248,6 +174,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         setState: function (state) {
             this._state = state;
         },
+
         getState: function () {
             return this._state;
         },
@@ -259,11 +186,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
          */
         createStatsOut: function (container) {
             var layer = this.getLayer();
+
             if (layer === null || layer === undefined) {
                 return;
             }
 
-            this._acceptedRegionCategories = layer.getCategoryMappings().categories;
+            this._acceptedRegionCategories =
+                layer.getCategoryMappings().categories;
             // indicator params are select-elements
             // (indicator drop down select and year & gender selects)
             this.prepareIndicatorParams(container);
@@ -289,12 +218,14 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 //clear the selectors container
                 container.find('.selectors-container').remove();
                 //add selectors
-                var selectors = jQuery('<div class="selectors-container clearfix"></div>');
+                var selectors = jQuery(
+                    '<div class="selectors-container clearfix"></div>'
+                );
                 container.append(selectors);
 
                 //Adding csv button
                 var me = this;
-                if (me.conf.csvDownload) {
+                if (me.getConfig().csvDownload) {
                     var csvLink = jQuery(me.templates.csvButton);
                     //container.find('selectors-container')
                     selectors.append(csvLink);
@@ -316,17 +247,19 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         },
 
         createDataSourceSelect: function (container) {
+            // FIXME select inside label
             var me = this,
-                dsElement = jQuery('<div class="data-source-select clearfix">' +
-                        '<div class="selector-cont">' +
-                            '<label for="statsgrid-data-source-select"></label>' +
-                            '<select id="statsgrid-data-source-select" class="indi">' +
-                            '</select>' +
-                        '</div>' +
+                dsElement = jQuery(
+                    '<div class="data-source-select clearfix">' +
+                    '  <div class="selector-cont">' +
+                    '    <label for="statsgrid-data-source-select"></label>' +
+                    '    <select id="statsgrid-data-source-select" class="indi">' +
+                    '    </select>' +
+                    '  </div>' +
                     '</div>'),
                 sel = dsElement.find('select');
 
-            dsElement.find('label').text(this._locale.tab.grid.organization);
+            dsElement.find('label').text(me._locale.tab.grid.organization);
 
             _.each(this._dataSources, function (dataSource, id) {
                 me._renderDataSourcesToList(id, dataSource.name, false, sel);
@@ -335,6 +268,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             sel.on('change', function (e) {
                 me.changeDataSource(e.target.value, container);
             });
+            // FIXME explain magic number
             sel.css({
                 'width': '191px'
             });
@@ -352,7 +286,12 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 name: dataSourceName
             };
 
-            this._renderDataSourcesToList(dataSourceId, dataSourceName, isSelected, elem);
+            this._renderDataSourcesToList(
+                dataSourceId,
+                dataSourceName,
+                isSelected,
+                elem
+            );
         },
 
         updateDataSource: function (dataSourceId, data) {
@@ -384,7 +323,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         changeDataSource: function (value, container) {
             var data = this._dataSources[value];
 
-            if (data !== undefined && data !== null)  {
+            if (data !== undefined && data !== null) {
                 //clear the selectors container
                 container.find('.selectors-container').empty();
                 this.createIndicatorsSelect(container, data.data);
@@ -400,7 +339,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         getStatsRegionData: function (container) {
             var me = this;
             // call ajax function (params: url, successFallback, errorCallback)
-            me.statsService.fetchStatsData(me._sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=regions&version=1.1',
+            me.statsService.fetchStatsData(
+                me.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=regions&version=1.1',
                 // success callback
                 function (regionData) {
                     if (regionData) {
@@ -414,12 +354,18 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                             me.loadStateIndicators(me._state, container);
                         }
                     } else {
-                        me.showMessage(me._locale.stats.errorTitle, me._locale.stats.regionDataError);
+                        me.showMessage(
+                            me._locale.stats.errorTitle,
+                            me._locale.stats.regionDataError
+                        );
                     }
                 },
                 // error callback
                 function (jqXHR, textStatus) {
-                    me.showMessage(me._locale.stats.errorTitle, me._locale.stats.regionDataXHRError);
+                    me.showMessage(
+                        me._locale.stats.errorTitle,
+                        me._locale.stats.regionDataXHRError
+                    );
                 });
         },
 
@@ -427,6 +373,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             var me = this,
                 lang = Oskari.getLang(),
                 categories = me._acceptedRegionCategories;
+
             this.regionCategories = _.foldl(regionData, function (result, region) {
                 if (_.contains(categories, region.category)) {
                     if (!result[region.category]) {
@@ -453,26 +400,29 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         createMunicipalitySlickGrid: function (container, regiondata) {
             var me = this,
                 grid,
-                gridContainer = jQuery('<div id="municipalGrid" class="municipal-grid"></div>'),
+                gridContainer = jQuery(
+                    '<div id="municipalGrid" class="municipal-grid"></div>'
+                ),
                 checkboxSelector;
             // clear and append municipal-grid container
             container.find('.municipal-grid').remove();
             container.append(gridContainer);
             // set initially selected region category
-            this._selectedRegionCategory = this._state.regionCategory || this._defaultRegionCategory;
-            this._setLayerToCategory(this._selectedRegionCategory);
+            me._selectedRegionCategory =
+                me._state.regionCategory || me._defaultRegionCategory;
+            me._setLayerToCategory(me._selectedRegionCategory);
             // add initial columns
 
             //This modified plugin adds checkboxes to grid
             checkboxSelector = new Slick.CheckboxSelectColumn2({
                 cssClass: 'slick-cell-checkboxsel'
             });
-            this.checkboxSelector = checkboxSelector;
+            me.checkboxSelector = checkboxSelector;
 
             // initial columns
             var columns = [me.checkboxSelector.getColumnDefinition(), {
                 id: 'municipality',
-                name: this._locale.regionCategories[this._selectedRegionCategory],
+                name: me._locale.regionCategories[me._selectedRegionCategory],
                 field: 'municipality',
                 sortable: true
             }];
@@ -500,7 +450,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             // metadata provider for data view
 
             // metadata provider for data view
-            var groupItemMetadataProvider = new Slick.Data.GroupItemMetadataProvider();
+            var groupItemMetadataProvider =
+                new Slick.Data.GroupItemMetadataProvider();
             // dataview for the grid
             var dataView = new Slick.Data.DataView({
                 groupItemMetadataProvider: groupItemMetadataProvider,
@@ -561,7 +512,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                         value1,
                         value2,
                         l;
-                    for (i = 0, l = cols.length; i < l; i++) {
+
+                    for (i = 0, l = cols.length; i < l; i += 1) {
                         field = cols[i].sortCol.field;
                         sign = cols[i].sortAsc ? 1 : -1;
                         value1 = me._numerizeValue(dataRow1[field]);
@@ -614,7 +566,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     groupsBeforeUpdate = data.getGroups().length;
 
                 //update item values (groupingkey is created from these)
-                item.sel = jQuery(e.target).is(':checked') ? 'checked' : 'empty';
+                item.sel =
+                    jQuery(e.target).is(':checked') ? 'checked' : 'empty';
                 data.updateItem(item.id, item);
 
                 // collapse group empty if it is created for the first time
@@ -622,7 +575,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 if (groups.length > 1) {
                     var i,
                         group;
-                    for (i = 0; i < groups.length; i++) {
+                    for (i = 0; i < groups.length; i += 1) {
                         group = groups[i];
                         if (group.groupingKey === 'empty' && group.count < 2 && groupsBeforeUpdate === 1) {
                             data.collapseGroup('empty');
@@ -702,7 +655,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 selectorsHeight = 0;
 
             if (selectorsCont.length > 0) {
-                selectorsHeight = selectorsCont.offset().top + selectorsCont.outerHeight();
+                selectorsHeight =
+                    selectorsCont.offset().top + selectorsCont.outerHeight();
             }
 
             gridDiv.height(parent.height() - selectorsHeight);
@@ -744,24 +698,35 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
          */
         getStatsIndicators: function (container) {
             var me = this,
-                sandbox = me._sandbox;
+                sandbox = me.getSandbox();
             // make the AJAX call
             me.statsService.fetchStatsData(sandbox.getAjaxUrl() +
                 'action_route=GetSotkaData&action=indicators&version=1.1',
                 //success callback
                 function (indicatorsdata) {
                     if (indicatorsdata) {
-                        me.addDataSource('sotkanet', 'SOTKAnet', indicatorsdata, true);
+                        me.addDataSource(
+                            'sotkanet',
+                            'SOTKAnet',
+                            indicatorsdata,
+                            true
+                        );
                         //if fetch returned something we create drop down selector
                         me.createIndicatorsSelect(container, indicatorsdata);
                         me.createDemographicsSelects(container, null);
                     } else {
-                        me.showMessage(me._locale.stats.errorTitle, me._locale.stats.indicatorsDataError);
+                        me.showMessage(
+                            me._locale.stats.errorTitle,
+                            me._locale.stats.indicatorsDataError
+                        );
                     }
                 },
                 // error callback
                 function (jqXHR, textStatus) {
-                    me.showMessage(me._locale.stats.errorTitle, me._locale.stats.indicatorsDataXHRError);
+                    me.showMessage(
+                        me._locale.stats.errorTitle,
+                        me._locale.stats.indicatorsDataXHRError
+                    );
                 });
         },
 
@@ -775,7 +740,17 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         createIndicatorsSelect: function (container, data) {
             var me = this;
             // Indicators' select container etc.
-            var indi = jQuery('<div class="indicator-cont"><div class="indisel selector-cont"><label for="indi">' + this._locale.indicators + '</label><select id="indi" name="indi" class="indi"><option value="" selected="selected"></option></select></div></div>'),
+            // FIXME select inside label
+            var indi = jQuery(
+                    '<div class="indicator-cont">' +
+                    '  <div class="indisel selector-cont">' +
+                    '    <label for="indi">' + me._locale.indicators + '</label>' +
+                    '    <select id="indi" name="indi" class="indi">' +
+                    '      <option value="" selected="selected"></option>' +
+                    '    </select>' +
+                    '  </div>' +
+                    '</div>'
+                ),
                 sel = indi.find('select'),
                 i,
                 indicData,
@@ -783,7 +758,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 value,
                 title,
                 opt;
-            for (i = 0; i < data.length; i++) {
+
+            for (i = 0; i < data.length; i += 1) {
                 indicData = data[i];
 
                 if (indicData.hasOwnProperty('id')) {
@@ -812,16 +788,22 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 }
             });
 
+            // FIXME kindly explain why this magic number is here
             sel.css({
                 'width': '205px'
             });
 
             var selectorsContainer = container.find('.selectors-container');
-            selectorsContainer.append(indi).append('<div class="parameters-cont clearfix"></div>');
+            selectorsContainer.append(indi).append(
+                '<div class="parameters-cont clearfix"></div>'
+            );
 
             var paramCont = selectorsContainer.find('.parameters-cont');
             // Place add new indicator button to the side of the data source select for now...
-            me._addOwnIndicatorButton(container.find('.data-source-select'), container);
+            me._addOwnIndicatorButton(
+                container.find('.data-source-select'),
+                container
+            );
 
             // we use chosen to create autocomplete version of indicator select element.
             sel.chosen({
@@ -846,15 +828,22 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             paramCont.append(button);
             button.find('input').click(function (e) {
                 // Warn the user if they're not logged in
-                if (!me._sandbox || !me._sandbox.getUser().isLoggedIn()) {
-                    var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                        okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
+                if (!me.getSandbox() || !me.getSandbox().getUser().isLoggedIn()) {
+                    var dialog = Oskari.clazz.create(
+                            'Oskari.userinterface.component.Popup'
+                        ),
+                        okBtn = Oskari.clazz.create(
+                            'Oskari.userinterface.component.buttons.OkButton'
+                        );
                     okBtn.setPrimary(true);
                     okBtn.setHandler(function () {
                         dialog.close(true);
                         me.createIndicatorForm(container);
                     });
-                    dialog.show(me._locale.addDataTitle, me._locale.loginToSaveIndicator, [okBtn]);
+                    dialog.show(
+                        me._locale.addDataTitle,
+                        me._locale.loginToSaveIndicator, [okBtn]
+                    );
                 } else {
                     me.createIndicatorForm(container);
                 }
@@ -864,33 +853,52 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         getUserIndicator: function (indicatorId) {
             var me = this;
 
-            this.userIndicatorsService
-                .getUserIndicator(indicatorId, function (indicator) {
+            me.userIndicatorsService.getUserIndicator(
+                indicatorId,
+                function (indicator) {
                     me.changeGridRegion(indicator.category);
                     me.addIndicatorDataToGrid(
-                        null, indicator.id, indicator.gender,
-                        indicator.year, indicator.data, indicator.meta
+                        null,
+                        indicator.id,
+                        indicator.gender,
+                        indicator.year,
+                        indicator.data,
+                        indicator.meta
                     );
                     me.addIndicatorMeta(indicator);
-                }, function () {
-//                    console.log('FAIL!', console.log(arguments));
-                });
+                    var state = me.getState();
+                    if (!state.indicators) {
+                        state.indicators = [];
+                    }
+                    state.indicators.push(indicator);
+                },
+                function () {
+                    //console.log('FAIL!', console.log(arguments));
+                }
+            );
         },
 
         createIndicatorForm: function (container) {
             var me = this,
                 form = Oskari.clazz.create(
                     'Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
-                    me._sandbox, me._locale, me.regionCategories,
-                    me._layer.getWmsName(), me._layer.getId(),
-                    me._selectedRegionCategory);
+                    me.getSandbox(),
+                    me._locale,
+                    me.regionCategories,
+                    me._layer.getWmsName(),
+                    me._layer.getId(),
+                    me._selectedRegionCategory
+                );
 
             container.find('.selectors-container').hide();
             container.find('.data-source-select').hide();
             container.find('#municipalGrid').hide();
-            form.createUI(container, function (data) {
-                me._addUserIndicatorToGrid(data, container, me);
-            });
+            form.createUI(
+                container,
+                function (data) {
+                    me._addUserIndicatorToGrid(data, container, me);
+                }
+            );
         },
 
         _addUserIndicatorToGrid: function (data, container, me) {
@@ -922,13 +930,21 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             };
             (state.indicators = state.indicators || []).push(userIndicator);
             this.updateDataSource('userIndicators', userIndicator);
+            this.addIndicatorMeta(userIndicator);
 
             if (me._selectedRegionCategory !== data.category) {
                 me.changeGridRegion(data.category);
             }
 
             // Show the data in the grid.
-            me.addIndicatorDataToGrid(container, data.indicatorId, 'total', data.year, data.data, indicator);
+            me.addIndicatorDataToGrid(
+                container,
+                data.indicatorId,
+                'total',
+                data.year,
+                data.data,
+                indicator
+            );
         },
 
         /**
@@ -940,7 +956,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
          */
         getStatsIndicatorMeta: function (container, indicator) {
             var me = this,
-                sandbox = me._sandbox;
+                sandbox = me.getSandbox();
             // fetch meta data for given indicator
             me.statsService.fetchStatsData(
                 sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=indicator_metadata&indicator=' + indicator + '&version=1.1',
@@ -956,12 +972,18 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                             me._warnOfInvalidIndicator(container, indicatorMeta);
                         }
                     } else {
-                        me.showMessage(me._locale.stats.errorTitle, me._locale.stats.indicatorMetaError);
+                        me.showMessage(
+                            me._locale.stats.errorTitle,
+                            me._locale.stats.indicatorMetaError
+                        );
                     }
                 },
                 // error callback
                 function (jqXHR, textStatus) {
-                    me.showMessage(me._locale.stats.errorTitle, me._locale.stats.indicatorMetaXHRError);
+                    me.showMessage(
+                        me._locale.stats.errorTitle,
+                        me._locale.stats.indicatorMetaXHRError
+                    );
                 });
 
         },
@@ -983,7 +1005,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 currentCategory = this._selectedRegionCategory.toLowerCase(),
                 i;
 
-            for (i = 0; i < rLen; ++i) {
+            for (i = 0; i < rLen; i += 1) {
                 if (regions[i].toLowerCase() === currentCategory) {
                     return true;
                 }
@@ -1003,10 +1025,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         _warnOfInvalidIndicator: function (container, metadata) {
             var regions = metadata.classifications,
                 warnTxt = this._locale.cannotDisplayIndicator;
+
             regions = regions && regions.region;
             regions = regions && regions.title;
             regions = regions && regions[Oskari.getLang()];
-
 
             if (regions) {
                 warnTxt += (this._locale.availableRegions + regions);
@@ -1033,7 +1055,12 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             // show meta data
             infoIcon.click(function (e) {
                 var lang = Oskari.getLang(),
-                    desc = '<h4 class="indicator-msg-popup">' + me._locale.stats.descriptionTitle + '</h4><p>' + indicator.description[lang] + '</p><br/><h4 class="indicator-msg-popup">' + me._locale.stats.sourceTitle + '</h4><p>' + indicator.organization.title[lang] + '</p>';
+                    desc =
+                    '<h4 class="indicator-msg-popup">' + me._locale.stats.descriptionTitle + '</h4>' +
+                    '<p>' + indicator.description[lang] + '</p>' +
+                    '<br/>' +
+                    '<h4 class="indicator-msg-popup">' + me._locale.stats.sourceTitle + '</h4>' +
+                    '<p>' + indicator.organization.title[lang] + '</p>';
                 me.showMessage(indicator.title[lang], desc);
             });
         },
@@ -1066,14 +1093,21 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 me.indicators.push(indicator);
                 // if there is a range we can create year select
                 if (indicator.range !== null && indicator.range !== undefined) {
-                    me.updateYearSelectorValues(parameters.find('select.year'), indicator.range.start, indicator.range.end);
+                    me.updateYearSelectorValues(
+                        parameters.find('select.year'),
+                        indicator.range.start,
+                        indicator.range.end
+                    );
                     // by default the last value is selected in getYearSelectorHTML
                     year = indicator.range.end;
                 }
 
                 // if there is a classification.sex we can create gender select
                 if (indicator.classifications && indicator.classifications.sex) {
-                    me.updateGenderSelectorValues(parameters.find('select.gender'), indicator.classifications.sex.values);
+                    me.updateGenderSelectorValues(
+                        parameters.find('select.gender'),
+                        indicator.classifications.sex.values
+                    );
                     // by default the last value is selected in getGenderSelectorHTML
                     gender = indicator.classifications.sex.values[indicator.classifications.sex.values.length - 1];
                 }
@@ -1096,8 +1130,12 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             } else {
                 // No indicator, create disabled mock selects
                 includedInGrid = false;
-                fetchButton = jQuery('<button class="fetch-data' + (includedInGrid ? ' hidden' : '') + ' selector-button primary">' + this._locale.addColumn + '</button>');
-                removeButton = jQuery('<button class="remove-data' + (includedInGrid ? '' : ' hidden') + ' selector-button">' + this._locale.removeColumn + '</button>');
+                fetchButton = jQuery(
+                    '<button class="fetch-data' + (includedInGrid ? ' hidden' : '') + ' selector-button primary">' + this._locale.addColumn + '</button>'
+                );
+                removeButton = jQuery(
+                    '<button class="remove-data' + (includedInGrid ? '' : ' hidden') + ' selector-button">' + this._locale.removeColumn + '</button>'
+                );
                 parameters.prepend(removeButton);
                 parameters.prepend(fetchButton);
                 parameters.prepend(me.getGenderSelectorHTML([]));
@@ -1186,7 +1224,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 i,
                 ilen;
 
-            for (i = 0, ilen = columns.length; i < ilen; i++) {
+            for (i = 0, ilen = columns.length; i < ilen; i += 1) {
                 if (columnId === columns[i].id) {
                     return true;
                 }
@@ -1210,7 +1248,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             // ajax call
             me.statsService.fetchStatsData(
                 // url
-                me._sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=data&version=1.0&indicator=' + indicatorId + '&years=' + year + '&genders=' + gndrs,
+                me.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=data&version=1.0&indicator=' + indicatorId + '&years=' + year + '&genders=' + gndrs,
                 // success callback
 
                 function (data) {
@@ -1228,15 +1266,28 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                             gender: gndrs
                         });
                         // Show the data in the grid.
-                        me.addIndicatorDataToGrid(container, indicatorId, gndrs, year, data, me.indicators[me.indicators.length - 1]);
+                        me.addIndicatorDataToGrid(
+                            container,
+                            indicatorId,
+                            gndrs,
+                            year,
+                            data,
+                            me.indicators[me.indicators.length - 1]
+                        );
                     } else {
-                        me.showMessage(me._locale.stats.errorTitle, me._locale.stats.indicatorDataError);
+                        me.showMessage(
+                            me._locale.stats.errorTitle,
+                            me._locale.stats.indicatorDataError
+                        );
                     }
                 },
                 // error callback
 
                 function (jqXHR, textStatus) {
-                    me.showMessage(me._locale.stats.errorTitle, me._locale.stats.indicatorDataXHRError);
+                    me.showMessage(
+                        me._locale.stats.errorTitle,
+                        me._locale.stats.indicatorDataXHRError
+                    );
                 }
             );
         },
@@ -1305,11 +1356,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                         }]
                     },
                     icon: 'icon-funnel',
-                    buttons: ((this.conf && this.conf.published) ? null : headerButtons)
+                    buttons: ((this.getConfig() && this.getConfig().published) ? null : headerButtons)
                 },
 
                 formatter: function (row, cell, value, columnDef, dataContext) {
-                    var numValue = Number(value),
+                    var numValue = me._numerizeValue(value),
                         ret;
                     if (isNaN(numValue) || columnDef.decimals === null || columnDef.decimals === undefined) {
                         ret = value;
@@ -1326,10 +1377,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                         rows = totals.group.rows,
                         row,
                         i;
-                    for (i = 0; i < rows.length; i++) {
+
+                    for (i = 0; i < rows.length; i += 1) {
                         row = rows[i];
                         if (row[columnDef.field] !== null && row[columnDef.field] !== undefined) {
-                            valueCount++;
+                            valueCount += 1;
                         }
                     }
                     text = valueCount + ' ' + me._locale.values;
@@ -1354,7 +1406,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
             me.updateDemographicsButtons(indicatorId, gender, year);
             me.grid.setSortColumn(me._state.currentColumn, true);
-
         },
 
         _updateIndicatorDataToGrid: function (columnId, data, columns) {
@@ -1387,7 +1438,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     }
                     return ret;
                 };
-            for (i = 0; i < data.length; i++) {
+            for (i = 0; i < data.length; i += 1) {
                 indicData = data[i];
                 regionId = indicData.region;
                 value = indicData['primary value'].replace(',', '.');
@@ -1421,7 +1472,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             // create all the aggregators we need
             var aggregators = [];
 
-            for (i = 0; i < columns.length; i++) {
+            for (i = 0; i < columns.length; i += 1) {
                 var id = columns[i].id;
                 aggregators.push(new Slick.Data.Aggregators.Avg(id));
                 aggregators.push(new Slick.Data.Aggregators.Std(id));
@@ -1473,7 +1524,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 });
             } else if (addedAlready) {
                 // Remove if warning is there
-                for (var i = 0, bLen = buttons.length; i < bLen; ++i) {
+                for (var i = 0, bLen = buttons.length; i < bLen; i += 1) {
                     if (buttons[i].id === 'no-data-warning') {
                         buttons.splice(i, 1);
                         break;
@@ -1499,13 +1550,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 ilen = 0,
                 j = 0;
 
-            for (i = 0, ilen = columns.length, j = 0; i < ilen; i++) {
+            for (i = 0, ilen = columns.length, j = 0; i < ilen; i += 1) {
                 if (columnId === columns[i].id) {
                     // Skip the column that is to be deleted
                     found = true;
                 } else {
                     allOtherColumns[j] = columns[i];
-                    j++;
+                    j += 1;
                 }
             }
 
@@ -1525,7 +1576,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
             // remove indicator also from to the state!
             if (this._state.indicators) {
-                for (i = 0, ilen = this._state.indicators.length; i < ilen; i++) {
+                for (i = 0, ilen = this._state.indicators.length; i < ilen; i += 1) {
                     var statedIndicator = this._state.indicators[i];
                     if ((indicatorId === statedIndicator.id) &&
                         (year === statedIndicator.year) &&
@@ -1556,7 +1607,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
         resetLayer: function () {
             if (!this.grid || this.grid.getColumns().length < 3) {
-                this._sandbox.postRequestByName('RemoveMapLayerRequest', [this._layer.getId()]);
+                this.getSandbox().postRequestByName('RemoveMapLayerRequest', [this._layer.getId()]);
             }
         },
 
@@ -1583,7 +1634,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         getYearSelectorHTML: function (startYear, endYear) {
             var me = this;
             // Years
-            var year = jQuery('<div class="yearsel selector-cont"><label for="year">' + this._locale.year + '</label><select name="year" class="year"></select></div>'),
+            // FIXME select inside label
+            var year = jQuery(
+                    '<div class="yearsel selector-cont">' +
+                    '  <label for="year">' + me._locale.year + '</label>' +
+                    '  <select name="year" class="year"></select>' +
+                    '</div>'
+                ),
                 sel = year.find('select'),
                 i,
                 opt;
@@ -1594,6 +1651,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             });
             return year;
         },
+
         /**
          * Update values for year selector
          *
@@ -1605,14 +1663,16 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         updateYearSelectorValues: function (sel, startYear, endYear) {
             var i,
                 opt;
+
             sel.empty();
-            for (i = startYear; i <= endYear; i++) {
+            for (i = startYear; i <= endYear; i += 1) {
                 opt = jQuery('<option value="' + i + '">' + i + '</option>');
                 sel.append(opt);
             }
             sel.val(endYear);
             sel.prop('disabled', '');
         },
+
         /**
          * Create HTML for gender selector
          *
@@ -1621,8 +1681,14 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
          */
         getGenderSelectorHTML: function (values) {
             var me = this;
-            //Gender
-            var gender = jQuery('<div class="gendersel selector-cont"><label for="gender">' + this._locale.gender + '</label><select name="gender" class="gender"></select></div>'),
+            // Gender
+            // FIXME select inside label
+            var gender = jQuery(
+                    '<div class="gendersel selector-cont">' +
+                    '  <label for="gender">' + this._locale.gender + '</label>' +
+                    '  <select name="gender" class="gender"></select>' +
+                    '</div>'
+                ),
                 sel = gender.find('select');
 
             if (values && values.length) {
@@ -1633,6 +1699,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             });
             return gender;
         },
+
         /**
          * Update values for gender selector
          *
@@ -1643,14 +1710,16 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         updateGenderSelectorValues: function (sel, values) {
             var i,
                 opt;
+
             sel.empty();
-            for (i = 0; i < values.length; i++) {
+            for (i = 0; i < values.length; i += 1) {
                 opt = jQuery('<option value="' + values[i] + '">' + this._locale.genders[values[i]] + '</option>');
                 sel.append(opt);
             }
             sel.val(values[values.length - 1]);
             sel.prop('disabled', '');
         },
+
         /**
          * Sends the selected column's data from the grid
          * in order to create the visualization.
@@ -1682,7 +1751,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             // Get values of selected column
             var data = this.dataView.getItems();
             if (curCol) {
-                for (i = 0; i < data.length; i++) {
+                for (i = 0; i < data.length; i += 1) {
                     var row = data[i];
                     // Exclude null values
                     if (row.sel === 'checked') {
@@ -1719,10 +1788,15 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         _setLayerVisibility: function (visibility) {
             // show the layer, if not visible
             if (this._layer._visible !== visibility) {
-                var sandbox = this._sandbox,
-                    visibilityRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
+                var sandbox = this.getSandbox(),
+                    visibilityRequestBuilder = sandbox.getRequestBuilder(
+                        'MapModulePlugin.MapLayerVisibilityRequest'
+                    );
                 if (visibilityRequestBuilder) {
-                    var request = visibilityRequestBuilder(this._layer.getId(), visibility);
+                    var request = visibilityRequestBuilder(
+                        this._layer.getId(),
+                        visibility
+                    );
                     sandbox.request(this, request);
                 }
             }
@@ -1737,13 +1811,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
          * @param callback what to do after we have fetched metadata for all the indicators
          */
         getStatsIndicatorsMeta: function (container, indicators, callback) {
-
             var me = this,
                 fetchedIndicators = 0,
                 i;
+
             me.indicators = [];
 
-            for (i = 0; i < indicators.length; i++) {
+            for (i = 0; i < indicators.length; i += 1) {
                 var indicatorData = indicators[i],
                     indicator = indicatorData.id;
                 if (indicator === null || indicator === undefined) {
@@ -1753,18 +1827,18 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 // ajax call
                 me.statsService.fetchStatsData(
                     // url
-                    me._sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=indicator_metadata&indicator=' + indicator + '&version=1.1',
+                    me.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=indicator_metadata&indicator=' + indicator + '&version=1.1',
                     // success callback
                     // FIXME create function outside loop
 
                     function (data) {
                         //keep track of returned ajax calls
-                        fetchedIndicators++;
+                        fetchedIndicators += 1;
 
                         if (data) {
                             me.addIndicatorMeta(data);
                             var j;
-                            for (j = 0; j < indicators.length; j++) {
+                            for (j = 0; j < indicators.length; j += 1) {
                                 if (indicators[j].id === null || indicators[j].id === undefined) {
                                     indicators[j].id = indicators[j].indicator;
                                 }
@@ -1780,16 +1854,22 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                             }
 
                         } else {
-                            me.showMessage(me._locale.stats.errorTitle, me._locale.stats.indicatorDataError);
+                            me.showMessage(
+                                me._locale.stats.errorTitle,
+                                me._locale.stats.indicatorDataError
+                            );
                         }
                     },
                     // error callback
                     // FIXME create function outside loop
 
                     function (jqXHR, textStatus) {
-                        me.showMessage(me._locale.stats.errorTitle, me._locale.stats.indicatorDataXHRError);
+                        me.showMessage(
+                            me._locale.stats.errorTitle,
+                            me._locale.stats.indicatorDataXHRError
+                        );
                         //keep track of returned ajax calls
-                        fetchedIndicators++;
+                        fetchedIndicators += 1;
                     }
                 );
             }
@@ -1808,7 +1888,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 indicatorsData = {},
                 i;
 
-            for (i = 0; i < indicators.length; i++) {
+            for (i = 0; i < indicators.length; i += 1) {
                 var indicatorData = indicators[i],
                     indicator = indicatorData.id,
                     year = indicatorData.year,
@@ -1821,18 +1901,18 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 // ajax call
                 me.statsService.fetchStatsData(
                     // url
-                    me._sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=data&version=1.0&indicator=' + indicator + '&years=' + year + '&genders=' + gender,
+                    me.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=data&version=1.0&indicator=' + indicator + '&years=' + year + '&genders=' + gender,
                     // success callback
                     // FIXME create function outside loop
 
                     function (data) {
-                        fetchedIndicators++;
+                        fetchedIndicators += 1;
                         if (data) {
                             var j,
                                 ind,
                                 indicatorColumnId;
                             //save the data to the right indicator for later use
-                            for (j = 0; j < indicators.length; j++) {
+                            for (j = 0; j < indicators.length; j += 1) {
                                 ind = indicators[j];
                                 if (ind.id === null || ind.id === undefined) {
                                     ind.id = ind.indicator;
@@ -1843,7 +1923,12 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                                     ind.year == data[0].year &&
                                     ind.gender === data[0].gender) {
 
-                                    indicatorColumnId = me._getIndicatorColumnId(ind.id, ind.gender, ind.year);
+                                    indicatorColumnId =
+                                        me._getIndicatorColumnId(
+                                            ind.id,
+                                            ind.gender,
+                                            ind.year
+                                        );
                                     indicatorsData[indicatorColumnId] = data;
                                 }
                             }
@@ -1851,33 +1936,54 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                             // add them to the grid and fire callback
                             if (fetchedIndicators >= indicators.length) {
                                 //add these to the grid!!
-                                for (j = 0; j < indicators.length; j++) {
+                                for (j = 0; j < indicators.length; j += 1) {
                                     ind = indicators[j];
                                     if (ind.id === null || ind.id === undefined) {
                                         ind.id = ind.indicator;
                                     }
                                     if (ind) {
-                                        indicatorColumnId = me._getIndicatorColumnId(ind.id, ind.gender, ind.year);
-                                        var indData = indicatorsData[indicatorColumnId];
-                                        me.addIndicatorDataToGrid(container, ind.id, ind.gender, ind.year, indData, me.indicators[j], true);
+                                        indicatorColumnId =
+                                            me._getIndicatorColumnId(
+                                                ind.id,
+                                                ind.gender,
+                                                ind.year
+                                            );
+                                        var indData =
+                                            indicatorsData[indicatorColumnId];
+                                        me.addIndicatorDataToGrid(
+                                            container,
+                                            ind.id,
+                                            ind.gender,
+                                            ind.year,
+                                            indData,
+                                            me.indicators[j],
+                                            true
+                                        );
                                     }
                                 }
                                 callback();
                             }
                         } else {
-                            me.showMessage(me._locale.stats.errorTitle, me._locale.stats.indicatorDataError);
+                            me.showMessage(
+                                me._locale.stats.errorTitle,
+                                me._locale.stats.indicatorDataError
+                            );
                         }
                     },
                     // error callback
                     // FIXME create function outside loop
 
                     function (jqXHR, textStatus) {
-                        me.showMessage(me._locale.stats.errorTitle, me._locale.stats.indicatorDataXHRError);
-                        fetchedIndicators++;
+                        me.showMessage(
+                            me._locale.stats.errorTitle,
+                            me._locale.stats.indicatorDataXHRError
+                        );
+                        fetchedIndicators += 1;
                     }
                 );
             }
         },
+
         /**
          * Removes all indicator data from the grid
          *
@@ -1888,14 +1994,16 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 return;
             }
             var columns = this.grid.getColumns(),
+                columnId,
                 newColumnDef = [],
                 j = 0,
                 i;
-            for (i = 0; i < columns.length; i++) {
-                var columnId = columns[i].id;
+
+            for (i = 0; i < columns.length; i += 1) {
+                columnId = columns[i].id;
                 if ((columnId === 'id' || columnId === 'municipality' || columnId === 'code' || columnId === '_checkbox_selector')) {
                     newColumnDef[j] = columns[i];
-                    j++;
+                    j += 1;
                 }
             }
             this.grid.setColumns(newColumnDef);
@@ -1915,25 +2023,25 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 if (this.dialog) {
                     this.dialog.close(true);
                     this.dialog = null;
-                    return;
                 }
 
                 var me = this,
-                    loc = this._locale,
-                    dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                    dialog = Oskari.clazz.create(
+                        'Oskari.userinterface.component.Popup'
+                    );
                 if (buttons) {
                     dialog.show(title, message, buttons);
                 } else {
-                    var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-                    okBtn.setTitle(loc.buttons.ok);
-                    okBtn.addClass('primary');
+                    var okBtn = Oskari.clazz.create(
+                        'Oskari.userinterface.component.buttons.OkButton'
+                    );
                     okBtn.setHandler(function () {
                         dialog.close(true);
                         me.dialog = null;
                     });
                     dialog.show(title, message, [okBtn]);
-                    me.dialog = dialog;
                 }
+                me.dialog = dialog;
             }
         },
 
@@ -1942,7 +2050,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
          */
         loadStateIndicators: function (state, container) {
             var me = this,
-                classifyPlugin = this._sandbox.findRegisteredModuleInstance('MainMapModuleManageClassificationPlugin');
+                classifyPlugin = me.getSandbox().findRegisteredModuleInstance(
+                    'MainMapModuleManageClassificationPlugin'
+                );
             // First, let's clear out the old data from the grid.
             me.clearDataFromGrid();
 
@@ -1953,21 +2063,35 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
             // Add user's own indicators to grid.
             _.each(indicators.user, function (indicator) {
-                me.addIndicatorDataToGrid(null, indicator.id, indicator.gender, indicator.year, indicator.data, {
-                    'title': indicator.title
-                });
+                me.addIndicatorDataToGrid(
+                    null,
+                    indicator.id,
+                    indicator.gender,
+                    indicator.year,
+                    indicator.data, {
+                        'title': indicator.title
+                    }
+                );
                 me.addIndicatorMeta(indicator);
             });
 
             // FIXME change sotka to something general
             if (indicators.sotka && indicators.sotka.length > 0) {
                 //send ajax calls and build the grid
-                me.getStatsIndicatorsMeta(container, indicators.sotka, function () {
-                    //send ajax calls and build the grid
-                    me.getStatsIndicatorsData(container, indicators.sotka, function () {
-                        me._afterStateIndicatorsLoaded(state);
-                    });
-                });
+                me.getStatsIndicatorsMeta(
+                    container,
+                    indicators.sotka,
+                    function () {
+                        //send ajax calls and build the grid
+                        me.getStatsIndicatorsData(
+                            container,
+                            indicators.sotka,
+                            function () {
+                                me._afterStateIndicatorsLoaded(state);
+                            }
+                        );
+                    }
+                );
             } else {
                 me._afterStateIndicatorsLoaded(state);
             }
@@ -2000,23 +2124,29 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 this.grid.setSortColumn(state.currentColumn, true);
             }
         },
+
         /**
          * Loop through first group (municipalities) and create header row for
          * @private _updateTotals
          */
         _updateTotals: function (groups) {
             if (groups) {
-                var columns = this.grid.getColumns(),
+                var me = this,
+                    columns = me.grid.getColumns(),
                     column,
+                    config = me.getConfig(),
+                    g,
+                    group,
+                    key,
                     i;
+
                 // loop through columns
-                for (i = 0; i < columns.length; i++) {
+                for (i = 0; i < columns.length; i += 1) {
                     column = columns[i];
 
                     // group totals (statistical variables) should be calculated only for the checked/selected items
-                    var group = groups[0],
-                        key,
-                        g;
+                    group = groups[0];
+
                     for (key in groups) {
                         if (groups.hasOwnProperty(key)) {
                             g = groups[key];
@@ -2027,32 +2157,39 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     }
 
                     var gridTotals = group.totals,
-                        sub = jQuery(this.templates.subHeader),
+                        sub = jQuery(me.templates.subHeader),
                         variableCount = 0,
                         j,
                         statistic;
+
                     // loop through statistical variables
-                    for (j = 0; j < this.conf.statistics.length; j++) {
-                        statistic = this.conf.statistics[j];
+                    for (j = 0; j < config.statistics.length; j += 1) {
+                        statistic = config.statistics[j];
                         if (statistic.visible) {
-                            sub.append(this._getStatistic(gridTotals, column.id, statistic.id));
-                            variableCount++;
+                            sub.append(
+                                me._getStatistic(
+                                    gridTotals,
+                                    column.id,
+                                    statistic.id
+                                )
+                            );
+                            variableCount += 1;
                         }
                     }
 
-                    var columnDiv = jQuery(this.grid.getHeaderRowColumn(column.id)).empty(),
-                        opts = this.grid.getOptions();
+                    var columnDiv = jQuery(me.grid.getHeaderRowColumn(column.id)).empty(),
+                        opts = me.grid.getOptions();
                     // TODO: 12 = font-size, 7 = padding...
                     var fontSize = columnDiv.css('line-height');
                     fontSize = (fontSize) ? fontSize.split('px')[0] : 12;
                     opts.headerRowHeight = variableCount * fontSize + 7;
-                    this.grid.setOptions(opts);
+                    me.grid.setOptions(opts);
 
                     sub.appendTo(columnDiv);
-
                 }
             }
         },
+
         /**
          * A method to get statistical variables
          * @private _getStatistic
@@ -2084,14 +2221,20 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
                     } else if (columnId === 'municipality') {
                         totalsItem = jQuery(this.templates.statsgridTotalsVar);
-                        totalsItem.attr('title', this._locale.statistic.tooltip[type]);
-                        totalsItem.addClass('statsgrid-totals-label').text(this._locale.statistic[type]);
+                        totalsItem.attr(
+                            'title',
+                            this._locale.statistic.tooltip[type]
+                        );
+                        totalsItem.addClass('statsgrid-totals-label').text(
+                            this._locale.statistic[type]
+                        );
                         break;
                     }
                 }
             }
             return totalsItem;
         },
+
         /**
          * A method to check if int is int instead of float
          * @private _isInt
@@ -2108,7 +2251,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             var me = this,
                 i;
             // lets create an empty container for menu items
-            for (i = 0; i < columns.length; i++) {
+            for (i = 0; i < columns.length; i += 1) {
                 var column = columns[i];
                 if (column.id === 'municipality') {
                     column.header = {
@@ -2123,9 +2266,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             me.headerMenuPlugin = new Slick.Plugins.HeaderMenu2({});
             // lets create a menu when user clicks the button.
             me.headerMenuPlugin.onBeforeMenuShow.subscribe(function (e, args) {
-                var menu = args.menu,
+                var config = me.getCongif(),
+                    menu = args.menu,
                     i,
                     input;
+
                 if (args.column.id === 'municipality') {
                     menu.items = [];
 
@@ -2135,7 +2280,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     });
                     // Region category selects
                     _.each(me._acceptedRegionCategories, function (category) {
-                        var categorySelector = jQuery('<li><input type="radio" name="categorySelector"></input><label></label></li>');
+                        // FIXME input inside label
+                        var categorySelector = jQuery(
+                            '<li>' +
+                            '  <input type="radio" name="categorySelector"></input>' +
+                            '  <label></label>' +
+                            '</li>'
+                        );
                         categorySelector.
                         find('input').
                         attr({
@@ -2159,9 +2310,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                         disabled: true
                     });
                     // Statistical variables
-                    for (i = 0; i < me.conf.statistics.length; i++) {
-                        var statistic = me.conf.statistics[i],
-                            elems = jQuery(me.templates.gridHeaderMenu).addClass('statsgrid-show-total-selects');
+                    for (i = 0; i < me.config.statistics.length; i += 1) {
+                        var statistic = me.config.statistics[i],
+                            elems = jQuery(me.templates.gridHeaderMenu);
+
+                        elems.addClass('statsgrid-show-total-selects');
 
                         // create input element with localization
                         input = elems.find('input').attr({
@@ -2184,16 +2337,19 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
                     // check if select rows checkbox should be checked
                     // we need to do something with current state of MVC which is non-existent
-                    var columns = args.grid.getColumns(),
+                    var column,
+                        columns = args.grid.getColumns(),
                         selectRowsChecked = false;
-                    for (i = 0; i < columns.length; i++) {
-                        var column = columns[i];
+
+                    for (i = 0; i < columns.length; i += 1) {
+                        column = columns[i];
                         if (column.field === 'sel') {
                             selectRowsChecked = true;
                         }
                     }
                     // create checkbox for selecting rows toggle
-                    var showRows = jQuery(me.templates.gridHeaderMenu).addClass('statsgrid-show-row-selects');
+                    var showRows = jQuery(me.templates.gridHeaderMenu);
+                    showRows.addClass('statsgrid-show-row-selects');
                     // create input element with localization
                     input = showRows.find('input').attr({
                         'id': 'statsgrid-show-row-selects'
@@ -2217,7 +2373,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     var columns = args.grid.getColumns(),
                         newColumns = [],
                         shouldAddSel = true;
-                    for (i = 0; i < columns.length; i++) {
+                    for (i = 0; i < columns.length; i += 1) {
                         var column = columns[i];
                         if (column.field !== 'sel') {
                             newColumns.push(column);
@@ -2227,7 +2383,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                         }
                     }
                     if (shouldAddSel) {
-                        newColumns.unshift(me.checkboxSelector.getColumnDefinition());
+                        newColumns.unshift(
+                            me.checkboxSelector.getColumnDefinition()
+                        );
                     }
 
                     args.grid.setColumns(newColumns);
@@ -2238,10 +2396,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 } else if (args.command === 'filterByRegion') {
                     me._createFilterByRegionPopup(args.column, this);
                 } else {
-                    for (i = 0; i < me.conf.statistics.length; i++) {
-                        var statistic = me.conf.statistics[i];
-                        // FIXME use ===
-                        if (statistic.id == args.command) {
+                    for (i = 0; i < me.getConfig().statistics.length; i += 1) {
+                        var statistic = me.getConfig().statistics[i];
+                        if (statistic.id === args.command) {
                             statistic.visible = !statistic.visible;
                             break;
                         }
@@ -2320,7 +2477,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 categoryMappings = layer.getCategoryMappings();
 
             layer.setWmsName(categoryMappings.wmsNames[category]);
-            layer.setFilterPropertyName(categoryMappings.filterProperties[category]);
+            layer.setFilterPropertyName(
+                categoryMappings.filterProperties[category]
+            );
         },
 
         /**
@@ -2398,18 +2557,23 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             popup.find('.filter-inputs-container').append(filterInputs);
 
             // dialog with cancel and filter buttons
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var dialog = Oskari.clazz.create(
+                'Oskari.userinterface.component.Popup'
+            );
 
             // cancel
-            var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            cancelBtn.setTitle(me._locale.buttons.cancel);
+            var cancelBtn = Oskari.clazz.create(
+                'Oskari.userinterface.component.buttons.CancelButton'
+            );
             cancelBtn.setHandler(function () {
                 headerMenuPlugin.hide();
                 me._destroyPopup('filterPopup');
             });
 
             // filter
-            var filterBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            var filterBtn = Oskari.clazz.create(
+                'Oskari.userinterface.component.Button'
+            );
             filterBtn.setTitle(me._locale.buttons.filter);
             filterBtn.addClass('primary');
             filterBtn.setHandler(function (e) {
@@ -2449,7 +2613,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         _getPopupIndex: function (name) {
             var ret = null,
                 i;
-            for (i = 0; i < this.popups.length; i++) {
+            for (i = 0; i < this.popups.length; i += 1) {
                 if (this.popups[i].name === name) {
                     ret = i;
                     break;
@@ -2478,11 +2642,16 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
          */
         _createFilterByRegionPopup: function (column, headerMenuPlugin) {
             var me = this,
-                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                dialog = Oskari.clazz.create(
+                    'Oskari.userinterface.component.Popup'
+                ),
                 dialogTitle = me._locale.filterTitle,
-                cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
-                cancelLoc = me._locale.buttons.cancel,
-                filterBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+                cancelBtn = Oskari.clazz.create(
+                    'Oskari.userinterface.component.buttons.CancelButton'
+                ),
+                filterBtn = Oskari.clazz.create(
+                    'Oskari.userinterface.component.Button'
+                ),
                 filterLoc = me._locale.buttons.filter,
                 content = jQuery(me.templates.filterByRegion).clone(),
                 regionCatCont = jQuery(me.templates.filterRow).clone(),
@@ -2496,7 +2665,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             // destroy possible open instance
             me._destroyPopup('filterByRegionPopup');
 
-            cancelBtn.setTitle(cancelLoc);
             cancelBtn.setHandler(function () {
                 headerMenuPlugin.hide();
                 me._destroyPopup('filterByRegionPopup');
@@ -2535,7 +2703,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     regionCat.find('select').append(regionCatOption);
                 }
             }
-            regionCatCont.find('.filter-label').text(me._locale.selectRegionCategory);
+            regionCatCont.find('.filter-label').text(
+                me._locale.selectRegionCategory
+            );
             regionCatCont.find('.filter-value').append(regionCat);
             content.find('.filter-container').append(regionCatCont);
             regionCat.change(function (e) {
@@ -2558,7 +2728,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             // destroy filter popups created by _createFilterByRegionPopup and _createFilterPopup
             var i,
                 popup;
-            for (i = 0; i < this.popups.length; i++) {
+            for (i = 0; i < this.popups.length; i += 1) {
                 popup = this.popups[i];
                 popup.content.off();
                 popup.popup.close(true);
@@ -2592,7 +2762,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
             regionCont.addClass('filter-region-container');
 
-            for (i = 0; i < rLen; ++i) {
+            for (i = 0; i < rLen; i += 1) {
                 region = regions[i];
                 regionOption = jQuery(this.templates.filterOption).clone();
                 regionOption.val(region.id).text(region.title);
@@ -2623,7 +2793,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
             inputArray = _.map(inputArray, this._numerizeValue);
 
-            for (i = 0; i < items.length; i++) {
+            for (i = 0; i < items.length; i += 1) {
                 item = items[i];
 
                 if (item.sel === 'checked') {
@@ -2633,36 +2803,36 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     } else {
 
                         switch (method) {
-                        case '>':
-                            if (itemVal <= inputArray[0]) {
-                                item.sel = 'empty';
-                            }
-                            break;
-                        case '>=':
-                            if (itemVal < inputArray[0]) {
-                                item.sel = 'empty';
-                            }
-                            break;
-                        case '=':
-                            if (itemVal !== inputArray[0]) {
-                                item.sel = 'empty';
-                            }
-                            break;
-                        case '<=':
-                            if (itemVal > inputArray[0]) {
-                                item.sel = 'empty';
-                            }
-                            break;
-                        case '<':
-                            if (itemVal >= inputArray[0]) {
-                                item.sel = 'empty';
-                            }
-                            break;
-                        case '...':
-                            if (inputArray[0] >= itemVal || itemVal >= inputArray[1]) {
-                                item.sel = 'empty';
-                            }
-                            break;
+                            case '>':
+                                if (itemVal <= inputArray[0]) {
+                                    item.sel = 'empty';
+                                }
+                                break;
+                            case '>=':
+                                if (itemVal < inputArray[0]) {
+                                    item.sel = 'empty';
+                                }
+                                break;
+                            case '=':
+                                if (itemVal !== inputArray[0]) {
+                                    item.sel = 'empty';
+                                }
+                                break;
+                            case '<=':
+                                if (itemVal > inputArray[0]) {
+                                    item.sel = 'empty';
+                                }
+                                break;
+                            case '<':
+                                if (itemVal >= inputArray[0]) {
+                                    item.sel = 'empty';
+                                }
+                                break;
+                            case '...':
+                                if (inputArray[0] >= itemVal || itemVal >= inputArray[1]) {
+                                    item.sel = 'empty';
+                                }
+                                break;
                         }
                     }
                     data.updateItem(item.id, item);
@@ -2698,7 +2868,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 item,
                 i;
 
-            for (i = 0; i < items.length; i++) {
+            for (i = 0; i < items.length; i += 1) {
                 item = items[i];
 
                 if (item.sel === 'checked') {
@@ -2733,7 +2903,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         _itemBelongsToAnyRegions: function (item, regionIds) {
             var i,
                 regionId;
-            for (i = 0; i < regionIds.length; ++i) {
+            for (i = 0; i < regionIds.length; i += 1) {
                 regionId = Number(regionIds[i]);
                 if (item.memberOf.indexOf(regionId) > -1) {
                     return true;
@@ -2754,7 +2924,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 i,
                 index;
 
-            for (i = 0; i < array.length; i++) {
+            for (i = 0; i < array.length; i += 1) {
                 line = '';
 
                 for (index in array[i]) {
@@ -2864,7 +3034,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 itemsByGrouping = [],
                 item,
                 i;
-            for (i = 0; i < items.length; i++) {
+
+            for (i = 0; i < items.length; i += 1) {
                 item = items[i];
                 if (item.sel === sel) {
                     itemsByGrouping.push(sel);
@@ -2887,10 +3058,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 i,
                 j,
                 id;
-            for (i = 0; i < items.length; i++) {
+
+            for (i = 0; i < items.length; i += 1) {
                 item = items[i];
                 item.sel = 'empty';
-                for (j = 0; j < idArray.length; j++) {
+                for (j = 0; j < idArray.length; j += 1) {
                     id = idArray[j];
                     if (item.id == id) {
                         item.sel = 'checked';
@@ -2915,7 +3087,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 items = _grid.getData().getItems(),
                 item,
                 i;
-            for (i = 0; i < items.length; i++) {
+
+            for (i = 0; i < items.length; i += 1) {
                 item = items[i];
                 if (leaveHilighted && this.selectedMunicipalities[item.code]) {
                     item.sel = 'checked';
@@ -2951,7 +3124,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             var columns = this.grid.getColumns(),
                 column,
                 i;
-            for (i = 0; i < columns.length; i++) {
+            for (i = 0; i < columns.length; i += 1) {
                 column = columns[i];
                 if (column.id === columnId) {
                     return column;
@@ -2968,14 +3141,21 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
          */
         sendTooltipData: function (feature) {
             var featAtts = feature.attributes,
-                eventBuilder = this._sandbox.getEventBuilder('MapStats.HoverTooltipContentEvent'),
+                eventBuilder = this.getSandbox().getEventBuilder(
+                    'MapStats.HoverTooltipContentEvent'
+                ),
                 currColumn = this._state.currentColumn,
                 property = this._getHilightPropertyName(),
                 item = this.getItemByCode(featAtts[property]),
                 content;
 
             if (item === null || item === undefined) {
-                this._sandbox.printWarn('sendTooltipData: item not found for', featAtts[property], 'in', this.dataView.getItems());
+                this.getSandbox().printWarn(
+                    'sendTooltipData: item not found for',
+                    featAtts[property],
+                    'in',
+                    this.dataView.getItems()
+                );
 
             }
 
@@ -2985,7 +3165,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
             if (eventBuilder) {
                 var event = eventBuilder(content);
-                this._sandbox.notifyAll(event);
+                this.getSandbox().notifyAll(event);
             }
         },
 
@@ -3056,7 +3236,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             var ret = val;
             if (val !== null && val !== undefined) {
                 if (val.replace) {
-                    ret = val.replace(',', '.');
+                    ret = val.replace(',', '.').replace(/ /g, '');
                 }
                 ret = Number(ret);
             }
@@ -3070,9 +3250,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         }
 
     }, {
+        'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
         /**
-         * @property {String[]} protocol array of superclasses as {String}
-         * @static
+         * @static @property {string[]} protocol array of superclasses
          */
         'protocol': [
             'Oskari.mapframework.module.Module',

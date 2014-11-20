@@ -879,7 +879,7 @@ Oskari = (function () {
                 // If this error is thrown,
                 // the class definition is missing.
                 // Ensure the file has been loaded before use
-                throw 'Class ' + className + ' does not exist';
+                throw 'Class "' + className + '" does not exist';
             }
             classInstance = new classInfo._class();
             constructors = classInfo._constructors;
@@ -927,7 +927,8 @@ Oskari = (function () {
                             constructors[i] === undefined) {
                         throw new Error(
                             'createWithClassInfo(): Undefined constructor in ' +
-                                'class ' + classInfo._composition.className
+                                'class "' + classInfo._composition.className +
+                                '"'
                         );
                     }
                     constructors[i].apply(classInstance, instanceArguments);
@@ -956,7 +957,7 @@ Oskari = (function () {
 
             classInfo = this._getClassInfo(className);
             if (!classInfo) {
-                throw 'Class ' + className + ' does not exist';
+                throw 'Class "' + className + '" does not exist';
             }
             return this.getBuilderFromClassInfo(classInfo);
         },
@@ -1686,7 +1687,13 @@ D         * @param {Object} classInfo ClassInfo
                             if (fn.indexOf('http') === -1) {
                                 fnWithPath = bundlePath + '/' + fn;
                             }
-                            srcFiles.files[fnWithPath] = def;
+                            // Don't load unneeded locale files if we're not in
+                            // packed mode
+                            if (p !== 'locales' || _isPackedMode() ||
+                                    def.lang === undefined ||
+                                    Oskari.getLang() === def.lang) {
+                                srcFiles.files[fnWithPath] = def;
+                            }
                         }
                     }
                 }

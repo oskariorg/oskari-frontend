@@ -3,65 +3,32 @@
  *
  * @class Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayerPlugin
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayerPlugin',
+Oskari.clazz.define(
+    'Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayerPlugin',
 
     /**
-     * @method create called automatically on construction
-     * @static
+     * @static @method create called automatically on construction
+     *
+     *
      */
+    function () {
+        var me = this;
 
-    function (config) {
-        this.mapModule = null;
-        this.pluginName = null;
-        this._sandbox = null;
-        this._map = null;
-        this._supportedFormats = {};
-        this.config = config;
-        this.ajaxUrl = null;
-        this.layers = {};
-        if (config && config.ajaxUrl) {
-            this.ajaxUrl = config.ajaxUrl;
+        me._clazz =
+            'Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayerPlugin';
+        me._name = 'MyPlacesLayerPlugin';
+
+        me._supportedFormats = {};
+        me.ajaxUrl = null;
+        me.layers = {};
+        if (me._config && me._config.ajaxUrl) {
+            me.ajaxUrl = me._config.ajaxUrl;
         }
     }, {
-        /** @static @property __name plugin name */
-        __name: 'MyPlacesLayerPlugin',
 
         /** @static @property _layerType type of layers this plugin handles */
         _layerType: 'MYPLACES',
 
-        /**
-         * @method getName
-         * @return {String} plugin name
-         */
-        getName: function () {
-            return this.pluginName;
-        },
-        /**
-         * @method getMapModule
-         * @return {Oskari.mapframework.ui.module.common.MapModule} reference to map
-         * module
-         */
-        getMapModule: function () {
-            return this.mapModule;
-        },
-        /**
-         * @method setMapModule
-         * @param {Oskari.mapframework.ui.module.common.MapModule} reference to map
-         * module
-         */
-        setMapModule: function (mapModule) {
-            this.mapModule = mapModule;
-            this.pluginName = mapModule.getName() + this.__name;
-        },
-        /**
-         * This plugin doesn't have an UI that we would want to ever hide so always returns false
-         *
-         * @method hasUI
-         * @return {Boolean}
-         */
-        hasUI: function () {
-            return false;
-        },
         /**
          * Interface method for the plugin protocol.
          * Registers self as a layerPlugin to mapmodule with mapmodule.setLayerPlugin()
@@ -71,6 +38,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
         register: function () {
             this.getMapModule().setLayerPlugin('myplaceslayer', this);
         },
+
         /**
          * Interface method for the plugin protocol
          * Unregisters self from mapmodules layerPlugins
@@ -80,177 +48,64 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
         unregister: function () {
             this.getMapModule().setLayerPlugin('myplaceslayer', null);
         },
+
         /**
          * Interface method for the module protocol.
          *
-         * @method init
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
+         * @private @method _initImpl
+         *
+         *
          */
-        init: function (sandbox) {
-            var sandboxName = (this.config ? this.config.sandbox : null) || 'sandbox';
-            sandbox = Oskari.getSandbox(sandboxName);
-
+        _initImpl: function () {
             // register domain builder
-            var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+            var layerModelBuilder,
+                mapLayerService = this.getSandbox().getService(
+                    'Oskari.mapframework.service.MapLayerService'
+                );
             if (mapLayerService) {
-                mapLayerService.registerLayerModel('myplaceslayer', 'Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer');
-
-                var layerModelBuilder = Oskari.clazz.create('Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayerModelBuilder', sandbox);
-                mapLayerService.registerLayerModelBuilder('myplaceslayer', layerModelBuilder);
-            }
-
-            if (jQuery.browser.msie && jQuery.browser.version < 9) { //TODO: fix me fast
-                this._ieHack();
+                mapLayerService.registerLayerModel(
+                    'myplaceslayer',
+                    'Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer'
+                );
+                layerModelBuilder = Oskari.clazz.create(
+                    'Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayerModelBuilder',
+                    this.getSandbox()
+                );
+                mapLayerService.registerLayerModelBuilder(
+                    'myplaceslayer',
+                    layerModelBuilder
+                );
             }
         },
-        _ieHack: function () {
-            OpenLayers.Renderer.VML.prototype.drawText = function (featureId, style, location) {
-                var label = this.nodeFactory(featureId + this.LABEL_ID_SUFFIX, "olv:rect");
-                var textbox = this.nodeFactory(featureId + this.LABEL_ID_SUFFIX + "_textbox", "olv:textbox");
 
-                var resolution = this.getResolution();
-                label.style.left = (((location.x - this.featureDx) / resolution - this.offset.x) | 0) + "px";
-                label.style.top = ((location.y / resolution - this.offset.y) | 0) + "px";
-                label.style.flip = "y";
-
-                textbox.innerText = style.label;
-
-                if (style.cursor != "inherit" && style.cursor !== null && style.cursor !== undefined) {
-                    textbox.style.cursor = style.cursor;
-                }
-                if (style.fontColor) {
-                    textbox.style.color = style.fontColor;
-                }
-
-                if (style.fontOpacity) {
-                    textbox.style.filter = 'alpha(opacity=' + (style.fontOpacity * 100) + ')';
-                }
-                if (style.fontFamily) {
-                    textbox.style.fontFamily = style.fontFamily;
-                }
-                if (style.fontSize) {
-                    var fontSizeNum = style.fontSize.split("px")[0];
-                    if (fontSizeNum > 18) {
-                        style.fontSize = '18px';
-                    }
-                    textbox.style.fontSize = style.fontSize;
-                }
-                if (style.fontWeight) {
-                    textbox.style.fontWeight = style.fontWeight;
-                }
-                if (style.fontStyle) {
-                    textbox.style.fontStyle = style.fontStyle;
-                }
-                if (style.labelSelect === true) {
-                    label._featureId = featureId;
-                    textbox._featureId = featureId;
-                    textbox._geometry = location;
-                    textbox._geometryClass = location.CLASS_NAME;
-                }
-                textbox.style.whiteSpace = "nowrap";
-                // fun with IE: IE7 in standards compliant mode does not display any
-                // text with a left inset of 0. So we set this to 1px and subtract one
-                // pixel later when we set label.style.left
-                textbox.inset = "1px,0px,0px,0px";
-
-                label.appendChild(textbox);
-                this.textRoot.appendChild(label);
-
-                var align = style.labelAlign || "cm";
-                if (align.length == 1) {
-                    align += "m";
-                }
-                var xshift = textbox.clientWidth *
-                    (OpenLayers.Renderer.VML.LABEL_SHIFT[align.substr(0, 1)]);
-                var yshift = textbox.clientHeight *
-                    (OpenLayers.Renderer.VML.LABEL_SHIFT[align.substr(1, 1)]);
-                label.style.left = parseInt(label.style.left, 10) - xshift - 1 + "px";
-                label.style.top = parseInt(label.style.top, 10) + yshift + "px";
-
-            };
-        },
         /**
          * Interface method for the plugin protocol.
          *
-         * @method startPlugin
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
+         * @private @method _startPluginImpl
+         *
+         *
          */
-        startPlugin: function (sandbox) {
-            var p;
-            this._sandbox = sandbox;
-            this._map = this.getMapModule().getMap();
-
-            sandbox.register(this);
-            for (p in this.eventHandlers) {
-                if (this.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.registerForEventByName(this, p);
-                }
-            }
+        _startPluginImpl: function () {
             if (!this.ajaxUrl) {
-                this.ajaxUrl = sandbox.getAjaxUrl() + 'action_route=GetAnalysis?';
+                this.ajaxUrl =
+                    this.getSandbox().getAjaxUrl() +
+                    'action_route=GetAnalysis?';
             }
         },
-        /**
-         * Interface method for the plugin protocol
-         *
-         * @method stopPlugin
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        stopPlugin: function (sandbox) {
-            var p;
-            for (p in this.eventHandlers) {
-                if (this.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.unregisterFromEventByName(this, p);
+
+        _createEventHandlers: function () {
+            var me = this;
+
+            return {
+                AfterMapLayerRemoveEvent: function (event) {
+                    me._afterMapLayerRemoveEvent(event);
+                },
+                AfterChangeMapLayerOpacityEvent: function (event) {
+                    me._afterChangeMapLayerOpacityEvent(event);
                 }
-            }
-
-            sandbox.unregister(this);
-
-            this._map = null;
-            this._sandbox = null;
-        },
-        /**
-         * Interface method for the module protocol
-         *
-         * @method start
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        start: function (sandbox) {},
-        /**
-         * Interface method for the module protocol
-         *
-         * @method stop
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        stop: function (sandbox) {},
-        /**
-         * @property {Object} eventHandlers
-         * @static
-         */
-        eventHandlers: {
-            'AfterMapLayerRemoveEvent': function (event) {
-                this._afterMapLayerRemoveEvent(event);
-            },
-            'AfterChangeMapLayerOpacityEvent': function (event) {
-                this._afterChangeMapLayerOpacityEvent(event);
-            }
+            };
         },
 
-        /**
-         * Event is handled forwarded to correct #eventHandlers if found or discarded
-         * if not.
-         *
-         * @method onEvent
-         * @param {Oskari.mapframework.event.Event} event a Oskari event object
-         */
-        onEvent: function (event) {
-            return this.eventHandlers[event.getName()].apply(this, [event]);
-        },
         /**
          * Adds given analysis layers to map if of type WFS
          *
@@ -258,20 +113,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
          * @param {Oskari.mapframework.domain.WfsLayer[]} layers
          */
         preselectLayers: function (layers) {
-            var sandbox = this._sandbox;
-            for (var i = 0; i < layers.length; i++) {
-                var layer = layers[i];
-                var layerId = layer.getId();
+            var sandbox = this.getSandbox(),
+                i,
+                layer,
+                layerId;
+
+            for (i = 0; i < layers.length; i += 1) {
+                layer = layers[i];
+                layerId = layer.getId();
 
                 if (!layer.isLayerOfType(this._layerType)) {
                     continue;
                 }
 
-                sandbox.printDebug("preselecting " + layerId);
+                sandbox.printDebug('preselecting ' + layerId);
                 this.addMapLayerToMap(layer, true, layer.isBaseLayer());
             }
-
         },
+
         /**
          * Adds a single MyPlaces layer to this map
          *
@@ -285,18 +144,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
                 return;
             }
 
-            var me = this;
+            var me = this,
+                openLayer,
+                openLayerId = 'layer_' + layer.getId(),
+                imgUrl = layer.getWmsUrl(),
+                layerScales = this.getMapModule().calculateLayerScales(
+                    layer.getMaxScale(),
+                    layer.getMinScale()
+                );
 
-            var openLayerId = 'layer_' + layer.getId();
-            var imgUrl = layer.getWmsUrl();
-            var layerScales = this.getMapModule()
-                .calculateLayerScales(layer.getMaxScale(), layer.getMinScale());
-
-                openLayer = new OpenLayers.Layer.WMS(openLayerId, imgUrl, {
+            openLayer = new OpenLayers.Layer.WMS(
+                openLayerId,
+                imgUrl, {
                     layers: layer.getWmsName(),
                     transparent: true,
-                    format: "image/png",
-                    hidden_ids: ""
+                    format: 'image/png',
+                    hidden_ids: ''
                 }, {
                     scales: layerScales,
                     isBaseLayer: false,
@@ -304,10 +167,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
                     visibility: true,
                     singleTile: true,
                     transitionEffect: null
-                });
+                }
+            );
 
-            this._addMapLayersToMap(layer, openLayer, keepLayerOnTop, true);
+            me._addMapLayersToMap(layer, openLayer, keepLayerOnTop, true);
         },
+
         /**
          * Adds  map layers (Wms layer / label text layer / group layer) to this map
          *
@@ -317,49 +182,50 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
          * @param {Boolean} keepLayerOnTop
          * @param {Boolean} isNew  is WMS openLayer already on Map
          */
-        _addMapLayersToMap : function (layer, openLayer, keepLayerOnTop, isNew)
-        {
-            var me = this;
+        _addMapLayersToMap: function (layer, openLayer, keepLayerOnTop, isNew) {
+            var me = this,
+                openLayerId = 'layer_' + layer.getId(),
+                renderer = OpenLayers.Util.getParameters(window.location.href).renderer;
 
-            var openLayerId = 'layer_' + layer.getId();
-
-            var renderer = OpenLayers.Util.getParameters(window.location.href).renderer;
             renderer = (renderer) ? [renderer] : OpenLayers.Layer.Vector.prototype.renderers;
 
-            var attentionLayer = new OpenLayers.Layer.Vector("layer_name_" + layer.getId(), {
-                styleMap: new OpenLayers.StyleMap({
-                    'default': new OpenLayers.Style({
-                        strokeOpacity: 1.0,
-                        fillOpacity: 1.0,
-                        pointerEvents: "visiblePainted",
-                        label: "${attentionText}",
-                        fontColor: "#${color}",
-                        labelAlign: "${align}",
-                        labelXOffset: "${xOffset}",
-                        labelYOffset: "${yOffset}",
-                        fontSize: "24px",
-                        fontFamily: "Open Sans",
-                        fontWeight: "bold",
-                        labelOutlineColor: "white",
-                        labelOutlineWidth: 3
-                    })
-                }),
-                renderers: renderer
-            });
+            var attentionLayer = new OpenLayers.Layer.Vector(
+                'layer_name_' + layer.getId(),
+                {
+                    styleMap: new OpenLayers.StyleMap({
+                        'default': new OpenLayers.Style({
+                            strokeOpacity: 1.0,
+                            fillOpacity: 1.0,
+                            pointerEvents: 'visiblePainted',
+                            label: '${attentionText}',
+                            fontColor: '#${color}',
+                            labelAlign: '${align}',
+                            labelXOffset: '${xOffset}',
+                            labelYOffset: '${yOffset}',
+                            fontSize: '24px',
+                            fontFamily: 'Open Sans',
+                            fontWeight: 'bold',
+                            labelOutlineColor: 'white',
+                            labelOutlineWidth: 3
+                        })
+                    }),
+                    renderers: renderer
+                }
+            );
 
             // Define three colors that will be used to style the cluster features
             // depending on the number of features they contain.
             var colors = {
-                low: "#6baed6",
-                middle: "#3182bd",
-                high: "#08519c"
+                low: '#6baed6',
+                middle: '#3182bd',
+                high: '#08519c'
             };
 
             // Define three rules to style the cluster features.
             var lowRule = new OpenLayers.Rule({
                 filter: new OpenLayers.Filter.Comparison({
                     type: OpenLayers.Filter.Comparison.LESS_THAN,
-                    property: "count",
+                    property: 'count',
                     value: 5
                 }),
                 symbolizer: {
@@ -369,17 +235,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
                     strokeOpacity: 0.5,
                     strokeWidth: 6,
                     pointRadius: 10,
-                    label: "${count}",
+                    label: '${count}',
                     labelOutlineWidth: 1,
-                    fontColor: "#ffffff",
+                    fontColor: '#ffffff',
                     fontOpacity: 0.8,
-                    fontSize: "12px"
+                    fontSize: '12px'
                 }
             });
             var middleRule = new OpenLayers.Rule({
                 filter: new OpenLayers.Filter.Comparison({
                     type: OpenLayers.Filter.Comparison.BETWEEN,
-                    property: "count",
+                    property: 'count',
                     lowerBoundary: 5,
                     upperBoundary: 10
                 }),
@@ -390,17 +256,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
                     strokeOpacity: 0.5,
                     strokeWidth: 6,
                     pointRadius: 13,
-                    label: "${count}",
+                    label: '${count}',
                     labelOutlineWidth: 1,
-                    fontColor: "#ffffff",
+                    fontColor: '#ffffff',
                     fontOpacity: 0.8,
-                    fontSize: "12px"
+                    fontSize: '12px'
                 }
             });
             var highRule = new OpenLayers.Rule({
                 filter: new OpenLayers.Filter.Comparison({
                     type: OpenLayers.Filter.Comparison.GREATER_THAN,
-                    property: "count",
+                    property: 'count',
                     value: 10
                 }),
                 symbolizer: {
@@ -410,11 +276,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
                     strokeOpacity: 0.5,
                     strokeWidth: 6,
                     pointRadius: 16,
-                    label: "${count}",
+                    label: '${count}',
                     labelOutlineWidth: 1,
-                    fontColor: "#ffffff",
+                    fontColor: '#ffffff',
                     fontOpacity: 0.8,
-                    fontSize: "12px"
+                    fontSize: '12px'
                 }
             });
 
@@ -491,12 +357,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
                  * {Boolean} The strategy was successfully activated.
                  */
                 activate: function () {
-                    var activated = OpenLayers.Strategy.prototype.activate.call(this);
+                    var activated =
+                        OpenLayers.Strategy.prototype.activate.call(this);
+
                     if (activated) {
                         this.layer.events.on({
-                            "beforefeaturesadded": this.cacheFeatures,
-                            "featuresremoved": this.clearCache,
-                            "moveend": this.cluster,
+                            'beforefeaturesadded': this.cacheFeatures,
+                            'featuresremoved': this.clearCache,
+                            'moveend': this.cluster,
                             scope: this
                         });
                     }
@@ -512,13 +380,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
                  * {Boolean} The strategy was successfully deactivated.
                  */
                 deactivate: function () {
-                    var deactivated = OpenLayers.Strategy.prototype.deactivate.call(this);
+                    var deactivated =
+                        OpenLayers.Strategy.prototype.deactivate.call(this);
+
                     if (deactivated) {
                         this.clearCache();
                         this.layer.events.un({
-                            "beforefeaturesadded": this.cacheFeatures,
-                            "featuresremoved": this.clearCache,
-                            "moveend": this.cluster,
+                            'beforefeaturesadded': this.cacheFeatures,
+                            'featuresremoved': this.clearCache,
+                            'moveend': this.cluster,
                             scope: this
                         });
                     }
@@ -568,71 +438,89 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
                 cluster: function (event) {
                     var clusteredFeatures = [],
                         i,
-                        j;
-                    if ((!event || event.zoomChanged) && this.features) {
-                        var firstAdded = false;
-                        var resolution = this.layer.map.getResolution();
-                        if (resolution != this.resolution || !this.clustersExist()) {
-                            this.resolution = resolution;
-                            var clusters = [];
-                            var feature, clustered, cluster;
-                            for (i = 0; i < this.features.length; ++i) {
-                                this.features[i].geometry.clustered = false;
-                                feature = this.features[i];
+                        j,
+                        me = this;
+
+                    if ((!event || event.zoomChanged) && me.features) {
+                        var firstAdded = false,
+                            resolution = me.layer.map.getResolution();
+
+                        if (resolution != me.resolution || !me.clustersExist()) {
+                            me.resolution = resolution;
+                            var clusters = [],
+                                feature,
+                                clustered,
+                                cluster;
+                            for (i = 0; i < me.features.length; i += 1) {
+                                me.features[i].geometry.clustered = false;
+                                feature = me.features[i];
                                 if (feature.geometry) {
                                     clustered = false;
-                                    for (j = clusters.length - 1; j >= 0; --j) {
+                                    for (j = clusters.length - 1; j >= 0; j -= 1) {
                                         cluster = clusters[j];
-                                        if (this.shouldCluster(cluster, feature)) {
-                                            this.features[i].geometry.clustered = true;
-                                            clusteredFeatures.push(this.features[i].featureId);
+                                        if (me.shouldCluster(cluster, feature)) {
+                                            me.features[i].geometry.clustered = true;
+                                            clusteredFeatures.push(
+                                                me.features[i].featureId
+                                            );
                                             if (!firstAdded) {
                                                 cluster.cluster[0].geometry.clustered = true;
-                                                clusteredFeatures.push(cluster.cluster[0].featureId);
+                                                clusteredFeatures.push(
+                                                    cluster.cluster[0].featureId
+                                                );
                                                 firstAdded = true;
                                             }
-                                            this.addToCluster(cluster, feature);
+                                            me.addToCluster(cluster, feature);
                                             clustered = true;
                                             break;
                                         }
                                     }
                                     if (!clustered) {
-                                        clusters.push(this.createCluster(this.features[i]));
+                                        clusters.push(
+                                            me.createCluster(me.features[i])
+                                        );
                                     }
                                 }
                             }
 
-                            this.clustering = true;
-                            this.layer.removeAllFeatures();
-                            this.clustering = false;
+                            me.clustering = true;
+                            me.layer.removeAllFeatures();
+                            me.clustering = false;
                             if (clusters.length > 0) {
-                                if (this.threshold > 1) {
+                                if (me.threshold > 1) {
                                     var clone = clusters.slice();
                                     clusters = [];
-                                    var candidate;
-                                    for (i = 0, len = clone.length; i < len; ++i) {
+                                    var candidate,
+                                        len;
+                                    for (i = 0, len = clone.length; i < len; i += 1) {
                                         candidate = clone[i];
-                                        if (candidate.attributes.count < this.threshold) {
-                                            Array.prototype.push.apply(clusters, candidate.cluster);
+                                        if (candidate.attributes.count < me.threshold) {
+                                            Array.prototype.push.apply(
+                                                clusters,
+                                                candidate.cluster
+                                            );
                                         } else {
                                             clusters.push(candidate);
                                         }
                                     }
                                 }
-                                this.clustering = true;
+                                me.clustering = true;
                                 // A legitimate feature addition could occur during this
                                 // addFeatures call.  For clustering to behave well, features
                                 // should be removed from a layer before requesting a new batch.
-                                this.layer.addFeatures(clusters);
-                                this.clustering = false;
+                                me.layer.addFeatures(clusters);
+                                me.clustering = false;
                             }
-                            this.clusters = clusters;
-                            var layerName = this.layer.name;
-                            var attentionLayer = this.layer.map.getLayersByName(layerName.substring(0, layerName.length - 1))[0];
-                            for (i = 0; i < attentionLayer.features.length; i++) {
+                            me.clusters = clusters;
+                            var layerName = me.layer.name,
+                                attentionLayer = me.layer.map.getLayersByName(
+                                    layerName.substring(0, layerName.length - 1)
+                                )[0];
+
+                            for (i = 0; i < attentionLayer.features.length; i += 1) {
                                 if (attentionLayer.features[i].geometry.clustered) {
                                     attentionLayer.features[i].style = {
-                                        display: ""
+                                        display: ''
                                     };
                                 } else {
                                     attentionLayer.features[i].style = null;
@@ -640,11 +528,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
                             }
                             attentionLayer.redraw();
 
-                            var featureFilter = "";
-
-                            for (i = 0; i < clusteredFeatures.length; i++) {
-//                                featureFilter = featureFilter + "+AND+id<>'" + clusteredFeatures[i] + "'";
-                            }
+                            var featureFilter = '';
+                            /*
+                            for (i = 0; i < clusteredFeatures.length; i += 1) {
+                                featureFilter = featureFilter + "+AND+id<>'" + clusteredFeatures[i] + "'";
+                            }*/
 
                             /*
                              if (clusteredFeatures > 0) {
@@ -658,11 +546,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
                              featureFilter = featureFilter+")";
                              */
                             if (featureFilter !== null) {
-                                var openLayer = this.layer.map.getLayersByName('layer_' + layer.getId())[0];
+                                var openLayer = me.layer.map.getLayersByName(
+                                    'layer_' + layer.getId()
+                                )[0];
                                 openLayer.mergeNewParams({
                                     'myFeatureNames': featureFilter
                                 });
-//                                openLayer.redraw();
+                                //                                openLayer.redraw();
                             }
                         }
                     }
@@ -677,12 +567,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
                  * {Boolean} The calculated clusters are already on the layer.
                  */
                 clustersExist: function () {
-                    var exist = false;
-                    if (this.clusters && this.clusters.length > 0 &&
-                        this.clusters.length == this.layer.features.length) {
+                    var me = this,
+                        exist = false,
+                        i;
+
+                    if (me.clusters && me.clusters.length > 0 &&
+                            me.clusters.length === me.layer.features.length) {
                         exist = true;
-                        for (var i = 0; i < this.clusters.length; ++i) {
-                            if (this.clusters[i] != this.layer.features[i]) {
+                        for (i = 0; i < me.clusters.length; i += 1) {
+                            if (me.clusters[i] != me.layer.features[i]) {
                                 exist = false;
                                 break;
                             }
@@ -703,12 +596,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
                  * {Boolean} The feature should be included in the cluster.
                  */
                 shouldCluster: function (cluster, feature) {
-                    var cc = cluster.geometry.getBounds().getCenterLonLat();
-                    var fc = feature.geometry.getBounds().getCenterLonLat();
-                    var distance = (
-                        Math.sqrt(
-                            Math.pow((cc.lon - fc.lon), 2) + Math.pow((cc.lat - fc.lat), 2)
-                        ) / this.resolution
+                    var cc = cluster.geometry.getBounds().getCenterLonLat(),
+                        fc = feature.geometry.getBounds().getCenterLonLat(),
+                        distance = (
+                            Math.sqrt(
+                                Math.pow((cc.lon - fc.lon), 2) +
+                                Math.pow((cc.lat - fc.lat), 2)
+                            ) / this.resolution
                         );
                     return (distance <= this.distance);
                 },
@@ -737,31 +631,39 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
                  * {<OpenLayers.Feature.Vector>} A cluster.
                  */
                 createCluster: function (feature) {
-                    var center = feature.geometry.getBounds().getCenterLonLat();
-                    var cluster = new OpenLayers.Feature.Vector(
-                        new OpenLayers.Geometry.Point(center.lon, center.lat), {
-                            count: 1
-                        }
-                    );
+                    var center = feature.geometry.getBounds().getCenterLonLat(),
+                        cluster = new OpenLayers.Feature.Vector(
+                            new OpenLayers.Geometry.Point(
+                                center.lon,
+                                center.lat
+                            ),
+                            {
+                                count: 1
+                            }
+                        );
                     cluster.cluster = [feature];
                     return cluster;
                 },
 
-                CLASS_NAME: "OpenLayers.Strategy.Cluster"
+                CLASS_NAME: 'OpenLayers.Strategy.Cluster'
             });
 
             var clusterStrategy = new OpenLayers.Strategy.Cluster({
                 distance: 25,
                 threshold: 2
-            });
-            var clusterLayer = new OpenLayers.Layer.Vector("layer_name_" + layer.getId() + "C", {
-                strategies: [clusterStrategy],
-                styleMap: new OpenLayers.StyleMap({
-                    "default": style
-                })
-            });
-
-            var myPlacesService = this._sandbox.getService('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService');
+            }),
+            clusterLayer = new OpenLayers.Layer.Vector(
+                'layer_name_' + layer.getId() + 'C',
+                {
+                    strategies: [clusterStrategy],
+                    styleMap: new OpenLayers.StyleMap({
+                        'default': style
+                    })
+                }
+            ),
+            myPlacesService = this.getSandbox().getService(
+                'Oskari.mapframework.bundle.myplaces2.service.MyPlacesService'
+            );
 
             /*  GeoServer is used instead.
             if (myPlacesService) {
@@ -773,9 +675,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
             openLayer.opacity = layer.getOpacity() / 100;
             clusterLayer.opacity = layer.getOpacity() / 100;
 
-            if(isNew)this._map.addLayer(openLayer);
-            this._map.addLayer(attentionLayer);
-            this._map.addLayer(clusterLayer);
+            if (isNew) {
+                this.getMap().addLayer(openLayer);
+            }
+            this.getMap().addLayer(attentionLayer);
+            this.getMap().addLayer(clusterLayer);
 
             var myLayersGroup = [];
             myLayersGroup.push(openLayer);
@@ -784,13 +688,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
 
             this.layers[openLayerId] = myLayersGroup;
 
-            this._sandbox.printDebug("#!#! CREATED OPENLAYER.LAYER.WMS for MyPlacesLayer " + layer.getId());
+            this.getSandbox().printDebug(
+                '#!#! CREATED OPENLAYER.LAYER.WMS for MyPlacesLayer ' +
+                layer.getId()
+            );
 
             if (keepLayerOnTop) {
-                this._map.setLayerIndex(openLayer, this._map.layers.length);
-                this._map.setLayerIndex(clusterLayer, this._map.layers.length);
+                this.getMap().setLayerIndex(
+                    openLayer,
+                    this.getMap().layers.length
+                );
+                this.getMap().setLayerIndex(
+                    clusterLayer,
+                    this.getMap().layers.length
+                );
             } else {
-                this._map.setLayerIndex(openLayer, 0);
+                this.getMap().setLayerIndex(openLayer, 0);
             }
 
             /* if (myPlacesService) {
@@ -798,6 +711,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
             } */
 
         },
+
         /**
          * Adds a single attention text to MyPlaces layer to this map
          *
@@ -808,10 +722,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
          * @param {OpenLayers.Layer.Vector} vectorLayer
          */
         _addAttentionText: function (myPlacesService, layerId, vectorLayer) {
-            var me = this;
-            var categoryId = layerId.split("_")[1];
-            var category = myPlacesService.findCategory(categoryId);
-            var features = myPlacesService.getPlacesInCategory(categoryId);
+            var me = this,
+                categoryId = layerId.split('_')[1],
+                category = myPlacesService.findCategory(categoryId),
+                features = myPlacesService.getPlacesInCategory(categoryId);
 
             _.forEach(features, function (feature) {
                 var name = feature.name;
@@ -820,33 +734,73 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
                     name = feature.attention_text;
                 }
 
-                if (feature.geometry.CLASS_NAME === "OpenLayers.Geometry.MultiPoint") {
+                // FIXME lotsa code duplication here...
+
+                if (feature.geometry.CLASS_NAME === 'OpenLayers.Geometry.MultiPoint') {
                     _.forEach(feature.geometry.components, function (component) {
-                        vectorLayer.addFeatures(me._createFeature(name, component, category.dotColor, category.dotSize * 4));
+                        vectorLayer.addFeatures(
+                            me._createFeature(
+                                name,
+                                component,
+                                category.dotColor,
+                                category.dotSize * 4
+                            )
+                        );
                     });
-                } else if (feature.geometry.CLASS_NAME === "OpenLayers.Geometry.MultiPolygon") {
+                } else if (feature.geometry.CLASS_NAME === 'OpenLayers.Geometry.MultiPolygon') {
                     _.forEach(feature.geometry.components, function (component) {
-                        var rightMostPoint = _.max(component.components[0].components, function (chr) {
+                        var rightMostPoint = _.max(
+                            component.components[0].components,
+                            function (chr) {
+                                return chr.x;
+                            }
+                        );
+                        vectorLayer.addFeatures(
+                            me._createFeature(
+                                name,
+                                rightMostPoint,
+                                category.dotColor,
+                                5
+                            )
+                        );
+                    });
+                } else if (feature.geometry.CLASS_NAME === 'OpenLayers.Geometry.LineString') {
+                    var rightMostPoint = _.max(
+                        feature.geometry.components,
+                        function (chr) {
                             return chr.x;
-                        });
-                        vectorLayer.addFeatures(me._createFeature(name, rightMostPoint, category.dotColor, 5));
-                    });
-                } else if (feature.geometry.CLASS_NAME === "OpenLayers.Geometry.LineString") {
-                    var rightMostPoint = _.max(feature.geometry.components, function (chr) {
-                        return chr.x;
-                    });
-                    vectorLayer.addFeatures(me._createFeature(name, rightMostPoint, category.dotColor, 5));
-                } else if (feature.geometry.CLASS_NAME === "OpenLayers.Geometry.Polygon") {
+                        }
+                    );
+                    vectorLayer.addFeatures(
+                        me._createFeature(
+                            name,
+                            rightMostPoint,
+                            category.dotColor,
+                            5
+                        )
+                    );
+                } else if (feature.geometry.CLASS_NAME === 'OpenLayers.Geometry.Polygon') {
                     _.forEach(feature.geometry.components, function (component) {
-                        var rightMostPoint = _.max(component.components, function (chr) {
-                            return chr.x;
-                        });
-                        vectorLayer.addFeatures(me._createFeature(name, rightMostPoint, category.dotColor, 5));
+                        var rightMostPoint = _.max(
+                            component.components,
+                            function (chr) {
+                                return chr.x;
+                            }
+                        );
+                        vectorLayer.addFeatures(
+                            me._createFeature(
+                                name,
+                                rightMostPoint,
+                                category.dotColor,
+                                5
+                            )
+                        );
                     });
                 }
 
             });
         },
+
         /**
          * Creating new point feature
          *
@@ -862,11 +816,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
             pointFeature.attributes = {
                 attentionText: name,
                 color: color,
-                align: "lb",
+                align: 'lb',
                 xOffset: xOffset
             };
             return pointFeature;
         },
+
         /**
          * Creates and adds point clusters to MyPlaces layer to this map
          *
@@ -877,17 +832,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
          * @param {OpenLayers.Layer.Vector} vectorLayer
          */
         _addPointClusters: function (myPlacesService, layerId, vectorLayer) {
-            var categoryId = layerId.split("_")[1];
-            var features = myPlacesService.getPlacesInCategory(categoryId);
-            var points = [];
-            for (var i = 0; i < features.length; i++) {
-                if (features[i].geometry.CLASS_NAME === "OpenLayers.Geometry.MultiPoint") {
-                    for (var j = 0; j < features[i].geometry.components.length; j++) {
-                        points.push(new OpenLayers.Feature.Vector(features[i].geometry.components[j]));
+            var categoryId = layerId.split('_')[1],
+                features = myPlacesService.getPlacesInCategory(categoryId),
+                i,
+                j,
+                points = [];
+
+            for (i = 0; i < features.length; i += 1) {
+                if (features[i].geometry.CLASS_NAME === 'OpenLayers.Geometry.MultiPoint') {
+                    for (j = 0; j < features[i].geometry.components.length; j += 1) {
+                        points.push(new OpenLayers.Feature.Vector(
+                            features[i].geometry.components[j]
+                        ));
                         points[points.length - 1].featureId = features[i].id;
                     }
-                } else if (features[i].geometry.CLASS_NAME === "OpenLayers.Geometry.Point") {
-                    points.push(new OpenLayers.Feature.Vector(features[i].geometry));
+                } else if (features[i].geometry.CLASS_NAME === 'OpenLayers.Geometry.Point') {
+                    points.push(new OpenLayers.Feature.Vector(
+                        features[i].geometry
+                    ));
                     points[points.length - 1].featureId = features[i].id;
                 }
             }
@@ -910,6 +872,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
             this._removeMapLayerFromMap(layer);
 
         },
+
         /**
          * Removes the layer from the map
          *
@@ -931,6 +894,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
             /* This should free all memory */
             //mapLayer[0].destroy();
         },
+
         /**
          * Returns references to OpenLayers layer objects for requested layer or null if layer is not added to map.
          *
@@ -943,9 +907,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
                 return null;
             }
 
-            //return this._map.getLayersByName('layer_' + layer.getId());
+            //return this.getMap().getLayersByName('layer_' + layer.getId());
             return this.layers['layer_' + layer.getId()];
         },
+
         /**
          * Handle AfterChangeMapLayerOpacityEvent
          *
@@ -970,9 +935,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
             //openLayer[0].setOpacity(opacity);
         }
     }, {
+        'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
         /**
-         * @property {String[]} protocol array of superclasses as {String}
-         * @static
+         * @static @property {string[]} protocol array of superclasses
          */
-        'protocol': ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+        'protocol': [
+            'Oskari.mapframework.module.Module',
+            'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
+        ]
     });

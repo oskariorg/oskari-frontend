@@ -232,5 +232,16 @@
             "Require-Bundle-Instance": []
         },
         "instanceProps": {}
+    }, {
+        "title": "Remote procedure call",
+        "bundlename": "rpc",
+        "bundleinstancename": "rpc",
+        "metadata": {
+            "Import-Bundle": {
+                "rpc": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            }
+        }
     }]
 }

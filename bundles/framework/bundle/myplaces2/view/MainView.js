@@ -298,6 +298,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
             var errors = this._validateForm(formValues);
             if (errors.length !== 0) {
                 this._showValidationErrorMessage(errors);
+                // Enable buttons again
+                jQuery('div#myplacesForm_contentDiv').find('input[type="button"]').removeAttr('disabled');
                 return;
             }
             // validation passed -> go save stuff

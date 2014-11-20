@@ -111,14 +111,13 @@ div.basic_analyse div.tool input, div.basic_analyse div.drawFilter input, div.ba
   margin-right: 10px; }
 div.basic_analyse div.analyse_settings_cont label {
   margin: 5px 0; }
-  div.basic_analyse div.analyse_settings_cont label span {
-    clear: both;
-    display: block; }
+  div.basic_analyse div.analyse_settings_cont label input[type=text] {
+    clear: left; }
   div.basic_analyse div.analyse_settings_cont label input, div.basic_analyse div.analyse_settings_cont label select {
     margin-top: 7px;
     margin-bottom: 10px; }
 div.basic_analyse select.settings_buffer_units, div.basic_analyse select.settings_area_size_units {
-  width: 80px; }
+  width: 110px; }
 
 .analyse_radiolabel, .analyse_checklabel {
   padding: 3px 6px;
@@ -156,20 +155,29 @@ div.basic_analyse div.buttons, div.analyse div.startview div.buttons {
 label.params_checklabel {
   text-overflow: ellipsis;
   display: inline-block;
-  width: 200px;
+  width: 230px;
   white-space: nowrap;
   overflow: hidden; }
 
 table.layer-icons {
   margin: 0 0 2px;
   width: 30%;
-  display: inline-table; }
+  display: inline-block; }
+  table.layer-icons td {
+    padding-left: 6px; }
   table.layer-icons div.icon-info {
     float: none; }
   table.layer-icons div.icon-close {
     cursor: pointer; }
 
 /* Analyse filter CSS */
+div.filter-popup-content {
+  overflow: auto;
+  max-height: 500px;
+  width: 700px;
+  margin: 0px !important;
+  padding: 10px; }
+
 div.analyse-filter-popup-content {
   padding: 8px; }
   div.analyse-filter-popup-content div.analyse-filter {
@@ -210,17 +218,42 @@ div.analyse-filter-popup-content div.filter-option {
       margin-left: 5px;
       min-width: 16px;
       text-align: center; }
-  div.analyse-filter-popup-content div.filter-option input[name="attribute-value"] {
-    width: 120px; }
+  div.analyse-filter-popup-content div.filter-option.filter-option-aggregate {
+    padding-bottom: 25px; }
+    div.analyse-filter-popup-content div.filter-option.filter-option-aggregate div.attribute-value-block {
+      position: relative;
+      display: inline-block; }
+      div.analyse-filter-popup-content div.filter-option.filter-option-aggregate div.attribute-value-block div.add-link {
+        position: absolute;
+        top: 40px; }
+  div.analyse-filter-popup-content div.filter-option .filter-input-value {
+    width: 160px;
+    margin: 1px; }
   div.analyse-filter-popup-content div.filter-option input[name="case-sensitive"] {
     margin-right: 5px; }
   div.analyse-filter-popup-content div.filter-option select.attribute {
     width: 150px; }
   div.analyse-filter-popup-content div.filter-option select.boolean {
     margin-top: 10px;
-    width: 60px; }
+    width: 65px; }
   div.analyse-filter-popup-content div.filter-option select.operator {
     width: 210px; }
+
+div.analyse-filter-popup-content div.analyse-filter {
+  border-bottom: none; }
+  div.analyse-filter-popup-content div.analyse-filter .input-blink {
+    border: 2px solid #217ad4;
+    margin: 0px; }
+
+div.filter-popup-multiselect {
+  border: 1px solid; }
+  div.filter-popup-multiselect div.header div.icon-close {
+    float: right;
+    margin: 10px; }
+  div.filter-popup-multiselect .oskari-formcomponent {
+    margin: 10px; }
+  div.filter-popup-multiselect .oskari-filter-with-aggregateAnalysis {
+    margin: 10px; }
 
 div.divmanazerpopup.drawfilterdialog {
   max-width: 400px; }

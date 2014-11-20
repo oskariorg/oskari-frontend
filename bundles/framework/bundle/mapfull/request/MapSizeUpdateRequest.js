@@ -12,15 +12,15 @@ Oskari.clazz.define(
      *
      *
      */
-    function () {
+    function (fullUpdate) {
         this._creator = null;
-
+        this.fullUpdate = fullUpdate;
     }, {
         /**
          * @static @property __name
          * Request name
          */
-        __name: "MapFull.MapSizeUpdateRequest",
+        __name: 'MapFull.MapSizeUpdateRequest',
         /**
          * @public @method getName
          *
@@ -35,6 +35,6 @@ Oskari.clazz.define(
          * @static @property {string[]} protocol
          * Array of superclasses as {string}
          */
-        'protocol': ['Oskari.mapframework.request.Request']
+        protocol: ['Oskari.mapframework.request.Request']
     }
 );

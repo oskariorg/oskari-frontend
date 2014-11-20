@@ -245,7 +245,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         	if (this.dialog) {
                 this.dialog.attr('id', pId);
             } else {
-                console.err("No UI");
+                Oskari.getSandbox().printWarn("Oskari.userinterface.component.Button.setId: No UI");
             }
         },
         /** 

@@ -5,9 +5,8 @@
 module.exports = function (grunt) {
 
     grunt.registerMultiTask('validate', 'Validate appsetup js', function () {
-        var starttime = (new Date()).getTime();
-
-        var options = this.data.options;
+        var starttime = (new Date()).getTime(),
+            options = this.data.options;
 
         // Run some sync stuff.
         grunt.log.writeln('Validating...');
@@ -31,7 +30,6 @@ module.exports = function (grunt) {
             'jquery.cookie.js',
             'jquery.event.drag-2.0.min.js',
             'jquery.placeholder.js',
-            'jquery-ui-1.9.1.custom.min.js',
             'jquery-ui-1.9.2.custom.min.js',
             'jscolor.js',
             'jsts.js',
@@ -107,22 +105,24 @@ module.exports = function (grunt) {
 
         var processedAppSetup = parser.getComponents(options.appSetupFile);
         // validate parsed appsetup
-        var files = [];
-        var validationDir = './validation/',
+        var array,
+            files = [],
+            unknownfiles = [],
+            validationDir = './validation/',
             i,
             j;
+
         if (!fs.existsSync(validationDir)) {
             fs.mkdirSync(validationDir);
         }
         for (j = 0; j < processedAppSetup.length; ++j) {
-            var array = parser.getFilesForComponent(processedAppSetup[j], 'javascript');
+            array = parser.getFilesForComponent(processedAppSetup[j], 'javascript');
             for (i = 0; i < array.length; ++i) {
                 this.validateJS(array[i], processedAppSetup[j].name);
             }
             this.writeLog(validationDir + processedAppSetup[j].name + '.txt');
         }
 
-        var unknownfiles = [];
         for (j = 0; j < processedAppSetup.length; ++j) {
             unknownfiles = unknownfiles.concat(parser.getFilesForComponent(processedAppSetup[j], 'unknown'));
         }

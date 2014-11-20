@@ -1,5 +1,34 @@
 # Release Notes
 
+## 1.25
+
+### personaldata
+
+No longer uses publishedMapUrl from config. GetViews JSON now includes URLs to views. Checkout oskari-server release notes for more details.
+
+### publisher
+
+No longer uses publishedMapUrl from config. Publish JSON now includes URL to published view. Checkout oskari-server release notes for more details.
+
+### core/sandbox
+
+Now has a convenience method createURL(baseUrl) that fills in protocol/host/path if missing from baseUrl.
+
+### catalogue/metadataflyout
+
+Rewritten to use JSON backend, any code relying on the old implementation is likely to break.
+New implementation has full localization.
+
+### analysis/analyse
+
+New spatial join method is available in analysis methods (join attributes of two layers)
+Field naming and styling of difference-method is changed 
+
+### integration/admin-layerselector
+
+Management of WFS-type maplayers in Oskari maplayer configuration
+Inserting/editing/removing WFS-layers in admin-layer UI.
+
 ## 1.24.7
 
 ### mapfull

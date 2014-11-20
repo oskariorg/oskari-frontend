@@ -86,7 +86,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.Tile',
          * @method refresh
          * Creates the UI for a fresh start
          */
-        refresh: function () {},
+        refresh: function () {
+            var cel = this.container;
+            var idEl = cel.children('.oskari-tile-title');
+            idEl.attr("id", 'oskari_analysis_analyse_tile_title');
+        },
 
         clickHandler: function (extensionState) {
             var i = this.instance,

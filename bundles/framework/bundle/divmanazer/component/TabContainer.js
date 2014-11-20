@@ -41,6 +41,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
                 headerContainer,
                 header,
                 link;
+
             if (this.panels.length === 0) {
                 content = this.templateTabs.clone();
                 this.ui.html(content);
@@ -50,10 +51,10 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
             } else {
                 if (first) {
                     // Set as first item
-                    panel.setPriority(this.panels[0].getPriority()-1.0);
+                    panel.setPriority(this.panels[0].getPriority() - 1.0);
                 } else if (typeof panel.getPriority() !== 'number') {
                     // Set as last item
-                    panel.setPriority(this.panels[this.panels.length-1].getPriority()+1.0);
+                    panel.setPriority(this.panels[this.panels.length - 1].getPriority() + 1.0);
                 }
             }
 

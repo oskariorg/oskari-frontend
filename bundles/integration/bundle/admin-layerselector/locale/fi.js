@@ -91,6 +91,7 @@ Oskari.registerLocalization({
             "wms1_1_1": "WMS 1.1.1",
             "wms1_3_0": "WMS 1.3.0",
             "getInfo": "Hae tiedot",
+            "editWfs": "WFS muokkaus",
             "selectClass": "Valitse aihe",
             "selectClassDesc": "Valitse aihe",
             "baseName": "Taustatason nimi",

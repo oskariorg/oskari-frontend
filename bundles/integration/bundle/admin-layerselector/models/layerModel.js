@@ -88,6 +88,8 @@ if (!Function.prototype.bind) {
                     dataToKeep = null;
                 // clear existing values
                 var capabilities = this.get("capabilities");
+                var adminBlock = this.get("_admin");
+
                 var typeFunction = this._typeHandlers[mapLayer.getLayerType()];
                 if(typeFunction) {
                     dataToKeep = typeFunction.apply(this);
@@ -95,14 +97,31 @@ if (!Function.prototype.bind) {
                 this.clear({
                     silent: true
                 });
+
                 if(dataToKeep && typeFunction) {
                     typeFunction.apply(this, [dataToKeep, mapLayer]);
+                }
+                // move credentials for maplayer data
+                if(adminBlock && mapLayer._admin) {
+                    mapLayer._admin.username = adminBlock.username;
+                    mapLayer._admin.password = adminBlock.password;
                 }
                 this.set(mapLayer, {
                     silent: true
                 });
+
                 // this will trigger change so the previous can be done silently
                 this.setCapabilitiesResponse(capabilities);
+            },
+            /**
+             * Append wfsconfiguration to capabilities adminblock.
+             * @param  {Object} GetWfsLayerconfiguration response from server
+             */
+            setWfsConfigurationResponse: function (resp) {
+                var adminBlock = this.get("_admin");
+                if(adminBlock) {
+                    adminBlock.passtrough = resp;
+                }
             },
             /**
              * Extra handling per layertype. If data is not given assume getter, otherwise setup data.

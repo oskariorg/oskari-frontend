@@ -20,6 +20,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Container',
          */
         addComponent: function (component) {
             'use strict';
+            if(!this._element) {
+                Oskari.getSandbox().printWarn(
+                    this.getClazz() + '.addComponent: container not initialized'
+                );
+            }
             if (component === null || component === undefined) {
                 throw new TypeError(
                     this.getClazz() + '.addComponent: ' +

@@ -384,7 +384,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultExtension',
         },
 
         /**
-         *@method notify sends notification to any registered listeners
+         * @method notify sends notification to any registered listeners
          */
         notify: function (eventName) {
             var args = this.slicer.apply(arguments, [1]),
