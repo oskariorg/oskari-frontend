@@ -20,7 +20,7 @@ Oskari.clazz.define(
          *
          */
         handleRequest: function (core, request) {
-            this.mapfull.updateSize();
+            this.mapfull.updateSize(request.fullUpdate);
         }
     }, {
         /**

@@ -127,7 +127,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
 
         _createRequestHandlers: function () {
             return {
-                'Toolbar.ToolContainerRequest': Oskari.clazz.create('Oskari.mapframework.bundle.toolbar.request.ToolContainerRequestHandler', this)
+                'Toolbar.ToolContainerRequest': Oskari.clazz.create(
+                    'Oskari.mapframework.bundle.toolbar.request.ToolContainerRequestHandler',
+                    this
+                )
             };
         },
 
