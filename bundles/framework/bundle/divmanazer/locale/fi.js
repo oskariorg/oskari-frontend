@@ -5,9 +5,10 @@ Oskari.registerLocalization({
         "buttons": {
             "add": "Lisää",
             "cancel": "Peruuta",
-            "close": "Poistu",
+            "close": "Sulje",
             "delete": "Poista",
             "edit": "Muokkaa",
+            "exit": "Poistu",
             "ok": "OK",
             "save": "Tallenna",
             "search": "Hae"

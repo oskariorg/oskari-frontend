@@ -831,7 +831,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     'Oskari.userinterface.component.Button'
                 ),
                 closeBtn = Oskari.clazz.create(
-                    'Oskari.userinterface.component.buttons.CloseButton'
+                    'Oskari.userinterface.component.buttons.ExitButton'
                 ),
                 saveBtn = Oskari.clazz.create(
                     'Oskari.userinterface.component.buttons.SaveButton'
