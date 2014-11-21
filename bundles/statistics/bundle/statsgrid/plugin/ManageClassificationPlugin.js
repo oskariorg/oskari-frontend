@@ -1421,10 +1421,10 @@ Oskari.clazz.define(
         _createColorDialog: function () {
             // Main dialog
             var me = this;
+
             if (me.dialog) {
                 me.dialog.close(true);
                 me.dialog = null;
-                return;
             }
             me.dialog = Oskari.clazz.create(
                 'Oskari.userinterface.component.Popup'
@@ -1435,17 +1435,21 @@ Oskari.clazz.define(
             // Content HTML / Color set select HTML
 
             var colorset_stats = jQuery(
-                '<div class="colorset_stats"><br>' +
-                this._locale.colorset.setselection +
-                '<br><select id="colo_set"></select><br></div>'
-            );
-            me.content.append(colorset_stats);
-            var sel = colorset_stats.find('select'),
+                    '<div class="colorset_stats">' +
+                    '  <br>' + this._locale.colorset.setselection + '<br>' +
+                    '  <select id="colo_set"></select>' +
+                    '  <br>' +
+                    '</div>'
+                ),
+                sel = colorset_stats.find('select'),
                 opt = jQuery(
                     '<option value="seq">' +
                     this._locale.colorset.sequential +
                     '</option>'
                 );
+
+            me.content.append(colorset_stats);
+
             sel.append(opt);
             opt = jQuery(
                 '<option value="qual">' +
@@ -1469,7 +1473,7 @@ Oskari.clazz.define(
                     '<div class="instructions2" style="padding: 20px 0px 0px 0px;"></div>'
                 ),
                 cancelBtn = Oskari.clazz.create(
-                    'Oskari.userinterface.component.buttons.CancelButton'
+                    'Oskari.userinterface.component.buttons.CloseButton'
                 );
             instructions2.append(this._locale.colorset.info2);
             me.content.append(instructions2);

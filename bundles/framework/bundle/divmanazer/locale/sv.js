@@ -4,10 +4,11 @@ Oskari.registerLocalization({
     "value": {
         "buttons": {
             "add": "Tillägg",
-            "cancel": "Tillbaka",
-            "close": "Avbryta",
+            "cancel": "Avbryt",
+            "close": "Stäng",
             "delete": "Ta bort",
             "edit": "Editera",
+            "exit": "Avsluta",
             "ok": "OK",
             "save": "Lagra",
             "search": "Sök"

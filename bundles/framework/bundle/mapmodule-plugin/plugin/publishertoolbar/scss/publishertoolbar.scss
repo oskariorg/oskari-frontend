@@ -8,10 +8,10 @@ $lightBorder: #888;
 $darkToolBackground: #212121;
 
 .tools {
-
 	display: block;
-	z-index: 100000000 !important;
+	margin-bottom: 10px !important;
 	text-align: left;
+	z-index: 100000000 !important;	
 	
 	.icon {
 		display: inline-block;

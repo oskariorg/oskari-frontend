@@ -100,7 +100,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 allowedLocations: ['top right'],
                 allowedSiblings: [
                     'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
-                    'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
+                    'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar',
+                    'Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin'
                 ],
                 groupedSiblings: true
             },
@@ -123,8 +124,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 groupedSiblings: true
             },
 
-            'Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin': {
-                allowedLocations: ['top left', 'top center', 'top right'],
+            'Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin': 
+{                allowedLocations: ['top left', 'top center', 'top right'],
                 allowedSiblings: [
                     'Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin',
                     'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin'
@@ -144,6 +145,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             'Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin': {
                 allowedLocations: ['top left', 'top center', 'top right'],
                 allowedSiblings: [
+                    'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
                     'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin',
                     'Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin'
                 ],
@@ -966,6 +968,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             var me = this,
                 sandbox = Oskari.getSandbox('sandbox');
 
+            if (me.toolLayoutEditMode) {
+                return;
+            }
+
             me.toolLayoutEditMode = true;
             jQuery('#editModeBtn').val(me.loc.toollayout.usereditmodeoff);
             jQuery('.mapplugins').show();
@@ -1017,6 +1023,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
         _editToolLayoutOff: function () {
             var me = this,
                 sandbox = Oskari.getSandbox('sandbox');
+
+            if (!me.toolLayoutEditMode) {
+                return;
+            }
 
             me.toolLayoutEditMode = false;
             jQuery('#editModeBtn').val(me.loc.toollayout.usereditmode);
@@ -1100,9 +1110,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 var checkbox = jQuery(e.target),
                     isChecked = checkbox.is(':checked');
 
-                // FIXME this doesn't seem right... aren't we supposed to show _something_ even if the user can't select the classification?
                 me.classifyPlugin.showClassificationOptions(isChecked);
-                me.classifyPlugin.setVisible(isChecked);
             });
             dataContainer.find(
                 'label.allow-classification-label'
