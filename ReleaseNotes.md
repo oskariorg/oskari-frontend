@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.25.2
+
+### publisher
+
+Fixed issues with editing embedded maps
+
 ## 1.25.1
 
 ### mapmodule/LogoPlugin
