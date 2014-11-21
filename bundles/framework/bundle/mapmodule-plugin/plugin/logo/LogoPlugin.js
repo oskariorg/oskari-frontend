@@ -84,6 +84,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
         _createControlElement: function () {
             return jQuery(
                 '<div class="mapplugin logoplugin">' +
+                '  <div class="icon"></div>' +
                 '  <div class="terms">' +
                 '    <a href="#" target="_blank"></a>' +
                 '  </div>' +
@@ -127,19 +128,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
                 link,
                 linkParams;
 
-            me.getElement().find('.icon').remove();
+            link = me.getElement().find('.icon');
+            link.unbind('click');
 
             if (mapUrl) {
-                linkParams = me.getSandbox().generateMapLinkParameters();
-                link = document.createElement('a');
-                link.href = mapUrl + linkParams;
-                link.target = '_blank';
-            } else {
-                link = document.createElement('div');
+                link.click(function (event) {
+                    linkParams = me.getSandbox().generateMapLinkParameters({});
+                    window.open(mapUrl + linkParams, '_blank');
+                });
             }
-
-            link.className = 'icon';
-            me.getElement().prepend(link);
         },
 
         _createTermsLink: function (termsUrl) {
