@@ -38,6 +38,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
                 iconCls: 'tool-save-view',
                 tooltip: tbstt,
                 sticky: false,
+                // disable button for non logged in users
+                enabled : sandbox.getUser().isLoggedIn(),
                 prepend: true,
                 callback: function () {
                     me._promptForView(function (name, description) {
@@ -46,11 +48,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
                     });
                 }
             }));
-        }
-        // disable button for non logged in users
-        if (!sandbox.getUser().isLoggedIn()) {
-            reqBuilder = sandbox.getRequestBuilder('Toolbar.ToolButtonStateRequest');
-            sandbox.request(instance, reqBuilder('save_view', 'viewtools', false));
         }
     }, {
         /**

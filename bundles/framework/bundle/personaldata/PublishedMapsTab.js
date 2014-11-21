@@ -378,7 +378,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 }
             };
 
-            //sending a request to publisher for editing view
+            // show a popup with the iframe code of the embedded map
             var htmlRenderer = function (name, data) {
                 var url = sandbox.createURL(data.url);
                 var link = me.templateLink.clone();
