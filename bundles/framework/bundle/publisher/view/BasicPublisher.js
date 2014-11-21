@@ -258,7 +258,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             }
         );
         me.latestGFI = null;
-        me.urlBase = instance.conf.urlPrefix + '/web/';
     }, {
         /**
          * @method render

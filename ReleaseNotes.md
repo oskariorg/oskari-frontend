@@ -9,6 +9,11 @@ Removed handling of disabled = true so we are consistent with enabled-flag. If y
 please update the code to use enabled = false instead. 
 Disabled = true just made the visual disabling, not actual clickhandler disabling anyway.
 
+### publisher
+
+Semi-configurable URL (conf.urlPrefix) used in GFI-preview functionality has been changed to use window.location.
+The configuration is no longer needed/used.
+
 ## 1.25
 
 ### personaldata
