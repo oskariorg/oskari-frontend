@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.25.1
+
+### mapmodule/LogoPlugin
+
+Clicking the logo now sends the mapstate as parameters as it was before.
+
 ## 1.25
 
 ### personaldata
