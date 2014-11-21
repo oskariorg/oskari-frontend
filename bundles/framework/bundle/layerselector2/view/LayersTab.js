@@ -80,6 +80,16 @@ Oskari.clazz.define(
         },
 
         /**
+         * @public @method focus
+         * Focuses the panel's search field (if available)
+         *
+         *
+         */
+        focus: function () {
+            this.getFilterField().getField().find('input').focus();
+        },
+
+        /**
          * @method _createInfoIcon
          * @private
          * @param {Object} input
@@ -155,7 +165,8 @@ Oskari.clazz.define(
 
 
             me.accordion = Oskari.clazz.create(
-                'Oskari.userinterface.component.Accordion');
+                'Oskari.userinterface.component.Accordion'
+            );
             me.accordion.insertTo(me.tabPanel.getContainer());
         },
 
