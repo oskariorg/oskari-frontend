@@ -517,7 +517,7 @@ Oskari.clazz.define(
                 me.template.children().clone().appendTo(div);
                 me._inputField = div.find('input[type=text]');
                 me._searchButton = div.find('input[type=button]');
-                me._bindUIEvents();
+                me._bindUIEvents(div);
                 return;
             }
 
@@ -531,7 +531,7 @@ Oskari.clazz.define(
                 me.styledTemplate.children().clone().appendTo(div);
                 me._inputField = div.find('input[type=text]');
                 me._searchButton = div.find('input[type=button]');
-                me._bindUIEvents();
+                me._bindUIEvents(div);
             }
 
             var resourcesPath = this.getMapModule().getImageUrl(),
