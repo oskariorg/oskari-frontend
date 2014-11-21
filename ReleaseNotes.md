@@ -1,5 +1,14 @@
 # Release Notes
 
+## 1.26
+
+### toolbar
+
+Sending enabled = false in Toolbar.AddToolButtonRequest now automatically disabled the button when added.
+Removed handling of disabled = true so we are consistent with enabled-flag. If you used disabled = true, 
+please update the code to use enabled = false instead. 
+Disabled = true just made the visual disabling, not actual clickhandler disabling anyway.
+
 ## 1.25
 
 ### personaldata

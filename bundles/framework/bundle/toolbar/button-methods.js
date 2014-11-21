@@ -89,7 +89,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         }
 
         // if button states to be disabled, disable button
-        if (pConfig.disabled === true) {
+        if (pConfig.enabled === false) {
             button.addClass('disabled');
         }
     },
@@ -122,8 +122,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             toolbar,
             group,
             button;
-        // FIXME use ===
-        if (btn.enabled == false) {
+        if (btn.enabled === false) {
             return;
         }
         // FIXME use ===
