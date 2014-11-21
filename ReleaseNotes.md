@@ -14,6 +14,12 @@ Disabled = true just made the visual disabling, not actual clickhandler disablin
 Semi-configurable URL (conf.urlPrefix) used in GFI-preview functionality has been changed to use window.location.
 The configuration is no longer needed/used.
 
+## 1.25.1
+
+### mapmodule/LogoPlugin
+
+Clicking the logo now sends the mapstate as parameters as it was before.
+
 ## 1.25
 
 ### personaldata
