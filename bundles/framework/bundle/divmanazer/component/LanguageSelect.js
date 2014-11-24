@@ -4,7 +4,8 @@
  * Language selection component. Locale files can be misused in other bundles
  * to list languages.
  */
-Oskari.clazz.define('Oskari.userinterface.component.LanguageSelect',
+Oskari.clazz.define(
+    'Oskari.userinterface.component.LanguageSelect',
 
     /**
      * @method create called automatically on construction
@@ -14,8 +15,19 @@ Oskari.clazz.define('Oskari.userinterface.component.LanguageSelect',
         var me = this,
             i,
             languages,
-            loc = Oskari.getLocalization('DivManazer').LanguageSelect,
+            loc,
             options = [];
+
+        loc = Oskari.getLocalization('DivManazer');
+        if (loc) {
+            loc = loc.LanguageSelect;
+        } else if (console && console.warn){
+            console.warn('Couldn\'t find DivManazer localization.');
+            loc = {
+                languages: {}
+            };
+        }
+
         me._clazz = 'Oskari.userinterface.component.LanguageSelect';
         me._element.className =
             'oskari-formcomponent oskari-select oskari-languageselect';
@@ -57,4 +69,4 @@ Oskari.clazz.define('Oskari.userinterface.component.LanguageSelect',
     }, {
         extend: ['Oskari.userinterface.component.Select']
     }
-    );
+);

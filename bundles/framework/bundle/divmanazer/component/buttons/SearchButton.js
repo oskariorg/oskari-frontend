@@ -10,7 +10,8 @@ Oskari.clazz.define('Oskari.userinterface.component.buttons.SearchButton',
      */
     function () {
         this._element.type = 'submit';
-        this.setTitle(Oskari.getLocalization('DivManazer').buttons.search);
+        var loc = Oskari.getLocalization('DivManazer');
+        this.setTitle(loc ? loc.buttons.search : 'Search');
         this.setPrimary(true);
     },
     {},

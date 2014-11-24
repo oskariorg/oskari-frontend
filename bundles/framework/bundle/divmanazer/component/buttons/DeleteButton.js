@@ -9,7 +9,8 @@ Oskari.clazz.define('Oskari.userinterface.component.buttons.DeleteButton',
      * @static
      */
     function () {
-        this.setTitle(Oskari.getLocalization('DivManazer').buttons['delete']);
+        var loc = Oskari.getLocalization('DivManazer');
+        this.setTitle(loc ? loc.buttons['delete'] : 'Delete');
     },
     {},
     {

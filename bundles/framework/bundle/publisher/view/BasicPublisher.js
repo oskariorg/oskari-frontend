@@ -640,10 +640,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                     'Oskari.userinterface.component.RadioButtonGroup'
                 ),
                 widthInput = Oskari.clazz.create(
-                    'Oskari.userinterface.component.NumberInput'
+                    'Oskari.userinterface.component.TextInput'
                 ),
                 heightInput = Oskari.clazz.create(
-                    'Oskari.userinterface.component.NumberInput'
+                    'Oskari.userinterface.component.TextInput'
                 ),
                 contentPanel = panel.getContainer(),
                 customOption = me.sizeOptions.filter(function (option) {
@@ -682,8 +682,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
 
             widthInput.setName('width');
             widthInput.setPlaceholder(me.loc.sizes.width);
-            widthInput.setMax(customOption.maxWidth);
-            widthInput.setMin(customOption.minWidth);
             widthInput.setValue(selectedOption.width);
             widthInput.setHandler(function () {
                 me._updateMapSize();
@@ -696,8 +694,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
 
             heightInput.setName('height');
             heightInput.setPlaceholder(me.loc.sizes.height);
-            heightInput.setMax(customOption.maxHeight);
-            heightInput.setMin(customOption.minHeight);
             heightInput.setValue(selectedOption.height);
             heightInput.setHandler(function () {
                 me._updateMapSize();
