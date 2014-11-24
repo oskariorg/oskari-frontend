@@ -2266,7 +2266,7 @@ Oskari.clazz.define(
             me.headerMenuPlugin = new Slick.Plugins.HeaderMenu2({});
             // lets create a menu when user clicks the button.
             me.headerMenuPlugin.onBeforeMenuShow.subscribe(function (e, args) {
-                var config = me.getCongif(),
+                var config = me.getConfig(),
                     menu = args.menu,
                     i,
                     input;
@@ -2310,8 +2310,8 @@ Oskari.clazz.define(
                         disabled: true
                     });
                     // Statistical variables
-                    for (i = 0; i < me.config.statistics.length; i += 1) {
-                        var statistic = me.config.statistics[i],
+                    for (i = 0; i < config.statistics.length; i += 1) {
+                        var statistic = config.statistics[i],
                             elems = jQuery(me.templates.gridHeaderMenu);
 
                         elems.addClass('statsgrid-show-total-selects');
