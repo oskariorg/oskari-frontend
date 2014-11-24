@@ -76,20 +76,24 @@ div.mapplugin.layerselection {
 
     }
 
-    div.layers, div.baselayers {
+    div.layers,
+    div.baselayers {
         padding: 10px;
     }
 
     div.header {
-        background-color: #3C3C3C;
-        color: #FFF !important;
-        padding: 8px;
+        background-color: #3c3c3c;
+        color: #FFF;
         cursor: pointer;
+        padding: 8px;
+        text-align: left;
+
         div.header-icon {
             display: inline-block;
-            margin-right: 10px;
+            margin-right: 4px;
             vertical-align: middle;
         }
+
     }
 
     div.layerselection-styled-content {
@@ -159,18 +163,18 @@ div.mapplugin.layerselection {
 /* Hacketyhack, we need to keep the popup on screen */
 .mapplugins.left {
 
-        div.mapplugin.layerselection {
+    div.mapplugin.layerselection {
 
-            div.published-styled-layerselector-content {
-                left: 0px !important;
-                right: auto !important;
+        div.published-styled-layerselector-content {
+            left: 0px !important;
+            right: auto !important;
 
-                div.styled-header-arrow {
-                    margin-left: 12px !important;
-                }
-
+            div.styled-header-arrow {
+                margin-left: 12px !important;
             }
 
         }
-}
 
+    }
+
+}

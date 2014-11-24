@@ -232,12 +232,18 @@ Oskari.clazz.define(
             var me = this,
                 el = element || me.getElement(),
                 content = el.find('div.content'),
-                header = el.find('div.classheader');
+                header = el.find('div.classheader'),
+                icon = header.find('.header-icon');
 
             header.unbind('click');
             if (!active) {
                 header.click(
                     function () {
+                        if (content.is(':visible')) {
+                            icon.removeClass('icon-arrow-white-down').addClass('icon-arrow-white-right');
+                        } else {
+                            icon.removeClass('icon-arrow-white-right').addClass('icon-arrow-white-down');
+                        }
                         content.animate(
                             {
                                 height: 'toggle'

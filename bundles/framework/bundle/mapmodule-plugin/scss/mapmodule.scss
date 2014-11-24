@@ -106,7 +106,6 @@ div.mapplugins {
         }
 
         &.right {
-            min-width: 100px;
 
             .mapplugin {
                 
@@ -118,10 +117,10 @@ div.mapplugins {
                     text-align: right;
                 }
     
-                &.layerselection, &.search {
+                &.layerselection, &.search, &.tools {
                     display: block;
                     float: right;
-                    margin: 0 $pluginMargin / 2;
+                    margin: 0 0 0 $pluginMargin;
                 }
                 
             }
@@ -129,7 +128,6 @@ div.mapplugins {
         }
 
         &.left {
-            min-width: 100px;
 
             .mapplugin {
                 
@@ -141,10 +139,10 @@ div.mapplugins {
                     text-align: left;
                 }
     
-                &.layerselection, &.search {
+                &.layerselection, &.search, &.tools {
                     display: block;
                     float: left;
-                    margin: 0 $pluginMargin / 2;
+                    margin: 0 $pluginMargin 0 0;
                 }
                 
             }
@@ -253,10 +251,6 @@ div.mapplugins {
                 vertical-align: middle;
             }
 
-        }
-
-        .mapplugin.indexmap .indexmapToggle {
-            float: right;
         }
 
     }

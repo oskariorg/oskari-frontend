@@ -46,13 +46,14 @@ div.mapplugin.layerselection {
   div.mapplugin.layerselection div.layers, div.mapplugin.layerselection div.baselayers {
     padding: 10px; }
   div.mapplugin.layerselection div.header {
-    background-color: #3C3C3C;
-    color: #FFF !important;
+    background-color: #3c3c3c;
+    color: #FFF;
+    cursor: pointer;
     padding: 8px;
-    cursor: pointer; }
+    text-align: left; }
     div.mapplugin.layerselection div.header div.header-icon {
       display: inline-block;
-      margin-right: 10px;
+      margin-right: 4px;
       vertical-align: middle; }
   div.mapplugin.layerselection div.layerselection-styled-content {
     width: 200px;

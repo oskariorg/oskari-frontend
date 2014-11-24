@@ -6,26 +6,25 @@ div.mapplugin.layerSelectionPlugin {
 
 .layerSelectionPlugin {
   max-width: 200px; }
-
-.layerSelectionPlugin div.header {
-  background-color: #333333 !important;
-  color: #FFF !important;
-  padding: 8px; }
-  .layerSelectionPlugin div.header div.header-icon {
-    display: inline-block;
-    margin-right: 10px;
-    vertical-align: middle; }
-
-.layerSelectionPlugin div.content {
-  background-color: white; }
-  .layerSelectionPlugin div.content div.baseLayerHeader {
-    background-color: #DDDDDD;
-    padding: 10px; }
-  .layerSelectionPlugin div.content div.layers, .layerSelectionPlugin div.content div.baselayers {
-    padding: 10px; }
-  .layerSelectionPlugin div.content div.layer {
-    margin: 5px 0;
-    text-align: left; }
-    .layerSelectionPlugin div.content div.layer input {
-      margin-right: 10px;
-      float: left; }
+  .layerSelectionPlugin div.header {
+    color: #FFF;
+    cursor: pointer;
+    background-color: #3c3c3c;
+    padding: 4px 8px; }
+    .layerSelectionPlugin div.header div.header-icon {
+      display: inline-block;
+      margin-right: 4px;
+      vertical-align: middle; }
+  .layerSelectionPlugin div.content {
+    background-color: white; }
+    .layerSelectionPlugin div.content div.baseLayerHeader {
+      background-color: #DDDDDD;
+      padding: 10px; }
+    .layerSelectionPlugin div.content div.layers, .layerSelectionPlugin div.content div.baselayers {
+      padding: 10px; }
+    .layerSelectionPlugin div.content div.layer {
+      margin: 5px 0;
+      text-align: left; }
+      .layerSelectionPlugin div.content div.layer input {
+        margin-right: 10px;
+        float: left; }
