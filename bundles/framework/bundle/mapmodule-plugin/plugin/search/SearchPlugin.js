@@ -103,6 +103,7 @@ Oskari.clazz.define(
 
         _setLayerToolsEditModeImpl: function() {
             var me = this,
+                el = me.getElement(),
                 overlay;
 
             if (me.inLayerToolsEditMode()) {
@@ -142,11 +143,13 @@ Oskari.clazz.define(
                 el = me.styledTemplate.clone();
                 me._inputField = el.find('input[type=text]');
                 me._searchButton = el.find('input[type=button]');
+                me._element = el;
                 me.changeToolStyle(conf.toolStyle, el);
             } else {
                 el = me.template.clone();
                 me._inputField = el.find('input[type=text]');
                 me._searchButton = el.find('input[type=button]');
+                me._element = el;
             }
 
             // bind events
@@ -592,7 +595,6 @@ Oskari.clazz.define(
             me._setLayerToolsEditMode(
                 me.getMapModule().isInLayerToolsEditMode()
             );
-
         },
 
         /**
