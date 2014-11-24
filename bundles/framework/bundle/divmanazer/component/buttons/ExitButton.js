@@ -9,7 +9,8 @@ Oskari.clazz.define('Oskari.userinterface.component.buttons.ExitButton',
      * @static
      */
     function () {
-        this.setTitle(Oskari.getLocalization('DivManazer').buttons.exit);
+        var loc = Oskari.getLocalization('DivManazer');
+        this.setTitle(loc ? loc.buttons.exit : 'Exit');
     },
     {},
     {

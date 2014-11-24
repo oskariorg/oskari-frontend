@@ -9,7 +9,8 @@ Oskari.clazz.define('Oskari.userinterface.component.buttons.EditButton',
      * @static
      */
     function () {
-        this.setTitle(Oskari.getLocalization('DivManazer').buttons.edit);
+        var loc = Oskari.getLocalization('DivManazer');
+        this.setTitle(loc ? loc.buttons.edit : 'Edit');
         this.setPrimary(true);
     },
     {},

@@ -1,4 +1,5 @@
 div.mapplugin.scalebar {
+  clear: both;
   /* 14px would be too big... */
   font-size: 12px;
   font-weight: bold;
