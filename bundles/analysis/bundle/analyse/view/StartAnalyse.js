@@ -2547,6 +2547,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          */
         _filterRequest: function (tools, analyse_layer_id) {
             var me = this,
+                filterIcon = tools.find('div.filter'),
                 popupContent,
                 prevJson,
                 editDialog = Oskari.clazz.create(
@@ -2557,7 +2558,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 layerId = analyse_layer_id.replace((this.id_prefix + 'layer_'), ''),
                 layer = this.instance.mapLayerService.findMapLayer(layerId);
 
-            tools.find('div.filter').bind('click', function () {
+            filterIcon.unbind('click');
+            filterIcon.bind('click', function () {
                 if (!me._filterPopups[layer.getId()]) {
                     editDialog.createFilterDialog(layer);
                     me._filterPopups[layer.getId()] = true;
@@ -2581,6 +2583,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                             layer.setFilterJson(filterJson);
                             // Update filter icon
                             me.updateFilterIcon(layer.getId());
+                            me._filterPopups[layerId] = null;
                         });
                     }
                 }
