@@ -14,6 +14,18 @@ Disabled = true just made the visual disabling, not actual clickhandler disablin
 Semi-configurable URL (conf.urlPrefix) used in GFI-preview functionality has been changed to use window.location.
 The configuration is no longer needed/used.
 
+## 1.25.4
+
+### Publisher
+
+Fixed editing old published maps
+
+## 1.25.3
+
+### statistics
+
+Fixed issue with filtering button not working
+
 ## 1.25.2
 
 ### publisher
