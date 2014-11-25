@@ -1,5 +1,17 @@
 # Release Notes
 
+## 1.25.4
+
+### Publisher
+
+Fixed editing old published maps
+
+## 1.25.3
+
+### statistics
+
+Fixed issue with filtering button not working
+
 ## 1.25.2
 
 ### publisher
