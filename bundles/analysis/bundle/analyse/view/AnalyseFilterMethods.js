@@ -722,7 +722,7 @@ Oskari.clazz.category(
          */
         _validateFilterValues: function (filterValues) {
             var errors = [],
-                filters = (filterValues ? filterValues.filters : []),
+                filters = (filterValues && filterValues.filters ? filterValues.filters : []),
                 filter,
                 i;
 
