@@ -151,7 +151,7 @@ Oskari = (function () {
                 }
             }
 
-            if (separators.length) {
+            if (separators.length && separators[0]) {
                 return separators[0];
             }
             return ','; // Most common separator
