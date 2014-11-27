@@ -575,11 +575,11 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
          */
         _validateFilterValues: function (filterValues) {
             var errors = [],
-                filters = (filterValues ? filterValues.filters : null),
+                filters = (filterValues && filterValues.filters ? filterValues.filters : []),
                 filter,
                 i;
 
-            for (i = 0; filters && i < filters.length; ++i) {
+            for (i = 0; filters && i < filters.length; i += 1) {
                 filter = filters[i];
                 // These are the filter objects
                 if (i % 2 === 0) {

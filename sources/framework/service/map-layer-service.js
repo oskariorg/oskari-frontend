@@ -600,11 +600,11 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             baseLayer.setVisible(true);
 
-            if (typeof baseMapJson.id !== 'string') {
-                baseLayer.setId(String(baseMapJson.id));
-            } else {
-                baseLayer.setId(baseMapJson.id);
-            }
+            //if (typeof baseMapJson.id !== 'string') {
+            //    baseLayer.setId(String(baseMapJson.id));
+            //} else {
+            baseLayer.setId(baseMapJson.id);
+            //}
 
             baseLayer.setName(baseMapJson.name);
 
@@ -736,11 +736,11 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             // set common map layer data
             layer.setAsNormalLayer();
-            if (typeof mapLayerJson.id !== 'string') {
-                layer.setId(String(mapLayerJson.id));
-            } else {
-                layer.setId(mapLayerJson.id);
-            }
+            //if (typeof mapLayerJson.id !== 'string') {
+            //    layer.setId(String(mapLayerJson.id));
+            //} else {
+            layer.setId(mapLayerJson.id);
+            //}
             
             layer.setName(mapLayerJson.name);
             if(mapLayerJson.layerName) {
