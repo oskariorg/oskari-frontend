@@ -180,7 +180,10 @@ Oskari.clazz.define(
         _createMapControls: function () {
             var me = this,
                 conf = me.getConfig(),
-                sandbox = me.getSandbox();
+                geodesic = conf.geodesic === undefined ? true : conf.geodesic,
+                sandbox = me.getSandbox(),
+                key;
+
             // check if already created
             if (me._zoomBoxTool) {
                 return;
@@ -214,12 +217,14 @@ Oskari.clazz.define(
 
             // Measure tools
             var optionsLine = {
+                geodesic: geodesic,
                 handlerOptions: {
                     persist: true
                 },
                 immediate: true
             };
             var optionsPolygon = {
+                geodesic: geodesic,
                 handlerOptions: {
                     persist: true
                 },
@@ -246,19 +251,21 @@ Oskari.clazz.define(
                     units = event.units,
                     order = event.order,
                     measure = event.measure,
-                    out = null;
-                if (order === 1) {
-                    out = measure.toFixed(3) + ' ' + units;
-                } else if (order === 2) {
-                    out = measure.toFixed(3) + ' ' + units + '²';
-                }
-                /*sandbox.printDebug(out + " " + ( finished ? "FINISHED" : "CONTINUES"));*/
-
-                var geomAsText = null,
+                    mapModule = me.getMapModule(),
+                    out = null,
+                    geomAsText = null,
                     geomMimeType = null;
+
+                if (order === 1 || order === 2) {
+                    out = mapModule.formatMeasurementResult(
+                        geometry,
+                        order === 1 ? 'line' : 'area'
+                    );
+                }
+
                 if (finished) {
                     if (OpenLayers.Format.GeoJSON) {
-                        var format = new(OpenLayers.Format.GeoJSON)();
+                        var format = new (OpenLayers.Format.GeoJSON)();
                         geomAsText = format.write(geometry, true);
                         geomMimeType = 'application/json';
                     }
@@ -270,19 +277,17 @@ Oskari.clazz.define(
                     )(out, finished, geomAsText, geomMimeType)
                 );
             }
-            var key,
-                control;
+            var measureHandler = function (event) {
+                    measurementsHandler(event, true);
+                },
+                measurePartialHandler = function (event) {
+                    measurementsHandler(event, false);
+                };
             for (key in me._measureControls) {
                 if (me._measureControls.hasOwnProperty(key)) {
-                    control = me._measureControls[key];
-                    // FIXME create functions outside loop
-                    control.events.on({
-                        'measure': function (event) {
-                            measurementsHandler(event, true);
-                        },
-                        'measurepartial': function (event) {
-                            measurementsHandler(event, false);
-                        }
+                    me._measureControls[key].events.on({
+                        measure: measureHandler,
+                        measurepartial: measurePartialHandler
                     });
                 }
             }
@@ -295,11 +300,11 @@ Oskari.clazz.define(
             }
         }
     }, {
-        'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
+        extend: ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
         /**
          * @static @property {string[]} protocol array of superclasses
          */
-        'protocol': [
+        protocol: [
             'Oskari.mapframework.module.Module',
             'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
         ]

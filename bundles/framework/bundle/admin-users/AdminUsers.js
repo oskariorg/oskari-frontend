@@ -17,13 +17,22 @@ Oskari.clazz.define(
         this.state = {};
     }, {
 
+        /**
+         * @private @method _initTemplates
+         *
+         *
+         */
         _initTemplates: function () {
             var me = this,
                 btn,
                 i;
+
             me.templates.main = jQuery('<div class="admin-users"></div>');
             me.templates.search = jQuery(
-                '<div><input type="search"></input><div class="icon-close"></div></div>'
+                '<div>' +
+                '  <input type="search"></input>' +
+                '  <div class="icon-close"></div>' +
+                '</div>'
             );
             me.templates.search.find('input').keypress(
                 function (event) {
@@ -34,12 +43,19 @@ Oskari.clazz.define(
             );
             me.templates.search.find('div.icon-close').click(
                 function (event) {
-                    jQuery(event.target).parent().find('input[type=search]').val('');
+                    jQuery(event.target)
+                        .parent()
+                        .find('input[type=search]')
+                        .val('');
                     me._filterList(event, me);
                 }
             );
-            btn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SearchButton');
-            btn.setHandler(
+            btn = Oskari.clazz.create(
+                'Oskari.userinterface.component.buttons.SearchButton'
+            );
+            // jQuery doesn't clone handlers that aren't created with jQuery,
+            // so we have to do this with jQuery...
+            jQuery(btn.getElement()).click(
                 function (event) {
                     me._filterList(event, me);
                 }
@@ -85,18 +101,26 @@ Oskari.clazz.define(
                 el.prev('span').html(me._getLocalization(el.attr('name')));
             });
 
-            var buttonFieldset = me.templates.form.find('fieldset:nth-of-type(2)');
-            btn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton');
+            var buttonFieldset = me.templates.form.find(
+                'fieldset:nth-of-type(2)'
+            );
+            btn = Oskari.clazz.create(
+                'Oskari.userinterface.component.buttons.SaveButton'
+            );
             btn.insertTo(buttonFieldset);
-            btn = Oskari.clazz.create('Oskari.userinterface.component.buttons.DeleteButton');
-            btn.setHandler(
+            btn = Oskari.clazz.create(
+                'Oskari.userinterface.component.buttons.DeleteButton'
+            );
+            jQuery(btn.getElement()).click(
                 function (event) {
                     me._deleteUser(event, me);
                 }
             );
             btn.insertTo(buttonFieldset);
-            btn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
-            btn.setHandler(
+            btn = Oskari.clazz.create(
+                'Oskari.userinterface.component.buttons.CancelButton'
+            );
+            jQuery(btn.getElement()).click(
                 function (event) {
                     me._closeForm(jQuery(event.target).parents('form'));
                 }
@@ -118,6 +142,11 @@ Oskari.clazz.define(
             );
             btn = Oskari.clazz.create('Oskari.userinterface.component.buttons.EditButton');
             btn.setName('edit');
+            jQuery(btn.getElement()).click(
+                function (event) {
+                    me._openForm(event, me);
+                }
+            );
             btn.insertTo(me.templates.item.find('div.header'));
             me.templates.main.append(me.templates.search);
             me.createRolesSelect();
@@ -285,11 +314,6 @@ Oskari.clazz.define(
         _populateItem: function (item, user) {
             var me = this;
 
-            item.find('input[name=edit]').click(
-                function (event) {
-                    me._openForm(event, me);
-                }
-            );
             item.attr('data-id', user.id);
             item.find('h3').html(
                 user.user +
@@ -323,6 +347,7 @@ Oskari.clazz.define(
                 target = jQuery(event.target),
                 item = target.parents('li'),
                 uid = item.attr('data-id');
+
             if (uid && uid.length) {
                 target.hide();
                 me._populateForm(form, me._getUser(parseInt(uid, 10)));

@@ -21,7 +21,7 @@ Oskari.clazz.define(
         me._clazz =
             'Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin';
         me._defaultLocation = 'bottom right';
-        me._index = 0;
+        me._index = 6;
         me._name = 'ManageClassificationPlugin';
 
         me._state = null;
@@ -228,6 +228,52 @@ Oskari.clazz.define(
             };
         },
 
+        _toggleHeaderClickBind: function (active, element) {
+            var me = this,
+                el = element || me.getElement(),
+                content = el.find('div.content'),
+                header = el.find('div.classheader'),
+                icon = header.find('.header-icon');
+
+            header.unbind('click');
+            if (!active) {
+                header.click(
+                    function () {
+                        if (content.is(':visible')) {
+                            icon.removeClass('icon-arrow-white-down').addClass('icon-arrow-white-right');
+                        } else {
+                            icon.removeClass('icon-arrow-white-right').addClass('icon-arrow-white-down');
+                        }
+                        content.animate(
+                            {
+                                height: 'toggle'
+                            },
+                            500
+                        );
+                    }
+                );
+            }
+        },
+
+        /**
+         * @method _setLayerToolsEditModeImpl
+         * Called after layerToolsEditMode is set, implement if needed.
+         *
+         *
+         */
+        _setLayerToolsEditModeImpl: function () {
+            var me = this,
+                active = me.inLayerToolsEditMode(),
+                el = me.getElement(),
+                content = el.find('div.content');
+
+            if (active) {
+                content.hide();
+            }
+
+            me._toggleHeaderClickBind(active);
+        },
+
         /**
          * @method setState
          * Set the state object of statsgrid to this plugin too.
@@ -312,8 +358,11 @@ Oskari.clazz.define(
             // Get class count
             if (me._state.numberOfClasses > params.COL_VALUES.length - 1) {
                 var newValue = Math.max(2, params.COL_VALUES.length - 1);
-                this.rangeSlider.slider('option',
-                    'value', newValue);
+
+                if (this.rangeSlider) {
+                    this.rangeSlider.slider('option',
+                        'value', newValue);
+                }
                 jQuery('input#amount_class').val(newValue);
                 me._state.numberOfClasses = newValue;
             }
@@ -613,7 +662,9 @@ Oskari.clazz.define(
                     value: me._state.numberOfClasses,
                     slide: function (event, ui) {
                         var newValue = ui.value;
-                        if (newValue > me._params.COL_VALUES.length - 1) {
+                        if ((me._params) &&
+                            (me._params.COL_VALUES) &&
+                            (newValue > me._params.COL_VALUES.length - 1)) {
                             newValue = Math.max(2, me._params.COL_VALUES.length - 1);
                         }
                         me._state.numberOfClasses = newValue;
@@ -629,6 +680,7 @@ Oskari.clazz.define(
                         );
                     }
                 });
+
                 me.rangeSlider = slider;
 
                 // HTML for the manual classification method.
@@ -725,26 +777,25 @@ Oskari.clazz.define(
                     flipColorsButton
                 );
             }
+
             content.append(classify);
 
             me._loadStateVariables(el);
 
-            // Toggle content HTML
-            header.click(function () {
-                content.animate({
-                    height: 'toggle'
-                }, 500);
-            });
-
             // Hide content
             content.hide();
             el.append(content);
+
+            // Toggle content HTML
+            me._toggleHeaderClickBind(false, el);
+
             // Hide Classify dialog
             //me.setVisible(me._isStatsLayerVisible());
             me.setVisible(me.isVisible());
             // Setup Colors
             me.setColors();
         },
+
 
         /**
          * @private @method  _createUI
@@ -1376,10 +1427,10 @@ Oskari.clazz.define(
         _createColorDialog: function () {
             // Main dialog
             var me = this;
+
             if (me.dialog) {
                 me.dialog.close(true);
                 me.dialog = null;
-                return;
             }
             me.dialog = Oskari.clazz.create(
                 'Oskari.userinterface.component.Popup'
@@ -1390,17 +1441,21 @@ Oskari.clazz.define(
             // Content HTML / Color set select HTML
 
             var colorset_stats = jQuery(
-                '<div class="colorset_stats"><br>' +
-                this._locale.colorset.setselection +
-                '<br><select id="colo_set"></select><br></div>'
-            );
-            me.content.append(colorset_stats);
-            var sel = colorset_stats.find('select'),
+                    '<div class="colorset_stats">' +
+                    '  <br>' + this._locale.colorset.setselection + '<br>' +
+                    '  <select id="colo_set"></select>' +
+                    '  <br>' +
+                    '</div>'
+                ),
+                sel = colorset_stats.find('select'),
                 opt = jQuery(
                     '<option value="seq">' +
                     this._locale.colorset.sequential +
                     '</option>'
                 );
+
+            me.content.append(colorset_stats);
+
             sel.append(opt);
             opt = jQuery(
                 '<option value="qual">' +
@@ -1424,7 +1479,7 @@ Oskari.clazz.define(
                     '<div class="instructions2" style="padding: 20px 0px 0px 0px;"></div>'
                 ),
                 cancelBtn = Oskari.clazz.create(
-                    'Oskari.userinterface.component.buttons.CancelButton'
+                    'Oskari.userinterface.component.buttons.CloseButton'
                 );
             instructions2.append(this._locale.colorset.info2);
             me.content.append(instructions2);

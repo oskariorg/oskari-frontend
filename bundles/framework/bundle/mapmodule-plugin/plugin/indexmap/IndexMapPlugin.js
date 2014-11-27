@@ -5,14 +5,16 @@
  *
  * See http://www.oskari.org/trac/wiki/DocumentationBundleMapModulePluginIndexMap
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin',
+Oskari.clazz.define(
+    'Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin',
+
     /**
-     * @method create called automatically on construction
-     * @static
+     * @static @method create called automatically on construction
+     *
      * @param {Object} config
      *      JSON config with params needed to run the plugin
+     *
      */
-
     function (config) {
         var me = this;
         me._clazz =
@@ -21,11 +23,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
         me._index = 5;
         me._name = 'IndexMapPlugin';
         me._indexMap = null;
+        // FIXME a more generic filename or get it from config...
         me._indexMapUrl = '/framework/bundle/mapmodule-plugin/plugin/indexmap/images/suomi25m_tm35fin.png';
-    }, {
+    },
+    {
         /**
          * @private @method _createControlElement
          * Constructs/initializes the indexmap  control for the map.
+         *
          *
          * @return {jQuery} element
          */
@@ -49,8 +54,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
          * Constructs/initializes the control adapter for the plugin
          *
          * @param {jQuery} el
+         *
          */
         _createControlAdapter: function (el) {
+            // FIXME this seems to be completely FI-specific?
             /*
              * create an overview map control with non-default
              * options
@@ -110,6 +117,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
         refresh: function () {
             var me = this,
                 toggleButton = me.getElement().find('.indexmapToggle');
+
             if (!toggleButton.length) {
                 toggleButton = jQuery('<div class="indexmapToggle"></div>');
                 // button has to be added separately so the element order is correct...
@@ -127,7 +135,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
                 var miniMap = me.getElement().find(
                     '.olControlOverviewMapElement'
                 );
-                console.log("icon click", miniMap);
+
                 miniMap.slideToggle({
                     duration: 100
                 });
@@ -169,13 +177,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
                 this._bindIcon(icon);
             }
         }
-    }, {
-        'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
+    },
+    {
+        extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
         /**
          * @static @property {string[]} protocol array of superclasses
          */
-        'protocol': [
+        protocol: [
             'Oskari.mapframework.module.Module',
             'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
         ]
-    });
+    }
+);

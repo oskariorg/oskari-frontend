@@ -186,17 +186,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                 loc: loc
             };
             me.filterDialog = Oskari.clazz.create('Oskari.userinterface.component.FilterDialog', loc, fixedOptions);
+
             me.filterDialog.setUpdateButtonHandler(function (filters) {
                 // throw event to new wfs
                 var event = me.instance.sandbox.getEventBuilder('WFSSetPropertyFilter')(filters, layer.getId());
                 me.instance.sandbox.notifyAll(event);
             });
-
+            
             me.aggregateAnalyseFilter = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.aggregateAnalyseFilter', me.instance, me.instance.getLocalization('layer'), me.filterDialog);
 
-            me.filterDialog.createFilterDialog(layer, function() {
-                me.service._returnAnalysisOfTypeAggregate(_.bind(me.aggregateAnalyseFilter.addAggregateFilterFunctionality, me));
-            });
+            if (me.service) {
+                me.filterDialog.createFilterDialog(layer, function() {
+                    me.service._returnAnalysisOfTypeAggregate(_.bind(me.aggregateAnalyseFilter.addAggregateFilterFunctionality, me));
+                });
+            } else {
+                me.filterDialog.createFilterDialog(layer);
+            }
             me.filterDialog.setCloseButtonHandler(_.bind(me.turnOnClickOff, me));
         },
 

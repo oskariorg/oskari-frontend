@@ -145,7 +145,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.service.AnalyseService',
                     }
                 }
             }
-            console.log("_handleAnalysisLayersResponse, analyseLayers: ", this.analyseLayers);
+
             if (layerarr && layerarr.length > 0) {
                 // notify components of added layer if not suppressed
                 var evt = sandbox.getEventBuilder('MapLayerEvent')(null, 'add');

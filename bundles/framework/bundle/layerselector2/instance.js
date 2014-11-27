@@ -7,7 +7,8 @@
  *
  * See Oskari.mapframework.bundle.layerselector2.LayerSelectorBundle for bundle definition.
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.LayerSelectorBundleInstance",
+Oskari.clazz.define(
+    'Oskari.mapframework.bundle.layerselector2.LayerSelectorBundleInstance',
 
     /**
      * @method create called automatically on construction
@@ -30,7 +31,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.LayerSelectorBund
          * @method getName
          * @return {String} the name for the component
          */
-        "getName": function () {
+        getName: function () {
             //"use strict";
             return this.__name;
         },
@@ -76,7 +77,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.LayerSelectorBund
          * @method start
          * implements BundleInstance protocol start method
          */
-        "start": function () {
+        start: function () {
             //"use strict";
             var me = this,
                 conf = me.conf,
@@ -127,7 +128,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.LayerSelectorBund
          * @method init
          * implements Module protocol init method - does nothing atm
          */
-        "init": function () {
+        init: function () {
             //"use strict";
             return null;
         },
@@ -135,7 +136,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.LayerSelectorBund
          * @method update
          * implements BundleInstance protocol update method - does nothing atm
          */
-        "update": function () {
+        update: function () {
             //"use strict";
         },
         /**
@@ -185,43 +186,63 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.LayerSelectorBund
             'MapLayerEvent': function (event) {
                 //"use strict";
                 var me = this,
-                    mapLayerService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService'),
+                    flyout = me.plugins['Oskari.userinterface.Flyout'],
+                    tile = me.plugins['Oskari.userinterface.Tile'],
+                    mapLayerService = me.sandbox.getService(
+                        'Oskari.mapframework.service.MapLayerService'
+                    ),
                     layerId = event.getLayerId(),
                     layer;
 
                 if (event.getOperation() === 'update') {
                     layer = mapLayerService.findMapLayer(layerId);
-                    me.plugins['Oskari.userinterface.Flyout'].handleLayerModified(layer);
+                    flyout.handleLayerModified(layer);
                 } else if (event.getOperation() === 'add') {
                     layer = mapLayerService.findMapLayer(layerId);
-                    me.plugins['Oskari.userinterface.Flyout'].handleLayerAdded(layer);
+                    flyout.handleLayerAdded(layer);
                     // refresh layer count
-                    me.plugins['Oskari.userinterface.Tile'].refresh();
+                    tile.refresh();
                 } else if (event.getOperation() === 'remove') {
-                    me.plugins['Oskari.userinterface.Flyout'].handleLayerRemoved(layerId);
+                    flyout.handleLayerRemoved(layerId);
                     // refresh layer count
-                    me.plugins['Oskari.userinterface.Tile'].refresh();
+                    tile.refresh();
                 } else if (event.getOperation() === 'sticky') {
                     layer = mapLayerService.findMapLayer(layerId);
-                    me.plugins['Oskari.userinterface.Flyout'].handleLayerSticky(layer);
+                    flyout.handleLayerSticky(layer);
                     // refresh layer count
-                    me.plugins['Oskari.userinterface.Tile'].refresh();
+                    tile.refresh();
                 }
             },
             'BackendStatus.BackendStatusChangedEvent': function (event) {
                 var layerId = event.getLayerId(),
                     status = event.getStatus(),
-                    mapLayerService = this.sandbox
-                        .getService('Oskari.mapframework.service.MapLayerService'),
+                    flyout = this.plugins['Oskari.userinterface.Flyout'],
+                    mapLayerService = this.sandbox.getService(
+                        'Oskari.mapframework.service.MapLayerService'
+                    ),
                     layer;
 
                 if (layerId === null || layerId === undefined) {
                     // Massive update so just recreate the whole ui
-                    this.plugins['Oskari.userinterface.Flyout'].populateLayers();
+                    flyout.populateLayers();
                 } else {
                     layer = mapLayerService.findMapLayer(layerId);
-                    this.plugins['Oskari.userinterface.Flyout']
-                        .handleLayerModified(layer);
+                    flyout.handleLayerModified(layer);
+                }
+            },
+            /**
+             * @method ExtensionUpdatedEvent
+             */
+            'userinterface.ExtensionUpdatedEvent': function (event) {
+                var plugin = this.plugins['Oskari.userinterface.Flyout'];
+
+                // ExtensionUpdateEvents are fired a lot, only let layerselector2 extension event to be handled when enabled
+                if (event.getExtension().getName() !== this.getName()) {
+                    // wasn't me -> do nothing
+                    return;
+                }
+                if (event.getViewState() !== 'close') {
+                    plugin.focus();
                 }
             }
         },
@@ -230,7 +251,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.LayerSelectorBund
          * @method stop
          * implements BundleInstance protocol stop method
          */
-        "stop": function () {
+        stop: function () {
             //"use strict";
             var me = this,
                 sandbox = me.sandbox(),
@@ -259,8 +280,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.LayerSelectorBund
          */
         startExtension: function () {
             //"use strict";
-            this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.mapframework.bundle.layerselector2.Flyout', this);
-            this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.mapframework.bundle.layerselector2.Tile', this);
+            this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.layerselector2.Flyout',
+                this
+            );
+            this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.layerselector2.Tile',
+                this
+            );
         },
         /**
          * @method stopExtension
@@ -330,5 +357,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.LayerSelectorBund
          * @property {String[]} protocol
          * @static
          */
-        "protocol": ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
-    });
+        protocol: [
+            'Oskari.bundle.BundleInstance',
+            'Oskari.mapframework.module.Module',
+            'Oskari.userinterface.Extension'
+        ]
+    }
+);

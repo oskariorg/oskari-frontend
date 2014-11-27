@@ -265,16 +265,16 @@ Oskari.clazz
              */
             createUi: function () {
                 var me = this,
-                    metadataCatalogueContainer = me.templates.metadataTab.clone(),
-                    optionPanel = me.templates.optionPanel.clone(),
-                    searchPanel = me.templates.searchPanel.clone(),
-                    resultPanel = me.templates.resultPanel.clone();
-                metadataCatalogueContainer.append(optionPanel);
-                metadataCatalogueContainer.append(searchPanel);
-                metadataCatalogueContainer.append(resultPanel);
-                searchPanel.hide();
-                searchPanel.append(me.getLocalization('searching'));
-                resultPanel.hide();
+                    metadataCatalogueContainer = me.templates.metadataTab.clone();
+                me.optionPanel = me.templates.optionPanel.clone(),
+                me.searchPanel = me.templates.searchPanel.clone(),
+                me.resultPanel = me.templates.resultPanel.clone();
+                metadataCatalogueContainer.append(me.optionPanel);
+                metadataCatalogueContainer.append(me.searchPanel);
+                metadataCatalogueContainer.append(me.resultPanel);
+                me.searchPanel.hide();
+                me.searchPanel.append(me.getLocalization('searching'));
+                me.resultPanel.hide();
 
                 var metadataCatalogueDescription = metadataCatalogueContainer.find('div.metadataCatalogueDescription');
                 metadataCatalogueDescription.html(me.getLocalization('metadataCatalogueDescription'));
@@ -282,9 +282,6 @@ Oskari.clazz
                 var field = Oskari.clazz.create('Oskari.userinterface.component.FormInput');
                 field.setPlaceholder(me.getLocalization('assistance'));
                 field.setIds('oskari_metadatacatalogue_forminput', 'oskari_metadatacatalogue_forminput_searchassistance');
-
-                // var regex = /[\s\w\d\.\,\?\!\-äöåÄÖÅ]*\*?$/;
-                // field.setContentCheck(true, me.getLocalization('contentErrorMsg'), regex);
 
                 field.bindChange(function (event) {
                     if (me.state === null) {
@@ -344,16 +341,16 @@ Oskari.clazz
                         }
                     }
                     me.lastSearch = field.getValue();
+
                     me.searchService.doSearch(search, function (data) {
                         me._showResults(metadataCatalogueContainer, data);
                     }, function (data) {
-                        searchPanel.hide();
-                        optionPanel.show();
-                        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                            okBtn = dialog.createCloseButton('OK'),
-                            title = me.getLocalization('metadatasearchservice_alert_title'),
-                            msg = me.getLocalization('metadatasearchservice_not_found_anything_text');
-                        dialog.show(title, msg, [okBtn]);
+                        var key = field.getValue();
+                        if (key === null || key === undefined || key.length === 0) {
+                            me._showError(me.getLocalization('cannot_be_empty'));
+                        } else {
+                            me._showError(me.getLocalization('metadatasearchservice_not_found_anything_text'));
+                        }
                     });
                 };
 
@@ -404,6 +401,21 @@ Oskari.clazz
                     }
                 });
                 metadataCatalogueContainer.find('div.moreLess').append(moreLessLink);
+            },
+
+            _showError: function (error) {
+                var me = this;
+                me.searchPanel.hide();
+                me.optionPanel.show();
+                var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                    okButton = dialog.createCloseButton('OK');
+
+                dialog.setId('oskari_search_error_popup');
+
+                dialog.show(
+                        this.getLocalization('metadataoptionservice_alert_title'),
+                        error, [okButton]
+                );
             },
             _createAdvancedPanel: function (data, advancedContainer, moreLessLink) {
                 var me = this,
@@ -556,7 +568,9 @@ Oskari.clazz
              * Displays metadata search results
              */
             _showResults: function (metadataCatalogueContainer, data) {
-                var me = this;
+                var me = this,
+                    data = data;
+
                 me.lastResult = data.results;
                 var resultPanel = metadataCatalogueContainer.find('.metadataResults'),
                     searchPanel = metadataCatalogueContainer.find('.metadataSearching'),
@@ -581,6 +595,13 @@ Oskari.clazz
                     resultPanel.empty();
                     optionPanel.show();
                 });
+
+                if (data.results.length === 0) {
+                    resultPanel.append(resultHeader);
+                    resultPanel.append(me.getLocalization('searchservice_search_not_found_anything_text'));
+                    resultPanel.show();
+                    return;
+                }
 
                 // render results
                 var table = me.templates.resultTable.clone(),

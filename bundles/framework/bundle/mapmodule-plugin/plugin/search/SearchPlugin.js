@@ -35,8 +35,7 @@ Oskari.clazz.define(
             me.template = jQuery(
                 '<div class="mapplugin search default-search-div">' +
                 '  <div class="search-textarea-and-button">' +
-                '    <input placeholder="' + me._loc.placeholder + '" type="text" />' +
-                '    <input type="button" value="' + me._loc.search + '" name="search" />' +
+                '    <input placeholder="' + me._loc.placeholder + '" type="text" /><input type="button" value="' + me._loc.search + '" name="search" />' +
                 '  </div>' +
                 '  <div class="results">' +
                 '    <div class="header">' +
@@ -103,6 +102,7 @@ Oskari.clazz.define(
 
         _setLayerToolsEditModeImpl: function() {
             var me = this,
+                el = me.getElement(),
                 overlay;
 
             if (me.inLayerToolsEditMode()) {
@@ -142,11 +142,13 @@ Oskari.clazz.define(
                 el = me.styledTemplate.clone();
                 me._inputField = el.find('input[type=text]');
                 me._searchButton = el.find('input[type=button]');
+                me._element = el;
                 me.changeToolStyle(conf.toolStyle, el);
             } else {
                 el = me.template.clone();
                 me._inputField = el.find('input[type=text]');
                 me._searchButton = el.find('input[type=button]');
+                me._element = el;
             }
 
             // bind events
@@ -517,7 +519,7 @@ Oskari.clazz.define(
                 me.template.children().clone().appendTo(div);
                 me._inputField = div.find('input[type=text]');
                 me._searchButton = div.find('input[type=button]');
-                me._bindUIEvents();
+                me._bindUIEvents(div);
                 return;
             }
 
@@ -531,7 +533,7 @@ Oskari.clazz.define(
                 me.styledTemplate.children().clone().appendTo(div);
                 me._inputField = div.find('input[type=text]');
                 me._searchButton = div.find('input[type=button]');
-                me._bindUIEvents();
+                me._bindUIEvents(div);
             }
 
             var resourcesPath = this.getMapModule().getImageUrl(),
@@ -592,7 +594,6 @@ Oskari.clazz.define(
             me._setLayerToolsEditMode(
                 me.getMapModule().isInLayerToolsEditMode()
             );
-
         },
 
         /**

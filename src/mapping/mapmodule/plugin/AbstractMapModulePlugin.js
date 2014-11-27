@@ -13,7 +13,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
         var me = this;
         me._config = config || {};
         me._eventHandlers = {};
-        me.isInLayerToolsEditMode = false;
+        me._isInLayerToolsEditMode = false;
         me._loc = {};
         me._map = null;
         me._mapModule = null;

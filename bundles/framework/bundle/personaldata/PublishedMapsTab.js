@@ -255,6 +255,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                     'id': view.id,
                     'state': view.state,
                     'name': view.name,
+                    'url': view.url,
                     'domain': view.pubDomain,
                     'lang': view.lang,
                     'isPublic': isPublic,
@@ -300,14 +301,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
 
             // set up the link from name field
             var nameRenderer = function (name, data) {
+                var url = sandbox.createURL(data.url);
+                if(!url) {
+                    // no url, no link just plain text
+                    return name;
+                }
+                // create link
                 var link = me.templateLink.clone();
                 link.append(name);
                 link.bind('click', function () {
-                    var publishedMapUrl = sandbox.getLocalizedProperty(
-                        me.instance.conf.publishedMapUrl
-                    );
                     window.open(
-                        publishedMapUrl + data.id,
+                        url,
                         'Published',
                         'location=1,status=1,scrollbars=yes,width=850,height=800'
                     );
@@ -374,17 +378,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 }
             };
 
-            //sending a request to publisher for editing view
+            // show a popup with the iframe code of the embedded map
             var htmlRenderer = function (name, data) {
+                var url = sandbox.createURL(data.url);
                 var link = me.templateLink.clone();
                 link.append(name);
                 link.bind('click', function () {
-                    var publishedMapUrl = sandbox.getLocalizedProperty(
-                            me.instance.conf.publishedMapUrl, data.lang
-                        ),
-                        url = 'http://' + window.location.host +
-                            publishedMapUrl + data.id,
-                        view = me._getViewById(data.id),
+                    var view = me._getViewById(data.id),
                         size = view ? view.state.mapfull.config.size : {
                             height: '525px',
                             width: '700px'

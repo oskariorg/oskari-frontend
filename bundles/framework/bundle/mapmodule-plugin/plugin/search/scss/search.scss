@@ -22,12 +22,14 @@ div.search {
     }
 
     input[type=text] {
+        @include border-radius(4px 0 0 4px);
+        border-right: 0;
         width: 140px;
     }
 
     input[type=button] {
+        @include border-radius(0 4px 4px 0);
         width: 60px;
-        margin-left: 3px;
     }
 
     div.results {

@@ -12,7 +12,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
      *
      *
      */
-    function () {
+    function (config) {
+        // hackhack for old configs so we don't have to remove
+        // with-panbuttons from them
+        this._config = config;
+        if (config && config.location && config.location.classes) {
+            config.location.classes = config.location.classes.replace(
+                'with-panbuttons',
+                ''
+            );
+            this._config = config;
+        }
         this._clazz =
             'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar';
         this._defaultLocation = 'top right';
@@ -21,17 +31,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
         this._slider = null;
         this._suppressEvents = false;
     }, {
-        _initImpl: function () {
-            // hackhack for old configs so we don't have to remove
-            // with-panbuttons from them
-            var conf = this.getConfig();
-            if (conf && conf.location && conf.location.classes) {
-                conf.location.classes =
-                    conf.location.classes.replace('with-panbuttons', '');
-                this._config = conf;
-            }
-        },
-
         /**
          * @private @method _createControlElement
          * Draws the zoombar on the screen.

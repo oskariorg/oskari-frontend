@@ -1,7 +1,14 @@
 div.mapplugin.scalebar {
-  /* 14px would be too big... */
-  font-size: 12px;
+  clear: both;
+  direction: ltr;
+  /* 12px would be too big... */
+  font-size: 10px;
   font-weight: bold;
   line-height: 13px;
   text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.35);
   /* text-shadow replacement for IE9, disabled as it doesn't look that good */ }
+  div.mapplugin.scalebar div {
+    direction: ltr; }
+
+.right div.mapplugin.scalebar {
+  direction: rtl; }

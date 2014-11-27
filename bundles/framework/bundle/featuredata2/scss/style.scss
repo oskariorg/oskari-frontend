@@ -1,3 +1,15 @@
+/* Mixins */
+@mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    -o-border-radius: $radius;
+    -ms-border-radius: $radius;
+    border-radius: $radius;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box;
+}
+
 .featuredata {
 
     div.tab-content {
@@ -39,13 +51,78 @@
 
 }
 
-div.oskariTabs .tabsHeader ul li a{
-    display: inline-block;
+div.analyse-filter-popup-content div.filter-option {
+    padding-bottom: 10px;
+
+    div.manage-filter-option {
+        display: inline-block;
+        vertical-align: middle;
+
+        div.add-filter-option, div.remove-filter-option {
+            cursor: pointer;
+            display: inline-block;
+            /* These are icons, so it's OK to have a custom font here. */
+            font-size: 48px;
+            font-weight: bold;
+            margin-left: 5px;
+            min-width: 16px;
+            text-align: center;
+        }
+        
+    }
+
+    &.filter-option-aggregate {
+        padding-bottom: 25px;
+
+        div.attribute-value-block {
+            position: relative;
+            display: inline-block;
+
+            div.add-link {
+                position: absolute;
+                top: 40px;
+            }
+        }
+    }
+
+    .filter-input-value {
+        width: 160px;
+        margin: 1px;
+    }
+
+    input[name="case-sensitive"] {
+        margin-right: 5px;
+    }
+
+    select {
+
+        &.attribute {
+            width: 150px;
+        }
+
+        &.boolean {
+            margin-top: 10px;
+            width: 65px;
+        }
+
+        &.operator {
+            width: 210px;
+        }
+
+    }
 }
 
-div.oskariTabs .tabsHeader ul li .union-filter{
-    display: inline-block;
-    margin-right: 10px;
+div.oskariTabs .tabsHeader ul li {
+
+    a {
+        display: inline-block;
+    }
+
+    .union-filter{
+        display: inline-block;
+        margin-right: 10px;
+    }
+
 }
 
 div.flyout-resizer {
@@ -54,8 +131,17 @@ div.flyout-resizer {
 }
 
 div.mapplugins .mappluginsContainer .mappluginsContent div.featuredataplugin.mapplugin {
+    clear: both;
     display: block;
-    background: #FFF;
-    border: 1px solid;
+    background: #3c3c3c;
+    @include border-radius(2px);
+    line-height: 28px;
     margin: 10px auto;
+    padding: 0 9px;
+
+    a {
+        color: white;
+        text-decoration: none;
+    }
+
 }

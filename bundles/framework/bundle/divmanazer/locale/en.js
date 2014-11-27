@@ -8,6 +8,7 @@ Oskari.registerLocalization({
             "close": "Close",
             "delete": "Delete",
             "edit": "Edit",
+            "exit": "Exit",
             "ok": "OK",
             "save": "Save",
             "search": "Search"

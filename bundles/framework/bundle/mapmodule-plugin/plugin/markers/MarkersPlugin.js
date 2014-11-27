@@ -42,6 +42,13 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         me.buttons = null;
         me.dialog = null;
         me._buttonsAdded = false;
+
+        // Show the marker button
+        me._markerButton = true;
+        if ((conf) && (typeof conf.markerButton === "boolean")) {
+            me._markerButton = conf.markerButton;
+        }
+
     }, {
         /**
          * @method hasUI
@@ -533,6 +540,12 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 tool,
                 sandbox = this.getSandbox(),
                 reqBuilder;
+
+            // Is button available?
+            if (!me._markerButton) {
+                return;
+            }
+
             // Already registered?
             if (me._buttonsAdded) {
                 return;

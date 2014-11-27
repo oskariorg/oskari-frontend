@@ -140,6 +140,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 }
             }
         }, {
+            id: 'Oskari.mapframework.mapmodule.ControlsPlugin',
+            selected: true
+        }, {
             id: 'Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin',
             selected: false,
             lefthanded: 'top right',
@@ -154,9 +157,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 },
                 toolbarId: 'PublisherToolbar'
             }
-        }, {
-            id: 'Oskari.mapframework.mapmodule.ControlsPlugin',
-            selected: true
         }, {
             id: 'Oskari.mapframework.mapmodule.GetInfoPlugin',
             selected: true,

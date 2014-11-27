@@ -72,6 +72,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                 sandbox = Oskari.getSandbox(sandboxName),
                 request,
                 p;
+
             if (me.started) {
                 return;
             }
@@ -98,11 +99,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
 
 
             // create request handlers
-            me.publishMapEditorRequestHandler = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.request.PublishMapEditorRequestHandler', me);
+            me.publishMapEditorRequestHandler = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.publisher.request.PublishMapEditorRequestHandler',
+                me
+            );
 
             // register request handlers
-            sandbox.addRequestHandler('Publisher.PublishMapEditorRequest', me.publishMapEditorRequestHandler);
+            sandbox.addRequestHandler(
+                'Publisher.PublishMapEditorRequest',
+                me.publishMapEditorRequestHandler
+            );
         },
+
         /**
          * @method init
          * Implements Module protocol init method - does nothing atm
@@ -110,6 +118,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
         init: function () {
             return null;
         },
+
         /**
          * @method update
          * Implements BundleInstance protocol update method - does nothing atm
@@ -117,6 +126,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
         update: function () {
 
         },
+
         /**
          * @method onEvent
          * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
@@ -129,44 +139,47 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
             }
             return handler.apply(this, [event]);
         },
+
         /**
          * @property {Object} eventHandlers
          * @static
          */
         eventHandlers: {
             /**
-             * @method AfterMapLayerRemoveEvent
-             * @param {Oskari.mapframework.event.common.AfterMapLayerRemoveEvent} event
-             *
-             * Calls flyouts handleLayerSelectionChanged() method
-             */
-            'AfterMapLayerRemoveEvent': function (event) {
-                this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged();
-                //update maplayerPanel in publisher too.
-                if (this.publisher) {
-                    this.publisher.maplayerPanel.handleLayerSelectionChanged();
-                }
-            },
-            /**
              * @method AfterMapLayerAddEvent
              * @param {Oskari.mapframework.event.common.AfterMapLayerAddEvent} event
              *
              * Calls flyouts handleLayerSelectionChanged() method
              */
-            'AfterMapLayerAddEvent': function (event) {
+            AfterMapLayerAddEvent: function (event) {
                 this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged();
 
                 if (this.publisher) {
                     this.publisher.maplayerPanel.handleLayerSelectionChanged();
                 }
             },
+
+            /**
+             * @method AfterMapLayerRemoveEvent
+             * @param {Oskari.mapframework.event.common.AfterMapLayerRemoveEvent} event
+             *
+             * Calls flyouts handleLayerSelectionChanged() method
+             */
+            AfterMapLayerRemoveEvent: function (event) {
+                this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged();
+                //update maplayerPanel in publisher too.
+                if (this.publisher) {
+                    this.publisher.maplayerPanel.handleLayerSelectionChanged();
+                }
+            },
+
             /**
              * @method AfterRearrangeSelectedMapLayerEvent
              * @param {Oskari.mapframework.event.common.AfterRearrangeSelectedMapLayerEvent} event
              *
              * Rearranges layers
              */
-            'AfterRearrangeSelectedMapLayerEvent': function (event) {
+            AfterRearrangeSelectedMapLayerEvent: function (event) {
                 if (event._creator !== this.getName() && event._fromPosition !== event._toPosition) {
                     // Layer order has been changed by someone else, resort layers
                     this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged();
@@ -178,27 +191,46 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                     }
                 }
             },
+
             /**
              * @method MapLayerEvent
              * @param {Oskari.mapframework.event.common.MapLayerEvent} event
              *
              * Calls flyouts handleLayerSelectionChanged() and handleDrawLayerSelectionChanged() functions
              */
-            'MapLayerEvent': function (event) {
+            MapLayerEvent: function (event) {
                 this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged();
                 if ((this.publisher) && (event.getOperation() === 'add')) {
                     // handleLayerSelectionChanged and handleDrawLayerSelectionChanged both rebuild the DOM
                     this.publisher.maplayerPanel.handleLayerSelectionChanged();
-                    this.publisher.toolsPanel.handleDrawLayerSelectionChanged(event.getLayerId());
+                    this.publisher.toolsPanel.handleDrawLayerSelectionChanged(
+                        event.getLayerId()
+                    );
                 }
             },
+
+            /**
+             * @method MapLayerVisibilityChangedEvent
+             */
+            MapLayerVisibilityChangedEvent: function (event) {
+                if (this.publisher && this.publisher.maplayerPanel) {
+                    this.publisher.maplayerPanel.handleLayerVisibilityChanged(
+                        event.getMapLayer(),
+                        event.isInScale(),
+                        event.isGeometryMatch()
+                    );
+                }
+            },
+
             /**
              * @method Publisher.MapPublishedEvent
              * @param {Oskari.mapframework.bundle.publisher.event.MapPublishedEvent} event
              */
             'Publisher.MapPublishedEvent': function (event) {
                 var loc = this.getLocalization(),
-                    dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                    dialog = Oskari.clazz.create(
+                        'Oskari.userinterface.component.Popup'
+                    ),
                     okBtn = dialog.createCloseButton(loc.BasicView.buttons.ok),
                     url,
                     iframeCode,
@@ -206,8 +238,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                     content,
                     width = event.getWidth(),
                     height = event.getHeight();
+
                 okBtn.addClass('primary');
-                url = this.sandbox.getLocalizedProperty(this.conf.publishedMapUrl) + event.getId();
+                url = event.getUrl();                
+                //url = this.sandbox.getLocalizedProperty(this.conf.publishedMapUrl) + event.getId();
                 iframeCode = '<div class="codesnippet"><code>&lt;iframe src="' + url + '" style="border: none;';
                 if (width !== null && width !== undefined) {
                     iframeCode += ' width: ' + width + ';';
@@ -224,6 +258,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                 dialog.show(loc.published.title, content, [okBtn]);
                 this.setPublishMode(false);
             },
+
             /**
              * @method Publisher.ToolStyleChangedEvent
              */
@@ -234,6 +269,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
 
                 this.publisher.changeToolStyles(event.getStyle());
             },
+
             /**
              * @method Publisher.ColourSchemeChangedEvent
              */
@@ -244,6 +280,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
 
                 this.publisher.changeColourScheme(event.getColourScheme());
             },
+
             /**
              * @method Publisher.FontChangedEvent
              */
@@ -253,14 +290,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                 }
 
                 this.publisher.changeFont(event.getFont());
-            },
-            /**
-             * @method MapLayerVisibilityChangedEvent
-             */
-            'MapLayerVisibilityChangedEvent': function (event) {
-                if (this.publisher && this.publisher.maplayerPanel) {
-                    this.publisher.maplayerPanel.handleLayerVisibilityChanged(event.getMapLayer(), event.isInScale(), event.isGeometryMatch());
-                }
             }
         },
 
@@ -293,8 +322,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
          * Oskari.mapframework.bundle.publisher.Tile
          */
         startExtension: function () {
-            this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.Flyout', this);
-            this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.Tile', this);
+            this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.publisher.Flyout',
+                this
+            );
+            this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.publisher.Tile',
+                this
+            );
         },
         /**
          * @method stopExtension
@@ -383,8 +418,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                 jQuery(me.plugins['Oskari.userinterface.Flyout'].container).parent().parent().css('display', 'none');
 
                 // proceed with publisher view
-                me.publisher = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
-                    me, me.getLocalization('BasicView'), data);
+                me.publisher = Oskari.clazz.create(
+                    'Oskari.mapframework.bundle.publisher.view.BasicPublisher',
+                    me,
+                    me.getLocalization('BasicView'),
+                    data
+                );
                 me.publisher.render(map);
                 me.publisher.setEnabled(true);
                 if (statsLayer) {
@@ -436,6 +475,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                 me.sandbox.request(me, request);
             }
         },
+
         /**
          * @method _addLayers
          * Adds temporarily removed layers to map
@@ -455,6 +495,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                 }
             }
         },
+
         /**
          * @method _removeLayers
          * Removes temporarily layers from map that the user cant publish
@@ -474,6 +515,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                 }
             }
         },
+
         /**
          * @method hasPublishRight
          * Checks if the layer can be published.
@@ -488,6 +530,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
             // or nothing at all
             return (layer.getPermission('publish') === 'publication_permission_ok');
         },
+
         /**
          * @method getLayersWithoutPublishRights
          * Checks currently selected layers and returns a subset of the list
@@ -516,5 +559,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
          * @property {String[]} protocol
          * @static
          */
-        'protocol': ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
-    });
+        protocol: [
+            'Oskari.bundle.BundleInstance',
+            'Oskari.mapframework.module.Module',
+            'Oskari.userinterface.Extension'
+        ]
+    }
+);

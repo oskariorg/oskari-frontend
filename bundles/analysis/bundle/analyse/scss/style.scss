@@ -249,7 +249,7 @@ div.basic_analyse {
     select {
 
         &.settings_buffer_units, &.settings_area_size_units {
-            width: 80px;
+            width: 110px;
         }
 
     }
@@ -326,6 +326,15 @@ table.layer-icons {
 }
 
 /* Analyse filter CSS */
+
+div.filter-popup-content {
+    overflow: auto;
+    max-height: 500px;
+    width: 700px;
+    margin: 0px !important;
+    padding: 10px;
+}
+
 div.analyse-filter-popup-content {
     padding: 8px;
 
@@ -429,7 +438,7 @@ div.analyse-filter-popup-content div.filter-option {
 
         &.boolean {
             margin-top: 10px;
-            width: 60px;
+            width: 65px;
         }
 
         &.operator {

@@ -52,6 +52,53 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             return this.sandbox;
         },
 
+        adjustMapSize: function () {
+            var me = this;
+
+            // do not resize map if resizeEnabled is false
+            if (me.resizeEnabled === null || me.resizeEnabled === undefined || me.resizeEnabled) {
+                var contentMap = jQuery('#' + me.contentMapDivId),
+                    dataContent = jQuery('.oskariui-left'),
+                    dataContentHasContent = !dataContent.is(':empty'),
+                    dataContentWidth = dataContent.width(),
+                    dataContentInlineWidth = dataContent.length ? dataContent[0].style.width : '',
+                    mapContainer = contentMap.find('.oskariui-center'),
+                    mapDiv = jQuery('#' + me.mapDivId),
+                    mapHeight = jQuery(window).height(),
+                    mapWidth = contentMap.width();
+
+                contentMap.height(mapHeight);
+
+                var toolbar = contentMap.find(
+                    '.oskariui-menutoolbar:visible'
+                );
+                if (toolbar.length > 0) {
+                    mapHeight -= toolbar.height();
+                }
+                dataContent.height(mapHeight);
+                mapDiv.height(mapHeight);
+
+                if (dataContentHasContent) {
+                    if (dataContent.is(':visible') &&
+                            dataContentWidth) {
+                        mapWidth -= dataContentWidth;
+                    }
+                } else {
+                    dataContent.addClass('oskari-closed');
+                }
+
+                // HACKHACK don't set widths if we have percentages there...
+                if (!dataContentInlineWidth ||
+                        dataContentInlineWidth.indexOf('%') === -1) {
+                    mapContainer.width(mapWidth);
+                    //mapDiv.width(mapWidth);
+                }
+
+                // notify map module that size has changed
+                me.updateSize();
+            }
+        },
+
         /**
          * @private @method _createUi
          * Creates the map module and rendes it to DOM element that has the id
@@ -88,58 +135,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 jQuery('#' + me.mapDivId).height(me.conf.size.height);
             } else {
                 // react to window resize with timer so app stays responsive
-                var adjustMapSize = function () {
-                    // do not resize map if resizeEnabled is false
-                    if (me.resizeEnabled === null || me.resizeEnabled === undefined || me.resizeEnabled) {
-                        var contentMap = jQuery('#' + me.contentMapDivId),
-                            dataContent = jQuery('.oskariui-left'),
-                            dataContentHasContent = !dataContent.is(':empty'),
-                            dataContentWidth = dataContent.width(),
-                            dataContentInlineWidth = dataContent.length ? dataContent[0].style.width : '',
-                            mapContainer = contentMap.find('.oskariui-center'),
-                            mapDiv = jQuery('#' + me.mapDivId),
-                            mapHeight = jQuery(window).height(),
-                            mapWidth = contentMap.width();
-
-                        contentMap.height(mapHeight);
-
-                        var toolbar = contentMap.find(
-                            '.oskariui-menutoolbar:visible'
-                        );
-                        if (toolbar.length > 0) {
-                            mapHeight -= toolbar.height();
-                        }
-                        dataContent.height(mapHeight);
-                        mapDiv.height(mapHeight);
-
-                        if (dataContentHasContent) {
-                            if (dataContent.is(':visible') &&
-                                    dataContentWidth) {
-                                mapWidth -= dataContentWidth;
-                            }
-                        } else {
-                            dataContent.addClass('oskari-closed');
-                        }
-
-                        // HACKHACK don't set widths if we have percentages there...
-                        if (!dataContentInlineWidth ||
-                                dataContentInlineWidth.indexOf('%') === -1) {
-                            mapContainer.width(mapWidth);
-                            //mapDiv.width(mapWidth);
-                        }
-
-                        // notify map module that size has changed
-                        me.updateSize();
-                    }
-                };
-
                 var resizeTimer;
                 jQuery(window).resize(function () {
                     clearTimeout(resizeTimer);
-                    resizeTimer = setTimeout(adjustMapSize, 100);
+                    resizeTimer = setTimeout(
+                        function () {
+                            me.adjustMapSize();
+                        },
+                        100
+                    );
                 });
 
-                adjustMapSize();
+                me.adjustMapSize();
             }
 
 
@@ -204,8 +211,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 timestamp: new Date().getTime(),
 
                 success: function (data) {
-                    Oskari.setSupportedLocales(data.supportedLocales);
-                    //console.log(blocale.getSupportedLocales());
+                    Oskari.setSupportedLocales(data.supportedLocales || []);
+                    Oskari.setDecimalSeparators(data.decimalSeparators || {});
                 },
                 error: function () {
                     // TODO add error handling
@@ -403,6 +410,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                         'RemoveMapLayerRequest'
                 ),
                 i;
+
             for (i = 0; i < selectedLayers.length; i += 1) {
                 this.sandbox.request(
                     module.getName(),
@@ -530,7 +538,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                             styleReqBuilder(layer.id, layer.style)
                         );
                     }
-                    if (layer.opacity) {
+                    if (layer.opacity || layer.opacity === 0) {
                         me.sandbox.request(
                             mapModuleName,
                             rbOpacity(layer.id, layer.opacity)
@@ -685,10 +693,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          * @public @method updateSize
          * Tells the map module that it should update/refresh its size.
          *
+         * @param {Boolean} fullUpdate
+         * Whether we only tell the map implementation to update its size or if
+         * we update the container size as well.
          *
          */
-        updateSize: function () {
-            this.mapmodule.updateSize();
+        updateSize: function (fullUpdate) {
+            if (fullUpdate) {
+                this.adjustMapSize();
+            } else {
+                this.mapmodule.updateSize();
+            }
         },
 
         /**
