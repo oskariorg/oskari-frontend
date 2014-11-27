@@ -413,6 +413,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                 me._removeLayers();
 
                 map.addClass('mapPublishMode');
+                map.addClass('published');
                 me.sandbox.mapMode = 'mapPublishMode';
                 // close/hide flyout - TODO: how about other flyouts, popups/gfi?
                 jQuery(me.plugins['Oskari.userinterface.Flyout'].container).parent().parent().css('display', 'none');
@@ -459,6 +460,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                 }
                 // first return all needed plugins before adding the layers back
                 map.removeClass('mapPublishMode');
+                map.removeClass('published');
                 if (me.sandbox._mapMode === 'mapPublishMode') {
                     delete me.sandbox._mapMode;
                 }
