@@ -138,8 +138,10 @@
   box-shadow: 2px 2px 2px #c0c0c0;
   min-width: 100px;
   z-index: 20; }
-  .slick-header-menu .slick-header-menuitem {
-    padding: 2px 4px;
+  .slick-header-menu .slick-header-menuitem a, .slick-header-menu .slick-header-menuitem li, .slick-header-menu .slick-header-menuitem div {
+    display: block;
+    padding: 2px 4px; }
+  .slick-header-menu .slick-header-menuitem a, .slick-header-menu .slick-header-menuitem li {
     border: 1px solid transparent;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
@@ -149,7 +151,7 @@
     -webkit-background-clip: padding-box;
     -moz-background-clip: padding-box;
     background-clip: padding-box; }
-    .slick-header-menu .slick-header-menuitem:hover {
+    .slick-header-menu .slick-header-menuitem a:hover, .slick-header-menu .slick-header-menuitem li:hover {
       border-color: silver;
       background: white; }
 

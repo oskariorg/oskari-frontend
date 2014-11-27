@@ -247,13 +247,21 @@
     z-index: 20;
 
     .slick-header-menuitem {
-        padding: 2px 4px;
-        border: 1px solid transparent;
-        @include border-radius(3px);
 
-        &:hover {
-            border-color: silver;
-            background: white;
+        a, li, div {
+            display: block;
+            padding: 2px 4px;
+        }
+        
+        a, li {
+            border: 1px solid transparent;
+            @include border-radius(3px);
+
+            &:hover {
+                border-color: silver;
+                background: white;
+            }
+
         }
 
     }
