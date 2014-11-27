@@ -13,9 +13,6 @@
 div.mapplugin.search {
     top: 10px;
     right: 10px;
-}
-
-div.search {
 
     div.close {
         float: right;
@@ -85,7 +82,9 @@ div.published-search-div {
         display: block;
         float: right;
 
-        div.search-left, div.search-middle, div.search-right {
+        div.search-left,
+        div.search-middle,
+        div.search-right {
             display: inline-block;
             float: left;
             height: 38px;

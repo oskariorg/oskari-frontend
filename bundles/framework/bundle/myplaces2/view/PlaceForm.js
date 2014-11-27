@@ -19,37 +19,38 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
 
         var loc = instance.getLocalization('placeform');
 
-        this.template = jQuery('<div class="myplacesform">' +
-            '<div class="field">' +
-            '<div class="help icon-info" ' +
-            'title="' + loc.tooltip + '"></div>' +
-            '<input type="text" name="placename" placeholder="' + loc.placename.placeholder + '"/>' +
-            '</div>' +
-            '<div class="field">' +
-            '<textarea name="placedesc" placeholder="' + loc.placedesc.placeholder + '">' +
-            '</textarea>' +
-            '</div>' +
-            '<div class="field">' +
-            '<input type="text" name="placeAttention" placeholder="' + loc.placeAttention.placeholder + '"/>' +
-            '</div>' +
-            '<div class="field measurementResult">' +
-            '</div>' +
-            '<div class="field">' +
-            '<input type="text" name="placelink" placeholder="' + loc.placelink.placeholder + '"/>' +
-            '</div>' +
-            '<div class="field">' +
-            '<input type="text" name="imagelink" placeholder="' + loc.imagelink.placeholder + '"/>' +
-            '</div>' +
-            '<div class="field imagePreview">' +
-            '<label>' + loc.imagelink.previewLabel + '</label><br clear="all" />' +
-            '<a class="myplaces_imglink" target="_blank"><img src=""></img></a>' +
-            '</div>' +
-            '<div class="field" id="newLayerForm">' +
-            '<label for="category">' + '<a href="#" class="newLayerLink">' + loc.category.newLayer + '</a>' + " " + loc.category.choose + '</label><br clear="all" />' +
-            '<select name="category" autofocus>' +
-            '</select>' +
-            '</div>' +
-            '</div>');
+        this.template = jQuery(
+            '<div class="myplacesform">' +
+            '  <div class="field">' +
+            '    <div class="help icon-info" title="' + loc.tooltip + '"></div>' +
+            '    <input type="text" name="placename" placeholder="' + loc.placename.placeholder + '" />' +
+            '  </div>' +
+            '  <div class="field">' +
+            '    <textarea name="placedesc" placeholder="' + loc.placedesc.placeholder + '"></textarea>' +
+            '  </div>' +
+            '  <div class="field">' +
+            '    <input type="text" name="placeAttention" placeholder="' + loc.placeAttention.placeholder + '"/>' +
+            '  </div>' +
+            '  <div class="field measurementResult"></div>' +
+            '  <div class="field">' +
+            '    <input type="text" name="placelink" placeholder="' + loc.placelink.placeholder + '"/>' +
+            '  </div>' +
+            '  <div class="field">' +
+            '    <input type="text" name="imagelink" placeholder="' + loc.imagelink.placeholder + '"/>' +
+            '  </div>' +
+            '  <div class="field imagePreview">' +
+            '    <label>' + loc.imagelink.previewLabel + '</label><br clear="all" />' +
+            '    <a class="myplaces_imglink" target="_blank"><img src=""></img></a>' +
+            '  </div>' +
+            '  <div class="field" id="newLayerForm">' +
+            '    <label for="category">' +
+            '      <a href="#" class="newLayerLink">' + loc.category.newLayer + '</a>' + " " + loc.category.choose +
+            '    </label>' +
+            '    <br clear="all" />' +
+            '    <select name="category"></select>' +
+            '  </div>' +
+            '</div>'
+        );
         this.templateOption = jQuery('<option></option>');
         this.categoryForm = undefined;
     }, {

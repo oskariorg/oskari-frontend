@@ -93,6 +93,8 @@ input[type="submit"], input[type="button"], input[type="reset"], button {
 	font-weight: bold;
 	overflow: visible;
 	padding: 8px 5px;
+    line-height: inherit;
+    min-width: 4em;
 	width: auto;
 }
 

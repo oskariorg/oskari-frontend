@@ -91,6 +91,8 @@ input[type="submit"], input[type="button"], input[type="reset"], button {
   cursor: pointer;
   overflow: visible;
   padding: 8px 5px;
+  line-height: inherit;
+  min-width: 4em;
   width: auto;
 }
 input[type="submit"]:hover:enabled, input[type="submit"]:focus, input[type="button"]:hover:enabled, input[type="button"]:focus, input[type="reset"]:hover:enabled, input[type="reset"]:focus, button:hover:enabled, button:focus {
@@ -158,10 +160,6 @@ input.focus, textarea.focus {
 
 textarea {
   padding: 5px 5px;
-}
-
-button, input[type=button], input[type=submit], input[type=reset] {
-  line-height: inherit;
 }
 
 button:disabled, input:disabled, select:disabled, textarea:disabled {
