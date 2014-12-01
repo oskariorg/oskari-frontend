@@ -6,10 +6,10 @@
 Oskari.clazz.define(
     'Oskari.mapframework.bundle.mapmodule.plugin.RealtimePlugin',
     /**
-     * @method create called automatically on construction
-     * @static
+     * @static @method create called automatically on construction
+     *
+     *
      */
-
     function (config) {
         var me = this,
             opt;
@@ -36,11 +36,12 @@ Oskari.clazz.define(
         me._config = conf;
     }, {
         /**
+         * @method _stopPluginImpl
          * Interface method for the plugin protocol.
          * Should unregisters requesthandlers and
          * eventlisteners.
          *
-         * @method _stopPluginImpl
+         *
          */
         _stopPluginImpl: function () {
             this.intervals = undefined;
@@ -202,8 +203,8 @@ Oskari.clazz.define(
          * @return {Number} rate in milliseconds
          */
         _getRefreshRate: function (rate) {
-            var minRate = this.config.minRefreshRate || this.minRefreshRate,
-                maxRate = this.config.maxRefreshRate || this.maxRefreshRate;
+            var minRate = this._config.minRefreshRate || this.minRefreshRate,
+                maxRate = this._config.maxRefreshRate || this.maxRefreshRate;
 
             return _.min([_.max([(rate * 1000), minRate]), maxRate]);
         },
@@ -216,16 +217,16 @@ Oskari.clazz.define(
          * @return {Boolean}
          */
         _isNotIgnored: function (layer) {
-            return !_.any(this.config.ignoredLayerTypes, function (type) {
+            return !_.any(this._config.ignoredLayerTypes, function (type) {
                 return layer.isLayerOfType(type);
             });
         }
     }, {
-        'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
+        extend: ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
         /**
          * @static @property {string[]} protocol array of superclasses
          */
-        'protocol': [
+        protocol: [
             'Oskari.mapframework.module.Module',
             'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
         ]
