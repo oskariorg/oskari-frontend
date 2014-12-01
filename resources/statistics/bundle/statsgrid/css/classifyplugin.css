@@ -1,7 +1,7 @@
 .manageClassificationPlugin {
   background-color: #FFF;
   z-index: 1000000 !important;
-  max-width: 220px;
+  max-width: 240px;
   padding: 0px;
   text-align: left;
   /* If there's a sane reason to keep the absolute positioning, write it here

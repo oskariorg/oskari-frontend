@@ -10,14 +10,14 @@ Oskari.clazz.define(
      *
      *
      */
-    function (instance, conf, locale) {
+    function (conf, instance, locale) {
         var me = this;
 
         me._clazz =
             'Oskari.mapframework.bundle.printout.plugin.LegendPlugin';
-        me._conf = conf;
-        if (!me.conf) {
-            me.conf = {};
+        me._config  = conf;
+        if (!me._config ) {
+            me._config = {};
         }
         me.instance = instance;
         me.locale = locale;

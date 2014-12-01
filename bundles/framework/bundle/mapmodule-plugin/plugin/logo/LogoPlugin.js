@@ -3,7 +3,8 @@
  * Displays the NLS logo and provides a link to terms of use on top of the map.
  * Gets base urls from localization files.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
+Oskari.clazz.define(
+    'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
     /**
      * @static @method create called automatically on construction
      *
@@ -19,12 +20,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
         templates: {
             dataSourcesDialog: jQuery(
                 '<div class="data-sources-dialog">' +
-                '  <div class="layers">' +
-                '    <h4></h4>' +
-                '  </div>' +
-                '  <div class="indicators">' +
-                '    <h4></h4>' +
-                '  </div>' +
+                '<div class="layers">' +
+                '<h4></h4>' +
+                '</div>' +
+                '<div class="indicators">' +
+                '<h4></h4>' +
+                '</div>' +
                 '</div>'
             )
         },
@@ -84,13 +85,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
         _createControlElement: function () {
             return jQuery(
                 '<div class="mapplugin logoplugin">' +
-                '  <div class="icon"></div>' +
-                '  <div class="terms">' +
-                '    <a href="#" target="_blank"></a>' +
-                '  </div>' +
-                '  <div class="data-sources">' +
-                '    <a href="#"></a>' +
-                '  </div>' +
+                '<div class="icon"></div>' +
+                '<div class="terms">' +
+                '<a href="#" target="_blank"></a>' +
+                '</div>' +
+                '<div class="data-sources">' +
+                '<a href="#"></a>' +
+                '</div>' +
                 '</div>'
             );
         },
@@ -222,12 +223,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
         },
 
         /**
+         * @method _openDataSourcesDialog
          * Opens a dialog to show data sources of the selected layers
          * and statistics indicators.
          *
-         * @method _openDataSourcesDialog
          * @param  {jQuery} target arget element where the popup is attached to
          * @param  {Array[Object]} indicators the open indicators
+         *
          * @return {undefined}
          */
         _openDataSourcesDialog: function (target) {
@@ -279,10 +281,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
         },
 
         /**
+         * @method _addIndicatorsToDataSourcesDialog
          * Adds indicators to the data sources dialog.
          *
-         * @method _addIndicatorsToDataSourcesDialog
          * @param {Object} indicators
+         *
          */
         _addIndicatorsToDataSourcesDialog: function (indicators) {
             if (!this.dataSourcesDialog) {
@@ -322,12 +325,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
             dialog.moveTo(target, 'top');
         }
     }, {
-        'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
+        extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
         /**
          * @static @property {string[]} protocol array of superclasses
          */
-        'protocol': [
+        protocol: [
             'Oskari.mapframework.module.Module',
             'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
         ]
-    });
+    }
+);

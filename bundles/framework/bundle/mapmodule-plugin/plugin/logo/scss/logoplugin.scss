@@ -28,9 +28,11 @@
 		cursor: pointer;
 
 		a {
+			/* Filter below requires that the element has height or smthn... */
+			display: inline-block;
 			text-decoration: none;
 			/* text-shadow replacement for IE9 */
-			filter: unquote("glow(color=#C0000000,strength=3)");
+			filter: unquote("glow(color=#C0000000,strength=1)");
 		}
 
 	}
