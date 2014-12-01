@@ -3,6 +3,7 @@ div.mapplugin.scalebar {
   /* 14px would be too big... */
   font-size: 12px;
   font-weight: bold;
-  line-height: 13px;
-  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.35);
-  /* text-shadow replacement for IE9, disabled as it doesn't look that good */ }
+  line-height: 13px; }
+  div.mapplugin.scalebar div {
+    background-color: rgba(255, 255, 255, 0.2);
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.35); }

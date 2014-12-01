@@ -361,11 +361,11 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
          * Prints given text to browser console
          */
         printDebug: function () {
-            if (this._debug && window.console !== null && window.console !== undefined) {
-                if (window.console.debug !== null && window.console.debug !== undefined) {
-                    console.debug.apply(console, arguments);
-                } else if (window.console.log !== null && window.console.log !== undefined) {
-                    console.log.apply(console, arguments);
+            if (this._debug && window.console) {
+                if (window.console.debug && window.console.debug.apply) {
+                    window.console.debug.apply(window.console, arguments);
+                } else if (window.console.log && window.console.log.apply) {
+                    window.console.log.apply(window.console, arguments);
                 }
             }
         },
@@ -374,8 +374,8 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
          * Prints given error text to browser console
          */
         printError: function () {
-            if (window.console !== null && window.console !== undefined) {
-                console.error.apply(console, arguments);
+            if (window.console && window.console.error && window.console.error.apply) {
+                window.console.error.apply(window.console, arguments);
             }
         },
 
@@ -383,8 +383,8 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
          * Prints given warn text to browser console
          */
         printWarn: function () {
-            if (window.console !== null && window.console !== undefined) {
-                console.warn.apply(console, arguments);
+            if (window.console && window.console.warn && window.console.warn.apply) {
+                window.console.warn.apply(window.console, arguments);
             }
         },
 
