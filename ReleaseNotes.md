@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.25.5
+
+### Core
+
+Fixed logging functions so they won't be called if they don't have .apply (i.e. don't break IE9).
+
 ## 1.25.4
 
 ### Publisher
