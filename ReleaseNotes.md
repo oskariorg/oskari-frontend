@@ -2,6 +2,10 @@
 
 ## 1.26
 
+### mapwmts
+
+WmtsLayers can now use options and params on layer JSON to override default layer parameters.
+
 ### toolbar
 
 Sending enabled = false in Toolbar.AddToolButtonRequest now automatically disabled the button when added.
@@ -13,6 +17,12 @@ Disabled = true just made the visual disabling, not actual clickhandler disablin
 
 Semi-configurable URL (conf.urlPrefix) used in GFI-preview functionality has been changed to use window.location.
 The configuration is no longer needed/used.
+
+## 1.25.5
+
+### Core
+
+Fixed logging functions so they won't be called if they don't have .apply (i.e. don't break IE9).
 
 ## 1.25.4
 

@@ -2,46 +2,45 @@
 div.mapplugin.search {
   top: 10px;
   right: 10px; }
-
-div.search div.close {
-  float: right; }
-div.search input[type=text] {
-  -webkit-border-radius: 4px 0 0 4px;
-  -moz-border-radius: 4px 0 0 4px;
-  -o-border-radius: 4px 0 0 4px;
-  -ms-border-radius: 4px 0 0 4px;
-  border-radius: 4px 0 0 4px;
-  -webkit-background-clip: padding-box;
-  -moz-background-clip: padding-box;
-  background-clip: padding-box;
-  border-right: 0;
-  width: 140px; }
-div.search input[type=button] {
-  -webkit-border-radius: 0 4px 4px 0;
-  -moz-border-radius: 0 4px 4px 0;
-  -o-border-radius: 0 4px 4px 0;
-  -ms-border-radius: 0 4px 4px 0;
-  border-radius: 0 4px 4px 0;
-  -webkit-background-clip: padding-box;
-  -moz-background-clip: padding-box;
-  background-clip: padding-box;
-  width: 60px; }
-div.search div.results {
-  border: 1px solid #f3f3f3;
-  background: white;
-  max-width: 350px;
-  max-height: 320px;
-  width: auto;
-  overflow: auto;
-  margin-top: 5px; }
-  div.search div.results div.header {
-    background: #DDDDDD; }
-  div.search div.results div.content table {
-    width: 100%;
-    text-align: center;
-    border-spacing: 2px; }
-    div.search div.results div.content table tr {
-      cursor: pointer; }
+  div.mapplugin.search div.close {
+    float: right; }
+  div.mapplugin.search input[type=text] {
+    -webkit-border-radius: 4px 0 0 4px;
+    -moz-border-radius: 4px 0 0 4px;
+    -o-border-radius: 4px 0 0 4px;
+    -ms-border-radius: 4px 0 0 4px;
+    border-radius: 4px 0 0 4px;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box;
+    border-right: 0;
+    width: 140px; }
+  div.mapplugin.search input[type=button] {
+    -webkit-border-radius: 0 4px 4px 0;
+    -moz-border-radius: 0 4px 4px 0;
+    -o-border-radius: 0 4px 4px 0;
+    -ms-border-radius: 0 4px 4px 0;
+    border-radius: 0 4px 4px 0;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box;
+    width: 60px; }
+  div.mapplugin.search div.results {
+    border: 1px solid #f3f3f3;
+    background: white;
+    max-width: 350px;
+    max-height: 320px;
+    width: auto;
+    overflow: auto;
+    margin-top: 5px; }
+    div.mapplugin.search div.results div.header {
+      background: #DDDDDD; }
+    div.mapplugin.search div.results div.content table {
+      width: 100%;
+      text-align: center;
+      border-spacing: 2px; }
+      div.mapplugin.search div.results div.content table tr {
+        cursor: pointer; }
 
 table.search-results {
   width: 100%;

@@ -85,68 +85,55 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                 return;
             }
 
-            var imageFormat = 'image/png',
-                layerDef = layer.getWmtsLayerDef(),
-                layerName = null,
-                me = this,
+            var me = this,
                 map = me.getMap(),
-                matrixSet = layer.getWmtsMatrixSet(),
-                matrixIds = [],
-                n,
-                reqEnc = 'KVP',
-                res,
-                resolutions = [],
-                sandbox = me.getSandbox(),
-                scaleDenom,
-                serverResolutions = [],
-                wmtsUrl =
-                    layerDef.resourceUrl ? (layerDef.resourceUrl.tile ? layerDef.resourceUrl.tile.template : undefined) : undefined;
+                matrixData = this.__calculateMatrix(layer.getWmtsMatrixSet()),
+                sandbox = me.getSandbox();
 
-            if (layer.isBaseLayer() || layer.isGroupLayer()) {
-                layerName = 'basemap_' + layer.getId();
-            } else {
-                layerName = 'layer_' + layer.getId();
-            }
-
-            if (!wmtsUrl) {
-                wmtsUrl = layer.getWmtsUrls()[0];
-            } else {
-                reqEnc = 'REST';
-            }
-
-            for (n = 0; n < matrixSet.matrixIds.length; n += 1) {
-                matrixIds.push(matrixSet.matrixIds[n]);
-                //.identifier);
-                scaleDenom = matrixSet.matrixIds[n].scaleDenominator;
-                res = scaleDenom / 90.71446714322 * OpenLayers.METERS_PER_INCH;
-                resolutions.push(res);
-                serverResolutions.push(res);
-            }
-
-            var wmtsLayerConfig = {
-                name: layerName.split('.').join(''),
-                url: wmtsUrl,
-                requestEncoding: reqEnc,
-                layer: layer.getWmtsName(),
-                matrixSet: matrixSet.identifier,
-                format: imageFormat,
+            // default params and options
+            var layerConfig = {
+                name: this.__getLayerName(layer),
+                url : layer.getUrl(),
+                layer: layer.getLayerName(),
                 style: layer.getCurrentStyle().getName(),
-                transparent: true,
-                matrixIds: matrixIds,
-                isBaseLayer: layer.isBaseLayer(),
-                buffer: 0,
-                serverResolutions: serverResolutions,
+                matrixSet : layer.getWmtsMatrixSet().identifier,
+
+                matrixIds: matrixData.matrixIds,
+                serverResolutions: matrixData.serverResolutions,
                 visibility: layer.isInScale(sandbox.getMap().getScale()),
-                layerDef: layerDef
+                requestEncoding : layer.getRequestEncoding(),
+
+                format: 'image/png',
+                displayInLayerSwitcher: false,
+                isBaseLayer: false,
+                buffer: 0,
+                params : {},
+                // additional debugging props, not needed by OL
+                layerDef: layer.getWmtsLayerDef()
             };
+
+            // override default params and options from layer
+            var key,
+                layerParams = layer.getParams(),
+                layerOptions = layer.getOptions();
+            for (key in layerOptions) {
+                if (layerOptions.hasOwnProperty(key)) {
+                    layerConfig[key] = layerOptions[key];
+                }
+            }
+            for (key in layerParams) {
+                if (layerParams.hasOwnProperty(key)) {
+                    layerConfig.params[key] = layerParams[key];
+                }
+            }
 
             sandbox.printDebug(
                 '[WmtsLayerPlugin] creating WMTS Layer ' +
-                matrixSet.identifier + ' / ' + wmtsLayerConfig.id + '/' +
-                wmtsLayerConfig.layer + '/' + wmtsLayerConfig.url
+                layerConfig.name + ' / ' + layerConfig.matrixSet + '/' +
+                layerConfig.layer + '/' + layerConfig.url
             );
 
-            var wmtsLayer = new OpenLayers.Layer.WMTS(wmtsLayerConfig);
+            var wmtsLayer = new OpenLayers.Layer.WMTS(layerConfig);
             wmtsLayer.opacity = layer.getOpacity() / 100;
 
             sandbox.printDebug(
@@ -155,17 +142,42 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
 
             map.addLayers([wmtsLayer]);
         },
+        __calculateMatrix : function(matrixSet) {
+            var matrixIds = [],
+                resolutions = [],
+                scaleDenom,
+                serverResolutions = [],
+                n = 0,
+                res;
+
+            for (; n < matrixSet.matrixIds.length; ++n) {
+                matrixIds.push(matrixSet.matrixIds[n]);
+                //.identifier);
+                scaleDenom = matrixSet.matrixIds[n].scaleDenominator;
+                res = scaleDenom / 90.71446714322 * OpenLayers.METERS_PER_INCH;
+                resolutions.push(res);
+                serverResolutions.push(res);
+            }
+            return {
+                matrixIds : matrixIds,
+                resolutions : resolutions,
+                serverResolutions : serverResolutions
+            };
+        },
+        __getLayerName : function(layer) {
+            var name = 'layer_' + layer.getId();
+            if (layer.isBaseLayer() || layer.isGroupLayer()) {
+                name = 'basemap_' + layer.getId();
+            }
+            // removing all dots (they cause problems on OL)
+            return name.split('.').join('');
+        },
 
         getOLMapLayers: function (layer) {
             if (!layer.isLayerOfType('WMTS')) {
                 return null;
             }
-
-            if (layer.isBaseLayer() || layer.isGroupLayer()) {
-                return this._map.getLayersByName('basemap_' + layer.getId());
-            } else {
-                return this._map.getLayersByName('layer_' + layer.getId());
-            }
+            return this._map.getLayersByName(this.__getLayerName(layer));
         },
 
         /***********************************************************
@@ -210,6 +222,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                 newStyle = layer.getCurrentStyle().getName();
 
             if (oLayer && oLayer[0]) {
+                // only works for layers with requestEncoding = 'KVP'
                 oLayer[0].mergeNewParams({
                     style: newStyle
                 });

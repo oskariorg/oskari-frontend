@@ -6,7 +6,7 @@ Oskari.registerLocalization(
         "tabTitle": "Metatietohaku",
         "metadataCatalogueDescription": "Hae paikkatietoaineistoja, -aineistosarjoja tai -palveluita.",
         "metadataCatalogueButton": "Hae",
-        "assistance": "Kirjoita hakusana",
+        "assistance": "Kirjoita hakusana tähän.",
         "showMore": "Lisää hakuehtoja",
         "showLess": "Piilota laajennettu haku",
         "emptyOption": "* Ei valintaa *",

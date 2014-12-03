@@ -110,7 +110,9 @@ Oskari.clazz.define(
             // draw ui
             me.createUi();
 
-            mapLayerService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+            mapLayerService = me.sandbox.getService(
+                'Oskari.mapframework.service.MapLayerService'
+            );
 
             sandbox.registerAsStateful(me.mediator.bundleId, me);
 
@@ -165,25 +167,27 @@ Oskari.clazz.define(
              *
              * Calls flyouts handleLayerSelectionChanged() method
              */
-            'AfterMapLayerRemoveEvent': function (event) {
+            AfterMapLayerRemoveEvent: function (event) {
                 //"use strict";
                 this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged(event.getMapLayer(), false);
             },
+
             /**
              * @method AfterMapLayerAddEvent
              * @param {Oskari.mapframework.event.common.AfterMapLayerAddEvent} event
              *
              * Calls flyouts handleLayerSelectionChanged() method
              */
-            'AfterMapLayerAddEvent': function (event) {
+            AfterMapLayerAddEvent: function (event) {
                 //"use strict";
                 this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged(event.getMapLayer(), true);
             },
+
             /**
              * @method MapLayerEvent
              * @param {Oskari.mapframework.event.common.MapLayerEvent} event
              */
-            'MapLayerEvent': function (event) {
+            MapLayerEvent: function (event) {
                 //"use strict";
                 var me = this,
                     flyout = me.plugins['Oskari.userinterface.Flyout'],
@@ -213,6 +217,7 @@ Oskari.clazz.define(
                     tile.refresh();
                 }
             },
+
             'BackendStatus.BackendStatusChangedEvent': function (event) {
                 var layerId = event.getLayerId(),
                     status = event.getStatus(),
@@ -230,6 +235,7 @@ Oskari.clazz.define(
                     flyout.handleLayerModified(layer);
                 }
             },
+
             /**
              * @method ExtensionUpdatedEvent
              */
@@ -257,6 +263,7 @@ Oskari.clazz.define(
                 sandbox = me.sandbox(),
                 request,
                 p;
+
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
                     sandbox.unregisterFromEventByName(me, p);

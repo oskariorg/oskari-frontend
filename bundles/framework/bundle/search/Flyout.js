@@ -3,15 +3,16 @@
  *
  * Renders the "search" flyout.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
+Oskari.clazz.define(
+    'Oskari.mapframework.bundle.search.Flyout',
 
     /**
-     * @method create called automatically on construction
-     * @static
+     * @static @method create called automatically on construction
+     *
      * @param {Oskari.mapframework.bundle.search.SearchBundleInstance}
-     *        instance reference to component that created the tile
+     * Instance reference to component that created the tile
+     *
      */
-
     function (instance) {
         this.instance = instance;
         this.container = null;
@@ -33,7 +34,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
         this.resultActions = {};
 
         this._searchContainer = null;
-        this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer');
+        this.tabsContainer = Oskari.clazz.create(
+            'Oskari.userinterface.component.TabContainer'
+        );
     }, {
         /**
          * @method getName
@@ -68,30 +71,49 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
          * that will be used to create the UI
          */
         startPlugin: function () {
-            this.template = jQuery('<div class="searchContainer">' +
-                '<div class="searchDescription"></div>' +
-                '<div class="controls">' +
-                '</div>' +
-                '<div><br></div>' +
-                '<div class="info"></div>' +
-                '<div><br></div>' +
-                '<div class="resultList"></div>' +
-                '</div>');
-            this.templateResultTable = jQuery('<table class="search_result oskari-grid">' + '<thead><tr></tr></thead>' + '<tbody></tbody>' + '</table>');
-            this.templateResultTableHeader = jQuery('<th><a href="JavaScript:void(0);"></a></th>');
+            this.template = jQuery(
+                '<div class="searchContainer">' +
+                '  <div class="searchDescription"></div>' +
+                '  <div class="controls">' +
+                '  </div>' +
+                '  <div><br></div>' +
+                '  <div class="info"></div>' +
+                '  <div><br></div>' +
+                '  <div class="resultList"></div>' +
+                '</div>'
+            );
 
-            this.templateResultTableRow = jQuery('<tr>' + '<td><a href="JavaScript:void(0);"></a></td>' + '<td></td>' + '<td></td>' + '</tr>');
+            this.templateResultTable = jQuery(
+                '<table class="search_result oskari-grid">' +
+                '  <thead><tr></tr></thead>' +
+                '  <tbody></tbody>' +
+                '</table>'
+            );
 
-            this.resultHeaders = [{
-                title: this.instance.getLocalization('grid').name,
-                prop: 'name'
-            }, {
-                title: this.instance.getLocalization('grid').village,
-                prop: 'village'
-            }, {
-                title: this.instance.getLocalization('grid').type,
-                prop: 'type'
-            }];
+            this.templateResultTableHeader = jQuery(
+                '<th><a href="JavaScript:void(0);"></a></th>'
+            );
+
+            this.templateResultTableRow = jQuery(
+                '<tr>' +
+                '  <td><a href="JavaScript:void(0);"></a></td>' +
+                '  <td></td>' +
+                '  <td></td>' +
+                '</tr>'
+            );
+
+            this.resultHeaders = [
+                {
+                    title: this.instance.getLocalization('grid').name,
+                    prop: 'name'
+                }, {
+                    title: this.instance.getLocalization('grid').village,
+                    prop: 'village'
+                }, {
+                    title: this.instance.getLocalization('grid').type,
+                    prop: 'type'
+                }
+            ];
         },
 
         /**
@@ -168,6 +190,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
             var me = this,
                 sandbox = me.instance.getSandbox(),
                 flyout = jQuery(me.container);
+
             flyout.empty();
 
             var searchContainer = me.template.clone();
@@ -177,7 +200,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
             searchDescription.html(me.instance.getLocalization('searchDescription'));
 
             var field = Oskari.clazz.create('Oskari.userinterface.component.FormInput');
-            field.setPlaceholder(me.instance.getLocalization("searchAssistance"));
+            field.setPlaceholder(me.instance.getLocalization('searchAssistance'));
             field.setIds('oskari_search_forminput', 'oskari_search_forminput_searchassistance');
 
             if (me.instance.safeChars) {
@@ -199,7 +222,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
                     resultList.empty();
 
                     // try to remove markers if request is available when field is emptied
-                    var reqBuilder = sandbox.getRequestBuilder('MapModulePlugin.RemoveMarkersRequest');
+                    var reqBuilder = sandbox.getRequestBuilder(
+                        'MapModulePlugin.RemoveMarkersRequest'
+                    );
                     if (reqBuilder) {
                         sandbox.request(me.instance.getName(), reqBuilder());
                     }
@@ -207,8 +232,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
             });
             field.addClearButton('oskari_search_forminput_clearbutton');
 
-            var button = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            button.setTitle(this.instance.getLocalization('searchButton'));
+            var button = Oskari.clazz.create(
+                'Oskari.userinterface.component.buttons.SearchButton'
+            );
             button.setId('oskari_search_button_search');
 
             var doSearch = function () {
@@ -263,7 +289,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
             controls.append(button.getElement());
 
             flyout.append(searchContainer);
+            me.tabsContainer.addTabChangeListener(
+                function (previousTab, newTab) {
+                    // Make sure this fires only when the flyout is open
+                    if (!flyout.parents('.oskari-flyout.oskari-closed').length) {
+                        var searchInput = newTab.getContainer().find('input[type=text]');
+                        if (searchInput) {
+                            searchInput.focus();
+                        }
+                    }
+                }
+            );
+        },
 
+        focus: function () {
+            var searchInput = this._searchContainer.find('input[type=text]');
+            searchInput.focus();
         },
 
         _validateSearchKey: function (key) {
@@ -330,6 +371,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
                     al = inst.getLocalization(alK),
                     nfK = 'searchservice_search_not_found_anything_text',
                     nf = inst.getLocalization(nfK);
+
                 resultList.append(al + ': ' + nf);
                 return;
             } else {
@@ -339,17 +381,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
 
                 if (result.hasMore) {
                     // more results available
-                    info.append(this.instance.getLocalization('searchResultDescriptionMoreResults'));
+                    info.append(
+                        this.instance.getLocalization('searchResultDescriptionMoreResults')
+                    );
                     info.append('<br/>');
                 }
-                info.append(this.instance.getLocalization('searchResultDescriptionOrdering'));
+                info.append(
+                    this.instance.getLocalization('searchResultDescriptionOrdering')
+                );
             }
 
             if (result.totalCount === 1) {
                 // move map etc
                 me._resultClicked(result.locations[0]);
                 // close flyout
-                inst.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'close']);
+                inst.sandbox.postRequestByName(
+                    'userinterface.UpdateExtensionRequest',
+                    [me.instance, 'close']
+                );
             }
             // render results
             var table = this.templateResultTable.clone(),
@@ -418,6 +467,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
                 cells,
                 titleCell,
                 title;
+
             for (i = 0; i < locations.length; i += 1) {
                 row = locations[i];
                 resultContainer = this.templateResultTableRow.clone();
@@ -434,12 +484,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
 
         _resultClicked: function (result) {
             var me = this,
-                popupId = "searchResultPopup",
+                popupId = 'searchResultPopup',
                 inst = this.instance,
                 sandbox = inst.sandbox;
             // good to go
             var moveReqBuilder = sandbox.getRequestBuilder('MapMoveRequest');
-            sandbox.request(me.instance.getName(), moveReqBuilder(result.lon, result.lat, result.zoomLevel, false));
+            sandbox.request(
+                me.instance.getName(),
+                moveReqBuilder(result.lon, result.lat, result.zoomLevel, false)
+            );
 
             var loc = this.instance.getLocalization('resultBox'),
                 resultActions = {},
@@ -452,7 +505,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
             }
 
             var contentItem = {
-                html: "<h3>" + result.name + "</h3>" + "<p>" + result.village + '<br/>' + result.type + "</p>",
+                html: '<h3>' + result.name + '</h3>' + '<p>' + result.village + '<br/>' + result.type + '</p>',
                 actions: resultActions
             };
             var content = [contentItem];
@@ -467,18 +520,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
 
             var rN = 'InfoBox.ShowInfoBoxRequest',
                 rB = sandbox.getRequestBuilder(rN),
-                request = rB(popupId, loc.title, content, new OpenLayers.LonLat(result.lon, result.lat), true);
+                request = rB(
+                    popupId,
+                    loc.title,
+                    content,
+                    new OpenLayers.LonLat(result.lon, result.lat),
+                    true
+                );
+
             sandbox.request(this.instance.getName(), request);
         },
 
         /**
-         * @method _sortResults
+         * @private @method _sortResults
          * Sorts the last search result by comparing given attribute on
          * the search objects
-         * @private
+         *
          * @param {String} pAttribute attributename to sort by (e.g.
          * result[pAttribute])
          * @param {Boolean} pDescending true if sort direction is descending
+         *
          */
         _sortResults: function (pAttribute, pDescending) {
             var me = this;
@@ -496,15 +557,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
         },
 
         /**
-         * @method _searchResultComparator
+         * @private @method _searchResultComparator
          * Compares the given attribute on given objects for sorting
          * search result objects.
-         * @private
+         *
          * @param {Object} a search result 1
          * @param {Object} b search result 2
          * @param {String} pAttribute attributename to sort by (e.g.
          * a[pAttribute])
          * @param {Boolean} pDescending true if sort direction is descending
+         *
          */
         _searchResultComparator: function (a, b, pAttribute, pDescending) {
             var nameA = a[pAttribute].toLowerCase(),
@@ -539,31 +601,41 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
                 me.tabsContainer.insertTo(flyout);
 
                 if (me.instance.disableDefault !== true) {
-                    var defaultPanel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel'),
-                        searchContainer = jQuery("div.searchContainer");
-                    defaultPanel.setTitle(me.getTabTitle(), 'oskari_search_tabpanel_header');
+                    var defaultPanel = Oskari.clazz.create(
+                            'Oskari.userinterface.component.TabPanel'
+                        ),
+                        searchContainer = jQuery('div.searchContainer');
+
+                    defaultPanel.setTitle(
+                        me.getTabTitle(),
+                        'oskari_search_tabpanel_header'
+                    );
                     defaultPanel.setContent(searchContainer);
                     defaultPanel.setPriority(me.instance.tabPriority);
                     me.tabsContainer.addPanel(defaultPanel);
                 }
             }
 
-            var panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
+            var panel = Oskari.clazz.create(
+                'Oskari.userinterface.component.TabPanel'
+            );
             panel.setTitle(item.title, item.id);
             panel.setContent(item.content);
             panel.setPriority(item.priority);
             me.tabsContainer.addPanel(panel);
         },
+
         addSearchResultAction: function (action) {
             this.resultActions[action.name] = action.callback;
         },
+
         removeSearchResultAction: function (name) {
             delete this.resultActions[name];
         }
     }, {
         /**
-         * @property {String[]} protocol
-         * @static
+         * @static @property {String[]} protocol
          */
-        'protocol': ['Oskari.userinterface.Flyout']
-    });
+        protocol: ['Oskari.userinterface.Flyout']
+    }
+);

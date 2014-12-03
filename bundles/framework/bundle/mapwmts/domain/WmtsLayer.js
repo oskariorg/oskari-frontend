@@ -18,6 +18,9 @@ function() {
     this._availableQueryFormats = [];
     /* Layer Type */
     this._layerType = "WMTS";
+
+    this._wmtsurl = null;
+    this._requestEncoding = 'KVP';
 }, {
     /**
      * @method setWmtsName
@@ -120,6 +123,43 @@ function() {
      */
     getWmtsUrls : function() {
         return this.getLayerUrls();
+    },
+    /**
+     * Determines the URL that should be used for this layer
+     * @return {String} URL for layer plugin
+     */
+    getUrl : function() {
+        this.__determineUrlFunctions();
+        return this._wmtsurl;
+    },
+    /**
+     * Request encoding for layer plugin
+     * @return {String} 'KVP' or 'REST'
+     */
+    getRequestEncoding : function() {
+        this.__determineUrlFunctions();
+        return this._requestEncoding;
+    },
+    /**
+     * Determines the URL that should be used for this layer
+     * @return {String} URL for layer plugin
+     */
+    __determineUrlFunctions : function() {
+        if(this._wmtsurl) {
+            return;
+        }
+        var layerDef = this.getWmtsLayerDef();
+        if(layerDef && layerDef.resourceUrl && layerDef.resourceUrl.tile && layerDef.resourceUrl.tile.template) {
+            this._wmtsurl =  layerDef.resourceUrl.tile.template;
+            this._requestEncoding = 'REST';
+        }
+        else if(this.getLayerUrls().length > 0) {
+            this._wmtsurl = this.getLayerUrls()[0];
+            this._requestEncoding = 'KVP';
+        }
+        if(!this._wmtsurl) {
+            // TODO: give some error to console?
+        }
     },
     /**
      * Possible options for #setQueryFormat()

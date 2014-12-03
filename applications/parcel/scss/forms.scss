@@ -92,6 +92,8 @@ input[type="submit"], input[type="button"], input[type="reset"], button {
 	cursor: pointer;
 	overflow: visible;
 	padding: 8px 5px;
+    line-height: inherit;
+    min-width: 4em;
 	width: auto;
 
 	&:hover:enabled, &:focus {
@@ -168,10 +170,6 @@ input.focus, textarea.focus {
 
 textarea {
     padding: 5px 5px;
-}
-
-button, input[type=button], input[type=submit], input[type=reset] {
-  line-height: inherit;
 }
 
 button, input, select, textarea {

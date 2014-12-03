@@ -1,7 +1,8 @@
 .manageClassificationPlugin {
 	background-color: #FFF;
 	z-index: 1000000 !important;
-	max-width: 220px;
+    // Can't be smaller as stuff overflows in IE
+	max-width: 240px;
 	padding: 0px;
 	text-align: left;
 	/* If there's a sane reason to keep the absolute positioning, write it here
@@ -226,4 +227,5 @@ table.colo_table1 {
 		height: 15px;
 		width: 5px;
 	}
+
 }

@@ -22,9 +22,11 @@
     margin: 5px;
     cursor: pointer; }
     .logoplugin .data-sources a, .logoplugin .terms a {
+      /* Filter below requires that the element has height or smthn... */
+      display: inline-block;
       text-decoration: none;
       /* text-shadow replacement for IE9 */
-      filter: glow(color=#C0000000,strength=3); }
+      filter: glow(color=#C0000000,strength=1); }
 
 .right .logoplugin {
   /* Right-align elements so a wide sibling plugin won't push them to the left... */

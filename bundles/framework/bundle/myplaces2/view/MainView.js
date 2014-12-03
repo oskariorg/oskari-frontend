@@ -155,13 +155,19 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
          */
         showPlaceForm: function (location, place) {
             var me = this,
+                layerId,
+                loc  = me.instance.getLocalization(),
                 sandbox = me.instance.sandbox;
+
             sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
-            var loc = this.instance.getLocalization();
             this.form = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.myplaces2.view.PlaceForm', this.instance, this.options);
-            var categories = this.instance.getService().getAllCategories(),
-                layerId;
+                'Oskari.mapframework.bundle.myplaces2.view.PlaceForm',
+                this.instance,
+                this.options
+            );
+
+            var categories = this.instance.getService().getAllCategories();
+
             if (place) {
                 var param = {
                     place: {
@@ -186,13 +192,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
                     this.form.setMeasurementResult(drawing, 'area');
                 }
             }
-
-            var content = [{
-                html: me.form.getForm(categories),
-                useButtons: true,
-                primaryButton: loc.buttons.save,
-                actions: {}
-            }];
+            var formEl = me.form.getForm(categories),
+                content = [{
+                    html: formEl,
+                    useButtons: true,
+                    primaryButton: loc.buttons.save,
+                    actions: {}
+                }];
 
             if (layerId) {
                 content[0].layerId = layerId;
@@ -211,6 +217,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
 
             var request = sandbox.getRequestBuilder('InfoBox.ShowInfoBoxRequest')(this.popupId, loc.placeform.title, content, location, true);
             sandbox.request(me.getName(), request);
+            // A tad ugly, but for some reason this won't work if we find the input from formEl
+            jQuery('input[name=placename]').focus();
         },
         /**
          * Destroys the opened form popup(s) from the screen.

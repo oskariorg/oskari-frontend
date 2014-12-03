@@ -117,6 +117,10 @@ div.mapplugins {
         display: table-cell;
         vertical-align: middle; }
 
+/* Hackhack for published maps that don't have bglayerselectionplugin */
+.published div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.logoplugin {
+  margin-top: 10px; }
+
 /* Publisher fonts, not part of style guide */
 .oskari-publisher-font-arial {
   font-family: Arial, sans-serif !important; }
