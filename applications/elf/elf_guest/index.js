@@ -411,17 +411,6 @@ jQuery(document).ready(function() {
                 this.protocols.my_places = new OpenLayers.Protocol.WFS(myPlacesProps);
             }
         });
-        
-        /* TEMPORARY */
-        /* force geodesic until fix is available in trunk */
-        var mapModule = Oskari.getSandbox().findRegisteredModuleInstance("MainMapModule"),
-        controlsPlugin = mapModule.getPluginInstance('ControlsPlugin');
-        if( controlsPlugin && controlsPlugin._measureControls && controlsPlugin._measureControls.area ) {
-    		controlsPlugin._measureControls.area.geodesic = true;
-    	}
-    	if( controlsPlugin && controlsPlugin._measureControls && controlsPlugin._measureControls.line ) {
-    		controlsPlugin._measureControls.line.geodesic = true;
-    	}
 
     }
 
