@@ -39,7 +39,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin'
         _createControlAdapter: function (el) {
             // initialize control, pass container
             this._scalebar = new OpenLayers.Control.ScaleLine({
-                div: el[0]
+                div: el[0],
+                geodesic: true
             });
 
             return this._scalebar;

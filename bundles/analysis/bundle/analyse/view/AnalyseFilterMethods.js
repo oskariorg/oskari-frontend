@@ -308,7 +308,7 @@ Oskari.clazz.category(
                 // Fill the values of the first filter already visible in the DOM.
                 me._fillFilterOptionsDiv(filterDiv, values.filters[0]);
 
-                values.filters.forEach(function (filter) {
+                values.filters.slice(1).forEach(function (filter) {
                     // The boolean operator selection
                     if (filter.boolean) {
                         var lastFilter = dialog.find('div.filter-option').last(),

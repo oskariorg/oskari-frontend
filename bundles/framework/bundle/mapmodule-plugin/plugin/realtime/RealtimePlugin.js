@@ -20,7 +20,7 @@ Oskari.clazz.define(
         this.minRefreshRate = 1000; // 1 second
         this.maxRefreshRate = Infinity;
         this.ignoredLayerTypes = [];
-        this.intervals = undefined;
+        this.intervals = {};
 
         var conf = {
             minRefreshRate: this.minRefreshRate,
