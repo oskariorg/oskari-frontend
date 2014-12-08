@@ -49,6 +49,8 @@ Oskari.clazz.define(
             if (zoom || zoom === 0) {
                 if (zoom.CLASS_NAME === 'OpenLayers.Bounds') {
                     this.mapModule.zoomToExtent(zoom);
+                } else if (zoom.scale) {
+                    this.mapModule.zoomToScale(zoom.scale);
                 } else {
                     this.mapModule.zoomTo(zoom);
                 }

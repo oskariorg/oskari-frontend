@@ -2,6 +2,18 @@
 
 ## 1.26
 
+### search
+
+Now prefers zoomScale over zoomLevel on result items.
+
+### mapmodule-plugin/MapMoveRequest
+
+Added support to zoom to a scale. MapMoveRequests zoom parameter can be given as an Object with scale property:
+
+```javascript
+    { scale : 10000 }
+```
+
 ### mapwmts
 
 WmtsLayers can now use options and params on layer JSON to override default layer parameters.

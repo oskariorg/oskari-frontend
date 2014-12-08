@@ -539,7 +539,7 @@ Oskari.clazz.define(
          */
         getClosestZoomLevel: function (maxScale, minScale) {
             var zoomLevel = this.getZoomLevel();
-
+            // FIXME: shouldn't we check appropriate level if even one is defined? '||' should be '&&'?
             if (!minScale || !maxScale) {
                 return zoomLevel;
             }
@@ -585,7 +585,7 @@ Oskari.clazz.define(
                 unit;
 
             if (drawMode === 'area') {
-                measurement = (Math.round(100 * geometry.getArea()) / 100);
+                measurement = (Math.round(100 * geometry.getGeodesicArea(this._projectionCode)) / 100);
                 unit = ' m²';
                 // 1 000 000 m² === 1 km²
                 if (measurement >= 1000000) {
@@ -593,7 +593,7 @@ Oskari.clazz.define(
                     unit = ' km²';
                 }
             } else if (drawMode === 'line') {
-                measurement = (Math.round(100 * geometry.getLength()) / 100);
+                measurement = (Math.round(100 * geometry.getGeodesicLength(this._projectionCode)) / 100);
                 unit = ' m';
                 // 1 000 m === 1 km
                 if (measurement >= 1000) {
