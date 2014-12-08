@@ -488,10 +488,15 @@ Oskari.clazz.define(
                 inst = this.instance,
                 sandbox = inst.sandbox;
             // good to go
-            var moveReqBuilder = sandbox.getRequestBuilder('MapMoveRequest');
+            // Note! result.ZoomLevel is deprecated. ZoomScale should be used instead
+            var moveReqBuilder = sandbox.getRequestBuilder('MapMoveRequest'),
+                zoom = result.zoomLevel;
+            if(result.zoomScale) {
+                var zoom = {scale : result.zoomScale};
+            }
             sandbox.request(
                 me.instance.getName(),
-                moveReqBuilder(result.lon, result.lat, result.zoomLevel, false)
+                moveReqBuilder(result.lon, result.lat, zoom, false)
             );
 
             var loc = this.instance.getLocalization('resultBox'),

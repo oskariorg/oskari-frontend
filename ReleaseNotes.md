@@ -2,6 +2,10 @@
 
 ## 1.26
 
+### search
+
+Now prefers zoomScale over zoomLevel on result items.
+
 ### mapmodule-plugin/MapMoveRequest
 
 Added support to zoom to a scale. MapMoveRequests zoom parameter can be given as an Object with scale property:
