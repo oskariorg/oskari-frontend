@@ -29,6 +29,10 @@
     "grunt-contrib-requirejs": "latest"
   },
   "dependencies": {
+    "adm-zip" : "latest",
+    "archiver" : "latest",
+    "node-fs-extra" : "latest",
+    "xml2js" : "latest",
     "grunt-cli": "0.1.9",
     "grunt-contrib-watch": "0.4.4",
     "yuidocjs": "0.3.45",
