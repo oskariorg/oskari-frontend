@@ -539,7 +539,7 @@ Oskari.clazz.define(
          */
         getClosestZoomLevel: function (maxScale, minScale) {
             var zoomLevel = this.getZoomLevel();
-
+            // FIXME: shouldn't we check appropriate level if even one is defined? '||' should be '&&'?
             if (!minScale || !maxScale) {
                 return zoomLevel;
             }
