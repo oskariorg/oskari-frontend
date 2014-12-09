@@ -1,13 +1,14 @@
 /**
  * @class Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin',
-/**
- * @method create called automatically on construction
- * @static
+Oskari.clazz.define(
+    'Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin',
+    /**
+     * @method create called automatically on construction
+     * @static
 
- * @param {Object} config
- */
+     * @param {Object} config
+     */
 
     function () {
         var me = this;
@@ -359,8 +360,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin',
                         tiles = me.getNonCachedGrid(layerId, grid);
                         me.getIO().setLocation(
                             layerId,
-                            srs,
-                            [
+                            srs, [
                                 bbox.left,
                                 bbox.bottom,
                                 bbox.right,
@@ -382,7 +382,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin',
                 // TODO 472: if no connection or the layer is not registered, get highlight with URL
                 for (x = 0; x < me.activeHighlightLayers.length; x += 1) {
                     if (me.getConnection().isLazy() &&
-                            (!me.getConnection().isConnected() ||
+                        (!me.getConnection().isConnected() ||
                             !sandbox.findMapLayerFromSelectedMapLayers(me.activeHighlightLayers[x].getId()))) {
 
                         // FIXME can't we just do this stuff once outside the loop?
@@ -395,8 +395,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin',
                         );
                         me.getHighlightImage(
                             me.activeHighlightLayers[x],
-                            srs,
-                            [
+                            srs, [
                                 bbox.left,
                                 bbox.bottom,
                                 bbox.right,
@@ -446,7 +445,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin',
                     styleName = layer.getCurrentStyle().getName();
                 }
                 if (styleName === null || styleName === undefined ||
-                        styleName === '') {
+                    styleName === '') {
 
                     styleName = 'default';
                 }
@@ -551,8 +550,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin',
                 layer.setClickedFeatureListIds(wfsFeatureIds);
                 this.getHighlightImage(
                     layer,
-                    srs,
-                    [
+                    srs, [
                         bbox.left,
                         bbox.bottom,
                         bbox.right,
@@ -675,8 +673,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin',
                         tiles = me.getNonCachedGrid(layerId, grid);
                         me.getIO().setLocation(
                             layerId,
-                            srs,
-                            [
+                            srs, [
                                 bbox.left,
                                 bbox.bottom,
                                 bbox.right,
@@ -719,7 +716,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin',
 
             layers.forEach(function (layer) {
                 if (layer.hasFeatureData() &&
-                        layer.getId() === event.getLayerId()) {
+                    layer.getId() === event.getLayerId()) {
                     layer.setSelectedFeatures([]);
                 }
             });
@@ -914,8 +911,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin',
                     layerName,
                     imageUrl,
                     boundsObj,
-                    ols,
-                    {
+                    ols, {
                         scales: layerScales,
                         transparent: true,
                         format: 'image/png',
@@ -1009,7 +1005,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin',
             }
 
             var layerName =
-                    this.__layerPrefix + _layer.getId() + '_' + layerType,
+                this.__layerPrefix + _layer.getId() + '_' + layerType,
                 layerScales = this.getMapModule().calculateLayerScales(
                     _layer.getMaxScale(),
                     _layer.getMinScale()
@@ -1075,22 +1071,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin',
                     },
 
                     addTile: function (bounds, position) {
-                        var tileOpts = OpenLayers.Util.extend(
-                                {},
-                                this.tileOptions
-                            );
+                        var tileOpts = OpenLayers.Util.extend({},
+                            this.tileOptions
+                        );
                         OpenLayers.Util.extend(tileOpts, {
                             setBounds: function (bounds) {
                                 bounds = bounds.clone();
                                 if (this.layer.map.baseLayer.wrapDateLine) {
                                     var worldExtent =
-                                            this.layer.map.getMaxExtent(),
+                                        this.layer.map.getMaxExtent(),
                                         tolerance =
-                                            this.layer.map.getResolution();
+                                        this.layer.map.getResolution();
 
                                     bounds = bounds.wrapDateLine(
-                                        worldExtent,
-                                        {
+                                        worldExtent, {
                                             leftTolerance: tolerance,
                                             rightTolerance: tolerance
                                         }
@@ -1201,8 +1195,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin',
                     'Oskari.mapframework.bundle.mapwfs2.domain.TileQueue'
                 ),
                 strategy = Oskari.clazz.create(
-                    'Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrategy',
-                    {
+                    'Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrategy', {
                         tileQueue: tileQueue
                     }
                 );
@@ -1231,8 +1224,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin',
             });
 
             this._tilesLayer = new OpenLayers.Layer.Vector(
-                'Tiles Layer',
-                {
+                'Tiles Layer', {
                     strategies: [strategy],
                     styleMap: styles,
                     visibility: true
@@ -1283,9 +1275,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin',
 
                         // if failed grid
                         if (typeof tile.bounds.left === 'undefined' ||
-                                typeof tile.bounds.bottom === 'undefined' ||
-                                typeof tile.bounds.right === 'undefined' ||
-                                typeof tile.bounds.top === 'undefined') {
+                            typeof tile.bounds.bottom === 'undefined' ||
+                            typeof tile.bounds.right === 'undefined' ||
+                            typeof tile.bounds.top === 'undefined') {
                             return null;
                         }
 
@@ -1526,14 +1518,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin',
                     height: map.getHeight()
                 },
                 params = '?layerId=' + layer.getId() +
-                    '&session=' + me.getIO().getSessionID() +
-                    '&type=' + 'highlight' +
-                    '&srs=' + srs +
-                    '&bbox=' + bbox.join(',') +
-                    '&zoom=' + zoom +
-                    '&featureIds=' + featureIds.join(',') +
-                    '&width=' + imageSize.width +
-                    '&height=' + imageSize.height,
+                '&session=' + me.getIO().getSessionID() +
+                '&type=' + 'highlight' +
+                '&srs=' + srs +
+                '&bbox=' + bbox.join(',') +
+                '&zoom=' + zoom +
+                '&featureIds=' + featureIds.join(',') +
+                '&width=' + imageSize.width +
+                '&height=' + imageSize.height,
                 imageUrl = me.getIO().getRootURL() + '/image' + params;
 
             // send as an event forward to WFSPlugin (draws)
@@ -1558,12 +1550,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin',
             this._highlighted = highlighted;
         }
     }, {
-        'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
+        extend: ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
         /**
          * @static @property {string[]} protocol array of superclasses
          */
-        'protocol': [
+        protocol: [
             'Oskari.mapframework.module.Module',
             'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
         ]
-    });
+    }
+);
