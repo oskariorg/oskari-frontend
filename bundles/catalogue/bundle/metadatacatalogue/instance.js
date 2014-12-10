@@ -292,7 +292,22 @@ Oskari.clazz.define(
                 this.drawCoverage = false;
 
                 document.getElementById("oskari_metadatacatalogue_forminput_searchassistance").focus();
+            },
+
+            'userinterface.ExtensionUpdatedEvent': function (event) {
+                var me = this,
+                    isShown = event.getViewState() !== 'close';
+
+                if (!isShown && me.drawCoverage === false) {
+                    me.selectionPlugin.stopDrawing();
+                    me.coverageButton.val(me.getLocalization('delimitArea'));
+                    me.drawCoverage = true;
+                    document.getElementById("oskari_metadatacatalogue_forminput_searchassistance").focus();
+                    var emptyData = {};
+                    me.coverageButton[0].data = "";
+                }
             }
+
         },
 
         /**
@@ -637,6 +652,7 @@ Oskari.clazz.define(
 
             var config = {
                 id: "MetaData",
+                enableTransform : true,
             };
 
             this.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin', config);
