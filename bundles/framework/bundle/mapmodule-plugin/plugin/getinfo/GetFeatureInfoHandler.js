@@ -2,39 +2,43 @@
  * @class Oskari.mapframework.bundle.mapmodule.getinfo.GetFeatureInfoHandler
  * Handles requests regarding GFI functionality
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.getinfo.GetFeatureInfoHandler',
-/**
- * @method create called automatically on construction
- * @static
- *
- * @param {Oskari.mapframework.mapmodule.GetInfoPlugin}
- *            getInfoPlugin plugin that handles gfi functionality
- */
-function(getInfoPlugin) {
-    this.getInfoPlugin = getInfoPlugin;
-}, {
+Oskari.clazz.define(
+    'Oskari.mapframework.bundle.mapmodule.getinfo.GetFeatureInfoHandler',
     /**
-     * @method handleRequest 
-     * Handles requests regarding GFI functionality.
-     * @param {Oskari.mapframework.core.Core} core
-     *      reference to the application core (reference sandbox core.getSandbox())
-     * @param {Oskari.mapframework.bundle.mapmodule.request.GetFeatureInfoRequest/Oskari.mapframework.bundle.mapmodule.request.GetFeatureInfoActivationRequest} request
-     *      request to handle
+     * @static @method create called automatically on construction
+     *
+     * @param {Oskari.mapframework.mapmodule.GetInfoPlugin} getInfoPlugi
+     * Plugin that handles gfi functionality
+     *
      */
-    handleRequest : function(core, request) {
-        if (request.getName() == 'MapModulePlugin.GetFeatureInfoRequest') {
-            this.getInfoPlugin.handleGetInfo({
-                lon : request.getLon(),
-                lat : request.getLat()
-            }, request.getX(), request.getY());
-        } else if (request.getName() == 'MapModulePlugin.GetFeatureInfoActivationRequest') {
-            this.getInfoPlugin.setEnabled(request.isEnabled());
+    function (getInfoPlugin) {
+        this.getInfoPlugin = getInfoPlugin;
+    }, {
+        /**
+         * @public @method handleRequest
+         * Handles requests regarding GFI functionality.
+         * @param {Oskari.mapframework.core.Core} core
+         * Reference to the application core (reference sandbox core.getSandbox())
+         * @param {Oskari.mapframework.bundle.mapmodule.request.GetFeatureInfoRequest/Oskari.mapframework.bundle.mapmodule.request.GetFeatureInfoActivationRequest} request
+         * Request to handle
+         *
+         */
+        handleRequest: function (core, request) {
+            if (request.getName() === 'MapModulePlugin.GetFeatureInfoRequest') {
+                var lonlat = {
+                        lon: request.getLon(),
+                        lat: request.getLat()
+                    };
+                this.getInfoPlugin.clickLocation = lonlat;
+                this.getInfoPlugin.handleGetInfo(lonlat);
+            } else if (request.getName() === 'MapModulePlugin.GetFeatureInfoActivationRequest') {
+                this.getInfoPlugin.setEnabled(request.isEnabled());
+            }
         }
+    }, {
+        /**
+         * @static @property {String[]} protocol array of superclasses as {String}
+         */
+        protocol: ['Oskari.mapframework.core.RequestHandler']
     }
-}, {
-    /**
-     * @property {String[]} protocol array of superclasses as {String}
-     * @static
-     */
-    protocol : ['Oskari.mapframework.core.RequestHandler']
-});
+);
