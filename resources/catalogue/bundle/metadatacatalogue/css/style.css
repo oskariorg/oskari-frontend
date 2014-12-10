@@ -72,6 +72,8 @@ div.metadataOptions div.rowLabel {
   min-width: 130px;
   width: 130px;
   white-space: nowrap; }
+div.metadataOptions #metadataCoverageButton {
+  min-width: 206px; }
 
 div.metadataResultHeader {
   display: table;
