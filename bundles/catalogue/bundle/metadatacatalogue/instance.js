@@ -42,6 +42,7 @@ Oskari.clazz.define(
         // last sort parameters are saved so we can change sort direction
         // if the same column is sorted again
         this.lastSort = null;
+        this.drawCoverage = false;
     }, {
         /**
          * @static
@@ -76,6 +77,11 @@ Oskari.clazz.define(
                 '  <select class="metadataDef"></select>' +
                 '</div>'
             ),
+            metadataButton: jQuery(
+                '<div class="metadataType">' +
+                '  <input id="metadataCoverageButton" class="metadataCoverageDef" type="button"></input>' +
+                '</div>'
+            ),
             dropdownOption: jQuery('<option></option>'),
             checkboxRow: jQuery(
                 '<div class="metadataRow checkboxRow">' +
@@ -85,6 +91,11 @@ Oskari.clazz.define(
             ),
             dropdownRow: jQuery(
                 '<div class="metadataRow dropdownRow">' +
+                '  <div class="rowLabel"></div>' +
+                '</div>'
+            ),
+            buttonRow: jQuery(
+                '<div class="metadataRow buttonRow">' +
                 '  <div class="rowLabel"></div>' +
                 '</div>'
             ),
@@ -265,14 +276,46 @@ Oskari.clazz.define(
          * @property {Object} eventHandlers
          * @static
          */
-        eventHandlers: {},
+        eventHandlers: {
+
+            /**
+             * @method FeatureData.FinishedDrawingEvent
+             */
+            'MetaData.FinishedDrawingEvent': function (event) {
+                var me = this,
+                    coverageFeature,
+
+                coverageFeature = this.selectionPlugin.getFeaturesAsGeoJSON();
+
+                this.coverageButton.val(me.getLocalization('deleteArea'));
+                this.coverageButton[0].data = JSON.stringify(coverageFeature);
+                this.drawCoverage = false;
+
+                document.getElementById("oskari_metadatacatalogue_forminput_searchassistance").focus();
+            },
+
+            'userinterface.ExtensionUpdatedEvent': function (event) {
+                var me = this,
+                    isShown = event.getViewState() !== 'close';
+
+                if (!isShown && me.drawCoverage === false) {
+                    me.selectionPlugin.stopDrawing();
+                    me.coverageButton.val(me.getLocalization('delimitArea'));
+                    me.drawCoverage = true;
+                    document.getElementById("oskari_metadatacatalogue_forminput_searchassistance").focus();
+                    var emptyData = {};
+                    me.coverageButton[0].data = "";
+                }
+            }
+
+        },
 
         /**
          * @method stop
          * implements BundleInstance protocol stop method
          */
         stop: function () {
-            var sandbox = this.sandbox(),
+            var sandbox = this.sandbox,
                 p;
             for (p in this.eventHandlers) {
                 if (this.eventHandlers.hasOwnProperty(p)) {
@@ -366,6 +409,7 @@ Oskari.clazz.define(
                         checkboxDefs,
                         values,
                         j,
+                        coverageButton,
                         checkboxDef,
                         dropdownDef,
                         dropdownRows,
@@ -390,6 +434,8 @@ Oskari.clazz.define(
                         dropdownDef = jQuery(dropdownRows[i]).find('.metadataDef');
                         search[dropdownDef.attr('name')] = dropdownDef.find(':selected').val();
                     }
+                    // Coverage geometry
+                    search[me.coverageButton.attr('name')] = me.coverageButton[0].data;
                 }
                 me.lastSearch = field.getValue();
 
@@ -481,6 +527,8 @@ Oskari.clazz.define(
                 newCheckbox,
                 newCheckboxDef,
                 newDropdown,
+                button,
+                icon,
                 dropdownDef,
                 emptyOption,
                 newOption,
@@ -548,6 +596,34 @@ Oskari.clazz.define(
                 newRow.addClass(dataField.field);
                 advancedContainer.append(newRow);
             }
+
+            newRow = me.templates.buttonRow.clone();
+            newLabel = me.getLocalization("searchArea");
+            newRow.find('div.rowLabel').append(newLabel);
+
+            newButton = me.templates.metadataButton.clone();
+            this.coverageButton = newButton.find('.metadataCoverageDef');
+            this.coverageButton.attr('value', me.getLocalization('delimitArea'));
+            this.coverageButton.attr('name', "coverage");
+            this.drawCoverage = true;
+
+            this.coverageButton.on('click', function () {
+                if (me.drawCoverage === true) {
+                    me._getCoverage();
+                } else {
+                    me.selectionPlugin.stopDrawing();
+                    me.coverageButton.val(me.getLocalization('delimitArea'));
+                    me.drawCoverage = true;
+                    document.getElementById("oskari_metadatacatalogue_forminput_searchassistance").focus();
+                    var emptyData = {};
+                    me.coverageButton[0].data = "";
+                }
+            });
+
+            newRow.append(newButton);
+            
+            advancedContainer.append(newRow);
+
             me._updateOptions(advancedContainer);
         },
 
@@ -570,8 +646,23 @@ Oskari.clazz.define(
             return text;
         },
 
+        _getCoverage: function () {
+            var me = this;
+            var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
+
+            var config = {
+                id: "MetaData",
+                enableTransform : true,
+            };
+
+            this.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin', config);
+            mapModule.registerPlugin(this.selectionPlugin);
+            mapModule.startPlugin(this.selectionPlugin);
+            this.selectionPlugin.startDrawing({drawMode: "square"});
+        },
+
         /**
-         * @method showResults
+         * @method _updateOptions
          * Updates availability of the options
          */
         _updateOptions: function (container) {

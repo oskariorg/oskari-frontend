@@ -19,6 +19,7 @@ Oskari.registerLocalization({
         "TopicCategory": "Topic category",
         "searchArea": "Search area",
         "delimitArea": "Limit the search area on the map",
+        "deleteArea": "Delete search area",
         "dataset": "Dataset",
         "series": "Series",
         "service": "Service",

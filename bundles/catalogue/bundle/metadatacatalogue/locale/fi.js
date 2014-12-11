@@ -20,6 +20,7 @@ Oskari.registerLocalization(
         "TopicCategory": "Aiheluokka",
         "searchArea": "Hakualue",
         "delimitArea": "Rajaa hakualue kartalta",
+        "deleteArea": "Poista aluerajaus",
         "dataset": "Aineisto",
         "series": "Aineistosarja",
         "service": "Palvelu",
