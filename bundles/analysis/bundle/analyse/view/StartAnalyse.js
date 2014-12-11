@@ -7,12 +7,13 @@
 Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
     /**
-     * @method create called automatically on construction
-     * @static
+     * @static @method create called automatically on construction
+     *
      * @param {Oskari.analysis.bundle.analyse.AnalyseBundleInstance} instance
-     *      reference to component that created this panel view
+     * reference to component that created this panel view
      * @param {Object} localization
-     *      localization data in JSON format
+     * localization data in JSON format
+     *
      */
     function (instance, localization) {
         var me = this,
@@ -226,8 +227,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         /**
          * @method render
          * Renders view to given DOM element
-         * @param {jQuery} container reference to DOM element this component will be
-         * rendered to
+         *
+         * @param {jQuery} container
+         * reference to DOM element this component will be rendered to
+         *
          */
         render: function (container) {
             var me = this,
@@ -308,21 +311,23 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             me.showInfos();
         },
         /**
+         * @method setFilterJson
          * Sets the filter JSON object for a given layer.
          *
-         * @method setFilterJson
          * @param {String} layer_id
          * @param {JSON} filterJson
+         *
          */
         setFilterJson: function (layer_id, filterJson) {
             this._filterJsons[layer_id] = filterJson;
         },
 
         /**
+         * @method removeFilterJson
          * Removes the filter JSON object for a given layer.
          *
-         * @method removeFilterJson
          * @param {String} layer_id
+         *
          */
         removeFilterJson: function (layer_id) {
             this._filterJsons[layer_id] = null;
@@ -330,10 +335,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
+         * @method getFilterJson
          * Returns filter JSON object for a given layer.
          *
-         * @method getFilterJson
          * @param {String} layer_id
+         *
          * @return {JSON}
          */
         getFilterJson: function (layer_id) {
@@ -371,9 +377,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
-         * @method _createMethodPanel
-         * @private
+         * @private @method _createMethodPanel
          * Creates the method selection panel for analyse
+         *
+         *
          * @return {jQuery} Returns the created panel
          */
         _createMethodPanel: function () {
@@ -434,9 +441,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
-         * @method _createSettingsPanel
-         * @private
+         * @private @method _createSettingsPanel
          * Creates a settings panel for analyses
+         *
+         *
          * @return {jQuery} Returns the created panel
          */
         _createSettingsPanel: function () {
@@ -486,11 +494,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
+         * @method _createColumnsSelector
          * Creates the selector to select which attributes should be preserved in the analysis
          * (all, none or select from list).
          *
-         * @method _createColumnsSelector
          * @param {jQuery Object} columnsContainer the dom element the columns selector should be appended to.
+         *
          */
         _createColumnsSelector: function (columnsContainer, title) {
             var me = this,
@@ -549,10 +558,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
+         * @method _appendFeatureList
          * Creates a list to select fields to include in analyse
          *
-         * @method _appendFeatureList
          * @param {jQuery object} toolContainer
+         *
          */
         _appendFeatureList: function (toolContainer) {
             var featureListSelect = this.template.featureListSelect.clone(),
@@ -571,9 +581,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
+         * @method _appendFields
          * Appeds the fields from the layer to the feature list
          *
-         * @method _appendFields
          * @param {jQuery object} featureList
          */
         _appendFields: function (featureList) {
@@ -610,12 +620,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 });
         },
         /**
+         * @private @method _preselectProperties
          * Preselects the max number of feature properties permitted
          * (defaults to 10).
          *
-         * @method _preselectProperties
-         * @private
          * @param  {jQuery} propertyList
+         *
          */
         _preselectProperties: function (propertyList) {
             var maxNumOfFields = this.max_analyse_layer_fields;
@@ -632,13 +642,13 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
+         * @private @method _checkPropertyList
          * Checks if the number of checked properties is over
          * the permitted limit and if so, disables the other
          * properties.
          *
-         * @method _checkPropertyList
-         * @private
          * @param  {jQuery} propertyList
+         *
          */
         _checkPropertyList: function (propertyList) {
             var checked = propertyList.find('li input:checked'),
@@ -652,9 +662,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
+         * @method _refreshFields
          * Refreshes the fields list after a layer has been added or changed.
          *
-         * @method _refreshFields
+         *
          */
         _refreshFields: function () {
             var featureList = jQuery('div.analyse-featurelist');
@@ -663,9 +674,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
-         * @method _createOutputPanel
-         * @private
+         * @private @method _createOutputPanel
          * Creates a output panel for analyse visualization
+         *
+         *
          * @return {jQuery} Returns the created panel
          */
         _createOutputPanel: function () {
@@ -758,9 +770,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
-         * @method _selectedLayers
-         * @private
+         * @private @method _selectedLayers
          * Select selected layers for analyse
+         *
+         *
          * @return {Json ?} Returns selected layers
          */
         _selectedLayers: function () {
@@ -768,10 +781,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
-         * @method _columnSelector
-         * @private
+         * @private @method _columnSelector
          * Select columns for analyse
+         *
          * @param {json}  layers selected layer ids etc
+         *
          * @return {Json ?} Returns selected columns
          */
         _columnSelector: function (layers) {
@@ -781,6 +795,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         /**
          * @method getStyleValues
          * Returns style values as an object
+         *
+         *
          * @return {Object}
          */
         getStyleValues: function () {
@@ -819,9 +835,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
-         * @method _getButtons
-         * @private
+         * @private @method _getButtons
          * Renders data buttons to DOM snippet and returns it.
+         *
+         *
          * @return {jQuery} container with buttons
          */
         _getButtons: function () {
@@ -871,11 +888,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
-         * @method _addAnalyseData
-         * @private
+         * @private @method _addAnalyseData
          * Add analyse data layer to selection box
+         *
          * @param {jQuery} contentPanel      content panel for data layer selections
          * @param String   inserted_layer_id id of last inserted layer
+         *
          */
         _addAnalyseData: function (contentPanel, inserted_layer_id) {
             var me = this,
@@ -1056,10 +1074,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
-         * @method _addExtraParameters
-         * @private
+         * @private @method _addExtraParameters
          * Add parameters data UI according to method
+         *
          * @param {String} prefixedMethod analyse method
+         *
          */
         _addExtraParameters: function (contentPanel, prefixedMethod) {
             var me = this,
@@ -1194,10 +1213,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             },
 
             /**
-             * @method aggregateText
-             * @private
-             ** Add extra parameters for params UI according to method aggregate
+             * @private @method aggregateText
+             * Add extra parameters for params UI according to method aggregate
+             *
              * @param {jQuery} contentPanel  div to append extra params
+             *
              */
             aggregateText: function (me, contentPanel) {
                 var text_parm_len = 1,
@@ -1245,11 +1265,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             },
 
             /**
-             * @method _intersectExtra
-             * @private
+             * @private @method _intersectExtra
              * Add extra parameters for params UI according to method needs
+             *
              * @param {jQuery} contentPanel  div to append extra params
              * @param {boolean} full define if full or limited set of choices is shown
+             *
              */
             intersect: function (me, contentPanel, full) {
                 // Set radiobuttons for selecting intersecting layer
@@ -1366,10 +1387,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             },
 
             /**
+             * @method layer_union
              * Add layer selection ui for analyse layer union.
              *
-             * @method layer_union
              * @param  {jQuery} contentPanel
+             *
              * @return {undefined}
              */
             layer_union: function (me, contentPanel) {
@@ -1429,10 +1451,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             },
 
             /**
+             * @method areas_and_sectors
              * Add params ui for areas and sectors.
              *
-             * @method areas_and_sectors
              * @param  {jQuery} contentPanel
+             *
              * @return {undefined}
              */
             areas_and_sectors: function (me, contentPanel) {
@@ -1463,10 +1486,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             },
 
             /**
+             * @method _diffExtra
              * Add params ui for difference.
              *
-             * @method _diffExtra
              * @param  {jQuery} contentPanel
+             *
              * @return {undefined}
              */
             difference: function (me, contentPanel) {
@@ -1576,10 +1600,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             },
 
             /**
+             * @method layer_union
              * Add layer selection ui for analyse spatial join.
              *
-             * @method layer_union
              * @param  {jQuery} contentPanel
+             *
              * @return {undefined}
              */
             spatial_join: function (me, contentPanel) {
@@ -1844,10 +1869,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
+         * @private @method _refreshIntersectLayers
          * Refreshes layer list in the intersect or clip parameters
          *
-         * @method
-         * @private
+         *
          */
         _refreshIntersectLayers: function () {
             var dataLayers = jQuery('div.basic_analyse div.analyse_option_cont.analyse_settings_cont input[type=radio]'),
@@ -1874,14 +1899,15 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
+         * @method _validForLayerUnion
          * Checks to see if the layer hiding behind the id is valid for layer union.
          * It performs checks to see if the layer is not the same as the selected layer,
          * the layer is of type 'analysis', and if the layer has the same feature fields
          * as the selected layer.
          *
-         * @method _validForLayerUnion
          * @param  {Oskari.Layer} selectedLayer
          * @param  {String} oskari_analyse_id id of the layer in form 'oskari_analyse_layer_<id>'
+         *
          * @return {Boolean} returns true if the layer is valid for analyse union
          */
         _validForLayerUnion: function (selectedLayer, oskari_analyse_id) {
@@ -1923,11 +1949,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
+         * @method _getLayerUnionLayers
          * Returns the analyse layers the user has selected for union.
          * Adds also the selected layer since it's not included in the checkboxes.
          *
-         * @method _getLayerUnionLayers
          * @param  {jQuery} container
+         *
          * @return {Array[String]}
          */
         _getLayerUnionLayers: function (container) {
@@ -1945,15 +1972,17 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
-         * @method _modifyExtraParameters
-         * @private
+         * @private @method _modifyExtraParameters
          * modify parameters data UI according to method
+         *
          * @param {String} method  analyse method
+         *
          */
         _modifyExtraParameters: function (method) {
             var me = this,
                 prefix = me.id_prefix,
                 contentPanel = me.mainPanel.find('div.extra_params');
+
             // Remove old content
             contentPanel.empty();
 
@@ -1984,9 +2013,13 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
+         * @private @method _getLayerServiceFields
          * Get only the fields which originate from the service,
          * that is, exclude those which are added by Oskari (starts with '__').
+         *
          * @param {Oskari.Layer} layer Layer
+         *
+         * @return {Object[]}
          */
         _getLayerServiceFields: function (layer) {
             var fields = ((layer && layer.getFields && layer.getFields()) ? layer.getFields().slice() : []),
@@ -2007,10 +2040,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
+         * @method _createColumnsDropdown
          * Creates a dropdown to choose an attribute to get aggregated.
          *
-         * @method _createColumnsDropdown
          * @param {jQuery Object} columnsContainer the container where the dropdown should be appended to.
+         *
          */
         _createColumnsDropdown: function (columnsContainer) {
             var me = this,
@@ -2057,9 +2091,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
-         * @method refreshAnalyseData
-         * @private
+         * @private @method refreshAnalyseData
          * refresh analyse data layers in selection box
+         *
          *
          */
         refreshAnalyseData: function (layer_id) {
@@ -2070,9 +2104,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
-         * @method refreshExtraParameters
-         * @private
+         * @private @method refreshExtraParameters
          * refresh analyse parameters UI in the selection box
+         *
          *
          */
         refreshExtraParameters: function () {
@@ -2084,9 +2118,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
-         * @method _gatherSelections
-         * @private
+         * @private @method _gatherSelections
          * Gathers analyse selections and returns them as JSON object
+         *
+         *
          * @return {Object}
          */
         _gatherSelections: function () {
@@ -2156,12 +2191,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
+         * @private @method _getMethodSelections
          * Adds method specific parameters to selections
          *
-         * @method _getMethodSelections
-         * @private
          * @param {Object} layer an Oskari layer
          * @param {Object} defaultSelections the defaults, such as name etc.
+         *
          * @return {Object} selections for a given method
          */
         _getMethodSelections: function (layer, defaultSelections) {
@@ -2300,9 +2335,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
-         * @method _getAggregateLocalization
-         * @private
+         * @private @method _getAggregateLocalization
+         *
          * @param {String}  funcKey Aggregate function key
+         *
          * @return {String} Localized aggregate function name
          * Get localized name for aggregate function
          */
@@ -2323,9 +2359,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
-         * @method _analyseMap
-         * @private
+         * @private @method _analyseMap
          * Check parameters and execute analyse.
+         *
          *
          */
         _analyseMap: function () {
@@ -2427,12 +2463,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
+         * @private @method _handleAnalyseMapResponse
          * Creates the map layer from the JSON given as a param
          * and adds it to the map and subsequently to be used in further analysis.
          *
-         * @method _handleAnalyseMapResponse
-         * @private
          * @param {JSON} analyseJson Layer JSON returned by server.
+         *
          */
         _handleAnalyseMapResponse: function (analyseJson) {
             // TODO: some error checking perhaps?
@@ -2482,10 +2518,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
-         * @method _saveAnalyse
-         * @private
+         * @private @method _saveAnalyse
          * Save analyse data.
-         * @param {Object} selections analyse params as returned by _gatherSelections()
+         *
+         * @param {Object} selections
+         * analyse params as returned by _gatherSelections()
+         *
          */
         _saveAnalyse: function (selections, features) {
             /*var sandbox = this.instance.getSandbox(),
@@ -2493,12 +2531,14 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             */
             alert('TODO: save analyse data operations');
         },
+
         /**
-         * @method _infoRequest
-         * @private
-         * Request sandbox for to open metadata info
+         * @private @method _infoRequest
+         * Request sandbox to open metadata info
+         *
          * @param {jQuery} tools  table div where info icon is located
          * @param {int} layer_id  layer id for to retreave layer object
+         *
          */
         _infoRequest: function (tools, layer_id) {
             var me = this,
@@ -2536,14 +2576,17 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 );
             });
         },
+
         /**
+         * @private @method _filterRequest
          * Open a pop-up to select filter parameters.
          *
-         * @method _filterRequest
-         * @private
-         * @param {jQuery} tools table div where filter icon is located
-         * @param {String} analyse_layer_id  layer id for to retrieve layer object,
-         *                 prefixed with 'oskari_analyse_layer_'.
+         * @param {jQuery} tools
+         * table div where filter icon is located
+         * @param {String} analyse_layer_id
+         * layer id for to retrieve layer object,
+         * prefixed with 'oskari_analyse_layer_'.
+         *
          */
         _filterRequest: function (tools, analyse_layer_id) {
             var me = this,
@@ -2591,11 +2634,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
+         * @private @method _removeLayerRequest
          * Requests to remove a layer from the map.
          *
-         * @method _removeLayerRequest
-         * @private
          * @param  {String} analyseLayerId
+         *
          */
         _removeLayerRequest: function (analyseLayerId) {
             var sandbox = this.instance.getSandbox(),
@@ -2608,11 +2651,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 sandbox.request(this.instance, request);
             }
         },
+
         /**
+         * @private @method _getSelectedMapLayer
          * Returns the Oskari layer object for currently selected layer
          *
-         * @method _getSelectedMapLayer
-         * @private
+         *
          * @return {Object/null} an Oskari layer or null if no layer selected
          */
         _getSelectedMapLayer: function () {
@@ -2633,11 +2677,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
+         * @method _getSelectedFeatureIds
          * Gets the clicked/selected features' ids and sets it to filterJson.
          *
-         * @method _getSelectedFeatureIds
          * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
          * @param {JSON} filterJson
+         *
          */
         _getSelectedFeatureIds: function (layer, filterJson) {
             if (!layer || !filterJson) {
@@ -2647,9 +2692,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
+         * @private @method _addPropertyTypes
          * Add field property types {fieldname1:type1,...} to layer and wps_params
+         *
          * @param layers selected layers
-         * @private
+         *
          */
         _addPropertyTypes: function (layers) {
             var me = this,
@@ -2667,9 +2714,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
+         * @private @method _isNumericField
          * Check if wfs field type is numeric
+         *
          * @param fieldName  property name
-         * @private
+         *
          */
         _isNumericField: function (fieldName) {
             var me = this,
@@ -2689,10 +2738,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
+         * @private @method _getNoDataValue
          * Get selected wfs layer's no_data value for wps analyse
          * There is no no_value for selected layer, if return value is undefined
+         *
+         *
          * @return no_data value
-         * @private
          */
         _getNoDataValue: function () {
             var me = this,
@@ -2718,8 +2769,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
+         * @private @method _modifyAnalyseName
          * Modify analyse name when analyse layer is changed
-         * @private
+         *
+         *
          */
         _modifyAnalyseName: function () {
             var me = this,
@@ -2737,7 +2790,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
+         * @method showInfos
          * Inform user, if more than 10 fields in analyse input layer
+         *
          *
          */
         showInfos: function () {
@@ -2771,12 +2826,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
+         * @private @method _checkParamsSelection
          * Check if the selected layer has more fields available
          * than the permitted maximum number and if so,
          * disable the 'all fields' selection.
          *
-         * @method _checkParamsSelection
-         * @private
+         *
          */
         _checkParamsSelection: function () {
             var selectedLayer = this._getSelectedMapLayer(),
@@ -2818,8 +2873,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
-         * Change default colors for analyse in random range order
          * @method randomColors
+         * Change default colors for analyse in random range order
+         *
+         *
          */
         randomizeColors: function () {
             if (!this.mainPanel.find('input[name=randomize_colors]').is(':checked')) {
