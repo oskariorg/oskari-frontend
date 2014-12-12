@@ -298,7 +298,11 @@ Oskari.clazz.define(
                 var me = this,
                     isShown = event.getViewState() !== 'close';
 
-                if (!isShown && me.drawCoverage === false) {
+                // ExtensionUpdateEvents are fired a lot, only let metadatacatalogue extension event to be handled when enabled
+                if (event.getExtension().getName() !== "Search") {
+                    // wasn't me or disabled -> do nothing
+                    return;
+                } else if (!isShown && me.drawCoverage === false) {
                     me.selectionPlugin.stopDrawing();
                     me.coverageButton.val(me.getLocalization('delimitArea'));
                     me.drawCoverage = true;
@@ -307,7 +311,6 @@ Oskari.clazz.define(
                     me.coverageButton[0].data = "";
                 }
             }
-
         },
 
         /**
