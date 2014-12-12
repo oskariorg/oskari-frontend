@@ -291,7 +291,7 @@ Oskari.clazz.define(
                 this.coverageButton[0].data = JSON.stringify(coverageFeature);
                 this.drawCoverage = false;
 
-                document.getElementById("oskari_metadatacatalogue_forminput_searchassistance").focus();
+                document.getElementById('oskari_metadatacatalogue_forminput_searchassistance').focus();
             },
 
             'userinterface.ExtensionUpdatedEvent': function (event) {
@@ -299,15 +299,18 @@ Oskari.clazz.define(
                     isShown = event.getViewState() !== 'close';
 
                 // ExtensionUpdateEvents are fired a lot, only let metadatacatalogue extension event to be handled when enabled
-                if (event.getExtension().getName() !== "Search") {
+                if (event.getExtension().getName() !== 'Search') {
                     // wasn't me or disabled -> do nothing
                     return;
                 } else if (!isShown && me.drawCoverage === false) {
-                    me.selectionPlugin.stopDrawing();
-                    me.coverageButton.val(me.getLocalization('delimitArea'));
+                    if (me.selectionPlugin) {
+                        me.selectionPlugin.stopDrawing();
+                    }
+                    if (me.coverageButton) {
+                        me.coverageButton.val(me.getLocalization('delimitArea'));
+                        me.coverageButton[0].data = '';
+                    }
                     me.drawCoverage = true;
-                    var emptyData = {};
-                    me.coverageButton[0].data = "";
                 }
             }
         },
