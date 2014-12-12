@@ -42,7 +42,7 @@ Oskari.clazz.define(
         // last sort parameters are saved so we can change sort direction
         // if the same column is sorted again
         this.lastSort = null;
-        this.drawCoverage = false;
+        this.drawCoverage = undefined;
     }, {
         /**
          * @static
@@ -294,6 +294,10 @@ Oskari.clazz.define(
                 document.getElementById('oskari_metadatacatalogue_forminput_searchassistance').focus();
             },
 
+            /**
+             * @method userinterface.ExtensionUpdatedEvent
+             * Stop drawing when flyout is closed
+             */
             'userinterface.ExtensionUpdatedEvent': function (event) {
                 var me = this,
                     isShown = event.getViewState() !== 'close';
@@ -311,6 +315,23 @@ Oskari.clazz.define(
                         me.coverageButton[0].data = '';
                     }
                     me.drawCoverage = true;
+                    var emptyData = {};
+                    me.coverageButton[0].data = "";
+                }
+            },
+
+            /**
+             * @method Search.TabChangedEvent
+             * Stop drawing when tab is changed
+             */
+            'Search.TabChangedEvent': function (event) {
+                var me = this;
+                if (event._previousTabId === 'oskari_metadatacatalogue_tabpanel_header' && me.drawCoverage === false) {
+                    me.selectionPlugin.stopDrawing();
+                    me.coverageButton.val(me.getLocalization('delimitArea'));
+                    me.drawCoverage = true;
+                    var emptyData = {};
+                    me.coverageButton[0].data = "";
                 }
             }
         },
