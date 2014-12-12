@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "en",
     "key": "elf-geolocator",
     "value": {
@@ -33,4 +34,5 @@ Oskari.registerLocalization({
             }
         }
     }
-});
+}
+);
