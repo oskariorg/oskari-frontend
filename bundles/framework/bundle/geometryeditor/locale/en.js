@@ -1,8 +1,10 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "en",
     "key": "GeometryEditor",
     "value": {
-        "title": "NOT TRANSLATED",
+        "title": "Geometry editor",
         "desc": ""
     }
-});
+}
+);

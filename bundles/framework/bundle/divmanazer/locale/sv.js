@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "sv",
     "key": "DivManazer",
     "value": {
@@ -231,15 +232,16 @@ Oskari.registerLocalization({
             }
         },
         "Grid": {
-            "columnSelector" : {
-                "title": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED"
+            "columnSelector": {
+                "title": "Egenskaper",
+                "tooltip": "Visa kolumner"
             },
             "export": {
-                "title": "NOT TRANSLATED",
+                "title": "Exportera data",
                 "csv": "CSV",
                 "excel": "Excel"
             }
         }
     }
-});
+}
+);
