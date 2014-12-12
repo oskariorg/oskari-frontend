@@ -126,7 +126,8 @@ Oskari.registerLocalization(
                         "label": "Flera zoner",
                         "classForPreview": "areas_and_sectors",
                         "tooltip": "Man kan skapa flera zoner omkring utvalda objekt. Man kan välja sig själv zoners storlek och antal."
-                    }, {
+                    },
+                    {
                         "id": "oskari_analyse_spatial_join",
                         "label": "NOT TRANSLATED",
                         "classForPreview": "spatial_join",
@@ -203,11 +204,17 @@ Oskari.registerLocalization(
             },
             "areas_and_sectors": {
                 "area_count": "Antal av zoner",
-                "area_count_tooltip": "Ge zoner antal.",
                 "area_size": "Storlek av zoner",
                 "sector_count": "Antal av sektorer",
+                "area_count_tooltip": "Ge zoner antal.",
                 "area_size_tooltip": "Ge zoner storlek.",
                 "sector_count_tooltip": "Ge sektorer antal."
+            },
+            "difference": {
+                "firstLayer": "Första analyslager",
+                "secondLayer": "Andra analyslager",
+                "field": "",
+                "keyField": ""
             },
             "spatial": {
                 "label": "Objekt för analys resultat",

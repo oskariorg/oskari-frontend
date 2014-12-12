@@ -73,34 +73,34 @@ Oskari.registerLocalization(
             },
             "MarkersPlugin": {
                 "buttons": {
-                    "add": "NOT TRANSLATED",
-                    "clear": "NOT TRANSLATED"
+                    "add": "Kartanteckning",
+                    "clear": "Ta bort alla anteckningar"
                 },
                 "form": {
-                    "title": "NOT TRANSLATED",
+                    "title": "Stil för punkt objekt",
                     "tooltip": "",
                     "symbol": {
-                        "label": "NOT TRANSLATED"
+                        "label": "Ikon"
                     },
                     "size": {
-                        "label": "NOT TRANSLATED"
+                        "label": "Storlek"
                     },
                     "color": {
-                        "label": "NOT TRANSLATED",
-                        "labelOr": "NOT TRANSLATED",
-                        "labelCustom": "NOT TRANSLATED"
+                        "label": "Färg",
+                        "labelOr": "eller",
+                        "labelCustom": "Egen färg (RGB 0-255)"
                     },
                     "preview": {
-                        "label": "NOT TRANSLATED"
+                        "label": "Förhandsgranskning"
                     },
                     "message": {
-                        "label": "NOT TRANSLATED",
-                        "hint": "NOT TRANSLATED"
+                        "label": "Text på kartan",
+                        "hint": "Skriv en text för att visa den på kartan."
                     }
                 },
                 "dialog": {
-                    "title": "NOT TRANSLATED",
-                    "message": "NOT TRANSLATED"
+                    "title": "Kartanteckning",
+                    "message": "Välj en ny position till kartanteckning genom att klicka kartan."
                 }
             }
         }

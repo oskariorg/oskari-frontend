@@ -1,11 +1,12 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "sv",
     "key": "catalogue.bundle.metadatacatalogue",
     "value": {
         "tabTitle": "Metadatasökning",
         "metadataCatalogueDescription": "Sök datamängder eller tjänster.",
         "metadataCatalogueButton": "Sök",
-        "assistance": " ",
+        "assistance": "Skriv ett sökord.",
         "showMore": "Mer sökvillkoren",
         "showLess": "Mindre sökvillkoren",
         "emptyOption": "* Inte valt *",
@@ -30,11 +31,8 @@ Oskari.registerLocalization({
         "view": "Visning",
         "Language": "Metadataspråk",
         "ResourceLanguage": "Resursspråk",
-        "CoverageLabel": "Aluepeitto",
-        "CoverageButton": "Begränsa området på kartan",
-        "CoverageButtonDelete": "Poista aluerajaus",
-        "modifySearch" : "Redigera sök",
-        "showSearch" : "Visa alla resultatet",
+        "modifySearch": "Redigera sök",
+        "showSearch": "Visa alla resultatet",
         "metadataCatalogueResults": "Resultatet",
         "show": "Visa kartlag",
         "hide": "Ta kartlag bort",
@@ -51,4 +49,5 @@ Oskari.registerLocalization({
             "name": "Namn"
         }
     }
-});
+}
+);

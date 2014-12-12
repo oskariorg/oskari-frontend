@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "sv",
     "key": "PublishedMyPlaces",
     "value": {
@@ -15,7 +16,7 @@ Oskari.registerLocalization({
         "tab": {
             "title": "Objekt",
             "nocategories": "Du har ännu inte lagrat objekten.",
-            "maxFeaturesExceeded": "NOT TRANSLATED",
+            "maxFeaturesExceeded": "Du har för många egna platser. Alla platser kunde inte laddas.",
             "publishCategory": {
                 "privateTooltip": "Kartlagret är privat. Klicka på lagret för att offentliggöra det.",
                 "publicTooltip": "Kartlagret är offentliggöra. Klicka på lagret för att privat det."
@@ -119,13 +120,13 @@ Oskari.registerLocalization({
                 "placeholder": "Obs tekst"
             },
             "measurement": {
-                "line": "Linjelängd: ",
-                "area": "Area: "
+                "line": "Linjelängd:",
+                "area": "Area:"
             },
             "category": {
                 "label": "Kartlager",
                 "newLayer": "Ny nivå...",
-                "choose": " eller välj från nivåer:"
+                "choose": "eller välj från nivåer:"
             },
             "imagelink": {
                 "placeholder": "Bild-URL",
@@ -133,7 +134,7 @@ Oskari.registerLocalization({
                 "add": "Ny nivå"
             },
             "rendering": {
-                "label": "",
+                "label": "Stil för objekt",
                 "point": {
                     "tooltip": "Punkt"
                 }
@@ -175,7 +176,7 @@ Oskari.registerLocalization({
                 "cancel": "Tillbaka"
             },
             "rendering": {
-                "label": "",
+                "label": "Stil för objekt",
                 "point": {
                     "tooltip": "Editera punktens stil"
                 },
@@ -323,4 +324,5 @@ Oskari.registerLocalization({
             "areaFillColor": "Områdets ifyllnadsfärg är felaktig."
         }
     }
-});
+}
+);

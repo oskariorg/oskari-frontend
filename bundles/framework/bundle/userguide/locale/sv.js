@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "sv",
     "key": "userinterface.UserGuide",
     "value": {
@@ -6,7 +7,7 @@ Oskari.registerLocalization({
         "desc": "",
         "flyout": {
             "title": "Så här använder du Paikkatietoikkuna",
-            "loadingtxt": "NOT TRANSLATED"
+            "loadingtxt": "<p>Laddar bruksanvisningar…</p>"
         },
         "tile": {
             "title": "Bruksanvisningar"
@@ -20,4 +21,5 @@ Oskari.registerLocalization({
             "contentPart": "body"
         }
     }
-});
+}
+);

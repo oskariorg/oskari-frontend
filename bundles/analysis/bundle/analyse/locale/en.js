@@ -88,6 +88,7 @@ Oskari.registerLocalization(
                         "id": "oskari_analyse_buffer",
                         "label": "Buffer",
                         "classForMethod": "buffer",
+                        "selected": true,
                         "tooltip": "By the method \"Buffer\" you can add the buffers around the selected objects. You can define the buffer size by yourself. After making buffers you can use them as a base for other analysis."
                     },
                     {
