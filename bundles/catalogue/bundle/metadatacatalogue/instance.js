@@ -306,7 +306,6 @@ Oskari.clazz.define(
                     me.selectionPlugin.stopDrawing();
                     me.coverageButton.val(me.getLocalization('delimitArea'));
                     me.drawCoverage = true;
-                    document.getElementById("oskari_metadatacatalogue_forminput_searchassistance").focus();
                     var emptyData = {};
                     me.coverageButton[0].data = "";
                 }
