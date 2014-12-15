@@ -69,6 +69,10 @@ input {
 	background: #FAFAFA;
 }
 
+input::-ms-clear {
+	display: none;
+} 
+
 input[type=button], input[type=email], input[type=number], input[type=file], input[type=password], input[type=reset], input[type=search], input[type=submit], input[type=tel], input[type=text], input[type=url], select, textarea, .textarea, button {
 	border: 1px solid;
 	border-color: #BFBFBF #DEDEDE #DEDEDE #BFBFBF;
