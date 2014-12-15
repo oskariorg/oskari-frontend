@@ -124,7 +124,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
          */
         getLocation: function () {
             var ret = this._defaultLocation;
-            if (this._config && this._config.location) {
+            if (this._config && this._config.location && this._config.location.classes) {
                 ret = this._config.location.classes;
             }
             return ret;
