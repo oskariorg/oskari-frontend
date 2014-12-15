@@ -5,7 +5,7 @@ Oskari.registerLocalization({
         "tabTitle": "Metadata Search",
         "metadataCatalogueDescription": "Search metadata for datasets, dataset series or services.",
         "metadataCatalogueButton": "Search",
-        "assistance": "Type the search term.",
+        "assistance": "Write the search term.",
         "showMore": "Show search options",
         "showLess": "Hide search options",
         "emptyOption": "* No selection *",

@@ -11,6 +11,8 @@ div.mapplugin.layerSelectionPlugin {
     cursor: pointer;
     background-color: #3c3c3c;
     padding: 4px 8px; }
+    .layerSelectionPlugin div.header:hover {
+      color: #ff9100; }
     .layerSelectionPlugin div.header div.header-icon {
       display: inline-block;
       margin-right: 4px;

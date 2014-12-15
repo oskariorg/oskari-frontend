@@ -11,11 +11,17 @@
 }
 
 div.mapplugin.search {
+    /* If you re-enable these, please explain why.
     top: 10px;
-    right: 10px;
+    right: 10px;*/
 
     div.close {
         float: right;
+    }
+
+    /* Faded inputs look odd in publisher layout edit mode */
+    input:disabled {
+        opacity: 1;
     }
 
     input[type=text] {

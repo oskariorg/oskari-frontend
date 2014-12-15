@@ -186,6 +186,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                 cel = jQuery(this.container),
                 i,
                 tab;
+
             cel.empty();
 
             me.tabContainer = Oskari.clazz.create(
@@ -197,6 +198,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                 me.tabContainer.addPanel(tab.getTabPanel());
             }
             //me.tabContainer.addTabChangeListener(me._tabsChanged); // -> filter with same keyword when changing tabs?
+            me.tabContainer.addTabChangeListener(
+                function (previousTab, newTab) {
+                    // Make sure this fires only when the flyout is open
+                    if (!cel.parents('.oskari-flyout.oskari-closed').length) {
+                        var searchInput = newTab.getContainer().find('input[type=text]');
+                        if (searchInput) {
+                            searchInput.focus();
+                        }
+                    }
+                }
+            );
             me.populateLayers();
         },
 

@@ -1,5 +1,6 @@
 .panbuttonDiv {
   color: black;
+  cursor: pointer;
   background: transparent;
   z-index: 15000;
   height: 90px;

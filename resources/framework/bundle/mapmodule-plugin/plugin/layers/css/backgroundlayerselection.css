@@ -78,9 +78,13 @@ div.mapplugin.backgroundLayerSelectionPlugin div.content {
         -moz-border-radius-bottomright: 2px;
         border-top-right-radius: 2px;
         border-bottom-right-radius: 2px; }
+      div.mapplugin.backgroundLayerSelectionPlugin div.content ul li:hover {
+        color: #ff9100; }
       div.mapplugin.backgroundLayerSelectionPlugin div.content ul li.selected {
         background-color: #fafafa;
         color: #3c3c3c; }
+        div.mapplugin.backgroundLayerSelectionPlugin div.content ul li.selected:hover {
+          color: #3c3c3c; }
   div.mapplugin.backgroundLayerSelectionPlugin div.content.dropdown div.currentSelection {
     display: block; }
     div.mapplugin.backgroundLayerSelectionPlugin div.content.dropdown div.currentSelection div.header-icon {

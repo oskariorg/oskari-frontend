@@ -99,9 +99,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 // Disabled for now, need to fix config reading first allowedLocations: ['top left', 'top right', 'bottom left', 'bottom right'],
                 allowedLocations: ['top right'],
                 allowedSiblings: [
+                    'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin',
                     'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                     'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar',
-                    'Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin'
+                    'Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin',
+                    'Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin'
                 ],
                 groupedSiblings: true
             },
@@ -125,10 +127,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             },
 
             'Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin': 
-{                allowedLocations: ['top left', 'top center', 'top right'],
+{               allowedLocations: ['top left', 'top center', 'top right'],
                 allowedSiblings: [
-                    'Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin',
-                    'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin'
+                    'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
+                    'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin',
+                    'Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin'
                 ],
                 groupedSiblings: false
             },
@@ -136,6 +139,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin': {
                 allowedLocations: ['top left', 'top center', 'top right'],
                 allowedSiblings: [
+                    'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
                     'Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin',
                     'Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin'
                 ],
@@ -981,6 +985,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                             plugin = me._getPluginByClazz(pluginClazz),
                             source = ui.draggable.parents('.mapplugins'),
                             target = jQuery(this);
+
                         me._moveSiblings(pluginClazz, source, target);
                         if (plugin && plugin.setLocation) {
                             plugin.setLocation(jQuery(this).parents('.mapplugins').attr('data-location'));

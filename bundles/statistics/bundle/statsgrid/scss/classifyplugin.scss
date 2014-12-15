@@ -48,6 +48,10 @@
 		padding: 4px 8px;
 		text-align: left;
 
+		&:hover {
+			color: #ff9100;
+		}
+
 		.header-icon {
 			display: inline-block;
 			margin-right: 4px;

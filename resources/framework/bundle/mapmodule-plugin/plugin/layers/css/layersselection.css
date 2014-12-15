@@ -1,5 +1,7 @@
 /* Mixins */
 div.mapplugin.layerselection {
+  height: 37px;
+  overflow: visible;
   max-width: 200px;
   z-index: 100000000 !important; }
   div.mapplugin.layerselection div.content {
@@ -51,6 +53,8 @@ div.mapplugin.layerselection {
     cursor: pointer;
     padding: 8px;
     text-align: left; }
+    div.mapplugin.layerselection div.header:hover {
+      color: #ff9100; }
     div.mapplugin.layerselection div.header div.header-icon {
       display: inline-block;
       margin-right: 4px;

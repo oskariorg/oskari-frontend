@@ -113,12 +113,22 @@ div.mapplugin.backgroundLayerSelectionPlugin {
                     border-bottom-right-radius: $buttonBorderRadius;
                 }
 
+                &:hover {
+                    color: #ff9100;
+                }
+
                 &.selected {
                     background-color: $buttonSelectedBackgroundColor;
                     color: $buttonSelectedColor;
+
+                    &:hover {
+                        color: $buttonSelectedColor;
+                    }
+
                 }
 
             }
+
         }
 
         /* dropdown version */

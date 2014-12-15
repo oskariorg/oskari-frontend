@@ -10,6 +10,7 @@ div.mapplugin.indexmap {
     border-top-width: 2px;
     padding: 5px;
     margin-left: 46px;
+    margin-right: 0;
     margin-bottom: -46px; }
   div.mapplugin.indexmap .indexmapToggle {
     width: 46px !important;
@@ -24,6 +25,7 @@ div.mapplugin.indexmap {
 .right div.mapplugin.indexmap {
   text-align: right; }
   .right div.mapplugin.indexmap .olControlOverviewMapElement {
+    margin-left: 0;
     margin-right: 46px; }
 
 .olControlOverviewMapContainer .olControlOverviewMapElement {
