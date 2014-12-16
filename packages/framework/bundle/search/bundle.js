@@ -35,6 +35,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.search.SearchBundle", function (
             "src": "../../../../bundles/framework/bundle/search/Tile.js"
         }, {
             "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/search/event/TabChangedEvent.js"
+        }, {
+            "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/search/request/AddTabRequest.js"
         }, {
             "type": "text/javascript",

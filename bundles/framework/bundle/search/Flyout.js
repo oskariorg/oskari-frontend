@@ -298,6 +298,12 @@ Oskari.clazz.define(
                             searchInput.focus();
                         }
                     }
+                    var eventBuilder = sandbox.getEventBuilder('Search.TabChangedEvent'),
+                        previousTabId = previousTab ? previousTab.getId() : null,
+                        newTabId = newTab ? newTab.getId() : null,
+                        event = eventBuilder(previousTabId, newTabId);
+
+                    sandbox.notifyAll(event);
                 }
             );
         },
@@ -616,6 +622,7 @@ Oskari.clazz.define(
                         'oskari_search_tabpanel_header'
                     );
                     defaultPanel.setContent(searchContainer);
+                    defaultPanel.setId('oskari_search_tabpanel_header');
                     defaultPanel.setPriority(me.instance.tabPriority);
                     me.tabsContainer.addPanel(defaultPanel);
                 }
@@ -625,6 +632,7 @@ Oskari.clazz.define(
                 'Oskari.userinterface.component.TabPanel'
             );
             panel.setTitle(item.title, item.id);
+            panel.setId(item.id);
             panel.setContent(item.content);
             panel.setPriority(item.priority);
             me.tabsContainer.addPanel(panel);
