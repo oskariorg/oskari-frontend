@@ -196,7 +196,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
             var loc = this.instance.getLocalization('placeform'),
                 measurementWithUnit = this.instance.getDrawPlugin().getMapModule().formatMeasurementResult(geometry, drawMode);
 
-            this.measurementResult = loc.measurement[drawMode] + measurementWithUnit;
+            this.measurementResult = loc.measurement[drawMode] + ' ' + measurementWithUnit;
 
             this._getOnScreenForm().
             find('div.measurementResult').

@@ -42,7 +42,7 @@ Oskari.clazz.define(
         // last sort parameters are saved so we can change sort direction
         // if the same column is sorted again
         this.lastSort = null;
-        this.drawCoverage = false;
+        this.drawCoverage = undefined;
     }, {
         /**
          * @static
@@ -291,22 +291,45 @@ Oskari.clazz.define(
                 this.coverageButton[0].data = JSON.stringify(coverageFeature);
                 this.drawCoverage = false;
 
-                document.getElementById("oskari_metadatacatalogue_forminput_searchassistance").focus();
+                document.getElementById('oskari_metadatacatalogue_forminput_searchassistance').focus();
             },
 
+            /**
+             * @method userinterface.ExtensionUpdatedEvent
+             * Stop drawing when flyout is closed
+             */
             'userinterface.ExtensionUpdatedEvent': function (event) {
                 var me = this,
                     isShown = event.getViewState() !== 'close';
 
                 // ExtensionUpdateEvents are fired a lot, only let metadatacatalogue extension event to be handled when enabled
-                if (event.getExtension().getName() !== "Search") {
+                if (event.getExtension().getName() !== 'Search') {
                     // wasn't me or disabled -> do nothing
                     return;
                 } else if (!isShown && me.drawCoverage === false) {
+                    if (me.selectionPlugin) {
+                        me.selectionPlugin.stopDrawing();
+                    }
+                    if (me.coverageButton) {
+                        me.coverageButton.val(me.getLocalization('delimitArea'));
+                        me.coverageButton[0].data = '';
+                    }
+                    me.drawCoverage = true;
+                    var emptyData = {};
+                    me.coverageButton[0].data = "";
+                }
+            },
+
+            /**
+             * @method Search.TabChangedEvent
+             * Stop drawing when tab is changed
+             */
+            'Search.TabChangedEvent': function (event) {
+                var me = this;
+                if (event._previousTabId === 'oskari_metadatacatalogue_tabpanel_header' && me.drawCoverage === false) {
                     me.selectionPlugin.stopDrawing();
                     me.coverageButton.val(me.getLocalization('delimitArea'));
                     me.drawCoverage = true;
-                    document.getElementById("oskari_metadatacatalogue_forminput_searchassistance").focus();
                     var emptyData = {};
                     me.coverageButton[0].data = "";
                 }
