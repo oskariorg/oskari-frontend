@@ -274,8 +274,8 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
          */
         setVisible: function (visible) {
             // toggle element
-            if (this._element) {
-                this._element.toggle(visible);
+            if (this._element && this._visible !== visible) {
+                    this._element.toggle(visible);
             }
             this._visible = visible;
         },

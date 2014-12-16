@@ -283,7 +283,7 @@ Oskari.clazz.define(
              */
             'MetaData.FinishedDrawingEvent': function (event) {
                 var me = this,
-                    coverageFeature,
+                    coverageFeature;
 
                 coverageFeature = this.selectionPlugin.getFeaturesAsGeoJSON();
 
@@ -291,7 +291,7 @@ Oskari.clazz.define(
                 this.coverageButton[0].data = JSON.stringify(coverageFeature);
                 this.drawCoverage = false;
 
-                document.getElementById("oskari_metadatacatalogue_forminput_searchassistance").focus();
+                document.getElementById('oskari_metadatacatalogue_forminput_searchassistance').focus();
             },
 
             'userinterface.ExtensionUpdatedEvent': function (event) {
@@ -299,16 +299,16 @@ Oskari.clazz.define(
                     isShown = event.getViewState() !== 'close';
 
                 // ExtensionUpdateEvents are fired a lot, only let metadatacatalogue extension event to be handled when enabled
-                if (event.getExtension().getName() !== "Search") {
+                if (event.getExtension().getName() !== 'Search') {
                     // wasn't me or disabled -> do nothing
                     return;
                 } else if (!isShown && me.drawCoverage === false) {
                     me.selectionPlugin.stopDrawing();
                     me.coverageButton.val(me.getLocalization('delimitArea'));
                     me.drawCoverage = true;
-                    document.getElementById("oskari_metadatacatalogue_forminput_searchassistance").focus();
+                    document.getElementById('oskari_metadatacatalogue_forminput_searchassistance').focus();
                     var emptyData = {};
-                    me.coverageButton[0].data = "";
+                    me.coverageButton[0].data = '';
                 }
             }
         },
@@ -601,13 +601,13 @@ Oskari.clazz.define(
             }
 
             newRow = me.templates.buttonRow.clone();
-            newLabel = me.getLocalization("searchArea");
+            newLabel = me.getLocalization('searchArea');
             newRow.find('div.rowLabel').append(newLabel);
 
-            newButton = me.templates.metadataButton.clone();
+            var newButton = me.templates.metadataButton.clone();
             this.coverageButton = newButton.find('.metadataCoverageDef');
             this.coverageButton.attr('value', me.getLocalization('delimitArea'));
-            this.coverageButton.attr('name', "coverage");
+            this.coverageButton.attr('name', 'coverage');
             this.drawCoverage = true;
 
             this.coverageButton.on('click', function () {
@@ -617,9 +617,9 @@ Oskari.clazz.define(
                     me.selectionPlugin.stopDrawing();
                     me.coverageButton.val(me.getLocalization('delimitArea'));
                     me.drawCoverage = true;
-                    document.getElementById("oskari_metadatacatalogue_forminput_searchassistance").focus();
+                    document.getElementById('oskari_metadatacatalogue_forminput_searchassistance').focus();
                     var emptyData = {};
-                    me.coverageButton[0].data = "";
+                    me.coverageButton[0].data = '';
                 }
             });
 
@@ -654,14 +654,14 @@ Oskari.clazz.define(
             var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
 
             var config = {
-                id: "MetaData",
-                enableTransform : true,
+                id: 'MetaData',
+                enableTransform: true
             };
 
             this.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin', config);
             mapModule.registerPlugin(this.selectionPlugin);
             mapModule.startPlugin(this.selectionPlugin);
-            this.selectionPlugin.startDrawing({drawMode: "square"});
+            this.selectionPlugin.startDrawing({drawMode: 'square'});
         },
 
         /**

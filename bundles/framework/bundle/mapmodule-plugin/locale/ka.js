@@ -70,6 +70,9 @@ Oskari.registerLocalization(
                     "line": "NOT TRANSLATED",
                     "area": "NOT TRANSLATED"
                 }
+            },
+            "MyLocationPlugin": {
+                "tooltip": "NOT TRANSLATED"
             }
         }
     }

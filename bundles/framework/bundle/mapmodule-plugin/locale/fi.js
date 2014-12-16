@@ -102,6 +102,9 @@ Oskari.registerLocalization(
                     "title": "Karttamerkintä",
                     "message": "Valitse kartalta uusi sijainti klikkaamalla."
                 }
+            },
+            "MyLocationPlugin": {
+                "tooltip": "Näytä sijaintisi kartalla"
             }
         }
     }

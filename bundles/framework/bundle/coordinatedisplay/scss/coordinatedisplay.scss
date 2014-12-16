@@ -17,6 +17,7 @@
     box-sizing: border-box;
     font-size: 11px;
     line-height: 15px;
+    margin-bottom: 10px !important; // Damned mapmodule css has this set as 0 with a high-specificity selector...
     padding: 2px 5px 0;
     text-align: left;
 
