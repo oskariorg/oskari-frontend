@@ -2,6 +2,12 @@
 
 ## 1.26
 
+### mapmodule-plugin/DrawPlugin
+
+DrawPlugin can now be configured to NOT register (and unregister) requests. This helps when there are multiple DrawPlugins on map.
+For now start the plugin with { requests : false } config if you have more than one. Otherwise the latest will receive all requests.
+Better solution should be developed for this (and Oskari should warn if a requesthandler has been overwritten).
+
 ### search
 
 Now prefers zoomScale over zoomLevel on result items.
