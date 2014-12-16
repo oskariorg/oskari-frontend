@@ -30,6 +30,14 @@ Disabled = true just made the visual disabling, not actual clickhandler disablin
 Semi-configurable URL (conf.urlPrefix) used in GFI-preview functionality has been changed to use window.location.
 The configuration is no longer needed/used.
 
+### metadatacatalogue
+
+Metadata search has now advances search option Search area which enables metadata searching by limiting the search area on the map. 
+
+### Openlayers
+
+OpenLayers.Control.TransformFeature was added to Openlayers full-map.js to enable transformations of drawn feature.
+
 ## 1.25.5
 
 ### Core

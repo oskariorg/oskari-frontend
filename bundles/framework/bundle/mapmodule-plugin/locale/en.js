@@ -22,7 +22,7 @@ Oskari.registerLocalization(
         "plugin": {
             "LogoPlugin": {
                 "terms": "Terms of Use",
-                "dataSources": "Data sources",
+                "dataSources": "Data Sources",
                 "layersHeader": "Map Layers",
                 "indicatorsHeader": "Indicators"
             },
