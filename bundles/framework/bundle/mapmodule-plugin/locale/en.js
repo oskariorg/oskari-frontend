@@ -95,7 +95,7 @@ Oskari.registerLocalization(
                     },
                     "message": {
                         "label": "The text on the map",
-                        "hint": "Write a text to be shown on the map."
+                        "hint": "Write a message"
                     }
                 },
                 "dialog": {
