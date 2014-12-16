@@ -3,13 +3,14 @@
  *
  * Shows a form for line rendering options
  */
-Oskari.clazz.define('Oskari.userinterface.component.visualization-form.LineForm',
+Oskari.clazz.define(
+    'Oskari.userinterface.component.visualization-form.LineForm',
 
     /**
-     * @method create called automatically on construction
-     * @static
+     * @static @method create called automatically on construction
+     *
+     *
      */
-
     function (creator, loc, defaultValues) {
         this.creator = creator;
         this.loc = loc;
@@ -34,7 +35,7 @@ Oskari.clazz.define('Oskari.userinterface.component.visualization-form.LineForm'
         this.activeColorCell = -1;
         // Default color
         var i;
-        for (i = 0; i < this.basicColors.length; i++) {
+        for (i = 0; i < this.basicColors.length; i += 1) {
             if (this.basicColors[i] === '#' + this.values.color) {
                 this.activeColorCell = i;
                 break;
@@ -42,7 +43,7 @@ Oskari.clazz.define('Oskari.userinterface.component.visualization-form.LineForm'
         }
 
         this.templateLineStyleDialogContent = jQuery('<div class="lineform">' +
-            '<div class="container">' +
+            '<div class="container clearfix">' +
             '<div class="column1">' +
             '<label>' + this.loc.style.label + '</label>' +
             '<div class="style icon-buttons"></div>' +
@@ -132,17 +133,17 @@ Oskari.clazz.define('Oskari.userinterface.component.visualization-form.LineForm'
 
             if (values !== null && values !== undefined) {
                 // transform strings into array indices
-                for (i = 0; i < this.creator.lineCapMap.length; i++) {
+                for (i = 0; i < this.creator.lineCapMap.length; i += 1) {
                     if (values.cap === this.creator.lineCapMap[i]) {
                         values.cap = i;
                     }
                 }
-                for (i = 0; i < this.creator.lineCornerMap.length; i++) {
+                for (i = 0; i < this.creator.lineCornerMap.length; i += 1) {
                     if (values.corner === this.creator.lineCornerMap[i]) {
                         values.corner = i;
                     }
                 }
-                for (i = 0; i < this.creator.lineStyleMap.length; i++) {
+                for (i = 0; i < this.creator.lineStyleMap.length; i += 1) {
                     if (values.style === this.creator.lineStyleMap[i]) {
                         values.style = i;
                     }
@@ -178,7 +179,7 @@ Oskari.clazz.define('Oskari.userinterface.component.visualization-form.LineForm'
             if (me.values.style.length === 0) {
                 me.values.style = 0;
             }
-            for (i = 0; i < me.styleButtonNames.length; i++) {
+            for (i = 0; i < me.styleButtonNames.length; i += 1) {
                 styleBtnContainer = me.templateButton.clone();
                 styleBtnContainer.addClass(me.styleButtonNames[i]);
                 styleBtnContainer.attr('id', i + 'linestyle');
@@ -197,7 +198,7 @@ Oskari.clazz.define('Oskari.userinterface.component.visualization-form.LineForm'
 
             // Line cap
             content = dialogContent.find('div.cap');
-            for (i = 0; i < me.capButtonNames.length; i++) {
+            for (i = 0; i < me.capButtonNames.length; i += 1) {
                 capBtnContainer = me.templateButton.clone();
                 capBtnContainer.addClass(me.capButtonNames[i]);
                 capBtnContainer.attr('id', i + 'linecap');
@@ -216,7 +217,7 @@ Oskari.clazz.define('Oskari.userinterface.component.visualization-form.LineForm'
 
             // Line corner
             content = dialogContent.find('div.corner');
-            for (i = 0; i < me.cornerButtonNames.length; i++) {
+            for (i = 0; i < me.cornerButtonNames.length; i += 1) {
                 cornerBtnContainer = me.templateButton.clone();
                 cornerBtnContainer.addClass(me.cornerButtonNames[i]);
                 cornerBtnContainer.attr('id', i + 'linecorner');
@@ -254,7 +255,7 @@ Oskari.clazz.define('Oskari.userinterface.component.visualization-form.LineForm'
                 activeCell;
             // Color chooser
             content = dialogContent.find('.color-rectangle');
-            for (i = 0; i < me.basicColors.length; i++) {
+            for (i = 0; i < me.basicColors.length; i += 1) {
                 colorCell = me.templateColorCell.clone();
                 colorCell.css('background-color', me.basicColors[i]);
                 idExt = 'ColorCell';
@@ -379,7 +380,7 @@ Oskari.clazz.define('Oskari.userinterface.component.visualization-form.LineForm'
                 values[1] = jQuery('input.custom-color.custom-green-value').val();
                 values[2] = jQuery('input.custom-color.custom-blue-value').val();
                 // From integer to hex values
-                for (i = 0; i < 3; i++) {
+                for (i = 0; i < 3; i += 1) {
                     intValue = parseInt(values[i],10);
                     if ((intValue < 0) || (intValue > 255)) {
                         return;
@@ -511,4 +512,5 @@ Oskari.clazz.define('Oskari.userinterface.component.visualization-form.LineForm'
             unselectedButton.css('border', '1px solid');
             unselectedButton.css('background-color', 'transparent');
         }
-    });
+    }
+);
