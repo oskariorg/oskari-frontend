@@ -50,11 +50,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
          */
         _initImpl: function () {
             var me = this,
-                reqBuilder = me.getSandbox().getRequestBuilder(
+                sandbox = me.getSandbox(),
+                reqBuilder = sandbox.getRequestBuilder(
                     'ToolSelectionRequest'
                 ),
                 gfiRn = 'MapModulePlugin.GetFeatureInfoActivationRequest',
-                gfiReqBuilder = me.getSandbox().getRequestBuilder(gfiRn);
+                gfiReqBuilder = sandbox.getRequestBuilder(gfiRn);
 
             me.template = jQuery(me.templates.main);
 
@@ -73,7 +74,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                             enabled: false,
                             sticky: false,
                             callback: function () {
-                                me.getSandbox().request(
+                                sandbox.request(
                                     me,
                                     reqBuilder('map_control_tool_prev')
                                 );
@@ -86,7 +87,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                             enabled: false,
                             sticky: false,
                             callback: function () {
-                                me.getSandbox().request(
+                                sandbox.request(
                                     me,
                                     reqBuilder('map_control_tool_next')
                                 );
@@ -104,8 +105,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                             sticky: true,
                             callback: function () {
                                 var rn = 'map_control_measure_tool';
-                                me.getSandbox().request(me, gfiReqBuilder(false));
-                                me.getSandbox().request(me, reqBuilder(rn));
+                                if (gfiReqBuilder) {
+                                    sandbox.request(me, gfiReqBuilder(false));
+                                }
+                                sandbox.request(me, reqBuilder(rn));
                             }
                         },
                         'measurearea': {
@@ -116,8 +119,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                             sticky: true,
                             callback: function () {
                                 var rn = 'map_control_measure_area_tool';
-                                me.getSandbox().request(me, gfiReqBuilder(false));
-                                me.getSandbox().request(me, reqBuilder(rn));
+                                if (gfiReqBuilder) {
+                                    sandbox.request(me, gfiReqBuilder(false));
+                                }
+                                sandbox.request(me, reqBuilder(rn));
                             }
                         }
                     }
