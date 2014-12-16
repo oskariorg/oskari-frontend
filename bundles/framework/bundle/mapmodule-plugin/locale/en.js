@@ -104,7 +104,7 @@ Oskari.registerLocalization(
                 }
             },
             "MyLocationPlugin": {
-                "tooltip": "Show my location"
+                "tooltip": "Center map to your location"
             }
         }
     }

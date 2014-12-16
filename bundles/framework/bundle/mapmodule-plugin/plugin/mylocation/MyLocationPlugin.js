@@ -32,7 +32,7 @@ Oskari.clazz.define(
          */
         _createControlElement: function () {
             var el = jQuery(
-                    '<button class="mapplugin mylocationplugin icon mylocation-rounded-dark"></button>'
+                    '<div class="mapplugin mylocationplugin icon mylocation-rounded-dark"></div>'
                 ),
                 me = this;
 
@@ -45,6 +45,11 @@ Oskari.clazz.define(
             return el;
         },
 
+        /**
+         * @private @method _setLayerToolsEditModeImpl
+         *
+         *
+         */ 
         _setLayerToolsEditModeImpl: function () {
             var me = this;
             if (me.inLayerToolsEditMode()) {
@@ -58,6 +63,11 @@ Oskari.clazz.define(
             }
         },
 
+        /**
+         * @public @method refresh
+         *
+         *
+         */
         refresh: function () {
             var me = this,
                 conf = me.getConfig();
@@ -69,11 +79,12 @@ Oskari.clazz.define(
         }, 
 
         /**
+         * @public @method changeToolStyle
          * Changes the tool style of the plugin
          *
-         * @method changeToolStyle
          * @param {Object} style
          * @param {jQuery} div
+         *
          */
         changeToolStyle: function (style, div) {
             var me = this,
@@ -90,7 +101,8 @@ Oskari.clazz.define(
 
         /**
          * @private @method _setupLocation
-         * Tries to get the geolocation from browser and move the map to the location
+         * Tries to get the geolocation from browser and move the map to the
+         * location
          *
          *
          */

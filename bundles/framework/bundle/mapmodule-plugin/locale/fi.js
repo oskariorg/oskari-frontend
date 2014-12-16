@@ -104,7 +104,7 @@ Oskari.registerLocalization(
                 }
             },
             "MyLocationPlugin": {
-                "tooltip": "Näytä sijaintisi kartalla"
+                "tooltip": "Keskitä kartta omaan sijaintiisi"
             }
         }
     }
