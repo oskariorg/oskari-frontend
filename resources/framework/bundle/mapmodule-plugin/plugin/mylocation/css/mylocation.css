@@ -1,10 +1,4 @@
 .mapplugin.mylocationplugin {
-  background: transparent;
-  border: none;
   cursor: pointer;
-  display: block;
-  margin: 0 auto;
-  padding: 0;
   width: 35px;
-  min-width: 35px;
   height: 35px; }

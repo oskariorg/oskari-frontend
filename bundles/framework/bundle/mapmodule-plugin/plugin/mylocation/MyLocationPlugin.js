@@ -4,8 +4,7 @@
  * Tries to locate the user by using HTML5 GeoLocation services or tries a
  * fallback to http://dev.maxmind.com/geoip/javascript GeoIP if GeoLocation is
  * not available.
- * Centers the map on the users location with zoom level 6 if location is
- * determined successfully.
+ * Centers the map on the users location if location is determined successfully.
  */
 Oskari.clazz.define(
     'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin',
@@ -19,7 +18,7 @@ Oskari.clazz.define(
         me._clazz =
             'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin';
         me._defaultLocation = 'top right';
-        me._index = 8;
+        me._index = 6;
         me._name = 'MyLocationPlugin';
     }, {
         /**
@@ -94,9 +93,9 @@ Oskari.clazz.define(
                 return;
             }
 
-            var styleClass = 'mylocation-' + style;
+            var styleClass = 'mylocation-' + (style ? style : 'rounded-dark');
 
-            me.getMapModule().changeCssClasses(styleClass, /^mylocation/, el);
+            me.getMapModule().changeCssClasses(styleClass, /^mylocation-/, [el]);
         },
 
         /**
@@ -110,11 +109,14 @@ Oskari.clazz.define(
             var me = this,
                 callback = function (lon, lat) {
                     // transform coordinates from browser projection to current
-                    var lonlat = me.getMapModule()._transformCoordinates(
-                        new OpenLayers.LonLat(lon, lat),
-                        'EPSG:4326'
-                    );
-                    me.getMapModule().centerMap(lonlat, 6);
+                    var mapModule = me.getMapModule(),
+                        lonlat = mapModule._transformCoordinates(
+                            new OpenLayers.LonLat(lon, lat),
+                            'EPSG:4326'
+                        ),
+                        zoom = mapModule.getMap().getNumZoomLevels() - 1;
+
+                    mapModule.centerMap(lonlat, zoom);
                 };
 
             if (navigator.geolocation) {
