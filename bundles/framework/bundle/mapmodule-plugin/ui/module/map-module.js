@@ -1017,6 +1017,30 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          */
         getMapElDom: function () {
             return this.getMapEl().get(0);
+        },
+
+        /**
+         * @method bringToTop
+         * @param {OpenLayers.Layer} layer The new topmost layer
+         * Brings map layer to top
+         */
+        bringToTop: function(layer) {
+            var zIndex;
+            if (layer !== null) {
+                zIndex = Math.max(this._map.Z_INDEX_BASE.Feature,layer.getZIndex());
+                layer.setZIndex(zIndex+1);
+            }
+            this.orderLayersByZIndex();
+        },
+
+        /**
+         * @method orderLayersByZIndex
+         * Orders layers by Z-indexes.
+         */
+        orderLayersByZIndex: function() {
+            this._map.layers.sort(function(a, b){
+                return a.getZIndex()-b.getZIndex();
+            });
         }
 
     }, {
