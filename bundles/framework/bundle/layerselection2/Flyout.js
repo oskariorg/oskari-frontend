@@ -432,11 +432,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                             request = builder(layer.getId());
 
                         sandbox.request(me.instance.getName(), request);
-                        /* AH-2186
-                         * Layer visibility is set back to true... somewhere.
-                         * So set it to visible for the layer object as well.
-                         */
-                        layer.setVisible(true);
                     }
                 );
             }
