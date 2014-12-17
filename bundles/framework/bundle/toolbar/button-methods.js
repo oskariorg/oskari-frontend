@@ -87,7 +87,11 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         } else {
             group.append(button);
         }
-
+        // prefer enabled flag over disabled
+        if(pConfig.disabled === true) {
+            pConfig.enabled = false;
+            delete pConfig.disabled;
+        }
         // if button states to be disabled, disable button
         if (pConfig.enabled === false) {
             button.addClass('disabled');

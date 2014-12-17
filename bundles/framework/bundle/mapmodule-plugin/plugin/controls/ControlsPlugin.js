@@ -145,6 +145,7 @@ Oskari.clazz.define(
                         this._zoomBoxTool.deactivate();
                     }
                     if (this.getConfig().measureControls !== false) {
+                        this.getMapModule().orderLayersByZIndex();
                         this._measureControls.line.deactivate();
                         this._measureControls.area.deactivate();
                     }

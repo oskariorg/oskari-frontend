@@ -15,21 +15,22 @@ Oskari.clazz.define(
         me.currentDrawMode = null;
         me.prefix = 'DrawPlugin.';
         me.creatorId = undefined;
-
-        if (me._config) {
-            if (me._config.id) {
+        var config = me.getConfig();
+        if (config) {
+            if (config.id) {
                 // Note that the events and requests need to match the configured
                 // prefix based on the id!
-                me.prefix = me._config.id + '.';
-                me.creatorId = me._config.id;
+                me.prefix = config.id + '.';
+                me.creatorId = config.id;
             }
             // graphicFill, instance
-            if (me._config.graphicFill) {
-                me.graphicFill = me._config.graphicFill;
+            if (config.graphicFill) {
+                me.graphicFill = config.graphicFill;
             }
         }
 
-        me.multipart = (me._config && me._config.multipart === true);
+        me.registerRequests = (config && config.requests !== false);
+        me.multipart = (config && config.multipart === true);
     }, {
         __name: 'DrawPlugin',
 
@@ -45,9 +46,7 @@ Oskari.clazz.define(
          * @method
          */
         startDrawing: function (params) {
-            // make the drawlayer go on top, just using 1000 as delta for now (quickfix)
-            // TODO: add a "bringToTop" function to mapmodule and add proper layer indexing
-            this.getMap().raiseLayer(this.drawLayer, 1000);
+            this.getMapModule().bringToTop(this.drawLayer);
             if (params.isModify) {
                 // preselect it for modification
                 this.modifyControls.select.select(this.drawLayer.features[0]);
@@ -347,6 +346,10 @@ Oskari.clazz.define(
         _createRequestHandlers: function () {
             var me = this,
                 sandbox = me.getSandbox();
+
+            if(!me.registerRequests) {
+                return {};
+            }
 
             return {
                 'DrawPlugin.StartDrawingRequest': Oskari.clazz.create(
