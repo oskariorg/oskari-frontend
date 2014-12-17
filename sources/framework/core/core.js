@@ -222,6 +222,9 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
             if (!handlerClsInstance) {
                 this.printWarn('Adding non-existent handler for', requestName);
             }
+            if (this.externalHandlerCls[requestName]) {
+                this.printWarn('Overriding an existing requesthandler for', requestName);
+            }
             this.externalHandlerCls[requestName] = handlerClsInstance;
         },
 

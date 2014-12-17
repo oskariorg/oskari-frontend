@@ -119,7 +119,7 @@ function() {
                     // pick the tooltip in the current language
                     toolConfig.tooltip = toolConfig.tooltip[me.userInterfaceLanguage];
                     // disable button
-                    toolConfig.disabled = true;
+                    toolConfig.enabled = false;
                     // set null 
                     toolConfig.callback = function() {};
                     sandbox.request(me, reqBuilder(tool, group, toolConfig));

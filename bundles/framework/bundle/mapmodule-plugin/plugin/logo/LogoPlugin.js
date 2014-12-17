@@ -64,13 +64,19 @@ Oskari.clazz.define(
          *
          */
         _setLayerToolsEditModeImpl: function () {
+            var me = this;
             // TODO document why this is done...
-            if (!this.inLayerToolsEditMode()) {
-                this.setLocation(
-                    this.getElement().parents('.mapplugins').attr(
+            if (!me.inLayerToolsEditMode()) {
+                me.setLocation(
+                    me.getElement().parents('.mapplugins').attr(
                         'data-location'
                     )
                 );
+            } else {
+                if (me.dataSourcesDialog) {
+                    me.dataSourcesDialog.close(true);
+                    me.dataSourcesDialog = null;
+                }
             }
         },
 
@@ -134,8 +140,10 @@ Oskari.clazz.define(
 
             if (mapUrl) {
                 link.click(function (event) {
-                    linkParams = me.getSandbox().generateMapLinkParameters({});
-                    window.open(mapUrl + linkParams, '_blank');
+                    if (!me.inLayerToolsEditMode()) {
+                        linkParams = me.getSandbox().generateMapLinkParameters({});
+                        window.open(mapUrl + linkParams, '_blank');
+                    }
                 });
             }
         },
@@ -147,6 +155,12 @@ Oskari.clazz.define(
             if (termsUrl) {
                 link.html(me._loc.terms);
                 link.attr('href', termsUrl);
+                link.click(function (evt) {
+                    evt.preventDefault();
+                    if (!me.inLayerToolsEditMode()) {
+                        window.open(termsUrl, '_blank');
+                    }
+                });
                 link.show();
             } else {
                 link.hide();
@@ -165,7 +179,7 @@ Oskari.clazz.define(
                 dataSources.find('a').html(me._loc.dataSources);
                 dataSources.unbind('click');
                 dataSources.click(function (e) {
-                    if (!me.isInLayerToolsEditMode && !me.dataSourcesDialog) {
+                    if (!me.inLayerToolsEditMode() && !me.dataSourcesDialog) {
                         me._openDataSourcesDialog(e.target);
                         me._requestDataSources();
                     } else if (me.dataSourcesDialog) {
