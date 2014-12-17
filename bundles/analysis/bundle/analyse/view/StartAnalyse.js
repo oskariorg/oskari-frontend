@@ -849,10 +849,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 ),
                 closeBtn = Oskari.clazz.create(
                     'Oskari.userinterface.component.buttons.ExitButton'
-                ),
-                saveBtn = Oskari.clazz.create(
-                    'Oskari.userinterface.component.buttons.SaveButton'
                 );
+
             closeBtn.setHandler(function () {
                 me.instance.setAnalyseMode(false);
             });
@@ -860,18 +858,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 'oskari_analysis_analyse_view_start_analyse_buttons_cancel'
             );
             closeBtn.insertTo(buttonCont);
-
-            saveBtn.setPrimary(false);
-            saveBtn.setHandler(function () {
-                var selections = me._gatherSelections();
-                if (selections) {
-                    me._saveAnalyse(selections);
-                }
-            });
-            saveBtn.setId(
-                'oskari_analysis_analyse_view_start_analyse_buttons_save'
-            );
-            saveBtn.insertTo(buttonCont);
 
             analyseBtn.setTitle(this.loc.buttons.analyse);
             analyseBtn.addClass('primary');

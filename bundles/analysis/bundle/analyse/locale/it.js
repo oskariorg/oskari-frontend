@@ -229,9 +229,7 @@ Oskari.registerLocalization({
             "buttons": {
                 "save": "Salva",
                 "analyse": "Analizza",
-                "data": "Aggiungi dati",
-                "cancel": "Annulla",
-                "ok": "OK"
+                "data": "Aggiungi dati"
             },
             "filter": {
                 "title": "Filtri",
