@@ -13,21 +13,20 @@
 div.mapplugin.search {
     top: 10px;
     right: 10px;
-}
-
-div.search {
 
     div.close {
         float: right;
     }
 
     input[type=text] {
+        @include border-radius(4px 0 0 4px);
+        border-right: 0;
         width: 140px;
     }
 
     input[type=button] {
+        @include border-radius(0 4px 4px 0);
         width: 60px;
-        margin-left: 3px;
     }
 
     div.results {
@@ -83,7 +82,9 @@ div.published-search-div {
         display: block;
         float: right;
 
-        div.search-left, div.search-middle, div.search-right {
+        div.search-left,
+        div.search-middle,
+        div.search-right {
             display: inline-block;
             float: left;
             height: 38px;

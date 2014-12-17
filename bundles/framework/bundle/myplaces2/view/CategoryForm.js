@@ -3,18 +3,19 @@
  *
  * Shows a form for a myplaces category
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.CategoryForm",
+Oskari.clazz.define(
+    'Oskari.mapframework.bundle.myplaces2.view.CategoryForm',
 
     /**
-     * @method create called automatically on construction
-     * @static
+     * @static @method create called automatically on construction
+     *
+     *
      */
-
     function (instance) {
         this.instance = instance;
 
-        var dotMinSize = null;
-        var dotMaxSize = null;
+        var dotMinSize = null,
+            dotMaxSize = null;
         if (instance.conf && instance.conf.defaults) {
             dotMinSize = instance.conf.defaults.dotMinSize;
             dotMaxSize = instance.conf.defaults.dotMaxSize;
@@ -51,21 +52,22 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.CategoryForm",
             }
         };
         this.visualizationForm = Oskari.clazz.create(
-            "Oskari.userinterface.component.VisualizationForm",
+            'Oskari.userinterface.component.VisualizationForm',
             formOptions
         );
 
         var loc = instance.getLocalization('categoryform');
 
-        this.template = jQuery('<div class="myplacescategoryform">' +
-            '<div class="field">' +
-            '<label for="categoryname">' + loc.name.label + '</label><br clear="all" />' +
-            '<input type="text" name="categoryname" placeholder="' + loc.name.placeholder + '"/>' +
-            '</div>' +
-            '<div class="field drawing">' +
-            '<label>' + loc.drawing.label + '</label><br clear="all" />' +
-            '<div class="rendering"></div>' +
-            '</div>' +
+        this.template = jQuery(
+            '<div class="myplacescategoryform">' +
+            '  <div class="field">' +
+            '    <label for="categoryname">' + loc.name.label + '</label><br clear="all" />' +
+            '    <input type="text" name="categoryname" placeholder="' + loc.name.placeholder + '"/>' +
+            '  </div>' +
+            '  <div class="field drawing">' +
+            '    <label>' + loc.drawing.label + '</label><br clear="all" />' +
+            '    <div class="rendering"></div>' +
+            '  </div>' +
 // Currently visible fields are not saved or used in any way so commenting out the UI for now
 /*            '<div class="field visibleFields">' +
             '<label>' + loc.visibleFields.label + '</label><br clear="all" />' +
@@ -73,7 +75,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.CategoryForm",
             '<input type="checkbox" name="placedesc" checked="checked" />' + loc.visibleFields.placedesc + '<br/>' +
             '<input type="checkbox" name="image" checked="checked" />' + loc.visibleFields.image + '<br/>' +
             '</div>' + */
-            '</div>');
+            '</div>'
+        );
         this.templateTableRow = jQuery('<tr></tr>');
         this.templateTableCell = jQuery('<td></td>');
         this.templateTextInput = jQuery('<input type="text"/>');
@@ -86,8 +89,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.CategoryForm",
          * @return {jQuery} jquery reference for the form
          */
         getForm: function () {
-            var ui = this.template.clone();
-            var table = ui.find('div.drawing table');
+            var ui = this.template.clone(),
+                table = ui.find('div.drawing table');
             // populate the rendering fields
             var content = ui.find('div.rendering');
             content.append(this.visualizationForm.getForm());
@@ -162,8 +165,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.CategoryForm",
             form.find('div.visibleFields input[type=checkbox]').each(function (i, elem) {
                 elem.removeAttr('checked');
                 var j,
-                    flen = fields ? fields.length : 0;
-                for (j = 0; j < fLen; ++j) {
+                    fLen = fields ? fields.length : 0;
+
+                for (j = 0; j < fLen; j += 1) {
                     if (fields[j] === elem.attr('name')) {
                         elem.attr('checked', 'checked');
                     }

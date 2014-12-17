@@ -801,7 +801,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayoutFo
             var title = this.loc.layout.popup.gfiDialog.title,
                 featureName = this.loc.layout.popup.gfiDialog.featureName,
                 featureDesc = this.loc.layout.popup.gfiDialog.featureDesc,
-                linkUrl = this._publisher.urlBase + Oskari.getLang();
+                linkUrl = window.location;
             // Templates
             // FIXME get GFI template from GFI plugin
             var dialogContent = jQuery('<div></div>'),

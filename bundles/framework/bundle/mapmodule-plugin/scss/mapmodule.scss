@@ -106,7 +106,6 @@ div.mapplugins {
         }
 
         &.right {
-            min-width: 100px;
 
             .mapplugin {
                 
@@ -118,10 +117,12 @@ div.mapplugins {
                     text-align: right;
                 }
     
-                &.layerselection, &.search {
+                &.layerselection,
+                &.search,
+                &.tools {
                     display: block;
                     float: right;
-                    margin: 0 $pluginMargin / 2;
+                    margin: 0 0 0 $pluginMargin;
                 }
                 
             }
@@ -129,7 +130,6 @@ div.mapplugins {
         }
 
         &.left {
-            min-width: 100px;
 
             .mapplugin {
                 
@@ -141,10 +141,12 @@ div.mapplugins {
                     text-align: left;
                 }
     
-                &.layerselection, &.search {
+                &.layerselection,
+                &.search,
+                &.tools {
                     display: block;
                     float: left;
-                    margin: 0 $pluginMargin / 2;
+                    margin: 0 $pluginMargin 0 0;
                 }
                 
             }
@@ -173,7 +175,8 @@ div.mapplugins {
                     vertical-align: top;
                     margin: 0 $pluginMargin / 2;
     
-                    &.layerselection, &.search {
+                    &.layerselection,
+                    &.search {
                         float: right;
                     }
 
@@ -255,12 +258,13 @@ div.mapplugins {
 
         }
 
-        .mapplugin.indexmap .indexmapToggle {
-            float: right;
-        }
-
     }
 
+}
+
+/* Hackhack for published maps that don't have bglayerselectionplugin */
+.published div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.logoplugin {
+    margin-top: $pluginMargin;
 }
 
 /* Publisher fonts, not part of style guide */

@@ -8,10 +8,11 @@
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
     /**
-     * @method create called automatically on construction
-     * @static
+     * @static @method create called automatically on construction
+     *
+     *
+     *
      */
-
     function () {
         this.__name = 'mapfull';
         this.map = null;
@@ -59,7 +60,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             if (me.resizeEnabled === null || me.resizeEnabled === undefined || me.resizeEnabled) {
                 var contentMap = jQuery('#' + me.contentMapDivId),
                     dataContent = jQuery('.oskariui-left'),
-                    dataContentHasContent = !dataContent.is(':empty'),
+                    dataContentHasContent = dataContent.length && !dataContent.is(':empty'),
                     dataContentWidth = dataContent.width(),
                     dataContentInlineWidth = dataContent.length ? dataContent[0].style.width : '',
                     mapContainer = contentMap.find('.oskariui-center'),
@@ -120,7 +121,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 );
 
             me.mapmodule = module;
-            var map = me.sandbox.register(module);
+            var map = me.getSandbox().register(module);
             // oskariui-left holds statsgrid and possibly other data stuff, size in config should include that as well as the map
             // set map size
             // call portlet with ?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=0&p_p_state=exclusive&p_p_mode=view&published=true
@@ -128,10 +129,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             // TODO true path can prolly be removed, we can just set the size on the iframe/container and let the map fill the available space
             if (me.conf.size) {
                 // contentMap holds the total width and height of the document
-                jQuery('#' + me.contentMapDivId).width(me.conf.size.width);
-                jQuery('#' + me.contentMapDivId).height(me.conf.size.height);
+                jQuery('#' + me.contentMapDivId)
+                    .width(me.conf.size.width)
+                    .height(me.conf.size.height);
                 // TODO check if we need to set mapDiv size at all here...
-                //jQuery('#' + me.mapDivId).width(me.conf.size.width);
                 jQuery('#' + me.mapDivId).height(me.conf.size.height);
             } else {
                 // react to window resize with timer so app stays responsive
@@ -150,7 +151,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             }
 
 
-            module.start(me.sandbox);
+            module.start(me.getSandbox());
 
             if (!me.nomaprender) {
                 map.render(me.mapDivId);
@@ -159,8 +160,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             if (me.conf.plugins) {
                 var plugins = this.conf.plugins,
                     i;
+
                 for (i = 0; i < plugins.length; i += 1) {
                     try {
+                        // FIXME this is prolly the wrong place for getConfig...
+                        // I _think_ plugins contains plugin definitions, not plugin instances...
                         plugins[i].instance = Oskari.clazz.create(
                             plugins[i].id,
                             plugins[i].config || (plugins[i].getConfig ? plugins[i].getConfig() : {}),
@@ -170,7 +174,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                         module.startPlugin(plugins[i].instance);
                     } catch (e) {
                         // something wrong with plugin (e.g. implementation not imported) -> log a warning
-                        me.sandbox.printWarn(
+                        me.getSandbox().printWarn(
                             'Unable to start plugin: ' + plugins[i].id + ': ' +
                             e
                         );
@@ -211,8 +215,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 timestamp: new Date().getTime(),
 
                 success: function (data) {
-                    Oskari.setSupportedLocales(data.supportedLocales);
-                    //console.log(blocale.getSupportedLocales());
+                    Oskari.setSupportedLocales(data.supportedLocales || []);
+                    Oskari.setDecimalSeparators(data.decimalSeparators || {});
                 },
                 error: function () {
                     // TODO add error handling
@@ -233,11 +237,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             sandbox.setUser(conf.user);
             sandbox.setAjaxUrl(conf.globalMapAjaxUrl);
 
-            // create services
-            var services = me._createServices(conf);
+            // create services & enhancements
+            var services = me._createServices(conf),
+                enhancements = [];
 
-            // create enhancements
-            var enhancements = [];
             enhancements.push(
                 Oskari.clazz.create(
                     'Oskari.mapframework.enhancement.mapfull.StartMapWithLinkEnhancement'
@@ -274,9 +277,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             sandbox.registerAsStateful(me.mediator.bundleId, this);
 
             var skipLocation = false;
-            if (me.mapmodule.isPluginActivated('GeoLocationPlugin')) {
+            if (me.getMapModule().isPluginActivated('GeoLocationPlugin')) {
                 // get plugin
-                var plugin = me.mapmodule.getPluginInstance(
+                var plugin = me.getMapModule().getPluginInstance(
                     'GeoLocationPlugin'
                 );
                 skipLocation = plugin.hasSetLocation();
@@ -404,14 +407,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          *
          */
         _teardownState: function (module) {
-            var selectedLayers = this.sandbox.findAllSelectedMapLayers(),
+            var selectedLayers = this.getSandbox().findAllSelectedMapLayers(),
                 // remove all current layers
-                rbRemove = this.sandbox.getRequestBuilder(
+                rbRemove = this.getSandbox().getRequestBuilder(
                         'RemoveMapLayerRequest'
                 ),
                 i;
+
             for (i = 0; i < selectedLayers.length; i += 1) {
-                this.sandbox.request(
+                this.getSandbox().request(
                     module.getName(),
                     rbRemove(selectedLayers[i].getId())
                 );
@@ -421,10 +425,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
         /**
          * @private @method _createServices
          * Setup services for this application. 
-         * Mainly Oskari.mapframework.service.MapLayerService, but also hacks in WMTS support
-         * and if conf.disableDevelopmentMode == 'true' -> disables debug messaging and 
-         * initializes Oskari.mapframework.service.UsageSnifferService to provide 
-         * feedback to server about map usage.
+         * Mainly Oskari.mapframework.service.MapLayerService, but also hacks in
+         * WMTS support and if conf.disableDevelopmentMode == 'true' -> disables
+         * debug messaging and initializes
+         * Oskari.mapframework.service.UsageSnifferService to provide feedback
+         * to server about map usage.
          *
          * @param {Object} conf
          *    JSON configuration for the application
@@ -438,6 +443,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     conf.globalMapAjaxUrl + 'action_route=GetMapLayers&lang=' + Oskari.getLang(),
                     me.core.getSandbox()
                 );
+
             services.push(mapLayerService);
 
             // DisableDevelopmentModeEnhancement
@@ -464,7 +470,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          *
          */
         stop: function () {
-            this.sandbox.unregisterStateful(this.mediator.bundleId);
+            this.getSandbox().unregisterStateful(this.mediator.bundleId);
             alert('Stopped!');
         },
 
@@ -479,14 +485,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          */
         setState: function (state, ignoreLocation) {
             var me = this,
-                mapmodule = me.sandbox.findRegisteredModuleInstance(
-                    'MainMapModule'
-                ),
+                mapmodule = me.getMapModule(),
                 mapModuleName = mapmodule.getName(),
                 rbAdd,
                 rbOpacity,
-                visibilityRequestBuilder,
-                styleReqBuilder,
+                rbVis,
+                rbStyle,
                 len,
                 i,
                 layer;
@@ -496,49 +500,49 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             // map location needs to be set before layers are added
             // otherwise f.ex. wfs layers break on add
             if (state.east && ignoreLocation !== true) {
-                me.sandbox.getMap().moveTo(
+                me.getSandbox().getMap().moveTo(
                     state.east,
                     state.north,
                     state.zoom
                 );
             }
 
-            me.sandbox.syncMapState(true);
+            me.getSandbox().syncMapState(true);
 
             // setting state
             if (state.selectedLayers) {
-                rbAdd = me.sandbox.getRequestBuilder('AddMapLayerRequest');
-                rbOpacity = me.sandbox.getRequestBuilder(
+                rbAdd = me.getSandbox().getRequestBuilder('AddMapLayerRequest');
+                rbOpacity = me.getSandbox().getRequestBuilder(
                     'ChangeMapLayerOpacityRequest'
                 );
-                visibilityRequestBuilder = me.sandbox.getRequestBuilder(
+                rbVis = me.getSandbox().getRequestBuilder(
                     'MapModulePlugin.MapLayerVisibilityRequest'
                 );
-                styleReqBuilder = me.sandbox.getRequestBuilder(
+                rbStyle = me.getSandbox().getRequestBuilder(
                     'ChangeMapLayerStyleRequest'
                 );
                 len = state.selectedLayers.length;
                 for (i = 0; i < len; i += 1) {
                     layer = state.selectedLayers[i];
-                    me.sandbox.request(
+                    me.getSandbox().request(
                         mapModuleName,
                         rbAdd(layer.id, true)
                     );
-                    me.sandbox.request(
+                    me.getSandbox().request(
                         mapModuleName,
-                        visibilityRequestBuilder(
+                        rbVis(
                             layer.id,
                             layer.hidden !== true
                         )
                     );
                     if (layer.style) {
-                        me.sandbox.request(
+                        me.getSandbox().request(
                             mapModuleName,
-                            styleReqBuilder(layer.id, layer.style)
+                            rbStyle(layer.id, layer.style)
                         );
                     }
                     if (layer.opacity || layer.opacity === 0) {
-                        me.sandbox.request(
+                        me.getSandbox().request(
                             mapModuleName,
                             rbOpacity(layer.id, layer.opacity)
                         );
@@ -592,21 +596,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          */
         getState: function () {
             // get applications current state
-            var map = this.sandbox.getMap(),
-                selectedLayers = this.sandbox.findAllSelectedMapLayers(),
-                mapmodule = this.sandbox.findRegisteredModuleInstance(
-                    'MainMapModule'
-                ),
+            var map = this.getSandbox().getMap(),
+                selectedLayers = this.getSandbox().findAllSelectedMapLayers(),
+                mapmodule = this.getMapModule(),
                 i,
                 layer,
                 layerJson,
-                state = jQuery.extend({
-                    north: map.getY(),
-                    east: map.getX(),
-                    zoom: map.getZoom(),
-                    srs: map.getSrsName(),
-                    selectedLayers: []
-                }, mapmodule.getState());
+                state = jQuery.extend(
+                    {
+                        north: map.getY(),
+                        east: map.getX(),
+                        zoom: map.getZoom(),
+                        srs: map.getSrsName(),
+                        selectedLayers: []
+                    },
+                    mapmodule.getState()
+                );
 
 
             for (i = 0; i < selectedLayers.length; i += 1) {
@@ -643,7 +648,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             var state = this.getState(),
                 link = 'zoomLevel=' + state.zoom + '&coord=' + state.east + '_' + state.north + '&mapLayers=',
                 selectedLayers = state.selectedLayers,
-                mapmodule = this.sandbox.findRegisteredModuleInstance('MainMapModule'),
+                mapmodule = this.getMapModule(),
                 layers = '',
                 layer = null,
                 i = 0,
@@ -685,7 +690,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             jQuery('#' + this.contentMapDivId).toggleClass(
                 'oskari-map-window-fullscreen'
             );
-            this.updateSize();
+            this.adjustMapSize();
         },
 
         /**
@@ -701,7 +706,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             if (fullUpdate) {
                 this.adjustMapSize();
             } else {
-                this.mapmodule.updateSize();
+                this.getMapModule().updateSize();
             }
         },
 
@@ -713,13 +718,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          * @return {jQuery} jQuery map element
          */
         getMapEl: function () {
-            var mapDiv = jQuery('#' + this.mapDivId);
-            if (!mapDiv.length) {
-                this.sandbox.printWarn(
-                    'mapDiv not found with id ' + this._mapDivId
+            var mapDiv = this.getMapElDom();
+
+            if (!mapDiv) {
+                this.getSandbox().printWarn(
+                    'mapDiv not found with id ' + this.mapDivId
                 );
             }
-            return mapDiv;
+            return jQuery(mapDiv);
         },
 
         /**
@@ -729,7 +735,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          * @return {Element} Map element
          */
         getMapElDom: function () {
-            return this.getMapEl().get(0);
+            return document.getElementById(this.mapDivId);
         }
     }, {
         /**

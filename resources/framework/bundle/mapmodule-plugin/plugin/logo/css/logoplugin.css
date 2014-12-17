@@ -5,6 +5,7 @@
   height: 25px;
   /* Force line to fit container */
   line-height: 15px;
+  text-align: left;
   text-shadow: 1px 0px 3px rgba(0, 0, 0, 0.5), -1px 0px 3px rgba(0, 0, 0, 0.5), 1px 0px 1px #000, -1px 0px 1px #000;
   z-index: 100000000 !important; }
   .logoplugin a, .logoplugin a:hover, .logoplugin a:active, .logoplugin a:visited {
@@ -26,6 +27,10 @@
       text-decoration: none;
       /* text-shadow replacement for IE9 */
       filter: glow(color=#C0000000,strength=1); }
+
+.right .logoplugin {
+  /* Right-align elements so a wide sibling plugin won't push them to the left... */
+  text-align: right; }
 
 .data-sources-dialog {
   max-width: 400px; }

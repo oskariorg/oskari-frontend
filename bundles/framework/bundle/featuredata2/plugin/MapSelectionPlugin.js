@@ -145,7 +145,7 @@ Oskari.clazz.define(
             for (key in this.drawControls) {
                 if (this.drawControls.hasOwnProperty(key)) {
                     control = this.drawControls[key];
-                    if (drawMode === key) {
+                    if (this.currentDrawMode === key) {
                         control.activate();
                     } else {
                         control.deactivate();
@@ -211,8 +211,18 @@ Oskari.clazz.define(
                         standalone: true
                     }
                 ),
+
                 select: new OpenLayers.Control.SelectFeature(me.drawLayer)
             };
+
+            // add transfrom to drawControls if defined in config
+            // NOTE! This feature still need to be developed. It is not yet in use.
+            if (me._config.enableTransform === true) {
+                me.drawControls.transform = new OpenLayers.Control.TransformFeature(me.drawLayer, {
+                    rotate: false,
+                    irregular: true
+                });
+            }
 
             // Make sure selected feature doesn't swallow events so we can drag above it
             // http://trac.osgeo.org/openlayers/wiki/SelectFeatureControlMapDragIssues

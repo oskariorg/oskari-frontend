@@ -215,8 +215,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 i;
 
             if (me.data.state.mapfull.config.size) {
-                initWidth = me.data.state.mapfull.config.size.width
-                initHeight = me.data.state.mapfull.config.size.height
+                initWidth = me.data.state.mapfull.config.size.width;
+                initHeight = me.data.state.mapfull.config.size.height;
             }
 
             if (initWidth === null || initWidth === undefined) {
@@ -258,7 +258,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             }
         );
         me.latestGFI = null;
-        me.urlBase = instance.conf.urlPrefix + '/web/';
     }, {
         /**
          * @method render
@@ -398,6 +397,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 );
             });
 
+            /* Disabled as none of the help tags work?
             // bind help tags
             var helper = Oskari.clazz.create(
                 'Oskari.userinterface.component.UIHelper',
@@ -408,7 +408,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 content,
                 me.loc.error.title,
                 me.loc.error.nohelp
-            );
+            );*/
         },
 
         /**

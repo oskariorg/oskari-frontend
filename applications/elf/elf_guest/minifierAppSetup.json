@@ -465,6 +465,29 @@
                 },
                 "Require-Bundle-Instance": []
             }
+        }, {
+            "bundleinstancename": "admin-layerselector",
+            "bundlename": "admin-layerselector",
+            "metadata": {
+                "Import-Bundle": {
+                    "admin-layerselector": {
+                        "bundlePath": "../../../packages/integration/bundle/"
+                    },
+                    "bb": {
+                        "bundlePath": "../../../packages/integration/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename": "admin-layerrights",
+            "bundleinstancename": "admin-layerrights",
+            "metadata": {
+                "Import-Bundle": {
+                    "admin-layerrights": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                }
+            }
         }
     ]
 }

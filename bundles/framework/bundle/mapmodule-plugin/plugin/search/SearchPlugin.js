@@ -35,8 +35,7 @@ Oskari.clazz.define(
             me.template = jQuery(
                 '<div class="mapplugin search default-search-div">' +
                 '  <div class="search-textarea-and-button">' +
-                '    <input placeholder="' + me._loc.placeholder + '" type="text" />' +
-                '    <input type="button" value="' + me._loc.search + '" name="search" />' +
+                '    <input placeholder="' + me._loc.placeholder + '" type="text" /><input type="button" value="' + me._loc.search + '" name="search" />' +
                 '  </div>' +
                 '  <div class="results">' +
                 '    <div class="header">' +

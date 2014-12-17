@@ -271,52 +271,8 @@ Oskari.clazz.define(
                 this.ref = inst;
             },
             getTitle: function () {
-                var p5 = this.ref._localization.page5.title;
-                return p5 + '<span>4/8</span>';
-            },
-            getContent: function () {
-                var me = this.ref;
-                me._openExtension('PersonalData');
-                var loc = me._localization.page5;
-                var content = jQuery('<div></div>');
-                content.append(loc.message);
-                var linkTemplate = jQuery('<a href="#"></a>');
-                var openLink = linkTemplate.clone();
-                openLink.append(loc.openLink);
-                openLink.bind('click',
-                    function () {
-                        me._openExtension('PersonalData');
-                        openLink.hide();
-                        closeLink.show();
-                    });
-                var closeLink = linkTemplate.clone();
-                closeLink.append(loc.closeLink);
-                closeLink.bind('click',
-                    function () {
-                        me._closeExtension('PersonalData');
-                        openLink.show();
-                        closeLink.hide();
-                    });
-                content.append('<br><br>');
-                content.append(openLink);
-                content.append(closeLink);
-                closeLink.show();
-                openLink.hide();
-                return content;
-            } //,
-            // getPositionRef : function () {
-            //     var loc = this.ref._localization('page5');
-            //     return jQuery("div.oskari-tile-title:contains('" + 
-            //                   loc.tileText + "')");
-            // },
-            // positionAlign : 'right'                
-        }, {
-            setScope: function (inst) {
-                this.ref = inst;
-            },
-            getTitle: function () {
                 var p6 = this.ref._localization.page6.title;
-                return p6 + '<span>5/8</span>';
+                return p6 + '<span>4/8</span>';
             },
             getContent: function () {
                 var me = this.ref;
@@ -347,6 +303,50 @@ Oskari.clazz.define(
                 closeLink.show();
                 openLink.hide();
                 return content;
+            } //,
+            // getPositionRef : function () {
+            //     var loc = this.ref._localization('page5');
+            //     return jQuery("div.oskari-tile-title:contains('" + 
+            //                   loc.tileText + "')");
+            // },
+            // positionAlign : 'right'                
+        }, {
+            setScope: function (inst) {
+                this.ref = inst;
+            },
+            getTitle: function () {
+                var p5 = this.ref._localization.page5.title;
+                return p5 + '<span>5/8</span>';
+            },
+            getContent: function () {
+                var me = this.ref;
+                me._openExtension('PersonalData');
+                var loc = me._localization.page5;
+                var content = jQuery('<div></div>');
+                content.append(loc.message);
+                var linkTemplate = jQuery('<a href="#"></a>');
+                var openLink = linkTemplate.clone();
+                openLink.append(loc.openLink);
+                openLink.bind('click',
+                    function () {
+                        me._openExtension('PersonalData');
+                        openLink.hide();
+                        closeLink.show();
+                    });
+                var closeLink = linkTemplate.clone();
+                closeLink.append(loc.closeLink);
+                closeLink.bind('click',
+                    function () {
+                        me._closeExtension('PersonalData');
+                        openLink.show();
+                        closeLink.hide();
+                    });
+                content.append('<br><br>');
+                content.append(openLink);
+                content.append(closeLink);
+                closeLink.show();
+                openLink.hide();
+                return content;
             } //),
             // getPositionRef : function () {
             //     var loc = this.ref._localization('page6');
@@ -364,7 +364,7 @@ Oskari.clazz.define(
             },
             getContent: function () {
                 var me = this.ref;
-                me._closeExtension('Publisher');
+                me._closeExtension('PersonalData');
                 var loc = me._localization.page7;
                 var content = jQuery('<div></div>');
                 content.append(loc.message);

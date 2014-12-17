@@ -1,11 +1,38 @@
+/* Mixins */
+@mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    -o-border-radius: $radius;
+    -ms-border-radius: $radius;
+    border-radius: $radius;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box;
+}
+
 div.search {
 
     .info {
         padding-left: 5px;
     }
 
-    div.controls div.oskarifield {
-        display : inline-block;
+    div.controls {
+
+        div.oskarifield {
+            display: inline-block;
+
+            input[type=text] {
+                @include border-radius(4px 0 0 4px);
+                box-sizing: border-box;
+                width: 300px;
+            }
+
+        }
+
+        .oskari-button {
+            @include border-radius(0 4px 4px 0);
+        }
+
     }
 
     div.searchDescription {

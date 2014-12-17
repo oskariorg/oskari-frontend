@@ -316,9 +316,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
          */
         _createShowHideButton: function (elementToHide) {
             var me = this,
-                buttonContainer = jQuery(me.mapModule.getMap().div),
                 button = jQuery(
-                    '<div id="publishedgridToggle" class="hidePublishedGrid"></div>'
+                    '<div id="publishedgridToggle" class="oskariui mapplugin hidePublishedGrid" data-clazz="Oskari.statistics.bundle.publishedgrid.PublishedGridBundleInstance"></div>'
                 );
 
             button.click(function (event) {
@@ -345,7 +344,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
                 }
             });
 
-            buttonContainer.append(button);
+            me.mapModule.setMapControlPlugin(button, 'top left', 1);
         },
 
         _updateMapModuleSize: function () {

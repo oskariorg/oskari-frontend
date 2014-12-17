@@ -12,6 +12,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.metadatacatalogue.MetadataCatalo
      */
 
     function (instance, localization) {
+        debugger;
         this.conf = instance.conf;
         this.instance = instance;
         this.tabsContainer = undefined;

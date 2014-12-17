@@ -4,7 +4,8 @@
  * Renders the "featuredata" flyout.
  */
 
-Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.Flyout',
+Oskari.clazz.define(
+    'Oskari.mapframework.bundle.featuredata.Flyout',
 
     /**
      * @method create called automatically on construction
@@ -62,11 +63,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.Flyout',
          * that will be used to create the UI
          */
         startPlugin: function () {
-            this.tabsContainer =
-                Oskari.clazz.create('Oskari.userinterface.component.TabContainer',
-                    this.instance.getLocalization('nodata'));
+            this.tabsContainer = Oskari.clazz.create(
+                'Oskari.userinterface.component.TabContainer',
+                this.instance.getLocalization('nodata')
+            );
 
-            this.modelMngr = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata.service.GridModelManager');
+            this.modelMngr = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.featuredata.service.GridModelManager'
+            );
         },
         /**
          * @method stopPlugin
@@ -126,8 +130,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.Flyout',
             flyout.empty();
 
             var sandbox = this.instance.sandbox,
-                dimReqBuilder = sandbox.getRequestBuilder('DimMapLayerRequest'),
-                hlReqBuilder = sandbox.getRequestBuilder('HighlightMapLayerRequest'),
+                dimReqBuilder = sandbox.getRequestBuilder(
+                    'DimMapLayerRequest'
+                ),
+                hlReqBuilder = sandbox.getRequestBuilder(
+                    'HighlightMapLayerRequest'
+                ),
                 request;
             // if previous panel is undefined -> just added first tab
             // if selectedPanel is undefined -> just removed last tab
@@ -159,7 +167,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.Flyout',
          * Adds a tab for the layer
          */
         layerAdded: function (layer) {
-            var panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
+            var panel = Oskari.clazz.create(
+                'Oskari.userinterface.component.TabPanel'
+            );
             panel.setTitle(layer.getName());
             panel.getContainer().append(this.instance.getLocalization('loading'));
             panel.layer = layer;
@@ -220,7 +230,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.Flyout',
                 cb = function (response) {
                     me._prepareData(layer, response);
                     if (selection) {
-                        for (var i = 0; i < selection.length; ++i) {
+                        for (var i = 0; i < selection.length; i += 1) {
                             //me._handleGridSelect(selection[i].featureId, true);
                             // ^ highlight on map, not fully working
                             panel.grid.select(selection[i].featureId, true);
@@ -270,7 +280,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.Flyout',
 
             // Start resizing
             resizer.mousedown(function (e) {
-                if (me.resizing) return;
+                if (me.resizing) {
+                    return;
+                }
                 me.resizing = true;
                 mouseOffsetX = e.pageX - flyout[0].offsetWidth - flyout[0].offsetLeft;
                 mouseOffsetY = e.pageY - flyout[0].offsetHeight - flyout[0].offsetTop;
@@ -319,7 +331,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.Flyout',
 
             // Modify layout for the resizer image
             flyout.find('div.oskari-flyoutcontent').css('padding-bottom', '5px');
-            if (jQuery('div.flyout-resizer').length === 0) flyout.append(resizer);
+            if (jQuery('div.flyout-resizer').length === 0) {
+                flyout.append(resizer);
+            }
         },
 
         /**
@@ -364,11 +378,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.Flyout',
                             dialog.moveTo(link, 'bottom');
                         });
 
-                    var visibleFields = [];
+                    var visibleFields = [],
+                        i;
                     // filter out certain fields
-                    for (var i = 0; i < fields.length; ++i) {
-                        if (fields[i] != 'featureId' &&
-                            fields[i] != 'qName') {
+                    for (i = 0; i < fields.length; i += 1) {
+                        if (fields[i] !== 'featureId' &&
+                            fields[i] !== 'qName') {
                             visibleFields.push(fields[i]);
                         }
                     }
@@ -377,10 +392,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.Flyout',
                     grid.setResizableColumns(true);
 
                     /*              AL-512 -> AL-793
-                grid.setColumnValueRenderer(visibleFields[0], function(value, rowData){
+                grid.setColumnValueRenderer(visibleFields[0], function (value, rowData){
                     var link = me.templateLink.clone();
                     link.append(value);
-                    link.bind('click', function() {
+                    link.bind('click', function () {
                         var sandbox = me.instance.getSandbox();
                         var lon = sandbox.getMap().getX();
                         var lat = sandbox.getMap().getY();
@@ -389,7 +404,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.Flyout',
                             lon : lon,
                             lat : lat
                         });
-                        sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoRequest', [lon, lat, px.x, px.y]);
+                        sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoRequest', [lon, lat]);
                     });
                     return link;
                 });
@@ -400,14 +415,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.Flyout',
                 panel.grid.renderTo(panel.getContainer());
                 // define flyout size to adjust correctly to arbitrary tables
                 var mapdiv = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule').getMapEl(),
-                    content = jQuery('div.oskari-flyoutcontent.featuredata');
-                flyout = content.parent().parent();
+                    content = jQuery('div.oskari-flyoutcontent.featuredata'),
+                    flyout = content.parent().parent();
                 if (!me.resized) {
                     // Define default size for the object data list
                     flyout.find('div.tab-content').css('max-height', (mapdiv.height() / 4).toString() + 'px');
                     flyout.css('max-width', mapdiv.width().toString() + 'px');
                 }
-                if (me.resizable) this._enableResize();
+                if (me.resizable) {
+                    this._enableResize();
+                }
             } else {
                 // Wrong tab selected -> ignore (shouldn't happen)
             }
@@ -518,5 +535,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.Flyout',
          * @property {String[]} protocol
          * @static
          */
-        'protocol': ['Oskari.userinterface.Flyout']
-    });
+        protocol: ['Oskari.userinterface.Flyout']
+    }
+);

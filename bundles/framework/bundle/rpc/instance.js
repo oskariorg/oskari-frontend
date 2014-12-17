@@ -43,7 +43,9 @@ Oskari.clazz.define(
 
         if (allowedRequests === null || allowedRequests === undefined) {
             allowedRequests = {
+                'InfoBox.ShowInfoBoxRequest': true,
                 'MapModulePlugin.AddMarkerRequest': true,
+                'MapModulePlugin.GetFeatureInfoRequest': true,
                 'MapModulePlugin.MapLayerVisibilityRequest': true,
                 'MapModulePlugin.RemoveMarkersRequest': true,
                 MapMoveRequest: true

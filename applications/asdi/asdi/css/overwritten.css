@@ -39,6 +39,7 @@ table {
     }
 
    .oskari-tile {
+        background: rgb(147, 187, 218) !important;
 		height: auto !important;
 		min-height: 31px !important;
         line-height: 15px !important;	

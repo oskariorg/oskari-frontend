@@ -3,15 +3,15 @@
  *
  * Handles Connection's IO
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.service.Mediator',
+Oskari.clazz.define(
+    'Oskari.mapframework.bundle.mapwfs2.service.Mediator',
     /**
-     * @method create called automatically on construction
-     * @static
+     * @static @method create called automatically on construction
      *
      * @param {Object} config
      * @param {Object} plugin
+     *
      */
-
     function (config, plugin) {
         this.config = config;
         this.plugin = plugin;
@@ -19,13 +19,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.service.Mediator',
         this.cometd = this.connection.get();
         this.layerProperties = {};
 
-        this.rootURL = location.protocol + "//" +
+        this.rootURL = location.protocol + '//' +
             this.config.hostname + this.config.port +
             this.config.contextPath;
 
         this.session = {
-            session: jQuery.cookie('JSESSIONID') || "",
-            route: jQuery.cookie('ROUTEID') || ""
+            session: jQuery.cookie('JSESSIONID') || '',
+            route: jQuery.cookie('ROUTEID') || ''
         };
 
         this._previousTimer = null;
@@ -52,7 +52,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.service.Mediator',
          * Subscribes client channels
          */
         subscribe: function () {
-            var self = this;
+            var self = this,
+                c;
 
             var channels = {
                 '/wfs/properties': function () {
@@ -81,9 +82,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.service.Mediator',
                 }
             };
 
-
-            for (var c in channels) {
-                this.cometd.subscribe(c, channels[c]);
+            for (c in channels) {
+                if (channels.hasOwnProperty(c)) {
+                    this.cometd.subscribe(c, channels[c]);
+                }
             }
         },
 
@@ -100,15 +102,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.service.Mediator',
             }
 
             // update session and route
-            this.session.session = jQuery.cookie('JSESSIONID') || "";
-            this.session.route = jQuery.cookie('ROUTEID') || "";
+            this.session.session = jQuery.cookie('JSESSIONID') || '';
+            this.session.route = jQuery.cookie('ROUTEID') || '';
 
             var layers = this.plugin.getSandbox().findAllSelectedMapLayers(), // get array of AbstractLayer (WFS|WMS..)
                 initLayers = {},
                 i;
-            for (i = 0; i < layers.length; ++i) {
+
+            for (i = 0; i < layers.length; i += 1) {
                 if (layers[i].hasFeatureData()) {
-                    initLayers[layers[i].getId() + ""] = {
+                    initLayers[layers[i].getId() + ''] = {
                         styleName: layers[i].getCurrentStyle().getName()
                     };
                 }
@@ -119,33 +122,36 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.service.Mediator',
                 zoom = this.plugin.getSandbox().getMap().getZoom(),
                 mapScales = this.plugin.getMapModule().getMapScales(),
                 grid = this.plugin.getGrid();
+
             if (grid === null || grid === undefined) {
                 grid = {};
             }
+
             var tileSize = this.plugin.getTileSize();
+
             if (tileSize === null || tileSize === undefined) {
                 tileSize = {};
             }
 
             this.cometd.publish('/service/wfs/init', {
-                "session": this.session.session,
-                "route": this.session.route,
-                "language": Oskari.getLang(),
-                "browser": this.session.browser,
-                "browserVersion": this.session.browserVersion,
-                "location": {
-                    "srs": srs,
-                    "bbox": [bbox.left, bbox.bottom, bbox.right, bbox.top],
-                    "zoom": zoom
+                session: this.session.session,
+                route: this.session.route,
+                language: Oskari.getLang(),
+                browser: this.session.browser,
+                browserVersion: this.session.browserVersion,
+                location: {
+                    srs: srs,
+                    bbox: [bbox.left, bbox.bottom, bbox.right, bbox.top],
+                    zoom: zoom
                 },
-                "grid": grid,
-                "tileSize": tileSize,
-                "mapSize": {
-                    "width": self.plugin.getSandbox().getMap().getWidth(),
-                    "height": self.plugin.getSandbox().getMap().getHeight()
+                grid: grid,
+                tileSize: tileSize,
+                mapSize: {
+                    width: self.plugin.getSandbox().getMap().getWidth(),
+                    height: self.plugin.getSandbox().getMap().getHeight()
                 },
-                "mapScales": mapScales,
-                "layers": initLayers
+                mapScales: mapScales,
+                layers: initLayers
             });
         }
     });
@@ -160,10 +166,13 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
      * Creates WFSPropertiesEvent
      */
     getWFSProperties: function (data) {
-        var layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId);
-        if (layer.getLayerType() != 'analysis') {
-            var oldFields = layer.getFields();
-            var oldLocales = layer.getLocales();
+        var layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId),
+            self = this;
+
+        if (layer.getLayerType() !== 'analysis') {
+            var oldFields = layer.getFields(),
+                oldLocales = layer.getLocales();
+
             if (oldFields.length > 0 && !this.plugin.isArrayEqual(data.data.fields, oldFields) && !this.plugin.isArrayEqual(data.data.locales, oldLocales)) {
                 this.plugin.mapMoveHandler();
             }
@@ -173,13 +182,12 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
 
         }
 
-        var self = this;
         if (this._propertyTimer) {
             clearTimeout(this._propertyTimer);
             this._propertyTimer = null;
         }
         this._propertyTimer = setTimeout(function () {
-            var event = self.plugin.getSandbox().getEventBuilder("WFSPropertiesEvent")(layer);
+            var event = self.plugin.getSandbox().getEventBuilder('WFSPropertiesEvent')(layer);
             self.plugin.getSandbox().notifyAll(event);
         }, this._featureUpdateFrequence);
     },
@@ -191,18 +199,19 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
      * Creates WFSFeatureEvent
      */
     getWFSFeature: function (data) {
-        var layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId);
-        if (data.data.feature != "empty" && data.data.feature != "max") {
+        var layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId),
+            self = this;
+
+        if (data.data.feature !== 'empty' && data.data.feature !== 'max') {
             layer.setActiveFeature(data.data.feature);
         }
 
-        var self = this;
         if (this._featureTimer) {
             clearTimeout(this._featureTimer);
             this._featureTimer = null;
         }
         this._featureTimer = setTimeout(function () {
-            var event = self.plugin.getSandbox().getEventBuilder("WFSFeatureEvent")(
+            var event = self.plugin.getSandbox().getEventBuilder('WFSFeatureEvent')(
                 layer,
                 data.data.feature
             );
@@ -218,15 +227,16 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
      * Creates WFSFeaturesSelectedEvent
      */
     getWFSMapClick: function (data) {
-        var sandbox = this.plugin.getSandbox();
-        var layer = sandbox.findMapLayerFromSelectedMapLayers(data.data.layerId);
-        var keepPrevious = data.data.keepPrevious;
-        var featureIds = [];
+        var sandbox = this.plugin.getSandbox(),
+            layer = sandbox.findMapLayerFromSelectedMapLayers(data.data.layerId),
+            keepPrevious = data.data.keepPrevious,
+            featureIds = [],
+            i;
 
-        if (data.data.features != "empty") {
+        if (data.data.features !== 'empty') {
             layer.setSelectedFeatures([]);
             // empty selected
-            for (var i = 0; i < data.data.features.length; ++i) {
+            for (i = 0; i < data.data.features.length; i += 1) {
                 featureIds.push(data.data.features[i][0]);
             }
         }
@@ -237,7 +247,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             layer.setClickedFeatureIds(featureIds);
         }
 
-        var event = sandbox.getEventBuilder("WFSFeaturesSelectedEvent")(featureIds, layer, keepPrevious);
+        var event = sandbox.getEventBuilder('WFSFeaturesSelectedEvent')(featureIds, layer, keepPrevious);
         sandbox.notifyAll(event);
 
         data.data.lonlat = this.lonlat;
@@ -248,22 +258,25 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
      * @method getWFSFeatureGeometries
      * @param {Object} data
      *
-     * get highlighted fea geometries
+     * get highlighted feature geometries
      * Creates WFSFeatureGeometriesSelectedEvent
      */
     getWFSFeatureGeometries: function (data) {
-        var sandbox = this.plugin.getSandbox();
-        var layer = sandbox.findMapLayerFromSelectedMapLayers(data.data.layerId);
-        var keepPrevious = data.data.keepPrevious;
-
+        var sandbox = this.plugin.getSandbox(),
+            layer = sandbox.findMapLayerFromSelectedMapLayers(data.data.layerId),
+            keepPrevious = data.data.keepPrevious;
 
         if (keepPrevious) {
-            if (data.data.geometries) layer.addClickedGeometries(data.data.geometries);
+            if (data.data.geometries) {
+                layer.addClickedGeometries(data.data.geometries);
+            }
         } else {
-            if (data.data.geometries) layer.setClickedGeometries(data.data.geometries);
+            if (data.data.geometries) {
+                layer.setClickedGeometries(data.data.geometries);
+            }
         }
 
-        var event = sandbox.getEventBuilder("WFSFeatureGeometriesEvent")(layer, keepPrevious);
+        var event = sandbox.getEventBuilder('WFSFeatureGeometriesEvent')(layer, keepPrevious);
         sandbox.notifyAll(event);
 
     },
@@ -276,23 +289,24 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
      * Creates WFSFeaturesSelectedEvent
      */
     getWFSFilter: function (data) {
-        var layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId);
-        var featureIds = [];
+        var layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId),
+            featureIds = [],
+            i;
 
-        if (data.data.features != "empty") {
+        if (data.data.features !== 'empty') {
             layer.setClickedFeatureIds([]);
-            for (var i = 0; i < data.data.features.length; ++i) {
+            for (i = 0; i < data.data.features.length; i += 1) {
                 featureIds.push(data.data.features[i][0]);
             }
         }
 
-        if (data.data.features != "empty") {
+        if (data.data.features !== 'empty') {
             layer.setSelectedFeatures(data.data.features);
         } else {
             layer.setSelectedFeatures([]);
         }
 
-        var event = this.plugin.getSandbox().getEventBuilder("WFSFeaturesSelectedEvent")(featureIds, layer, false);
+        var event = this.plugin.getSandbox().getEventBuilder('WFSFeaturesSelectedEvent')(featureIds, layer, false);
         this.plugin.getSandbox().notifyAll(event);
     },
 
@@ -307,11 +321,12 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
                 data.data.layerId
             ),
             imageUrl = '';
+
         try {
-            if (typeof data.data.data != "undefined") {
+            if (typeof data.data.data !== 'undefined') {
                 imageUrl = 'data:image/png;base64,' + data.data.data;
             } else {
-                imageUrl = this.rootURL + data.data.url + "&session=" + this.session.session;
+                imageUrl = this.rootURL + data.data.url + '&session=' + this.session.session;
             }
         } catch (error) {
             this.plugin.getSandbox().printDebug(error);
@@ -325,7 +340,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             };
 
         // send as an event forward to WFSPlugin (draws)
-        var event = this.plugin.getSandbox().getEventBuilder("WFSImageEvent")(
+        var event = this.plugin.getSandbox().getEventBuilder('WFSImageEvent')(
             layer,
             imageUrl,
             data.data.bbox,
@@ -337,13 +352,13 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
 
         this.plugin.getSandbox().notifyAll(event);
 
-        if (layerType === "normal") {
+        if (layerType === 'normal') {
             this.plugin.setPrintTile(
                 layer,
                 data.data.bbox,
                 this.rootURL +
                 data.data.url +
-                "&session=" +
+                '&session=' +
                 this.session.session
             );
 
@@ -375,214 +390,213 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
 
 // send to backend
 
-Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'setters', {
-    /**
-     * @method addMapLayer
-     * @param {Number} id
-     * @param {String} style
-     *
-     * sends message to /service/wfs/addMapLayer
-     */
-    addMapLayer: function (id, style) {
-        if (this.connection.isConnected()) {
-            this.cometd.publish('/service/wfs/addMapLayer', {
-                "layerId": id,
-                "styleName": style
-            });
-        }
-    },
+Oskari.clazz.category(
+    'Oskari.mapframework.bundle.mapwfs2.service.Mediator',
+    'setters', {
+        /**
+         * @method addMapLayer
+         * @param {Number} id
+         * @param {String} style
+         *
+         * sends message to /service/wfs/addMapLayer
+         */
+        addMapLayer: function (id, style) {
+            if (this.connection.isConnected()) {
+                this.cometd.publish('/service/wfs/addMapLayer', {
+                    'layerId': id,
+                    'styleName': style
+                });
+            }
+        },
 
-    /**
-     * @method removeMapLayer
-     * @param {Number} id
-     *
-     * sends message to /service/wfs/removeMapLayer
-     */
-    removeMapLayer: function (id) {
-        if (this.connection.isConnected()) {
-            this.cometd.publish('/service/wfs/removeMapLayer', {
-                "layerId": id
-            });
-        }
-    },
+        /**
+         * @method removeMapLayer
+         * @param {Number} id
+         *
+         * sends message to /service/wfs/removeMapLayer
+         */
+        removeMapLayer: function (id) {
+            if (this.connection.isConnected()) {
+                this.cometd.publish('/service/wfs/removeMapLayer', {
+                    layerId: id
+                });
+            }
+        },
 
-    /**
-     * @method highlightMapLayerFeatures
-     * @param {Number} id
-     * @param {String[]} featureIds
-     * @param {Boolean} keepPrevious
-     * @param {Boolean} geomRequest  response geometries, if true
-     *
-     * sends message to /service/wfs/highlightFeatures
-     */
-    highlightMapLayerFeatures: function (id, featureIds, keepPrevious, geomRequest) {
-        if (this.connection.isConnected()) {
-            this.cometd.publish('/service/wfs/highlightFeatures', {
-                "layerId": id,
-                "featureIds": featureIds,
-                "keepPrevious": keepPrevious,
-                "geomRequest": geomRequest
-            });
-        }
-    },
+        /**
+         * @method highlightMapLayerFeatures
+         * @param {Number} id
+         * @param {String[]} featureIds
+         * @param {Boolean} keepPrevious
+         * @param {Boolean} geomRequest  response geometries, if true
+         *
+         * sends message to /service/wfs/highlightFeatures
+         */
+        highlightMapLayerFeatures: function (id, featureIds, keepPrevious, geomRequest) {
+            if (this.connection.isConnected()) {
+                this.cometd.publish('/service/wfs/highlightFeatures', {
+                    layerId: id,
+                    featureIds: featureIds,
+                    keepPrevious: keepPrevious,
+                    geomRequest: geomRequest
+                });
+            }
+        },
 
-    /**
-     * @method setLocation
-     * @param {Number} layerId
-     * @param {String} srs
-     * @param {Number[]} bbox
-     * @param {Number} zoom
-     * @param {Object} grid
-     * @param {Object} tiles
-     *
-     * sends message to /service/wfs/setLocation
-     */
-    setLocation: function (layerId, srs, bbox, zoom, grid, tiles) {
-        if (this.connection.isConnected()) {
-            this.cometd.publish('/service/wfs/setLocation', {
-                "layerId": layerId,
-                "srs": srs,
-                "bbox": bbox,
-                "zoom": zoom,
-                "grid": grid,
-                "tiles": tiles
-            });
-        }
-    },
+        /**
+         * @method setLocation
+         * @param {Number} layerId
+         * @param {String} srs
+         * @param {Number[]} bbox
+         * @param {Number} zoom
+         * @param {Object} grid
+         * @param {Object} tiles
+         *
+         * sends message to /service/wfs/setLocation
+         */
+        setLocation: function (layerId, srs, bbox, zoom, grid, tiles) {
+            if (this.connection.isConnected()) {
+                this.cometd.publish('/service/wfs/setLocation', {
+                    layerId: layerId,
+                    srs: srs,
+                    bbox: bbox,
+                    zoom: zoom,
+                    grid: grid,
+                    tiles: tiles
+                });
+            }
+        },
 
-    /**
-     * @method setMapSize
-     * @param {Number} width
-     * @param {Number} height
-     *
-     * sends message to /service/wfs/setMapSize
-     */
-    setMapSize: function (width, height) {
-        if (this.connection.isConnected()) {
-            this.cometd.publish('/service/wfs/setMapSize', {
-                "width": width,
-                "height": height
-            });
-        }
-    },
+        /**
+         * @method setMapSize
+         * @param {Number} width
+         * @param {Number} height
+         *
+         * sends message to /service/wfs/setMapSize
+         */
+        setMapSize: function (width, height) {
+            if (this.connection.isConnected()) {
+                this.cometd.publish('/service/wfs/setMapSize', {
+                    width: width,
+                    height: height
+                });
+            }
+        },
 
-    /**
-     * @method setMapLayerStyle
-     * @param {Number} id
-     * @param {String} style
-     *
-     * sends message to /service/wfs/setMapLayerStyle
-     */
-    setMapLayerStyle: function (id, style) {
-        if (this.connection.isConnected()) {
-            this.cometd.publish('/service/wfs/setMapLayerStyle', {
-                "layerId": id,
-                "styleName": style
-            });
-        }
-    },
+        /**
+         * @method setMapLayerStyle
+         * @param {Number} id
+         * @param {String} style
+         *
+         * sends message to /service/wfs/setMapLayerStyle
+         */
+        setMapLayerStyle: function (id, style) {
+            if (this.connection.isConnected()) {
+                this.cometd.publish('/service/wfs/setMapLayerStyle', {
+                    layerId: id,
+                    styleName: style
+                });
+            }
+        },
 
-    /**
-     * @method setMapLayerStyle
-     * @param {Number} id
-     * @param {Object} style
-     *
-     * sends message to /service/wfs/setMapLayerCustomStyle
-     */
-    setMapLayerCustomStyle: function (id, style) {
-        if (this.connection.isConnected()) {
-            this.cometd.publish('/service/wfs/setMapLayerCustomStyle', {
-                "layerId": id,
+        /**
+         * @method setMapLayerStyle
+         * @param {Number} id
+         * @param {Object} style
+         *
+         * sends message to /service/wfs/setMapLayerCustomStyle
+         */
+        setMapLayerCustomStyle: function (id, style) {
+            if (this.connection.isConnected()) {
+                this.cometd.publish('/service/wfs/setMapLayerCustomStyle', {
+                    layerId: id,
+                    fill_color: style.area.fillColor, // check somewhere that first char is # - _prefixColorForServer @ MyPlacesWFSTStore.js
+                    fill_pattern: style.area.fillStyle,
+                    border_color: style.area.lineColor, // check somewhere that first char is # - _prefixColorForServer @ MyPlacesWFSTStore.js
+                    border_linejoin: style.area.lineCorner,
+                    border_dasharray: style.area.lineStyle,
+                    border_width: style.area.lineWidth,
+                    stroke_linecap: style.line.cap,
+                    stroke_color: style.line.color, // check somewhere that first char is # - _prefixColorForServer @ MyPlacesWFSTStore.js
+                    stroke_linejoin: style.line.corner,
+                    stroke_dasharray: style.line.style,
+                    stroke_width: style.line.width,
+                    dot_color: style.dot.color, // check somewhere that first char is # - _prefixColorForServer @ MyPlacesWFSTStore.js
+                    dot_shape: style.dot.shape,
+                    dot_size: style.dot.size
+                });
+            }
+        },
 
-                "fill_color": style.area.fillColor, // check somewhere that first char is # - _prefixColorForServer @ MyPlacesWFSTStore.js
-                "fill_pattern": style.area.fillStyle,
-                "border_color": style.area.lineColor, // check somewhere that first char is # - _prefixColorForServer @ MyPlacesWFSTStore.js
-                "border_linejoin": style.area.lineCorner,
-                "border_dasharray": style.area.lineStyle,
-                "border_width": style.area.lineWidth,
+        /**
+         * @method setMapClick
+         * @param {Number} longitude
+         * @param {Number} latitude
+         * @param {Boolean} keepPrevious
+         *
+         * sends message to /service/wfs/setMapClick
+         */
+        setMapClick: function (lonlat, keepPrevious, geomRequest) {
+            if (this.connection.isConnected()) {
+                this.lonlat = lonlat;
+                this.cometd.publish('/service/wfs/setMapClick', {
+                    longitude: lonlat.lon,
+                    latitude: lonlat.lat,
+                    keepPrevious: keepPrevious,
+                    geomRequest: geomRequest
+                });
+            }
+        },
 
-                "stroke_linecap": style.line.cap,
-                "stroke_color": style.line.color, // check somewhere that first char is # - _prefixColorForServer @ MyPlacesWFSTStore.js
-                "stroke_linejoin": style.line.corner,
-                "stroke_dasharray": style.line.style,
-                "stroke_width": style.line.width,
+        /**
+         * @method setFilter
+         * @param {Object} geojson
+         * @param {Object} filters;  WFS feature property filter params
+         *
+         * sends message to /service/wfs/setFilter
+         */
+        setFilter: function (geojson) {
+            var filter = {
+                geojson: geojson
+            };
+            if (this.connection.isConnected()) {
+                this.cometd.publish('/service/wfs/setFilter', {
+                    filter: filter
+                });
+            }
+        },
+        /**
+         * @method setPropertyFilter
+         * @param {Object} filters;  WFS feature property filter params
+         *
+         * sends message to /service/wfs/setPropertyFilter
+         */
+        setPropertyFilter: function (filters, id) {
+            var filter = {
+                filters: filters,
+                layer_id: id
+            };
+            if (this.connection.isConnected()) {
+                this.cometd.publish('/service/wfs/setPropertyFilter', {
+                    filter: filter
+                });
+            }
+        },
 
-                "dot_color": style.dot.color, // check somewhere that first char is # - _prefixColorForServer @ MyPlacesWFSTStore.js
-                "dot_shape": style.dot.shape,
-                "dot_size": style.dot.size
-            });
-        }
-    },
-
-    /**
-     * @method setMapClick
-     * @param {Number} longitude
-     * @param {Number} latitude
-     * @param {Boolean} keepPrevious
-     *
-     * sends message to /service/wfs/setMapClick
-     */
-    setMapClick: function (lonlat, keepPrevious, geomRequest) {
-        if (this.connection.isConnected()) {
-            this.lonlat = lonlat;
-            this.cometd.publish('/service/wfs/setMapClick', {
-                "longitude": lonlat.lon,
-                "latitude": lonlat.lat,
-                "keepPrevious": keepPrevious,
-                "geomRequest": geomRequest
-            });
-        }
-    },
-
-    /**
-     * @method setFilter
-     * @param {Object} geojson
-     * @param {Object} filters;  WFS feature property filter params
-     *
-     * sends message to /service/wfs/setFilter
-     */
-    setFilter: function (geojson) {
-        filter = {
-            geojson: geojson
-        };
-        if (this.connection.isConnected()) {
-            this.cometd.publish('/service/wfs/setFilter', {
-                "filter": filter
-            });
-        }
-    },
-    /**
-     * @method setPropertyFilter
-     * @param {Object} filters;  WFS feature property filter params
-     *
-     * sends message to /service/wfs/setPropertyFilter
-     */
-    setPropertyFilter: function (filters, id) {
-        filter = {
-            filters: filters,
-            layer_id: id
-        };
-        if (this.connection.isConnected()) {
-            this.cometd.publish('/service/wfs/setPropertyFilter', {
-                "filter": filter
-            });
-        }
-    },
-
-    /**
-     * @method setMapLayerVisibility
-     * @param {Number} id
-     * @param {Boolean} visible
-     *
-     * sends message to /service/wfs/setMapLayerVisibility
-     */
-    setMapLayerVisibility: function (id, visible) {
-        if (this.connection.isConnected()) {
-            this.cometd.publish('/service/wfs/setMapLayerVisibility', {
-                "layerId": id,
-                "visible": visible
-            });
+        /**
+         * @method setMapLayerVisibility
+         * @param {Number} id
+         * @param {Boolean} visible
+         *
+         * sends message to /service/wfs/setMapLayerVisibility
+         */
+        setMapLayerVisibility: function (id, visible) {
+            if (this.connection.isConnected()) {
+                this.cometd.publish('/service/wfs/setMapLayerVisibility', {
+                    layerId: id,
+                    visible: visible
+                });
+            }
         }
     }
-
-});
+);

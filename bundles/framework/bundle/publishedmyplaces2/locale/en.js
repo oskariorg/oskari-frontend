@@ -120,7 +120,7 @@ Oskari.registerLocalization(
                 "placeholder": "Place text on the map"
             },
             "measurement": {
-                "line": "Line distance:",
+                "line": "Line length:",
                 "area": "Area size:"
             },
             "category": {

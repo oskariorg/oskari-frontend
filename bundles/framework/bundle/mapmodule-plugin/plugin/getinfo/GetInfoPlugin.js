@@ -250,7 +250,7 @@ Oskari.clazz.define(
         handleGetInfo: function (lonlat, layers) {
             var me = this,
                 dteMs = (new Date()).getTime(),
-                layerIds = me._buildLayerIdList(layers),
+                layerIds = me._buildLayerIdList(layers || this.getSandbox().findAllSelectedMapLayers()),
                 ajaxUrl = this.getSandbox().getAjaxUrl(),
                 mapVO = me.getSandbox().getMap(),
                 olMap = me.getMapModule().getMap(),
@@ -259,6 +259,7 @@ Oskari.clazz.define(
             if (!layerIds) {
                 return;
             }
+
             if (me._pendingAjaxQuery.busy &&
                 me._pendingAjaxQuery.timestamp &&
                 dteMs - me._pendingAjaxQuery.timestamp < 500) {
@@ -320,6 +321,7 @@ Oskari.clazz.define(
                 url: ajaxUrl + 'action_route=GetFeatureInfoWMS'
             });
         },
+
         /**
          * Formats the given data and sends a request to show infobox.
          *
@@ -402,6 +404,7 @@ Oskari.clazz.define(
                 this.getSandbox().request(this, request);
             }
         },
+
         /**
          * Sends a request to refresh infobox content.
          *
@@ -469,11 +472,11 @@ Oskari.clazz.define(
             }
         }
     }, {
-        'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
+        extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
         /**
          * @static @property {string[]} protocol array of superclasses
          */
-        'protocol': [
+        protocol: [
             'Oskari.mapframework.module.Module',
             'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
         ]

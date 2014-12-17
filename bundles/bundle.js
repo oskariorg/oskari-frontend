@@ -58,6 +58,22 @@ Oskari = (function () {
     Bundle_locale.prototype = {
 
         /**
+         * @public @method getLocalization
+         *
+         * @param  {string} key Key
+         *
+         * @return {string}     Localized value for key 
+         */
+        getLocalization: function (key) {
+            if (key === null || key === undefined) {
+                throw new TypeError(
+                    'getLocalization(): Missing key'
+                );
+            }
+            return this.localizations[this.lang][key];
+        },
+
+        /**
          * @public @method setLocalization
          *
          * @param {string}  lang  Language
@@ -83,6 +99,16 @@ Oskari = (function () {
         },
 
         /**
+         * @public @method getLang
+         *
+         *
+         * @return {string} Language
+         */
+        getLang: function () {
+            return this.lang;
+        },
+
+        /**
          * @public @method setLang
          *
          * @param {string} lang Language
@@ -95,6 +121,84 @@ Oskari = (function () {
                 );
             }
             this.lang = lang;
+        },
+
+        /**
+         * @public @method getDecimalSeparator
+         *
+         *
+         * @return {string} Decimal separator
+         */
+        getDecimalSeparator: function () {
+            var me = this,
+                lang = me.getLang(),
+                locales = me.getSupportedLocales().filter(
+                    function (locale){
+                        return locale.indexOf(lang) === 0;
+                    }
+                ),
+                separators = locales.map(function (locale) {
+                        return me.getDecimalSeparators()[locale];
+                    }
+                );
+
+            if (separators.length > 1) {
+
+                if (console && console.warn) {
+                    console.warn(
+                        'Found more than one separator for ' + this.getLang()
+                    );
+                }
+            }
+
+            if (separators.length && separators[0]) {
+                return separators[0];
+            }
+            return ','; // Most common separator
+        },
+
+
+        getDecimalSeparators: function () {
+            return this.decimalSeparators;
+        },
+
+        /**
+         * @public @method setDecimalSeparators
+         *
+         * @param {Object} decimalSeparators Decimal separators
+         *
+         */
+        setDecimalSeparators: function (decimalSeparators) {
+            this.decimalSeparators = decimalSeparators;
+        },
+
+        /**
+         * @public @method getSupportedLanguages
+         *
+         *
+         * @return {string[]} Supported languages 
+         */
+        getSupportedLanguages: function () {
+            var langs = [],
+                locale,
+                i;
+
+            for (i = 0; i < this.supportedLocales.length; i += 1) {
+                locale = this.supportedLocales[i];
+                // FIXME what do if indexOf === -1?
+                langs.push(locale.substring(0, locale.indexOf('_')));
+            }
+            return langs;
+        },
+
+        /**
+         * @public @method getSupportedLocales
+         *
+         *
+         * @return {string[]} Supported locales 
+         */
+        getSupportedLocales: function () {
+            return this.supportedLocales || [];
         },
 
         /**
@@ -118,73 +222,19 @@ Oskari = (function () {
         },
 
         /**
-         * @public @method getLang
-         *
-         *
-         * @return {string} Language
-         */
-        getLang: function () {
-            return this.lang;
-        },
-
-        /**
-         * @public @method getLocalization
-         *
-         * @param  {string} key Key
-         *
-         * @return {string}     Localized value for key 
-         */
-        getLocalization: function (key) {
-            if (key === null || key === undefined) {
-                throw new TypeError(
-                    'getLocalization(): Missing key'
-                );
-            }
-            return this.localizations[this.lang][key];
-        },
-
-        /**
-         * @public @method getSupportedLocales
-         *
-         *
-         * @return {string[]} Supported locales 
-         */
-        getSupportedLocales: function () {
-            if (this.supportedLocales) {
-                return this.supportedLocales;
-            }
-            return [];
-        },
-
-        /**
          * @public @method getDefaultLanguage
          *
          *
          * @return {string} Default language 
          */
         getDefaultLanguage: function () {
-            var locale = this.supportedLocales[0];
-            // FIXME what do if indexOf === -1?
-            return locale.substring(0, locale.indexOf('_'));
-        },
+            var locale = this.supportedLocales[0],
+                ret;
 
-        /**
-         * @public @method getSupportedLanguages
-         *
-         *
-         * @return {string[]} Supported languages 
-         */
-        getSupportedLanguages: function () {
-            var langs = [],
-                locale,
-                i;
-
-            for (i = 0; i < this.supportedLocales.length; i += 1) {
-                locale = this.supportedLocales[i];
-                // FIXME what do if indexOf === -1?
-                langs.push(locale.substring(0, locale.indexOf('_')));
+            if (locale.indexOf('_') !== -1) {
+                ret = locale.substring(0, locale.indexOf('_'));
             }
-            return langs;
+            return ret;
         }
     };
 
@@ -2976,6 +3026,26 @@ D         * @param {Object} classInfo ClassInfo
          */
         getSupportedLanguages: function () {
             return blocale.getSupportedLanguages();
+        },
+
+        /**
+         * @public @static @method Oskari.getDecimalSeparator
+         *
+         *
+         * @return {string} Active locale's decimal separator
+         */
+        getDecimalSeparator: function () {
+            return blocale.getDecimalSeparator();
+        },
+
+        /**
+         * @public @static @method Oskari.setDecimalSeparators
+         *
+         * @param  {Object} decimalSeparators Decimal separators
+         *
+         */
+        setDecimalSeparators: function (decimalSeparators) {
+            return blocale.setDecimalSeparators(decimalSeparators);
         },
 
         /**

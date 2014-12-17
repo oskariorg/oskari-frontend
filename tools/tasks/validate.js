@@ -24,6 +24,7 @@ module.exports = function (grunt) {
             'chosen.jquery.js',
             'clipper.js',
             'comp.js',
+            'geostats-0.9.min.js',
             'geostats.min.js',
             'jenks.util.js',
             'jquery.base64.min.js',

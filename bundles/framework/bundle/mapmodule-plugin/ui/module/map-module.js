@@ -45,29 +45,48 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
         }
     }, {
+
+        _getContainerWithClasses: function (containerClasses) {
+            var mapDiv = this.getMapEl(),
+                containerDiv = jQuery(
+                    '<div class="mapplugins">' +
+                    '  <div class="mappluginsContainer">' +
+                    '    <div class="mappluginsContent"></div>' +
+                    '  </div>' +
+                    '</div>'
+                );
+
+            containerDiv.addClass(containerClasses);
+            containerDiv.attr('data-location', containerClasses);
+            return containerDiv;
+        },
+
+        _getContainerClasses: function () {
+            return [
+                'bottom center',
+                'center top',
+                'center right',
+                'center left',
+                'bottom right',
+                'bottom left',
+                'right top',
+                'left top'
+            ];
+        },
+
         /**
          * Adds containers for map control plugins
          */
         _addMapControlPluginContainers: function () {
-            var containerClasses = [
-                    'bottom center',
-                    'center top',
-                    'center right',
-                    'center left',
-                    'bottom right',
-                    'bottom left',
-                    'right top',
-                    'left top'
-                ],
+            var containerClasses = this._getContainerClasses(),
                 containerDiv,
                 mapDiv = this.getMapEl(),
                 i;
 
             for (i = 0; i < containerClasses.length; i += 1) {
-                containerDiv = jQuery('<div class="mapplugins"><div class="mappluginsContainer"><div class="mappluginsContent"></div></div></div>');
-                containerDiv.addClass(containerClasses[i]);
-                containerDiv.attr('data-location', containerClasses[i]);
-                mapDiv.append(containerDiv);
+                mapDiv.append(
+                    this._getContainerWithClasses(containerClasses[i])
+                );
             }
         },
 
@@ -79,16 +98,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
             containerDiv = mapDiv.find(selector);
             if (!containerDiv.length) {
-                var containersClasses = [
-                        'bottom center',
-                        'center top',
-                        'center right',
-                        'center left',
-                        'bottom right',
-                        'bottom left',
-                        'right top',
-                        'left top'
-                    ],
+                var containersClasses = this._getContainerClasses(),
                     currentClasses,
                     previousFound = null,
                     current,
@@ -113,9 +123,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                         }
                         if (classesMatch) {
                             // It's the one we're supposed to add
-                            containerDiv = jQuery('<div class="mapplugins"><div class="mappluginsContainer"><div class="mappluginsContent"></div></div></div>');
-                            containerDiv.addClass(containerClasses);
-                            containerDiv.attr('data-location', containerClasses);
+                            containerDiv = this._getContainerWithClasses(
+                                currentClasses
+                            );
                             if (previousFound !== null && previousFound.length) {
                                 previousFound.after(containerDiv);
                             } else {
@@ -144,6 +154,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 inverted = /^(?=.*\bbottom\b)((?=.*\bleft\b)|(?=.*\bright\b)).+/.test(containerClasses), // bottom corner container?
                 precedingPlugin = null,
                 curr;
+
             if (!element) {
                 throw 'Element is non-existent.';
             }
@@ -153,6 +164,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             if (!content || !content.length) {
                 throw 'Container with classes "' + containerClasses + '" not found.';
             }
+            if (content.length > 1) {
+                throw 'Found more than one container with classes "' + containerClasses + '".';
+            }
+
             // Add slot to element
             element.attr('data-position', position);
             // Detach element
@@ -1002,6 +1017,30 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          */
         getMapElDom: function () {
             return this.getMapEl().get(0);
+        },
+
+        /**
+         * @method bringToTop
+         * @param {OpenLayers.Layer} layer The new topmost layer
+         * Brings map layer to top
+         */
+        bringToTop: function(layer) {
+            var zIndex;
+            if (layer !== null) {
+                zIndex = Math.max(this._map.Z_INDEX_BASE.Feature,layer.getZIndex());
+                layer.setZIndex(zIndex+1);
+            }
+            this.orderLayersByZIndex();
+        },
+
+        /**
+         * @method orderLayersByZIndex
+         * Orders layers by Z-indexes.
+         */
+        orderLayersByZIndex: function() {
+            this._map.layers.sort(function(a, b){
+                return a.getZIndex()-b.getZIndex();
+            });
         }
 
     }, {

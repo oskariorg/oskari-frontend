@@ -1,5 +1,53 @@
 # Release Notes
 
+## 1.26
+
+### core
+
+Oskari now prints a warning to console if a requesthandler will be overwritten.
+
+### mapmodule-plugin/DrawPlugin
+
+DrawPlugin can now be configured to NOT register (and unregister) requests. This helps when there are multiple DrawPlugins on map.
+For now start the plugin with { requests : false } config if you have more than one. Otherwise the latest will receive all requests.
+Better solution should be developed for this.
+
+### search
+
+Now prefers zoomScale over zoomLevel on result items.
+
+### mapmodule-plugin/MapMoveRequest
+
+Added support to zoom to a scale. MapMoveRequests zoom parameter can be given as an Object with scale property:
+
+```javascript
+    { scale : 10000 }
+```
+
+### mapwmts
+
+WmtsLayers can now use options and params on layer JSON to override default layer parameters.
+
+### toolbar
+
+Sending enabled = false in Toolbar.AddToolButtonRequest now automatically disabled the button when added.
+Removed handling of disabled = true so we are consistent with enabled-flag. If you used disabled = true, 
+please update the code to use enabled = false instead. 
+Disabled = true just made the visual disabling, not actual clickhandler disabling anyway.
+
+### publisher
+
+Semi-configurable URL (conf.urlPrefix) used in GFI-preview functionality has been changed to use window.location.
+The configuration is no longer needed/used.
+
+### metadatacatalogue
+
+Metadata search has now advances search option Search area which enables metadata searching by limiting the search area on the map. 
+
+### Openlayers
+
+OpenLayers.Control.TransformFeature was added to Openlayers full-map.js to enable transformations of drawn feature.
+
 ## 1.25.5
 
 ### Core

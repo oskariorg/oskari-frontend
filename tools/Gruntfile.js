@@ -1,6 +1,6 @@
 /*global module:false*/
 module.exports = function (grunt) {
-    "use strict";
+    'use strict';
     // Project configuration.
     grunt.initConfig({
         meta: {
@@ -51,31 +51,31 @@ module.exports = function (grunt) {
         },
         sprite: {
             options: {
-                iconDirectoryPath: "../applications/paikkatietoikkuna.fi/full-map/icons",
-                resultImageName: "../applications/paikkatietoikkuna.fi/full-map/icons/icons.png",
-                resultCSSName: "../applications/paikkatietoikkuna.fi/full-map/css/icons.css",
-                spritePathInCSS: "../icons"
+                iconDirectoryPath: '../applications/paikkatietoikkuna.fi/full-map/icons',
+                resultImageName: '../applications/paikkatietoikkuna.fi/full-map/icons/icons.png',
+                resultCSSName: '../applications/paikkatietoikkuna.fi/full-map/css/icons.css',
+                spritePathInCSS: '../icons'
             }
         },
         compileDev: {
             options: {
-                appSetupFile: "../tests/minifierFullMapAppSetup.json",
-                dest: "../dist/",
+                appSetupFile: '../tests/minifierFullMapAppSetup.json',
+                dest: '../dist/',
                 concat: true
             }
         },
         release: {
             options: {
-                configs: "../applications/paikkatietoikkuna.fi/full-map/minifierAppSetup.json,../applications/paikkatietoikkuna.fi/full-map_guest/minifierAppSetup.json,../applications/paikkatietoikkuna.fi/published-map/minifierAppSetup.json,../applications/parcel/minifierAppSetup.json",
-                defaultIconDirectoryPath: "../applications/default/icons/"
+                configs: '../applications/paikkatietoikkuna.fi/full-map/minifierAppSetup.json,../applications/paikkatietoikkuna.fi/full-map_guest/minifierAppSetup.json,../applications/paikkatietoikkuna.fi/published-map/minifierAppSetup.json,../applications/parcel/minifierAppSetup.json',
+                defaultIconDirectoryPath: '../applications/default/icons/'
             }
         },
         buildApp: {
             options: {
-                applicationPaths: "../applications/paikkatietoikkuna.fi/full-map/,../applications/paikkatietoikkuna.fi/full-map_guest/,../applications/paikkatietoikkuna.fi/published-map/,../applications/parcel/",
-                buildsetupconfigFileName: "buildsetupconfig.json",
-                appsetupconfigFileName: "appsetupconfig.json",
-                defaultIconDirectoryPath: "../applications/default/icons/"
+                applicationPaths: '../applications/paikkatietoikkuna.fi/full-map/,../applications/paikkatietoikkuna.fi/full-map_guest/,../applications/paikkatietoikkuna.fi/published-map/,../applications/parcel/',
+                buildsetupconfigFileName: 'buildsetupconfig.json',
+                appsetupconfigFileName: 'appsetupconfig.json',
+                defaultIconDirectoryPath: '../applications/default/icons/'
             }
         },
         karma: {
@@ -104,8 +104,8 @@ module.exports = function (grunt) {
             options: {
                 force: true
             },
-            build: ["../build"],
-            dist: ["../dist"]
+            build: ['../build'],
+            dist: ['../dist']
         },
         oskaridoc: {
             dist: {
@@ -118,11 +118,11 @@ module.exports = function (grunt) {
         },
         mddocs: {
             options: {
-                "toolsPath": process.cwd(),
-                "docsPath": "../docs",
-                "docsurl": "/Oskari/<%= version %>docs/",
-                "apiurl": "/Oskari/<%= version %>api/classes/",
-                "outdir": "../dist/<%= version %>docs/"
+                'toolsPath': process.cwd(),
+                'docsPath': '../docs',
+                'docsurl': '/Oskari/<%= version %>docs/',
+                'apiurl': '/Oskari/<%= version %>api/classes/',
+                'outdir': '../dist/<%= version %>docs/'
             }
         },
         validateLocalizationJSON: {
@@ -136,8 +136,7 @@ module.exports = function (grunt) {
             }
         },
         impL10nExcels: {
-            target: {
-            }
+            target: {}
         },
         genL10nExcels: {
             target: {
@@ -148,7 +147,7 @@ module.exports = function (grunt) {
         compress: {
             zip: {
                 options: {
-                    archive: "../oskari.org/archives/oskari.<%= versionNum %>.zip",
+                    archive: '../oskari.org/archives/oskari.<%= versionNum %>.zip',
                     mode: 'zip',
                     pretty: true
                 },
@@ -166,12 +165,10 @@ module.exports = function (grunt) {
                         src: 'oskari*',
                         dest: '/min/',
                         expand: true
-                    },
-                    {
+                    }, {
                         src: '../bundles/bundle.js',
                         dest: '/',
-                    },
-                    {
+                    }, {
                         src: '../packages/openlayers/startup.js',
                         dest: '/',
                     }
@@ -179,7 +176,7 @@ module.exports = function (grunt) {
             },
             tgz: {
                 options: {
-                    archive: "../oskari.org/archives/oskari.<%= versionNum %>.tgz",
+                    archive: '../oskari.org/archives/oskari.<%= versionNum %>.tgz',
                     mode: 'tgz',
                     pretty: true
                 },
@@ -187,194 +184,194 @@ module.exports = function (grunt) {
             }
         },
         modulizeAll: {
-          'admin-layerrights': '../packages/framework/bundle/admin-layerrights',
-          'backendstatus': '../packages/framework/bundle/backendstatus',
-          'coordinatedisplay': '../packages/framework/bundle/coordinatedisplay',
-// Manual modification          'divmanazer': '../packages/framework/bundle/divmanazer',
-          'featuredata': '../packages/framework/bundle/featuredata',
-          'featuredata2': '../packages/framework/bundle/featuredata2',
-// Manual modification          'guidedtour': '../packages/framework/bundle/guidedtour',
-          'infobox': '../packages/framework/bundle/infobox',
-// Manual modification          'layerselection2': '../packages/framework/bundle/layerselection2',
-          'layerselector2': '../packages/framework/bundle/layerselector2',
-          'mapanalysis': '../packages/framework/bundle/mapanalysis',
-          'mapfull': '../packages/framework/bundle/mapfull',
-          'maplegend': '../packages/framework/bundle/maplegend',
-// Manual replaced by src/mapping/mapmodule-plugin          'mapmodule-plugin': '../packages/framework/bundle/mapmodule-plugin',
-          'mapstats': '../packages/framework/bundle/mapstats',
-          'mapwfs': '../packages/framework/bundle/mapwfs',
-          'mapwfs2': '../packages/framework/bundle/mapwfs2',
-// Manual replaced by src/framework/mapwmts          'mapwmts': '../packages/framework/bundle/mapwmts',
-          'metadata': '../packages/framework/bundle/metadata',
-          'myplaces2': '../packages/framework/bundle/myplaces2',
-// Manual modification          'oskariui': '../packages/framework/bundle/oskariui',
-          'parcel': '../packages/framework/bundle/parcel',
-          'parcelinfo': '../packages/framework/bundle/parcelinfo',
-          'parcelselector': '../packages/framework/bundle/parcelselector',
-          'personaldata': '../packages/framework/bundle/personaldata',
-          'postprocessor': '../packages/framework/bundle/postprocessor',
-          'printout': '../packages/framework/bundle/printout',
-          'promote': '../packages/framework/bundle/promote',
-          'publisher': '../packages/framework/bundle/publisher',
-          'routesearch': '../packages/framework/bundle/routesearch',
-          'search': '../packages/framework/bundle/search',
-          'statehandler': '../packages/framework/bundle/statehandler',
-          'toolbar': '../packages/framework/bundle/toolbar',
-          'usagetracker': '../packages/framework/bundle/usagetracker',
-          'userguide': '../packages/framework/bundle/userguide',
-// Manual modification          'statsgrid': '../packages/statistics/bundle/statsgrid',
-          'analyse': '../packages/analysis/bundle/analyse',
-// Manual modification          'metadataflyout': '../packages/catalogue/bundle/metadataflyout',
-          'metadatacatalogue': '../packages/catalogue/bundle/metadataflyout'
+            'admin-layerrights': '../packages/framework/bundle/admin-layerrights',
+            'backendstatus': '../packages/framework/bundle/backendstatus',
+            'coordinatedisplay': '../packages/framework/bundle/coordinatedisplay',
+            // Manual modification          'divmanazer': '../packages/framework/bundle/divmanazer',
+            'featuredata': '../packages/framework/bundle/featuredata',
+            'featuredata2': '../packages/framework/bundle/featuredata2',
+            // Manual modification          'guidedtour': '../packages/framework/bundle/guidedtour',
+            'infobox': '../packages/framework/bundle/infobox',
+            // Manual modification          'layerselection2': '../packages/framework/bundle/layerselection2',
+            'layerselector2': '../packages/framework/bundle/layerselector2',
+            'mapanalysis': '../packages/framework/bundle/mapanalysis',
+            'mapfull': '../packages/framework/bundle/mapfull',
+            'maplegend': '../packages/framework/bundle/maplegend',
+            // Manual replaced by src/mapping/mapmodule-plugin          'mapmodule-plugin': '../packages/framework/bundle/mapmodule-plugin',
+            'mapstats': '../packages/framework/bundle/mapstats',
+            'mapwfs': '../packages/framework/bundle/mapwfs',
+            'mapwfs2': '../packages/framework/bundle/mapwfs2',
+            // Manual replaced by src/framework/mapwmts          'mapwmts': '../packages/framework/bundle/mapwmts',
+            'metadata': '../packages/framework/bundle/metadata',
+            'myplaces2': '../packages/framework/bundle/myplaces2',
+            // Manual modification          'oskariui': '../packages/framework/bundle/oskariui',
+            'parcel': '../packages/framework/bundle/parcel',
+            'parcelinfo': '../packages/framework/bundle/parcelinfo',
+            'parcelselector': '../packages/framework/bundle/parcelselector',
+            'personaldata': '../packages/framework/bundle/personaldata',
+            'postprocessor': '../packages/framework/bundle/postprocessor',
+            'printout': '../packages/framework/bundle/printout',
+            'promote': '../packages/framework/bundle/promote',
+            'publisher': '../packages/framework/bundle/publisher',
+            'routesearch': '../packages/framework/bundle/routesearch',
+            'search': '../packages/framework/bundle/search',
+            'statehandler': '../packages/framework/bundle/statehandler',
+            'toolbar': '../packages/framework/bundle/toolbar',
+            'usagetracker': '../packages/framework/bundle/usagetracker',
+            'userguide': '../packages/framework/bundle/userguide',
+            // Manual modification          'statsgrid': '../packages/statistics/bundle/statsgrid',
+            'analyse': '../packages/analysis/bundle/analyse',
+            // Manual modification          'metadataflyout': '../packages/catalogue/bundle/metadataflyout',
+            'metadatacatalogue': '../packages/catalogue/bundle/metadataflyout'
         },
         minifyAll: {
             options: {
-                baseUrl : "../",
+                baseUrl: '../',
                 paths: {
-                    jquery: "empty:",
-                    oskari: "empty:",
-                    css: "libraries/requirejs/lib/css",
-                    json: "libraries/requirejs/lib/json",
-                    domReady: "libraries/requirejs/lib/domReady",
-                    normalize: "libraries/requirejs/lib/normalize",
-                    i18n: "libraries/requirejs/lib/i18n",
-                    'css-builder': "libraries/requirejs/lib/css-builder"
+                    jquery: 'empty:',
+                    oskari: 'empty:',
+                    css: 'libraries/requirejs/lib/css',
+                    json: 'libraries/requirejs/lib/json',
+                    domReady: 'libraries/requirejs/lib/domReady',
+                    normalize: 'libraries/requirejs/lib/normalize',
+                    i18n: 'libraries/requirejs/lib/i18n',
+                    'css-builder': 'libraries/requirejs/lib/css-builder'
                 },
                 optimizeAllPluginResources: true,
                 findNestedDependencies: true,
                 preserveLicenseComments: true
             },
             'admin-layerrights': {
-                name: "src/framework/admin-layerrights/module",
-                out: "../src/framework/admin-layerrights/minified.js"
+                name: 'src/framework/admin-layerrights/module',
+                out: '../src/framework/admin-layerrights/minified.js'
             },
             'backendstatus': {
-                name: "src/framework/backendstatus/module",
-                out: "../src/framework/backendstatus/minified.js"
+                name: 'src/framework/backendstatus/module',
+                out: '../src/framework/backendstatus/minified.js'
             },
             'coordinatedisplay': {
-                name: "src/framework/coordinatedisplay/module",
-                out: "../src/framework/coordinatedisplay/minified.js"
+                name: 'src/framework/coordinatedisplay/module',
+                out: '../src/framework/coordinatedisplay/minified.js'
             },
             'divmanazer': {
-                name: "src/framework/divmanazer/module",
-                out: "../src/framework/divmanazer/minified.js"
+                name: 'src/framework/divmanazer/module',
+                out: '../src/framework/divmanazer/minified.js'
             },
             'featuredata': {
-                name: "src/framework/featuredata/module",
-                out: "../src/framework/featuredata/minified.js"
+                name: 'src/framework/featuredata/module',
+                out: '../src/framework/featuredata/minified.js'
             },
             'featuredata2': {
-                name: "src/framework/featuredata2/module",
-                out: "../src/framework/featuredata2/minified.js"
+                name: 'src/framework/featuredata2/module',
+                out: '../src/framework/featuredata2/minified.js'
             },
             'guidedtour': {
-                name: "src/framework/guidedtour/module",
-                out: "../src/framework/guidedtour/minified.js"
+                name: 'src/framework/guidedtour/module',
+                out: '../src/framework/guidedtour/minified.js'
             },
             'infobox': {
-                name: "src/framework/infobox/module",
-                out: "../src/framework/infobox/minified.js"
+                name: 'src/framework/infobox/module',
+                out: '../src/framework/infobox/minified.js'
             },
             'layerselection2': {
-                name: "src/framework/layerselection2/module",
-                out: "../src/framework/layerselection2/minified.js"
+                name: 'src/framework/layerselection2/module',
+                out: '../src/framework/layerselection2/minified.js'
             },
             'layerselector2': {
-                name: "src/framework/layerselector2/module",
-                out: "../src/framework/layerselector2/minified.js"
+                name: 'src/framework/layerselector2/module',
+                out: '../src/framework/layerselector2/minified.js'
             },
             'mapanalysis': {
-                name: "src/framework/mapanalysis/module",
-                out: "../src/framework/mapanalysis/minified.js"
+                name: 'src/framework/mapanalysis/module',
+                out: '../src/framework/mapanalysis/minified.js'
             },
             'mapfull': {
-                name: "src/framework/mapfull/module",
-                out: "../src/framework/mapfull/minified.js"
+                name: 'src/framework/mapfull/module',
+                out: '../src/framework/mapfull/minified.js'
             },
             'maplegend': {
-                name: "src/framework/maplegend/module",
-                out: "../src/framework/maplegend/minified.js"
+                name: 'src/framework/maplegend/module',
+                out: '../src/framework/maplegend/minified.js'
             },
             'mapstats': {
-                name: "src/framework/mapstats/module",
-                out: "../src/framework/mapstats/minified.js"
+                name: 'src/framework/mapstats/module',
+                out: '../src/framework/mapstats/minified.js'
             },
             'mapwfs': {
-                name: "src/framework/mapwfs/module",
-                out: "../src/framework/mapwfs/minified.js"
+                name: 'src/framework/mapwfs/module',
+                out: '../src/framework/mapwfs/minified.js'
             },
             'mapwfs2': {
-                name: "src/framework/mapwfs2/module",
-                out: "../src/framework/mapwfs2/minified.js"
+                name: 'src/framework/mapwfs2/module',
+                out: '../src/framework/mapwfs2/minified.js'
             },
             'mapwmts': {
-                name: "src/framework/mapwmts/module",
-                out: "../src/framework/mapwmts/minified.js"
+                name: 'src/framework/mapwmts/module',
+                out: '../src/framework/mapwmts/minified.js'
             },
             'metadata': {
-                name: "src/framework/metadata/module",
-                out: "../src/framework/metadata/minified.js"
+                name: 'src/framework/metadata/module',
+                out: '../src/framework/metadata/minified.js'
             },
             'myplaces2': {
-                name: "src/framework/myplaces2/module",
-                out: "../src/framework/myplaces2/minified.js"
+                name: 'src/framework/myplaces2/module',
+                out: '../src/framework/myplaces2/minified.js'
             },
             'oskariui': {
-                name: "src/framework/oskariui/module",
-                out: "../src/framework/oskariui/minified.js"
+                name: 'src/framework/oskariui/module',
+                out: '../src/framework/oskariui/minified.js'
             },
             'parcel': {
-                name: "src/framework/parcel/module",
-                out: "../src/framework/parcel/minified.js"
+                name: 'src/framework/parcel/module',
+                out: '../src/framework/parcel/minified.js'
             },
             'parcelinfo': {
-                name: "src/framework/parcelinfo/module",
-                out: "../src/framework/parcelinfo/minified.js"
+                name: 'src/framework/parcelinfo/module',
+                out: '../src/framework/parcelinfo/minified.js'
             },
             'parcelselector': {
-                name: "src/framework/parcelselector/module",
-                out: "../src/framework/parcelselector/minified.js"
+                name: 'src/framework/parcelselector/module',
+                out: '../src/framework/parcelselector/minified.js'
             },
             'personaldata': {
-                name: "src/framework/personaldata/module",
-                out: "../src/framework/personaldata/minified.js"
+                name: 'src/framework/personaldata/module',
+                out: '../src/framework/personaldata/minified.js'
             },
             'postprocessor': {
-                name: "src/framework/postprocessor/module",
-                out: "../src/framework/postprocessor/minified.js"
+                name: 'src/framework/postprocessor/module',
+                out: '../src/framework/postprocessor/minified.js'
             },
             'printout': {
-                name: "src/framework/printout/module",
-                out: "../src/framework/printout/minified.js"
+                name: 'src/framework/printout/module',
+                out: '../src/framework/printout/minified.js'
             },
             'promote': {
-                name: "src/framework/promote/module",
-                out: "../src/framework/promote/minified.js"
+                name: 'src/framework/promote/module',
+                out: '../src/framework/promote/minified.js'
             },
             'publisher': {
-                name: "src/framework/publisher/module",
-                out: "../src/framework/publisher/minified.js"
+                name: 'src/framework/publisher/module',
+                out: '../src/framework/publisher/minified.js'
             },
             'search': {
-                name: "src/framework/search/module",
-                out: "../src/framework/search/minified.js"
+                name: 'src/framework/search/module',
+                out: '../src/framework/search/minified.js'
             },
             'statehandler': {
-                name: "src/framework/statehandler/module",
-                out: "../src/framework/statehandler/minified.js"
+                name: 'src/framework/statehandler/module',
+                out: '../src/framework/statehandler/minified.js'
             },
             'toolbar': {
-                name: "src/framework/toolbar/module",
-                out: "../src/framework/toolbar/minified.js"
+                name: 'src/framework/toolbar/module',
+                out: '../src/framework/toolbar/minified.js'
             },
             'usagetracker': {
-                name: "src/framework/usagetracker/module",
-                out: "../src/framework/usagetracker/minified.js"
+                name: 'src/framework/usagetracker/module',
+                out: '../src/framework/usagetracker/minified.js'
             },
             'userguide': {
-                name: "src/framework/userguide/module",
-                out: "../src/framework/userguide/minified.js"
+                name: 'src/framework/userguide/module',
+                out: '../src/framework/userguide/minified.js'
             }
         }
     });
@@ -401,14 +398,16 @@ module.exports = function (grunt) {
     grunt.registerTask('compileDev', 'Developer compile', function () {
         var options = this.options();
         // set task configs
-        grunt.config.set("compile.dev.options", options);
+        grunt.config.set('compile.dev.options', options);
         grunt.task.run('compile');
 
-        grunt.config.set("compileAppCSS.dev.options", {
-            "appSetupFile": '../applications/paikkatietoikkuna.fi/full-map/minifierAppSetup.json',
-            "dest": options.dest
-        });
-        grunt.task.run("compileAppCSS");
+        grunt.config.set(
+            'compileAppCSS.dev.options', {
+                appSetupFile: '../applications/paikkatietoikkuna.fi/full-map/minifierAppSetup.json',
+                dest: options.dest
+            }
+        );
+        grunt.task.run('compileAppCSS');
     });
 
     grunt.registerTask('compileAppSetupToStartupSequence', function () {
@@ -421,7 +420,7 @@ module.exports = function (grunt) {
             startupSequence,
             definedBundles = {},
             bundle,
-            result = "var _defaultsStartupSeq = ",
+            result = 'var _defaultsStartupSeq = ',
             i,
             ilen;
 
@@ -429,7 +428,7 @@ module.exports = function (grunt) {
 
         // read files and parse output name
         files = grunt.config(this.name).files[0];
-        outputFilename = files.replace(".json", ".opts.js");
+        outputFilename = files.replace('.json', '.opts.js');
 
         // read file
         cfgFile = fs.readFileSync(files, 'utf8');
@@ -462,7 +461,7 @@ module.exports = function (grunt) {
             last,
             cwd,
             appName,
-            APPSFOLDERNAME = "applications",
+            APPSFOLDERNAME = 'applications',
             dest,
             options = this.options(),
             files,
@@ -482,8 +481,8 @@ module.exports = function (grunt) {
             grunt.fail.fatal('Missing parameter\nUsage: grunt release:1.7:"../path/to/minifierAppSetup.json"', 1);
         }
         // set version in config for grunt templating
-        grunt.config.set("version", version + "/");
-        grunt.config.set("versionNum", version);
+        grunt.config.set('version', version + '/');
+        grunt.config.set('versionNum', version);
 
         // set multi task configs for compile and validate
         configs = configs.split(',');
@@ -492,20 +491,20 @@ module.exports = function (grunt) {
             last = (config.lastIndexOf('/'));
             cwd = config.substring(0, last);
             appName = config.substring(cwd.lastIndexOf('/') + 1, last);
-            dest = "../dist/<%= version %>" + appName + "/";
+            dest = '../dist/<%= version %>' + appName + '/';
             options = {
-                iconDirectoryPath: config.substring(0, last) + "/icons",
-                resultImageName: "../dist/<%= version %>" + appName + "/icons/icons.png",
-                resultCSSName: "../dist/<%= version %>" + appName + "/css/icons.css",
-                spritePathInCSS: "../icons",
+                iconDirectoryPath: config.substring(0, last) + '/icons',
+                resultImageName: '../dist/<%= version %>' + appName + '/icons/icons.png',
+                resultCSSName: '../dist/<%= version %>' + appName + '/css/icons.css',
+                spritePathInCSS: '../icons',
                 defaultIconDirectoryPath: defaultIconDirectoryPath
             };
             files = [];
             copyFiles = {
-                "expand": true,
-                "cwd": cwd + "/",
-                "src": ["css/**", "images/**", "*.js"],
-                "dest": dest
+                expand: true,
+                cwd: cwd + '/',
+                src: ['css/**', 'images/**', '*.js'],
+                dest: dest
             };
 
             // subsets have underscore (_) in appName, which means we need to
@@ -515,10 +514,10 @@ module.exports = function (grunt) {
                 parentAppName = appName.substring(0, appNameSeparatorIndex);
                 // copy files from parent folder to be replaced by child
                 files.push({
-                    "expand": true,
-                    "cwd": cwd.replace(appName, parentAppName) + "/",
-                    "src": ["css/**", "images/**", "*.js"],
-                    "dest": dest
+                    expand: true,
+                    cwd: cwd.replace(appName, parentAppName) + '/',
+                    src: ['css/**', 'images/**', '*.js'],
+                    dest: dest
                 });
                 // modify css-sprite to use parent icons instead
                 options.iconDirectoryPath = options.iconDirectoryPath.replace(appName, parentAppName);
@@ -528,66 +527,68 @@ module.exports = function (grunt) {
             files.push(copyFiles);
 
             // setting task configs
-            grunt.config.set("copy." + appName + ".files", files);
-/*            grunt.config.set("validate." + appName + ".options", {
-                "appSetupFile": config,
-                "dest": dest
-            }); */
-            grunt.config.set("compile." + appName + ".options", {
-                "appSetupFile": config,
-                "dest": dest
+            grunt.config.set('copy.' + appName + '.files', files);
+            /*            grunt.config.set("validate." + appName + ".options", {
+                            "appSetupFile": config,
+                            "dest": dest
+                        }); */
+            grunt.config.set('compile.' + appName + '.options', {
+                appSetupFile: config,
+                dest: dest
             });
-            grunt.config.set("compileAppCSS." + appName + ".options", {
-                "appSetupFile": config,
-                "dest": dest
+            grunt.config.set('compileAppCSS.' + appName + '.options', {
+                appSetupFile: config,
+                dest: dest
             });
-            grunt.config.set("sprite." + appName + ".options", options);
+            grunt.config.set('sprite.' + appName + '.options', options);
 
-            if (appName === 'full-map') grunt.config.set('compress.options.fullMap', appName);
+            if (appName === 'full-map') {
+                grunt.config.set('compress.options.fullMap', appName);
+            }
         }
 
 
         // add mddocs to dist
         // add resources to dist
-        grunt.config.set("copy.common.files", [{
-                "expand": true,
-                "cwd": "../docs/",
-                "src": ["images/**", "layout/**"],
-                "dest": grunt.config.get("mddocs.options.outdir")
-            }, {
-                "expand": true,
-                "cwd": "../",
-                "src": ["resources/**", "libraries/**", "bundles/**", "packages/**", "src/**", "applications/**", "sources/**"],
-                "dest": "../dist/"
-            }]);
+        grunt.config.set('copy.common.files', [{
+            expand: true,
+            cwd: '../docs/',
+            src: ['images/**', 'layout/**'],
+            dest: grunt.config.get('mddocs.options.outdir')
+        }, {
+            expand: true,
+            cwd: '../',
+            src: ['resources/**', 'libraries/**', 'bundles/**', 'packages/**', 'src/**', 'applications/**', 'sources/**'],
+            dest: '../dist/'
+        }]);
 
 
-//        grunt.task.run('validate');
+        //        grunt.task.run('validate');
 
         // configure copy-task to copy back the results from dist/css and dist/icons to applications/appname/(css || icons)
         if (copyResourcesToApplications) {
             var copyApps = Object.keys(grunt.config.get('copy')),
                 finalFiles = [];
 
-            for(i = 0, ilen = copyApps.length; i < ilen; i++) {
+            for (i = 0, ilen = copyApps.length; i < ilen; i += 1) {
                 appName = copyApps[i];
 
                 // skip common copy task, the rest should be real apps that are copied
-                if ("common" !== appName) {
+                if ('common' !== appName) {
                     copyFiles = grunt.config.get('copy.' + copyApps[i] + '.files')[0];
                     finalFiles.push({
-                        "expand": true,
-                        "cwd": copyFiles.dest,
-                        "src": ["css/**", "icons/**"],
-                        "dest": copyFiles.cwd
-                    });                    
+                        expand: true,
+                        cwd: copyFiles.dest,
+                        src: ['css/**', 'icons/**'],
+                        dest: copyFiles.cwd
+                    });
                 }
                 // only run the given copy tasks
                 grunt.task.run('copy:' + copyApps[i]);
             }
 
             // add final copy settings to be run after compilation
-            grunt.config.set("copy.final.files", finalFiles);
+            grunt.config.set('copy.final.files', finalFiles);
         } else {
             grunt.task.run('copy');
         }
@@ -599,7 +600,9 @@ module.exports = function (grunt) {
             grunt.task.run('oskaridoc');
         }
 
-        if (grunt.config.get('compress.options.fullMap')) grunt.task.run('compress');
+        if (grunt.config.get('compress.options.fullMap')) {
+            grunt.task.run('compress');
+        }
         if (copyResourcesToApplications) {
             grunt.task.run('copy:final');
         }
@@ -629,16 +632,16 @@ module.exports = function (grunt) {
             line = null,
             exclude,
             include,
-            FIRST = "[first]",
-            LAST = "[last]",
-            INCLUDE = "[include]",
-            EXCLUDE = "[exclude]";
+            FIRST = '[first]',
+            LAST = '[last]',
+            INCLUDE = '[include]',
+            EXCLUDE = '[exclude]';
 
         if (!packages) {
-            grunt.log.writeln("No cfg packages given, reading all cfg files in current directory.");
+            grunt.log.writeln('No cfg packages given, reading all cfg files in current directory.');
             packages = [];
             files = fs.readdirSync(process.cwd());
-            file = "";
+            file = '';
             for (i in files) {
                 if (files.hasOwnProperty(i)) {
                     file = files[i];
@@ -653,28 +656,28 @@ module.exports = function (grunt) {
         }
 
         console.log('Running openlayers packager...');
-        sourceDirectory = path.join(process.cwd(), "/components/openlayers/lib/");
+        sourceDirectory = path.join(process.cwd(), '/components/openlayers/lib/');
 
         // read cfg files
         for (i = 0, ilen = packages.length; i < ilen; i += 1) {
-            cfgFile = fs.readFileSync(packages[i], 'utf8').split("\r\n");
+            cfgFile = fs.readFileSync(packages[i], 'utf8').split('\r\n');
             profile = packages[i];
-            profile = profile.substring(profile.lastIndexOf("/") + 1, profile.indexOf('.cfg'));
+            profile = profile.substring(profile.lastIndexOf('/') + 1, profile.indexOf('.cfg'));
 
             cfg = {};
             for (j = 0, jlen = cfgFile.length; j < jlen; j += 1) {
                 line = cfgFile[j];
 
                 // skip empty lines and lines that start with #
-                if ((line.length > 0) && (line[0] !== "#")) {
+                if ((line.length > 0) && (line[0] !== '#')) {
                     if (line === FIRST) {
-                        linegroup = "forceFirst";
+                        linegroup = 'forceFirst';
                     } else if (line === LAST) {
-                        linegroup = "forceLast";
+                        linegroup = 'forceLast';
                     } else if (line === INCLUDE) {
-                        linegroup = "include";
+                        linegroup = 'include';
                     } else if (line === EXCLUDE) {
-                        linegroup = "exclude";
+                        linegroup = 'exclude';
                     } else {
                         // add array if not defined
                         if (!cfg[linegroup]) {
@@ -716,30 +719,30 @@ module.exports = function (grunt) {
             }
 
             // clean up the profile name a bit
-            if (profile.indexOf("openlayers-") === 0) {
-                profile = profile.substring("openlayers-".length);
+            if (profile.indexOf('openlayers-') === 0) {
+                profile = profile.substring('openlayers-'.length);
             }
 
             // set configuration to concat
-            grunt.config.set("concat." + profile + ".src", cfg.include);
-            grunt.config.set("concat." + profile + ".dest", "../libraries/OpenLayers/OpenLayers." + profile + ".js");
+            grunt.config.set('concat.' + profile + '.src', cfg.include);
+            grunt.config.set('concat.' + profile + '.dest', '../libraries/OpenLayers/OpenLayers.' + profile + '.js');
         }
 
         // concatenate the files
         grunt.task.run('concat');
     });
 
-    grunt.registerTask("watchSCSS", "Watch task for SCSS files", function () {
-        grunt.config.set("compileAppCSS.watchCSS.options", {
-            "appSetupFile": '../applications/paikkatietoikkuna.fi/full-map/minifierAppSetup.json'
+    grunt.registerTask('watchSCSS', 'Watch task for SCSS files', function () {
+        grunt.config.set('compileAppCSS.watchCSS.options', {
+            appSetupFile: '../applications/paikkatietoikkuna.fi/full-map/minifierAppSetup.json'
         });
-        grunt.task.run("compileAppCSS");
+        grunt.task.run('compileAppCSS');
     });
 
     // TODO compile bundle css only for bundles that the application uses
-    grunt.registerMultiTask("compileAppCSS", "Build css for application", function () {
+    grunt.registerMultiTask('compileAppCSS', 'Build css for application', function () {
         var varsDirectory = this.data.options.appSetupFile,
-            appName = varsDirectory.substring(varsDirectory.lastIndexOf("/") + 1, varsDirectory.length),
+            appName = varsDirectory.substring(varsDirectory.lastIndexOf('/') + 1, varsDirectory.length),
             varsFileExists = true,
             invalidPaths = [],
             fs = require('fs');
@@ -750,17 +753,17 @@ module.exports = function (grunt) {
 
 
         // strip file part so we get the application path
-        varsDirectory = varsDirectory.substring(0, varsDirectory.lastIndexOf("/"));
-        grunt.log.writeln("Compiling app CSS with appPath " + varsDirectory);
+        varsDirectory = varsDirectory.substring(0, varsDirectory.lastIndexOf('/'));
+        grunt.log.writeln('Compiling app CSS with appPath ' + varsDirectory);
 
 
         // find valid applicationVariables.scss path
-        grunt.log.writeln("Finding valid applicationVariables.scss path");
-        if (!fs.existsSync(varsDirectory + "/_applicationVariables.scss")) {
-            if (varsDirectory.indexOf("_") > 0) {
+        grunt.log.writeln('Finding valid applicationVariables.scss path');
+        if (!fs.existsSync(varsDirectory + '/_applicationVariables.scss')) {
+            if (varsDirectory.indexOf('_') > 0) {
                 // get parent application path
-                varsDirectory = varsDirectory.substring(0, varsDirectory.lastIndexOf("_"));
-                if (!fs.existsSync(varsDirectory + "/_applicationVariables.scss")) {
+                varsDirectory = varsDirectory.substring(0, varsDirectory.lastIndexOf('_'));
+                if (!fs.existsSync(varsDirectory + '/_applicationVariables.scss')) {
                     invalidPaths.push(varsDirectory);
                     varsFileExists = false;
                 }
@@ -769,9 +772,9 @@ module.exports = function (grunt) {
                 varsFileExists = false;
             }
             if (!varsFileExists) {
-                grunt.fail.fatal("applicationVariables.scss not found, looked in:\n" + invalidPaths, 1);
+                grunt.fail.fatal('applicationVariables.scss not found, looked in:\n' + invalidPaths, 1);
             } else {
-                grunt.log.writeln("Found valid applicationVariables.scss path:\n" + varsDirectory);
+                grunt.log.writeln('Found valid applicationVariables.scss path:\n' + varsDirectory);
             }
         }
 
@@ -784,15 +787,14 @@ module.exports = function (grunt) {
         */
 
         // compile to css
-        grunt.log.writeln("Compiling app SCSS to CSS, using " + varsDirectory + "/scss/ as SCSS folder.");
+        grunt.log.writeln('Compiling app SCSS to CSS, using ' + varsDirectory + '/scss/ as SCSS folder.');
         grunt.config.set(
-            'sass.' + appName + '.files',
-            [{
-                "expand": true,
-                "cwd": varsDirectory + "/scss/",
-                "src": ['*.scss'],
-                "dest": varsDirectory + '/css/',
-                "ext": '.css'
+            'sass.' + appName + '.files', [{
+                expand: true,
+                cwd: varsDirectory + '/scss/',
+                src: ['*.scss'],
+                dest: varsDirectory + '/css/',
+                ext: '.css'
             }]
 
         );
@@ -804,23 +806,23 @@ module.exports = function (grunt) {
         // TODO change to copy
         fs.createReadStream(varsDirectory + '/_applicationVariables.scss').pipe(fs.createWriteStream('../applications/_applicationVariables.scss'));
 
-        grunt.log.writeln("Compiling bundle CSS");
+        grunt.log.writeln('Compiling bundle CSS');
 
         grunt.task.run('compileBundleCSS');
 
 
         if (this.data && this.data.options) {
-            grunt.log.writeln("Minifying...");
-            grunt.config.set("minifyAppCSS." + appName + ".options", {
-                "appSetupFile": this.data.options.appSetupFile,
-                "dest": this.data.options.dest
+            grunt.log.writeln('Minifying...');
+            grunt.config.set('minifyAppCSS.' + appName + '.options', {
+                appSetupFile: this.data.options.appSetupFile,
+                dest: this.data.options.dest
             });
-            grunt.task.run("minifyAppCSS");
+            grunt.task.run('minifyAppCSS');
         } else {
             if (!this.data) {
-                grunt.log.writeln("this.data is undefined");
+                grunt.log.writeln('this.data is undefined');
             }
-            grunt.fail.fatal("Couldn't find options.");
+            grunt.fail.fatal('Couldn\'t find options.');
         }
 
     });
@@ -839,16 +841,16 @@ module.exports = function (grunt) {
                 }
                 content = grunt.file.read(filepath);
                 // Remove Oskari function call so we don't have to use eval...
-                content = content.replace("Oskari.registerLocalization(", "");
-                content = content.substring(0, content.lastIndexOf(");"));
+                content = content.replace('Oskari.registerLocalization(', '');
+                content = content.substring(0, content.lastIndexOf(');'));
                 try {
                     parsed = JSON.parse(content);
-                    languageCode = filepath.substring(filepath.lastIndexOf("/") + 1, filepath.lastIndexOf("."));
+                    languageCode = filepath.substring(filepath.lastIndexOf('/') + 1, filepath.lastIndexOf('.'));
                     if (languageCode !== parsed.lang) {
-                        grunt.fail.fatal("Language code mismatch in " + filepath + ":\nExpected " + languageCode + ", found " + parsed.lang + ".");
+                        grunt.fail.fatal('Language code mismatch in ' + filepath + ':\nExpected ' + languageCode + ', found ' + parsed.lang + '.');
                     }
                 } catch (err) {
-                    grunt.fail.fatal(filepath + ": " + err);
+                    grunt.fail.fatal(filepath + ': ' + err);
                 }
             });
         });
@@ -856,9 +858,9 @@ module.exports = function (grunt) {
 
     grunt.registerMultiTask('beautifyJS', 'Clean up JS code style', function () {
         var startTime = new Date().getTime(),
-            beautify = require("js-beautify"),
+            beautify = require('js-beautify'),
             beautifyOptions = {
-                "jslint_happy": true
+                jslint_happy: true
             },
             contents;
         this.files.forEach(function (file) {
@@ -868,34 +870,33 @@ module.exports = function (grunt) {
                     grunt.log.warn('Source file "' + filepath + '" not found.');
                     return false;
                 }
-                grunt.log.writeln("Beautifying " + filepath);
+                grunt.log.writeln('Beautifying ' + filepath);
                 // replace tabs with four spaces, beautify only does this for indentation
                 contents = grunt.file.read(filepath).replace(/\t/g, '    ');
                 grunt.file.write(filepath, beautify(contents, beautifyOptions));
                 return true;
             });
         });
-        grunt.log.writeln("Beautification took " + ((new Date().getTime() - startTime) / 1000) + " seconds.");
+        grunt.log.writeln('Beautification took ' + ((new Date().getTime() - startTime) / 1000) + ' seconds.');
     });
 
-    grunt.registerTask("compileBundleCSS", "Compile bundle SASS to CSS", function () {
+    grunt.registerTask('compileBundleCSS', 'Compile bundle SASS to CSS', function () {
         grunt.config.set(
-            'sass.' + "test" + "-bundles" + '.files',
-            [{
-                "expand": true,
-                "cwd": "../bundles/",
-                "src": "**/*.scss",
-                "dest": '../resources/',
-                "rename": function (dest, src) {
-                    return dest + src.replace("/scss/", "/css/");
+            'sass.' + 'test' + '-bundles' + '.files', [{
+                expand: true,
+                cwd: '../bundles/',
+                src: '**/*.scss',
+                dest: '../resources/',
+                rename: function (dest, src) {
+                    return dest + src.replace('/scss/', '/css/');
                 },
-                "ext": '.css'
+                ext: '.css'
             }]
         );
         grunt.task.run('sass');
     });
 
-    grunt.registerMultiTask("minifyAppCSS", "Concatenate and minify application css", function () {
+    grunt.registerMultiTask('minifyAppCSS', 'Concatenate and minify application css', function () {
         var done = this.async(),
             cssPacker = require('uglifycss'),
             parser = require('./parser.js'),
@@ -906,7 +907,7 @@ module.exports = function (grunt) {
             i,
             pasFiles;
 
-        grunt.log.writeln("Concatenating and minifying css");
+        grunt.log.writeln('Concatenating and minifying css');
         // internal minify CSS function
         this.minifyCSS = function (files, outputFile) {
 
@@ -915,7 +916,7 @@ module.exports = function (grunt) {
                 content,
                 packed;
             // read files to value
-            grunt.log.writeln("Concatenating and minifying " + files.length + " files");
+            grunt.log.writeln('Concatenating and minifying ' + files.length + ' files');
             for (j = 0; j < files.length; j += 1) {
                 if (!fs.existsSync(files[j])) {
                     grunt.fail.fatal('Couldnt locate ' + files[j]);
@@ -925,12 +926,12 @@ module.exports = function (grunt) {
             }
             // minify value
             packed = cssPacker.processString(value);
-            grunt.log.writeln("Writing packed CSS to " + outputFile);
+            grunt.log.writeln('Writing packed CSS to ' + outputFile);
 
             // write value to outputfile
             fs.writeFile(outputFile, packed, function (err) {
                 // ENOENT means the file did not exist, which is ok. Let's just create it.
-                if (err && err.code !== "ENOENT") {
+                if (err && err.code !== 'ENOENT') {
                     grunt.fail.fatal('Error writing packed CSS: ' + err);
                 }
                 done();
@@ -938,7 +939,7 @@ module.exports = function (grunt) {
         };
 
         // gather css files from bundles' minifierAppSetups
-        grunt.log.writeln("Getting files from processedAppSetups");
+        grunt.log.writeln('Getting files from processedAppSetups');
         for (i = 0; i < processedAppSetup.length; i += 1) {
             pasFiles = parser.getFilesForComponent(processedAppSetup[i], 'css');
             cssfiles = cssfiles.concat(pasFiles);
@@ -946,18 +947,18 @@ module.exports = function (grunt) {
         this.minifyCSS(cssfiles, options.dest + 'oskari.min.css');
     });
 
-    grunt.registerMultiTask("modulizeAll", "Convert all bundles to modules", function () {
+    grunt.registerMultiTask('modulizeAll', 'Convert all bundles to modules', function () {
         grunt.task.run('bundle2module:' + this.data);
     });
 
-    grunt.registerMultiTask("minifyAll", "Minify all modules", function () {
+    grunt.registerMultiTask('minifyAll', 'Minify all modules', function () {
         var options = this.options(this.data);
         grunt.config.set('requirejs.' + this.target + '.options', options);
         grunt.task.run('requirejs:' + this.target);
     });
 
-    grunt.registerTask("buildApp", "Build App", function (applicationPaths, version, defaultIconDirectoryPath, copyResourcesToApplications) {
-        grunt.log.writeln("Building Apps in ", applicationPaths);
+    grunt.registerTask('buildApp', 'Build App', function (applicationPaths, version, defaultIconDirectoryPath, copyResourcesToApplications) {
+        grunt.log.writeln('Building Apps in ', applicationPaths);
         var i,
             ilen,
             applicationPath,
@@ -966,7 +967,7 @@ module.exports = function (grunt) {
             last,
             cwd,
             appName,
-            APPSFOLDERNAME = "applications",
+            APPSFOLDERNAME = 'applications',
             dest,
             options = this.options(),
             buildoptions,
@@ -980,7 +981,7 @@ module.exports = function (grunt) {
             applicationPaths = options.applicationPaths;
         }
         if (!version) {
-            var packagejson = grunt.file.readJSON("../package.json");
+            var packagejson = grunt.file.readJSON('../package.json');
             version = packagejson.version;
         }
         if (options.defaultIconDirectoryPath && !defaultIconDirectoryPath) {
@@ -988,7 +989,7 @@ module.exports = function (grunt) {
         }
 
         // set version in config for grunt templating
-        grunt.config.set("version", version);
+        grunt.config.set('version', version);
 
         // set multi task configs for compile and validate
         applicationPaths = applicationPaths.split(',');
@@ -999,20 +1000,20 @@ module.exports = function (grunt) {
             last = (applicationPath.lastIndexOf('/'));
             cwd = applicationPath.substring(0, last);
             appName = applicationPath.substring(cwd.lastIndexOf('/') + 1, last);
-            dest = "../dist/<%= version %>/" + appName + "/";
+            dest = '../dist/<%= version %>/' + appName + '/';
             options = {
-                iconDirectoryPath: applicationPath.substring(0, last) + "/icons",
-                resultImageName: "../dist/<%= version %>/" + appName + "/icons/icons.png",
-                resultCSSName: "../dist/<%= version %>/" + appName + "/css/icons.css",
-                spritePathInCSS: "../icons",
+                iconDirectoryPath: applicationPath.substring(0, last) + '/icons',
+                resultImageName: '../dist/<%= version %>/' + appName + '/icons/icons.png',
+                resultCSSName: '../dist/<%= version %>/' + appName + '/css/icons.css',
+                spritePathInCSS: '../icons',
                 defaultIconDirectoryPath: defaultIconDirectoryPath
             };
             files = [];
             copyFiles = {
-                "expand": true,
-                "cwd": cwd + "/",
-                "src": ["css/**", "images/**", "*.js"],
-                "dest": dest
+                expand: true,
+                cwd: cwd + '/',
+                src: ['css/**', 'images/**', '*.js'],
+                dest: dest
             };
 
             // subsets have underscore (_) in appName, which means we need to
@@ -1022,10 +1023,10 @@ module.exports = function (grunt) {
                 parentAppName = appName.substring(0, appNameSeparatorIndex);
                 // copy files from parent folder to be replaced by child
                 files.push({
-                    "expand": true,
-                    "cwd": cwd.replace(appName, parentAppName) + "/",
-                    "src": ["css/**", "images/**", "*.js"],
-                    "dest": dest
+                    expand: true,
+                    cwd: cwd.replace(appName, parentAppName) + '/',
+                    src: ['css/**', 'images/**', '*.js'],
+                    dest: dest
                 });
                 // modify css-sprite to use parent icons instead
                 options.iconDirectoryPath = options.iconDirectoryPath.replace(appName, parentAppName);
@@ -1035,50 +1036,50 @@ module.exports = function (grunt) {
             files.push(copyFiles);
 
             // setting task configs
-            grunt.config.set("copy." + appName + ".files", files);
-            grunt.config.set("compileAppCSS." + appName + ".options", {
-                "appSetupFile": appsetupconfig,
-                "dest": dest
+            grunt.config.set('copy.' + appName + '.files', files);
+            grunt.config.set('compileAppCSS.' + appName + '.options', {
+                appSetupFile: appsetupconfig,
+                dest: dest
             });
-            grunt.config.set("sprite." + appName + ".options", options);
+            grunt.config.set('sprite.' + appName + '.options', options);
 
             buildoptions = grunt.file.readJSON(buildsetupconfig);
-            buildoptions.out = "../dist/" + version + "/" + appName + "/oskari.min.js";
-            grunt.config.set("requirejs." + appName + ".options", buildoptions);
+            buildoptions.out = '../dist/' + version + '/' + appName + '/oskari.min.js';
+            grunt.config.set('requirejs.' + appName + '.options', buildoptions);
         }
 
         // add resources to dist
-        grunt.config.set("copy.common.files", [{
-                "expand": true,
-                "cwd": "../",
-                "src": ["resources/**", "libraries/**", "bundles/**", "packages/**", "src/**", "applications/**", "sources/**"],
-                "dest": "../dist/"
-            }]);
+        grunt.config.set('copy.common.files', [{
+            expand: true,
+            cwd: '../',
+            src: ['resources/**', 'libraries/**', 'bundles/**', 'packages/**', 'src/**', 'applications/**', 'sources/**'],
+            dest: '../dist/'
+        }]);
 
         // configure copy-task to copy back the results from dist/css and dist/icons to applications/appname/(css || icons)
         if (copyResourcesToApplications) {
             var copyApps = Object.keys(grunt.config.get('copy')),
                 finalFiles = [];
 
-            for(i = 0, ilen = copyApps.length; i < ilen; i++) {
+            for (i = 0, ilen = copyApps.length; i < ilen; i += 1) {
                 appName = copyApps[i];
 
                 // skip common copy task, the rest should be real apps that are copied
-                if ("common" !== appName) {
+                if ('common' !== appName) {
                     copyFiles = grunt.config.get('copy.' + copyApps[i] + '.files')[0];
                     finalFiles.push({
-                        "expand": true,
-                        "cwd": copyFiles.dest,
-                        "src": ["css/**", "icons/**"],
-                        "dest": copyFiles.cwd
-                    });                    
+                        expand: true,
+                        cwd: copyFiles.dest,
+                        src: ['css/**', 'icons/**'],
+                        dest: copyFiles.cwd
+                    });
                 }
                 // only run the given copy tasks
                 grunt.task.run('copy:' + copyApps[i]);
             }
 
             // add final copy settings to be run after compilation
-            grunt.config.set("copy.final.files", finalFiles);
+            grunt.config.set('copy.final.files', finalFiles);
         } else {
             grunt.task.run('copy');
         }

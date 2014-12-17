@@ -22,7 +22,7 @@ Oskari.registerLocalization(
         "plugin": {
             "LogoPlugin": {
                 "terms": "Terms of Use",
-                "dataSources": "Data sources",
+                "dataSources": "Data Sources",
                 "layersHeader": "Map Layers",
                 "indicatorsHeader": "Indicators"
             },
@@ -95,7 +95,7 @@ Oskari.registerLocalization(
                     },
                     "message": {
                         "label": "The text on the map",
-                        "hint": "Write a text to be shown on the map."
+                        "hint": "Write a message"
                     }
                 },
                 "dialog": {

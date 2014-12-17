@@ -22,10 +22,10 @@ Oskari.registerLocalization(
                 "year": "År",
                 "delete": "Ta bort"
             },
-            "deleteTitle": "NOT TRANSLATED",
+            "deleteTitle": "Ta bort en indikator",
             "destroyIndicator": "Radera",
             "cancelDelete": "Avsluta",
-            "confirmDelete": "NOT TRANSLATED",
+            "confirmDelete": "Vill du säkert ta bort indikatoren",
             "newIndicator": "Ny indikator",
             "error": {
                 "title": "Fel",

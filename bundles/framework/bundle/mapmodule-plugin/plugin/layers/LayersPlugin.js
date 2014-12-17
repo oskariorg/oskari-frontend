@@ -296,6 +296,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
                     }
                 }
             }
+            this.getMapModule().orderLayersByZIndex();
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],

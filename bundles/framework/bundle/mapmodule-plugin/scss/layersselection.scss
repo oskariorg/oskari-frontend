@@ -6,43 +6,46 @@ div.mapplugin.layerSelectionPlugin {
 }
 
 .layerSelectionPlugin {
-  max-width: 200px;
-}
+    max-width: 200px;
 
-.layerSelectionPlugin div.header {
-      background-color: #333333 !important;
-      color: #FFF !important;
-      padding: 8px;
+    div.header {
+        color: #FFF;
+        cursor: pointer;
+        background-color: #3c3c3c;
+        padding: 4px 8px;
 
-    div.header-icon {
-        display : inline-block;
-        margin-right: 10px;
-        vertical-align: middle;
-    }
-
-}
-
-.layerSelectionPlugin div.content {
-    background-color: white;
-
-    div.baseLayerHeader {
-      background-color: #DDDDDD;
-      padding: 10px;
-    }
-
-    div.layers, div.baselayers {
-      padding: 10px;
-    }
-
-    div.layer {
-        margin: 5px 0;
-        text-align: left;
-        
-        input {
-            margin-right: 10px;
-            float: left;
+        div.header-icon {
+            display: inline-block;
+            margin-right: 4px;
+            vertical-align: middle;
         }
 
     }
 
+    div.content {
+        background-color: white;
+
+        div.baseLayerHeader {
+            background-color: #DDDDDD;
+            padding: 10px;
+        }
+
+        div.layers,
+        div.baselayers {
+            padding: 10px;
+        }
+
+        div.layer {
+            margin: 5px 0;
+            text-align: left;
+
+            input {
+                margin-right: 10px;
+                float: left;
+            }
+
+        }
+
+    }
+    
 }

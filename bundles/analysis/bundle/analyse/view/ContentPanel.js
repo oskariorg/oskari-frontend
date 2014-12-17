@@ -491,7 +491,8 @@ Oskari.clazz.define(
                 'Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
                 {
                     id: this.drawPluginId,
-                    multipart: true
+                    multipart: true,
+                    requests : false
                 }
             );
 
@@ -807,15 +808,8 @@ Oskari.clazz.define(
          * @param {Object} config params for StartDrawRequest
          */
         _sendDrawRequest: function (config) {
-            var sandbox = this.sandbox,
-                reqBuilder = sandbox.getRequestBuilder(
-                    'DrawPlugin.StartDrawingRequest'
-                ),
-                request;
-
-            if (reqBuilder) {
-                request = reqBuilder(config);
-                sandbox.request(this.instance, request);
+            if(this.drawPlugin) {
+                this.drawPlugin.startDrawing(config);
             }
         },
         /**
@@ -826,19 +820,18 @@ Oskari.clazz.define(
          * @param {Boolean} isCancel boolean param for StopDrawingRequest, true == canceled, false = finish drawing (dblclick)
          */
         _sendStopDrawRequest: function (isCancel) {
-            var sandbox = this.sandbox,
-                reqBuilder = sandbox.getRequestBuilder(
-                    'DrawPlugin.StopDrawingRequest'
-                ),
-                request;
-
             this.getDrawToolsPanelContainer()
                 .find('div.toolContainer div.buttons')
                 .remove();
 
-            if (reqBuilder) {
-                request = reqBuilder(isCancel);
-                sandbox.request(this.instance, request);
+            if(this.drawPlugin) {
+                if (isCancel) {
+                    // we wish to clear the drawing without sending further events
+                    this.drawPlugin.stopDrawing();
+                } else {
+                    // pressed finished drawing, act like dblclick
+                    this.drawPlugin.forceFinishDraw();
+                }   
             }
         },
         /**

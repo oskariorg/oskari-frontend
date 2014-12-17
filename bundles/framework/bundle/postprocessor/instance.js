@@ -75,8 +75,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.postprocessor.PostProcessorBundl
                 }
                 // create dummy layer since the real one might not be available and we only need it for id
                 var mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
-                if (!mapLayerService) {
+                if (!mapLayerService || featureIdList.length === 0) {
                     // service not found - should never happen
+                    // there are no highlighted features, should we tell the user about this?
                     return;
                 }
                 var dummyLayer = mapLayerService.createLayerTypeInstance('wfslayer');

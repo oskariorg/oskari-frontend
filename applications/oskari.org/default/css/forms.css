@@ -69,6 +69,10 @@ input {
   background: #FAFAFA;
 }
 
+input::-ms-clear {
+  display: none;
+} 
+
 input[type=button], input[type=email], input[type=number], input[type=file], input[type=password], input[type=reset], input[type=search], input[type=submit], input[type=tel], input[type=text], input[type=url], select, textarea, .textarea, button {
   border: 1px solid;
   border-color: #BFBFBF #DEDEDE #DEDEDE #BFBFBF;
@@ -89,10 +93,12 @@ button::-moz-focus-inner, input[type="button"]::-moz-focus-inner, input[type="su
 
 /* This is used in buttons */
 input[type="submit"], input[type="button"], input[type="reset"], button {
-  cursor: pointer;
-  overflow: visible;
-  padding: 8px 5px;
-  width: auto;
+    cursor: pointer;
+    overflow: visible;
+    padding: 8px 5px;
+    line-height: inherit;
+    min-width: 4em;
+    width: auto;
 }
 input[type="submit"]:hover:enabled, input[type="submit"]:focus, input[type="button"]:hover:enabled, input[type="button"]:focus, input[type="reset"]:hover:enabled, input[type="reset"]:focus, button:hover:enabled, button:focus {
   background: #DFF4FF;
@@ -161,11 +167,16 @@ textarea {
   padding: 5px 5px;
 }
 
-button, input[type=button], input[type=submit], input[type=reset] {
-  line-height: inherit;
-}
-
 button:disabled, input:disabled, select:disabled, textarea:disabled {
     cursor: default;
     opacity: 0.25;
+}
+
+.ui-autocomplete {
+    max-height: 100px;
+    overflow-y: auto;
+    /* prevent horizontal scrollbar */
+    overflow-x: hidden;
+    /* add padding to account for vertical scrollbar */
+    padding-right: 20px;
 }

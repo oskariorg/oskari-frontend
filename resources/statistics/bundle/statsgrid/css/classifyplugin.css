@@ -30,10 +30,11 @@
     padding: 0px;
     margin: 2px; }
   .manageClassificationPlugin div.classheader {
+    background-color: #3c3c3c;
     color: #FFF;
     cursor: pointer;
-    background-color: #3c3c3c;
-    padding: 4px 8px; }
+    padding: 4px 8px;
+    text-align: left; }
     .manageClassificationPlugin div.classheader .header-icon {
       display: inline-block;
       margin-right: 4px;

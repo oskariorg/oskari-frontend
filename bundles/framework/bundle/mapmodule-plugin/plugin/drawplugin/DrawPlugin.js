@@ -15,21 +15,22 @@ Oskari.clazz.define(
         me.currentDrawMode = null;
         me.prefix = 'DrawPlugin.';
         me.creatorId = undefined;
-
-        if (me._config) {
-            if (me._config.id) {
+        var config = me.getConfig();
+        if (config) {
+            if (config.id) {
                 // Note that the events and requests need to match the configured
                 // prefix based on the id!
-                me.prefix = me._config.id + '.';
-                me.creatorId = me._config.id;
+                me.prefix = config.id + '.';
+                me.creatorId = config.id;
             }
             // graphicFill, instance
-            if (me._config.graphicFill) {
-                me.graphicFill = me._config.graphicFill;
+            if (config.graphicFill) {
+                me.graphicFill = config.graphicFill;
             }
         }
 
-        me.multipart = (me._config && me._config.multipart === true);
+        me.registerRequests = (config && config.requests !== false);
+        me.multipart = (config && config.multipart === true);
     }, {
         __name: 'DrawPlugin',
 
@@ -45,9 +46,7 @@ Oskari.clazz.define(
          * @method
          */
         startDrawing: function (params) {
-            // make the drawlayer go on top, just using 1000 as delta for now (quickfix)
-            // TODO: add a "bringToTop" function to mapmodule and add proper layer indexing
-            this.getMap().raiseLayer(this.drawLayer, 1000);
+            this.getMapModule().bringToTop(this.drawLayer);
             if (params.isModify) {
                 // preselect it for modification
                 this.modifyControls.select.select(this.drawLayer.features[0]);
@@ -112,66 +111,74 @@ Oskari.clazz.define(
          * @method
          */
         finishedDrawing: function (isForced) {
-            if (!this.multipart || isForced) {
+            var me = this,
+                activeControl,
+                activeControls,
+                components,
+                drawControls = me.drawControls,
+                i,
+                lastIndex,
+                sandbox = me.getSandbox(),
+                evtBuilder,
+                event;
+
+            if (!me.multipart || isForced) {
                 // not a multipart, stop editing
-                var activeControls = this._getActiveDrawControls(),
-                    i,
-                    components;
+                activeControls = me._getActiveDrawControls();
 
                 for (i = 0; i < activeControls.length; i += 1) {
+                    activeControl = activeControls[i];
                     // only lines and polygons have the finishGeometry function
-                    if (typeof this.drawControls[activeControls[i]].handler.finishGeometry === typeof Function) {
+                    if (typeof drawControls[activeControl].handler.finishGeometry === 'function') {
                         // No need to finish geometry if already finished
-                        switch (activeControls[i]) {
+                        switch (activeControl) {
                             case 'line':
-                                if (this.drawControls.line.handler.line.geometry.components.length < 2) {
+                                if (drawControls.line.handler.line.geometry.components.length < 2) {
                                     continue;
                                 }
                                 break;
                             case 'area':
-                                components = this.drawControls.area.handler.polygon.geometry.components;
+                                components = drawControls.area.handler.polygon.geometry.components;
                                 if (components[components.length - 1].components.length < 3) {
                                     continue;
                                 }
                                 break;
                         }
-                        this.drawControls[activeControls[i]].handler.finishGeometry();
+                        drawControls[activeControl].handler.finishGeometry();
                     }
                 }
-                this.toggleControl();
+                me.toggleControl();
             }
 
-            if (!this.editMode) {
+            if (!me.editMode) {
                 // programmatically select the drawn feature ("not really supported by openlayers")
                 // http://lists.osgeo.org/pipermail/openlayers-users/2009-February/010601.html
-                var lastIndex = this.drawLayer.features.length - 1;
-                this.modifyControls.select.select(
-                    this.drawLayer.features[lastIndex]
+                lastIndex = me.drawLayer.features.length - 1;
+                me.modifyControls.select.select(
+                    me.drawLayer.features[lastIndex]
                 );
             }
 
-            var evtBuilder,
-                event;
-            if (!this.multipart || isForced) {
-                evtBuilder = this.getSandbox().getEventBuilder(
+            if (!me.multipart || isForced) {
+                evtBuilder = sandbox.getEventBuilder(
                     'DrawPlugin.FinishedDrawingEvent'
                 );
                 event = evtBuilder(
-                    this.getDrawing(),
-                    this.editMode,
-                    this.creatorId
+                    me.getDrawing(),
+                    me.editMode,
+                    me.creatorId
                 );
             } else {
-                evtBuilder = this.getSandbox().getEventBuilder(
+                evtBuilder = sandbox.getEventBuilder(
                     'DrawPlugin.AddedFeatureEvent'
                 );
                 event = evtBuilder(
-                    this.getDrawing(),
-                    this.currentDrawMode,
-                    this.creatorId
+                    me.getDrawing(),
+                    me.currentDrawMode,
+                    me.creatorId
                 );
             }
-            this.getSandbox().notifyAll(event);
+            sandbox.notifyAll(event);
         },
 
         /**
@@ -200,6 +207,7 @@ Oskari.clazz.define(
                 }
             }
         },
+
         /**
          * @private @method _initImpl
          * Initializes the plugin:
@@ -211,10 +219,11 @@ Oskari.clazz.define(
          */
         _initImpl: function () {
             var me = this,
+                geodesic = me.getConfig().geodesic === undefined ? true : me.getConfig().geodesic,
                 key;
 
-            this.drawLayer = new OpenLayers.Layer.Vector(
-                this.prefix + 'DrawLayer', {
+            me.drawLayer = new OpenLayers.Layer.Vector(
+                me.prefix + 'DrawLayer', {
                     /*style: {
                      strokeColor: "#ff00ff",
                      strokeWidth: 3,
@@ -232,11 +241,15 @@ Oskari.clazz.define(
                     }
                 });
 
-            this.drawControls = {
-                point: new OpenLayers.Control.DrawFeature(me.drawLayer,
-                    OpenLayers.Handler.Point),
-                line: new OpenLayers.Control.DrawFeature(me.drawLayer,
-                    OpenLayers.Handler.Path, {
+            me.drawControls = {
+                point: new OpenLayers.Control.DrawFeature(
+                    me.drawLayer,
+                    OpenLayers.Handler.Point
+                ),
+                line: new OpenLayers.Control.DrawFeature(
+                    me.drawLayer,
+                    OpenLayers.Handler.Path,
+                    {
                         callbacks: {
                             modify: function (geom, feature) {
                                 me._sendActiveGeometry(
@@ -244,13 +257,14 @@ Oskari.clazz.define(
                                     'line'
                                 );
                             }
-                        }
-                    }),
-                area: new OpenLayers.Control.DrawFeature(me.drawLayer,
-                    OpenLayers.Handler.Polygon, {
-                        handlerOptions: {
-                            holeModifier: 'altKey'
                         },
+                        geodesic: geodesic
+                    }
+                ),
+                area: new OpenLayers.Control.DrawFeature(
+                    me.drawLayer,
+                    OpenLayers.Handler.Polygon,
+                    {
                         callbacks: {
                             modify: function (geom, feature) {
                                 me._sendActiveGeometry(
@@ -258,8 +272,13 @@ Oskari.clazz.define(
                                     'area'
                                 );
                             }
-                        }
-                    }),
+                        },
+                        handlerOptions: {
+                            holeModifier: 'altKey'
+                        },
+                        geodesic: geodesic
+                    }
+                ),
                 /*cut : new OpenLayers.Control.DrawFeature(me.drawLayer,
                                                           OpenLayers.Handler.Polygon,
                                                           {handlerOptions:{drawingHole: true}}),*/
@@ -267,6 +286,7 @@ Oskari.clazz.define(
                     me.drawLayer,
                     OpenLayers.Handler.RegularPolygon,
                     {
+                        geodesic: geodesic,
                         handlerOptions: {
                             sides: 4,
                             irregular: true
@@ -275,16 +295,17 @@ Oskari.clazz.define(
                 )
             };
 
-            if (this.graphicFill !== null && this.graphicFill !== undefined) {
+            if (me.graphicFill !== null && me.graphicFill !== undefined) {
                 var str = this.graphicFill,
                     format = new OpenLayers.Format.SLD(),
                     obj = format.read(str),
                     p;
+
                 if (obj && obj.namedLayers) {
                     for (p in obj.namedLayers) {
                         if (obj.namedLayers.hasOwnProperty(p)) {
-                            this.drawLayer.styleMap.styles['default'] = obj.namedLayers[p].userStyles[0];
-                            this.drawLayer.redraw();
+                            me.drawLayer.styleMap.styles['default'] = obj.namedLayers[p].userStyles[0];
+                            me.drawLayer.redraw();
                             break;
                         }
                     }
@@ -292,39 +313,43 @@ Oskari.clazz.define(
             }
 
             // doesn't really need to be in array, but lets keep it for future development
-            this.modifyControls = {
+            me.modifyControls = {
                 modify: new OpenLayers.Control.ModifyFeature(me.drawLayer, {
                     standalone: true
                 })
             };
-            this.modifyControls.select = new OpenLayers.Control.SelectFeature(
+            me.modifyControls.select = new OpenLayers.Control.SelectFeature(
                 me.drawLayer,
                 {
-                    onBeforeSelect: this.modifyControls.modify.beforeSelectFeature,
-                    onSelect: this.modifyControls.modify.selectFeature,
-                    onUnselect: this.modifyControls.modify.unselectFeature,
-                    scope: this.modifyControls.modify
+                    onBeforeSelect: me.modifyControls.modify.beforeSelectFeature,
+                    onSelect: me.modifyControls.modify.selectFeature,
+                    onUnselect: me.modifyControls.modify.unselectFeature,
+                    scope: me.modifyControls.modify
                 }
             );
 
-            this.getMap().addLayers([me.drawLayer]);
-            for (key in this.drawControls) {
-                if (this.drawControls.hasOwnProperty(key)) {
-                    this.getMap().addControl(this.drawControls[key]);
+            me.getMap().addLayers([me.drawLayer]);
+            for (key in me.drawControls) {
+                if (me.drawControls.hasOwnProperty(key)) {
+                    me.getMap().addControl(me.drawControls[key]);
                 }
             }
-            for (key in this.modifyControls) {
-                if (this.modifyControls.hasOwnProperty(key)) {
-                    this.getMap().addControl(this.modifyControls[key]);
+            for (key in me.modifyControls) {
+                if (me.modifyControls.hasOwnProperty(key)) {
+                    me.getMap().addControl(me.modifyControls[key]);
                 }
             }
             // no harm in activating straight away
-            this.modifyControls.modify.activate();
+            me.modifyControls.modify.activate();
         },
 
         _createRequestHandlers: function () {
             var me = this,
                 sandbox = me.getSandbox();
+
+            if(!me.registerRequests) {
+                return {};
+            }
 
             return {
                 'DrawPlugin.StartDrawingRequest': Oskari.clazz.create(
