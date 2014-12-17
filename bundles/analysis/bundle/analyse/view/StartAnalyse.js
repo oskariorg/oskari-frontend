@@ -700,19 +700,22 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 .attr('id', 'analyse_randomize_colors_input');
 
             panel.setTitle(me.loc.output.label);
+
             // tooltip
             tooltipCont.attr('title', me.loc.output.tooltip);
             tooltipCont.addClass('header-icon-info');
             headerPanel.append(tooltipCont);
+
             // title
             colorTitle.find('.output_color_label').html(me.loc.output.color_label);
             contentPanel.append(colorTitle);
+
             // Create random color picker checkbox
             colorRandomizer.find('input[name=randomize_colors]').attr(
                 'checked',
                 'checked'
             );
-            colorRandomizer.find('label').addClass('params_checklabel').html(
+            colorRandomizer.find('label').addClass('params_checklabel').find('span').html(
                 me.loc.output.random_color_label
             );
             contentPanel.append(colorRandomizer);

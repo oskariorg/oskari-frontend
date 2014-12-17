@@ -172,6 +172,14 @@ button:disabled, input:disabled, select:disabled, textarea:disabled {
     opacity: 0.25;
 }
 
+label > input {
+    vertical-align: middle;
+}
+
+label > span {
+    vertical-align: middle;
+}
+
 .ui-autocomplete {
     max-height: 100px;
     overflow-y: auto;

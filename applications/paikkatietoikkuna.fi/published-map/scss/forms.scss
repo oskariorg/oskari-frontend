@@ -183,6 +183,18 @@ button, input, select, textarea {
   }
 }
 
+label {
+
+    > input {
+        vertical-align: middle;
+    }
+
+    > span {
+        vertical-align: middle;
+    }
+
+}
+
 .ui-autocomplete {
     max-height: 100px;
     overflow-y: auto;

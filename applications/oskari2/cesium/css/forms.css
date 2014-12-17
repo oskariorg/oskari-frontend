@@ -181,6 +181,14 @@ input.focus, textarea.focus, .ie6 input.focus, .ie6 textarea.focus {
 	filter: alpha(opacity=50);
 }
 
+label > input {
+    vertical-align: middle;
+}
+
+label > span {
+    vertical-align: middle;
+}
+
 .ui-autocomplete {
     max-height: 100px;
     overflow-y: auto;
