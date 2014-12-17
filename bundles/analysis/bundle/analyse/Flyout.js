@@ -5,32 +5,37 @@
  *
  * Oskari.analysis.bundle.analyse.view.StartView (shown for logged in users).
  */
-Oskari.clazz.define('Oskari.analysis.bundle.analyse.Flyout',
+Oskari.clazz.define(
+    'Oskari.analysis.bundle.analyse.Flyout',
 
     /**
-     * @method create called automatically on construction
-     * @static
+     * @static @method create called automatically on construction
+     *
      * @param {Oskari.analysis.bundle.analyse.AnalyseBundleInstance} instance
-     *      reference to component that created the flyout
+     * Reference to component that created the flyout
+     *
      */
-
     function (instance) {
         this.instance = instance;
         this.container = null;
         this.state = null;
-
         this.template = null;
         this.view = null;
     }, {
         /**
-         * @method getName
+         * @public @method getName
+         *
+         *
          * @return {String} the name for the component
          */
         getName: function () {
             return 'Oskari.analysis.bundle.analyse.Flyout';
         },
+
         /**
-         * @method setEl
+         * @public @method setEl
+         * Interface method implementation
+         *
          * @param {Object} el
          *      reference to the container in browser
          * @param {Number} width
@@ -38,7 +43,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.Flyout',
          * @param {Number} height
          *      container size(?) - not used
          *
-         * Interface method implementation
          */
         setEl: function (el, width, height) {
             this.container = el[0];
@@ -46,71 +50,101 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.Flyout',
                 jQuery(this.container).addClass('analyse');
             }
         },
+
         /**
-         * @method startPlugin
-         *
+         * @public @method startPlugin
          * Interface method implementation, assigns the HTML templates
          * that will be used to create the UI
+         *
+         *
          */
         startPlugin: function () {
             this.template = jQuery('<div></div>');
         },
+
         /**
-         * @method stopPlugin
+         * @public @method stopPlugin
          * Interface method implementation, does nothing atm
+         *
+         *
          */
         stopPlugin: function () {},
+
         /**
-         * @method getTitle
+         * @public @method getTitle
+         *
+         *
          * @return {String} localized text for the title of the flyout
          */
         getTitle: function () {
             return this.instance.getLocalization('flyouttitle');
         },
+
         /**
-         * @method getDescription
+         * @public @method getDescription
+         *
+         *
          * @return {String} localized text for the description of the
          * flyout
          */
         getDescription: function () {
             return this.instance.getLocalization('desc');
         },
+
         /**
-         * @method getOptions
+         * @public @method getOptions
          * Interface method implementation, does nothing atm
+         *
+         *
          */
         getOptions: function () {},
+
         /**
-         * @method setState
-         * @param {Object} state
-         *      state that this component should use
+         * @public @method setState
          * Interface method implementation, does nothing atm
+         *
+         * @param {Object} state
+         * State that this component should use
+         *
          */
         setState: function (state) {
             this.state = state;
 
         },
+
         /**
-         * @method createUi
+         * @public @method createUi
          * Creates the UI for a fresh start.
          * Selects the view to show based on user (guest/loggedin)
+         *
+         *
          */
         createUi: function () {
             var me = this;
 
-            this.view = Oskari.clazz.create('Oskari.analysis.bundle.analyse.view.StartView',
+            this.view = Oskari.clazz.create(
+                'Oskari.analysis.bundle.analyse.view.StartView',
                 this.instance,
-                this.instance.getLocalization('StartView'));
+                this.instance.getLocalization('StartView')
+            );
         },
 
+
+        /**
+         * @public @method refresh
+         *
+         *
+         */
         refresh: function () {
             var flyout = jQuery(this.container);
             flyout.empty();
             var sandbox = this.instance.getSandbox();
 
             if (!sandbox.getUser().isLoggedIn()) {
-                this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer',
-                this.instance.getLocalization('notLoggedIn'));
+                this.tabsContainer = Oskari.clazz.create(
+                    'Oskari.userinterface.component.TabContainer',
+                    this.instance.getLocalization('notLoggedIn')
+                );
                 this.tabsContainer.insertTo(flyout);
                 return;
             }
@@ -124,8 +158,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.Flyout',
         }
     }, {
         /**
-         * @property {String[]} protocol
-         * @static
+         * @static @property {String[]} protocol
          */
-        'protocol': ['Oskari.userinterface.Flyout']
-    });
+        protocol: ['Oskari.userinterface.Flyout']
+    }
+);

@@ -48,14 +48,31 @@ Oskari.clazz.define(
                 }
             });
             return el;
+        },
+
+        /**
+         * @private @method  _createRequestHandlers
+         *
+         *
+         * @return {Object} Request handler map
+         */
+        _createRequestHandlers: function () {
+            return {
+                'MapModulePlugin.ToggleFullScreenControlRequest':
+                    Oskari.clazz.create(
+                        'Oskari.mapframework.bundle.mapmodule.request.ToggleFullScreenControlRequestHandler',
+                        this
+                    )
+            };
         }
+
     },
     {
-        'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
+        extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
         /**
          * @static @property {string[]} protocol array of superclasses
          */
-        'protocol': [
+        protocol: [
             'Oskari.mapframework.module.Module',
             'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
         ]
