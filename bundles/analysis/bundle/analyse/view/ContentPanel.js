@@ -670,11 +670,11 @@ Oskari.clazz.define(
         },
 
         /**
+         * @private @method _createDrawControls
          * Creates and returns the draw control buttons where the user
          * can either save or discard the drawn feature.
          *
-         * @method _createDrawControls
-         * @private
+         *
          * @return {Oskari.userinterface.component.Button[]}
          */
         _createDrawControls: function () {
@@ -766,14 +766,19 @@ Oskari.clazz.define(
         },
 
         /**
+         * @private @method _startNewDrawing
          * Resets currently selected place and sends a draw request to plugin
          * with given config.
          *
-         * @method _startNewDrawing
-         * @private
          * @param {Object} config params for StartDrawRequest
+         *
          */
         _startNewDrawing: function (config) {
+            if (this.helpDialog) {
+                // TODO ask user if they want to cancel/finish the drawing etc?
+                return;
+            }
+
             var controlButtons = this._createDrawControls(),
                 loc = this.loc.content.drawDialog,
                 dialogTitle = loc[config.drawMode].title,
@@ -790,8 +795,7 @@ Oskari.clazz.define(
             );
             this.helpDialog.show(dialogTitle, dialogText, controlButtons);
             this.helpDialog.addClass('analyse-draw-dialog');
-            this.helpDialog.
-            moveTo('div.tool.add-' + config.drawMode, 'bottom');
+            this.helpDialog.moveTo('div.tool.add-' + config.drawMode, 'bottom');
         },
 
         _startNewDrawFiltering: function (config) {
@@ -1150,6 +1154,7 @@ Oskari.clazz.define(
         _closeHelpDialog: function () {
             if (this.helpDialog) {
                 this.helpDialog.close(true);
+                delete this.helpDialog;
             }
         },
 
