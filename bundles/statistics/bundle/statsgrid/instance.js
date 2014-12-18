@@ -96,7 +96,7 @@ Oskari.clazz.define(
                     visible: true
                 }, {
                     id: 'sum',
-                    visible: true
+                    visible: false
                 }]
             };
             var gridPlugin = Oskari.clazz.create(
