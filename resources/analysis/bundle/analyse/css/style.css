@@ -53,7 +53,7 @@ div.basic_analyse div.analyse_difference_cont ul {
     margin: 5px; }
 div.basic_analyse div.icon-info {
   float: right;
-  cursor: pointer; }
+  cursor: help; }
 div.basic_analyse div.icon-funnel, div.basic_analyse div.icon-funnel-active {
   cursor: pointer; }
 div.basic_analyse div.icon-menu {
