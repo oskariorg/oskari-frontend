@@ -69,7 +69,7 @@ Oskari.clazz.define(
         };
 
         // FIXME ugly
-        this._config = jQuery.extend(true, this._config, defaults);
+        this._config = jQuery.extend(true, defaults, this._config);
         this.templates = {
             csvButton: '<button class="statsgrid-csv-button">csv</button>',
             statsgridTotalsVar: '<span class="statsgrid-variable"></span>',
@@ -2372,7 +2372,8 @@ Oskari.clazz.define(
                 if (args.command === 'selectRows') {
                     var columns = args.grid.getColumns(),
                         newColumns = [],
-                        shouldAddSel = true;
+                        shouldAddSel = true,
+                        config;
                     for (i = 0; i < columns.length; i += 1) {
                         var column = columns[i];
                         if (column.field !== 'sel') {
@@ -2396,10 +2397,11 @@ Oskari.clazz.define(
                 } else if (args.command === 'filterByRegion') {
                     me._createFilterByRegionPopup(args.column, this);
                 } else {
-                    for (i = 0; i < me.getConfig().statistics.length; i += 1) {
-                        var statistic = me.getConfig().statistics[i];
-                        if (statistic.id === args.command) {
-                            statistic.visible = !statistic.visible;
+                    config = me.getConfig();
+                    for (i = 0; i < config.statistics.length; i += 1) {
+                        if (config.statistics[i].id === args.command) {
+                            config.statistics[i].visible = !config.statistics[i].visible;
+                            me.setConfig(config);
                             break;
                         }
                     }
