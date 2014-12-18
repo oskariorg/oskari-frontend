@@ -775,7 +775,9 @@ Oskari.clazz.define(
          */
         _startNewDrawing: function (config) {
             if (this.helpDialog) {
-                // TODO ask user if they want to cancel/finish the drawing etc?
+                this._sendStopDrawRequest(true);
+                this._closeHelpDialog();
+                this._activateWFSLayer(true);
                 return;
             }
 
