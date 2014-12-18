@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.26.1
+
+### statistics
+
+Fixed statistical variable functionality in the drop-down list.
+
 ## 1.26
 
 ### core
