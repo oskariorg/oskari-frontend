@@ -801,6 +801,12 @@ Oskari.clazz.define(
         },
 
         _startNewDrawFiltering: function (config) {
+            if (this.helpDialog) {
+                me._cancelDrawFilter();
+                return;
+            }
+
+
             var me = this,
                 diaLoc = this.loc.content.drawFilter.dialog,
                 controlButtons = [],
@@ -849,6 +855,7 @@ Oskari.clazz.define(
             this.getDrawToolsPanelContainer()
                 .find('div.drawFilterContainer')
                 .find('div.buttons').remove();
+            delete this.helpDialog;
         },
 
         /**
