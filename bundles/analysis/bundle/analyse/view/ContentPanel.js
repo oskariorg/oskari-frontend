@@ -27,8 +27,7 @@ Oskari.clazz.define(
         me.start();
     }, {
         /**
-         * @static
-         * @property _templates
+         * @static @property _templates
          */
         _templates: {
             help: '<div class="help icon-info"></div>',
@@ -44,82 +43,106 @@ Oskari.clazz.define(
             drawFilter: '<div class="drawFilter"></div>',
             search: '<div class="analyse-search"></div>'
         },
+
         /**
-         * @method getDataPanel
+         * @public @method getDataPanel
+         *
+         *
          * @return {Oskari.userinterface.component.AccordionPanel}
          */
         getDataPanel: function () {
             return this.dataPanel;
         },
+
         getDrawToolsPanel: function () {
             return this.drawToolsPanel;
         },
+
         /**
+         * @method getDataPanelContainer
          * Returns the container where all the stuff is.
          *
-         * @method getDataPanelContainer
+         *
          * @return {jQuery}
          */
         getDataPanelContainer: function () {
             return this.getDataPanel().getContainer();
         },
+
         getDrawToolsPanelContainer: function () {
             return this.getDrawToolsPanel().getContainer();
         },
+
         /**
          * @method getName
+         *
+         *
          * @return {String}
          */
         getName: function () {
             return this.instance.getName() + 'ContentPanel';
         },
+
         /**
+         * @method getFeatures
          * Returns a list of all temporary features added.
          *
-         * @method getFeatures
+         *
          * @return {Object[]}
          */
         getFeatures: function () {
             return this.features;
         },
+
         /**
+         * @method getSelectedGeometry
          * Returns a geometry selected by the user.
          *
-         * @method getSelectedGeometry
+         *
          * @return {Object[]}
          */
         getSelectedGeometry: function () {
             return this.selectedGeometry;
         },
+
         /**
+         * @method getLayersContainer
          * Returns the element which the layer list is rendered into.
          *
-         * @method getLayersContainer
+         *
          * @return {jQuery}
          */
         getLayersContainer: function () {
             return this.getDataPanelContainer().find('div.layers');
         },
+
         /**
-         * Returns the type of the layer we fake here for the temporary features.
-         *
          * @method getLayerType
+         * Returns the type of the layer we fake here for the temporary
+         * features.
+         *
+         *
          * @return {String}
          */
         getLayerType: function () {
             return this.layerType;
         },
+
         /**
+         * @method emptyLayers
          * Empties the layer list.
          *
-         * @method emptyLayers
+         *
          */
         emptyLayers: function () {
             this.getLayersContainer().empty();
         },
+
         /**
          * @method onEvent
+         *
          * @param  {Oskari.Event} event
+         *
          */
         onEvent: function (event) {
             var handler = this.eventHandlers[event.getName()];
@@ -127,9 +150,9 @@ Oskari.clazz.define(
                 return handler.apply(this, [event]);
             }
         },
+
         /**
-         * @static
-         * @property eventHandlers
+         * @static @property eventHandlers
          */
         eventHandlers: {
             'DrawPlugin.FinishedDrawingEvent': function (event) {
@@ -199,12 +222,14 @@ Oskari.clazz.define(
                 }
             }
         },
+
         /**
+         * @method init
          * Initializes the class.
          * Creates draw plugin and feature layer and sets the class/instance variables.
          *
-         * @method init
          * @param  {Oskari.analysis.bundle.analyse.view.StartAnalyse} view
+         *
          */
         init: function (view) {
             var me = this,
@@ -240,11 +265,13 @@ Oskari.clazz.define(
                 }
             }
         },
+
         /**
+         * @method start
          * Adds the feature layer to the map, stops all other draw plugins
          * and starts the draw plugin needed here.
          *
-         * @method start
+         *
          */
         start: function () {
             var me = this,
@@ -277,10 +304,12 @@ Oskari.clazz.define(
 
             me.isStarted = true;
         },
+
         /**
+         * @method destroy
          * Destroys the created components and unsets the class/instance variables.
          *
-         * @method destroy
+         *
          */
         destroy: function () {
             var me = this,
@@ -312,11 +341,13 @@ Oskari.clazz.define(
             me.linkAction = undefined;
             me.isStarted = undefined;
         },
+
         /**
+         * @public @method stop
          * Removes the feature layer, stops the draw plugin and
          * restarts all other draw plugins.
          *
-         * @method stop
+         *
          */
         stop: function () {
             var me = this,
@@ -348,11 +379,13 @@ Oskari.clazz.define(
 
             me.isStarted = false;
         },
+
         /**
+         * @public @method findFeatureById
          * Returns the feature object by its id.
          *
-         * @method findFeatureById
          * @param  {String} id
+         *
          * @return {Object}
          */
         findFeatureById: function (id) {
@@ -363,14 +396,15 @@ Oskari.clazz.define(
                 }
             );
         },
+
         /**
+         * @private @method addGeometry
          * Adds the given geometry to the feature layer
          * and to the internal list of features.
          *
-         * @method addGeometry
-         * @private
          * @param {OpenLayers.Geometry} geometry
          * @param {String} name optional name for the temp feature
+         *
          */
         addGeometry: function (geometry, name) {
             var feature,
@@ -399,12 +433,14 @@ Oskari.clazz.define(
                 this.view.refreshAnalyseData(feature.id);
             }
         },
+
         /**
+         * @method removeGeometry
          * Removes the feature by given id from the feature layer
          * and from the internal feature list.
          *
-         * @method removeGeometry
          * @param  {String} id
+         *
          */
         removeGeometry: function (id) {
             var arr = this.features || [],
@@ -461,6 +497,7 @@ Oskari.clazz.define(
 
             return panel;
         },
+
         _createDrawToolsPanel: function (loc) {
             var panel = Oskari.clazz.create(
                     'Oskari.userinterface.component.AccordionPanel'
@@ -479,6 +516,7 @@ Oskari.clazz.define(
 
             return panel;
         },
+
         /**
          * Creates and returns the draw plugin needed here.
          *
@@ -498,6 +536,7 @@ Oskari.clazz.define(
 
             return drawPlugin;
         },
+
         /**
          * Creates and returns the draw filter plugin needed here.
          *
@@ -515,6 +554,7 @@ Oskari.clazz.define(
 
             return drawFilterPlugin;
         },
+
         /**
          * Creates and returns the data button which opens the layer selector
          * and the search button which opens the search flyout.
@@ -556,6 +596,7 @@ Oskari.clazz.define(
 
             return buttons;
         },
+
         /**
          * Creates and returns the draw buttons from which the user can draw
          * temporary features which can be used in analysis.
@@ -590,6 +631,7 @@ Oskari.clazz.define(
                 return container;
             }, toolContainer);
         },
+
         /**
          * Creates and returns the draw filter buttons from which the user can filter
          * by drawing which features are going to be used in analysis.
@@ -666,6 +708,7 @@ Oskari.clazz.define(
 
             return [cancelBtn, finishBtn];
         },
+
         /**
          * Creates and returns the filter control buttons.
          *
@@ -721,6 +764,7 @@ Oskari.clazz.define(
             this.sandbox.postRequestByName(
                 rn, [extension, 'attach', rn, '0', '424']);
         },
+
         /**
          * Resets currently selected place and sends a draw request to plugin
          * with given config.
@@ -742,7 +786,8 @@ Oskari.clazz.define(
             this._sendDrawRequest(config);
 
             this.helpDialog = Oskari.clazz.create(
-                'Oskari.userinterface.component.Popup');
+                'Oskari.userinterface.component.Popup'
+            );
             this.helpDialog.show(dialogTitle, dialogText, controlButtons);
             this.helpDialog.addClass('analyse-draw-dialog');
             this.helpDialog.
@@ -812,6 +857,7 @@ Oskari.clazz.define(
                 this.drawPlugin.startDrawing(config);
             }
         },
+
         /**
          * Sends a StopDrawingRequest.
          *
@@ -834,6 +880,7 @@ Oskari.clazz.define(
                 }   
             }
         },
+
         /**
          * Sends a StartDrawFilteringRequest with given params.
          *
@@ -853,6 +900,7 @@ Oskari.clazz.define(
                 sandbox.request(this.instance, request);
             }
         },
+
         /**
          * Sends a StopDrawFilteringRequest with given params.
          *
@@ -872,6 +920,7 @@ Oskari.clazz.define(
                 sandbox.request(this.instance, request);
             }
         },
+
         /**
          * Creates a fake layer for analyse view which behaves
          * like an Oskari layer in some sense
@@ -918,6 +967,7 @@ Oskari.clazz.define(
                 }
             };
         },
+
         /**
          * Maps OpenLayers geometries into strings (draw modes).
          *
@@ -938,6 +988,7 @@ Oskari.clazz.define(
 
             return (geometry ? modes[geometry.CLASS_NAME] : undefined);
         },
+
         /**
          * Creates the feature layer where the drawn features are added to
          * and adds it to the map.
@@ -953,6 +1004,7 @@ Oskari.clazz.define(
 
             return layer;
         },
+
         /**
          * Destroys the feature layer and removes it from the map.
          *
@@ -969,6 +1021,7 @@ Oskari.clazz.define(
                 this.featureLayer = undefined;
             }
         },
+
         /**
          * Either starts or stops draw plugins which are added to the map module
          * (except the one created in this class).
@@ -997,6 +1050,7 @@ Oskari.clazz.define(
                 }
             });
         },
+
         /**
          * Either starts or stops draw filter plugins which are added to the map module
          *
@@ -1024,6 +1078,7 @@ Oskari.clazz.define(
                 }
             });
         },
+
         /**
          * Returns a function that gets called in search bundle with
          * the search result as an argument which in turn returns

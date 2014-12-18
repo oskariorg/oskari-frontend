@@ -978,6 +978,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         'class': 'params_checklabel'
                     })
                     .find('span')
+                    .attr('title', datum.label)
                     .html(datum.label);
 
                 if (isTemp) {
