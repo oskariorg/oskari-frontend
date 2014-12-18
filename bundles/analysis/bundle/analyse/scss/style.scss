@@ -238,7 +238,7 @@ div.basic_analyse {
                 clear: left;
             }
 
-            input, select {
+            select {
                 margin-top: 7px;
                 margin-bottom: 10px;
             }
@@ -306,7 +306,7 @@ label.params_checklabel {
 //    width: 18px !important;
 //} 
 table.layer-icons {
-    margin: 0 0 2px;
+    margin: 0;
     // FIXME percentages is no bueno
     width: 30%;
     display: inline-block;
