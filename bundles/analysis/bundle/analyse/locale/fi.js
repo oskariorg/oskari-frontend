@@ -143,7 +143,7 @@ Oskari.registerLocalization(
                 "options": [
                     {
                         "id": "oskari_analyse_Count",
-                        "label": "Lukumäärä",
+                        "label": "Kohteiden lukumäärä",
                         "selected": true
                     },
                     {
