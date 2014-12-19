@@ -20,12 +20,12 @@ Oskari.clazz.define(
         templates: {
             dataSourcesDialog: jQuery(
                 '<div class="data-sources-dialog">' +
-                '<div class="layers">' +
-                '<h4></h4>' +
-                '</div>' +
-                '<div class="indicators">' +
-                '<h4></h4>' +
-                '</div>' +
+                '  <div class="layers">' +
+                '    <h4></h4>' +
+                '  </div>' +
+                '  <div class="indicators">' +
+                '    <h4></h4>' +
+                '  </div>' +
                 '</div>'
             )
         },
@@ -91,13 +91,13 @@ Oskari.clazz.define(
         _createControlElement: function () {
             return jQuery(
                 '<div class="mapplugin logoplugin">' +
-                '<div class="icon"></div>' +
-                '<div class="terms">' +
-                '<a href="#" target="_blank"></a>' +
-                '</div>' +
-                '<div class="data-sources">' +
-                '<a href="#"></a>' +
-                '</div>' +
+                '  <div class="icon"></div>' +
+                '  <div class="terms">' +
+                '    <a href="#" target="_blank"></a>' +
+                '  </div>' +
+                '  <div class="data-sources">' +
+                '    <a href="#"></a>' +
+                '  </div>' +
                 '</div>'
             );
         },
@@ -277,10 +277,11 @@ Oskari.clazz.define(
 
                 for (i = 0; i < layersLen; i += 1) {
                     layer = layers[i];
+                    // AH-2182 Show source for user layers
                     layersCont.append(
                         '<div>' +
                         layer.getName() + ' - ' +
-                        layer.getOrganizationName() +
+                        (layer.getSource && layer.getSource() ? layer.getSource() : layer.getOrganizationName()) +
                         '</div>'
                     );
                 }
