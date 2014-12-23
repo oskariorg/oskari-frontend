@@ -268,6 +268,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             accordion.addPanel(methodPanel);
             accordion.addPanel(settingsPanel);
             accordion.addPanel(outputPanel);
+            accordion.getContainer().find('.header-icon-info').click(
+                function (evt) {
+                    evt.preventDefault();
+                    return false;
+                }
+            );
             accordion.insertTo(contentDiv);
 
             // buttons
@@ -978,6 +984,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         'class': 'params_checklabel'
                     })
                     .find('span')
+                    .attr('title', datum.label)
                     .html(datum.label);
 
                 if (isTemp) {

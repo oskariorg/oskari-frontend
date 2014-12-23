@@ -303,12 +303,18 @@ Oskari.clazz.define(
                     // wasn't me or disabled -> do nothing
                     return;
                 } else if (!isShown && me.drawCoverage === false) {
-                    me.selectionPlugin.stopDrawing();
-                    me.coverageButton.val(me.getLocalization('delimitArea'));
+                    if (me.selectionPlugin) {
+                        me.selectionPlugin.stopDrawing();
+                    }
+                    if (me.coverageButton) {
+                        me.coverageButton.val(me.getLocalization('delimitArea'));
+                    }
                     me.drawCoverage = true;
                     document.getElementById('oskari_metadatacatalogue_forminput_searchassistance').focus();
                     var emptyData = {};
-                    me.coverageButton[0].data = '';
+                    if (me.coverageButton) {
+                        me.coverageButton[0].data = '';
+                    }
                 }
             }
         },
