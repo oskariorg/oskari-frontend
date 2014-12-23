@@ -150,7 +150,7 @@ Oskari.clazz.define(
                 }
 
                 var openLayer = new OpenLayers.Layer.WMS(layerIdPrefix + _layer.getId(), _layer.getWmsUrls(), defaultParams, defaultOptions);
-                openLayer.opacity = _layer.getOpacity() / 100;
+                openLayer.opacity = layer.getOpacity() / 100;
 
                 this.getMap().addLayer(openLayer);
                 this.getSandbox().printDebug(
