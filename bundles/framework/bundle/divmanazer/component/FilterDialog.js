@@ -43,7 +43,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
          * @method _createFilterDialog
          * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
          */
-        createFilterDialog: function (layer, cb) {
+        createFilterDialog: function (layer, prevJson,  cb) {
             var me = this,
                 closeButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
                 // Clears the filter values
@@ -53,7 +53,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                 layerAttributes,
                 popupTitle,
                 popupContent,
-                filterJson,
+                prevJson,
                 filterErrors;
 
             if (typeof layer !== "undefined") {
@@ -63,12 +63,9 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
             if (typeof me._layer === null) {
                 return;
             }
+
             // Create filter dialog content
             layerAttributes = me._layer.getFilterJson();
-            if (layerAttributes === null) {
-                me._loadWFSLayerPropertiesAndTypes(me._layer.getId(), cb);
-                return;
-            }
             popupContent = this.getFilterDialogContent(me._layer);
             popupTitle = this.loc.filter.description + " " + me._layer.getName();
 
@@ -113,6 +110,11 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                     }
                 }
             });
+
+            // If there's already filter values for current layer, populate the dialog with them.
+            if (prevJson && !jQuery.isEmptyObject(prevJson)) {
+                this.fillDialogContent(popupContent, prevJson, me._layer);
+            }
 
             me.popup.show(popupTitle, popupContent, [closeButton, clearButton, updateButton]);
             me.popup.getJqueryContent().addClass('filter-popup-content');
@@ -267,7 +269,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                 opPlaceHolder = this.loc.filter.values.placeholders.operator;
 
             // Appends values to the attribute select.
-            this._appendOptionValues(attrSelect, attrPlaceHolder, this._layer.getFilterJson());
+            this._appendOptionValues(attrSelect, attrPlaceHolder, me._getLayerAttributes(layer));
             // Appends values to the operator select.
             // values: equals, like, not equals, not like, greater than, less than,
             //         greater or equal than, less or equal than
@@ -434,6 +436,34 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
             ]);
 
             return boolOption;
+        },
+        /**
+         * Reads the layer attributes and returns an object with
+         * keys from the fields array and values from the locales array.
+         *
+         * @method _getLayerAttributes
+         * @private
+         * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
+         */
+        _getLayerAttributes: function (layer) {
+            // Make copies of fields and locales
+            var fields = (layer.getFields && layer.getFields()) ? layer.getFields().slice(0) : [],
+                locales = (layer.getLocales && layer.getLocales()) ? layer.getLocales().slice(0) : [],
+                attributes = [],
+                i;
+
+            for (i = 0; i < fields.length; i += 1) {
+                // Get only the fields which originate from the service,
+                // that is, exclude those which are added by Oskari (starts with '__').
+                if (!fields[i].match(/^__/)) {
+                    attributes.push({
+                        id: fields[i],
+                        name: (locales[i] || fields[i])
+                    });
+                }
+            }
+
+            return attributes;
         },
 
         /**
