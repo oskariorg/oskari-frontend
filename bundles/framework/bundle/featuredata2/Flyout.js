@@ -173,6 +173,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
 
         addFilterFunctionality: function(event, layer) {
             var me = this,
+                prevJson,
                 loc = this.instance.getLocalization('layer'),
 
                 // this is needed to add the functionality to filter with aggregate analyse values
@@ -196,7 +197,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
             me.aggregateAnalyseFilter = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.aggregateAnalyseFilter', me.instance, me.instance.getLocalization('layer'), me.filterDialog);
 
             if (me.service) {
-                me.filterDialog.createFilterDialog(layer, function() {
+                me.filterDialog.createFilterDialog(layer, prevJson, function() {
                     me.service._returnAnalysisOfTypeAggregate(_.bind(me.aggregateAnalyseFilter.addAggregateFilterFunctionality, me));
                 });
             } else {

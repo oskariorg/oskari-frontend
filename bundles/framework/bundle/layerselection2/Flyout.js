@@ -764,7 +764,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 filterIcon.addClass('icon-funnel');
 
                 filterIcon.bind('click', function () {
-                    var icon = jQuery(this);
+                    var icon = jQuery(this),
+                        prevJson;
 
                     if (icon.hasClass('icon-funnel')) {
                         var isAggregateValueAvailable = me.checkIfAggregateValuesAreAvailable(),
@@ -786,7 +787,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                         me.aggregateAnalyseFilter = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.aggregateAnalyseFilter', me.instance, me.instance.getLocalization('layer'), me.filterDialog);
 
                         if (me.service) {
-                            me.filterDialog.createFilterDialog(layer, function() {
+                            me.filterDialog.createFilterDialog(layer, prevJson, function() {
                                 me.service._returnAnalysisOfTypeAggregate(_.bind(me.aggregateAnalyseFilter.addAggregateFilterFunctionality, me));
                             });
                         } else {

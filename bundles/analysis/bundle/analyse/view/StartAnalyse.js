@@ -2600,14 +2600,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             filterIcon.unbind('click');
             filterIcon.bind('click', function () {
                 if (!me._filterPopups[layer.getId()]) {
-                    editDialog.createFilterDialog(layer);
+                    prevJson = me.getFilterJson(layer.getId());
+                    editDialog.createFilterDialog(layer, prevJson);
                     me._filterPopups[layer.getId()] = true;
                     me._userSetFilter[layer.getId()] = true;
                     // If there's already filter values for current layer, populate the dialog with them.
-                    prevJson = me.getFilterJson(layer.getId());
                     if (prevJson && !jQuery.isEmptyObject(prevJson)) {
-                        popupContent = editDialog.getFilterDialogContent(layer);
-                        editDialog.fillDialogContent(popupContent, prevJson, layer);
                         editDialog.setCloseButtonHandler(function () {
                             me._filterPopups[layerId] = null;
                         });
