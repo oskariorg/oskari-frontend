@@ -19,7 +19,7 @@ Oskari.clazz.define('Oskari.userinterface.component.VisualizationForm',
         this._loc = this._getLocalization('DivManazer');
         this.lineCapMap = ["butt", "round"];
         this.lineCornerMap = ["mitre", "round", "bevel"];
-        this.lineStyleMap = ["", "5 2", ""];
+        this.lineStyleMap = ["", "5 2", "D"];
         this.dialog = null;
 
         var defaultOptions = {
