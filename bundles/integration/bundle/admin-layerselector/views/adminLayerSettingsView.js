@@ -486,12 +486,15 @@ define([
                     dataType: 'json',
                     url: sandbox.getAjaxUrl() + 'action_route=SaveLayer',
                     success: function (resp) {
+                        var success = true;
                         me.progressSpinner.stop();
                         // response should be a complete JSON for the new layer
                         if (!resp) {
                             alert(me.instance.getLocalization('admin').update_or_insert_failed);
+                            success = false;
                         } else if (resp.error) {
                             alert(me.instance.getLocalization('admin')[resp.error] || resp.error);
+                            success = false;
                         }
                         // happy case - we got id
                         if (resp.id) {
@@ -518,6 +521,10 @@ define([
                         }
                         if (resp.warn) {
                             alert(me.instance.getLocalization('admin')[resp.warn] || resp.warn);
+                            success = false;
+                        }
+                        if (success) {
+                            alert(me.instance.getLocalization('admin')['success']);
                         }
                     },
                     error: function (jqXHR, textStatus) {
