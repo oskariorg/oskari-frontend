@@ -171,10 +171,12 @@ Oskari.registerLocalization({
             "interfaceAddressDesc": "Give the interface address (URL) without ?-mark and parameters after that.",
             "viewingRightsRoles": "Rights to view for roles",
             "metadataReadFailure": "Fetching layer metadata failed.",
+            "permissionFailure": "Invalid username or password.",
             "mandatory_field_missing": "Field is required:",
             "invalid_field_value": "Invalid value:",
             "operation_not_permitted_for_layer_id": "You don't have privileges to change layer data or add a layer",
-            "no_layer_with_id": "The layer doesn't exist."
+            "no_layer_with_id": "The layer doesn't exist.",
+            "success": "Success."
         },
         "cancel": "Cancel",
         "add": "Add",
