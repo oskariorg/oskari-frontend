@@ -72,6 +72,9 @@ define([
                 this.capabilitiesTemplate = _.template(CapabilitiesTemplate);
                 _.bindAll(this);
 
+                // Progress spinner
+                this.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
+
                 this._rolesUpdateHandler();
                 if (this.model) {
                     // listenTo will remove dead listeners, use it instead of on()
@@ -95,6 +98,8 @@ define([
              */
             render: function () {
                 var me = this;
+                var spinnerContainer;
+
                 // set id for this layer
                 if (me.model && me.model.getId()) {
                     me.$el.attr('data-id', me.model.getId());
@@ -125,6 +130,12 @@ define([
                         supportedTypes : me.supportedTypes,
                         localization: me.options.instance.getLocalization('admin')
                     }));
+                }
+
+                // Append a progress spinner
+                spinnerContainer = me.instance.view.container.parent().parent();
+                if (!spinnerContainer.has(me.progressSpinner).length > 0) {
+                    me.progressSpinner.insertTo(spinnerContainer);
                 }
             },
             /**
@@ -357,7 +368,7 @@ define([
                 if (e && e.stopPropagation) {
                     e.stopPropagation();
                 }
-
+debugger;
                 // FIXME don't get this shit from the event...
                 var me = this,
                     element = jQuery(e.currentTarget),
@@ -464,6 +475,8 @@ define([
                 }
 
 
+                // Progress spinner
+                me.progressSpinner.start();
                 // Layer class id aka. orgName id aka groupId
                 data.groupId = lcId;
                 var sandbox = me.instance.getSandbox();
@@ -473,6 +486,8 @@ define([
                     dataType: 'json',
                     url: sandbox.getAjaxUrl() + 'action_route=SaveLayer',
                     success: function (resp) {
+debugger;
+                        me.progressSpinner.stop();
                         // response should be a complete JSON for the new layer
                         if (!resp) {
                             alert(me.instance.getLocalization('admin').update_or_insert_failed);
@@ -507,6 +522,8 @@ define([
                         }
                     },
                     error: function (jqXHR, textStatus) {
+debugger;
+                        me.progressSpinner.stop();
                         if (jqXHR.status !== 0) {
                             var loc = me.instance.getLocalization('admin'),
                                 err = loc.update_or_insert_failed;
@@ -662,6 +679,9 @@ define([
 
                 e.stopPropagation();
 
+                // Progress spinner
+                me.progressSpinner.start();
+
                 var serviceURL = form.find('#add-layer-interface').val(),
                     layerType = form.find('#add-layer-layertype').val(),
                     user = form.find('#add-layer-username').val(),
@@ -689,10 +709,13 @@ define([
                     },
                     url: baseUrl + 'action_route=GetWSCapabilities',
                     success: function (resp) {
+                        me.progressSpinner.stop();
                         me.__capabilitiesResponseHandler(layerType, resp);
                     },
                     error: function (jqXHR, textStatus) {
+                        me.progressSpinner.stop();
                         if (jqXHR.status !== 0) {
+debugger;
                             alert(me.instance.getLocalization('admin').metadataReadFailure);
                         }
                     }
