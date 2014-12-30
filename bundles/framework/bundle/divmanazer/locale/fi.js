@@ -237,8 +237,28 @@ Oskari.registerLocalization({
             },
             "export": {
                 "title": "Aineiston vienti",
-                "csv": "CSV",
-                "excel": "Excel"
+                "export": "Vie",
+                "additional": {
+                    "title": "Lisäasetukset",
+                    "dataSource": "Tietolähde",
+                    "metadata": "Metatietolinkki"
+                },
+                "columns": {
+                    "title": "Sarakkeet",
+                    "all": "Kaikki",
+                    "visible": "Avatut"
+                },
+                "format": {
+                    "title": "Tiedostomuoto",
+                    "xlsx": "Excel",
+                    "csv": "CSV"
+                },
+                "separator": {
+                    "title": "CSV-tiedoston erotin",
+                    "comma": "Pilkku",
+                    "semicolon": "Puolipiste",
+                    "tabulator": "Sarkain"
+                }
             }
         }
     }

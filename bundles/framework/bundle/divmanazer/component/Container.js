@@ -99,10 +99,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Container',
         getValues: function (values, eventElement) {
             'use strict';
             var i,
-                me,
+                me = this,
                 component,
-                components = this._components,
+                components = me._components,
                 val;
+
             // TODO see http://malsup.com/jquery/form/comp/
             // - only used <input type="submit":s value should be serialized
             //   - we need to get this from event or smthn...
@@ -111,13 +112,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Container',
             //   - just make ResetButton's getValue return undefined...
             for (i = 0; i < components.length; i += 1) {
                 component = components[i];
-                if (!component.isDisabled() &&
-                        component.getName &&
-                        component.getName() &&
-                        component.getName() !== '' &&
-                        component.getValue &&
-                        component.getValue() !== undefined &&
-                        component.getValue() !== '') {
+                if (component.isEnabled() && me._hasNameAndValue(component)) {
                     val = values[component.getName()];
                     if (val) {
                         if (Array.isArray(val)) {
@@ -137,6 +132,13 @@ Oskari.clazz.define('Oskari.userinterface.component.Container',
                 }
             }
             return values;
+        },
+
+        _hasNameAndValue: function (component) {
+            return component.getName && component.getName() &&
+                component.getName() !== '' && component.getValue &&
+                component.getValue() !== undefined &&
+                component.getValue() !== '';
         },
 
         /**
@@ -162,4 +164,4 @@ Oskari.clazz.define('Oskari.userinterface.component.Container',
     }, {
         extend: ['Oskari.userinterface.component.Component']
     }
-    );
+);

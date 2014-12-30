@@ -167,9 +167,18 @@ textarea {
   padding: 5px 5px;
 }
 
-button:disabled, input:disabled, select:disabled, textarea:disabled {
+fieldset:disabled label > span,
+form:disabled label > span,
+label > input:disabled + span {
+    opacity: 0.5;
+}
+
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled {
     cursor: default;
-    opacity: 0.25;
+    opacity: 0.5;
 }
 
 label > input {

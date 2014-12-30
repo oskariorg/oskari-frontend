@@ -176,11 +176,22 @@ textarea {
     padding: 5px 5px;
 }
 
-button, input, select, textarea {
-  &:disabled {
-  	cursor: default;
-    opacity: 0.25;
-  }
+fieldset:disabled label > span,
+form:disabled label > span,
+label > input:disabled + span {
+    opacity: 0.5;
+}
+
+button,
+input,
+select,
+textarea {
+
+    &:disabled {
+        cursor: default;
+        opacity: 0.25;
+    }
+
 }
 
 label {

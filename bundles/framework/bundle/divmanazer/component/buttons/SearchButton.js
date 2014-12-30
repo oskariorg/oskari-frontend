@@ -5,17 +5,16 @@
  */
 Oskari.clazz.define('Oskari.userinterface.component.buttons.SearchButton',
     /**
-     * @method create called automatically on construction
-     * @static
+     * @static @method create called automatically on construction
+     *
+     *
      */
     function () {
-        this._element.type = 'submit';
         var loc = Oskari.getLocalization('DivManazer');
         this.setTitle(loc ? loc.buttons.search : 'Search');
-        this.setPrimary(true);
     },
     {},
     {
-        "extend": ["Oskari.userinterface.component.Button"]
+        extend: ['Oskari.userinterface.component.buttons.SubmitButton']
     }
 );

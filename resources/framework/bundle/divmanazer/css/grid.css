@@ -107,3 +107,10 @@ table.oskari-grid > tr > th, table.oskari-grid > tbody > tr > th {
   text-align: left; }
 table.oskari-grid tr:last-child td {
   border: 1px solid #E6E6E6; }
+
+.oskari-grid-export {
+  width: 340px; }
+  .oskari-grid-export fieldset.oskari-formcomponent {
+    float: left; }
+    .oskari-grid-export fieldset.oskari-formcomponent label {
+      width: 170px; }
