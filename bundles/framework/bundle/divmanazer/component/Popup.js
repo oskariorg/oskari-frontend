@@ -64,8 +64,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 contentDiv.css('overflow-y', 'auto');
             }
             // center on screen
-            this.dialog.css('margin-left', - (this.dialog.width() / 2) + 'px');
-            this.dialog.css('margin-top', - (this.dialog.height() / 2) + 'px');
+            this.dialog.css('margin-left', -(this.dialog.width() / 2) + 'px');
+            this.dialog.css('margin-top', -(this.dialog.height() / 2) + 'px');
         },
         /**
          * @method fadeout
@@ -100,6 +100,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         createCloseButton: function (label) {
             var me = this,
                 okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+
             okBtn.setTitle(label);
             okBtn.setHandler(function () {
                 me.close(true);
@@ -116,7 +117,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             if (this.overlay) {
                 this.overlay.close();
             }
-            if(this.hasKeydownListener) {
+            if (this.hasKeydownListener) {
                 jQuery(this.dialog).off('keydown', this._stopKeydownPropagation);
             }
             if (noAnimation) {
@@ -151,7 +152,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 tar = jQuery(target),
                 pos = tar.offset();
 
-            if(!tar || tar.length === 0 || !pos) {
+            if (!tar || tar.length === 0 || !pos) {
                 // couldn't find target - aborting
                 return;
             }
@@ -231,7 +232,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             jQuery(this.dialog).keydown(this._stopKeydownPropagation);
             this.hasKeydownListener = true;
         },
-        _stopKeydownPropagation : function(e) {
+        _stopKeydownPropagation: function (e) {
             e.stopPropagation();
         },
         setTitle: function (title) {
@@ -241,11 +242,13 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             return this.dialog.find('h3')[0].textContent;
         },
         setId: function (pId) {
-        	this.id = pId;
-        	if (this.dialog) {
+            this.id = pId;
+            if (this.dialog) {
                 this.dialog.attr('id', pId);
             } else {
-                Oskari.getSandbox().printWarn("Oskari.userinterface.component.Button.setId: No UI");
+                Oskari.getSandbox().printWarn(
+                    'Oskari.userinterface.component.Button.setId: No UI'
+                );
             }
         },
         /** 
@@ -283,9 +286,13 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          * Clears any listeners (registered with onClose(callback)-function).
          */
         clearListeners: function () {
-            for(var key in this.__listeners) {
-                this.__listeners[key] = null;
-                delete this.__listeners[key];
+            var key;
+
+            for (key in this.__listeners) {
+                if (this.__listeners.hasOwnProperty(key)) {
+                    this.__listeners[key] = null;
+                    delete this.__listeners[key];
+                }
             }
         },
         /**
@@ -293,27 +300,29 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          * @param {String} type of listener ('close' for example)
          * @param {Object} event (optional)
          */
-        __notifyListeners : function(type, event) {
-            if(!type) {
+        __notifyListeners: function (type, event) {
+            if (!type) {
                 return;
             }
-            if(!this.__listeners[type]) {
+            if (!this.__listeners[type]) {
                 return;
             }
-            _.each(this.__listeners[type], function(cb){ cb(event); });
+            _.each(this.__listeners[type], function (cb) {
+                cb(event);
+            });
         },
         /**
-         * Returns an array of listeners for given type. 
+         * Returns an array of listeners for given type.
          * @param {String} type of listener ('close' for example)
          */
-        __getListeners : function(type) {
-            if(!type) {
+        __getListeners: function (type) {
+            if (!type) {
                 return [];
             }
-            if(!this.__listeners) {
+            if (!this.__listeners) {
                 this.__listeners = {};
             }
-            if(!this.__listeners[type] || !this.__listeners[type].push) {
+            if (!this.__listeners[type] || !this.__listeners[type].push) {
                 this.__listeners[type] = [];
             }
             return this.__listeners[type];

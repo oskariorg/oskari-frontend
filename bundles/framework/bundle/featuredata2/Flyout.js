@@ -4,15 +4,16 @@
  * Renders the "featuredata2" flyout.
  */
 
-Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
+Oskari.clazz.define(
+    'Oskari.mapframework.bundle.featuredata2.Flyout',
 
     /**
-     * @method create called automatically on construction
-     * @static
+     * @static @method create called automatically on construction
+     *
      * @param {Oskari.mapframework.bundle.featuredata2.FeatureDataGridBundleInstance} instance
-     *      reference to component that created the tile
+     * Reference to component that created the tile
+     *
      */
-
     function (instance) {
         this.instance = instance;
         this.container = null;
@@ -37,6 +38,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
         getName: function () {
             return 'Oskari.mapframework.bundle.featuredata2.Flyout';
         },
+
         /**
          * @method setEl
          * @param {Object} el
@@ -54,6 +56,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                 jQuery(this.container).addClass('featuredata');
             }
         },
+
         /**
          * @method startPlugin
          *
@@ -61,10 +64,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
          * that will be used to create the UI
          */
         startPlugin: function () {
-            this.tabsContainer =
-                Oskari.clazz.create('Oskari.userinterface.component.TabContainer',
-                    this.instance.getLocalization('nodata'));
+            this.tabsContainer = Oskari.clazz.create(
+                'Oskari.userinterface.component.TabContainer',
+                this.instance.getLocalization('nodata')
+            );
         },
+
         /**
          * @method stopPlugin
          *
@@ -73,6 +78,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
         stopPlugin: function () {
 
         },
+
         /**
          * @method getTitle
          * @return {String} localized text for the title of the flyout
@@ -80,6 +86,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
         getTitle: function () {
             return this.instance.getLocalization('title');
         },
+
         /**
          * @method getDescription
          * @return {String} localized text for the description of the
@@ -88,6 +95,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
         getDescription: function () {
             return this.instance.getLocalization('desc');
         },
+
         /**
          * @method getOptions
          * Interface method implementation, does nothing atm
@@ -95,6 +103,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
         getOptions: function () {
 
         },
+
         /**
          * @method setState
          * @param {Object} state
@@ -104,6 +113,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
         setState: function (state) {
             this.state = state;
         },
+
         /**
          * @method setResizable
          * @param {Boolean} resizable
@@ -113,38 +123,46 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
         setResizable: function (resizable) {
             this.resizable = resizable;
         },
+
         /**
          * @method createUi
          * Creates the UI for a fresh start
          */
         createUi: function () {
             var me = this,
-                flyout = jQuery(this.container);
+                flyout = jQuery(me.container),
+                sandbox = me.instance.sandbox,
+                dimReqBuilder = sandbox.getRequestBuilder(
+                    'DimMapLayerRequest'
+                ),
+                hlReqBuilder = sandbox.getRequestBuilder(
+                    'HighlightMapLayerRequest'
+                );
+
             flyout.empty();
 
-            var sandbox = this.instance.sandbox,
-                dimReqBuilder = sandbox.getRequestBuilder('DimMapLayerRequest'),
-                hlReqBuilder = sandbox.getRequestBuilder('HighlightMapLayerRequest');
             // if previous panel is undefined -> just added first tab
             // if selectedPanel is undefined -> just removed last tab
-            this.tabsContainer.addTabChangeListener(function (previousPanel, selectedPanel) {
-                var request;
-                // sendout dim request for unselected tab
-                if (previousPanel) {
-                    request = dimReqBuilder(previousPanel.layer.getId());
-                    sandbox.request(me.instance.getName(), request);
-                }
-                me.selectedTab = selectedPanel;
-                if (selectedPanel) {
-                    me.updateData(selectedPanel.layer);
-                    // sendout highlight request for selected tab
-                    if (me.active) {
-                        request = hlReqBuilder(selectedPanel.layer.getId());
+            me.tabsContainer.addTabChangeListener(
+                function (previousPanel, selectedPanel) {
+                    var request;
+                    // sendout dim request for unselected tab
+                    if (previousPanel) {
+                        request = dimReqBuilder(previousPanel.layer.getId());
                         sandbox.request(me.instance.getName(), request);
                     }
+                    me.selectedTab = selectedPanel;
+                    if (selectedPanel) {
+                        me.updateData(selectedPanel.layer);
+                        // sendout highlight request for selected tab
+                        if (me.active) {
+                            request = hlReqBuilder(selectedPanel.layer.getId());
+                            sandbox.request(me.instance.getName(), request);
+                        }
+                    }
                 }
-            });
-            this.tabsContainer.insertTo(flyout);
+            );
+            me.tabsContainer.insertTo(flyout);
         },
 
         /**
@@ -155,23 +173,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
          */
         layerAdded: function (layer) {
             var me = this,
-                panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
+                panel = Oskari.clazz.create(
+                    'Oskari.userinterface.component.TabPanel'
+                );
+
             panel.setTitle(layer.getName());
-            panel.getContainer().append(this.instance.getLocalization('loading'));
+            panel.getContainer().append(
+                this.instance.getLocalization('loading')
+            );
             panel.layer = layer;
             this.layers['' + layer.getId()] = panel;
             this.tabsContainer.addPanel(panel);
-            panel.setTitleIcon('icon-funnel', function(event){
+            panel.setTitleIcon('icon-funnel', function (event) {
                 me.addFilterFunctionality(event, layer);
             });
         },
 
-        turnOnClickOff: function() {
+        turnOnClickOff: function () {
             var me = this;
             me.filterDialog.popup.dialog.off('click', '.add-link');
         },
 
-        addFilterFunctionality: function(event, layer) {
+        addFilterFunctionality: function (event, layer) {
             var me = this,
                 loc = this.instance.getLocalization('layer'),
 
@@ -185,18 +208,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                 addLinkToAggregateValues: isAggregateValueAvailable,
                 loc: loc
             };
-            me.filterDialog = Oskari.clazz.create('Oskari.userinterface.component.FilterDialog', loc, fixedOptions);
+            me.filterDialog = Oskari.clazz.create(
+                'Oskari.userinterface.component.FilterDialog',
+                loc,
+                fixedOptions
+            );
 
             me.filterDialog.setUpdateButtonHandler(function (filters) {
                 // throw event to new wfs
                 var event = me.instance.sandbox.getEventBuilder('WFSSetPropertyFilter')(filters, layer.getId());
                 me.instance.sandbox.notifyAll(event);
             });
-            
-            me.aggregateAnalyseFilter = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.aggregateAnalyseFilter', me.instance, me.instance.getLocalization('layer'), me.filterDialog);
+
+            me.aggregateAnalyseFilter = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.featuredata2.aggregateAnalyseFilter',
+                me.instance,
+                me.instance.getLocalization('layer'),
+                me.filterDialog
+            );
 
             if (me.service) {
-                me.filterDialog.createFilterDialog(layer, function() {
+                me.filterDialog.createFilterDialog(layer, function () {
                     me.service._returnAnalysisOfTypeAggregate(_.bind(me.aggregateAnalyseFilter.addAggregateFilterFunctionality, me));
                 });
             } else {
@@ -206,14 +238,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
         },
 
         // function gives value to addLinkToAggregateValues (true/false) 
-        checkIfAggregateValuesAreAvailable: function() {
-            this.service = this.instance.sandbox.getService('Oskari.analysis.bundle.analyse.service.AnalyseService');
+        checkIfAggregateValuesAreAvailable: function () {
+            this.service = this.instance.sandbox.getService(
+                'Oskari.analysis.bundle.analyse.service.AnalyseService'
+            );
             if (!this.service) {
                 return false;
             }
             return true;
         },
-        
+
         /**
          * @method layerRemoved
          * @param {Oskari.mapframework.domain.WfsLayer} layer
@@ -223,6 +257,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
         layerRemoved: function (layer) {
             var layerId = '' + layer.getId(),
                 panel = this.layers[layerId];
+
             this.tabsContainer.removePanel(panel);
             // clean up
             if (panel) {
@@ -250,6 +285,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                 panel = this.layers['' + layer.getId()],
                 selection = null,
                 i;
+
             if (panel.grid) {
                 selection = panel.grid.getSelection();
             }
@@ -263,22 +299,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
             // in scale, proceed
             this._prepareData(layer);
 
-            if (selection && selection.length > 0 && typeof selection[0].featureId != 'undefined') {
-                for (i = 0; i < selection.length; ++i) {
+            if (selection && selection.length > 0 && typeof selection[0].featureId !== 'undefined') {
+                for (i = 0; i < selection.length; i += 1) {
                     panel.grid.select(selection[i].featureId, true);
                 }
             }
 
             // mapClick
             if (panel.grid && layer.getClickedFeatureIds().length > 0) {
-                for (i = 0; i < layer.getClickedFeatureIds().length; ++i) {
+                for (i = 0; i < layer.getClickedFeatureIds().length; i += 1) {
                     panel.grid.select(layer.getClickedFeatureIds()[i], true);
                 }
             }
 
             // filter
             if (panel.grid && layer.getSelectedFeatures().length > 0) {
-                for (i = 0; i < layer.getSelectedFeatures().length; ++i) {
+                for (i = 0; i < layer.getSelectedFeatures().length; i += 1) {
                     panel.grid.select(layer.getSelectedFeatures()[i][0], true);
                 }
             }
@@ -390,7 +426,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
          * @method _addNumericColumnRenderers
          * @private
          * @param {Grid} Grid instance
-         * Adds column renderers for numeric columns, each renderer rendering 
+         * Adds column renderers for numeric columns, each renderer rendering
          * the numbers with the highest decimal count found in the column.
          */
         _addNumericColumnRenderers: function (grid) {
@@ -445,40 +481,44 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
             }
         },
 
+        // helper for removing item (indexOf is not in IE8)
+        remove_item: function (a, val) {
+            var key;
+            for (key in a) {
+                if (a[key] === val) {
+                    a.splice(key, 1);
+                    break;
+                }
+            }
+            return a;
+        },
+
         /**
-         * @method _prepareData
-         * @param {Oskari.mapframework.domain.WfsLayer} layer
-         *           WFS layer that was added
-         * @param {Object} data
-         *           WFS data JSON
+         * @private @method _prepareData
          * Updates data for layer
+         *
+         * @param {Oskari.mapframework.domain.WfsLayer} layer
+         * WFS layer that was added
+         * @param {Object} data
+         * WFS data JSON
+         *
          */
         _prepareData: function (layer) {
             var me = this,
                 panel = this.layers['' + layer.getId()],
                 isOk = this.tabsContainer.isSelected(panel);
+
             if (isOk) {
                 panel.getContainer().empty();
 
                 // create model
-                var model = Oskari.clazz.create('Oskari.userinterface.component.GridModel');
+                var model = Oskari.clazz.create(
+                    'Oskari.userinterface.component.GridModel'
+                );
                 model.setIdField('__fid');
 
                 // hidden fields (hide all - remove if not empty)
                 var hiddenFields = layer.getFields().slice(0);
-
-                // FIXME why are we creating a global here? It's actually used in _addFeatureValues
-                // helper for removing item (indexOf is not in IE8)
-               remove_item = function (a, val) {
-                    var key;
-                    for (key in a) {
-                        if (a[key] == val) {
-                            a.splice(key, 1);
-                            break;
-                        }
-                    }
-                    return a;
-                };
 
                 // get data
                 var featureData,
@@ -488,8 +528,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                     features = layer.getActiveFeatures().slice(0),
                     selectedFeatures = layer.getSelectedFeatures().slice(0); // filter
 
-                this._addFeatureValues(model, fields, hiddenFields, features, selectedFeatures);
-                this._addFeatureValues(model, fields, hiddenFields, selectedFeatures, null);
+                me._addFeatureValues(model, fields, hiddenFields, features, selectedFeatures);
+                me._addFeatureValues(model, fields, hiddenFields, selectedFeatures, null);
 
                 fields = model.getFields();
                 hiddenFields.push('__fid');
@@ -498,7 +538,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                 hiddenFields.push('geometry');
 
                 // check if properties (fields or locales) have changed
-                if (!panel.fields || !panel.locales || !this._isArrayEqual(fields, panel.fields) || !this._isArrayEqual(locales, panel.locales)) {
+                if (!panel.fields || !panel.locales || !me._isArrayEqual(fields, panel.fields) || !me._isArrayEqual(locales, panel.locales)) {
                     panel.fields = fields;
                     panel.locales = locales;
                     panel.propertiesChanged = true;
@@ -507,12 +547,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                 if (!panel.grid || panel.propertiesChanged) {
                     panel.propertiesChanged = false;
 
-                    var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid', this.instance.getLocalization('columnSelectorTooltip')),
+                    var grid = Oskari.clazz.create(
+                            'Oskari.userinterface.component.Grid',
+                            me.instance.getLocalization('columnSelectorTooltip')
+                        ),
                         k;
+
+                    // Data source & metadata link
+                    grid.setDataSource(
+                        layer.getSource && layer.getSource() ? layer.getSource() : layer.getOrganizationName()
+                    );
+                    grid.setMetadataLink(layer.getMetadataIdentifier());
 
                     // localizations
                     if (locales) {
-                        for (k = 0; k < locales.length; k++) {
+                        for (k = 0; k < locales.length; k += 1) {
                             grid.setColumnUIName(fields[k], locales[k]);
                         }
                     }
@@ -523,10 +572,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                     });
 
                     // set popup handler for inner data
-                    var showMore = this.instance.getLocalization('showmore');
+                    var showMore = me.instance.getLocalization('showmore');
                     grid.setAdditionalDataHandler(showMore,
                         function (link, content) {
-                            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                            var dialog = Oskari.clazz.create(
+                                'Oskari.userinterface.component.Popup'
+                            );
                             dialog.show(showMore, content);
                             dialog.moveTo(link, 'bottom');
                             if (me.dialog) {
@@ -537,8 +588,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
 
                     // helper function for visibleFields
                     var contains = function (a, obj) {
-                        for (var i = 0; i < a.length; i++) {
-                            if (a[i] == obj) {
+                        for (var i = 0; i < a.length; i += 1) {
+                            if (a[i] === obj) {
                                 return true;
                             }
                         }
@@ -548,7 +599,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                     // filter out certain fields
                     var visibleFields = [],
                         i;
-                    for (i = 0; i < fields.length; ++i) {
+
+                    for (i = 0; i < fields.length; i += 1) {
                         if (!contains(hiddenFields, fields[i])) {
                             visibleFields.push(fields[i]);
                         }
@@ -557,7 +609,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                     grid.setVisibleFields(visibleFields);
                     grid.setColumnSelector(true);
                     grid.setResizableColumns(true);
-                    grid.setExcelExporter(layer.getPermission('publish') === 'publication_permission_ok');
+                    grid.setExcelExporter(
+                        layer.getPermission('publish') === 'publication_permission_ok'
+                    );
 
                     panel.grid = grid;
                 }
@@ -568,6 +622,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                 var mapdiv = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule').getMapEl(),
                     content = jQuery('div.oskari-flyoutcontent.featuredata'),
                     flyout = content.parent().parent();
+
                 if (!me.resized) {
                     // Define default size for the object data list
                     flyout.find('div.tab-content').css('max-height', (mapdiv.height() / 4).toString() + 'px');
@@ -580,7 +635,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                 // Wrong tab selected -> ignore (shouldn't happen)
             }
         },
-
 
         /**
          * @method _addFeatureValues
@@ -599,49 +653,49 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                 values;
 
             eachFeature:
-            for (i = 0; i < features.length; i++) {
-                featureData = {};
-                values = features[i];
+                for (i = 0; i < features.length; i += 1) {
+                    featureData = {};
+                    values = features[i];
 
-                // remove from selected if in feature list
-                if (selectedFeatures !== null && selectedFeatures !== undefined && selectedFeatures.length > 0) {
-                    for (k = 0; k < selectedFeatures.length; k++) {
-                        if (values[0] == selectedFeatures[k][0]) { // fid match
-                            selectedFeatures.splice(k, 1);
-                        }
-                    }
-                }
-
-                for (j = 0; j < fields.length; j++) {
-                    if (values[j] === null || values[j] === undefined || values[j] === '') {
-                        featureData[fields[j]] = '';
-                    } else {
-                        // Generate and url links
-                        if (this._isUrlValid(values[j])) {
-                            if (values[j].substring(0,4) === "http") {
-                                urlLink = values[j];
-                            } else {
-                                urlLink = "http://"+values[j];
+                    // remove from selected if in feature list
+                    if (selectedFeatures !== null && selectedFeatures !== undefined && selectedFeatures.length > 0) {
+                        for (k = 0; k < selectedFeatures.length; k += 1) {
+                            if (values[0] === selectedFeatures[k][0]) { // fid match
+                                selectedFeatures.splice(k, 1);
                             }
-                            featureData[fields[j]] = '<a href="'+urlLink+'" target="_blank">'+values[j]+'</a>';
-                        } else {
-                            featureData[fields[j]] = values[j];
                         }
-                        // remove from empty fields
-                        remove_item(hiddenFields, fields[j]);
                     }
-                }
 
-                // Remove this when better solution to handle duplicates is implemented
-                var tableData = model.getData();
-                for (j = 0; j < tableData.length; ++j) {
-                    if (tableData[j]["__fid"] === featureData["__fid"]) {
-                        continue eachFeature;
+                    for (j = 0; j < fields.length; j += 1) {
+                        if (values[j] === null || values[j] === undefined || values[j] === '') {
+                            featureData[fields[j]] = '';
+                        } else {
+                            // Generate and url links
+                            if (this._isUrlValid(values[j])) {
+                                if (values[j].substring(0, 4) === 'http') {
+                                    urlLink = values[j];
+                                } else {
+                                    urlLink = 'http://' + values[j];
+                                }
+                                featureData[fields[j]] = '<a href="' + urlLink + '" target="_blank">' + values[j] + '</a>';
+                            } else {
+                                featureData[fields[j]] = values[j];
+                            }
+                            // remove from empty fields
+                            this.remove_item(hiddenFields, fields[j]);
+                        }
                     }
-                }
 
-                model.addData(featureData);
-            }
+                    // Remove this when better solution to handle duplicates is implemented
+                    var tableData = model.getData();
+                    for (j = 0; j < tableData.length; j += 1) {
+                        if (tableData[j].__fid === featureData.__fid) {
+                            continue eachFeature;
+                        }
+                    }
+
+                    model.addData(featureData);
+                }
         },
 
         /**
@@ -652,8 +706,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
          *
          * Checks if a url is valid
          */
-        _isUrlValid: function(url) {
-            if ((!url)||(typeof url !== "string")){
+        _isUrlValid: function (url) {
+            if ((!url) || (typeof url !== 'string')) {
                 return false;
             }
             var re = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/|www\.)[a-zåÅäÄöÖ0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/;
@@ -669,13 +723,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
          * Checks if the arrays are equal
          */
         _isArrayEqual: function (current, old) {
+            var i;
+
             if (old.length !== current.length) {
                 // arrays have different lengths, no way are they equal
                 return false;
             }
 
-            for (var i = 0; i < current.length; i++) {
-                if (current[i] != old[i]) {
+            for (i = 0; i < current.length; i += 1) {
+                if (current[i] !== old[i]) {
                     return false;
                 }
             }
@@ -707,8 +763,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
 
         /**
          * @method featureSelected
+         *
          * @param {Oskari.mapframework.bundle.mapwfs.event.WFSFeaturesSelectedEvent} event
          * Handles changes on the UI when a feature has been selected (highlights grid row)
+         *
          */
         featureSelected: function (event) {
             if (!this.active) {
@@ -719,10 +777,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                 panel = this.layers['' + layer.getId()],
                 fids = event.getWfsFeatureIds(),
                 i;
+
             if (fids !== null && fids !== undefined && fids.length > 0) {
                 panel.grid.select(fids[0], event.isKeepSelection());
                 if (fids.length > 1) {
-                    for (i = 1; i < fids.length; ++i) {
+                    for (i = 1; i < fids.length; i += 1) {
                         panel.grid.select(fids[i], true);
                     }
                 }
@@ -733,9 +792,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
 
         /**
          * @method setEnabled
-         * @param {Boolean} isEnabled
          * True to enable grid functionality
          * False to disable and stop reacting to any map movements etc
+         *
+         * @param {Boolean} isEnabled
+         *
          */
         setEnabled: function (isEnabled) {
             if (this.active == isEnabled) {
@@ -747,16 +808,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                 request;
 
             // feature info activation disabled if object data grid flyout active and vice versa
-            var gfiReqBuilder = sandbox.getRequestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
+            var gfiReqBuilder = sandbox.getRequestBuilder(
+                'MapModulePlugin.GetFeatureInfoActivationRequest'
+            );
             if (gfiReqBuilder) {
-                sandbox.request(this.instance.getName(), gfiReqBuilder(!this.active));
+                sandbox.request(
+                    this.instance.getName(),
+                    gfiReqBuilder(!this.active)
+                );
             }
 
             // disabled
             if (!this.active) {
                 if (this.selectedTab) {
                     // dim possible highlighted layer
-                    var dimReqBuilder = sandbox.getRequestBuilder('DimMapLayerRequest');
+                    var dimReqBuilder = sandbox.getRequestBuilder(
+                        'DimMapLayerRequest'
+                    );
                     request = dimReqBuilder(this.selectedTab.layer.getId());
                     sandbox.request(this.instance.getName(), request);
                 }
@@ -771,7 +839,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
             else {
                 if (this.selectedTab) {
                     // highlight layer if any
-                    var hlReqBuilder = sandbox.getRequestBuilder('HighlightMapLayerRequest');
+                    var hlReqBuilder = sandbox.getRequestBuilder(
+                        'HighlightMapLayerRequest'
+                    );
                     request = hlReqBuilder(this.selectedTab.layer.getId());
                     sandbox.request(this.instance.getName(), request);
 
@@ -782,9 +852,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
         }
     }, {
         /**
-         * @property {String[]} protocol
-         * @static
+         * @static @property {String[]} protocol
          */
-        'protocol': ['Oskari.userinterface.Flyout']
-    });
-
+        protocol: ['Oskari.userinterface.Flyout']
+    }
+);

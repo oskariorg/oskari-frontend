@@ -5,7 +5,10 @@ $secondaryFieldWidth: 80px;
 $unitMargin: 6px;
 
 // Buttons
-button, input[type=button], input[type=reset], input[type=submit] {
+button,
+input[type=button],
+input[type=reset],
+input[type=submit] {
     &.oskari-formcomponent {
         margin-top: $unitMargin;
     }
@@ -24,7 +27,8 @@ fieldset.oskari-formcomponent {
 }
 
 // Inputs, selects, etc.
-fieldset.oskari-formcomponent label, label.oskari-formcomponent {
+fieldset.oskari-formcomponent label,
+label.oskari-formcomponent {
     display: block;
     clear: both;
     // TODO explain magic number
@@ -54,7 +58,8 @@ fieldset.oskari-formcomponent label, label.oskari-formcomponent {
         width: $fieldWidth;
     }
 
-    input, textarea {
+    input,
+    textarea {
 
         + .icon-close {
             display: none;
@@ -128,6 +133,7 @@ label.oskari-formcomponent.oskari-numberinput .input-controls:hover .icon-close 
 }
 
 // group's radio buttons are essentially a single component
+fieldset.oskari-formcomponent.oskari-checkboxgroup,
 fieldset.oskari-formcomponent.oskari-radiobuttongroup {
     margin-bottom: $unitMargin * 2;
 

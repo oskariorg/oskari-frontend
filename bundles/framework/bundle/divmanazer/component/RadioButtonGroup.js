@@ -136,6 +136,7 @@ Oskari.clazz.define('Oskari.userinterface.component.RadioButtonGroup',
         },
 
         getTitle: function () {
+            'use strict';
             return this._titleEl.textContent;
         },
 

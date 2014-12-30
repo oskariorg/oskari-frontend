@@ -5,8 +5,9 @@
  */
 Oskari.clazz.define('Oskari.userinterface.component.buttons.OkButton',
     /**
-     * @method create called automatically on construction
-     * @static
+     * @static @method create called automatically on construction
+     *
+     *
      */
     function () {
         var loc = Oskari.getLocalization('DivManazer');
@@ -15,6 +16,6 @@ Oskari.clazz.define('Oskari.userinterface.component.buttons.OkButton',
     },
     {},
     {
-        "extend": ["Oskari.userinterface.component.Button"]
+        extend: ['Oskari.userinterface.component.Button']
     }
 );

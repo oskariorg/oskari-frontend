@@ -181,6 +181,20 @@ input.focus, textarea.focus, .ie6 input.focus, .ie6 textarea.focus {
 	filter: alpha(opacity=50);
 }
 
+fieldset:disabled label > span,
+form:disabled label > span,
+label > input:disabled + span {
+    opacity: 0.5;
+}
+
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled {
+    cursor: default;
+    opacity: 0.5;
+}
+
 label > input {
     vertical-align: middle;
 }
