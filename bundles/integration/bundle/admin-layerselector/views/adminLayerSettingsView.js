@@ -187,7 +187,13 @@ define([
                 var me = this,
                     supportedLanguages = Oskari.getSupportedLanguages(),
                     opacity = 100,
-                    styles = [];
+                    lcId,
+                    layerGroups,
+                    urlInput,
+                    url,
+                    urlSource = [],
+                    i,
+                    j;
                 if (!me.model) {
                     me.model = this._createNewModel(layerType);
                     this.listenTo(this.model, 'change', this.render);
@@ -233,6 +239,33 @@ define([
                         var sldr = me.$el.find('.layout-slider');
                         sldr.slider('value', jQuery(this).val());
                     });
+                }
+                // Layer interface autocomplete
+                lcId = me.$el.parents('.accordion').attr('lcid');
+                if (typeof lcId !== 'undefined') {
+                    urlInput = me.$el.find('input[type=text]#add-layer-interface');
+                    if (urlInput.length > 0 ) {
+                        layerGroups = me.options.instance.models.organization.layerGroups;
+                        for (i=0; i<layerGroups.length; i++) {
+                            if (layerGroups[i].id.toString() === lcId) {
+                                for (j=0; j<layerGroups[i].models.length; j++) {
+                                    url = layerGroups[i].models[j].getAdmin().url;
+                                    if ((typeof url !== 'undefined')&&(jQuery.inArray(url,urlSource) === -1)) {
+                                        urlSource.push(url);
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                        if (urlSource.length > 0) {
+                            urlSource.sort();
+                            urlInput.autocomplete({
+                                delay: 300,
+                                minLength: 0,
+                                source: urlSource
+                            });
+                        }
+                    }
                 }
             },
             _createNewModel: function (type) {
