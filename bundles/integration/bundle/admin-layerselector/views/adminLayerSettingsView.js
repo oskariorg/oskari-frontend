@@ -72,6 +72,9 @@ define([
                 this.capabilitiesTemplate = _.template(CapabilitiesTemplate);
                 _.bindAll(this);
 
+                // Progress spinner
+                this.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
+
                 this._rolesUpdateHandler();
                 if (this.model) {
                     // listenTo will remove dead listeners, use it instead of on()
@@ -95,6 +98,8 @@ define([
              */
             render: function () {
                 var me = this;
+                var spinnerContainer;
+
                 // set id for this layer
                 if (me.model && me.model.getId()) {
                     me.$el.attr('data-id', me.model.getId());
@@ -125,6 +130,12 @@ define([
                         supportedTypes : me.supportedTypes,
                         localization: me.options.instance.getLocalization('admin')
                     }));
+                }
+
+                // Append a progress spinner
+                spinnerContainer = me.instance.view.container.parent().parent();
+                if (!spinnerContainer.has(me.progressSpinner).length > 0) {
+                    me.progressSpinner.insertTo(spinnerContainer);
                 }
             },
             /**
@@ -176,7 +187,13 @@ define([
                 var me = this,
                     supportedLanguages = Oskari.getSupportedLanguages(),
                     opacity = 100,
-                    styles = [];
+                    lcId,
+                    layerGroups,
+                    urlInput,
+                    url,
+                    urlSource = [],
+                    i,
+                    j;
                 if (!me.model) {
                     me.model = this._createNewModel(layerType);
                     this.listenTo(this.model, 'change', this.render);
@@ -222,6 +239,33 @@ define([
                         var sldr = me.$el.find('.layout-slider');
                         sldr.slider('value', jQuery(this).val());
                     });
+                }
+                // Layer interface autocomplete
+                lcId = me.$el.parents('.accordion').attr('lcid');
+                if (typeof lcId !== 'undefined') {
+                    urlInput = me.$el.find('input[type=text]#add-layer-interface');
+                    if (urlInput.length > 0 ) {
+                        layerGroups = me.options.instance.models.organization.layerGroups;
+                        for (i=0; i<layerGroups.length; i++) {
+                            if (layerGroups[i].id.toString() === lcId) {
+                                for (j=0; j<layerGroups[i].models.length; j++) {
+                                    url = layerGroups[i].models[j].getAdmin().url;
+                                    if ((typeof url !== 'undefined')&&(jQuery.inArray(url,urlSource) === -1)) {
+                                        urlSource.push(url);
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                        if (urlSource.length > 0) {
+                            urlSource.sort();
+                            urlInput.autocomplete({
+                                delay: 300,
+                                minLength: 0,
+                                source: urlSource
+                            });
+                        }
+                    }
                 }
             },
             _createNewModel: function (type) {
@@ -464,6 +508,8 @@ define([
                 }
 
 
+                // Progress spinner
+                me.progressSpinner.start();
                 // Layer class id aka. orgName id aka groupId
                 data.groupId = lcId;
                 var sandbox = me.instance.getSandbox();
@@ -473,11 +519,15 @@ define([
                     dataType: 'json',
                     url: sandbox.getAjaxUrl() + 'action_route=SaveLayer',
                     success: function (resp) {
+                        var success = true;
+                        me.progressSpinner.stop();
                         // response should be a complete JSON for the new layer
                         if (!resp) {
                             alert(me.instance.getLocalization('admin').update_or_insert_failed);
+                            success = false;
                         } else if (resp.error) {
                             alert(me.instance.getLocalization('admin')[resp.error] || resp.error);
+                            success = false;
                         }
                         // happy case - we got id
                         if (resp.id) {
@@ -504,9 +554,14 @@ define([
                         }
                         if (resp.warn) {
                             alert(me.instance.getLocalization('admin')[resp.warn] || resp.warn);
+                            success = false;
+                        }
+                        if (success) {
+                            alert(me.instance.getLocalization('admin')['success']);
                         }
                     },
                     error: function (jqXHR, textStatus) {
+                        me.progressSpinner.stop();
                         if (jqXHR.status !== 0) {
                             var loc = me.instance.getLocalization('admin'),
                                 err = loc.update_or_insert_failed;
@@ -662,6 +717,9 @@ define([
 
                 e.stopPropagation();
 
+                // Progress spinner
+                me.progressSpinner.start();
+
                 var serviceURL = form.find('#add-layer-interface').val(),
                     layerType = form.find('#add-layer-layertype').val(),
                     user = form.find('#add-layer-username').val(),
@@ -689,9 +747,11 @@ define([
                     },
                     url: baseUrl + 'action_route=GetWSCapabilities',
                     success: function (resp) {
+                        me.progressSpinner.stop();
                         me.__capabilitiesResponseHandler(layerType, resp);
                     },
                     error: function (jqXHR, textStatus) {
+                        me.progressSpinner.stop();
                         if (jqXHR.status !== 0) {
                             alert(me.instance.getLocalization('admin').metadataReadFailure);
                         }

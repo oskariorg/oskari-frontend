@@ -171,10 +171,12 @@ Oskari.registerLocalization({
             "interfaceAddressDesc": "Anna rajapinnan osoite ilman ?-merkkiä ja sen jälkeisiä parametreja.",
             "viewingRightsRoles": "Katseluoikeudet rooleille",
             "metadataReadFailure": "Karttatason metatietojen haku epäonnistui.",
+            "permissionFailure": "Virheellinen käyttäjätunnus tai salasana.",
             "mandatory_field_missing": "Pakollinen tieto:",
             "invalid_field_value": "Virheellinen arvo:",
             "operation_not_permitted_for_layer_id": "Käyttöoikeutesi eivät riitä tason muokkaamiseen tai lisäämiseen.",
-            "no_layer_with_id": "Virhe: Karttatasoa ei löytynyt. Se on mahdollisesti jo poistettu."
+            "no_layer_with_id": "Virhe: Karttatasoa ei löytynyt. Se on mahdollisesti jo poistettu.",
+            "success": "Tallennus onnistui."
         },
         "cancel": "Peruuta",
         "add": "Lisää",
