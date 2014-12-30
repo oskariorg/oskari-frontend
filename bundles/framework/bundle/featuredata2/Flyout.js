@@ -196,6 +196,7 @@ Oskari.clazz.define(
 
         addFilterFunctionality: function (event, layer) {
             var me = this,
+                prevJson,
                 loc = this.instance.getLocalization('layer'),
 
                 // this is needed to add the functionality to filter with aggregate analyse values
@@ -228,7 +229,7 @@ Oskari.clazz.define(
             );
 
             if (me.service) {
-                me.filterDialog.createFilterDialog(layer, function () {
+                me.filterDialog.createFilterDialog(layer, prevJson, function() {
                     me.service._returnAnalysisOfTypeAggregate(_.bind(me.aggregateAnalyseFilter.addAggregateFilterFunctionality, me));
                 });
             } else {
