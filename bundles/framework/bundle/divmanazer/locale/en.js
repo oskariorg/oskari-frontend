@@ -254,7 +254,7 @@ Oskari.registerLocalization(
                     "xlsx": "Excel",
                     "csv": "CSV"
                 },
-                "separator": {
+                "delimiter": {
                     "title": "CSV-file separator",
                     "comma": "Comma",
                     "semicolon": "Semicolon",
