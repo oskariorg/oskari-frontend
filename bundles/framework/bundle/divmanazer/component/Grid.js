@@ -872,8 +872,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 exportButton.setHandler(function () {
                     var values = exportForm.getValues({});
                     values.data = me._getTableData(values.columns !== 'all');
-                    console.log(values);
-                    console.table(values.data);
                     exportForm.getElement().elements.data.value = JSON.stringify(values.data);
                     exportForm.submit();
                 });
@@ -922,7 +920,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 format = Oskari.clazz.create(
                     'Oskari.userinterface.component.RadioButtonGroup'
                 ),
-                separator = Oskari.clazz.create(
+                delimiter = Oskari.clazz.create(
                     'Oskari.userinterface.component.RadioButtonGroup'
                 ),
                 additional = Oskari.clazz.create(
@@ -935,7 +933,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             form.addClass('oskari-grid-export');
             form.addClass('clearfix');
             form.setAction(
-                me.getSandbox().getAjaxUrl() + 'action_route=GetTableFile'
+                Oskari.getSandbox().getAjaxUrl() + 'action_route=ExportTableFile'
             );
             form.setMethod('POST');
 
@@ -955,25 +953,25 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             );
             columns.setValue('visible');
 
-            separator.setName('separator');
-            separator.setTitle(loc.separator.title);
-            separator.setOptions(
+            delimiter.setName('delimiter');
+            delimiter.setTitle(loc.delimiter.title);
+            delimiter.setOptions(
                 [
                     {
-                        title: loc.separator.comma,
+                        title: loc.delimiter.comma,
                         value: ','
                     },
                     {
-                        title: loc.separator.semicolon,
+                        title: loc.delimiter.semicolon,
                         value: ';'
                     },
                     {
-                        title: loc.separator.tabulator,
-                        value: '\t'
+                        title: loc.delimiter.tabulator,
+                        value: 'tab'
                     }
                 ]
             );
-            separator.setValue(',');
+            delimiter.setValue(',');
 
             format.setName('format');
             format.setTitle(loc.format.title);
@@ -990,7 +988,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 ]
             );
             format.setHandler(function (value) {
-                separator.setEnabled(value === 'CSV');
+                delimiter.setEnabled(value === 'CSV');
             });
             format.setValue('XLSX');
 
@@ -1023,7 +1021,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
 
             form.addComponent(format);
             form.addComponent(columns);
-            form.addComponent(separator);
+            form.addComponent(delimiter);
             form.addComponent(additional);
             form.getElement().appendChild(input);
 
