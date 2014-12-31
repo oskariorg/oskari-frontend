@@ -172,10 +172,12 @@ Oskari.registerLocalization(
             "interfaceAddressDesc": "Gränssnittjänstens URL utan ? och tillläggande parameter",
             "viewingRightsRoles": "Kollar rättigheter roller",
             "metadataReadFailure": "Fetching layer metadata failed.",
+            "permissionFailure": "NOT TRANSLATED",
             "mandatory_field_missing": "Nödvändig uppgift:",
             "invalid_field_value": "Ogiltigt värde:",
             "operation_not_permitted_for_layer_id": "Åtgärden är inte tillåten för kartlager",
-            "no_layer_with_id": "Ingen kartlagret hittades med id"
+            "no_layer_with_id": "Ingen kartlagret hittades med id",
+            "success": "NOT TRANSLATED"
         },
         "cancel": "Tillbaka",
         "add": "Tillägg",
