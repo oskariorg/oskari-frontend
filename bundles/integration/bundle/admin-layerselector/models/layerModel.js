@@ -270,6 +270,24 @@ if (!Function.prototype.bind) {
                 // TODO: maybe cache result?
                 return this._getLanguages(this.get('_description'));
             },
+
+            /**
+             * Returns metadata url
+             * @returns {String} metadata url
+             */
+            getMetadataUrl: function() {
+                //return this.get('_dataUrl');
+                return this.getDataUrl();
+            },
+
+            /**
+             * Returns legend url
+             * @returns {String} legend url
+             */
+            getLegendUrl: function() {
+                return this.getCurrentStyle().getLegend();
+            },
+
             /**
              * Returns defined language codes or default language if not set
              * @method  _getLanguages

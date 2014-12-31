@@ -88,6 +88,18 @@
         </div>
     </div>
 
+    <div class="add-layer-record">
+        <div class="add-layer-label-area">
+            <label for="add-layer-metainfourl" class="add-layer-label" title="<%= instance.getLocalization('admin').metaInfoUrlDesc %>"><%= instance.getLocalization('admin').metaInfoUrl %></label>
+        </div>
+        <div class="add-layer-input-area">
+            <div class="input-controls">
+                <input type="text" id="add-layer-metainfourl" class="add-layer-input long" placeholder="<%= instance.getLocalization('admin').metaInfoUrlDesc %>" value="<% if(model) { %><%= model.getMetadataUrl() %><% } %>" />
+                <div class="icon-close"></div>
+            </div>
+        </div>
+    </div>
+
     <div class="add-layer-record add-layer-separation">
         <div class="add-layer-label-area">
             <label for="add-layer-layerName" class="add-layer-label" title="<%= instance.getLocalization('admin').wmsName %>"><%= instance.getLocalization('admin').wmsName %></label>
@@ -143,7 +155,7 @@
             <% if(model.getStyles().length > 1) { %>
             <select id="add-layer-style">
                  <% for(var i = 0; i < model.getStyles().length; i++) { %>
-                <option value="<%= model.getStyles()[i].getName() %>" 
+                <option value="<%= model.getStyles()[i].getName() %>">
                     <% if(model.getCurrentStyle().getName() == model.getStyles()[i].getName() ) { %>selected<% } %> ><%= model.getStyles()[i].getTitle() %></option>
                 <% } %>
             </select>
@@ -184,7 +196,7 @@
         </div>
         <div class="add-layer-input-area">
             <div class="input-controls">
-                <textarea rows="3" cols="50" id="add-layer-legendImage" class="add-layer-input long"><% if(model) { %><%= model.getLegendImage() %><% } %></textarea>
+                <textarea rows="3" cols="50" id="add-layer-legendImage" class="add-layer-input long"><% if(model) { %><%= model.getLegendUrl() %><% } %></textarea>
             </div>
         </div>
     </div>
