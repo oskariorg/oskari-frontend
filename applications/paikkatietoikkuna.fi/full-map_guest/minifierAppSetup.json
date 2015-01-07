@@ -412,6 +412,16 @@
 		            }
 		        }
 		    }
+		}, {
+			"bundlename" : "geolocator",
+			"bundleinstancename" : "geolocator",
+			"metadata" : {
+				"Import-Bundle" : {
+					"geolocator" : {
+						"bundlePath" : "../../../packages/framework/bundle/"
+					}
+				}
+			}
 		}
 	]
 }

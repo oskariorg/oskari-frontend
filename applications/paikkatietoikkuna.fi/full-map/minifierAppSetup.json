@@ -530,7 +530,7 @@
 			"metadata" : {
 				"Import-Bundle" : {
 					"geolocator" : {
-						"bundlePath" : "/Oskari/packages/framework/bundle/"
+						"bundlePath" : "../../../packages/framework/bundle/"
 					}
 				}
 			}
