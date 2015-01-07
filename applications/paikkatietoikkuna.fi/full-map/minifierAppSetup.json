@@ -524,6 +524,16 @@
 		            }
 		        }
 		    }
+		}, {
+			"bundlename" : "geolocator",
+			"bundleinstancename" : "geolocator",
+			"metadata" : {
+				"Import-Bundle" : {
+					"geolocator" : {
+						"bundlePath" : "/Oskari/packages/framework/bundle/"
+					}
+				}
+			}
 		}
 	]
 }
