@@ -12,7 +12,9 @@ module.exports = function (grunt) {
                 i;
 
             if (!locale) {
-                grunt.fail.fatal('Locale not defined.');
+                // TODO: rather check languages based on bundles /locale/<lang>.js
+                locale = 'af,ak,am,ar,az,be,bg,bm,bn,bo,br,bs,ca,cs,cy,da,de,dz,ee,el,en,eo,es,et,eu,fa,ff,fi,fo,fr,fy,ga,gd,gl,gu,ha,he,hi,hr,hu,hy,ia,id,ig,is,it,ja,ka,ki,kk,kl,km,kn,ko,ks,kw,ky,lb,lg,ln,lo,lt,lu,lv,mg,mk,ml,mn,mr,ms,mt,my,nb,nd,ne,nl,nn,om,or,os,pa,pl,ps,pt,qu,rm,rn,ro,ru,rw,se,sg,si,sk,sl,sn,so,sq,sr,sv,sw,ta,te,th,ti,tn,to,tr,ts,ug,uk,ur,uz,vi,yi,yo,zh,zu';
+//                grunt.fail.fatal('Locale not defined.');
             }
             locales = locale.split(',').map(
                 Function.prototype.call,
