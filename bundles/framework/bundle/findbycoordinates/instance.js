@@ -62,7 +62,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
          * Returns the search service.
          * 
          * @method getSearchService
-         * @return {Oskari.mapframework.bundle.findbycoordinates.service.FindByCoordinatesSearchService}
+         * @return {Oskari.mapframework.bundle.findbycoordinates.service.FindByCoordinatesService}
          */
         getSearchService: function () {
             return this.searchService;

@@ -1,14 +1,14 @@
 /**
- * @class Oskari.mapframework.bundle.geolocator.service.GeoLocatorSearchService
+ * @class Oskari.mapframework.bundle.findbycoordinates.service.FindByCoordinatesService
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.geolocator.service.GeoLocatorSearchService',
+Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.service.FindByCoordinatesService',
     function(instance, url) {
         this.instance = instance;
         this.sandbox = instance.getSandbox();
         this.url = url;
     }, {
-        __name: 'geolocator.GeoLocatorSearchService',
-        __qname: 'Oskari.mapframework.bundle.geolocator.service.GeoLocatorSearchService',
+        __name: 'findbycoordinates.FindByCoordinatesService',
+        __qname: 'Oskari.mapframework.bundle.findbycoordinates.service.FindByCoordinatesService',
         getQName: function () {
             return this.__qname;
         },
