@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.27
+
+### geolocator
+
+*New bundle!* Creates a service and a user interface for searching nearest address on a map and adds a button to the toolbar for reverse geocode search. Requires server side functionality.
+
 ## 1.26.1
 
 ### statistics
