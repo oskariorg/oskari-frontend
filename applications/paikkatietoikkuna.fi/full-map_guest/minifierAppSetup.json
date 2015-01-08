@@ -413,11 +413,11 @@
 		        }
 		    }
 		}, {
-			"bundlename" : "geolocator",
-			"bundleinstancename" : "geolocator",
+			"bundlename" : "findbycoordinates",
+			"bundleinstancename" : "findbycoordinates",
 			"metadata" : {
 				"Import-Bundle" : {
-					"geolocator" : {
+					"findbycoordinates" : {
 						"bundlePath" : "../../../packages/framework/bundle/"
 					}
 				}

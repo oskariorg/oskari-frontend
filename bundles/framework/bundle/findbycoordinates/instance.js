@@ -1,7 +1,7 @@
 /**
- * @class Oskari.mapframework.bundle.geolocator.GeoLocatorBundleInstance
+ * @class Oskari.mapframework.bundle.findbycoordinates.FindByCoordinatesBundleInstance
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.geolocator.GeoLocatorBundleInstance",
+Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordinatesBundleInstance",
 
     /**
      * @static @method create called automatically on construction
@@ -9,7 +9,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.geolocator.GeoLocatorBundleInsta
      */
     function() {
         this.buttonGroup = 'selectiontools';
-        this.toolName = 'geolocator';
+        this.toolName = 'findbycoordinates';
         this.tool = {
             iconCls: 'icon-find-nearest-address',
             sticky: true,
@@ -17,7 +17,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.geolocator.GeoLocatorBundleInsta
         };
         this.searchUrl = undefined;
     }, {
-        __name : 'geolocator',
+        __name : 'findbycoordinates',
         getName : function () {
             return this.__name;
         },
@@ -52,7 +52,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.geolocator.GeoLocatorBundleInsta
 
             // Create the search service
             this.searchService = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.geolocator.service.GeoLocatorSearchService',
+                'Oskari.mapframework.bundle.findbycoordinates.service.FindByCoordinatesService',
                 this, this.searchUrl);
 
             // Create the tool for searching places by clicking on the map
@@ -62,7 +62,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.geolocator.GeoLocatorBundleInsta
          * Returns the search service.
          * 
          * @method getSearchService
-         * @return {Oskari.mapframework.bundle.geolocator.service.GeoLocatorSearchService}
+         * @return {Oskari.mapframework.bundle.findbycoordinates.service.FindByCoordinatesSearchService}
          */
         getSearchService: function () {
             return this.searchService;
@@ -165,7 +165,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.geolocator.GeoLocatorBundleInsta
                 zoomLevel = sandbox.getMap().getZoom(),
                 srsName = sandbox.getMap().getSrsName(),
                 lonlat = new OpenLayers.LonLat(result.lon, result.lat),
-                popupId = "geolocator-search-result",
+                popupId = "findbycoordinates-search-result",
                 moveReqBuilder = sandbox
                     .getRequestBuilder('MapMoveRequest'),
                 infoBoxReqBuilder = sandbox

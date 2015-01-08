@@ -1,14 +1,14 @@
 /**
- * @class Oskari.mapframework.bundle.geolocator.GeoLocatorBundleInstance
+ * @class Oskari.mapframework.bundle.findbycoordinates.FindByCoordinatesBundleInstance
  *
  * Definition for bundle. See source for details.
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.geolocator.GeoLocatorBundleInstance", function () {
+Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordinatesBundleInstance", function () {
 
 }, {
     "create": function () {
         var me = this,
-            inst = Oskari.clazz.create("Oskari.mapframework.bundle.geolocator.GeoLocatorBundleInstance");
+            inst = Oskari.clazz.create("Oskari.mapframework.bundle.findbycoordinates.FindByCoordinatesBundleInstance");
 
         return inst;
 
@@ -23,33 +23,33 @@ Oskari.clazz.define("Oskari.mapframework.bundle.geolocator.GeoLocatorBundleInsta
 
         "scripts": [{
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/geolocator/service/geolocatorsearchservice.js"
+            "src": "../../../../bundles/framework/bundle/findbycoordinates/service/findbycoordinatesservice.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/geolocator/instance.js"
+            "src": "../../../../bundles/framework/bundle/findbycoordinates/instance.js"
         }, {
             "type": "text/css",
-            "src": "../../../../resources/framework/bundle/geolocator/css/style.css"
+            "src": "../../../../resources/framework/bundle/findbycoordinates/css/style.css"
         }],
 
         "locales": [{
             "lang": "en",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/geolocator/locale/en.js"
+            "src": "../../../../bundles/framework/bundle/findbycoordinates/locale/en.js"
         }, {
             "lang": "fi",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/geolocator/locale/fi.js"
+            "src": "../../../../bundles/framework/bundle/findbycoordinates/locale/fi.js"
         }, {
             "lang": "sv",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/geolocator/locale/sv.js"
+            "src": "../../../../bundles/framework/bundle/findbycoordinates/locale/sv.js"
         }]
     },
     "bundle": {
         "manifest": {
-            "Bundle-Identifier": "geolocator",
-            "Bundle-Name": "geolocator",
+            "Bundle-Identifier": "findbycoordinates",
+            "Bundle-Name": "findbycoordinates",
             "Bundle-Author": [{
                 "Name": "jjk",
                 "Organisation": "nls.fi",
@@ -85,4 +85,4 @@ Oskari.clazz.define("Oskari.mapframework.bundle.geolocator.GeoLocatorBundleInsta
 
 });
 
-Oskari.bundle_manager.installBundleClass("geolocator", "Oskari.mapframework.bundle.geolocator.GeoLocatorBundleInstance");
+Oskari.bundle_manager.installBundleClass("findbycoordinates", "Oskari.mapframework.bundle.findbycoordinates.FindByCoordinatesBundleInstance");

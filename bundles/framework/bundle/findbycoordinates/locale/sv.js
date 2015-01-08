@@ -1,10 +1,10 @@
 Oskari.registerLocalization(
 {
     "lang": "sv",
-    "key": "geolocator",
+    "key": "findbycoordinates",
     "value": {
-        "title": "Geolocator",
-        "desc": "Geolocator",
+        "title": "FindByCoordinates",
+        "desc": "FindByCoordinates",
         "tool": {
             "tooltip": "Sök närmaste adress genom att klicka kartan."
         },

@@ -1,9 +1,9 @@
 Oskari.registerLocalization({
     "lang": "fi",
-    "key": "geolocator",
+    "key": "findbycoordinates",
     "value": {
-        "title": "Geolocator",
-        "desc": "Geolocator",
+        "title": "Koordinaateilla haku",
+        "desc": "Koordinaateilla haku",
         "tool": {
             "tooltip": "Hae lähin osoite osoittamalla karttaa"
         },
