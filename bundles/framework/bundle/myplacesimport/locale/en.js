@@ -11,13 +11,18 @@ Oskari.registerLocalization(
         },
         "flyout": {
             "title": "Dataset Import",
-            "description": "You can import your own datasets in shp-, gpx- or mif/mid file format in a zip file or in kmz file format (zipped kml). You can import files containing at most 5000 features.",
+            "description": "You can import your own datasets in shp-, gpx- or mif/mid file format in a zip file or in kmz file format (zipped kml).",
             "actions": {
                 "cancel": "Cancel",
                 "next": "Next"
             },
             "file": {
-                "submit": "Send"
+                "submit": "Send",
+                "fileOverSizeError": {
+                    "title": "Error",
+                    "message": "Your dataset is too large. Maximun size of the imported dataset is <xx> mb.",
+                    "close": "Close"
+                }
             },
             "layer": {
                 "title": "Save the dataset information:",

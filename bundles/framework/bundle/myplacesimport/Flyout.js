@@ -74,7 +74,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
             var container = this.getEl(),
                 iframe = jQuery(this.__templates.iframe).clone(),
                 tooltipCont = jQuery(this.__templates.help).clone();
-
             container.addClass('myplacesimport');
             container.append(iframe);
             tooltipCont.attr('title', this.locale.help);
@@ -126,6 +125,55 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
             return template;
         },
         /**
+        * Checks the file upload form file size 
+        * @private
+        */
+        __checkFileSize: function(locale){
+            var me = this,
+                maxFileSizeMb = me.instance.conf.maxFileSizeMb,
+                fileSize = null,
+                fileInput = me.container.find('input[name=file-import]');
+
+            //console.log(me.instance.conf.maxFileSizeMb+ ' is size limit');
+
+            // Checks modern browsers (FF, Safari, Opera, Chore and IE 10 >)
+            if(fileInput[0]  && fileInput[0].files) {
+                fileSize = fileInput[0].files[0].size //size in kb
+                fileSize = fileSize / 1048576; //size in mb 
+            }
+
+            // Check IE 9
+            if(fileSize===null && navigator.userAgent.match(/msie/i)) {                
+                try{                
+                    var hasAX = "ActiveXObject" in window;
+                    if(hasAX){
+                        var objFSO = new ActiveXObject("Scripting.FileSystemObject"); 
+                        var filePath = $("#" + fileid)[0].value;
+                        var objFile = objFSO.getFile(filePath);
+                        var fileSize = objFile.size; //size in kb
+                        fileSize = fileSize / 1048576; //size in mb
+                    }
+                } catch(e){
+                    // ActiveX not supported, please check at it's enabled
+                    // If ActiveX not enabled, check file size on backend code.
+                }
+            }
+
+            if(fileSize!==null && fileSize>maxFileSizeMb) {
+                var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                    btn = dialog.createCloseButton(locale.file.fileOverSizeError.close);
+                dialog.show(locale.file.fileOverSizeError.title, locale.file.fileOverSizeError.message.replace(/<xx>/g, maxFileSizeMb), [btn]);
+                dialog.makeModal();
+                dialog.onClose(function() {
+                    me.container.find('form input[type=submit]').prop('disabled', true);
+                });                
+            } else {
+                me.container.find('form input[type=submit]').prop('disabled', false);
+            }
+
+
+        },
+        /**
          * Creates the template for file upload form
          *
          * @method __createFileImportTemplate
@@ -145,7 +193,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
             file.find('div.desc label').html(locale.layer.desc);
             file.find('div.source label').html(locale.layer.source);
             file.find('div.style label').html(locale.layer.style);
-            file.find('div.style-form').html(styleForm.getForm());
+            file.find('div.style-form').html(styleForm.getForm());            
+            file.find('input[name=file-import]').bind('change', function(e){
+                me.__checkFileSize(locale);
+            });
+
             file.find('form')
                 .attr('action', action)
                 .find('input[type=submit]')
