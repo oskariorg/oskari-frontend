@@ -209,15 +209,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
             //baseJson.wmsUrl = "/karttatiili/myplaces?myCat=" + categoryModel.getId() + "&";
             baseJson.name = categoryModel.getName();
             baseJson.id = this._getMapLayerId(categoryModel.getId());
-            if (categoryModel.isPublic()) {
+         //  Permission is always ok for user's own data
                 baseJson.permissions = {
                     'publish': 'publication_permission_ok'
                 };
-            } else {
-                baseJson.permissions = {
-                    'publish': 'no_publication_permission'
-                };
-            }
             return baseJson;
         },
         /**

@@ -1001,9 +1001,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 'Oskari.userinterface.component.CheckboxInput'
             );
             input.setName('dataSource');
-            input.setTitle(loc.additional.dataSource);
-            input.setValue(true);
+            input.setTitle(loc.additional.dataSource);  // Doesn't go to backend in form submit
+            input.setValue(loc.additional.dataSource + ':' + this.getDataSource());
             input.setEnabled(!!this.getDataSource());
+            input.setChecked(!!this.getDataSource());
             additional.addComponent(input);
 
             input = Oskari.clazz.create(
@@ -1011,8 +1012,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             );
             input.setName('metadata');
             input.setTitle(loc.additional.metadata);
-            input.setValue(true);
+            input.setValue(loc.additional.metadata + ':' + this.getMetadataLink());
             input.setEnabled(!!this.getMetadataLink());
+            input.setChecked(!!this.getMetadataLink());
             additional.addComponent(input);
 
             input = document.createElement('input');
