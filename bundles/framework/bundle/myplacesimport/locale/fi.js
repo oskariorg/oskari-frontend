@@ -11,13 +11,18 @@ Oskari.registerLocalization(
         },
         "flyout": {
             "title": "Omien aineistojen tuonti",
-            "description": "Voit tuoda omia aineistoja shp-, gpx- tai mif/mid-tiedostomuodossa zip-pakattuna tai kmz-tiedostomuodossa (pakattu kml). Tuotava tiedosto voi sisältää enintään 5000 kohdetta.",
+            "description": "Voit tuoda omia aineistoja shp-, gpx- tai mif/mid-tiedostomuodossa zip-pakattuna tai kmz-tiedostomuodossa (pakattu kml).",
             "actions": {
                 "cancel": "Peruuta",
                 "next": "Seuraava"
             },
             "file": {
-                "submit": "Lähetä"
+                "submit": "Lähetä",
+                "fileOverSizeError": {
+                    "title": "Virhe",
+                    "message": "Aineistosi on liian suuri. Voit tuoda korkeintaan <xx> megatavun kokoisen pakatun tiedoston.",
+                    "close": "Sulje"
+                }
             },
             "layer": {
                 "title": "Tallenna karttatason tiedot:",
