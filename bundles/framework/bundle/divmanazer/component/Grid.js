@@ -874,6 +874,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     values.data = me._getTableData(values.columns !== 'all');
                     exportForm.getElement().elements.data.value = JSON.stringify(values.data);
                     exportForm.submit();
+                    me.exportPopup.close(true);
                 });
 
                 exportPopupButton.setPrimary(true);

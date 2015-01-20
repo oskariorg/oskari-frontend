@@ -134,9 +134,10 @@ define([
 
                 // Append a progress spinner
                 spinnerContainer = me.instance.view.container.parent().parent();
-                if (!spinnerContainer.has(me.progressSpinner).length > 0) {
+                // FF bug ?
+              /*  if (!spinnerContainer.has(me.progressSpinner).length > 0) {
                     me.progressSpinner.insertTo(spinnerContainer);
-                }
+                } */
             },
             /**
              * @method _rolesUpdateHandler
