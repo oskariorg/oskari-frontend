@@ -233,7 +233,8 @@ Oskari.clazz.define(
         addUserIndicator: function (indicator) {
             var me = this,
                 view = me.getView(),
-                state = me.getState();
+                state = me.getState(),
+                s = me.getSandbox();
 
             state.indicators = state.indicators || [];
             state.indicators.push(indicator);
@@ -256,6 +257,10 @@ Oskari.clazz.define(
                             indicator.meta
                         );
                         me.gridPlugin.addIndicatorMeta(indicator);
+                        s.postRequestByName(
+                            'userinterface.UpdateExtensionRequest',
+                            [me, 'attach']
+                        );
                     }, 1000
                 );
             } else {
