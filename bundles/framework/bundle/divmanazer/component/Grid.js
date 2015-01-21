@@ -497,15 +497,27 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     );
                     for (field in value) {
                         if (value.hasOwnProperty(field)) {
-                            fullFieldNames.push(
-                                {
-                                    key: key + '.' + field,
-                                    baseKey: key,
-                                    subKey: field,
-                                    type: 'default',
-                                    visibility: 'hidden'
-                                }
-                            );
+                            if (dataArray.length > 2) {
+                                fullFieldNames.push(
+                                    {
+                                        key: key + '.' + field,
+                                        baseKey: key,
+                                        subKey: field,
+                                        type: 'default',
+                                        visibility: 'hidden'
+                                    }
+                                );
+                            } else {
+                                fullFieldNames.push(
+                                    {
+                                        key: key + '.' + field,
+                                        baseKey: key,
+                                        subKey: field,
+                                        type: 'default',
+                                        visibility: 'shown'
+                                    }
+                                );
+                            }
                         }
                     }
                 } else {
@@ -544,8 +556,13 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 if (fullFieldNames[i].type === 'default') {
                     link.bind('click', headerClosureMagic(fullFieldNames[i].key));
                 } else if (fullFieldNames[i].type === 'object') {
-                    header.addClass('closedSubTable');
-                    header.addClass('base');
+                    if (dataArray.length > 2) {
+                        header.addClass('closedSubTable');
+                        header.addClass('base');
+                    } else {
+                        header.addClass('openSubTable');
+                        header.addClass('base');
+                    }
                     // Expand or close subtable
                     // FIXME create function outside the loop
                     link.bind('click', function () {
