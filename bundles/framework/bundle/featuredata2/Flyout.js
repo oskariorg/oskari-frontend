@@ -178,6 +178,7 @@ Oskari.clazz.define(
                 );
 
             panel.setTitle(layer.getName());
+            panel.setTooltip(layer.getName());
             panel.getContainer().append(
                 this.instance.getLocalization('loading')
             );
