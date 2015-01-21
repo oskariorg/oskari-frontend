@@ -23,7 +23,6 @@ Oskari.clazz.define(
         me._clazz =
             'Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin';
         me._name = 'ManageStatsPlugin';
-
         me._locale = locale || {};
         me._layer = null;
         me._state = null;
@@ -2436,11 +2435,7 @@ Oskari.clazz.define(
                 grid = this.grid,
                 regions = this.regionCategories[category],
                 currColumn;
-
-            _.each(regions, function (item) {
-                item.sel = 'checked';
-            });
-
+            
             this._setSelectedRegionCategory(category);
 
             // notify dataview that we are starting to update data
@@ -2449,7 +2444,13 @@ Oskari.clazz.define(
             dataView.setItems([]);
             grid.invalidateAllRows();
             // set municipality data
-            dataView.setItems(regions);
+            // [AH-2327] Cannot use setData because it's breaks SlickGrid. Use instead addItem (check before adding at dataView not contains added items).
+            jQuery.each(regions, function(index, item){
+                if(!dataView.getItemById(item.id)){
+                    item.sel = 'checked';
+                    dataView.addItem(item);
+                }
+            });
             // notify data view that we have updated data
             dataView.endUpdate();
             // invalidate() -> the values in the grid are not correct -> invalidate
@@ -2473,7 +2474,6 @@ Oskari.clazz.define(
 
             me.sendStatsData(currColumn);
         },
-
         _setLayerToCategory: function (category) {
             var layer = this.getLayer(),
                 categoryMappings = layer.getCategoryMappings();
