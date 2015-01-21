@@ -100,10 +100,11 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
                 return;
             }
 
-            if(!data) return;
-
             $el = $(el);
             data = $el.data();
+
+            if(!data) return;
+
             if (data.spinner) {
                 data.spinner.stop();
                 delete data.spinner;
