@@ -23,6 +23,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
         me.columns = null;
         me.cleanData = null;
         me.activeRole = null;
+        me.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
     }, {
         /**
          * @method getName
@@ -151,8 +152,9 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
         doSave : function () {
             "use strict";
             var me = this,
-                saveData = {"resource" : JSON.stringify(me.extractSelections())};
-
+                saveData = {"resource" : JSON.stringify(me.extractSelections())},
+                rightsLoc = this.instance._localization.rights;
+            me.progressSpinner.start();
             jQuery.ajax({
                 type: 'POST',
                 url: ajaxUrl + 'action_route=SaveLayerPermission',
@@ -162,9 +164,20 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 data: saveData,
                 success: function () {
                     me.updatePermissionsTable(me.activeRole, "ROLE");
+                    var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                    // TODO kielistä
+                    //dialog.show(rightsLoc.title, rightsLoc.save.success);
+                    me.progressSpinner.stop();
+                    dialog.show('Tallennus onnistui', 'Karttatasojen oikeuksien tallennus onnistui.');
+                    dialog.fadeout();
                 },
                 error: function() {
-                    // TODO add error handling
+                    var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                    // TODO kielistä
+                    //dialog.show(rightsLoc.title, rightsLoc.save.success);
+                    me.progressSpinner.stop();
+                    dialog.show('Tallennus epäonnistui', 'Karttatasojen oikeuksien tallennus epäonnistui.');
+                    dialog.fadeout();
                 }
             });
         },
@@ -209,6 +222,9 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
             flyout.append(container);
             // We're only supporting ROLE ATM, USER support might be added later
             me.getExternalIdsAjaxRequest("ROLE", 0);
+
+            /* progress */
+            this.progressSpinner.insertTo(container);
         },
 
         handleRoleChange: function (role, operation) {
@@ -248,7 +264,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 table += '<th>' + columnHeaders[i].name + '</th>';
             }
             table += '</tr></thead>';
-            
+
             var service = this.instance.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
 
             table += "<tbody>";
@@ -363,6 +379,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
         updatePermissionsTable : function (activeRole, externalType) {
             "use strict";
             var me = this;
+            me.progressSpinner.start();
 
             jQuery.getJSON(ajaxUrl, {
                 action_route: "GetPermissionsLayerHandlers",
@@ -372,6 +389,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                //resourceType: "WMS_LAYER",
                 externalType: externalType
             }, function (result) {
+                me.progressSpinner.stop();
                 // store unaltered data so we can do a dirty check on save
                 me.cleanData = result.resource;
                 var table = me.createLayerRightGrid(me.columns, result.resource);
