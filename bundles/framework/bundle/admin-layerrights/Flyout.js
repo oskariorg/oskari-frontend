@@ -60,6 +60,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          */
         startPlugin : function () {
             "use strict";
+
             this.template = jQuery(
                 '<div class="admin-layerrights">\n' +
                     '   <form method="post" id="admin-layerrights-form">' +
@@ -76,7 +77,8 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                     '   </form>' +
                     '</div>\n'
             );
-            var rightsLoc = this.instance._localization.rights;
+            var rightsLoc = this.instance._localization.rights,
+                elParent;
             this.columns = [
                 {id: "name", "name": rightsLoc.name},
                 {id: "isSelected", "name": rightsLoc.rightToPublish},
@@ -84,6 +86,9 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 {id: "isDownloadSelected", "name": rightsLoc.rightToDownload},
                 {id: "isViewPublishedSelected", "name": rightsLoc.rightToPublishView}
             ];
+
+            elParent = this.container.parentElement.parentElement;
+            jQuery(elParent).addClass('admin-layerrights-flyout');
         },
 
         /**
@@ -242,7 +247,8 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
             for (i  = 0; i < columnHeaders.length; i += 1) {
                 table += '<th>' + columnHeaders[i].name + '</th>';
             }
-            table += "</tr></thead>";
+            table += '</tr></thead>';
+            
             var service = this.instance.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
 
             table += "<tbody>";
@@ -277,7 +283,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
 
                 table += "</tr>";
             }
-            table += "</tbody>";
+            table += "</tbody></table>";
             return table;
         },
 
