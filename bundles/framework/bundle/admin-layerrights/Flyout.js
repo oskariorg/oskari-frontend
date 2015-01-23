@@ -148,36 +148,35 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
             }
             return this.state;
         },
-
+        /**
+        * @method doSave
+        * Save layer rights
+        */
         doSave : function () {
             "use strict";
             var me = this,
-                saveData = {"resource" : JSON.stringify(me.extractSelections())},
-                rightsLoc = this.instance._localization.rights;
+                selections = me.extractSelections(),
+                saveData = {"resource" : JSON.stringify(selections)},
+                rightsLoc = this.instance._localization.rights,
+                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+
             me.progressSpinner.start();
             jQuery.ajax({
                 type: 'POST',
                 url: ajaxUrl + 'action_route=SaveLayerPermission',
                 lang: Oskari.getLang(),
-                timestamp: new Date().getTime(),
-               
+                timestamp: new Date().getTime(),               
                 data: saveData,
                 success: function () {
                     me.updatePermissionsTable(me.activeRole, "ROLE");
-                    var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                    // TODO kielistä
-                    //dialog.show(rightsLoc.title, rightsLoc.save.success);
                     me.progressSpinner.stop();
-                    dialog.show('Tallennus onnistui', 'Karttatasojen oikeuksien tallennus onnistui.');
-                    dialog.fadeout();
+                    dialog.show(rightsLoc.success.title, rightsLoc.success.message);
+                    dialog.fadeout(3000);
                 },
                 error: function() {
-                    var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                    // TODO kielistä
-                    //dialog.show(rightsLoc.title, rightsLoc.save.success);
                     me.progressSpinner.stop();
-                    dialog.show('Tallennus epäonnistui', 'Karttatasojen oikeuksien tallennus epäonnistui.');
-                    dialog.fadeout();
+                    dialog.show(rightsLoc.error.title, rightsLoc.error.message);
+                    dialog.fadeout(3000);
                 }
             });
         },
