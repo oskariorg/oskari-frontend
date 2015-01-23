@@ -17,7 +17,15 @@ Oskari.registerLocalization(
             "rightToPublish": "rätt att publicera",
             "rightToView": "rätt att visa",
             "rightToDownload": "rätt att ladda ner",
-            "rightToPublishView": "rätt att visa en publicerat vy"
+            "rightToPublishView": "rätt att visa en publicerat vy",
+            "success" : {
+                "title" : "Rätter har uppdaterats",
+                "message" : "Sparning av rätter lyckas."
+            },
+            "error" : {
+                "title" : "Rätter har inte uppdaterats",
+                "message" : "Sparning av rätter lyckas inte."
+            }
         },
         "save": "Lagra",
         "selectRole": "Rol"
