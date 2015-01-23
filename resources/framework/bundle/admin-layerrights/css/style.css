@@ -27,10 +27,10 @@ table.layer-rights-table tbody {
   overflow: auto; }
   @media screen and (max-height: 800px) {
     table.layer-rights-table tbody {
-      max-height: 300px; } }
+      max-height: 280px; } }
   @media screen and (min-height: 800px) {
     table.layer-rights-table tbody {
-      max-height: 500px; } }
+      max-height: 480px; } }
   table.layer-rights-table tbody tr td {
     width: 40%;
     text-align: center; }

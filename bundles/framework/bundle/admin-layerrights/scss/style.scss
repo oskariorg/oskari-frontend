@@ -36,10 +36,10 @@ table.layer-rights-table {
 	}
 	tbody {
 		@media screen and (max-height: 800px) {
-			max-height: 300px;
+			max-height: 280px;
 		}
 		@media screen and (min-height: 800px) {
-			max-height: 500px;
+			max-height: 480px;
 		}
 		position: relative;
 		display: block;
