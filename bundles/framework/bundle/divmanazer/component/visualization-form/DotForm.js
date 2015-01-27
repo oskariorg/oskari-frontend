@@ -415,6 +415,9 @@ Oskari.clazz.define(
             } else {
                 saveBtn.setHandler(function () {
                     me.renderDialog.close();
+                    if (me.saveCallback) {
+                        me.saveCallback();
+                    }
                 });
             }
             this.saveButton = saveBtn;
@@ -448,6 +451,9 @@ Oskari.clazz.define(
             return this.renderDialog;
         },
 
+        setSaveHandler: function (param) {
+            this.saveCallback = param;
+        },
         /**
          * @method _selectButton
          * Selects the chosen button

@@ -401,6 +401,9 @@ Oskari.clazz.define(
             saveBtn.addClass('primary showSelection');
             saveBtn.setHandler(function () {
                 renderDialog.close();
+                if (me.saveCallback) {
+                    me.saveCallback();
+                }
             });
 
             var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
@@ -418,6 +421,9 @@ Oskari.clazz.define(
             me._updatePreview();
             saveBtn.focus();
             return renderDialog;
+        },
+        setSaveHandler: function (param) {
+            this.saveCallback = param;
         },
 
         /**

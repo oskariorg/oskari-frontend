@@ -56,6 +56,10 @@ Oskari.clazz.define(
         options = options || {};
         this._options = jQuery.extend({}, defaultOptions, options);
 
+        if (this._options.saveCallback) {
+            this.saveCallback = this._options.saveCallback;
+        }
+
         this._formClazzes = this._createFormClazzes(
             this._options.forms,
             this._options.formValues
@@ -289,6 +293,9 @@ Oskari.clazz.define(
                 fValues = formValues[fName];
                 fClazz = this._createFormClazz(fName, fValues);
                 fClazzes[fName] = fClazz;
+                if (this.saveCallback) {
+                    fClazz.setSaveHandler(this.saveCallback);
+                }
             }
 
             return fClazzes;

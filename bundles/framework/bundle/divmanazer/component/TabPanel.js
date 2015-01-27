@@ -128,6 +128,20 @@ Oskari.clazz.define('Oskari.userinterface.component.TabPanel',
             this.html.html(this.content);
         },
         /**
+         * @method getTooltip
+         * @return {String} tooltip
+         */
+        getTooltip: function () {
+            return this.header.title;
+        },
+        /**
+         * @method setTooltip
+         * @param {String} tooltip
+         */
+        setTooltip: function (tooltip) {
+            this.header[0].title = tooltip;
+        },
+        /**
          * @method destroy
          * Destroys the panel/removes it from document
          */
