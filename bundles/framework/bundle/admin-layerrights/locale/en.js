@@ -17,7 +17,15 @@ Oskari.registerLocalization(
             "rightToPublish": "Publish",
             "rightToView": "View",
             "rightToDownload": "Download",
-            "rightToPublishView": "View in Embedded map"
+            "rightToPublishView": "View in Embedded map",
+            "success" : {
+                "title" : "Layer rights saved",
+                "message" : "Layer rights were saved successfully."
+            },
+            "error" : {
+                "title" : "Layer rights not saved",
+                "message" : "Saving of layer rights failed."
+            }
         },
         "save": "Save",
         "selectRole": "Role"
