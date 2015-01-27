@@ -43,6 +43,12 @@ Oskari.clazz.define(
         // if the same column is sorted again
         this.lastSort = null;
         this.drawCoverage = false;
+        this.licenseStatus = {
+            licenseElement: null,
+            callback: null,
+            bindCallbackTo: null,
+            licenseTextSelector: null
+        };
     }, {
         /**
          * @static
@@ -126,6 +132,7 @@ Oskari.clazz.define(
                 '<tr class="resultRow">' +
                 '  <td></td>' +
                 '  <td></td>' +
+                '  <td><div class="licencePlaceholder"></div></td>' +
                 '  <td><div class="layerInfo icon-info"></div></td>' +
                 '  <td><div class="resultRemove icon-close"></div></td>' +
                 '</tr>'
@@ -236,6 +243,17 @@ Oskari.clazz.define(
                     sandbox.registerForEventByName(me, p);
                 }
             }
+
+            this.showLicenseRequestHandler = Oskari.clazz.create(
+                'Oskari.catalogue.bundle.metadatacatalogue.request.ShowLicenseRequestHandler',
+                sandbox,
+                me
+            );
+            sandbox.addRequestHandler(
+                'ShowLicenseRequest',
+                this.showLicenseRequestHandler
+            );
+
 
             // draw ui
             me.createUi();
@@ -914,15 +932,53 @@ Oskari.clazz.define(
                         // Todo: real rating
                         //jQuery(cells[1]).append("*****");
                         jQuery(cells[1]).addClass(me.resultHeaders[1].prop);
-                        jQuery(cells[2]).addClass(me.resultHeaders[2].prop);
-                        jQuery(cells[2]).find('div.layerInfo').click(function () {
+
+                        // Licence link
+                        if(me._isLicense() == true) {
+                            var licenseElement = me.licenseStatus.licenseElement.clone();
+                            // Set license callback
+                            if(me.licenseStatus.callback && typeof me.licenseStatus.callback == 'function') {
+                                // Bind licence click to bindCallbackTo if bindCallbackTo paaram exist
+                                if(me.licenseStatus.bindCallbackTo) {
+                                    licenseElement.find(me.licenseStatus.bindCallbackTo).bind('click', {metadata:row}, function(event){
+                                       me.licenseStatus.callback(event.data.metadata);
+                                    });
+                                }
+                                // Bind license click to root element if no bindCallbackTo selector
+                                else {
+                                    licenseElement.first().bind('click', {metadata: row}, function(event){
+                                       me.licenseStatus.callback(event.data.metadata);
+                                    });
+                                }
+                            }
+
+                            // Set license text
+                            var licenseTextEl = null;
+                            if(me.licenseStatus.licenseTextSelector) {
+                                licenseTextEl = licenseElement.find(me.licenseStatus.licenseTextSelector);                                
+                            }
+                            else {
+                                licenseTextEl = licenseElement.first();
+                            }
+                            if(licenseTextEl.is('a')){
+                                licenseTextEl.html(me.getLocalization('licenseText'));
+                            }
+                            else {
+                                licenseTextEl.val(me.getLocalization('licenseText'));
+                            }
+
+                            jQuery(cells[2]).append(licenseElement);                            
+                        }
+
+                        jQuery(cells[3]).addClass(me.resultHeaders[2].prop);
+                        jQuery(cells[3]).find('div.layerInfo').click(function () {
                             var rn = 'catalogue.ShowMetadataRequest';
                             me.sandbox.postRequestByName(rn, [{
                                 uuid: row.id
                             }]);
                         });
-                        jQuery(cells[3]).addClass(me.resultHeaders[3].prop);
-                        jQuery(cells[3]).find('div.resultRemove').click(function () {
+                        jQuery(cells[4]).addClass(me.resultHeaders[3].prop);
+                        jQuery(cells[5]).find('div.resultRemove').click(function () {
                             jQuery('table.metadataSearchResult tr.res' + i).hide();
                             jQuery('div.metadataResultHeader a.showLink').show();
                         });
@@ -931,7 +987,6 @@ Oskari.clazz.define(
                 })(i);
             }
         },
-
         _addLayerLinks: function (layer, layerList) {
             var me = this,
                 selectedLayers,
@@ -1054,6 +1109,31 @@ Oskari.clazz.define(
                 value = value * -1;
             }
             return value;
+        },
+        /**
+        * @method
+        * Set license status.
+        * @public
+        * @param {jQuery} licenseElement jQuery licence element
+        * @param {Function} callback the callback function
+        * @param {String} bindCallbackTo the jQuery selector where bind click operation
+        * @param {String} licenseTextSelector license text jQuery selector. If it's null then text showed on main element.
+        */
+        setLicenseStatus: function(licenseElement, callback, bindCallbackTo, licenseTextSelector){
+            var me = this;
+            me.licenseStatus.licenseElement = licenseElement,
+            me.licenseStatus.callback = callback,
+            me.licenseStatus.bindCallbackTo = bindCallbackTo;
+            me.licenseStatus.licenseTextSelector = licenseTextSelector;
+        },
+        /**
+        * @method _isLicense
+        * @private
+        * @return {Boolean} is licence
+        */
+        _isLicense: function(){
+            var me = this;
+            return me.licenseStatus.licenseElement !== null;
         },
         /**
          * @method setState

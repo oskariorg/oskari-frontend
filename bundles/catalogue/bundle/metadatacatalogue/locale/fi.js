@@ -48,7 +48,8 @@ Oskari.registerLocalization(
         "searching": "Haetaan…",
         "grid": {
             "name": "Nimi"
-        }
+        },
+        "licenseText": "Hae lisenssi"
     }
 }
 );

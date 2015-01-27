@@ -46,6 +46,7 @@ Oskari.registerLocalization({
         "searching": "Searching…",
         "grid": {
             "name": "Name"
-        }
+        },
+        "licenseText": "Get license"
     }
 });
