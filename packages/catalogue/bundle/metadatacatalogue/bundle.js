@@ -22,25 +22,44 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadatacatalogue.MetadataCatalogue
 	"protocol" : ["Oskari.bundle.Bundle", "Oskari.bundle.BundleInstance", "Oskari.mapframework.bundle.extension.ExtensionBundle"],
 	"source" : {
 
-		"scripts" : [{
-            "type": "text/javascript",
-            "src": "../../../../bundles/catalogue/bundle/metadatacatalogue/service/MetadataOptionService.js"
-        }, {
-            "type": "text/javascript",
-            "src": "../../../../bundles/catalogue/bundle/metadatacatalogue/service/MetadataSearchService.js"
-        }, {
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/featuredata2/plugin/MapSelectionPlugin.js"
-        }, {
-            "type": "text/javascript",
-            "src": "../../../../bundles/catalogue/bundle/metadatacatalogue/event/FinishedDrawingEvent.js"
-        }, {
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/catalogue/bundle/metadatacatalogue/instance.js"
-		}, {
-			"type" : "text/css",
-			"src" : "../../../../resources/catalogue/bundle/metadatacatalogue/css/style.css"
-		}], 
+		"scripts" : [
+			/* service */
+			{
+	            "type": "text/javascript",
+	            "src": "../../../../bundles/catalogue/bundle/metadatacatalogue/service/MetadataOptionService.js"
+	        }, {
+	            "type": "text/javascript",
+	            "src": "../../../../bundles/catalogue/bundle/metadatacatalogue/service/MetadataSearchService.js"
+	        }, 
+	        /* plugin */
+	        {
+	            "type": "text/javascript",
+	            "src": "../../../../bundles/framework/bundle/featuredata2/plugin/MapSelectionPlugin.js"
+	        }, 
+	        /* event */
+	        {
+	            "type": "text/javascript",
+	            "src": "../../../../bundles/catalogue/bundle/metadatacatalogue/event/FinishedDrawingEvent.js"
+	        }, 
+	        /* instance */
+	        {
+				"type" : "text/javascript",
+				"src" : "../../../../bundles/catalogue/bundle/metadatacatalogue/instance.js"
+			}, 
+			/* request */
+	        {
+	            "type": "text/javascript",
+	            "src": "../../../../bundles/catalogue/bundle/metadatacatalogue/request/ShowLicenseRequest.js"
+	        }, {
+	            "type": "text/javascript",
+	            "src": "../../../../bundles/catalogue/bundle/metadatacatalogue/request/ShowLicenseRequestHandler.js"
+	        },
+	        /* css */
+			{
+				"type" : "text/css",
+				"src" : "../../../../resources/catalogue/bundle/metadatacatalogue/css/style.css"
+			}
+		], 
 		"locales" : [  
 		{
 			"lang" : "fi",

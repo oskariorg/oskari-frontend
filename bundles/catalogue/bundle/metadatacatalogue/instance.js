@@ -43,6 +43,13 @@ Oskari.clazz.define(
         // if the same column is sorted again
         this.lastSort = null;
         this.drawCoverage = false;
+        // License status object.
+        this.licenseStatus = {
+            licenseElement: null,
+            licenseTextElement: null,
+            callback: null,
+            bindCallbackTo: null            
+        };
     }, {
         /**
          * @static
@@ -126,6 +133,7 @@ Oskari.clazz.define(
                 '<tr class="resultRow">' +
                 '  <td></td>' +
                 '  <td></td>' +
+                '  <td><div class="licencePlaceholder"></div></td>' +
                 '  <td><div class="layerInfo icon-info"></div></td>' +
                 '  <td><div class="resultRemove icon-close"></div></td>' +
                 '</tr>'
@@ -236,6 +244,17 @@ Oskari.clazz.define(
                     sandbox.registerForEventByName(me, p);
                 }
             }
+
+            this.showLicenseRequestHandler = Oskari.clazz.create(
+                'Oskari.catalogue.bundle.metadatacatalogue.request.ShowLicenseRequestHandler',
+                sandbox,
+                me
+            );
+            sandbox.addRequestHandler(
+                'ShowLicenseRequest',
+                this.showLicenseRequestHandler
+            );
+
 
             // draw ui
             me.createUi();
@@ -912,17 +931,59 @@ Oskari.clazz.define(
 
                         jQuery(cells[0]).append(layerList);
                         // Todo: real rating
-                        //jQuery(cells[1]).append("*****");
+                        // jQuery(cells[1]).append("*****");
                         jQuery(cells[1]).addClass(me.resultHeaders[1].prop);
-                        jQuery(cells[2]).addClass(me.resultHeaders[2].prop);
-                        jQuery(cells[2]).find('div.layerInfo').click(function () {
+
+                        // Licence link
+                        if(me._isLicense() == true) {
+                            var licenseElement = me.licenseStatus.licenseElement.clone(),
+                                callbackElement = null,
+                                licenseTextEl = null;
+                            
+                            // Set license callback
+                            if(me.licenseStatus.callback && typeof me.licenseStatus.callback == 'function') {
+                                // Bind licence click to bindCallbackTo if bindCallbackTo param exist
+                                if(me.licenseStatus.bindCallbackTo) {
+                                    callbackElement = licenseElement.find(me.licenseStatus.bindCallbackTo);
+                                }
+                                // Bind license click to root element if bindCallbackTo is null
+                                else {
+                                    callbackElement =  licenseElement.first();
+                                }
+                                callbackElement.css({'cursor':'pointer'}).bind('click', {metadata: row}, function(event){
+                                   me.licenseStatus.callback(event.data.metadata);
+                                });
+                            }
+
+                            // Set license text
+                            if(me.licenseStatus.licenseTextElement) {
+                                licenseTextEl = licenseElement.find(me.licenseStatus.licenseTextElement);
+                            } else {
+                                licenseTextEl = licenseElement.first();
+                            }
+                            if(licenseTextEl.is('input') ||
+                                licenseTextEl.is('select') ||
+                                licenseTextEl.is('button') ||
+                                licenseTextEl.is('textarea')){
+                                licenseTextEl.val(me.getLocalization('licenseText'));
+                            }
+                            else {                                
+                                licenseTextEl.html(me.getLocalization('licenseText'));
+                            }
+
+                            jQuery(cells[2]).find('div.licencePlaceholder').append(licenseElement);                            
+                        }
+
+                        jQuery(cells[3]).addClass(me.resultHeaders[2].prop);
+                        jQuery(cells[3]).find('div.layerInfo').click(function () {
                             var rn = 'catalogue.ShowMetadataRequest';
                             me.sandbox.postRequestByName(rn, [{
                                 uuid: row.id
                             }]);
                         });
-                        jQuery(cells[3]).addClass(me.resultHeaders[3].prop);
-                        jQuery(cells[3]).find('div.resultRemove').click(function () {
+                        jQuery(cells[4]).addClass(me.resultHeaders[3].prop);
+                        
+                        jQuery(cells[4]).find('div.resultRemove').click(function () {
                             jQuery('table.metadataSearchResult tr.res' + i).hide();
                             jQuery('div.metadataResultHeader a.showLink').show();
                         });
@@ -931,7 +992,6 @@ Oskari.clazz.define(
                 })(i);
             }
         },
-
         _addLayerLinks: function (layer, layerList) {
             var me = this,
                 selectedLayers,
@@ -1054,6 +1114,33 @@ Oskari.clazz.define(
                 value = value * -1;
             }
             return value;
+        },
+        /**
+        * @method
+        * Set license status.
+        * @public
+        * @param {jQuery} licenseElement jQuery licence element
+        * @param {Function} callback the callback function
+        * @param {String} bindCallbackTo the jQuery selector where to bind click operation
+        * @param {String} licenseTextElement license text jQuery selector. If it's null then text showed on main element
+        */
+        setLicenseStatus: function(licenseElement, licenseTextElement, callback, bindCallbackTo){
+            var me = this;
+            me.licenseStatus = {
+                licenseElement: licenseElement,
+                licenseTextElement: licenseTextElement,
+                callback: callback,
+                bindCallbackTo: bindCallbackTo
+            };
+        },
+        /**
+        * @method _isLicense
+        * @private
+        * @return {Boolean} is licence
+        */
+        _isLicense: function(){
+            var me = this;
+            return me.licenseStatus.licenseElement !== null;
         },
         /**
          * @method setState
