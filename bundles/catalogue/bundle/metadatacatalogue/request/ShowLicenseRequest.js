@@ -11,18 +11,13 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatacatalogue.request.ShowLicen
  * @method create called automatically on construction
  * @static
  *
- * @param {jQuery} licenseElement the jQuery element for licence, may be e.g. text, link or button.
- * @param {String} licenseTextElement license text jQuery selector. If it's null then text showed on main element.
- * @param {Function} callback the callback fuction that handles the licenseElement clicks.  
- *                   Metadatacatalogue search result is passed to callback function.
- * @param {String} bindCallbackTo bind callback functionality to this jQuery selector on element param. 
- *                 If bindCallbackTo is null, callback is binded to main element of licenseElement param.
+ * @param {Object} data request data
  */
-function(licenseElement, licenseTextElement, callback, bindCallbackTo) {
-    this._licenseElement = licenseElement;
-    this._licenseTextElement = licenseTextElement;
-    this._callback = callback;
-    this._bindCallbackTo = bindCallbackTo;    
+function(data) {
+    this._licenseElement = data.licenseElement;
+    this._licenseTextElement = data.licenseTextElement;
+    this._callback = data.callback;
+    this._bindCallbackTo = data.bindCallbackTo;    
 }, {
     /** @static @property __name request name */
     __name : "ShowLicenseRequest",
