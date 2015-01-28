@@ -26,10 +26,9 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatacatalogue.request.ShowLicen
         var licenseElement = request.getLicenseElement(),
             callback = request.getCallback(),
             bindCallbackTo = request.getBindCallbackTo(),
-            licenseTextSelector = request.getLicenseTextSelector();
-        
+            licenseTextElement = request.getLicenseTextElement();
         this.sandbox.printDebug("[Oskari.catalogue.bundle.metadatacatalogue.request.ShowLicenseRequest]");
-        this.instance.setLicenseStatus(licenseElement, callback, bindCallbackTo, licenseTextSelector);
+        this.instance.setLicenseStatus(licenseElement, licenseTextElement, callback, bindCallbackTo);
     }
 }, {
     /**
