@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CodeMirror Sandbox - Oskari editor</title>
+  <meta charset="utf-8"/>
+
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+  <link rel=stylesheet href="lib/codemirror.css">
+  <link rel=stylesheet href="addon/lint/lint.css">
+  <link rel=stylesheet href="main.css">
+  <script src="lib/codemirror.js"></script>
+  <script src="mode/xml/xml.js"></script>
+  <script src="mode/javascript/javascript.js"></script>
+  <script src="mode/css/css.js"></script>
+  <script src="mode/htmlmixed/htmlmixed.js"></script>
+  <script src="addon/edit/matchbrackets.js"></script>
+  <script src="//ajax.aspnetcdn.com/ajax/jshint/r07/jshint.js"></script>
+  <script src="https://rawgithub.com/zaach/jsonlint/79b553fb65c192add9066da64043458981b3972b/lib/jsonlint.js"></script>
+  <script src="addon/lint/lint.js"></script>
+  <script src="addon/lint/javascript-lint.js"></script>
+  <script src="addon/lint/json-lint.js"></script>
+</head>
+<body>
+<h3>CodeMirror Sandbox for Oskari</h3>
+<div>
+  This is a Sandbox playground to help developers try out different configurations.
+</div>
+<div id="buttons">
+  <button id="run" >Run</button>
+</div>
+<div class="container">
+<textarea id="editor">
+jQuery(document).ready(function() {
+    var getAppSetupParams = {};
+
+    // populate getappsetup url with possible control parameters
+    if (typeof window.controlParams === 'object') {
+      var key;
+      for (key in window.controlParams) {
+          if (window.controlParams.hasOwnProperty(key)) {
+              getAppSetupParams[key] = window.controlParams[key];
+          }
+      }
+    }
+    // NOTE! expects global variables language and preloaded from encapsulating page
+    if ((typeof window.language !== 'string') || !window.language) {
+        // default to english
+        window.language = 'en';
+    }
+    Oskari.setLang(window.language);
+
+    if (typeof window.preloaded !== 'boolean') {
+        // default to false
+        window.preloaded = false;
+    }
+    Oskari.setPreloaded(window.preloaded);
+
+    // appsetup has been injected as variable setup
+    // usually the appsetup file is retrieved from the server
+//    jQuery.ajax({
+//      type: 'POST',
+//      dataType: 'json',
+//      data : getAppSetupParams,
+//      url: ajaxUrl + 'action_route=GetAppSetup',
+//      success : function(setup) {
+          var app = Oskari.app;
+          app.setApplicationSetup(setup);
+          app.setConfiguration(setup.configuration);
+
+          app.startApplication(function(startupInfos) {
+            // all bundles have been loaded
+          });
+//      }
+//    });
+
+});
+</textarea>
+<textarea id="appsetup">
+{
+    "configuration": {
+        "toolbar": {
+            "state": {
+                "selected": {
+                    "id": "select",
+                    "group": "default-basictools"
+                }
+            },
+            "conf": {
+                "viewtools": {
+                    "link": false,
+                    "print": false
+                }
+            }
+        },
+        "layerselection2": {
+            "state": {},
+            "conf": {}
+        },
+        "search": {
+            "state": {},
+            "conf": {}
+        },
+        "openlayers-default-theme": {
+            "state": {},
+            "conf": {}
+        },
+        "statehandler": {
+            "state": {},
+            "conf": {}
+        },
+        "divmanazer": {
+            "state": {},
+            "conf": {}
+        },
+        "layerselector2": {
+            "state": {
+                "tab": "By Theme",
+                "filter": "",
+                "groups": []
+            },
+            "conf": {}
+        },
+        "metadataflyout": {
+            "state": {},
+            "conf": {}
+        },
+        "coordinatedisplay": {
+            "state": {},
+            "conf": {}
+        },
+        "infobox": {
+            "state": {},
+            "conf": {
+                "adaptable": true
+            }
+        },
+        "mapfull": {
+            "state": {
+                "selectedLayers": [
+                    {
+                        "id": 2,
+                        "opacity": 100
+                    }
+                ],
+                "plugins": {
+                    "MainMapModuleMarkersPlugin": {
+                        "markers": []
+                    }
+                },
+                "zoom": 4,
+                "srs": "EPSG:3067",
+                "north": 6686492,
+                "east": 388220
+            },
+            "conf": {
+                "globalMapAjaxUrl": "/?",
+                "plugins": [
+                    {
+                        "id": "Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin"
+                    },
+                    {
+                        "id": "Oskari.mapframework.mapmodule.WmsLayerPlugin"
+                    },
+                    {
+                        "id": "Oskari.mapframework.mapmodule.MarkersPlugin"
+                    },
+                    {
+                        "id": "Oskari.mapframework.mapmodule.ControlsPlugin"
+                    },
+                    {
+                        "id": "Oskari.mapframework.mapmodule.GetInfoPlugin",
+                        "config": {
+                            "ignoredLayerTypes": [
+                                "WFS"
+                            ]
+                        }
+                    },
+                    {
+                        "id": "Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin"
+                    },
+                    {
+                        "id": "Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin"
+                    },
+                    {
+                        "id": "Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin"
+                    },
+                    {
+                        "id": "Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar"
+                    },
+                    {
+                        "id": "Oskari.mapframework.bundle.mapmodule.plugin.PanButtons"
+                    },
+                    {
+                        "id": "Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugin"
+                    }
+                ],
+                "layers": [
+                    {
+                        "wmsName": "osm_finland:osm-finland",
+                        "params": {},
+                        "baseLayerId": -1,
+                        "type": "wmslayer",
+                        "orgName": "Demo layers",
+                        "refreshRate": 0,
+                        "id": 2,
+                        "realtime": false,
+                        "wmsUrl": "http://avaa.tdata.fi/geoserver/osm_finland/wms",
+                        "name": "OpenStreetMap WMS ETRS-TM35FIN",
+                        "permissions": {
+                            "publish": "no_publication_permission"
+                        },
+                        "subtitle": "",
+                        "opacity": 100,
+                        "inspire": "Others",
+                        "options": {}
+                    }
+                ],
+                "imageLocation": "/Oskari/resources",
+                "user": {
+                    "userID": -1,
+                    "lastName": "guest",
+                    "nickName": "guest",
+                    "roles": [
+                        {
+                            "id": 1,
+                            "name": "Guest"
+                        }
+                    ],
+                    "userUUID": "",
+                    "firstName": "guest",
+                    "loginName": ""
+                }
+            }
+        }
+    },
+    "startupSequence": [
+        {
+            "instanceProps": {},
+            "title": "OpenLayers",
+            "bundleinstancename": "openlayers-default-theme",
+            "fi": "OpenLayers",
+            "sv": "OpenLayers",
+            "en": "OpenLayers",
+            "bundlename": "openlayers-default-theme",
+            "metadata": {
+                "Import-Bundle": {
+                    "openlayers-default-theme": {
+                        "bundlePath": "/Oskari/packages/openlayers/bundle/"
+                    },
+                    "openlayers-full-map": {
+                        "bundlePath": "/Oskari/packages/openlayers/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        },
+        {
+            "instanceProps": {},
+            "title": "Map",
+            "bundleinstancename": "mapfull",
+            "fi": "mapfull",
+            "sv": "mapfull",
+            "en": "mapfull",
+            "bundlename": "mapfull",
+            "metadata": {
+                "Import-Bundle": {
+                    "mapwmts": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "service-base": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "event-map-layer": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "request-map-layer": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "mapmodule-plugin": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "ui-components": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "event-base": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "mapfull": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "core-base": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "oskariui": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "mapwfs2": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "request-base": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "mapstats": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "domain": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "core-map": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "request-map": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "sandbox-base": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "mapmyplaces": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "mapanalysis": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "service-map": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "sandbox-map": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "event-map": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        },
+        {
+            "instanceProps": {},
+            "title": "Oskari DIV Manazer",
+            "fi": "divmanazer",
+            "bundleinstancename": "divmanazer",
+            "sv": "divmanazer",
+            "en": "divmanazer",
+            "bundlename": "divmanazer",
+            "metadata": {
+                "Import-Bundle": {
+                    "divmanazer": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        },
+        {
+            "instanceProps": {},
+            "title": "Toolbar",
+            "bundleinstancename": "toolbar",
+            "fi": "toolbar",
+            "sv": "toolbar",
+            "en": "toolbar",
+            "bundlename": "toolbar",
+            "metadata": {
+                "Import-Bundle": {
+                    "toolbar": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        },
+        {
+            "instanceProps": {},
+            "title": "Infobox",
+            "fi": "infobox",
+            "bundleinstancename": "infobox",
+            "sv": "infobox",
+            "en": "infobox",
+            "bundlename": "infobox",
+            "metadata": {
+                "Import-Bundle": {
+                    "infobox": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        },
+        {
+            "instanceProps": {},
+            "title": "Statehandler",
+            "bundleinstancename": "statehandler",
+            "fi": "statehandler",
+            "sv": "statehandler",
+            "en": "statehandler",
+            "bundlename": "statehandler",
+            "metadata": {
+                "Import-Bundle": {
+                    "statehandler": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        },
+        {
+            "instanceProps": {},
+            "title": "Search",
+            "bundleinstancename": "search",
+            "fi": "search",
+            "sv": "?",
+            "en": "?",
+            "bundlename": "search",
+            "metadata": {
+                "Import-Bundle": {
+                    "search": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        },
+        {
+            "instanceProps": {},
+            "title": "Maplayer selection",
+            "bundleinstancename": "layerselector2",
+            "fi": "layerselector2",
+            "sv": "layerselector2",
+            "en": "layerselector2",
+            "bundlename": "layerselector2",
+            "metadata": {
+                "Import-Bundle": {
+                    "layerselector2": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        },
+        {
+            "instanceProps": {},
+            "title": "Chosen maplayers",
+            "bundleinstancename": "layerselection2",
+            "fi": "layerselection2",
+            "sv": "layerselection2",
+            "en": "layerselection2",
+            "bundlename": "layerselection2",
+            "metadata": {
+                "Import-Bundle": {
+                    "layerselection2": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        },
+        {
+            "instanceProps": {},
+            "title": "Coordinate display",
+            "bundleinstancename": "coordinatedisplay",
+            "fi": "coordinatedisplay",
+            "sv": "coordinatedisplay",
+            "en": "coordinatedisplay",
+            "bundlename": "coordinatedisplay",
+            "metadata": {
+                "Import-Bundle": {
+                    "coordinatedisplay": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        },
+        {
+            "instanceProps": {},
+            "title": "Metadata Flyout",
+            "bundleinstancename": "metadataflyout",
+            "fi": "metadataflyout",
+            "sv": "metadataflyout",
+            "en": "metadataflyout",
+            "bundlename": "metadataflyout",
+            "metadata": {
+                "Import-Bundle": {
+                    "metadataflyout": {
+                        "bundlePath": "/Oskari/packages/catalogue/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        }
+    ]
+}
+</textarea>
+</div>
+<iframe id="sandbox" src="sandbox.html" sandbox="allow-same-origin allow-forms allow-scripts">
+</iframe>
+
+  <script>
+    var editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
+      lineNumbers: true,
+      mode: "javascript",
+      gutters: ["CodeMirror-lint-markers"],
+      lint: true,
+      matchBrackets: true
+    });
+
+    var appsetup = CodeMirror.fromTextArea(document.getElementById("appsetup"), {
+      lineNumbers: true,
+      mode: "application/json",
+      gutters: ["CodeMirror-lint-markers"],
+      lint: true,
+      matchBrackets: true
+    });
+
+    function loadSandbox() {
+      try {
+        document.getElementById("sandbox").contentWindow.eval("setup = " + window.parent.appsetup.getValue() + ";");        
+      } catch (e) {
+        alert('Invalid setup! Check the setup.');
+        console.log(e);
+      }
+      try {
+        document.getElementById("sandbox").contentWindow.eval(window.parent.editor.getValue());
+      } catch (e) {
+        alert('Invalid script! Check the index script.');
+        console.log(e);
+      }
+    }
+
+    jQuery('#sandbox').load(function(){
+      loadSandbox();
+    });
+
+    document.getElementById("run").onclick = function () {
+      document.getElementById("sandbox").contentWindow.location.reload();
+    }
+
+  </script>
+</body>
+</html>
