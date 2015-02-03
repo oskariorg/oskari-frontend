@@ -45,7 +45,7 @@ Oskari.clazz.define("Oskari.digiroad.bundle.personaldata.PersonalDataBundle", fu
 			"src" : "../../../../bundles/digiroad/digiroad-personaldata/MyFeedbackTab.js"
 		}, {
 		    "type" : "text/css",
-		    "src" : "../../../../resources/digiroad/bundle/digiroad-personaldata/css/personaldata.css"		  
+		    "src" : "../../../../bundles/digiroad/digiroad-personaldata/resources/css/personaldata.css"		  
 		}],
 		
 		"locales" : [{
