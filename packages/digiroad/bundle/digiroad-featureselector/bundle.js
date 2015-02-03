@@ -86,7 +86,7 @@ function() {
         // CSS
         {
             "type" : "text/css",
-            "src" : "../../../../resources/digiroad/bundle/digiroad-featureselector/css/style.css"
+            "src" : "../../../../bundles/digiroad/digiroad-featureselector/resources/css/style.css"
         },
 
         // SlickGrid
