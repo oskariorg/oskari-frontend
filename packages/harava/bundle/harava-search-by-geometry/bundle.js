@@ -61,7 +61,7 @@ function() {
         /* Resources */
         {
 		    "type" : "text/css",
-		    "src" : "../../../../resources/harava/bundle/harava-search-by-geometry/css/style.css"	  
+		    "src" : "../../../../bundles/harava/harava-search-by-geometry/resources/css/style.css"	  
 		}],
 		/* Locales */
 		"locales" : [{

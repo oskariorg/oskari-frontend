@@ -54,7 +54,7 @@ function() {
         /* Resources */
         {
 		    "type" : "text/css",
-		    "src" : "../../../../resources/harava/bundle/harava-draw/css/style.css"	  
+		    "src" : "../../../../bundles/harava/harava-draw/resources/css/style.css"	  
 		}],
 		/* Locales */
 		"locales" : [{

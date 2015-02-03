@@ -52,7 +52,7 @@ function() {
         },
         {
 		    "type" : "text/css",
-		    "src" : "../../../../resources/harava/bundle/harava-mapmodule-plugin/css/style.css"	  
+		    "src" : "../../../../bundles/harava/harava-mapmodule-plugin/resources/css/style.css"	  
 		},
 		{
 			"type" : "text/javascript",
@@ -60,7 +60,7 @@ function() {
 		},
 		{
 		    "type" : "text/css",
-		    "src" : "../../../../resources/harava/bundle/harava-mapmodule-plugin/css/attribution.css"	  
+		    "src" : "../../../../bundles/harava/harava-mapmodule-plugin/resources/css/attribution.css"	  
 		},
         /*
          * Requests and handlers

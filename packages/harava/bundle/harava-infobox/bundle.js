@@ -44,7 +44,7 @@ function() {
             "src" : "../../../../bundles/harava/harava-infobox/request/HideInfoBoxRequestHandler.js"
         }, {
 		    "type" : "text/css",
-		    "src" : "../../../../resources/harava/bundle/harava-infobox/css/infobox.css"	  
+		    "src" : "../../../../bundles/harava/harava-infobox/resources/css/infobox.css"	  
 		}]
 	},
 	"bundle" : {
