@@ -35,7 +35,7 @@ function() {
             "src" : "../../../../bundles/framework/parcelinfo/plugin/ParcelInfoPlugin.js"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/framework/bundle/parcelinfo/css/parcelinfo.css"
+            "src" : "../../../../bundles/framework/parcelinfo/resources/css/parcelinfo.css"
         }],
 
         "locales" : [{

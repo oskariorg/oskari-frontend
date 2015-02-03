@@ -115,7 +115,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.PublishedMyPla
 		// css
 		{
             "type" : "text/css",
-            "src" : "../../../../resources/framework/bundle/publishedmyplaces2/css/publishedmyplaces.css"
+            "src" : "../../../../bundles/framework/publishedmyplaces2/resources/css/publishedmyplaces.css"
         }],
 
         "locales" : [{

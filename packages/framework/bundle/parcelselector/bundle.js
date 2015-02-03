@@ -44,7 +44,7 @@ function() {
             "src" : "../../../../bundles/framework/parcelselector/event/RegisterUnitSelectedEvent.js"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/framework/bundle/parcelselector/css/parcelselector.css"
+            "src" : "../../../../bundles/framework/parcelselector/resources/css/parcelselector.css"
         }],
 
         "locales" : [{
