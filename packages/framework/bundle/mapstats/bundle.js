@@ -44,7 +44,7 @@ Oskari.clazz.define(
                 "src": "../../../../bundles/framework/mapstats/event/HoverTooltipContentEvent.js"
             }, {
                 "type": "text/css",
-                "src": "../../../../resources/framework/bundle/mapstats/css/mapstats.css"
+                "src": "../../../../bundles/framework/mapstats/resources/css/mapstats.css"
             }],
             "locales": [{
                 "lang": "fi",

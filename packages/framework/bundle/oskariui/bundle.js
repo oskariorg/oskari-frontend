@@ -41,10 +41,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.oskariui.OskariUIBundle", functi
 			"src" : "../../../../libraries/jquery/plugins/jquery.base64.min.js"
 		},{
 			"type" : "text/css",
-			"src" : "../../../../resources/framework/bundle/oskariui/css/jquery-ui-1.9.2.custom.css"
+			"src" : "../../../../bundles/framework/oskariui/resources/css/jquery-ui-1.9.2.custom.css"
 		}, {
 			"type" : "text/css",
-			"src" : "../../../../resources/framework/bundle/oskariui/bootstrap-grid.css"
+			"src" : "../../../../bundles/framework/oskariui/resources/bootstrap-grid.css"
 		},{
 			"type" : "text/javascript",
 			"src" : "../../../../libraries/lodash/2.3.0/lodash.js"
