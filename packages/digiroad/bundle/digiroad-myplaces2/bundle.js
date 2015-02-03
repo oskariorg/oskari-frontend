@@ -119,7 +119,7 @@ Oskari.clazz.define("Oskari.digiroad.bundle.myplaces2.MyPlacesBundle", function(
 		// css
 		{
             "type" : "text/css",
-            "src" : "../../../../resources/digiroad/bundle/digiroad-myplaces2/css/myplaces.css"
+            "src" : "../../../../bundles/digiroad/digiroad-myplaces2/resources/css/myplaces.css"
         }],
 
         "locales" : [{
