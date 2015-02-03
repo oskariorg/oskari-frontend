@@ -98,10 +98,10 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
                 "src": "../../../../bundles/statistics/statsgrid/UserIndicatorsTab.js"
             }, {
                 "type": "text/css",
-                "src": "../../../../resources/statistics/bundle/statsgrid/css/style.css"
+                "src": "../../../../bundles/statistics/statsgrid/resources/css/style.css"
             }, {
                 "type": "text/css",
-                "src": "../../../../resources/statistics/bundle/statsgrid/css/classifyplugin.css"
+                "src": "../../../../bundles/statistics/statsgrid/resources/css/classifyplugin.css"
             }, {
                 "type": "text/css",
                 "src": "../../../../libraries/slickgrid/css/slick.grid.css"

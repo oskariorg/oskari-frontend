@@ -54,12 +54,12 @@ function() {
             "src" : "../../../../bundles/statistics/statsgrid/request/IndicatorsRequestHandler.js"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/statistics/bundle/statsgrid/css/style.css"
+            "src" : "../../../../bundles/statistics/statsgrid/resources/css/style.css"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/statistics/bundle/statsgrid/css/classifyplugin.css"
+            "src" : "../../../../bundles/statistics/statsgrid/resources/css/classifyplugin.css"
         }, {
-            "src" : "../../../../resources/statistics/bundle/publishedgrid/css/publishedgrid.css",
+            "src" : "../../../../bundles/statistics/publishedgrid/resources/css/publishedgrid.css",
             "type" : "text/css"
         }, {
             "type" : "text/css",
