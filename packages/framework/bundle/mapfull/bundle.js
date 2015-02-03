@@ -82,7 +82,7 @@ function() {
             "src" : "../../../../bundles/framework/mapfull/request/MapSizeUpdateRequestHandler.js"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/framework/bundle/mapfull/css/style.css"
+            "src" : "../../../../bundles/framework/mapfull/resources/css/style.css"
         }],
         "locales": [{
             "lang": "fi",

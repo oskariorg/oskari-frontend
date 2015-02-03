@@ -33,7 +33,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundle", func
             "src": "../../../../bundles/framework/maplegend/Tile.js"
         }, {
             "type": "text/css",
-            "src": "../../../../resources/framework/bundle/maplegend/css/style.css"
+            "src": "../../../../bundles/framework/maplegend/resources/css/style.css"
         }],
 
         "locales": [{

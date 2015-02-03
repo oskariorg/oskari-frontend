@@ -107,43 +107,43 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.ComponentsBundle", function(
             "src" : "../../../../libraries/jquery/plugins/jquery-placeholder/jquery.placeholder.js"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/framework/bundle/divmanazer/css/visualizationform.css"
+            "src" : "../../../../bundles/framework/divmanazer/resources/css/visualizationform.css"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/framework/bundle/divmanazer/css/divman.css"
+            "src" : "../../../../bundles/framework/divmanazer/resources/css/divman.css"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/framework/bundle/divmanazer/css/accordion.css"
+            "src" : "../../../../bundles/framework/divmanazer/resources/css/accordion.css"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/framework/bundle/divmanazer/css/tab.css"
+            "src" : "../../../../bundles/framework/divmanazer/resources/css/tab.css"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/framework/bundle/divmanazer/css/modal.css"
+            "src" : "../../../../bundles/framework/divmanazer/resources/css/modal.css"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/framework/bundle/divmanazer/css/badge.css"
+            "src" : "../../../../bundles/framework/divmanazer/resources/css/badge.css"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/framework/bundle/divmanazer/css/alert.css"
+            "src" : "../../../../bundles/framework/divmanazer/resources/css/alert.css"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/framework/bundle/divmanazer/css/forminput.css"
+            "src" : "../../../../bundles/framework/divmanazer/resources/css/forminput.css"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/framework/bundle/divmanazer/css/grid.css"
+            "src" : "../../../../bundles/framework/divmanazer/resources/css/grid.css"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/framework/bundle/divmanazer/css/popup.css"
+            "src" : "../../../../bundles/framework/divmanazer/resources/css/popup.css"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/framework/bundle/divmanazer/css/button.css"
+            "src" : "../../../../bundles/framework/divmanazer/resources/css/button.css"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/framework/bundle/divmanazer/css/overlay.css"
+            "src" : "../../../../bundles/framework/divmanazer/resources/css/overlay.css"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/framework/bundle/divmanazer/css/popover.css"
+            "src" : "../../../../bundles/framework/divmanazer/resources/css/popover.css"
         }],
         "locales" : [{
             "lang" : "fi",

@@ -44,7 +44,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.LayerSelectorBund
             "src": "../../../../bundles/framework/layerselector2/view/PublishedLayersTab.js"
         }, {
             "type": "text/css",
-            "src": "../../../../resources/framework/bundle/layerselector2/css/style.css"
+            "src": "../../../../bundles/framework/layerselector2/resources/css/style.css"
         }],
 
         "locales": [{

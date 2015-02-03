@@ -230,7 +230,7 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
                 "src": "../../../../bundles/framework/divmanazer/resources/css/divman.css"
             }, {
                 "type": "text/css",
-                "src": "../../../../bundles/framework/bundle/divmanazer/resources/css/accordion.css"
+                "src": "../../../../bundles/framework/divmanazer/resources/css/accordion.css"
             }, {
                 "type": "text/css",
                 "src": "../../../../bundles/framework/divmanazer/resources/css/tab.css"

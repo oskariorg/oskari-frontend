@@ -35,7 +35,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselection2.LayerSelectionBu
             "src": "../../../../bundles/framework/featuredata2/AggregateAnalyseFilter.js"
         }, {
             "type": "text/css",
-            "src": "../../../../resources/framework/bundle/layerselection2/css/style.css"
+            "src": "../../../../bundles/framework/layerselection2/resources/css/style.css"
         }],
 
         "locales": [{
