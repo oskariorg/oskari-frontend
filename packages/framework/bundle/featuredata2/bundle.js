@@ -25,7 +25,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundle",
         /*
          * Abstract base
          */
-
         {
             "type": "text/javascript",
             "src": "../../../../src/mapping/mapmodule/plugin/AbstractMapModulePlugin.js"
@@ -34,11 +33,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundle",
             "type": "text/javascript",
             "src": "../../../../src/mapping/mapmodule/plugin/BasicMapModulePlugin.js"
         },
-
         /*
          * featuredata2
          */
-
         {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/featuredata2/instance.js"
@@ -77,9 +74,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundle",
             "src": "../../../../bundles/framework/featuredata2/request/ShowFeatureDataRequestHandler.js"
         }, {
             "type": "text/css",
-            "src": "../../../../resources/framework/bundle/featuredata2/css/style.css"
+            "src": "../../../../bundles/framework/featuredata2/resources/css/style.css"
         }],
-
         "locales": [{
             "lang": "cs",
             "type": "text/javascript",
