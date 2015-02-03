@@ -29,19 +29,19 @@ function() {
         "scripts" : [
         {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/parcelselector/instance.js"
+            "src" : "../../../../bundles/framework/parcelselector/instance.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/parcelselector/Flyout.js"
+            "src" : "../../../../bundles/framework/parcelselector/Flyout.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/parcelselector/Tile.js"
+            "src" : "../../../../bundles/framework/parcelselector/Tile.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/parcelselector/event/ParcelSelectedEvent.js"
+            "src" : "../../../../bundles/framework/parcelselector/event/ParcelSelectedEvent.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/parcelselector/event/RegisterUnitSelectedEvent.js"
+            "src" : "../../../../bundles/framework/parcelselector/event/RegisterUnitSelectedEvent.js"
         }, {
             "type" : "text/css",
             "src" : "../../../../resources/framework/bundle/parcelselector/css/parcelselector.css"
@@ -50,7 +50,7 @@ function() {
         "locales" : [{
             "lang" : "fi",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/parcelselector/locale/fi.js"
+            "src" : "../../../../bundles/framework/parcelselector/locale/fi.js"
         }]
     },
     "bundle" : {

@@ -22,27 +22,27 @@ Oskari.clazz.define("Oskari.digiroad.bundle.personaldata.PersonalDataBundle", fu
 
 		"scripts" : [{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-personaldata/instance.js"
+			"src" : "../../../../bundles/digiroad/digiroad-personaldata/instance.js"
 
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-personaldata/Flyout.js"
+			"src" : "../../../../bundles/digiroad/digiroad-personaldata/Flyout.js"
 
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-personaldata/Tile.js"
+			"src" : "../../../../bundles/digiroad/digiroad-personaldata/Tile.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-personaldata/MyPlacesTab.js"
+			"src" : "../../../../bundles/digiroad/digiroad-personaldata/MyPlacesTab.js"
 		}, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-personaldata/service/ViewService.js"
+            "src" : "../../../../bundles/digiroad/digiroad-personaldata/service/ViewService.js"
         }, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-personaldata/MyEditedFeaturesTab.js"
+			"src" : "../../../../bundles/digiroad/digiroad-personaldata/MyEditedFeaturesTab.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-personaldata/MyFeedbackTab.js"
+			"src" : "../../../../bundles/digiroad/digiroad-personaldata/MyFeedbackTab.js"
 		}, {
 		    "type" : "text/css",
 		    "src" : "../../../../resources/digiroad/bundle/digiroad-personaldata/css/personaldata.css"		  
@@ -51,15 +51,15 @@ Oskari.clazz.define("Oskari.digiroad.bundle.personaldata.PersonalDataBundle", fu
 		"locales" : [{
 			"lang" : "fi",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-personaldata/locale/fi.js"
+			"src" : "../../../../bundles/digiroad/digiroad-personaldata/locale/fi.js"
 		}, {
 			"lang" : "sv",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-personaldata/locale/sv.js"
+			"src" : "../../../../bundles/digiroad/digiroad-personaldata/locale/sv.js"
 		}, {
 			"lang" : "en",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-personaldata/locale/en.js"
+			"src" : "../../../../bundles/digiroad/digiroad-personaldata/locale/en.js"
 		}]
 	},
 	"bundle" : {

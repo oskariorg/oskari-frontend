@@ -58,28 +58,28 @@ function() {
 
         "scripts" : [{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/mapfull/instance.js"
+            "src" : "../../../../bundles/framework/mapfull/instance.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/mapfull/enhancement/start-map-with-link-enhancement.js"
+            "src" : "../../../../bundles/framework/mapfull/enhancement/start-map-with-link-enhancement.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/mapfull/request/MapResizeEnabledRequest.js"
+            "src" : "../../../../bundles/framework/mapfull/request/MapResizeEnabledRequest.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/mapfull/request/MapResizeEnabledRequestHandler.js"
+            "src" : "../../../../bundles/framework/mapfull/request/MapResizeEnabledRequestHandler.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/mapfull/request/MapWindowFullScreenRequest.js"
+            "src" : "../../../../bundles/framework/mapfull/request/MapWindowFullScreenRequest.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/mapfull/request/MapWindowFullScreenRequestHandler.js"
+            "src" : "../../../../bundles/framework/mapfull/request/MapWindowFullScreenRequestHandler.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/mapfull/request/MapSizeUpdateRequest.js"
+            "src" : "../../../../bundles/framework/mapfull/request/MapSizeUpdateRequest.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/mapfull/request/MapSizeUpdateRequestHandler.js"
+            "src" : "../../../../bundles/framework/mapfull/request/MapSizeUpdateRequestHandler.js"
         }, {
             "type" : "text/css",
             "src" : "../../../../resources/framework/bundle/mapfull/css/style.css"
@@ -87,15 +87,15 @@ function() {
         "locales": [{
             "lang": "fi",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/mapfull/locale/fi.js"
+            "src": "../../../../bundles/framework/mapfull/locale/fi.js"
         }, {
             "lang": "sv",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/mapfull/locale/sv.js"
+            "src": "../../../../bundles/framework/mapfull/locale/sv.js"
         }, {
             "lang": "en",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/mapfull/locale/en.js"
+            "src": "../../../../bundles/framework/mapfull/locale/en.js"
         }]
     },
     "bundle" : {

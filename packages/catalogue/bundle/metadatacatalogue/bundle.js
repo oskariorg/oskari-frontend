@@ -26,33 +26,33 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadatacatalogue.MetadataCatalogue
 			/* service */
 			{
 	            "type": "text/javascript",
-	            "src": "../../../../bundles/catalogue/bundle/metadatacatalogue/service/MetadataOptionService.js"
+	            "src": "../../../../bundles/catalogue/metadatacatalogue/service/MetadataOptionService.js"
 	        }, {
 	            "type": "text/javascript",
-	            "src": "../../../../bundles/catalogue/bundle/metadatacatalogue/service/MetadataSearchService.js"
+	            "src": "../../../../bundles/catalogue/metadatacatalogue/service/MetadataSearchService.js"
 	        }, 
 	        /* plugin */
 	        {
 	            "type": "text/javascript",
-	            "src": "../../../../bundles/framework/bundle/featuredata2/plugin/MapSelectionPlugin.js"
+	            "src": "../../../../bundles/framework/featuredata2/plugin/MapSelectionPlugin.js"
 	        }, 
 	        /* event */
 	        {
 	            "type": "text/javascript",
-	            "src": "../../../../bundles/catalogue/bundle/metadatacatalogue/event/FinishedDrawingEvent.js"
+	            "src": "../../../../bundles/catalogue/metadatacatalogue/event/FinishedDrawingEvent.js"
 	        }, 
 	        /* instance */
 	        {
 				"type" : "text/javascript",
-				"src" : "../../../../bundles/catalogue/bundle/metadatacatalogue/instance.js"
+				"src" : "../../../../bundles/catalogue/metadatacatalogue/instance.js"
 			}, 
 			/* request */
 	        {
 	            "type": "text/javascript",
-	            "src": "../../../../bundles/catalogue/bundle/metadatacatalogue/request/ShowLicenseRequest.js"
+	            "src": "../../../../bundles/catalogue/metadatacatalogue/request/ShowLicenseRequest.js"
 	        }, {
 	            "type": "text/javascript",
-	            "src": "../../../../bundles/catalogue/bundle/metadatacatalogue/request/ShowLicenseRequestHandler.js"
+	            "src": "../../../../bundles/catalogue/metadatacatalogue/request/ShowLicenseRequestHandler.js"
 	        },
 	        /* css */
 			{
@@ -64,15 +64,15 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadatacatalogue.MetadataCatalogue
 		{
 			"lang" : "fi",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/catalogue/bundle/metadatacatalogue/locale/fi.js"
+			"src" : "../../../../bundles/catalogue/metadatacatalogue/locale/fi.js"
 		},{
 			"lang" : "en",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/catalogue/bundle/metadatacatalogue/locale/en.js"
+			"src" : "../../../../bundles/catalogue/metadatacatalogue/locale/en.js"
 		},{
 			"lang" : "sv",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/catalogue/bundle/metadatacatalogue/locale/sv.js"
+			"src" : "../../../../bundles/catalogue/metadatacatalogue/locale/sv.js"
 		}],
 		"resources" : []
 	},

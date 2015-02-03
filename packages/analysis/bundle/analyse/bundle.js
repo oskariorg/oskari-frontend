@@ -23,54 +23,54 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.AnalyseBundle", function() {
 
         "scripts" : [ {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/analysis/bundle/analyse/instance.js"
+            "src" : "../../../../bundles/analysis/analyse/instance.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/analysis/bundle/analyse/Flyout.js"
+            "src" : "../../../../bundles/analysis/analyse/Flyout.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/analysis/bundle/analyse/Tile.js"
+            "src" : "../../../../bundles/analysis/analyse/Tile.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/analysis/bundle/analyse/view/StartView.js"
+            "src" : "../../../../bundles/analysis/analyse/view/StartView.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/analysis/bundle/analyse/view/StartAnalyse.js"
+            "src" : "../../../../bundles/analysis/analyse/view/StartAnalyse.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/analysis/bundle/analyse/view/AnalyseValidations.js"
+            "src" : "../../../../bundles/analysis/analyse/view/AnalyseValidations.js"
         },  {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/analysis/bundle/analyse/view/ContentPanel.js"
+            "src" : "../../../../bundles/analysis/analyse/view/ContentPanel.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/analysis/bundle/analyse/view/PersonalDataTab.js"
+            "src" : "../../../../bundles/analysis/analyse/view/PersonalDataTab.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/analysis/bundle/analyse/request/AnalyseRequest.js"
+            "src" : "../../../../bundles/analysis/analyse/request/AnalyseRequest.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/analysis/bundle/analyse/request/AnalyseRequestHandler.js"
+            "src" : "../../../../bundles/analysis/analyse/request/AnalyseRequestHandler.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/analysis/bundle/analyse/service/AnalyseService.js"
+            "src" : "../../../../bundles/analysis/analyse/service/AnalyseService.js"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/analysis/bundle/analyse/css/style.css"
+            "src" : "../../../../resources/analysis/analyse/css/style.css"
         }],
 
         "locales" : [{
             "lang" : "fi",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/analysis/bundle/analyse/locale/fi.js"
+            "src" : "../../../../bundles/analysis/analyse/locale/fi.js"
         }, {
             "lang" : "sv",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/analysis/bundle/analyse/locale/sv.js"
+            "src" : "../../../../bundles/analysis/analyse/locale/sv.js"
         }, {
             "lang" : "en",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/analysis/bundle/analyse/locale/en.js"
+            "src" : "../../../../bundles/analysis/analyse/locale/en.js"
         }]
     },
     "bundle" : {

@@ -41,13 +41,13 @@ function() {
 
         "scripts" : [{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/admin-layerrights/instance.js"
+            "src" : "../../../../bundles/framework/admin-layerrights/instance.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/admin-layerrights/Flyout.js"
+            "src" : "../../../../bundles/framework/admin-layerrights/Flyout.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/admin-layerrights/Tile.js"
+            "src" : "../../../../bundles/framework/admin-layerrights/Tile.js"
         }, {
             "type" : "text/css",
             "src" : "../../../../resources/framework/bundle/admin-layerrights/css/style.css"
@@ -62,15 +62,15 @@ function() {
         "locales" : [{
             "lang" : "fi",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/admin-layerrights/locale/fi.js"
+            "src" : "../../../../bundles/framework/admin-layerrights/locale/fi.js"
         }, {
             "lang" : "sv",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/admin-layerrights/locale/sv.js"
+            "src" : "../../../../bundles/framework/admin-layerrights/locale/sv.js"
         }, {
             "lang" : "en",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/admin-layerrights/locale/en.js"
+            "src" : "../../../../bundles/framework/admin-layerrights/locale/en.js"
         }]
     },
     "bundle" : {

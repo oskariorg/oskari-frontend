@@ -39,10 +39,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatedisplay.CoordinateDisp
          */
         {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/coordinatedisplay/instance.js"
+            "src": "../../../../bundles/framework/coordinatedisplay/instance.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/coordinatedisplay/plugin/CoordinatesPlugin.js"
+            "src": "../../../../bundles/framework/coordinatedisplay/plugin/CoordinatesPlugin.js"
         }, {
             "type": "text/css",
             "src": "../../../../resources/framework/bundle/coordinatedisplay/css/coordinatedisplay.css"
@@ -50,75 +50,75 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatedisplay.CoordinateDisp
         "locales": [{
             "lang": "bg",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/bg.js"
+            "src": "../../../../bundles/framework/coordinatedisplay/locale/bg.js"
         }, {
             "lang": "cs",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/cs.js"
+            "src": "../../../../bundles/framework/coordinatedisplay/locale/cs.js"
         }, {
             "lang": "da",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/da.js"
+            "src": "../../../../bundles/framework/coordinatedisplay/locale/da.js"
         }, {
             "lang": "de",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/de.js"
+            "src": "../../../../bundles/framework/coordinatedisplay/locale/de.js"
         }, {
             "lang": "en",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/en.js"
+            "src": "../../../../bundles/framework/coordinatedisplay/locale/en.js"
         }, {
             "lang": "es",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/es.js"
+            "src": "../../../../bundles/framework/coordinatedisplay/locale/es.js"
         }, {
             "lang": "et",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/et.js"
+            "src": "../../../../bundles/framework/coordinatedisplay/locale/et.js"
         }, {
             "lang": "fi",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/fi.js"
+            "src": "../../../../bundles/framework/coordinatedisplay/locale/fi.js"
         }, {
             "lang": "el",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/el.js"
+            "src": "../../../../bundles/framework/coordinatedisplay/locale/el.js"
         }, {
             "lang": "hr",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/hr.js"
+            "src": "../../../../bundles/framework/coordinatedisplay/locale/hr.js"
         }, {
             "lang": "lv",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/lv.js"
+            "src": "../../../../bundles/framework/coordinatedisplay/locale/lv.js"
         }, {
             "lang": "nl",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/nl.js"
+            "src": "../../../../bundles/framework/coordinatedisplay/locale/nl.js"
         }, {
             "lang": "pl",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/pl.js"
+            "src": "../../../../bundles/framework/coordinatedisplay/locale/pl.js"
         }, {
             "lang": "pt",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/pt.js"
+            "src": "../../../../bundles/framework/coordinatedisplay/locale/pt.js"
         }, {
             "lang": "ro",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/ro.js"
+            "src": "../../../../bundles/framework/coordinatedisplay/locale/ro.js"
         }, {
             "lang": "sl",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/sl.js"
+            "src": "../../../../bundles/framework/coordinatedisplay/locale/sl.js"
         }, {
             "lang": "sv",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/sv.js"
+            "src": "../../../../bundles/framework/coordinatedisplay/locale/sv.js"
         }, {
             "lang": "uk",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/uk.js"
+            "src": "../../../../bundles/framework/coordinatedisplay/locale/uk.js"
         }]
     },
     "bundle": {

@@ -29,10 +29,10 @@ function() {
         "scripts" : [
         {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/parcelinfo/instance.js"
+            "src" : "../../../../bundles/framework/parcelinfo/instance.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/parcelinfo/plugin/ParcelInfoPlugin.js"
+            "src" : "../../../../bundles/framework/parcelinfo/plugin/ParcelInfoPlugin.js"
         }, {
             "type" : "text/css",
             "src" : "../../../../resources/framework/bundle/parcelinfo/css/parcelinfo.css"
@@ -41,7 +41,7 @@ function() {
         "locales" : [{
             "lang" : "fi",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/parcelinfo/locale/fi.js"
+            "src" : "../../../../bundles/framework/parcelinfo/locale/fi.js"
         }]
     },
     "bundle" : {

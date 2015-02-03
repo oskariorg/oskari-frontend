@@ -33,23 +33,23 @@ Oskari.clazz.define("Oskari.integration.bundle.bb.BackBoneBundle", function() {
     "source" : {
         "scripts" : [{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/integration/bundle/bb/comp.js"
+            "src" : "../../../../bundles/integration/bb/comp.js"
 
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/integration/bundle/bb/Flyout.js"
+            "src" : "../../../../bundles/integration/bb/Flyout.js"
 
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/integration/bundle/bb/Tile.js"
+            "src" : "../../../../bundles/integration/bb/Tile.js"
 
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/integration/bundle/bb/View.js"
+            "src" : "../../../../bundles/integration/bb/View.js"
 
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/integration/bundle/bb/Adapter.js"
+            "src" : "../../../../bundles/integration/bb/Adapter.js"
 
         }],
         "resources" : []

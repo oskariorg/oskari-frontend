@@ -44,13 +44,13 @@ function() {
 
         "scripts" : [{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/metadata/instance.js"
+            "src" : "../../../../bundles/framework/metadata/instance.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/metadata/plugin/MapSelectionPlugin.js"
+            "src" : "../../../../bundles/framework/metadata/plugin/MapSelectionPlugin.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/metadata/event/MapSelectionEvent.js"
+            "src" : "../../../../bundles/framework/metadata/event/MapSelectionEvent.js"
         },
 		{
             "type" : "text/css",

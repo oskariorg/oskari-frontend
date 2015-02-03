@@ -23,16 +23,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselection2.LayerSelectionBu
 
         "scripts": [{
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/layerselection2/instance.js"
+            "src": "../../../../bundles/framework/layerselection2/instance.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/layerselection2/Flyout.js"
+            "src": "../../../../bundles/framework/layerselection2/Flyout.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/layerselection2/Tile.js"
+            "src": "../../../../bundles/framework/layerselection2/Tile.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/featuredata2/AggregateAnalyseFilter.js"
+            "src": "../../../../bundles/framework/featuredata2/AggregateAnalyseFilter.js"
         }, {
             "type": "text/css",
             "src": "../../../../resources/framework/bundle/layerselection2/css/style.css"
@@ -41,99 +41,99 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselection2.LayerSelectionBu
         "locales": [{
             "lang": "bg",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/layerselection2/locale/bg.js"
+            "src": "../../../../bundles/framework/layerselection2/locale/bg.js"
         }, {
             "lang": "cs",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/layerselection2/locale/cs.js"
+            "src": "../../../../bundles/framework/layerselection2/locale/cs.js"
         }, {
             "lang": "da",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/layerselection2/locale/da.js"
+            "src": "../../../../bundles/framework/layerselection2/locale/da.js"
         }, {
             "lang": "de",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/layerselection2/locale/de.js"
+            "src": "../../../../bundles/framework/layerselection2/locale/de.js"
         }, {
             "lang": "en",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/layerselection2/locale/en.js"
+            "src": "../../../../bundles/framework/layerselection2/locale/en.js"
         }, {
             "lang": "es",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/layerselection2/locale/es.js"
+            "src": "../../../../bundles/framework/layerselection2/locale/es.js"
         }, {
             "lang": "et",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/layerselection2/locale/et.js"
+            "src": "../../../../bundles/framework/layerselection2/locale/et.js"
         }, {
             "lang": "fi",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/layerselection2/locale/fi.js"
+            "src": "../../../../bundles/framework/layerselection2/locale/fi.js"
         }, {
             "lang": "ka",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/layerselection2/locale/ka.js"
+            "src": "../../../../bundles/framework/layerselection2/locale/ka.js"
         }, {
             "lang": "el",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/layerselection2/locale/el.js"
+            "src": "../../../../bundles/framework/layerselection2/locale/el.js"
         }, {
             "lang": "hr",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/layerselection2/locale/hr.js"
+            "src": "../../../../bundles/framework/layerselection2/locale/hr.js"
         }, {
             "lang": "hu",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/layerselection2/locale/hu.js"
+            "src": "../../../../bundles/framework/layerselection2/locale/hu.js"
         }, {
             "lang": "lv",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/layerselection2/locale/lv.js"
+            "src": "../../../../bundles/framework/layerselection2/locale/lv.js"
         }, {
             "lang": "es",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/layerselection2/locale/es.js"
+            "src": "../../../../bundles/framework/layerselection2/locale/es.js"
         }, {
             "lang": "nl",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/layerselection2/locale/nl.js"
+            "src": "../../../../bundles/framework/layerselection2/locale/nl.js"
         }, {
             "lang": "pl",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/layerselection2/locale/pl.js"
+            "src": "../../../../bundles/framework/layerselection2/locale/pl.js"
         }, {
             "lang": "pt",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/layerselection2/locale/pt.js"
+            "src": "../../../../bundles/framework/layerselection2/locale/pt.js"
         }, {
             "lang": "ro",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/layerselection2/locale/ro.js"
+            "src": "../../../../bundles/framework/layerselection2/locale/ro.js"
         }, {
             "lang": "sr",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/layerselection2/locale/sr.js"
+            "src": "../../../../bundles/framework/layerselection2/locale/sr.js"
         }, {
             "lang": "sl",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/layerselection2/locale/sl.js"
+            "src": "../../../../bundles/framework/layerselection2/locale/sl.js"
         }, {
             "lang": "sk",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/layerselection2/locale/sk.js"
+            "src": "../../../../bundles/framework/layerselection2/locale/sk.js"
         }, {
             "lang": "sq",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/layerselection2/locale/sq.js"
+            "src": "../../../../bundles/framework/layerselection2/locale/sq.js"
         }, {
             "lang": "sv",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/layerselection2/locale/sv.js"
+            "src": "../../../../bundles/framework/layerselection2/locale/sv.js"
         }, {
             "lang": "uk",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/layerselection2/locale/uk.js"
+            "src": "../../../../bundles/framework/layerselection2/locale/uk.js"
         }]
     },
     "bundle": {

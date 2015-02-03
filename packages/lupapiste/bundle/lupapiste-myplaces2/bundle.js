@@ -19,95 +19,95 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.myplaces2.MyPlacesBundle", function
 		/* event */
 		{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/lupapiste/bundle/lupapiste-myplaces2/event/FinishedDrawingEvent.js"
+			"src" : "../../../../bundles/lupapiste/lupapiste-myplaces2/event/FinishedDrawingEvent.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/lupapiste/bundle/lupapiste-myplaces2/event/MyPlaceHoverEvent.js"
+			"src" : "../../../../bundles/lupapiste/lupapiste-myplaces2/event/MyPlaceHoverEvent.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/lupapiste/bundle/lupapiste-myplaces2/event/MyPlacesChangedEvent.js"
+			"src" : "../../../../bundles/lupapiste/lupapiste-myplaces2/event/MyPlacesChangedEvent.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/lupapiste/bundle/lupapiste-myplaces2/event/MyPlaceSelectedEvent.js"
+			"src" : "../../../../bundles/lupapiste/lupapiste-myplaces2/event/MyPlaceSelectedEvent.js"
 		},
 		/* model */
 		{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/lupapiste/bundle/lupapiste-myplaces2/model/MyPlace.js"
+			"src" : "../../../../bundles/lupapiste/lupapiste-myplaces2/model/MyPlace.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/lupapiste/bundle/lupapiste-myplaces2/model/MyPlacesCategory.js"
+			"src" : "../../../../bundles/lupapiste/lupapiste-myplaces2/model/MyPlacesCategory.js"
 		},
 		/* plugin */
 		{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/lupapiste/bundle/lupapiste-myplaces2/plugin/DrawPlugin.js"
+			"src" : "../../../../bundles/lupapiste/lupapiste-myplaces2/plugin/DrawPlugin.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/lupapiste/bundle/lupapiste-myplaces2/plugin/HoverPlugin.js"
+			"src" : "../../../../bundles/lupapiste/lupapiste-myplaces2/plugin/HoverPlugin.js"
 		},
 		/* request */
 		{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/lupapiste/bundle/lupapiste-myplaces2/request/StopDrawingRequest.js"
+			"src" : "../../../../bundles/lupapiste/lupapiste-myplaces2/request/StopDrawingRequest.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/lupapiste/bundle/lupapiste-myplaces2/request/StartDrawingRequest.js"
+			"src" : "../../../../bundles/lupapiste/lupapiste-myplaces2/request/StartDrawingRequest.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/lupapiste/bundle/lupapiste-myplaces2/request/GetGeometryRequest.js"
+            "src" : "../../../../bundles/lupapiste/lupapiste-myplaces2/request/GetGeometryRequest.js"
 		}, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/lupapiste/bundle/lupapiste-myplaces2/request/GetGeometryRequestHandler.js"
+            "src" : "../../../../bundles/lupapiste/lupapiste-myplaces2/request/GetGeometryRequestHandler.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/lupapiste/bundle/lupapiste-myplaces2/request/StartDrawingRequestHandler.js"
+            "src" : "../../../../bundles/lupapiste/lupapiste-myplaces2/request/StartDrawingRequestHandler.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/lupapiste/bundle/lupapiste-myplaces2/request/StopDrawingRequestHandler.js"
+            "src" : "../../../../bundles/lupapiste/lupapiste-myplaces2/request/StopDrawingRequestHandler.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/lupapiste/bundle/lupapiste-myplaces2/request/EditPlaceRequest.js"
+            "src" : "../../../../bundles/lupapiste/lupapiste-myplaces2/request/EditPlaceRequest.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/lupapiste/bundle/lupapiste-myplaces2/request/EditCategoryRequest.js"
+            "src" : "../../../../bundles/lupapiste/lupapiste-myplaces2/request/EditCategoryRequest.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/lupapiste/bundle/lupapiste-myplaces2/request/DeleteCategoryRequest.js"
+            "src" : "../../../../bundles/lupapiste/lupapiste-myplaces2/request/DeleteCategoryRequest.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/lupapiste/bundle/lupapiste-myplaces2/request/PublishCategoryRequest.js"
+            "src" : "../../../../bundles/lupapiste/lupapiste-myplaces2/request/PublishCategoryRequest.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/lupapiste/bundle/lupapiste-myplaces2/request/EditRequestHandler.js"
+            "src" : "../../../../bundles/lupapiste/lupapiste-myplaces2/request/EditRequestHandler.js"
 		},
 		/* service */
 		{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/lupapiste/bundle/lupapiste-myplaces2/service/MyPlacesService.js"
+			"src" : "../../../../bundles/lupapiste/lupapiste-myplaces2/service/MyPlacesService.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/lupapiste/bundle/lupapiste-myplaces2/service/MyPlacesWFSTStore.js"
+			"src" : "../../../../bundles/lupapiste/lupapiste-myplaces2/service/MyPlacesWFSTStore.js"
 		},
 		/* ui */
 		{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/lupapiste/bundle/lupapiste-myplaces2/view/MainView.js"
+			"src" : "../../../../bundles/lupapiste/lupapiste-myplaces2/view/MainView.js"
 		}, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/lupapiste/bundle/lupapiste-myplaces2/view/PlaceForm.js"
+            "src" : "../../../../bundles/lupapiste/lupapiste-myplaces2/view/PlaceForm.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/lupapiste/bundle/lupapiste-myplaces2/view/CategoryForm.js"
+            "src" : "../../../../bundles/lupapiste/lupapiste-myplaces2/view/CategoryForm.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/lupapiste/bundle/lupapiste-myplaces2/ButtonHandler.js"
+            "src" : "../../../../bundles/lupapiste/lupapiste-myplaces2/ButtonHandler.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/lupapiste/bundle/lupapiste-myplaces2/CategoryHandler.js"
+            "src" : "../../../../bundles/lupapiste/lupapiste-myplaces2/CategoryHandler.js"
         }, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/lupapiste/bundle/lupapiste-myplaces2/instance.js"
+			"src" : "../../../../bundles/lupapiste/lupapiste-myplaces2/instance.js"
         }, {
            // NOTE! EXTERNAL LIBRARY!
             "type" : "text/javascript",
@@ -117,15 +117,15 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.myplaces2.MyPlacesBundle", function
         "locales" : [{
             "lang" : "fi",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/lupapiste/bundle/lupapiste-myplaces2/locale/fi.js"
+            "src" : "../../../../bundles/lupapiste/lupapiste-myplaces2/locale/fi.js"
         }, {
             "lang" : "sv",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/lupapiste/bundle/lupapiste-myplaces2/locale/sv.js"
+            "src" : "../../../../bundles/lupapiste/lupapiste-myplaces2/locale/sv.js"
         }, {
             "lang" : "en",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/lupapiste/bundle/lupapiste-myplaces2/locale/en.js"
+            "src" : "../../../../bundles/lupapiste/lupapiste-myplaces2/locale/en.js"
         }
        ]
 	},

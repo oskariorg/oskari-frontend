@@ -40,7 +40,7 @@ Oskari.clazz.define("Oskari.integration.bundle.todo.ToDoBundle", function() {
     "source" : {
         "requirements" : {
             "aliases":  {
-                "_bundle" : "../../../../bundles/integration/bundle/todo",
+                "_bundle" : "../../../../bundles/integration/todo",
             },
             "config" : {
             },
@@ -48,24 +48,24 @@ Oskari.clazz.define("Oskari.integration.bundle.todo.ToDoBundle", function() {
         },
         "scripts" : [{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/integration/bundle/todo/View.js"
+            "src" : "../../../../bundles/integration/todo/View.js"
 
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/integration/bundle/todo/css/style.css"
+            "src" : "../../../../resources/integration/todo/css/style.css"
         }],
         "locales" : [{
             "lang" : "fi",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/integration/bundle/todo/locale/fi.js"
+            "src" : "../../../../bundles/integration/todo/locale/fi.js"
         }, {
             "lang" : "en",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/integration/bundle/todo/locale/en.js"
+            "src" : "../../../../bundles/integration/todo/locale/en.js"
         }, {
             "lang" : "sv",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/integration/bundle/todo/locale/sv.js"
+            "src" : "../../../../bundles/integration/todo/locale/sv.js"
         }],
         "resources" : []
     },

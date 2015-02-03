@@ -47,7 +47,7 @@ Oskari.clazz.define(
         "source": {
             "scripts": [{
                 "type": "text/javascript",
-                "src": "../../../../bundles/integration/bundle/admin-layerselector/View.js"
+                "src": "../../../../bundles/integration/admin-layerselector/View.js"
 
             }, {
                 "type": "text/css",
@@ -57,32 +57,16 @@ Oskari.clazz.define(
                 {
                     "lang": "fi",
                     "type": "text/javascript",
-                    "src": "../../../../bundles/integration/bundle/admin-layerselector/locale/fi.js"
+                    "src": "../../../../bundles/integration/admin-layerselector/locale/fi.js"
                 }, {
                     "lang": "en",
                     "type": "text/javascript",
-                    "src": "../../../../bundles/integration/bundle/admin-layerselector/locale/en.js"
+                    "src": "../../../../bundles/integration/admin-layerselector/locale/en.js"
                 }, {
                     "lang": "sv",
                     "type": "text/javascript",
-                    "src": "../../../../bundles/integration/bundle/admin-layerselector/locale/sv.js"
+                    "src": "../../../../bundles/integration/admin-layerselector/locale/sv.js"
                 }
-                /*        , {
-           // NOTE! EXTERNAL LIBRARY!
-            "type" : "text/javascript",
-            "src" : "../../../../libraries/jquery/plugins/tagIt/tag-it.js"
-        }
-        ,
-        // css
-        {
-            "type" : "text/css",
-            "src" : "../../../../libraries/jquery/plugins/tagIt/jquery.tagit.css"
-        },
-        {
-            "type": "text/javascript",
-            "src" : "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js"
-        }
-*/
             ],
             "resources": []
         },

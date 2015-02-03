@@ -26,51 +26,51 @@ function() {
 
 		"scripts" : [{
 				"type" : "text/javascript",
-				"src" : "../../../../bundles/harava/bundle/harava-map-questions/instance.js"
+				"src" : "../../../../bundles/harava/harava-map-questions/instance.js"
 			},
 			{
 	            "type" : "text/javascript",
-	            "src" : "../../../../bundles/harava/bundle/harava-map-questions/plugin/questionsmap/HaravaQuestionsMapPlugin.js"
+	            "src" : "../../../../bundles/harava/harava-map-questions/plugin/questionsmap/HaravaQuestionsMapPlugin.js"
 	        },
 			{
 	            "type" : "text/javascript",
-	            "src" : "../../../../bundles/harava/bundle/harava-map-questions/request/ShowQuestionStepRequest.js"
+	            "src" : "../../../../bundles/harava/harava-map-questions/request/ShowQuestionStepRequest.js"
 	        },
 	        {
 	            "type" : "text/javascript",
-	            "src" : "../../../../bundles/harava/bundle/harava-map-questions/request/ShowQuestionStepRequestHandler.js"
+	            "src" : "../../../../bundles/harava/harava-map-questions/request/ShowQuestionStepRequestHandler.js"
 	        },
 	        {
 	            "type" : "text/javascript",
-	            "src" : "../../../../bundles/harava/bundle/harava-map-questions/request/ShowQuestionToolsRequest.js"
+	            "src" : "../../../../bundles/harava/harava-map-questions/request/ShowQuestionToolsRequest.js"
 	        },
 	        {
 	            "type" : "text/javascript",
-	            "src" : "../../../../bundles/harava/bundle/harava-map-questions/request/ShowQuestionToolsRequestHandler.js"
+	            "src" : "../../../../bundles/harava/harava-map-questions/request/ShowQuestionToolsRequestHandler.js"
 	        },
 	        {
 	            "type" : "text/javascript",
-	            "src" : "../../../../bundles/harava/bundle/harava-map-questions/request/HideQuestionToolsRequest.js"
+	            "src" : "../../../../bundles/harava/harava-map-questions/request/HideQuestionToolsRequest.js"
 	        },
 	        {
 	            "type" : "text/javascript",
-	            "src" : "../../../../bundles/harava/bundle/harava-map-questions/request/HideQuestionToolsRequestHandler.js"
+	            "src" : "../../../../bundles/harava/harava-map-questions/request/HideQuestionToolsRequestHandler.js"
 	        },
 	        {
 	            "type" : "text/javascript",
-	            "src" : "../../../../bundles/harava/bundle/harava-map-questions/request/ToggleQuestionToolsRequest.js"
+	            "src" : "../../../../bundles/harava/harava-map-questions/request/ToggleQuestionToolsRequest.js"
 	        },
 	        {
 	            "type" : "text/javascript",
-	            "src" : "../../../../bundles/harava/bundle/harava-map-questions/request/ToggleQuestionToolsRequestHandler.js"
+	            "src" : "../../../../bundles/harava/harava-map-questions/request/ToggleQuestionToolsRequestHandler.js"
 	        },
 	        {
 	            "type" : "text/javascript",
-	            "src" : "../../../../bundles/harava/bundle/harava-map-questions/request/VisibilityQuestionRequest.js"
+	            "src" : "../../../../bundles/harava/harava-map-questions/request/VisibilityQuestionRequest.js"
 	        },
 	        {
 	            "type" : "text/javascript",
-	            "src" : "../../../../bundles/harava/bundle/harava-map-questions/request/VisibilityQuestionRequestHandler.js"
+	            "src" : "../../../../bundles/harava/harava-map-questions/request/VisibilityQuestionRequestHandler.js"
 	        },
 			/* Resources */
 			{
