@@ -45,7 +45,7 @@ Oskari.clazz.define("Oskari.framework.bundle.admin-users.AdminUsersBundle",
                 "src": "../../../../bundles/framework/admin-users/Tile.js"
             }, {
                 "type": "text/css",
-                "src": "../../../../resources/framework/bundle/admin-users/css/style.css"
+                "src": "../../../../bundles/framework/admin-users/resources/css/style.css"
             }, {
                 "src": "../../../../libraries/chosen/chosen.jquery.js",
                 "type": "text/javascript"

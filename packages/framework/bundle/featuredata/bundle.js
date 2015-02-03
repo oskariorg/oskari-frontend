@@ -60,7 +60,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata.FeatureDataBundle", 
             "src": "../../../../bundles/framework/featuredata/request/ShowFeatureDataRequestHandler.js"
         }, {
             "type": "text/css",
-            "src": "../../../../resources/framework/bundle/featuredata/css/style.css"
+            "src": "../../../../bundles/framework/featuredata/resources/css/style.css"
         }],
 
         "locales": [{

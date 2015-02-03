@@ -50,7 +50,7 @@ function() {
             "src" : "../../../../bundles/framework/admin-layerrights/Tile.js"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/framework/bundle/admin-layerrights/css/style.css"
+            "src" : "../../../../bundles/framework/admin-layerrights/resources/css/style.css"
         }, {
             "src" : "../../../../libraries/chosen/chosen.jquery.js",
             "type" : "text/javascript"
