@@ -52,7 +52,7 @@ Oskari.clazz.define(
                 "src": "../../../../bundles/catalogue/metadataflyout/plugin/MetadataLayerPlugin.js"
             }, {
                 "type": "text/css",
-                "src": "../../../../resources/catalogue/bundle/metadataflyout/css/style.css"
+                "src": "../../../../bundles/catalogue/metadataflyout/resources/css/style.css"
             }],
             "locales": [{
                 "lang": "fi",
