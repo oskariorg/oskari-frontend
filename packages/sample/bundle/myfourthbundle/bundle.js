@@ -30,7 +30,7 @@ function() {
             "src" : "../../../../bundles/sample/myfourthbundle/instance.js"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/sample/myfourthbundle/css/style.css"
+            "src" : "../../../../bundles/sample/myfourthbundle/resources/css/style.css"
         }],
 
         "locales" : [{

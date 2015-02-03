@@ -36,7 +36,7 @@ function() {
             "src" : "../../../../bundles/sample/mythirdbundle/Tile.js"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/sample/bundle/mythirdbundle/css/style.css"
+            "src" : "../../../../bundles/sample/mythirdbundle/resources/css/style.css"
         }],
 
         "locales" : [{
