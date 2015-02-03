@@ -56,7 +56,7 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.AnalyseBundle", function() {
             "src" : "../../../../bundles/analysis/analyse/service/AnalyseService.js"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/analysis/analyse/css/style.css"
+            "src" : "../../../../bundles/analysis/analyse/resources/css/style.css"
         }],
 
         "locales" : [{
