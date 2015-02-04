@@ -158,7 +158,7 @@
   height: 14px; }
 
 .oskariui .ui-slider-horizontal .ui-slider-handle {
-  background-image: url('/Oskari/resources/framework/bundle/oskariui/images/horizontal_handle.png');
+  background-image: url('../images/horizontal_handle.png');
   background-repeat: no-repeat; }
 
 .oskariui .ui-slider-horizontal .ui-slider-range {
@@ -174,12 +174,12 @@
 .oskariui .ui-slider-vertical {
   margin-left: 2px;
   width: 24px;
-  background-image: url('/Oskari/resources/framework/bundle/oskariui/images/zoombar_part.png');
+  background-image: url('../images/zoombar_part.png');
   background-repeat: repeat-y; }
 
 .oskariui .ui-slider-vertical .ui-slider-handle {
   margin-left: 0;
-  background-image: url('/Oskari/resources/framework/bundle/oskariui/images/zoombar_cursor.png');
+  background-image: url('../images/zoombar_cursor.png');
   background-repeat: no-repeat; }
 
 .oskariui .ui-slider-vertical .ui-slider-range {

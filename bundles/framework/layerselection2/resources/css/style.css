@@ -36,7 +36,7 @@ div.layerselection2 .layer.selected {
         display: inline-block; }
       div.layerselection2 .layer.selected div.layer-tools div.left-tools div.layer-opacity {
         display: inline-block;
-        background-image: url('/Oskari/resources/framework/bundle/layerselection2/images/opacity_slider.png');
+        background-image: url('../images/opacity_slider.png');
         background-repeat: no-repeat; }
         div.layerselection2 .layer.selected div.layer-tools div.left-tools div.layer-opacity input.opacity {
           padding: 1px;

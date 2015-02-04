@@ -99,6 +99,9 @@
 	background-image: none;
 }
 body .ui-tooltip { border-width: 2px; }
+.oskariui .ui-slider-horizontal .ui-slider-handle { background-image: url('../images/horizontal_handle.png'); background-repeat: no-repeat;}
+.oskariui .ui-slider-vertical { margin-left: 2px; width: 24px; background-image: url('../images/zoombar_part.png'); background-repeat: repeat-y; }
+.oskariui .ui-slider-vertical .ui-slider-handle { margin-left: 0; background-image: url('../images/zoombar_cursor.png'); background-repeat: no-repeat;}
 
 /* Component containers
 ----------------------------------*/
