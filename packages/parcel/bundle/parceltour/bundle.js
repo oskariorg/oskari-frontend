@@ -35,7 +35,7 @@ Oskari.clazz.define(
                 "src": "../../../../libraries/jquery/plugins/jquery.cookie.js"
             }, {
                 "type": "text/css",
-                "src": "../../../../resources/parcel/bundle/parceltour/css/style.css"
+                "src": "../../../../bundles/parcel/parceltour/resources/css/style.css"
             }],
             "locales": [{
                 "lang": "bg",
