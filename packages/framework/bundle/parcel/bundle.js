@@ -189,7 +189,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcel.DrawingTool",
                 {
                     "lang": "fi",
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/parcel/locale/fi.js"
+                    "src": "../../../../bundles/framework/parcel/locale/fi.js"
                 }
             ]
         },

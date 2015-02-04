@@ -1,13 +1,13 @@
 th {
 
     &.asc {
-        background-image: url('/Oskari/resources/framework/bundle/divmanazer/images/asc_arrow.png');
+        background-image: url('../images/asc_arrow.png');
         background-repeat: no-repeat;
         background-position: right center;
     }
 
     &.desc {
-        background-image: url('/Oskari/resources/framework/bundle/divmanazer/images/desc_arrow.png');
+        background-image: url('../images/desc_arrow.png');
         background-repeat: no-repeat;
         background-position: right center;
     }
@@ -30,7 +30,7 @@ div.column-selector-placeholder {
 div.column-selector-title {
   margin-top: 10px;
   margin-left: 2px;
-  background-image: url('/Oskari/resources/framework/bundle/divmanazer/images/desc_arrow.png');
+  background-image: url('../images/desc_arrow.png');
   background-repeat: no-repeat;
   background-position: 120px 3px;
   cursor: pointer;
@@ -129,13 +129,13 @@ table.oskari-grid {
         }
 
         &.closedSubTable {
-          background-image: url('/Oskari/resources/framework/bundle/divmanazer/images/icon-arrow-right.png');
+          background-image: url('../images/icon-arrow-right.png');
           background-repeat: no-repeat;
           background-position: right center;
         }
 
         &.openSubTable {
-          background-image: url('/Oskari/resources/framework/bundle/divmanazer/images/icon-arrow-left.png');
+          background-image: url('../images/icon-arrow-left.png');
           background-repeat: no-repeat;
           background-position: right center;
         }

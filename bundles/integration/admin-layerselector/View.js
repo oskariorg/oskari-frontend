@@ -122,7 +122,7 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
     'requirementsConfig': {
         waitSeconds: 15,
         paths: {
-            '_bundle': '../../../Oskari/bundles/integration/bundle/admin-layerselector'
+            '_bundle': '../../../Oskari/bundles/integration/admin-layerselector'
         }
     },
 

@@ -28,17 +28,17 @@
 }
 
 .harava-question-tool-point {         
-	background: url('/Oskari/resources/harava/bundle/harava-map-questions/images/questions_point.png') no-repeat;
+	background: url('../images/questions_point.png') no-repeat;
     background-position: center center;            
 }
 
 .harava-question-tool-line {
-    background: url('/Oskari/resources/harava/bundle/harava-map-questions/images/questions_line.png') no-repeat;
+    background: url('../images/questions_line.png') no-repeat;
     background-position: center center;
 }
 
 .harava-question-tool-area {
-    background: url('/Oskari/resources/harava/bundle/harava-map-questions/images/questions_area.png') no-repeat;
+    background: url('../images/questions_area.png') no-repeat;
     background-position: center center;
 }
 
@@ -65,13 +65,13 @@
 }
 
 .harava-toolbar-hide {
-	background: url('/Oskari/resources/harava/bundle/harava-map-questions/images/left_arrow.png') no-repeat; 
+	background: url('/../images/left_arrow.png') no-repeat; 
 	background-position: center center;
 	background-color:#057777; 
 }
 
 .harava-toolbar-show {
-    background: url('/Oskari/resources/harava/bundle/harava-map-questions/images/right_arrow.png') no-repeat;
+    background: url('../images/right_arrow.png') no-repeat;
     background-position: center center;
     background-color:#057777;   
 }

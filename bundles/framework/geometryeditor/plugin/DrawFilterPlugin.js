@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
     this.markers = [];
     this.markerSize = new OpenLayers.Size(21, 25);
     this.markerOffset = new OpenLayers.Pixel(-(this.markerSize.w / 2), -this.markerSize.h);
-    this.markerIcon = new OpenLayers.Icon('/Oskari/resources/framework/bundle/geometryeditor/images/marker.png', this.markerSize, this.markerOffset);
+    this.markerIcon = new OpenLayers.Icon('/Oskari/bundles/framework/geometryeditor/resources/images/marker.png', this.markerSize, this.markerOffset);
     this.activeMarker = null;
     this.startIndex = null;
     this.endIndex = null;

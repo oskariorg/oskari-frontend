@@ -21,12 +21,12 @@ div.mapplugin.indexmap {
         width: $toggleSize !important;
         height: $toggleSize !important;
         cursor: default;
-        background: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/component-indexmap.png') 0px 0px !important;
+        background: url('../images/component-indexmap.png') 0px 0px !important;
         display: inline-block;
         position: relative;
 
         &:hover {
-            background: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/component-indexmap_hover.png') !important;
+            background: url('../images/component-indexmap_hover.png') !important;
         }
 
     }
@@ -63,7 +63,7 @@ div.mapplugin.indexmap {
         right: 0px;
         bottom: 0px;
         cursor: default;
-        background: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/component-indexmap_hover.png')  !important;
+        background: url('../images/component-indexmap_hover.png')  !important;
         
     }
 }

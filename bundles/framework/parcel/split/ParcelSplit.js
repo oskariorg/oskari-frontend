@@ -42,7 +42,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.split.ParcelSplit',
          *
          *
          */
-        this.markerIcon = new OpenLayers.Icon('/Oskari/resources/parcel/images/marker.png', this.markerSize, this.markerOffset);
+        this.markerIcon = new OpenLayers.Icon('/Oskari/bundles/parcel/resources/images/marker.png', this.markerSize, this.markerOffset);
 
         /**
          * @property splitPolygons

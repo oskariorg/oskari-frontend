@@ -1,11 +1,11 @@
 /* Mixins */
 @font-face {
   font-family: "Liberation Sans";
-  src: url("/Oskari/resources/framework/bundle/printout/fonts/LiberationSans-Regular.ttf"); }
+  src: url("../fonts/LiberationSans-Regular.ttf"); }
 
 @font-face {
   font-family: "Liberation Sans";
-  src: url("/Oskari/resources/framework/bundle/printout/fonts/LiberationSans-Bold.ttf");
+  src: url("../fonts/LiberationSans-Bold.ttf");
   font-weight: bold; }
 
 div.notLoggedIn {

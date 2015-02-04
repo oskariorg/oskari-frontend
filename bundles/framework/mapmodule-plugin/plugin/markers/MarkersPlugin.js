@@ -18,7 +18,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         me.dotForm = null;
         me._markers = [];
         me._svg = false;
-        me._defaultIconUrl = '/Oskari/resources/framework/bundle/mapmodule-plugin/images/marker.png';
+        me._defaultIconUrl = '/Oskari/bundles/framework/mapmodule-plugin/resources/images/marker.png';
         me._defaultIconUrlSize = 32;
         me._prevIconUrl = '';
         me._preSVGIconUrl = 'data:image/svg+xml;base64,';
