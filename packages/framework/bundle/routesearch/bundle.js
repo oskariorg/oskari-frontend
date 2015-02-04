@@ -25,7 +25,7 @@ Oskari.clazz.define(
                 "src": "../../../../bundles/framework/search/service/searchservice.js"
             }, {
                 "type": "text/css",
-                "src": "../../../../resources/framework/bundle/routesearch/css/routesearch.css"
+                "src": "../../../../bundles/framework/routesearch/resources/css/routesearch.css"
             }],
 
             "locales": [{

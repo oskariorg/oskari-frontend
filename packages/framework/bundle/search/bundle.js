@@ -53,7 +53,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.search.SearchBundle", function (
             "src": "../../../../bundles/framework/search/request/SearchResultActionRequestHandler.js"
         }, {
             "type": "text/css",
-            "src": "../../../../resources/framework/bundle/search/css/style.css"
+            "src": "../../../../bundles/framework/search/resources/css/style.css"
         }],
 
         "locales": [{
