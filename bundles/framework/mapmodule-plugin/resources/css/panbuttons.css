@@ -11,7 +11,7 @@
   display: block; }
 
 .panbuttonDivImg {
-  background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/sprite.png'); }
+  background-image: url('/Oskari/bundles/framework/mapmodule-plugin/resources/plugin/panbuttons/images/sprite.png'); }
   .panbuttonDivImg.root {
     background-position: 0px -90px; }
   .panbuttonDivImg.left {

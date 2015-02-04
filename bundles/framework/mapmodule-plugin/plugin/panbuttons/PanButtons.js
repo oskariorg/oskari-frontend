@@ -50,7 +50,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                 right = el.find('.panbuttons_right'),
                 top = el.find('.panbuttons_up'),
                 bottom = el.find('.panbuttons_down'),
-                pbimg = me.getMapModule().getImageUrl() + '/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/',
+                pbimg = me.getMapModule().getImageUrl() + '/framework/mapmodule-plugin/resources/plugin/panbuttons/images/',
                 panbuttonDivImg = el.find('.panbuttonDivImg');
             // update path from config
             panbuttonDivImg.attr('src', pbimg + 'empty.png');
@@ -173,7 +173,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             } else {
 
                 var resourcesPath = this.getMapModule().getImageUrl(),
-                    imgUrl = resourcesPath + '/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/',
+                    imgUrl = resourcesPath + '/framework/mapmodule-plugin/resources/plugin/panbuttons/images/',
                     bgImg = imgUrl + 'panbutton-sprites-' + styleName + '.png';
 
                 panButtons.css({
