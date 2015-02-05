@@ -5,7 +5,7 @@ div.pzbDiv {
     right: 70px;
 
     div.pzbDiv-plus {
-        background-image: url('/Oskari/bundles/framework/mapmodule-plugin/resources/plugin/portti2zoombar/images/zoombar_plus_patched.png');
+        background-image: url('../images/zoombar_plus_patched.png');
         cursor: pointer;
         cursor: zoom-in;
         width: 18px;
@@ -13,7 +13,7 @@ div.pzbDiv {
     }
 
     div.pzbDiv-minus {
-        background-image: url('/Oskari/bundles/framework/mapmodule-plugin/resources/plugin/portti2zoombar/images/zoombar_minus.png');
+        background-image: url('../images/zoombar_minus.png');
         cursor: pointer;
         cursor: zoom-out;
         width: 18px;

@@ -9,7 +9,7 @@
   /* Slight hack, this stops the plugin from jumping when coordinatesplugin is shown */ }
 
 .panbuttonDivImg {
-  background-image: url('/Oskari/bundles/framework/mapmodule-plugin/resources/plugin/panbuttons/images/sprite.png'); }
+  background-image: url('../images/sprite.png'); }
   .panbuttonDivImg.root {
     background-position: 0px -90px; }
   .panbuttonDivImg.up {
