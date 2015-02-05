@@ -331,7 +331,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
         } catch (error) {
             this.plugin.getSandbox().printDebug(error);
         }
-        var layerType = data.data.type, // "highlight" | "normal"
+        var layerType = data.data.type.toLowerCase(), // "highlight" | "normal"
             boundaryTile = data.data.boundaryTile,
             keepPrevious = data.data.keepPrevious,
             size = {
