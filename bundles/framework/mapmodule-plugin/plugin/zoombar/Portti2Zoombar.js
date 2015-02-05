@@ -174,7 +174,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             }
 
             var resourcesPath = this.getMapModule().getImageUrl(),
-                imgUrl = resourcesPath + '/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/',
+                imgUrl = resourcesPath + '/framework/mapmodule-plugin/resources/plugin/portti2zoombar/images/',
                 styleName = style.val,
                 zoombarImg = imgUrl + 'zoombar-' + styleName + '.png',
                 zoombarCursorImg = imgUrl + 'zoombar-cursor-' + styleName + '.png',

@@ -1,4 +1,4 @@
-define(["bundles/framework/bundle/mapmodule-plugin/plugin/layers/LayersPlugin"], function (LayersPlugin) {
+define(["bundles/framework/mapmodule-plugin/plugin/layers/LayersPlugin"], function (LayersPlugin) {
     // load helper
     // 
     Oskari.cls('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin').category({

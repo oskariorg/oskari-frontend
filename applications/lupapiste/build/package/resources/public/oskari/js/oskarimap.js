@@ -14845,7 +14845,7 @@ function(id, imageUrl) {
         var size = new OpenLayers.Size(32, 32);
         var offset = new OpenLayers.Pixel(-16, -size.h);
 
-        var icon = new OpenLayers.Icon(this.getImageUrl() + '/framework/bundle/mapmodule-plugin/images/marker.png', size, offset);
+        var icon = new OpenLayers.Icon(this.getImageUrl() + '/framework/mapmodule-plugin/resources/images/marker.png', size, offset);
         var marker = new OpenLayers.Marker(centerMapLonLat, icon);
         layerMarkers.addMarker(marker);
     },
@@ -19206,7 +19206,7 @@ function(config) {
     this._map = null;
     this._conf = config;
     this._indexMap = null;
-    this._indexMapUrl = '/framework/bundle/mapmodule-plugin/plugin/indexmap/images/suomi25m_tm35fin.png';
+    this._indexMapUrl = '/framework/mapmodule-plugin/plugin/indexmap/images/suomi25m_tm35fin.png';
 }, {
     /** @static @property __name plugin name */
     __name : 'IndexMapPlugin',
@@ -23230,7 +23230,7 @@ function(config) {
         }
 
 
-        var pbimg = this.getMapModule().getImageUrl() + '/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/';
+        var pbimg = this.getMapModule().getImageUrl() + '/framework/mapmodule-plugin/plugin/panbuttons/images/';
         var panbuttonDivImg = pb.find('.panbuttonDivImg');
         // update path from config
         panbuttonDivImg.attr('src', pbimg + "default.png");

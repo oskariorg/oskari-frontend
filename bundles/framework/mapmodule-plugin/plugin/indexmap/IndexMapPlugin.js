@@ -24,7 +24,7 @@ Oskari.clazz.define(
         me._name = 'IndexMapPlugin';
         me._indexMap = null;
         // FIXME a more generic filename or get it from config...
-        me._indexMapUrl = '/framework/bundle/mapmodule-plugin/plugin/indexmap/images/suomi25m_tm35fin.png';
+        me._indexMapUrl = '/framework/mapmodule-plugin/resources/plugin/indexmap/images/suomi25m_tm35fin.png';
     },
     {
         /**

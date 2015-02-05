@@ -1,4 +1,4 @@
-define(["./AbstractMapLayerModel", "bundles/framework/bundle/mapwmts/domain/WmtsLayer"], function () {
+define(["./AbstractMapLayerModel", "bundles/framework/mapwmts/domain/WmtsLayer"], function () {
     // Dependency load helper
 
     Oskari.cls('Oskari.mapframework.wmts.domain.WmtsLayer').category({
