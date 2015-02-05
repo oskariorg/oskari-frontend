@@ -7,29 +7,29 @@ Oskari.registerLocalization(
             "link": {
                 "tooltip": "Enlace",
                 "ok": "Hecho",
-                "title": "Enlace a una vista"
+                "title": "Generar un enlace a la vista"
             },
             "print": {
-                "tooltip": "Imprimir"
+                "tooltip": "Imprimir la vista"
             },
             "history": {
                 "reset": "Volver a la vista inicial",
-                "back": "Atrás",
-                "next": "Siguiente"
+                "back": "Volver a la vista por defecto",
+                "next": "Pasar a la vista siguiente"
             },
-            "pan": "Desplazar la vista",
+            "pan": "Desplazarse por la vista arrastrando el ratón",
             "zoom": "Acercar",
             "measure": {
-                "line": "Medir distancia",
-                "area": "Medir área"
+                "line": "Medir una línea en el mapa",
+                "area": "Medir un área en el mapa. Doble click para finalizar la medición."
             }
         },
         "measure": {
-            "title": "Mediciones",
+            "title": "Resultados de medición",
             "close": "Cancelar",
             "guidance": {
-                "measureline": "Medir una línea en el mapa. Doble click para finalizar la medición.",
-                "measurearea": "Medir un área en el mapa. Doble click para finalizar la medición."
+                "measureline": "Dibujar una línea y medirla. Haga clic para el punto inicial y los vértices, doble clic para el punto final",
+                "measurearea": "Dibujar una área y medirla. Haga clic para el punto inicial y los vértices de la línea de borde; doble clic para el punto final de la línea de borde"
             }
         }
     }

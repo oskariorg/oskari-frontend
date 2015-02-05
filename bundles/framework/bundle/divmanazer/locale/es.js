@@ -1,9 +1,10 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "es",
     "key": "DivManazer",
     "value": {
         "buttons": {
-            "add": "Agregar",
+            "add": "Añadir",
             "cancel": "Cancelar",
             "close": "Cerrar",
             "delete": "Eliminar",
@@ -15,7 +16,7 @@ Oskari.registerLocalization({
         },
         "LanguageSelect": {
             "title": "Idioma",
-            "tooltip": "NOT TRANSLATED",
+            "tooltip": "Seleccionar idioma",
             "languages": {
                 "af": "afrikáans",
                 "ak": "akan",
@@ -139,96 +140,128 @@ Oskari.registerLocalization({
         },
         "VisualizationForm": {
             "tooltips": {
-                "dot": "Edit point style",
-                "area": "Edit area style",
-                "line": "Edit line style"
+                "dot": "Editar estilo de punto",
+                "area": "Editar estilo de área",
+                "line": "Editar estilo de línea"
             },
             "dot": {
-                "title": "Point feature portrayal",
+                "title": "Estilo de objeto puntal",
                 "tooltip": "",
                 "symbol": {
-                    "label": "Point feature icon"
+                    "label": "Icono"
                 },
                 "size": {
-                    "label": "Size"
+                    "label": "Tamaño"
                 },
                 "color": {
-                    "label": "Colour",
-                    "labelOr": "or",
-                    "labelCustom": "Custom RGB color (0-255)"
+                    "label": "Color",
+                    "labelOr": "o",
+                    "labelCustom": "Color personalizado RGB (0-255)"
                 },
                 "preview": {
-                    "label": "Preview"
+                    "label": "Vista previa"
                 },
                 "buttons": {
-                    "save": "Save",
-                    "cancel": "Cancel"
+                    "save": "Guardar",
+                    "cancel": "Cancelar"
                 }
             },
             "line": {
-                "title": "Line portrayal",
+                "title": "Estilo de objeto lineal",
                 "tooltip": "",
                 "style": {
-                    "label": "Line style"
+                    "label": "Guión"
                 },
                 "cap": {
-                    "label": "Line endigs"
+                    "label": "Estremos"
                 },
                 "corner": {
-                    "label": "Corners"
+                    "label": "Esquinas"
                 },
                 "width": {
-                    "label": "Width"
+                    "label": "Anchura"
                 },
                 "color": {
-                    "label": "Colour",
-                    "labelOr": "or",
-                    "labelCustom": "Custom RGB colour (0-255)"
+                    "label": "Color",
+                    "labelOr": "o",
+                    "labelCustom": "Color personalizado RGB (0-255)"
                 },
                 "preview": {
-                    "label": "Preview"
+                    "label": "Vista previa"
                 },
                 "buttons": {
-                    "save": "Save",
-                    "cancel": "Cancel"
+                    "save": "Guardar",
+                    "cancel": "Cancelar"
                 }
             },
             "area": {
-                "title": "Area portrayal",
+                "title": "Estilo deobjeto superficial",
                 "tooltip": "",
                 "linestyle": {
-                    "label": "Area line style"
+                    "label": "Línea discontinua"
                 },
                 "linecap": {
-                    "label": "Area line endings"
+                    "label": "Extremos de línea"
                 },
                 "linecorner": {
-                    "label": "Corners"
+                    "label": "Esquinas de línea"
                 },
                 "linewidth": {
-                    "label": "Width"
+                    "label": "Anchura de línea"
                 },
                 "linecolor": {
-                    "label": "Line colour",
-                    "labelOr": "or",
-                    "labelCustom": "Custom RGB colour (0-255)"
+                    "label": "Color de línea",
+                    "labelOr": "o",
+                    "labelCustom": "Color personalizado RGB (0-255)"
                 },
                 "color": {
-                    "label": "Area fill colour",
-                    "labelOr": "or",
-                    "labelCustom": "Own RGB colour (0-255)"
+                    "label": "Color de relleno",
+                    "labelOr": "o",
+                    "labelCustom": "Color personalizado RGB (0-255)"
                 },
                 "fill": {
-                    "label": "Area fill pattern"
+                    "label": "Patrón de relleno"
                 },
                 "preview": {
-                    "label": "Preview"
+                    "label": "Vista previa"
                 },
                 "buttons": {
-                    "save": "Save",
-                    "cancel": "Cancel"
+                    "save": "Guardar",
+                    "cancel": "Cancelar"
+                }
+            }
+        },
+        "Grid": {
+            "columnSelector": {
+                "title": "Propiedades",
+                "tooltip": "Mostrar columnas"
+            },
+            "export": {
+                "title": "Exportar datos",
+                "export": "Exportar",
+                "additional": {
+                    "title": "Ajustes adicionales",
+                    "dataSource": "Fuente de datos",
+                    "metadata": "Enlace de metadatos"
+                },
+                "columns": {
+                    "title": "Columnas",
+                    "all": "Todo",
+                    "visible": "Abierto"
+                },
+                "format": {
+                    "title": "Formato de archivo",
+                    "xlsx": "Excel",
+                    "csv": "CSV"
+                },
+                "delimiter": {
+                    "title": "Separador de archivo CSV",
+                    "comma": "Coma",
+                    "semicolon": "Punto y coma",
+                    "tabulator": "Tabulador"
                 }
             }
         }
     }
-});
+}
+);

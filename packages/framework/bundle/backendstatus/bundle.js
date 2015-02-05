@@ -40,6 +40,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
 			"lang" : "en",
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/backendstatus/locale/en.js"
+		}, {
+			"lang" : "es",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/bundle/backendstatus/locale/es.js"
 		}]
 	},
 	"bundle" : {

@@ -73,6 +73,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs.MapWfsBundle", function()
             "lang" : "en",
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/mapwfs/locale/en.js"
+        }, {
+            "lang" : "es",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapwfs/locale/es.js"
         }
        ]
 	},

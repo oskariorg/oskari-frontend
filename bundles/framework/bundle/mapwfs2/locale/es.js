@@ -1,40 +1,42 @@
-Oskari.registerLocalization({
-    "lang" : "es",
-    "key" : "MapWfs2",
-    "value" : {
-        "title" : "MapWfs2",
-        "desc" : "",
-        "object-data": "Object data",
-        "default-style": "Default style",
-        "own-style": "Own style",
-        "tile" : {
-            "title" : "MapWfs2"
+Oskari.registerLocalization(
+{
+    "lang": "es",
+    "key": "MapWfs2",
+    "value": {
+        "title": "MapWfs2",
+        "desc": "",
+        "object-data": "Datos del objeto geográfico",
+        "default-style": "Estilo por defecto",
+        "own-style": "Estilo propio",
+        "tile": {
+            "title": "MapWfs2"
         },
-        "flyout" : {
-            "title" : "MapWfs2",
-            "message" : "MapWfs2"
+        "flyout": {
+            "title": "MapWfs2",
+            "message": "MapWfs2"
         },
-        "error" : {
+        "error": {
             "title": "Error",
-            "connection_not_available": "Connection to the WFS background service is not available.",
-            "connection_broken": "Connection to the WFS background service broke down.",
-            "wfs_no_permissions": "No permission to use WFS layer ({layer}).",
-            "wfs_configuring_layer_failed": "Configuring WFS layer ({layer}) failed.",
-            "wfs_request_failed": "WFS layer's ({layer}) request failed.",
-            "features_parsing_failed": "Feature parsing of WFS layer ({layer}) failed."
+            "connection_not_available": "La conexión al servicio WFS original no está disponible",
+            "connection_broken": "La conexión al servicio WFS original está rota.",
+            "wfs_no_permissions": "Usted no tiene permiso para utilizar la capa WFS",
+            "wfs_configuring_layer_failed": "La configuración de la capa WFS ha fallado.",
+            "wfs_request_failed": "La petición para la capa WFS ha fallado.",
+            "features_parsing_failed": "El análisis del objeto geográfico de la capa WFS ha fallado."
         },
         "button": {
-            "cancel": "Cancel",
-            "show": "View places",
-            "close": "Close",
-            "edit" : "Edit"
+            "cancel": "Cancelar",
+            "show": "Mostrar lugares",
+            "close": "Cerrar",
+            "edit": "Editar"
         },
         "popup": {
-            "title": "Own style",
+            "title": "Estilo propio",
             "button": {
-                "cancel": "Cancel",
-                "save": "Save"
+                "cancel": "Cancelar",
+                "save": "Guardar"
             }
         }
     }
-});
+}
+);
