@@ -14016,7 +14016,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
             "src" : "../../../../bundles/framework/search/service/searchservice.js"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/framework/mapmodule-plugin/plugin/search/css/search.css"
+            "src" : "../../../../bundles/framework/mapmodule-plugin/resources/plugin/search/css/search.css"
         },
         /**
          * Logo plugin
@@ -14027,7 +14027,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
         },
         {
             "type" : "text/css",
-            "src" : "../../../../resources/framework/mapmodule-plugin/plugin/logo/css/logoplugin.css"
+            "src" : "../../../../bundles/framework/mapmodule-plugin/resources/plugin/logo/css/logoplugin.css"
         },
         
         // IndexMap
@@ -14037,7 +14037,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
         },
         {
             "type" : "text/css",
-            "src" : "../../../../resources/framework/mapmodule-plugin/plugin/indexmap/css/indexmap.css"
+            "src" : "../../../../bundles/framework/mapmodule-plugin/resources/plugin/indexmap/css/indexmap.css"
         },
         
         // ScaleBar
@@ -14055,7 +14055,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
         },
         {
             "type" : "text/css",
-            "src" : "../../../../resources/framework/mapmodule-plugin/plugin/layers/css/layersselection.css"
+            "src" : "../../../../bundles/framework/mapmodule-plugin/resources/plugin/layers/css/layersselection.css"
         },
 		/**
 		 * Layers plugin
