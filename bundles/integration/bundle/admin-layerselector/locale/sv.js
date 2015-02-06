@@ -108,8 +108,6 @@ Oskari.registerLocalization(
             "layerNameAndDesc": "Lagrets namn och kort beskrivning",
             "metaInfoIdDesc": "Geodata&shy;registrets metadata filtagg, som unikt identifierar metadatans XML beskrivning",
             "metaInfoId": "Metadatans filtagg",
-            "metaInfoUrl": "NOT TRANSLATED",
-            "metaInfoUrlDesc": "NOT TRANSLATED",
             "wmsName": "Unik namn för kartlager",
             "wmsNameDesc": "Unik eller teknisk namn för kartlager",
             "username": "Användarsnamn",

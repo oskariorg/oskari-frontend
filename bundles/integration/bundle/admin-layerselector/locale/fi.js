@@ -107,8 +107,6 @@ Oskari.registerLocalization({
             "layerNameAndDesc": "Tason nimi ja kuvaus",
             "metaInfoIdDesc": "Paikkatieto&shy;hakemiston metatiedon tiedostotunniste, joka yksilöi metatiedon XML kuvailun",
             "metaInfoId": "Metatiedon tiedosto&shy;tunniste",
-            "metaInfoUrl": "Metatiedon osoite",
-            "metaInfoUrlDesc": "Metatiedon osoite",
             "wmsName": "Karttatason yksilöivä nimi",
             "wmsNameDesc": "Karttatason yksilöivä eli tekninen nimi",
             "username": "Käyttäjätunnus",

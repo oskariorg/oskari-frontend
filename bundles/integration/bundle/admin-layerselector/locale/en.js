@@ -107,8 +107,6 @@ Oskari.registerLocalization({
             "layerNameAndDesc": "Layer name and description",
             "metaInfoIdDesc": "The metadata file identifier in the metadata service (Paikkatietohakemisto) to identify the XML file containing metadata.",
             "metaInfoId": "Metadata file identifier",
-            "metaInfoUrl": "Metadata URL",
-            "metaInfoUrlDesc": "Metadata URL",
             "wmsName": "Unique name",
             "wmsNameDesc": "The unique name that identifies the map layer.",
             "username": "User name",
