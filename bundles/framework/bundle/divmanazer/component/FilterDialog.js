@@ -66,6 +66,10 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
 
             // Create filter dialog content
             layerAttributes = me._layer.getFilterJson();
+            if (layerAttributes === null) {
+                me._loadWFSLayerPropertiesAndTypes(me._layer.getId(), cb);
+                return;
+            }
             popupContent = this.getFilterDialogContent(me._layer);
             popupTitle = this.loc.filter.description + " " + me._layer.getName();
 
@@ -720,6 +724,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
          */
         _handleWFSLayerPropertiesAndTypesResponse: function (propertyJson, cb) {
             var me = this,
+                prevJson,
                 fields = propertyJson.propertyTypes;
             var layerAttributes = [];
             for (var key in fields) {
@@ -732,7 +737,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                 }
             }
             this._layer.setFilterJson(layerAttributes);
-            this.createFilterDialog(this._layer, cb);
+            this.createFilterDialog(this._layer, prevJson, cb);
         },
 
         /**
