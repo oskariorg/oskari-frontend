@@ -125,15 +125,15 @@ Oskari.clazz.define("Oskari.digiroad.bundle.myplaces2.MyPlacesBundle", function(
         "locales" : [{
             "lang" : "fi",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/digiroad-myplaces2/locale/fi.js"
+            "src" : "../../../../bundles/digiroad/digiroad-myplaces2/resources/locale/fi.js"
         }, {
             "lang" : "sv",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/digiroad-myplaces2/locale/sv.js"
+            "src" : "../../../../bundles/digiroad/digiroad-myplaces2/resources/locale/sv.js"
         }, {
             "lang" : "en",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/digiroad-myplaces2/locale/en.js"
+            "src" : "../../../../bundles/digiroad/digiroad-myplaces2/resources/locale/en.js"
         }
        ]
 	},

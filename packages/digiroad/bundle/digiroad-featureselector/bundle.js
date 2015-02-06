@@ -145,15 +145,15 @@ function() {
         "locales" : [{
             "lang" : "fi",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/digiroad-featureselector/locale/fi.js"
+            "src" : "../../../../bundles/digiroad/digiroad-featureselector/resources/locale/fi.js"
         }, {
             "lang" : "sv",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/digiroad-featureselector/locale/sv.js"
+            "src" : "../../../../bundles/digiroad/digiroad-featureselector/resources/locale/sv.js"
         }, {
             "lang" : "en",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/digiroad-featureselector/locale/en.js"
+            "src" : "../../../../bundles/digiroad/digiroad-featureselector/resources/locale/en.js"
         }]
     },
     "bundle" : {

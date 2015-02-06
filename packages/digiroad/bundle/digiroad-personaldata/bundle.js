@@ -51,15 +51,15 @@ Oskari.clazz.define("Oskari.digiroad.bundle.personaldata.PersonalDataBundle", fu
 		"locales" : [{
 			"lang" : "fi",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/digiroad-personaldata/locale/fi.js"
+			"src" : "../../../../bundles/digiroad/digiroad-personaldata/resources/locale/fi.js"
 		}, {
 			"lang" : "sv",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/digiroad-personaldata/locale/sv.js"
+			"src" : "../../../../bundles/digiroad/digiroad-personaldata/resources/locale/sv.js"
 		}, {
 			"lang" : "en",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/digiroad-personaldata/locale/en.js"
+			"src" : "../../../../bundles/digiroad/digiroad-personaldata/resources/locale/en.js"
 		}]
 	},
 	"bundle" : {
