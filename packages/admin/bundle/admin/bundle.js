@@ -45,15 +45,15 @@ function() {
         "locales" : [{
             "lang" : "fi",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/admin/admin/locale/fi.js"
+            "src" : "../../../../bundles/admin/admin/resources/locale/fi.js"
         }, {
             "lang" : "sv",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/admin/admin/locale/sv.js"
+            "src" : "../../../../bundles/admin/admin/resources/locale/sv.js"
         }, {
             "lang" : "en",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/admin/admin/locale/en.js"
+            "src" : "../../../../bundles/admin/admin/resources/locale/en.js"
         }]
     },
     "bundle" : {

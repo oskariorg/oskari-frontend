@@ -62,15 +62,15 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.AnalyseBundle", function() {
         "locales" : [{
             "lang" : "fi",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/analysis/analyse/locale/fi.js"
+            "src" : "../../../../bundles/analysis/analyse/resources/locale/fi.js"
         }, {
             "lang" : "sv",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/analysis/analyse/locale/sv.js"
+            "src" : "../../../../bundles/analysis/analyse/resources/locale/sv.js"
         }, {
             "lang" : "en",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/analysis/analyse/locale/en.js"
+            "src" : "../../../../bundles/analysis/analyse/resources/locale/en.js"
         }]
     },
     "bundle" : {
