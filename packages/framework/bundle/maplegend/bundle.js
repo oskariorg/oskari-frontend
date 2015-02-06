@@ -39,99 +39,99 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundle", func
         "locales": [{
             "lang": "hy",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/maplegend/locale/hy.js"
+            "src": "../../../../bundles/framework/maplegend/resources/locale/hy.js"
         }, {
             "lang": "bg",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/maplegend/locale/bg.js"
+            "src": "../../../../bundles/framework/maplegend/resources/locale/bg.js"
         }, {
             "lang": "cs",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/maplegend/locale/cs.js"
+            "src": "../../../../bundles/framework/maplegend/resources/locale/cs.js"
         }, {
             "lang": "da",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/maplegend/locale/da.js"
+            "src": "../../../../bundles/framework/maplegend/resources/locale/da.js"
         }, {
             "lang": "de",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/maplegend/locale/de.js"
+            "src": "../../../../bundles/framework/maplegend/resources/locale/de.js"
         }, {
             "lang": "en",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/maplegend/locale/en.js"
+            "src": "../../../../bundles/framework/maplegend/resources/locale/en.js"
         }, {
             "lang": "es",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/maplegend/locale/es.js"
+            "src": "../../../../bundles/framework/maplegend/resources/locale/es.js"
         }, {
             "lang": "et",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/maplegend/locale/et.js"
+            "src": "../../../../bundles/framework/maplegend/resources/locale/et.js"
         }, {
             "lang": "fi",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/maplegend/locale/fi.js"
+            "src": "../../../../bundles/framework/maplegend/resources/locale/fi.js"
         }, {
             "lang": "ka",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/maplegend/locale/ka.js"
+            "src": "../../../../bundles/framework/maplegend/resources/locale/ka.js"
         }, {
             "lang": "el",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/maplegend/locale/el.js"
+            "src": "../../../../bundles/framework/maplegend/resources/locale/el.js"
         }, {
             "lang": "hr",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/maplegend/locale/hr.js"
+            "src": "../../../../bundles/framework/maplegend/resources/locale/hr.js"
         }, {
             "lang": "hu",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/maplegend/locale/hu.js"
+            "src": "../../../../bundles/framework/maplegend/resources/locale/hu.js"
         }, {
             "lang": "lv",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/maplegend/locale/lv.js"
+            "src": "../../../../bundles/framework/maplegend/resources/locale/lv.js"
         }, {
             "lang": "nl",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/maplegend/locale/nl.js"
+            "src": "../../../../bundles/framework/maplegend/resources/locale/nl.js"
         }, {
             "lang": "pl",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/maplegend/locale/pl.js"
+            "src": "../../../../bundles/framework/maplegend/resources/locale/pl.js"
         }, {
             "lang": "pt",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/maplegend/locale/pt.js"
+            "src": "../../../../bundles/framework/maplegend/resources/locale/pt.js"
         }, {
             "lang": "ro",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/maplegend/locale/ro.js"
+            "src": "../../../../bundles/framework/maplegend/resources/locale/ro.js"
         }, {
             "lang": "sr",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/maplegend/locale/sr.js"
+            "src": "../../../../bundles/framework/maplegend/resources/locale/sr.js"
         }, {
             "lang": "sl",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/maplegend/locale/sl.js"
+            "src": "../../../../bundles/framework/maplegend/resources/locale/sl.js"
         }, {
             "lang": "sk",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/maplegend/locale/sk.js"
+            "src": "../../../../bundles/framework/maplegend/resources/locale/sk.js"
         }, {
             "lang": "sq",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/maplegend/locale/sq.js"
+            "src": "../../../../bundles/framework/maplegend/resources/locale/sq.js"
         }, {
             "lang": "sv",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/maplegend/locale/sv.js"
+            "src": "../../../../bundles/framework/maplegend/resources/locale/sv.js"
         }, {
             "lang": "uk",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/maplegend/locale/uk.js"
+            "src": "../../../../bundles/framework/maplegend/resources/locale/uk.js"
         }]
     },
     "bundle": {

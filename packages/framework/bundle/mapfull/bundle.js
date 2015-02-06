@@ -87,15 +87,15 @@ function() {
         "locales": [{
             "lang": "fi",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/mapfull/locale/fi.js"
+            "src": "../../../../bundles/framework/mapfull/resources/locale/fi.js"
         }, {
             "lang": "sv",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/mapfull/locale/sv.js"
+            "src": "../../../../bundles/framework/mapfull/resources/locale/sv.js"
         }, {
             "lang": "en",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/mapfull/locale/en.js"
+            "src": "../../../../bundles/framework/mapfull/resources/locale/en.js"
         }]
     },
     "bundle" : {

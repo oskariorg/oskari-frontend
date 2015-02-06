@@ -61,15 +61,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs.MapWfsBundle", function()
         "locales" : [{
             "lang" : "fi",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs/locale/fi.js"
+            "src" : "../../../../bundles/framework/mapwfs/resources/locale/fi.js"
         }, {
             "lang" : "sv",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs/locale/sv.js"
+            "src" : "../../../../bundles/framework/mapwfs/resources/locale/sv.js"
         }, {
             "lang" : "en",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs/locale/en.js"
+            "src" : "../../../../bundles/framework/mapwfs/resources/locale/en.js"
         }
        ]
 	},

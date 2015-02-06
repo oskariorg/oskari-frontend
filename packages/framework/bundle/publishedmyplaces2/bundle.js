@@ -121,27 +121,27 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.PublishedMyPla
         "locales" : [{
             "lang" : "fi",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/publishedmyplaces2/locale/fi.js"
+            "src" : "../../../../bundles/framework/publishedmyplaces2/resources/locale/fi.js"
         }, {
             "lang" : "sv",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/publishedmyplaces2/locale/sv.js"
+            "src" : "../../../../bundles/framework/publishedmyplaces2/resources/locale/sv.js"
         }, {
             "lang" : "en",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/publishedmyplaces2/locale/en.js"
+            "src" : "../../../../bundles/framework/publishedmyplaces2/resources/locale/en.js"
         }, {
             "lang" : "cs",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/publishedmyplaces2/locale/cs.js"
+            "src" : "../../../../bundles/framework/publishedmyplaces2/resources/locale/cs.js"
         }, {
             "lang" : "de",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/publishedmyplaces2/locale/de.js"
+            "src" : "../../../../bundles/framework/publishedmyplaces2/resources/locale/de.js"
         }, {
             "lang" : "es",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/publishedmyplaces2/locale/es.js"
+            "src" : "../../../../bundles/framework/publishedmyplaces2/resources/locale/es.js"
         }
        ]
 	},

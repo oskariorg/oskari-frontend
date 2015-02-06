@@ -49,15 +49,15 @@ Oskari.clazz.define(
             "locales": [{
                 "lang": "fi",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/mapstats/locale/fi.js"
+                "src": "../../../../bundles/framework/mapstats/resources/locale/fi.js"
             }, {
                 "lang": "sv",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/mapstats/locale/sv.js"
+                "src": "../../../../bundles/framework/mapstats/resources/locale/sv.js"
             }, {
                 "lang": "en",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/mapstats/locale/en.js"
+                "src": "../../../../bundles/framework/mapstats/resources/locale/en.js"
             }]
         },
         "bundle": {

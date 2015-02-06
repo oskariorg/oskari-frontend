@@ -34,15 +34,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
         "locales": [{
             "lang": "en",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/findbycoordinates/locale/en.js"
+            "src": "../../../../bundles/framework/findbycoordinates/resources/locale/en.js"
         }, {
             "lang": "fi",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/findbycoordinates/locale/fi.js"
+            "src": "../../../../bundles/framework/findbycoordinates/resources/locale/fi.js"
         }, {
             "lang": "sv",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/findbycoordinates/locale/sv.js"
+            "src": "../../../../bundles/framework/findbycoordinates/resources/locale/sv.js"
         }]
     },
     "bundle": {

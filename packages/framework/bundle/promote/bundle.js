@@ -36,15 +36,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.promote.PromoteBundle", function
 		"locales" : [{
 			"lang" : "fi",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/promote/locale/fi.js"
+			"src" : "../../../../bundles/framework/promote/resources/locale/fi.js"
 		}, {
 			"lang" : "sv",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/promote/locale/sv.js"
+			"src" : "../../../../bundles/framework/promote/resources/locale/sv.js"
 		}, {
 			"lang" : "en",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/promote/locale/en.js"
+			"src" : "../../../../bundles/framework/promote/resources/locale/en.js"
 		}]
 	},
 	"bundle" : {

@@ -50,7 +50,7 @@ function() {
         "locales" : [{
             "lang" : "fi",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/parcelselector/locale/fi.js"
+            "src" : "../../../../bundles/framework/parcelselector/resources/locale/fi.js"
         }]
     },
     "bundle" : {

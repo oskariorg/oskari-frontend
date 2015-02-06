@@ -58,99 +58,99 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundle"
         "locales": [{
             "lang": "hy",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/personaldata/locale/hy.js"
+            "src": "../../../../bundles/framework/personaldata/resources/locale/hy.js"
         }, {
             "lang": "bg",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/personaldata/locale/bg.js"
+            "src": "../../../../bundles/framework/personaldata/resources/locale/bg.js"
         }, {
             "lang": "cs",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/personaldata/locale/cs.js"
+            "src": "../../../../bundles/framework/personaldata/resources/locale/cs.js"
         }, {
             "lang": "da",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/personaldata/locale/da.js"
+            "src": "../../../../bundles/framework/personaldata/resources/locale/da.js"
         }, {
             "lang": "de",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/personaldata/locale/de.js"
+            "src": "../../../../bundles/framework/personaldata/resources/locale/de.js"
         }, {
             "lang": "en",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/personaldata/locale/en.js"
+            "src": "../../../../bundles/framework/personaldata/resources/locale/en.js"
         }, {
             "lang": "es",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/personaldata/locale/es.js"
+            "src": "../../../../bundles/framework/personaldata/resources/locale/es.js"
         }, {
             "lang": "et",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/personaldata/locale/et.js"
+            "src": "../../../../bundles/framework/personaldata/resources/locale/et.js"
         }, {
             "lang": "fi",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/personaldata/locale/fi.js"
+            "src": "../../../../bundles/framework/personaldata/resources/locale/fi.js"
         }, {
             "lang": "ka",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/personaldata/locale/ka.js"
+            "src": "../../../../bundles/framework/personaldata/resources/locale/ka.js"
         }, {
             "lang": "el",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/personaldata/locale/el.js"
+            "src": "../../../../bundles/framework/personaldata/resources/locale/el.js"
         }, {
             "lang": "hr",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/personaldata/locale/hr.js"
+            "src": "../../../../bundles/framework/personaldata/resources/locale/hr.js"
         }, {
             "lang": "hu",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/personaldata/locale/hu.js"
+            "src": "../../../../bundles/framework/personaldata/resources/locale/hu.js"
         }, {
             "lang": "lv",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/personaldata/locale/lv.js"
+            "src": "../../../../bundles/framework/personaldata/resources/locale/lv.js"
         }, {
             "lang": "nl",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/personaldata/locale/nl.js"
+            "src": "../../../../bundles/framework/personaldata/resources/locale/nl.js"
         }, {
             "lang": "pl",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/personaldata/locale/pl.js"
+            "src": "../../../../bundles/framework/personaldata/resources/locale/pl.js"
         }, {
             "lang": "pt",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/personaldata/locale/pt.js"
+            "src": "../../../../bundles/framework/personaldata/resources/locale/pt.js"
         }, {
             "lang": "ro",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/personaldata/locale/ro.js"
+            "src": "../../../../bundles/framework/personaldata/resources/locale/ro.js"
         }, {
             "lang": "sr",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/personaldata/locale/sr.js"
+            "src": "../../../../bundles/framework/personaldata/resources/locale/sr.js"
         }, {
             "lang": "sl",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/personaldata/locale/sl.js"
+            "src": "../../../../bundles/framework/personaldata/resources/locale/sl.js"
         }, {
             "lang": "sk",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/personaldata/locale/sk.js"
+            "src": "../../../../bundles/framework/personaldata/resources/locale/sk.js"
         }, {
             "lang": "sq",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/personaldata/locale/sq.js"
+            "src": "../../../../bundles/framework/personaldata/resources/locale/sq.js"
         }, {
             "lang": "sv",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/personaldata/locale/sv.js"
+            "src": "../../../../bundles/framework/personaldata/resources/locale/sv.js"
         }, {
             "lang": "uk",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/personaldata/locale/uk.js"
+            "src": "../../../../bundles/framework/personaldata/resources/locale/uk.js"
         }]
     },
     "bundle": {

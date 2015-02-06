@@ -59,15 +59,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.statehandler.StateHandlerBundle"
         {
             "lang": "en",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/statehandler/locale/en.js"
+            "src": "../../../../bundles/framework/statehandler/resources/locale/en.js"
         }, {
             "lang": "sv",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/statehandler/locale/sv.js"
+            "src": "../../../../bundles/framework/statehandler/resources/locale/sv.js"
         }, {
             "lang": "fi",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/statehandler/locale/fi.js"
+            "src": "../../../../bundles/framework/statehandler/resources/locale/fi.js"
         }
         ]
     },

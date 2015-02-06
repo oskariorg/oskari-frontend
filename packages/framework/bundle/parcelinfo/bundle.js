@@ -41,7 +41,7 @@ function() {
         "locales" : [{
             "lang" : "fi",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/parcelinfo/locale/fi.js"
+            "src" : "../../../../bundles/framework/parcelinfo/resources/locale/fi.js"
         }]
     },
     "bundle" : {

@@ -31,15 +31,15 @@ Oskari.clazz.define(
             "locales": [{
                 "lang": "en",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/routesearch/locale/en.js"
+                "src": "../../../../bundles/framework/routesearch/resources/locale/en.js"
             }, {
                 "lang": "fi",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/routesearch/locale/fi.js"
+                "src": "../../../../bundles/framework/routesearch/resources/locale/fi.js"
             }, {
                 "lang": "sv",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/routesearch/locale/sv.js"
+                "src": "../../../../bundles/framework/routesearch/resources/locale/sv.js"
             }]
         },
         "bundle": {

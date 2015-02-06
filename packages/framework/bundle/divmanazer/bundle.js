@@ -275,475 +275,475 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
         "locales": [{
             "lang": "af",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/af.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/af.js"
         }, {
             "lang": "ak",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/ak.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/ak.js"
         }, {
             "lang": "am",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/am.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/am.js"
         }, {
             "lang": "ar",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/ar.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/ar.js"
         }, {
             "lang": "az",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/az.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/az.js"
         }, {
             "lang": "be",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/be.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/be.js"
         }, {
             "lang": "bg",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/bg.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/bg.js"
         }, {
             "lang": "bm",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/bm.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/bm.js"
         }, {
             "lang": "bn",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/bn.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/bn.js"
         }, {
             "lang": "bo",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/bo.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/bo.js"
         }, {
             "lang": "br",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/br.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/br.js"
         }, {
             "lang": "bs",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/bs.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/bs.js"
         }, {
             "lang": "ca",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/ca.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/ca.js"
         }, {
             "lang": "cs",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/cs.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/cs.js"
         }, {
             "lang": "cy",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/cy.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/cy.js"
         }, {
             "lang": "da",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/da.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/da.js"
         }, {
             "lang": "de",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/de.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/de.js"
         }, {
             "lang": "dz",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/dz.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/dz.js"
         }, {
             "lang": "ee",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/ee.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/ee.js"
         }, {
             "lang": "el",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/el.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/el.js"
         }, {
             "lang": "en",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/en.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/en.js"
         }, {
             "lang": "eo",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/eo.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/eo.js"
         }, {
             "lang": "es",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/es.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/es.js"
         }, {
             "lang": "et",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/et.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/et.js"
         }, {
             "lang": "eu",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/eu.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/eu.js"
         }, {
             "lang": "fa",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/fa.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/fa.js"
         }, {
             "lang": "ff",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/ff.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/ff.js"
         }, {
             "lang": "fi",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/fi.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/fi.js"
         }, {
             "lang": "fo",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/fo.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/fo.js"
         }, {
             "lang": "fr",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/fr.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/fr.js"
         }, {
             "lang": "fy",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/fy.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/fy.js"
         }, {
             "lang": "ga",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/ga.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/ga.js"
         }, {
             "lang": "gd",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/gd.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/gd.js"
         }, {
             "lang": "gl",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/gl.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/gl.js"
         }, {
             "lang": "gu",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/gu.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/gu.js"
         }, {
             "lang": "ha",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/ha.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/ha.js"
         }, {
             "lang": "he",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/he.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/he.js"
         }, {
             "lang": "hi",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/hi.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/hi.js"
         }, {
             "lang": "hr",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/hr.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/hr.js"
         }, {
             "lang": "hu",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/hu.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/hu.js"
         }, {
             "lang": "hy",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/hy.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/hy.js"
         }, {
             "lang": "ia",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/ia.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/ia.js"
         }, {
             "lang": "id",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/id.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/id.js"
         }, {
             "lang": "ig",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/ig.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/ig.js"
         }, {
             "lang": "is",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/is.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/is.js"
         }, {
             "lang": "it",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/it.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/it.js"
         }, {
             "lang": "ja",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/ja.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/ja.js"
         }, {
             "lang": "ka",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/ka.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/ka.js"
         }, {
             "lang": "ki",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/ki.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/ki.js"
         }, {
             "lang": "kk",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/kk.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/kk.js"
         }, {
             "lang": "kl",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/kl.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/kl.js"
         }, {
             "lang": "km",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/km.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/km.js"
         }, {
             "lang": "kn",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/kn.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/kn.js"
         }, {
             "lang": "ko",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/ko.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/ko.js"
         }, {
             "lang": "ks",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/ks.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/ks.js"
         }, {
             "lang": "kw",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/kw.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/kw.js"
         }, {
             "lang": "ky",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/ky.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/ky.js"
         }, {
             "lang": "lb",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/lb.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/lb.js"
         }, {
             "lang": "lg",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/lg.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/lg.js"
         }, {
             "lang": "ln",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/ln.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/ln.js"
         }, {
             "lang": "lo",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/lo.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/lo.js"
         }, {
             "lang": "lt",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/lt.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/lt.js"
         }, {
             "lang": "lu",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/lu.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/lu.js"
         }, {
             "lang": "lv",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/lv.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/lv.js"
         }, {
             "lang": "mg",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/mg.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/mg.js"
         }, {
             "lang": "mk",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/mk.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/mk.js"
         }, {
             "lang": "ml",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/ml.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/ml.js"
         }, {
             "lang": "mn",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/mn.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/mn.js"
         }, {
             "lang": "mr",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/mr.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/mr.js"
         }, {
             "lang": "ms",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/ms.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/ms.js"
         }, {
             "lang": "mt",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/mt.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/mt.js"
         }, {
             "lang": "my",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/my.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/my.js"
         }, {
             "lang": "nb",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/nb.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/nb.js"
         }, {
             "lang": "nd",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/nd.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/nd.js"
         }, {
             "lang": "ne",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/ne.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/ne.js"
         }, {
             "lang": "nl",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/nl.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/nl.js"
         }, {
             "lang": "nn",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/nn.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/nn.js"
         }, {
             "lang": "om",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/om.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/om.js"
         }, {
             "lang": "or",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/or.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/or.js"
         }, {
             "lang": "os",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/os.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/os.js"
         }, {
             "lang": "pa",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/pa.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/pa.js"
         }, {
             "lang": "pl",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/pl.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/pl.js"
         }, {
             "lang": "ps",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/ps.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/ps.js"
         }, {
             "lang": "pt",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/pt.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/pt.js"
         }, {
             "lang": "qu",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/qu.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/qu.js"
         }, {
             "lang": "rm",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/rm.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/rm.js"
         }, {
             "lang": "rn",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/rn.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/rn.js"
         }, {
             "lang": "ro",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/ro.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/ro.js"
         }, {
             "lang": "ru",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/ru.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/ru.js"
         }, {
             "lang": "rw",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/rw.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/rw.js"
         }, {
             "lang": "se",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/se.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/se.js"
         }, {
             "lang": "sg",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/sg.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/sg.js"
         }, {
             "lang": "si",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/si.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/si.js"
         }, {
             "lang": "sk",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/sk.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/sk.js"
         }, {
             "lang": "sl",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/sl.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/sl.js"
         }, {
             "lang": "sn",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/sn.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/sn.js"
         }, {
             "lang": "so",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/so.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/so.js"
         }, {
             "lang": "sq",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/sq.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/sq.js"
         }, {
             "lang": "sr",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/sr.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/sr.js"
         }, {
             "lang": "sv",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/sv.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/sv.js"
         }, {
             "lang": "sw",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/sw.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/sw.js"
         }, {
             "lang": "ta",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/ta.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/ta.js"
         }, {
             "lang": "te",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/te.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/te.js"
         }, {
             "lang": "th",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/th.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/th.js"
         }, {
             "lang": "ti",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/ti.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/ti.js"
         }, {
             "lang": "tn",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/tn.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/tn.js"
         }, {
             "lang": "to",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/to.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/to.js"
         }, {
             "lang": "tr",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/tr.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/tr.js"
         }, {
             "lang": "ts",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/ts.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/ts.js"
         }, {
             "lang": "ug",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/ug.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/ug.js"
         }, {
             "lang": "uk",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/uk.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/uk.js"
         }, {
             "lang": "ur",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/ur.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/ur.js"
         }, {
             "lang": "uz",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/uz.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/uz.js"
         }, {
             "lang": "vi",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/vi.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/vi.js"
         }, {
             "lang": "yi",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/yi.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/yi.js"
         }, {
             "lang": "yo",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/yo.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/yo.js"
         }, {
             "lang": "zh",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/zh.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/zh.js"
         }, {
             "lang": "zu",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/divmanazer/locale/zu.js"
+            "src": "../../../../bundles/framework/divmanazer/resources/locale/zu.js"
         }]
 
     },

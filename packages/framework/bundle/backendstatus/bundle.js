@@ -31,15 +31,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
 		"locales" : [{
 			"lang" : "fi",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/backendstatus/locale/fi.js"
+			"src" : "../../../../bundles/framework/backendstatus/resources/locale/fi.js"
 		}, {
 			"lang" : "sv",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/backendstatus/locale/sv.js"
+			"src" : "../../../../bundles/framework/backendstatus/resources/locale/sv.js"
 		}, {
 			"lang" : "en",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/backendstatus/locale/en.js"
+			"src" : "../../../../bundles/framework/backendstatus/resources/locale/en.js"
 		}]
 	},
 	"bundle" : {

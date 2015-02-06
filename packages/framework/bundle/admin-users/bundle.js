@@ -57,15 +57,15 @@ Oskari.clazz.define("Oskari.framework.bundle.admin-users.AdminUsersBundle",
             "locales": [{
                 "lang": "fi",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/admin-users/locale/fi.js"
+                "src": "../../../../bundles/framework/admin-users/resources/locale/fi.js"
             }, {
                 "lang": "sv",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/admin-users/locale/sv.js"
+                "src": "../../../../bundles/framework/admin-users/resources/locale/sv.js"
             }, {
                 "lang": "en",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/admin-users/locale/en.js"
+                "src": "../../../../bundles/framework/admin-users/resources/locale/en.js"
             }]
         },
         "bundle": {

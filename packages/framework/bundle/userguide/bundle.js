@@ -52,91 +52,91 @@ Oskari.clazz.define("Oskari.mapframework.bundle.userguide.UserGuideBundle", func
         "locales": [{
             "lang": "hy",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/userguide/locale/hy.js"
+            "src": "../../../../bundles/framework/userguide/resources/locale/hy.js"
         }, {
             "lang": "cs",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/userguide/locale/cs.js"
+            "src": "../../../../bundles/framework/userguide/resources/locale/cs.js"
         }, {
             "lang": "da",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/userguide/locale/da.js"
+            "src": "../../../../bundles/framework/userguide/resources/locale/da.js"
         }, {
             "lang": "de",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/userguide/locale/de.js"
+            "src": "../../../../bundles/framework/userguide/resources/locale/de.js"
         }, {
             "lang": "en",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/userguide/locale/en.js"
+            "src": "../../../../bundles/framework/userguide/resources/locale/en.js"
         }, {
             "lang": "es",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/userguide/locale/es.js"
+            "src": "../../../../bundles/framework/userguide/resources/locale/es.js"
         }, {
             "lang": "et",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/userguide/locale/et.js"
+            "src": "../../../../bundles/framework/userguide/resources/locale/et.js"
         }, {
             "lang": "fi",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/userguide/locale/fi.js"
+            "src": "../../../../bundles/framework/userguide/resources/locale/fi.js"
         }, {
             "lang": "el",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/userguide/locale/el.js"
+            "src": "../../../../bundles/framework/userguide/resources/locale/el.js"
         }, {
             "lang": "hr",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/userguide/locale/hr.js"
+            "src": "../../../../bundles/framework/userguide/resources/locale/hr.js"
         }, {
             "lang": "hu",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/userguide/locale/hu.js"
+            "src": "../../../../bundles/framework/userguide/resources/locale/hu.js"
         }, {
             "lang": "lv",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/userguide/locale/lv.js"
+            "src": "../../../../bundles/framework/userguide/resources/locale/lv.js"
         }, {
             "lang": "nl",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/userguide/locale/nl.js"
+            "src": "../../../../bundles/framework/userguide/resources/locale/nl.js"
         }, {
             "lang": "pl",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/userguide/locale/pl.js"
+            "src": "../../../../bundles/framework/userguide/resources/locale/pl.js"
         }, {
             "lang": "pt",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/userguide/locale/pt.js"
+            "src": "../../../../bundles/framework/userguide/resources/locale/pt.js"
         }, {
             "lang": "ro",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/userguide/locale/ro.js"
+            "src": "../../../../bundles/framework/userguide/resources/locale/ro.js"
         }, {
             "lang": "sl",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/userguide/locale/sl.js"
+            "src": "../../../../bundles/framework/userguide/resources/locale/sl.js"
         }, {
             "lang": "sk",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/userguide/locale/sk.js"
+            "src": "../../../../bundles/framework/userguide/resources/locale/sk.js"
         }, {
             "lang": "sq",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/userguide/locale/sq.js"
+            "src": "../../../../bundles/framework/userguide/resources/locale/sq.js"
         }, {
             "lang": "sr",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/userguide/locale/sr.js"
+            "src": "../../../../bundles/framework/userguide/resources/locale/sr.js"
         }, {
             "lang": "sv",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/userguide/locale/sv.js"
+            "src": "../../../../bundles/framework/userguide/resources/locale/sv.js"
         }, {
             "lang": "uk",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/userguide/locale/uk.js"
+            "src": "../../../../bundles/framework/userguide/resources/locale/uk.js"
         }]
     },
     "bundle": {
