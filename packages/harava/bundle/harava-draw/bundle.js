@@ -60,15 +60,15 @@ function() {
 		"locales" : [{
 			"lang" : "fi",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/harava/harava-draw/locale/fi.js"
+			"src" : "../../../../bundles/harava/harava-draw/resources/locale/fi.js"
 		}, {
 			"lang" : "sv",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/harava/harava-draw/locale/sv.js"
+			"src" : "../../../../bundles/harava/harava-draw/resources/locale/sv.js"
 		}, {
 			"lang" : "en",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/harava/harava-draw/locale/en.js"
+			"src" : "../../../../bundles/harava/harava-draw/resources/locale/en.js"
 		}
 		]
 	},

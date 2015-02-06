@@ -175,15 +175,15 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
             "locales": [{
                 "lang": "fi",
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/statsgrid/locale/fi.js"
+                "src": "../../../../bundles/statistics/statsgrid/resources/locale/fi.js"
             }, {
                 "lang": "sv",
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/statsgrid/locale/sv.js"
+                "src": "../../../../bundles/statistics/statsgrid/resources/locale/sv.js"
             }, {
                 "lang": "en",
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/statsgrid/locale/en.js"
+                "src": "../../../../bundles/statistics/statsgrid/resources/locale/en.js"
             }]
         },
         "bundle": {

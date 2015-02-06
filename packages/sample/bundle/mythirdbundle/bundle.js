@@ -42,15 +42,15 @@ function() {
         "locales" : [{
             "lang" : "fi",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/sample/mythirdbundle/locale/fi.js"
+            "src" : "../../../../bundles/sample/mythirdbundle/resources/locale/fi.js"
         }, {
             "lang" : "sv",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/sample/mythirdbundle/locale/sv.js"
+            "src" : "../../../../bundles/sample/mythirdbundle/resources/locale/sv.js"
         }, {
             "lang" : "en",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/sample/mythirdbundle/locale/en.js"
+            "src" : "../../../../bundles/sample/mythirdbundle/resources/locale/en.js"
         }]
     },
     "bundle" : {

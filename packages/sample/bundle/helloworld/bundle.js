@@ -50,15 +50,15 @@ function() {
         "locales" : [{
             "lang" : "fi",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/sample/helloworld/locale/fi.js"
+            "src" : "../../../../bundles/sample/helloworld/resources/locale/fi.js"
         }, {
             "lang" : "sv",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/sample/helloworld/locale/sv.js"
+            "src" : "../../../../bundles/sample/helloworld/resources/locale/sv.js"
         }, {
             "lang" : "en",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/sample/helloworld/locale/en.js"
+            "src" : "../../../../bundles/sample/helloworld/resources/locale/en.js"
         }]
     },
     "bundle" : {

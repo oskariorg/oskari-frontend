@@ -8,7 +8,7 @@
  * - a reference to implementing file in /bundles...
  *
  * 2) LOCALISATION file references
- * - references to locale implementation files in bundles/.../locale/.js
+ * - references to locale implementation files in bundles/.../resources/locale/.js
  *
  * 3) Call to Create the BackboneJS Oskari Adapter with appropriate
  * parameters: <Bundle-Name>, <View Class Name>
@@ -57,15 +57,15 @@ Oskari.clazz.define(
                 {
                     "lang": "fi",
                     "type": "text/javascript",
-                    "src": "../../../../bundles/integration/admin-layerselector/locale/fi.js"
+                    "src": "../../../../bundles/integration/admin-layerselector/resources/locale/fi.js"
                 }, {
                     "lang": "en",
                     "type": "text/javascript",
-                    "src": "../../../../bundles/integration/admin-layerselector/locale/en.js"
+                    "src": "../../../../bundles/integration/admin-layerselector/resources/locale/en.js"
                 }, {
                     "lang": "sv",
                     "type": "text/javascript",
-                    "src": "../../../../bundles/integration/admin-layerselector/locale/sv.js"
+                    "src": "../../../../bundles/integration/admin-layerselector/resources/locale/sv.js"
                 }
             ],
             "resources": []

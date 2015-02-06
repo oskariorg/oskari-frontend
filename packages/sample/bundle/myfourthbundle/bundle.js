@@ -36,15 +36,15 @@ function() {
         "locales" : [{
             "lang" : "fi",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/sample/myfourthbundle/locale/fi.js"
+            "src" : "../../../../bundles/sample/myfourthbundle/resources/locale/fi.js"
         }, {
             "lang" : "sv",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/sample/myfourthbundle/locale/sv.js"
+            "src" : "../../../../bundles/sample/myfourthbundle/resources/locale/sv.js"
         }, {
             "lang" : "en",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/sample/myfourthbundle/locale/en.js"
+            "src" : "../../../../bundles/sample/myfourthbundle/resources/locale/en.js"
         }]
     },
     "bundle" : {

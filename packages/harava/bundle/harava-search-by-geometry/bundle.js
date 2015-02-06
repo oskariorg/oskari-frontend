@@ -67,15 +67,15 @@ function() {
 		"locales" : [{
 			"lang" : "fi",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/harava/harava-search-by-geometry/locale/fi.js"
+			"src" : "../../../../bundles/harava/harava-search-by-geometry/resources/locale/fi.js"
 		}, {
 			"lang" : "sv",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/harava/harava-search-by-geometry/locale/sv.js"
+			"src" : "../../../../bundles/harava/harava-search-by-geometry/resources/locale/sv.js"
 		}, {
 			"lang" : "en",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/harava/harava-search-by-geometry/locale/en.js"
+			"src" : "../../../../bundles/harava/harava-search-by-geometry/resources/locale/en.js"
 		}
 		]
 	},

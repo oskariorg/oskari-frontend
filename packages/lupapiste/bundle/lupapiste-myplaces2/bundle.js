@@ -117,15 +117,15 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.myplaces2.MyPlacesBundle", function
         "locales" : [{
             "lang" : "fi",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/lupapiste/lupapiste-myplaces2/locale/fi.js"
+            "src" : "../../../../bundles/lupapiste/lupapiste-myplaces2/resources/locale/fi.js"
         }, {
             "lang" : "sv",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/lupapiste/lupapiste-myplaces2/locale/sv.js"
+            "src" : "../../../../bundles/lupapiste/lupapiste-myplaces2/resources/locale/sv.js"
         }, {
             "lang" : "en",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/lupapiste/lupapiste-myplaces2/locale/en.js"
+            "src" : "../../../../bundles/lupapiste/lupapiste-myplaces2/resources/locale/en.js"
         }
        ]
 	},
