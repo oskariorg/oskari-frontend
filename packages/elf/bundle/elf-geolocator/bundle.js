@@ -36,15 +36,15 @@ Oskari.clazz.define("Oskari.elf.geolocator.Bundle", function() {
         "locales" : [{
             "lang": "fi",
             "type": "text/javascript",
-            "src": "../../../../bundles/elf/elf-geolocator/locale/fi.js"
+            "src": "../../../../bundles/elf/elf-geolocator/resources/locale/fi.js"
         }, {
             "lang": "sv",
             "type": "text/javascript",
-            "src": "../../../../bundles/elf/elf-geolocator/locale/sv.js"
+            "src": "../../../../bundles/elf/elf-geolocator/resources/locale/sv.js"
         }, {
             "lang": "en",
             "type": "text/javascript",
-            "src": "../../../../bundles/elf/elf-geolocator/locale/en.js"
+            "src": "../../../../bundles/elf/elf-geolocator/resources/locale/en.js"
         }]
     },
     "bundle" : {
