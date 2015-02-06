@@ -57,15 +57,15 @@ Oskari.clazz.define(
             "locales": [{
                 "lang": "fi",
                 "type": "text/javascript",
-                "src": "../../../../bundles/catalogue/metadataflyout/locale/fi.js"
+                "src": "../../../../bundles/catalogue/metadataflyout/resources/locale/fi.js"
             }, {
                 "lang": "en",
                 "type": "text/javascript",
-                "src": "../../../../bundles/catalogue/metadataflyout/locale/en.js"
+                "src": "../../../../bundles/catalogue/metadataflyout/resources/locale/en.js"
             }, {
                 "lang": "sv",
                 "type": "text/javascript",
-                "src": "../../../../bundles/catalogue/metadataflyout/locale/sv.js"
+                "src": "../../../../bundles/catalogue/metadataflyout/resources/locale/sv.js"
             }],
             "resources": []
         },
