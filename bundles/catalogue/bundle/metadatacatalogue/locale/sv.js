@@ -47,7 +47,8 @@ Oskari.registerLocalization(
         "searching": "Söker…",
         "grid": {
             "name": "Namn"
-        }
+        },
+        "licenseText": "Sök licens"
     }
 }
 );

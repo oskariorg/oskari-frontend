@@ -10,28 +10,28 @@ Oskari.registerLocalization(
         "BasicView": {
             "title": "Imprimir vista",
             "name": {
-                "label": "NOT TRANSLATED",
-                "placeholder": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED"
+                "label": "El nombre del mapa",
+                "placeholder": "requerido",
+                "tooltip": "Pon a tu mapa un nombre descriptivo. Por favor, tenga en cuenta el idioma de la interfaz de usuario"
             },
             "language": {
-                "label": "NOT TRANSLATED",
+                "label": "Idioma",
                 "options": {
-                    "fi": "NOT TRANSLATED",
-                    "sv": "NOT TRANSLATED",
-                    "en": "NOT TRANSLATED"
+                    "fi": "Finlandés",
+                    "sv": "Sueco",
+                    "en": "Inglés"
                 },
-                "tooltip": "NOT TRANSLATED"
+                "tooltip": "Seleccione el idioma a usar en la impresión. Por favor, tenga en cuenta el idioma de la interfaz de usuario y del conjunto de datos"
             },
             "size": {
                 "label": "Tamaño",
-                "tooltip": "Seleccione el modelo de impresión| La previsualización del mapa está actualizada correctamente",
+                "tooltip": "Seleccione el tamaño de impresión. La previsualización del mapa muestra las actualizaciones",
                 "options": [
                     {
                         "id": "A4",
                         "label": "A4 vertical",
                         "classForPreview": "Previsualización vertical",
-                        "selected": "verdadero"
+                        "selected": true
                     },
                     {
                         "id": "A4_Landscape",
@@ -52,27 +52,27 @@ Oskari.registerLocalization(
             },
             "preview": {
                 "label": "Previsualización",
-                "tooltip": "Pulse la previsualización pequeña para abrir una agrandada",
+                "tooltip": "Haga clic en la previsualización para agrandarla",
                 "pending": "La previsualización se actualizará en breve",
                 "notes": {
-                    "extent": "La previsualización puede usarse para calcular la extensión del mapa para la impresión",
+                    "extent": "La previsualización puede usarse para calcular la extensión del mapa para impresión",
                     "restriction": "No se muestran todas las capas en la previsualización"
                 }
             },
             "buttons": {
                 "save": "Imprimir",
                 "ok": "Hecho",
-                "back" : "NOT TRANSLATED",
+                "back": "Previo",
                 "cancel": "Cancelar"
             },
             "location": {
                 "label": "Localización y nivel de zoom",
                 "tooltip": "La escala de impresión coincide con la escala del mapa en el navegador",
-                "zoomlevel": "Nivel de zoom"
+                "zoomlevel": "Escala de impresión"
             },
             "settings": {
                 "label": "Más configuraciones",
-                "tooltip": "Realizar configuraciones adicionales como el formato, el título y la escala"
+                "tooltip": "Elija un formato de fichero, un título, una escala y una fecha para el mapa impreso"
             },
             "format": {
                 "label": "Formato",
@@ -85,90 +85,90 @@ Oskari.registerLocalization(
                     },
                     {
                         "id": "pdf",
-                        "format": "application/pdf",
-                        "selected": "verdadero",
+                        "format": "aplicación/pdf",
+                        "selected": true,
                         "label": "documento PDF"
                     }
                 ]
             },
             "mapTitle": {
-                "label": "Añadir título",
-                "tooltip": "añadir un título para el mapa"
+                "label": "Título del mapa",
+                "tooltip": "Añadir un título para el mapa impreso"
             },
             "content": {
                 "options": [
                     {
                         "id": "pageLogo",
-                        "label": "Añadir el logo de Oskari",
+                        "label": "Añadir el logo de Oskari en la impresión",
                         "tooltip": "Si es necesario, puede ocultar el logo",
                         "checked": "comprobado"
                     },
                     {
                         "id": "pageScale",
-                        "label": "Añadir la escala al mapa",
-                        "tooltip": "Añadir la escala al mapa",
+                        "label": "Añadir una escala al mapa impreso",
+                        "tooltip": "Añadir una escala al mapa impreso",
                         "checked": "comprobado"
                     },
                     {
                         "id": "pageDate",
-                        "label": "Añadir fecha",
-                        "tooltip": "Puede añadir la fecha a la impresión",
+                        "label": "Añadir una fecha al mapa impreso",
+                        "tooltip": "Puede añadir una fecha a la impresión",
                         "checked": "comprobado"
                     }
                 ]
             },
             "legend": {
-                "label": "Legend",
-                "tooltip": "Select legend position",
+                "label": "Leyenda",
+                "tooltip": "Elija la posición de la leyenda",
                 "options": [
                     {
                         "id": "oskari_legend_NO",
                         "loca": "NO",
-                        "label": "No legend ",
-                        "tooltip": "No legend plot",
+                        "label": "No hay leyenda",
+                        "tooltip": "La leyenda del mapa no se muestra en la impresión",
                         "selected": true
                     },
                     {
                         "id": "oskari_legend_LL",
                         "loca": "LL",
-                        "label": "Left lower corner ",
-                        "tooltip": "Legend position in left lower corner of print area"
+                        "label": "Esquina inferior izquierda",
+                        "tooltip": "La leyenda va situada en la esquina inferior izquierda del área de impresión"
                     },
                     {
                         "id": "oskari_legend_LU",
                         "loca": "LU",
-                        "label": "Left upper corner ",
-                        "tooltip": "Legend position in left upper corner of print area"
+                        "label": "Esquina superior izquierda",
+                        "tooltip": "La leyenda va situada en la esquina superior izquierda del área de impresión"
                     },
                     {
                         "id": "oskari_legend_RU",
                         "loca": "RU",
-                        "label": "Right upper corner ",
-                        "tooltip": "Legend position in right upper corner of print area"
+                        "label": "Esquina superior derecha",
+                        "tooltip": "La leyenda va situada en la esquina superior derecha del área de impresión"
                     },
                     {
                         "id": "oskari_legend_RL",
                         "loca": "RL",
-                        "label": "Right lower corner ",
-                        "tooltip": "Legend position in right lower corner of print area"
+                        "label": "Esquina inferior derecha",
+                        "tooltip": "La leyenda va situada en la esquina inferior derecha del área de impresión"
                     }
                 ]
             },
             "help": "Ayuda",
             "error": {
                 "title": "Error",
-                "size": "NOT TRANSLATED",
-                "name": "NOT TRANSLATED",
+                "size": "Error en las definiciones de tamaños",
+                "name": "Se requiere la información del nombre",
                 "nohelp": "No hay ayuda disponible",
-                "saveFailed": "La impresión del mapa ha fallado | Inténtelo más tarde",
-                "nameIllegalCharacters": "NOT TRANSLATED"
+                "saveFailed": "La impresión del mapa ha fallado. Por favor, inténtelo más tarde",
+                "nameIllegalCharacters": "El nombre contiene caracteres no válidos. Son válidos las letras a-z, además de å, ä y ö, números (0-9), retornos y guiones (-)"
             }
         },
         "StartView": {
-            "text": "Puede imprimir la vista que has creado",
+            "text": "Puede imprimir la vista que ha creado como imagen PNG o fichero PDF",
             "info": {
-                "maxLayers": "Puede imprimir un máximo de ocho capas de una vez",
-                "printoutProcessingTime": "El proceso de impresión tarda cuando se seleccionan varias capas"
+                "maxLayers": "Puede imprimir un máximo de ocho capas a la vez",
+                "printoutProcessingTime": "El proceso de impresión tarda cierto tiempo cuando se seleccionan varias capas"
             },
             "buttons": {
                 "continue": "Continuar",

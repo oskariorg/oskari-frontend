@@ -21,12 +21,17 @@ Oskari.clazz.define("Oskari.elf.languageselector.Bundle", function() {
     "protocol" : ["Oskari.bundle.Bundle", "Oskari.mapframework.bundle.extension.ExtensionBundle"],
     "source" : {
 
-        "scripts" : [{
+        "scripts" : [
+        {
             "type" : "text/javascript",
             "src" : "../../../../bundles/elf/bundle/elf-language-selector/elf-extension.js"
-        }, {
+        },
+        {
             "type" : "text/javascript",
             "src" : "../../../../bundles/elf/bundle/elf-language-selector/instance.js"
+        }, {
+            "type" : "text/css",
+            "src" : "../../../../resources/elf/bundle/elf-language-selector/css/style.css"
         }],
         "locales" : []
     },

@@ -78,12 +78,13 @@ table {
         background-repeat: no-repeat;
     }
 
-
-
-
-
+    .toolrow[tbgroup=default-selectiontools] {
+       display: none !important;
+    }
+    .default-selectiontools{
+        display:none !important;
+    }
     .marker-share {
-
         display: none !important;
     }
     .tool-print{
@@ -93,9 +94,6 @@ table {
     .layer-backendstatus-icon {
         display: none !important;
     }
-
-
-
 
 
     
@@ -143,9 +141,41 @@ table {
 	width: 25px;
 	vertical-align: bottom;
 	cursor: pointer;
+    float: left;
+}
+
+.logoplugin .terms {
+    float: left;
+}
+
+.logoplugin .data-sources {
+    float: left;
 }
 
 
 div.layerselection2 div.object-data {
-display: none !important;
+    display: none !important;
 }
+
+.oskari-tile-closed {
+    background: transparent !important;
+}
+
+div.mapplugin.scalebar {
+    font-size: 9px !important;
+}
+
+.accordion_panel .header {
+    cursor: pointer;
+}
+
+.icon-close, .icon-info {
+    cursor: pointer;
+}
+
+/*
+.oskari-flyoutheading{
+    background-color: transparent !important;
+    border: none !important;
+}
+*/
