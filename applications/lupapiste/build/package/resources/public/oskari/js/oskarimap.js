@@ -14027,7 +14027,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
         },
         {
             "type" : "text/css",
-            "src" : "../../../../bundles/framework/mapmodule-plugin/resources/plugin/logo/css/logoplugin.css"
+            "src" : "../../../../bundles/framework/mapmodule-plugin/resources/css/logoplugin.css"
         },
         
         // IndexMap

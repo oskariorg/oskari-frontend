@@ -157,7 +157,7 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/framework/mapmodule-plugin/plugin/logo/LogoPlugin.js"
                 }, {
                     "type": "text/css",
-                    "src": "../../../../bundles/framework/mapmodule-plugin/resources/plugin/logo/css/logoplugin.css"
+                    "src": "../../../../bundles/framework/mapmodule-plugin/resources/css/logoplugin.css"
                 },
                 /**
                  * Data Source plugin
