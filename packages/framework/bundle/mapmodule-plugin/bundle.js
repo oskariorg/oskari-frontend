@@ -185,16 +185,6 @@ Oskari.clazz.define(
                     "type": "text/css",
                     "src": "../../../../bundles/framework/mapmodule-plugin/resources/css/scalebar.css"
                 },
-                /**
-                 * PublisherToolbarPlugin plugin
-                 */
-                {
-                    "type": "text/javascript",
-                    "src": "../../../../bundles/framework/mapmodule-plugin/plugin/publishertoolbar/PublisherToolbarPlugin.js"
-                }, {
-                    "type": "text/css",
-                    "src": "../../../../bundles/framework/mapmodule-plugin/resources/plugin/publishertoolbar/css/publishertoolbar.css"
-                },
                 // FullScreen
                 {
                     "type": "text/javascript",
@@ -317,7 +307,7 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/framework/mapmodule-plugin/plugin/publishertoolbar/request/ToolContainerRequestHandler.js"
                 }, {
                     "type": "text/css",
-                    "src": "../../../../bundles/framework/mapmodule-plugin/resources/plugin/publishertoolbar/css/publishertoolbar.css"
+                    "src": "../../../../bundles/framework/mapmodule-plugin/resources/css/publishertoolbar.css"
                 },
                 /**
                  * Realtime plugin
