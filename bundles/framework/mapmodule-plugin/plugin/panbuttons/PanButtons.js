@@ -173,7 +173,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             } else {
 
                 var resourcesPath = this.getMapModule().getImageUrl(),
-                    imgUrl = resourcesPath + '/framework/mapmodule-plugin/resources/plugin/panbuttons/images/',
+                    imgUrl = resourcesPath + '/framework/mapmodule-plugin/resources/images/',
                     bgImg = imgUrl + 'panbutton-sprites-' + styleName + '.png';
 
                 panButtons.css({
