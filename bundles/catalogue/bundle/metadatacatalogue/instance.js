@@ -43,10 +43,10 @@ Oskari.clazz.define(
         // if the same column is sorted again
         this.lastSort = null;
         this.drawCoverage = false;
-        // License status object.
-        this.licenseStatus = {
-            licenseElement: null,
-            licenseTextElement: null,
+        // Action status object.
+        this.actionStatus = {
+            actionElement: null,
+            actionTextElement: null,
             callback: null,
             bindCallbackTo: null            
         };
@@ -133,7 +133,7 @@ Oskari.clazz.define(
                 '<tr class="resultRow">' +
                 '  <td></td>' +
                 '  <td></td>' +
-                '  <td><div class="licencePlaceholder"></div></td>' +
+                '  <td><div class="actionPlaceholder"></div></td>' +
                 '  <td><div class="layerInfo icon-info"></div></td>' +
                 '  <td><div class="resultRemove icon-close"></div></td>' +
                 '</tr>'
@@ -245,14 +245,14 @@ Oskari.clazz.define(
                 }
             }
 
-            this.showLicenseRequestHandler = Oskari.clazz.create(
-                'Oskari.catalogue.bundle.metadatacatalogue.request.ShowLicenseRequestHandler',
+            this.addSearchResultActionRequestHandler = Oskari.clazz.create(
+                'Oskari.catalogue.bundle.metadatacatalogue.request.AddSearchResultActionRequestHandler',
                 sandbox,
                 me
             );
             sandbox.addRequestHandler(
-                'ShowLicenseRequest',
-                this.showLicenseRequestHandler
+                'AddSearchResultActionRequest',
+                this.addSearchResultActionRequestHandler
             );
 
 
@@ -934,44 +934,44 @@ Oskari.clazz.define(
                         // jQuery(cells[1]).append("*****");
                         jQuery(cells[1]).addClass(me.resultHeaders[1].prop);
 
-                        // Licence link
-                        if(me._isLicense() == true) {
-                            var licenseElement = me.licenseStatus.licenseElement.clone(),
+                        // Action link
+                        if(me._isAction() == true) {
+                            var actionElement = me.actionStatus.actionElement.clone(),
                                 callbackElement = null,
-                                licenseTextEl = null;
+                                actionTextEl = null;
                             
-                            // Set license callback
-                            if(me.licenseStatus.callback && typeof me.licenseStatus.callback == 'function') {
-                                // Bind licence click to bindCallbackTo if bindCallbackTo param exist
-                                if(me.licenseStatus.bindCallbackTo) {
-                                    callbackElement = licenseElement.find(me.licenseStatus.bindCallbackTo);
+                            // Set action callback
+                            if(me.actionStatus.callback && typeof me.actionStatus.callback == 'function') {
+                                // Bind action click to bindCallbackTo if bindCallbackTo param exist
+                                if(me.actionStatus.bindCallbackTo) {
+                                    callbackElement = licenseElement.find(me.actionStatus.bindCallbackTo);
                                 }
-                                // Bind license click to root element if bindCallbackTo is null
+                                // Bind action click to root element if bindCallbackTo is null
                                 else {
-                                    callbackElement =  licenseElement.first();
+                                    callbackElement =  actionElement.first();
                                 }
                                 callbackElement.css({'cursor':'pointer'}).bind('click', {metadata: row}, function(event){
-                                   me.licenseStatus.callback(event.data.metadata);
+                                   me.actionStatus.callback(event.data.metadata);
                                 });
                             }
 
-                            // Set license text
-                            if(me.licenseStatus.licenseTextElement) {
-                                licenseTextEl = licenseElement.find(me.licenseStatus.licenseTextElement);
+                            // Set action text
+                            if(me.actionStatus.actionTextElement) {
+                                actionTextEl = actionElement.find(me.actionStatus.actionTextElement);
                             } else {
-                                licenseTextEl = licenseElement.first();
+                                actionTextEl = actionElement.first();
                             }
-                            if(licenseTextEl.is('input') ||
-                                licenseTextEl.is('select') ||
-                                licenseTextEl.is('button') ||
-                                licenseTextEl.is('textarea')){
-                                licenseTextEl.val(me.getLocalization('licenseText'));
+                            if(actionTextEl.is('input') ||
+                                actionTextEl.is('select') ||
+                                actionTextEl.is('button') ||
+                                actionTextEl.is('textarea')){
+                                actionTextEl.val(me.getLocalization('licenseText'));
                             }
                             else {                                
-                                licenseTextEl.html(me.getLocalization('licenseText'));
+                                actionTextEl.html(me.getLocalization('licenseText'));
                             }
 
-                            jQuery(cells[2]).find('div.licencePlaceholder').append(licenseElement);                            
+                            jQuery(cells[2]).find('div.actionPlaceholder').append(actionElement);                            
                         }
 
                         jQuery(cells[3]).addClass(me.resultHeaders[2].prop);
@@ -1116,31 +1116,31 @@ Oskari.clazz.define(
             return value;
         },
         /**
-        * @method
-        * Set license status.
+        * @method addSearchResultAction
+        * Add search result action.
         * @public
-        * @param {jQuery} licenseElement jQuery licence element
+        * @param {jQuery} actionElement jQuery action element
         * @param {Function} callback the callback function
         * @param {String} bindCallbackTo the jQuery selector where to bind click operation
-        * @param {String} licenseTextElement license text jQuery selector. If it's null then text showed on main element
+        * @param {String} actionTextElement action text jQuery selector. If it's null then text showed on main element
         */
-        setLicenseStatus: function(licenseElement, licenseTextElement, callback, bindCallbackTo){
+        addSearchResultAction: function(actionElement, actionTextElement, callback, bindCallbackTo){
             var me = this;
-            me.licenseStatus = {
-                licenseElement: licenseElement,
-                licenseTextElement: licenseTextElement,
+            me.actionStatus = {
+                actionElement: actionElement,
+                actionTextElement: actionTextElement,
                 callback: callback,
                 bindCallbackTo: bindCallbackTo
             };
         },
         /**
-        * @method _isLicense
+        * @method _isAction
         * @private
-        * @return {Boolean} is licence
+        * @return {Boolean} is action
         */
-        _isLicense: function(){
+        _isAction: function(){
             var me = this;
-            return me.licenseStatus.licenseElement !== null;
+            return me.actionStatus.actionElement !== null;
         },
         /**
          * @method setState

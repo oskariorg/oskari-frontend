@@ -14,23 +14,23 @@ User loginName has been renamed as email. User.getLoginName() is still available
 
 Metadatacatalogue can now be show license element in search results list. This functionality need to be actived ShowLicenseRequest.
 
-### metadatacatalogue/ShowLicenseRequest
+### metadatacatalogue/AddSearchResultActionRequest
 
-Added support to show license element in metadatacatalogue search results list. 
+Added support to show extra action element in metadatacatalogue search results list. 
 
-License element can be added via requests as follows:
+Action element can be added via requests as follows:
 
 ```javascript
-var reqBuilder = this.sandbox.getRequestBuilder('ShowLicenseRequest');
+var reqBuilder = this.sandbox.getRequestBuilder('AddSearchResultActionRequest');
 if (reqBuilder) {
     var data = {
-        licenseElement: jQuery('<a href="javascript:void(0)"></a>'),
+        actionElement: jQuery('<a href="javascript:void(0)"></a>'),
         callback: function(metadata) {
             console.log('Get license information');
             console.log(metadata);
         },
         bindCallbackTo: null,
-        licenseTextElement: null
+        actionTextElement: null
     };
     var request = reqBuilder(data);
     this.sandbox.request(this.getName(), request);

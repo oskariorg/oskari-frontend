@@ -1,6 +1,6 @@
 /**
- * @class Oskari.catalogue.bundle.metadatacatalogue.request.ShowLicenseRequestHandler
- * Handles Oskari.catalogue.bundle.metadatacatalogue.request.ShowLicenseRequest.
+ * @class Oskari.catalogue.bundle.metadatacatalogue.request.AddSearchResultActionRequestHandler
+ * Handles Oskari.catalogue.bundle.metadatacatalogue.request.AddSearchResultActionRequest.
  */
  /**
  * @method create called automatically on construction
@@ -10,7 +10,7 @@
  * @param {Oskari.catalogue.bundle.metadatacatalogue.MetadataCatalogueBundleInstance} instance
  *          reference to my metadatacatalogue bundle instance
  */
-Oskari.clazz.define('Oskari.catalogue.bundle.metadatacatalogue.request.ShowLicenseRequestHandler', function(sandbox, instance) {
+Oskari.clazz.define('Oskari.catalogue.bundle.metadatacatalogue.request.AddSearchResultActionRequestHandler', function(sandbox, instance) {
     this.sandbox = sandbox;
     this.instance = instance;
 }, {
@@ -23,12 +23,12 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatacatalogue.request.ShowLicen
      *      request to handle
      */
     handleRequest : function(core, request) {
-        var licenseElement = request.getLicenseElement(),
+        var actionElement = request.getActionElement(),
             callback = request.getCallback(),
             bindCallbackTo = request.getBindCallbackTo(),
-            licenseTextElement = request.getLicenseTextElement();
-        this.sandbox.printDebug("[Oskari.catalogue.bundle.metadatacatalogue.request.ShowLicenseRequest]");
-        this.instance.setLicenseStatus(licenseElement, licenseTextElement, callback, bindCallbackTo);
+            actionTextElement = request.getActionTextElement();
+        this.sandbox.printDebug("[Oskari.catalogue.bundle.metadatacatalogue.request.AddSearchResultActionRequest]");
+        this.instance.addSearchResultAction(actionElement, actionTextElement, callback, bindCallbackTo);
     }
 }, {
     /**
