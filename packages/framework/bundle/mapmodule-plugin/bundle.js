@@ -147,7 +147,7 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/framework/search/service/searchservice.js"
                 }, {
                     "type": "text/css",
-                    "src": "../../../../bundles/framework/mapmodule-plugin/resources/plugin/search/css/search.css"
+                    "src": "../../../../bundles/framework/mapmodule-plugin/resources/css/search.css"
                 },
                 /**
                  * Logo plugin
