@@ -380,7 +380,7 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/framework/mapmodule-plugin/plugin/panbuttons/PanButtons.js"
                 }, {
                     "type": "text/css",
-                    "src": "../../../../bundles/framework/mapmodule-plugin/resources/plugin/panbuttons/css/panbuttons.css"
+                    "src": "../../../../bundles/framework/mapmodule-plugin/resources/css/panbuttons.css"
                 }, {
                     "type": "text/css",
                     "src": "../../../../bundles/framework/mapmodule-plugin/resources/css/mapmodule.css"

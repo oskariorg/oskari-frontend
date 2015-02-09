@@ -14143,7 +14143,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
 		},{
 		    "type" : "text/css",
 		    "src" : "../../../../bundles/framework/" + 
-		            "mapmodule-plugin/resources/plugin/panbuttons/css/panbuttons.css"	  
+		            "mapmodule-plugin/resources/css/panbuttons.css"	  
 		},{
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/mapmodule-plugin/instance.js"

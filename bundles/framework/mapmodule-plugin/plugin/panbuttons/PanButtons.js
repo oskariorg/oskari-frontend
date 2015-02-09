@@ -50,7 +50,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                 right = el.find('.panbuttons_right'),
                 top = el.find('.panbuttons_up'),
                 bottom = el.find('.panbuttons_down'),
-                pbimg = me.getMapModule().getImageUrl() + '/framework/mapmodule-plugin/resources/plugin/panbuttons/images/',
+                pbimg = me.getMapModule().getImageUrl() + '/framework/mapmodule-plugin/resources/images/',
                 panbuttonDivImg = el.find('.panbuttonDivImg');
             // update path from config
             panbuttonDivImg.attr('src', pbimg + 'empty.png');
