@@ -14037,7 +14037,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
         },
         {
             "type" : "text/css",
-            "src" : "../../../../bundles/framework/mapmodule-plugin/resources/plugin/indexmap/css/indexmap.css"
+            "src" : "../../../../bundles/framework/mapmodule-plugin/resources/css/indexmap.css"
         },
         
         // ScaleBar
@@ -14136,7 +14136,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
 		}, {
 		    "type" : "text/css",
 		    "src" : "../../../../bundles/framework/" + 
-		            "mapmodule-plugin/resources/plugin/portti2zoombar/css/porttizoombar.css"	  
+		            "mapmodule-plugin/resources/css/porttizoombar.css"	  
 		}, {
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/mapmodule-plugin/plugin/panbuttons/PanButtons.js"
@@ -19206,7 +19206,7 @@ function(config) {
     this._map = null;
     this._conf = config;
     this._indexMap = null;
-    this._indexMapUrl = '/framework/mapmodule-plugin/resources/plugin/indexmap/images/suomi25m_tm35fin.png';
+    this._indexMapUrl = '/framework/mapmodule-plugin/resources/images/suomi25m_tm35fin.png';
 }, {
     /** @static @property __name plugin name */
     __name : 'IndexMapPlugin',

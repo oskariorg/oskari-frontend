@@ -51,12 +51,10 @@ div.layerselection2 .layer.selected {
           padding-top: 2px; }
         div.layerselection2 .layer.selected div.layer-tools div.right-tools div.object-data a {
           padding-left: 5px; }
-
   div.layerselection2 .layer.selected div.stylesel {
-    background-color: #f3f3f3;
-  }
-  div.layerselection2 .layer.selected div.stylesel label {
-    padding: 7px; }
+    background-color: #f3f3f3; }
+    div.layerselection2 .layer.selected div.stylesel label {
+      padding: 7px; }
 div.layerselection2 ul.selectedLayersList {
   height: 100%;
   width: 100%;

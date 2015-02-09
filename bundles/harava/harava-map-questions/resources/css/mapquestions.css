@@ -53,7 +53,7 @@
   cursor: pointer; }
 
 .harava-toolbar-hide {
-  background: url('../images/left_arrow.png') no-repeat;
+  background: url('/../images/left_arrow.png') no-repeat;
   background-position: center center;
   background-color: #057777; }
 

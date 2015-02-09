@@ -28,7 +28,7 @@ Oskari.clazz.define(
             // FIXME do this with classes...
             var me = this,
                 fsimg = this.getMapModule().getImageUrl() +
-                '/framework/mapmodule-plugin/resources/plugin/fullscreen/images/',
+                '/framework/mapmodule-plugin/resources/images/',
                 el = jQuery(
                     '<div class="fullscreenDiv">' +
                     '<img class="fullscreenDivImg" src="' + fsimg + 'hide-navigation.png' + '"></img>' +

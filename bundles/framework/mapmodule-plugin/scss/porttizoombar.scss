@@ -1,9 +1,4 @@
 div.pzbDiv {
-    background: transparent;
-    cursor: pointer;
-    top: 140px;
-    right: 70px;
-
     div.pzbDiv-plus {
         background-image: url('../images/zoombar_plus_patched.png');
         cursor: pointer;
@@ -28,5 +23,10 @@ div.pzbDiv {
         }
 
     }
+}
 
+div.mapplugin.zoombar {
+  background: none repeat scroll 0 0 transparent;
+  cursor: pointer;
+  width: 18px;
 }

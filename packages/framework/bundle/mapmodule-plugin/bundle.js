@@ -103,7 +103,7 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/framework/mapmodule-plugin/plugin/getinfo/GetFeatureInfoFormatter.js"
                 }, {
                     "type": "text/css",
-                    "src": "../../../../bundles/framework/mapmodule-plugin/resources/plugin/getinfo/css/getinfo.css"
+                    "src": "../../../../bundles/framework/mapmodule-plugin/resources/css/getinfo.css"
                 },
                 /**
                  * Markers plugin
@@ -167,7 +167,7 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/framework/mapmodule-plugin/plugin/datasource/DataSourcePlugin.js"
                 }, {
                     "type": "text/css",
-                    "src": "../../../../bundles/framework/mapmodule-plugin/resources/plugin/datasource/css/datasource.css"
+                    "src": "../../../../bundles/framework/mapmodule-plugin/resources/css/datasource.css"
                 },
                 // IndexMap
                 {
@@ -175,7 +175,7 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/framework/mapmodule-plugin/plugin/indexmap/IndexMapPlugin.js"
                 }, {
                     "type": "text/css",
-                    "src": "../../../../bundles/framework/mapmodule-plugin/resources/plugin/indexmap/css/indexmap.css"
+                    "src": "../../../../bundles/framework/mapmodule-plugin/resources/css/indexmap.css"
                 },
                 // ScaleBar
                 {
@@ -183,7 +183,7 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/framework/mapmodule-plugin/plugin/scalebar/ScaleBarPlugin.js"
                 }, {
                     "type": "text/css",
-                    "src": "../../../../bundles/framework/mapmodule-plugin/resources/plugin/scalebar/css/scalebar.css"
+                    "src": "../../../../bundles/framework/mapmodule-plugin/resources/css/scalebar.css"
                 },
                 /**
                  * PublisherToolbarPlugin plugin
@@ -201,7 +201,7 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/framework/mapmodule-plugin/plugin/fullscreen/FullScreen.js"
                 }, {
                     "type": "text/css",
-                    "src": "../../../../bundles/framework/mapmodule-plugin/resources/plugin/fullscreen/css/fullscreen.css"
+                    "src": "../../../../bundles/framework/mapmodule-plugin/resources/css/fullscreen.css"
                 },
 
                 /**
@@ -374,7 +374,7 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/framework/mapmodule-plugin/plugin/zoombar/Portti2Zoombar.js"
                 }, {
                     "type": "text/css",
-                    "src": "../../../../bundles/framework/mapmodule-plugin/resources/plugin/zoombar/css/porttizoombar.css"
+                    "src": "../../../../bundles/framework/mapmodule-plugin/resources/css/porttizoombar.css"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/framework/mapmodule-plugin/plugin/panbuttons/PanButtons.js"
