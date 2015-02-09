@@ -886,9 +886,12 @@ module.exports = function (grunt) {
                 expand: true,
                 cwd: '../bundles/',
                 src: '**/*.scss',
-                dest: '../resources/',
+                dest: '../bundles/',
                 rename: function (dest, src) {
-                    return dest + src.replace('/scss/', '/css/');
+                    
+                    var target = dest + src.replace('/scss/', '/resources/css/');
+                    grunt.log.writeln('Target: ' + target);
+                    return target;
                 },
                 ext: '.css'
             }]
