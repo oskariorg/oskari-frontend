@@ -337,7 +337,7 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/framework/mapmodule-plugin/plugin/mylocation/MyLocationPlugin.js"
                 }, {
                     "type": "text/css",
-                    "src": "../../../../bundles/framework/mapmodule-plugin/resources/plugin/mylocation/css/mylocation.css"
+                    "src": "../../../../bundles/framework/mapmodule-plugin/resources/css/mylocation.css"
                 },
                 /**
                  * Requests & handlers
