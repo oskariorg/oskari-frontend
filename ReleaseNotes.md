@@ -37,6 +37,11 @@ if (reqBuilder) {
 }
 ```
 
+### mapwfs2/WfsLayerPlugin
+
+Highlighting of border features is fixed in map move event.
+Ctrl-select of Wfs features is fixed (no duplicate features allowed any more)
+
 
 ## 1.26.1
 
