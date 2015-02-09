@@ -228,6 +228,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
      */
     getWFSMapClick: function (data) {
         var sandbox = this.plugin.getSandbox(),
+            me = this,
             layer = sandbox.findMapLayerFromSelectedMapLayers(data.data.layerId),
             keepPrevious = data.data.keepPrevious,
             featureIds = [],
@@ -242,6 +243,9 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
         }
 
         if (keepPrevious) {
+            // No duplicates
+            featureIds = me.filterDuplicates(layer.getClickedFeatureIds(), featureIds);
+            if(featureIds.length < 1) return;
             layer.setClickedFeatureIds(layer.getClickedFeatureIds().concat(featureIds));
         } else {
             layer.setClickedFeatureIds(featureIds);
@@ -597,6 +601,27 @@ Oskari.clazz.category(
                     visible: visible
                 });
             }
+        },
+        /**
+         * @method filterDuplicates
+         * @param {String []} a1    current array
+         * @param {String []} a2    to concat
+         *
+         * drop duplicates in concat array
+         */
+        filterDuplicates: function (a1, a2) {
+            var a3 = [];
+            if (a1 && a2) {
+                a2.forEach(function (item2) {
+                    if (a1.indexOf(item2) < 0) {
+                        a3.push(item2);
+                    }
+                });
+
+            }
+            return a3;
         }
+
+
     }
 );
