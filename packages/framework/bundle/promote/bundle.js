@@ -45,6 +45,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.promote.PromoteBundle", function
 			"lang" : "en",
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/promote/resources/locale/en.js"
+		}, {
+			"lang" : "es",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/promote/resources/locale/es.js"
 		}]
 	},
 	"bundle" : {

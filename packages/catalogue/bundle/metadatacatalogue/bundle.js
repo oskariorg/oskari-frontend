@@ -49,10 +49,10 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadatacatalogue.MetadataCatalogue
 			/* request */
 	        {
 	            "type": "text/javascript",
-	            "src": "../../../../bundles/catalogue/metadatacatalogue/request/ShowLicenseRequest.js"
+	            "src": "../../../../bundles/catalogue/metadatacatalogue/request/AddSearchResultActionRequest.js"
 	        }, {
 	            "type": "text/javascript",
-	            "src": "../../../../bundles/catalogue/metadatacatalogue/request/ShowLicenseRequestHandler.js"
+	            "src": "../../../../bundles/catalogue/metadatacatalogue/request/AddSearchResultActionRequestHandler.js"
 	        },
 	        /* css */
 			{
@@ -73,6 +73,10 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadatacatalogue.MetadataCatalogue
 			"lang" : "sv",
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/catalogue/metadatacatalogue/resources/locale/sv.js"
+		},{
+			"lang" : "es",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/catalogue/metadatacatalogue/resourceslocale/es.js"
 		}],
 		"resources" : []
 	},

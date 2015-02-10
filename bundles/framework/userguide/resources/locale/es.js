@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "es",
     "key": "userinterface.UserGuide",
     "value": {
@@ -20,4 +21,5 @@ Oskari.registerLocalization({
             "contentPart": "NOT TRANSLATED"
         }
     }
-});
+}
+);

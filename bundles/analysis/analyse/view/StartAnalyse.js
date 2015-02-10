@@ -1437,7 +1437,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     toolContainer.find('input').attr('name', 'layer_union');
                     label = option.label;
                     toolContainer.find('label').append(label).attr({
-                        'for': option.id,
                         'class': 'params_checklabel'
                     });
                     if (option.selected) {
@@ -2867,8 +2866,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         _disableMethodsForTempLayer: function (methodLabels) {
-            methodLabels.find('input#oskari_analyse_aggregate').prop('disabled', true);
-            methodLabels.find('input#oskari_analyse_difference').prop('disabled', true);
+            methodLabels.find('input#oskari_analyse_aggregate').prop('disabled', true).prop('checked', false);
+            methodLabels.find('input#oskari_analyse_difference').prop('disabled', true).prop('checked', false);
+            methodLabels.find('input#oskari_analyse_buffer').prop('checked', true);
         },
 
         _enableAllMethods: function (methodLabels) {

@@ -9,16 +9,16 @@ Oskari.registerLocalization(
             "title": "¡Error!",
             "generic": "¡Error del sistema! Por favor, inténtelo más tarde",
             "loadFailed": "¡Error cargando capas! Recargue la página en su navegador y seleccione las capas",
-            "noResults": "La búsqueda no ha devuelto ningún resultado",
-            "noResultsForKeyword": "La búsqueda no ha devuelto ningún resultado",
-            "minChars": "La longitud mínima es de 4 caracteres."
+            "noResults": "No hay resultados",
+            "noResultsForKeyword": "No hay capas con esta palabra clave",
+            "minChars": "La longitud mínima es de 4 caracteres. Los caracteres permitidos son las letras de la a a la z, también å, ä y ö, números, retrocesos y guiones"
         },
         "loading": "Cargando…",
         "filter": {
             "text": "Buscar capas",
-            "keywordsTitle": "Keywords:",
-            "shortDescription": "Search map layers by name, producer or keyword.",
-            "description": "You can search map layers by writing a part of the name or producer of the layer. By writing at 4 least characters and pushing enter key you can also search for keywords that are related to the layers. The number after the keyword in the list tells you how many map layers are related to it.",
+            "keywordsTitle": "Palabras clave:",
+            "shortDescription": "Buscar las capas del mapa por el nombre de la capa del mapa, el nombre del productor de los datos o la palabra clave que describe la capa del mapa.",
+            "description": "Escribe una parte del nombre de la capa de mapa, el nombre del productor de los datos o la palabra clave que describe la capa de mapa. La búsqueda por palabra clave se inicia cuando al menos se han escrito cuatro caracteres. Los caracteres permitidos son las letras a-z, así como å, ä y ö, números, espacios y guiones.",
             "inspire": "Por temas",
             "organization": "Por proveedores de datos",
             "published": "Usuarios",
@@ -30,25 +30,25 @@ Oskari.registerLocalization(
         },
         "tooltip": {
             "type-base": "Mapa de fondo",
-            "type-wms": "Capa",
-            "type-wfs": "Producto"
+            "type-wms": "Capa (WMS, WMTS)",
+            "type-wfs": "Producto de datos (WFS)"
         },
         "backendStatus": {
             "OK": {
                 "tooltip": "La capa está actualmente disponible",
-                "iconClass": "NOT TRANSLATED"
+                "iconClass": "Estado del bakend ok"
             },
             "DOWN": {
                 "tooltip": "La capa no está actualmente disponible",
-                "iconClass": "NOT TRANSLATED"
+                "iconClass": "Estado del bakend caído"
             },
             "MAINTENANCE": {
-                "tooltip": "La capa puede no estar disponible de manera intermitente durante los próximos días",
-                "iconClass": "NOT TRANSLATED"
+                "tooltip": "La capa puede no estar disponible de manera periódica durante los próximos días",
+                "iconClass": "Estado del bakend en mantenimiento"
             },
             "UNKNOWN": {
                 "tooltip": "",
-                "iconClass": "NOT TRANSLATED"
+                "iconClass": "Estado del bakend ok"
             }
         },
         "buttons": {
@@ -56,10 +56,10 @@ Oskari.registerLocalization(
         },
         "types": {
             "syn": "Sinónimo",
-            "lk": "Concepto Relacionados",
-            "vk": "Coordinar Concepto",
-            "ak": "Concepto Subordinado",
-            "yk": "Concepto de Orden Superior"
+            "lk": "Concepto relacionado",
+            "vk": "Concepto coordinado",
+            "ak": "Concepto subordinado",
+            "yk": "Concepto de orden superior"
         }
     }
 }

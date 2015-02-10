@@ -2,6 +2,7 @@
  * Start when dom ready
  */
 jQuery(document).ready(function() {
+    // TODO: remove this
     jQuery.urlParam = function(name){
         var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
         if (results==null){
@@ -12,10 +13,10 @@ jQuery(document).ready(function() {
         }
     }
 
-	
+	// TODO: remove this hack
 	if( jQuery.cookie('JSESSIONID') === undefined ||
 			jQuery.cookie('JSESSIONID') === '' ) {
-	jQuery.cookie('JSESSIONID','_'+(new Date().getTime()));
+	   jQuery.cookie('JSESSIONID','_'+(new Date().getTime()));
 	}
 
     if(!ajaxUrl) {
@@ -23,6 +24,7 @@ jQuery(document).ready(function() {
         return;
     }
 
+    // TODO: remove this
     if(!window.console) {
         window.console = {
             log : function() {
@@ -46,9 +48,8 @@ jQuery(document).ready(function() {
             getAppSetupParams[key] = controlParams[key];
         }
     }
-    var language = jQuery.urlParam('lang');
-    
-    if(language === null) {
+    if (!language) {
+        //language = jQuery.urlParam('lang');
         // default to english
         language = 'en';
     }
@@ -59,6 +60,7 @@ jQuery(document).ready(function() {
     Oskari.setLoaderMode('dev');
     Oskari.setPreloaded(preloaded);
 
+    // TODO: this code doesn't belong here, move it to some inherited bundle or something
     function startELFSettingsCallback(appConfigElf) {
         var sandbox = Oskari.getSandbox();
 

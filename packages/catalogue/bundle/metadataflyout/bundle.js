@@ -24,7 +24,6 @@ Oskari.clazz.define(
             "scripts": [{
                 "type": "text/javascript",
                 "src": "../../../../bundles/catalogue/metadataflyout/instance.js"
-
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/catalogue/metadataflyout/service/MetadataLoader.js"
@@ -66,6 +65,10 @@ Oskari.clazz.define(
                 "lang": "sv",
                 "type": "text/javascript",
                 "src": "../../../../bundles/catalogue/metadataflyout/resources/locale/sv.js"
+            }, {
+                "lang": "es",
+                "type": "text/javascript",
+                "src": "../../../../bundles/catalogue/metadataflyout/resources/locale/es.js"
             }],
             "resources": []
         },

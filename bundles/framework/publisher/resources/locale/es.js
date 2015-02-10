@@ -3,11 +3,11 @@ Oskari.registerLocalization(
     "lang": "es",
     "key": "Publisher",
     "value": {
-        "title": "Crear mapa",
-        "flyouttitle": "Crear mapa",
+        "title": "Publicar mapa",
+        "flyouttitle": "Generar mapa embebido",
         "desc": "",
         "published": {
-            "title": "Se ha creado su mapa",
+            "title": "Se ha creado mapa para embeber",
             "desc": "Incorpore su mapa añadiendo el siguiente código HTML a tu portal web"
         },
         "edit": {
@@ -27,7 +27,7 @@ Oskari.registerLocalization(
             },
             "name": {
                 "label": "El nombre del mapa",
-                "placeholder": "NOT TRANSLATED",
+                "placeholder": "requerido",
                 "tooltip": "Asigne a su mapa un nombre descriptivo. Por favor, tenga en cuenta el idioma de la interfaz de usuario"
             },
             "language": {
@@ -50,21 +50,23 @@ Oskari.registerLocalization(
                 "IndexMapPlugin": "Mapa índice",
                 "PanButtons": "Herramienta de desplazamiento",
                 "Portti2Zoombar": "Barra de escala",
+                "MyLocationPlugin": "Centrar a la locaclización del usuario",
                 "ControlsPlugin": "Desplazamiento",
                 "SearchPlugin": "Búsqueda de sitios y direcciones",
-                "FeaturedataPlugin": "",
+                "FeaturedataPlugin": "Datos de objetos geográficos",
                 "GetInfoPlugin": "Herramienta de consulta para los datos de sitios",
-                "PublisherToolbarPlugin": "NOT TRANSLATED",
-                "selectDrawLayer": "NOT TRANSLATED"
+                "PublisherToolbarPlugin": "Herramientas de mapa",
+                "selectDrawLayer": "Selecciona la capa para nuevos objetos geográficos"
             },
             "toolbarToolNames": {
-                "history_back": "NOT TRANSLATED",
-                "history_forward": "NOT TRANSLATED",
-                "measureline": "NOT TRANSLATED",
-                "measurearea": "NOT TRANSLATED",
-                "point": "NOT TRANSLATED",
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "history_back": "Mover atrás",
+                "history_forward": "Mover adelante",
+                "measureline": "Medir distancia",
+                "measurearea": "Medir área",
+                "drawTools": "Herramientas de dibujo",
+                "point": "Permitir usuarios añadir objetos geográficos puntuales",
+                "line": "Permitir usuarios añadir objetos geográficos lineales",
+                "area": "Permitir usuarios añadir objetos geográficos superficiales"
             },
             "toollayout": {
                 "label": "Tool layout",
@@ -79,70 +81,70 @@ Oskari.registerLocalization(
                 "label": "Statistics",
                 "tooltip": "Show the data related to map.",
                 "grid": "Show statistic grid",
-                "allowClassification": "NOT TRANSLATED"
+                "allowClassification": "Permitir clasificación"
             },
             "layout": {
-                "label": "NOT TRANSLATED",
+                "label": "Muestra gráfica",
                 "fields": {
                     "colours": {
-                        "label": "NOT TRANSLATED",
-                        "placeholder": "NOT TRANSLATED",
-                        "buttonLabel": "NOT TRANSLATED",
-                        "light_grey": "NOT TRANSLATED",
-                        "dark_grey": "NOT TRANSLATED",
-                        "blue": "NOT TRANSLATED",
-                        "red": "NOT TRANSLATED",
-                        "green": "NOT TRANSLATED",
-                        "yellow": "NOT TRANSLATED",
-                        "custom": "NOT TRANSLATED",
+                        "label": "Esquema de color",
+                        "placeholder": "Selecciona el esquema de color.",
+                        "buttonLabel": "Seleccionar",
+                        "light_grey": "Gris claro",
+                        "dark_grey": "Gris oscuro",
+                        "blue": "Azul",
+                        "red": "Rojo",
+                        "green": "Verde",
+                        "yellow": "Amarillo",
+                        "custom": "Esquema de color propio",
                         "customLabels": {
-                            "bgLabel": "NOT TRANSLATED",
-                            "titleLabel": "NOT TRANSLATED",
-                            "headerLabel": "NOT TRANSLATED",
-                            "iconLabel": "NOT TRANSLATED",
-                            "iconCloseLabel": "NOT TRANSLATED",
-                            "iconCloseWhiteLabel": "NOT TRANSLATED"
+                            "bgLabel": "Fondo del identificador",
+                            "titleLabel": "Texto del identificador",
+                            "headerLabel": "Texto de la cabecera",
+                            "iconLabel": "Icono",
+                            "iconCloseLabel": "Oscuro",
+                            "iconCloseWhiteLabel": "Claro"
                         }
                     },
                     "fonts": {
-                        "label": "NOT TRANSLATED"
+                        "label": "Estilo de fuente"
                     },
                     "toolStyles": {
-                        "label": "NOT TRANSLATED",
-                        "default": "NOT TRANSLATED",
-                        "rounded-dark": "NOT TRANSLATED",
-                        "rounded-light": "NOT TRANSLATED",
-                        "sharp-dark": "NOT TRANSLATED",
-                        "sharp-light": "NOT TRANSLATED",
-                        "3d-dark": "NOT TRANSLATED",
-                        "3d-light": "NOT TRANSLATED"
+                        "label": "Estilo de herramienta",
+                        "default": "Estilo por defecto",
+                        "rounded-dark": "Redondeado (Oscuro)",
+                        "rounded-light": "Redondeado (Claro)",
+                        "sharp-dark": "Angular (Oscuro)",
+                        "sharp-light": "Angular (Claro)",
+                        "3d-dark": "Tridimensional (Oscuro)",
+                        "3d-light": "Tridimensional (Claro)"
                     }
                 },
                 "popup": {
-                    "title": "NOT TRANSLATED",
-                    "close": "NOT TRANSLATED",
+                    "title": "Seleccionar esquema de color",
+                    "close": "Cerrar",
                     "gfiDialog": {
-                        "title": "NOT TRANSLATED",
-                        "featureName": "NOT TRANSLATED",
-                        "featureDesc": "NOT TRANSLATED"
+                        "title": "Información de objeto geográfico",
+                        "featureName": "Previsualización",
+                        "featureDesc": "El esquema de color solo define el color de la ventana emergente para la información del objeto geográfico y la selección de la capa del mapa."
                     }
                 }
             },
             "layers": {
-                "add": "NOT TRANSLATED",
-                "addselect": "NOT TRANSLATED",
+                "add": "Crear nueva capa para nuevos objetos geográficos",
                 "label": "Capas",
+                "addselect": "Añadir una nueva capa de dibujo en el mapa.",
                 "defaultLayer": "(Capa por defecto)",
                 "useAsDefaultLayer": "Usar como capa por defecto"
             },
             "myplaces": {
-                "label": "NOT TRANSLATED"
+                "label": "Mis capas del mapa."
             },
             "sizes": {
                 "small": "Pequeño",
                 "medium": "Mediano",
                 "large": "Grande",
-                "fill": "NOT TRANSLATED",
+                "fill": "Rellenar espacios",
                 "custom": "Tamaño personalizado",
                 "width": "ancho",
                 "height": "alto",
@@ -198,7 +200,7 @@ Oskari.registerLocalization(
             "layerlist_empty": "Las capas que ha seleccionado no pueden incorporarse| El menú Capas seleccionadas muestra si una capa puede o no puede incorporarse",
             "layerlist_denied": "No puede incorporarse",
             "denied_tooltip": "Los proveedores de los datos del mapa no han concedido el permiso para publicar este material en otros portales web. Comprueba los derechos de publicación en el menú Capas seleccionadas antes de la incorporación",
-            "myPlacesDisclaimer": "NOT TRANSLATED",
+            "myPlacesDisclaimer": "Estás publicando tu propia capa de mapa.",
             "buttons": {
                 "continue": "Continuar",
                 "continueAndAccept": "Aceptar los términos de uso y continuar",

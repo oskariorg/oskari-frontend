@@ -1,11 +1,11 @@
 /**
- * @class Oskari.catalogue.bundle.metadatacatalogue.request.ShowLicenseRequest
- * Requests to show licence on the metadata catalogue search results.
+ * @class Oskari.catalogue.bundle.metadatacatalogue.request.AddSearchResultActionRequest
+ * Requests to add search result action on the metadata catalogue search results.
  * 
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
-Oskari.clazz.define('Oskari.catalogue.bundle.metadatacatalogue.request.ShowLicenseRequest', 
+Oskari.clazz.define('Oskari.catalogue.bundle.metadatacatalogue.request.AddSearchResultActionRequest', 
 
 /**
  * @method create called automatically on construction
@@ -14,13 +14,13 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatacatalogue.request.ShowLicen
  * @param {Object} data request data
  */
 function(data) {
-    this._licenseElement = data.licenseElement;
-    this._licenseTextElement = data.licenseTextElement;
+    this._actionElement = data.actionElement;
+    this._actionTextElement = data.actionTextElement;
     this._callback = data.callback;
     this._bindCallbackTo = data.bindCallbackTo;    
 }, {
     /** @static @property __name request name */
-    __name : "ShowLicenseRequest",
+    __name : "AddSearchResultActionRequest",
     /**
      * @method getName
      * @return {String} request name
@@ -29,18 +29,18 @@ function(data) {
         return this.__name;
     },
     /**
-     * @method getLicenseElement
-     * @return {jQuery} licence jQuery element
+     * @method getActionElement
+     * @return {jQuery} action jQuery element
      */
-    getLicenseElement : function() {
-        return this._licenseElement;
+    getActionElement : function() {
+        return this._actionElement;
     },
     /**
-     * @method getLicenseTextElement
-     * @return {String} license text jQuery selector
+     * @method getActionTextElement
+     * @return {String} action text jQuery selector
      */
-    getLicenseTextElement : function() {
-        return this._licenseTextElement;
+    getActionTextElement : function() {
+        return this._actionTextElement;
     },
     /**
      * @method getCallback

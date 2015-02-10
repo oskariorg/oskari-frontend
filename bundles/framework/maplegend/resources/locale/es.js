@@ -3,7 +3,7 @@ Oskari.registerLocalization(
     "lang": "es",
     "key": "maplegend",
     "value": {
-        "title": "Leyenda",
+        "title": "Leyendas de mapa",
         "desc": ""
     }
 }
