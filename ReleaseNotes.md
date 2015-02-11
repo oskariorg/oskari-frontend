@@ -24,7 +24,7 @@ Fixed feature selection popup to show only one popup when clicking tool again.
 
 ### metadatacatalogue
 
-Metadatacatalogue can now be show license element in search results list. This functionality need to be actived ShowLicenseRequest.
+Metadatacatalogue can now be show extra action element in search results list. This functionality need to be actived AddSearchResultActionRequest.
 
 ### metadatacatalogue/AddSearchResultActionRequest
 
