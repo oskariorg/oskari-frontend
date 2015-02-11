@@ -77,6 +77,11 @@ function(instance) {
 	showSelectionTools : function() {
         var me = this;
 
+        // Safety check at not show more than one popup
+        if(jQuery('.tools_selection').is(':visible')) {
+            return;   
+        }
+
         // close popup so we can update the selection geometry
         // this is done so we can optimize grid updates on normal updateExtensionRequests.
         // if the selection show wouldn't use this request but a custom one, this wouldn't be needed
