@@ -24,8 +24,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
         eventHandlers: {
             'MapClickedEvent': function (event) {
                 if (this.tool.active === true) {
-                    this.stopTool();
-                    this.selectDefaultTool();
                     this.__handleMapClick(event.getLonLat());
                 }
             },
@@ -99,6 +97,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
         startTool: function () {
             this.tool.active = true;
             jQuery('#mapdiv').addClass('reverse-geocode');
+            this.enableGFI(false);
         },
         /**
          * Stops the tool
@@ -109,6 +108,28 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
         stopTool: function () {
             this.tool.active = false;
             jQuery('#mapdiv').removeClass('reverse-geocode');
+            //this.enableGfi(true);
+        },
+        /**
+         * @method enableGfi
+         * Enables/disables the gfi functionality
+         * @param {Boolean} blnEnable true to enable, false to disable
+         */
+        enableGFI: function (blnEnable) {
+            var gfiReqBuilder = this.sandbox.getRequestBuilder(
+                'MapModulePlugin.GetFeatureInfoActivationRequest'
+                ),
+                hiReqBuilder = this.sandbox.getRequestBuilder(
+                'WfsLayerPlugin.ActivateHighlightRequest'
+                );
+            // enable or disable gfi requests
+            if (gfiReqBuilder) {
+                this.sandbox.request(this, gfiReqBuilder(blnEnable));
+            }
+            // enable or disable wfs highlight
+            if (hiReqBuilder) {
+                this.sandbox.request(this, hiReqBuilder(blnEnable));
+            }
         },
         /**
          * Sends a request to select the default tool.
@@ -149,6 +170,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                 me.getSandbox().printWarn(
                     'ReverseGeoCode search failed',
                     [].slice.call(arguments));
+                this.stopTool();
+                this.selectDefaultTool();
             });
         },
         /**
@@ -189,6 +212,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                     [infoBoxContent], lonlat, true);
                 sandbox.request(this, infoBoxReq);
             }
+            this.stopTool();
+            this.selectDefaultTool();
         },
         /**
          * Returns the content for the infobox.
