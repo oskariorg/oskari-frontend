@@ -2,6 +2,10 @@
 
 ## 1.27
 
+### admin-layerselector
+
+Fixed JavaScript alerts and confirm dialogs to use Oskari.userinterface.component.Popup.
+
 ### core/user
 
 User loginName has been renamed as email. User.getLoginName() is still available and if user object doesn't get the email property, loginName is used instead. However loginName should be considered deprecated and email should be preferred.
@@ -9,6 +13,14 @@ User loginName has been renamed as email. User.getLoginName() is still available
 ### findbycoordinates
 
 *New bundle!* Creates a service and a user interface for searching nearest address on a map and adds a button to the toolbar for reverse geocode search. Requires server side functionality.
+
+### featuredata
+
+Fixed feature selection popup to show only one popup when clicking tool again.
+
+### featuredata2
+
+Fixed feature selection popup to show only one popup when clicking tool again.
 
 ### metadatacatalogue
 
