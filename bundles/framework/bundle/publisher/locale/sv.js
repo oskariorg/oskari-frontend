@@ -49,6 +49,7 @@ Oskari.registerLocalization({
                 "IndexMapPlugin": "Indexkarta",
                 "PanButtons": "Panoreringsverktyg",
                 "Portti2Zoombar": "Skalans glidreglage",
+                "MyLocationPlugin": "Centrera kartan på användarens position",
                 "ControlsPlugin": "Panorering på",
                 "SearchPlugin": "Adress- och ortnamnssökning",
                 "FeaturedataPlugin": "Objektuppgifter",

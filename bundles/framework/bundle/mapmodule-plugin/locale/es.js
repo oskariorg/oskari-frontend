@@ -42,34 +42,69 @@ Oskari.registerLocalization(
             },
             "SearchPlugin": {
                 "placeholder": "Encontrar sitios",
-                "search": "Encontrar",
+                "search": "Buscar",
                 "title": "Resultados de la búsqueda",
                 "close": "Cerrar resultados de búsqueda",
-                "noresults": "No se encontraron resultados",
-                "toomanyresults": "Más de 100 resultados encontrados. Por favor, refine la búsqueda",
+                "noresults": "No se encontraron resultados. Por favor, afine su búsqueda",
+                "toomanyresults": "Más de 100 resultados encontrados. Por favor, afine su búsqueda",
                 "column_name": "Nombre",
                 "column_village": "Municipio",
                 "column_type": "Tipo"
             },
             "GetInfoPlugin": {
-                "title": "Capas",
-                "layer": "Layer",
-                "places": "Sitios",
+                "title": "Datos de objetos geográficos",
+                "layer": "Capas de mapa",
+                "places": "Objetos",
                 "description": "Descripción",
-                "link": "URL-address",
+                "link": "Dirección web",
                 "name": "Nombre"
             },
             "PublisherToolbarPlugin": {
-                "test": "NOT TRANSLATED",
+                "test": "prueba",
                 "history": {
-                    "reset": "NOT TRANSLATED",
-                    "back": "NOT TRANSLATED",
-                    "next": "NOT TRANSLATED"
+                    "reset": "Volver a la vista por defecto",
+                    "back": "Volver a la vista previa",
+                    "next": "Mover a la siguiente vista"
                 },
                 "measure": {
-                    "line": "NOT TRANSLATED",
-                    "area": "NOT TRANSLATED"
+                    "line": "Medir distancia",
+                    "area": "Medir area"
                 }
+            },
+            "MarkersPlugin": {
+                "buttons": {
+                    "add": "Marcador de mapa",
+                    "clear": "Eliminar todos los marcadores"
+                },
+                "form": {
+                    "title": "Estilo de objeto geográfico puntual",
+                    "tooltip": "",
+                    "symbol": {
+                        "label": "Icono"
+                    },
+                    "size": {
+                        "label": "Tamaño"
+                    },
+                    "color": {
+                        "label": "Color",
+                        "labelOr": "o",
+                        "labelCustom": "Color personalizado (RGB 0-255)"
+                    },
+                    "preview": {
+                        "label": "Vista previa"
+                    },
+                    "message": {
+                        "label": "El texto en el mapa",
+                        "hint": "Escribe un mensaje"
+                    }
+                },
+                "dialog": {
+                    "title": "Marcador de mapa",
+                    "message": "Seleccionar una nueva ubicación para el marcador haciendo clic en el mapa."
+                }
+            },
+            "MyLocationPlugin": {
+                "tooltip": "Centrar mapa en su ubicación"
             }
         }
     }

@@ -268,6 +268,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             accordion.addPanel(methodPanel);
             accordion.addPanel(settingsPanel);
             accordion.addPanel(outputPanel);
+            accordion.getContainer().find('.header-icon-info').click(
+                function (evt) {
+                    evt.preventDefault();
+                    return false;
+                }
+            );
             accordion.insertTo(contentDiv);
 
             // buttons
@@ -595,9 +601,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             }
 
             var featureListElement,
-                featureListList = featureList.find('ul');
+                featureListList = featureList.find('ul'),
+                layerFields = me._getLayerServiceFields(selectedLayer);
 
-            me._getLayerServiceFields(selectedLayer).forEach(
+            layerFields.forEach(
                 function (serviceField) {
                     featureListElement = me.template.featureListElement.clone();
                     featureListElement
@@ -611,7 +618,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     featureListList.append(featureListElement);
                 }
             );
-
             me._preselectProperties(featureListList);
             featureListList
                 .find('li')
@@ -691,7 +697,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 contentPanel = panel.getContainer(),
                 tooltipCont = me.template.help.clone(),
                 visualizationForm = Oskari.clazz.create(
-                    'Oskari.userinterface.component.VisualizationForm'
+                    'Oskari.userinterface.component.VisualizationForm', {saveCallback: function() {
+                    me.ownStyleSaved();
+                }}
                 );
 
             colorRandomizer.find('input')
@@ -700,19 +708,22 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 .attr('id', 'analyse_randomize_colors_input');
 
             panel.setTitle(me.loc.output.label);
+
             // tooltip
             tooltipCont.attr('title', me.loc.output.tooltip);
             tooltipCont.addClass('header-icon-info');
             headerPanel.append(tooltipCont);
+
             // title
             colorTitle.find('.output_color_label').html(me.loc.output.color_label);
             contentPanel.append(colorTitle);
+
             // Create random color picker checkbox
             colorRandomizer.find('input[name=randomize_colors]').attr(
                 'checked',
                 'checked'
             );
-            colorRandomizer.find('label').addClass('params_checklabel').html(
+            colorRandomizer.find('label').addClass('params_checklabel').find('span').html(
                 me.loc.output.random_color_label
             );
             contentPanel.append(colorRandomizer);
@@ -849,10 +860,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 ),
                 closeBtn = Oskari.clazz.create(
                     'Oskari.userinterface.component.buttons.ExitButton'
-                ),
-                saveBtn = Oskari.clazz.create(
-                    'Oskari.userinterface.component.buttons.SaveButton'
                 );
+
             closeBtn.setHandler(function () {
                 me.instance.setAnalyseMode(false);
             });
@@ -860,18 +869,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 'oskari_analysis_analyse_view_start_analyse_buttons_cancel'
             );
             closeBtn.insertTo(buttonCont);
-
-            saveBtn.setPrimary(false);
-            saveBtn.setHandler(function () {
-                var selections = me._gatherSelections();
-                if (selections) {
-                    me._saveAnalyse(selections);
-                }
-            });
-            saveBtn.setId(
-                'oskari_analysis_analyse_view_start_analyse_buttons_save'
-            );
-            saveBtn.insertTo(buttonCont);
 
             analyseBtn.setTitle(this.loc.buttons.analyse);
             analyseBtn.addClass('primary');
@@ -976,10 +973,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         'checked': datum.checked
                     })
                     .change(function (e) {
+                        var selectedlayer = me._getSelectedMapLayer();
                         me._refreshFields();
                         me._modifyAnalyseName();
                         me.showInfos();
                         me._checkParamsSelection();
+                        me._checkMethodSelection();
                         me._refreshIntersectLayers();
                         me.refreshExtraParameters();
                     });
@@ -989,6 +988,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         'class': 'params_checklabel'
                     })
                     .find('span')
+                    .attr('title', datum.label)
                     .html(datum.label);
 
                 if (isTemp) {
@@ -1035,6 +1035,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             me._refreshFields();
             me.refreshExtraParameters();
             me._checkParamsSelection();
+            me._checkMethodSelection();
         },
 
         updateFilterIcon: function (layerId, element) {
@@ -1436,7 +1437,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     toolContainer.find('input').attr('name', 'layer_union');
                     label = option.label;
                     toolContainer.find('label').append(label).attr({
-                        'for': option.id,
                         'class': 'params_checklabel'
                     });
                     if (option.selected) {
@@ -2604,14 +2604,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             filterIcon.unbind('click');
             filterIcon.bind('click', function () {
                 if (!me._filterPopups[layer.getId()]) {
-                    editDialog.createFilterDialog(layer);
+                    prevJson = me.getFilterJson(layer.getId());
+                    editDialog.createFilterDialog(layer, prevJson);
                     me._filterPopups[layer.getId()] = true;
                     me._userSetFilter[layer.getId()] = true;
                     // If there's already filter values for current layer, populate the dialog with them.
-                    prevJson = me.getFilterJson(layer.getId());
                     if (prevJson && !jQuery.isEmptyObject(prevJson)) {
-                        popupContent = editDialog.getFilterDialogContent(layer);
-                        editDialog.fillDialogContent(popupContent, prevJson, layer);
                         editDialog.setCloseButtonHandler(function () {
                             me._filterPopups[layerId] = null;
                         });
@@ -2841,12 +2839,40 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     (selectedLayer.getFields().length >
                         this.max_analyse_layer_fields)
                 );
-
             if (exceedsFieldsCount) {
                 this._disableAllParamsSelection();
+            } else if (selectedLayer) {
+                var layerType = selectedLayer.getLayerType();
+                if (layerType === "temp") {
+                    this._disableParamsIfNoList();
+                }
             } else {
                 this._enableAllParamsSelection();
             }
+            
+        },
+
+        _checkMethodSelection: function () {
+            var selectedLayer = this._getSelectedMapLayer(),
+                methodLabels = jQuery('.accordion').find('.method_radiolabel');
+            if (selectedLayer) {
+                layerType = selectedLayer.getLayerType();
+                if (layerType === "temp") {
+                    this._disableMethodsForTempLayer(methodLabels);
+                } else {
+                    this._enableAllMethods(methodLabels);
+                }
+            }
+        },
+
+        _disableMethodsForTempLayer: function (methodLabels) {
+            methodLabels.find('input#oskari_analyse_aggregate').prop('disabled', true).prop('checked', false);
+            methodLabels.find('input#oskari_analyse_difference').prop('disabled', true).prop('checked', false);
+            methodLabels.find('input#oskari_analyse_buffer').prop('checked', true);
+        },
+
+        _enableAllMethods: function (methodLabels) {
+            methodLabels.find('input').prop('disabled', false);
         },
 
         _enableAllParamsSelection: function () {
@@ -2855,6 +2881,23 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             paramsCont
                 .find('#oskari_analyse_all')
                 .prop('disabled', false)
+                .prop('checked', true)
+                .change();
+        },
+
+        _disableParamsIfNoList: function () {
+            var paramsCont = jQuery('.analyse-columns-container');
+
+            paramsCont
+                .find('#oskari_analyse_all')
+                .prop('disabled', true);
+
+            paramsCont
+                .find('##oskari_analyse_select')
+                .prop('disabled', true);
+
+            paramsCont
+                .find('#oskari_analyse_none')
                 .prop('checked', true)
                 .change();
         },
@@ -2919,6 +2962,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             if (this.visualizationForm) {
                 this.visualizationForm.setValues(values);
             }
+        },
+        ownStyleSaved: function () {
+            this.mainPanel.find('input[name=randomize_colors]').prop("checked", false);
         },
 
         /**

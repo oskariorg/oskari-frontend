@@ -260,9 +260,7 @@ Oskari.registerLocalization(
             "buttons": {
                 "save": "Lagra",
                 "analyse": "Fortsätta analys",
-                "data": "Mera kartlager",
-                "cancel": "Avbryt",
-                "ok": "OK"
+                "data": "Mera kartlager"
             },
             "filter": {
                 "title": "Filtrering",

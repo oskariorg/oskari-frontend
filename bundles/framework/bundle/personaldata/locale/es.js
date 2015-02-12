@@ -17,27 +17,27 @@ Oskari.registerLocalization(
                     "name": "Nombre",
                     "description": "Descripción",
                     "publish": "Publicado",
-                    "edit": "NOT TRANSLATED",
-                    "delete": "NOT TRANSLATED"
+                    "edit": "Editar",
+                    "delete": "Borrar"
                 },
                 "popup": {
-                    "edit": "Editar información de la vista",
-                    "title": "Guardar vista",
+                    "edit": "Editar la vista",
+                    "title": "Guardar la vista",
                     "label": "Nombre de la vista:",
-                    "name_placeholder": "Asignar un nombre a la vista",
+                    "name_placeholder": "Dar un nombre a la vista",
                     "description_placeholder": "Asignar una descripción a la vista",
                     "save": "Guardar",
                     "cancel": "Cancelar",
-                    "error_noname": "Tipo de nombre",
-                    "deletetitle": "Confirmar borrado",
+                    "error_noname": "Teclear el nombre de la vista",
+                    "deletetitle": "Borrar la vista",
                     "deletemsg": "¿Desea borrar esta vista?"
                 },
                 "save": {
                     "success": "Se ha guardado la vista",
-                    "error_noname": "El nombre del campo no puede estar vacío",
-                    "error_illegalchars": "El nombre contiene caracteres no permitidos. Los caracteres permitidos son las letras entre a-z, los números, los espacios y los guiones.",
+                    "error_noname": "El nombre de la vista no puede estar vacío",
+                    "error_illegalchars": "El nombre de la vista tiene caracteres no válidos. Son válidos son las letras (a-z,å,ä,ö, A-Z,Å,Ä,Ö), los números (0-9), los retornos y los guiones (-)",
                     "msg": {
-                        "view_name": "El nombre de la vista"
+                        "view_name": "Nombre de la vista"
                     }
                 },
                 "button": {
@@ -49,32 +49,32 @@ Oskari.registerLocalization(
                 "error": {
                     "title": "¡Error!",
                     "generic": "¡Error del sistema! Por favor, inténtelo más tarde",
-                    "notsaved": "No pudo guardarse la vista",
-                    "notdeleted": "No pudo borrarse la vista",
+                    "notsaved": "No pudo guardarse la vista. Por favor, inténtelo más tarde",
+                    "notdeleted": "No pudo borrarse la vista. Por favor, inténtelo más tarde",
                     "makePublic": "No pudo publicarse la vista. Por favor, inténtelo más tarde",
-                    "makePrivate": "No pudo despublicarse la vista. Por favor, inténtelo más tarde",
-                    "loadfailed": "No pudieron descargarse las vistas"
+                    "makePrivate": "No pudo dejarse de despublicar la vista. Por favor, inténtelo más tarde",
+                    "loadfailed": "No pudieron descargarse las vistas. Por favor, inténtelo más tarde"
                 }
             },
             "publishedmaps": {
-                "title": "Mapas incorporados",
+                "title": "Mapas incluidos",
                 "show": "Mostrar en el mapa",
-                "getHTML": "NOT TRANSLATED",
+                "getHTML": "Código HTML",
                 "edit": "Editar",
                 "publish": "Publicar mapa",
-                "unpublish": "Despublicar mapa",
+                "unpublish": "Dejar de publicar mapa",
                 "delete": "Borrar",
                 "grid": {
                     "name": "Nombre",
-                    "domain": "Configuración del mapa",
+                    "domain": "Sitio web",
                     "publish": "Estado",
-                    "show": "NOT TRANSLATED",
-                    "html": "NOT TRANSLATED",
-                    "edit": "NOT TRANSLATED",
-                    "delete": "NOT TRANSLATED"
+                    "show": "Acciones",
+                    "html": "Código HTML",
+                    "edit": "Editar",
+                    "delete": "Borrar"
                 },
                 "published": {
-                    "desc": "NOT TRANSLATED"
+                    "desc": "Incluir el mapa añadiendo el siguiente código HTML en tu página:"
                 },
                 "popup": {
                     "edit": "Cambiar el nombre del mapa",
@@ -84,16 +84,16 @@ Oskari.registerLocalization(
                     "save": "Guardar",
                     "cancel": "Cancelar",
                     "error_noname": "Asignar un nombre al mapa",
-                    "deletetitle": "¿Borrar el mapa?",
-                    "deletemsg": "¿Desea borrar el mapa incorporado? No se mostrará más en tu portal web",
+                    "deletetitle": "Borrar el mapa incorporado",
+                    "deletemsg": "¿Desea borrar el mapa incorporado? No se mostrará más en su web",
                     "showErrorTitle": "Vista incompleta",
-                    "showConfirmMissing": "Algunas capas guardadas no están disponibles. Aun así, ¿quiere abrir esta vista?",
-                    "showConfirmNotLoaded": "Algunas capas no se han cargado todavía, inténtelo más tarde"
+                    "showConfirmMissing": "Algunas capas no están disponibles. Aun así, ¿quiere abrir esta vista?",
+                    "showConfirmNotLoaded": "Algunas capas no se han cargado todavía. Por favor, inténtelo más tarde"
                 },
                 "save": {
                     "success": "Se ha guardado el mapa",
-                    "error_noname": "El nombre del campo no puede estar vacío",
-                    "error_illegalchars": "El nombre contiene caracteres no permitidos. Los caracteres permitidos son las letras entre a-z, los números, los espacios y los guiones.",
+                    "error_noname": "El nombre del mapa no puede estar vacío",
+                    "error_illegalchars": "El nombre contiene caracteres no válidos. Son válidos letras  (a-z,å,ä,ö, A-Z,Å,Ä,Ö), los números (0-9), los retornos y los guiones (-).",
                     "msg": {
                         "view_name": "Nombre del mapa"
                     }
@@ -107,10 +107,10 @@ Oskari.registerLocalization(
                 "error": {
                     "title": "¡Error!",
                     "generic": "¡Error del sistema! Por favor, inténtelo más tarde",
-                    "notsaved": "No pudo guardarse el mapa",
-                    "notdeleted": "No pudo borrarse el mapa",
+                    "notsaved": "No pudo guardarse el mapa. Por favor, inténtelo más tarde",
+                    "notdeleted": "No pudo borrarse el mapa. Por favor, inténtelo más tarde",
                     "makePublic": "No pudo publicarse el mapa. Por favor, inténtelo más tarde",
-                    "makePrivate": "No pudo despublicarse el mapa. Por favor, inténtelo más tarde"
+                    "makePrivate": "No se pudo dejar de publicarse el mapa. Por favor, inténtelo más tarde"
                 }
             },
             "account": {
@@ -119,7 +119,7 @@ Oskari.registerLocalization(
                 "lastName": "Apellido",
                 "nickName": "Alias",
                 "email": "Correo electrónico",
-                "changeInfo": "Cambiar la información de su cuenta",
+                "changeInfo": "Actualizar la información de su cuenta",
                 "changePassword": "Cambiar su contraseña",
                 "removeAccount": "Borrar su cuenta",
                 "changeInfoUrl": "/web/es/profile"

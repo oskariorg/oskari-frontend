@@ -129,6 +129,12 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/framework/bundle/mapmodule-plugin/request/RemoveMarkersRequestHandler.js"
                 }, {
                     "type": "text/javascript",
+                    "src": "../../../../bundles/framework/bundle/mapmodule-plugin/request/ToggleFullScreenControlRequest.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/framework/bundle/mapmodule-plugin/request/ToggleFullScreenControlRequestHandler.js"
+                }, {
+                    "type": "text/javascript",
                     "src": "../../../../bundles/framework/bundle/mapmodule-plugin/event/AfterAddMarkerEvent.js"
                 }, {
                     "type": "text/javascript",
@@ -335,6 +341,17 @@ Oskari.clazz.define(
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/realtime/event/RefreshLayerEvent.js"
+                },
+
+                /**
+                 * My Location plugin
+                 */
+                {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/mylocation/MyLocationPlugin.js"
+                }, {
+                    "type": "text/css",
+                    "src": "../../../../resources/framework/bundle/mapmodule-plugin/plugin/mylocation/css/mylocation.css"
                 },
 
                 /**

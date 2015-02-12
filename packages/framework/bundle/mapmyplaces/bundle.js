@@ -47,6 +47,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapmyplaces.MapMyPlacesBundle", 
                 "lang": "en",
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/bundle/mapmyplaces/locale/en.js"
+            }, {
+                "lang": "es",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/mapmyplaces/locale/es.js"
             }]
         },
         "bundle": {

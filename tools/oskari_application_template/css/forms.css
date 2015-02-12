@@ -151,6 +151,28 @@ input.focus, textarea.focus {
   border: 1px solid #FC0;
 }
 
+fieldset:disabled label > span,
+form:disabled label > span,
+label > input:disabled + span {
+    opacity: 0.5;
+}
+
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled {
+    cursor: default;
+    opacity: 0.5;
+}
+
+label > input {
+    vertical-align: middle;
+}
+
+label > span {
+    vertical-align: middle;
+}
+
 .ie .aui-button-disabled input {
   -ms-filter: alpha(opacity=50);
   filter: alpha(opacity=50);

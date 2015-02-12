@@ -549,8 +549,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                 layer;
             for (i = 0; i < selectedLayers.length; i += 1) {
                 layer = selectedLayers[i];
-                if (!this.hasPublishRight(layer) &&
-                        layer.getId().toString().indexOf('myplaces_') < 0) {
+                if (!this.hasPublishRight(layer)) {
                     deniedLayers.push(layer);
                 }
             }

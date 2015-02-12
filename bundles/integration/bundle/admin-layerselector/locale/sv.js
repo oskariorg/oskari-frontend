@@ -116,13 +116,13 @@ Oskari.registerLocalization(
             "addInspireNameTitle": "Ämnets namn",
             "addOrganizationName": "Data&shy;producentens namn",
             "addOrganizationNameTitle": "Data&shy;producentens namn",
-            "addNewClass": "Tillägg nytt teema",
+            "addNewClass": "Tillägg nytt tema",
             "addNewLayer": "Tillägg nytt kartlager",
             "addNewGroupLayer": "Tillägg nytt gruppnivå",
             "addNewBaseLayer": "Tillägg nytt bakgrundsnivå",
             "addNewOrganization": "Tillägg ny dataproducent",
-            "addInspireTheme": "Tillägg ämne",
-            "addInspireThemeDesc": "Tillägg ämnen enligt InspireTheme",
+            "addInspireTheme": "Tema",
+            "addInspireThemeDesc": "Välj teman enligt InspireTheme",
             "opacity": "Opacitet",
             "opacityDesc": "Lagrets opacitet (0% gör lagret genomskinligt)",
             "style": "Förvald utseende",
@@ -172,15 +172,25 @@ Oskari.registerLocalization(
             "interfaceAddressDesc": "Gränssnittjänstens URL utan ? och tillläggande parameter",
             "viewingRightsRoles": "Kollar rättigheter roller",
             "metadataReadFailure": "Fetching layer metadata failed.",
+            "permissionFailure": "NOT TRANSLATED",
             "mandatory_field_missing": "Nödvändig uppgift:",
             "invalid_field_value": "Ogiltigt värde:",
             "operation_not_permitted_for_layer_id": "Åtgärden är inte tillåten för kartlager",
-            "no_layer_with_id": "Ingen kartlagret hittades med id"
+            "no_layer_with_id": "Ingen kartlagret hittades med id",
+            "success": "NOT TRANSLATED",
+            "errorRemoveLayer": "NOT TRANSLATED",
+            "errorInsertAllreadyExists" :"NOT TRANSLATED",
+            "errorRemoveGroupLayer": "NOT TRANSLATED",
+            "errorSaveGroupLayer": "NOT TRANSLATED",
+            "errorTitle" : "Fel",
+            "warningTitle" : "Varning",
+            "successTitle" : "Lagrat"
         },
         "cancel": "Tillbaka",
         "add": "Tillägg",
         "save": "Lagra",
-        "delete": "Ta bort"
+        "delete": "Ta bort",
+        "ok": "OK"
     }
 }
 );

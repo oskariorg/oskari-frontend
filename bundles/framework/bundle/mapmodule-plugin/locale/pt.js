@@ -70,6 +70,9 @@ Oskari.registerLocalization(
                     "line": "Medir distância",
                     "area": "Medir área"
                 }
+            },
+            "MyLocationPlugin": {
+                "tooltip": "NOT TRANSLATED"
             }
         }
     }

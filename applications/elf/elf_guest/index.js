@@ -2,13 +2,21 @@
  * Start when dom ready
  */
 jQuery(document).ready(function() {
-	
-	
-	
-	
+    // TODO: remove this
+    jQuery.urlParam = function(name){
+        var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+        if (results==null){
+           return null;
+        }
+        else{
+           return results[1] || 0;
+        }
+    }
+
+	// TODO: remove this hack
 	if( jQuery.cookie('JSESSIONID') === undefined ||
 			jQuery.cookie('JSESSIONID') === '' ) {
-	jQuery.cookie('JSESSIONID','_'+(new Date().getTime()));
+	   jQuery.cookie('JSESSIONID','_'+(new Date().getTime()));
 	}
 
     if(!ajaxUrl) {
@@ -16,6 +24,7 @@ jQuery(document).ready(function() {
         return;
     }
 
+    // TODO: remove this
     if(!window.console) {
         window.console = {
             log : function() {
@@ -39,286 +48,84 @@ jQuery(document).ready(function() {
             getAppSetupParams[key] = controlParams[key];
         }
     }
-
-    if(!language) {
+    if (!language) {
+        //language = jQuery.urlParam('lang');
         // default to english
         language = 'en';
     }
     Oskari.setLang(language);
+ 
 
-    if (language === "fi") {
-        Oskari.getLocalization('MapModule').plugin.LogoPlugin.layersHeader = "&copy; ELF ja seuraavat tiedontuottajat:";
-    } else if (language === "sv") {
-        Oskari.getLocalization('MapModule').plugin.LogoPlugin.layersHeader = "&copy; ELF och följande dataproducenter:";
-    } else if (language === "en") {
-    /* ELF specific localization adjustments */
-    Oskari.registerLocalization(
-    		{
-    		    "lang": "en",
-    		    "key": "MapModule",
-    		    "value": {
-    		        "status_update_map": "Loading the map...",
-    		        "zoombar_tooltip": {
-    		            "zoomLvl-0": "Background map",
-    		            "zoomLvl-1": "Country",
-    		            "zoomLvl-2": "Province",
-    		            "zoomLvl-3": "",
-    		            "zoomLvl-4": "Town",
-    		            "zoomLvl-5": "",
-    		            "zoomLvl-6": "",
-    		            "zoomLvl-7": "Part of town",
-    		            "zoomLvl-8": "",
-    		            "zoomLvl-9": "",
-    		            "zoomLvl-10": "Street",
-    		            "zoomLvl-11": "",
-    		            "zoomLvl-12": ""
-    		        },
-    		        "plugin": {
-    		            "LogoPlugin": {
-    		                "terms": "Terms of Use",
-    		                "dataSources": "&copy; ELF and the following service providers:",
-    		                "layersHeader": "Map Layers",
-    		                "indicatorsHeader": "Indicators"
-    		            },
-    		            "DataSourcePlugin": {
-    		                "link": "Copyright",
-    		                "popup": {
-    		                    "title": "Copyright",
-    		                    "content": "NOT TRANSLATED"
-    		                },
-    		                "button": {
-    		                    "close": "Close"
-    		                }
-    		            },
-    		            "LayerSelectionPlugin": {
-    		                "title": "Map layers",
-    		                "chooseDefaultBaseLayer": "Select the background map"
-    		            },
-    		            "SearchPlugin": {
-    		                "placeholder": "Search location",
-    		                "search": "Search",
-    		                "close": "Close search results.",
-    		                "noresults": "No results found. Please refine your search.",
-    		                "toomanyresults": "Over 100 results found. Please refine your search.",
-    		                "column_name": "Name",
-    		                "column_village": "Municipality",
-    		                "column_type": "Type"
-    		            },
-    		            "GetInfoPlugin": {
-    		                "title": "Feature Data",
-    		                "layer": "Map layer",
-    		                "places": "Features",
-    		                "description": "Description",
-    		                "link": "Web address",
-    		                "name": "Name"
-    		            },
-    		            "PublisherToolbarPlugin": {
-    		                "test": "test",
-    		                "history": {
-    		                    "reset": "Return to the default view",
-    		                    "back": "Return to the previous view",
-    		                    "next": "Move to the next view"
-    		                },
-    		                "measure": {
-    		                    "line": "Measure a distance",
-    		                    "area": "Measure an area"
-    		                }
-    		            },
-    		            "MarkersPlugin": {
-    		                "buttons": {
-    		                    "add": "Map marker",
-    		                    "clear": "Delete all markers"
-    		                },
-    		                "form": {
-    		                    "title": "Point feature style",
-    		                    "tooltip": "",
-    		                    "symbol": {
-    		                        "label": "Icon"
-    		                    },
-    		                    "size": {
-    		                        "label": "Size"
-    		                    },
-    		                    "color": {
-    		                        "label": "Colour",
-    		                        "labelOr": "or",
-    		                        "labelCustom": "Custom colour (RGB 0-255)"
-    		                    },
-    		                    "preview": {
-    		                        "label": "Preview"
-    		                    },
-    		                    "message": {
-    		                        "label": "The text on the map",
-    		                        "hint": "Write a text to be shown on the map."
-    		                    }
-    		                },
-    		                "dialog": {
-    		                    "title": "Map marker",
-    		                    "message": "Select a new location for the marker by clicking the map."
-    		                }
-    		            }
-    		        }
-    		    }
-    		}
-    		);
-    
-    Oskari.registerLocalization(
-    		{
-    		    "lang": "en",
-    		    "key": "catalogue.bundle.metadataflyout",
-    		    "value": {
-    		        "title": "Metadata",
-    		        "desc": "",
-    		        "loader": {
-    		            "json": "/catalogue/portti-metadata-printout-service/MetadataServlet?",
-    		            "abstract": "/geonetwork/srv/en/metadata.show.portti.abstract?",
-    		            "inspire": "/geonetwork/srv/en/metadata.show.portti?",
-    		            "jhs": "/geonetwork/srv/en/metadata.show.portti.jhs158?",
-    		            "pdf": "/catalogue/portti-metadata-printout-service/MetadataPrintoutServlet?lang=sv&title=METADATAPRINTOUT&metadataresource",
-    		            "xml": "/geonetwork/srv/en/iso19139.xml?",
-    		            "schemas": "/geonetwork/srv/en/metadata.show.portti.skeemat?"
-    		        },
-    		        "layer": {
-    		            "name": "Metadata",
-    		            "description": "",
-    		            "orgName": "Metadata catalogue",
-    		            "inspire": "Metadata"
-    		        },
-    		        "flyout": {
-    		            "title": "Metadata",
-    		            "abstract": "Basic information",
-    		            "inspire": "Inspire metadata",
-    		            "jhs": "ISO 19115 metadata",
-    		            "xml": "ISO 19139 XML file",
-    		            "map": "Geographic extent",
-    		            "pdf": "Printout",
-    		            "select_metadata_prompt": "Select metadata by clicking the icons.",
-    		            "metadata_printout_title": "METADATA PRINTOUT",
-    		            "linkto": "Link to this metadata",
-    		            "tabs": {
-    		                "abstract": {
-    		                    "abstract": "",
-    		                    "jhs": "Show ISO 19115 metadata",
-    		                    "inspire": "Show INSPIRE metadata",
-    		                    "xml": {
-    		                        "text": "Open ISO 19139 XML file",
-    		                        "target": "_blank"
-    		                    },
-    		                    "pdf": {
-    		                        "text": "Open PDF printout",
-    		                        "target": "_blank"
-    		                    }
-    		                },
-    		                "jhs": {
-    		                    "abstract": "Show basic information",
-    		                    "jhs": "",
-    		                    "inspire": "Show INSPIRE metadata",
-    		                    "xml": {
-    		                        "text": "Open ISO 19139 XML file",
-    		                        "target": "_blank"
-    		                    },
-    		                    "pdf": {
-    		                        "text": "Open metadata in PDF printout",
-    		                        "target": "_blank"
-    		                    }
-    		                },
-    		                "inspire": {
-    		                    "abstract": "Show basic information",
-    		                    "jhs": "Show ISO 19115 metadata",
-    		                    "inspire": "",
-    		                    "xml": {
-    		                        "text": "Open ISO 19139 XML file",
-    		                        "target": "_blank"
-    		                    },
-    		                    "pdf": {
-    		                        "text": "Open metadata in PDF printout",
-    		                        "target": "_blank"
-    		                    }
-    		                }
-    		            }
-    		        },
-    		        "tile": {
-    		            "title": "Metadata",
-    		            "tooltip": "The terms of use and the availability of the dataset are documented in the metadata description."
-    		        }
-    		    }
-    		}
-    		);
-    }
-    
     /* Startup */
-    
-
     Oskari.setLoaderMode('dev');
     Oskari.setPreloaded(preloaded);
 
+    // TODO: this code doesn't belong here, move it to some inherited bundle or something
     function startELFSettingsCallback(appConfigElf) {
-
         var sandbox = Oskari.getSandbox();
 
         /* temporary fix to ELF WMTS services not working properly zoomed out - forcing minScale on layers */
         Oskari.clazz.category('Oskari.mapframework.wmts.service.WMTSLayerService', 'fix', {
-            parseCapabilitiesToLayers : function(wmtsName, caps, matrixSet) {
+                parseCapabilitiesToLayers : function(wmtsName, caps, matrixSet) {
+                    var me = this;
+                    var mapLayerService = this.mapLayerService;
+                    var getTileUrl = null;
+                    if(caps.operationsMetadata.GetTile.dcp.http.getArray) {
+                        getTileUrl = caps.operationsMetadata.GetTile.dcp.http.getArray;
+                    } else {
+                        getTileUrl = caps.operationsMetadata.GetTile.dcp.http.get;
+                    }
+                    var capsLayers = caps.contents.layers;
+                    var contents = caps.contents;
+                    var matrixSet = contents.tileMatrixSets[matrixSet];
+                    var layersCreated = [];
 
-                var me = this;
-                var mapLayerService = this.mapLayerService;
-                var getTileUrl = null;
-                if(caps.operationsMetadata.GetTile.dcp.http.getArray) {
-                    getTileUrl = caps.operationsMetadata.GetTile.dcp.http.getArray;
-                } else {
-                    getTileUrl = caps.operationsMetadata.GetTile.dcp.http.get;
-                }
-                var capsLayers = caps.contents.layers;
-                var contents = caps.contents;
-                var matrixSet = contents.tileMatrixSets[matrixSet];
-                var layersCreated = [];
+                    for(var n = 0; n < capsLayers.length; n++) {
 
-                for(var n = 0; n < capsLayers.length; n++) {
+                        var spec = capsLayers[n],
+                        mapLayerId = spec.identifier,
+                        mapLayerSysId = mapLayerId.split('.').join('_'),
+                        mapLayerName = spec.identifier,
+                        layerExtraInfo =  appConfigElf.conf.layers ? appConfigElf.conf.layers[mapLayerSysId]||{}: {},
+                        minScale =  layerExtraInfo.minScale,
+                        metadataid = layerExtraInfo.metadataid,
+                        mapLayerJson = {
+                          wmtsName : mapLayerId,
+                          descriptionLink : "",
+                          orgName : wmtsName,
+                          type : "wmtslayer",
+                          legendImage : "",
+                          formats : {
+                            value : "text/html"
+                          },
+                          isQueryable : true,
+                          minScale : minScale,
+                          style : "",
+                          dataUrl : "",
+                          name : mapLayerId,
+                          title : spec.title,
+                          opacity : 100,
+                          inspire : wmtsName,
+                          maxScale : 1
+                        };
 
-                    var spec = capsLayers[n],
-                    mapLayerId = spec.identifier,
-                    mapLayerSysId = mapLayerId.split('.').join('_'),
-                    mapLayerName = spec.identifier,
-                    layerExtraInfo =  appConfigElf.conf.layers ? appConfigElf.conf.layers[mapLayerSysId]||{}: {},
-                    minScale =  layerExtraInfo.minScale,
-                    metadataid = layerExtraInfo.metadataid,
-                    mapLayerJson = {
-                      wmtsName : mapLayerId,
-                      descriptionLink : "",
-                      orgName : wmtsName,
-                      type : "wmtslayer",
-                      legendImage : "",
-                      formats : {
-                        value : "text/html"
-                      },
-                      isQueryable : true,
-                      minScale : minScale,
-                      style : "",
-                      dataUrl : "",
-                      name : mapLayerId,
-                      title : spec.title,
-                      opacity : 100,
-                      inspire : wmtsName,
-                      maxScale : 1
-                    };
+                    var layer = Oskari.clazz.create('Oskari.mapframework.wmts.domain.WmtsLayer');
 
-                var layer = Oskari.clazz.create('Oskari.mapframework.wmts.domain.WmtsLayer');
-
-                layer.setAsNormalLayer();
-                layer.setId(mapLayerSysId);
-                layer.setName(mapLayerJson.title);
-                layer.setWmtsName(mapLayerJson.wmtsName);
-                layer.setOpacity(mapLayerJson.opacity);
-                layer.setMaxScale(mapLayerJson.maxScale);
-                layer.setMinScale(mapLayerJson.minScale);
-                layer.setDescription(mapLayerJson.info);
-                layer.setDataUrl(mapLayerJson.dataUrl);
-                layer.setOrganizationName(mapLayerJson.orgName);
-                layer.setInspireName(mapLayerJson.inspire);
-                layer.setWmtsMatrixSet(matrixSet)
-                layer.setWmtsLayerDef(spec);
-                layer.setVisible(true);
-                layer.setMetadataIdentifier(metadataid);
-
+                    layer.setAsNormalLayer();
+                    layer.setId(mapLayerSysId);
+                    layer.setName(mapLayerJson.title);
+                    layer.setWmtsName(mapLayerJson.wmtsName);
+                    layer.setOpacity(mapLayerJson.opacity);
+                    layer.setMaxScale(mapLayerJson.maxScale);
+                    layer.setMinScale(mapLayerJson.minScale);
+                    layer.setDescription(mapLayerJson.info);
+                    layer.setDataUrl(mapLayerJson.dataUrl);
+                    layer.setOrganizationName(mapLayerJson.orgName);
+                    layer.setInspireName(mapLayerJson.inspire);
+                    layer.setWmtsMatrixSet(matrixSet)
+                    layer.setWmtsLayerDef(spec);
+                    layer.setVisible(true);
+                    layer.setMetadataIdentifier(metadataid);
 
                     layer.addWmtsUrl(getTileUrl);
 
@@ -344,9 +151,7 @@ jQuery(document).ready(function() {
 
                 }
             }
-        });
-
-      
+        });     
 
         /* TEMPORARY: */
         /* Let's load WMTS layers from WMTS Caps documents defined in ELF.json */
@@ -376,11 +181,10 @@ jQuery(document).ready(function() {
           }
           
         }
-        
+            
         /* TEMPORARY */
         /* Let's fix some legacy assumptions */
         Oskari.clazz.category('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTStore','xxx', {
-
             /**
              * @method connect
              *
@@ -414,9 +218,214 @@ jQuery(document).ready(function() {
 
     }
 
+    /**
+    * Set ELF languges HACK. Dirty solution, need to be fixed in future.
+    * TODO: move these to another palce
+    */
+    function setELFLanguagesHack(){
+        var language = Oskari.getLang();
+        if (language === "fi") {
+            Oskari.getLocalization('MapModule').plugin.LogoPlugin.layersHeader = "&copy; ELF ja seuraavat tiedontuottajat:";
+        } else if (language === "sv") {
+            Oskari.getLocalization('MapModule').plugin.LogoPlugin.layersHeader = "&copy; ELF och följande dataproducenter:";
+        } else if (language === "en") {
+            /* ELF specific localization adjustments */
+            Oskari.registerLocalization(
+            {
+                "lang": "en",
+                "key": "MapModule",
+                "value": {
+                    "status_update_map": "Loading the map...",
+                    "zoombar_tooltip": {
+                        "zoomLvl-0": "Background map",
+                        "zoomLvl-1": "Country",
+                        "zoomLvl-2": "Province",
+                        "zoomLvl-3": "",
+                        "zoomLvl-4": "Town",
+                        "zoomLvl-5": "",
+                        "zoomLvl-6": "",
+                        "zoomLvl-7": "Part of town",
+                        "zoomLvl-8": "",
+                        "zoomLvl-9": "",
+                        "zoomLvl-10": "Street",
+                        "zoomLvl-11": "",
+                        "zoomLvl-12": ""
+                    },
+                    "plugin": {
+                        "LogoPlugin": {
+                            "terms": "Terms of Use",
+                            "dataSources": "&copy; ELF and the following service providers:",
+                            "layersHeader": "Map Layers",
+                            "indicatorsHeader": "Indicators"
+                        },
+                        "DataSourcePlugin": {
+                            "link": "Copyright",
+                            "popup": {
+                                "title": "Copyright",
+                                "content": "NOT TRANSLATED"
+                            },
+                            "button": {
+                                "close": "Close"
+                            }
+                        },
+                        "LayerSelectionPlugin": {
+                            "title": "Map layers",
+                            "chooseDefaultBaseLayer": "Select the background map"
+                        },
+                        "SearchPlugin": {
+                            "placeholder": "Search location",
+                            "search": "Search",
+                            "close": "Close search results.",
+                            "noresults": "No results found. Please refine your search.",
+                            "toomanyresults": "Over 100 results found. Please refine your search.",
+                            "column_name": "Name",
+                            "column_village": "Municipality",
+                            "column_type": "Type"
+                        },
+                        "GetInfoPlugin": {
+                            "title": "Feature Data",
+                            "layer": "Map layer",
+                            "places": "Features",
+                            "description": "Description",
+                            "link": "Web address",
+                            "name": "Name"
+                        },
+                        "PublisherToolbarPlugin": {
+                            "test": "test",
+                            "history": {
+                                "reset": "Return to the default view",
+                                "back": "Return to the previous view",
+                                "next": "Move to the next view"
+                            },
+                            "measure": {
+                                "line": "Measure a distance",
+                                "area": "Measure an area"
+                            }
+                        },
+                        "MarkersPlugin": {
+                            "buttons": {
+                                "add": "Map marker",
+                                "clear": "Delete all markers"
+                            },
+                            "form": {
+                                "title": "Point feature style",
+                                "tooltip": "",
+                                "symbol": {
+                                    "label": "Icon"
+                                },
+                                "size": {
+                                    "label": "Size"
+                                },
+                                "color": {
+                                    "label": "Colour",
+                                    "labelOr": "or",
+                                    "labelCustom": "Custom colour (RGB 0-255)"
+                                },
+                                "preview": {
+                                    "label": "Preview"
+                                },
+                                "message": {
+                                    "label": "The text on the map",
+                                    "hint": "Write a text to be shown on the map."
+                                }
+                            },
+                            "dialog": {
+                                "title": "Map marker",
+                                "message": "Select a new location for the marker by clicking the map."
+                            }
+                        }
+                    }
+                }
+            });
+    
+            Oskari.registerLocalization(
+                {
+                    "lang": "en",
+                    "key": "catalogue.bundle.metadataflyout",
+                    "value": {
+                        "title": "Metadata",
+                        "desc": "",
+                        "loader": {
+                            "json": "/catalogue/portti-metadata-printout-service/MetadataServlet?",
+                            "abstract": "/geonetwork/srv/en/metadata.show.portti.abstract?",
+                            "inspire": "/geonetwork/srv/en/metadata.show.portti?",
+                            "jhs": "/geonetwork/srv/en/metadata.show.portti.jhs158?",
+                            "pdf": "/catalogue/portti-metadata-printout-service/MetadataPrintoutServlet?lang=sv&title=METADATAPRINTOUT&metadataresource",
+                            "xml": "/geonetwork/srv/en/iso19139.xml?",
+                            "schemas": "/geonetwork/srv/en/metadata.show.portti.skeemat?"
+                        },
+                        "layer": {
+                            "name": "Metadata",
+                            "description": "",
+                            "orgName": "Metadata catalogue",
+                            "inspire": "Metadata"
+                        },
+                        "flyout": {
+                            "title": "Metadata",
+                            "abstract": "Basic information",
+                            "inspire": "Inspire metadata",
+                            "jhs": "ISO 19115 metadata",
+                            "xml": "ISO 19139 XML file",
+                            "map": "Geographic extent",
+                            "pdf": "Printout",
+                            "select_metadata_prompt": "Select metadata by clicking the icons.",
+                            "metadata_printout_title": "METADATA PRINTOUT",
+                            "linkto": "Link to this metadata",
+                            "tabs": {
+                                "abstract": {
+                                    "abstract": "",
+                                    "jhs": "Show ISO 19115 metadata",
+                                    "inspire": "Show INSPIRE metadata",
+                                    "xml": {
+                                        "text": "Open ISO 19139 XML file",
+                                        "target": "_blank"
+                                    },
+                                    "pdf": {
+                                        "text": "Open PDF printout",
+                                        "target": "_blank"
+                                    }
+                                },
+                                "jhs": {
+                                    "abstract": "Show basic information",
+                                    "jhs": "",
+                                    "inspire": "Show INSPIRE metadata",
+                                    "xml": {
+                                        "text": "Open ISO 19139 XML file",
+                                        "target": "_blank"
+                                    },
+                                    "pdf": {
+                                        "text": "Open metadata in PDF printout",
+                                        "target": "_blank"
+                                    }
+                                },
+                                "inspire": {
+                                    "abstract": "Show basic information",
+                                    "jhs": "Show ISO 19115 metadata",
+                                    "inspire": "",
+                                    "xml": {
+                                        "text": "Open ISO 19139 XML file",
+                                        "target": "_blank"
+                                    },
+                                    "pdf": {
+                                        "text": "Open metadata in PDF printout",
+                                        "target": "_blank"
+                                    }
+                                }
+                            }
+                        },
+                        "tile": {
+                            "title": "Metadata",
+                            "tooltip": "The terms of use and the availability of the dataset are documented in the metadata description."
+                        }
+                    }
+                }
+            );
+        }
+    }
+
     /* let's start some ELF specific ops - config and loading of WMTS capabilities from XML */
     function startELF(sb) {
-
+        setELFLanguagesHack();
         jQuery.ajax({
             type : 'GET',
             dataType : 'json',
@@ -435,16 +444,12 @@ jQuery(document).ready(function() {
                 }
             }
         });
-
     }
+
  
     /* let's start the app after config has been loaded successfully */
     function start(appSetup, appConfig, cb) {
         var app = Oskari.app;
-        
-        
-        
-        
 
         app.setApplicationSetup(appSetup);
         app.setConfiguration(appConfig);
@@ -486,4 +491,5 @@ jQuery(document).ready(function() {
             }
         }
     });
-});
+
+});   

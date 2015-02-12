@@ -13,7 +13,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
         this._clazz = 'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin';
         this._defaultLocation = 'top right';
         this._instance = config.instance;
-        this._index = 6;
+        this._index = 8;
         this._name = 'FeaturedataPlugin';
     }, {
         /**

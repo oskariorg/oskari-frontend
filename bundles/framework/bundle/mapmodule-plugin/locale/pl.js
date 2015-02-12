@@ -69,6 +69,9 @@ Oskari.registerLocalization({
                     "line": "Pomiar odległości",
                     "area": "Pomiar powierzchni"
                 }
+            },
+            "MyLocationPlugin": {
+                "tooltip": "NOT TRANSLATED"
             }
         }
     }

@@ -38,12 +38,28 @@
     background-position: -60px -46px !important;
 }
 
+.icon-arrow-white-down {
+    width: 13px;
+    height: 15px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -106px 0px !important;
+}
+
+.icon-arrow-white-right {
+    width: 13px;
+    height: 15px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -119px 0px !important;
+}
+
 .icon-close-dark {
     width: 16px;
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -106px 0px !important;
+    background-position: -132px 0px !important;
 }
 
 .icon-close-white {
@@ -51,7 +67,7 @@
     height: 20px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -122px 0px !important;
+    background-position: -148px 0px !important;
 }
 
 .icon-close {
@@ -59,7 +75,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -142px 0px !important;
+    background-position: -168px 0px !important;
 }
 
 .icon-close:hover {
@@ -67,7 +83,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -142px -16px !important;
+    background-position: -168px -16px !important;
 }
 
 .icon-drag {
@@ -75,7 +91,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -158px 0px !important;
+    background-position: -184px 0px !important;
 }
 
 .icon-drag:hover {
@@ -83,7 +99,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -158px -16px !important;
+    background-position: -184px -16px !important;
 }
 
 .icon-funnel {
@@ -91,7 +107,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -174px 0px !important;
+    background-position: -200px 0px !important;
 }
 
 .icon-info {
@@ -99,7 +115,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -190px 0px !important;
+    background-position: -216px 0px !important;
 }
 
 .icon-info:hover {
@@ -107,7 +123,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -190px -16px !important;
+    background-position: -216px -16px !important;
 }
 
 .icon-maximize {
@@ -115,7 +131,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -206px 0px !important;
+    background-position: -232px 0px !important;
 }
 
 .icon-maximize:hover {
@@ -123,7 +139,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -206px -16px !important;
+    background-position: -232px -16px !important;
 }
 
 .icon-menu {
@@ -131,7 +147,7 @@
     height: 7px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -222px 0px !important;
+    background-position: -248px 0px !important;
 }
 
 .icon-minimize {
@@ -139,7 +155,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -247px 0px !important;
+    background-position: -273px 0px !important;
 }
 
 .icon-minimize:hover {
@@ -147,7 +163,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -247px -16px !important;
+    background-position: -273px -16px !important;
 }
 
 .icon-restore {
@@ -155,7 +171,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -263px 0px !important;
+    background-position: -289px 0px !important;
 }
 
 .icon-restore:hover {
@@ -163,7 +179,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -263px -16px !important;
+    background-position: -289px -16px !important;
 }
 
 .layer-analysis {
@@ -171,7 +187,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -279px 0px !important;
+    background-position: -305px 0px !important;
 }
 
 .layer-base {
@@ -179,7 +195,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -295px 0px !important;
+    background-position: -321px 0px !important;
 }
 
 .layer-gfi-1 {
@@ -187,7 +203,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -311px 0px !important;
+    background-position: -337px 0px !important;
 }
 
 .layer-gfi-2 {
@@ -195,7 +211,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -327px 0px !important;
+    background-position: -353px 0px !important;
 }
 
 .layer-group {
@@ -203,7 +219,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -343px 0px !important;
+    background-position: -369px 0px !important;
 }
 
 .layer-vector {
@@ -211,7 +227,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -359px 0px !important;
+    background-position: -385px 0px !important;
 }
 
 .layer-wfs {
@@ -219,7 +235,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -375px 0px !important;
+    background-position: -401px 0px !important;
 }
 
 .layer-wms {
@@ -227,7 +243,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -391px 0px !important;
+    background-position: -417px 0px !important;
 }
 
 .layer-wmts {
@@ -235,7 +251,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -407px 0px !important;
+    background-position: -433px 0px !important;
 }
 
 .marker {
@@ -243,7 +259,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -423px 0px !important;
+    background-position: -449px 0px !important;
 }
 
 .myplaces-draw-area {
@@ -251,7 +267,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -455px 0px !important;
+    background-position: -481px 0px !important;
 }
 
 .myplaces-draw-line {
@@ -259,7 +275,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -487px 0px !important;
+    background-position: -513px 0px !important;
 }
 
 .myplaces-draw-point {
@@ -267,7 +283,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -519px 0px !important;
+    background-position: -545px 0px !important;
 }
 
 .tool-history-back {
@@ -275,7 +291,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -551px 0px !important;
+    background-position: -577px 0px !important;
 }
 
 .tool-history-forward {
@@ -283,7 +299,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -583px 0px !important;
+    background-position: -609px 0px !important;
 }
 
 .tool-measure-area {
@@ -291,7 +307,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -615px 0px !important;
+    background-position: -641px 0px !important;
 }
 
 .tool-measure-line {
@@ -299,7 +315,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -647px 0px !important;
+    background-position: -673px 0px !important;
 }
 
 .tool-reset {
@@ -307,7 +323,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -679px 0px !important;
+    background-position: -705px 0px !important;
 }
 
 .menu-3d-dark {
@@ -315,7 +331,7 @@
     height: 35px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -711px 0px !important;
+    background-position: -737px 0px !important;
 }
 
 .menu-3d-light {
@@ -323,7 +339,7 @@
     height: 35px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -746px 0px !important;
+    background-position: -772px 0px !important;
 }
 
 .menu-rounded-dark {
@@ -331,7 +347,7 @@
     height: 36px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -781px 0px !important;
+    background-position: -807px 0px !important;
 }
 
 .menu-rounded-light {
@@ -339,7 +355,7 @@
     height: 36px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -817px 0px !important;
+    background-position: -843px 0px !important;
 }
 
 .menu-sharp-dark {
@@ -347,7 +363,7 @@
     height: 35px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -853px 0px !important;
+    background-position: -879px 0px !important;
 }
 
 .menu-sharp-light {
@@ -355,7 +371,55 @@
     height: 35px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -888px 0px !important;
+    background-position: -914px 0px !important;
+}
+
+.mylocation-3d-dark {
+    width: 35px;
+    height: 35px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -949px 0px !important;
+}
+
+.mylocation-3d-light {
+    width: 35px;
+    height: 35px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -984px 0px !important;
+}
+
+.mylocation-rounded-dark {
+    width: 35px;
+    height: 35px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1019px 0px !important;
+}
+
+.mylocation-rounded-light {
+    width: 35px;
+    height: 35px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1054px 0px !important;
+}
+
+.mylocation-sharp-dark {
+    width: 35px;
+    height: 35px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1089px 0px !important;
+}
+
+.mylocation-sharp-light {
+    width: 35px;
+    height: 35px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1124px 0px !important;
 }
 
 .myplaces-draw-area-dark {
@@ -363,7 +427,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -923px 0px !important;
+    background-position: -1159px 0px !important;
 }
 
 .myplaces-draw-area-light {
@@ -371,7 +435,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -955px 0px !important;
+    background-position: -1191px 0px !important;
 }
 
 .myplaces-draw-line-dark {
@@ -379,7 +443,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -987px 0px !important;
+    background-position: -1223px 0px !important;
 }
 
 .myplaces-draw-line-light {
@@ -387,7 +451,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1019px 0px !important;
+    background-position: -1255px 0px !important;
 }
 
 .myplaces-draw-point-dark {
@@ -395,7 +459,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1051px 0px !important;
+    background-position: -1287px 0px !important;
 }
 
 .myplaces-draw-point-light {
@@ -403,7 +467,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1083px 0px !important;
+    background-position: -1319px 0px !important;
 }
 
 .tool-history-back-dark {
@@ -411,7 +475,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1115px 0px !important;
+    background-position: -1351px 0px !important;
 }
 
 .tool-history-back-light {
@@ -419,7 +483,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1147px 0px !important;
+    background-position: -1383px 0px !important;
 }
 
 .tool-history-forward-dark {
@@ -427,7 +491,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1179px 0px !important;
+    background-position: -1415px 0px !important;
 }
 
 .tool-history-forward-light {
@@ -435,7 +499,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1211px 0px !important;
+    background-position: -1447px 0px !important;
 }
 
 .tool-measure-area-dark {
@@ -443,7 +507,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1243px 0px !important;
+    background-position: -1479px 0px !important;
 }
 
 .tool-measure-area-light {
@@ -451,7 +515,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1275px 0px !important;
+    background-position: -1511px 0px !important;
 }
 
 .tool-measure-line-dark {
@@ -459,7 +523,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1307px 0px !important;
+    background-position: -1543px 0px !important;
 }
 
 .tool-measure-line-light {
@@ -467,7 +531,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1339px 0px !important;
+    background-position: -1575px 0px !important;
 }
 
 .tool-zoombox-dark {
@@ -475,7 +539,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1371px 0px !important;
+    background-position: -1607px 0px !important;
 }
 
 .tool-zoombox-light {
@@ -483,6 +547,6 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1403px 0px !important;
+    background-position: -1639px 0px !important;
 }
 

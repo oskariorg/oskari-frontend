@@ -52,9 +52,9 @@ fieldset.oskari-formcomponent label, label.oskari-formcomponent {
 label.oskari-formcomponent.oskari-numberinput .input-controls:hover .icon-close {
   display: none; }
 
-fieldset.oskari-formcomponent.oskari-radiobuttongroup {
+fieldset.oskari-formcomponent.oskari-checkboxgroup, fieldset.oskari-formcomponent.oskari-radiobuttongroup {
   margin-bottom: 12px; }
-  fieldset.oskari-formcomponent.oskari-radiobuttongroup label {
+  fieldset.oskari-formcomponent.oskari-checkboxgroup label, fieldset.oskari-formcomponent.oskari-radiobuttongroup label {
     margin-bottom: 0; }
 
 form.oskari-searchform > label {

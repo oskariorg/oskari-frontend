@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "es",
     "key": "MyPlaces2",
     "value": {
@@ -15,6 +16,7 @@ Oskari.registerLocalization({
         "tab": {
             "title": "Sitios",
             "nocategories": "Todavía no ha guardado los sitios.",
+            "maxFeaturesExceeded": "Ha superado la cantidad máxima de lugares. Todos los lugares no ha sido cargados.",
             "publishCategory": {
                 "privateTooltip": "La capa es privada. Pulse en la capa para publicarla.",
                 "publicTooltip": "La capa es pública. Pulse en la capa para despublicarla."
@@ -29,9 +31,9 @@ Oskari.registerLocalization({
                 "desc": "Descripción",
                 "createDate": "Creada",
                 "updateDate": "Actualizada",
-                "measurement": "NOT TRANSLATED",
-                "edit": " ",
-                "delete": " "
+                "measurement": "Tamaño",
+                "edit": "Edición",
+                "delete": "Borrar"
             },
             "notification": {
                 "delete": {
@@ -47,55 +49,55 @@ Oskari.registerLocalization({
         },
         "tools": {
             "measureline": {
-                "title": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
+                "title": "Medir distancia",
+                "tooltip": "Medir distancia",
                 "add": "",
                 "next": "",
-                "edit": "NOT TRANSLATED",
+                "edit": "Puede editar la línea haciendo clic y arrastrando los vertices.",
                 "noResult": "0 m"
             },
             "measurearea": {
-                "title": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
+                "title": "Medir área",
+                "tooltip": "Medir área",
                 "add": "",
                 "next": "",
-                "edit": "NOT TRANSLATED",
+                "edit": "Puedes editar el área haciendo clic y arrastrando los vertices en el borde de la línea.",
                 "noResult": "0 m²"
             },
             "point": {
-                "title": "NOT TRANSLATED",
+                "title": "Añadir punto",
                 "tooltip": "Añadir punto",
-                "add": "NOT TRANSLATED",
+                "add": "Dibuja un punto haciendo click en el mapa.",
                 "next": "Puedes guardar o dibujar más puntos en el mismo dibujo",
                 "edit": "¡Mover el punto pulsando y arrastrando!",
                 "save": "Guardar localización"
             },
             "line": {
-                "title": "NOT TRANSLATED",
+                "title": "Añadir línea",
                 "tooltip": "Añadir línea",
-                "add": "NOT TRANSLATED",
+                "add": "Dibuja una línea añadiendo vertices en el mapa. Puede agregar los vertices haciendo clic en el mapa. Deje de dibujar haciendo doble clic o haciendo clic en \"Guardar como mi lugar\".",
                 "next": "Puedes guardar o dibujar más líneas en el mismo dibujo",
                 "edit": "Editar la línea pulsando y arrastrando sus hitos",
                 "save": "Guadar forma",
-                "noResult": "NOT TRANSLATED"
+                "noResult": "0 m"
             },
             "area": {
-                "title": "NOT TRANSLATED",
-                "tooltip": "Añadir área",
-                "add": "NOT TRANSLATED",
+                "title": "Añadir área",
+                "tooltip": "Añadir área a \"Mis sitios\"",
+                "add": "Dibuja un área añadiendo vertices en la línea de borde en el mapa. Puede agregar los vertices haciendo clic en el mapa. Deje de dibujar haciendo doble clic o haciendo clic en \"Guardar como mi lugar\".",
                 "next": "Puede guardar o dibujar más polígonos en el mismo dibujo.",
                 "edit": "Editar la forma del área pulsando y arrastrando los hitos de su contorno",
                 "save": "Guardar forma",
-                "noResult": "NOT TRANSLATED"
+                "noResult": "0 m²"
             }
         },
         "buttons": {
             "ok": "Hecho",
             "cancel": "Cancelar",
-            "close": "NOT TRANSLATED",
-            "finish": "Fin de edición",
+            "close": "Cancelar",
+            "finish": "Guardar como mi lugar",
             "save": "Guardar",
-            "saveAsMyPlace": "NOT TRANSLATED",
+            "saveAsMyPlace": "Guardar como mi lugar",
             "movePlaces": "Mover sitios y borrar",
             "deleteCategory": "Borrar",
             "deleteCategoryAndPlaces": "Borrar categorías y sitios",
@@ -115,26 +117,26 @@ Oskari.registerLocalization({
                 "placeholder": "Describa el sitio"
             },
             "placeAttention": {
-                "placeholder": "NOT TRANSLATED"
+                "placeholder": "Coloque el texto en el mapa"
             },
             "measurement": {
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "line": "Longitud de línea",
+                "area": "Tamaño del área:"
             },
             "category": {
                 "label": "Capa",
-                "newLayer": "NOT TRANSLATED",
-                "choose": "NOT TRANSLATED"
+                "newLayer": "Crear una nueva capa de mapa",
+                "choose": "o seleccione una capa del mapa ya existente:"
             },
             "imagelink": {
-                "placeholder": "NOT TRANSLATED",
-                "previewLabel": "NOT TRANSLATED",
-                "add": "NOT TRANSLATED"
+                "placeholder": "Enlace a la imagen",
+                "previewLabel": "Previsualización de imagen",
+                "add": "Nueva capa de mapa"
             },
             "rendering": {
-                "label": "NOT TRANSLATED",
+                "label": "Colocar estilo",
                 "point": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": "Punto"
                 }
             }
         },
@@ -163,10 +165,10 @@ Oskari.registerLocalization({
                 }
             },
             "visibleFields": {
-                "label": "NOT TRANSLATED",
-                "placename": "NOT TRANSLATED",
-                "placedesc": "NOT TRANSLATED",
-                "image": "NOT TRANSLATED"
+                "label": "Colocar datos visibles",
+                "placename": "Nombre",
+                "placedesc": "Descripción",
+                "image": "Imagen"
             },
             "edit": {
                 "title": "Editar capa",
@@ -174,108 +176,108 @@ Oskari.registerLocalization({
                 "cancel": "Atrás"
             },
             "rendering": {
-                "label": "NOT TRANSLATED",
+                "label": "Colocar estilo",
                 "point": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": "Editar estilo de punto"
                 },
                 "area": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": "Editar estilo de área"
                 },
                 "line": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": "Editar estilo de línea"
                 }
             }
         },
         "pointform": {
-            "title": "NOT TRANSLATED",
+            "title": "Estilo de punto",
             "tooltip": "",
             "symbol": {
-                "label": "NOT TRANSLATED"
+                "label": "Símbolo"
             },
             "size": {
-                "label": "NOT TRANSLATED"
+                "label": "Tamaño"
             },
             "color": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "Color",
+                "labelOr": "o",
+                "labelCustom": "Color personalizado RGB (0-255)"
             },
             "preview": {
-                "label": "NOT TRANSLATED"
+                "label": "Vista previa"
             },
             "buttons": {
-                "save": "NOT TRANSLATED",
-                "cancel": "NOT TRANSLATED"
+                "save": "Guardar",
+                "cancel": "Cancelar"
             }
         },
         "lineform": {
-            "title": "NOT TRANSLATED",
+            "title": "Estilo de línea",
             "tooltip": "",
             "style": {
-                "label": "NOT TRANSLATED"
+                "label": "Estilo"
             },
             "cap": {
-                "label": "NOT TRANSLATED"
+                "label": "Final"
             },
             "corner": {
-                "label": "NOT TRANSLATED"
+                "label": "Esquinas"
             },
             "width": {
-                "label": "NOT TRANSLATED"
+                "label": "Anchura"
             },
             "color": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "Color",
+                "labelOr": "o",
+                "labelCustom": "Color RGB personalizado (0-255)"
             },
             "preview": {
-                "label": "NOT TRANSLATED"
+                "label": "Vista previa"
             },
             "buttons": {
-                "save": "NOT TRANSLATED",
-                "cancel": "NOT TRANSLATED"
+                "save": "Guardar",
+                "cancel": "Cancelar"
             }
         },
         "areaform": {
-            "title": "NOT TRANSLATED",
+            "title": "Estilo de área",
             "tooltip": "",
             "linestyle": {
-                "label": "NOT TRANSLATED"
+                "label": "Estilo de línea borde"
             },
             "linecap": {
-                "label": "NOT TRANSLATED"
+                "label": "Final de línea borde"
             },
             "linecorner": {
-                "label": "NOT TRANSLATED"
+                "label": "Esquinas de línea borde"
             },
             "linewidth": {
-                "label": "NOT TRANSLATED"
+                "label": "Ancho de línea borde"
             },
             "linecolor": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "Color de línea borde",
+                "labelOr": "o",
+                "labelCustom": "Color RGB personalizado (0-255)"
             },
             "color": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "Color de relleno",
+                "labelOr": "o",
+                "labelCustom": "Color RGB personalizado (0-255)"
             },
             "fill": {
-                "label": "NOT TRANSLATED"
+                "label": "Patrón de relleno"
             },
             "preview": {
-                "label": "NOT TRANSLATED"
+                "label": "Vista previa"
             },
             "buttons": {
-                "save": "NOT TRANSLATED",
-                "cancel": "NOT TRANSLATED"
+                "save": "Guardar",
+                "cancel": "Cancelar"
             }
         },
         "notification": {
             "placeAdded": {
                 "title": "El sitio se ha guardado",
-                "message": "Puede encontrarse el sitio en el menú Mis datos"
+                "message": "Puede encontrarse el sitio en el menú «Mis datos»"
             },
             "categorySaved": {
                 "title": "Capa guardada",
@@ -283,43 +285,44 @@ Oskari.registerLocalization({
             },
             "categoryDelete": {
                 "title": "Borrar capa",
-                "deleteConfirmMove": "La capa {0} contiene {1} objetos. ¿Desea borrar la capa y mover sus sitios a la capa por defecto {2}?",
+                "deleteConfirmMove": "La capa {0} contiene {1} lugares. ¿Desea borrar la capa y mover sus lugares a la capa por defecto {2}?",
                 "deleteConfirm": "¿Borrar la capa {0}?",
                 "deleted": "Capa borrada"
             },
             "categoryToPublic": {
                 "title": "Publicar capa",
-                "message": "Está publicando la capa {0}. Puede compartir enlaces a la capa pública con otros usuarios de Internet o incorporar la capa como un visualizador en otro portal web. Otros usuarios también podrán ver la capa."
+                "message": "Está usted publicando la capa {0}. Después, puede compartir la capa en Internet o incluirla como una capa en otro servicio web"
             },
             "categoryToPrivate": {
-                "title": "Despublicar capa",
-                "message": "Está despublicando la capa {0}. A partir de ahora no será posible compartirla con otros usuarios o incorporarla en otro portal web. Otros usuarios ya no verán la capa."
+                "title": "Dejar de publicar capa",
+                "message": "Usted va a dejar de publicar la capa {0}. A partir de ahora no será posible compartirla en Internet o incluirla como capa en otro servicio web"
             },
             "error": {
-                "addCategory": "La capa no pudo guardarse. El sitio no se ha guardado.",
-                "editCategory": "La capa no pudo guardarse.",
-                "savePlace": "El sitio no pudo guardarse.",
+                "addCategory": "La capa no pudo guardarse. El sitio no se ha guardado. Vuelva a intentarlo más tarde",
+                "editCategory": "La capa no pudo guardarse. Por favor, inténtelo más tarde",
+                "savePlace": "El sitio no pudo guardarse. Por favor, intentélo más tarde",
                 "title": "¡Error!",
-                "generic": "Error del sistema. Por favor, inténtalo más tarde.",
-                "deleteCategory": "¡Se produjo un error durante el borrado!",
-                "deleteDefault": "No puede borrarse el mapa por defecto."
+                "generic": "Error del sistema. Por favor, inténtelo más tarde.",
+                "deleteCategory": "¡Se produjo un error durante el borrado! Por favor, inténtelo más tarde",
+                "deleteDefault": "El mapa por defecto no puede borrarse"
             }
         },
         "validation": {
             "title": "Los datos contienen errores:",
-            "placeName": "No se ha rellenado el nombre del sitio.",
-            "categoryName": "No se ha rellenado el nombre de la capa.",
-            "placeNameIllegal": "El nombre del objeto contiene caracteres no permitidos. Los caracteres permitidos son las letras entre a-z, números, espacios y guiones.",
-            "descIllegal": "La descripción del objeto contiene caracteres no permitidos. Los caracteres permitidos son las letras entre a-z, números, espacios y guiones.",
-            "categoryNameIllegal": "La descripción de la capa contiene caracteres no permitidos. Los caracteres permitidos son las letras entre a-z, números, espacios y guiones.",
-            "dotSize": "El tamaño del punto no está dentro de los límites de tamaño (1-5).",
-            "dotColor": "Color de punto incorrecto",
-            "dotShape": "NOT TRANSLATED",
-            "lineSize": "El tamaño de la línea no está dentro de los límites de tamaño (1-50).",
-            "lineColor": "Color de línea incorrecto",
-            "areaLineSize": "El tamaño del contorno del área no está dentro de los límites de tamaño (1-50).",
-            "areaLineColor": "Color de la línea del contorno de área incorrecto",
-            "areaFillColor": "Color de relleno incorrecto"
+            "placeName": "Falta el nombre del sitio",
+            "categoryName": "Falta el nombre de la capa.",
+            "placeNameIllegal": "El nombre del lugar contiene caracteres no válidos. Son válidos las letras entre a-z, números, retornos y guiones.",
+            "descIllegal": "La descripción del lugar contiene caracteres no válidos. Son válidos las letras entre a-z, números, retornos y guiones.",
+            "categoryNameIllegal": "El nombre de la capa contiene caracteres no válidos. Son válidos las letras entre a-z, números, retornos y guiones.",
+            "dotSize": "El tamaño del punto no es válido. Tiene que estar entre 1 y 5",
+            "dotColor": "El color del punto no es válido. Los valores tienen que estar entre 0 y 255",
+            "dotShape": "La forma del punto no es válida",
+            "lineSize": "El tamaño de la línea no es válido. Tiene que estar entre 0 y 50",
+            "lineColor": "El color de la línea no es válido. Los valores tienen que estar entre 0 y 255",
+            "areaLineSize": "El grosor de la línea de borde no es válido. Tiene que estar entre 0 y 50",
+            "areaLineColor": "El color de la línea de borde no es válido. Los valores tienen que estar entre 0 y 255",
+            "areaFillColor": "El colo de relleno no es válido. Los valores tienen que estar entre 0 y 255"
         }
     }
-});
+}
+);

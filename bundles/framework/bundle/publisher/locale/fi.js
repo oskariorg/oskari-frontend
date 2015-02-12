@@ -50,6 +50,7 @@ Oskari.registerLocalization(
                 "IndexMapPlugin": "Indeksikartta",
                 "PanButtons": "Kartan liikuttaminen nuolipainikkeilla",
                 "Portti2Zoombar": "Mittakaavasäädin",
+                "MyLocationPlugin": "Käyttäjän sijaintiin keskittäminen",
                 "ControlsPlugin": "Kartan liikuttaminen hiirellä raahaamalla",
                 "SearchPlugin": "Osoite- ja paikannimihaku",
                 "FeaturedataPlugin": "Kohdetietotaulukko",

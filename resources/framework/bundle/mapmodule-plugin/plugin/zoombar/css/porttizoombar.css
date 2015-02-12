@@ -1,18 +1,20 @@
 div.mapplugin.zoombar {
   background: transparent;
+  cursor: pointer;
   width: 18px; }
   div.mapplugin.zoombar div.pzbDiv-plus {
+    background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/zoombar_plus_patched.png');
+    cursor: pointer;
+    cursor: zoom-in;
     width: 18px;
-    height: 46px;
-    background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/zoombar_plus_patched.png'); }
+    height: 46px; }
   div.mapplugin.zoombar div.pzbDiv-minus {
+    background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/zoombar_minus.png');
+    cursor: pointer;
+    cursor: zoom-out;
     width: 18px;
-    height: 18px;
-    background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/zoombar_minus.png'); }
-  div.mapplugin.zoombar div.rui-slider-vertical {
-    background-color: transparent;
-    background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/zoombar.png');
-    height: 148px;
-    width: 18px;
-    border: 0;
-    margin: 0; }
+    height: 18px; }
+  div.mapplugin.zoombar div.ui-slider-vertical {
+    cursor: pointer; }
+    div.mapplugin.zoombar div.ui-slider-vertical .ui-slider-handle {
+      cursor: ns-resize; }

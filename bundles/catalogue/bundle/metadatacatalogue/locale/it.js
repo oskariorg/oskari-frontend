@@ -26,6 +26,7 @@ Oskari.registerLocalization({
         "resultBox": {
             "close": "Chiudi",
             "title": "Risultati della ricerca"
-        }
+        },
+        "licenseText": "Get licenza"
     }
 });

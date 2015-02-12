@@ -13,6 +13,7 @@ div.mapplugin.indexmap {
         border-top-width: 2px;
         padding: 5px;
         margin-left: $toggleSize;
+        margin-right: 0;
         margin-bottom: -$toggleSize;
     }
 
@@ -36,6 +37,7 @@ div.mapplugin.indexmap {
         text-align: right;
 
         .olControlOverviewMapElement {
+            margin-left: 0;
             margin-right: $toggleSize;
         }
 

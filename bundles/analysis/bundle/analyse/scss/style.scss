@@ -117,7 +117,7 @@ div.basic_analyse {
 
     div.icon-info {
         float: right;
-        cursor: pointer;
+        cursor: help;
     }
 
     div.icon-funnel, div.icon-funnel-active {
@@ -238,7 +238,7 @@ div.basic_analyse {
                 clear: left;
             }
 
-            input, select {
+            select {
                 margin-top: 7px;
                 margin-bottom: 10px;
             }
@@ -283,7 +283,6 @@ div.basic_analyse {
 /* Buttons */
 div.basic_analyse div.buttons, div.analyse div.startview div.buttons {
     margin: 5px;
-    margin-bottom: 40px; /* This is here so the buttons can be scrolled into the viewport in small resolutions... */
 
     input {
         margin-right: 1px;
@@ -306,7 +305,7 @@ label.params_checklabel {
 //    width: 18px !important;
 //} 
 table.layer-icons {
-    margin: 0 0 2px;
+    margin: 0;
     // FIXME percentages is no bueno
     width: 30%;
     display: inline-block;

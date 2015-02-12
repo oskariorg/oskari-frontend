@@ -1,52 +1,66 @@
 /**
  * @class Oskari.statistics.bundle.statsgrid.StatsToolbar
  */
-Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
+Oskari.clazz.define(
+    'Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
     /**
      * @static constructor function
-     * @param {Object} localization
-     * @param {Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance} instance
+     *
+     * @param {Object}   sandbox
+     * @param {Object}   localization
+     * @param {String[]} regionCategories
+     * @param {String}   layerWMSName
+     * @param {String}   layerId
+     * @param {String}   regionCategory
+     *
      */
     function (sandbox, localization, regionCategories, layerWMSName, layerId, regionCategory) {
-        this.sandbox = sandbox;
-        this.localization = localization;
-        this.regions = regionCategories;
-        this.layerWMSName = layerWMSName;
-        this.layerId = layerId;
-        this.regionCategory = regionCategory;
-        this.municipalityCategory = 'kunta';
-
-        this.templates = {
+        var me = this;
+        me.sandbox = sandbox;
+        me.localization = localization;
+        me.regions = regionCategories;
+        me.layerWMSName = layerWMSName;
+        me.layerId = layerId;
+        me.regionCategory = regionCategory;
+        me.municipalityCategory = 'kunta';
+        me.templates = {
             main: '<form class="add-indicator">' +
-                    '    <h2></h2>' +
-                    '    <fieldset class="form-meta">' +
-                    '        <legend></legend>' +
-                    '        <label for="indicator_title"></label><input type="text" id="indicator_title" required>' +
-                    '        <label for="indicator_sources"></label><input type="text" id="indicator_sources" required>' +
-                    '        <label for="indicator_description"></label><input type="text" id="indicator_description" required>' +
-                    '        <label for="indicator_year"></label><input type="text" id="indicator_year" required>' +
-                    '        <label for="indicator_publicity"></label><input type="checkbox" id="indicator_publicity">' +
-                    '    </fieldset>' +
-                    '    <fieldset class="form-import">' +
-                    '        <legend></legend>' +
-                    '        <label for="indicator_reference-layer"></label><select id="indicator_reference-layer"></select>' +
-                    '        <label for="indicator_text-import"></label><textarea class="import-textarea" id="indicator_text-import"></textarea>' +
-                    '        <button class="start-import primary" title=""></button><button class="clear-import" title=""></button>' + // We need the empty title so the tooltip will show up...
-                    '    </fieldset>' +
-                    '    <fieldset class="form-municipalities">' +
-                    '        <legend></legend><hr>' +
-                    '        <ul class="municipalities"></ul>' +
-                    '    </fieldset>' +
-                    '    <fieldset class="form-submit">' +
-                    '        <button class="cancel-form-button"></button><button class="submit-form-button primary" title=""></button><button class="clear-form-button"></button>' +
-                    '    </fieldset>' +
-                    '</form>',
-            municipalityRow: '<li class="municipality-row"><label class="municipality-row"></label><input type="text"></li>'
+                '    <h2></h2>' +
+                '    <fieldset class="form-meta">' +
+                '        <legend></legend>' +
+                '        <label for="indicator_title"></label><input type="text" id="indicator_title" required>' +
+                '        <label for="indicator_sources"></label><input type="text" id="indicator_sources" required>' +
+                '        <label for="indicator_description"></label><input type="text" id="indicator_description" required>' +
+                '        <label for="indicator_year"></label><input type="text" id="indicator_year" required>' +
+                '        <label for="indicator_publicity"></label><input type="checkbox" id="indicator_publicity">' +
+                '    </fieldset>' +
+                '    <fieldset class="form-import">' +
+                '        <legend></legend>' +
+                '        <label for="indicator_reference-layer"></label><select id="indicator_reference-layer"></select>' +
+                '        <label for="indicator_text-import"></label><textarea class="import-textarea" id="indicator_text-import"></textarea>' +
+                '        <button class="start-import primary" title=""></button><button class="clear-import" title=""></button>' + // We need the empty title so the tooltip will show up...
+                '    </fieldset>' +
+                '    <fieldset class="form-municipalities">' +
+                '        <legend></legend><hr>' +
+                '        <ul class="municipalities"></ul>' +
+                '    </fieldset>' +
+                '    <fieldset class="form-submit">' +
+                '        <button class="cancel-form-button"></button><button class="submit-form-button primary" title=""></button><button class="clear-form-button"></button>' +
+                '    </fieldset>' +
+                '</form>',
+            municipalityRow:
+                '<li class="municipality-row">' +
+                '    <label class="municipality-row"></label><input type="text">' +
+                '</li>'
         };
     }, {
         /**
-         * @method _createUI
+         * @public @method _createUI
          * Create UI for the form
+         *
+         * @param {jQuery}   container
+         * @param {Function} callback
+         *
          */
         createUI: function (container, callback) {
             var me = this,
@@ -148,7 +162,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
                 e.preventDefault();
                 me._clearValues();
             });
-            
+
             // add data submit
             field = form.find('.submit-form-button');
             field.append(me.localization.formSubmit);
@@ -160,9 +174,15 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
             me._createRegionInputs(form, me.regions[me.regionCategory]);
 
             container.append(form);
-
         },
 
+        /**
+         * @private @method _createRegionInputs
+         *
+         * @param {jQuery}   container
+         * @param {Object[]} regions
+         *
+         */
         _createRegionInputs: function (container, regions) {
             var me = this,
                 header = container.find('.form-municipalities legend'),
@@ -197,10 +217,14 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
                 tbl.append(row);
             });
         },
+
         /**
-         * @method _handleCancel
-         * @private
+         * @private @method _handleCancel
          * Remove form and show grid
+         *
+         * @param {} e
+         * @param {} me
+         *
          */
         _handleCancel: function (e, me) {
             me.container.find('form.add-indicator').remove();
@@ -208,16 +232,23 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
             me.container.find('.data-source-select').show();
             me.container.find('#municipalGrid').show();
         },
+
         /**
-         * @method _handleSubmit
-         * @private
+         * @private @method _handleSubmit
          * Send data to backend and remove form.
+         *
+         * @param {} e
+         * @param {} me
+         * @param {Function} callback
+         *
          */
         _handleSubmit: function (e, me, callback) {
-            var service = this.sandbox.getService('Oskari.statistics.bundle.statsgrid.UserIndicatorsService'),
+            var service = this.sandbox.getService(
+                    'Oskari.statistics.bundle.statsgrid.UserIndicatorsService'
+                ),
                 indicatorData = me._gatherData();
 
-            if (indicatorData !== null && indicatorData !== undefined && service !== null && service !== undefined) {
+            if (indicatorData  && service) {
                 if (this.sandbox && this.sandbox.getUser().isLoggedIn()) {
                     service.saveUserIndicator(indicatorData, function (indicator) {
                         me._handleCancel(e, me);
@@ -238,15 +269,20 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
         },
 
         /**
-         * @method _parseData
-         * @private
+         * @private @method _parseData
          * Parse data from dialog (it is pasted from clipboard)
+         *
+         * @param {} e
+         * @param {} me
+         * @param {} dialog
+         *
          */
         _parseData: function (e, me, dialog) {
             var inputArray = [],
                 form = jQuery(e.target).parents('form.add-indicator'),
                 textarea = form.find('textarea'),
                 data = textarea.val();
+
             //update form regions / municipalities
             var updateValue = function (name, value) {
                 var row;
@@ -261,13 +297,17 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
                             name = '0' + name;
                         }
                     }
-                    row = me.container.find('.municipality-row[data-code=' + name + ']');
+                    row = me.container.find(
+                        '.municipality-row[data-code="' + name + '"]'
+                    );
                 } else {
                     // Only use the first part of the name in case of a municipality
                     if (me.regionCategory.toLowerCase() === me.municipalityCategory) {
                         name = name.split(' ')[0];
                     }
-                    row = me.container.find('.municipality-row[data-name=' + name.toLowerCase() + ']');
+                    row = me.container.find(
+                        '.municipality-row[data-name="' + name.toLowerCase() + '"]'
+                    );
                 }
 
                 if (row && row.length) {
@@ -308,11 +348,15 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
             var openImport = me.container.find('.clear-import');
             // alert user of unrecognized lines
             var unrecognizedInfo = '';
+
             if (unrecognized.length > 0) {
                 unrecognizedInfo = '<br>' + me.localization.parsedDataUnrecognized + ': ' + unrecognized.length;
             }
             // Tell user about how many regions were imported
-            var info = me.localization.parsedDataInfo + ': <span class="import-indicator-bold">' + updated + '</span> ' + unrecognizedInfo;
+            var info = me.localization.parsedDataInfo +
+                ': <span class="import-indicator-bold">' + updated +
+                '</span> ' + unrecognizedInfo;
+
             openImport.tooltip({
                 content: info,
                 position: {
@@ -324,61 +368,60 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
 
             textarea.val('');
         },
+
         /**
-         * @method _parseData
-         * @private
+         * @private @method _parseData
          * Parse data from dialog (it is pasted from clipboard)
+         *
+         *
+         * @return {Object} Dialog data
          */
         _gatherData: function () {
             // FIXME all jQuery selectors...
             var me = this,
                 json = {},
-                emptyFields = [];
+                emptyFields = [],
+                tmp;
 
-            // IE8 fix
-            if (typeof String.prototype.trim !== 'function') {
-                String.prototype.trim = function () {
-                    return this.replace(/^\s+|\s+$/g, '');
-                };
-            }
             // Get indicator title or push it to the unrecognized areas array
             var title = me.container.find('#indicator_title').val();
             if (title === null || title === undefined || title.trim() === '') {
                 emptyFields.push(me.container.find('#indicator_title').prev().text());
             }
             // TODO: real localized title
-            json.title = JSON.stringify({
-                'fi': title
-            });
+            tmp = {};
+            tmp[Oskari.getLang()] = title;
+            json.title = JSON.stringify(tmp);
 
             var source = me.container.find('#indicator_sources').val();
             if (source === null || source === undefined || source.trim() === '') {
                 emptyFields.push(me.container.find('#indicator_sources').prev().text());
             }
             // TODO: real localized source
-            json.source = JSON.stringify({
-                'fi': source
-            });
+            tmp = {};
+            tmp[Oskari.getLang()] = source;
+            json.source = JSON.stringify(tmp);
 
             var description = me.container.find('#indicator_description').val();
             if (description === null || description === undefined || description.trim() === '') {
                 emptyFields.push(me.container.find('#indicator_description').prev().text());
             }
             // TODO: real localized description
-            json.description = JSON.stringify({
-                'fi': description
-            });
+            tmp = {};
+            tmp[Oskari.getLang()] = description;
+            json.description = JSON.stringify(tmp);
 
             var year = me.container.find('#indicator_year').val(),
                 text = /^[0-9]+$/,
                 currentYear = new Date().getFullYear();
+
             if (year === null || year === undefined || year.trim() === '' ||
                 ((year !== '') && (!text.test(year))) ||
                 year.length !== 4 ||
                 year < 1900 ||
                 year > currentYear) {
 
-                emptyFields.push( me.container.find('#indicator_year').prev().text());
+                emptyFields.push(me.container.find('#indicator_year').prev().text());
             }
             json.year = year;
 
@@ -393,8 +436,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
 
             // if there was empty fields 
             if (emptyFields.length > 0) {
-                var submitBtn = me.container.find('.submit-form-button');
-                var failedSubmit = me.localization.failedSubmit + '<br>' + emptyFields.join(', ');
+                var submitBtn = me.container.find('.submit-form-button'),
+                    failedSubmit = me.localization.failedSubmit + '<br>' + emptyFields.join(', ');
                 submitBtn.attr('title', failedSubmit);
                 submitBtn.tooltip({
                     content: failedSubmit,
@@ -413,10 +456,12 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
                 // loop through all the regions and gather data 
                 var municipalityRows = me.container.find('.municipality-row'),
                     i;
+
                 for (i = 0; i < municipalityRows.length; i += 1) {
                     var row = jQuery(municipalityRows[i]),
                         input = row.find('input'),
                         value = input.val();
+
                     if (value !== null && value !== undefined && value.trim() !== '') {
                         json.data.push({
                             'region': row.attr('data-id'),
@@ -429,6 +474,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
             }
         },
 
+        /**
+         * @private @method _clearValues
+         *
+         *
+         */
         _clearValues: function () {
             this.container.find('input[type=text]').val('');
             this.container.find('#indicator_publicity').prop('checked', false);
@@ -436,16 +486,23 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
         },
 
         /**
-         * @method validateYear
+         * @public @method validateYear
          * Validate year (keypress & blur)
+         *
+         * @param {String} year
+         * @param {} e
+         *
+         * @return {Boolean} Year validity
          */
         validateYear: function (year, e) {
             // FIXME just parseInt(value, 10); !isNaN(numVal) && numVal >= minVal && numVal <= maxVal
             var text = /^[0-9]+$/;
+
             if (e.type === 'blur' ||
                 year.length === 4 && e.keyCode !== 8 && e.keyCode !== 46 && e.keyCode !== 37 && e.keyCode !== 39) {
                 if (year !== 0 && year !== '0') {
                     var current = jQuery(e.target);
+
                     if ((year !== '') && (!text.test(year))) {
                         //alert("Please Enter Numeric Values Only");
                         current.css({
@@ -463,6 +520,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
                     // FIXME I think it's completely feasible to have data that
                     // is from the 1800s or extends to the future
                     var currentYear = new Date().getFullYear();
+
                     if ((year < 1900) || (year > currentYear)) {
                         //alert("Year should be in range 1920 to current year");
                         current.css({
@@ -477,4 +535,5 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
                 }
             }
         }
-    });
+    }
+);

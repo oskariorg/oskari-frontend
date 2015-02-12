@@ -17,6 +17,13 @@ Oskari.clazz.define('Oskari.userinterface.component.Form',
             return me._onSubmit(event);
         };
     }, {
+
+        /**
+         * @private @method _destroyImpl
+         *
+         * @param {Boolean} cleanup
+         *
+         */
         _destroyImpl: function (cleanup) {
             'use strict';
             var i,
@@ -27,11 +34,25 @@ Oskari.clazz.define('Oskari.userinterface.component.Form',
             }
         },
 
+        /**
+         * @public @method getAction
+         * Returns the form's action
+         *
+         *
+         * @return {String} Form's action
+         */
         getAction: function () {
             'use strict';
             return this._element.action;
         },
 
+        /**
+         * @public @method setAction
+         * Sets the form's action
+         *
+         * @param {String} action
+         *
+         */
         setAction: function (action) {
             'use strict';
             if (typeof action !== 'string') {
@@ -43,7 +64,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Form',
         },
 
         /**
-         * @method isEnabled
+         * @public @method isEnabled
+         *
+         *
          * @return {Boolean} enabled 
          */
         isEnabled: function () {
@@ -52,8 +75,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Form',
         },
 
         /**
-         * @method setEnabled
+         * @public @method setEnabled
+         *
          * @param {Boolean} enabled
+         *
          */
         setEnabled: function (enabled) {
             'use strict';
@@ -66,11 +91,25 @@ Oskari.clazz.define('Oskari.userinterface.component.Form',
             this._element.disabled = !enabled;
         },
 
+        /**
+         * @public @method getMethod
+         * Returns the form's method
+         *
+         *
+         * @return {String} Form method
+         */
         getMethod: function () {
             'use strict';
             return this._element.method;
         },
 
+        /**
+         * @public @method setMethod
+         * Sets the form's method (GET or POST)
+         *
+         * @param {String} method
+         *
+         */
         setMethod: function (method) {
             'use strict';
             var mtd;
@@ -89,8 +128,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Form',
         },
 
         /**
-         * @method addField
-         * @deprecated
+         * @deprecated @public @method addField
+         *
+         * @param {Object} field
+         *
          */
         addField: function (field) {
             'use strict';
@@ -100,9 +141,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Form',
         },
 
         /**
-         * @method getForm
-         * @deprecated
+         * @deprecated @public  @method getForm
          * Returns reference to the form DOM
+         *
+         *
          * @return {jQuery} form element
          */
         getForm: function (elementSelector) {
@@ -113,7 +155,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Form',
         },
 
         /**
-         * @method getHandler
+         * @public @method getHandler
+         *
+         *
          * @return {Function} handler
          */
         getHandler: function () {
@@ -122,8 +166,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Form',
         },
 
         /**
-         * @method setHandler
+         * @public @method setHandler
+         *
          * @param {Function} handler Function(form, event)
+         *
          */
         setHandler: function (handler) {
             'use strict';
@@ -132,6 +178,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Form',
 
         /**
          * @method validate
+         *
+         *
          * @return {Array} errors
          */
         validate: function () {
@@ -146,8 +194,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Form',
         },
 
         /**
-         * @methods showErrors
-         * @deprecated
+         * @deprecated @public @method showErrors
+         *
+         *
          */
         showErrors: function () {
             'use strict';
@@ -166,13 +215,15 @@ Oskari.clazz.define('Oskari.userinterface.component.Form',
         },
 
         /**
-         * @methods showErrors
-         * @deprecated
+         * @deprecated @public @method showErrors
+         *
+         *
          */
         clearErrors: function () {
             'use strict';
             Oskari.getSandbox().printWarn(
-                this.getClazz() + '.clearErrors is deprecated.');
+                this.getClazz() + '.clearErrors is deprecated.'
+            );
             this.getComponents().forEach(function (component) {
                 if (component.clearErrors) {
                     component.clearErrors();
@@ -180,6 +231,24 @@ Oskari.clazz.define('Oskari.userinterface.component.Form',
             });
         },
 
+        /**
+         * @public @method submit
+         * Submits the form
+         *
+         *
+         */
+        submit: function () {
+            this.getElement().submit();
+        },
+
+        /**
+         * @private @method _onSubmit
+         * Called before the form is submitted
+         *
+         * @param {Object} event
+         *
+         * @return {Boolean} True
+         */
         _onSubmit: function (event) {
             'use strict';
             if (this.getHandler()) {
@@ -190,4 +259,4 @@ Oskari.clazz.define('Oskari.userinterface.component.Form',
     }, {
         extend: ['Oskari.userinterface.component.Container']
     }
-    );
+);

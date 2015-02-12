@@ -96,6 +96,10 @@ function() {
             "lang": "en",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/mapfull/locale/en.js"
+        }, {
+            "lang": "es",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/mapfull/locale/es.js"
         }]
     },
     "bundle" : {

@@ -17,7 +17,15 @@ Oskari.registerLocalization(
             "rightToPublish": "Julkaisuoikeus",
             "rightToView": "Katseluoikeus",
             "rightToDownload": "Latausoikeus",
-            "rightToPublishView": "Katseluoikeus upotetussa kartassa"
+            "rightToPublishView": "Katseluoikeus upotetussa kartassa",
+            "success" : {
+                "title" : "Oikeudet on päivitetty",
+                "message" : "Oikeuksien tallentaminen onnistui."
+            },
+            "error" : {
+                "title" : "Oikeuksia ei ole päivitetty",
+                "message" : "Oikeuksien tallentaminen ei onnistunut."
+            }
         },
         "save": "Tallenna",
         "selectRole": "Rooli"

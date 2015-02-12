@@ -102,6 +102,9 @@ Oskari.registerLocalization(
                     "title": "Kartanteckning",
                     "message": "Välj en ny position till kartanteckning genom att klicka kartan."
                 }
+            },
+            "MyLocationPlugin": {
+                "tooltip": "Centrera kartan på din position"
             }
         }
     }

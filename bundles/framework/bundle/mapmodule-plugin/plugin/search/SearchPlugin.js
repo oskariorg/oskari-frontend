@@ -218,7 +218,7 @@ Oskari.clazz.define(
             });
             content.find('div.results').hide();
 
-            if (me.conf && me.conf.toolStyle) {
+            if (me.getConfig() && me.getConfig().toolStyle) {
                 // Hide the results if esc was pressed or if the field is empty.
                 me._inputField.keyup(function(e) {
                     if (e.keyCode === 27 || (e.keyCode === 8 && !jQuery(this).val())) {
@@ -419,7 +419,7 @@ Oskari.clazz.define(
                     tableBody.append(row);
                 }
 
-                if (!(me.conf && me.conf.toolStyle)) {
+                if (!(me.getConfig() && me.getConfig().toolStyle)) {
                     tableBody.find(':odd').addClass('odd');
                 }
 

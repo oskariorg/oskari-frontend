@@ -238,8 +238,28 @@ Oskari.registerLocalization(
             },
             "export": {
                 "title": "Exportera data",
-                "csv": "CSV",
-                "excel": "Excel"
+                "export": "Exportera",
+                "additional": {
+                    "title": "Ytterligare inställningar",
+                    "dataSource": "Datakälla",
+                    "metadata": "Metadata"
+                },
+                "columns": {
+                    "title": "Kolumner",
+                    "all": "Allt",
+                    "visible": "Öppnad"
+                },
+                "format": {
+                    "title": "Filformat",
+                    "xlsx": "Excel",
+                    "csv": "CSV"
+                },
+                "delimiter": {
+                    "title": "CSV-fil separator",
+                    "comma": "Komma",
+                    "semicolon": "Semikolon",
+                    "tabulator": "Tabulator"
+                }
             }
         }
     }

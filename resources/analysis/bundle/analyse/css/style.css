@@ -53,7 +53,7 @@ div.basic_analyse div.analyse_difference_cont ul {
     margin: 5px; }
 div.basic_analyse div.icon-info {
   float: right;
-  cursor: pointer; }
+  cursor: help; }
 div.basic_analyse div.icon-funnel, div.basic_analyse div.icon-funnel-active {
   cursor: pointer; }
 div.basic_analyse div.icon-menu {
@@ -113,7 +113,7 @@ div.basic_analyse div.analyse_settings_cont label {
   margin: 5px 0; }
   div.basic_analyse div.analyse_settings_cont label input[type=text] {
     clear: left; }
-  div.basic_analyse div.analyse_settings_cont label input, div.basic_analyse div.analyse_settings_cont label select {
+  div.basic_analyse div.analyse_settings_cont label select {
     margin-top: 7px;
     margin-bottom: 10px; }
 div.basic_analyse select.settings_buffer_units, div.basic_analyse select.settings_area_size_units {
@@ -146,9 +146,7 @@ div.basic_analyse select.settings_buffer_units, div.basic_analyse select.setting
 
 /* Buttons */
 div.basic_analyse div.buttons, div.analyse div.startview div.buttons {
-  margin: 5px;
-  margin-bottom: 40px;
-  /* This is here so the buttons can be scrolled into the viewport in small resolutions... */ }
+  margin: 5px; }
   div.basic_analyse div.buttons input, div.analyse div.startview div.buttons input {
     margin-right: 1px; }
 
@@ -160,7 +158,7 @@ label.params_checklabel {
   overflow: hidden; }
 
 table.layer-icons {
-  margin: 0 0 2px;
+  margin: 0;
   width: 30%;
   display: inline-block; }
   table.layer-icons td {

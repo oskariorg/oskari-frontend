@@ -69,6 +69,9 @@ Oskari.registerLocalization({
                     "line": "Meet afstand",
                     "area": "Meet gebied"
                 }
+            },
+            "MyLocationPlugin": {
+                "tooltip": "NOT TRANSLATED"
             }
         }
     }

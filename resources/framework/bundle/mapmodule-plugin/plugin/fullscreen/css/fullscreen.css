@@ -1,6 +1,8 @@
 .fullscreenDiv {
   display: block;
   background: transparent;
+  pointer-events: auto;
   z-index: 15000; }
   .fullscreenDiv .fullscreenDivImg {
-    cursor: pointer; }
+    cursor: pointer;
+    pointer-events: auto; }

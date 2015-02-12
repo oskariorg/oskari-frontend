@@ -41,7 +41,7 @@ Oskari.registerLocalization(
                 "chooseDefaultBaseLayer": "Valitse taustakartta"
             },
             "SearchPlugin": {
-                "placeholder": "Hae kohteita paikannimen tai osoitteen perusteella.",
+                "placeholder": "Hae kohteita",
                 "search": "Hae",
                 "title": "Paikkahaun tulokset",
                 "close": "Sulje hakutulokset",
@@ -102,6 +102,9 @@ Oskari.registerLocalization(
                     "title": "Karttamerkintä",
                     "message": "Valitse kartalta uusi sijainti klikkaamalla."
                 }
+            },
+            "MyLocationPlugin": {
+                "tooltip": "Keskitä kartta omaan sijaintiisi"
             }
         }
     }

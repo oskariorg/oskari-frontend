@@ -1,9 +1,13 @@
 /* Mixins */
 div.mapplugin.search {
-  top: 10px;
-  right: 10px; }
+  /* If you re-enable these, please explain why.
+    top: 10px;
+    right: 10px;*/
+  /* Faded inputs look odd in publisher layout edit mode */ }
   div.mapplugin.search div.close {
     float: right; }
+  div.mapplugin.search input:disabled {
+    opacity: 1; }
   div.mapplugin.search input[type=text] {
     -webkit-border-radius: 4px 0 0 4px;
     -moz-border-radius: 4px 0 0 4px;

@@ -72,7 +72,6 @@ Oskari.clazz.define("Oskari.elf.languageselector.BundleInstance", function() {
         };
 
         var sandbox = this.getSandbox();
-
         var elem = jQuery('#' + this.conf.elemId);
         var langName = this._localization.name;
         elem.append('<p>' + langName + '</p>');

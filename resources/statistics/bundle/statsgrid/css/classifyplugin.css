@@ -35,6 +35,8 @@
     cursor: pointer;
     padding: 4px 8px;
     text-align: left; }
+    .manageClassificationPlugin div.classheader:hover {
+      color: #ff9100; }
     .manageClassificationPlugin div.classheader .header-icon {
       display: inline-block;
       margin-right: 4px;

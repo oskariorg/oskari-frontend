@@ -11,6 +11,9 @@
 }
 
 div.mapplugin.layerselection {
+    // Ugly hack to force overflow
+    height: 37px;
+    overflow: visible;
     max-width: 200px;
     z-index: 100000000 !important;
 
@@ -87,6 +90,10 @@ div.mapplugin.layerselection {
         cursor: pointer;
         padding: 8px;
         text-align: left;
+
+        &:hover {
+            color: #ff9100;
+        }
 
         div.header-icon {
             display: inline-block;

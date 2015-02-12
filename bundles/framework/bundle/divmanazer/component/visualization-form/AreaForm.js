@@ -11,10 +11,11 @@ Oskari.clazz.define(
      *
      *
      */
-    function (creator, loc, defaultValues) {
+    function (creator, loc, defaultValues, parent) {
         this.creator = creator;
         this.loc = loc;
         this.defaultValues = defaultValues;
+        this.instance = parent;
 
         // Temporary IE8 fix
         this.first = true;
@@ -475,6 +476,9 @@ Oskari.clazz.define(
             saveBtn.addClass('primary showSelection');
             saveBtn.setHandler(function () {
                 renderDialog.close();
+                if (me.saveCallback) {
+                    me.saveCallback();
+                }
             });
 
             var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
@@ -493,7 +497,9 @@ Oskari.clazz.define(
             saveBtn.focus();
             return renderDialog;
         },
-
+        setSaveHandler: function (param) {
+            this.saveCallback = param;
+        },
         /**
          * @method _selectButton
          * Selects the chosen button

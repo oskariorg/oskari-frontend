@@ -12,7 +12,8 @@ div.metadataCatalogueContainer {
   div.metadataCatalogueContainer th.name, div.metadataCatalogueContainer td.name {
     text-align: left; }
   div.metadataCatalogueContainer td.name {
-    padding-left: 8px; }
+    padding-left: 8px;
+    padding-right: 8px; }
   div.metadataCatalogueContainer th.rating, div.metadataCatalogueContainer td.rating {
     text-align: right; }
   div.metadataCatalogueContainer th.info, div.metadataCatalogueContainer td.info {

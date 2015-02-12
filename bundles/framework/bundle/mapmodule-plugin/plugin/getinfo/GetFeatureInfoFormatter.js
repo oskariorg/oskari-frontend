@@ -35,6 +35,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                     titleWrapper = me.template.headerTitle.clone();
 
                 titleWrapper.append(fragmentTitle);
+                titleWrapper.attr('title', fragmentTitle);
                 headerWrapper.append(titleWrapper);
                 contentWrapper.append(headerWrapper);
 

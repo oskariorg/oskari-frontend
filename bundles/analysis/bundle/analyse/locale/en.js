@@ -257,10 +257,8 @@ Oskari.registerLocalization(
             },
             "buttons": {
                 "save": "Save and finish",
-                "analyse": "Analyse and continue",
-                "data": "Add the map layers",
-                "cancel": "Cancel",
-                "ok": "OK"
+                "analyse": "Create analysis",
+                "data": "Add the map layers"
             },
             "filter": {
                 "title": "Filtering",

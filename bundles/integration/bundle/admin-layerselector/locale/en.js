@@ -120,8 +120,8 @@ Oskari.registerLocalization({
             "addNewGroupLayer": "Add a new map layer group",
             "addNewBaseLayer": "Add a new background map layer",
             "addNewOrganization": "Add a new organization",
-            "addInspireTheme": "Add a new theme",
-            "addInspireThemeDesc": "Add a new INSPIRE theme.",
+            "addInspireTheme": "Theme",
+            "addInspireThemeDesc": "Select a new INSPIRE theme.",
             "opacity": "Opacity",
             "opacityDesc": "Define the layer opacity. If the setting is 0%, the layer will be completely transparent.",
             "style": "Default style",
@@ -171,14 +171,24 @@ Oskari.registerLocalization({
             "interfaceAddressDesc": "Give the interface address (URL) without ?-mark and parameters after that.",
             "viewingRightsRoles": "Rights to view for roles",
             "metadataReadFailure": "Fetching layer metadata failed.",
+            "permissionFailure": "Invalid username or password.",
             "mandatory_field_missing": "Field is required:",
             "invalid_field_value": "Invalid value:",
             "operation_not_permitted_for_layer_id": "You don't have privileges to change layer data or add a layer",
-            "no_layer_with_id": "The layer doesn't exist."
+            "no_layer_with_id": "The layer doesn't exist.",
+            "success": "Success.",
+            "errorRemoveLayer": "Removing layer did not work.",
+            "errorInsertAllreadyExists": "Inserted a new layer but a layer with same id already existed!!",
+            "errorRemoveGroupLayer": "Removing group failed.",
+            "errorSaveGroupLayer": "Failed to save grouplayer.",
+            "errorTitle": "Error",
+            "warningTitle": "Warning",
+            "successTitle": "Saved"
         },
         "cancel": "Cancel",
         "add": "Add",
         "save": "Save",
-        "delete": "Remove"
+        "delete": "Remove",
+        "ok": "OK"
     }
 });

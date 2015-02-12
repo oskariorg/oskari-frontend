@@ -42,7 +42,14 @@ Oskari.clazz.define(
         // last sort parameters are saved so we can change sort direction
         // if the same column is sorted again
         this.lastSort = null;
-        this.drawCoverage = undefined;
+        this.drawCoverage = false;
+        // Action status object.
+        this.actionStatus = {
+            actionElement: null,
+            actionTextElement: null,
+            callback: null,
+            bindCallbackTo: null            
+        };
     }, {
         /**
          * @static
@@ -126,6 +133,7 @@ Oskari.clazz.define(
                 '<tr class="resultRow">' +
                 '  <td></td>' +
                 '  <td></td>' +
+                '  <td><div class="actionPlaceholder"></div></td>' +
                 '  <td><div class="layerInfo icon-info"></div></td>' +
                 '  <td><div class="resultRemove icon-close"></div></td>' +
                 '</tr>'
@@ -237,6 +245,17 @@ Oskari.clazz.define(
                 }
             }
 
+            this.addSearchResultActionRequestHandler = Oskari.clazz.create(
+                'Oskari.catalogue.bundle.metadatacatalogue.request.AddSearchResultActionRequestHandler',
+                sandbox,
+                me
+            );
+            sandbox.addRequestHandler(
+                'AddSearchResultActionRequest',
+                this.addSearchResultActionRequestHandler
+            );
+
+
             // draw ui
             me.createUi();
         },
@@ -283,7 +302,7 @@ Oskari.clazz.define(
              */
             'MetaData.FinishedDrawingEvent': function (event) {
                 var me = this,
-                    coverageFeature,
+                    coverageFeature;
 
                 coverageFeature = this.selectionPlugin.getFeaturesAsGeoJSON();
 
@@ -294,10 +313,6 @@ Oskari.clazz.define(
                 document.getElementById('oskari_metadatacatalogue_forminput_searchassistance').focus();
             },
 
-            /**
-             * @method userinterface.ExtensionUpdatedEvent
-             * Stop drawing when flyout is closed
-             */
             'userinterface.ExtensionUpdatedEvent': function (event) {
                 var me = this,
                     isShown = event.getViewState() !== 'close';
@@ -312,26 +327,13 @@ Oskari.clazz.define(
                     }
                     if (me.coverageButton) {
                         me.coverageButton.val(me.getLocalization('delimitArea'));
-                        me.coverageButton[0].data = '';
                     }
                     me.drawCoverage = true;
+                    document.getElementById('oskari_metadatacatalogue_forminput_searchassistance').focus();
                     var emptyData = {};
-                    me.coverageButton[0].data = "";
-                }
-            },
-
-            /**
-             * @method Search.TabChangedEvent
-             * Stop drawing when tab is changed
-             */
-            'Search.TabChangedEvent': function (event) {
-                var me = this;
-                if (event._previousTabId === 'oskari_metadatacatalogue_tabpanel_header' && me.drawCoverage === false) {
-                    me.selectionPlugin.stopDrawing();
-                    me.coverageButton.val(me.getLocalization('delimitArea'));
-                    me.drawCoverage = true;
-                    var emptyData = {};
-                    me.coverageButton[0].data = "";
+                    if (me.coverageButton) {
+                        me.coverageButton[0].data = '';
+                    }
                 }
             }
         },
@@ -624,13 +626,13 @@ Oskari.clazz.define(
             }
 
             newRow = me.templates.buttonRow.clone();
-            newLabel = me.getLocalization("searchArea");
+            newLabel = me.getLocalization('searchArea');
             newRow.find('div.rowLabel').append(newLabel);
 
-            newButton = me.templates.metadataButton.clone();
+            var newButton = me.templates.metadataButton.clone();
             this.coverageButton = newButton.find('.metadataCoverageDef');
             this.coverageButton.attr('value', me.getLocalization('delimitArea'));
-            this.coverageButton.attr('name', "coverage");
+            this.coverageButton.attr('name', 'coverage');
             this.drawCoverage = true;
 
             this.coverageButton.on('click', function () {
@@ -640,9 +642,9 @@ Oskari.clazz.define(
                     me.selectionPlugin.stopDrawing();
                     me.coverageButton.val(me.getLocalization('delimitArea'));
                     me.drawCoverage = true;
-                    document.getElementById("oskari_metadatacatalogue_forminput_searchassistance").focus();
+                    document.getElementById('oskari_metadatacatalogue_forminput_searchassistance').focus();
                     var emptyData = {};
-                    me.coverageButton[0].data = "";
+                    me.coverageButton[0].data = '';
                 }
             });
 
@@ -677,14 +679,14 @@ Oskari.clazz.define(
             var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
 
             var config = {
-                id: "MetaData",
-                enableTransform : true,
+                id: 'MetaData',
+                enableTransform: true
             };
 
             this.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin', config);
             mapModule.registerPlugin(this.selectionPlugin);
             mapModule.startPlugin(this.selectionPlugin);
-            this.selectionPlugin.startDrawing({drawMode: "square"});
+            this.selectionPlugin.startDrawing({drawMode: 'square'});
         },
 
         /**
@@ -929,17 +931,59 @@ Oskari.clazz.define(
 
                         jQuery(cells[0]).append(layerList);
                         // Todo: real rating
-                        //jQuery(cells[1]).append("*****");
+                        // jQuery(cells[1]).append("*****");
                         jQuery(cells[1]).addClass(me.resultHeaders[1].prop);
-                        jQuery(cells[2]).addClass(me.resultHeaders[2].prop);
-                        jQuery(cells[2]).find('div.layerInfo').click(function () {
+
+                        // Action link
+                        if(me._isAction() == true) {
+                            var actionElement = me.actionStatus.actionElement.clone(),
+                                callbackElement = null,
+                                actionTextEl = null;
+                            
+                            // Set action callback
+                            if(me.actionStatus.callback && typeof me.actionStatus.callback == 'function') {
+                                // Bind action click to bindCallbackTo if bindCallbackTo param exist
+                                if(me.actionStatus.bindCallbackTo) {
+                                    callbackElement = licenseElement.find(me.actionStatus.bindCallbackTo);
+                                }
+                                // Bind action click to root element if bindCallbackTo is null
+                                else {
+                                    callbackElement =  actionElement.first();
+                                }
+                                callbackElement.css({'cursor':'pointer'}).bind('click', {metadata: row}, function(event){
+                                   me.actionStatus.callback(event.data.metadata);
+                                });
+                            }
+
+                            // Set action text
+                            if(me.actionStatus.actionTextElement) {
+                                actionTextEl = actionElement.find(me.actionStatus.actionTextElement);
+                            } else {
+                                actionTextEl = actionElement.first();
+                            }
+                            if(actionTextEl.is('input') ||
+                                actionTextEl.is('select') ||
+                                actionTextEl.is('button') ||
+                                actionTextEl.is('textarea')){
+                                actionTextEl.val(me.getLocalization('licenseText'));
+                            }
+                            else {                                
+                                actionTextEl.html(me.getLocalization('licenseText'));
+                            }
+
+                            jQuery(cells[2]).find('div.actionPlaceholder').append(actionElement);                            
+                        }
+
+                        jQuery(cells[3]).addClass(me.resultHeaders[2].prop);
+                        jQuery(cells[3]).find('div.layerInfo').click(function () {
                             var rn = 'catalogue.ShowMetadataRequest';
                             me.sandbox.postRequestByName(rn, [{
                                 uuid: row.id
                             }]);
                         });
-                        jQuery(cells[3]).addClass(me.resultHeaders[3].prop);
-                        jQuery(cells[3]).find('div.resultRemove').click(function () {
+                        jQuery(cells[4]).addClass(me.resultHeaders[3].prop);
+                        
+                        jQuery(cells[4]).find('div.resultRemove').click(function () {
                             jQuery('table.metadataSearchResult tr.res' + i).hide();
                             jQuery('div.metadataResultHeader a.showLink').show();
                         });
@@ -948,7 +992,6 @@ Oskari.clazz.define(
                 })(i);
             }
         },
-
         _addLayerLinks: function (layer, layerList) {
             var me = this,
                 selectedLayers,
@@ -1071,6 +1114,33 @@ Oskari.clazz.define(
                 value = value * -1;
             }
             return value;
+        },
+        /**
+        * @method addSearchResultAction
+        * Add search result action.
+        * @public
+        * @param {jQuery} actionElement jQuery action element
+        * @param {Function} callback the callback function
+        * @param {String} bindCallbackTo the jQuery selector where to bind click operation
+        * @param {String} actionTextElement action text jQuery selector. If it's null then text showed on main element
+        */
+        addSearchResultAction: function(actionElement, actionTextElement, callback, bindCallbackTo){
+            var me = this;
+            me.actionStatus = {
+                actionElement: actionElement,
+                actionTextElement: actionTextElement,
+                callback: callback,
+                bindCallbackTo: bindCallbackTo
+            };
+        },
+        /**
+        * @method _isAction
+        * @private
+        * @return {Boolean} is action
+        */
+        _isAction: function(){
+            var me = this;
+            return me.actionStatus.actionElement !== null;
         },
         /**
          * @method setState

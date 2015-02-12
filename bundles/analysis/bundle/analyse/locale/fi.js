@@ -143,7 +143,7 @@ Oskari.registerLocalization(
                 "options": [
                     {
                         "id": "oskari_analyse_Count",
-                        "label": "Lukumäärä",
+                        "label": "Kohteiden lukumäärä",
                         "selected": true
                     },
                     {
@@ -262,10 +262,8 @@ Oskari.registerLocalization(
             },
             "buttons": {
                 "save": "Tallenna ja lopeta",
-                "analyse": "Tee analyysi ja jatka",
-                "data": "Lisää karttatasoja",
-                "cancel": "Poistu",
-                "ok": "OK"
+                "analyse": "Tee analyysi",
+                "data": "Lisää karttatasoja"
             },
             "filter": {
                 "title": "Suodatus",

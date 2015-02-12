@@ -102,6 +102,9 @@ Oskari.registerLocalization(
                     "title": "Map marker",
                     "message": "Select a new location for the marker by clicking the map."
                 }
+            },
+            "MyLocationPlugin": {
+                "tooltip": "Center map to your location"
             }
         }
     }

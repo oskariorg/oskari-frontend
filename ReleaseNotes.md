@@ -1,5 +1,60 @@
 # Release Notes
 
+## 1.27
+
+### admin-layerselector
+
+Fixed JavaScript alerts and confirm dialogs to use Oskari.userinterface.component.Popup.
+
+### core/user
+
+User loginName has been renamed as email. User.getLoginName() is still available and if user object doesn't get the email property, loginName is used instead. However loginName should be considered deprecated and email should be preferred.
+
+### findbycoordinates
+
+*New bundle!* Creates a service and a user interface for searching nearest address on a map and adds a button to the toolbar for reverse geocode search. Requires server side functionality.
+
+### featuredata
+
+Fixed feature selection popup to show only one popup when clicking tool again.
+
+### featuredata2
+
+Fixed feature selection popup to show only one popup when clicking tool again.
+
+### metadatacatalogue
+
+Metadatacatalogue can now be show extra action element in search results list. This functionality need to be actived AddSearchResultActionRequest.
+
+### metadatacatalogue/AddSearchResultActionRequest
+
+Added support to show extra action element in metadatacatalogue search results list. 
+
+Action element can be added via requests as follows:
+
+```javascript
+var reqBuilder = this.sandbox.getRequestBuilder('AddSearchResultActionRequest');
+if (reqBuilder) {
+    var data = {
+        actionElement: jQuery('<a href="javascript:void(0)"></a>'),
+        callback: function(metadata) {
+            console.log('Get license information');
+            console.log(metadata);
+        },
+        bindCallbackTo: null,
+        actionTextElement: null
+    };
+    var request = reqBuilder(data);
+    this.sandbox.request(this.getName(), request);
+}
+```
+
+### mapwfs2/WfsLayerPlugin
+
+Highlighting of border features is fixed in map move event.
+Ctrl-select of Wfs features is fixed (no duplicate features allowed any more)
+
+
 ## 1.26.1
 
 ### statistics

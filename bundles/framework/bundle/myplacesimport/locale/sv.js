@@ -11,13 +11,18 @@ Oskari.registerLocalization(
         },
         "flyout": {
             "title": "Datamängd importering",
-            "description": "Du kan importera dina egna datamängder i shape-, gpx- eller mif/mid filformat i zip-paketet eller kmz filformat. Du kan importera filer med högst 5000 objekt.",
+            "description": "Du kan importera dina egna datamängder i shape-, gpx- eller mif/mid filformat i zip-paketet eller kmz filformat.",
             "actions": {
                 "cancel": "Avbryt",
                 "next": "Nästa"
             },
             "file": {
-                "submit": "Skicka"
+                "submit": "Skicka",
+                "fileOverSizeError": {
+                    "title": "Fel",
+                    "message": "Din datamängd är för stor. Datamängden kan vara högst <xx> mb.",
+                    "close": "Stäng"
+                }
             },
             "layer": {
                 "title": "Spara kartlager information:",

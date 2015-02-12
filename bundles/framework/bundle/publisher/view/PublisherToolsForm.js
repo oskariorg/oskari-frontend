@@ -126,6 +126,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 }
             }
         }, {
+            id: 'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin',
+            selected: false,
+            lefthanded: 'top left',
+            righthanded: 'top right',
+            config: {
+                location: {
+                    top: '',
+                    right: '',
+                    bottom: '',
+                    left: '',
+                    classes: 'top left'
+                }
+            }
+        }, {
             id: 'Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             selected: false,
             lefthanded: 'top right',

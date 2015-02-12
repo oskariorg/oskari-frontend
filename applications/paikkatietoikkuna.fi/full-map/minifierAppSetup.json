@@ -524,6 +524,16 @@
 		            }
 		        }
 		    }
+		}, {
+			"bundlename" : "findbycoordinates",
+			"bundleinstancename" : "findbycoordinates",
+			"metadata" : {
+				"Import-Bundle" : {
+					"findbycoordinates" : {
+						"bundlePath" : "../../../packages/framework/bundle/"
+					}
+				}
+			}
 		}
 	]
 }

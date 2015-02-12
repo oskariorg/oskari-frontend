@@ -120,8 +120,8 @@ Oskari.registerLocalization({
             "addNewGroupLayer": "Lisää uusi ryhmätaso",
             "addNewBaseLayer": "Lisää uusi taustataso",
             "addNewOrganization": "Lisää uusi tiedontuottaja",
-            "addInspireTheme": "Lisää uusi aihe",
-            "addInspireThemeDesc": "Lisää Inspire-direktiivin liitteissä olevien teemojen mukainen aihe.",
+            "addInspireTheme": "Aihe",
+            "addInspireThemeDesc": "Valitse Inspire-direktiivin liitteissä olevien teemojen mukainen aihe.",
             "opacity": "Peittävyys",
             "opacityDesc": "Tason peittävyys (arvo 0% tekee tasosta oletuksena näkymättömän)",
             "style": "Oletustyyli",
@@ -171,14 +171,24 @@ Oskari.registerLocalization({
             "interfaceAddressDesc": "Anna rajapinnan osoite ilman ?-merkkiä ja sen jälkeisiä parametreja.",
             "viewingRightsRoles": "Katseluoikeudet rooleille",
             "metadataReadFailure": "Karttatason metatietojen haku epäonnistui.",
+            "permissionFailure": "Virheellinen käyttäjätunnus tai salasana.",
             "mandatory_field_missing": "Pakollinen tieto:",
             "invalid_field_value": "Virheellinen arvo:",
             "operation_not_permitted_for_layer_id": "Käyttöoikeutesi eivät riitä tason muokkaamiseen tai lisäämiseen.",
-            "no_layer_with_id": "Virhe: Karttatasoa ei löytynyt. Se on mahdollisesti jo poistettu."
+            "no_layer_with_id": "Virhe: Karttatasoa ei löytynyt. Se on mahdollisesti jo poistettu.",
+            "success": "Tallennus onnistui.",
+            "errorRemoveLayer": "Karttatason poisto ei onnistunut.",
+            "errorInsertAllreadyExists": "Uusi taso lisätty, mutta samalla id:llä oleva taso on jo olemassa!!",
+            "errorRemoveGroupLayer": "Karttatasoryhmän poisto epäonnistui.",
+            "errorSaveGroupLayer": "Karttatasoryhmän tallennus epäonnistui.",
+            "errorTitle": "Virhe",
+            "warningTitle": "Varoitus",
+            "successTitle": "Tallennettu"
         },
         "cancel": "Peruuta",
         "add": "Lisää",
         "save": "Tallenna",
-        "delete": "Poista"
+        "delete": "Poista",
+        "ok": "OK"
     }
 });

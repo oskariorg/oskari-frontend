@@ -150,3 +150,17 @@ table.oskari-grid {
     }
 
 }
+
+.oskari-grid-export {
+    width: 340px;
+
+    fieldset.oskari-formcomponent {
+        float: left;
+
+        label {
+            width: 170px;
+        }
+
+    }
+
+}
