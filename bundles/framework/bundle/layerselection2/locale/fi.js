@@ -88,7 +88,7 @@ Oskari.registerLocalization(
                     "aggregateValueSelectTitle": "Käytä laskettua tunnuslukua valintaan",
                     "selectAggregateAnalyse": "Valitse analyysitaso",
                     "selectIndicator": "Valitse ominaisuustieto",
-                    "selectReadyButton": "Sulje",,
+                    "selectReadyButton": "Sulje",
                     "getAggregateAnalysisFailed": "Koosteanalyysidatan haku epäonnistui!",
                     "noAggregateAnalysisPopupTitle": "Koosteanalyysejä ei löytynyt",
                     "noAggregateAnalysisPopupContent": "Sinulla ei ole tallennettuja koosteanalyysejä. Voit luoda omia koosteanalyysejä Analyysi-toiminnolla ja käyttää koosteanalyysin arvoja kohteiden suodatuksessa"
