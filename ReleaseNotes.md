@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.27.1
+
+Fixed a broken locale file: bundles/framework/bundle/layerselection2/locale/fi.js had an extra comma.
+
 ## 1.27
 
 ### admin-layerselector
