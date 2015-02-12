@@ -84,11 +84,11 @@ Oskari.registerLocalization(
                     "lessThanOrEqualTo": "on pienempi tai yhtä pieni kuin"
                 },
                 "aggregateAnalysisFilter": {
-                    "addAggregateFilter": "Hae koosteanalyysin arvo",
-                    "aggregateValueSelectTitle": "Käytä koosteanalyysin arvoa suodatuksessa",
-                    "selectAggregateAnalyse": "Valitse koosteanalyysi",
-                    "selectIndicator": "Valitse indikaattori",
-                    "selectReadyButton": "Valmis",
+                    "addAggregateFilter": "Käytä laskettua tunnuslukua",
+                    "aggregateValueSelectTitle": "Käytä laskettua tunnuslukua valintaan",
+                    "selectAggregateAnalyse": "Valitse analyysitaso",
+                    "selectIndicator": "Valitse ominaisuustieto",
+                    "selectReadyButton": "Sulje",,
                     "getAggregateAnalysisFailed": "Koosteanalyysidatan haku epäonnistui!",
                     "noAggregateAnalysisPopupTitle": "Koosteanalyysejä ei löytynyt",
                     "noAggregateAnalysisPopupContent": "Sinulla ei ole tallennettuja koosteanalyysejä. Voit luoda omia koosteanalyysejä Analyysi-toiminnolla ja käyttää koosteanalyysin arvoja kohteiden suodatuksessa"
