@@ -176,11 +176,19 @@ Oskari.registerLocalization({
             "invalid_field_value": "Virheellinen arvo:",
             "operation_not_permitted_for_layer_id": "Käyttöoikeutesi eivät riitä tason muokkaamiseen tai lisäämiseen.",
             "no_layer_with_id": "Virhe: Karttatasoa ei löytynyt. Se on mahdollisesti jo poistettu.",
-            "success": "Tallennus onnistui."
+            "success": "Tallennus onnistui.",
+            "errorRemoveLayer": "Karttatason poisto ei onnistunut.",
+            "errorInsertAllreadyExists": "Uusi taso lisätty, mutta samalla id:llä oleva taso on jo olemassa!!",
+            "errorRemoveGroupLayer": "Karttatasoryhmän poisto epäonnistui.",
+            "errorSaveGroupLayer": "Karttatasoryhmän tallennus epäonnistui.",
+            "errorTitle": "Virhe",
+            "warningTitle": "Varoitus",
+            "successTitle": "Tallennettu"
         },
         "cancel": "Peruuta",
         "add": "Lisää",
         "save": "Tallenna",
-        "delete": "Poista"
+        "delete": "Poista",
+        "ok": "OK"
     }
 });

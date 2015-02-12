@@ -340,55 +340,179 @@ define([
 
                 var me = this,
                     element = jQuery(e.currentTarget),
-                    addLayerDiv = element.parents('.admin-add-layer');
+                    addLayerDiv = element.parents('.admin-add-layer'),
+                    confirmMsg = me.instance.getLocalization('admin').confirmDeleteLayer,
+                    dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                    btn = dialog.createCloseButton(me.instance.getLocalization().ok),
+                    cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+                    sandbox = me.options.instance.getSandbox();
 
                 if (callback) {
                     addLayerDiv = jQuery('.admin-layerselector .admin-add-layer.show-edit-layer[data-id=' + me.options.baseLayerId + ']');
                 }
 
-                var confirmMsg = me.instance.getLocalization('admin').confirmDeleteLayer;
-                if (!confirm(confirmMsg)) {
-                    // existing layer/cancel!!
-                    return;
-                }
+                btn.addClass('primary');
+                cancelBtn.setTitle(me.instance.getLocalization().cancel);
+                btn.setHandler(function() {
+                    dialog.close();
 
-                var sandbox = me.options.instance.getSandbox();
-                jQuery.ajax({
-                    type: 'GET',
-                    dataType: 'json',
-                    data: {
-                        layer_id: me.model.getId()
-                    },
-                    url: sandbox.getAjaxUrl() + 'action_route=DeleteLayer',
-                    success: function (resp) {
-                        if (!resp) {
-                            // TODO this isn't fired on sublayer delete...
-                            //close this
-                            if (addLayerDiv.hasClass('show-edit-layer')) {
-                                addLayerDiv.removeClass('show-edit-layer');
-                                // FIXME this re-renders the layer view but doesn't update the model...
-                                // bubble this action to the View
-                                // = outside of backbone implementation
-                                element.trigger({
-                                    type: 'adminAction',
-                                    command: 'removeLayer',
-                                    modelId: me.model.getId(),
-                                    baseLayerId: me.options.baseLayerId
-                                });
-                                addLayerDiv.remove();
+                    jQuery.ajax({
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {
+                            layer_id: me.model.getId()
+                        },
+                        url: sandbox.getAjaxUrl() + 'action_route=DeleteLayer',
+                        success: function (resp) {
+                            if (!resp) {
+                                // TODO this isn't fired on sublayer delete...
+                                //close this
+                                if (addLayerDiv.hasClass('show-edit-layer')) {
+                                    addLayerDiv.removeClass('show-edit-layer');
+                                    // FIXME this re-renders the layer view but doesn't update the model...
+                                    // bubble this action to the View
+                                    // = outside of backbone implementation
+                                    element.trigger({
+                                        type: 'adminAction',
+                                        command: 'removeLayer',
+                                        modelId: me.model.getId(),
+                                        baseLayerId: me.options.baseLayerId
+                                    });
+                                    addLayerDiv.remove();
+                                }
+                                if (callback) {
+                                    callback();
+                                }
                             }
+                            /* else {
+                                //problem
+                                console.log('Removing layer did not work.')
+                            }*/
+                        },
+                        error: function (jqXHR, textStatus) {
+                            if (jqXHR.status !== 0) {
+                                me._showDialog(me.instance.getLocalization('admin')['errorTitle'], me.instance.getLocalization('admin')['errorRemoveLayer']);
+                            }
+                        }
+                    });
+
+                });
+                cancelBtn.setHandler(function() {
+                    dialog.close();
+                });
+
+                dialog.show(me.instance.getLocalization('admin')['warningTitle'], confirmMsg, [btn, cancelBtn]);
+                dialog.makeModal();
+                
+            },
+            /**
+            * @method _showDialog
+            * @private
+            * @param title the dialog title
+            * @param message the dialog message
+            */
+            _showDialog: function(title, message){
+                var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                dialog.show(title, message);
+                dialog.fadeout(5000);
+            },
+            /**
+            * @method _addLayerAjax
+            * @private
+            * @param {Object} data saved data
+            * @param {jQuery} element jQuery element
+            */
+            _addLayerAjax: function(data, element){
+                var me = this,
+                    form = element.parents('.admin-add-layer'),
+                    createLayer,
+                    sandbox = me.instance.getSandbox();
+                // Progress spinner
+                me.progressSpinner.start();
+                
+                jQuery.ajax({
+                    type: 'POST',
+                    data: data,
+                    dataType: 'json',
+                    url: sandbox.getAjaxUrl() + 'action_route=SaveLayer',
+                    success: function (resp) {
+                        var success = true;
+                        me.progressSpinner.stop();
+                        // response should be a complete JSON for the new layer
+                        if (!resp) {
+                            me._showDialog(me.instance.getLocalization('admin')['errorTitle'], me.instance.getLocalization('admin').update_or_insert_failed);
+                            success = false;
+                        } else if (resp.error) {
+                            me._showDialog(me.instance.getLocalization('admin')['errorTitle'], me.instance.getLocalization('admin')[resp.error] || resp.error);
+                            success = false;
+                        }
+                        // happy case - we got id
+                        if (resp.id) {
+                            // close this
+                            form.removeClass('show-add-layer');
+                            createLayer = form.parents('.create-layer');
+                            if (createLayer) {
+                                createLayer.find('.admin-add-layer-btn').html(me.instance.getLocalization('admin').addLayer);
+                                createLayer.find('.admin-add-layer-btn').attr('title', me.instance.getLocalization('admin').addLayerDesc);
+                            }
+                            form.remove();
                             if (callback) {
                                 callback();
                             }
+
+                            // FIXME this doesn't seem to do anything? remove's trigger re-renders the layer view, this doesn't
+                            //trigger event to View.js so that it can act accordingly
+                            accordion.trigger({
+                                type: 'adminAction',
+                                command: me.model.getId() !== null && me.model.getId() !== undefined ? 'editLayer' : 'addLayer',
+                                layerData: resp,
+                                baseLayerId: me.options.baseLayerId
+                            });
                         }
-                        /* else {
-                            //problem
-                            console.log('Removing layer did not work.')
-                        }*/
+                        if (resp.warn) {
+                            me._showDialog(me.instance.getLocalization('admin')['warningTitle'], me.instance.getLocalization('admin')[resp.warn] || resp.warn);
+                            success = false;
+                        }
+                        if (success) {
+                            me._showDialog(me.instance.getLocalization('admin')['successTitle'], me.instance.getLocalization('admin')['success']);
+                        }
                     },
                     error: function (jqXHR, textStatus) {
+                        me.progressSpinner.stop();
                         if (jqXHR.status !== 0) {
-                            alert(' Removing layer did not work. ');
+                            var loc = me.instance.getLocalization('admin'),
+                                err = loc.update_or_insert_failed;
+                            if (jqXHR.responseText) {
+                                var jsonResponse = jQuery.parseJSON(jqXHR.responseText);
+                                if (jsonResponse && jsonResponse.error) {
+                                    err = jsonResponse.error;
+                                    // see if we recognize the error
+                                    var errVar = null;
+                                    if (err.indexOf('mandatory_field_missing:') === 0) {
+                                        errVar = err.substring('mandatory_field_missing:'.length);
+                                        err = 'mandatory_field_missing';
+                                    } else if (err.indexOf('invalid_field_value:') === 0) {
+                                        errVar = err.substring('invalid_field_value:'.length);
+                                        err = 'invalid_field_value';
+                                    } else if (err.indexOf('operation_not_permitted_for_layer_id:') === 0) {
+                                        errVar = err.substring('operation_not_permitted_for_layer_id:'.length);
+                                        err = 'operation_not_permitted_for_layer_id';
+                                    } else if (err.indexOf('no_layer_with_id') === 0) {
+                                        errVar = err.substring('no_layer_with_id:'.length);
+                                        err = 'no_layer_with_id';
+                                    }
+
+                                    err = loc[err] || err;
+                                    if (errVar) {
+                                        if (loc[errVar]) {
+                                            err += loc[errVar];
+                                        } else {
+                                            err += errVar;
+                                        }
+                                    }
+                                }
+                            }
+                            me._showDialog(me.instance.getLocalization('admin')['errorTitle'], err);
                         }
                     }
                 });
@@ -403,7 +527,7 @@ define([
                     e.stopPropagation();
                 }
 
-                // FIXME don't get this shit from the event...
+                // FIXME don't get this from the event...
                 var me = this,
                     element = jQuery(e.currentTarget),
                     accordion = element.parents('.accordion'),
@@ -446,14 +570,6 @@ define([
                 data.layerUrl = form.find('#add-layer-url').val();
                 if (typeof data.layerUrl === "undefined") {
                     data.layerUrl = form.find('#add-layer-interface').val();
-                }
-                if (data.layerUrl !== me.model.getInterfaceUrl() ||
-                    data.layerName !== me.model.getLayerName()) {
-                    var confirmMsg = me.instance.getLocalization('admin').confirmResourceKeyChange;
-                    if (me.model.getId() && !confirm(confirmMsg)) {
-                        // existing layer/cancel!!
-                        return;
-                    }
                 }
 
                 data.opacity = form.find('#opacity-slider').val();
@@ -508,100 +624,34 @@ define([
                     }
                 }
 
-
-                // Progress spinner
-                me.progressSpinner.start();
                 // Layer class id aka. orgName id aka groupId
                 data.groupId = lcId;
-                var sandbox = me.instance.getSandbox();
-                jQuery.ajax({
-                    type: 'POST',
-                    data: data,
-                    dataType: 'json',
-                    url: sandbox.getAjaxUrl() + 'action_route=SaveLayer',
-                    success: function (resp) {
-                        var success = true;
-                        me.progressSpinner.stop();
-                        // response should be a complete JSON for the new layer
-                        if (!resp) {
-                            alert(me.instance.getLocalization('admin').update_or_insert_failed);
-                            success = false;
-                        } else if (resp.error) {
-                            alert(me.instance.getLocalization('admin')[resp.error] || resp.error);
-                            success = false;
-                        }
-                        // happy case - we got id
-                        if (resp.id) {
-                            // close this
-                            form.removeClass('show-add-layer');
-                            createLayer = form.parents('.create-layer');
-                            if (createLayer) {
-                                createLayer.find('.admin-add-layer-btn').html(me.instance.getLocalization('admin').addLayer);
-                                createLayer.find('.admin-add-layer-btn').attr('title', me.instance.getLocalization('admin').addLayerDesc);
-                            }
-                            form.remove();
-                            if (callback) {
-                                callback();
-                            }
 
-                            // FIXME this doesn't seem to do anything? remove's trigger re-renders the layer view, this doesn't
-                            //trigger event to View.js so that it can act accordingly
-                            accordion.trigger({
-                                type: 'adminAction',
-                                command: me.model.getId() !== null && me.model.getId() !== undefined ? 'editLayer' : 'addLayer',
-                                layerData: resp,
-                                baseLayerId: me.options.baseLayerId
-                            });
-                        }
-                        if (resp.warn) {
-                            alert(me.instance.getLocalization('admin')[resp.warn] || resp.warn);
-                            success = false;
-                        }
-                        if (success) {
-                            alert(me.instance.getLocalization('admin')['success']);
-                        }
-                    },
-                    error: function (jqXHR, textStatus) {
-                        me.progressSpinner.stop();
-                        if (jqXHR.status !== 0) {
-                            var loc = me.instance.getLocalization('admin'),
-                                err = loc.update_or_insert_failed;
-                            if (jqXHR.responseText) {
-                                var jsonResponse = jQuery.parseJSON(jqXHR.responseText);
-                                if (jsonResponse && jsonResponse.error) {
-                                    err = jsonResponse.error;
-                                    // see if we recognize the error
-                                    var errVar = null;
-                                    if (err.indexOf('mandatory_field_missing:') === 0) {
-                                        errVar = err.substring('mandatory_field_missing:'.length);
-                                        err = 'mandatory_field_missing';
-                                    } else if (err.indexOf('invalid_field_value:') === 0) {
-                                        errVar = err.substring('invalid_field_value:'.length);
-                                        err = 'invalid_field_value';
-                                    } else if (err.indexOf('operation_not_permitted_for_layer_id:') === 0) {
-                                        errVar = err.substring('operation_not_permitted_for_layer_id:'.length);
-                                        err = 'operation_not_permitted_for_layer_id';
-                                    } else if (err.indexOf('no_layer_with_id') === 0) {
-                                        errVar = err.substring('no_layer_with_id:'.length);
-                                        err = 'no_layer_with_id';
-                                    }
+                if (data.layerUrl !== me.model.getInterfaceUrl() ||
+                    data.layerName !== me.model.getLayerName()) {
+                    var confirmMsg = me.instance.getLocalization('admin').confirmResourceKeyChange,
+                        dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                        btn = dialog.createCloseButton(me.instance.getLocalization().ok),
+                        cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                    
+                    btn.addClass('primary');
+                    cancelBtn.setTitle(me.instance.getLocalization().cancel);
 
-                                    err = loc[err] || err;
-                                    if (errVar) {
-                                        if (loc[errVar]) {
-                                            err += loc[errVar];
-                                        } else {
-                                            err += errVar;
-                                        }
-                                    }
-                                }
-                            }
-                            alert(err);
-                        }
-                    }
-                });
+                    btn.setHandler(function() {
+                        dialog.close();
+                        me._addLayerAjax(data, element);
+                    });
+
+                    cancelBtn.setHandler(function() {
+                        dialog.close();
+                    });
+
+                    dialog.show(me.instance.getLocalization('admin')['warningTitle'], confirmMsg, [btn, cancelBtn]);
+                    dialog.makeModal();
+                } else {
+                    me._addLayerAjax(data, element);
+                }
             },
-
             /**
              * Save group or base layers
              *
@@ -674,11 +724,10 @@ define([
                     },
                     error: function (jqXHR, textStatus) {
                         jQuery('body').css('cursor', '');
-                        alert('Failed to save grouplayer');
+                        me._showDialog(me.instance.getLocalization('admin')['errorTitle'], me.instance.getLocalization('admin')['errorSaveGroupLayer']);
                     }
                 });
             },
-
             removeLayerCollection: function (e) {
                 var me = this,
                     element = jQuery(e.currentTarget),
@@ -701,7 +750,7 @@ define([
                         });
                     },
                     error: function (jqXHR, textStatus) {
-                        alert('Removing group failed');
+                        me._showDialog(me.instance.getLocalization('admin')['errorTitle'], me.instance.getLocalization('admin')['errorRemoveGroupLayer']);
                     }
                 });
             },
@@ -754,7 +803,7 @@ define([
                     error: function (jqXHR, textStatus) {
                         me.progressSpinner.stop();
                         if (jqXHR.status !== 0) {
-                            alert(me.instance.getLocalization('admin').metadataReadFailure);
+                            me._showDialog(me.instance.getLocalization('admin')['errorTitle'], me.instance.getLocalization('admin').metadataReadFailure);
                         }
                     }
                 });
@@ -792,7 +841,7 @@ define([
                     },
                     error: function (jqXHR, textStatus) {
                         if (jqXHR.status !== 0) {
-                            alert(me.instance.getLocalization('admin').metadataReadFailure);
+                            me._showDialog(me.instance.getLocalization('admin')['errorTitle'], me.instance.getLocalization('admin').metadataReadFailure);
                         }
                     }
                 });

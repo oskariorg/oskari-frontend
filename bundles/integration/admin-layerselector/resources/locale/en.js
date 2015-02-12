@@ -176,11 +176,19 @@ Oskari.registerLocalization({
             "invalid_field_value": "Invalid value:",
             "operation_not_permitted_for_layer_id": "You don't have privileges to change layer data or add a layer",
             "no_layer_with_id": "The layer doesn't exist.",
-            "success": "Success."
+            "success": "Success.",
+            "errorRemoveLayer": "Removing layer did not work.",
+            "errorInsertAllreadyExists": "Inserted a new layer but a layer with same id already existed!!",
+            "errorRemoveGroupLayer": "Removing group failed.",
+            "errorSaveGroupLayer": "Failed to save grouplayer.",
+            "errorTitle": "Error",
+            "warningTitle": "Warning",
+            "successTitle": "Saved"
         },
         "cancel": "Cancel",
         "add": "Add",
         "save": "Save",
-        "delete": "Remove"
+        "delete": "Remove",
+        "ok": "OK"
     }
 });

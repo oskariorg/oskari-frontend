@@ -434,7 +434,7 @@ define([
                 this.layerGroupingModel.save(data, function(err) {
                     if(err) {
                         // TODO: handle error
-                        alert("Error!! " + err);
+                        me._showDialog(me.instance.getLocalization('admin')['errorTitle'], err);
                         return;
                     }
                     element.parents('.show-add-class').removeClass('show-add-class');
@@ -451,34 +451,56 @@ define([
                     groupId = element.attr('data-id'),
                     group = this.layerGroupingModel.getGroup(groupId),
                     layers = group.getLayers(),
-                    loc = me.instance.getLocalization();
+                    loc = me.instance.getLocalization(),
+                    dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                    btn = dialog.createCloseButton(loc.ok),
+                    cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+                    confirmMsg = loc.admin.confirmDeleteLayerGroup;
 
                 if (this.allowDeleteWhenNotEmpty && layers.length > 0) {
                     this.__showDialog(loc.errors.title, loc.errors['not_empty'], element);
                     return;
                 }
-                var confirmMsg = loc.admin.confirmDeleteLayerGroup;
-                if(!confirm(confirmMsg)) {
-                    // user canceled
-                    return;
-                }
 
-                this.layerGroupingModel.remove(groupId, function(err, info) {
-                    if(info && info.responseText) {
-                        try {
-                            var obj = JSON.parse(info.responseText);
-                            if(obj.info && obj.info.code && loc.errors[obj.info.code]) {
-                                me.__showDialog(loc.errors.title, loc.errors[obj.info.code], element);
-                            }
+                btn.addClass('primary');
+                cancelBtn.setTitle(loc.cancel);
+                btn.setHandler(function() {
+                   dialog.close();
+                   me.layerGroupingModel.remove(groupId, function(err, info) {
+                        if(info && info.responseText) {
+                            try {
+                                var obj = JSON.parse(info.responseText);
+                                if(obj.info && obj.info.code && loc.errors[obj.info.code]) {
+                                    me.__showDialog(loc.errors.title, loc.errors[obj.info.code], element);
+                                }
+                                return;
+                            } catch(ignored) {}
+                        }
+                        if(err) {
+                            // TODO: handle error
+                            me._showDialog(me.instance.getLocalization('admin')['errorTitle'], err);
                             return;
-                        } catch(ignored) {}
-                    }
-                    if(err) {
-                        // TODO: handle error
-                        alert("Error!! " + err);
-                        return;
-                    }
+                        }
+                    });
                 });
+                
+                cancelBtn.setHandler(function() {
+                   dialog.close();
+                });
+
+                dialog.show(me.instance.getLocalization('admin')['warningTitle'], confirmMsg, [btn, cancelBtn]);
+                dialog.makeModal();                
+            },
+            /**
+            * @method _showDialog
+            * @private
+            * @param title the dialog title
+            * @param message the dialog message
+            */
+            _showDialog: function(title, message){
+                var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                dialog.show(title, message);
+                dialog.fadeout(5000);
             },
             __showDialog : function(title, content, elRef, alignment) {
                 var me = this;

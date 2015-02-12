@@ -124,11 +124,11 @@ Oskari.registerLocalization({
                     "lessThanOrEqualTo": "is smaller than or equal to"
                 },
                 "aggregateAnalysisFilter": { 
-                    "addAggregateFilter": "Select the aggregate value", 
-                    "aggregateValueSelectTitle": "Use the aggregate value in the filter", 
-                    "selectAggregateAnalyse": "Select the aggregate analysis", 
-                    "selectIndicator": "Select the indicator", 
-                    "selectReadyButton": "Ready", 
+                    "addAggregateFilter": "Previously calculated key ratios", 
+                    "aggregateValueSelectTitle": "Use a previously calculated key ratios", 
+                    "selectAggregateAnalyse": "Select an analysis layer", 
+                    "selectIndicator": "Select property", 
+                    "selectReadyButton": "Close", 
                     "getAggregateAnalysisFailed": "The aggregate data could not be found.", 
                     "noAggregateAnalysisPopupTitle": "The aggregate analysis did not found.", 
                     "noAggregateAnalysisPopupContent": "You have not done any aggregate analysis. You can create your own aggregata data by the analysis function and then use values in filtering." 

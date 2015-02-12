@@ -176,9 +176,6 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
             me._layerUpdateHandler(true);
         });
     },
-
-
-
     /**
      * @method handleAction
      * This is called when backbone fires an event that needs to be passed
@@ -211,7 +208,7 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
                     mapLayerService.addLayer(mapLayer);
                 }
                 else {
-                    alert('Error!! Inserted a new layer but a layer with same id already existed!!');
+                    me._showDialog(me.instance.getLocalization('admin')['errorTitle'], me.instance.getLocalization('admin')['errorInsertAllreadyExists']);
                     // should we update if layer already exists??? mapLayerService.updateLayer(e.layerData.id, e.layerData); 
                 }
             }
