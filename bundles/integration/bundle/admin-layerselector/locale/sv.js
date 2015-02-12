@@ -108,8 +108,6 @@ Oskari.registerLocalization(
             "layerNameAndDesc": "Lagrets namn och kort beskrivning",
             "metaInfoIdDesc": "Geodata&shy;registrets metadata filtagg, som unikt identifierar metadatans XML beskrivning",
             "metaInfoId": "Metadatans filtagg",
-            "metaInfoUrl": "NOT TRANSLATED",
-            "metaInfoUrlDesc": "NOT TRANSLATED",
             "wmsName": "Unik namn för kartlager",
             "wmsNameDesc": "Unik eller teknisk namn för kartlager",
             "username": "Användarsnamn",
@@ -179,12 +177,20 @@ Oskari.registerLocalization(
             "invalid_field_value": "Ogiltigt värde:",
             "operation_not_permitted_for_layer_id": "Åtgärden är inte tillåten för kartlager",
             "no_layer_with_id": "Ingen kartlagret hittades med id",
-            "success": "NOT TRANSLATED"
+            "success": "NOT TRANSLATED",
+            "errorRemoveLayer": "NOT TRANSLATED",
+            "errorInsertAllreadyExists" :"NOT TRANSLATED",
+            "errorRemoveGroupLayer": "NOT TRANSLATED",
+            "errorSaveGroupLayer": "NOT TRANSLATED",
+            "errorTitle" : "Fel",
+            "warningTitle" : "Varning",
+            "successTitle" : "Lagrat"
         },
         "cancel": "Tillbaka",
         "add": "Tillägg",
         "save": "Lagra",
-        "delete": "Ta bort"
+        "delete": "Ta bort",
+        "ok": "OK"
     }
 }
 );

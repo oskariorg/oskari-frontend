@@ -376,7 +376,8 @@ Oskari.clazz.define(
             }
 
             // update zoomLevel and highlight pictures
-            if (me.zoomLevel !== zoom) {
+            // must be updated also in map move, because of hili in bordertiles
+       //     if (me.zoomLevel !== zoom) {
                 me.zoomLevel = zoom;
 
                 // TODO 472: if no connection or the layer is not registered, get highlight with URL
@@ -421,7 +422,7 @@ Oskari.clazz.define(
                         }
                     }
                 });
-            }
+           // }
         },
 
         /**

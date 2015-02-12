@@ -272,15 +272,6 @@ if (!Function.prototype.bind) {
             },
 
             /**
-             * Returns metadata url
-             * @returns {String} metadata url
-             */
-            getMetadataUrl: function() {
-                //return this.get('_dataUrl');
-                return this.getDataUrl();
-            },
-
-            /**
              * Returns legend url
              * @returns {String} legend url
              */

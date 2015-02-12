@@ -94,6 +94,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
         "showSelectionTools": function (singleSelection) {
             var me = this;
 
+            // Safety check at not show more than one popup
+            if(jQuery('.tools_selection').is(':visible')) {
+                return;   
+            }
+
             // close popup so we can update the selection geometry
             // this is done so we can optimize grid updates on normal updateExtensionRequests.
             // if the selection show wouldn't use this request but a custom one, this wouldn't be needed
@@ -101,7 +106,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
 
             var closureMagic = function (tool) {
                 return function () {
-
                     me.buttons[tool].callback();
                     dialog.close();
                     if (!singleSelection) {

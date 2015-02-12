@@ -49,10 +49,10 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadatacatalogue.MetadataCatalogue
 			/* request */
 	        {
 	            "type": "text/javascript",
-	            "src": "../../../../bundles/catalogue/bundle/metadatacatalogue/request/ShowLicenseRequest.js"
+	            "src": "../../../../bundles/catalogue/bundle/metadatacatalogue/request/AddSearchResultActionRequest.js"
 	        }, {
 	            "type": "text/javascript",
-	            "src": "../../../../bundles/catalogue/bundle/metadatacatalogue/request/ShowLicenseRequestHandler.js"
+	            "src": "../../../../bundles/catalogue/bundle/metadatacatalogue/request/AddSearchResultActionRequestHandler.js"
 	        },
 	        /* css */
 			{

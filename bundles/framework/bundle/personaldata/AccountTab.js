@@ -43,7 +43,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.AccountTab',
                     value: user.getNickName()
                 }, {
                     label: localization.email,
-                    value: user.getLoginName()
+                    value: user.getEmail()
                 }],
                 infoContainer = container.find('.info'),
                 i,
