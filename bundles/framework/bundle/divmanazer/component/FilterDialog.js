@@ -67,7 +67,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
             // Create filter dialog content
             layerAttributes = me._layer.getFilterJson();
             if (layerAttributes === null) {
-                me._loadWFSLayerPropertiesAndTypes(me._layer.getId(), cb);
+                me._loadWFSLayerPropertiesAndTypes(me._layer.getId(), prevJson, cb);
                 return;
             }
             popupContent = this.getFilterDialogContent(me._layer);
@@ -114,7 +114,6 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                     }
                 }
             });
-
             // If there's already filter values for current layer, populate the dialog with them.
             if (prevJson && !jQuery.isEmptyObject(prevJson)) {
                 this.fillDialogContent(popupContent, prevJson, me._layer);
@@ -147,7 +146,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
             // The BBOX filter selection
             if (typeof this.fixedOptions.bboxSelection === "undefined") {
                 bboxSelection.find('div.bbox-title').html('<h4>' + this.loc.filter.bbox.title + '</h4>');
-                bboxSelection.find('div.bbox-on').find('label').html(this.loc.filter.bbox.on);
+                bboxSelection.find('div.bbox-on').find('label').html(this.loc.filter.bbox.on).prop('checked', true);
                 bboxSelection.find('div.bbox-off').find('label').html(this.loc.filter.bbox.off);
                 content.append(bboxSelection);
             }
@@ -180,7 +179,6 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
          * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
          */
         fillDialogContent: function (dialog, values, layer) {
-
             var bboxDiv = dialog.find('div.bbox-radio'),
                 clickedFeaturesDiv = dialog.find('div.analyse-filter-clicked-features'),
                 filterDiv = dialog.find('div.filter-option'),
@@ -671,7 +669,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
          * Load analysis layers in start.
          *
          */
-        _loadWFSLayerPropertiesAndTypes:function (layer_id, cb) {
+        _loadWFSLayerPropertiesAndTypes:function (layer_id, prevJson, cb) {
             var me = this,
                 url = me.sandbox.getAjaxUrl()
 
@@ -681,7 +679,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
 
                 function (response) {
                     if (response) {
-                        me._handleWFSLayerPropertiesAndTypesResponse(response, cb);
+                        me._handleWFSLayerPropertiesAndTypesResponse(response, prevJson, cb);
                     }
                 },
                 // Error callback
@@ -722,7 +720,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
          * @private
          * @param {JSON} propertyJson properties and property types of WFS layer JSON returned by server.
          */
-        _handleWFSLayerPropertiesAndTypesResponse: function (propertyJson, cb) {
+        _handleWFSLayerPropertiesAndTypesResponse: function (propertyJson, prevJson, cb) {
             var me = this,
                 prevJson,
                 fields = propertyJson.propertyTypes;
