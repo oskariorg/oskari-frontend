@@ -108,7 +108,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
         stopTool: function () {
             this.tool.active = false;
             jQuery('#mapdiv').removeClass('reverse-geocode');
-            //this.enableGfi(true);
+            this.enableGFI(true);
         },
         /**
          * @method enableGfi
