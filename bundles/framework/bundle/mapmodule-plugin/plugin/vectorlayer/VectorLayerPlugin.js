@@ -6,8 +6,7 @@ Oskari.clazz.define(
     function () {
         var me = this;
 
-        me._clazz =
-            'Oskari.mapframework.mapmodule.VectorLayerPlugin';
+        me._clazz = 'Oskari.mapframework.mapmodule.VectorLayerPlugin';
         me._name = 'VectorLayerPlugin';
 
         this._supportedFormats = {};
@@ -146,7 +145,6 @@ Oskari.clazz.define(
 
             this.removeMapLayerFromMap(layer);
         },
-
         /**
          * @method _afterChangeMapLayerOpacityEvent
          * Handle AfterChangeMapLayerOpacityEvent

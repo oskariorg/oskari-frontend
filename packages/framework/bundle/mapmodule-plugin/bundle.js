@@ -276,9 +276,8 @@ Oskari.clazz.define(
                     "type": "text/javascript",
                     "src": "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/location/GeoLocationPlugin.js"
                 },
-
                 /**
-                 * GeoLocation plugin
+                 * Draw plugin
                  */
                 {
                     "type": "text/javascript",
@@ -352,6 +351,14 @@ Oskari.clazz.define(
                 }, {
                     "type": "text/css",
                     "src": "../../../../resources/framework/bundle/mapmodule-plugin/plugin/mylocation/css/mylocation.css"
+                },
+
+                /**
+                 * Show Geometry plugin
+                 */
+                {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/showgeometry/ShowGeometryPlugin.js"
                 },
 
                 /**
