@@ -1,17 +1,14 @@
 # Release Notes
 
-<<<<<<< HEAD
-## 1.27.1
-
-Fixed a broken locale file: bundles/framework/bundle/layerselection2/locale/fi.js had an extra comma.
-=======
-## 2.0
+## 1.28
 
 ### core/abstractmapmodule
 
 GetImageUrl() always return now '/Oskari/bundles' folder location.
 
-### Oskari 2.0 folder structure changes
+### Folder structure changes
+
+Preparing for version 2 of the changes, please change your bundles to following folder structure.
 
 ```
 <your root dir>
@@ -37,7 +34,7 @@ GetImageUrl() always return now '/Oskari/bundles' folder location.
 |           |--bundle.js
 ```
 
-### Oskari 2.0 Migration Guide
+#### Migration Guide (Preparing for version 2 of changes)
 * Create `<bundle-identifier>` folder under the `bundles/<mynamespace>` folder
 * Move all files and folders in `bundles/<mynamespace>/bundle/<bundle-identifier>` folder under the `bundles/<mynamespace>/<bundle-identifier>` folder
 * Delete `bundles/<mynamespace>/bundle/<bundle-identifier>` folder
@@ -59,12 +56,11 @@ GetImageUrl() always return now '/Oskari/bundles' folder location.
 ** CSS files: `bundles/<mynamespace>/<bundle-identifier>/resources/css/..`
 
 ### Grunt tool
-Grunt tool has been modified to support version 2 folder structure changes.
+Grunt tool has been modified to support folder structure changes.
 
-### GetImage
+## 1.27.1
 
-
->>>>>>> feature/AH-2328
+Fixed a broken locale file: bundles/framework/bundle/layerselection2/locale/fi.js had an extra comma.
 
 ## 1.27
 
