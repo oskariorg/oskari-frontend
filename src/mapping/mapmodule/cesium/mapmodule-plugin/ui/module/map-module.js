@@ -8,7 +8,7 @@
  * See http://www.oskari.org/trac/wiki/DocumentationBundleMapmodule
  */
 define([
-    "bundles/framework/bundle/mapmodule-plugin/ui/module/map-module",
+    "bundles/framework/mapmodule-plugin/ui/module/map-module",
     "libraries/Proj4js/proj4js-2.2.1/proj4-src"
     ], function(MapModule, Proj4js) {
     Oskari.cls('Oskari.mapframework.ui.module.common.MapModule').category({

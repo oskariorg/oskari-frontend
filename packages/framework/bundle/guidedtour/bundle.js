@@ -29,106 +29,106 @@ Oskari.clazz.define(
 
             "scripts": [{
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/guidedtour/instance.js"
+                "src": "../../../../bundles/framework/guidedtour/instance.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../libraries/jquery/plugins/jquery.cookie.js"
             }, {
                 "type": "text/css",
-                "src": "../../../../resources/framework/bundle/guidedtour/css/style.css"
+                "src": "../../../../bundles/framework/guidedtour/resources/css/style.css"
             }],
             "locales": [{
                 "lang": "bg",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/guidedtour/locale/bg.js"
+                "src": "../../../../bundles/framework/guidedtour/resources/locale/bg.js"
             }, {
                 "lang": "cs",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/guidedtour/locale/cs.js"
+                "src": "../../../../bundles/framework/guidedtour/resources/locale/cs.js"
             }, {
                 "lang": "da",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/guidedtour/locale/da.js"
+                "src": "../../../../bundles/framework/guidedtour/resources/locale/da.js"
             }, {
                 "lang": "de",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/guidedtour/locale/de.js"
+                "src": "../../../../bundles/framework/guidedtour/resources/locale/de.js"
             }, {
                 "lang": "en",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/guidedtour/locale/en.js"
+                "src": "../../../../bundles/framework/guidedtour/resources/locale/en.js"
             }, {
                 "lang": "es",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/guidedtour/locale/es.js"
+                "src": "../../../../bundles/framework/guidedtour/resources/locale/es.js"
             }, {
                 "lang": "et",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/guidedtour/locale/et.js"
+                "src": "../../../../bundles/framework/guidedtour/resources/locale/et.js"
             }, {
                 "lang": "fi",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/guidedtour/locale/fi.js"
+                "src": "../../../../bundles/framework/guidedtour/resources/locale/fi.js"
             }, {
                 "lang": "ka",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/guidedtour/locale/ka.js"
+                "src": "../../../../bundles/framework/guidedtour/resources/locale/ka.js"
             }, {
                 "lang": "el",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/guidedtour/locale/el.js"
+                "src": "../../../../bundles/framework/guidedtour/resources/locale/el.js"
             }, {
                 "lang": "hr",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/guidedtour/locale/hr.js"
+                "src": "../../../../bundles/framework/guidedtour/resources/locale/hr.js"
             }, {
                 "lang": "hu",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/guidedtour/locale/hu.js"
+                "src": "../../../../bundles/framework/guidedtour/resources/locale/hu.js"
             }, {
                 "lang": "lv",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/guidedtour/locale/lv.js"
+                "src": "../../../../bundles/framework/guidedtour/resources/locale/lv.js"
             }, {
                 "lang": "nl",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/guidedtour/locale/nl.js"
+                "src": "../../../../bundles/framework/guidedtour/resources/locale/nl.js"
             }, {
                 "lang": "pl",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/guidedtour/locale/pl.js"
+                "src": "../../../../bundles/framework/guidedtour/resources/locale/pl.js"
             }, {
                 "lang": "pt",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/guidedtour/locale/pt.js"
+                "src": "../../../../bundles/framework/guidedtour/resources/locale/pt.js"
             }, {
                 "lang": "ro",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/guidedtour/locale/ro.js"
+                "src": "../../../../bundles/framework/guidedtour/resources/locale/ro.js"
             }, {
                 "lang": "sr",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/guidedtour/locale/sr.js"
+                "src": "../../../../bundles/framework/guidedtour/resources/locale/sr.js"
             }, {
                 "lang": "sl",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/guidedtour/locale/sl.js"
+                "src": "../../../../bundles/framework/guidedtour/resources/locale/sl.js"
             }, {
                 "lang": "sk",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/guidedtour/locale/sk.js"
+                "src": "../../../../bundles/framework/guidedtour/resources/locale/sk.js"
             }, {
                 "lang": "sq",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/guidedtour/locale/sq.js"
+                "src": "../../../../bundles/framework/guidedtour/resources/locale/sq.js"
             }, {
                 "lang": "sv",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/guidedtour/locale/sv.js"
+                "src": "../../../../bundles/framework/guidedtour/resources/locale/sv.js"
             }, {
                 "lang": "uk",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/guidedtour/locale/uk.js"
+                "src": "../../../../bundles/framework/guidedtour/resources/locale/uk.js"
             }]
         },
         "bundle": {

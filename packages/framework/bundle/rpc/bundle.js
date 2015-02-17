@@ -24,7 +24,7 @@ Oskari.clazz.define(
                 "src": "../../../../libraries/JSChannel/jschannel.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/rpc/instance.js"
+                "src": "../../../../bundles/framework/rpc/instance.js"
             }]
         },
         bundle: {

@@ -28,7 +28,7 @@ function() {
 
         "scripts" : [{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/sample/bundle/mysecondbundle/instance.js"
+            "src" : "../../../../bundles/sample/mysecondbundle/instance.js"
         }]
     },
     "bundle" : {

@@ -1,8 +1,70 @@
 # Release Notes
 
+<<<<<<< HEAD
 ## 1.27.1
 
 Fixed a broken locale file: bundles/framework/bundle/layerselection2/locale/fi.js had an extra comma.
+=======
+## 2.0
+
+### core/abstractmapmodule
+
+GetImageUrl() always return now '/Oskari/bundles' folder location.
+
+### Oskari 2.0 folder structure changes
+
+```
+<your root dir>
+|--bundles
+|  |--<mynamespace>
+|     |--<bundle-identifier>
+|           |--instance.js
+|           |--resources
+|           |  |--css
+|           |  |  |--style.css
+|           |  |--images
+|           |  |  |--image.png
+|           |  |--locales
+|           |      |--en.js
+|           |      |--fi.js
+|           |      |--sv.js
+|           |--scss
+|              |--style.scss
+|--packages
+|  |--<mynamespace>
+|     |--bundle
+|        |--<bundle-identifier>
+|           |--bundle.js
+```
+
+### Oskari 2.0 Migration Guide
+* Create `<bundle-identifier>` folder under the `bundles/<mynamespace>` folder
+* Move all files and folders in `bundles/<mynamespace>/bundle/<bundle-identifier>` folder under the `bundles/<mynamespace>/<bundle-identifier>` folder
+* Delete `bundles/<mynamespace>/bundle/<bundle-identifier>` folder
+* Delete also `bundles/<mynamespace>/bundle` folder if it's empty
+* Create `resources` folder under the `bundles/<mynamespace>/<bundle-identifier>` folder
+* Move all files and folders in `resources/<mynamespace>/bundle/<bundle-identifier>` folder under the `bundles/<mynamespace>/<bundle-identifier>/resources` folder
+* Delete `resources/<mynamespace>/bundle/<bundle-identifier>` folder
+* Delete also `resources/<mynamespace>/bundle` folder if it's empty
+* Check all stylesheet files under the `bundles/<mynamespace>/<bundle-identifier>/resources/css` folder at the images paths are correct (`../images`)
+* Create `locale` folder under the `bundles/<mynamespace>/<bundle-identifier>/resources` folder
+* Move all files in `bundles/<mynamespace>/<bundle-identifier>/locale` folder under the `bundles/<mynamespace>/<bundle-identifier>/resources/locale` folder
+* Delete `resources/<mynamespace>/bundle/<bundle-identifier>/locale` folder
+* Create `scss` folder under the `bundles/<mynamespace>/<bundle-identifier>` folder
+* Move all files and folders in `bundles/<mynamespace>/bundle/<bundle-identifier>/scss` folder under the `bundles/<mynamespace>/<bundle-identifier>` folder
+* Delete `bundles/<mynamespace>/bundle/<bundle-identifier>/scss` folder
+* Fix all bundle file locations on the `packages/<mynamespace>/bundle/<bundle-identifier>/bundle.js` file
+** JavaScript files: `bundles/<mynamespace>/<bundle-identifier>/..`
+** Locale files: `bundles/<mynamespace>/<bundle-identifier>/resources/locale/..`
+** CSS files: `bundles/<mynamespace>/<bundle-identifier>/resources/css/..`
+
+### Grunt tool
+Grunt tool has been modified to support version 2 folder structure changes.
+
+### GetImage
+
+
+>>>>>>> feature/AH-2328
 
 ## 1.27
 

@@ -44,49 +44,49 @@ function() {
 
         "scripts" : [{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-featureselector/instance.js"
+            "src" : "../../../../bundles/digiroad/digiroad-featureselector/instance.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-featureselector/Flyout.js"
+            "src" : "../../../../bundles/digiroad/digiroad-featureselector/Flyout.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-featureselector/Tile.js"
+            "src" : "../../../../bundles/digiroad/digiroad-featureselector/Tile.js"
         },
 
         // Events
         {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-featureselector/event/FeatureEditedEvent.js"
+            "src" : "../../../../bundles/digiroad/digiroad-featureselector/event/FeatureEditedEvent.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-featureselector/event/FeatureHighlightEvent.js"
+            "src" : "../../../../bundles/digiroad/digiroad-featureselector/event/FeatureHighlightEvent.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-featureselector/event/FeaturesAddedEvent.js"
+            "src" : "../../../../bundles/digiroad/digiroad-featureselector/event/FeaturesAddedEvent.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-featureselector/event/FeaturesRemovedEvent.js"
+            "src" : "../../../../bundles/digiroad/digiroad-featureselector/event/FeaturesRemovedEvent.js"
         },
 
         // Models
         {
             "type": "text/javascript",
-            "src": "../../../../bundles/digiroad/bundle/digiroad-featureselector/domain/VectorLayer.js"
+            "src": "../../../../bundles/digiroad/digiroad-featureselector/domain/VectorLayer.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/digiroad/bundle/digiroad-featureselector/domain/VectorLayerModelBuilder.js"
+            "src": "../../../../bundles/digiroad/digiroad-featureselector/domain/VectorLayerModelBuilder.js"
         },
 
         // Plugins
         {
             "type": "text/javascript",
-            "src": "../../../../bundles/digiroad/bundle/digiroad-featureselector/plugin/VectorLayerPlugin.js"
+            "src": "../../../../bundles/digiroad/digiroad-featureselector/plugin/VectorLayerPlugin.js"
         },
 
         // CSS
         {
             "type" : "text/css",
-            "src" : "../../../../resources/digiroad/bundle/digiroad-featureselector/css/style.css"
+            "src" : "../../../../bundles/digiroad/digiroad-featureselector/resources/css/style.css"
         },
 
         // SlickGrid
@@ -145,15 +145,15 @@ function() {
         "locales" : [{
             "lang" : "fi",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-featureselector/locale/fi.js"
+            "src" : "../../../../bundles/digiroad/digiroad-featureselector/resources/locale/fi.js"
         }, {
             "lang" : "sv",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-featureselector/locale/sv.js"
+            "src" : "../../../../bundles/digiroad/digiroad-featureselector/resources/locale/sv.js"
         }, {
             "lang" : "en",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-featureselector/locale/en.js"
+            "src" : "../../../../bundles/digiroad/digiroad-featureselector/resources/locale/en.js"
         }]
     },
     "bundle" : {

@@ -21,7 +21,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.usagetracker.UsageTrackerBundle"
         "scripts" : [
 		{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/usagetracker/instance.js"
+            "src" : "../../../../bundles/framework/usagetracker/instance.js"
         }
         ]
     },

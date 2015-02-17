@@ -1,4 +1,4 @@
-define(["bundles/framework/bundle/mapwmts/plugin/wmtslayer/WmtsLayerPlugin"], function(WmtsLayerPlugin) {
+define(["bundles/framework/mapwmts/plugin/wmtslayer/WmtsLayerPlugin"], function(WmtsLayerPlugin) {
     // load helper and enhancer
 
     Oskari.cls('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin').category({

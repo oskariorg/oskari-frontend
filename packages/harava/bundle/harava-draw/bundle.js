@@ -26,49 +26,49 @@ function() {
 
 		"scripts" : [{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/harava/bundle/harava-draw/instance.js"
+			"src" : "../../../../bundles/harava/harava-draw/instance.js"
 		}, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/harava/bundle/harava-draw/plugin/draw/HaravaDrawPlugin.js"
+            "src" : "../../../../bundles/harava/harava-draw/plugin/draw/HaravaDrawPlugin.js"
         }, 
         /*
          * Requests and handlers
          */
         {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/harava/bundle/harava-draw/request/ToggleVisibilityHaravaDrawRequest.js"
+            "src" : "../../../../bundles/harava/harava-draw/request/ToggleVisibilityHaravaDrawRequest.js"
         },
         {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/harava/bundle/harava-draw/request/ToggleVisibilityHaravaDrawRequestHandler.js"
+            "src" : "../../../../bundles/harava/harava-draw/request/ToggleVisibilityHaravaDrawRequestHandler.js"
         },
         
         {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/harava/bundle/harava-draw/request/AddWKTGeometryRequest.js"
+            "src" : "../../../../bundles/harava/harava-draw/request/AddWKTGeometryRequest.js"
         },
         {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/harava/bundle/harava-draw/request/AddWKTGeometryRequestHandler.js"
+            "src" : "../../../../bundles/harava/harava-draw/request/AddWKTGeometryRequestHandler.js"
         },
         /* Resources */
         {
 		    "type" : "text/css",
-		    "src" : "../../../../resources/harava/bundle/harava-draw/css/style.css"	  
+		    "src" : "../../../../bundles/harava/harava-draw/resources/css/style.css"	  
 		}],
 		/* Locales */
 		"locales" : [{
 			"lang" : "fi",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/harava/bundle/harava-draw/locale/fi.js"
+			"src" : "../../../../bundles/harava/harava-draw/resources/locale/fi.js"
 		}, {
 			"lang" : "sv",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/harava/bundle/harava-draw/locale/sv.js"
+			"src" : "../../../../bundles/harava/harava-draw/resources/locale/sv.js"
 		}, {
 			"lang" : "en",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/harava/bundle/harava-draw/locale/en.js"
+			"src" : "../../../../bundles/harava/harava-draw/resources/locale/en.js"
 		}
 		]
 	},

@@ -55,7 +55,6 @@ function() {
 
 	"protocol" : ["Oskari.bundle.Bundle"],
 	"source" : {
-
 		"scripts" : [
 		{
 			"type" : "text/javascript",

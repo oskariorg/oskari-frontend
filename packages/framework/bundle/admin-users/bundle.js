@@ -27,25 +27,25 @@ Oskari.clazz.define("Oskari.framework.bundle.admin-users.AdminUsersBundle",
 
             "scripts": [{
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/admin-users/instance.js"
+                "src": "../../../../bundles/framework/admin-users/instance.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/admin-users/Flyout.js"
+                "src": "../../../../bundles/framework/admin-users/Flyout.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/admin-users/AdminUsers.js"
+                "src": "../../../../bundles/framework/admin-users/AdminUsers.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/admin-users/AdminRoles.js"
+                "src": "../../../../bundles/framework/admin-users/AdminRoles.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/admin-users/event/RoleChangedEvent.js"
+                "src": "../../../../bundles/framework/admin-users/event/RoleChangedEvent.js"
             },{
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/admin-users/Tile.js"
+                "src": "../../../../bundles/framework/admin-users/Tile.js"
             }, {
                 "type": "text/css",
-                "src": "../../../../resources/framework/bundle/admin-users/css/style.css"
+                "src": "../../../../bundles/framework/admin-users/resources/css/style.css"
             }, {
                 "src": "../../../../libraries/chosen/chosen.jquery.js",
                 "type": "text/javascript"
@@ -57,15 +57,15 @@ Oskari.clazz.define("Oskari.framework.bundle.admin-users.AdminUsersBundle",
             "locales": [{
                 "lang": "fi",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/admin-users/locale/fi.js"
+                "src": "../../../../bundles/framework/admin-users/resources/locale/fi.js"
             }, {
                 "lang": "sv",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/admin-users/locale/sv.js"
+                "src": "../../../../bundles/framework/admin-users/resources/locale/sv.js"
             }, {
                 "lang": "en",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/admin-users/locale/en.js"
+                "src": "../../../../bundles/framework/admin-users/resources/locale/en.js"
             }]
         },
         "bundle": {

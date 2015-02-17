@@ -1,3 +1,3 @@
-define(["jquery-ui", "bundles/statistics/bundle/statsgrid/plugin/ManageClassificationPlugin"], function (ManageClassificationPlugin) {
+define(["jquery-ui", "bundles/statistics/statsgrid/plugin/ManageClassificationPlugin"], function (ManageClassificationPlugin) {
     // load helper
 });

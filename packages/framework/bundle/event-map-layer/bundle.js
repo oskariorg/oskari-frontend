@@ -77,13 +77,6 @@ Oskari.clazz.define("Oskari.mapframework.event.map.layer.Bundle",
                     "type": "text/javascript",
                     "src": "../../../../sources/framework/event/common/after-dim-map-layer-event.js"
                 }
-                /*
-         removed in 7.4,
-         {
-         "type" : "text/javascript",
-         "src" : "../../../../sources/framework/event/common/after-remove-highlight-map-layer-event.js"
-         }*/
-
             ],
             "resources": []
         },

@@ -43,129 +43,129 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcel.DrawingTool",
                 /* event */
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/parcel/event/FinishedDrawingEvent.js"
+                    "src": "../../../../bundles/framework/parcel/event/FinishedDrawingEvent.js"
                 },
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/parcel/event/SaveDrawingEvent.js"
+                    "src": "../../../../bundles/framework/parcel/event/SaveDrawingEvent.js"
                 },
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/parcel/event/ParcelSelectedEvent.js"
+                    "src": "../../../../bundles/framework/parcel/event/ParcelSelectedEvent.js"
                 },
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/parcel/event/ParcelInfoLayerRegisterEvent.js"
+                    "src": "../../../../bundles/framework/parcel/event/ParcelInfoLayerRegisterEvent.js"
                 },
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/parcel/event/ParcelInfoLayerUnregisterEvent.js"
+                    "src": "../../../../bundles/framework/parcel/event/ParcelInfoLayerUnregisterEvent.js"
                 },
                 /* plugin */
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/parcel/plugin/DrawPlugin.js"
+                    "src": "../../../../bundles/framework/parcel/plugin/DrawPlugin.js"
                 },
                 /* request */
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/parcel/request/SaveDrawingRequest.js"
+                    "src": "../../../../bundles/framework/parcel/request/SaveDrawingRequest.js"
                 },
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/parcel/request/StopDrawingRequest.js"
+                    "src": "../../../../bundles/framework/parcel/request/StopDrawingRequest.js"
                 },
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/parcel/request/CancelDrawingRequest.js"
+                    "src": "../../../../bundles/framework/parcel/request/CancelDrawingRequest.js"
                 },
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/parcel/request/StartDrawingRequest.js"
+                    "src": "../../../../bundles/framework/parcel/request/StartDrawingRequest.js"
                 },
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/parcel/request/SaveDrawingRequestHandler.js"
+                    "src": "../../../../bundles/framework/parcel/request/SaveDrawingRequestHandler.js"
                 },
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/parcel/request/StopDrawingRequestHandler.js"
+                    "src": "../../../../bundles/framework/parcel/request/StopDrawingRequestHandler.js"
                 },
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/parcel/request/CancelDrawingRequestHandler.js"
+                    "src": "../../../../bundles/framework/parcel/request/CancelDrawingRequestHandler.js"
                 },
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/parcel/request/StartDrawingRequestHandler.js"
+                    "src": "../../../../bundles/framework/parcel/request/StartDrawingRequestHandler.js"
                 },
                 /* model */
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/parcel/model/PreParcel.js"
+                    "src": "../../../../bundles/framework/parcel/model/PreParcel.js"
                 },
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/parcel/model/PreParcelData.js"
+                    "src": "../../../../bundles/framework/parcel/model/PreParcelData.js"
                 },
                 /* service */
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/parcel/service/ParcelService.js"
+                    "src": "../../../../bundles/framework/parcel/service/ParcelService.js"
                 },
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/parcel/service/ParcelWfst.js"
+                    "src": "../../../../bundles/framework/parcel/service/ParcelWfst.js"
                 },
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/parcel/service/PreParcelWFSTStore.js"
+                    "src": "../../../../bundles/framework/parcel/service/PreParcelWFSTStore.js"
                 },
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/parcel/service/ParcelPlot.js"
+                    "src": "../../../../bundles/framework/parcel/service/ParcelPlot.js"
                 },
                 /* splitter */
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/parcel/split/ParcelSplit.js"
+                    "src": "../../../../bundles/framework/parcel/split/ParcelSplit.js"
                 },
                 /* ui */
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/parcel/view/MainView.js"
+                    "src": "../../../../bundles/framework/parcel/view/MainView.js"
                 },
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/parcel/view/StartPrintView.js"
+                    "src": "../../../../bundles/framework/parcel/view/StartPrintView.js"
                 },
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/parcel/view/ParcelPrintForm1.js"
+                    "src": "../../../../bundles/framework/parcel/view/ParcelPrintForm1.js"
                 },
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/parcel/view/ParcelPrintForm2.js"
+                    "src": "../../../../bundles/framework/parcel/view/ParcelPrintForm2.js"
                 },
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/parcel/handler/ButtonHandler.js"
+                    "src": "../../../../bundles/framework/parcel/handler/ButtonHandler.js"
                 },
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/parcel/handler/ParcelSelectorHandler.js"
+                    "src": "../../../../bundles/framework/parcel/handler/ParcelSelectorHandler.js"
                 },
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/parcel/handler/PreParcelSelectorHandler.js"
+                    "src": "../../../../bundles/framework/parcel/handler/PreParcelSelectorHandler.js"
                 },
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/parcel/instance.js"
+                    "src": "../../../../bundles/framework/parcel/instance.js"
                 },
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/parcel/Flyout.js"
+                    "src": "../../../../bundles/framework/parcel/Flyout.js"
                 },
                 {
                     "type": "text/javascript",
@@ -182,14 +182,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcel.DrawingTool",
                 // css
                 {
                     "type": "text/css",
-                    "src": "../../../../resources/framework/bundle/parcel/css/style.css"
+                    "src": "../../../../bundles/framework/parcel/resources/css/style.css"
                 }
             ],
             "locales": [
                 {
                     "lang": "fi",
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/parcel/locale/fi.js"
+                    "src": "../../../../bundles/framework/parcel/resources/locale/fi.js"
                 }
             ]
         },
