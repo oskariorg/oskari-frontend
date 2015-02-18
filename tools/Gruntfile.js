@@ -467,7 +467,8 @@ module.exports = function (grunt) {
             files,
             copyFiles,
             appNameSeparatorIndex,
-            parentAppName;
+            parentAppName,
+            imageDest;
 
         // use grunt default options
         if (options.configs && !configs) {
@@ -492,6 +493,7 @@ module.exports = function (grunt) {
             cwd = config.substring(0, last);
             appName = config.substring(cwd.lastIndexOf('/') + 1, last);
             dest = '../dist/<%= version %>' + appName + '/';
+            imageDest = './' + appName + '/images/';
             options = {
                 iconDirectoryPath: config.substring(0, last) + '/icons',
                 resultImageName: '../dist/<%= version %>' + appName + '/icons/icons.png',
@@ -528,17 +530,15 @@ module.exports = function (grunt) {
 
             // setting task configs
             grunt.config.set('copy.' + appName + '.files', files);
-            /*            grunt.config.set("validate." + appName + ".options", {
-                            "appSetupFile": config,
-                            "dest": dest
-                        }); */
+
             grunt.config.set('compile.' + appName + '.options', {
                 appSetupFile: config,
                 dest: dest
             });
             grunt.config.set('compileAppCSS.' + appName + '.options', {
                 appSetupFile: config,
-                dest: dest
+                dest: dest,
+                imageDest: imageDest
             });
             grunt.config.set('sprite.' + appName + '.options', options);
 
@@ -560,10 +560,14 @@ module.exports = function (grunt) {
             cwd: '../',
             src: ['resources/**', 'libraries/**', 'bundles/**', 'packages/**', 'src/**', 'applications/**', 'sources/**'],
             dest: '../dist/'
-        }]);
-
-
-        //        grunt.task.run('validate');
+        }, {
+            expand: true,
+            cwd: '../',
+            src: ['**/resources/images/**/*.{png,jpg,jpeg,svg,gif}'],
+            dest: dest + '/images/',
+            flatten: true
+        }
+        ]);
 
         // configure copy-task to copy back the results from dist/css and dist/icons to applications/appname/(css || icons)
         if (copyResourcesToApplications) {
@@ -586,6 +590,14 @@ module.exports = function (grunt) {
                 // only run the given copy tasks
                 grunt.task.run('copy:' + copyApps[i]);
             }
+
+            finalFiles.push({
+                expand: true,
+                cwd: '../',
+                src: ['**/resources/images/**/*.{png,jpg,jpeg,svg,gif}'],
+                dest: dest + '/images/',
+                flatten: true
+            });
 
             // add final copy settings to be run after compilation
             grunt.config.set('copy.final.files', finalFiles);
@@ -815,7 +827,8 @@ module.exports = function (grunt) {
             grunt.log.writeln('Minifying...');
             grunt.config.set('minifyAppCSS.' + appName + '.options', {
                 appSetupFile: this.data.options.appSetupFile,
-                dest: this.data.options.dest
+                dest: this.data.options.dest,
+                imageDest: this.data.options.imageDest
             });
             grunt.task.run('minifyAppCSS');
         } else {
@@ -886,9 +899,12 @@ module.exports = function (grunt) {
                 expand: true,
                 cwd: '../bundles/',
                 src: '**/*.scss',
-                dest: '../resources/',
+                dest: '../bundles/',
                 rename: function (dest, src) {
-                    return dest + src.replace('/scss/', '/css/');
+                    
+                    var target = dest + src.replace('/scss/', '/resources/css/');
+                    grunt.log.writeln('Target: ' + target);
+                    return target;
                 },
                 ext: '.css'
             }]
@@ -905,16 +921,20 @@ module.exports = function (grunt) {
             options = this.data.json.options,
             processedAppSetup = parser.getComponents(options.appSetupFile),
             i,
-            pasFiles;
+            pasFiles,
+            findImageDir = '../images/',
+            findImageDirRegExp = new RegExp(findImageDir, 'g'),
+            replaceImageDir = './images/';
 
         grunt.log.writeln('Concatenating and minifying css');
+
         // internal minify CSS function
         this.minifyCSS = function (files, outputFile) {
-
             var value = '',
                 j,
                 content,
                 packed;
+
             // read files to value
             grunt.log.writeln('Concatenating and minifying ' + files.length + ' files');
             for (j = 0; j < files.length; j += 1) {
@@ -924,6 +944,11 @@ module.exports = function (grunt) {
                 content = fs.readFileSync(files[j], 'utf8');
                 value = value + '\n' + content;
             }
+
+            // correct image paths
+            value = value.replace(findImageDirRegExp, replaceImageDir);
+
+
             // minify value
             packed = cssPacker.processString(value);
             grunt.log.writeln('Writing packed CSS to ' + outputFile);

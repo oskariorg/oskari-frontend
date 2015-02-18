@@ -20,7 +20,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.postprocessor.PostProcessorBundl
 		"scripts" : [
 		{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/postprocessor/instance.js"
+			"src" : "../../../../bundles/framework/postprocessor/instance.js"
 		}]
 	},
 	"bundle" : {

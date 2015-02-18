@@ -25,58 +25,55 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs.MapWfsBundle", function()
 
 		"scripts" : [
 		{
-/*			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/mapwfs/plugin/wmtslayer/WmtsLayerPlugin.js"
-		}, { */
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/mapwfs/domain/WfsLayer.js"
+			"src" : "../../../../bundles/framework/mapwfs/domain/WfsLayer.js"
 		}, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/mapwfs/domain/WfsLayerModelBuilder.js"
+            "src" : "../../../../bundles/framework/mapwfs/domain/WfsLayerModelBuilder.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/mapwfs/domain/QueuedTile.js"
+            "src" : "../../../../bundles/framework/mapwfs/domain/QueuedTile.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/mapwfs/domain/TileQueue.js"
+            "src" : "../../../../bundles/framework/mapwfs/domain/TileQueue.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/mapwfs/domain/WfsTileRequest.js"
+            "src" : "../../../../bundles/framework/mapwfs/domain/WfsTileRequest.js"
         }, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/mapwfs/event/WFSFeaturesSelectedEvent.js"
+			"src" : "../../../../bundles/framework/mapwfs/event/WFSFeaturesSelectedEvent.js"
 		}, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/mapwfs/service/WfsTileService.js"
+            "src" : "../../../../bundles/framework/mapwfs/service/WfsTileService.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/mapwfs/plugin/wfslayer/QueuedTilesGrid.js"
+            "src" : "../../../../bundles/framework/mapwfs/plugin/wfslayer/QueuedTilesGrid.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/mapwfs/plugin/wfslayer/QueuedTilesStrategy.js"
+            "src" : "../../../../bundles/framework/mapwfs/plugin/wfslayer/QueuedTilesStrategy.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/mapwfs/plugin/wfslayer/WfsLayerPlugin.js"
+            "src" : "../../../../bundles/framework/mapwfs/plugin/wfslayer/WfsLayerPlugin.js"
         }, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/mapwfs/instance.js"
+			"src" : "../../../../bundles/framework/mapwfs/instance.js"
 		}],
         "locales" : [{
             "lang" : "fi",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/mapwfs/locale/fi.js"
+            "src" : "../../../../bundles/framework/mapwfs/resources/locale/fi.js"
         }, {
             "lang" : "sv",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/mapwfs/locale/sv.js"
+            "src" : "../../../../bundles/framework/mapwfs/resources/locale/sv.js"
         }, {
             "lang" : "en",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/mapwfs/locale/en.js"
+            "src" : "../../../../bundles/framework/mapwfs/resources/locale/en.js"
         }, {
             "lang" : "es",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/mapwfs/locale/es.js"
+            "src" : "../../../../bundles/framework/mapwfs/resources/locale/es.js"
         }
        ]
 	},

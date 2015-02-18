@@ -19,98 +19,98 @@ Oskari.clazz.define("Oskari.digiroad.bundle.myplaces2.MyPlacesBundle", function(
 		/* event */
 		{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/event/FinishedDrawingEvent.js"
+			"src" : "../../../../bundles/digiroad/digiroad-myplaces2/event/FinishedDrawingEvent.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/event/MyPlacesChangedEvent.js"
+			"src" : "../../../../bundles/digiroad/digiroad-myplaces2/event/MyPlacesChangedEvent.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/event/MyPlaceSelectedEvent.js"
+			"src" : "../../../../bundles/digiroad/digiroad-myplaces2/event/MyPlaceSelectedEvent.js"
 		}, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/event/EditedFeaturesLoadedEvent.js"
+            "src" : "../../../../bundles/digiroad/digiroad-myplaces2/event/EditedFeaturesLoadedEvent.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/event/FeedbackLoadedEvent.js"
+            "src" : "../../../../bundles/digiroad/digiroad-myplaces2/event/FeedbackLoadedEvent.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/event/NewRestrictionsLoadedEvent.js"
+            "src" : "../../../../bundles/digiroad/digiroad-myplaces2/event/NewRestrictionsLoadedEvent.js"
         },
 		/* model */
 		{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/model/MyPlace.js"
+			"src" : "../../../../bundles/digiroad/digiroad-myplaces2/model/MyPlace.js"
 		},
 		/* plugin */
 		{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/plugin/DrawPlugin.js"
+			"src" : "../../../../bundles/digiroad/digiroad-myplaces2/plugin/DrawPlugin.js"
 		}, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/plugin/TurningRestrictionsPlugin.js"
+            "src" : "../../../../bundles/digiroad/digiroad-myplaces2/plugin/TurningRestrictionsPlugin.js"
         },
 		/* request */
 		{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/request/StopDrawingRequest.js"
+			"src" : "../../../../bundles/digiroad/digiroad-myplaces2/request/StopDrawingRequest.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/request/StartDrawingRequest.js"
+			"src" : "../../../../bundles/digiroad/digiroad-myplaces2/request/StartDrawingRequest.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/request/GetGeometryRequest.js"
+            "src" : "../../../../bundles/digiroad/digiroad-myplaces2/request/GetGeometryRequest.js"
 		}, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/request/GetGeometryRequestHandler.js"
+            "src" : "../../../../bundles/digiroad/digiroad-myplaces2/request/GetGeometryRequestHandler.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/request/StartDrawingRequestHandler.js"
+            "src" : "../../../../bundles/digiroad/digiroad-myplaces2/request/StartDrawingRequestHandler.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/request/StopDrawingRequestHandler.js"
+            "src" : "../../../../bundles/digiroad/digiroad-myplaces2/request/StopDrawingRequestHandler.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/request/EditPlaceRequest.js"
+            "src" : "../../../../bundles/digiroad/digiroad-myplaces2/request/EditPlaceRequest.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/request/EditRequestHandler.js"
+            "src" : "../../../../bundles/digiroad/digiroad-myplaces2/request/EditRequestHandler.js"
 		}, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/request/FinishRestrictionRequest.js"
+            "src" : "../../../../bundles/digiroad/digiroad-myplaces2/request/FinishRestrictionRequest.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/request/FinishRestrictionRequestHandler.js"
+            "src" : "../../../../bundles/digiroad/digiroad-myplaces2/request/FinishRestrictionRequestHandler.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/request/StartRestrictionRequest.js"
+            "src" : "../../../../bundles/digiroad/digiroad-myplaces2/request/StartRestrictionRequest.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/request/StartRestrictionRequestHandler.js"
+            "src" : "../../../../bundles/digiroad/digiroad-myplaces2/request/StartRestrictionRequestHandler.js"
         },
 		/* service */
 		{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/service/MyPlacesService.js"
+			"src" : "../../../../bundles/digiroad/digiroad-myplaces2/service/MyPlacesService.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/service/MyPlacesWFSTStore.js"
+			"src" : "../../../../bundles/digiroad/digiroad-myplaces2/service/MyPlacesWFSTStore.js"
 		},
 		/* ui */
 		{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/view/MainView.js"
+			"src" : "../../../../bundles/digiroad/digiroad-myplaces2/view/MainView.js"
 		}, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/view/PlaceForm.js"
+            "src" : "../../../../bundles/digiroad/digiroad-myplaces2/view/PlaceForm.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/view/FeedbackForm.js"
+            "src" : "../../../../bundles/digiroad/digiroad-myplaces2/view/FeedbackForm.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/ButtonHandler.js"
+            "src" : "../../../../bundles/digiroad/digiroad-myplaces2/ButtonHandler.js"
         }, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/instance.js"
+			"src" : "../../../../bundles/digiroad/digiroad-myplaces2/instance.js"
         }, {
            // NOTE! EXTERNAL LIBRARY!
             "type" : "text/javascript",
@@ -119,21 +119,21 @@ Oskari.clazz.define("Oskari.digiroad.bundle.myplaces2.MyPlacesBundle", function(
 		// css
 		{
             "type" : "text/css",
-            "src" : "../../../../resources/digiroad/bundle/digiroad-myplaces2/css/myplaces.css"
+            "src" : "../../../../bundles/digiroad/digiroad-myplaces2/resources/css/myplaces.css"
         }],
 
         "locales" : [{
             "lang" : "fi",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/locale/fi.js"
+            "src" : "../../../../bundles/digiroad/digiroad-myplaces2/resources/locale/fi.js"
         }, {
             "lang" : "sv",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/locale/sv.js"
+            "src" : "../../../../bundles/digiroad/digiroad-myplaces2/resources/locale/sv.js"
         }, {
             "lang" : "en",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/locale/en.js"
+            "src" : "../../../../bundles/digiroad/digiroad-myplaces2/resources/locale/en.js"
         }
        ]
 	},

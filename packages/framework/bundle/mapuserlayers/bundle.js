@@ -18,27 +18,27 @@ Oskari.clazz.define(
         "source": {
             "scripts": [{
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/myplacesimport/domain/UserLayer.js"
+                "src": "../../../../bundles/framework/myplacesimport/domain/UserLayer.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/myplacesimport/domain/UserLayerModelBuilder.js"
+                "src": "../../../../bundles/framework/myplacesimport/domain/UserLayerModelBuilder.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/myplacesimport/plugin/UserLayersLayerPlugin.js"
+                "src": "../../../../bundles/framework/myplacesimport/plugin/UserLayersLayerPlugin.js"
             }],
 
             "locales": [{
                 "lang": "fi",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/myplacesimport/locale/fi.js"
+                "src": "../../../../bundles/framework/myplacesimport/resources/locale/fi.js"
             }, {
                 "lang": "sv",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/myplacesimport/locale/sv.js"
+                "src": "../../../../bundles/framework/myplacesimport/resources/locale/sv.js"
             }, {
                 "lang": "en",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/myplacesimport/locale/en.js"
+                "src": "../../../../bundles/framework/myplacesimport/resources/locale/en.js"
             }]
         },
         "bundle": {

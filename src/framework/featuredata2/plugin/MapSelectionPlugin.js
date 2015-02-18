@@ -1,4 +1,4 @@
-define(["bundles/framework/bundle/featuredata2/plugin/MapSelectionPlugin"], function() {
+define(["bundles/framework/featuredata2/plugin/MapSelectionPlugin"], function() {
     Oskari.cls('Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin').category({
         init: function(sandbox) {
             // Esimerkkitoteutus

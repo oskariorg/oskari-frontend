@@ -21,22 +21,22 @@ Oskari.clazz.define(
         "source": {
             "scripts": [{
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/statehandler/request/SaveStateRequest.js"
+                "src": "../../../../bundles/framework/statehandler/request/SaveStateRequest.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/statehandler/request/SaveStateRequestHandler.js"
+                "src": "../../../../bundles/framework/statehandler/request/SaveStateRequestHandler.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/statehandler/request/SetStateRequest.js"
+                "src": "../../../../bundles/framework/statehandler/request/SetStateRequest.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/statehandler/request/SetStateRequestHandler.js"
+                "src": "../../../../bundles/framework/statehandler/request/SetStateRequestHandler.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/publishedstatehandler/instance.js"
+                "src": "../../../../bundles/framework/publishedstatehandler/instance.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/publishedstatehandler/state-methods.js"
+                "src": "../../../../bundles/framework/publishedstatehandler/state-methods.js"
             }]
         },
         "bundle": {

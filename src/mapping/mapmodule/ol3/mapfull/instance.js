@@ -7,7 +7,7 @@
  * See bundle documentation at http://www.oskari.org/trac/wiki/DocumentationBundleMapfull
  */
 define([
-	"bundles/framework/bundle/mapfull/instance",
+	"bundles/framework/mapfull/instance",
 	"libraries/Proj4js/proj4js-2.2.1/proj4-src",
 	"lodash"
 ], function(MapFull, proj4, _) {

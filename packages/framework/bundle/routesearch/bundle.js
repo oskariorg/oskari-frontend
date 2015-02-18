@@ -16,30 +16,30 @@ Oskari.clazz.define(
 
             "scripts": [{
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/routesearch/instance.js"
+                "src": "../../../../bundles/framework/routesearch/instance.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/routesearch/Flyout.js"
+                "src": "../../../../bundles/framework/routesearch/Flyout.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/search/service/searchservice.js"
+                "src": "../../../../bundles/framework/search/service/searchservice.js"
             }, {
                 "type": "text/css",
-                "src": "../../../../resources/framework/bundle/routesearch/css/routesearch.css"
+                "src": "../../../../bundles/framework/routesearch/resources/css/routesearch.css"
             }],
 
             "locales": [{
                 "lang": "en",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/routesearch/locale/en.js"
+                "src": "../../../../bundles/framework/routesearch/resources/locale/en.js"
             }, {
                 "lang": "fi",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/routesearch/locale/fi.js"
+                "src": "../../../../bundles/framework/routesearch/resources/locale/fi.js"
             }, {
                 "lang": "sv",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/routesearch/locale/sv.js"
+                "src": "../../../../bundles/framework/routesearch/resources/locale/sv.js"
             }]
         },
         "bundle": {

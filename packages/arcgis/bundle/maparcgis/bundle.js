@@ -25,10 +25,10 @@ Oskari.clazz.define("Oskari.arcgis.bundle.arcgis.MapArcGisBundle", function() {
 
 		"scripts" : [{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/arcgis/bundle/maparcgis/plugin/ArcGisLayerPlugin.js"
+			"src" : "../../../../bundles/arcgis/maparcgis/plugin/ArcGisLayerPlugin.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/arcgis/bundle/maparcgis/domain/ArcGisLayer.js"
+			"src" : "../../../../bundles/arcgis/maparcgis/domain/ArcGisLayer.js"
 		}
        ]
 	},

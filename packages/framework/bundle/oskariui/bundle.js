@@ -35,30 +35,26 @@ Oskari.clazz.define("Oskari.mapframework.bundle.oskariui.OskariUIBundle", functi
 		"scripts" : [
 		{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/oskariui/jquery-ui-1.9.2.custom.min.js"
+			"src" : "../../../../bundles/framework/oskariui/jquery-ui-1.9.2.custom.min.js"
 		}, {
 			"type" : "text/javascript",
 			"src" : "../../../../libraries/jquery/plugins/jquery.base64.min.js"
 		},{
 			"type" : "text/css",
-			"src" : "../../../../resources/framework/bundle/oskariui/css/jquery-ui-1.9.2.custom.css"
+			"src" : "../../../../bundles/framework/oskariui/resources/css/jquery-ui-1.9.2.custom.css"
 		}, {
 			"type" : "text/css",
-			"src" : "../../../../resources/framework/bundle/oskariui/bootstrap-grid.css"
+			"src" : "../../../../bundles/framework/oskariui/resources/bootstrap-grid.css"
 		},{
 			"type" : "text/javascript",
 			"src" : "../../../../libraries/lodash/2.3.0/lodash.js"
 		},{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/oskariui/DomManager.js"
+			"src" : "../../../../bundles/framework/oskariui/DomManager.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/oskariui/Layout.js"
-		}/*, {
-			"type" : "text/css",
-			"src" : "../../../../resources/framework/bundle/oskariui/css/layout-grid.css"
-		}*/],
-
+			"src" : "../../../../bundles/framework/oskariui/Layout.js"
+		}],
 		"locales" : []
 	},
 	"bundle" : {

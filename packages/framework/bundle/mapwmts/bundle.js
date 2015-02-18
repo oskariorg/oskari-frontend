@@ -25,22 +25,22 @@ Oskari.clazz.define("Oskari.mapframework.bundle.MapWmtsBundle", function() {
 
 		"scripts" : [{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/mapwmts/plugin/wmtslayer/WmtsLayerPlugin.js"
+			"src" : "../../../../bundles/framework/mapwmts/plugin/wmtslayer/WmtsLayerPlugin.js"
 		}, {
 			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/domain/AbstractLayer.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/mapwmts/domain/WmtsLayer.js"
+			"src" : "../../../../bundles/framework/mapwmts/domain/WmtsLayer.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/mapwmts/service/WmtsLayerService.js"
+			"src" : "../../../../bundles/framework/mapwmts/service/WmtsLayerService.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/mapwmts/service/WmtsLayerModelBuilder.js"
+			"src" : "../../../../bundles/framework/mapwmts/service/WmtsLayerModelBuilder.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/mapwmts/instance.js"
+			"src" : "../../../../bundles/framework/mapwmts/instance.js"
 		}],
 		"resources" : []
 	},

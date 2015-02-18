@@ -24,31 +24,31 @@ Oskari.clazz.define("Oskari.mapframework.bundle.promote.PromoteBundle", function
 		"scripts" : [
 		{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/promote/instance.js"
+			"src" : "../../../../bundles/framework/promote/instance.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/promote/Flyout.js"
+			"src" : "../../../../bundles/framework/promote/Flyout.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/promote/Tile.js"
+			"src" : "../../../../bundles/framework/promote/Tile.js"
 		}],
 
 		"locales" : [{
 			"lang" : "fi",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/promote/locale/fi.js"
+			"src" : "../../../../bundles/framework/promote/resources/locale/fi.js"
 		}, {
 			"lang" : "sv",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/promote/locale/sv.js"
+			"src" : "../../../../bundles/framework/promote/resources/locale/sv.js"
 		}, {
 			"lang" : "en",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/promote/locale/en.js"
+			"src" : "../../../../bundles/framework/promote/resources/locale/en.js"
 		}, {
 			"lang" : "es",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/promote/locale/es.js"
+			"src" : "../../../../bundles/framework/promote/resources/locale/es.js"
 		}]
 	},
 	"bundle" : {
