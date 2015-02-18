@@ -796,6 +796,9 @@ Oskari.clazz.define(
             me.setColors();
         },
 
+        isVisible: function () {
+            return this._isStatsLayerVisible();
+        },
 
         /**
          * @private @method  _createUI
@@ -808,6 +811,7 @@ Oskari.clazz.define(
                 el;
 
             el = jQuery('<div class="mapplugin manageClassificationPlugin" />');
+            el.toggle(me.isVisible());
             me.refresh(el);
             return el;
         },
