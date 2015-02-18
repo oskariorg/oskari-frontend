@@ -44,6 +44,8 @@ module.exports = function(grunt) {
             for (var i = 0; i < files.length; ++i) {
                 if (!fs.existsSync(files[i])) {
                     var msg = 'Couldnt locate ' + files[i]; 
+                    grunt.log.warn(msg);
+                    grunt.fail.warn(msg);
                     throw msg;
                 }
                 // do not put duplicates on compiled code
@@ -73,7 +75,7 @@ module.exports = function(grunt) {
                         }
                     }
                     err.origError = e;
-                    grunt.log.warn('Uglifying source ' + chalk.cyan(src) + ' failed.');
+                    grunt.log.warn('Uglifying sources ' + okFiles.join() + ' failed.');
                     grunt.fail.warn(err);
                 }
             } else {
