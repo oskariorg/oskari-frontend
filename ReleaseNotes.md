@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.27.2
+
+Fixed statistics classification plugin so that it is shown only when statistic layers are shown.
+
 ## 1.27.1
 
 Fixed a broken locale file: bundles/framework/bundle/layerselection2/locale/fi.js had an extra comma.
