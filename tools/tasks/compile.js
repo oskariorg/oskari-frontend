@@ -57,11 +57,25 @@ module.exports = function(grunt) {
 
             // minify or concatenate the files
             if (!concat) {
-                result = UglifyJS.minify(okFiles, {
-                    //outSourceMap : "out.js.map",
-                    warnings : true,
-                    compress : true
-                });
+                try {
+                    result = UglifyJS.minify(okFiles, {
+                        //outSourceMap : "out.js.map",
+                        warnings : true,
+                        compress : true
+                    });
+                } catch (e) {
+                    console.log(e);
+                    var err = new Error('Uglification failed.');
+                    if (e.message) {
+                        err.message += '\n' + e.message + '. \n';
+                        if (e.line) {
+                            err.message += 'Line ' + e.line + ' in ' + src + '\n';
+                        }
+                    }
+                    err.origError = e;
+                    grunt.log.warn('Uglifying source ' + chalk.cyan(src) + ' failed.');
+                    grunt.fail.warn(err);
+                }
             } else {
                 // emulate the result uglify creates, but only concatenating
                 result = {"code" : ""};
