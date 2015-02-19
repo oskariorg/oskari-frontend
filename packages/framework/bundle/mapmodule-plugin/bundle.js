@@ -254,6 +254,12 @@ Oskari.clazz.define(
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/framework/mapmodule-plugin/plugin/vectorlayer/request/AddFeaturesToMapRequestHandler.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/framework/mapmodule-plugin/plugin/vectorlayer/request/RemoveFeaturesFromMapRequest.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/framework/mapmodule-plugin/plugin/vectorlayer/request/RemoveFeaturesFromMapRequestHandler.js"
                 },
                 /**
                  * GeoLocation plugin

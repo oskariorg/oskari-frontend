@@ -33,6 +33,13 @@ div.metadataCatalogueContainer {
     margin-left: 5px;
     margin-right: 5px;
     float: right; }
+  div.metadataCatalogueContainer td.showBbox div.showBbox {
+    width: 16px;
+    height: 16px;
+    margin-left: 5px;    
+    background-image: url("../images/zoom_to.png") !important;
+    background-repeat: no-repeat !important;
+    float: right; }
   div.metadataCatalogueContainer tr.resultRow {
     padding-left: 10px;
     outline: 1pt solid #c0d0e0; }

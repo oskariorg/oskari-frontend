@@ -31,6 +31,9 @@ Oskari.clazz.define(
             prop: 'rating'
         }, {
             title: '',
+            prop: 'showBbox'
+        }, {
+            title: '',
             prop: 'info'
         }, {
             title: '',
@@ -134,6 +137,7 @@ Oskari.clazz.define(
                 '  <td></td>' +
                 '  <td></td>' +
                 '  <td><div class="actionPlaceholder"></div></td>' +
+                '  <td><div class="showBbox icon-zoomto"></div></td>' +
                 '  <td><div class="layerInfo icon-info"></div></td>' +
                 '  <td><div class="resultRemove icon-close"></div></td>' +
                 '</tr>'
@@ -324,6 +328,8 @@ Oskari.clazz.define(
                 } else if (!isShown && me.drawCoverage === false) {
                     if (me.selectionPlugin) {
                         me.selectionPlugin.stopDrawing();
+
+                        // TODO POISTA BBOX
                     }
                     if (me.coverageButton) {
                         me.coverageButton.val(me.getLocalization('delimitArea'));
@@ -645,6 +651,8 @@ Oskari.clazz.define(
                     document.getElementById('oskari_metadatacatalogue_forminput_searchassistance').focus();
                     var emptyData = {};
                     me.coverageButton[0].data = '';
+
+                    // TODO POISTA BBOX
                 }
             });
 
@@ -860,7 +868,16 @@ Oskari.clazz.define(
                 };
             };
             var selectedLayers = me.sandbox.findAllSelectedMapLayers(),
-                i;
+                i,
+                style = OpenLayers.Util.applyDefaults(style, OpenLayers.Feature.Vector.style['default']);
+            style.pointRadius = 8;
+            style.strokeColor = '#D3BB1B';
+            style.fillColor = '#FFDE00';
+            style.fillOpacity = 0.6;
+            style.strokeOpacity = 0.8;
+            style.strokeWidth = 2;
+            style.cursor = 'pointer';
+
             for (i = 0; i < results.length; i += 1) {
                 if ((!results[i].name) || (results[i].name.length === 0)) {
                     continue;
@@ -974,16 +991,26 @@ Oskari.clazz.define(
                             jQuery(cells[2]).find('div.actionPlaceholder').append(actionElement);                            
                         }
 
+                        // Show bbox icon
                         jQuery(cells[3]).addClass(me.resultHeaders[2].prop);
-                        jQuery(cells[3]).find('div.layerInfo').click(function () {
+                        jQuery(cells[3]).find('div.showBbox').click(function () {
+                            var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
+
+                            me.sandbox.postRequestByName(rn, [row.geom, 'WKT', null, null, 'replace', true, style, true]);
+                        });
+
+                        // Show layer info icon
+                        jQuery(cells[4]).addClass(me.resultHeaders[3].prop);
+                        jQuery(cells[4]).find('div.layerInfo').click(function () {
                             var rn = 'catalogue.ShowMetadataRequest';
                             me.sandbox.postRequestByName(rn, [{
                                 uuid: row.id
                             }]);
                         });
-                        jQuery(cells[4]).addClass(me.resultHeaders[3].prop);
-                        
-                        jQuery(cells[4]).find('div.resultRemove').click(function () {
+
+                        // Showw remove icon
+                        jQuery(cells[5]).addClass(me.resultHeaders[4].prop);                        
+                        jQuery(cells[5]).find('div.resultRemove').click(function () {
                             jQuery('table.metadataSearchResult tr.res' + i).hide();
                             jQuery('div.metadataResultHeader a.showLink').show();
                         });

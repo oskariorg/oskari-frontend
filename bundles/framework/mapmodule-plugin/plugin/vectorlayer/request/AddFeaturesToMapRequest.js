@@ -8,7 +8,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddFeaturesToM
      * @method create called automatically on construction
      * @static
      *
-     * @param {String/OpenLayers.Format.GeoJSON geometry the geometry
+     * @param {String/OpenLayers.Format.GeoJSON} geometry the geometry
      * @param {String} geometryType geometry type, WKT or GeoJSON
      * @param {Object} attributes the attributes
      * @param {Oskari.mapframework.domain.VectorLayer} layer the layer

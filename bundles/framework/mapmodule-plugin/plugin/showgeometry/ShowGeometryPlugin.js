@@ -114,7 +114,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.ShowGeometryPlu
             sandbox.register(this);
 
             me._registerVectorFormats();
-
+/*
+            POLYGON ((4094485.56723472 2476062.767112067, 
+                5400519.165736005 2811354.452930909, 
+                4742671.868119625 4458566.284254857, 
+                3671322.242936889 4017334.5608673007, 
+                4094485.56723472 2476062.767112067))
+*/
+/*
             var wkt = 'POLYGON (('+
                 '429268 6903911,' +
                 '438128 6908451,' +
@@ -122,6 +129,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.ShowGeometryPlu
                 '430468 6895391,' +
                 '429268 6903911' +
                 '))';
+
+            var wkt = "POLYGON ((375207.07719295955 6679961.038833934, 375207.07719295955 6697464.48468633, 400444.3787757725 6697464.48468633, 400444.3787757725 6679961.038833934, 375207.07719295955 6679961.038833934))";
 
             var layerJson = {
                 wmsName: '',
@@ -147,9 +156,100 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.ShowGeometryPlu
             style.strokeWidth = 2;
             style.cursor = 'pointer';
             me._sandbox.postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [wkt, 'WKT', null, vectorLayer, 'replace', true, style, true]);
+            */
             
+            
+        },
+        /**
+         * @method addFeaturesOnMap
+         * @public
+         * Add feature on the map
+         * 
+         * @param {Object} geometry the geometry WKT string or GeoJSON object
+         * @param {String} geometryType the geometry type. Supported formats are: WKT and GeoJSON.
+         * @param {Object} attributes the geometry attributes
+         * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} layer
+         * @param {String} operation layer operations. Supported: replace.
+         * @param {Boolean} keepLayerOnTop. If true add layer on the top. Default true.
+         * @param {OpenLayers.Style} style the features style
+         * @param {Boolean} centerTo center map to features. Default true.
+         */
+        addFeaturesToMap: function(geometry, geometryType, attributes, layer, operation, keepLayerOnTop, style, centerTo){
+            var me = this,
+                format = me._supportedFormats[geometryType],
+                olLayer,
+                isOlLayerAdded = true;
 
-            //me._addFeatureToMap(wkt, 'WKT', null, null, null, 'replace', true);
+            if (!layer.isLayerOfType('VECTOR')) {
+                return;
+            }
+
+            if (!format) {
+                return;
+            }
+
+            if (!keepLayerOnTop) {
+                var keepLayerOnTop = true;
+            }
+
+            if (geometry) {
+                var feature = format.read(geometry);
+
+                if (attributes && attributes !== null) {
+                    feature.attributes = attributes;
+                }
+                
+                olLayer = me._map.getLayersByName(me._olLayerPrefix + layer.getId())[0];
+                
+                if (!olLayer) {
+                    var opacity = 100;
+                    if(layer){
+                        opacity = layer.getOpacity() / 100;
+                    }
+                    olLayer = new OpenLayers.Layer.Vector(me._olLayerPrefix + layer.getId());
+
+                    olLayer.setOpacity(opacity);
+                    isOlLayerAdded = false;
+                }
+
+                if (operation && operation !== null && operation === 'replace') {
+                    olLayer.removeFeatures(olLayer.features);
+                }
+
+                if (style && style !== null) {
+                    feature.style = style;
+                }
+
+                olLayer.addFeatures([feature]);
+                
+                if(isOlLayerAdded === false) me._map.addLayer(olLayer);
+
+                if (keepLayerOnTop) {
+                    me._map.setLayerIndex(
+                        olLayer,
+                        me._map.layers.length
+                    );
+                } else {
+                    me._map.setLayerIndex(openLayer, 0);
+                }
+
+                if (layer && layer !== null) {
+                    var mapLayerService = me._sandbox.getService('Oskari.mapframework.service.MapLayerService');
+                    mapLayerService.addLayer(layer, false);
+
+                    window.setTimeout(function(){
+                        var request = me._sandbox.getRequestBuilder('AddMapLayerRequest')(layer.getId(), true);
+                            me._sandbox.request(me.getName(), request);
+                        }, 
+                    100);
+                }
+                
+                if(centerTo === true){
+                    var center = feature.geometry.getCentroid(),
+                        mapmoveRequest = me._sandbox.getRequestBuilder('MapMoveRequest')(center.x, center.y, feature.geometry.getBounds(), false);
+                    me._sandbox.request(me, mapmoveRequest);
+                } 
+            }
         },
         /**
          * @method stopPlugin

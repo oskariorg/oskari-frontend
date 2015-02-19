@@ -112,7 +112,9 @@ Oskari.clazz.define(
             me.registerVectorFormat('GeoJSON', new OpenLayers.Format.GeoJSON());
             me.registerVectorFormat('WKT', new OpenLayers.Format.WKT({}));
         },
+        removeFeaturesFromMap: function(identifier, value, layer){
 
+        },
         /**
          * @method addFeaturesOnMap
          * @public
@@ -131,10 +133,15 @@ Oskari.clazz.define(
             var me = this,
                 format = me._supportedFormats[geometryType],
                 olLayer,
-                isOlLayerAdded = true;
+                isOlLayerAdded = true,
+                layerId = 'VECTOR';
 
-            if (!layer.isLayerOfType('VECTOR')) {
+            if (layer && !layer.isLayerOfType('VECTOR')) {
                 return;
+            }
+
+            if(layer && layer !== null){
+                layerId = layer.getId();
             }
 
             if (!format) {
@@ -152,21 +159,22 @@ Oskari.clazz.define(
                     feature.attributes = attributes;
                 }
                 
-                olLayer = me._map.getLayersByName(me._olLayerPrefix + layer.getId())[0];
+                olLayer = me._map.getLayersByName(me._olLayerPrefix + layerId)[0];
                 
                 if (!olLayer) {
                     var opacity = 100;
                     if(layer){
                         opacity = layer.getOpacity() / 100;
                     }
-                    olLayer = new OpenLayers.Layer.Vector(me._olLayerPrefix + layer.getId());
+                    olLayer = new OpenLayers.Layer.Vector(me._olLayerPrefix + layerId);
 
                     olLayer.setOpacity(opacity);
                     isOlLayerAdded = false;
                 }
 
                 if (operation && operation !== null && operation === 'replace') {
-                    olLayer.removeFeatures(olLayer.features);
+                    olLayer.removeAllFeatures();
+                    olLayer.refresh();
                 }
 
                 if (style && style !== null) {
@@ -191,10 +199,10 @@ Oskari.clazz.define(
                     mapLayerService.addLayer(layer, false);
 
                     window.setTimeout(function(){
-                        var request = me._sandbox.getRequestBuilder('AddMapLayerRequest')(layer.getId(), true);
+                        var request = me._sandbox.getRequestBuilder('AddMapLayerRequest')(layerId, true);
                             me._sandbox.request(me.getName(), request);
                         }, 
-                    100);
+                    50);
                 }
                 
                 if(centerTo === true){
@@ -353,7 +361,7 @@ Oskari.clazz.define(
                 features = event.getFeatures(),
                 op = event.getOp(),
                 mapLayer = this.getMap().getLayersByName(
-                    me._olLayerPrefix + layer.getId()
+                    me._olLayerPrefix
                 )[0];
 
             if (!mapLayer) {
