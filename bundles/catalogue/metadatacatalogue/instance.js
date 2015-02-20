@@ -28,12 +28,19 @@ Oskari.clazz.define(
             prop: 'name'
         }, {
             title: '', // this.getLocalization('grid').rating,
+            tooltip: '',
             prop: 'rating'
         }, {
             title: '',
+            tooltip: this.getLocalization('grid').showBBOX,
+            prop: 'showBbox'
+        }, {
+            title: '',
+            tooltip: this.getLocalization('grid').info,
             prop: 'info'
         }, {
             title: '',
+            tooltip: this.getLocalization('grid').remove,
             prop: 'remove'
         }];
         this.lastSearch = '';
@@ -134,6 +141,7 @@ Oskari.clazz.define(
                 '  <td></td>' +
                 '  <td></td>' +
                 '  <td><div class="actionPlaceholder"></div></td>' +
+                '  <td><div class="showBbox icon-zoomto"></div></td>' +
                 '  <td><div class="layerInfo icon-info"></div></td>' +
                 '  <td><div class="resultRemove icon-close"></div></td>' +
                 '</tr>'
@@ -321,9 +329,11 @@ Oskari.clazz.define(
                 if (event.getExtension().getName() !== 'Search') {
                     // wasn't me or disabled -> do nothing
                     return;
-                } else if (!isShown && me.drawCoverage === false) {
+                }
+
+                if (!isShown && me.drawCoverage === false) {
                     if (me.selectionPlugin) {
-                        me.selectionPlugin.stopDrawing();
+                        me.selectionPlugin.stopDrawing();                        
                     }
                     if (me.coverageButton) {
                         me.coverageButton.val(me.getLocalization('delimitArea'));
@@ -334,10 +344,27 @@ Oskari.clazz.define(
                     if (me.coverageButton) {
                         me.coverageButton[0].data = '';
                     }
-                }
+                } 
+
+                if (event.getViewState() === 'close') {
+                    me._removeFeaturesFromMap();
+                } 
             }
         },
-
+        /**
+         * @method _removeFeaturesFromMap
+         * @private
+         * Removes features from map.
+         *
+         * @param {String} identifier the identifier
+         * @param {String} value the identifier value
+         * @param {Oskari.mapframework.domain.VectorLayer} layer the layer
+         */
+        _removeFeaturesFromMap: function(identifier, value, layer){
+            var me = this,
+                rn = 'MapModulePlugin.RemoveFeaturesFromMapRequest';
+            me.sandbox.postRequestByName(rn, [identifier, value, layer]);
+        },
         /**
          * @method stop
          * implements BundleInstance protocol stop method
@@ -424,6 +451,7 @@ Oskari.clazz.define(
             button.setId('oskari_metadatacatalogue_button_search');
 
             var doMetadataCatalogue = function () {
+                me._removeFeaturesFromMap();
                 metadataCatalogueContainer.find('.metadataOptions').hide();
                 metadataCatalogueContainer.find('.metadataSearching').show();
                 var search = {
@@ -645,6 +673,7 @@ Oskari.clazz.define(
                     document.getElementById('oskari_metadatacatalogue_forminput_searchassistance').focus();
                     var emptyData = {};
                     me.coverageButton[0].data = '';
+                    me._removeFeaturesFromMap();
                 }
             });
 
@@ -763,6 +792,7 @@ Oskari.clazz.define(
             modifyLink.click(function () {
                 resultPanel.empty();
                 optionPanel.show();
+                me._removeFeaturesFromMap();
             });
 
             if (data.results.length === 0) {
@@ -860,7 +890,16 @@ Oskari.clazz.define(
                 };
             };
             var selectedLayers = me.sandbox.findAllSelectedMapLayers(),
-                i;
+                i,
+                style = OpenLayers.Util.applyDefaults(style, OpenLayers.Feature.Vector.style['default']);
+            style.pointRadius = 8;
+            style.strokeColor = '#D3BB1B';
+            style.fillColor = '#FFDE00';
+            style.fillOpacity = 0.6;
+            style.strokeOpacity = 0.8;
+            style.strokeWidth = 2;
+            style.cursor = 'pointer';
+
             for (i = 0; i < results.length; i += 1) {
                 if ((!results[i].name) || (results[i].name.length === 0)) {
                     continue;
@@ -974,18 +1013,31 @@ Oskari.clazz.define(
                             jQuery(cells[2]).find('div.actionPlaceholder').append(actionElement);                            
                         }
 
+                        // Show bbox icon
                         jQuery(cells[3]).addClass(me.resultHeaders[2].prop);
-                        jQuery(cells[3]).find('div.layerInfo').click(function () {
+                        jQuery(cells[3]).attr('title', me.resultHeaders[2].tooltip);
+                        jQuery(cells[3]).find('div.showBbox').click(function () {
+                            var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
+                            me.sandbox.postRequestByName(rn, [row.geom, 'WKT', {id:row.id}, null, 'replace', true, style, true]);
+                        });
+
+                        // Show layer info icon
+                        jQuery(cells[4]).addClass(me.resultHeaders[3].prop);
+                        jQuery(cells[4]).attr('title', me.resultHeaders[3].tooltip);
+                        jQuery(cells[4]).find('div.layerInfo').click(function () {
                             var rn = 'catalogue.ShowMetadataRequest';
                             me.sandbox.postRequestByName(rn, [{
                                 uuid: row.id
                             }]);
                         });
-                        jQuery(cells[4]).addClass(me.resultHeaders[3].prop);
-                        
-                        jQuery(cells[4]).find('div.resultRemove').click(function () {
+
+                        // Show remove icon
+                        jQuery(cells[5]).addClass(me.resultHeaders[4].prop);
+                        jQuery(cells[5]).attr('title', me.resultHeaders[4].tooltip);
+                        jQuery(cells[5]).find('div.resultRemove').click(function () {
                             jQuery('table.metadataSearchResult tr.res' + i).hide();
                             jQuery('div.metadataResultHeader a.showLink').show();
+                            me._removeFeaturesFromMap('id', row.id);
                         });
                     }
                     resultsTableBody.append(resultContainer);

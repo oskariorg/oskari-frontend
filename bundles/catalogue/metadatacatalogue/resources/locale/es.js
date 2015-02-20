@@ -46,7 +46,10 @@ Oskari.registerLocalization(
         "too_many_stars": "El término de búsqueda contiene demasiados astericos (caracteres *). Puede contener un máximo de N caractere *",
         "searching": "Buscando…",
         "grid": {
-            "name": "Nombre"
+            "name": "Nombre",
+            "showBBOX": "NOT TRANSLATED",
+            "info": "NOT TRANSLATED",
+            "remove": "NOT TRANSLATED"
         },
         "licenseText": "NOT TRANSLATED"
     }

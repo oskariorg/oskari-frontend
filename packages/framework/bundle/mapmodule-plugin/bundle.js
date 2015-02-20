@@ -248,6 +248,18 @@ Oskari.clazz.define(
                 {
                     "type": "text/javascript",
                     "src": "../../../../bundles/framework/mapmodule-plugin/plugin/vectorlayer/VectorLayerPlugin.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/framework/mapmodule-plugin/plugin/vectorlayer/request/AddFeaturesToMapRequest.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/framework/mapmodule-plugin/plugin/vectorlayer/request/AddFeaturesToMapRequestHandler.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/framework/mapmodule-plugin/plugin/vectorlayer/request/RemoveFeaturesFromMapRequest.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/framework/mapmodule-plugin/plugin/vectorlayer/request/RemoveFeaturesFromMapRequestHandler.js"
                 },
                 /**
                  * GeoLocation plugin
@@ -257,7 +269,7 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/framework/mapmodule-plugin/plugin/location/GeoLocationPlugin.js"
                 },
                 /**
-                 * GeoLocation plugin
+                 * Draw plugin
                  */
                 {
                     "type": "text/javascript",
@@ -329,6 +341,7 @@ Oskari.clazz.define(
                     "type": "text/css",
                     "src": "../../../../bundles/framework/mapmodule-plugin/resources/css/mylocation.css"
                 },
+
                 /**
                  * Requests & handlers
                  */

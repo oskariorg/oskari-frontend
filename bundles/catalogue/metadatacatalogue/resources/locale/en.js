@@ -45,7 +45,10 @@ Oskari.registerLocalization({
         "too_many_stars": "The search term contains too many stars (*-characters). It may contain at most N *-characters.",
         "searching": "Searching…",
         "grid": {
-            "name": "Name"
+            "name": "Name",
+            "showBBOX": "Show data coverage",
+            "info": "Show metadata",
+            "remove": "Remove from search results"
         },
         "licenseText": "Get license"
     }

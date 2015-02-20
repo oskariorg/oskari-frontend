@@ -42,7 +42,19 @@ div.metadataCatalogueContainer {
         height: 16px;
         margin-left: 5px;
         float: right;
+        cursor: pointer;
     }
+
+    td.showBbox div.showBbox {
+        width: 16px;
+        height: 16px;
+        margin-left: 5px;    
+        background-image: url("../images/zoom_to.png") !important;
+        background-repeat: no-repeat !important;
+        float: right; 
+        cursor: pointer;
+    }
+
 
     td.remove div.resultRemove {
         width: 16px;
@@ -50,6 +62,7 @@ div.metadataCatalogueContainer {
         margin-left: 5px;
         margin-right: 5px;
         float: right;
+        cursor: pointer;
     }
 
     tr.resultRow {

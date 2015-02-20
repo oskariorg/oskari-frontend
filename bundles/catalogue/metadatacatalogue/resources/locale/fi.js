@@ -47,7 +47,10 @@ Oskari.registerLocalization(
         "too_many_stars": "Antamassasi hakusanassa on liian monta jokerimerkkiä (*). Hakusanassa saa olla enintään yksi jokerimerkki ja sen tulee olla sanan lopussa.",
         "searching": "Haetaan…",
         "grid": {
-            "name": "Nimi"
+            "name": "Nimi",
+            "showBBOX": "Näytä aineiston kattavuus",
+            "info": "Näytä metatiedot",
+            "remove": "Poista hakutuloksista"
         },
         "licenseText": "Hae lisenssi"
     }

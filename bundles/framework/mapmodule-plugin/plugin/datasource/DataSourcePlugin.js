@@ -233,7 +233,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugi
          * renders pop-up
          */
         _openDialog: function () {
-            alert("wee");
             var me = this,
                 sandbox = me._sandbox,
                 dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),

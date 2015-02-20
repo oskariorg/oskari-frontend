@@ -2,9 +2,118 @@
 
 ## 1.28
 
+### catalogue/metadatagatalogue
+
+Show metadata coverage on the map tool is added to Metadatacatalogue search results.
+
 ### core/abstractmapmodule
 
 GetImageUrl() always return now '/Oskari/bundles' folder location.
+
+### framework/mapmodule-plugin/plugin/vectorlayer
+
+Added handling for two *new requests* (MapModulePlugin.AddFeaturesToMapRequest and MapModulePlugin.RemoveFeaturesFromMapRequest).
+
+### framework/mapmodule-plugin/plugin/vectorlayer/MapModulePlugin.AddFeaturesToMapRequest
+
+Added support to add features to map. Supported formats are 'WKT' and 'GeoJSON'
+
+Features can be added via requests as follows:
+
+```javascript
+var reqBuilder = this.sandbox.getRequestBuilder('MapModulePlugin.AddFeaturesToMapRequest');
+if (reqBuilder) {
+    var layer = null,
+        layerJson = {
+            wmsName: '',
+            type: 'vectorlayer'
+            isQueryable: false,
+            opacity: 60,
+            orgName: 'Test organization',
+            inspire: 'Test inspire',
+            id: 'Test layer',
+            name: 'Test layer'
+        },
+        style = OpenLayers.Util.applyDefaults(style, OpenLayers.Feature.Vector.style['default']),
+        mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService'),
+        vectorlayer = mapLayerService.createMapLayer(layerJson);
+    
+    style.pointRadius = 8;
+    style.strokeColor = '#D3BB1B';
+    style.fillColor = '#FFDE00';
+    style.fillOpacity = 0.6;
+    style.strokeOpacity = 0.8;
+    style.strokeWidth = 2;
+    style.cursor = 'pointer';
+
+    // Example 1 add features on the map and also create layer to selected layer list and also map layers list
+    var request1 = reqBuilder(
+        'POLYGON ((199519.8148320266 7256441.554606095, 199519.8148320266 7779004.414678753, 614614.2197851419 7779004.414678753, 614614.2197851419 7256441.554606095, 199519.8148320266 7256441.554606095))',
+        'WKT',
+        { id: 1},
+        vectorlayer,
+        'replace',
+        true,
+        style,
+        true
+    );
+    this.sandbox.request(this.getName(), request1);
+
+    // Example 2 Shows only features on the map
+    var request2 = reqBuilder(
+        'POLYGON ((199519.8148320266 7256441.554606095, 199519.8148320266 7779004.414678753, 614614.2197851419 7779004.414678753, 614614.2197851419 7256441.554606095, 199519.8148320266 7256441.554606095))',
+        'WKT',
+        { id: 1 },
+        null, // no layer specification --> not add layer to selected layer list and map layers list
+        'replace',
+        true,
+        style,
+        true
+    );
+    this.sandbox.request(this.getName(), request2);
+}
+```
+
+### framework/mapmodule-plugin/plugin/vectorlayer/MapModulePlugin.RemoveFeaturesFromMapRequest
+
+Added support to remove features to map.
+
+Features can be removed via requests as follows:
+
+```javascript
+var reqBuilder = this.sandbox.getRequestBuilder('MapModulePlugin.RemoveFeaturesFromMapRequest');
+if (reqBuilder) {
+    var layer = null,
+        layerJson = {
+            wmsName: '',
+            type: 'vectorlayer'
+            isQueryable: false,
+            opacity: 60,
+            orgName: 'Test organization',
+            inspire: 'Test inspire',
+            id: 'Test layer',
+            name: 'Test layer'
+        },
+        mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService'),
+        vectorlayer = mapLayerService.createMapLayer(layerJson);
+
+    // Example 1 remove all features from the map
+    var request1 = reqBuilder(
+        null,
+        null,
+        vectorLayer
+    );
+    this.sandbox.request(this.getName(), request1);
+
+    // Example 2 Removes selected features from map
+    var request2 = reqBuilder(
+        'id',
+        1,
+        vectorLayer
+    );
+    this.sandbox.request(this.getName(), request2);
+}
+```
 
 ### Folder structure changes
 
@@ -55,7 +164,7 @@ Preparing for version 2 of the changes, please change your bundles to following 
 ** Locale files: `bundles/<mynamespace>/<bundle-identifier>/resources/locale/..`
 ** CSS files: `bundles/<mynamespace>/<bundle-identifier>/resources/css/..`
 
-### Grunt tool
+#### Grunt tool
 Grunt tool has been modified to support folder structure changes.
 
 ## 1.27.2
