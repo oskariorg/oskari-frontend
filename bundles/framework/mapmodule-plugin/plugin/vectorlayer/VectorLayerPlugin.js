@@ -1,5 +1,6 @@
 /**
  * @class Oskari.mapframework.mapmodule.VectorLayerPlugin
+ * Provides functionality to draw vector layers on the map
  */
 Oskari.clazz.define(
     'Oskari.mapframework.mapmodule.VectorLayerPlugin',
