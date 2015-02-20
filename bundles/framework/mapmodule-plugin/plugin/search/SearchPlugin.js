@@ -537,7 +537,7 @@ Oskari.clazz.define(
             }
 
             var resourcesPath = this.getMapModule().getImageUrl(),
-                imgPath = resourcesPath + '/framework/mapmodule-plugin/resources/plugin/search/images/',
+                imgPath = resourcesPath + '/framework/mapmodule-plugin/resources/images/',
                 styleName = style.val,
                 bgLeft = imgPath + 'search-tool-' + styleName + '_01.png',
                 bgMiddle = imgPath + 'search-tool-' + styleName + '_02.png',

@@ -299,7 +299,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
 
             // 
             var resourcesPath = me.getMapModule().getImageUrl(),
-                imgPath = resourcesPath + '/framework/mapmodule-plugin/resources/plugin/publishertoolbar/images/',
+                imgPath = resourcesPath + '/framework/mapmodule-plugin/resources/images/',
                 styledImg = imgPath + 'menu-' + style + '.png',
                 icon = div.find('.icon'),
                 toolsContent = div.find('.' + me.toolbarContent),
