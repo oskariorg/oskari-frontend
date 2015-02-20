@@ -50,6 +50,7 @@ function(searchUrl) {
     doSearch : function(search, onSuccess, onError) {
         var lang = Oskari.getLang();
         var epsg = Oskari.getSandbox().getMap().getSrsName();
+        if(!search.srs) search.srs = epsg;
         jQuery.ajax({
             dataType : "json",
             type : "POST",

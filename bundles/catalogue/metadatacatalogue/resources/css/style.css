@@ -26,13 +26,26 @@ div.metadataCatalogueContainer {
     width: 16px;
     height: 16px;
     margin-left: 5px;
-    float: right; }
+    float: right; 
+    cursor: pointer;
+  }
   div.metadataCatalogueContainer td.remove div.resultRemove {
     width: 16px;
     height: 16px;
     margin-left: 5px;
     margin-right: 5px;
-    float: right; }
+    float: right; 
+    cursor: pointer;
+  }
+  div.metadataCatalogueContainer td.showBbox div.showBbox {
+    width: 16px;
+    height: 16px;
+    margin-left: 5px;    
+    background-image: url("../images/zoom_to.png") !important;
+    background-repeat: no-repeat !important;
+    float: right; 
+    cursor: pointer;
+  }
   div.metadataCatalogueContainer tr.resultRow {
     padding-left: 10px;
     outline: 1pt solid #c0d0e0; }

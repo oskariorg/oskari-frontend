@@ -60,6 +60,9 @@ function(searchUrl) {
              },
             url : this._searchUrl,
             error : onError,
+            data : {
+                srs: epsg
+            },
             success : onSuccess
         });
     }
