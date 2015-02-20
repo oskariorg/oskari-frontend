@@ -45,7 +45,7 @@ module.exports = function(grunt) {
                 if (!fs.existsSync(files[i])) {
                     var msg = 'Couldnt locate ' + files[i]; 
                     grunt.log.warn(msg);
-                    grunt.fail.warn(msg);
+                    grunt.fail.fatal(msg);
                     throw msg;
                 }
                 // do not put duplicates on compiled code
