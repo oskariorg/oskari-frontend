@@ -341,13 +341,6 @@ Oskari.clazz.define(
                     "type": "text/css",
                     "src": "../../../../bundles/framework/mapmodule-plugin/resources/css/mylocation.css"
                 },
-                /**
-                 * Show Geometry plugin
-                 */
-                {
-                    "type": "text/javascript",
-                    "src": "../../../../bundles/framework/mapmodule-plugin/plugin/showgeometry/ShowGeometryPlugin.js"
-                },
 
                 /**
                  * Requests & handlers
