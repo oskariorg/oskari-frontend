@@ -112,8 +112,44 @@ Oskari.clazz.define(
             me.registerVectorFormat('GeoJSON', new OpenLayers.Format.GeoJSON());
             me.registerVectorFormat('WKT', new OpenLayers.Format.WKT({}));
         },
+        /**
+         * @method removeFeaturesFromMap
+         * @public
+         * Removes all/selected features from map.
+         * 
+         * @param {String} identifier the feature attribute identifier
+         * @param {String} value the feature identifier value
+         * @param {Oskari.mapframework.domain.VectorLayer} layer layer details
+         */
         removeFeaturesFromMap: function(identifier, value, layer){
+            var me = this,
+                foundedFeatures,
+                olLayer,
+                layerId = 'VECTOR';
 
+            if(layer && layer !== null){
+                layerId = layer.getId();
+            }
+
+            olLayer = me._map.getLayersByName(me._olLayerPrefix + layerId)[0];
+
+            if (!olLayer) {
+                return;
+            }
+
+            // Removes only wanted features from map
+            if (identifier && identifier !== null && value && value !== null){
+                foundedFeatures = olLayer.getFeaturesByAttribute(identifier, value);
+                olLayer.removeFeatures(foundedFeatures);
+                olLayer.refresh();
+            }
+            // Removes all features from map
+            else {
+                olLayer.removeAllFeatures();
+                olLayer.refresh();
+                /* This should free all memory */
+                olLayer.destroy();
+            }
         },
         /**
          * @method addFeaturesOnMap
@@ -123,7 +159,7 @@ Oskari.clazz.define(
          * @param {Object} geometry the geometry WKT string or GeoJSON object
          * @param {String} geometryType the geometry type. Supported formats are: WKT and GeoJSON.
          * @param {Object} attributes the geometry attributes
-         * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} layer
+         * @param {Oskari.mapframework.domain.VectorLayer} layer
          * @param {String} operation layer operations. Supported: replace.
          * @param {Boolean} keepLayerOnTop. If true add layer on the top. Default true.
          * @param {OpenLayers.Style} style the features style
@@ -223,6 +259,11 @@ Oskari.clazz.define(
             return {
                 'MapModulePlugin.AddFeaturesToMapRequest': Oskari.clazz.create(
                     'Oskari.mapframework.bundle.mapmodule.request.AddFeaturesToMapRequestHandler',
+                    sandbox,
+                    me
+                ),
+                'MapModulePlugin.RemoveFeaturesFromMapRequest': Oskari.clazz.create(
+                    'Oskari.mapframework.bundle.mapmodule.request.RemoveFeaturesFromMapRequestHandler',
                     sandbox,
                     me
                 )

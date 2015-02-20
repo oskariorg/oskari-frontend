@@ -46,7 +46,10 @@ Oskari.registerLocalization(
         "too_many_stars": "För många *-tecken.",
         "searching": "Söker…",
         "grid": {
-            "name": "Namn"
+            "name": "Namn",
+            "showBBOX": "Visa geografisk datatäckning",
+            "info": "Visa metadata",
+            "remove": "Bort från sökresultaten"
         },
         "licenseText": "Sök licens"
     }
