@@ -309,8 +309,10 @@ Oskari.clazz.define(
         },
 
         focus: function () {
-            var searchInput = this._searchContainer.find('input[type=text]');
-            searchInput.focus();
+            if(this._searchContainer) {
+                var searchInput = this._searchContainer.find('input[type=text]');
+                searchInput.focus();
+            }
         },
 
         _validateSearchKey: function (key) {
