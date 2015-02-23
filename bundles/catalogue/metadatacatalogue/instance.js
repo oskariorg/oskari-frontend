@@ -758,8 +758,8 @@ Oskari.clazz.define(
                         }
                     }
                 }
+                row.show();
             }
-            row.show();
         },
 
         /**
