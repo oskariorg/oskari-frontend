@@ -56,7 +56,8 @@ Oskari.clazz.define(
             actionTextElement: null,
             callback: null,
             bindCallbackTo: null,
-            actionText: null           
+            actionText: null,
+            showAction: function(metadata){return true}       
         };
     }, {
         /**
@@ -975,7 +976,7 @@ Oskari.clazz.define(
                         jQuery(cells[1]).addClass(me.resultHeaders[1].prop);
 
                         // Action link
-                        if(me._isAction() == true) {
+                        if(me._isAction() == true && me.actionStatus.showAction(row)) {
                             var actionElement = me.actionStatus.actionElement.clone(),
                                 callbackElement = null,
                                 actionTextEl = null;
@@ -1001,10 +1002,12 @@ Oskari.clazz.define(
                             } else {
                                 actionTextEl = actionElement.first();
                             }
+
                             if(actionTextEl.is('input') ||
                                 actionTextEl.is('select') ||
                                 actionTextEl.is('button') ||
                                 actionTextEl.is('textarea')){
+
                                 if(me.actionStatus.actionText && me.actionStatus.actionText != null){
                                     actionTextEl.val(me.actionStatus.actionText);
                                 }
@@ -1187,16 +1190,22 @@ Oskari.clazz.define(
         * @param {String} bindCallbackTo the jQuery selector where to bind click operation
         * @param {String} actionTextElement action text jQuery selector. If it's null then text showed on main element
         * @param {String} actionText action text
+        * @param {Function} showAction function. If return true then shows action text. Optional.
         */
-        addSearchResultAction: function(actionElement, actionTextElement, callback, bindCallbackTo, actionText){
+        addSearchResultAction: function(actionElement, actionTextElement, callback, bindCallbackTo, actionText, showAction){
             var me = this;
             me.actionStatus = {
                 actionElement: actionElement,
                 actionTextElement: actionTextElement,
                 callback: callback,
                 bindCallbackTo: bindCallbackTo,
-                actionText: actionText
+                actionText: actionText,
+                showAction: function(metadata){return true;}
             };
+
+            if(showAction && showAction !== null) {
+                me.actionStatus.showAction = showAction;
+            }
         },
         /**
         * @method _isAction

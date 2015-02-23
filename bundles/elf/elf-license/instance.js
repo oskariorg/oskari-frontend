@@ -51,8 +51,6 @@ function () {
         var me = this,
             reqBuilder = me._sandbox.getRequestBuilder('AddSearchResultActionRequest');
 
-        alert(me._locale.getLicenseText);
-
         if (reqBuilder) {
             var data = {
                 actionElement: jQuery('<a href="javascript:void(0)"></a>'),
@@ -62,7 +60,10 @@ function () {
                 },
                 bindCallbackTo: null,
                 actionTextElement: null,
-                actionText: me._locale.getLicenseText
+                actionText: me._locale.getLicenseText,
+                showAction: function(metadata) {
+                    return metadata.license && metadata.license !== null;
+                }
             };
             var request = reqBuilder(data);
             me._sandbox.request(me, request);
