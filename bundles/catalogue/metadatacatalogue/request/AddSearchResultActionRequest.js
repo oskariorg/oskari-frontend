@@ -16,6 +16,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatacatalogue.request.AddSearch
 function(data) {
     this._actionElement = data.actionElement;
     this._actionTextElement = data.actionTextElement;
+    this._actionText = data.actionText;
     this._callback = data.callback;
     this._bindCallbackTo = data.bindCallbackTo;    
 }, {
@@ -41,6 +42,13 @@ function(data) {
      */
     getActionTextElement : function() {
         return this._actionTextElement;
+    },
+    /**
+     * @method getActionText
+     * @return {String} action text
+     */
+    getActionText : function() {
+        return this._actionText;
     },
     /**
      * @method getCallback

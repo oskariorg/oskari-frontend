@@ -55,7 +55,8 @@ Oskari.clazz.define(
             actionElement: null,
             actionTextElement: null,
             callback: null,
-            bindCallbackTo: null            
+            bindCallbackTo: null,
+            actionText: null           
         };
     }, {
         /**
@@ -1004,10 +1005,20 @@ Oskari.clazz.define(
                                 actionTextEl.is('select') ||
                                 actionTextEl.is('button') ||
                                 actionTextEl.is('textarea')){
-                                actionTextEl.val(me.getLocalization('licenseText'));
+                                if(me.actionStatus.actionText && me.actionStatus.actionText != null){
+                                    actionTextEl.val(me.actionStatus.actionText);
+                                }
+                                else {
+                                    actionTextEl.val(me.getLocalization('licenseText'));
+                                }
                             }
-                            else {                                
-                                actionTextEl.html(me.getLocalization('licenseText'));
+                            else {
+                                if(me.actionStatus.actionText && me.actionStatus.actionText != null){
+                                    actionTextEl.html(me.actionStatus.actionText);
+                                }
+                                else {
+                                    actionTextEl.html(me.getLocalization('licenseText'));
+                                }
                             }
 
                             jQuery(cells[2]).find('div.actionPlaceholder').append(actionElement);                            
@@ -1175,14 +1186,16 @@ Oskari.clazz.define(
         * @param {Function} callback the callback function
         * @param {String} bindCallbackTo the jQuery selector where to bind click operation
         * @param {String} actionTextElement action text jQuery selector. If it's null then text showed on main element
+        * @param {String} actionText action text
         */
-        addSearchResultAction: function(actionElement, actionTextElement, callback, bindCallbackTo){
+        addSearchResultAction: function(actionElement, actionTextElement, callback, bindCallbackTo, actionText){
             var me = this;
             me.actionStatus = {
                 actionElement: actionElement,
                 actionTextElement: actionTextElement,
                 callback: callback,
-                bindCallbackTo: bindCallbackTo
+                bindCallbackTo: bindCallbackTo,
+                actionText: actionText
             };
         },
         /**
