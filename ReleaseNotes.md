@@ -6,6 +6,8 @@
 
 Show metadata coverage on the map tool is added to Metadatacatalogue search results.
 
+Metadatacatalogue bundle now requires vectorlayer plugin to be in use in frontend.
+
 ### core/abstractmapmodule
 
 GetImageUrl() always return now '/Oskari/bundles' folder location.
