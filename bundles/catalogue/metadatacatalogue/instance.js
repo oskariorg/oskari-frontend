@@ -1014,12 +1014,16 @@ Oskari.clazz.define(
                         }
 
                         // Show bbox icon
-                        jQuery(cells[3]).addClass(me.resultHeaders[2].prop);
-                        jQuery(cells[3]).attr('title', me.resultHeaders[2].tooltip);
-                        jQuery(cells[3]).find('div.showBbox').click(function () {
-                            var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
-                            me.sandbox.postRequestByName(rn, [row.geom, 'WKT', {id:row.id}, null, 'replace', true, style, true]);
-                        });
+                        if(row.geom && row.geom != null) { 
+                            jQuery(cells[3]).addClass(me.resultHeaders[2].prop);
+                            jQuery(cells[3]).attr('title', me.resultHeaders[2].tooltip);
+                            jQuery(cells[3]).find('div.showBbox').click(function () {
+                                var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
+                                me.sandbox.postRequestByName(rn, [row.geom, 'WKT', {id:row.id}, null, 'replace', true, style, true]);
+                            });
+                        } else {
+                            jQuery(cells[3]).find('div.showBbox').hide();
+                        }
 
                         // Show layer info icon
                         jQuery(cells[4]).addClass(me.resultHeaders[3].prop);
