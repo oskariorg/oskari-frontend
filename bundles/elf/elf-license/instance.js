@@ -14,10 +14,15 @@ function () {
     this._licenseInformationUrl = null;
     this._templates = {
         licenseDialog: jQuery('<div class="elf_license_dialog">' +
-            '<div class="elf_license_dialog_name"></div>' +
-            '<div class="elf_license_dialog_description"></div>' +
-            '<div class="elf_license_dialog_licensemodels_title"></div>' +
-            '<div class="elf_license_dialog_licensemodels"></div>' +
+            '   <div class="elf_license_dialog_name"></div>' +
+            '   <div class="elf_license_dialog_license_data">' +
+            '      <div class="elf_license_dialog_description"></div>' +
+            '      <div class="elf_license_dialog_licensemodels">' +
+            '           <div class="elf_license_dialog_licensemodels_title"></div>' +
+            '       </div>' +
+            '   </div>' +
+            '   <div class="elf_license_dialog_license_details">' +
+            '   </div>' +
             '</div>'),
         licenseModel: jQuery('<div class="elf_license_model">' +
             '<div class="elf_license_model_headers">' +
@@ -25,7 +30,6 @@ function () {
                 '<div class="elf_license_model_name"></div>' +
                 '<div class="elf_license_model_description"></div>' +
             '</div>' +
-            '<div class="elf_license_model_values"></div>' +
             '</div>')
     };
 }, {
@@ -118,6 +122,7 @@ function () {
             }
         }, function () {
             me.getSandbox().printWarn('ELF license search failed', [].slice.call(arguments));
+            me._showMessage(me._locale.errors.cannotGetLicenseInformation.title, me._locale.errors.cannotGetLicenseInformation.message);
         });
     },
     /**
@@ -149,6 +154,8 @@ function () {
             models = dialogContent.find('.elf_license_dialog_licensemodels'),
             metadataTitle = '';
 
+        me._showLicenseModels();
+
         dialog.addClass('elf_license_dialog');
         dialogContent.find('.elf_license_dialog_name').html(data.name);
         dialogContent.find('.elf_license_dialog_description').html(data.description);
@@ -156,6 +163,10 @@ function () {
 
         jQuery.each(data.licenseModels, function(index, model){
             var modelEl = me._templates.licenseModel.clone();
+            modelEl.bind('click', function(){
+                me._showLicenseParams(model);
+            });
+
             modelEl.find('.elf_license_model_name').html(model.name);
             modelEl.find('.elf_license_model_description').html(model.description);
             models.append(modelEl);
@@ -168,6 +179,35 @@ function () {
 
         dialog.show(me._locale.dialog.licenseTitle + ' - ' + metadataTitle, dialogContent, [cancelBtn]);
         dialog.makeModal();
+    },
+    /**
+     * Shows license models.
+     * @method _showLicenseModels
+     * @private
+     */
+    _showLicenseModels: function(){
+        jQuery('.elf_license_dialog_license_details').hide();
+        jQuery('.elf_license_dialog_license_data').show();
+    },
+    /**
+     * Shows license details.
+     * @method _showLicenseDetails
+     * @private
+     */
+    _showLicenseDetails: function(){
+        jQuery('.elf_license_dialog_license_details').show();
+        jQuery('.elf_license_dialog_license_data').hide();
+    },
+     /**
+     * Show license information params
+     * @method _showLicenseParams
+     * @private
+     *
+     * @param {Object} model license model
+     */
+    _showLicenseParams(model) {
+        var me = this;
+        me._showLicenseDetails();
     }
 }, {
     "extend" : ["Oskari.userinterface.extension.DefaultExtension"]
