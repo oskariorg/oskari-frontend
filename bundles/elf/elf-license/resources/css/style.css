@@ -1,0 +1,44 @@
+.elf_license_dialog_name {
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.elf_license_dialog_description {
+	margin-top: 6px;
+}
+
+.elf_license_dialog_licensemodels{
+	max-height: 320px;
+	overflow: auto;
+}
+
+.elf_license_dialog_licensemodels_title {
+	margin-top:12px;
+}
+
+.elf_license_model 
+{
+	cursor: pointer;
+}
+
+.elf_license_model_headers {
+	background-color: #f3f3f3;
+	margin: 6px;
+	outline: 1px solid #c0d0d0;
+	overflow: hidden;
+	padding: 10px;
+}
+
+.elf_license_model_arrow {
+	float: left;
+}
+
+.elf_license_model_values {
+	display: none;
+}
+
+.elf_license_model_description {
+	margin-left: 12px;
+	margin-top: 4px;
+	font-size: 13px;
+}

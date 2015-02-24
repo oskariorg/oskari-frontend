@@ -24,6 +24,14 @@ Oskari.clazz.define("Oskari.elf.license.Bundle", function() {
             {
                 "type" : "text/javascript",
                 "src" : "../../../../bundles/elf/elf-license/instance.js"
+            },
+            {
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/elf/elf-license/service/LicenseService.js"
+            },
+            {
+                "type" : "text/css",
+                "src" : "../../../../bundles/elf/elf-license/resources/css/style.css"
             }
         ],
         "locales" : [
