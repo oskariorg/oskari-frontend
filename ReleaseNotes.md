@@ -2,6 +2,14 @@
 
 ## 1.28
 
+### elf/elf-language-selector
+
+Hardcodings removed and now uses the configured supported languages. 
+
+### core
+
+Oskari.getLocalization() now supports language as a second parameter. Notice that the locale still won't be loaded automatically.
+
 ### framework/userguide
 
 Renamed function Flyout.getUserGuideTabs() to Flyout.getUserGuides().

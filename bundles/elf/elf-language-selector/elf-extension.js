@@ -13,13 +13,10 @@ Oskari.clazz.define("Oskari.elf.extension.EnhancedExtension",
      *
      */
 
-    function (name, locale) {
+    function (name) {
         this.sandbox = null;
         this.plugins = {};
-        this._localization = locale;
-        this.conf = {
-            "name": name
-        };
+        this.__name = name;
     }, {
         /**
          * @method getTitle
@@ -97,7 +94,7 @@ Oskari.clazz.define("Oskari.elf.extension.EnhancedExtension",
             
             me.sandbox = sandbox;
 
-            this.setLocalization(this.locales[Oskari.getLang()] || this.locales['en']);
+            //this.setLocalization(this.locales[Oskari.getLang()] || this.locales['en']);
 
             /* stateful */
             if (conf && conf.stateful === true) {
@@ -203,7 +200,7 @@ Oskari.clazz.define("Oskari.elf.extension.EnhancedExtension",
          * Module protocol method
          */
         getName: function () {
-            return this.conf.name;
+            return this.__name;
         },
         /**
          * @method getConfiguration
