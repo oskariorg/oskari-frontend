@@ -8,13 +8,6 @@ jQuery(document).ready(function() {
         return;
     }
 
-    // remove host part from url
-    if(ajaxUrl.indexOf('http') == 0) {
-        var hostIdx = ajaxUrl.indexOf('://') + 3;
-        var pathIdx = ajaxUrl.indexOf('/', hostIdx);
-        ajaxUrl = ajaxUrl.substring(pathIdx);
-    }
-
     // populate url with possible control parameters
     var getAppSetupParams = {};
     if( typeof window.controlParams == 'object') {
@@ -27,9 +20,6 @@ jQuery(document).ready(function() {
         language = 'en';
     }
     Oskari.setLang(language);
- 
-
-    /* Startup */
     Oskari.setLoaderMode('dev');
     Oskari.setPreloaded(preloaded);
 
@@ -367,11 +357,6 @@ jQuery(document).ready(function() {
         jQuery.ajax({
             type : 'GET',
             dataType : 'json',
-            beforeSend : function(x) {
-                if(x && x.overrideMimeType) {
-                    x.overrideMimeType("application/j-son;charset=UTF-8");
-                }
-            },
             url : "/Oskari/applications/elf/ELF.json",
             success : function(appConfigElf) {
                 startELFSettingsCallback(appConfigElf);
@@ -390,8 +375,8 @@ jQuery(document).ready(function() {
         var app = Oskari.app;
 
         app.setApplicationSetup(appSetup);
+
         // TODO: move to DB!
-        
         appConfig.userguide.conf = {
             "flyoutClazz": "Oskari.mapframework.bundle.userguide.SimpleFlyout"
         };
@@ -410,11 +395,6 @@ jQuery(document).ready(function() {
     jQuery.ajax({
         type : 'POST',
         dataType : 'json',
-        beforeSend : function(x) {
-            if(x && x.overrideMimeType) {
-                x.overrideMimeType("application/j-son;charset=UTF-8");
-            }
-        },
         data : getAppSetupParams,
         url : ajaxUrl + 'action_route=GetAppSetup',
         success : function(app) {
