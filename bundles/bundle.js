@@ -64,13 +64,13 @@ Oskari = (function () {
          *
          * @return {string}     Localized value for key 
          */
-        getLocalization: function (key) {
+        getLocalization: function (key, lang) {
             if (key === null || key === undefined) {
                 throw new TypeError(
                     'getLocalization(): Missing key'
                 );
             }
-            return this.localizations[this.lang][key];
+            return this.localizations[ (lang || this.lang) ][key];
         },
 
         /**
@@ -2964,8 +2964,8 @@ D         * @param {Object} classInfo ClassInfo
          *
          * @return {string} 
          */
-        getLocalization: function (key) {
-            return blocale.getLocalization(key);
+        getLocalization: function (key, lang) {
+            return blocale.getLocalization(key, lang);
         },
 
         /**

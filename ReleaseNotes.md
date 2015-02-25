@@ -2,6 +2,10 @@
 
 ## 1.28
 
+### core
+
+Oskari.getLocalization() now supports language as a second parameter. Notice that the locale still won't be loaded automatically.
+
 ### framework/userguide
 
 Renamed function Flyout.getUserGuideTabs() to Flyout.getUserGuides().
