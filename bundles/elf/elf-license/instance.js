@@ -358,8 +358,13 @@ function () {
             element = me._getLicenseParamDisplayElement(param);
         } else if (type === 'LicenseParamInt') {
             element = me._getLicenseParamIntElement(param);
-        } else if(type === 'LicenseParamText') {
+        } else if (type === 'LicenseParamText') {
             element = me._getLicenseParamTextElement(param);
+        } else if (type === 'LicenseParamBln') {
+            element = me._getLicenseParamBlnElement(param);
+        } else if (type === 'LicenseParamEnum') {
+            console.warn('NOT IMPLEMENTED: LicenseParamEnum');
+            console.log(param);
         }
 
         return element;
@@ -472,6 +477,43 @@ function () {
         return element;
     },
     /**
+     * Get boolean element
+     * @method _getLicenseParamBlnElement
+     * @private
+     *
+     * @param {Object} param the license model param
+     *
+     * @return {Object} jQuery element object
+     */
+    _getLicenseParamBlnElement: function(param) {
+        var me = this,
+            element = me._templates.licenseUserData.clone(),
+            title = param.title,
+            data = me._templates.licenseInput.clone(),
+            input = null,
+            value = '';
+
+        data.append('<input type="checkbox"></input>');
+        input = data.find('input');
+
+        if (title === null) {
+            title = param.name;
+        }
+
+        if(param.value === true) {
+            input.prop('checked', true);
+        }
+
+        // Add data to element
+        data.attr('data-name', param.name);
+        data.attr('data-title', title);
+        data.attr('data-element-type', 'boolean');
+
+        element.find('.elf_license_user_data_label').html(param.title);
+        element.find('.elf_license_user_data').html(data);
+        return element;
+    },
+    /**
      * Get license input values
      * @method
      * @private
@@ -500,6 +542,8 @@ function () {
                 inputValues.push(element.find('input').val());
             } else if (type === 'text') {
                 inputValues.push(element.find('input').val());
+            } else if (type === 'boolean') {
+                inputValues.push(element.find('input').is(':checked'));
             }
             value.values = inputValues;
             values.push(value);
