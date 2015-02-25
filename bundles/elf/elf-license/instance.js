@@ -358,6 +358,8 @@ function () {
             element = me._getLicenseParamDisplayElement(param);
         } else if (type === 'LicenseParamInt') {
             element = me._getLicenseParamIntElement(param);
+        } else if(type === 'LicenseParamText') {
+            element = me._getLicenseParamTextElement(param);
         }
 
         return element;
@@ -432,6 +434,44 @@ function () {
         return element;
     },
     /**
+     * Get text element
+     * @method _getLicenseParamTextElement
+     * @private
+     *
+     * @param {Object} param the license model param
+     *
+     * @return {Object} jQuery element object
+     */
+    _getLicenseParamTextElement: function(param) {
+        var me = this,
+            element = me._templates.licenseUserData.clone(),
+            title = param.title,
+            data = me._templates.licenseInput.clone(),
+            input = null,
+            value = '';
+
+        data.append('<input type="text"></input>');
+        input = data.find('input');
+
+        if (title === null) {
+            title = param.name;
+        }
+
+        if(param.values[0] && param.values[0] !== null) {
+            value = param.values[0];
+        }
+
+        // Add data to element
+        data.attr('data-name', param.name);
+        data.attr('data-title', title);
+        data.attr('data-element-type', 'text');
+
+        input.val(value);
+        element.find('.elf_license_user_data_label').html(param.title);
+        element.find('.elf_license_user_data').html(data);
+        return element;
+    },
+    /**
      * Get license input values
      * @method
      * @private
@@ -457,6 +497,8 @@ function () {
                     inputValues.push(jQuery(this).html());
                 });
             } else if (type === 'int') {
+                inputValues.push(element.find('input').val());
+            } else if (type === 'text') {
                 inputValues.push(element.find('input').val());
             }
             value.values = inputValues;
