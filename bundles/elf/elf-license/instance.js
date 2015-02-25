@@ -30,8 +30,16 @@ function () {
                 '<div class="elf_license_model_name"></div>' +
                 '<div class="elf_license_model_description"></div>' +
             '</div>' +
-            '</div>')
+            '</div>'),
+        licenceModelDetails: jQuery('<div class="license_basic_data">' +
+                '<div class="elf_name"></div>'+
+            '</div>'+
+            '<div class="license_user_data">'+
+            '<table class="elf_license_user_data_table"></table>' +
+            '</div>'),
+        licenseUserData: jQuery('<tr><td class="elf_license_user_data_label"></td><td class="elf_license_user_data"></td></tr>')
     };
+    this._dialogStep = null;
 }, {
     /**
      * @static
@@ -151,10 +159,24 @@ function () {
             dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
             dialogContent = me._templates.licenseDialog.clone(),
             cancelBtn = dialog.createCloseButton(me._locale.buttons.close),
+            prevBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+            nextBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
             models = dialogContent.find('.elf_license_dialog_licensemodels'),
             metadataTitle = '';
 
         me._showLicenseModels();
+
+        prevBtn.addClass('elf_license_previous_button');
+        prevBtn.setTitle(me._locale.buttons.previous);
+        prevBtn.setHandler(function(){
+            me._goBack();
+        });
+
+        nextBtn.addClass('elf_license_next_button');
+        nextBtn.setTitle(me._locale.buttons.next);
+        nextBtn.setHandler(function(){
+            me._goNext();
+        });
 
         dialog.addClass('elf_license_dialog');
         dialogContent.find('.elf_license_dialog_name').html(data.name);
@@ -177,8 +199,77 @@ function () {
             metadataTitle += ', ' + metadata.organization;
         }
 
-        dialog.show(me._locale.dialog.licenseTitle + ' - ' + metadataTitle, dialogContent, [cancelBtn]);
+        dialog.show(me._locale.dialog.licenseTitle + ' - ' + metadataTitle, dialogContent, [prevBtn, cancelBtn, nextBtn]);
         dialog.makeModal();
+    },
+    /**
+     * Go back
+     * @method _goBack
+     * @private
+     */
+    _goBack: function(){
+        var me = this;
+        if(me._dialogStep === null) return;
+        if(me._dialogStep == 'step2') {
+            me._showLicenseModels();
+        }
+    },
+    /**
+     * Go next
+     * @method _goNext
+     * @private
+     */
+    _goNext: function(){
+        var me = this;
+        if(me._dialogStep === null) return;
+
+    },
+    /**
+     * Hide previous button
+     * @method _hidePreviousButton
+     * @private
+     */
+    _hidePreviousButton: function(){
+        jQuery('.elf_license_previous_button').hide();
+    },
+    /**
+     * Show previous button
+     * @method _showPreviousButton
+     * @private
+     */
+    _showPreviousButton: function(){
+        jQuery('.elf_license_previous_button').show();
+    },
+    /**
+     * Hide next button
+     * @method _hideNextButton
+     * @private
+     */
+    _hideNextButton: function(){
+        jQuery('.elf_license_next_button').hide();
+    },
+    /**
+     * Show next button
+     * @method _showNextButton
+     * @private
+     */
+    _showNextButton: function(){
+        jQuery('.elf_license_next_button').show();
+    },
+    /**
+     * Check buttons visibility
+     * @method _checkButtonsVisibility
+     * @private
+     */
+    _checkButtonsVisibility: function(){
+        var me = this;
+        if (me._dialogStep === null || me._dialogStep === 'step1') {
+            me._hidePreviousButton();
+            me._hideNextButton();
+        } else {
+            me._showPreviousButton();
+            me._showNextButton();
+        }
     },
     /**
      * Shows license models.
@@ -186,8 +277,11 @@ function () {
      * @private
      */
     _showLicenseModels: function(){
+        var me = this;
+        me._dialogStep = 'step1';
         jQuery('.elf_license_dialog_license_details').hide();
         jQuery('.elf_license_dialog_license_data').show();
+        me._checkButtonsVisibility();
     },
     /**
      * Shows license details.
@@ -195,8 +289,11 @@ function () {
      * @private
      */
     _showLicenseDetails: function(){
+        var me = this;
+        me._dialogStep = 'step2';
         jQuery('.elf_license_dialog_license_details').show();
         jQuery('.elf_license_dialog_license_data').hide();
+        me._checkButtonsVisibility();
     },
      /**
      * Show license information params
@@ -206,8 +303,78 @@ function () {
      * @param {Object} model license model
      */
     _showLicenseParams(model) {
-        var me = this;
+        var me = this,
+            modelDetails = me._templates.licenceModelDetails.clone(),
+            userData = modelDetails.find('.license_user_data'),
+            licenseDetails = jQuery('.elf_license_dialog_license_details');
+
         me._showLicenseDetails();
+        licenseDetails.empty();
+
+        modelDetails.find('.elf_name').html(model.name);
+
+        if(model.params.length>0) {
+            var userDataTable = modelDetails.find('.elf_license_user_data_table');
+            userData.append(userDataTable);
+            jQuery.each(model.params, function(index, param){
+                var jQueryElement = me._getFormElement(param);
+                if(jQueryElement !== null) userDataTable.append(jQueryElement);
+            });
+        }
+
+        licenseDetails.append(modelDetails);
+        console.dir(model);
+
+        // TODO looppaa läpi paramsit ja muodosta niiden mukaan lomake
+    },
+    /**
+     * Get form element
+     * @method _getFormElement
+     * @private
+     * 
+     * @param {Object} param the license model param
+     *
+     * @return {Object} jQuery element object
+     */
+    _getFormElement: function(param){
+        var me = this,
+            element = null,
+            type = param.type;
+
+        if (type === 'LicenseParamDisplay') {
+            element = me._getLicenseParamDisplayElement(param);
+        }
+
+        return element;
+    },
+    /**
+     * Get display element
+     * @method _getLicenseParamDisplayElement
+     * @private
+     *
+     * @param {Object} param the license model param
+     *
+     * @return {Object} jQuery element object
+     */
+    _getLicenseParamDisplayElement: function(param) {
+        var me = this,
+            element = me._templates.licenseUserData.clone(),
+            title = param.title,
+            data = jQuery('<div></div>');        
+
+        if (title === null) {
+            title = param.name;
+        }
+
+        console.log('Get ['+title+'] display element ');
+
+        jQuery.each(param.values, function(index, value){
+            data.append('<div>'+value+'</div>');
+        });
+
+        element.find('.elf_license_user_data_label').html(param.title);
+        element.find('.elf_license_user_data').html(data);
+        return element;
     }
 }, {
     "extend" : ["Oskari.userinterface.extension.DefaultExtension"]

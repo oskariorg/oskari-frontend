@@ -18,7 +18,9 @@ Oskari.registerLocalization({
         	"licenseModelsTitle": "Lisenssimallit:"
         },
         "buttons": {
-        	"close": "Sulje"
+        	"close": "Sulje",
+        	"previous": "Edellinen",
+        	"next": "Seuraava"
         }
     }
 });

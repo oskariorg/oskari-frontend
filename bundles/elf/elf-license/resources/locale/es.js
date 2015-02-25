@@ -18,7 +18,9 @@ Oskari.registerLocalization({
         	"licenseModelsTitle": "NOT TRANSLATED:"
         },
         "buttons": {
-        	"close": "NOT TRANSLATED"
+        	"close": "NOT TRANSLATED",
+        	"previous": "NOT TRANSLATED",
+        	"next": "NOT TRANSLATED"
         }
     }
 });
