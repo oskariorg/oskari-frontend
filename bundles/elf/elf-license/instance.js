@@ -12,6 +12,7 @@ function () {
     this._sandbox = null;
     this._locale = null;
     this._licenseInformationUrl = null;
+    this.licenseService = null;
     this._templates = {
         licenseDialog: jQuery('<div class="elf_license_dialog">' +
             '   <div class="elf_license_dialog_name"></div>' +
@@ -37,9 +38,13 @@ function () {
             '<div class="license_user_data">'+
             '<table class="elf_license_user_data_table"></table>' +
             '</div>'),
-        licenseUserData: jQuery('<tr><td class="elf_license_user_data_label"></td><td class="elf_license_user_data"></td></tr>')
+        licenseUserData: jQuery('<tr><td class="elf_license_user_data_label"></td><td class="elf_license_user_data"></td></tr>'),
+        licenseInput: jQuery('<div class="elf_license_input"></div>')
     };
     this._dialogStep = null;
+    this._validator = {
+        number: null
+    };
 }, {
     /**
      * @static
@@ -83,6 +88,9 @@ function () {
         this.licenseService = Oskari.clazz.create(
                 'Oskari.elf.license.service.LicenseService',
                 this, this._licenseInformationUrl);
+
+        // Create validators
+        this._validator.number = Oskari.clazz.create('Oskari.elf.license.validator.NumberValidator',this, false, true);
     },
     /**
      * Activate metadata search results show license link
@@ -210,7 +218,7 @@ function () {
     _goBack: function(){
         var me = this;
         if(me._dialogStep === null) return;
-        if(me._dialogStep == 'step2') {
+        if(me._dialogStep === 'step2') {
             me._showLicenseModels();
         }
     },
@@ -222,6 +230,12 @@ function () {
     _goNext: function(){
         var me = this;
         if(me._dialogStep === null) return;
+
+        if(me._dialogStep === 'step2') {
+            var values = me._getLicenseInputValues();
+            console.info("User input values:");
+            console.dir(values);
+        }
 
     },
     /**
@@ -323,7 +337,6 @@ function () {
         }
 
         licenseDetails.append(modelDetails);
-        console.dir(model);
 
         // TODO looppaa läpi paramsit ja muodosta niiden mukaan lomake
     },
@@ -343,6 +356,8 @@ function () {
 
         if (type === 'LicenseParamDisplay') {
             element = me._getLicenseParamDisplayElement(param);
+        } else if (type === 'LicenseParamInt') {
+            element = me._getLicenseParamIntElement(param);
         }
 
         return element;
@@ -360,11 +375,16 @@ function () {
         var me = this,
             element = me._templates.licenseUserData.clone(),
             title = param.title,
-            data = jQuery('<div></div>');        
+            data = me._templates.licenseInput.clone();        
 
         if (title === null) {
             title = param.name;
         }
+
+        // Add data to element
+        data.attr('data-name', param.name);
+        data.attr('data-title', title);
+        data.attr('data-element-type', 'display');
 
         jQuery.each(param.values, function(index, value){
             data.append('<div>'+value+'</div>');
@@ -373,6 +393,76 @@ function () {
         element.find('.elf_license_user_data_label').html(param.title);
         element.find('.elf_license_user_data').html(data);
         return element;
+    },
+    /**
+     * Get int element
+     * @method _getLicenseParamIntElement
+     * @private
+     *
+     * @param {Object} param the license model param
+     *
+     * @return {Object} jQuery element object
+     */
+    _getLicenseParamIntElement: function(param) {
+        var me = this,
+            element = me._templates.licenseUserData.clone(),
+            title = param.title,
+            data = me._templates.licenseInput.clone(),
+            input = null;
+
+        data.append('<input type="text"></input>');
+        input = data.find('input');
+
+        if (title === null) {
+            title = param.name;
+        }
+
+        // Add data to element
+        data.attr('data-name', param.name);
+        data.attr('data-title', title);
+        data.attr('data-element-type', 'int');
+
+        input.val(param.value);        
+        input.on('keydown keyup keypress change blur focus paste', function(evt) {
+            me._validator.number.keyListener(evt);
+        });
+
+        element.find('.elf_license_user_data_label').html(param.title);
+        element.find('.elf_license_user_data').html(data);
+        return element;
+    },
+    /**
+     * Get license input values
+     * @method
+     * @private
+     *
+     * @return {Object} license values
+     */
+    _getLicenseInputValues: function(){
+        var values = [];
+        jQuery('.elf_license_user_data div.elf_license_input').each(function(){
+            var element = jQuery(this),
+                type = element.attr('data-element-type');
+
+            var value = {
+                name: element.attr('data-name'),
+                title: element.attr('data-title'),
+                values: [],
+                type: type
+            };
+
+            var inputValues = [];
+            if (type === 'display') {
+                element.find('div').each(function(){
+                    inputValues.push(jQuery(this).html());
+                });
+            } else if (type === 'int') {
+                inputValues.push(element.find('input').val());
+            }
+            value.values = inputValues;
+            values.push(value);
+        });
+        return values;
     }
 }, {
     "extend" : ["Oskari.userinterface.extension.DefaultExtension"]

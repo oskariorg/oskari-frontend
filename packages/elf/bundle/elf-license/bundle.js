@@ -30,6 +30,10 @@ Oskari.clazz.define("Oskari.elf.license.Bundle", function() {
                 "src" : "../../../../bundles/elf/elf-license/service/LicenseService.js"
             },
             {
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/elf/elf-license/validator/NumberValidator.js"
+            },
+            {
                 "type" : "text/css",
                 "src" : "../../../../bundles/elf/elf-license/resources/css/style.css"
             }
