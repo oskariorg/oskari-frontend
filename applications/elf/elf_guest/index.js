@@ -2,36 +2,10 @@
  * Start when dom ready
  */
 jQuery(document).ready(function() {
-    // TODO: remove this
-    jQuery.urlParam = function(name){
-        var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-        if (results==null){
-           return null;
-        }
-        else{
-           return results[1] || 0;
-        }
-    }
-
-	// TODO: remove this hack
-	if( jQuery.cookie('JSESSIONID') === undefined ||
-			jQuery.cookie('JSESSIONID') === '' ) {
-	   jQuery.cookie('JSESSIONID','_'+(new Date().getTime()));
-	}
 
     if(!ajaxUrl) {
         alert('Ajax URL not set - cannot proceed');
         return;
-    }
-
-    // TODO: remove this
-    if(!window.console) {
-        window.console = {
-            log : function() {
-            },
-            dir : function() {
-            }
-        };
     }
 
     // remove host part from url
@@ -49,7 +23,6 @@ jQuery(document).ready(function() {
         }
     }
     if (!language) {
-        //language = jQuery.urlParam('lang');
         // default to english
         language = 'en';
     }
@@ -181,41 +154,6 @@ jQuery(document).ready(function() {
           }
           
         }
-            
-        /* TEMPORARY */
-        /* Let's fix some legacy assumptions */
-        Oskari.clazz.category('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTStore','xxx', {
-            /**
-             * @method connect
-             *
-             * 'connects' to store (does not but might)
-             */
-            connect: function () {
-                var url = this.url;
-                this.protocols.categories = new OpenLayers.Protocol.WFS({
-                    version: '1.1.0',
-                    srsName: Oskari.getSandbox().getMap().getSrsName(),
-                    featureType: 'categories',
-                    featureNS: this.featureNS,
-                    url: url
-                });
-                // myplaces uses version 1.0.0 since with 1.1.0 geoserver connects
-                // multilines to one continuous line on save
-                var myPlacesProps = {
-                    version: '1.0.0',
-                    srsName: Oskari.getSandbox().getMap().getSrsName(),
-                    geometryName: 'geometry',
-                    featureType: 'my_places',
-                    featureNS: this.featureNS,
-                    url: url
-                };
-                if (this.options.maxFeatures) {
-                    myPlacesProps.maxFeatures = this.options.maxFeatures;
-                }
-                this.protocols.my_places = new OpenLayers.Protocol.WFS(myPlacesProps);
-            }
-        });
-
     }
 
     /**
@@ -452,6 +390,12 @@ jQuery(document).ready(function() {
         var app = Oskari.app;
 
         app.setApplicationSetup(appSetup);
+        // TODO: move to DB!
+        
+        appConfig.userguide.conf = {
+            "flyoutClazz": "Oskari.mapframework.bundle.userguide.SimpleFlyout"
+        };
+
         app.setConfiguration(appConfig);
         app.startApplication(function(startupInfos) {
             var instance = startupInfos.bundlesInstanceInfos.mapfull.bundleInstance;
