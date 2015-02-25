@@ -2,6 +2,23 @@
 
 ## 1.28
 
+### framework/userguide
+
+Renamed function Flyout.getUserGuideTabs() to Flyout.getUserGuides().
+
+Can now be configured with alternative flyout implementation that will get content from server based on 
+configured tags (defaults to "userguide"). Includes current language as a tag if includeLang is 
+configured as true (defaults to false).
+
+    {
+        "conf" : {
+            "flyoutClazz": "Oskari.mapframework.bundle.userguide.SimpleFlyout",
+            "tags" : "userguide",
+            "includeLang" : true
+        }
+    }
+
+
 ### catalogue/metadatagatalogue
 
 Show metadata coverage on the map tool is added to Metadatacatalogue search results.

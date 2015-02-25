@@ -53,11 +53,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.Flyout',
         },
 
         /**
-         * @method getUserGuideTabs
+         * @method getUserGuides
          * Calling method will return userGuideTabs
          */
 
-        getUserGuideTabs: function () {
+        getUserGuides: function () {
             return this.userGuideTabs;
         },
 

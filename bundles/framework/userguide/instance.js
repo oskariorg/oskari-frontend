@@ -15,11 +15,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.UserGuideBundleInstanc
         this.attachedToDefault = false;
         this.helper = null;
         this.isContentLoaded = false;
-        this.defaultConf = {
-            name: 'userinterface.UserGuide',
-            'tileClazz': 'Oskari.userinterface.extension.DefaultTile',
-            flyoutClazz: 'Oskari.mapframework.bundle.userguide.Flyout'
-        };
+
+        // override defaults
+        var conf = this.getConfiguration();
+        conf.name = 'userinterface.UserGuide';
+        conf.flyoutClazz = 'Oskari.mapframework.bundle.userguide.Flyout';
+        this.defaultConf = conf;
     }, {
         /**
          * @method afterstart
@@ -28,7 +29,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.UserGuideBundleInstanc
         afterStart: function (sandbox) {
             var title = this.getLocalization('title');
 
-            var conf = this.conf,
+            var conf = this.getConfiguration(),
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
                 sandbox = Oskari.getSandbox(sandboxName);
 
@@ -40,10 +41,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.UserGuideBundleInstanc
             this.plugins['Oskari.userinterface.Flyout'].createUi();
 
             // get help content
-            var helper = Oskari.clazz.create('Oskari.userinterface.component.UIHelper', sandbox);
-            this.helper = helper;
-
-
+            this.helper = Oskari.clazz.create('Oskari.userinterface.component.UIHelper', sandbox);
         },
         /**
          * @property {Object} eventHandlers
@@ -63,9 +61,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.UserGuideBundleInstanc
                 }
 
                 var isOpen = event.getViewState() !== 'close';
-
                 me.displayContent(isOpen);
-
             }
         },
 
@@ -90,7 +86,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.UserGuideBundleInstanc
                 helpContentPart = me.getLocalization('help').contentPart;
             }
 
-            var userGuideTabs = me.plugins['Oskari.userinterface.Flyout'].getUserGuideTabs();
 
             function closureMagic (tagsTxt) {
                 return function (isSuccess, pContent) {
@@ -111,19 +106,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.UserGuideBundleInstanc
                 };
             }
 
-            if (me.getLocalization('tabs')) {
-                for (i = 0; i < userGuideTabs.length; i += 1) {
-                    newtab = userGuideTabs[i];
-                    me.helper.getHelpArticle(
-                        newtab.tags,
-                        closureMagic(newtab.tags)
-                    );
-                }
-            } else {
-                me.tagsTxt = me.getLocalization('help').tags;
+            var userGuideTabs = me.plugins['Oskari.userinterface.Flyout'].getUserGuides();
+            for (i = 0; i < userGuideTabs.length; i += 1) {
+                newtab = userGuideTabs[i];
                 me.helper.getHelpArticle(
-                    me.tagsTxt,
-                    closureMagic(me.tagsTxt)
+                    newtab.tags,
+                    closureMagic(newtab.tags)
                 );
             }
         },
