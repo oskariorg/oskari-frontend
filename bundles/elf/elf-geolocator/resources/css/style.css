@@ -11,6 +11,11 @@ div.geolocator-search div.search-additionals {
       width: 50%; }
       div.geolocator-search div.search-additionals div.input-fields div.additional-input div.controls label {
         margin-left: 5px; }
+div.geolocator-search div.search-buttons {
+    display: flex; justify-content: space-between; }
+div.search-buttons div.geolocator-button input[type="button"] {
+  width: 100% !important;
+}
 div.geolocator-search div.search-fields input[type="text"] {
   width: 80% !important; }
 div.geolocator-search div.search-fields label {
