@@ -366,8 +366,6 @@ function () {
             title = param.name;
         }
 
-        console.log('Get ['+title+'] display element ');
-
         jQuery.each(param.values, function(index, value){
             data.append('<div>'+value+'</div>');
         });

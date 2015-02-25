@@ -132,17 +132,6 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
             me._cancelAjaxRequest('licenseInformation');
             me._startAjaxRequest(dteMs, 'licenseInformation');
 
-                /**
-                 this._pendingAjaxQuery = {
-            licenseInformation: {
-                busy: false,
-                jqhr: null,
-                timestamp: null
-            }
-        };
-                */
-
-
             jQuery.ajax({
                 dataType : "json",
                 type : "GET",

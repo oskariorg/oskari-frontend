@@ -2,25 +2,25 @@ Oskari.registerLocalization({
     "lang": "sv",
     "key": "elf-license",
     "value": {
-    	"getLicenseText": "NOT TRANSLATED",
+    	"getLicenseText": "License",
     	"errors": {
         	"cannotGetLicenseInformation": {
-        		"title": "NOT TRANSLATED",
-        		"message": "NOT TRANSLATED"
+        		"title": "Error for getting license information",
+        		"message": "Cannot get license information"
         	},
         	"failedGetLicenseInformation": {
-        		"title": "NOT TRANSLATED",
-        		"message": "NOT TRANSLATED"
+        		"title": "Failed to get license information",
+        		"message": "Cannot connect to license server"
         	}
         },
         "dialog": {
-        	"licenseTitle": "NOT TRANSLATED",
-        	"licenseModelsTitle": "NOT TRANSLATED:"
+        	"licenseTitle": "License information",
+        	"licenseModelsTitle": "Licensemodels:"
         },
         "buttons": {
-        	"close": "Stäng",
-        	"previous": "NOT TRANSLATED",
-        	"next": "NOT TRANSLATED"
+        	"close": "Close",
+        	"previous": "Previous",
+        	"next": "Next"
         }
     }
 });
