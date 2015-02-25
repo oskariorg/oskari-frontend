@@ -363,8 +363,7 @@ function () {
         } else if (type === 'LicenseParamBln') {
             element = me._getLicenseParamBlnElement(param);
         } else if (type === 'LicenseParamEnum') {
-            console.warn('NOT IMPLEMENTED: LicenseParamEnum');
-            console.log(param);
+            element = me._getLicenseParamEnumElement(param);
         }
 
         return element;
@@ -434,7 +433,7 @@ function () {
             me._validator.number.keyListener(evt);
         });
 
-        element.find('.elf_license_user_data_label').html(param.title);
+        element.find('.elf_license_user_data_label').html(title);
         element.find('.elf_license_user_data').html(data);
         return element;
     },
@@ -472,7 +471,7 @@ function () {
         data.attr('data-element-type', 'text');
 
         input.val(value);
-        element.find('.elf_license_user_data_label').html(param.title);
+        element.find('.elf_license_user_data_label').html(title);
         element.find('.elf_license_user_data').html(data);
         return element;
     },
@@ -490,8 +489,7 @@ function () {
             element = me._templates.licenseUserData.clone(),
             title = param.title,
             data = me._templates.licenseInput.clone(),
-            input = null,
-            value = '';
+            input = null;
 
         data.append('<input type="checkbox"></input>');
         input = data.find('input');
@@ -509,7 +507,50 @@ function () {
         data.attr('data-title', title);
         data.attr('data-element-type', 'boolean');
 
-        element.find('.elf_license_user_data_label').html(param.title);
+        element.find('.elf_license_user_data_label').html(title);
+        element.find('.elf_license_user_data').html(data);
+        return element;
+    },
+    /**
+     * Get enum element. Can be a radio button group or checkbox list.
+     * @method _getLicenseParamEnumElement
+     * @private
+     *
+     * @param {Object} param the license model param
+     *
+     * @return {Object} jQuery element object
+     */
+    _getLicenseParamEnumElement: function(param) {
+        var me = this,
+            element = me._templates.licenseUserData.clone(),
+            title = param.title,
+            data = me._templates.licenseInput.clone();
+
+        // Radio button list
+        if (param.multi === false) {
+            jQuery.each(param.options, function(index, value){
+                data.append('<input type="radio" name="'+param.name+'" value="'+value+'">' + value + '<br>');
+            });
+
+            data.find('input').first().prop("checked", true);            
+        }
+        // Checkbox list
+        else {
+            jQuery.each(param.options, function(index, value){
+                data.append('<input type="checkbox" name="'+param.name+'" value="'+value+'">' + value + '<br>');
+            });
+        }
+
+        if (title === null) {
+            title = param.name;
+        }
+
+        // Add data to element
+        data.attr('data-name', param.name);
+        data.attr('data-title', title);
+        data.attr('data-element-type', 'enum');
+
+        element.find('.elf_license_user_data_label').html(title);
         element.find('.elf_license_user_data').html(data);
         return element;
     },
@@ -544,6 +585,11 @@ function () {
                 inputValues.push(element.find('input').val());
             } else if (type === 'boolean') {
                 inputValues.push(element.find('input').is(':checked'));
+            } else if (type === 'enum') {
+                var multi = element.attr('data-element-multi') === 'true';
+                element.find('input:checked').each(function(){
+                    inputValues.push(jQuery(this).val());
+                });
             }
             value.values = inputValues;
             values.push(value);
