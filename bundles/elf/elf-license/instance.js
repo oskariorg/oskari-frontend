@@ -45,6 +45,7 @@ function () {
     this._validator = {
         number: null
     };
+    this._metadata = null;
 }, {
     /**
      * @static
@@ -142,6 +143,34 @@ function () {
         });
     },
     /**
+     * Get price
+     * @method _getPrice
+     * @private
+     * 
+     * @param {Object} metadata metadata information
+     */
+    _getPrice: function() {
+        var me = this,
+            data = me._getLicenseInputValues();
+        me.licenseService.doGetPrice({
+            data: data,
+            id: me._metadata.license
+        }, function (response) {
+            /*
+            if (response) {
+                me._showLicenseInformationDialog(response, metadata);
+            } else {
+                me._showMessage(me._locale.errors.cannotGetLicenseInformation.title, me._locale.errors.cannotGetLicenseInformation.message);
+            }
+            */
+        }, function () {
+            /*
+            me.getSandbox().printWarn('ELF license search failed', [].slice.call(arguments));
+            me._showMessage(me._locale.errors.cannotGetLicenseInformation.title, me._locale.errors.cannotGetLicenseInformation.message);
+            */
+        });
+    },
+    /**
      * Show message
      * @method _showMessage
      * @private
@@ -173,6 +202,7 @@ function () {
             metadataTitle = '';
 
         me._showLicenseModels();
+        me._metadata = metadata;
 
         prevBtn.addClass('elf_license_previous_button');
         prevBtn.setTitle(me._locale.buttons.previous);
@@ -232,9 +262,7 @@ function () {
         if(me._dialogStep === null) return;
 
         if(me._dialogStep === 'step2') {
-            var values = me._getLicenseInputValues();
-            console.info("User input values:");
-            console.dir(values);
+            me._getPrice();            
         }
 
     },
@@ -316,7 +344,7 @@ function () {
      *
      * @param {Object} model license model
      */
-    _showLicenseParams(model) {
+    _showLicenseParams: function(model) {
         var me = this,
             modelDetails = me._templates.licenceModelDetails.clone(),
             userData = modelDetails.find('.license_user_data'),
@@ -337,8 +365,6 @@ function () {
         }
 
         licenseDetails.append(modelDetails);
-
-        // TODO looppaa läpi paramsit ja muodosta niiden mukaan lomake
     },
     /**
      * Get form element
@@ -569,28 +595,30 @@ function () {
 
             var value = {
                 name: element.attr('data-name'),
-                title: element.attr('data-title'),
-                values: [],
-                type: type
+                //title: element.attr('data-title'),
+                values: []/*,
+                type: type*/
             };
 
-            var inputValues = [];
-            if (type === 'display') {
-                element.find('div').each(function(){
-                    inputValues.push(jQuery(this).html());
-                });
-            } else if (type === 'int') {
-                inputValues.push(element.find('input').val());
+            var inputValues = null;
+
+            if (type === 'int') {
+                inputValues = element.find('input').val();
             } else if (type === 'text') {
-                inputValues.push(element.find('input').val());
+                inputValues = element.find('input').val();
             } else if (type === 'boolean') {
-                inputValues.push(element.find('input').is(':checked'));
+                inputValues = element.find('input').is(':checked');
             } else if (type === 'enum') {
+                inputValues = [];
                 var multi = element.attr('data-element-multi') === 'true';
                 element.find('input:checked').each(function(){
                     inputValues.push(jQuery(this).val());
                 });
+            } else {
+                return;
             }
+
+
             value.values = inputValues;
             values.push(value);
         });

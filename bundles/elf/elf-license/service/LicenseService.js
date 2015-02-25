@@ -2,12 +2,17 @@
  * @class Oskari.elf.license.service.LicenseService
  */
 Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
-    function(instance, licenseInformationUrl) {
+    function(instance, licenseServiceUrl) {
         this.instance = instance;
         this.sandbox = instance.getSandbox();
-        this._licenseInformationUrl = licenseInformationUrl;
+        this._licenseServiceUrl = licenseServiceUrl;
         this._pendingAjaxQuery = {
             licenseInformation: {
+                busy: false,
+                jqhr: null,
+                timestamp: null
+            },
+            getPrice: {
                 busy: false,
                 jqhr: null,
                 timestamp: null
@@ -142,7 +147,7 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
                         x.overrideMimeType("application/j-son;charset=UTF-8");
                     }
                 },
-                url : me._licenseInformationUrl,
+                url : me._licenseServiceUrl,
                 error : function() {
                     me._finishAjaxRequest('licenseInformation');
                     errorCb();
@@ -156,6 +161,57 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
                 },
                 complete: function () {
                     me._finishAjaxRequest('licenseInformation');
+                },
+            });
+        },
+        /**
+         * Do get price
+         * @method doGetPrice
+         * @public
+         *
+         * @param {Object} options url options
+         * @param {Function} successCb success callback
+         * @param {Function} errorCd error callback
+         */
+        doGetPrice: function (options, successCb, errorCb) {
+            var me = this,
+                data = me._getLicenseInformationData(options),
+                dte = new Date(),
+                dteMs = dte.getTime();
+
+            if (me._pendingAjaxQuery['getPrice'].busy && me._pendingAjaxQuery['getPrice'].timestamp &&
+                dteMs - me._pendingAjaxQuery['licenseInformation'].timestamp < 500) {
+                me.sandbox.printDebug("[elf-license.LicenseService] License information request NOT SENT (time difference < 500ms)");
+                return;
+            }
+
+            me._cancelAjaxRequest('getPrice');
+            me._startAjaxRequest(dteMs, 'getPrice');
+
+            jQuery.ajax({
+                dataType : "json",
+                type : "POST",
+                data: data,
+                beforeSend: function(x) {
+                    me._pendingAjaxQuery['getPrice'].jqhr = x;
+                    if (x && x.overrideMimeType) {
+                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                    }
+                },
+                url : me._licenseServiceUrl,
+                error : function() {
+                    me._finishAjaxRequest('getPrice');
+                    errorCb();
+                },
+                success : function(data) {
+                    me._finishAjaxRequest('getPrice');
+                    successCb(data);
+                },
+                always: function () {
+                    me._finishAjaxRequest('getPrice');
+                },
+                complete: function () {
+                    me._finishAjaxRequest('getPrice');
                 },
             });
         }
