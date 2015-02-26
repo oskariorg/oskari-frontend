@@ -427,13 +427,15 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
             "use strict";
             var externalIdSelect = jQuery(this.container).find("select.admin-layerrights-role"),
                 a,
-                d;
+                d,
+                rightsLoc = this.instance._localization.rights;
+
             externalIdSelect.html("");
             if (externalType !== "0") {
                 if (selectedId !== "0") {
-                    a = '<option value="0" >-- Valitse tunniste --</option>';
+                    a = '<option value="0" >-- ' + rightsLoc.selectValue + ' --</option>';
                 } else {
-                    a = '<option value="0" selected="selected">-- Valitse tunniste --</option>';
+                    a = '<option value="0" selected="selected">-- ' + rightsLoc.selectValue + ' --</option>';
                 }
                 for (d = 0; d < result.external.length; d += 1) {
                     if (result.external[d].id === selectedId) {

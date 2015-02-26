@@ -25,7 +25,8 @@ Oskari.registerLocalization(
             "error" : {
                 "title" : "Oikeuksia ei ole päivitetty",
                 "message" : "Oikeuksien tallentaminen ei onnistunut."
-            }
+            },
+            "selectValue": "Valitse tunniste"
         },
         "save": "Tallenna",
         "selectRole": "Rooli"

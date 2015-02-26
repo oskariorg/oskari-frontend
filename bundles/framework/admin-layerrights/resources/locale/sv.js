@@ -25,7 +25,8 @@ Oskari.registerLocalization(
             "error" : {
                 "title" : "Rätter har inte uppdaterats",
                 "message" : "Sparning av rätter lyckas inte."
-            }
+            },
+            "selectValue": "Markera värdet"
         },
         "save": "Lagra",
         "selectRole": "Rol"

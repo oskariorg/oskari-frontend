@@ -25,7 +25,8 @@ Oskari.registerLocalization(
             "error" : {
                 "title" : "Layer rights not saved",
                 "message" : "Saving of layer rights failed."
-            }
+            },
+            "selectValue": "Select the value"
         },
         "save": "Save",
         "selectRole": "Role"
