@@ -50,15 +50,8 @@ Oskari.clazz.define(
         // if the same column is sorted again
         this.lastSort = null;
         this.drawCoverage = false;
-        // Action status object.
-        this.actionStatus = {
-            actionElement: null,
-            actionTextElement: null,
-            callback: null,
-            bindCallbackTo: null,
-            actionText: null,
-            showAction: function(metadata){return true}       
-        };
+        // Search result actions array.
+        this.searchResultActions = [];
     }, {
         /**
          * @static
@@ -976,55 +969,62 @@ Oskari.clazz.define(
                         jQuery(cells[1]).addClass(me.resultHeaders[1].prop);
 
                         // Action link
-                        if(me._isAction() == true && me.actionStatus.showAction(row)) {
-                            var actionElement = me.actionStatus.actionElement.clone(),
-                                callbackElement = null,
-                                actionTextEl = null;
-                            
-                            // Set action callback
-                            if(me.actionStatus.callback && typeof me.actionStatus.callback == 'function') {
-                                // Bind action click to bindCallbackTo if bindCallbackTo param exist
-                                if(me.actionStatus.bindCallbackTo) {
-                                    callbackElement = licenseElement.find(me.actionStatus.bindCallbackTo);
-                                }
-                                // Bind action click to root element if bindCallbackTo is null
-                                else {
-                                    callbackElement =  actionElement.first();
-                                }
-                                callbackElement.css({'cursor':'pointer'}).bind('click', {metadata: row}, function(event){
-                                   me.actionStatus.callback(event.data.metadata);
-                                });
-                            }
+                        if(me._isAction() == true){                            
+                            jQuery.each(me.searchResultActions, function(index, action){
+                                if(action.showAction(row)) {
+                                    var actionElement = action.actionElement.clone(),
+                                        callbackElement = null,
+                                        actionTextEl = null;
+                                    
+                                    actionElement.css('margin-left','6px');
+                                    actionElement.css('margin-right','6px');
 
-                            // Set action text
-                            if(me.actionStatus.actionTextElement) {
-                                actionTextEl = actionElement.find(me.actionStatus.actionTextElement);
-                            } else {
-                                actionTextEl = actionElement.first();
-                            }
+                                    // Set action callback
+                                    if(action.callback && typeof action.callback == 'function') {
+                                        // Bind action click to bindCallbackTo if bindCallbackTo param exist
+                                        if(action.bindCallbackTo) {
+                                            callbackElement = licenseElement.find(action.bindCallbackTo);
+                                        }
+                                        // Bind action click to root element if bindCallbackTo is null
+                                        else {
+                                            callbackElement =  actionElement.first();
+                                        }
+                                        callbackElement.css({'cursor':'pointer'}).bind('click', {metadata: row}, function(event){
+                                           action.callback(event.data.metadata);
+                                        });
+                                    }
 
-                            if(actionTextEl.is('input') ||
-                                actionTextEl.is('select') ||
-                                actionTextEl.is('button') ||
-                                actionTextEl.is('textarea')){
+                                    // Set action text
+                                    if(action.actionTextElement) {
+                                        actionTextEl = actionElement.find(action.actionTextElement);
+                                    } else {
+                                        actionTextEl = actionElement.first();
+                                    }
 
-                                if(me.actionStatus.actionText && me.actionStatus.actionText != null){
-                                    actionTextEl.val(me.actionStatus.actionText);
-                                }
-                                else {
-                                    actionTextEl.val(me.getLocalization('licenseText'));
-                                }
-                            }
-                            else {
-                                if(me.actionStatus.actionText && me.actionStatus.actionText != null){
-                                    actionTextEl.html(me.actionStatus.actionText);
-                                }
-                                else {
-                                    actionTextEl.html(me.getLocalization('licenseText'));
-                                }
-                            }
+                                    if(actionTextEl.is('input') ||
+                                        actionTextEl.is('select') ||
+                                        actionTextEl.is('button') ||
+                                        actionTextEl.is('textarea')) {
 
-                            jQuery(cells[2]).find('div.actionPlaceholder').append(actionElement);                            
+                                        if(action.actionText && action.actionText != null){
+                                            actionTextEl.val(action.actionText);
+                                        }
+                                        else {
+                                            actionTextEl.val(me.getLocalization('licenseText'));
+                                        }
+                                    }
+                                    else {
+                                        if(action.actionText && action.actionText != null){
+                                            actionTextEl.html(action.actionText);
+                                        }
+                                        else {
+                                            actionTextEl.html(me.getLocalization('licenseText'));
+                                        }
+                                    }
+
+                                    jQuery(cells[2]).find('div.actionPlaceholder').append(actionElement);
+                                }
+                            });
                         }
 
                         // Show bbox icon
@@ -1197,8 +1197,10 @@ Oskari.clazz.define(
         * @param {Function} showAction function. If return true then shows action text. Optional.
         */
         addSearchResultAction: function(actionElement, actionTextElement, callback, bindCallbackTo, actionText, showAction){
-            var me = this;
-            me.actionStatus = {
+            var me = this,
+                status = null;
+            
+            status = {
                 actionElement: actionElement,
                 actionTextElement: actionTextElement,
                 callback: callback,
@@ -1208,8 +1210,10 @@ Oskari.clazz.define(
             };
 
             if(showAction && showAction !== null) {
-                me.actionStatus.showAction = showAction;
+                status.showAction = showAction;
             }
+
+            me.searchResultActions.push(status);
         },
         /**
         * @method _isAction
@@ -1218,7 +1222,7 @@ Oskari.clazz.define(
         */
         _isAction: function(){
             var me = this;
-            return me.actionStatus.actionElement !== null;
+            return me.searchResultActions.length > 0;
         },
         /**
          * @method setState

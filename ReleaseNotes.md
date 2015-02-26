@@ -2,6 +2,11 @@
 
 ## 1.28
 
+### elf/elf-license
+
+*New bundle!* Extends metadatacatalogue search to show user license information. User can unconclude/conclude license to it self.
+
+
 ### elf/elf-language-selector
 
 Hardcodings removed and now uses the configured supported languages. 

@@ -434,14 +434,14 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
                     }
 
                 })
-                    .focus(function () {
+                    .focus(function (event) {
                         event.preventDefault();
                         container.find('#countries').val('');
                         container.find('#countries').autocomplete('search', '');
                     });
             });
         },
-/**
+        /**
          * Renders the search results to a div.
          * 
          * @method __renderSearchResults
