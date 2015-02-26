@@ -1,0 +1,83 @@
+.elf_license_dialog {
+	max-width: 820px !important;
+}
+
+.elf_license_previous_button {
+	display: none;
+	float: left;
+}
+
+.elf_license_next_button {
+	display: none;
+	float:right;
+}
+
+.elf_license_dialog_name {
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.elf_license_dialog_description {
+	margin-top: 6px;
+}
+
+.elf_license_dialog_licensemodels {
+	max-height: 400px;
+	overflow: auto;
+	width: 800px;
+}
+
+.elf_license_dialog_licensemodels_title {
+	margin-top:12px;
+}
+
+.elf_license_model 
+{
+	cursor: pointer;
+}
+
+.elf_license_model_headers {
+	background-color: #f3f3f3;
+	margin: 6px;
+	outline: 1px solid #c0d0d0;
+	overflow: hidden;
+	padding: 10px;
+}
+
+.elf_license_model_arrow {
+	float: left;
+}
+
+.elf_license_model_description {
+	margin-left: 12px;
+	margin-top: 4px;
+	font-size: 13px;
+}
+
+.elf_license_dialog_license_details {
+	display: none;
+	overflow: none;
+	width: 800px;
+}
+
+.elf_license_dialog_license_details .license_user_data {
+	overflow: auto;
+	width: 800px;
+	max-height: 400px;
+}
+
+.license_basic_data .elf_name {
+	margin-top: 6px;
+	margin-bottom: 6px;
+}
+
+.elf_license_dialog_license_details .license_user_data  .elf_license_user_data_table .elf_license_user_data_label {
+	font-size: 12px;
+	color: #0099CB;
+	font-weight: bold;
+	padding: 4px;
+}
+
+.elf_license_dialog_license_details .license_user_data  .elf_license_user_data_table .elf_license_user_data {
+	padding: 4px;
+}

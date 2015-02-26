@@ -55,7 +55,9 @@ Oskari.clazz.define(
             actionElement: null,
             actionTextElement: null,
             callback: null,
-            bindCallbackTo: null            
+            bindCallbackTo: null,
+            actionText: null,
+            showAction: function(metadata){return true}       
         };
     }, {
         /**
@@ -974,7 +976,7 @@ Oskari.clazz.define(
                         jQuery(cells[1]).addClass(me.resultHeaders[1].prop);
 
                         // Action link
-                        if(me._isAction() == true) {
+                        if(me._isAction() == true && me.actionStatus.showAction(row)) {
                             var actionElement = me.actionStatus.actionElement.clone(),
                                 callbackElement = null,
                                 actionTextEl = null;
@@ -1000,14 +1002,26 @@ Oskari.clazz.define(
                             } else {
                                 actionTextEl = actionElement.first();
                             }
+
                             if(actionTextEl.is('input') ||
                                 actionTextEl.is('select') ||
                                 actionTextEl.is('button') ||
                                 actionTextEl.is('textarea')){
-                                actionTextEl.val(me.getLocalization('licenseText'));
+
+                                if(me.actionStatus.actionText && me.actionStatus.actionText != null){
+                                    actionTextEl.val(me.actionStatus.actionText);
+                                }
+                                else {
+                                    actionTextEl.val(me.getLocalization('licenseText'));
+                                }
                             }
-                            else {                                
-                                actionTextEl.html(me.getLocalization('licenseText'));
+                            else {
+                                if(me.actionStatus.actionText && me.actionStatus.actionText != null){
+                                    actionTextEl.html(me.actionStatus.actionText);
+                                }
+                                else {
+                                    actionTextEl.html(me.getLocalization('licenseText'));
+                                }
                             }
 
                             jQuery(cells[2]).find('div.actionPlaceholder').append(actionElement);                            
@@ -1179,15 +1193,23 @@ Oskari.clazz.define(
         * @param {Function} callback the callback function
         * @param {String} bindCallbackTo the jQuery selector where to bind click operation
         * @param {String} actionTextElement action text jQuery selector. If it's null then text showed on main element
+        * @param {String} actionText action text
+        * @param {Function} showAction function. If return true then shows action text. Optional.
         */
-        addSearchResultAction: function(actionElement, actionTextElement, callback, bindCallbackTo){
+        addSearchResultAction: function(actionElement, actionTextElement, callback, bindCallbackTo, actionText, showAction){
             var me = this;
             me.actionStatus = {
                 actionElement: actionElement,
                 actionTextElement: actionTextElement,
                 callback: callback,
-                bindCallbackTo: bindCallbackTo
+                bindCallbackTo: bindCallbackTo,
+                actionText: actionText,
+                showAction: function(metadata){return true;}
             };
+
+            if(showAction && showAction !== null) {
+                me.actionStatus.showAction = showAction;
+            }
         },
         /**
         * @method _isAction

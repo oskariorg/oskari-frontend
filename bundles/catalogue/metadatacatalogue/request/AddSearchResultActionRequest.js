@@ -16,8 +16,10 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatacatalogue.request.AddSearch
 function(data) {
     this._actionElement = data.actionElement;
     this._actionTextElement = data.actionTextElement;
+    this._actionText = data.actionText;
     this._callback = data.callback;
-    this._bindCallbackTo = data.bindCallbackTo;    
+    this._bindCallbackTo = data.bindCallbackTo;
+    this._showAction = data.showAction;
 }, {
     /** @static @property __name request name */
     __name : "AddSearchResultActionRequest",
@@ -43,8 +45,15 @@ function(data) {
         return this._actionTextElement;
     },
     /**
+     * @method getActionText
+     * @return {String} action text
+     */
+    getActionText : function() {
+        return this._actionText;
+    },
+    /**
      * @method getCallback
-     * @return {Function} callback
+     * @return {Function} callback function, first param is metadata search result object.
      */
     getCallback : function() {
         return this._callback;
@@ -55,6 +64,13 @@ function(data) {
      */
     getBindCallbackTo : function() {
         return this._bindCallbackTo;
+    },
+    /**
+     * @method getShowAction
+     * @return {Function} showAction checker, if setted then show metadata action only when this return true. First param is metadata search result object.
+     */
+    getShowAction : function() {
+        return this._showAction;
     }
 }, {
     /**

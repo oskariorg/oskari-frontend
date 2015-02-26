@@ -26,9 +26,11 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatacatalogue.request.AddSearch
         var actionElement = request.getActionElement(),
             callback = request.getCallback(),
             bindCallbackTo = request.getBindCallbackTo(),
-            actionTextElement = request.getActionTextElement();
+            actionTextElement = request.getActionTextElement(),
+            actionText = request.getActionText(),
+            showAction = request.getShowAction();
         this.sandbox.printDebug("[Oskari.catalogue.bundle.metadatacatalogue.request.AddSearchResultActionRequest]");
-        this.instance.addSearchResultAction(actionElement, actionTextElement, callback, bindCallbackTo);
+        this.instance.addSearchResultAction(actionElement, actionTextElement, callback, bindCallbackTo, actionText, showAction);
     }
 }, {
     /**
