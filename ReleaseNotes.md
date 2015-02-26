@@ -2,6 +2,10 @@
 
 ## 1.28
 
+### framework/mapmodule-plugin - SearchPlugin
+
+Now supports zoomScale in search results.
+
 ### elf/elf-license
 
 *New bundle!* Extends metadatacatalogue search to show user license information. User can unconclude/conclude license to it self.
