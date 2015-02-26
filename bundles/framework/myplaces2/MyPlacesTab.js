@@ -144,8 +144,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
          */
         _showPlace: function (geometry, categoryId) {
             // center map on selected place
-            var center = geometry.getCentroid(),
-                mapmoveRequest = this.instance.sandbox.getRequestBuilder('MapMoveRequest')(center.x, center.y, geometry.getBounds(), false);
+            var me = this,
+                center = geometry.getCentroid(),
+                bounds = me._fitBounds(geometry.getBounds()),
+                mapmoveRequest = this.instance.sandbox.getRequestBuilder('MapMoveRequest')(center.x, center.y, bounds, false);
             this.instance.sandbox.request(this.instance, mapmoveRequest);
             // add the myplaces layer to map
             var layerId = 'myplaces_' + categoryId,
@@ -420,5 +422,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
             var alert = Oskari.clazz.create('Oskari.userinterface.component.Alert');
             alert.insertTo(container);
             alert.setContent(this.loc.maxFeaturesExceeded);
+        },
+        /**
+         *  Expand bounds, if bounds area is zero
+         * @param gbounds Object geometry bounds
+         * @returns {*}  expanded bounds or as is
+         * @private
+         * TODO: maybe config for expansion frame size
+         */
+        _fitBounds: function (gbounds) {
+
+            if (gbounds.bottom === gbounds.top &&
+                gbounds.left === gbounds.right)
+            {
+                gbounds.bottom = gbounds.bottom - 100;
+                gbounds.left = gbounds.left - 100;
+                gbounds.top = gbounds.top + 100;
+                gbounds.right = gbounds.right + 100;
+            }
+
+            return gbounds;
         }
     });

@@ -26,6 +26,15 @@ div.geolocator-search {
         }
 
     }
+    div.search-buttons {
+        display: flex;
+        justify-content: space-between;
+        div.geolocator-button {
+            input[type="button"] {
+                width: 100% !important;
+            }
+        }
+    }
 
     div.search-fields {
 

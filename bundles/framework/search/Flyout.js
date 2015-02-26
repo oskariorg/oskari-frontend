@@ -312,7 +312,7 @@ Oskari.clazz.define(
             var me = this,
                 searchInput = null;
 
-            if(me._searchContainer || me._searchContainer === null){
+            if(!me._searchContainer || me._searchContainer === null){
                 return;
             }
 

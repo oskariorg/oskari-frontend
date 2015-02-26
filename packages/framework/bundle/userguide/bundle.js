@@ -46,6 +46,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.userguide.UserGuideBundle", func
             "type": "text/javascript",
             "src": "../../../../bundles/framework/userguide/Flyout.js"
         }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/userguide/SimpleFlyout.js"
+        }, {
             "type": "text/css",
             "src": "../../../../bundles/framework/userguide/resources/css/style.css"
         }],

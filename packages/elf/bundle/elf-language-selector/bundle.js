@@ -33,7 +33,26 @@ Oskari.clazz.define("Oskari.elf.languageselector.Bundle", function() {
             "type" : "text/css",
             "src" : "../../../../bundles/elf/elf-language-selector/resources/css/style.css"
         }],
-        "locales" : []
+        "locales" : [{
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/elf/elf-language-selector/resources/locale/all.js"
+        }, {
+            "lang" : "en",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/elf/elf-language-selector/resources/locale/en.js"
+        }, {
+            "lang" : "fi",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/elf/elf-language-selector/resources/locale/fi.js"
+        }, {
+            "lang" : "sv",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/elf/elf-language-selector/resources/locale/sv.js"
+        }, {
+            "lang" : "es",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/elf/elf-language-selector/resources/locale/es.js"
+        }]
     },
     "bundle" : {
         "manifest" : {
