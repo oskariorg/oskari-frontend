@@ -5,7 +5,8 @@ Oskari.registerLocalization(
     "value": {
         "title": "MineData",
         "desc": "MineData",
-        "notLoggedIn": "Du kan gemme dine map views og browse kort som du har indlejret på andre hjemmesider. <a href='/web/da/login'>Log ind</a>",
+        "notLoggedIn": "Du kan gemme dine map views og browse kort som du har indlejret på andre hjemmesider.",
+        "notLoggedInText": "Log ind.",
         "tabs": {
             "myviews": {
                 "title": "Mine map views",

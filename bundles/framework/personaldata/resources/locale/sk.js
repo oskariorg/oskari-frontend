@@ -6,6 +6,7 @@ Oskari.registerLocalization(
         "title": "Moje údaje",
         "desc": "Moje údaje",
         "notLoggedIn": "Môžete uložiť zobrazenia mapy a prehliadať mapy, ktoré ste si vložili na iné webové stránky v Mojich údajoch.",
+        "notLoggedInText": "NOT TRANSLATED.",
         "tabs": {
             "myviews": {
                 "title": "Moje zobrazenia mapy",

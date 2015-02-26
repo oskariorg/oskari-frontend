@@ -6,6 +6,7 @@ Oskari.registerLocalization(
         "title": "Saját adatok",
         "desc": "Saját adatok",
         "notLoggedIn": "Mentheti a térképnézeteket és kereshet a beágyazott térképek között a \"Saját adatok\"-ban.",
+        "notLoggedInText": "NOT TRANSLATED.",
         "tabs": {
             "myviews": {
                 "title": "Saját térképnézetek",

@@ -6,6 +6,7 @@ Oskari.registerLocalization(
         "title": "Իմ տվյալներ",
         "desc": "Իմ տվյալներ",
         "notLoggedIn": "NOT TRANSLATED",
+        "notLoggedInText": "NOT TRANSLATED.",
         "tabs": {
             "myviews": {
                 "title": "Քարտեզի դիտումները",

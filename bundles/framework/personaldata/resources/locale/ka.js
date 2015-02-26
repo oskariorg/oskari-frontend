@@ -6,6 +6,7 @@ Oskari.registerLocalization(
         "title": "ჩემი მონაცემები",
         "desc": "ჩემი მონაცემები",
         "notLoggedIn": "ჩემ მონაცემებში შეგიძლიათ, შეინახოთ რუკის ხედები და დაათვალიეროთ რუკები, რომლებიც ჩადგით სხვა ვებ–გვერდებზე",
+        "notLoggedInText": "NOT TRANSLATED.",
         "tabs": {
             "myviews": {
                 "title": "ჩემი რუკის ხედები",

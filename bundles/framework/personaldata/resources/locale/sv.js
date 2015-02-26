@@ -4,7 +4,8 @@ Oskari.registerLocalization({
   "value": {
     "title": "Mina uppgifter",
     "desc": "Mina uppgifter",
-    "notLoggedIn": "Du kan lagra dina egna kartvyer och titta på kartor som du har inbäddat på andra webbplatser i Mina uppgifter. <a href='/web/sv/login'>Logga in</a>.",
+    "notLoggedIn": "Du kan lagra dina egna kartvyer och titta på kartor som du har inbäddat på andra webbplatser i Mina uppgifter.",
+    "notLoggedInText": "Logga in.",
     "tabs": {
       "myviews": {
         "title": "Mina vyer",

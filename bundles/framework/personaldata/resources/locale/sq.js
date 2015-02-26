@@ -6,6 +6,7 @@ Oskari.registerLocalization(
         "title": "Të dhënat e mia",
         "desc": "Të dhënat e mia",
         "notLoggedIn": "NOT TRANSLATED",
+        "notLoggedInText": "NOT TRANSLATED.",
         "tabs": {
             "myviews": {
                 "title": "Shikimet e mia në hartë",

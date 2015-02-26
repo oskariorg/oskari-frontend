@@ -5,7 +5,8 @@ Oskari.registerLocalization(
     "value": {
         "title": "Mis datos",
         "desc": "Mis datos",
-        "notLoggedIn": "En Mis datos, puede guardar vistas y navegar por los mapas que haya incorporado en otros portales web. <a href='/web/en/login'>Acceder</a>",
+        "notLoggedIn": "En Mis datos, puede guardar vistas y navegar por los mapas que haya incorporado en otros portales web.",
+        "notLoggedInText": "Acceder",
         "tabs": {
             "myviews": {
                 "title": "Mis vistas",

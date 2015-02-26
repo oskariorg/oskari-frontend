@@ -6,6 +6,7 @@ Oskari.registerLocalization(
         "title": "Datele mele",
         "desc": "Datele mele",
         "notLoggedIn": "Puteţi salva vederile de hărţi şi afişa hărţi pe care le-aţi înglobat în alte site-uri web în Datele Mele.",
+        "notLoggedInText": "NOT TRANSLATED.",
         "tabs": {
             "myviews": {
                 "title": "Hărţile mele",

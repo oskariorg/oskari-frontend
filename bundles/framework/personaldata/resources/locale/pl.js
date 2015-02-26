@@ -4,7 +4,8 @@ Oskari.registerLocalization({
     "value": {
         "title": "Moje dane",
         "desc": "Moje dane",
-        "notLoggedIn": "Możesz zapisać widoki mapy i przeglądać mapy , któe abudowałeś na innych stronach w Moje dane. <a href='/web/pl/login'>Log in</a>",
+        "notLoggedIn": "Możesz zapisać widoki mapy i przeglądać mapy , któe abudowałeś na innych stronach w Moje dane.",
+        "notLoggedInText": "NOT TRANSLATED.",
         "tabs": {
             "myviews": {
                 "title": "Moje widoki mapy",

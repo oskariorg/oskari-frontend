@@ -5,7 +5,8 @@ Oskari.registerLocalization(
     "value": {
         "title": "Mani dati",
         "desc": "Mani dati",
-        "notLoggedIn": "Jūs varat saglabāt kartes skatus un pārlūkotās kartes, kas ir iegultas no citām mājas lapām, sadaļā \"Mani dati\". <a href='/web/en/login'> Log in </ a> \"",
+        "notLoggedIn": "Jūs varat saglabāt kartes skatus un pārlūkotās kartes, kas ir iegultas no citām mājas lapām, sadaļā \"Mani dati\".",
+        "notLoggedInText": "NOT TRANSLATED.",
         "tabs": {
             "myviews": {
                 "title": "Mans kartes skats",

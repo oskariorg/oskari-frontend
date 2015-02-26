@@ -5,7 +5,8 @@ Oskari.registerLocalization(
     "value": {
         "title": "Os meus dados",
         "desc": "Os meus dados",
-        "notLoggedIn": "Pode guardar vistas e procurar cartas que tenha embutido em outros sítios web em Os meus dados. <a href='/web/pt/login'>Log in</a>",
+        "notLoggedIn": "Pode guardar vistas e procurar cartas que tenha embutido em outros sítios web em Os meus dados.",
+        "notLoggedInText": "NOT TRANSLATED.",
         "tabs": {
             "myviews": {
                 "title": "As minhas vistas",

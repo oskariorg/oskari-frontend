@@ -6,6 +6,7 @@ Oskari.registerLocalization(
         "title": "Моите данни",
         "desc": "Моите данни",
         "notLoggedIn": "Може да запазите изгледите на картата и браузваните карти, които сте прикачили на други уебсайтове, в Моите данни.",
+        "notLoggedInText": "NOT TRANSLATED.",
         "tabs": {
             "myviews": {
                 "title": "Моите изгледи на карта",

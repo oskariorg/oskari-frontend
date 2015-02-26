@@ -5,7 +5,8 @@ Oskari.registerLocalization(
     "value": {
         "title": "Moji podaci",
         "desc": "Moji podaci",
-        "notLoggedIn": "Možete sačuvati prikaze mapa i pregledati mape koje ste ugradili na drugim web sajtovima u odeljku Moji podaci. <a href='/web/en/login'>Prijava</a>",
+        "notLoggedIn": "Možete sačuvati prikaze mapa i pregledati mape koje ste ugradili na drugim web sajtovima u odeljku Moji podaci.",
+        "notLoggedInText": "Prijava.",
         "tabs": {
             "myviews": {
                 "title": "Moji prikazi mapa",

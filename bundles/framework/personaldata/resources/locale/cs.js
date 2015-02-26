@@ -4,7 +4,8 @@ Oskari.registerLocalization({
   "value": {
     "title": "Moje data",
     "desc": "Moje data",
-    "notLoggedIn": "Lze uložit zobrazení map a prohlížet mapy, které jste vložili do jiných webů v Mých datech. <a href='/web/en/login'>Přihlásit se</a>.",
+    "notLoggedIn": "Lze uložit zobrazení map a prohlížet mapy, které jste vložili do jiných webů v Mých datech.",
+    "notLoggedInText": "Přihlásit se.",
     "tabs": {
       "myviews": {
         "title": "Má zobrazení mapy",

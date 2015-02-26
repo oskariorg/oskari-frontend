@@ -110,10 +110,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
                 flyout = jQuery(this.container), // clear container
                 tabId,
                 tab,
-                panel;
+                panel,
+                notLoggedIn = this.instance.getLocalization('notLoggedIn'),
+                notLoggedInText = this.instance.getLocalization('notLoggedInText'),
+                notLoggedInFullText = notLoggedIn + ' ' + notLoggedInText;
+
             flyout.empty();
-            this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer',
-            this.instance.getLocalization('notLoggedIn'));
+
+
+            
+            this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer', 
+                notLoggedInFullText);
+            
             this.tabsContainer.insertTo(flyout);
 
             if (!sandbox.getUser().isLoggedIn()) {

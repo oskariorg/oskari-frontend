@@ -4,7 +4,8 @@ Oskari.registerLocalization({
   "value": {
     "title": "Moji podaci",
     "desc": "Moji podaci",
-    "notLoggedIn": "Možete spremiti prikaze karte i pregledavati karte koje ste ugradili na svoje stranice na Moji podaci. <a href='/web/hr/login'>Log in</a>.",
+    "notLoggedIn": "Možete spremiti prikaze karte i pregledavati karte koje ste ugradili na svoje stranice na Moji podaci.",
+    "notLoggedInText": "NOT TRANSLATED.",
     "tabs": {
       "myviews": {
         "title": "Moji prikazi karte",

@@ -4,7 +4,8 @@ Oskari.registerLocalization({
     "value": {
         "title": "Mijn gegevens",
         "desc": "Mijn gegevens",
-        "notLoggedIn": "U kunt bekeken kaarten opslaan en bladeren door kaarten die je hebt geïntegreerd op andere websites in Mijn gegevens. <a href='/web/en/login'> Log in </ a>.",
+        "notLoggedIn": "U kunt bekeken kaarten opslaan en bladeren door kaarten die je hebt geïntegreerd op andere websites in Mijn gegevens.",
+        "notLoggedInText": "NOT TRANSLATED.",
         "tabs": {
             "myviews": {
                 "title": "Mijn kaartweergaven",

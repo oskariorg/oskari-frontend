@@ -5,6 +5,7 @@ Oskari.registerLocalization({
         "title": "Minu andmed",
         "desc": "Minu andmed",
         "notLoggedIn": "Võid salvestada kaardivaateid ja sirvida kaarte, mida oled põiminud teistes veebilehtes Minu andmete all",
+        "notLoggedInText": "NOT TRANSLATED.",
         "tabs": {
             "myviews": {
                 "title": "Minu kaardivaated",

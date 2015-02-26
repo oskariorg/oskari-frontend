@@ -4,7 +4,8 @@ Oskari.registerLocalization({
   "value": {
     "title": "Meine Daten",
     "desc": "Meine Daten",
-    "notLoggedIn": "Sie können unter \"Meine Daten\" Kartenansichten speichern und Karten durchsuchen, die Sie auf anderen Webseiten eingebunden haben. <a href='/web/en/login'>Anmelden</a>.",
+    "notLoggedIn": "Sie können unter \"Meine Daten\" Kartenansichten speichern und Karten durchsuchen, die Sie auf anderen Webseiten eingebunden haben.",
+    "notLoggedInText": "Anmelden.",
     "tabs": {
       "myviews": {
         "title": "Meine Kartenansichten",

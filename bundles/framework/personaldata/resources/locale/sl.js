@@ -6,6 +6,7 @@ Oskari.registerLocalization(
         "title": "Moji podatki",
         "desc": "Moji podatki",
         "notLoggedIn": "V Moji podatki lahko shranite kartne poglede  in brskate po vstavljenih kartah na spletnem mestu.",
+        "notLoggedInText": "NOT TRANSLATED.",
         "tabs": {
             "myviews": {
                 "title": "Moji kartni pogledi",

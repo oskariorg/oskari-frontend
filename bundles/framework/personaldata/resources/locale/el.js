@@ -5,6 +5,7 @@ Oskari.registerLocalization({
         "title": "Τα δεδομένα μου",
         "desc": "Τα δεδομένα μου",
         "notLoggedIn": "Μπορείτε να αποθηκεύσετε χάρτες και να αναζητήσετε χάρτες που έχετε ενσωματώσει σε άλλους ιστότοπους από τα Δεδομένα μου",
+        "notLoggedInText": "NOT TRANSLATED.",
         "tabs": {
             "myviews": {
                 "title": "Οι χάρτες μου",
