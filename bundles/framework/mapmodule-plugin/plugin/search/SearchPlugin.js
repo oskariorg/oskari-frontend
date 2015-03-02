@@ -360,6 +360,9 @@ Oskari.clazz.define(
                 lon = msg.locations[0].lon;
                 lat = msg.locations[0].lat;
                 zoom = msg.locations[0].zoomLevel;
+                if(msg.locations[0].zoomScale) {
+                    zoom = {scale : msg.locations[0].zoomScale};
+                }
 
                 me.getSandbox().request(
                     me.getName(),
@@ -393,13 +396,17 @@ Oskari.clazz.define(
                         );
                         break;
                     }
-                    lon = msg.locations[i].lon;
-                    lat = msg.locations[i].lat;
-                    zoom = msg.locations[i].zoomLevel;
+                    var resultItem = msg.locations[i];
+                    lon = resultItem.lon;
+                    lat = resultItem.lat;
+                    zoom = resultItem.zoomLevel;
+                    if(resultItem.zoomScale) {
+                        zoom = {scale : resultItem.zoomScale};
+                    }
                     var row = me.templateResultsRow.clone(),
-                        name = msg.locations[i].name,
-                        municipality = msg.locations[i].village,
-                        type = msg.locations[i].type,
+                        name = resultItem.name,
+                        municipality = resultItem.village,
+                        type = resultItem.type,
                         cells = row.find('td'),
                         xref = jQuery(cells[0]).find('a');
                     row.attr('data-location', i);
