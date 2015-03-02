@@ -266,9 +266,15 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 for (field in value) {
                     if (value.hasOwnProperty(field)) {
                         if ((jQuery(subKeys[index]).data('key') === baseKey) && (jQuery(subKeys[index]).data('value') === field)) {
+                            console.log("data value", jQuery(subKeys[index]).data('value'));
                             cell = this.templateCell.clone();
                             cell.addClass(baseKey);
-                            cell.append(value[field]);
+                            console.log("value[field]", value[field]);
+                            if (_.isArray(value[field])) {
+                                cell.append(value[field][0])
+                            } else {
+                                cell.append(value[field]);
+                            }
                             if (hidden) {
                                 cell.addClass('hidden');
                             }
