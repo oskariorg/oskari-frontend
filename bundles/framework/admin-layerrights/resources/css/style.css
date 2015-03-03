@@ -11,7 +11,9 @@ table.layer-rights-table thead tr {
   table.layer-rights-table thead tr th {
     width: 40%;
     padding: 2px 5px;
-    text-align: center; }
+    text-align: center; 
+    min-width: 116px;
+  }
   table.layer-rights-table thead tr th + th {
     width: 15%; }
   table.layer-rights-table thead tr th + th + th {
@@ -25,15 +27,22 @@ table.layer-rights-table tbody {
   display: block;
   width: 100%;
   overflow: auto; }
-  @media screen and (max-height: 800px) {
+
+  @media screen and (max-height: 600px) {
+    table.layer-rights-table tbody {
+      max-height: 86px; } }
+  @media screen and (max-height: 800px) and (min-height: 600px) {
     table.layer-rights-table tbody {
       max-height: 280px; } }
   @media screen and (min-height: 800px) {
     table.layer-rights-table tbody {
       max-height: 480px; } }
+      
   table.layer-rights-table tbody tr td {
     width: 40%;
-    text-align: center; }
+    text-align: center; 
+    min-width: 116px;
+  }
   table.layer-rights-table tbody tr td + td {
     width: 15%; }
   table.layer-rights-table tbody tr td + td + td {
