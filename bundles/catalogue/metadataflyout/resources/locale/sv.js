@@ -394,7 +394,7 @@ Oskari.registerLocalization({
                 "distributionFormat": "Distributionsformat",
                 "fileIdentifier": "Identifierare för metadatamängd",
                 "legalConstraint": "Rättsliga restriktioner",
-                "lineageStatement": "Lineage statement",
+                "lineageStatement": "Tillkomsthistorik",
                 "metadataCharacterSet": "Teckenuppsättning i metadata",
                 "metadataDateStamp": "Datum för metadata",
                 "metadataLanguage": "Språk i metadata",
