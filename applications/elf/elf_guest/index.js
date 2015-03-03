@@ -157,6 +157,7 @@ jQuery(document).ready(function() {
         } else if (language === "sv") {
             Oskari.getLocalization('MapModule').plugin.LogoPlugin.layersHeader = "&copy; ELF och följande dataproducenter:";
         } else if (language === "en") {
+            Oskari.getLocalization('MapModule').plugin.LogoPlugin.layersHeader = "&copy; ELF and listed service providers:";
             /* ELF specific localization adjustments */
             Oskari.registerLocalization(
             {
@@ -182,8 +183,8 @@ jQuery(document).ready(function() {
                     "plugin": {
                         "LogoPlugin": {
                             "terms": "Terms of Use",
-                            "dataSources": "&copy; ELF and the following service providers:",
-                            "layersHeader": "Map Layers",
+                            "dataSources": "Data sources",
+                            "layersHeader": "&copy; ELF and listed service providers:",
                             "indicatorsHeader": "Indicators"
                         },
                         "DataSourcePlugin": {
@@ -374,6 +375,12 @@ jQuery(document).ready(function() {
     function start(appSetup, appConfig, cb) {
         var app = Oskari.app;
 
+
+        /*elf hack, drop indexmap from the list of available tools*/
+        if (!appConfig.publisher || !appConfig.publisher.conf || !appConfig.publisher.conf.tools) {
+	        appConfig.publisher.conf.tools = elfPublisherAllowedToolsHack();
+        }
+
         app.setApplicationSetup(appSetup);
 
         // TODO: move to DB!
@@ -390,6 +397,108 @@ jQuery(document).ready(function() {
         });
     }
 
+    /**
+    * Nasty hack to remove index map from the list of allowed tools in elf. TODO: add these to db
+    */
+    function elfPublisherAllowedToolsHack() {
+		return [{
+            id: 'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin',
+            selected: false,
+            lefthanded: 'bottom left',
+            righthanded: 'bottom right',
+            config: {
+                location: {
+                    top: '',
+                    right: '',
+                    bottom: '',
+                    left: '',
+                    classes: 'bottom left'
+                }
+            }
+        }, {
+            id: 'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
+            selected: false,
+            lefthanded: 'top left',
+            righthanded: 'top right',
+            config: {
+                location: {
+                    top: '',
+                    right: '',
+                    bottom: '',
+                    left: '',
+                    classes: 'top left'
+                }
+            }
+        }, {
+            id: 'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar',
+            selected: true,
+            lefthanded: 'top left',
+            righthanded: 'top right',
+            config: {
+                location: {
+                    top: '',
+                    right: '',
+                    bottom: '',
+                    left: '',
+                    classes: 'top left'
+                }
+            }
+        }, {
+            id: 'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin',
+            selected: false,
+            lefthanded: 'top left',
+            righthanded: 'top right',
+            config: {
+                location: {
+                    top: '',
+                    right: '',
+                    bottom: '',
+                    left: '',
+                    classes: 'top left'
+                }
+            }
+        }, {
+            id: 'Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
+            selected: false,
+            lefthanded: 'top right',
+            righthanded: 'top left',
+            config: {
+                location: {
+                    top: '',
+                    right: '',
+                    bottom: '',
+                    left: '',
+                    classes: 'top right'
+                }
+            }
+        }, {
+            id: 'Oskari.mapframework.mapmodule.ControlsPlugin',
+            selected: true
+        }, {
+            id: 'Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin',
+            selected: false,
+            lefthanded: 'top right',
+            righthanded: 'top left',
+            config: {
+                location: {
+                    top: '',
+                    right: '',
+                    bottom: '',
+                    left: '',
+                    classes: 'top right'
+                },
+                toolbarId: 'PublisherToolbar'
+            }
+        }, {
+            id: 'Oskari.mapframework.mapmodule.GetInfoPlugin',
+            selected: true,
+            config: {
+                ignoredLayerTypes: ['WFS'],
+                infoBox: false
+            }
+        }];
+
+    }
 
     /* let's load the appsetup and configurations from database */
     jQuery.ajax({
