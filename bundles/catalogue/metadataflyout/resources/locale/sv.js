@@ -15,6 +15,7 @@ Oskari.registerLocalization({
             "abstract": "Abstrakt",
             "inspire": "INSPIRE",
             "jhs": "ISO 19115",
+            "quality":"Data kvalität",
             "xml": "XML",
             "map": "Omfattning",
             "pdf": "Utskrift",
@@ -379,6 +380,10 @@ Oskari.registerLocalization({
                     }
                 }
             },
+            "qualityContent": {
+                "qualityPassTrue": "Datamängden uppfyller specifikationen.",
+                "qualityPassFalse": "Datamängden uppfyller inte specifikationen."
+            },
             "heading": {
                 "abstractTextData": "Sammanfattning (data)",
                 "abstractTextService": "Sammanfattning (tjänst)",
@@ -409,7 +414,24 @@ Oskari.registerLocalization({
                 "spatialResolution": "Rumslig upplösning",
                 "temporalExtent": "Temporal utsträckning",
                 "topicCategory": "Ämneskategori",
-                "useLimitation": "Avrådd användning"
+                "useLimitation": "Avrådd användning",
+
+                "absoluteExternalPositionalAccuracy":"Absolut lägesnoggrannhet",
+                "accuracyOfTimeMeasurement":"Tidsnoggrannhet",
+                "completenessCommission":"Övertalighet",
+                "completenessOmission":"Brist",
+                "conceptualConsistency":"Konceptuell konsistens",
+                "domainConsistency":"Domänkonsistens",
+                "formatConsistency":"Formatkonsistens",
+                "griddedDataPositionalAccuracy":"Lägesnoggrannhet hos rasterdata",
+                "nonQuantitativeAttributeAccuracy":"Tematisk noggrannhet kvalitativa attribut",
+                "quantitativeAttributeAccuracy":"Tematisk noggrannhet kvantitativa attribut",
+                "relativeInternalPositionalAccuracy":"Relativ lägesnoggrannhet",
+                "temporalConsistency":"Temporal konsistens",
+                "temporalValidity":"Temporal validitet",
+                "thematicClassificationCorrectness":"Klassificeringsnoggrannhet",
+                "topologicalConsistency":"Topologisk konsistens"
+
             }
         },
         "tile": {

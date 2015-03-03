@@ -16,6 +16,7 @@ Oskari.registerLocalization({
             "inspire": "Inspire metadata",
             "jhs": "ISO 19115 metadata",
             "xml": "ISO 19139 XML file",
+            "quality":"NOT TRANSLATED",
             "map": "Geographic extent",
             "pdf": "Printout",
             "select_metadata_prompt": "Select metadata by clicking the icons.",
@@ -379,6 +380,10 @@ Oskari.registerLocalization({
                     }
                 }
             },
+            "qualityContent": {
+                "qualityPassTrue": "NOT TRANSLATED",
+                "qualityPassFalse": "NOT TRANSLATED"
+            },
             "heading": {
                 "abstractTextData": "Abstract text (data)",
                 "abstractTextService": "Abstract text (service)",
@@ -409,7 +414,24 @@ Oskari.registerLocalization({
                 "spatialResolution": "Spatial resolution",
                 "temporalExtent": "Temporal extents",
                 "topicCategory": "Topic categories",
-                "useLimitation": "Use limitations"
+                "useLimitation": "Use limitations",
+
+                "absoluteExternalPositionalAccuracy":"NOT TRANSLATED",
+                "accuracyOfTimeMeasurement":"NOT TRANSLATED",
+                "completenessCommission":"NOT TRANSLATED",
+                "completenessOmission":"NOT TRANSLATED",
+                "conceptualConsistency":"NOT TRANSLATED",
+                "domainConsistency":"NOT TRANSLATED",
+                "formatConsistency":"NOT TRANSLATED",
+                "griddedDataPositionalAccuracy":"NOT TRANSLATED",
+                "nonQuantitativeAttributeAccuracy":"NOT TRANSLATED",
+                "quantitativeAttributeAccuracy":"NOT TRANSLATED",
+                "relativeInternalPositionalAccuracy":"NOT TRANSLATED",
+                "temporalConsistency":"NOT TRANSLATED",
+                "temporalValidity":"NOT TRANSLATED",
+                "thematicClassificationCorrectness":"NOT TRANSLATED",
+                "topologicalConsistency":"NOT TRANSLATED"
+
             }
         },
         "tile": {

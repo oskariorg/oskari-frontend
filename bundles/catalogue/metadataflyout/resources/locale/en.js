@@ -15,6 +15,7 @@ Oskari.registerLocalization({
             "abstract": "Basic information",
             "inspire": "Inspire metadata",
             "jhs": "ISO 19115 metadata",
+            "quality":"Data quality",
             "xml": "ISO 19139 XML file",
             "map": "Geographic extent",
             "pdf": "Printout",
@@ -379,6 +380,10 @@ Oskari.registerLocalization({
                     }
                 }
             },
+            "qualityContent": {
+                "qualityPassTrue":"Dataset is conformant to the specification.",
+                "qualityPassFalse": "Dataset is not conformant to the specification."
+            },
             "heading": {
                 "abstractTextData": "Abstract text (data)",
                 "abstractTextService": "Abstract text (service)",
@@ -409,7 +414,23 @@ Oskari.registerLocalization({
                 "spatialResolution": "Spatial resolution",
                 "temporalExtent": "Temporal extents",
                 "topicCategory": "Topic categories",
-                "useLimitation": "Use limitations"
+                "useLimitation": "Use limitations",
+
+                "absoluteExternalPositionalAccuracy":"Absolute external positional accuracy",
+                "accuracyOfTimeMeasurement":"Accuracy of time measurement",
+                "completenessCommission":"Completeness commission",
+                "completenessOmission":"Completeness omission",
+                "conceptualConsistency":"Conceptual consistency",
+                "domainConsistency":"Domain consistency",
+                "formatConsistency":"Format consistency",
+                "griddedDataPositionalAccuracy":"Gridded data positional accuracy",
+                "nonQuantitativeAttributeAccuracy":"Non quantitative attribute accuracy",
+                "quantitativeAttributeAccuracy":"Quantitative attribute accuracy",
+                "relativeInternalPositionalAccuracy":"Relative internal positional accuracy",
+                "temporalConsistency":"Temporal consistency",
+                "temporalValidity":"Temporal validity",
+                "thematicClassificationCorrectness":"Thematic classification correctness",
+                "topologicalConsistency":"Topological consistency"
             }
         },
         "tile": {
