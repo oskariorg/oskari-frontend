@@ -16,6 +16,7 @@ Oskari.registerLocalization(
             "abstract": "Información básica",
             "inspire": "metadatos Inspire",
             "jhs": "ISO 19115 metadatos",
+            "quality":"NOT TRANSLATED",
             "xml": "ISO 19139 XML archivo",
             "map": "Extensión geográfica",
             "pdf": "Imprimir",
@@ -379,6 +380,10 @@ Oskari.registerLocalization(
                     }
                 }
             },
+            "qualityContent": {
+                "qualityPassTrue": "NOT TRANSLATED",
+                "qualityPassFalse": "NOT TRANSLATED"
+            },
             "heading": {
                 "abstractTextData": "Texto resumen (datos)",
                 "abstractTextService": "Texto resumen (resumen)",
@@ -409,7 +414,24 @@ Oskari.registerLocalization(
                 "spatialResolution": "Resolución espacial",
                 "temporalExtent": "Extensiones temporales",
                 "topicCategory": "Categorías del tema",
-                "useLimitation": "Limitaciones de uso"
+                "useLimitation": "Limitaciones de uso",
+
+                "absoluteExternalPositionalAccuracy":"NOT TRANSLATED",
+                "accuracyOfTimeMeasurement":"NOT TRANSLATED",
+                "completenessCommission":"NOT TRANSLATED",
+                "completenessOmission":"NOT TRANSLATED",
+                "conceptualConsistency":"NOT TRANSLATED",
+                "domainConsistency":"NOT TRANSLATED",
+                "formatConsistency":"NOT TRANSLATED",
+                "griddedDataPositionalAccuracy":"NOT TRANSLATED",
+                "nonQuantitativeAttributeAccuracy":"NOT TRANSLATED",
+                "quantitativeAttributeAccuracy":"NOT TRANSLATED",
+                "relativeInternalPositionalAccuracy":"NOT TRANSLATED",
+                "temporalConsistency":"NOT TRANSLATED",
+                "temporalValidity":"NOT TRANSLATED",
+                "thematicClassificationCorrectness":"NOT TRANSLATED",
+                "topologicalConsistency":"NOT TRANSLATED"
+                
             }
         },
         "tile": {
