@@ -15,6 +15,7 @@ Oskari.registerLocalization({
             "abstract": "Perustiedot",
             "inspire": "Inspire-metatiedot",
             "jhs": "JHS 158-metatiedot",
+            "quality":"Tiedon laatu",
             "xml": "ISO 19139 XML-tiedosto",
             "map": "Kattavuus",
             "pdf": "Tuloste",
@@ -379,6 +380,10 @@ Oskari.registerLocalization({
                     }
                 }
             },
+            "qualityContent": {
+                "qualityPassTrue":"Aineisto on sääntöjenmukainen.",
+                "qualityPassFalse": "Aineisto ei ole sääntöjenmukainen."
+            },
             "heading": {
                 "abstractTextData": "Aineiston tiivistelmä",
                 "abstractTextService": "Palvelun tiivistelmä",
@@ -409,7 +414,24 @@ Oskari.registerLocalization({
                 "spatialResolution": "Sijaintitiedon erotuskyky",
                 "temporalExtent": "Ajallinen kattavuus",
                 "topicCategory": "Aiheluokka",
-                "useLimitation": "Käyttöehdot"
+                "useLimitation": "Käyttöehdot",
+
+                "absoluteExternalPositionalAccuracy":"Absoluuttinen sijaintitarkkuus",
+                "accuracyOfTimeMeasurement":"Ajallisen mittauksen oikeellisuus",
+                "completenessCommission":"Ylimääräinen tieto",
+                "completenessOmission":"Puuttuva tieto",
+                "conceptualConsistency":"Käsitteellinen eheys",
+                "domainConsistency":"Arvojoukkoeheys",
+                "formatConsistency":"Formaattieheys",
+                "griddedDataPositionalAccuracy":"Rasteritiedon sijaintitarkkuus",
+                "nonQuantitativeAttributeAccuracy":"Kuvailevan ominaisuustiedon oikeellisuus",
+                "quantitativeAttributeAccuracy":"Mitattavan ominaisuustiedon oikeellisuus",
+                "relativeInternalPositionalAccuracy":"Suhteellinen sijaintitarkkuus",
+                "temporalConsistency":"Ajallinen eheys",
+                "temporalValidity":"Ajanmukaisuus",
+                "thematicClassificationCorrectness":"Luokittelun oikeellisuus",
+                "topologicalConsistency":"Topologinen eheys"
+                
             }
         },
         "tile": {
