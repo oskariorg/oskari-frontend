@@ -19,6 +19,10 @@ Hardcodings removed and now uses the configured supported languages.
 
 Oskari.getLocalization() now supports language as a second parameter. Notice that the locale still won't be loaded automatically.
 
+### framework/admin-layerrights
+
+Fixed layer table breaking when layer name is short.
+
 ### framework/userguide
 
 Renamed function Flyout.getUserGuideTabs() to Flyout.getUserGuides().

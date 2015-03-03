@@ -1,9 +1,9 @@
 .admin-layerrights-layers .layer-rights-table {
   margin-top: 20px; }
-  .admin-layerrights-layers .layer-rights-table th {
-    padding: 2px 5px; }
   .admin-layerrights-layers .layer-rights-table th, .admin-layerrights-layers .layer-rights-table td {
     text-align: center; }
+  .admin-layerrights-layers .layer-rights-table th {
+    padding: 2px 5px; }
 
 table.layer-rights-table thead tr {
   position: relative;
@@ -11,9 +11,8 @@ table.layer-rights-table thead tr {
   table.layer-rights-table thead tr th {
     width: 40%;
     padding: 2px 5px;
-    text-align: center; 
-    min-width: 116px;
-  }
+    text-align: center;
+    min-width: 116px; }
   table.layer-rights-table thead tr th + th {
     width: 15%; }
   table.layer-rights-table thead tr th + th + th {
@@ -27,7 +26,6 @@ table.layer-rights-table tbody {
   display: block;
   width: 100%;
   overflow: auto; }
-
   @media screen and (max-height: 600px) {
     table.layer-rights-table tbody {
       max-height: 86px; } }
@@ -37,12 +35,10 @@ table.layer-rights-table tbody {
   @media screen and (min-height: 800px) {
     table.layer-rights-table tbody {
       max-height: 480px; } }
-      
   table.layer-rights-table tbody tr td {
     width: 40%;
-    text-align: center; 
-    min-width: 116px;
-  }
+    text-align: center;
+    min-width: 116px; }
   table.layer-rights-table tbody tr td + td {
     width: 15%; }
   table.layer-rights-table tbody tr td + td + td {
@@ -57,3 +53,4 @@ div.admin-layerrights-flyout div.oskari-flyoutcontentcontainer {
 
 div.layer-rights-table-grid-headers {
   padding-top: 16px; }
+-top: 16px; }
