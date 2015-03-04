@@ -51,7 +51,7 @@ Oskari.registerLocalization(
                 "PanButtons": "Pan tool",
                 "Portti2Zoombar": "Zoom bar",
                 "MyLocationPlugin": "Center to user's location",
-                "ControlsPlugin": "Pan the map",
+                "ControlsPlugin": "Pan the map by dragging",
                 "SearchPlugin": "Addess and place name search",
                 "FeaturedataPlugin": "Feature data",
                 "GetInfoPlugin": "Query tool for feature data",
