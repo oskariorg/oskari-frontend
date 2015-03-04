@@ -488,8 +488,7 @@
                     }
                 }
             }
-        },
-        {
+        }, {
             "instanceProps": {},
             "title": "ELF license",
             "bundleinstancename": "elf-license",
