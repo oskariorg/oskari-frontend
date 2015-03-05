@@ -14,22 +14,13 @@ table.layer-rights-table {
   thead tr {
     position: relative;
     display: block;
-    th {
+    th:first-child {
       width: 40%;
       padding: 2px 5px;
       text-align: center; 
-      min-width: 116px;
+      min-width: 380px;
     }
-    th + th {
-      width: 15%; 
-    }
-    th + th + th {
-      width: 15%; 
-    }
-    th + th + th + th {
-      width: 15%; 
-    }
-    th + th + th + th + th {
+    th {
       width: 15%; 
     }
   }
@@ -50,24 +41,14 @@ table.layer-rights-table {
     width: 100%;
     overflow: auto; 
     tr {
-      td {
+      td:first-child {
         width: 40%;
         text-align: center; 
-        min-width: 116px;
+        min-width: 380px;
       }
-      td + td {
+      td {
         width: 15%; 
       }
-      td + td + td {
-        width: 15%; 
-      }
-      td + td + td + td {
-        width: 15%; 
-      }
-      td + td + td + td + td {
-        width: 15%; 
-      }
-
     }
   }
 
