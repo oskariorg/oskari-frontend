@@ -1116,10 +1116,7 @@ select {
 
 #maptools{
   width: 170px !important;
-  height: 100%;
+  height: 100% !important;
+  height: calc(100% - 20px) !important;
   overflow:auto;
-}
-
-.portlet-borderless-container {
-  margin-bottom: -20px !important;
 }
