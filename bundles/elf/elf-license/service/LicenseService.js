@@ -161,7 +161,7 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
                 },
                 complete: function () {
                     me._finishAjaxRequest('licenseInformation');
-                },
+                }
             });
         },
         /**
