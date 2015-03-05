@@ -17,6 +17,8 @@ Oskari.clazz.define("Oskari.elf.languageselector.BundleInstance", function() {
         var sandbox = this.getSandbox();
         var elem = jQuery('#langSelector');
 
+        jQuery("#langSelector").appendTo("#maptools");
+
         // get localization file "Languages" for language "all" - imported by this bundle
         // don't try this at home
         var languages = Oskari.getLocalization('Languages', 'all');
