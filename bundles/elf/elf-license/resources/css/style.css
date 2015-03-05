@@ -27,6 +27,10 @@
 	width: 800px;
 }
 
+.elf_license_dialog_licensemodels .text {
+	overflow: hidden;
+}
+
 .elf_license_dialog_licensemodels_title {
 	margin-top:12px;
 }

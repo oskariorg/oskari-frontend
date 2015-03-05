@@ -199,6 +199,7 @@ function () {
             prevBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
             nextBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
             models = dialogContent.find('.elf_license_dialog_licensemodels'),
+            title = dialogContent.find('.elf_license_dialog_licensemodels_title'),
             metadataTitle = '';
 
         me._showLicenseModels();
@@ -219,18 +220,36 @@ function () {
         dialog.addClass('elf_license_dialog');
         dialogContent.find('.elf_license_dialog_name').html(data.name);
         dialogContent.find('.elf_license_dialog_description').html(data.description);
-        dialogContent.find('.elf_license_dialog_licensemodels_title').html(me._locale.dialog.licenseModelsTitle);
 
-        jQuery.each(data.licenseModels, function(index, model){
-            var modelEl = me._templates.licenseModel.clone();
-            modelEl.bind('click', function(){
-                me._showLicenseParams(model);
+        title.removeClass('text');
+
+        // If  founded models then shows them
+        if(data.licenseModels.length > 0)  { 
+            title.html(me._locale.dialog.licenseModelsTitle);
+            jQuery.each(data.licenseModels, function(index, model){
+                var modelEl = me._templates.licenseModel.clone();
+                modelEl.bind('click', function(){
+                    me._showLicenseParams(model);
+                });
+
+                modelEl.find('.elf_license_model_name').html(model.name);
+                modelEl.find('.elf_license_model_description').html(model.description);
+                models.append(modelEl);
             });
+        }
+        // If not found then shows message
+        else {
+            title.addClass('text');
+            // If user has already logged in  then shows at no right to anyone license
+            if (me._sandbox.getUser().isLoggedIn()) {
+                title.html(me._locale.dialog.noRightToAnyLicenseModels);
+            } 
+            // Else if user has not logged in then show log in message
+            else {
+                title.html(me._locale.dialog.loginShort);
+            }
+        }
 
-            modelEl.find('.elf_license_model_name').html(model.name);
-            modelEl.find('.elf_license_model_description').html(model.description);
-            models.append(modelEl);
-        });
 
         metadataTitle = metadata.name;
         if(metadata.organization && metadata.organization !== null && metadata.organization !== ''){

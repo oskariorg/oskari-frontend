@@ -15,7 +15,9 @@ Oskari.registerLocalization({
         },
         "dialog": {
         	"licenseTitle": "Lisenssitiedot",
-        	"licenseModelsTitle": "Lisenssimallit:"
+        	"licenseModelsTitle": "Lisenssimallit:",
+            "noRightToAnyLicenseModels": "Sinulla ei ole oikeutta lisenssimalleihin.",
+            "loginShort": "Kirjaudu sisään nähdäksesi lisenssimallit."
         },
         "buttons": {
         	"close": "Sulje",
