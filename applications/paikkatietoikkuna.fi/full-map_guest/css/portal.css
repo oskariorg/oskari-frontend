@@ -1117,6 +1117,6 @@ select {
 #maptools{
   width: 170px !important;
   height: 100% !important;
-  height: calc(100% - 20px) !important;
   overflow:auto;
+  position: fixed !important;
 }
