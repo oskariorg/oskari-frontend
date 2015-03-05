@@ -1095,3 +1095,17 @@ select {
   width: 200px;
   z-index: 3;
 }
+
+#contentMap {
+  margin-left: 170px !important;
+}
+
+#maptools{
+  width: 170px !important;
+  height: 100%;
+  overflow:auto;
+}
+
+.portlet-borderless-container {
+  margin-bottom: -20px !important;
+}
