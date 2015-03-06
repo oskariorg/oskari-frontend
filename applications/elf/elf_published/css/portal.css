@@ -1102,3 +1102,7 @@ select {
   overflow:auto;
   position: fixed !important;
 }
+
+div.toolrow {
+  border-color: #FFFFFF !important;
+}
