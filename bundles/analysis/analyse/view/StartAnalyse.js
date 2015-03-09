@@ -1600,7 +1600,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             },
 
             /**
-             * @method layer_union
+             * @method spatial_join
              * Add layer selection ui for analyse spatial join.
              *
              * @param  {jQuery} contentPanel
@@ -1624,6 +1624,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     toolContainer,
                     i,
                     j,
+                    showSpatial = true, // Show also spatial operator choice
+
                     limitSelection = function (autoSelect) {
                         var features = extraParams.find(
                                 '.analyse-featurelist ul li input'
@@ -1767,6 +1769,51 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 limitSelection(true);
 
                 contentPanel.append(extraParams);
+
+                if (showSpatial) {
+                    //title spatial operator
+                    var titlespa = me.template.title_extra.clone();
+                    titlespa.find('.extra_title_label').html(
+                        me.loc.spatial.label
+                    );
+                    contentPanel.append(titlespa);
+
+                    var selectSpatial = function (tool) {
+                        return function () {
+                            me.spatialOptions.forEach(function (option) {
+                                option.selected = false;
+                            });
+                            tool.selected = true;
+                        };
+                    };
+
+                    // spatial operators
+                    me.spatialOptions.forEach(function (option, i, options) {
+                        toolContainer = me.template.radioToolOption.clone();
+                        toolContainer.find('input').attr('name', 'spatial');
+                        me._createLabel(
+                            option,
+                            toolContainer,
+                            'params_radiolabel'
+                        );
+
+                        if (option.selected) {
+                            toolContainer.find('input').attr(
+                                'checked',
+                                'checked'
+                            );
+                        }
+                        contentPanel.append(toolContainer);
+                        toolContainer.find('input').attr({
+                            'value': option.id,
+                            'name': 'spatial',
+                            'id': option.id
+                        });
+                        toolContainer.find('input').change(
+                            selectSpatial(option)
+                        );
+                    });
+                }
             }
         },
 
@@ -2321,7 +2368,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     methodParams: {
                         layerId: differenceLayerId,
                         featuresA1: featuresA1,
-                        featuresB1: featuresB1
+                        featuresB1: featuresB1,
+                        operator: spatialOperator
                     }
                 }
             };
