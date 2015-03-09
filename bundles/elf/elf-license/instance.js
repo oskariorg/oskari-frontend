@@ -46,6 +46,11 @@ function () {
         number: null
     };
     this._metadata = null;
+    this._paramEnumElement = null;
+    this._paramDisplayElement = null;
+    this._paramIntElement = null;
+    this._paramTextElement = null;
+    this._paramBlnElement = null;
 }, {
     /**
      * @static
@@ -92,6 +97,13 @@ function () {
 
         // Create validators
         this._validator.number = Oskari.clazz.create('Oskari.elf.license.validator.NumberValidator',this, false, true);
+        
+        // Create elements
+        this._paramEnumElement = Oskari.clazz.create('Oskari.elf.license.elements.ParamEnumElement', this, this._validator);
+        this._paramDisplayElement = Oskari.clazz.create('Oskari.elf.license.elements.ParamDisplayElement', this, this._validator);
+        this._paramIntElement = Oskari.clazz.create('Oskari.elf.license.elements.ParamIntElement', this, this._validator);
+        this._paramTextElement = Oskari.clazz.create('Oskari.elf.license.elements.ParamTextElement', this, this._validator);
+        this._paramBlnElement = Oskari.clazz.create('Oskari.elf.license.elements.ParamBlnElement', this, this._validator);
     },
     /**
      * Activate metadata search results show license link
@@ -153,7 +165,7 @@ function () {
         var me = this,
             data = me._getLicenseInputValues();
         me.licenseService.doGetPrice({
-            data: data,
+            data: JSON.stringify(data),
             id: me._metadata.license
         }, function (response) {
             /*
@@ -394,209 +406,27 @@ function () {
      *
      * @return {Object} jQuery element object
      */
-    _getFormElement: function(param){
+    _getFormElement: function(param, readOnly){
         var me = this,
             element = null,
             type = param.type;
 
+        if (readOnly === null) {
+            readOnly = false;
+        }
+
         if (type === 'LicenseParamDisplay') {
-            element = me._getLicenseParamDisplayElement(param);
+            element = me._paramDisplayElement.getElement(param, readOnly);
         } else if (type === 'LicenseParamInt') {
-            element = me._getLicenseParamIntElement(param);
+            element = me._paramIntElement.getElement(param, readOnly);
         } else if (type === 'LicenseParamText') {
-            element = me._getLicenseParamTextElement(param);
+            element = me._paramTextElement.getElement(param, readOnly);
         } else if (type === 'LicenseParamBln') {
-            element = me._getLicenseParamBlnElement(param);
+            element = me._paramBlnElement.getElement(param, readOnly);
         } else if (type === 'LicenseParamEnum') {
-            element = me._getLicenseParamEnumElement(param);
+            element = me._paramEnumElement.getElement(param, readOnly);
         }
 
-        return element;
-    },
-    /**
-     * Get display element
-     * @method _getLicenseParamDisplayElement
-     * @private
-     *
-     * @param {Object} param the license model param
-     *
-     * @return {Object} jQuery element object
-     */
-    _getLicenseParamDisplayElement: function(param) {
-        var me = this,
-            element = me._templates.licenseUserData.clone(),
-            title = param.title,
-            data = me._templates.licenseInput.clone();        
-
-        if (title === null) {
-            title = param.name;
-        }
-
-        // Add data to element
-        data.attr('data-name', param.name);
-        data.attr('data-title', title);
-        data.attr('data-element-type', 'display');
-
-        jQuery.each(param.values, function(index, value){
-            data.append('<div>'+value+'</div>');
-        });
-
-        element.find('.elf_license_user_data_label').html(param.title);
-        element.find('.elf_license_user_data').html(data);
-        return element;
-    },
-    /**
-     * Get int element
-     * @method _getLicenseParamIntElement
-     * @private
-     *
-     * @param {Object} param the license model param
-     *
-     * @return {Object} jQuery element object
-     */
-    _getLicenseParamIntElement: function(param) {
-        var me = this,
-            element = me._templates.licenseUserData.clone(),
-            title = param.title,
-            data = me._templates.licenseInput.clone(),
-            input = null;
-
-        data.append('<input type="text"></input>');
-        input = data.find('input');
-
-        if (title === null) {
-            title = param.name;
-        }
-
-        // Add data to element
-        data.attr('data-name', param.name);
-        data.attr('data-title', title);
-        data.attr('data-element-type', 'int');
-
-        input.val(param.value);        
-        input.on('keydown keyup keypress change blur focus paste', function(evt) {
-            me._validator.number.keyListener(evt);
-        });
-
-        element.find('.elf_license_user_data_label').html(title);
-        element.find('.elf_license_user_data').html(data);
-        return element;
-    },
-    /**
-     * Get text element
-     * @method _getLicenseParamTextElement
-     * @private
-     *
-     * @param {Object} param the license model param
-     *
-     * @return {Object} jQuery element object
-     */
-    _getLicenseParamTextElement: function(param) {
-        var me = this,
-            element = me._templates.licenseUserData.clone(),
-            title = param.title,
-            data = me._templates.licenseInput.clone(),
-            input = null,
-            value = '';
-
-        data.append('<input type="text"></input>');
-        input = data.find('input');
-
-        if (title === null) {
-            title = param.name;
-        }
-
-        if(param.values[0] && param.values[0] !== null) {
-            value = param.values[0];
-        }
-
-        // Add data to element
-        data.attr('data-name', param.name);
-        data.attr('data-title', title);
-        data.attr('data-element-type', 'text');
-
-        input.val(value);
-        element.find('.elf_license_user_data_label').html(title);
-        element.find('.elf_license_user_data').html(data);
-        return element;
-    },
-    /**
-     * Get boolean element
-     * @method _getLicenseParamBlnElement
-     * @private
-     *
-     * @param {Object} param the license model param
-     *
-     * @return {Object} jQuery element object
-     */
-    _getLicenseParamBlnElement: function(param) {
-        var me = this,
-            element = me._templates.licenseUserData.clone(),
-            title = param.title,
-            data = me._templates.licenseInput.clone(),
-            input = null;
-
-        data.append('<input type="checkbox"></input>');
-        input = data.find('input');
-
-        if (title === null) {
-            title = param.name;
-        }
-
-        if(param.value === true) {
-            input.prop('checked', true);
-        }
-
-        // Add data to element
-        data.attr('data-name', param.name);
-        data.attr('data-title', title);
-        data.attr('data-element-type', 'boolean');
-
-        element.find('.elf_license_user_data_label').html(title);
-        element.find('.elf_license_user_data').html(data);
-        return element;
-    },
-    /**
-     * Get enum element. Can be a radio button group or checkbox list.
-     * @method _getLicenseParamEnumElement
-     * @private
-     *
-     * @param {Object} param the license model param
-     *
-     * @return {Object} jQuery element object
-     */
-    _getLicenseParamEnumElement: function(param) {
-        var me = this,
-            element = me._templates.licenseUserData.clone(),
-            title = param.title,
-            data = me._templates.licenseInput.clone();
-
-        // Radio button list
-        if (param.multi === false) {
-            jQuery.each(param.options, function(index, value){
-                data.append('<input type="radio" name="'+param.name+'" value="'+value+'">' + value + '<br>');
-            });
-
-            data.find('input').first().prop("checked", true);            
-        }
-        // Checkbox list
-        else {
-            jQuery.each(param.options, function(index, value){
-                data.append('<input type="checkbox" name="'+param.name+'" value="'+value+'">' + value + '<br>');
-            });
-        }
-
-        if (title === null) {
-            title = param.name;
-        }
-
-        // Add data to element
-        data.attr('data-name', param.name);
-        data.attr('data-title', title);
-        data.attr('data-element-type', 'enum');
-
-        element.find('.elf_license_user_data_label').html(title);
-        element.find('.elf_license_user_data').html(data);
         return element;
     },
     /**
@@ -614,9 +444,7 @@ function () {
 
             var value = {
                 name: element.attr('data-name'),
-                //title: element.attr('data-title'),
-                values: []/*,
-                type: type*/
+                values: []
             };
 
             var inputValues = null;
