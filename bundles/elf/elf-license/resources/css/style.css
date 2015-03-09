@@ -1,5 +1,5 @@
 .elf_license_dialog {
-	max-width: 820px !important;
+	max-width: 900px !important;
 }
 
 .elf_license_previous_button {
@@ -61,12 +61,12 @@
 .elf_license_dialog_license_details {
 	display: none;
 	overflow: none;
-	width: 800px;
+	width: 100%;
 }
 
 .elf_license_dialog_license_details .license_user_data {
 	overflow: auto;
-	width: 800px;
+	width: 100%;
 	max-height: 400px;
 }
 
@@ -77,7 +77,7 @@
 
 .elf_license_dialog_license_details .license_user_data  .elf_license_user_data_table .elf_license_user_data_label {
 	font-size: 12px;
-	color: #0099CB;
+	color: #000000;
 	font-weight: bold;
 	padding: 4px;
 }
