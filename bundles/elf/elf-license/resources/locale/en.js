@@ -15,7 +15,9 @@ Oskari.registerLocalization({
         },
         "dialog": {
         	"licenseTitle": "License information",
-        	"licenseModelsTitle": "Licensemodels:"
+        	"licenseModelsTitle": "Licensemodels:",
+            "noRightToAnyLicenseModels": "You have no rights to any licensemodels.",
+            "loginShort": "Log in to show licensemodels."
         },
         "buttons": {
         	"close": "Close",
