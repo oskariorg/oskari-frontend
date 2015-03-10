@@ -74,6 +74,32 @@ jQuery(document).ready(function () {
 
     function start(appSetup, appConfig, cb) {
         var app = Oskari.app;
+
+        /*add metadatafeedback bundle. TODO: Add this to db*/
+        var metadatafeedback = {
+            "title" : "metadatafeedback",
+            "fi" : "metadatafeedback",
+            "sv" : "metadatafeedback",
+            "en" : "metadatafeedback",
+            "bundlename" : "metadatafeedback",
+            "bundleinstancename" : "metadatafeedback",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "metadatafeedback" : {
+                        "bundlePath" : "/Oskari/packages/catalogue/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance" : []
+            },
+            "instanceProps" : {}
+        }
+        appSetup.startupSequence.push(metadatafeedback);
+
+
+
+
+
+
         app.setApplicationSetup(appSetup);
         app.setConfiguration(appConfig);
         app.startApplication(function (startupInfos) {

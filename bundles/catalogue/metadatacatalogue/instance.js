@@ -128,6 +128,7 @@ Oskari.clazz.define(
                 '</div>'
             ),
             resultTableHeader: jQuery('<th><a href="JavaScript:void(0);"></a></th>'),
+            /*
             resultTableRow: jQuery(
                 '<tr class="spacerRow">' +
                 '  <td class="spacer"></td>' +
@@ -141,6 +142,26 @@ Oskari.clazz.define(
                 '  <td><div class="resultRemove icon-close"></div></td>' +
                 '</tr>'
             ),
+*/            
+            resultTableRow: jQuery(
+                '<tr class="spacerRow">' +
+                '  <td class="spacer"></td>' +
+                '</tr>' +
+                '<tr class="resultRow">' +
+                '  <td></td>' +
+                '  <td><div class="ratingInfo"></div></td>' +
+                '  <td><div class="actionPlaceholder"></div></td>' +
+                '  <td><div class="showBbox icon-zoomto"></div></td>' +
+//                '  <td></td>'+
+                '  <td><div class="layerInfo icon-info"></div></td>' +
+                '  <td><div class="resultRemove icon-close"></div></td>' +
+                '</tr>'
+            ),
+            
+
+            starItem: jQuery('<div class="ratingStar"></div>'),
+            numRatings: jQuery('<div class="numRatings"></div>'),
+
             layerList: jQuery('<ul class="layerList"></ul>'),
             layerListItem: jQuery('<li></li>'),
             layerLink: jQuery('<a href="JavaScript:void(0);" class="layerLink"></a>')
@@ -765,6 +786,22 @@ Oskari.clazz.define(
             var me = this;
 
             me.lastResult = data.results;
+
+            // Rating
+            me.userAbleToRate = (typeof data.userAbleToRate !== "undefined")&&(data.userAbleToRate);
+            me.showRating = (typeof data.showRating !== "undefined")&&(data.showRating);
+            me.showFeedback = (typeof data.showFeedback !== "undefined")&&(data.showFeedback);
+            // Enable rating for test purposes
+            // TODO: Remove following lines
+            me.userAbleToRate = true;
+            me.showRating = true;
+            me.showFeedback = true;
+
+            // Rating title
+            if (me.showRating) {
+                me.resultHeaders[1].title = me.getLocalization('gridrating');
+            }
+
             var resultPanel = metadataCatalogueContainer.find('.metadataResults'),
                 searchPanel = metadataCatalogueContainer.find('.metadataSearching'),
                 optionPanel = metadataCatalogueContainer.find('.metadataOptions');
@@ -967,6 +1004,37 @@ Oskari.clazz.define(
                         // Todo: real rating
                         // jQuery(cells[1]).append("*****");
                         jQuery(cells[1]).addClass(me.resultHeaders[1].prop);
+                        // Rating
+                        if (me.showRating) {
+                            if (typeof me.lastResult[i].rating === "undefined") {
+                                me.lastResult[i].rating = 0.0;
+                                me.lastResult[i].numRatings = 0;
+                                // Generating test data
+                                // TODO: Remove test data generation
+                                me.lastResult[i].rating = 5*i/(results.length-1.0);
+                                me.lastResult[i].numRatings = i+1;
+                            }
+                            ratingSymbols = me._generateRatingSymbols(me.lastResult[i].rating);
+                            var ratingContainer = jQuery(cells[1]).find('div.ratingInfo');
+                            for (j = 0; j < 5; j++) {
+                                starContainer = me.templates.starItem.clone();
+                                starContainer.addClass(ratingSymbols[j]);
+                                starContainer.data('starId', 'rating-star-' + row.id + '-' + j);
+                                if (me.userAbleToRate) {
+                                    starContainer.on('click', {index: j + 1, metadataId: row['id']}, function (e) {
+                                        me.sandbox.postRequestByName('catalogue.ShowFeedbackRequest', [e.data.index, e.data.metadataId]);
+                                    });
+                                }
+                                ratingContainer.append(starContainer);
+                            }
+                            numRatingsContainer = me.templates.numRatings.clone();
+                            numRatingsContainer.append("(" + me.lastResult[i].numRatings + ")");
+                            numRatingsContainer.addClass(me.resultHeaders[1].prop);
+                            ratingContainer.append(numRatingsContainer);
+                        }
+
+
+
 
                         // Action link
                         if(me._isAction() == true){                            
@@ -1061,6 +1129,24 @@ Oskari.clazz.define(
                     resultsTableBody.append(resultContainer);
                 })(i);
             }
+        },
+        _generateRatingSymbols: function(input) {
+            if ((typeof input === "undefined")||(input === null)) {
+                return null;
+            }
+            var ratingSymbols = [];
+            var score = Number(input);
+            var i;
+            for (i=0; i<5; i++) {
+                if (score < i+0.25) {
+                    ratingSymbols.push("icon-star-off");
+                } else if ((i+0.25 <= score)&&(score < i+0.75)) {
+                    ratingSymbols.push("icon-star-half");
+                } else {
+                    ratingSymbols.push("icon-star-on");
+                }
+            }
+            return ratingSymbols;
         },
         _addLayerLinks: function (layer, layerList) {
             var me = this,
