@@ -51,18 +51,24 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamEnumElement',
                 data = me._templates.licenseInput.clone(),
                 input = null;
 
-            // Radio button list
-            if (param.multi === false) {
-                jQuery.each(param.options, function(index, value){
-                    data.append('<input type="radio" name="'+param.name+'" value="'+value+'">' + value + '<br>');
-                });
+            if(!readOnly || readOnly === false){
+               // Radio button list
+                if (param.multi === false) {
+                    jQuery.each(param.options, function(index, value){
+                        data.append('<input type="radio" name="'+param.name+'" value="'+value+'">' + value + '<br>');
+                    });
 
-                data.find('input').first().prop("checked", true);            
-            }
-            // Checkbox list
-            else {
-                jQuery.each(param.options, function(index, value){
-                    data.append('<input type="checkbox" name="'+param.name+'" value="'+value+'">' + value + '<br>');
+                    data.find('input').first().prop("checked", true);            
+                }
+                // Checkbox list
+                else {
+                    jQuery.each(param.options, function(index, value){
+                        data.append('<input type="checkbox" name="'+param.name+'" value="'+value+'">' + value + '<br>');
+                    });
+                }
+            } else {
+                jQuery.each(param.selections, function(index, value){
+                    data.append('<div>'+value+'</div>');
                 });
             }
 
