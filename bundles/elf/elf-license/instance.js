@@ -165,8 +165,9 @@ function () {
         var me = this,
             data = me._getLicenseInputValues();
         me.licenseService.doGetPrice({
-            data: JSON.stringify(data),
-            id: me._metadata.license
+            data: data,
+            id: jQuery('.license_basic_data').attr('data-id'),
+            modelId: jQuery('.license_basic_data').attr('data-model-id')
         }, function (response) {
             /*
             if (response) {
@@ -241,7 +242,7 @@ function () {
             jQuery.each(data.licenseModels, function(index, model){
                 var modelEl = me._templates.licenseModel.clone();
                 modelEl.bind('click', function(){
-                    me._showLicenseParams(model);
+                    me._showLicenseParams(model, data);
                 });
 
                 modelEl.find('.elf_license_model_name').html(model.name);
@@ -374,8 +375,9 @@ function () {
      * @private
      *
      * @param {Object} model license model
+     * @param {Object} licenseData license data
      */
-    _showLicenseParams: function(model) {
+    _showLicenseParams: function(model, licenseData) {
         var me = this,
             modelDetails = me._templates.licenceModelDetails.clone(),
             userData = modelDetails.find('.license_user_data'),
@@ -385,6 +387,8 @@ function () {
         licenseDetails.empty();
 
         modelDetails.find('.elf_name').html(model.name);
+        modelDetails.attr('data-model-id', model.id);
+        modelDetails.attr('data-id', licenseData.id);
 
         if(model.params.length>0) {
             var userDataTable = modelDetails.find('.elf_license_user_data_table');
