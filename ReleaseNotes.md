@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.27.3
+
+GetInfoPlugin now handles it's config correctly again.
+
 ## 1.27.2
 
 Fixed statistics classification plugin so that it is shown only when statistic layers are shown.
