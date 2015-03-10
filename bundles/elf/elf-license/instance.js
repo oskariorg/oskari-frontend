@@ -167,7 +167,7 @@ function () {
         me.licenseService.doGetPrice({
             data: data,
             id: jQuery('.license_basic_data').attr('data-id'),
-            modelId: jQuery('.license_basic_data').attr('data-model-id')
+            modelid: jQuery('.license_basic_data').attr('data-model-id')
         }, function (response) {
             /*
             if (response) {
