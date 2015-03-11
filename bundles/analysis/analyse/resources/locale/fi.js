@@ -133,7 +133,7 @@ Oskari.registerLocalization(
                         "tooltip": ""
                     }, {
                         "id": "oskari_analyse_spatial_join",
-                        "label": "Ominaisuustietojen yhdistäminen",
+                        "label": "Yhdistäminen sijainnin perusteella",
                         "classForPreview": "spatial_join",
                         "tooltip": ""
                     }]
@@ -214,8 +214,8 @@ Oskari.registerLocalization(
                 "sector_count_tooltip": "Anna sektoreiden lukumäärä."
             },
             "difference": {
-                "firstLayer": "Ensimmäinen taso",
-                "secondLayer": "Toinen taso",
+                "firstLayer": "Taso johon yhdistetään",
+                "secondLayer": "Taso jolta yhdistetään",
                 "field": "Valitse ominaisuustieto",
                 "keyField": "Yhdistävä ominaisuustieto"
             },

@@ -59,7 +59,6 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
 
             data['lang'] = lang;
             data['epsg'] = epsg;
-
             for (var opt in options) {
                 if (options.hasOwnProperty(opt)) {
                     data[opt] = options[opt];
@@ -161,7 +160,7 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
                 },
                 complete: function () {
                     me._finishAjaxRequest('licenseInformation');
-                },
+                }
             });
         },
         /**
@@ -174,6 +173,7 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
          * @param {Function} errorCd error callback
          */
         doGetPrice: function (options, successCb, errorCb) {
+            options.data = JSON.stringify(options.data);
             var me = this,
                 data = me._getLicenseInformationData(options),
                 dte = new Date(),

@@ -185,7 +185,7 @@ Oskari.clazz.define(
          * @return {Boolean} true if layer's type is ignored
          */
         _isIgnoredLayerType: function (layer) {
-            return _.any((this.config || {}).ignoredLayerTypes, function (type) {
+            return _.any((this._config || {}).ignoredLayerTypes, function (type) {
                 return layer.isLayerOfType(type);
             });
         },
@@ -386,9 +386,9 @@ Oskari.clazz.define(
                 colourScheme,
                 font;
 
-            if (_.isObject(this.config)) {
-                colourScheme = this.config.colourScheme;
-                font = this.config.font;
+            if (_.isObject(this._config)) {
+                colourScheme = this._config.colourScheme;
+                font = this._config.font;
             }
 
             if (reqBuilder) {

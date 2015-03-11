@@ -8,18 +8,12 @@
 table.layer-rights-table thead tr {
   position: relative;
   display: block; }
-  table.layer-rights-table thead tr th {
+  table.layer-rights-table thead tr th:first-child {
     width: 40%;
     padding: 2px 5px;
     text-align: center;
-    min-width: 116px; }
-  table.layer-rights-table thead tr th + th {
-    width: 15%; }
-  table.layer-rights-table thead tr th + th + th {
-    width: 15%; }
-  table.layer-rights-table thead tr th + th + th + th {
-    width: 15%; }
-  table.layer-rights-table thead tr th + th + th + th + th {
+    min-width: 380px; }
+  table.layer-rights-table thead tr th {
     width: 15%; }
 table.layer-rights-table tbody {
   position: relative;
@@ -35,17 +29,11 @@ table.layer-rights-table tbody {
   @media screen and (min-height: 800px) {
     table.layer-rights-table tbody {
       max-height: 480px; } }
-  table.layer-rights-table tbody tr td {
+  table.layer-rights-table tbody tr td:first-child {
     width: 40%;
     text-align: center;
-    min-width: 116px; }
-  table.layer-rights-table tbody tr td + td {
-    width: 15%; }
-  table.layer-rights-table tbody tr td + td + td {
-    width: 15%; }
-  table.layer-rights-table tbody tr td + td + td + td {
-    width: 15%; }
-  table.layer-rights-table tbody tr td + td + td + td + td {
+    min-width: 380px; }
+  table.layer-rights-table tbody tr td {
     width: 15%; }
 
 div.admin-layerrights-flyout div.oskari-flyoutcontentcontainer {
@@ -53,4 +41,3 @@ div.admin-layerrights-flyout div.oskari-flyoutcontentcontainer {
 
 div.layer-rights-table-grid-headers {
   padding-top: 16px; }
--top: 16px; }

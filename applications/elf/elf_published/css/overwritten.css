@@ -29,14 +29,15 @@ table {
         height: 100%;
         position: absolute;
         top: 0;
-        width: 153px;
+        width: 170px;
+        overflow:auto;
         z-index: 2;
         background-color: #0099CB;
         margin-top: 0px;
     }
     #contentMap {
         height: 100%;
-        margin-left: 153px;
+        margin-left: 170px;
     }
 
     img.panbuttonDivImg {
@@ -71,7 +72,7 @@ table {
 
     #logobar {
         height: 80px;
-        width: 153px;
+        width: 100%;
         overflow: hidden;
         background-color: white;
         background-image: url('ELF_web_logo_small.jpg');
