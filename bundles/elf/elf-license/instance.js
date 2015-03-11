@@ -246,9 +246,6 @@ function () {
         me._showLicenseModels();
         me._metadata = metadata;
 
-        //me._progressSpinner.insertTo(dialog);
-        me._progressSpinner.start();
-
         me.prevBtn.addClass('elf_license_previous_button');
         me.prevBtn.setTitle(me._locale.buttons.previous);
         me.prevBtn.setHandler(function(){
@@ -302,6 +299,14 @@ function () {
 
         dialog.show(me._locale.dialog.licenseTitle + ' - ' + metadataTitle, dialogContent, [me.prevBtn, cancelBtn, me.nextBtn]);
         dialog.makeModal();
+
+        me._progressSpinner.insertTo(jQuery('.elf_license_dialog'));
+
+        // If there is only one licensemodel then open it
+        if(data.licenseModels.length == 1) {
+            me._showLicenseParams(data.licenseModels[0], data);
+        }
+
     },
     /**
      * Go back
