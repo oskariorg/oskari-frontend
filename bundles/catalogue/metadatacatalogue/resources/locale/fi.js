@@ -50,7 +50,9 @@ Oskari.registerLocalization(
             "name": "Nimi",
             "showBBOX": "Näytä aineiston kattavuus",
             "info": "Näytä metatiedot",
-            "remove": "Poista hakutuloksista"
+            "remove": "Poista hakutuloksista",
+            "rating": "Arviointi"
+
         },
         "licenseText": "Hae lisenssi"
     }

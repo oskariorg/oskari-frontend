@@ -799,7 +799,7 @@ Oskari.clazz.define(
 
             // Rating title
             if (me.showRating) {
-                me.resultHeaders[1].title = me.getLocalization('gridrating');
+                me.resultHeaders[1].title = me.getLocalization('grid').rating;
             }
 
             var resultPanel = metadataCatalogueContainer.find('.metadataResults'),
@@ -899,6 +899,8 @@ Oskari.clazz.define(
                 link.append(me.resultHeaders[i].title);
                 // Todo: Temporarily only the first column is sortable
                 if (i === 0) {
+                    link.bind('click', headerClosureMagic(me.resultHeaders[i]));
+                } else if (i === 1 && me.showRating) {
                     link.bind('click', headerClosureMagic(me.resultHeaders[i]));
                 }
                 tableHeaderRow.append(header);
@@ -1007,11 +1009,13 @@ Oskari.clazz.define(
                         // Rating
                         if (me.showRating) {
                             if (typeof me.lastResult[i].rating === "undefined") {
-                                me.lastResult[i].rating = 0.0;
+//                                me.lastResult[i].rating = 0.0;
+                                me.lastResult[i].rating = "0.0";
                                 me.lastResult[i].numRatings = 0;
                                 // Generating test data
                                 // TODO: Remove test data generation
-                                me.lastResult[i].rating = 5*i/(results.length-1.0);
+//                                me.lastResult[i].rating = 5*i/(results.length-1.0);
+                                me.lastResult[i].rating = ""+(5*i/(results.length-1.0));
                                 me.lastResult[i].numRatings = i+1;
                             }
                             ratingSymbols = me._generateRatingSymbols(me.lastResult[i].rating);
@@ -1021,8 +1025,8 @@ Oskari.clazz.define(
                                 starContainer.addClass(ratingSymbols[j]);
                                 starContainer.data('starId', 'rating-star-' + row.id + '-' + j);
                                 if (me.userAbleToRate) {
-                                    starContainer.on('click', {index: j + 1, metadataId: row['id']}, function (e) {
-                                        me.sandbox.postRequestByName('catalogue.ShowFeedbackRequest', [e.data.index, e.data.metadataId]);
+                                    starContainer.on('click', {metadataRating: row["rating"], metadataId: row['id']}, function (e) {
+                                        me.sandbox.postRequestByName('catalogue.ShowFeedbackRequest', [e.data.metadataRating, e.data.metadataId]);
                                     });
                                 }
                                 ratingContainer.append(starContainer);

@@ -15,7 +15,10 @@ div.metadataCatalogueContainer {
     padding-left: 8px;
     padding-right: 8px; }
   div.metadataCatalogueContainer th.rating, div.metadataCatalogueContainer td.rating {
-    text-align: right; }
+    text-align: left; }
+  
+
+
   div.metadataCatalogueContainer th.info, div.metadataCatalogueContainer td.info {
     text-align: right;
     width: 16px; }
@@ -105,7 +108,7 @@ div.metadataResultHeader {
 .ratingInfo {
   display: table;
   width: 120px;
-  margin-left: 5px;
+  /*margin-left: 5px;*/
 }
 
 .ratingStar {

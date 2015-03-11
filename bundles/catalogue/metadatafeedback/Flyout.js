@@ -34,7 +34,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
                 '</p>'+
                 '<div id="raty-star">'+
                 '</div>'+
-                '<p><label >'+this.locale.userFeedback.ratingJustification+': </label><textarea id="justification" name="justification" maxlength="1000" class="span5" rows=4></textarea></p>'+
+                '<p><label >'+this.locale.userFeedback.ratingJustification+': </label><textarea id="justification" name="justification" maxlength="1000" class="span5" rows=4 required></textarea></p>'+
                 '<p>'+
                   '<label >'+this.locale.userFeedback.userRole+': </label>'+
                   '<select  id="userRole">'+
@@ -44,7 +44,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
 //                    '<option value="CommercialDataProducer">'+this.locale.userFeedback.commercialDataProducer+'</option>'+
                   '</select>'+
                 '</p>'+
-                '<p><label >'+this.locale.userFeedback.userComment+': </label><textarea id="userComment" name="userComment" class="span5" rows="4" maxlength="1000"></textarea></p>'+
+                '<p><label >'+this.locale.userFeedback.userComment+': </label><textarea id="userComment" name="userComment" class="span5" rows="4" maxlength="1000" required></textarea></p>'+
 /*
                 '<p><label >'+this.locale.userFeedback.domainURN+': </label></p>'+
                 '<ul id="manyDomains" class="unstyled">'+
@@ -156,7 +156,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
                 '</fieldset>'+
                 '<fieldset>'+
                   '<legend><small>'+this.locale.userInformation.userDetails+'</small></legend>'+
-                  '<p><label >'+this.locale.userInformation.userName+'</label><input id="username" name="username" type="text"/></p>'+
+                  '<p><label >'+this.locale.userInformation.userName+'</label><input id="username" name="username" type="text" required/></p>'+
                   '<p><label >'+this.locale.userInformation.organisationName+'</label><input id="organisation" name="organisation" type="text"/>'+
                   '<p><label >'+this.locale.userInformation.positionName+'</label><input id="position" name="position" type="text" />'+
                   '<label >'+this.locale.userInformation.contactRole+'</label>'+
@@ -231,9 +231,11 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
             //var imgDir = "./resources/images/";
             var starOnImg = imgDir+"star-on.png";
             var starOffImg = imgDir+"star-off.png";
+            var starHalfImg = imgDir+"star-half.png";
             contents.find("div#raty-star").raty({
                 starOn: starOnImg,
-                starOff: starOffImg
+                starOff: starOffImg,
+                starHalf: starHalfImg
             });
 
             var saveBtn = contents.find("button.save");
@@ -243,24 +245,24 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
               var params = me._getFieldValues();
 
               if (!params) {
-                alert('inte så bra');
+                  me._showMessage(me.locale.errorPopup.title, me.locale.errorPopup.formValidationFailed);
               } else {
 
                 me.instance.addFeedbackService.addFeedback(params, function(e) {
                   alert('add feedback success '+e);
                 }, 
                 function(e) {
-                  alert('add feedback error '+e);
+                    me._showMessage(me.locale.errorPopup.title, me.locale.errorPopup.savingTheFeedbackFailed);
+
+                    /*
+                    me.instance.sandbox.postRequestByName(
+                        'userinterface.UpdateExtensionRequest',
+                        [me.instance, 'close']
+                    );
+                    */
                 });
 
               }
-              //TODO: och sen...?
-/*
-                me.instance.sandbox.postRequestByName(
-                    'userinterface.UpdateExtensionRequest',
-                    [me.instance, 'close']
-                );
-*/
             });
 
             var cancelBtn = contents.find("button.cancel");
@@ -379,9 +381,14 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
             if ($(input).attr('type') == 'button') {
               return;
             }
+            /*remove red borders if any*/
+            if ($(input).hasClass('error')) {
+              $(input).removeClass('error');
+            }
 
             var value = $(input).val();
             if ($(input).attr('required') !== undefined && (!value || value.length === 0)) {
+              $(input).addClass("error");
               validationOk = false;
             }
 
@@ -390,7 +397,25 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
 
           return validationOk ? params : validationOk;
 
-        }
+        },
+        /**
+         * @method _showMessage
+         * Shows user a message with ok button
+         * @private
+         * @param {String} title popup title
+         * @param {String} message popup message
+         */
+        _showMessage: function (title, message) {
+                var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                    okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            okBtn.setTitle(this.locale.errorPopup.okButtonText);
+            okBtn.addClass('primary');
+            okBtn.setHandler(function () {
+                dialog.close(true);
+            });
+            dialog.show(title, message, [okBtn]);
+        },
+
     }, {
         'extend': ['Oskari.userinterface.extension.DefaultFlyout']
     });

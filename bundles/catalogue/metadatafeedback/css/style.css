@@ -259,6 +259,12 @@ div.userfeedback-values input[type="text"] {
   border-radius: 4px;
 }
 
+div.userfeedback-values select.error,
+div.userfeedback-values textarea.error,
+div.userfeedback-values input.error[type="text"] {
+  border-color: #FF0000;
+}
+
 div.userfeedback-values input,
 div.userfeedback-values textarea {
   width: 206px;
