@@ -52,6 +52,9 @@
 	                "mapuserlayers": {
 	                    "bundlePath": "../../../packages/framework/bundle/"
 	                },
+				    "maparcgis": {
+					"bundlePath": "../../../packages/arcgis/bundle/"
+				    },
 	                "service-base": {
 	                    "bundlePath": "../../../packages/framework/bundle/"
 	                },
