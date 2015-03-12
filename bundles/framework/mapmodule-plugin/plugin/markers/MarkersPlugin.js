@@ -350,7 +350,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 i;
 
             // Combine default values with given values
-            var data = jQuery.extend(true, me._defaultData, markerData);
+            var data = jQuery.extend(true, _.cloneDeep(me._defaultData), markerData);
 
             // Coordinates are needed
             if ((typeof markerData.x === 'undefined') || (typeof markerData.y === 'undefined')) {
