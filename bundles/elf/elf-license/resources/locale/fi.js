@@ -25,8 +25,12 @@ Oskari.registerLocalization({
             "licenseSummaryTitle": "Lisenssin yhteenveto",
             "priceTitle": "Hinta",
             "priceUnitEuro": "€",
-            "licenseSummaryHelp": "Hyväksyttyäsi lisenssin, tilaa kyseinen lisenssi painamalla 'Tilaa'. Voit muuttaa syöttämiäsi tietojasi painamalla 'Edellinen' tai voit keskeyttää tilauksen painamalla 'Sulje'"
-
+            "help": {
+                "info": "Valitse lisenssi malli klikkaamalla sitä.",
+                "details": " Täytä lisenssin tiedot ja paina sen jälkeen 'Seuraava' nähdäksesi lisenssin yhteenvedon ja hinnan. Jos haluat valita eri lisenssimallin niin valitse 'Edellinen'. Voit myös lopettaa tilauksen painamalla valitsemalla 'Sulje'.",
+                "summary": "Lue ja hyväksy täyttämäsi lisenssi valitsemalla 'Tilaa lisenssi'. Jos haluat muokata syöttämiäsi tietoja valitse 'Edellinen'. Voit myös lopettaa tilauksen painamalla valitsemalla 'Sulje'."
+            },
+            "concludeSuccessTitle": "Lisenssin tilaus onnistui"
         },
         "buttons": {
         	"close": "Sulje",
