@@ -68,7 +68,8 @@ Oskari.registerLocalization({
                 "wms": "WMS-taso",
                 "wfs": "WFS-taso",
                 "wmts": "WMTS-taso",
-                "arcgis": "ArcGIS-taso"
+                "arcgis": "ArcGISCache-taso",
+                "arcgis93": "ArcGISRest-taso"
             },
             "selectLayer": "Valitse ylätaso",
             "selectSubLayer": "Valitse alataso",
@@ -81,7 +82,7 @@ Oskari.registerLocalization({
             "edit": "Muokkaa",
             "editDesc": "Muokkaa karttatason nimeä",
             "layerType": "Tason tyyppi",
-            "layerTypeDesc": "Valitse tason tyyppi. Tällä hetkellä vaihtoehdot ovat WMS (Web Map Service), WFS (Web Feature Service), WMTS (Web Map Tile Service) ja ArcGIS (ArcGIS REST -rasteritaso).",
+            "layerTypeDesc": "Valitse tason tyyppi. Tällä hetkellä vaihtoehdot ovat WMS (Web Map Service), WFS (Web Feature Service), WMTS (Web Map Tile Service) ArcGISCache (ArcGIS Cache -rasteritaso) ja ArcGISRest (ArcGIS Rest -rasteritaso).",
             "type": "Tason tyyppi",
             "typePlaceholder": "Valitse tason tyyppi",
             "baseLayer": "Taustakarttataso",
