@@ -1,5 +1,5 @@
 Oskari.registerLocalization({
-    "lang": "en",
+    "lang": "sv",
     "key": "elf-license",
     "value": {
     	"getLicenseText": "License",
@@ -15,14 +15,6 @@ Oskari.registerLocalization({
             "cannotGetLicensePrice": {
                 "title": "Failed to get license price",
                 "message": "Cannot get license price"
-            },
-            "failedConclude": {
-                "title": "Error for conclude license",
-                "message": "Cannot conclude license."
-            },
-            "concludeNoResponse": {
-                "title": "Cannot conclude license",
-                "message": "Cannot conclude license."
             }
         },
         "dialog": {

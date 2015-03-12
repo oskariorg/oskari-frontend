@@ -49,24 +49,37 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamIntElement',
                 element = me._templates.licenseUserData.clone(),
                 title = param.title,
                 data = me._templates.licenseInput.clone(),
-                input = null;
+                input = null,
+                readOnlyElement = jQuery('<div></div>'),
+                showInput = true;
 
-            data.append('<input type="text"></input>');
-            input = data.find('input');
+            if(readOnly && readOnly === true) {
+                showInput = false;
+            }
 
             if (title === null) {
                 title = param.name;
+            }
+
+            if(showInput === true) {
+                data.append('<input type="text"></input>');
+                input = data.find('input');
+                input.val(param.value);        
+                input.on('keydown keyup keypress change blur focus paste', function(evt) {
+                    me._validator.number.keyListener(evt);
+                });
+            } else {
+                var valueEl = readOnlyElement.clone();
+                valueEl.attr('data-value', param.value);
+                valueEl.html(param.value);
+                data.append(valueEl);
             }
 
             // Add data to element
             data.attr('data-name', param.name);
             data.attr('data-title', title);
             data.attr('data-element-type', 'int');
-
-            input.val(param.value);        
-            input.on('keydown keyup keypress change blur focus paste', function(evt) {
-                me._validator.number.keyListener(evt);
-            });
+            data.attr('data-read-only', readOnly);
 
             element.find('.elf_license_user_data_label').html(title);
             element.find('.elf_license_user_data').html(data);

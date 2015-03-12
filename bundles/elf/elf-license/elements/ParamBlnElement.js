@@ -49,23 +49,37 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamBlnElement',
                 element = me._templates.licenseUserData.clone(),
                 title = param.title,
                 data = me._templates.licenseInput.clone(),
-                input = null;
+                input = null,
+                readOnlyElement = jQuery('<div></div>'),
+                showInput = true;
 
-            data.append('<input type="checkbox"></input>');
-            input = data.find('input');
+            if(readOnly && readOnly === true) {
+                showInput = false;
+            }
 
             if (title === null) {
                 title = param.name;
             }
 
-            if(param.value === true) {
-                input.prop('checked', true);
+            if(showInput === true) {
+                data.append('<input type="checkbox"></input>');
+                input = data.find('input');
+
+                if(param.value === true) {
+                    input.prop('checked', true);
+                }
+            } else {
+                var valueEl = readOnlyElement.clone();
+                valueEl.attr('data-value', param.value);
+                valueEl.html(param.value);
+                data.append(valueEl);
             }
 
             // Add data to element
             data.attr('data-name', param.name);
             data.attr('data-title', title);
             data.attr('data-element-type', 'boolean');
+            data.attr('data-read-only', readOnly);
 
             element.find('.elf_license_user_data_label').html(title);
             element.find('.elf_license_user_data').html(data);
