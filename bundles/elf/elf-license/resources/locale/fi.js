@@ -30,13 +30,20 @@ Oskari.registerLocalization({
                 "details": " Täytä lisenssin tiedot ja paina sen jälkeen 'Seuraava' nähdäksesi lisenssin yhteenvedon ja hinnan. Jos haluat valita eri lisenssimallin niin valitse 'Edellinen'. Voit myös lopettaa tilauksen painamalla valitsemalla 'Sulje'.",
                 "summary": "Lue ja hyväksy täyttämäsi lisenssi valitsemalla 'Tilaa lisenssi'. Jos haluat muokata syöttämiäsi tietoja valitse 'Edellinen'. Voit myös lopettaa tilauksen painamalla valitsemalla 'Sulje'."
             },
-            "concludeSuccessTitle": "Lisenssin tilaus onnistui"
+            "concludeSuccessTitle": "Lisenssin tilaus onnistui",
+            "conclude": {
+                "title": "Tilauksen tiedot",
+                "productid": "Tuote",
+                "licenseid": "Lisenssi",
+                "validto": "Voimassa"
+            }
         },
         "buttons": {
         	"close": "Sulje",
         	"previous": "Edellinen",
         	"next": "Seuraava",
-            "conclude": "Tilaa lisenssi"
+            "conclude": "Tilaa lisenssi",
+            "ok": "OK"
         }
     }
 });

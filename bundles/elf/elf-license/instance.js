@@ -57,7 +57,24 @@ function () {
             '<div class="help"></div>'+
             '</div>'),
         licenseUserData: jQuery('<tr><td class="elf_license_user_data_label"></td><td class="elf_license_user_data"></td></tr>'),
-        licenseInput: jQuery('<div class="elf_license_input"></div>')
+        licenseInput: jQuery('<div class="elf_license_input"></div>'),
+        licenceConcludeSuccessMessage: jQuery('<div class="elf_license_success_message">'+
+            '   <div class="headtitle"></div>'+
+            '   <table>'+
+            '       <tr>' +
+            '           <td><div class="productid title"></div></td>'+
+            '           <td><div class="productid value"></div></td>'+
+            '       </tr>' +
+            '       <tr>' +
+            '           <td><div class="licenseid title"></div></td>'+
+            '           <td><div class="licenseid value"></div></td>'+
+            '       </tr>' +
+            '       <tr>' +
+            '           <td><div class="validto title"></div></td>'+
+            '           <td><div class="validto value"></div></td>'+
+            '       </tr>' +
+            '   </table>'+
+            '</div>')
     };
     this._dialogStep = null;
     this._validator = {
@@ -215,7 +232,13 @@ function () {
      */
     _concludeLicense: function() {
         var me = this,
-            data = me._getLicenseInputValues();
+            data = me._getLicenseInputValues(),
+            msg = me._templates.licenceConcludeSuccessMessage.clone();
+
+        msg.find('.headtitle').html(me._locale.dialog.conclude.title);
+        msg.find('.productid.title').html(me._locale.dialog.conclude.productid);
+        msg.find('.licenseid.title').html(me._locale.dialog.conclude.licenseid);
+        msg.find('.validto.title').html(me._locale.dialog.conclude.validto);
 
         me._progressSpinner.start();
 
@@ -226,8 +249,11 @@ function () {
         }, function (response) {
             me._progressSpinner.stop();
             if (response) {
-                me._dialog.close();
-                me._showMessage(me._locale.dialog.concludeSuccessTitle, "TODO: TEKSTI RESPONSESTA", null, false);
+                //me._dialog.close();                
+                msg.find('.productid.value').html(response.productId);
+                msg.find('.licenseid.value').html(response.licenseId);
+                msg.find('.validto.value').html(response.validTo);
+                me._showMessage(me._locale.dialog.concludeSuccessTitle, msg, null, false, true);
             } else {
                 me._showMessage(me._locale.errors.concludeNoResponse.title, me._locale.errors.concludeNoResponse.message);
             }
@@ -244,14 +270,16 @@ function () {
      *
      * @param {String} title message title
      * @param {String} message the message
-     * @param {Integer} time the mesage fadeout time. Default 5000.
+     * @param {Integer} time the message fadeout time. Default 5000.
      * @param {Boolean} fadeout do fadeout
      */
-    _showMessage: function(title, message, time, fadeout) {
+    _showMessage: function(title, message, time, fadeout, showOk) {
         var me = this,
             dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+            btn = dialog.createCloseButton(me._locale.buttons.ok);
             fadeoutTime = 5000,
-            doFadeout = true;
+            doFadeout = true,
+            doButton = false;
 
         if(me._showsMessage === true) return;
 
@@ -259,12 +287,22 @@ function () {
             fadeoutTime = time;
         }
 
-        if(fadeout && fadeout !== null) {
+        if(fadeout || fadeout !== null) {
             doFadeout = fadeout;
         }
 
+        if(showOk && showOk !== null) {
+            doButton = showOk;
+        }
+
         me._showsMessage = true;
-        dialog.show(title, message);
+
+        if(doButton === false) {
+            dialog.show(title, message);
+        } else {
+            dialog.show(title, message, [btn]);
+        }
+
         dialog.onClose(function() {
            me._showsMessage = false;
         });

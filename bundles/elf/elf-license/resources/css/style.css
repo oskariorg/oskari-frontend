@@ -143,3 +143,22 @@
 .elf_license_dialog_license_data, .elf_license_dialog_license_details, .elf_license_dialog_license_price {
 	height: 460px;
 }
+
+.elf_license_success_message{
+	width: 600px;
+}
+
+.elf_license_success_message .headtitle {
+	font-size: 16px;
+	font-weight: bold;
+	margin-bottom: 10px;
+	padding-top: 6px;
+}
+
+.elf_license_success_message table tr td div.title {
+	font-weight: bold;
+}
+
+.elf_license_success_message table tr td:first-child {
+	width:20%;
+}
