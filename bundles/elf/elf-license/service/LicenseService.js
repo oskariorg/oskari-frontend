@@ -231,10 +231,6 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
                 dte = new Date(),
                 dteMs = dte.getTime();
 
-            console.dir(data);
-            successCb(data);
-            return;
-
             if (me._pendingAjaxQuery['concludeLicense'].busy && me._pendingAjaxQuery['concludeLicense'].timestamp &&
                 dteMs - me._pendingAjaxQuery['concludeLicense'].timestamp < 500) {
                 me.sandbox.printDebug("[elf-license.LicenseService] License information request NOT SENT (time difference < 500ms)");

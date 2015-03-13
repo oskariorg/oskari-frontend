@@ -223,7 +223,7 @@ function () {
             id: jQuery('.license_basic_data').attr('data-id'),
             modelid: jQuery('.license_basic_data').attr('data-model-id')
         }, function (response) {
-            me._progressSpinner.stop();            
+            me._progressSpinner.stop();
             if (response) {
                 me._dialog.close();
                 me._showMessage(me._locale.dialog.concludeSuccessTitle, "TODO: TEKSTI RESPONSESTA", null, false);
@@ -584,7 +584,7 @@ function () {
      */
     _getLicenseInputValues: function(){
         var values = [];
-        jQuery('.elf_license_user_data div.elf_license_input').each(function(){
+        jQuery('.elf_license_user_data div.elf_license_input:visible').each(function(){
             var element = jQuery(this),
                 type = element.attr('data-element-type'),
                 readOnly = element.attr('data-read-only');
@@ -596,7 +596,7 @@ function () {
 
             var inputValues = null;
 
-            if(readOnly === true || readOnly === 'true') {
+            if(!readOnly || readOnly === false || readOnly === 'false') {
                 if (type === 'int') {
                     inputValues = element.find('input').val();
                 } else if (type === 'text') {
