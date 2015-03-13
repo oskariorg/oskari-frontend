@@ -16,6 +16,11 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
                 busy: false,
                 jqhr: null,
                 timestamp: null
+            },
+            concludeLicense: {
+                busy: false,
+                jqhr: null,
+                timestamp: null
             }
         };
     }, {

@@ -21,8 +21,8 @@ function () {
             '   <div class="elf_license_dialog_name"></div>' +
             '   <div class="elf_license_dialog_license_data">' +
             '      <div class="elf_license_dialog_description"></div>' +
-            '      <div class="elf_license_dialog_licensemodels">' +
-            '           <div class="elf_license_dialog_licensemodels_title"></div>' +
+            '      <div class="elf_license_dialog_licensemodels_title"></div>' +
+            '      <div class="elf_license_dialog_licensemodels">' +            
             '      </div>' +
             '   <div class="help"></div>'+
             '   </div>' +
@@ -45,13 +45,14 @@ function () {
             '   <table class="elf_license_user_data_table"></table>' +
             '</div>' +
             '<div class="help"></div></div>'),
-        licenceModelSummaryDetails: jQuery('<div class="license_basic_data">' +
+        licenceModelSummaryDetails: jQuery('<div><div class="license_basic_data">' +
                 '<div class="name"></div>'+
                 '<div class="header"></div>'+
             '</div>'+
             '<div class="license_user_data">'+
             '<table class="elf_license_user_data_table"></table>' +
-            '<div class="price"><span class="title"></span><span class="price"></span></div>'+
+            '</div>'+
+            '<div class="price_summary"><span class="title"></span><span class="price"></span></div>'+
             '<div class="clear"></div>'+
             '<div class="help"></div>'+
             '</div>'),
@@ -492,9 +493,9 @@ function () {
 
         licenseSummary.find('.name').html(model.name);
         licenseSummary.find('.header').html(me._locale.dialog.licenseSummaryTitle);
-        licenseSummary.find('.price .title').html(me._locale.dialog.priceTitle);
+        licenseSummary.find('.price_summary .title').html(me._locale.dialog.priceTitle);
         licenseSummary.find('.help').html(me._locale.dialog.help.summary);
-        licenseSummary.find('.price .price').html(model.price + ' ' + me._locale.dialog.priceUnitEuro);
+        licenseSummary.find('.price_summary .price').html(model.price + ' ' + me._locale.dialog.priceUnitEuro);
 
         basicData.attr('data-model-id', model.groupid);
         basicData.attr('data-id', model.id);
