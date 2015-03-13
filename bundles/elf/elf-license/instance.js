@@ -193,7 +193,7 @@ function () {
             }
         }, function () {
             me._progressSpinner.stop();
-            me.getSandbox().printWarn('ELF license search failed', [].slice.call(arguments));
+            me.getSandbox().printWarn('ELF license info failed', [].slice.call(arguments));
             me._showMessage(me._locale.errors.cannotGetLicenseInformation.title, me._locale.errors.cannotGetLicenseInformation.message);
         });
     },
@@ -221,7 +221,7 @@ function () {
             }
         }, function () {
             me._progressSpinner.stop();
-            me.getSandbox().printWarn('ELF license search failed', [].slice.call(arguments));
+            me.getSandbox().printWarn('ELF license price failed', [].slice.call(arguments));
             me._showMessage(me._locale.errors.cannotGetLicensePrice.title, me._locale.errors.cannotGetLicensePrice.message);
         });
     },
@@ -259,7 +259,7 @@ function () {
             }
         }, function () {
             me._progressSpinner.stop();
-            me.getSandbox().printWarn('ELF license search failed', [].slice.call(arguments));
+            me.getSandbox().printWarn('ELF license conclude failed', [].slice.call(arguments));
             me._showMessage(me._locale.errors.failedConclude.title, me._locale.errors.failedConclude.message);
         });
     },
