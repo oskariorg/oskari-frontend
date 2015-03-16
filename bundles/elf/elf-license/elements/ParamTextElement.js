@@ -50,25 +50,40 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamTextElement',
                 title = param.title,
                 data = me._templates.licenseInput.clone(),
                 input = null,
-                value = '';
+                value = '',
+                readOnlyElement = jQuery('<div></div>'),
+                showInput = true;
 
-            data.append('<input type="text"></input>');
-            input = data.find('input');
+            if(readOnly && readOnly === true) {
+                showInput = false;
+            }
 
-            if (title === null) {
+            if(title === null) {
                 title = param.name;
             }
 
-            if(param.values[0] && param.values[0] !== null) {
-                value = param.values[0];
-            }
+            if(showInput === true) {
+                data.append('<input type="text"></input>');
+                input = data.find('input');
+                if(param.values[0] && param.values[0] !== null) {
+                    value = param.values[0];
+                }
+                input.val(value);
+            } else {
+                jQuery.each(param.values, function(index, value){
+                    var valueEl = readOnlyElement.clone();
+                    valueEl.attr('data-value', value);
+                    valueEl.html(value);
+                    data.append(valueEl);
+                });
+            }            
 
             // Add data to element
             data.attr('data-name', param.name);
             data.attr('data-title', title);
             data.attr('data-element-type', 'text');
-
-            input.val(value);
+            data.attr('data-read-only', readOnly);
+            
             element.find('.elf_license_user_data_label').html(title);
             element.find('.elf_license_user_data').html(data);
             return element;
