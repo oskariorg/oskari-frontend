@@ -219,10 +219,18 @@ function () {
             } else {
                 me._showMessage(me._locale.errors.cannotGetLicensePrice.title, me._locale.errors.cannotGetLicensePrice.message);
             }
-        }, function () {
+        }, function (response) {
+            var errorMsg = null;
             me._progressSpinner.stop();
             me.getSandbox().printWarn('ELF license price failed', [].slice.call(arguments));
-            me._showMessage(me._locale.errors.cannotGetLicensePrice.title, me._locale.errors.cannotGetLicensePrice.message);
+            if (response && response.responseText){
+                errorMsg = JSON.parse(response.responseText);
+            }
+            if (errorMsg && errorMsg !== null && errorMsg.error && errorMsg.error !== null) {
+                me._showMessage(me._locale.errors.cannotGetLicensePrice.title, errorMsg.error);
+            } else {
+               me._showMessage(me._locale.errors.cannotGetLicensePrice.title, me._locale.errors.cannotGetLicensePrice.message);
+            }
         });
     },
     /**
@@ -257,10 +265,18 @@ function () {
             } else {
                 me._showMessage(me._locale.errors.concludeNoResponse.title, me._locale.errors.concludeNoResponse.message);
             }
-        }, function () {
+        }, function (response) {
+            var errorMsg = null;
             me._progressSpinner.stop();
             me.getSandbox().printWarn('ELF license conclude failed', [].slice.call(arguments));
-            me._showMessage(me._locale.errors.failedConclude.title, me._locale.errors.failedConclude.message);
+            if (response && response.responseText){
+                errorMsg = JSON.parse(response.responseText);
+            }
+            if (errorMsg && errorMsg !== null && errorMsg.error && errorMsg.error !== null) {
+                me._showMessage(me._locale.errors.failedConclude.title, errorMsg.error);
+            } else {
+               me._showMessage(me._locale.errors.failedConclude.title, me._locale.errors.failedConclude.message);
+            }
         });
     },
     /**
