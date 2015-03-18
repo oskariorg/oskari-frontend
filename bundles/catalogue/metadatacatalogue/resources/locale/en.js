@@ -48,7 +48,8 @@ Oskari.registerLocalization({
             "name": "Name",
             "showBBOX": "Show data coverage",
             "info": "Show metadata",
-            "remove": "Remove from search results"
+            "remove": "Remove from search results",
+            "rating": "Rating"
         },
         "licenseText": "Get license"
     }

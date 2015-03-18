@@ -28,7 +28,8 @@ Oskari.registerLocalization({
             "title": "Risultati della ricerca",
             "showBBOX": "NOT TRANSLATED",
             "info": "NOT TRANSLATED",
-            "remove": "NOT TRANSLATED"
+            "remove": "NOT TRANSLATED",
+            "rating": "NOT TRANSLATED"
         },
         "licenseText": "Get licenza"
     }
