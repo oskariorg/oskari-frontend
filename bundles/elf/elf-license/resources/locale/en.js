@@ -27,7 +27,13 @@ Oskari.registerLocalization({
             "cannotDeactivateLicense": {
                 "title": "Failed to deactivate license",
                 "message": "Cannot deactivate license"
-            },
+            }
+        },
+        "success": {
+            "deactivateLicense": {
+                "title": "License deactivated",
+                "message": "License deactivated successfully"
+            }
         },
         "dialog": {
         	"licenseTitle": "License details",

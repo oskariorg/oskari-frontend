@@ -15,6 +15,24 @@ Oskari.registerLocalization({
             "cannotGetLicensePrice": {
                 "title": "Virhe hinnan haussa",
                 "message": "Hintaa ei saatu haettua"
+            },
+            "failedConclude": {
+                "title": "Virhe lisenssin tilauksessa",
+                "message": "Lisenssiä ei saatu tilattua"
+            },
+            "concludeNoResponse": {
+                "title": "Virhe lisenssin tilauksessa",
+                "message": "Lisenssiä ei saatu tilattua"
+            },
+            "cannotDeactivateLicense": {
+                "title": "Virhe lisenssin tilauksen lopettamisessa",
+                "message": "Lisenssin tilausta ei saatu lopetettua"
+            }
+        },
+        "success": {
+            "deactivateLicense": {
+                "title": "Lisenssin tilaus lopetettu",
+                "message": "Lisenssin tilauksen lopetus onnistui"
             }
         },
         "dialog": {

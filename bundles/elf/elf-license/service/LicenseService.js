@@ -21,6 +21,11 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
                 busy: false,
                 jqhr: null,
                 timestamp: null
+            },
+            deactivateLicense: {
+                busy: false,
+                jqhr: null,
+                timestamp: null
             }
         };
     }, {
@@ -287,8 +292,6 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
                 data = me._getLicenseInformationData(options),
                 dte = new Date(),
                 dteMs = dte.getTime();
-                alert('deaktivoi');
-            return; 
 
             if (me._pendingAjaxQuery['deactivateLicense'].busy && me._pendingAjaxQuery['deactivateLicense'].timestamp &&
                 dteMs - me._pendingAjaxQuery['deactivateLicense'].timestamp < 500) {
@@ -299,17 +302,18 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
             me._cancelAjaxRequest('deactivateLicense');
             me._startAjaxRequest(dteMs, 'deactivateLicense');
 
+            console.dir(data);
+
             jQuery.ajax({
                 dataType : "json",
-                type : "PUT",
-                data: data,
+                type : "DELETE",
                 beforeSend: function(x) {
                     me._pendingAjaxQuery['deactivateLicense'].jqhr = x;
                     if (x && x.overrideMimeType) {
                         x.overrideMimeType("application/j-son;charset=UTF-8");
                     }
                 },
-                url : me._licenseServiceUrl,
+                url : me._licenseServiceUrl + '&' + jQuery.param(data),
                 error : function(jqXHR,textStatus, errorThrown) {
                     me._finishAjaxRequest('deactivateLicense');
                     errorCb(jqXHR);
@@ -326,14 +330,6 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
                 },
             });
         }
-
-
-
-
-
-
-
-
     }, {
         'protocol': ['Oskari.mapframework.service.Service']
     });

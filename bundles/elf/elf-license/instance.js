@@ -451,7 +451,6 @@ function () {
         yesBtn.setTitle(me._locale.buttons.yes);
         yesBtn.setHandler(function(){
             dialog.close();
-            me._dialog.close();
             me._deactivateLicense();
         });
 
@@ -475,7 +474,14 @@ function () {
             modelid: jQuery('.license_basic_data').attr('data-model-id')
         }, function (response) {
             me._progressSpinner.stop();
-            if (response) {
+
+            if (response) {                
+                if(response.success && response.success === true) {
+                    me._dialog.close();
+                    me._showMessage(me._locale.success.deactivateLicense.title, me._locale.success.deactivateLicense.message);
+                } else {
+                    me._showMessage(me._locale.errors.cannotDeactivateLicense.title, me._locale.errors.cannotDeactivateLicense.message);
+                }
                 // TODO show really necessary details of deactivating license
                 //me._showLicenseOrderSummaryDialog(response);
             } else {

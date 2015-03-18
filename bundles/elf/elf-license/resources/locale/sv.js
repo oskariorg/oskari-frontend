@@ -15,6 +15,24 @@ Oskari.registerLocalization({
             "cannotGetLicensePrice": {
                 "title": "Failed to get license price",
                 "message": "Cannot get license price"
+            },
+            "failedConclude": {
+                "title": "Error for conclude license",
+                "message": "Cannot conclude license."
+            },
+            "concludeNoResponse": {
+                "title": "Cannot conclude license",
+                "message": "Cannot conclude license."
+            },
+            "cannotDeactivateLicense": {
+                "title": "Failed to deactivate license",
+                "message": "Cannot deactivate license"
+            }
+        },
+        "success": {
+            "deactivateLicense": {
+                "title": "License deactivated",
+                "message": "License deactivated successfully"
             }
         },
         "dialog": {
