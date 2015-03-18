@@ -10,6 +10,8 @@ div.elf_license_dialog {
   div.elf_license_dialog input.elf_license_next_button {
     display: none;
     float: right; }
+  div.elf_license_dialog input.elf_license_deactivate_button {
+    float: right; }
   div.elf_license_dialog div.elf_license_dialog_name {
     font-size: 16px;
     font-weight: bold; }

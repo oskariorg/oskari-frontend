@@ -18,7 +18,7 @@ Oskari.registerLocalization({
             }
         },
         "dialog": {
-        	"licenseTitle": "License information",
+        	"licenseTitle": "License details",
         	"licenseModelsTitle": "Licensemodels:",
             "noRightToAnyLicenseModels": "You have no rights to any licensemodels.",
             "loginShort": "Log in to show licensemodels.",
@@ -28,7 +28,8 @@ Oskari.registerLocalization({
             "help": {
                 "info": "Select a license model by clicking on it.",
                 "details": " Fill license details and then press 'Next' to see license summary and price. If you want select different license model then press 'Previous'. You can also stop your order by pressing 'Close' button.",
-                "summary": "Read license and accept filled license pressing 'Conclude'. If you want edit some filled information, go back to by pressing 'Back' button. You can also stop your order by pressing 'Close' button."
+                "summary": "Read license and accept filled license pressing 'Conclude'. If you want edit some filled information, go back to by pressing 'Back' button. You can also stop your order by pressing 'Close' button.",
+                "orderDetails": "Above you will see your license order information. Close dialog by pressing 'Close' button. If you want deactivate your order then press 'Deactivate license' button."
             },
             "concludeSuccessTitle": "License concluded successfully",
             "conclude": {
@@ -43,7 +44,8 @@ Oskari.registerLocalization({
         	"previous": "Previous",
         	"next": "Next",
             "conclude": "Conclude",
-            "ok": "OK"
+            "ok": "OK",
+            "deactivate": "Deactivate license"
         }
     }
 });

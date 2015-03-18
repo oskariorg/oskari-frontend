@@ -187,7 +187,11 @@ function () {
         }, function (response) {
             me._progressSpinner.stop();
             if (response) {
-                me._showLicenseInformationDialog(response, metadata);
+                if(response.userLicense && response.userLicense === true){
+                    me._showLicenseDeactivateDialog(response, metadata);
+                } else {
+                    me._showLicenseSubscriptionInformationDialog(response, metadata);
+                }
             } else {
                 me._showMessage(me._locale.errors.cannotGetLicenseInformation.title, me._locale.errors.cannotGetLicenseInformation.message);
             }
@@ -329,14 +333,160 @@ function () {
 
     },
     /**
-     * Show license information dialog
-     * @method _showLicenseInformationDialog
+     * Show license deactivate information dialog
+     * @method _showLicenseDeactivateDialog
      * @private
      *
      * @param {Object} data license information data
      * @param {Object} metadata the metadata
      */
-    _showLicenseInformationDialog: function(data, metadata){
+    _showLicenseDeactivateDialog: function(data, metadata){
+        var me = this,
+            dialogContent = me._templates.licenseDialog.clone(),
+            models = dialogContent.find('.elf_license_dialog_licensemodels'),
+            title = dialogContent.find('.elf_license_dialog_licensemodels_title'),
+            metadataTitle = '',
+            cancelBtn = me._dialog.createCloseButton(this._locale.buttons.close),
+            deactivateBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+
+        me._showLicenseModels();
+        me._metadata = metadata;
+
+        cancelBtn.addClass('elf_license_close_button');
+
+        deactivateBtn.addClass('elf_license_deactivate_button');
+        deactivateBtn.setTitle(me._locale.buttons.deactivate);
+        deactivateBtn.setHandler(function(){
+            me._deactivateLicense();
+        });
+
+
+
+        me._dialog.addClass('elf_license_dialog');
+        dialogContent.find('.elf_license_dialog_name').html(data.name);
+        dialogContent.find('.elf_license_dialog_description').html(data.description);
+        title.removeClass('text');
+
+        // If  founded models then shows them
+        if(data.licenseModels.length > 0)  { 
+            title.html(me._locale.dialog.licenseModelsTitle);
+        }
+        // If not found then shows message
+        else {
+            title.addClass('text');
+            // If user has already logged in  then shows at no right to anyone license
+            if (me._sandbox.getUser().isLoggedIn()) {
+                title.html(me._locale.dialog.noRightToAnyLicenseModels);
+            } 
+            // Else if user has not logged in then show log in message
+            else {
+                title.html(me._locale.dialog.loginShort);
+            }
+        }
+
+        metadataTitle = metadata.name;
+        if(metadata.organization && metadata.organization !== null && metadata.organization !== ''){
+            metadataTitle += ', ' + metadata.organization;
+        }
+
+        me._dialog.show(me._locale.dialog.licenseTitle + ' - ' + metadataTitle, dialogContent, [cancelBtn, deactivateBtn]);
+        me._dialog.makeModal();
+
+        me._progressSpinner.insertTo(jQuery('.elf_license_dialog'));
+
+        // If there is orderer licensemodel then open it
+        if(data.licenseModels.length == 1) {
+            me._showLicenseDeactivateParams(data.licenseModels[0], data);
+        }
+
+    },
+    /**
+     * Show license deactivate params dialog
+     * @method _showLicenseDeactivateParams
+     * @private
+     *
+     * @param {Object} model license model
+     * @param {Object} licenseData license data
+     */
+    _showLicenseDeactivateParams: function(model, licenseData) {
+        var me = this,
+            modelDetails = me._templates.licenceModelDetails.clone(),
+            userData = modelDetails.find('.license_user_data'),
+            licenseDetails = jQuery('.elf_license_dialog_license_details'),
+            basicData = modelDetails.find('.license_basic_data'),
+            closeButtonEl = jQuery('.elf_license_close_button'),
+            deactivateButtonEl = jQuery('.elf_license_deactivate_button'),
+            closeButtonMargin = closeButtonEl.outerWidth() - closeButtonEl.width();
+
+        me._showLicenseDetails();
+        licenseDetails.empty();
+
+        modelDetails.find('.elf_name').html(model.name);
+        modelDetails.find('.help').html(me._locale.dialog.help.orderDetails);
+
+        basicData.attr('data-model-id', model.id);
+        basicData.attr('data-id', licenseData.id);
+
+        if(model.params.length>0) {
+            var userDataTable = modelDetails.find('.elf_license_user_data_table');
+            jQuery.each(model.params, function(index, param){
+                var jQueryElement = me._getFormElement(param, true);
+                if(jQueryElement !== null) userDataTable.append(jQueryElement);
+            });
+        }
+
+        licenseDetails.append(modelDetails);
+
+        closeButtonEl.css('margin-left',  deactivateButtonEl.outerWidth() + closeButtonMargin);
+    },
+    /**
+     * Deactivate license. Shows confirmataion window by user and if user accept that then deactivate license.
+     * @method _deactivateLicense
+     * @private
+     */
+    _deactivateLicense: function(){
+        var me = this,
+            data = me._getLicenseInputValues();
+
+            //console.dir(data);
+/*
+        me._progressSpinner.start();
+
+        me.licenseService.doGetPrice({
+            data: data,
+            id: jQuery('.license_basic_data').attr('data-id'),
+            modelid: jQuery('.license_basic_data').attr('data-model-id')
+        }, function (response) {
+            me._progressSpinner.stop();
+            if (response) {
+                me._showLicenseOrderSummaryDialog(response);
+            } else {
+                me._showMessage(me._locale.errors.cannotGetLicensePrice.title, me._locale.errors.cannotGetLicensePrice.message);
+            }
+        }, function (response) {
+            var errorMsg = null;
+            me._progressSpinner.stop();
+            me.getSandbox().printWarn('ELF license price failed', [].slice.call(arguments));
+            if (response && response.responseText){
+                errorMsg = JSON.parse(response.responseText);
+            }
+            if (errorMsg && errorMsg !== null && errorMsg.error && errorMsg.error !== null) {
+                me._showMessage(me._locale.errors.cannotGetLicensePrice.title, errorMsg.error);
+            } else {
+               me._showMessage(me._locale.errors.cannotGetLicensePrice.title, me._locale.errors.cannotGetLicensePrice.message);
+            }
+        });
+*/
+    },
+    /**
+     * Show license subscription information dialog
+     * @method _showLicenseSubscriptionInformationDialog
+     * @private
+     *
+     * @param {Object} data license information data
+     * @param {Object} metadata the metadata
+     */
+    _showLicenseSubscriptionInformationDialog: function(data, metadata){
         var me = this,
             dialogContent = me._templates.licenseDialog.clone(),
             models = dialogContent.find('.elf_license_dialog_licensemodels'),
@@ -407,7 +557,6 @@ function () {
         if(data.licenseModels.length == 1) {
             me._showLicenseParams(data.licenseModels[0], data);
         }
-
     },
     /**
      * Go back
