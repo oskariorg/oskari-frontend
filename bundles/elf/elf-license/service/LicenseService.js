@@ -271,7 +271,69 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
                     me._finishAjaxRequest('concludeLicense');
                 },
             });
+        },
+        /**
+         * Do deactivate license
+         * @method doDeactivateLicense
+         * @public
+         *
+         * @param {Object} options url options
+         * @param {Function} successCb success callback
+         * @param {Function} errorCd error callback
+         */
+        doDeactivateLicense: function (options, successCb, errorCb) {
+            options.data = JSON.stringify(options.data);
+            var me = this,
+                data = me._getLicenseInformationData(options),
+                dte = new Date(),
+                dteMs = dte.getTime();
+                alert('deaktivoi');
+            return; 
+
+            if (me._pendingAjaxQuery['deactivateLicense'].busy && me._pendingAjaxQuery['deactivateLicense'].timestamp &&
+                dteMs - me._pendingAjaxQuery['deactivateLicense'].timestamp < 500) {
+                me.sandbox.printDebug("[elf-license.LicenseService] License information request NOT SENT (time difference < 500ms)");
+                return;
+            }
+
+            me._cancelAjaxRequest('deactivateLicense');
+            me._startAjaxRequest(dteMs, 'deactivateLicense');
+
+            jQuery.ajax({
+                dataType : "json",
+                type : "PUT",
+                data: data,
+                beforeSend: function(x) {
+                    me._pendingAjaxQuery['deactivateLicense'].jqhr = x;
+                    if (x && x.overrideMimeType) {
+                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                    }
+                },
+                url : me._licenseServiceUrl,
+                error : function(jqXHR,textStatus, errorThrown) {
+                    me._finishAjaxRequest('deactivateLicense');
+                    errorCb(jqXHR);
+                },
+                success : function(data) {
+                    me._finishAjaxRequest('deactivateLicense');
+                    successCb(data);
+                },
+                always: function () {
+                    me._finishAjaxRequest('deactivateLicense');
+                },
+                complete: function () {
+                    me._finishAjaxRequest('deactivateLicense');
+                },
+            });
         }
+
+
+
+
+
+
+
+
     }, {
         'protocol': ['Oskari.mapframework.service.Service']
     });

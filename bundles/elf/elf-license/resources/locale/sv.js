@@ -37,6 +37,10 @@ Oskari.registerLocalization({
                 "productid": "Product",
                 "licenseid": "License",
                 "validto": "Valid to"
+            },
+            "deactivateConfirm": {
+                "title": "License deactivate",
+                "message": "Do you want deactivate your license?"
             }
         },
         "buttons": {
@@ -45,7 +49,9 @@ Oskari.registerLocalization({
         	"next": "Next",
             "conclude": "Conclude",
             "ok": "OK",
-            "deactivate": "Deactivate license"
+            "deactivate": "Deactivate license",
+            "no": "No",
+            "yes": "Yes"
         }
     }
 });

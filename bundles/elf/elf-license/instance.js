@@ -357,10 +357,8 @@ function () {
         deactivateBtn.addClass('elf_license_deactivate_button');
         deactivateBtn.setTitle(me._locale.buttons.deactivate);
         deactivateBtn.setHandler(function(){
-            me._deactivateLicense();
+            me._showDeactivateLicenseConfirm();
         });
-
-
 
         me._dialog.addClass('elf_license_dialog');
         dialogContent.find('.elf_license_dialog_name').html(data.name);
@@ -440,43 +438,62 @@ function () {
         closeButtonEl.css('margin-left',  deactivateButtonEl.outerWidth() + closeButtonMargin);
     },
     /**
-     * Deactivate license. Shows confirmataion window by user and if user accept that then deactivate license.
+     * Shows deactivate confirm dialog.
+     * @method _showDeactivateLicenseConfirm
+     * @private
+     */
+    _showDeactivateLicenseConfirm: function(){
+        var me = this,
+            dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+            noBtn = dialog.createCloseButton(me._locale.buttons.no),
+            yesBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+
+        yesBtn.setTitle(me._locale.buttons.yes);
+        yesBtn.setHandler(function(){
+            dialog.close();
+            me._dialog.close();
+            me._deactivateLicense();
+        });
+
+        dialog.show(me._locale.dialog.deactivateConfirm.title, me._locale.dialog.deactivateConfirm.message , [noBtn, yesBtn]);
+        dialog.makeModal();
+    },
+    /**
+     * Deactivate license.
      * @method _deactivateLicense
      * @private
      */
     _deactivateLicense: function(){
         var me = this,
             data = me._getLicenseInputValues();
-
-            //console.dir(data);
-/*
+        
         me._progressSpinner.start();
 
-        me.licenseService.doGetPrice({
+        me.licenseService.doDeactivateLicense({
             data: data,
             id: jQuery('.license_basic_data').attr('data-id'),
             modelid: jQuery('.license_basic_data').attr('data-model-id')
         }, function (response) {
             me._progressSpinner.stop();
             if (response) {
-                me._showLicenseOrderSummaryDialog(response);
+                // TODO show really necessary details of deactivating license
+                //me._showLicenseOrderSummaryDialog(response);
             } else {
-                me._showMessage(me._locale.errors.cannotGetLicensePrice.title, me._locale.errors.cannotGetLicensePrice.message);
+                me._showMessage(me._locale.errors.cannotDeactivateLicense.title, me._locale.errors.cannotDeactivateLicense.message);
             }
         }, function (response) {
             var errorMsg = null;
             me._progressSpinner.stop();
-            me.getSandbox().printWarn('ELF license price failed', [].slice.call(arguments));
+            me.getSandbox().printWarn('ELF license deactivate failed', [].slice.call(arguments));
             if (response && response.responseText){
                 errorMsg = JSON.parse(response.responseText);
             }
             if (errorMsg && errorMsg !== null && errorMsg.error && errorMsg.error !== null) {
-                me._showMessage(me._locale.errors.cannotGetLicensePrice.title, errorMsg.error);
+                me._showMessage(me._locale.errors.cannotDeactivateLicense.title, errorMsg.error);
             } else {
-               me._showMessage(me._locale.errors.cannotGetLicensePrice.title, me._locale.errors.cannotGetLicensePrice.message);
+               me._showMessage(me._locale.errors.cannotDeactivateLicense.title, me._locale.errors.cannotDeactivateLicense.message);
             }
         });
-*/
     },
     /**
      * Show license subscription information dialog

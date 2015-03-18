@@ -30,6 +30,17 @@ Oskari.registerLocalization({
                 "details": " Fill license details and then press 'Next' to see license summary and price. If you want select different license model then press 'Previous'. You can also stop your order by pressing 'Close' button.",
                 "summary": "Read license and accept filled license pressing 'Conclude'. If you want edit some filled information, go back to by pressing 'Back' button. You can also stop your order by pressing 'Close' button.",
                 "orderDetails": "Above you will see your license order information. Close dialog by pressing 'Close' button. If you want deactivate your order then press 'Deactivate license' button."
+            },
+            "concludeSuccessTitle": "License concluded successfully",
+            "conclude": {
+                "title": "License order details",
+                "productid": "Product",
+                "licenseid": "License",
+                "validto": "Valid to"
+            },
+            "deactivateConfirm": {
+                "title": "License deactivate",
+                "message": "Do you want deactivate your license?"
             }
         },
         "buttons": {
@@ -38,7 +49,9 @@ Oskari.registerLocalization({
         	"next": "Next",
             "conclude": "Conclude",
             "ok": "OK",
-            "deactivate": "Deactivate license"
+            "deactivate": "Deactivate license",
+            "no": "No",
+            "yes": "Yes"
         }
     }
 });

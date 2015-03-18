@@ -37,6 +37,10 @@ Oskari.registerLocalization({
                 "productid": "Tuote",
                 "licenseid": "Lisenssi",
                 "validto": "Voimassa"
+            },
+            "deactivateConfirm": {
+                "title": "Lisenssin peruuttaminen",
+                "message": "Haluatko lopettaa lisenssin tlauksen?"
             }
         },
         "buttons": {
@@ -45,7 +49,9 @@ Oskari.registerLocalization({
         	"next": "Seuraava",
             "conclude": "Tilaa lisenssi",
             "ok": "OK",
-            "deactivate": "Peruuta lisenssi"
+            "deactivate": "Peruuta lisenssi",
+            "no": "EI",
+            "yes": "Kyllä"
         }
     }
 });

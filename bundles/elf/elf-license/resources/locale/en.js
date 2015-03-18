@@ -23,7 +23,11 @@ Oskari.registerLocalization({
             "concludeNoResponse": {
                 "title": "Cannot conclude license",
                 "message": "Cannot conclude license."
-            }
+            },
+            "cannotDeactivateLicense": {
+                "title": "Failed to deactivate license",
+                "message": "Cannot deactivate license"
+            },
         },
         "dialog": {
         	"licenseTitle": "License details",
@@ -45,6 +49,10 @@ Oskari.registerLocalization({
                 "productid": "Product",
                 "licenseid": "License",
                 "validto": "Valid to"
+            },
+            "deactivateConfirm": {
+                "title": "License deactivate",
+                "message": "Do you want deactivate your license?"
             }
         },
         "buttons": {
@@ -53,7 +61,9 @@ Oskari.registerLocalization({
         	"next": "Next",
             "conclude": "Conclude",
             "ok": "OK",
-            "deactivate": "Deactivate license"
+            "deactivate": "Deactivate license",
+            "no": "No",
+            "yes": "Yes"
         }
     }
 });
