@@ -49,7 +49,9 @@ Oskari.registerLocalization(
             "name": "Nombre",
             "showBBOX": "NOT TRANSLATED",
             "info": "NOT TRANSLATED",
-            "remove": "NOT TRANSLATED"
+            "remove": "NOT TRANSLATED",
+            "rating": "NOT TRANSLATED"
+
         },
         "licenseText": "NOT TRANSLATED"
     }

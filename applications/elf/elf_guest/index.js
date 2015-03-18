@@ -183,7 +183,6 @@ jQuery(document).ready(function() {
     /* let's start the app after config has been loaded successfully */
     function start(appSetup, appConfig, cb) {
         var app = Oskari.app;
-
         app.setApplicationSetup(appSetup);
 
         // TODO: move to DB!
