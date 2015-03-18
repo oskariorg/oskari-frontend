@@ -28,7 +28,8 @@ Oskari.registerLocalization({
             "help": {
                 "info": "Valitse lisenssi malli klikkaamalla sitä.",
                 "details": " Täytä lisenssin tiedot ja paina sen jälkeen 'Seuraava' nähdäksesi lisenssin yhteenvedon ja hinnan. Jos haluat valita eri lisenssimallin niin valitse 'Edellinen'. Voit myös lopettaa tilauksen painamalla valitsemalla 'Sulje'.",
-                "summary": "Lue ja hyväksy täyttämäsi lisenssi valitsemalla 'Tilaa lisenssi'. Jos haluat muokata syöttämiäsi tietoja valitse 'Edellinen'. Voit myös lopettaa tilauksen painamalla valitsemalla 'Sulje'."
+                "summary": "Lue ja hyväksy täyttämäsi lisenssi valitsemalla 'Tilaa lisenssi'. Jos haluat muokata syöttämiäsi tietoja valitse 'Edellinen'. Voit myös lopettaa tilauksen painamalla valitsemalla 'Sulje'.",
+                "orderDetails": "Yläpuolella näet tilauksesi tiedot. Sulje dialogi valitsemalla 'Sulje'. Voit peruuttaa tilauksesi valitsemalla 'Peruuta lisenssi'."
             },
             "concludeSuccessTitle": "Lisenssin tilaus onnistui",
             "conclude": {
@@ -43,7 +44,8 @@ Oskari.registerLocalization({
         	"previous": "Edellinen",
         	"next": "Seuraava",
             "conclude": "Tilaa lisenssi",
-            "ok": "OK"
+            "ok": "OK",
+            "deactivate": "Peruuta lisenssi"
         }
     }
 });
