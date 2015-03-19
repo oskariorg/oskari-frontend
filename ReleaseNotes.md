@@ -24,6 +24,8 @@ Hardcodings removed and now uses the configured supported languages.
 
 Oskari.getLocalization() now supports language as a second parameter. Notice that the locale still won't be loaded automatically.
 
+Oskari.registerLocalization() now supports override languages. Locales are merged to each other. Notice that at this not override old locales, so if you want override default locales the language override bundle need start first.
+
 ### framework/admin-layerrights
 
 Fixed layer table breaking when layer name is short.
