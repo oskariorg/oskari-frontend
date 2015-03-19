@@ -65,22 +65,21 @@ function() {
         },
         {
             "type" : "text/css",
-//            "src" : "../../../../resources/catalogue/bundle/metadatafeedback/css/style.css"
-            "src" : "../../../../bundles/elf/elf-metadatafeedback/css/style.css"
+            "src" : "../../../../bundles/elf/elf-metadatafeedback/resources/css/style.css"
         }
         ],
         "locales" : [{
             "lang" : "fi",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/elf/elf-metadatafeedback/locale/fi.js"
+            "src" : "../../../../bundles/elf/elf-metadatafeedback/resources/locale/fi.js"
         }, {
             "lang" : "sv",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/elf/elf-metadatafeedback/locale/sv.js"
+            "src" : "../../../../bundles/elf/elf-metadatafeedback/resources/locale/sv.js"
         }, {
             "lang" : "en",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/elf/elf-metadatafeedback/locale/en.js"
+            "src" : "../../../../bundles/elf/elf-metadatafeedback/resources/locale/en.js"
         }]
     },
     "bundle" : {
