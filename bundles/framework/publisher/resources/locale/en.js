@@ -156,7 +156,7 @@ Oskari.registerLocalization(
                 "ok": "OK",
                 "replace": "Replace",
                 "cancel": "Cancel",
-                "add": "Add the map layer"
+                "add": "Add a map layer"
             },
             "confirm": {
                 "replace": {
