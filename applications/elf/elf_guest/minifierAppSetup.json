@@ -1,5 +1,20 @@
 {
-    "startupSequence": [{      
+    "startupSequence": [
+    	{
+            "instanceProps": {},
+            "title": "ELF language overrides",
+            "bundleinstancename": "elf-lang-overrides",
+            "bundlename": "elf-lang-overrides",
+            "metadata": {
+                "Import-Bundle": {
+                    "elf-lang-overrides": {
+                        "bundlePath": "../../../packages/elf/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        },
+    	{      
             "bundleinstancename": "oskariui",
             "bundlename": "oskariui",
             "instanceProps": {},
@@ -499,19 +514,6 @@
             "metadata": {
                 "Import-Bundle": {
                     "elf-license": {
-                        "bundlePath": "../../../packages/elf/bundle/"
-                    }
-                },
-                "Require-Bundle-Instance": []
-            }
-        }, {
-            "instanceProps": {},
-            "title": "ELF language overrides",
-            "bundleinstancename": "elf-lang-overrides",
-            "bundlename": "elf-lang-overrides",
-            "metadata": {
-                "Import-Bundle": {
-                    "elf-lang-overrides": {
                         "bundlePath": "../../../packages/elf/bundle/"
                     }
                 },
