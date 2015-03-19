@@ -2936,10 +2936,11 @@ D         * @param {Object} classInfo ClassInfo
         /**
          * @public @static @method Oskari.registerLocalization
          *
-         * @param  {Object|Object[]} props Properties
+         * @param {Object|Object[]} props Properties
+         * @param {Boolean} override override languages
          *
          */
-        registerLocalization: function (props) {
+        registerLocalization: function (props, override) {
             var p,
                 pp,
                 loc;
@@ -2951,30 +2952,50 @@ D         * @param {Object} classInfo ClassInfo
             if (props.length) {
                 for (p = 0; p < props.length; p += 1) {
                     pp = props[p];
-                    if(props.key && props.lang){
-                        loc = Oskari.getLocalization(pp.key, pp.lang);
+
+                    if(override && override === true){
+                        if(pp.key && pp.lang){
+                            loc = Oskari.getLocalization(pp.key, pp.lang);
+                        }
+                        
+                        if(loc && loc !== null){              
+                            pp.value = jQuery.extend(true, {}, loc, pp.value);
+                        }
+                        
+                    } else {
+                        if(pp.key && pp.lang){
+                            loc = Oskari.getLocalization(pp.key, pp.lang);
+                        }
+                        
+                        if(loc && loc !== null){              
+                            pp.value = jQuery.extend(true, {}, pp.value, loc);
+                        }
                     }
-                                    
-                    if(loc && loc !== null){                    
-                        pp.value = jQuery.extend(true, {}, pp.value, loc);
-                    }
+                    
                     blocale.setLocalization(pp.lang, pp.key, pp.value);
                 }
                 
-            } else {                
-                if(props.key && props.lang){
-                    loc = Oskari.getLocalization(props.key, props.lang);
+            } else {
+                if(override && override === true){
+                    if(props.key && props.lang){
+                        loc = Oskari.getLocalization(props.key, props.lang);
+                    }
+                    
+                    if(loc && loc !== null){              
+                        props.value = jQuery.extend(true, {}, loc, props.value);
+                    }
+                    
+                } else {
+                    if(props.key && props.lang){
+                        loc = Oskari.getLocalization(props.key, props.lang);
+                    }
+                    
+                    if(loc && loc !== null){              
+                        props.value = jQuery.extend(true, {}, props.value, loc);
+                    }
                 }
-
-                if(loc && loc !== null){                    
-                    props.value = jQuery.extend(true, {}, props.value, loc);
-                }
-
-                blocale.setLocalization(
-                    props.lang,
-                    props.key,
-                    props.value
-                );
+                blocale.setLocalization(props.lang,props.key,props.value);
+                
             }
         },
 

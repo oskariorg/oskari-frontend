@@ -34,7 +34,7 @@ function () {
     start: function (sandbox) {        
         // Set languages
         jQuery.each(Oskari.getLocalization('elf-lang-overrides'), function(key, value ) {
-            Oskari.registerLocalization({'key': key, 'value': value, 'lang': Oskari.getLang()}); 
+            Oskari.registerLocalization({'key': key, 'value': value, 'lang': Oskari.getLang()}, true); 
         });
     },
     /**
