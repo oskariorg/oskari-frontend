@@ -248,7 +248,7 @@
         "bundlename": "elf-lang-overrides",
         "metadata": {
             "Import-Bundle": {
-                "elf-license": {
+                "elf-lang-overrides": {
                     "bundlePath": "../../../packages/elf/bundle/"
                 }
             },
