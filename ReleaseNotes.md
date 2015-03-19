@@ -6,6 +6,11 @@
 
 Now supports zoomScale in search results.
 
+
+### elf/elf-lang-overrides
+
+*New bundle!* This bundle is used to override default locales in ELF application.
+
 ### elf/elf-license
 
 *New bundle!* Extends metadatacatalogue search to show user license information. User can unconclude/conclude license to it self.

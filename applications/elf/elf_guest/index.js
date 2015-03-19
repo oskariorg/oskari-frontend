@@ -146,24 +146,8 @@ jQuery(document).ready(function() {
         }
     }
 
-    /**
-    * Set ELF languges HACK. Dirty solution, need to be fixed in future.
-    * TODO: move these to another palce
-    */
-    function setELFLanguagesHack(){
-        var language = Oskari.getLang();
-        if (language === "fi") {
-            Oskari.getLocalization('MapModule').plugin.LogoPlugin.layersHeader = "&copy; ELF ja seuraavat tiedontuottajat:";
-        } else if (language === "sv") {
-            Oskari.getLocalization('MapModule').plugin.LogoPlugin.layersHeader = "&copy; ELF och följande dataproducenter:";
-        } else if (language === "en") {
-            Oskari.getLocalization('MapModule').plugin.LogoPlugin.layersHeader = "&copy; ELF and listed service providers:";
-        }
-    }
-
     /* let's start some ELF specific ops - config and loading of WMTS capabilities from XML */
     function startELF(sb) {
-        setELFLanguagesHack();
         jQuery.ajax({
             type : 'GET',
             dataType : 'json',
