@@ -1,18 +1,22 @@
 Oskari.registerLocalization( 
 { 
     "lang": "en", 
-    "key": "elf-lang-overrides", 
-    "value": { 
-        "MapModule": { 
-            "plugin": { 
-                "LogoPlugin" : { 
-                    "dataSources": "Copyright",
-                    "layersHeader": "&copy; ELF and listed service providers"
-                }
-            } 
-        },
-        "catalogue.bundle.metadatacatalogue": {
-            "tabTitle": "Geo Product Finder"
-        }
+    "key": "MapModule", 
+    "value": {
+        "plugin": { 
+            "LogoPlugin" : { 
+                "dataSources": "Copyright",
+                "layersHeader": "&copy; ELF and listed service providers"
+            }
+        } 
     } 
-});
+}, true);
+
+Oskari.registerLocalization( 
+{ 
+    "lang": "en", 
+    "key": "catalogue.bundle.metadatacatalogue", 
+    "value": {
+        "tabTitle": "Geo Product Finder"
+    } 
+}, true);

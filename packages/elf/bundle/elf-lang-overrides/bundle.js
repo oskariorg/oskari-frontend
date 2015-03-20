@@ -7,24 +7,19 @@ Oskari.clazz.define("Oskari.elf.lang.overrides.Bundle", function() {
 
 }, {
     "create" : function() {
-        return Oskari.clazz.create(
-            "Oskari.elf.lang.overrides.BundleInstance",
-            "elf-lang-overrides");
+        return this;
     },
     "update" : function(manager, bundle, bi, info) {
-    }
+    },
+    "start": function() {},
+    "stop": function() {}
 }, {
     "protocol" : [
         "Oskari.bundle.Bundle",
         "Oskari.mapframework.bundle.extension.ExtensionBundle"
     ],
     "source" : {
-
         "scripts" : [
-            {
-                "type" : "text/javascript",
-                "src" : "../../../../bundles/elf/elf-lang-overrides/instance.js"
-            }
         ],
         "locales" : [
             {

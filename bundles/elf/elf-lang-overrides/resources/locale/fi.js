@@ -1,18 +1,22 @@
 Oskari.registerLocalization( 
 { 
     "lang": "fi", 
-    "key": "elf-lang-overrides", 
-    "value": { 
-        "MapModule": { 
-            "plugin": { 
-                "LogoPlugin" : {
-                    "dataSources": "Copyright",
-                    "layersHeader": "&copy; ELF ja seuraavat tiedontuottajat" 
-                } 
-            } 
-        },
-        "catalogue.bundle.metadatacatalogue": {
-            "tabTitle": "Geo Product Finder"
-        }
+    "key": "MapModule", 
+    "value": {
+        "plugin": { 
+            "LogoPlugin" : { 
+                "dataSources": "Copyright",
+                "layersHeader": "&copy; ELF ja seuraavat tiedontuottajat"
+            }
+        } 
     } 
-}); 
+}, true);
+
+Oskari.registerLocalization( 
+{ 
+    "lang": "fi", 
+    "key": "catalogue.bundle.metadatacatalogue", 
+    "value": {
+        "tabTitle": "Geo Product Finder"
+    } 
+}, true);
