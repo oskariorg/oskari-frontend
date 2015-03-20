@@ -2,10 +2,14 @@
 
 ## 1.28
 
+### core/AbstractLayer and Oskari.getDefaultLanguage()
+
+AbstractLayer: if name, description, Inspire theme and organization is missing for users language the default language version is used.
+Oskari.getDefaultLanguage() no longer crashes if supported locales are not set. Returns Oskari.getLang() in such case.
+
 ### framework/mapmodule-plugin - SearchPlugin
 
 Now supports zoomScale in search results.
-
 
 ### elf/elf-lang-overrides
 
@@ -14,7 +18,6 @@ Now supports zoomScale in search results.
 ### elf/elf-license
 
 *New bundle!* Extends metadatacatalogue search to show user license information. User can unconclude/conclude license to it self.
-
 
 ### elf/elf-language-selector
 
@@ -213,6 +216,7 @@ Preparing for version 2 of the changes, please change your bundles to following 
 ** CSS files: `bundles/<mynamespace>/<bundle-identifier>/resources/css/..`
 
 #### Grunt tool
+
 Grunt tool has been modified to support folder structure changes.
 
 ## 1.27.3
