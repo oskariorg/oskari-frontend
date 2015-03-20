@@ -753,7 +753,10 @@ Oskari.clazz.define(
          * adds layer tool to tools
          */
         addTool: function (tool) {
-            // TODO: check for duplicates?
+            if(!tool || this.getTool(tool.getName())) {
+                // check for duplicates and invalid param
+                return;
+            }
             this._tools.push(tool);
         },
 
@@ -778,7 +781,7 @@ Oskari.clazz.define(
                     }
                 }
             }
-            return tool;
+            return null;
         },
         /**
          * @method setLegendImage

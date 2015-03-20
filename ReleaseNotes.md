@@ -22,6 +22,7 @@ Now handles MapLayerEvent with type 'tool' and updates the selected layers tools
 ### core/AbstractLayer and Oskari.getDefaultLanguage()
 
 AbstractLayer: if name, description, Inspire theme and organization is missing for users language the default language version is used.
+AbstractLayer now checks for duplicates before adding tools.
 Oskari.getDefaultLanguage() no longer crashes if supported locales are not set. Returns Oskari.getLang() in such case.
 
 ### framework/mapmodule-plugin - SearchPlugin

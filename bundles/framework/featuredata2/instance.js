@@ -136,15 +136,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
 
             sandbox.addRequestHandler('ShowFeatureDataRequest', this.requestHandlers.showFeatureHandler);
 
-            // add tools for feature data layers
-            var service = this.getLayerService();
-            var layers = service.getAllLayers();
-            _.each(layers, function(layer) {
-                me.__addTool(layer, true);
-            });
-            // update all layers at once since we suppressed individual events
-            var event = sandbox.getEventBuilder('MapLayerEvent')(null, 'tool');
-            sandbox.notifyAll(event);
+            this.__setupLayerTools();
         },
 
         /**
@@ -225,6 +217,21 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
 
             service.addToolForLayer(layerModel, tool, suppressEvent);
         },
+        /**
+         * Adds tools for all layers
+         */
+        __setupLayerTools : function() {
+            var me = this;
+            // add tools for feature data layers
+            var service = this.getLayerService();
+            var layers = service.getAllLayers();
+            _.each(layers, function(layer) {
+                me.__addTool(layer, true);
+            });
+            // update all layers at once since we suppressed individual events
+            var event = me.sandbox.getEventBuilder('MapLayerEvent')(null, 'tool');
+            me.sandbox.notifyAll(event);
+        },
 
         /**
          * @property {Object} eventHandlers
@@ -236,7 +243,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                     // only handle add layer
                     return;
                 }
-                this.__addTool(event.getLayerId());
+                if(event.getLayerId()) {
+                    this.__addTool(event.getLayerId());
+                }
+                else {
+                    // ajax call for all layers
+                    this.__setupLayerTools();
+                }
             },
             /**
              * @method AfterMapLayerRemoveEvent
