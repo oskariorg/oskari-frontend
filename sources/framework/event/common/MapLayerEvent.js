@@ -55,15 +55,15 @@ Oskari.clazz.define('Oskari.mapframework.event.common.MapLayerEvent',
         operations: {
             /** @static @property {String} operations.add layer has been added */
             'add': 'add',
-            /** @static @property {String} operations.remove layer has been removed
-             */
+            /** @static @property {String} operations.remove layer has been removed */
             'remove': 'remove',
-            /** @static @property {String} operations.sticky layer switch off state is changed
-             * (e.g. name) */
+            /** @static @property {String} operations.sticky layer switch off state is changed */
             'sticky': 'sticky',
             /** @static @property {String} operations.update layer has been updated
              * (e.g. name) */
-            'update': 'update'
+            'update': 'update',
+            /** @static @property {String} operations.tool layers tools has been updated */
+            'tool': 'tool'
         }
     }, {
         /**
@@ -72,5 +72,3 @@ Oskari.clazz.define('Oskari.mapframework.event.common.MapLayerEvent',
          */
         'protocol': ['Oskari.mapframework.event.Event']
     });
-
-/* Inheritance */

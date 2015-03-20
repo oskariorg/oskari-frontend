@@ -753,6 +753,7 @@ Oskari.clazz.define(
          * adds layer tool to tools
          */
         addTool: function (tool) {
+            // TODO: check for duplicates?
             this._tools.push(tool);
         },
 

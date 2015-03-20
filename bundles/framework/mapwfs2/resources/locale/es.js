@@ -5,7 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "MapWfs2",
         "desc": "",
-        "object-data": "Datos del objeto geográfico",
         "default-style": "Estilo por defecto",
         "own-style": "Estilo propio",
         "tile": {

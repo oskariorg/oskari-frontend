@@ -2,6 +2,23 @@
 
 ## 1.28
 
+### mapwfs2
+
+ModelBuilder no longer assumes featuredata2 is present in the application setup. Feature data tool is not added to layers by default.
+
+### featuredata2
+
+Adds 'Feature Data' tool for any layers that are capable of showing it (WFS-based layer types).
+
+### core/MapLayerService and MapLayerEvent
+
+New method added to service addToolForLayer(layer, tool) for adding tools for layers. Signals other components with 
+MapLayerEvent typed as 'tool' about the updated layer.
+
+### layerselection2
+
+Now handles MapLayerEvent with type 'tool' and updates the selected layers tools accordingly.
+
 ### core/AbstractLayer and Oskari.getDefaultLanguage()
 
 AbstractLayer: if name, description, Inspire theme and organization is missing for users language the default language version is used.

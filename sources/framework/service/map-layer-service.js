@@ -99,6 +99,24 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 this._sandbox.notifyAll(event);
             }
         },
+        /**
+         * Adds a tool the layer and notifies other components about is with MapLayerEvent typed with 'tool'
+         * @param {Oskari.mapframework.domain.AbstractLayer} layerModel   layer to modify
+         * @param {Oskari.mapframework.domain.Tool} tool                  tool to add
+         * @param {Boolean} suppressEvent true to not send event (notify manually later to signal a batch update)
+         */
+        addToolForLayer : function(layerModel, tool, suppressEvent) {
+            if(!layerModel || !tool) {
+                throw new Error('Invalid params');
+            }
+            layerModel.addTool(tool);
+
+            if (suppressEvent !== true) {
+                // notify components of modified layer tools if not suppressed
+                var event = this._sandbox.getEventBuilder('MapLayerEvent')(layerModel.getId(), 'tool');
+                this._sandbox.notifyAll(event);
+            }
+        },
 
         /**
          * @method addSubLayer
