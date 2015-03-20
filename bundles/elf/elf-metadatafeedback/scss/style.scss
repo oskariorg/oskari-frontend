@@ -531,4 +531,35 @@ div.userfeedback-values  {
     z-index: 998;
   }
 
+
+  .input-error {
+    border: #FF0000;
+  }
+}
+
+div.ratingInfo {
+  display: table;
+  width: 120px;
+  margin-left: 5px;
+}
+
+div.ratingStar {
+  display: table-cell;
+  width: 16px;
+  cursor: pointer;
+}
+
+div.numRatings {
+  margin-left: 8px;
+  margin-right: 2px;
+}
+
+div.icon-star-off {
+  background-image: url('../images/star-off.png');
+}
+div.icon-star-on {
+  background-image: url('../images/star-on.png');
+}
+div.icon-star-half {
+  background-image: url('../images/star-half.png');
 }

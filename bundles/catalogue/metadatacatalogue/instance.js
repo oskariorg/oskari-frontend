@@ -28,8 +28,8 @@ Oskari.clazz.define(
             prop: 'name'
         }, {
             title: '', // this.getLocalization('grid').rating,
-            tooltip: '',
-            prop: 'rating'
+            tooltip: ''
+//            prop: 'rating'
         }, {
             title: '',
             tooltip: this.getLocalization('grid').showBBOX,
@@ -966,7 +966,7 @@ Oskari.clazz.define(
                         jQuery(cells[0]).append(layerList);
                         // Todo: real rating
                         // jQuery(cells[1]).append("*****");
-                        jQuery(cells[1]).addClass(me.resultHeaders[1].prop);
+                        //jQuery(cells[1]).addClass(me.resultHeaders[1].prop);
 
                         // Action link
                         if(me._isAction() == true){                            
