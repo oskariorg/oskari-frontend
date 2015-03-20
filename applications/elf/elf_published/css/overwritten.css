@@ -126,12 +126,21 @@ table {
 
 
 .logoplugin .icon {
-	background-image: url('ELF-logo-small.png') !important;
-	display: inline-block;
-	height: 25px;
-	width: 25px;
-	vertical-align: bottom;
-	cursor: pointer;
+    background-image: url('ELF-logo-small.png') !important;
+    display: inline-block;
+    height: 25px;
+    width: 25px;
+    vertical-align: bottom;
+    cursor: pointer;
+    float:left;
+}
+
+.logoplugin .terms {
+    float:left;
+}
+
+.logoplugin .data-sources {
+    float:left;
 }
 
 div.layerselection2 div.object-data {

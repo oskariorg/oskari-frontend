@@ -232,9 +232,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
                 Oskari.clazz.create('Oskari.userinterface.component.TabContainer',
                     this.locale['title']);
             var contents = jQuery(me.template);
-//            var imgDir = "/Oskari/resources/catalogue/bundle/metadatafeedback/images/";
-            var imgDir = "/Oskari/bundles/catalogue/metadataflyout/resources/images/";
-            //var imgDir = "./resources/images/";
+            var imgDir = "/Oskari/bundles/elf/elf-metadatafeedback/resources/images/";
             var starOnImg = imgDir+"star-on.png";
             var starOffImg = imgDir+"star-off.png";
             var starHalfImg = imgDir+"star-half.png";
@@ -397,13 +395,13 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
               return;
             }
             /*remove red borders if any*/
-            if ($(input).hasClass('error')) {
-              $(input).removeClass('error');
+            if ($(input).hasClass('input-error')) {
+              $(input).removeClass('input-error');
             }
 
             var value = $(input).val();
             if ($(input).attr('required') !== undefined && (!value || value.length === 0)) {
-              $(input).addClass("error");
+              $(input).addClass('input-error');
               validationOk = false;
             }
 

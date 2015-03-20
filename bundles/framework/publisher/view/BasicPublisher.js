@@ -266,13 +266,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
 
         me.maplayerPanel = null;
         me.mainPanel = null;
+
+        //dig up the config from the instance used by the full map
+        var logoPluginConfig = _.cloneDeep(me.instance.getSandbox().findRegisteredModuleInstance("MainMapModuleLogoPlugin").getConfig());
+        logoPluginConfig.location = {
+            classes: me.logoPluginClasses.classes
+        };
         me.logoPlugin = Oskari.clazz.create(
             'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
-            {
-                location: {
-                    classes: me.logoPluginClasses.classes
-                }
-            }
+            logoPluginConfig
         );
         me.latestGFI = null;
     }, {
