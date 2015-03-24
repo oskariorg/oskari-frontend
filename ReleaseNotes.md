@@ -6,6 +6,11 @@
 
 Now supports zoomScale in search results.
 
+
+### elf/elf-lang-overrides
+
+*New bundle!* This bundle is used to override default locales in ELF application.
+
 ### elf/elf-license
 
 *New bundle!* Extends metadatacatalogue search to show user license information. User can unconclude/conclude license to it self.
@@ -19,9 +24,40 @@ Hardcodings removed and now uses the configured supported languages.
 
 Oskari.getLocalization() now supports language as a second parameter. Notice that the locale still won't be loaded automatically.
 
+Oskari.registerLocalization() now supports override languages a second parameter. Locales are merged to each other. 
+Notice that at this not override old locales, so if you want override default locales the language override bundle need start first.
+
 ### framework/admin-layerrights
 
 Fixed layer table breaking when layer name is short.
+
+### framework/personaldata
+
+Personaldata bundle supports now logInUrl configuration. 
+
+LogInUrl config can be a:
+* string, when using this login url for all languages
+* object, when try to get current locale log in url. If not found then using default locale.
+
+```javascript
+// Example 1. String logInUrl configuration.
+{
+    "conf" : {
+        "logInUrl": "/web/en/login"
+    }
+}
+
+// Example 2. Object logInUrl configuration.
+{
+    "conf" : {
+        "logInUrl": {
+            "en": /web/en/login",
+            "fi": /web/fi/login",
+            "sv": /web/sv/login"
+        }
+    }
+}
+```
 
 ### framework/userguide
 
@@ -206,6 +242,10 @@ Preparing for version 2 of the changes, please change your bundles to following 
 
 #### Grunt tool
 Grunt tool has been modified to support folder structure changes.
+
+## 1.27.3
+
+GetInfoPlugin now handles it's config correctly again.
 
 ## 1.27.2
 

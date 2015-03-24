@@ -69,7 +69,8 @@ Oskari.registerLocalization(
                 "wms": "WMS Lager",
                 "wfs": "WFS Lager",
                 "wmts": "WMTS Lager",
-                "arcgis": "ArcGIS Lager"
+                "arcgis": "ArcGISCache Lager",
+                "arcgis93": "ArcGISRest Lager"
             },
             "selectLayer": "Välj nivå",
             "selectSubLayer": "Välj undernivå",
@@ -82,7 +83,7 @@ Oskari.registerLocalization(
             "edit": "Editera",
             "editDesc": "Editera namn",
             "layerType": "Lagertyp",
-            "layerTypeDesc": "Lagrets typ: WMS, WFS, WMTS",
+            "layerTypeDesc": "Lagrets typ: WMS, WFS, WMTS, ArcGis Cache and ArcGis93. Rest",
             "type": "Typ av kartnivå",
             "typePlaceholder": "Välj kartnivåns typ",
             "baseLayer": "Bakgrundsnivå",

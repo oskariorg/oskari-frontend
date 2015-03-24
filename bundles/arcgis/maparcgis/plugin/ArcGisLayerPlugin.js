@@ -22,13 +22,18 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
         /** @static @property _layerType type of layers this plugin handles */
         _layerType: 'arcgis',
 
+        /** @static @property _layerType2 type of layers this plugin handles */
+        _layerType2: 'arcgis93',
+
+
         /**
          * @method register
          * Interface method for the plugin protocol.
          * Registers self as a layerPlugin to mapmodule with mapmodule.setLayerPlugin()
          */
         register: function () {
-            this.getMapModule().setLayerPlugin('arcgislayer', this);
+           this.getMapModule().setLayerPlugin('arcgislayer', this);
+
         },
         /**
          * @method unregister
@@ -37,6 +42,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
          */
         unregister: function () {
             this.getMapModule().setLayerPlugin('arcgislayer', null);
+
         },
         /**
          * @private @method _initImpl
@@ -54,6 +60,10 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                 mapLayerService.registerLayerModel(
                     'arcgislayer',
                     'Oskari.arcgis.bundle.maparcgis.domain.ArcGisLayer'
+                );
+                mapLayerService.registerLayerModel(
+                    'arcgis93layer',
+                    'Oskari.arcgis.bundle.maparcgis.domain.ArcGis93Layer'
                 );
             }
         },
@@ -77,7 +87,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
 
         /**
          * @method preselectLayers
-         * Adds given layers to map if of type WMS
+         * Adds given layers to map if of type WMS or rest 93
          * @param {Oskari.mapframework.domain.WmsLayer[]} layers
          */
         preselectLayers: function (layers) {
@@ -90,7 +100,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                 layer = layers[i];
                 layerId = layer.getId();
 
-                if (layer.isLayerOfType(this._layerType)) {
+                if (layer.isLayerOfType(this._layerType) || layer.isLayerOfType(this._layerType2) ) {
                     sandbox.printDebug('preselecting ' + layerId);
                     this.addMapLayerToMap(layer, true, layer.isBaseLayer());
                 }
@@ -124,7 +134,12 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
         addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
             var me = this;
 
-            if (!layer.isLayerOfType(me._layerType)) {
+            if (!layer.isLayerOfType(me._layerType) && !layer.isLayerOfType(me._layerType2)) {
+                return;
+            }
+
+            if (layer.isLayerOfType(me._layerType2)) {
+                me._addMapLayer2ToMap(layer, keepLayerOnTop, isBaseMap)
                 return;
             }
 
@@ -168,6 +183,51 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                 layer.getId()
             );
         },
+        /**
+         * Adds a single ArcGis rst 93 layer to this map
+         *
+         * @method addMapLayerToMap
+         * @param {Oskari.arcgis.domain.ArcGis93Layer} layer
+         * @param {Boolean} keepLayerOnTop
+         * @param {Boolean} isBaseMap
+         */
+        _addMapLayer2ToMap: function (layer, keepLayerOnTop, isBaseMap) {
+            var me = this;
+
+            if (!layer.isLayerOfType(me._layerType2)) {
+                return;
+            }
+            var params = {
+                layers: 'show:0',
+                srs:me.getMap().projection.substr(
+                    me.getMap().projection.indexOf(':') + 1),
+                transparent: 'true'};
+
+            var openLayer = new OpenLayers.Layer.ArcGIS93Rest( 'arcgis93layer_' + layer.getId(),
+                layer.getLayerUrls()[0],
+                params);
+
+
+                openLayer.isBaseLayer = false;
+                me._layer[layer.getId()] = openLayer;
+
+                openLayer.opacity = layer.getOpacity() / 100;
+                me.getMap().addLayer(openLayer);
+
+                if (keepLayerOnTop) {
+                    me.getMap().setLayerIndex(
+                        openLayer,
+                        me.getMap().layers.length
+                    );
+                } else {
+                    me.getMap().setLayerIndex(openLayer, 0);
+                }
+
+            me.getSandbox().printDebug(
+                '#!#! CREATED OPENLAYER.LAYER.ArcGis93Rest for ArcGisLayer ' +
+                layer.getId()
+            );
+        },
 
         /**
          * @method _afterMapLayerRemoveEvent
@@ -179,7 +239,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
         _afterMapLayerRemoveEvent: function (event) {
             var layer = event.getMapLayer();
 
-            if (!layer.isLayerOfType(this._layerType)) {
+            if (!layer.isLayerOfType(this._layerType) && !layer.isLayerOfType(this._layerType2)) {
                 return;
             }
             this._removeMapLayerFromMap(layer);
@@ -202,7 +262,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
          * @return {OpenLayers.Layer[]}
          */
         getOLMapLayers: function (layer) {
-            if (!layer.isLayerOfType(this._layerType)) {
+            if (!layer.isLayerOfType(this._layerType) && !layer.isLayerOfType(this._layerType2)) {
                 return null;
             }
 
@@ -219,7 +279,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
         _afterChangeMapLayerOpacityEvent: function (event) {
             var layer = event.getMapLayer();
 
-            if (!layer.isLayerOfType(this._layerType)) {
+            if (!layer.isLayerOfType(this._layerType) && !layer.isLayerOfType(this._layerType2)) {
                 return;
             }
 

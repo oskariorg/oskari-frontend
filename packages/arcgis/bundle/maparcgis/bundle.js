@@ -29,6 +29,9 @@ Oskari.clazz.define("Oskari.arcgis.bundle.arcgis.MapArcGisBundle", function() {
 		}, {
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/arcgis/maparcgis/domain/ArcGisLayer.js"
+		}, {
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/arcgis/maparcgis/domain/ArcGis93Layer.js"
 		}
        ]
 	},

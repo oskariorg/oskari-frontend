@@ -68,7 +68,8 @@ Oskari.registerLocalization({
                 "wms": "WMS layer",
                 "wfs": "WFS layer",
                 "wmts": "WMTS layer",
-                "arcgis": "ArcGIS layer"
+                "arcgis": "ArcGISCache layer",
+                "arcgis93": "ArcGISRest layer"
             },
             "selectLayer": "Select a map layer.",
             "selectSubLayer": "Select a sublayer for this map layer.",
@@ -81,7 +82,7 @@ Oskari.registerLocalization({
             "edit": "Edit",
             "editDesc": "Edit map layer's name.",
             "layerType": "Layer type",
-            "layerTypeDesc": "Select a layer type. The current options are WMS (Web Map Service), WFS (Web Feature Service) and WMTS (Web Map Tile Service).",
+            "layerTypeDesc": "Select a layer type. The current options are WMS (Web Map Service), WFS (Web Feature Service), WMTS (Web Map Tile Service), ArcGisCache (ArcGis Cache tile) and ArcGisRest (ArcGis rest layer).",
             "type": "Layer type",
             "typePlaceholder": "Choose layer type",
             "baseLayer": "Background map layer",

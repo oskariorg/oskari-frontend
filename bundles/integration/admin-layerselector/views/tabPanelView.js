@@ -100,7 +100,8 @@ define([
                     {id : "wfslayer", localeKey : "wfs"},
                     {id : "wmslayer", localeKey : "wms"},
                     {id : "wmtslayer", localeKey : "wmts"},
-                    {id : "arcgislayer", localeKey : "arcgis", footer : false}
+                    {id : "arcgislayer", localeKey : "arcgis", footer : false},
+                    {id : "arcgis93layer", localeKey : "arcgis93", footer : false}
                 ];
                 // filter out ones that are not registered in current appsetup
                 var sandbox = this.instance.sandbox,

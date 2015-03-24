@@ -64,8 +64,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 contentDiv.css('overflow-y', 'auto');
             }
             // center on screen
-            this.dialog.css('margin-left', -(this.dialog.width() / 2) + 'px');
-            this.dialog.css('margin-top', -(this.dialog.height() / 2) + 'px');
+            me.dialog.css('margin-left', -(this.dialog.width() / 2) + 'px');
+            me.dialog.css('margin-top', -(this.dialog.height() / 2) + 'px');
+
+            // make popup to visible
+            me.dialog.css('opacity', 1);
         },
         /**
          * @method fadeout

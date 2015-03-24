@@ -1,5 +1,20 @@
 {
-    "startupSequence": [{      
+    "startupSequence": [
+    	{
+            "instanceProps": {},
+            "title": "ELF language overrides",
+            "bundleinstancename": "elf-lang-overrides",
+            "bundlename": "elf-lang-overrides",
+            "metadata": {
+                "Import-Bundle": {
+                    "elf-lang-overrides": {
+                        "bundlePath": "../../../packages/elf/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        },
+    	{      
             "bundleinstancename": "oskariui",
             "bundlename": "oskariui",
             "instanceProps": {},
@@ -52,6 +67,9 @@
 	                "mapuserlayers": {
 	                    "bundlePath": "../../../packages/framework/bundle/"
 	                },
+				    "maparcgis": {
+					"bundlePath": "../../../packages/arcgis/bundle/"
+				    },
 	                "service-base": {
 	                    "bundlePath": "../../../packages/framework/bundle/"
 	                },

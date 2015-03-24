@@ -49,7 +49,8 @@ Oskari.registerLocalization(
             "name": "Namn",
             "showBBOX": "Visa geografisk datatäckning",
             "info": "Visa metadata",
-            "remove": "Bort från sökresultaten"
+            "remove": "Bort från sökresultaten",
+            "rating": "Beskattning"
         },
         "licenseText": "Sök licens"
     }

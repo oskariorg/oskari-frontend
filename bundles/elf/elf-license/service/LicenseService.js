@@ -16,6 +16,16 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
                 busy: false,
                 jqhr: null,
                 timestamp: null
+            },
+            concludeLicense: {
+                busy: false,
+                jqhr: null,
+                timestamp: null
+            },
+            deactivateLicense: {
+                busy: false,
+                jqhr: null,
+                timestamp: null
             }
         };
     }, {
@@ -59,7 +69,6 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
 
             data['lang'] = lang;
             data['epsg'] = epsg;
-
             for (var opt in options) {
                 if (options.hasOwnProperty(opt)) {
                     data[opt] = options[opt];
@@ -174,13 +183,14 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
          * @param {Function} errorCd error callback
          */
         doGetPrice: function (options, successCb, errorCb) {
+            options.data = JSON.stringify(options.data);
             var me = this,
                 data = me._getLicenseInformationData(options),
                 dte = new Date(),
                 dteMs = dte.getTime();
 
             if (me._pendingAjaxQuery['getPrice'].busy && me._pendingAjaxQuery['getPrice'].timestamp &&
-                dteMs - me._pendingAjaxQuery['licenseInformation'].timestamp < 500) {
+                dteMs - me._pendingAjaxQuery['getPrice'].timestamp < 500) {
                 me.sandbox.printDebug("[elf-license.LicenseService] License information request NOT SENT (time difference < 500ms)");
                 return;
             }
@@ -199,9 +209,9 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
                     }
                 },
                 url : me._licenseServiceUrl,
-                error : function() {
+                error : function(jqXHR,textStatus, errorThrown) {
                     me._finishAjaxRequest('getPrice');
-                    errorCb();
+                    errorCb(jqXHR);
                 },
                 success : function(data) {
                     me._finishAjaxRequest('getPrice');
@@ -212,6 +222,111 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
                 },
                 complete: function () {
                     me._finishAjaxRequest('getPrice');
+                },
+            });
+        },
+        /**
+         * Do conclude license
+         * @method doConludeLicense
+         * @public
+         *
+         * @param {Object} options url options
+         * @param {Function} successCb success callback
+         * @param {Function} errorCd error callback
+         */
+        doConludeLicense: function (options, successCb, errorCb) {
+            options.data = JSON.stringify(options.data);
+            var me = this,
+                data = me._getLicenseInformationData(options),
+                dte = new Date(),
+                dteMs = dte.getTime();
+
+            if (me._pendingAjaxQuery['concludeLicense'].busy && me._pendingAjaxQuery['concludeLicense'].timestamp &&
+                dteMs - me._pendingAjaxQuery['concludeLicense'].timestamp < 500) {
+                me.sandbox.printDebug("[elf-license.LicenseService] License information request NOT SENT (time difference < 500ms)");
+                return;
+            }
+
+            me._cancelAjaxRequest('concludeLicense');
+            me._startAjaxRequest(dteMs, 'concludeLicense');
+
+            jQuery.ajax({
+                dataType : "json",
+                type : "PUT",
+                data: data,
+                beforeSend: function(x) {
+                    me._pendingAjaxQuery['concludeLicense'].jqhr = x;
+                    if (x && x.overrideMimeType) {
+                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                    }
+                },
+                url : me._licenseServiceUrl,
+                error : function(jqXHR,textStatus, errorThrown) {
+                    me._finishAjaxRequest('concludeLicense');
+                    errorCb(jqXHR);
+                },
+                success : function(data) {
+                    me._finishAjaxRequest('concludeLicense');
+                    successCb(data);
+                },
+                always: function () {
+                    me._finishAjaxRequest('concludeLicense');
+                },
+                complete: function () {
+                    me._finishAjaxRequest('concludeLicense');
+                },
+            });
+        },
+        /**
+         * Do deactivate license
+         * @method doDeactivateLicense
+         * @public
+         *
+         * @param {Object} options url options
+         * @param {Function} successCb success callback
+         * @param {Function} errorCd error callback
+         */
+        doDeactivateLicense: function (options, successCb, errorCb) {
+            options.data = JSON.stringify(options.data);
+            var me = this,
+                data = me._getLicenseInformationData(options),
+                dte = new Date(),
+                dteMs = dte.getTime();
+
+            if (me._pendingAjaxQuery['deactivateLicense'].busy && me._pendingAjaxQuery['deactivateLicense'].timestamp &&
+                dteMs - me._pendingAjaxQuery['deactivateLicense'].timestamp < 500) {
+                me.sandbox.printDebug("[elf-license.LicenseService] License information request NOT SENT (time difference < 500ms)");
+                return;
+            }
+
+            me._cancelAjaxRequest('deactivateLicense');
+            me._startAjaxRequest(dteMs, 'deactivateLicense');
+
+            console.dir(data);
+
+            jQuery.ajax({
+                dataType : "json",
+                type : "DELETE",
+                beforeSend: function(x) {
+                    me._pendingAjaxQuery['deactivateLicense'].jqhr = x;
+                    if (x && x.overrideMimeType) {
+                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                    }
+                },
+                url : me._licenseServiceUrl + '&' + jQuery.param(data),
+                error : function(jqXHR,textStatus, errorThrown) {
+                    me._finishAjaxRequest('deactivateLicense');
+                    errorCb(jqXHR);
+                },
+                success : function(data) {
+                    me._finishAjaxRequest('deactivateLicense');
+                    successCb(data);
+                },
+                always: function () {
+                    me._finishAjaxRequest('deactivateLicense');
+                },
+                complete: function () {
+                    me._finishAjaxRequest('deactivateLicense');
                 },
             });
         }
