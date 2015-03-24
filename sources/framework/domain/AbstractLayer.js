@@ -40,6 +40,9 @@ Oskari.clazz.define(
         /* optional options */
         me._options = options || {};
 
+        /* optional attributes */
+        me._attributes = {};
+
         /* modules can "tag" the layers with this for easier reference */
         me._metaType = null;
 
@@ -954,6 +957,21 @@ Oskari.clazz.define(
         getOptions: function () {
             return this._options;
         },
+        /**
+         * @method getAttributes
+         * @return {Object} optional layer attributes like heatmap-parameters
+         */
+        getAttributes: function () {
+            return this._attributes || {};
+        },
+        /**
+         * @method setAttributes
+         * @param {Object} optional layer attributes like heatmap-parameters
+         */
+        setAttributes: function (param) {
+            this._attributes = param;
+        },
+
         /**
          * @method hasFeatureData
          * @return {Boolean} true if the layer has feature data

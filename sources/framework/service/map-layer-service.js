@@ -272,6 +272,11 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 layer.setAdmin(newLayerConf.admin);
             }
 
+            // optional attributes
+            if (newLayerConf.attributes) {
+                layer.setAttributes(newLayerConf.attributes);
+            }
+            
             // wms specific
             // TODO: we need to figure this out some other way
             // we could remove the old layer and create a new one in admin bundle
@@ -815,6 +820,11 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             // extent  
             if (mapLayerJson.geom && layer.setGeometryWKT) {
                 layer.setGeometryWKT(mapLayerJson.geom);
+            }
+
+            // optional attributes
+            if (mapLayerJson.attributes) {
+                layer.setAttributes(mapLayerJson.attributes);
             }
 
             // permissions
