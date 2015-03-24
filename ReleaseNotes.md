@@ -2,6 +2,11 @@
 
 ## 1.28
 
+### divmanazer components
+
+Popup.createCloseButton('label') label parameter is now optional. Popup now uses button component
+Oskari.userinterface.component.buttons.CloseButton and sets the button title if label is given.
+
 ### mapwfs2
 
 ModelBuilder no longer assumes featuredata2 is present in the application setup. Feature data tool is not added to layers by default.
