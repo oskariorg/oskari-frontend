@@ -1,16 +1,21 @@
 // TODO:
 // - dynamic field widths?
 $dialogWidth: 820px;
-$dialogDataHeight: 460px;
-$maxHeight: 400px;
+$dialogWidthPros: 94%;
+$dialogDataHeight: 320px;
+$maxHeight: 260px;
 
 div.elf_license_dialog {
+	div.content {
+		overflow: hidden;
+	}
 	width: $dialogWidth !important;
 	
 	div.help {
 		position: absolute;
 		bottom: 70px;
 		left: 10px;
+		width: $dialogWidthPros;
 	}
 
 	input.elf_license_previous_button {
@@ -42,7 +47,7 @@ div.elf_license_dialog {
 		div.elf_license_dialog_licensemodels {
 			max-height: $maxHeight;
 			overflow: auto;
-			width: 95%;
+			width: $dialogWidthPros;
 
 			div.text {
 				overflow: hidden;
@@ -81,7 +86,7 @@ div.elf_license_dialog {
 .elf_license_dialog_license_details {
 	display: none;
 	overflow: none;
-	width: 95%;
+	width: $dialogWidthPros;
 	height: $dialogDataHeight;
 
 	.license_user_data {
@@ -105,12 +110,23 @@ div.elf_license_dialog {
 			}
 		}
 	}
+
+	.validto_summary{
+		font-weight: bold;
+		margin-top: 10px;
+		padding-top: 4px;
+		width: 100%;
+		.validto {
+			margin-left: 4px;
+			float: none;
+		}
+	}
 }
 
 .elf_license_dialog_license_price {
 	display: none;
 	overflow: none;
-	width: 95%;
+	width: $dialogWidthPros;
 	height: $dialogDataHeight;
 
 	.license_user_data {
