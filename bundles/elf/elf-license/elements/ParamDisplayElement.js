@@ -52,6 +52,8 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamDisplayElement',
                 valueElement = jQuery('<div></div>'),
                 showInput = true;
 
+            console.dir(param);
+
             if(readOnly && readOnly === true) {
                 showInput = false;
             }
@@ -60,22 +62,12 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamDisplayElement',
                 title = param.name;
             }
 
-            if(showInput === true) {
-                jQuery.each(param.values, function(index, value){
-                    var valueEl = valueElement.clone();
-                    valueEl.html(value);
-                    data.append(valueEl);
-                });
-            }
-            else {
-                jQuery.each(param.values, function(index, value){
-                    var valueEl = valueElement.clone();
-                    valueEl.attr('data-value', value);
-                    valueEl.html(value);
-                    data.append(valueEl);
-                });
-
-            }
+            
+            jQuery.each(param.values, function(index, value){
+                var valueEl = valueElement.clone();
+                valueEl.html(value);
+                data.append(valueEl);
+            });
 
             // Add data to element
             data.attr('data-name', param.name);
@@ -83,7 +75,7 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamDisplayElement',
             data.attr('data-element-type', 'display');
             data.attr('data-read-only', readOnly);
 
-            element.find('.elf_license_user_data_label').html(param.title);
+            element.find('.elf_license_user_data_label').html(title);
             element.find('.elf_license_user_data').html(data);
             return element;
         }
