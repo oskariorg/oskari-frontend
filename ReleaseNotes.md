@@ -31,6 +31,34 @@ Notice that at this not override old locales, so if you want override default lo
 
 Fixed layer table breaking when layer name is short.
 
+### framework/personaldata
+
+Personaldata bundle supports now logInUrl configuration. 
+
+LogInUrl config can be a:
+* string, when using this login url for all languages
+* object, when try to get current locale log in url. If not found then using default locale.
+
+```javascript
+// Example 1. String logInUrl configuration.
+{
+    "conf" : {
+        "logInUrl": "/web/en/login"
+    }
+}
+
+// Example 2. Object logInUrl configuration.
+{
+    "conf" : {
+        "logInUrl": {
+            "en": /web/en/login",
+            "fi": /web/fi/login",
+            "sv": /web/sv/login"
+        }
+    }
+}
+```
+
 ### framework/userguide
 
 Renamed function Flyout.getUserGuideTabs() to Flyout.getUserGuides().
