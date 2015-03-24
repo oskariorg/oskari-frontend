@@ -270,11 +270,10 @@ function () {
         }, function (response) {
             me._progressSpinner.stop();
             if (response) {
-                //me._dialog.close();                
                 msg.find('.productid.value').html(response.productId);
                 msg.find('.licenseid.value').html(response.licenseId);
                 msg.find('.validto.value').html(response.validTo);
-                me._showMessage(me._locale.dialog.concludeSuccessTitle, msg, null, false, true);
+                me._showMessage(me._locale.dialog.concludeSuccessTitle, msg, null, false, true, function(){me._dialog.close();});
             } else {
                 me._showMessage(me._locale.errors.concludeNoResponse.title, me._locale.errors.concludeNoResponse.message);
             }
@@ -301,8 +300,9 @@ function () {
      * @param {String} message the message
      * @param {Integer} time the message fadeout time. Default 5000.
      * @param {Boolean} fadeout do fadeout
+     * @param {Function} handler button handler
      */
-    _showMessage: function(title, message, time, fadeout, showOk) {
+    _showMessage: function(title, message, time, fadeout, showOk, handler) {
         var me = this,
             dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
             btn = dialog.createCloseButton(me._locale.buttons.ok);
@@ -322,6 +322,13 @@ function () {
 
         if(showOk && showOk !== null) {
             doButton = showOk;
+        }
+
+        if(handler && handler !== null && typeof handler === 'function') {
+            btn.setHandler(function(){
+                dialog.close();
+                handler();
+            });
         }
 
         me._showsMessage = true;
@@ -449,18 +456,6 @@ function () {
             validToElem.find('.title').html(me._locale.dialog.validTo);
             validToElem.find('.validto').html(licenseData.validTo);
         }
-
-        /*
-        licenceModelUnconcludeDetails: jQuery('<div><div class="license_basic_data">' +
-                '<div class="elf_name"></div>'+
-            '</div>'+
-            '<div class="license_user_data">'+
-            '   <table class="elf_license_user_data_table"></table>' +
-            '</div>' +
-            '<div class="validto_summary"><span class="title"></span><span class="validto"></span></div>'+
-            '<div class="clear"></div>'+
-            '<div class="help"></div></div>'),
-        */
 
         licenseDetails.append(modelDetails);
 
