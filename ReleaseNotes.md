@@ -10,20 +10,9 @@ ModelBuilder no longer assumes featuredata2 is present in the application setup.
 
 Adds 'Feature Data' tool for any layers that are capable of showing it (WFS-based layer types).
 
-### core/MapLayerService and MapLayerEvent
-
-New method added to service addToolForLayer(layer, tool) for adding tools for layers. Signals other components with 
-MapLayerEvent typed as 'tool' about the updated layer.
-
 ### layerselection2
 
 Now handles MapLayerEvent with type 'tool' and updates the selected layers tools accordingly.
-
-### core/AbstractLayer and Oskari.getDefaultLanguage()
-
-AbstractLayer: if name, description, Inspire theme and organization is missing for users language the default language version is used.
-AbstractLayer now checks for duplicates before adding tools.
-Oskari.getDefaultLanguage() no longer crashes if supported locales are not set. Returns Oskari.getLang() in such case.
 
 ### framework/mapmodule-plugin - SearchPlugin
 
@@ -43,10 +32,29 @@ Hardcodings removed and now uses the configured supported languages.
 
 ### core
 
+#### localization handling
+
 Oskari.getLocalization() now supports language as a second parameter. Notice that the locale still won't be loaded automatically.
 
 Oskari.registerLocalization() now supports override languages a second parameter. Locales are merged to each other. 
 Notice that at this not override old locales, so if you want override default locales the language override bundle need start first.
+
+#### AbstractLayer
+
+AbstractLayer: if name, description, Inspire theme and organization is missing for users language the default language version is used.
+AbstractLayer now checks for duplicates before adding tools.
+Added new Object-typed field for generic layer attributes (setAttributes()/getAttributes()).
+
+#### default language
+
+Oskari.getDefaultLanguage() no longer crashes if supported locales are not set. Returns Oskari.getLang() in such case.
+
+#### MapLayerService and MapLayerEvent
+
+New method added to service addToolForLayer(layer, tool) for adding tools for layers. Signals other components with 
+MapLayerEvent typed as 'tool' about the updated layer.
+
+MapLayerService now parses attributes from layer JSON.
 
 ### framework/admin-layerrights
 
