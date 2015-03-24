@@ -198,7 +198,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
             var service = this.getLayerService();
             if(typeof layerModel !== 'object') {
                 // detect layerId and replace with the corresponding layerModel
-                layerModel = service.findMapLayer(layerId);
+                layerModel = service.findMapLayer(layerModel);
             }
             if(!layerModel || !layerModel.hasFeatureData()) {
                 return;
