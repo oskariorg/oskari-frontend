@@ -89,6 +89,14 @@ div.elf_license_dialog {
     .elf_license_dialog_license_price .price_summary .price {
       margin-left: 4px;
       float: none; }
+  .elf_license_dialog_license_details .validto_summary {
+    font-weight: bold;
+    margin-top: 10px;
+    padding-top: 4px;
+    width: 100%; }
+    .elf_license_dialog_license_details .validto_summary .validto {
+      margin-left: 4px;
+      float: none; }
   .elf_license_dialog_license_price .clear {
     clear: both; }
   .elf_license_dialog_license_price .license_basic_data .header {

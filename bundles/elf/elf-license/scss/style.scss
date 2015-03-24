@@ -110,6 +110,17 @@ div.elf_license_dialog {
 			}
 		}
 	}
+
+	.validto_summary{
+		font-weight: bold;
+		margin-top: 10px;
+		padding-top: 4px;
+		width: 100%;
+		.validto {
+			margin-left: 4px;
+			float: none;
+		}
+	}
 }
 
 .elf_license_dialog_license_price {
