@@ -963,7 +963,7 @@ Oskari.clazz.define(
                     bboxKey
                 );
 
-                // put the data in cache      
+                // put the data in cache
                 if (!boundaryTile) { // normal case and cached
                     me._tileData.mput(
                         layerId,
@@ -989,7 +989,7 @@ Oskari.clazz.define(
                 }
 
                 if (tileToUpdate) {
-                    tileToUpdate.draw(); // QUEUES updates! 
+                    tileToUpdate.draw(); // QUEUES updates!
                 }
             }
         },

@@ -215,7 +215,7 @@ function () {
             }
 
 
-            var ratingSymbols = me._generateRatingSymbols(metadata.rating); 
+            var ratingSymbols = me._generateRatingSymbols(metadata.rating);
             var ratingContainer = me.templates.ratingContainer.clone();
             for (j = 0; j < 5; j++) {
                 starContainer = me.templates.starItem.clone();

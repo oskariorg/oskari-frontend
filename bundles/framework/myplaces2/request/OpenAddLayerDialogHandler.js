@@ -2,14 +2,14 @@
  * @class Oskari.mapframework.bundle.myplaces2.request.OpenAddLayerDialogHandler
  * Handles sequests for opening the add layer dialog.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.OpenAddLayerDialogHandler', 
+Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.OpenAddLayerDialogHandler',
 
 /**
  * @method create called automatically on construction
  * @static
  * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
  *          reference to application sandbox
- * @param {Oskari.mapframework.bundle.myplaces2.MyPlacesBundleInstance} instance 
+ * @param {Oskari.mapframework.bundle.myplaces2.MyPlacesBundleInstance} instance
  *          reference to my places bundle instance
  */
 function(sandbox, instance) {
@@ -17,7 +17,7 @@ function(sandbox, instance) {
     this.instance = instance;
 }, {
     /**
-     * @method handleRequest 
+     * @method handleRequest
      * @param {Oskari.mapframework.core.Core} core
      *      reference to the application core (reference sandbox core.getSandbox())
      * @param {Oskari.mapframework.bundle.myplaces2.request.EditPlaceRequest/Oskari.mapframework.bundle.myplaces2.request.OpenAddLayerDialogRequest} request

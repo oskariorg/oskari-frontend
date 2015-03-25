@@ -32,7 +32,7 @@ Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
         },
         /**
          * DefaultExtension method for doing stuff after the bundle has started.
-         * 
+         *
          * @method afterStart
          */
         afterStart: function (sandbox) {
@@ -61,7 +61,7 @@ Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
         },
         /**
          * Returns the search service.
-         * 
+         *
          * @method getSearchService
          * @return {Oskari.elf.geolocator.service.GeoLocatorSearchService}
          */
@@ -70,7 +70,7 @@ Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
         },
         /**
          * Requests the tool to be added to the toolbar.
-         * 
+         *
          * @method registerTool
          */
         registerTool: function () {
@@ -95,7 +95,7 @@ Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
         /**
          * Starts the tool
          * (for now only sets its `active` property to true)
-         * 
+         *
          * @method startTool
          */
         startTool: function () {
@@ -105,7 +105,7 @@ Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
         /**
          * Stops the tool
          * (for now only sets its `active` property to false)
-         * 
+         *
          * @method stopTool
          */
         stopTool: function () {
@@ -114,7 +114,7 @@ Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
         },
         /**
          * Sends a request to select the default tool.
-         * 
+         *
          * @method selectDefaultTool
          */
         selectDefaultTool: function () {
@@ -132,7 +132,7 @@ Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
         /**
          * Sends the search request to the search service
          * and handles the response.
-         * 
+         *
          * @method __handleMapClick
          * @private
          * @param  {Object} lonlat
@@ -155,7 +155,7 @@ Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
         },
         /**
          * Sends a map move and infobox requests for the given result.
-         * 
+         *
          * @method resultClicked
          * @param  {Object} result
          */
@@ -194,7 +194,7 @@ Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
         },
         /**
          * Returns the content for the infobox.
-         * 
+         *
          * @method __getInfoBoxHtml
          * @private
          * @param  {Object} result

@@ -108,7 +108,7 @@ function() {
         sandbox.request(this, request);
 
         // draw ui
-        me.createUi();      
+        me.createUi();
 
         if (this.conf && this.conf.toolbarButtons) {
             // request toolbar to add buttons
@@ -120,7 +120,7 @@ function() {
                     toolConfig.tooltip = toolConfig.tooltip[me.userInterfaceLanguage];
                     // disable button
                     toolConfig.enabled = false;
-                    // set null 
+                    // set null
                     toolConfig.callback = function() {};
                     sandbox.request(me, reqBuilder(tool, group, toolConfig));
                 }

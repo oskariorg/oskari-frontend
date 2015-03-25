@@ -28,9 +28,9 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.plugin.HoverPlugin', func
      */
     init : function(sandbox) {
         var me = this;
-			
-			
-        OpenLayers.Control.Hover = OpenLayers.Class(OpenLayers.Control, {                
+
+
+        OpenLayers.Control.Hover = OpenLayers.Class(OpenLayers.Control, {
             defaultHandlerOptions: {
                 'delay': 500,
                 'pixelTolerance': null,
@@ -43,13 +43,13 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.plugin.HoverPlugin', func
                 );
                 OpenLayers.Control.prototype.initialize.apply(
                     this, arguments
-                ); 
+                );
                 this.handler = new OpenLayers.Handler.Hover(
                     this,
                     {'pause': this.onPause, 'move': this.onMove},
                     this.handlerOptions
                 );
-            }, 
+            },
 
             onPause: function(evt) {
             },
@@ -60,13 +60,13 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.plugin.HoverPlugin', func
                 // request.
             }
         });
-        
+
         this.hoverControl = new OpenLayers.Control.Hover({
             handlerOptions: {
                 'delay': 500,
                 'pixelTolerance': 6
             },
-            
+
             onPause: function(evt) {
             	var lonlat = me._map.getLonLatFromPixel(evt.xy);
 		        var event = sandbox.getEventBuilder('LupaPisteMyPlaces.MyPlaceHoverEvent')(lonlat, evt, me._map.getZoom());
@@ -85,7 +85,7 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.plugin.HoverPlugin', func
     deactivate : function() {
         this.hoverControl.deactivate();
     },
-    
+
     register : function() {
 
     },

@@ -1,11 +1,11 @@
 /**
  * @class Oskari.harava.bundle.mapquestions.request.ToggleQuestionToolsRequest
  * Requests a hide question tools
- * 
+ *
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
-Oskari.clazz.define('Oskari.harava.bundle.mapquestions.request.ToggleQuestionToolsRequest', 
+Oskari.clazz.define('Oskari.harava.bundle.mapquestions.request.ToggleQuestionToolsRequest',
 
 /**
  * @method create called automatically on construction

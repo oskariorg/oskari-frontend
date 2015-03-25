@@ -3,14 +3,14 @@
  * Disables debug logging and enables usage logging based on environment
  * @deprecated
  */
-Oskari.clazz.define('Oskari.mapframework.enhancement.common.DisableDevelopmentModeEnhancement', 
+Oskari.clazz.define('Oskari.mapframework.enhancement.common.DisableDevelopmentModeEnhancement',
 
 /**
  * @method create called automatically on construction
  * @static
  * @param {Boolean}
- *            enableMapMovementLogging true to enable usage logging 
- */ 
+ *            enableMapMovementLogging true to enable usage logging
+ */
 function(enableMapMovementLogging) {
 
     // Should map movement logging be enabled or not

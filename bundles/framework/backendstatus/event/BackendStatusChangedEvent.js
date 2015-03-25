@@ -1,9 +1,9 @@
 /**
  * Event is sent when the backend status of a map layer has changed.
- * 
+ *
  * @class Oskari.mapframework.bundle.backendstatus.event.BackendStatusChangedEvent
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.backendstatus.event.BackendStatusChangedEvent', 
+Oskari.clazz.define('Oskari.mapframework.bundle.backendstatus.event.BackendStatusChangedEvent',
 /**
  * @method create called automatically on construction
  * @static
@@ -16,7 +16,7 @@ function(layerId, status) {
     __name : "BackendStatus.BackendStatusChangedEvent",
     /**
      * @method getName
-     * @return {String} the name for the event 
+     * @return {String} the name for the event
      */
     getName : function() {
         return this.__name;

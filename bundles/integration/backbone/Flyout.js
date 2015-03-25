@@ -41,7 +41,7 @@ function(instance, locale, ui) {
         var locale = me.locale;
         var ui = me.ui;
         ui.setEl(me.container);
-        
+
         ui.render();
     },
     stopPlugin : function() {

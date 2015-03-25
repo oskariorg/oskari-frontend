@@ -28,4 +28,4 @@ Oskari.registerLocalization({
             }
         }
     }
-}); 
+});

@@ -1,7 +1,7 @@
 /**
  * @class Oskari.clazz.define('Oskari.mapframework.bundle.printout.event.PrintableContentEvent
- * 
- * 
+ *
+ *
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.printout.event.PrintableContentEvent',
 /**
@@ -54,7 +54,7 @@ function(contentId, layer, tileData, geojsonData) {
      * Returns the bbox-imageUrl array used to generate output
      *
      * @method getData
-     * @return {Array[Object]} 
+     * @return {Array[Object]}
      */
     getTileData : function() {
         return this._tileData;
@@ -70,7 +70,7 @@ function(contentId, layer, tileData, geojsonData) {
      * Returns the geojson data used to generate output
      *
      * @method getGeoJsonData
-     * @return {Object} 
+     * @return {Object}
      */
     getGeoJsonData : function() {
         return this._geojsonData;

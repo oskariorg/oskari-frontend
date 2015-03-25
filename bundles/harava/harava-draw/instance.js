@@ -112,7 +112,7 @@ Oskari.clazz.define("Oskari.harava.bundle.haravaDraw.DrawBundleInstance",
                 sandbox.unregisterFromEventByName(this, p);
             }
 
-            // request handler cleanup 
+            // request handler cleanup
             sandbox.removeRequestHandler('ToggleVisibilityHaravaDrawRequest', this.requestHandlers.ToggleVisibilityHaravaDrawRequest);
             sandbox.removeRequestHandler('AddWKTGeometryRequest', this.requestHandlers.AddWKTGeometryRequest);
             var request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);

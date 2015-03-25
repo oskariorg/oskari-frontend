@@ -2,7 +2,7 @@
  * @class Oskari.harava.bundle.mapmodule.request.UpdateMapRequestHandler
  * Handles Oskari.harava.bundle.mapmodule.request.UpdateMapRequest to update map.
  */
-Oskari.clazz.define('Oskari.harava.bundle.mapmodule.request.UpdateMapRequestHandler', 
+Oskari.clazz.define('Oskari.harava.bundle.mapmodule.request.UpdateMapRequestHandler',
 /**
  * @method create called automatically on construction
  * @static
@@ -17,7 +17,7 @@ function(sandbox, mapModule) {
     this.mapModule = mapModule;
 }, {
 	/**
-	 * @method handleRequest 
+	 * @method handleRequest
 	 * Update map
 	 * @param {Oskari.mapframework.core.Core} core
 	 * 		reference to the application core (reference sandbox core.getSandbox())

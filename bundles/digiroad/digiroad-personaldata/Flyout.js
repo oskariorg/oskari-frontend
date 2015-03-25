@@ -13,29 +13,29 @@ function(instance) {
     this.instance = instance;
     this.container = null;
     this.state = null;
-    
+
 	this.template = null;
 	this.templateTabHeader = null;
     this.templateTabContent = null;
 	this.tabsData = [];
-	
+
 }, {
 	/**
 	 * @method getName
-	 * @return {String} the name for the component 
+	 * @return {String} the name for the component
 	 */
     getName : function() {
         return 'Oskari.digiroad.bundle.personaldata.Flyout';
     },
 	/**
 	 * @method setEl
-	 * @param {Object} el 
+	 * @param {Object} el
 	 * 		reference to the container in browser
-	 * @param {Number} width 
+	 * @param {Number} width
 	 * 		container size(?) - not used
-	 * @param {Number} height 
-	 * 		container size(?) - not used 
-	 * 
+	 * @param {Number} height
+	 * 		container size(?) - not used
+	 *
 	 * Interface method implementation
 	 */
     setEl : function(el, width, height) {
@@ -45,13 +45,13 @@ function(instance) {
 		}
     },
 	/**
-	 * @method startPlugin 
-	 * 
-	 * Interface method implementation, assigns the HTML templates that will be used to create the UI 
+	 * @method startPlugin
+	 *
+	 * Interface method implementation, assigns the HTML templates that will be used to create the UI
 	 */
     startPlugin : function() {
 		var me = this;
-        
+
         var tabsLocalization = this.instance.getLocalization('tabs');
 		this.tabsData = {
 			"myPlaces" : Oskari.clazz.create('Oskari.digiroad.bundle.personaldata.MyPlacesTab', this.instance, tabsLocalization.myplaces),
@@ -60,44 +60,44 @@ function(instance) {
 		};
     },
 	/**
-	 * @method stopPlugin 
-	 * 
-	 * Interface method implementation, does nothing atm 
+	 * @method stopPlugin
+	 *
+	 * Interface method implementation, does nothing atm
 	 */
 	stopPlugin : function() {
 
 	},
 	/**
-	 * @method getTitle 
-	 * @return {String} localized text for the title of the flyout 
+	 * @method getTitle
+	 * @return {String} localized text for the title of the flyout
 	 */
 	getTitle : function() {
 		return this.instance.getLocalization('title');
 	},
 	/**
-	 * @method getDescription 
-	 * @return {String} localized text for the description of the flyout 
+	 * @method getDescription
+	 * @return {String} localized text for the description of the flyout
 	 */
 	getDescription : function() {
 		return this.instance.getLocalization('desc');
 	},
 	/**
-	 * @method getOptions 
-	 * Interface method implementation, does nothing atm 
+	 * @method getOptions
+	 * Interface method implementation, does nothing atm
 	 */
 	getOptions : function() {
 
 	},
 	/**
-	 * @method setState 
+	 * @method setState
 	 * @param {Object} state
 	 * 		state that this component should use
-	 * Interface method implementation, does nothing atm 
+	 * Interface method implementation, does nothing atm
 	 */
 	setState : function(state) {
 		this.state = state;
 	},
-	
+
 	/**
 	 * @method createUi
 	 * Creates the UI for a fresh start
@@ -105,24 +105,24 @@ function(instance) {
     createUi : function() {
         var me = this;
         var sandbox = me.instance.getSandbox();
-        
+
 		// clear container
 		var flyout = jQuery(this.container);
 		flyout.empty();
-        this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer', 
+        this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer',
             this.instance.getLocalization('notLoggedIn'));
         this.tabsContainer.insertTo(flyout);
-        
+
         if(!sandbox.getUser().isLoggedIn()) {
             return;
         }
-        
+
         // now we can presume user is logged in
 		for(var tabId in this.tabsData) {
 			var tab = this.tabsData[tabId];
 	        var panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
             panel.setTitle(tab.getTitle());
-            
+
 	    	tab.addTabContent(panel.getContainer());
 	    	// binds tab to events
 	    	if(tab.bindEvents) {
@@ -134,7 +134,7 @@ function(instance) {
 }, {
 	/**
 	 * @property {String[]} protocol
-	 * @static 
+	 * @static
 	 */
     'protocol' : ['Oskari.userinterface.Flyout']
 });

@@ -2933,7 +2933,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             } else {
                 this._enableAllParamsSelection();
             }
-            
+
         },
 
         _checkMethodSelection: function () {

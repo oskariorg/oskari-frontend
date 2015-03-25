@@ -14,7 +14,7 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance",
         this.sandbox = null;
     }, {
         __name: "lupakartta",
-        // jemma - a hash for storing state of what ever needed 
+        // jemma - a hash for storing state of what ever needed
         jemma: {},
 
         getName: function () {

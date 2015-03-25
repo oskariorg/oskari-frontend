@@ -235,7 +235,7 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.myplaces2.ButtonHandler",
             'Toolbar.ToolSelectedEvent': function (event) {
                 if (!this.ignoreEvents) {
                     // changed tool -> cancel any drawing
-                    // do not trigger when we return drawing tool to 
+                    // do not trigger when we return drawing tool to
                     this.sendStopDrawRequest(true);
                     this.instance.enableGfi(true);
                 }

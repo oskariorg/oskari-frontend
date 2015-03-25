@@ -5,4 +5,4 @@ Oskari.registerLocalization({
     "title": "Förklaringar",
     "desc": ""
   }
-});	
+});

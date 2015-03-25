@@ -50,8 +50,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 'toolbarId': 'PublisherToolbar',
                 'layer': null, // cannot be selected in advance, so it is selected in _updateDrawLayerSelection
                 'myplaces' : {
-                    'point': true, 
-                    'line': true, 
+                    'point': true,
+                    'line': true,
                     'area': true
                 }
             }

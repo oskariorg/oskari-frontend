@@ -1,8 +1,8 @@
 /**
  * @class Oskari.digiroad.bundle.myplaces2.service.MyPlacesService
- * 
+ *
  */
-Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.service.MyPlacesService', 
+Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.service.MyPlacesService',
 
 /**
  * @method create called automatically on construction
@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.service.MyPlacesService',
  * @param {String} uuid current users uuid
  * @param {Oskari.mapframework.sandbox.Sandbox} sandbox reference to Oskari sandbox
  * @param {String} categoryName default category name
- * 
+ *
  */
 function(url, uuid, sandbox, defaultName) {
 
@@ -33,14 +33,14 @@ function(url, uuid, sandbox, defaultName) {
     },
     /**
      * @method init
-     * Initializes the service and loads 
+     * Initializes the service and loads
      */
     init : function() {
         // preload stuff
         var me = this;
         this.wfstStore.connect();
         var loadedPlaces = false;
-    
+
         var initialLoadCallBackPlaces = function(places) {
             if(places) {
                 me._placesList = places;
@@ -53,18 +53,18 @@ function(url, uuid, sandbox, defaultName) {
             var event = me._sandbox.getEventBuilder('DigiroadMyPlaces.EditedFeaturesLoadedEvent')(features);
             me._sandbox.notifyAll(event);
         };
-        
+
         var initialLoadCallBackFeedback = function(feedbackFeatures) {
             var event = me._sandbox.getEventBuilder('DigiroadMyPlaces.FeedbackLoadedEvent')(feedbackFeatures);
             me._sandbox.notifyAll(event);
         };
-    
+
         this.wfstStore.getMyPlaces(initialLoadCallBackPlaces);
         this.wfstStore.getEditedFeatures(initialLoadCallBackEditedFeatures);
         this.wfstStore.getFeedbackFeatures(initialLoadCallBackFeedback);
         this.getAllNewRestrictions();
     },
-    
+
     /**
      * @method parseDate
      *
@@ -237,7 +237,7 @@ function(url, uuid, sandbox, defaultName) {
 
         this.wfstStore.commitMyPlaces([myplaceModel], callBackWrapper);
     },
-    
+
     /**
      * @method saveFeedback
      * Saves the user drawn feedback polygon to the backend.
@@ -297,7 +297,7 @@ function(url, uuid, sandbox, defaultName) {
     getAllMyPlaces : function() {
         return this._placesList;
     },
-    
+
     /**
      * @method getAllEditedFeatures
      * Retrieves all the edited features from the backend.
@@ -328,10 +328,10 @@ function(url, uuid, sandbox, defaultName) {
     			callback(false);
     		}
     	};
-    	
+
         this.wfstStore.commitEditedFeatures('edited_elements', feature, layerName, callbackWrapper);
     },
-    
+
     /**
      * @method deleteEditedFeature
      * @param {String} protocolType either 'edited_elements' or 'edited_segments'
@@ -352,7 +352,7 @@ function(url, uuid, sandbox, defaultName) {
             this.wfstStore.deleteEditedFeatures(protocolType, [featureId], callbackWrapper);
         }
     },
-    
+
     /**
      * @method getAllNewRestrictions
      * Retrieves all created turning restrictions from the backend
@@ -366,7 +366,7 @@ function(url, uuid, sandbox, defaultName) {
         };
         me.wfstStore.getNewRestrictions(callback);
     },
-    
+
     /**
      * @method saveNewRestriction
      * @param {Object} restriction an OpenLayers feature object

@@ -255,7 +255,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 );
             }
         },
-        /** 
+        /**
          * @method setContent
          * Sets dialog content element
          * @param {HTML/DOM/jQueryObject}

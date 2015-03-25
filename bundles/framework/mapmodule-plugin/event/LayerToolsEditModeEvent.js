@@ -1,9 +1,9 @@
 /**
  * @class Oskari.mapframework.bundle.mapmodule.event.LayerToolsEditModeEvent
- * 
- * Event is sent when decides to 
+ *
+ * Event is sent when decides to
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.event.LayerToolsEditModeEvent', 
+Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.event.LayerToolsEditModeEvent',
 /**
  * @method create called automatically on construction
  * @static
@@ -15,14 +15,14 @@ function(inMode) {
     __name : "LayerToolsEditModeEvent",
     /**
      * @method getName
-     * @return {String} the name for the event 
+     * @return {String} the name for the event
      */
     getName : function() {
         return this.__name;
     },
     /**
      * @method getName
-     * @return {String} the name for the event 
+     * @return {String} the name for the event
      */
     isInMode : function() {
         return this._isInMode;

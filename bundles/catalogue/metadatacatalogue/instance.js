@@ -328,7 +328,7 @@ Oskari.clazz.define(
 
                 if (!isShown && me.drawCoverage === false) {
                     if (me.selectionPlugin) {
-                        me.selectionPlugin.stopDrawing();                        
+                        me.selectionPlugin.stopDrawing();
                     }
                     if (me.coverageButton) {
                         me.coverageButton.val(me.getLocalization('delimitArea'));
@@ -339,11 +339,11 @@ Oskari.clazz.define(
                     if (me.coverageButton) {
                         me.coverageButton[0].data = '';
                     }
-                } 
+                }
 
                 if (event.getViewState() === 'close') {
                     me._removeFeaturesFromMap();
-                } 
+                }
             }
         },
         /**
@@ -673,7 +673,7 @@ Oskari.clazz.define(
             });
 
             newRow.append(newButton);
-            
+
             advancedContainer.append(newRow);
 
             me._updateOptions(advancedContainer);
@@ -969,13 +969,13 @@ Oskari.clazz.define(
                         //jQuery(cells[1]).addClass(me.resultHeaders[1].prop);
 
                         // Action link
-                        if(me._isAction() == true){                            
+                        if(me._isAction() == true){
                             jQuery.each(me.searchResultActions, function(index, action){
                                 if(action.showAction(row)) {
                                     var actionElement = action.actionElement.clone(),
                                         callbackElement = null,
                                         actionTextEl = null;
-                                    
+
                                     actionElement.css('margin-left','6px');
                                     actionElement.css('margin-right','6px');
 
@@ -1028,7 +1028,7 @@ Oskari.clazz.define(
                         }
 
                         // Show bbox icon
-                        if(row.geom && row.geom != null) { 
+                        if(row.geom && row.geom != null) {
                             jQuery(cells[3]).addClass(me.resultHeaders[2].prop);
                             jQuery(cells[3]).attr('title', me.resultHeaders[2].tooltip);
                             jQuery(cells[3]).find('div.showBbox').click(function () {
@@ -1199,7 +1199,7 @@ Oskari.clazz.define(
         addSearchResultAction: function(actionElement, actionTextElement, callback, bindCallbackTo, actionText, showAction){
             var me = this,
                 status = null;
-            
+
             status = {
                 actionElement: actionElement,
                 actionTextElement: actionTextElement,

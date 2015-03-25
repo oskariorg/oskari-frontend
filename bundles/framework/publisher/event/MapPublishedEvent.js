@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.event.MapPublishedEven
      * @param {String} language language for the map
      */
     function (mapId, width, height, language, url) {
-        this._id = mapId; 
+        this._id = mapId;
         this._width = width;
         this._height = height;
         this._language = language;

@@ -12,10 +12,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
     	this.loc = localization;
     }, {
         __templates : {
-            'main' : _.template('<div>' + 
+            'main' : _.template('<div>' +
             	'</div>'),
             'propertySelect' : _.template('<div><span>${label}</span></div>'),
-            'select' : _.template('<select name="properties">' + 
+            'select' : _.template('<select name="properties">' +
             			'<option value="">${label}</option>' +
             			'<% _.forEach(props, function(value) {  %>' +
             				'<option>${value}</option>'+

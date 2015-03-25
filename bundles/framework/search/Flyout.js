@@ -459,7 +459,7 @@ Oskari.clazz.define(
 
             this._populateResultTable(tableBody);
             resultList.append('<div><h3>' +
-                this.instance.getLocalization('searchResults') + ' ' + result.totalCount + ' ' + 
+                this.instance.getLocalization('searchResults') + ' ' + result.totalCount + ' ' +
                 this.instance.getLocalization('searchResultsDescription') + ' ' + searchKey + '</h3></div>');
             resultList.append(table);
         },

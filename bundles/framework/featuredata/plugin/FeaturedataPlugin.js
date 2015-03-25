@@ -66,7 +66,7 @@ function(config) {
      */
     init : function(sandbox) {
 
-        this.__templates['main'] = 
+        this.__templates['main'] =
             jQuery('<div class="mapplugin featuredataplugin">' +
                 '<a href="JavaScript: void(0);"></a>' +
                '</div>');
@@ -115,7 +115,7 @@ function(config) {
         for(p in this.eventHandlers ) {
             sandbox.unregisterFromEventByName(this, p);
         }
-        
+
         if(this.__elements['main']) {
             this.__elements['main'].remove();
             delete this.__elements['main'];
@@ -152,7 +152,7 @@ function(config) {
         var me = this;
         // get div where the map is rendered from openlayers
         var parentContainer = jQuery(this._map.div);
-        
+
         if(!me.__elements['main']) {
             me.__elements['main'] = me.__templates['main'].clone();
         }
@@ -160,7 +160,7 @@ function(config) {
         link.html(this.instance.getLocalization('title'));
         link.bind('click', function() {
             me.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'detach']);
-            return false;        
+            return false;
         });
         me.__elements['main'].mousedown(function(event) {
             event.stopPropagation();
@@ -173,7 +173,7 @@ function(config) {
      * Updates the plugins interface (hides if no WFS layer selected)
      */
     update : function() {
-        
+
         var sandbox = this.mapModule.getSandbox();
         var layers = sandbox.findAllSelectedMapLayers();
         var layerCount = 0;
@@ -186,7 +186,7 @@ function(config) {
         }
         var me = this;
         if(layerCount > 0) {
-            
+
             me.__elements['main'].show();
         }
         else {

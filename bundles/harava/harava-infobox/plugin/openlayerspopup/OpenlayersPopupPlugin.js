@@ -335,7 +335,7 @@ Oskari.clazz.define('Oskari.harava.bundle.haravaInfobox.plugin.mapmodule.Openlay
             var size = this._map.getCurrentSize();
             var width = size.w;
             var height = size.h;
-            // if infobox would be out of screen 
+            // if infobox would be out of screen
             // -> move map to make infobox visible on screen
             var panx = 0;
             var pany = 0;

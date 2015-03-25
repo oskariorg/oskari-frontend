@@ -115,7 +115,7 @@ function() {
             sandbox.request(this, addBtnRequestBuilder('dialog', 'selectiontools', btn));
         }
 
-        // check if preselected layers included wfs layers -> act if they are added now 
+        // check if preselected layers included wfs layers -> act if they are added now
         var layers = sandbox.findAllSelectedMapLayers();
         for (var i = 0; i < layers.length; ++i) {
             if (layers[i].isLayerOfType('WFS')) {

@@ -1,7 +1,7 @@
 /**
  * @class Oskari.mapframework.bundle.featuredata2.AggregateAnalyseFilter
  *
- * Adds to the filterDialog the possibility to filter with aggregate analyse values 
+ * Adds to the filterDialog the possibility to filter with aggregate analyse values
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.aggregateAnalyseFilter",
 
@@ -40,14 +40,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.aggregateAnalyseFil
                         var aggregateSelect = me.content.find('.filter-popup-multiselect');
                         if (aggregateSelect) {
                             aggregateSelect.remove();
-                        } 
+                        }
                         me.aggregateAnalyseFilter.addAggregateValuesSelect(aggregateAnalysis, function(value) {
                             jQuery(event.target).parent().parent().find('input').val(value);
                             me.aggregateAnalyseFilter._blink(jQuery(event.target).parent().parent().find('input'));
                         });
                     }
                 })
-            } 
+            }
         },
 
         /**
@@ -85,7 +85,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.aggregateAnalyseFil
                  element.animate({
                     opacity: 1
                 });
-            });  
+            });
         },
 
         /**

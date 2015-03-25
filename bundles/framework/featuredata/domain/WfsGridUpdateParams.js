@@ -1,6 +1,6 @@
 /**
  * @class Oskari.mapframework.bundle.featuredata.domain.WfsGridUpdateParams
- * 
+ *
  * Convenience class to store parameters for WFS Grid update scheduling
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.domain.WfsGridUpdateParams',
@@ -11,16 +11,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.domain.WfsGridUpdate
  *
  * @param {Oskari.mapframework.domain.WfsLayer} mapLayer
  *            wfs maplayer
- * 
+ *
  * @param {OpenLayers.Geometry} geometry
  *            map bounding box for selection
- * 
+ *
  * @param {Number} mapWidth
  *            width of map
- * 
+ *
  * @param {Number} mapHeight
  *            height of map
- * 
+ *
  * @param {Function} onReady
  *            function to call when operation is completed
  */

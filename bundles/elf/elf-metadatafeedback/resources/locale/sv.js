@@ -99,6 +99,6 @@ Oskari.registerLocalization({
               "save":"Save",
 			  "cancel":"Cancel"
 		}
-        
+
     }
 });

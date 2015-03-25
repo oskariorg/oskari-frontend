@@ -1,6 +1,6 @@
 /**
  * @class Oskari.lupapiste.bundle.myplaces2.view.PlaceForm
- * 
+ *
  * Shows a form for my place
  */
 Oskari.clazz.define("Oskari.lupapiste.bundle.myplaces2.view.PlaceForm",
@@ -14,23 +14,23 @@ function(instance) {
     this.newCategoryId = '-new-';
     this.placeId = undefined;
     this.initialValues = undefined;
-    
+
     var loc = instance.getLocalization('placeform');
-    
+
     this.template = jQuery('<div class="myplacesform">' +
-            '<div class="field">' + 
-                '<div class="help icon-info" ' + 
-                'title="' + loc.tooltip + '"></div>' + 
+            '<div class="field">' +
+                '<div class="help icon-info" ' +
+                'title="' + loc.tooltip + '"></div>' +
                 '<input type="text" name="placename" placeholder="' + loc.placename.placeholder + '"/>' +
             '</div>' +
-            '<div class="field">' + 
+            '<div class="field">' +
                 '<input type="text" name="placelink" placeholder="' + loc.placelink.placeholder + '"/>' +
             '</div>' +
-            '<div class="field">' +  
+            '<div class="field">' +
                 '<textarea name="placedesc" placeholder="' + loc.placedesc.placeholder + '">' +
                 '</textarea>' +
             '</div>' +
-            '<div class="field">' + 
+            '<div class="field">' +
                 '<label for="category">' + loc.category.label + '</label><br clear="all" />' +
                 '<select name="category" autofocus>' +
                 '</select>' +
@@ -42,7 +42,7 @@ function(instance) {
     /**
      * @method getForm
      * @param {Oskari.lupapiste.bundle.myplaces2.model.MyPlacesCategory[]} categories array containing available categories
-     * @return {jQuery} jquery reference for the form 
+     * @return {jQuery} jquery reference for the form
      */
     getForm : function(categories) {
         var ui = this.template.clone();
@@ -73,7 +73,7 @@ function(instance) {
             }
             this._bindCategoryChange();
         }
-        
+
         if(this.initialValues) {
             ui.find('input[name=placename]').attr('value', this.initialValues.place.name);
             ui.find('input[name=placelink]').attr('value', this.initialValues.place.link);
@@ -84,14 +84,14 @@ function(instance) {
     /**
      * @method getValues
      * Returns form values as an object
-     * @return {Object} 
+     * @return {Object}
      */
     getValues : function() {
         var values = {};
-        // infobox will make us lose our reference so search 
+        // infobox will make us lose our reference so search
         // from document using the form-class
         var onScreenForm = this._getOnScreenForm();
-        
+
         if(onScreenForm.length > 0) {
             // found form on screen
             var placeName = onScreenForm.find('input[name=placename]').val();
@@ -123,14 +123,14 @@ function(instance) {
     /**
      * @method setValues
      * Sets form values from object.
-     * @param {Object} data place data as formatted in #getValues() 
+     * @param {Object} data place data as formatted in #getValues()
      */
     setValues : function(data) {
         this.placeId = data.place.id;
-        // infobox will make us lose our reference so search 
+        // infobox will make us lose our reference so search
         // from document using the form-class
         var onScreenForm = this._getOnScreenForm();
-        
+
         if(onScreenForm.length > 0) {
             // found form on screen
             onScreenForm.find('input[name=placename]').val(data.place.name);
@@ -138,7 +138,7 @@ function(instance) {
             onScreenForm.find('textarea[name=placedesc]').val(data.place.desc);
             onScreenForm.find('select[name=category]').val(data.place.category);
         }
-        
+
         this.initialValues = data;
     },
     /**
@@ -154,7 +154,7 @@ function(instance) {
         var onScreenForm = this._getOnScreenForm();
         onScreenForm.find('select[name=category]').live('change', function() {
             var value = jQuery(this).val();
-            // fetch new reference from screen because the closure scoped  
+            // fetch new reference from screen because the closure scoped
             // is not proper reference with our live binding
             var form = me._getOnScreenForm();
             // show category form
@@ -171,7 +171,7 @@ function(instance) {
     },
     /**
      * @method destroy
-     * Removes eventlisteners 
+     * Removes eventlisteners
      */
     destroy : function() {
         // unbind live bindings
@@ -184,11 +184,11 @@ function(instance) {
     },
     /**
      * @method _getOnScreenForm
-     * Returns reference to the on screen version shown by OpenLayers 
+     * Returns reference to the on screen version shown by OpenLayers
      * @private
      */
     _getOnScreenForm : function() {
-        // unbind live so 
+        // unbind live so
         return jQuery('div.myplacesform');
     }
 });

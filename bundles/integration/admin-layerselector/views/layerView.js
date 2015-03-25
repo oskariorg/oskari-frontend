@@ -236,7 +236,7 @@ define([
                                 modelId: subLayerId,
                                 baseLayerId: parentId
                             });
-                            exitPopup(); 
+                            exitPopup();
                         });
                         //exitPopup();
                     });

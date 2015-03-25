@@ -2,7 +2,7 @@
  * @class Oskari.mapframework.bundle.mapwfs.service.WfsTileService
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs.service.WfsTileService',
-    /** 
+    /**
      * @method create called automatically on construction
      * @static
      *

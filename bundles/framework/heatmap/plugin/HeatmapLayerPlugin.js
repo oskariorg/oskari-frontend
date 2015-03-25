@@ -137,7 +137,7 @@ Oskari.clazz.define(
             // hackish way of hooking into layers redraw calls
             var original = openLayer.redraw;
             openLayer.redraw = function() {
-            	// mergeNewParams triggers a new redraw so we need to use 
+            	// mergeNewParams triggers a new redraw so we need to use
             	// a flag variable to detect if we should redraw or calculate new SLD
             	if(this.____oskariFlagSLD === true) {
             		this.____oskariFlagSLD = false;
@@ -235,7 +235,7 @@ Oskari.clazz.define(
 			'<ogc:Literal>data</ogc:Literal>'+
 			'</ogc:Function>';
 			if(layer.getWeightedHeatmapProperty()) {
-				SLD = SLD + 
+				SLD = SLD +
 					'<ogc:Function name="parameter">'+
 					'<ogc:Literal>weightAttr</ogc:Literal>'+
 					'<ogc:Literal>'+layer.getWeightedHeatmapProperty()+'</ogc:Literal>'+
@@ -281,13 +281,13 @@ Oskari.clazz.define(
 				'<ColorMap type="ramp" >';
 
 			// setup color map
-			//'<ColorMapEntry color="#FFFFFF" quantity="0.02" opacity="0"/>'; 
+			//'<ColorMapEntry color="#FFFFFF" quantity="0.02" opacity="0"/>';
 			var colors = layer.getColorConfig();
 			var entryTemplate = _.template('<ColorMapEntry color="${color}" quantity="${quantity}" opacity="${opacity}" />');
 			_.each(colors, function(color) {
 				SLD = SLD + entryTemplate(color);
 			});
-			SLD = SLD + 
+			SLD = SLD +
 				'</ColorMap>'+
 				'</RasterSymbolizer>'+
 				'</Rule>'+

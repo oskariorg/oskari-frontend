@@ -13,7 +13,7 @@ Oskari.clazz
                         return this._callbackMethod;
                     }
                 },
-                
+
                 {
                     'protocol' : ['Oskari.mapframework.request.Request']
                 });

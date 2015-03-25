@@ -146,7 +146,7 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.myplaces2.CategoryHandler",
             }
 
             if (this.initialLoad) {
-                // add the myplaces layers programmatically since normal link processing 
+                // add the myplaces layers programmatically since normal link processing
                 // cant do this (run before the bundle adds the layers)
                 this._processStartupLinkLayers(sandbox);
                 // done here because layers aren't added to the service before this
@@ -598,7 +598,7 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.myplaces2.CategoryHandler",
                 dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 service = me.instance.getService(),
                 loc;
-            
+
             if (success) {
                 if (movePlaces) {
                     // places moved to default category -> update it
@@ -607,7 +607,7 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.myplaces2.CategoryHandler",
                     var request = this.instance.sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest')(layerId, true);
                     this.instance.sandbox.request(this, request);
                 }
-                // NOTE OK 
+                // NOTE OK
                 loc = me.instance.getLocalization();
                 dialog.show(loc.notification.categoryDelete.title, loc.notification.categoryDelete.deleted);
                 dialog.fadeout();

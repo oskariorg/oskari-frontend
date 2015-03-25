@@ -1,7 +1,7 @@
 /**
  * Creates the UI for ELF Geonetwork search service and
  * adds it as a tab to the search bundle.
- * 
+ *
  * @class Oskari.elf.geolocator.GeoLocatorSeachTab
  */
 Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
@@ -91,7 +91,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
         },
         /**
          * Sends a request to the search bundle to add the UI as a tab.
-         * 
+         *
          * @method requestToAddTab
          */
         requestToAddTab: function () {
@@ -107,7 +107,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
         /**
          * Initializes the tab content by creating the search fields
          * and binding functionality.
-         * 
+         *
          * @method __initContent
          * @private
          * @return {jQuery}
@@ -277,7 +277,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
         /**
          * Returns the title for the search results.
          * Appends the result count to it if given.
-         * 
+         *
          * @method __getSearchResultsTitle
          * @private
          * @param  {Number} count
@@ -303,7 +303,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
          * Returns the form values.
          * If there were validations errors the return object
          * has a key `errors`
-         * 
+         *
          * @method __getValues
          * @private
          * @return {Object}
@@ -340,7 +340,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
         },
         /**
          * Performs the search through the search service.
-         * 
+         *
          * @method __doSearch
          * @private
          * @param  {Object} values
@@ -377,7 +377,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
         },
         /**
          * Empties the search results div and starts the progress spinner.
-         * 
+         *
          * @method __beforeSearch
          * @private
          */
@@ -393,7 +393,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
         },
         /**
          * Renders the search results or a notification of an error.
-         * 
+         *
          * @method __handleSearchResult
          * @private
          * @param  {Object} results
@@ -443,7 +443,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
         },
         /**
          * Renders the search results to a div.
-         * 
+         *
          * @method __renderSearchResults
          * @private
          * @param  {Object} results
@@ -470,7 +470,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
         },
         /**
          * Renders a message to the results div notifying of an error.
-         * 
+         *
          * @method __handleSearchError
          * @private
          * @param  {jQuery} container
@@ -482,7 +482,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
         },
         /**
          * Initializes the Oskari grid for displaying the search results.
-         * 
+         *
          * @method __initResultsGrid
          * @private
          * @return {Oskari.userinterface.component.Grid}
@@ -513,7 +513,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
         },
         /**
          * Creates a model for the results grid containing the search results.
-         * 
+         *
          * @method __getGridModel
          * @private
          * @param  {Object} results
@@ -542,7 +542,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
         /**
          * Displays the error messages in a div
          * and adds a class to the error input fields.
-         * 
+         *
          * @method __addErrors
          * @private
          * @param  {Object[]} errors
@@ -562,7 +562,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
         /**
          * Empties the error div and removes the error class
          * from the input fields.
-         * 
+         *
          * @method __removeErrors
          * @private
          * @param  {jQuery} container

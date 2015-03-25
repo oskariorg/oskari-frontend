@@ -1,25 +1,25 @@
 /**
  * @class Oskari.mapframework.mapmodule.ControlsPlugin
- * 
- * Adds mouse and keyboard controls to the map and adds tools controls 
- * for zoombox and measurement (line/area). Also adds request handling for 
+ *
+ * Adds mouse and keyboard controls to the map and adds tools controls
+ * for zoombox and measurement (line/area). Also adds request handling for
  * ToolSelectionRequest, EnableMapKeyboardMovementRequest, DisableMapKeyboardMovementRequest,
  * EnableMapMouseMovementRequest and DisableMapMouseMovementRequest.
  * Overrides OpenLayers keyboard/mouse controls with PorttiKeyboard and PorttiMouse.
- * 
+ *
  * default configuration for mouse as of 2012-12-05:
- * 
- * 
+ *
+ *
     {
                "id":"Oskari.mapframework.mapmodule.ControlsPlugin",
                "config" : {
                     "mouse" : {
                         "useCenterMapInWheelZoom" : false,
                         "useCenterMapInDblClickZoom": false
-                    }   
+                    }
                }
      }
- * 
+ *
  */
 Oskari.clazz.define(
     'Oskari.mapframework.mapmodule.ControlsPlugin',

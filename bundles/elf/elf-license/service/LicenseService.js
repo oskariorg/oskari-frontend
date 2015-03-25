@@ -58,7 +58,7 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
          * @method getUrl
          * @private
          * @param {Object} options url options
-         * 
+         *
          * @return {String} url
          */
         _getLicenseInformationData: function (options) {
@@ -81,7 +81,7 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
          * Cancel ajax request
          * @method _cancelAjaxRequest
          * @private
-         * 
+         *
          * @param {String} requestName request name
          */
         _cancelAjaxRequest: function (requestName) {
@@ -119,7 +119,7 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
             var me = this;
             me._pendingAjaxQuery[requestName].busy = false;
             me._pendingAjaxQuery[requestName].jqhr = null;
-            
+
             me.sandbox.printDebug("[elf-license.LicenseService] finished jqhr ajax request");
         },
         /**

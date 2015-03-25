@@ -122,7 +122,7 @@ function() {}, {
         return handler.apply(this, [event]);
 
     },
-    
+
     /**
      * @property {Object} eventHandlers are configurable
      * @static
@@ -143,7 +143,7 @@ function() {}, {
             url : logUrlWithLinkParams
         });
     }
-    
+
 }, {
     "protocol" : ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module']
 });

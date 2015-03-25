@@ -8,7 +8,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.request.AddWKTGeometryReques
     this.plugin = plugin;
 }, {
 	/**
-	 * @method handleRequest 
+	 * @method handleRequest
 	 * Start geometry search
 	 * @param {Oskari.mapframework.core.Core} core
 	 * 		reference to the application core (reference sandbox core.getSandbox())
@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.request.AddWKTGeometryReques
 	 */
     handleRequest : function(core, request) {
         var wkt = request.getWKTString();
-        
+
         this.sandbox.printDebug("[Oskari.harava.bundle.mapmodule.request.AddWKTGeometryRequest]");
         this.plugin.addWKT(wkt);
     }

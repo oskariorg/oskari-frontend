@@ -3,7 +3,7 @@
  *
  * Class for requesting add features to map.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddFeaturesToMapRequest', 
+Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddFeaturesToMapRequest',
     /**
      * @method create called automatically on construction
      * @static

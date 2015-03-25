@@ -4,4 +4,4 @@ Oskari.registerLocalization({
   "value": {
       "object-data": "Objektuppgifter"
   }
-});	
+});

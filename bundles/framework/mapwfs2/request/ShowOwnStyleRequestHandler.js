@@ -70,7 +70,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequ
                 // remove old custom tiles
                 self.plugin.deleteTileCache(layerId, styleName);
 
-                // set values to backend 
+                // set values to backend
                 var values = self.visualizationForm.getValues();
                 layer.setCustomStyle(values);
                 self.plugin.setCustomStyle(layerId, values);

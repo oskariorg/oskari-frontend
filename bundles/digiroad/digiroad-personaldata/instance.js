@@ -2,10 +2,10 @@
  * @class Oskari.digiroad.bundle.personaldata.PersonalDataBundleInstance
  *
  * Main component and starting point for the personal data functionality.
- * 
- * See Oskari.digiroad.bundle.personaldata.PersonalDataBundle for bundle definition. 
+ *
+ * See Oskari.digiroad.bundle.personaldata.PersonalDataBundle for bundle definition.
  */
-Oskari.clazz.define("Oskari.digiroad.bundle.personaldata.PersonalDataBundleInstance", 
+Oskari.clazz.define("Oskari.digiroad.bundle.personaldata.PersonalDataBundleInstance",
 
 /**
  * @method create called automatically on construction
@@ -26,7 +26,7 @@ function() {
 	__name : 'DigiroadPersonalData',
 	/**
 	 * @method getName
-	 * @return {String} the name for the component 
+	 * @return {String} the name for the component
 	 */
 	"getName" : function() {
 		return this.__name;
@@ -57,7 +57,7 @@ function() {
      * @method getLocalization
      * Returns JSON presentation of bundles localization data for current language.
      * If key-parameter is not given, returns the whole localization data.
-     * 
+     *
      * @param {String} key (optional) if given, returns the value for key
      * @return {String/Object} returns single localization string or
      * 		JSON object for complete data depending on localization
@@ -182,15 +182,15 @@ function() {
 		return this.plugins;
 	},
 	/**
-	 * @method getTitle 
-	 * @return {String} localized text for the title of the component 
+	 * @method getTitle
+	 * @return {String} localized text for the title of the component
 	 */
 	getTitle : function() {
 		return this.getLocalization('title');
 	},
 	/**
-	 * @method getDescription 
-	 * @return {String} localized text for the description of the component 
+	 * @method getDescription
+	 * @return {String} localized text for the description of the component
 	 */
 	getDescription : function() {
 		return this.getLocalization('desc');
@@ -208,7 +208,7 @@ function() {
 }, {
 	/**
 	 * @property {String[]} protocol
-	 * @static 
+	 * @static
 	 */
 	"protocol" : ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
 });

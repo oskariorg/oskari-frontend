@@ -1,6 +1,6 @@
 /**
  * @class Oskari.parcel.bundle.parceltour.ParcelTourBundleInstance
- *  
+ *
  * Add this to startupsequence to get this bundle started
  {
  title : 'parceltour',
@@ -93,7 +93,7 @@ Oskari.clazz.define(
 
             // Check cookie 'parcel_tour_seen'. Value '1' means that tour
             // is not to be started
-            // jQuery cookie plugin: 
+            // jQuery cookie plugin:
             //   resources/framework/bundle/parceltour/js/jquery.cookie.js
             //   github.com/carhartl/jquery-cookie/
             if (jQuery.cookie('parcel_tour_seen') != '1') {
@@ -176,7 +176,7 @@ Oskari.clazz.define(
             //   var sel = "div.oskari-tile-title:contains(" + tt + ")";
             //   return jQuery(sel);
             // },
-            // positionAlign : 'right',                
+            // positionAlign : 'right',
         }, {
             setScope: function (inst) {
                 this.ref = inst;
@@ -217,11 +217,11 @@ Oskari.clazz.define(
             } //,
             // getPositionRef : function () {
             //     var loc = this.ref._localization('page3');
-            //     var sel = 
-            //     return jQuery("div.oskari-tile-title:contains('" + 
+            //     var sel =
+            //     return jQuery("div.oskari-tile-title:contains('" +
             //                   loc.tileText + "')");
             // },
-            // positionAlign : 'right'                
+            // positionAlign : 'right'
         }, {
             setScope: function (inst) {
                 this.ref = inst;
@@ -262,10 +262,10 @@ Oskari.clazz.define(
             } //,
             // getPositionRef : function () {
             //     var loc = this.ref._localization('page4');
-            //     return jQuery("div.oskari-tile-title:contains('" + 
+            //     return jQuery("div.oskari-tile-title:contains('" +
             //                   loc.tileText + "')");
             // },
-            // positionAlign : 'right'*/                
+            // positionAlign : 'right'*/
         }, {
             setScope: function (inst) {
                 this.ref = inst;
@@ -306,10 +306,10 @@ Oskari.clazz.define(
             } //,
             // getPositionRef : function () {
             //     var loc = this.ref._localization('page5');
-            //     return jQuery("div.oskari-tile-title:contains('" + 
+            //     return jQuery("div.oskari-tile-title:contains('" +
             //                   loc.tileText + "')");
             // },
-            // positionAlign : 'right'                
+            // positionAlign : 'right'
         }, {
             setScope: function (inst) {
                 this.ref = inst;
@@ -350,10 +350,10 @@ Oskari.clazz.define(
             } //),
             // getPositionRef : function () {
             //     var loc = this.ref._localization('page6');
-            //     return jQuery("div.oskari-tile-title:contains('" + 
+            //     return jQuery("div.oskari-tile-title:contains('" +
             //                   loc.tileText + "')");
             // },
-            // positionAlign : 'right'*/                
+            // positionAlign : 'right'*/
         }, {
             setScope: function (inst) {
                 this.ref = inst;

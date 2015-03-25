@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamIntElement',
         this._validator = validator;
     }, {
         __name: 'elf-license.ParamIntElement',
-        __qname: 'Oskari.elf.license.elements.ParamIntElement',       
+        __qname: 'Oskari.elf.license.elements.ParamIntElement',
         /**
          * Get Qualified name
          * @method getQName
@@ -64,7 +64,7 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamIntElement',
             if(showInput === true) {
                 data.append('<input type="text"></input>');
                 input = data.find('input');
-                input.val(param.value);        
+                input.val(param.value);
                 input.on('keydown keyup keypress change blur focus paste', function(evt) {
                     me._validator.number.keyListener(evt);
                 });

@@ -78,7 +78,7 @@ define([
             },
             removeLayer : function(layerId) {
                 // removing layer from the main collection
-                // layer groups monitor the main collection and update 
+                // layer groups monitor the main collection and update
                 // their state based on changes to the main collection
                 var models = this.instance.models.layers;
                 var layer = models.get(layerId);
@@ -154,7 +154,7 @@ define([
                 // render organizations
                 this._renderLayerGroups(this.organizationTabModel, 'organization');
 
-                // FIXME: not really comfortable with this but need 
+                // FIXME: not really comfortable with this but need
                 // the references on layer forms and instance is available
                 // maybe create a service to store these?
                 this.instance.models.inspire = this.inspireTabModel;

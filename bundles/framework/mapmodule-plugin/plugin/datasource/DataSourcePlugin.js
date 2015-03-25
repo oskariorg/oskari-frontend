@@ -159,13 +159,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugi
          */
         stop: function (sandbox) {},
 
-        /** 
+        /**
          * @property {Object} eventHandlers
          * @static
          */
         eventHandlers: {},
 
-        /** 
+        /**
          * @method onEvent
          * @param {Oskari.mapframework.event.Event} event a Oskari event object
          * Event is handled forwarded to correct #eventHandlers if found or discarded if not.

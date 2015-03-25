@@ -23,52 +23,52 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
             filterContent: '<div class="analyse-filter-popup-content">' +
                 //'<div class="analyse-filter filter-title"></div>' +
                 '</div>',
-            filterContentBBOX: '<div class="analyse-filter analyse-filter-popup-bbox">' + 
-                                    '<div class="bbox-title"></div>' + 
-                                    '<div class="bbox-radio">' + 
-                                        '<div class="bbox-on">' + 
-                                            '<input id="analyse-filter-bbox-on" type="radio" name="filter-bbox" value="true" />' + 
-                                            '<label for="analyse-filter-bbox-on"></label>' + 
-                                        '</div>' + 
-                                        '<div class="bbox-off">' + 
-                                            '<input id="analyse-filter-bbox-off" type="radio" name="filter-bbox" value="false" checked="checked" />' + 
-                                            '<label for="analyse-filter-bbox-off"></label>' + 
-                                        '</div>' + 
-                                    '</div>' + 
+            filterContentBBOX: '<div class="analyse-filter analyse-filter-popup-bbox">' +
+                                    '<div class="bbox-title"></div>' +
+                                    '<div class="bbox-radio">' +
+                                        '<div class="bbox-on">' +
+                                            '<input id="analyse-filter-bbox-on" type="radio" name="filter-bbox" value="true" />' +
+                                            '<label for="analyse-filter-bbox-on"></label>' +
+                                        '</div>' +
+                                        '<div class="bbox-off">' +
+                                            '<input id="analyse-filter-bbox-off" type="radio" name="filter-bbox" value="false" checked="checked" />' +
+                                            '<label for="analyse-filter-bbox-off"></label>' +
+                                        '</div>' +
+                                    '</div>' +
                                 '</div>',
-            filterClickedFeatures: '<div class="analyse-filter analyse-filter-clicked-features">' + 
-                                        '<div class="clicked-features-title"></div>' + 
+            filterClickedFeatures: '<div class="analyse-filter analyse-filter-clicked-features">' +
+                                        '<div class="clicked-features-title"></div>' +
                                         '<div class="clicked-features-checkboxes">' +
                                             '<div class="clicked-features-checkbox">' +
-                                                '<input type="checkbox" name="analyse-clicked-features" id="analyse-clicked-features" />' + 
+                                                '<input type="checkbox" name="analyse-clicked-features" id="analyse-clicked-features" />' +
                                                 '<label id="filter-clicked-features" for="analyse-clicked-features"></label>' +
                                             '</div>' +
-                                            '<div class="filter-by-geometry-checkbox">' + 
-                                                '<input type="checkbox" name="analyse-filter-by-geometry" id="analyse-filter-by-geometry" />' + 
+                                            '<div class="filter-by-geometry-checkbox">' +
+                                                '<input type="checkbox" name="analyse-filter-by-geometry" id="analyse-filter-by-geometry" />' +
                                                 '<label id="filter-by-geometry-label" for="analyse-filter-by-geometry"></label>' +
                                             '</div>' +
-                                            '<div class="filter-by-geometry-radio">' + 
-                                                '<div class="filter-by-geometry-intersect">' + 
-                                                    '<input id="analyse-filter-by-geometry-intersect" type="radio" name="filter-by-geometry" value="Intersects" disabled/>' + 
-                                                    '<label id="filter-by-geometry-intersect-label" for="analyse-filter-by-geometry-intersect"></label>' + 
-                                                '</div>' + 
-                                                '<div class="filter-by-geometry-contains">' + 
-                                                    '<input id="analyse-filter-by-geometry-contains" type="radio" name="filter-by-geometry" value="Contains" disabled/>' + 
-                                                    '<label id="filter-by-geometry-contains-label" for="analyse-filter-by-geometry-contains"></label>' + 
-                                                '</div>' + 
-                                            '</div>' + 
+                                            '<div class="filter-by-geometry-radio">' +
+                                                '<div class="filter-by-geometry-intersect">' +
+                                                    '<input id="analyse-filter-by-geometry-intersect" type="radio" name="filter-by-geometry" value="Intersects" disabled/>' +
+                                                    '<label id="filter-by-geometry-intersect-label" for="analyse-filter-by-geometry-intersect"></label>' +
+                                                '</div>' +
+                                                '<div class="filter-by-geometry-contains">' +
+                                                    '<input id="analyse-filter-by-geometry-contains" type="radio" name="filter-by-geometry" value="Contains" disabled/>' +
+                                                    '<label id="filter-by-geometry-contains-label" for="analyse-filter-by-geometry-contains"></label>' +
+                                                '</div>' +
+                                            '</div>' +
                                         '</div>' +
                                     '</div>',
             filterContentValues: '<div class="analyse-filter analyse-filter-popup-values">' + '<div class="values-title"></div>' + '</div>',
             filterContentOption: '<div>' +
-                                    '<div class="case-sensitive-filtering">' + 
-                                        '<input name="case-sensitive" type="checkbox"></input>' + 
-                                        '<label for="case-sensitive">Ota huomioon kirjainkoko</label>' + 
-                                    '</div>' + 
-                                    '<div class="filter-option">' + 
-                                        '<select class="attribute"></select>' + 
-                                        '<select class="operator"></select>' + 
-                                        '<input name="attribute-value" class="filter-input-value" type="text"></input>' + 
+                                    '<div class="case-sensitive-filtering">' +
+                                        '<input name="case-sensitive" type="checkbox"></input>' +
+                                        '<label for="case-sensitive">Ota huomioon kirjainkoko</label>' +
+                                    '</div>' +
+                                    '<div class="filter-option">' +
+                                        '<select class="attribute"></select>' +
+                                        '<select class="operator"></select>' +
+                                        '<input name="attribute-value" class="filter-input-value" type="text"></input>' +
                                     '</div>' +
                                 '</div>',
             manageFilterOption: '<div class="manage-filter-option">' + '<div class="add-filter-option">+</div>' + '<div class="remove-filter-option">-</div>' + '</div>',
@@ -205,7 +205,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                 clickedFeaturesSelection.find('#filter-by-geometry-contains-label').html(this.loc.filter.clickedFeatures.filterByGeometryContains);
                 content.append(clickedFeaturesSelection);
 
-                //Check conditions for clicked features 
+                //Check conditions for clicked features
 
                 // jos ei ole ollenkaan valittuja kohteita
                 if (!clickedFeatures) {
@@ -220,7 +220,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                     clickedFeaturesSelection.find('#analyse-clicked-features').prop({'disabled': true, 'checked': false});
                     clickedFeaturesSelection.find('#analyse-filter-by-geometry').prop({'disabled': true, 'checked': false});
                 }
-                
+
                 clickedFeaturesSelection.find('#analyse-filter-by-geometry').on("click", function () {
                     if (clickedFeaturesSelection.find('#analyse-filter-by-geometry').prop('checked') === true) {
                         clickedFeaturesSelection.find('input[name="filter-by-geometry"]').prop('disabled', false);
@@ -229,7 +229,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                         clickedFeaturesSelection.find('input[name="filter-by-geometry"]').prop('checked', false);
                     }
                 });
-            } 
+            }
 
             // Filter values selection
             valuesSelection.find('div.values-title').html('<h4>' + this.loc.filter.values.title + '</h4>');
@@ -482,7 +482,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                 prevSibling = parent.prev('div.filter-option'),
                 manageFilterOption = this._addManageFilterOption(layer);
 
-            // Replace the boolean operator select with the 
+            // Replace the boolean operator select with the
             prevSibling.find('select.boolean').replaceWith(manageFilterOption);
             // Unless this is the last filter option, remove it.
             if (prevSibling && prevSibling.length) {

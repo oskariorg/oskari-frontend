@@ -18,7 +18,7 @@ function() {
 
     /**
      * Sets the wms url for the layer.
-     * 
+     *
      * @method setWmsUrl
      * @param {String} wmsUrl
      */
@@ -27,9 +27,9 @@ function() {
     },
     /**
      * Returns the wms url of the layer.
-     * 
+     *
      * @method getWmsUrl
-     * @return {String} 
+     * @return {String}
      */
     getWmsUrl : function() {
         return this._wmsUrl;
