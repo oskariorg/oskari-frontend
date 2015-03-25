@@ -482,64 +482,8 @@ Oskari.clazz.define(
         },
         _getDialogButton: function (dialog) {
             var me = this,
-                buttons = [],
-                bn,
                 closeTxt = me._localization['button']['close'];
-            var closeBtn = dialog.createCloseButton(closeTxt);
-            buttons.push(closeBtn);
-
-            // Remove the following line for further steps
-            return buttons;
-
-            if (this.guideStep > 1) {
-                bn = 'Oskari.userinterface.component.Button';
-                var prevBtn = Oskari.clazz.create(bn);
-                var prevTxt = me._localization['button']['previous'];
-                prevBtn.setTitle(prevTxt);
-                prevBtn.setHandler(
-                    function () {
-                        me.guideStep--;
-                        me._showGuideContentForStep(me.guideStep, dialog);
-                    }
-                );
-                buttons.push(prevBtn);
-            }
-
-            if (this.guideStep === 0) {
-                bn = 'Oskari.userinterface.component.Button';
-                var startBtn = Oskari.clazz.create(bn);
-                var startTxt = me._localization['button']['start'];
-                startBtn.setTitle(startTxt);
-                startBtn.setHandler(
-                    function () {
-                        me.guideStep++;
-                        me._showGuideContentForStep(me.guideStep, dialog);
-                    }
-                );
-                buttons.push(startBtn);
-            }
-            // check this._guideSteps.length <> 
-            // this.guideStep and return next or finish?
-            else if (this.guideStep < this._guideSteps.length - 1) {
-                bn = 'Oskari.userinterface.component.Button';
-                var nextBtn = Oskari.clazz.create(bn);
-                var nextTxt = me._localization['button']['next'];
-                nextBtn.setTitle(nextTxt);
-                nextBtn.setHandler(
-                    function () {
-                        me.guideStep++;
-                        me._showGuideContentForStep(me.guideStep, dialog);
-                    }
-                );
-                buttons.push(nextBtn);
-                // custom class for positioned popups
-                dialog.addClass('bluetitle');
-            } else if (this.guideStep === this._guideSteps.length - 1) {
-                var finishTxt = me._localization['button']['finish'];
-                var finishBtn = dialog.createCloseButton(finishTxt);
-                buttons.push(finishBtn);
-            }
-            return buttons;
+            return [dialog.createCloseButton(closeTxt)];
         },
         /**
          * @method init
