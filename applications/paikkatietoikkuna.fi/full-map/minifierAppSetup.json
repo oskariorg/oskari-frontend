@@ -534,6 +534,16 @@
 					}
 				}
 			}
+		}, {
+			"bundlename" : "heatmap",
+			"bundleinstancename" : "heatmap",
+			"metadata" : {
+				"Import-Bundle" : {
+					"heatmap" : {
+						"bundlePath" : "../../../packages/framework/bundle/"
+					}
+				}
+			}
 		}
 	]
 }
