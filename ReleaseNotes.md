@@ -2,6 +2,20 @@
 
 ## 1.28
 
+### framework/heatmap
+
+*New bundle!* Adds heatmap functionality to layers configured to support it (WMS-layers only at the moment). Configuration is done by adding the following information to a layers JSON:
+
+    {
+        attributes : {
+          geometryProperty : "the_geom",
+          layerWorkspace : "ows",
+          heatmap : ["properties to use", "as heatmap weighted property"]
+        }
+    }
+
+SelectedLayers bundle will show heatmap-enabled layers with an additional "Heatmap" tool in the layer frame to access the functionality.
+
 ### divmanazer components
 
 Popup.createCloseButton('label') label parameter is now optional. Popup now uses button component
