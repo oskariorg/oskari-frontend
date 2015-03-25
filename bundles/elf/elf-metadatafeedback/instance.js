@@ -24,7 +24,7 @@ function () {
         templates: {
             ratingContainer: jQuery('<div class="ratingInfo"></div>'),
             starItem: jQuery('<div class="ratingStar"></div>'),
-            numRatings: jQuery('<div class="numRatings"></div>'),
+            numRatings: jQuery('<div class="numRatings"></div>')
         },
         /**
          * @static

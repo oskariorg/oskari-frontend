@@ -39,7 +39,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.request.ShowFeedba
          */
         getMetadata: function () {
             return this._metadata;
-        },
+        }
 
     }, {
         protocol: ['Oskari.mapframework.request.Request']

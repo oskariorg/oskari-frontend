@@ -427,7 +427,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
                 dialog.close(true);
             });
             dialog.show(title, message, [okBtn]);
-        },
+        }
 
     }, {
         'extend': ['Oskari.userinterface.extension.DefaultFlyout']

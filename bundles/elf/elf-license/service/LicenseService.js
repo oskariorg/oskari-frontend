@@ -222,7 +222,7 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
                 },
                 complete: function () {
                     me._finishAjaxRequest('getPrice');
-                },
+                }
             });
         },
         /**
@@ -274,7 +274,7 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
                 },
                 complete: function () {
                     me._finishAjaxRequest('concludeLicense');
-                },
+                }
             });
         },
         /**
@@ -327,7 +327,7 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
                 },
                 complete: function () {
                     me._finishAjaxRequest('deactivateLicense');
-                },
+                }
             });
         }
     }, {

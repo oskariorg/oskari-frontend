@@ -134,7 +134,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 allowedSiblings: [
                     'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
                     'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
-                    'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar',
+                    'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 ],
                 groupedSiblings: true
             },
