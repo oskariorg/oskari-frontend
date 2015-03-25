@@ -15,8 +15,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
             'main' : _.template('<div>' + 
             	'</div>'),
             'propertySelect' : _.template('<div><span>${label}</span></div>'),
-            'propertySingle' : _.template('<div><span>${label}</span>: ${value}</div>'),
             'select' : _.template('<select name="properties">' + 
+            			'<option value="">${label}</option>' +
             			'<% _.forEach(props, function(value) {  %>' +
             				'<option>${value}</option>'+
         				'<% }); %>' +
@@ -33,32 +33,33 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
     		var content = jQuery(this.__templates.main());
 			// TODO: maybe replace radius field with a slider?
 			var radiusInput = Oskari.clazz.create('Oskari.userinterface.component.NumberInput');
-			radiusInput.setTitle('Radius');
-			radiusInput.setValue(layer.getRadius() || 10);
+			radiusInput.setTitle(this.loc.radiusLabel);
+			radiusInput.setValue(layer.getRadius());
 			radiusInput.setMin(1);
 			radiusInput.setMax(300);
 			content.append(radiusInput.getElement());
+
+			var ppcInput = Oskari.clazz.create('Oskari.userinterface.component.NumberInput');
+			ppcInput.setTitle(this.loc.pixelsPerCellLabel);
+			ppcInput.setValue(layer.getPixelsPerCell());
+			ppcInput.setMin(1);
+			ppcInput.setMax(300);
+			content.append(ppcInput.getElement());
 			// TODO: color selection
 
     		var propertyElement = null;
     		var propertySelector = null;
     		// only show select if there is something to select?
-    		if(layer.getHeatmapProperties().length > 1) {
+    		if(layer.getHeatmapProperties().length > 0) {
     			propertyElement =  jQuery(this.__templates.propertySelect({
 	    			label : this.loc.propertyLabel
 	    		}));
     			propertySelector = jQuery(this.__templates.select({
+    				label : this.loc.noneOption,
 	    			props : layer.getHeatmapProperties()
 	    		}));
-	    		propertySelector.val(layer.getSelectedHeatmapProperty())
+	    		propertySelector.val(layer.getWeightedHeatmapProperty())
 	    		propertyElement.append(propertySelector);
-	    		content.append(propertyElement);
-    		}
-    		else {
-    			propertyElement =  jQuery(this.__templates.propertySingle({
-	    			label : this.loc.propertyLabel,
-	    			value : layer.getSelectedHeatmapProperty()
-	    		}));
 	    		content.append(propertyElement);
     		}
     		var buttons = [];
@@ -67,13 +68,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
 			okBtn.setHandler(function() {
 				// TODO: validate
 				var values = {
-					radius : radiusInput.getValue()
+					radius : radiusInput.getValue(),
+					pixelsPerCell : ppcInput.getValue()
 				};
 				if(propertySelector) {
 					values.property = propertySelector.val();
-				}
-				else {
-					values.property = layer.getHeatmapProperties()[0]
 				}
 				dialog.close();
 				delete me.dialog;

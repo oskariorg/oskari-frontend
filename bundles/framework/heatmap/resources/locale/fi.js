@@ -6,7 +6,10 @@ Oskari.registerLocalization({
         "tool_label_settings" : "Asetukset",
         "dialog" : {
             "title" : "Heatmap asetukset",
-            "propertyLabel" : "Painotettava muuttuja"
+            "propertyLabel" : "Painotettava muuttuja",
+            "radiusLabel" : "Säde",
+            "pixelsPerCellLabel" : "Pixels per cell",
+            "noneOption" : "Ei valintaa"
         }
     }
 });

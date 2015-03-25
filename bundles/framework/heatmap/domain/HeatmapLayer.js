@@ -15,7 +15,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.domain.HeatmapLayer',
     	init : function() {
 	        this._layerType = "HEATMAP";
             this._selectedProperty = null;
-            this._radius = 10;
+            this._radius = 30;
+            this._pixelsPerCell = 10;
 	        this.localization = Oskari.getLocalization('heatmap');
     	},
     	copyValues : function(parentLayer, overrides) {
@@ -47,17 +48,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.domain.HeatmapLayer',
         getRadius : function() {
             return this._radius;
         },
-        setSelectedHeatmapProperty : function(param) {
+        setPixelsPerCell : function(param) {
+            this._pixelsPerCell = param;
+        },
+        getPixelsPerCell : function() {
+            return this._pixelsPerCell;
+        },
+        setWeightedHeatmapProperty : function(param) {
             this._selectedProperty = param;
         },
-        getSelectedHeatmapProperty : function() {
+        getWeightedHeatmapProperty : function() {
             if(this._selectedProperty) {
                 return this._selectedProperty;
             }
-            var list = this.getHeatmapProperties();
-            if(list.length > 0) {
-                return list[0];
-            }
+            return null;
         },
         getSLDNamedLayer : function() {
             var attr = this.getAttributes();
@@ -67,7 +71,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.domain.HeatmapLayer',
                 name = workspace + ':' + name;
             }
             return name;
+        },
+        getColorConfig : function() {
+            return [
+                { color : "#FFFFFF", quantity : 0.02, opacity : 0 },
+                { color : "#4444FF", quantity : 0.1, opacity : 1 },
+                { color : "#FF0000", quantity : 0.5, opacity : 1 },
+                { color : "#FFFF00", quantity : 1, opacity : 1 }
+            ];
         }
+
     }, {
         "extend": ["Oskari.mapframework.domain.WmsLayer"]
     });
