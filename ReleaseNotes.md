@@ -2,10 +2,40 @@
 
 ## 1.28
 
+### framework/heatmap
+
+*New bundle!* Adds heatmap functionality to layers configured to support it (WMS-layers only at the moment). Configuration is done by adding the following information to a layers JSON:
+
+    {
+        attributes : {
+          geometryProperty : "the_geom",
+          layerWorkspace : "ows",
+          heatmap : ["properties to use", "as heatmap weighted property"]
+        }
+    }
+
+SelectedLayers bundle will show heatmap-enabled layers with an additional "Heatmap" tool in the layer frame to access the functionality.
+
+### divmanazer components
+
+Popup.createCloseButton('label') label parameter is now optional. Popup now uses button component
+Oskari.userinterface.component.buttons.CloseButton and sets the button title if label is given.
+
+### mapwfs2
+
+ModelBuilder no longer assumes featuredata2 is present in the application setup. Feature data tool is not added to layers by default.
+
+### featuredata2
+
+Adds 'Feature Data' tool for any layers that are capable of showing it (WFS-based layer types).
+
+### layerselection2
+
+Now handles MapLayerEvent with type 'tool' and updates the selected layers tools accordingly.
+
 ### framework/mapmodule-plugin - SearchPlugin
 
 Now supports zoomScale in search results.
-
 
 ### elf/elf-lang-overrides
 
@@ -15,17 +45,35 @@ Now supports zoomScale in search results.
 
 *New bundle!* Extends metadatacatalogue search to show user license information. User can unconclude/conclude license to it self.
 
-
 ### elf/elf-language-selector
 
 Hardcodings removed and now uses the configured supported languages. 
 
 ### core
 
+#### localization handling
+
 Oskari.getLocalization() now supports language as a second parameter. Notice that the locale still won't be loaded automatically.
 
 Oskari.registerLocalization() now supports override languages a second parameter. Locales are merged to each other. 
 Notice that at this not override old locales, so if you want override default locales the language override bundle need start first.
+
+#### AbstractLayer
+
+AbstractLayer: if name, description, Inspire theme and organization is missing for users language the default language version is used.
+AbstractLayer now checks for duplicates before adding tools.
+Added new Object-typed field for generic layer attributes (setAttributes()/getAttributes()).
+
+#### default language
+
+Oskari.getDefaultLanguage() no longer crashes if supported locales are not set. Returns Oskari.getLang() in such case.
+
+#### MapLayerService and MapLayerEvent
+
+New method added to service addToolForLayer(layer, tool) for adding tools for layers. Signals other components with 
+MapLayerEvent typed as 'tool' about the updated layer.
+
+MapLayerService now parses attributes from layer JSON.
 
 ### framework/admin-layerrights
 
@@ -241,6 +289,7 @@ Preparing for version 2 of the changes, please change your bundles to following 
 ** CSS files: `bundles/<mynamespace>/<bundle-identifier>/resources/css/..`
 
 #### Grunt tool
+
 Grunt tool has been modified to support folder structure changes.
 
 ## 1.27.3

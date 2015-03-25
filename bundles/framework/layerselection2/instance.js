@@ -162,14 +162,24 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselection2.LayerSelectionBu
              */
             'MapLayerEvent': function (event) {
                 var mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService'),
+                    flyout = this.plugins['Oskari.userinterface.Flyout'],
                     layerId = event.getLayerId(),
                     layer;
-                if (event.getOperation() === 'update') {
-                    layer = mapLayerService.findMapLayer(layerId);
-                    this.plugins['Oskari.userinterface.Flyout'].handleLayerModified(layer);
+                if (event.getOperation() === 'update' || event.getOperation() === 'tool') {
+                    if(layerId) {
+                        layer = mapLayerService.findMapLayer(layerId);
+                        flyout.handleLayerModified(layer);
+                    }
+                    else {
+                        // no layer specified, update all layers
+                        var layers = this.sandbox.findAllSelectedMapLayers();
+                        _.each(layers, function(layer) {
+                            flyout.handleLayerModified(layer);
+                        });
+                    }
                 } else if (event.getOperation() === 'sticky') {
                     layer = mapLayerService.findMapLayer(layerId);
-                    this.plugins['Oskari.userinterface.Flyout'].handleLayerSticky(layer);
+                    flyout.handleLayerSticky(layer);
                 }
             },
             /**

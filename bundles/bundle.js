@@ -184,11 +184,12 @@ Oskari = (function () {
          */
         getSupportedLanguages: function () {
             var langs = [],
+                supported = this.getSupportedLocales(),
                 locale,
                 i;
 
-            for (i = 0; i < this.supportedLocales.length; i += 1) {
-                locale = this.supportedLocales[i];
+            for (i = 0; i < supported.length; i += 1) {
+                locale = supported[i];
                 // FIXME what do if indexOf === -1?
                 langs.push(locale.substring(0, locale.indexOf('_')));
             }
@@ -232,13 +233,23 @@ Oskari = (function () {
          * @return {string} Default language 
          */
         getDefaultLanguage: function () {
-            var locale = this.supportedLocales[0],
-                ret;
+            var supported = this.getSupportedLocales();
+
+            if(supported.length === 0) {
+                // supported locales not set, use current
+                if (console && console.warn) {
+                    console.warn(
+                        'Supported locales not set, using current language ' + this.getLang()
+                    );
+                }
+                return this.getLang();
+            }
+            var locale = supported[0];
 
             if (locale.indexOf('_') !== -1) {
-                ret = locale.substring(0, locale.indexOf('_'));
+                return locale.substring(0, locale.indexOf('_'));
             }
-            return ret;
+            return this.getLang();
         }
     };
 
