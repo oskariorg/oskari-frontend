@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
         				'<% }); %>' +
             		'</select>')
         },
-    	showDialog : function(layer, callback) {
+    	showDialog : function(layer, callback, isNew) {
     		if(this.dialog) {
     			this.dialog.close(true);
     			delete this.dialog;
@@ -31,6 +31,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
     			dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
 
     		var content = jQuery(this.__templates.main());
+
 			// TODO: maybe replace radius field with a slider?
 			var radiusInput = Oskari.clazz.create('Oskari.userinterface.component.NumberInput');
 			radiusInput.setTitle(this.loc.radiusLabel);
@@ -45,6 +46,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
 			ppcInput.setMin(1);
 			ppcInput.setMax(300);
 			content.append(ppcInput.getElement());
+
 			// TODO: color selection
 
     		var propertyElement = null;
@@ -62,9 +64,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
 	    		propertyElement.append(propertySelector);
 	    		content.append(propertyElement);
     		}
-    		var buttons = [];
-
-			var okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
+			var okBtn = null;
+            if(isNew) {
+                okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.AddButton');
+            }
+            else {
+                okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
+            }
 			okBtn.setHandler(function() {
 				// TODO: validate
 				var values = {
@@ -78,10 +84,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
 				delete me.dialog;
 				callback(values);
 			});
-			buttons.push(dialog.createCloseButton());
-
-			buttons.push(okBtn);
-    		dialog.show(this.loc.title, content, buttons);
+            var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
+            cancelBtn.setHandler(function() {
+                dialog.close();
+                delete me.dialog;
+            });
+    		dialog.show(this.loc.title, content, [cancelBtn, okBtn]);
     		dialog.makeDraggable();
 			this.dialog = dialog;
     	}

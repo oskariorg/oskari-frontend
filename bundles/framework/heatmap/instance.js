@@ -97,7 +97,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapBundleInstance',
                 if(layerModel.isLayerOfType('HEATMAP')) {
                     dialog.showDialog(layerModel, function(values) {
                         me.__setupHeatmap(layerModel, values, false);
-                    });
+                    }, false);
                 }
                 else {
                     var layer = Oskari.clazz.create('Oskari.mapframework.bundle.heatmap.domain.HeatmapLayer');
@@ -109,7 +109,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapBundleInstance',
                     me.__addTool(layer, true);
                     dialog.showDialog(layer, function(values) {
                         me.__setupHeatmap(layer, values, true);
-                    });
+                    }, true);
                 }
             });
 
