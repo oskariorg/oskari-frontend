@@ -546,8 +546,6 @@ module.exports = function (grunt) {
             processedAppSetup = parser.getComponents(options.appSetupFile),
             i,
             pasFiles,
-            findImageDir = '\.\./images/',
-            findImageDirRegExp = new RegExp(findImageDir, 'g'),
             replaceImageDir = './images/';
 
         grunt.log.writeln('Concatenating and minifying css');
@@ -569,9 +567,12 @@ module.exports = function (grunt) {
                 value = value + '\n' + content;
             }
 
-            // correct image paths
-            value = value.replace(findImageDirRegExp, replaceImageDir);
-
+            // FIXME: Make a better effort when improving tooling for Oskari2
+            // fix image paths to minified form
+            // "../images/pic.png" -> "./images/pic.png"
+            value = value.replace(/\.\.\/images\//g, replaceImageDir);
+            // "../../../something/resources/images/pic.png" -> "./images/pic.png"
+            value = value.replace(/\.\.\/\.\.\/\.\.\/.*\/images\//g, replaceImageDir);
 
             // minify value
             packed = cssPacker.processString(value);
