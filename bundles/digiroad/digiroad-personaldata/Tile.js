@@ -17,20 +17,20 @@ function(instance) {
 }, {
 	/**
 	 * @method getName
-	 * @return {String} the name for the component 
+	 * @return {String} the name for the component
 	 */
 	getName : function() {
 		return 'Oskari.digiroad.bundle.personaldata.Tile';
 	},
 	/**
 	 * @method setEl
-	 * @param {Object} el 
+	 * @param {Object} el
 	 * 		reference to the container in browser
-	 * @param {Number} width 
+	 * @param {Number} width
 	 * 		container size(?) - not used
-	 * @param {Number} height 
-	 * 		container size(?) - not used 
-	 * 
+	 * @param {Number} height
+	 * 		container size(?) - not used
+	 *
 	 * Interface method implementation
 	 */
 	setEl : function(el, width, height) {
@@ -38,43 +38,43 @@ function(instance) {
 	},
 	/**
 	 * @method startPlugin
-	 * Interface method implementation, calls #refresh() 
+	 * Interface method implementation, calls #refresh()
 	 */
 	startPlugin : function() {
 		this.refresh();
 	},
 	/**
-	 * @method stopPlugin 
-	 * Interface method implementation, clears the container 
+	 * @method stopPlugin
+	 * Interface method implementation, clears the container
 	 */
 	stopPlugin : function() {
 		this.container.empty();
 	},
 	/**
-	 * @method getTitle 
-	 * @return {String} localized text for the title of the tile 
+	 * @method getTitle
+	 * @return {String} localized text for the title of the tile
 	 */
 	getTitle : function() {
 		return this.instance.getLocalization('title');
 	},
 	/**
-	 * @method getDescription 
-	 * @return {String} localized text for the description of the tile 
+	 * @method getDescription
+	 * @return {String} localized text for the description of the tile
 	 */
 	getDescription : function() {
 	},
 	/**
-	 * @method getOptions 
-	 * Interface method implementation, does nothing atm 
+	 * @method getOptions
+	 * Interface method implementation, does nothing atm
 	 */
 	getOptions : function() {
 
 	},
 	/**
-	 * @method setState 
+	 * @method setState
 	 * @param {Object} state
 	 * 		state that this component should use
-	 * Interface method implementation, does nothing atm 
+	 * Interface method implementation, does nothing atm
 	 */
 	setState : function(state) {
 	},
@@ -87,7 +87,7 @@ function(instance) {
 }, {
 	/**
 	 * @property {String[]} protocol
-	 * @static 
+	 * @static
 	 */
 	'protocol' : ['Oskari.userinterface.Tile']
 });

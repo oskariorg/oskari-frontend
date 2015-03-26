@@ -722,7 +722,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayoutFo
 
             red = red.length ? parseInt(red, 10) : 0;
             green = green.length ? parseInt(green, 10) : 0;
-            blue = blue.length ? parseInt(blue, 10) : 0;        
+            blue = blue.length ? parseInt(blue, 10) : 0;
 
             return {
                 red: red,
@@ -780,7 +780,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayoutFo
                         if (rgb.length === 3) {
                             rgb = parsed;
                         }
-                    }   
+                    }
                 }
             }
             return {

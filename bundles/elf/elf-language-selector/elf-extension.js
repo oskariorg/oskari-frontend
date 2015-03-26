@@ -91,7 +91,7 @@ Oskari.clazz.define("Oskari.elf.extension.EnhancedExtension",
             var conf = this.conf;
             var sandboxName = (conf ? conf.sandbox : null) || 'sandbox';
             var sandbox = Oskari.getSandbox(sandboxName);
-            
+
             me.sandbox = sandbox;
 
             //this.setLocalization(this.locales[Oskari.getLang()] || this.locales['en']);

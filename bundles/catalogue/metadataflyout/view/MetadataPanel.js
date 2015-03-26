@@ -450,31 +450,31 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '    <% } %>' +
                     '    <% if (dataQualities.length) { %>' +
                     '        <% _.forEach(dataQualities, function (dataQuality) { %>' +
-                    '           <% if (dataQuality.absoluteExternalPositionalAccuracyList.length) { %>' + 
+                    '           <% if (dataQuality.absoluteExternalPositionalAccuracyList.length) { %>' +
                     '               <h2>' + this.locale.heading.absoluteExternalPositionalAccuracy + '</h2>' +
                     '               <% _.forEach(dataQuality.absoluteExternalPositionalAccuracyList, function(dataQualityItem) { %>'+
                     '                   <% _.forEach(dataQualityItem.list, function (item) { %>' +
                     '                       <p><%= item %></p>' +
                     '                   <% }); %>' +
-                    '                   <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+ 
-                    '               <% }); %> '+    
+                    '                   <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
+                    '               <% }); %> '+
                     '           <% } %>'+
-                    '           <% if (dataQuality.accuracyOfTimeMeasurementList.length) { %>' + 
+                    '           <% if (dataQuality.accuracyOfTimeMeasurementList.length) { %>' +
                     '               <h2>' + this.locale.heading.accuracyOfTimeMeasurement + '</h2>' +
                     '               <% _.forEach(dataQuality.accuracyOfTimeMeasurementList, function (dataQualityItem) { %>' +
                     '                   <% _.forEach(dataQualityItem.list, function (item) { %>' +
                     '                      <p><%= item %></p>' +
                     '                  <% }); %>' +
-                    '                  <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+ 
+                    '                  <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
                     '              <% }) %>' +
                     '           <% } %>'+
-                    '           <% if (dataQuality.completenessCommissionList.length) { %>' + 
+                    '           <% if (dataQuality.completenessCommissionList.length) { %>' +
                     '               <h2>' + this.locale.heading.completenessCommission + '</h2>' +
                     '               <% _.forEach(dataQuality.completenessCommissionList, function (dataQualityItem) { %>' +
                     '                   <% _.forEach(dataQualityItem.list, function (item) { %>' +
                     '                       <p><%= item %></p>' +
                     '                   <% }); %>' +
-                    '                   <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+ 
+                    '                   <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
                     '               <% }); %>' +
                     '           <% } %>'+
                     '           <% if (dataQuality.completenessOmissionList.length) { %>' +
@@ -483,7 +483,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '                  <% _.forEach(dataQualityItem.list, function (item) { %>' +
                     '                      <p><%= item %></p>' +
                     '                  <% }); %>' +
-                    '                  <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+ 
+                    '                  <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
                     '               <% }); %>' +
                     '           <% } %>'+
                     '           <% if (dataQuality.conceptualConsistencyList.length) { %>' +
@@ -492,7 +492,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '                  <% _.forEach(dataQualityItem.list, function (item) { %>' +
                     '                      <p><%= item %></p>' +
                     '                  <% }); %>' +
-                    '                  <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+ 
+                    '                  <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
                     '               <% }); %>' +
                     '           <% } %>'+
                     '           <% if (dataQuality.domainConsistencyList.length) { %>' +
@@ -501,7 +501,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '                  <% _.forEach(dataQualityItem.list, function (item) { %>' +
                     '                      <p><%= item %></p>' +
                     '                  <% }); %>' +
-                    '                  <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+ 
+                    '                  <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
                     '               <% }); %>' +
                     '           <% } %>'+
                     '           <% if (dataQuality.formatConsistencyList.length) { %>' +
@@ -510,7 +510,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '                 <% _.forEach(dataQualityItem.list, function (item) { %>' +
                     '                    <p><%= item %></p>' +
                     '                 <% }); %>' +
-                    '                 <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+ 
+                    '                 <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
                     '               <% }); %>' +
                     '           <% } %>'+
                     '           <% if (dataQuality.griddedDataPositionalAccuracyList.length) { %>' +
@@ -519,7 +519,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '                   <% _.forEach(dataQualityItem.list, function (item) { %>' +
                     '                      <p><%= item %></p>' +
                     '                   <% }); %>' +
-                    '                   <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+ 
+                    '                   <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
                     '               <% }); %>' +
                     '           <% } %>'+
                     '           <% if (dataQuality.nonQuantitativeAttributeAccuracyList.length) { %>' +
@@ -528,7 +528,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '                  <% _.forEach(dataQualityItem.list, function (item) { %>' +
                     '                      <p><%= item %></p>' +
                     '                  <% }); %>' +
-                    '                  <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+ 
+                    '                  <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
                     '              <% }); %>' +
                     '           <% } %>'+
                     '           <% if (dataQuality.quantitativeAttributeAccuracyList.length) { %>' +
@@ -537,7 +537,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '                  <% _.forEach(dataQualityItem.list, function (item) { %>' +
                     '                      <p><%= item %></p>' +
                     '                  <% }); %>' +
-                    '                  <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+ 
+                    '                  <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
                     '              <% }); %>' +
                     '           <% } %>'+
                     '           <% if (dataQuality.relativeInternalPositionalAccuracyList.length) { %>' +
@@ -546,7 +546,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '                   <% _.forEach(dataQualityItem.list, function (item) { %>' +
                     '                       <p><%= item %></p>' +
                     '                   <% }); %>' +
-                    '                   <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+ 
+                    '                   <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
                     '               <% }); %>' +
                     '           <% } %>'+
                     '           <% if (dataQuality.temporalConsistencyList.length) { %>' +
@@ -555,7 +555,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '                   <% _.forEach(dataQualityItem.list, function (item) { %>' +
                     '                       <p><%= item %></p>' +
                     '                   <% }); %>' +
-                    '                   <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+ 
+                    '                   <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
                     '               <% }); %>' +
                     '           <% } %>'+
                     '           <% if (dataQuality.temporalValidityList.length) { %>' +
@@ -564,7 +564,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '                   <% _.forEach(dataQualityItem.list, function (item) { %>' +
                     '                       <p><%= item %></p>' +
                     '                   <% }); %>' +
-                    '                   <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+ 
+                    '                   <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
                     '               <% }); %>' +
                     '           <% } %>'+
                     '           <% if (dataQuality.thematicClassificationCorrectnessList.length) { %>' +
@@ -573,7 +573,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '                   <% _.forEach(dataQualityItem.list, function (item) { %>' +
                     '                       <p><%= item %></p>' +
                     '                   <% }); %>' +
-                    '                   <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+ 
+                    '                   <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
                     '               <% }); %>' +
                     '           <% } %>'+
                     '           <% if (dataQuality.topologicalConsistencyList.length) { %>' +
@@ -582,12 +582,12 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '                  <% _.forEach(dataQualityItem.list, function (item) { %>' +
                     '                       <p><%= item %></p>' +
                     '                   <% }); %>' +
-                    '                   <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+ 
+                    '                   <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
                     '               <% }); %>' +
                     '           <% } %>'+
-                    '       <br/><br/>'+    
+                    '       <br/><br/>'+
                     '       <% }); %> '+
-                    '    <% } %> '+    
+                    '    <% } %> '+
                     '</article>'
                 )
 
@@ -653,7 +653,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             entry.attr('href', model.metadataURL);
             entry.attr('target', '_blank');
             links = entry;
-            
+
             entry = jQuery('<a />');
             entry.html(locale.pdf);
             entry.attr(

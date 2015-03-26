@@ -65,8 +65,8 @@ function(conf) {
         var me = this;
         this._sandbox = sandbox;
         this._sandbox.printDebug("[AttributionPlugin] init");
-        
-        
+
+
     },
     /**
      * @method register
@@ -96,9 +96,9 @@ function(conf) {
             this._sandbox = sandbox;
         }
         this._map = this.getMapModule().getMap();
-        
+
         jQuery('.olMapViewport').append('<div id="attributiontext">'+me._conf.attribution+'</div>');
-        
+
     },
     /**
      * @method stopPlugin
@@ -113,7 +113,7 @@ function(conf) {
         if (sandbox && sandbox.register) {
             this._sandbox = sandbox;
         }
-        
+
         this._sandbox.unregister(this);
         this._map = null;
         this._sandbox = null;

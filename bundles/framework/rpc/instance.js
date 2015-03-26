@@ -437,36 +437,43 @@ Oskari.clazz.define(
             'use strict';
             var ret = {},
                 key,
-                //strippedKey,
-                value;
+                allowedTypes = ['string', 'number', 'boolean'];
 
             if (event.getParams) {
                 ret = event.getParams();
             } else {
                 for (key in event) {
-                    if (event.hasOwnProperty(key)) {
-                        // Skip __name and such
-                        if (key.indexOf('__') !== 0) {
-                            value = event[key];
-                            if (typeof value === 'string' ||
-                                    typeof value === 'number' ||
-                                    typeof value === 'boolean') {
-                                /* try to make the key a tad cleaner?
-                                strippedKey = key;
-                                if (key.indexOf('_') === 0) {
-                                    strippedKey = key.substring(1);
-                                    if (event[strippedKey] === undefined) {
-                                        key = strippedKey;
-                                    }
-                                }*/
-                                ret[key] = value;
-                            }
-                        }
+                    // Skip __name and such
+                    if (!event.hasOwnProperty(key) || key.indexOf('__') === 0) {
+                        continue;
+                    }
+                    // check that value is one of allowed types
+                    if(this.__isInList(typeof event[key], allowedTypes)) {
+                        ret[key] = event[key];
                     }
                 }
             }
 
             return ret;
+        },
+        /**
+         * @private @method __isInList
+         * Returns true if first parameter is found in the list given as second parameter.
+         *
+         * @param  {String} value to check
+         * @param  {String[]} list to check against
+         *
+         * @return {Boolean}  true if value is part of the list
+         */
+        __isInList : function(value, list) {
+            var i = 0,
+                len = list.length;
+            for(;i < len; ++i) {
+                if(value === list[i]) {
+                    return true;
+                }
+            }
+            return false;
         },
 
         /**

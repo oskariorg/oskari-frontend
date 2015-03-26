@@ -3,7 +3,7 @@
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs.plugin.wfslayer.WfsLayerPlugin',
 
-    /** 
+    /**
      * @method create called automatically on construction
      * @static
      */
@@ -292,7 +292,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs.plugin.wfslayer.WfsLayerP
 
             /** remove old wfs layers from map */
             if (!keepPrevious) {
-                // TODO: make remove layer methods better so we can use them here 
+                // TODO: make remove layer methods better so we can use them here
                 removeLayers = this.getMap().getLayersByName(layerName);
                 for (i = 0; i < removeLayers.length; i += 1) {
                     layerIndex = this.getMap().getLayerIndex(removeLayers[i]);
@@ -475,7 +475,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs.plugin.wfslayer.WfsLayerP
                             })
                         });
 
-                        
+
                         this._tilesLayer = new OpenLayers.Layer.Vector(
                                 "Tiles Layer", {
                                     strategies: [strategy],

@@ -8,7 +8,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.request.ToggleVisibilityHara
     this.plugin = plugin;
 }, {
 	/**
-	 * @method handleRequest 
+	 * @method handleRequest
 	 * Start geometry search
 	 * @param {Oskari.mapframework.core.Core} core
 	 * 		reference to the application core (reference sandbox core.getSandbox())

@@ -1,6 +1,6 @@
 /**
  * Requests a search result action to be removed.
- * 
+ *
  * @class Oskari.mapframework.bundle.search.request.RemoveSearchResultActionRequest
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.search.request.RemoveSearchResultActionRequest',

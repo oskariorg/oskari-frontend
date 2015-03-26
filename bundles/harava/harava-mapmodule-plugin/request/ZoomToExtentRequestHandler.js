@@ -2,7 +2,7 @@
  * @class Oskari.harava.bundle.mapmodule.request.ZoomToExtentRequestHandler
  * Handles Oskari.harava.bundle.mapmodule.request.ZoomToExtentRequest to zoom to extent.
  */
-Oskari.clazz.define('Oskari.harava.bundle.mapmodule.request.ZoomToExtentRequestHandler', 
+Oskari.clazz.define('Oskari.harava.bundle.mapmodule.request.ZoomToExtentRequestHandler',
 /**
  * @method create called automatically on construction
  * @static
@@ -17,7 +17,7 @@ function(sandbox, mapModule) {
     this.mapModule = mapModule;
 }, {
 	/**
-	 * @method handleRequest 
+	 * @method handleRequest
 	 * Zoom to Extent
 	 * @param {Oskari.mapframework.core.Core} core
 	 * 		reference to the application core (reference sandbox core.getSandbox())

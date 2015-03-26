@@ -1,6 +1,6 @@
 /**
  * @class Oskari.lupapiste.bundle.myplaces2.MyPlacesBundleInstance
- * 
+ *
  * My places functionality
  */
 Oskari.clazz.define("Oskari.lupapiste.bundle.myplaces2.MyPlacesBundleInstance",
@@ -20,7 +20,7 @@ function() {
     __name : 'MyPlaces2',
     /**
      * @method getName
-     * @return {String} the name for the component 
+     * @return {String} the name for the component
      */
     getName : function() {
         return this.__name;
@@ -36,7 +36,7 @@ function() {
      * @method getLocalization
      * Returns JSON presentation of bundles localization data for current language.
      * If key-parameter is not given, returns the whole localization data.
-     * 
+     *
      * @param {String} key (optional) if given, returns the value for key
      * @return {String/Object} returns single localization string or
      *      JSON object for complete data depending on localization
@@ -75,13 +75,13 @@ function() {
     },
     /**
      * @method forceDisable
-     * Disables the functionality since something went wrong 
+     * Disables the functionality since something went wrong
      * (couldnt create default category)
      */
     forceDisable : function() {
         this.buttons.disableButtons();
         var loc = this.getLocalization();
-      
+
         this.showMessage(loc.category.organization + ' - ' +
              loc.notification.error.title, loc.notification.error.generic);
     },
@@ -139,18 +139,18 @@ function() {
      * implements BundleInstance protocol start methdod
      */
     start : function() {
-        
+
         // Should this not come as a param?
         var sandbox = Oskari.$('sandbox');
         this.sandbox = sandbox;
-        
+
         var me = this;
         sandbox.printDebug("Initializing my places module...");
-        
-        // handles toolbar buttons related to my places 
+
+        // handles toolbar buttons related to my places
         this.buttons = Oskari.clazz.create("Oskari.lupapiste.bundle.myplaces2.ButtonHandler", this);
         this.buttons.start();
-        
+
         var user = sandbox.getUser();
         if(!user.isLoggedIn()) {
             // guest users don't need anything else
@@ -158,25 +158,25 @@ function() {
         }
         // handles category related logic - syncs categories to my places map layers etc
         this.categoryHandler = Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.CategoryHandler', this);
-        this.categoryHandler.start();        
+        this.categoryHandler.start();
 
         var defaultCategoryName = this.getLocalization('category').defaultName;
-        
-        var actionUrl = this.conf.queryUrl; 
+
+        var actionUrl = this.conf.queryUrl;
         //'/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=1&p_p_state=exclusive&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_Portti2Map_WAR_portti2mapportlet_fi.mml.baseportlet.CMD=ajax.jsp&myplaces=WFS';
-        // this.conf.queryUrl; 
+        // this.conf.queryUrl;
         // back end communication
-        this.myPlacesService = Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.service.MyPlacesService', 
+        this.myPlacesService = Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.service.MyPlacesService',
             actionUrl, user.getUuid(), sandbox, defaultCategoryName, this);
         // register service so personal data can access it
         this.sandbox.registerService(this.myPlacesService);
         // init loads the places/categories
         this.myPlacesService.init();
-        
+
         // handles my places insert form etc
         this.view = Oskari.clazz.create("Oskari.lupapiste.bundle.myplaces2.view.MainView", this);
         this.view.start();
-        
+
         this.editRequestHandler = Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.request.EditRequestHandler', sandbox, me);
         sandbox.addRequestHandler('LupaPisteMyPlaces.EditPlaceRequest', this.editRequestHandler);
         sandbox.addRequestHandler('LupaPisteMyPlaces.EditCategoryRequest', this.editRequestHandler);
@@ -190,11 +190,11 @@ function() {
     stop : function() {
         this.sandbox = null;
     }
-    
+
 }, {
     /**
      * @property {String[]} protocol
-     * @static 
+     * @static
      */
     protocol : ['Oskari.bundle.BundleInstance']
 });

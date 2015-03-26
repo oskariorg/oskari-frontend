@@ -8,7 +8,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.request.HideQuestionTools
     this.bundle = bundle;
 }, {
 	/**
-	 * @method handleRequest 
+	 * @method handleRequest
 	 * @param {Oskari.mapframework.core.Core} core
 	 * 		reference to the application core (reference sandbox core.getSandbox())
 	 * @param {Oskari.harava.bundle.mapquestions.request.HideQuestionToolsRequest} request

@@ -124,12 +124,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
                     if(!value) {
                         value = conf.logInUrl[Oskari.getDefaultLanguage()];
                     }
-                    
+
                     if(value) {
-                        notLoggedInText = '<a href="' + value + '">' + notLoggedInText + '</a>';    
+                        notLoggedInText = '<a href="' + value + '">' + notLoggedInText + '</a>';
                     }
                 }
-                else if(typeof conf.logInUrl === 'string') { 
+                else if(typeof conf.logInUrl === 'string') {
                     notLoggedInText = '<a href="' + conf.logInUrl + '">' + notLoggedInText + '</a>';
                 }
             }
@@ -137,10 +137,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
             notLoggedInFullText += '<br/><br/>' + notLoggedInText;
 
             flyout.empty();
-            
-            this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer', 
+
+            this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer',
                 notLoggedInFullText);
-            
+
             this.tabsContainer.insertTo(flyout);
 
             if (!sandbox.getUser().isLoggedIn()) {
@@ -154,7 +154,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
                     panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
                     panel.setTitle(tab.getTitle());
                     tab.addTabContent(panel.getContainer());
-               
+
                     // binds tab to events
                     if (tab.bindEvents) {
                         tab.bindEvents();

@@ -4,7 +4,7 @@
  * Requests for a search to be made with the given query and provides
  * callbacks
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.search.service.SearchService', 
+Oskari.clazz.define('Oskari.mapframework.bundle.search.service.SearchService',
 
 /**
  * @method create called automatically on construction
@@ -38,12 +38,12 @@ function (searchUrl) {
     },
     /**
      * @method doSearch
-     * 
+     *
      * Makes the actual ajax call to search service implementation
 	 * @param {String}
 	 *            searchString the query to search with
 	 * @param {Function}
-	 *            onSuccess callback method for successful search 
+	 *            onSuccess callback method for successful search
 	 * @param {Function}
 	 *            onComplete callback method for search completion
      */

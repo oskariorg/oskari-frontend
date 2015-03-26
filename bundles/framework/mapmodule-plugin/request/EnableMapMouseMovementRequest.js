@@ -1,10 +1,10 @@
 /**
  * @class Oskari.mapframework.bundle.mapmodule.request.EnableMapMouseMovementRequest
  *
- * Requests for mouse control on map to be enabled. 
+ * Requests for mouse control on map to be enabled.
  * Opposite of
  * Oskari.mapframework.bundle.mapmodule.request.DisableMapMouseMovementRequest
- * 
+ *
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */

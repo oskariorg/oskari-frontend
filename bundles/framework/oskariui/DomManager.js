@@ -1,7 +1,7 @@
 /**
  * @class Oskari.framework.bundle.oskariui.DomManager
  *
- 
+
  */
 Oskari.clazz.define('Oskari.framework.bundle.oskariui.DomManager',
     /**

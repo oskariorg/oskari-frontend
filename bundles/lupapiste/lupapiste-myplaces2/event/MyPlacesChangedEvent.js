@@ -2,7 +2,7 @@
  * @method Oskari.lupapiste.myplaces2.event.MyPlacesChangedEvent
  * Tell components to reload myplaces data.
  */
-Oskari.clazz.define('Oskari.lupapiste.myplaces2.event.MyPlacesChangedEvent', 
+Oskari.clazz.define('Oskari.lupapiste.myplaces2.event.MyPlacesChangedEvent',
 
 /**
  * @method create called automatically on construction
@@ -26,4 +26,4 @@ function(config) {
      * @static
      */
     'protocol' : ['Oskari.mapframework.event.Event']
-}); 
+});

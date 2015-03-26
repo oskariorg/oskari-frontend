@@ -1,6 +1,6 @@
 /*
  * @class Oskari.framework.bundle.admin-layerrights.Tile
- * 
+ *
  * Renders the layer rights management tile.
  */
 Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Tile',
@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Tile',
     }, {
         /**
          * @method getName
-         * @return {String} the name for the component 
+         * @return {String} the name for the component
          */
         getName : function () {
             "use strict";
@@ -28,13 +28,13 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Tile',
         },
         /**
          * @method setEl
-         * @param {Object} el 
+         * @param {Object} el
          *      reference to the container in browser
-         * @param {Number} width 
+         * @param {Number} width
          *      container size(?) - not used
-         * @param {Number} height 
-         *      container size(?) - not used 
-         * 
+         * @param {Number} height
+         *      container size(?) - not used
+         *
          * Interface method implementation
          */
         setEl : function (el, width, height) {
@@ -43,48 +43,48 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Tile',
         },
         /**
          * @method startPlugin
-         * Interface method implementation, calls #refresh() 
+         * Interface method implementation, calls #refresh()
          */
         startPlugin : function () {
             "use strict";
             this.refresh();
         },
         /**
-         * @method stopPlugin 
-         * Interface method implementation, clears the container 
+         * @method stopPlugin
+         * Interface method implementation, clears the container
          */
         stopPlugin : function () {
             "use strict";
             this.container.empty();
         },
         /**
-         * @method getTitle 
-         * @return {String} localized text for the title of the tile 
+         * @method getTitle
+         * @return {String} localized text for the title of the tile
          */
         getTitle : function () {
             "use strict";
             return this.instance.getLocalization('title');
         },
         /**
-         * @method getDescription 
-         * @return {String} localized text for the description of the tile 
+         * @method getDescription
+         * @return {String} localized text for the description of the tile
          */
         getDescription : function () {
             "use strict";
             return this.instance.getLocalization('desc');
         },
         /**
-         * @method getOptions 
-         * Interface method implementation, does nothing atm 
+         * @method getOptions
+         * Interface method implementation, does nothing atm
          */
         getOptions : function () {
             "use strict";
         },
         /**
-         * @method setState 
+         * @method setState
          * @param {Object} state
          *      state that this component should use
-         * Interface method implementation, does nothing atm 
+         * Interface method implementation, does nothing atm
          */
         setState : function (state) {
             "use strict";
@@ -110,7 +110,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Tile',
     }, {
         /**
          * @property {String[]} protocol
-         * @static 
+         * @static
          */
         'protocol' : ['Oskari.userinterface.Tile']
     });

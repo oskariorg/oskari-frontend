@@ -1,7 +1,7 @@
 /**
  * @class Oskari.lupapiste.bundle.myplaces2.model.MyPlacesCategory
  */
-Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.model.MyPlacesCategory', 
+Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.model.MyPlacesCategory',
 
 /**
  * @method create called automatically on construction
@@ -22,35 +22,35 @@ function() {
     this.uuid = undefined;
 }, {
     /**
-     * @method setId 
+     * @method setId
      * @param {Number} value
      */
     setId : function(value) {
         this.id = value;
     },
     /**
-     * @method getId 
-     * @return {Number} 
+     * @method getId
+     * @return {Number}
      */
     getId : function() {
         return this.id;
     },
     /**
-     * @method setName 
+     * @method setName
      * @param {String} value
      */
     setName : function(value) {
         this.name = value;
     },
     /**
-     * @method getName 
-     * @return {String} 
+     * @method getName
+     * @return {String}
      */
     getName : function() {
         return this.name;
     },
     /**
-     * @method setDefault 
+     * @method setDefault
      * @param {Boolean} value
      */
     setDefault : function(value) {
@@ -64,7 +64,7 @@ function() {
         return (this._isDefault == true);
     },
     /**
-     * @method setPublic 
+     * @method setPublic
      * @param {Boolean} value
      */
     setPublic : function(value) {
@@ -85,22 +85,22 @@ function() {
         this.lineWidth = value;
     },
     /**
-     * @method getLineWidth 
+     * @method getLineWidth
      * @return {Number}
      */
     getLineWidth : function() {
         return this.lineWidth;
-    }, 
+    },
     /**
-     * @method setLineColor 
-     * @param {String} value color as hex string 
+     * @method setLineColor
+     * @param {String} value color as hex string
      */
     setLineColor : function(value) {
         this.lineColor = value;
     },
     /**
-     * @method getLineColor 
-     * Returns color as hex string 
+     * @method getLineColor
+     * Returns color as hex string
      * @return {String}
      */
     getLineColor : function() {
@@ -114,22 +114,22 @@ function() {
         this.areaLineWidth = value;
     },
     /**
-     * @method getAreaLineWidth 
+     * @method getAreaLineWidth
      * @return {Number}
      */
     getAreaLineWidth : function() {
         return this.areaLineWidth;
-    }, 
+    },
     /**
-     * @method setAreaLineColor 
-     * @param {String} value color as hex string 
+     * @method setAreaLineColor
+     * @param {String} value color as hex string
      */
     setAreaLineColor : function(value) {
         this.areaLineColor = value;
     },
     /**
-     * @method getAreaLineColor 
-     * Returns color as hex string 
+     * @method getAreaLineColor
+     * Returns color as hex string
      * @return {String}
      */
     getAreaLineColor : function() {
@@ -137,15 +137,15 @@ function() {
     },
     /**
      * @method setAreaFillColor
-     * @param {String} value color as hex string 
+     * @param {String} value color as hex string
      */
     setAreaFillColor : function(value) {
         this.areaFillColor = value;
     },
     /**
      * @method getAreaFillColor
-     * Returns color as hex string 
-     * @return {String} 
+     * Returns color as hex string
+     * @return {String}
      */
     getAreaFillColor : function() {
         return this.areaFillColor;
@@ -158,37 +158,37 @@ function() {
         this.dotSize = value;
     },
     /**
-     * @method getDotSize 
+     * @method getDotSize
      * @return {Number}
      */
     getDotSize : function() {
         return this.dotSize;
-    }, 
+    },
     /**
-     * @method setDotColor 
-     * @param {String} value color as hex string 
+     * @method setDotColor
+     * @param {String} value color as hex string
      */
     setDotColor : function(value) {
         this.dotColor = value;
     },
     /**
-     * @method getDotColor 
-     * Returns color as hex string 
+     * @method getDotColor
+     * Returns color as hex string
      * @return {String}
      */
     getDotColor : function() {
         return this.dotColor;
     },
     /**
-     * @method setUUID 
+     * @method setUUID
      * @param {String} value
      */
     setUUID : function(value) {
         this.uuid = value;
     },
     /**
-     * @method getUUID 
-     * @return {String} 
+     * @method getUUID
+     * @return {String}
      */
     getUUID : function() {
         return this.uuid;

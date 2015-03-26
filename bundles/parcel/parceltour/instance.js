@@ -1,6 +1,6 @@
 /**
  * @class Oskari.parcel.bundle.parceltour.ParcelTourBundleInstance
- *  
+ *
  * Add this to startupsequence to get this bundle started
  {
  title : 'parceltour',
@@ -93,7 +93,7 @@ Oskari.clazz.define(
 
             // Check cookie 'parcel_tour_seen'. Value '1' means that tour
             // is not to be started
-            // jQuery cookie plugin: 
+            // jQuery cookie plugin:
             //   resources/framework/bundle/parceltour/js/jquery.cookie.js
             //   github.com/carhartl/jquery-cookie/
             if (jQuery.cookie('parcel_tour_seen') != '1') {
@@ -176,7 +176,7 @@ Oskari.clazz.define(
             //   var sel = "div.oskari-tile-title:contains(" + tt + ")";
             //   return jQuery(sel);
             // },
-            // positionAlign : 'right',                
+            // positionAlign : 'right',
         }, {
             setScope: function (inst) {
                 this.ref = inst;
@@ -217,11 +217,11 @@ Oskari.clazz.define(
             } //,
             // getPositionRef : function () {
             //     var loc = this.ref._localization('page3');
-            //     var sel = 
-            //     return jQuery("div.oskari-tile-title:contains('" + 
+            //     var sel =
+            //     return jQuery("div.oskari-tile-title:contains('" +
             //                   loc.tileText + "')");
             // },
-            // positionAlign : 'right'                
+            // positionAlign : 'right'
         }, {
             setScope: function (inst) {
                 this.ref = inst;
@@ -262,10 +262,10 @@ Oskari.clazz.define(
             } //,
             // getPositionRef : function () {
             //     var loc = this.ref._localization('page4');
-            //     return jQuery("div.oskari-tile-title:contains('" + 
+            //     return jQuery("div.oskari-tile-title:contains('" +
             //                   loc.tileText + "')");
             // },
-            // positionAlign : 'right'*/                
+            // positionAlign : 'right'*/
         }, {
             setScope: function (inst) {
                 this.ref = inst;
@@ -306,10 +306,10 @@ Oskari.clazz.define(
             } //,
             // getPositionRef : function () {
             //     var loc = this.ref._localization('page5');
-            //     return jQuery("div.oskari-tile-title:contains('" + 
+            //     return jQuery("div.oskari-tile-title:contains('" +
             //                   loc.tileText + "')");
             // },
-            // positionAlign : 'right'                
+            // positionAlign : 'right'
         }, {
             setScope: function (inst) {
                 this.ref = inst;
@@ -350,10 +350,10 @@ Oskari.clazz.define(
             } //),
             // getPositionRef : function () {
             //     var loc = this.ref._localization('page6');
-            //     return jQuery("div.oskari-tile-title:contains('" + 
+            //     return jQuery("div.oskari-tile-title:contains('" +
             //                   loc.tileText + "')");
             // },
-            // positionAlign : 'right'*/                
+            // positionAlign : 'right'*/
         }, {
             setScope: function (inst) {
                 this.ref = inst;
@@ -482,64 +482,8 @@ Oskari.clazz.define(
         },
         _getDialogButton: function (dialog) {
             var me = this,
-                buttons = [],
-                bn,
                 closeTxt = me._localization['button']['close'];
-            var closeBtn = dialog.createCloseButton(closeTxt);
-            buttons.push(closeBtn);
-
-            // Remove the following line for further steps
-            return buttons;
-
-            if (this.guideStep > 1) {
-                bn = 'Oskari.userinterface.component.Button';
-                var prevBtn = Oskari.clazz.create(bn);
-                var prevTxt = me._localization['button']['previous'];
-                prevBtn.setTitle(prevTxt);
-                prevBtn.setHandler(
-                    function () {
-                        me.guideStep--;
-                        me._showGuideContentForStep(me.guideStep, dialog);
-                    }
-                );
-                buttons.push(prevBtn);
-            }
-
-            if (this.guideStep === 0) {
-                bn = 'Oskari.userinterface.component.Button';
-                var startBtn = Oskari.clazz.create(bn);
-                var startTxt = me._localization['button']['start'];
-                startBtn.setTitle(startTxt);
-                startBtn.setHandler(
-                    function () {
-                        me.guideStep++;
-                        me._showGuideContentForStep(me.guideStep, dialog);
-                    }
-                );
-                buttons.push(startBtn);
-            }
-            // check this._guideSteps.length <> 
-            // this.guideStep and return next or finish?
-            else if (this.guideStep < this._guideSteps.length - 1) {
-                bn = 'Oskari.userinterface.component.Button';
-                var nextBtn = Oskari.clazz.create(bn);
-                var nextTxt = me._localization['button']['next'];
-                nextBtn.setTitle(nextTxt);
-                nextBtn.setHandler(
-                    function () {
-                        me.guideStep++;
-                        me._showGuideContentForStep(me.guideStep, dialog);
-                    }
-                );
-                buttons.push(nextBtn);
-                // custom class for positioned popups
-                dialog.addClass('bluetitle');
-            } else if (this.guideStep === this._guideSteps.length - 1) {
-                var finishTxt = me._localization['button']['finish'];
-                var finishBtn = dialog.createCloseButton(finishTxt);
-                buttons.push(finishBtn);
-            }
-            return buttons;
+            return [dialog.createCloseButton(closeTxt)];
         },
         /**
          * @method init

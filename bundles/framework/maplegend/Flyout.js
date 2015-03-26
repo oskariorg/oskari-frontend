@@ -218,7 +218,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
 
             var legendDiv = me.templateLayerLegend.clone(),
                 imgDiv = legendDiv.find('img');
-            /*var legendUrl = 
+            /*var legendUrl =
             'http://kartta.liikennevirasto.fi/maaliikenne/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=liikennemaarat&style=KAVLras';*/
             imagesAdded[legendUrl] = true;
             var img = new Image();

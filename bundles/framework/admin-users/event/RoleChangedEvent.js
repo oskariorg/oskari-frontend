@@ -1,15 +1,15 @@
 /**
  * Event is sent when the role has been added or removed
- * 
+ *
  * @class Oskari.mapframework.bundle.admin-users.event.RoleChangedEvent
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.event.RoleChangedEvent', 
+Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.event.RoleChangedEvent',
     /**
      * @method create called automatically on construction
      * @static
      *
      * @param {Object}
-     *            role id and name for the changed layer 
+     *            role id and name for the changed layer
      * @param {String}
      *            operation one of #operations
      */

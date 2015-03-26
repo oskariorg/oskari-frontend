@@ -132,10 +132,10 @@
                 });
             },
             /**
-             * Tries to call backend with given method, if server responds with 
+             * Tries to call backend with given method, if server responds with
              * '405 Method Not Allowed' tries the request again with POST method
              * and additional header 'X-HTTP-Method-Override' with the original method as value.
-             * @param  {String} method 'GET' | 'POST' | 'PUT'  | 'DELETE' 
+             * @param  {String} method 'GET' | 'POST' | 'PUT'  | 'DELETE'
              * @param  {Object} config for jQuery.ajax() - method will be overridden with value of method param
              */
             __tryRestMethods : function(method, config) {
@@ -143,7 +143,7 @@
                 config.type = method;
                 var errorHandler = function(jqXHR, textStatus, errorThrown) {
                     var origType = config.type;
-                    if(errorThrown === 'Method Not Allowed' && 
+                    if(errorThrown === 'Method Not Allowed' &&
                         (origType === 'PUT' || origType === 'DELETE')) {
                         // PUT/DELETE not allowed -> try POST instead
                         var origBefore = config.beforeSend;
@@ -279,11 +279,11 @@
 
             sortByName : function() {
                 this.layerGroups.sort(function(a,b){
-                    var name_a = a.name; 
+                    var name_a = a.name;
                     if(name_a) {
                         name_a = name_a.toLowerCase();
                     }
-                    var name_b = b.name; 
+                    var name_b = b.name;
                     if(name_b) {
                         name_b = name_b.toLowerCase();
                     }
@@ -308,7 +308,7 @@
                         "name" : ""
                     });
                 }
-                
+
                 return {
                     "getNamesAsList" : function() {
                         return names;
@@ -397,7 +397,7 @@
                             type: "adminAction",
                             command: 'removeLayer',
                             modelId: layer.getId()
-                        }); 
+                        });
                     });
                     if(layers.length == 0) {
                         // trigger change event so that DOM will be re-rendered
@@ -444,7 +444,7 @@
                     }
                 });
             },
-            
+
 
             getGroup: function (groupId) {
                 var groups = this.layerGroups;

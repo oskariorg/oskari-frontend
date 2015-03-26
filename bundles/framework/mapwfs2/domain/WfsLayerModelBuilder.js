@@ -31,19 +31,6 @@ Oskari.clazz.define(
                 layer.addTool(toolOwnStyle);
             }
 
-            // add object data tool
-            // TODO: should propably be configurable -> maybe through wfslayerplugin conf
-            // so we can disable if feature data bundle is not loaded
-            var locObjData = this.localization['object-data'],
-                toolObjData = toolBuilder();
-            toolObjData.setName("objectData");
-            toolObjData.setTitle(locObjData);
-            toolObjData.setTooltip(locObjData);
-            toolObjData.setCallback(function () {
-                me.sandbox.postRequestByName('ShowFeatureDataRequest', [layer.getId()]);
-            });
-            layer.addTool(toolObjData);
-
             // create a default style
             var locDefaultStyle = this.localization['default-style'],
                 defaultStyle = Oskari.clazz.create('Oskari.mapframework.domain.Style'),

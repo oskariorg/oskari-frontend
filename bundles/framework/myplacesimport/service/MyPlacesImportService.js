@@ -25,7 +25,7 @@ function(instance) {
     },
     /**
      * Initializes the service (does nothing atm).
-     * 
+     *
      * @method init
      */
     init: function() {
@@ -42,7 +42,7 @@ function(instance) {
     /**
      * Retrieves the user layers (with the id param only the specified layer)
      * from the backend and adds them to the map layer service.
-     * 
+     *
      * @method getUserLayers
      * @param  {Function} successCb (optional)
      * @param  {Function} errorCb (optional)
@@ -77,7 +77,7 @@ function(instance) {
     },
     /**
      * Adds the layers to the map layer service.
-     * 
+     *
      * @method _addLayersToService
      * @private
      * @param {JSON[]} layers
@@ -98,7 +98,7 @@ function(instance) {
     /**
      * Adds one layer to the map layer service
      * and calls the cb with the added layer model if provided.
-     * 
+     *
      * @method addLayerToService
      * @param {JSON} layerJson
      * @param {Boolean} skip add maplayer even in map-layer-service

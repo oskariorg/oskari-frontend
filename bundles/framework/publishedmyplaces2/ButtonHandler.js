@@ -202,7 +202,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler"
             });
             buttons.push(finishBtn);
 
-            // store data for later reuse 
+            // store data for later reuse
             me.toolContentDivData = {
                 "className": 'myplaces2',
                 "title": title,
@@ -262,7 +262,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler"
             'Toolbar.ToolSelectedEvent': function (event) {
                 if (!this.ignoreEvents) {
                     // changed tool -> cancel any drawing
-                    // do not trigger when we return drawing tool to 
+                    // do not trigger when we return drawing tool to
                     this.sendStopDrawRequest(true);
                     this.instance.enableGfi(true);
                 }

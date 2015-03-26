@@ -3,7 +3,7 @@
  * Handles Oskari.mapframework.bundle.toolbar.request.ToolContainerRequest
  *  for managing toolbar buttons
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.ToolContainerRequestHandler', 
+Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.ToolContainerRequestHandler',
 
 /**
  * @method create called automatically on construction
@@ -15,7 +15,7 @@ function(toolbarPlugin) {
     this._toolbar = toolbarPlugin;
 }, {
     /**
-     * @method handleRequest 
+     * @method handleRequest
      * Hides the requested infobox/popup
      * @param {Oskari.mapframework.core.Core} core
      *      reference to the application core (reference sandbox core.getSandbox())

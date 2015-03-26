@@ -35,7 +35,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
         },
         /**
          * DefaultExtension method for doing stuff after the bundle has started.
-         * 
+         *
          * @method afterStart
          */
         afterStart: function (sandbox) {
@@ -58,7 +58,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
         },
         /**
          * Returns the search service.
-         * 
+         *
          * @method getSearchService
          * @return {Oskari.mapframework.bundle.findbycoordinates.service.FindByCoordinatesService}
          */
@@ -67,7 +67,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
         },
         /**
          * Requests the tool to be added to the toolbar.
-         * 
+         *
          * @method registerTool
          */
         registerTool: function () {
@@ -91,7 +91,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
         /**
          * Starts the tool
          * (for now only sets its `active` property to true)
-         * 
+         *
          * @method startTool
          */
         startTool: function () {
@@ -102,7 +102,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
         /**
          * Stops the tool
          * (for now only sets its `active` property to false)
-         * 
+         *
          * @method stopTool
          */
         stopTool: function () {
@@ -133,7 +133,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
         },
         /**
          * Sends a request to select the default tool.
-         * 
+         *
          * @method selectDefaultTool
          */
         selectDefaultTool: function () {
@@ -151,7 +151,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
         /**
          * Sends the search request to the search service
          * and handles the response.
-         * 
+         *
          * @method __handleMapClick
          * @private
          * @param  {Object} lonlat
@@ -176,7 +176,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
         },
         /**
          * Sends a map move and infobox requests for the given result.
-         * 
+         *
          * @method resultClicked
          * @param  {Object} result
          */
@@ -217,7 +217,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
         },
         /**
          * Returns the content for the infobox.
-         * 
+         *
          * @method __getInfoBoxHtml
          * @private
          * @param  {Object} result

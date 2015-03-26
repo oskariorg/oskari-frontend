@@ -431,7 +431,7 @@ Oskari.registerLocalization(
                 "temporalValidity":"NOT TRANSLATED",
                 "thematicClassificationCorrectness":"NOT TRANSLATED",
                 "topologicalConsistency":"NOT TRANSLATED"
-                
+
             }
         },
         "tile": {

@@ -2,7 +2,7 @@
  * @class Oskari.harava.bundle.haravaInfobox.request.HideInfoBoxRequestHandler
  * Handles Oskari.harava.bundle.haravaInfobox.request.HideInfoBoxRequest to hide info box.
  */
-Oskari.clazz.define('Oskari.harava.bundle.haravaInfobox.request.HideInfoBoxRequestHandler', 
+Oskari.clazz.define('Oskari.harava.bundle.haravaInfobox.request.HideInfoBoxRequestHandler',
 /**
  * @method create called automatically on construction
  * @static
@@ -10,10 +10,10 @@ Oskari.clazz.define('Oskari.harava.bundle.haravaInfobox.request.HideInfoBoxReque
  * 			reference to plugin that handles the popups
  */
 function(popupPlugin) {
-    this.popupPlugin = popupPlugin; 
+    this.popupPlugin = popupPlugin;
 }, {
 	/**
-	 * @method handleRequest 
+	 * @method handleRequest
 	 * Hides the requested infobox/popup
 	 * @param {Oskari.mapframework.core.Core} core
 	 * 		reference to the application core (reference sandbox core.getSandbox())

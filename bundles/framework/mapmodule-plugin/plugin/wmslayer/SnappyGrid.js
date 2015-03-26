@@ -1,4 +1,4 @@
-/* Copyright (c) 2006-2010 by OpenLayers Contributors (see authors.txt for 
+/* Copyright (c) 2006-2010 by OpenLayers Contributors (see authors.txt for
  * full list of contributors). Published under the Clear BSD license.
  * See http://svn.openlayers.org/trunk/openlayers/license.txt for the
  * full text of the license. */
@@ -75,7 +75,7 @@ Oskari.$("SnappyGrid", OpenLayers.Class(OpenLayers.Layer.HTTPRequest, {
         OpenLayers.Layer.HTTPRequest.prototype.initialize.apply(this,
             arguments);
 
-        //grid layers will trigger 'tileloaded' when each new tile is 
+        //grid layers will trigger 'tileloaded' when each new tile is
         // loaded, as a means of progress update to listeners.
         // listeners can access 'numLoadingTiles' if they wish to keep track
         // of the loading progress
@@ -174,7 +174,7 @@ Oskari.$("SnappyGrid", OpenLayers.Class(OpenLayers.Layer.HTTPRequest, {
 
             if (this.singleTile) {
 
-                // We want to redraw whenever even the slightest part of the 
+                // We want to redraw whenever even the slightest part of the
                 //  current bounds is not contained by our tile.
                 //  (thus, we do not specify partial -- its default is false)
                 if (forceReTile ||
@@ -183,10 +183,10 @@ Oskari.$("SnappyGrid", OpenLayers.Class(OpenLayers.Layer.HTTPRequest, {
                 }
             } else {
 
-                // if the bounds have changed such that they are not even 
-                //  *partially* contained by our tiles (IE user has 
-                //  programmatically panned to the other side of the earth) 
-                //  then we want to reTile (thus, partial true).  
+                // if the bounds have changed such that they are not even
+                //  *partially* contained by our tiles (IE user has
+                //  programmatically panned to the other side of the earth)
+                //  then we want to reTile (thus, partial true).
                 //
                 if (forceReTile || !tilesBounds.containsBounds(bounds, true)) {
                     this.initGriddedTiles(bounds);
@@ -301,7 +301,7 @@ Oskari.$("SnappyGrid", OpenLayers.Class(OpenLayers.Layer.HTTPRequest, {
         this.removeExcessTiles(1, 1);
     },
 
-    /** 
+    /**
      * Method: calculateGridLayout
      * Generate parameters for the grid layout. This
      *
@@ -485,7 +485,7 @@ Oskari.$("SnappyGrid", OpenLayers.Class(OpenLayers.Layer.HTTPRequest, {
                 break;
             }
 
-            // if the test grid coordinates are within the bounds of the 
+            // if the test grid coordinates are within the bounds of the
             //  grid, get a reference to the tile.
             tile = null;
             if ((testRow < this.grid.length) && (testRow >= 0) &&
@@ -535,7 +535,7 @@ Oskari.$("SnappyGrid", OpenLayers.Class(OpenLayers.Layer.HTTPRequest, {
         // Should be implemented by subclasses
     },
 
-    /** 
+    /**
      * Method: addTileMonitoringHooks
      * This function takes a tile as input and adds the appropriate hooks to
      *     the tile so that the layer can keep track of the loading tiles.
@@ -566,7 +566,7 @@ Oskari.$("SnappyGrid", OpenLayers.Class(OpenLayers.Layer.HTTPRequest, {
         tile.events.register("unload", this, tile.onLoadEnd);
     },
 
-    /** 
+    /**
      * Method: removeTileMonitoringHooks
      * This function takes a tile as input and removes the tile hooks
      *     that were added in addTileMonitoringHooks()
@@ -769,7 +769,7 @@ Oskari.$("SnappyGrid", OpenLayers.Class(OpenLayers.Layer.HTTPRequest, {
 
 **/
 
-/* Copyright (c) 2006-2011 by OpenLayers Contributors (see authors.txt for 
+/* Copyright (c) 2006-2011 by OpenLayers Contributors (see authors.txt for
  * full list of contributors). Published under the Clear BSD license.
  * See http://svn.openlayers.org/trunk/openlayers/license.txt for the
  * full text of the license. */
@@ -826,7 +826,7 @@ Oskari.$("SnappyWMSLayer", OpenLayers.Class(OpenLayers.Layer.Grid, {
      */
     encodeBBOX: false,
 
-    /** 
+    /**
      * APIProperty: noMagic
      * {Boolean} If true, the image format will not be automagicaly switched
      *     from image/jpeg to image/png or image/gif when using
@@ -906,7 +906,7 @@ Oskari.$("SnappyWMSLayer", OpenLayers.Class(OpenLayers.Layer.Grid, {
         );
 
 
-        //layer is transparent        
+        //layer is transparent
         if (!this.noMagic && this.params.TRANSPARENT &&
             this.params.TRANSPARENT.toString().toLowerCase() == "true") {
 
@@ -915,7 +915,7 @@ Oskari.$("SnappyWMSLayer", OpenLayers.Class(OpenLayers.Layer.Grid, {
                 this.isBaseLayer = false;
             }
 
-            // jpegs can never be transparent, so intelligently switch the 
+            // jpegs can never be transparent, so intelligently switch the
             //  format, depending on the browser's capabilities
             if (this.params.FORMAT == "image/jpeg") {
                 this.params.FORMAT = OpenLayers.Util.alphaHack() ? "image/gif" : "image/png";
@@ -929,7 +929,7 @@ Oskari.$("SnappyWMSLayer", OpenLayers.Class(OpenLayers.Layer.Grid, {
      * Destroy this layer
      */
     destroy: function () {
-        // for now, nothing special to do here. 
+        // for now, nothing special to do here.
         OpenLayers.Layer.Grid.prototype.destroy.apply(this, arguments);
     },
 
@@ -1017,7 +1017,7 @@ Oskari.$("SnappyWMSLayer", OpenLayers.Class(OpenLayers.Layer.Grid, {
             newArguments);
     },
 
-    /** 
+    /**
      * APIMethod: getFullRequestString
      * Combine the layer's url with its params and these newParams.
      *

@@ -327,7 +327,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                     'StateHandler.SetStateRequest'
                 );
                 // error handling: check if the layers referenced in view are
-                // loaded 
+                // loaded
                 var resp = service.isViewLayersLoaded(data, sandbox);
                 if (resp.status || forced === true) {
                     if (setStateRequestBuilder) {

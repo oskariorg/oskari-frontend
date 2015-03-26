@@ -56,7 +56,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
             var loadedCategories = false,
                 loadedPlaces = false;
 
-            // function to 
+            // function to
             var allLoaded = function () {
                 // when both places and categories have been loaded, notify that the data has changed
                 if (loadedPlaces && loadedCategories) {
@@ -99,7 +99,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
             this.wfstStore.getCategories(initialLoadCallBackCategories);
             this.wfstStore.getMyPlaces(initialLoadCallBackPlaces);
         },
-        /** 
+        /**
          * @method _createDefaultCategory
          * @private
          * Creates a default category for the user

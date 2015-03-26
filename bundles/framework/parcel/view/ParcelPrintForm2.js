@@ -1,6 +1,6 @@
 /**
  * @class Oskari.mapframework.bundle.parcel.view.ParcelPrintForm2
- * 
+ *
  * Shows a form for my place. For requests for name and description.
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.parcel.view.ParcelPrintForm2",
@@ -15,7 +15,7 @@ function(instance) {
     this._formUi = undefined;
     this.isEnabled = false;
     this.pointCnt = 0;
-    
+
     this.loc = instance.getLocalization('parcelprintform2');
 
     this.template = jQuery('<div class="parcelprintform2">' +
@@ -133,7 +133,7 @@ function(instance) {
         },
             /**
      * @method getForm
-     * @return {jQuery} jquery reference for the form 
+     * @return {jQuery} jquery reference for the form
      */
         _getForm: function () {
                 var ui = this.template.clone(),
@@ -156,14 +156,14 @@ function(instance) {
     /**
      * @method getValues
      * Returns form values as an object
-     * @return {Object} 
+     * @return {Object}
      */
     getValues : function() {
         var values = [],
             table = {},
             titlerow = {};
 
-        // infobox will make us lose our reference so search 
+        // infobox will make us lose our reference so search
         // from document using the form-class
         var onScreenForm = this._getOnScreenForm();
 
@@ -189,11 +189,11 @@ function(instance) {
 
     /**
      * @method _getOnScreenForm
-     * Returns reference to the on screen version shown by OpenLayers 
+     * Returns reference to the on screen version shown by OpenLayers
      * @private
      */
     _getOnScreenForm : function() {
-        // unbind live so 
+        // unbind live so
         return jQuery('div.parcelprintform1');
     },
         /**

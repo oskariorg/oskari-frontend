@@ -277,7 +277,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.plugin.HaravaQuestionsMap
 
                 /* Add all configured Question modules */
                 jQuery.each(me.modules, function (k, module) {
-                    // Create module own OpenLayers layer               
+                    // Create module own OpenLayers layer
                     module.layer = new OpenLayers.Layer.Vector(me.drawLayerSubfix + module.questionId, {
 
                         eventListeners: {
@@ -785,7 +785,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.plugin.HaravaQuestionsMap
         "finishedDrawing": function () {
             var me = this;
 
-            // programmatically select the drawn feature ("not really supported by openlayers")         
+            // programmatically select the drawn feature ("not really supported by openlayers")
             me._currentControls.select.unselectAll();
             var module = me.getModuleById(me._currentStep);
 

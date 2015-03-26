@@ -11,6 +11,6 @@ Oskari.registerLocalization({
         "grid": {
             "address": "Osoite",
             "coordinates": "Koordinaatit"
-        },
+        }
     }
 });

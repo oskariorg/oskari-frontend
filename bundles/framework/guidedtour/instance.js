@@ -1,6 +1,6 @@
 /**
  * @class Oskari.mapframework.bundle.guidedtour.GuidedTourBundleInstance
- *  
+ *
  * Add this to startupsequence to get this bundle started
  {
  title : 'guidedtour',
@@ -91,10 +91,10 @@ Oskari.clazz.define(
                 this._localization = Oskari.getLocalization(this.getName());
             }
 
-            // Check cookie 'pti_tour_seen'. Value '1' means that tour 
+            // Check cookie 'pti_tour_seen'. Value '1' means that tour
             // is not to be started
-            // jQuery cookie plugin: 
-            //   resources/framework/bundle/guidedtour/js/jquery.cookie.js 
+            // jQuery cookie plugin:
+            //   resources/framework/bundle/guidedtour/js/jquery.cookie.js
             //   github.com/carhartl/jquery-cookie/
             if (jQuery.cookie('pti_tour_seen') !== '1') {
                 var me = this,
@@ -176,7 +176,7 @@ Oskari.clazz.define(
             //   var sel = "div.oskari-tile-title:contains(" + tt + ")";
             //   return jQuery(sel);
             // },
-            // positionAlign : 'right',                
+            // positionAlign : 'right',
         }, {
             setScope: function (inst) {
                 this.ref = inst;
@@ -217,11 +217,11 @@ Oskari.clazz.define(
             } //,
             // getPositionRef : function () {
             //     var loc = this.ref._localization('page3');
-            //     var sel = 
-            //     return jQuery("div.oskari-tile-title:contains('" + 
+            //     var sel =
+            //     return jQuery("div.oskari-tile-title:contains('" +
             //                   loc.tileText + "')");
             // },
-            // positionAlign : 'right'                
+            // positionAlign : 'right'
         }, {
             setScope: function (inst) {
                 this.ref = inst;
@@ -262,10 +262,10 @@ Oskari.clazz.define(
             } //,
             // getPositionRef : function () {
             //     var loc = this.ref._localization('page4');
-            //     return jQuery("div.oskari-tile-title:contains('" + 
+            //     return jQuery("div.oskari-tile-title:contains('" +
             //                   loc.tileText + "')");
             // },
-            // positionAlign : 'right'*/                
+            // positionAlign : 'right'*/
         }, {
             setScope: function (inst) {
                 this.ref = inst;
@@ -306,10 +306,10 @@ Oskari.clazz.define(
             } //,
             // getPositionRef : function () {
             //     var loc = this.ref._localization('page5');
-            //     return jQuery("div.oskari-tile-title:contains('" + 
+            //     return jQuery("div.oskari-tile-title:contains('" +
             //                   loc.tileText + "')");
             // },
-            // positionAlign : 'right'                
+            // positionAlign : 'right'
         }, {
             setScope: function (inst) {
                 this.ref = inst;
@@ -350,10 +350,10 @@ Oskari.clazz.define(
             } //),
             // getPositionRef : function () {
             //     var loc = this.ref._localization('page6');
-            //     return jQuery("div.oskari-tile-title:contains('" + 
+            //     return jQuery("div.oskari-tile-title:contains('" +
             //                   loc.tileText + "')");
             // },
-            // positionAlign : 'right'*/                
+            // positionAlign : 'right'*/
         }, {
             setScope: function (inst) {
                 this.ref = inst;
@@ -516,7 +516,7 @@ Oskari.clazz.define(
                 );
                 buttons.push(startBtn);
             }
-            // check this._guideSteps.length <> 
+            // check this._guideSteps.length <>
             // this.guideStep and return next or finish?
             else if (this.guideStep < this._guideSteps.length - 1) {
                 var nextBtn = Oskari.clazz.create(bn);

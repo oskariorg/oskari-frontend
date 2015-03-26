@@ -1,9 +1,9 @@
 /**
  * @class Oskari.mapframework.bundle.parcel.event.ParcelLayerUnregisterEvent
- * 
+ *
  * Use to notify ParcelInfo bundle that the given layer should not be followed by that bundle anymore.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.parcel.event.ParcelLayerUnregisterEvent', 
+Oskari.clazz.define('Oskari.mapframework.bundle.parcel.event.ParcelLayerUnregisterEvent',
 /**
  * @method create called automatically on construction
  * @static

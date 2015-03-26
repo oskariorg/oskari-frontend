@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.domain.StatsLayerModelB
         if (mapLayerJson.visualizations) {
             layer.setFilterPropertyName(mapLayerJson.visualizations[0].filterproperty);
         }
-        // Populate layer tools 
+        // Populate layer tools
         var toolBuilder = Oskari.clazz.builder('Oskari.mapframework.domain.Tool');
 
         // Statistics

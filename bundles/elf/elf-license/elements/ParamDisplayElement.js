@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamDisplayElement',
         this._validator = validator;
     }, {
         __name: 'elf-license.ParamDisplayElement',
-        __qname: 'Oskari.elf.license.elements.ParamDisplayElement',       
+        __qname: 'Oskari.elf.license.elements.ParamDisplayElement',
         /**
          * Get Qualified name
          * @method getQName
@@ -62,7 +62,7 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamDisplayElement',
                 title = param.name;
             }
 
-            
+
             jQuery.each(param.values, function(index, value){
                 var valueEl = valueElement.clone();
                 valueEl.html(value);

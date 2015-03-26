@@ -32,7 +32,7 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
 
         },
         MapLayerEvent: function (event) {
-            if(event.getOperation() === 'update' || 
+            if(event.getOperation() === 'update' ||
                 event.getOperation() === 'add') {
                 // schedule to be updated
                 this._scheduleUpdateForLayer(event.getLayerId());
@@ -147,7 +147,7 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
             container = me.getEl();
         // admin-layerselector is rendered under this container
         container.addClass('admin-layerselector');
-        // backbone will fire adminAction events if they need to be 
+        // backbone will fire adminAction events if they need to be
         // passed to other bundles
         container.on('adminAction', {
             me: me
@@ -164,14 +164,14 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
 
             // Finally, we kick things off by creating the **App**.
             // We need to pass container element for the view and
-            // instance. 
+            // instance.
             me.view = new LayerSelectorView({
                 el: container,
                 instance: me.instance,
                 locale: me.locale
             });
             // If call for layers is ready before backbone is created,
-            // we'll instantiate our view with that data 
+            // we'll instantiate our view with that data
             me._scheduleUpdateForLayer();
             me._layerUpdateHandler(true);
         });
@@ -209,7 +209,7 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
                 }
                 else {
                     me._showDialog(me.instance.getLocalization('admin')['errorTitle'], me.instance.getLocalization('admin')['errorInsertAllreadyExists']);
-                    // should we update if layer already exists??? mapLayerService.updateLayer(e.layerData.id, e.layerData); 
+                    // should we update if layer already exists??? mapLayerService.updateLayer(e.layerData.id, e.layerData);
                 }
             }
         } else if (e.command === 'editLayer') {

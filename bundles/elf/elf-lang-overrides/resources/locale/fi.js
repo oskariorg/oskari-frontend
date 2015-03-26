@@ -1,22 +1,22 @@
-Oskari.registerLocalization( 
-{ 
-    "lang": "fi", 
-    "key": "MapModule", 
+Oskari.registerLocalization(
+{
+    "lang": "fi",
+    "key": "MapModule",
     "value": {
-        "plugin": { 
-            "LogoPlugin" : { 
+        "plugin": {
+            "LogoPlugin" : {
                 "dataSources": "Copyright",
                 "layersHeader": "&copy; ELF ja seuraavat tiedontuottajat"
             }
-        } 
-    } 
+        }
+    }
 }, true);
 
-Oskari.registerLocalization( 
-{ 
-    "lang": "fi", 
-    "key": "catalogue.bundle.metadatacatalogue", 
+Oskari.registerLocalization(
+{
+    "lang": "fi",
+    "key": "catalogue.bundle.metadatacatalogue",
     "value": {
         "tabTitle": "Geo Product Finder"
-    } 
+    }
 }, true);

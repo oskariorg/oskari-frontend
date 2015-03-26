@@ -1,7 +1,7 @@
 /**
  * @class Oskari.mapframework.bundle.metadatafeedback.service.AddFeedbackService
  *
- * 
+ *
  * callbacks
  */
 Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.service.AddFeedbackService',
@@ -47,7 +47,7 @@ function(url) {
              },
             url : this._url,
             data : {
-                data: JSON.stringify(params)   
+                data: JSON.stringify(params)
             },
             error : onError,
             success : onSuccess

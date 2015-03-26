@@ -117,7 +117,7 @@ Oskari.clazz.define(
          * @method removeFeaturesFromMap
          * @public
          * Removes all/selected features from map.
-         * 
+         *
          * @param {String} identifier the feature attribute identifier
          * @param {String} value the feature identifier value
          * @param {Oskari.mapframework.domain.VectorLayer} layer layer details
@@ -156,7 +156,7 @@ Oskari.clazz.define(
          * @method addFeaturesOnMap
          * @public
          * Add feature on the map
-         * 
+         *
          * @param {Object} geometry the geometry WKT string or GeoJSON object
          * @param {String} geometryType the geometry type. Supported formats are: WKT and GeoJSON.
          * @param {Object} attributes the geometry attributes
@@ -195,9 +195,9 @@ Oskari.clazz.define(
                 if (attributes && attributes !== null) {
                     feature.attributes = attributes;
                 }
-                
+
                 olLayer = me._map.getLayersByName(me._olLayerPrefix + layerId)[0];
-                
+
                 if (!olLayer) {
                     var opacity = 100;
                     if(layer){
@@ -219,7 +219,7 @@ Oskari.clazz.define(
                 }
 
                 olLayer.addFeatures([feature]);
-                
+
                 if(isOlLayerAdded === false) me._map.addLayer(olLayer);
 
                 if (keepLayerOnTop) {
@@ -238,15 +238,15 @@ Oskari.clazz.define(
                     window.setTimeout(function(){
                         var request = me._sandbox.getRequestBuilder('AddMapLayerRequest')(layerId, true);
                             me._sandbox.request(me.getName(), request);
-                        }, 
+                        },
                     50);
                 }
-                
+
                 if(centerTo === true){
                     var center = feature.geometry.getCentroid(),
                         mapmoveRequest = me._sandbox.getRequestBuilder('MapMoveRequest')(center.x, center.y, feature.geometry.getBounds(), false);
                     me._sandbox.request(me, mapmoveRequest);
-                } 
+                }
             }
         },
         /**
@@ -274,7 +274,7 @@ Oskari.clazz.define(
         /**
          * @method AddMapLayerToMap
          * Primitive for adding layer to this map
-         * 
+         *
          * @param {Oskari.mapframework.domain.VectorLayer} layer
          * @param {Boolean} keepLayerOnTop keep layer on top
          * @param {Boolean} isBaseMap is basemap
@@ -296,7 +296,7 @@ Oskari.clazz.define(
                 var styleInfo = this._sldFormat.read(sldSpec),
                     styles = styleInfo.namedLayers[0].userStyles,
                     style = styles[0];
-                
+
                 styleMap.styles['default'] = style;
             }
 
@@ -378,9 +378,9 @@ Oskari.clazz.define(
             if(remLayer[0]) remLayer[0].destroy();
         },
         /**
-         * @method getOLMapLayers 
+         * @method getOLMapLayers
          * Get OpenLayers map layers.
-         * 
+         *
          * @param {Oskari.mapframework.domain.VectorLayer} layer the layer
          */
         getOLMapLayers: function (layer) {

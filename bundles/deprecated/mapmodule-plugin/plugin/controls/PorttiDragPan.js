@@ -1,9 +1,9 @@
 OpenLayers.Control.PorttiDragPan = OpenLayers.Class(OpenLayers.Control, {
     type: OpenLayers.Control.TYPE_TOOL,
     panned: false,
-    interval: 1,       
+    interval: 1,
     documentDrag: false,
-    kinetic: null, 
+    kinetic: null,
     enableKinetic: false,
     kineticInterval: 10,
 
@@ -12,7 +12,7 @@ OpenLayers.Control.PorttiDragPan = OpenLayers.Class(OpenLayers.Control, {
         if(this.enableKinetic) {
             var config = {interval: this.kineticInterval};
             if(typeof this.enableKinetic === "object") {
-                config = 
+                config =
                     OpenLayers.Util.extend(config, this.enableKinetic);
             }
             this.kinetic = new OpenLayers.Kinetic(config);
@@ -45,7 +45,7 @@ OpenLayers.Control.PorttiDragPan = OpenLayers.Class(OpenLayers.Control, {
             {dragging: true, animate: false}
         );
     },
-    
+
     panMapDone: function(xy) {
         if(this.panned) {
             var res = null;

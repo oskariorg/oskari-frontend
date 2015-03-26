@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamTextElement',
         this._validator = validator;
     }, {
         __name: 'elf-license.ParamTextElement',
-        __qname: 'Oskari.elf.license.elements.ParamTextElement',       
+        __qname: 'Oskari.elf.license.elements.ParamTextElement',
         /**
          * Get Qualified name
          * @method getQName
@@ -76,14 +76,14 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamTextElement',
                     valueEl.html(value);
                     data.append(valueEl);
                 });
-            }            
+            }
 
             // Add data to element
             data.attr('data-name', param.name);
             data.attr('data-title', title);
             data.attr('data-element-type', 'text');
             data.attr('data-read-only', readOnly);
-            
+
             element.find('.elf_license_user_data_label').html(title);
             element.find('.elf_license_user_data').html(data);
             return element;

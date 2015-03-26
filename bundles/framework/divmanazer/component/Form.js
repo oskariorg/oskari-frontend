@@ -67,7 +67,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Form',
          * @public @method isEnabled
          *
          *
-         * @return {Boolean} enabled 
+         * @return {Boolean} enabled
          */
         isEnabled: function () {
             'use strict';

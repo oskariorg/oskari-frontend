@@ -15,8 +15,8 @@ function() {
      * @return {Object/Boolean} parsed data or false if not successful
      * Parses the JSON data to an object with keys as localized featuredata
      * labels and values as Oskari.userinterface.component.GridModel.
-     * Also adds an "all" named model to the returned object featuring 
-     * all the data from all the featuredatas with an additional field 
+     * Also adds an "all" named model to the returned object featuring
+     * all the data from all the featuredatas with an additional field
      * "__featureName" which has the featuredata name where the data is originally.
      */
     getData : function(data) {
@@ -68,7 +68,7 @@ function() {
      * @method _isValidData
      * @param {Object} data JSON data for WFS grid
      * @private
-     * @return {Boolean} true if data is good to go 
+     * @return {Boolean} true if data is good to go
      * Validates the data so we can process it safely if this returns true.
      */
     _isValidData : function(data) {
@@ -89,8 +89,8 @@ function() {
      * @param {String[]} pList list to check
      * @param {String} pValue value to find in list
      * @private
-     * @return {Number} index of the value in given list or -1 if not found 
-     * Checks if the list contains the given value. Returns the values 
+     * @return {Number} index of the value in given list or -1 if not found
+     * Checks if the list contains the given value. Returns the values
      * location/index in the list or -1 if not found.
      */
     _findInList : function(pList, pValue) {

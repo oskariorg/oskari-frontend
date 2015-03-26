@@ -129,7 +129,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
         getValues: function () {
             var forcedCategory = (this.options ? this.options.category : undefined);
             var values = {};
-            // infobox will make us lose our reference so search 
+            // infobox will make us lose our reference so search
             // from document using the form-class
             var onScreenForm = this._getOnScreenForm();
 
@@ -174,7 +174,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
          */
         setValues: function (data) {
             this.placeId = data.place.id;
-            // infobox will make us lose our reference so search 
+            // infobox will make us lose our reference so search
             // from document using the form-class
             var onScreenForm = this._getOnScreenForm();
 
@@ -295,7 +295,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
          * @private
          */
         _getOnScreenForm: function () {
-            // unbind live so 
+            // unbind live so
             return jQuery('div.myplacesform');
         }
     });

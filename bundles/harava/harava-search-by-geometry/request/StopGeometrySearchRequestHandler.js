@@ -8,7 +8,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.request.StopGeometrySearchRe
     this.searchPlugin = searchPlugin;
 }, {
 	/**
-	 * @method handleRequest 
+	 * @method handleRequest
 	 * Stop geometry search
 	 * @param {Oskari.mapframework.core.Core} core
 	 * 		reference to the application core (reference sandbox core.getSandbox())

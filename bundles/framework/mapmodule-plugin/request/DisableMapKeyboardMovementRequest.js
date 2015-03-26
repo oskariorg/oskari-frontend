@@ -5,7 +5,7 @@
  * so that typing on a textfield doesn't move the map on the background.
  * Opposite of
  * Oskari.mapframework.bundle.mapmodule.request.EnableMapKeyboardMovementRequest
- * 
+ *
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */

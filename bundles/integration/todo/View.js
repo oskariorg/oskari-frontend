@@ -26,7 +26,7 @@ Oskari.clazz.define('Oskari.integration.bundle.todo.View', function() {
      */
     "eventHandlers" : {
         "MapLayerVisibilityChangedEvent" : function(event) {
-            
+
         },
         "AfterMapMoveEvent" : function(event) {
 
@@ -45,7 +45,7 @@ Oskari.clazz.define('Oskari.integration.bundle.todo.View', function() {
             '_bundle' : '../../../Oskari/bundles/integration/todo'
         }
     },
-   
+
     /**
      * @method render
      * This is called when *everything* is ready for Backbone to be started
@@ -60,7 +60,7 @@ Oskari.clazz.define('Oskari.integration.bundle.todo.View', function() {
         var locale = this.getLocalization();
 
         /* _bundle - path conf is set in bundle loader based on bundle.js */
-        
+
         require(["_bundle/views/todoView"], function(ToDoView) {
 
             // Finally, we kick things off by creating the **App**.

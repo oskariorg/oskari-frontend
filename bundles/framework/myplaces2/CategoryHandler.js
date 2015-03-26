@@ -649,7 +649,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
                         request = this.instance.sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest')(layerId, true);
                     this.instance.sandbox.request(this, request);
                 }
-                // NOTE OK 
+                // NOTE OK
                 loc = me.instance.getLocalization();
                 dialog.show(loc.notification.categoryDelete.title, loc.notification.categoryDelete.deleted);
                 dialog.fadeout();

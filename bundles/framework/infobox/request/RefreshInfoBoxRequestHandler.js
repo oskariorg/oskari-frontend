@@ -16,7 +16,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.request.RefreshInfoBoxRe
          * Refreshes the requested infobox/popup if present
          * If operation is 'remove', removes the requested content from the popup.
          * If no operation is given, just sends a status report of the requested popup.
-         * 
+         *
          * @method handleRequest
          * @param {Oskari.mapframework.core.Core} core
          *      reference to the application core (reference sandbox core.getSandbox())

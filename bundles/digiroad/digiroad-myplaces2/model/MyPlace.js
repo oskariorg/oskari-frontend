@@ -1,5 +1,5 @@
 
-Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.model.MyPlace', 
+Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.model.MyPlace',
 
 /**
  * @method create called automatically on construction
@@ -14,38 +14,38 @@ function() {
     this.categoryID = undefined;
     this.geometry = undefined;
     this.createDate = undefined;
-    //this.updateDate = undefined; 
+    //this.updateDate = undefined;
 }, {
     /**
-     * @method setId 
+     * @method setId
      * @param {Number} value
      */
     setId : function(value) {
         this.id = value;
     },
     /**
-     * @method getId 
+     * @method getId
      * @return {Number}
      */
     getId : function() {
         return this.id;
     },
     /**
-     * @method setName 
+     * @method setName
      * @param {String} value
      */
     setName : function(value) {
         this.name = value;
     },
     /**
-     * @method getName 
+     * @method getName
      * @return {String}
      */
     getName : function() {
         return this.name;
     },
     /**
-     * @method setDescription 
+     * @method setDescription
      * @param {String} value
      */
     setDescription : function(value) {
@@ -59,28 +59,28 @@ function() {
         return this.description;
     },
     /**
-     * @method setCategoryID 
+     * @method setCategoryID
      * @param {Number} value
      */
     setCategoryID : function(value) {
         this.categoryID = value;
     },
     /**
-     * @method getCategoryID 
+     * @method getCategoryID
      * @return {Number}
      */
     getCategoryID : function() {
         return this.categoryID;
-    }, 
+    },
     /**
-     * @method setGeometry 
+     * @method setGeometry
      * @param {OpenLayers.Geometry} value
      */
     setGeometry : function(value) {
         this.geometry = value;
     },
     /**
-     * @method getGeometry 
+     * @method getGeometry
      * @return {OpenLayers.Geometry}
      */
     getGeometry : function() {
@@ -99,14 +99,14 @@ function() {
      * @method getCreateDate
      * Returns date in string format:
      * Date format is 2011-11-02T15:27:48.981+02:00 (time part is optional).
-     * See Oskari.mapframework.bundle.myplaces2.service.MyPlacesService 
-     * @return {String} 
+     * See Oskari.mapframework.bundle.myplaces2.service.MyPlacesService
+     * @return {String}
      */
     getCreateDate : function() {
         return this.createDate;
     },
     /**
-     * @method setUpdateDate 
+     * @method setUpdateDate
      * Date format is 2011-11-02T15:27:48.981+02:00 (time part is optional).
      * See Oskari.mapframework.bundle.myplaces2.service.MyPlacesService
      * @param {String} value
@@ -115,32 +115,32 @@ function() {
         this.updateDate = value;
     },
     /**
-     * @method getUpdateDate 
+     * @method getUpdateDate
      * Returns date in string format:
      * Date format is 2011-11-02T15:27:48.981+02:00 (time part is optional).
-     * See Oskari.mapframework.bundle.myplaces2.service.MyPlacesService 
+     * See Oskari.mapframework.bundle.myplaces2.service.MyPlacesService
      * @return {String}
      */
     getUpdateDate : function() {
         return this.updateDate;
     },
     /**
-     * @method setUUID 
+     * @method setUUID
      * @param {String} value
      */
     setUUID : function(value) {
         this.uuid = value;
     },
     /**
-     * @method getUUID 
-     * @return {String} 
+     * @method getUUID
+     * @return {String}
      */
     getUUID : function() {
         return this.uuid;
     },
 
     /**
-     * @method setDynType 
+     * @method setDynType
      * @param {String} value
      */
     setDynType : function(value) {
@@ -148,15 +148,15 @@ function() {
     },
 
     /**
-     * @method getDynType 
-     * @return {String} 
+     * @method getDynType
+     * @return {String}
      */
     getDynType : function() {
         return this.dynType;
     },
 
     /**
-     * @method setDynValue 
+     * @method setDynValue
      * @param {String} value
      */
     setDynValue : function(value) {
@@ -164,8 +164,8 @@ function() {
     },
 
     /**
-     * @method getDynValue 
-     * @return {String} 
+     * @method getDynValue
+     * @return {String}
      */
     getDynValue : function() {
         return this.dynValue;

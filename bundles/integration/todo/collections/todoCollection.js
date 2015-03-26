@@ -2,9 +2,9 @@
 (function() {
 
     define(['_bundle/models/todoModel'],function(Todo) {
-        
-        
-        
+
+
+
           // Todo Collection
         // ---------------
 
@@ -40,6 +40,6 @@
                 return todo.get('order');
             }
         });
-        
+
     });
 }).call(this);

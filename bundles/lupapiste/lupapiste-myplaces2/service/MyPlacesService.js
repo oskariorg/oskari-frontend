@@ -1,8 +1,8 @@
 /**
  * @class Oskari.lupapiste.bundle.myplaces2.service.MyPlacesService
- * 
+ *
  */
-Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.service.MyPlacesService', 
+Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.service.MyPlacesService',
 
 /**
  * @method create called automatically on construction
@@ -11,9 +11,9 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.service.MyPlacesService',
  * @param {String} uuid current users uuid
  * @param {Oskari.mapframework.sandbox.Sandbox} sandbox reference to Oskari sandbox
  * @param {String} categoryName default category name
- * @param {Oskari.lupapiste.bundle.myplaces2.MyPlacesBundleInstance} pInstance 
- *  instance to notify if problems with default category 
- * 
+ * @param {Oskari.lupapiste.bundle.myplaces2.MyPlacesBundleInstance} pInstance
+ *  instance to notify if problems with default category
+ *
  */
 function(url, uuid, sandbox, defaultName, pInstance) {
 
@@ -54,7 +54,7 @@ function(url, uuid, sandbox, defaultName, pInstance) {
                 //me._categoryList = categories;
             }
             loadedCategories = true;
-    
+
             if (!me.getDefaultCategory()) {
                 // user doesn't have default category, propably a new user
                 // create a default category
@@ -63,22 +63,22 @@ function(url, uuid, sandbox, defaultName, pInstance) {
                 me._notifyDataChanged();
             }
         };
-    
+
         var initialLoadCallBackPlaces = function(places) {
             if(places) {
                 me._placesList = places;
             }
             loadedPlaces = true;
-            
+
             if (loadedCategories) {
                 me._notifyDataChanged();
             }
         };
-    
+
         this.wfstStore.getCategories(initialLoadCallBackCategories);
         this.wfstStore.getMyPlaces(initialLoadCallBackPlaces);
     },
-    /** 
+    /**
      * @method _createDefaultCategory
      * @private
      * Creates a default category for the user
@@ -99,20 +99,20 @@ function(url, uuid, sandbox, defaultName, pInstance) {
         defaultCategory.setDotColor('cc9900');
         defaultCategory.setDotSize(4);
         defaultCategory.setDefault(true);
-        
+
         var defaultCategoryCreationCallback = function() {
             // called if new user -> just created a default category for user
-    
+
             if (me.getAllCategories().length === 0) {
                 // something went wrong and we should propably just show error
                 // message instead of my places functionality
                 me._instance.forceDisable();
-                 
+
             } else {
                 me._notifyDataChanged();
             }
         };
-        
+
         this.saveCategory(defaultCategory, defaultCategoryCreationCallback);
     },
 
@@ -253,7 +253,7 @@ function(url, uuid, sandbox, defaultName, pInstance) {
      * @method deleteCategory
      * Deletes all places in given category or moves the places to default category. After that
      * deletes the category.
-     * @param {Number} categoryId category id to delete 
+     * @param {Number} categoryId category id to delete
      * @param {Boolean} movePlacesToDefault true to move places, false to delete
      * @param {Function} callback function to call when done, receives boolean as argument(true == successful)
      */
@@ -305,7 +305,7 @@ function(url, uuid, sandbox, defaultName, pInstance) {
     /**
      * @method _removeCategory
      * @private
-     * Removes given category from internal data structure. Called when similar backend function 
+     * Removes given category from internal data structure. Called when similar backend function
      * has returned successfully.
      * @param {Number} categoryId category id to delete
      */
@@ -322,8 +322,8 @@ function(url, uuid, sandbox, defaultName, pInstance) {
      * @method saveCategory
      * Saves given category to backend and internal data structure. Adds it if new and updates if existing (has an id).
      * @param {Oskari.lupapiste.bundle.myplaces2.model.MyPlacesCategory} categoryModel category to save
-     * @param {Function} callback function to call when done, receives boolean as 
-     *      first argument(true == successful), categoryModel as second parameter and boolean as third parameter (true if the category was new)  
+     * @param {Function} callback function to call when done, receives boolean as
+     *      first argument(true == successful), categoryModel as second parameter and boolean as third parameter (true if the category was new)
      */
     saveCategory : function(categoryModel, callback) {
         var me = this;
@@ -340,10 +340,10 @@ function(url, uuid, sandbox, defaultName, pInstance) {
                     category.setName(categoryModel.getName());
                     category.setDotSize(categoryModel.getDotSize());
                     category.setDotColor(categoryModel.getDotColor());
-                    
+
                     category.setLineWidth(categoryModel.getLineWidth());
                     category.setLineColor(categoryModel.getLineColor());
-                    
+
                     category.setAreaLineWidth(categoryModel.getAreaLineWidth());
                     category.setAreaLineColor(categoryModel.getAreaLineColor());
                     category.setAreaFillColor(categoryModel.getAreaFillColor());
@@ -361,8 +361,8 @@ function(url, uuid, sandbox, defaultName, pInstance) {
 
     /**
      * @method getAllCategories
-     * Returns all categories ("maplayers" for my places) that is loaded in the system. 
-     * @return {Oskari.lupapiste.bundle.myplaces2.model.MyPlacesCategory[]}  
+     * Returns all categories ("maplayers" for my places) that is loaded in the system.
+     * @return {Oskari.lupapiste.bundle.myplaces2.model.MyPlacesCategory[]}
      */
     getAllCategories : function() {
         return this._categoryList;
@@ -370,8 +370,8 @@ function(url, uuid, sandbox, defaultName, pInstance) {
 
     /**
      * @method getDefaultCategory
-     * Returns users default category or undefined 
-     * @return {Oskari.lupapiste.bundle.myplaces2.model.MyPlacesCategory}  
+     * Returns users default category or undefined
+     * @return {Oskari.lupapiste.bundle.myplaces2.model.MyPlacesCategory}
      */
     getDefaultCategory : function() {
         return this.defaultCategory;
@@ -380,7 +380,7 @@ function(url, uuid, sandbox, defaultName, pInstance) {
     /**
      * @method _addMyPlace
      * @private
-     * Adds given place to internal data structure. Called when similar backend function 
+     * Adds given place to internal data structure. Called when similar backend function
      * has returned successfully.
      * @param {Oskari.lupapiste.bundle.myplaces2.model.MyPlace} myplaceModel place to add
      */
@@ -390,7 +390,7 @@ function(url, uuid, sandbox, defaultName, pInstance) {
     /**
      * @method _removeMyPlace
      * @private
-     * Removes given place from internal data structure. Called when similar backend function 
+     * Removes given place from internal data structure. Called when similar backend function
      * has returned successfully.
      * @param {Number} placeId id for place to remove
      */
@@ -497,7 +497,7 @@ function(url, uuid, sandbox, defaultName, pInstance) {
 
     /**
      * @method findBy
-     * Tries to find object from the given list. 
+     * Tries to find object from the given list.
      * Abstraction method used by findCategory and findMyPlace.
      *
      * @param {Object} list list to loop through
@@ -519,8 +519,8 @@ function(url, uuid, sandbox, defaultName, pInstance) {
      * @method saveMyPlace
      * Saves given category to backend and internal data structure. Adds it if new and updates if existing (has an id).
      * @return {Oskari.lupapiste.bundle.myplaces2.model.MyPlace} myplaceModel place to save
-     * @param {Function} callback function to call when done, receives boolean as 
-     *      first argument(true == successful), myplaceModel as second parameter and boolean as third parameter (true if the category was new)  
+     * @param {Function} callback function to call when done, receives boolean as
+     *      first argument(true == successful), myplaceModel as second parameter and boolean as third parameter (true if the category was new)
      */
     saveMyPlace : function(myplaceModel, callback) {
         var me = this;
@@ -561,7 +561,7 @@ function(url, uuid, sandbox, defaultName, pInstance) {
         return this._placesList;
     },
 
-  
+
     /**
      * @method publishCategory
      * Method marks the category published or unpublished

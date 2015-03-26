@@ -1,12 +1,12 @@
 /**
  * Requests a saved "my place" to be deleted
- * 
+ *
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
- * 
+ *
  * @class Oskari.mapframework.bundle.myplaces2.request.DeletePlaceRequest
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.DeletePlaceRequest', 
+Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.DeletePlaceRequest',
 
 /**
  * @method create called automatically on construction

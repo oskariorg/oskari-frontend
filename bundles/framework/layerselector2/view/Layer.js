@@ -19,7 +19,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
         this.ui = this._createLayerContainer(layer);
     }, {
         __template: '<div class="layer"><input type="checkbox" /> ' + '<div class="layer-tools"><div class="layer-backendstatus-icon backendstatus-ok"></div>' + '<div class="layer-icon"></div><div class="layer-info"></div></div>' + '<div class="layer-title"></div>' +
-        //'<div class="layer-keywords"></div>' + 
+        //'<div class="layer-keywords"></div>' +
         '</div>',
         /**
          * @method getId
@@ -109,8 +109,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
             //"use strict";
             var me = this,
                 sandbox = me.sandbox,
-                // create from layer template 
-                // (was clone-from-template but template was only used once so there was some overhead)  
+                // create from layer template
+                // (was clone-from-template but template was only used once so there was some overhead)
                 layerDiv = jQuery(this.__template),
                 tooltips = this.localization.tooltip,
                 tools = jQuery(layerDiv).find('div.layer-tools'),

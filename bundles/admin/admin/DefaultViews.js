@@ -48,7 +48,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.DefaultViews', function(locale, p
         return content;
     },
     /**
-     * Loads list of default views defined for Oskari instance and 
+     * Loads list of default views defined for Oskari instance and
      * calls the given callback when finished.
      * @param  {Function} callback [description]
      */
@@ -68,13 +68,13 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.DefaultViews', function(locale, p
             },
             error : function() {
                 me.instance.showMessage(
-                    me.locale.notifications.errorTitle, 
+                    me.locale.notifications.errorTitle,
                     me.locale.notifications.errorLoadingFailed);
             }
         });
     },
     /**
-     * Collects current map state and calls backend to update the given view 
+     * Collects current map state and calls backend to update the given view
      * with new location and default layers
      * @param  {String}  id     view id to update
      * @param  {Boolean} force  true to update even if server warns about layers
@@ -152,7 +152,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.DefaultViews', function(locale, p
                     var layer = sb.findMapLayerFromAllAvailable(layerId),
                         msg = 'Layer ID ' + layerId;
                     if(layer) {
-                        msg = layer.getName(); 
+                        msg = layer.getName();
                     }
                     list.push(me.templates.listItem({ msg : msg }));
                 });
@@ -180,13 +180,13 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.DefaultViews', function(locale, p
 
     __showGenericErrorSave: function(id) {
         this.instance.showMessage(
-            this.locale.notifications.errorTitle, 
+            this.locale.notifications.errorTitle,
             _.template(this.locale.notifications.errorUpdating)({id : id}));
     },
 
     __viewSaved: function(id, data) {
         this.instance.showMessage(
-            this.locale.notifications.successTitle, 
+            this.locale.notifications.successTitle,
             _.template(this.locale.notifications.viewUpdated)({id : id}));
     },
 
@@ -203,7 +203,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.DefaultViews', function(locale, p
             name: me.locale.globalViewTitle,
             action: me.locale.setButton
         });
-        
+
         _.each(data.roles, function(role) {
             if (!role.viewId) {
                 return;

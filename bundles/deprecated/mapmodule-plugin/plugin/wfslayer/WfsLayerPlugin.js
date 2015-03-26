@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 Oskari.clazz.define('Oskari.mapframework.mapmodule.WfsLayerPlugin', function() {
 	this.mapModule = null;
@@ -57,7 +57,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WfsLayerPlugin', function() {
 	},
 	/**
 	 * @method stop called from sandbox
-	 * 
+	 *
 	 */
 	stop : function(sandbox) {
 	},
@@ -94,7 +94,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WfsLayerPlugin', function() {
 		return this.eventHandlers[event.getName()].apply(this, [ event ]);
 	},
 	/**
-	 * 
+	 *
 	 */
 	preselectLayers : function(layers) {
 
@@ -115,7 +115,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WfsLayerPlugin', function() {
 
 	afterChangeMapLayerOpacityEvent : function(event) {
 		var layer = event.getMapLayer();
-		
+
 		if (!layer.isLayerOfType('WFS')) {
 			return;
 		}
@@ -123,13 +123,13 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WfsLayerPlugin', function() {
 		var layers = this.getOLMapLayers(layer); //_map.getLayersByName(wfsReqExp);
 		for ( var i = 0; i < layers.length; i++) {
 			layers[i].setOpacity(layer.getOpacity() / 100);
-		
+
 		}
 	},
-	
+
 	/***************************************************************************
 	 * Handle AfterDimMapLayerEvent
-	 * 
+	 *
 	 * @param {Object}
 	 *            event
 	 */
@@ -149,7 +149,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WfsLayerPlugin', function() {
 
 	/***************************************************************************
 	 * Handle AfterMapLaeyrAddEvent
-	 * 
+	 *
 	 * @param {Object}
 	 *            event
 	 */
@@ -165,7 +165,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WfsLayerPlugin', function() {
 	},
 	/***************************************************************************
 	 * Handle AfterMapLayerRemoveEvent
-	 * 
+	 *
 	 * @param {Object}
 	 *            event
 	 */
@@ -201,7 +201,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WfsLayerPlugin', function() {
 	},
 	/***************************************************************************
 	 * Handle AfterWfsGetFeaturesPngImageForMapEvent
-	 * 
+	 *
 	 * @param {Oskari.mapframework.event.common.AfterWfsGetFeaturesPngImageForMapEvent}
 	 *            event
 	 */
@@ -209,7 +209,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WfsLayerPlugin', function() {
 		var imageUrl = event.getImageUrl();
 		var imageBbox = event.getBbox();
 		var layer = event.getMapLayer();
-		
+
 		var boundsObj = null;
 		if (imageBbox.bounds && imageBbox.bounds.left && imageBbox.bounds.right
 				&& imageBbox.bounds.top && imageBbox.bounds.bottom) {
@@ -300,7 +300,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WfsLayerPlugin', function() {
 	},
 	/***************************************************************************
 	 * Handle AfterHighlightWFSFeatureRowEvent
-	 * 
+	 *
 	 * @param {Object}
 	 *            event
 	 */
@@ -325,7 +325,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WfsLayerPlugin', function() {
 },
 /* ******************************************************************************
  * Handle AfterRemoveHighlightMapLayerEvent
- * 
+ *
  * @param {Object}
  *            event
  */
@@ -366,7 +366,7 @@ updateWfsImages : function(creator) {
 
         var mapWidth = map.getWidth();
         var mapHeight = map.getHeight();
-        
+
         ogcSearchService.scheduleWFSMapLayerUpdate(mapLayer, bbox, mapWidth, mapHeight, this.getName());
         ogcSearchService.startPollers();
     },
@@ -378,7 +378,7 @@ updateWfsImages : function(creator) {
 },*/
 afterAfterMapMoveEvent : function(event) {
 	this.updateWfsImages(this.getName());
-	
+
 	this.removeHighlightOnMapLayer();
 }
 }, {

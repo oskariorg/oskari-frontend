@@ -12,7 +12,7 @@ Oskari.clazz.define("Oskari.mapframework.gridcalc.QueuedTilesGrid",
       this.maxExtent = null;
       this.buffer = 0;
       this.numLoadingTiles = 0;
-      
+
       for( p in options ) this[p] = options[p];
 	},{
 

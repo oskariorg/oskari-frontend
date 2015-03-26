@@ -24,7 +24,7 @@ function () {
         templates: {
             ratingContainer: jQuery('<div class="ratingInfo"></div>'),
             starItem: jQuery('<div class="ratingStar"></div>'),
-            numRatings: jQuery('<div class="numRatings"></div>'),
+            numRatings: jQuery('<div class="numRatings"></div>')
         },
         /**
          * @static
@@ -215,7 +215,7 @@ function () {
             }
 
 
-            var ratingSymbols = me._generateRatingSymbols(metadata.rating); 
+            var ratingSymbols = me._generateRatingSymbols(metadata.rating);
             var ratingContainer = me.templates.ratingContainer.clone();
             for (j = 0; j < 5; j++) {
                 starContainer = me.templates.starItem.clone();

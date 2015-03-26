@@ -103,7 +103,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
 
         /**
          * @method getClazz
-         * @return {String} clazz 
+         * @return {String} clazz
          */
         getClazz: function () {
             'use strict';
@@ -112,7 +112,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
 
         /**
          * @method getElement
-         * @return {HTMLElement} element 
+         * @return {HTMLElement} element
          */
         getElement: function () {
             'use strict';
@@ -121,7 +121,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
 
         /**
          * @method getName
-         * @return {String} name 
+         * @return {String} name
          */
         getName: function () {
             'use strict';
@@ -130,7 +130,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
 
         /**
          * @method setName
-         * @param {String} name 
+         * @param {String} name
          */
         setName: function (name) {
             'use strict';
@@ -139,7 +139,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
 
         /**
          * @method getTitle
-         * @return {String} title 
+         * @return {String} title
          */
         getTitle: function () {
             'use strict';
@@ -148,7 +148,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
 
         /**
          * @method setTitle
-         * @param {String} title 
+         * @param {String} title
          */
         setTitle: function (title) {
             'use strict';
@@ -157,7 +157,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
 
         /**
          * @method isVisible
-         * @return {Boolean} 
+         * @return {Boolean}
          */
         isVisible: function () {
             'use strict';
@@ -190,7 +190,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
 
         /**
          * @method insertTo
-         * @param {HTMLElement} container 
+         * @param {HTMLElement} container
          */
         insertTo: function (container) {
             'use strict';

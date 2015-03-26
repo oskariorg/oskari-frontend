@@ -1,7 +1,7 @@
 /**
  * @class Oskari.digiroad.bundle.myplaces2.MyPlacesBundleInstance
- * 
- * Registers and starts the 
+ *
+ * Registers and starts the
  * Oskari.mapframework.bundle.myplaces2.plugin.CoordinatesPlugin plugin for main map.
  */
 Oskari.clazz.define("Oskari.digiroad.bundle.myplaces2.view.MainView",
@@ -18,7 +18,7 @@ function(instance) {
     __name : 'DigiroadMyPlacesMainView',
     /**
      * @method getName
-     * @return {String} the name for the component 
+     * @return {String} the name for the component
      */
     getName : function() {
         return this.__name;
@@ -42,26 +42,26 @@ function(instance) {
      */
     start : function() {
         var me = this;
-        
+
         var sandbox = this.instance.sandbox;
         sandbox.register(me);
         for(p in me.eventHandlers) {
             sandbox.registerForEventByName(me, p);
         }
-        
+
         var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-        
+
         // register plugin for map (drawing for my places)
         var drawPlugin = Oskari.clazz.create('Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin', this.instance.queryUrl, this.instance.snappingLayerConf);
         mapModule.registerPlugin(drawPlugin);
         mapModule.startPlugin(drawPlugin);
         this.drawPlugin = drawPlugin;
-        
+
         var restrictionPlugin = Oskari.clazz.create('Oskari.digiroad.bundle.myplaces2.plugin.TurningRestrictionsPlugin', this.instance.queryUrl);
         mapModule.registerPlugin(restrictionPlugin);
         mapModule.startPlugin(restrictionPlugin);
         this.restrictionPlugin = restrictionPlugin;
-        
+
         // register plugin for map (hover tooltip for my places)
         // TODO: start when a myplaces layer is added and stop when last is removed?
         /*var hoverPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.plugin.HoverPlugin');
@@ -169,7 +169,7 @@ function(instance) {
             }
             this.form.setValues(param);
         }
-        
+
         var content = [{
             html : me.form.getForm(),
             useButtons: true,
@@ -182,26 +182,26 @@ function(instance) {
             // ask toolbar to select default tool
             var toolbarRequest = me.instance.sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')();
             me.instance.sandbox.request(me, toolbarRequest);
-        }; 
+        };
         // save button
         content[0].actions[loc.buttons.save] = function() {
             me._saveForm(drawMode);
-        }; 
+        };
 
         var request = sandbox.getRequestBuilder('InfoBox.ShowInfoBoxRequest')(this.popupId, loc.placeform.title, content, location, true);
         sandbox.request(me.getName(), request);
     },
     /**
      * @method _validateForm
-     * Validates form data, returns an object array if any errors. 
-     * Error objects have field and error properties ({field : 'name', error: 'Name missing'}). 
+     * Validates form data, returns an object array if any errors.
+     * Error objects have field and error properties ({field : 'name', error: 'Name missing'}).
      * @private
      * @param {Object} values form values as returned by Oskari.mapframework.bundle.myplaces2.view.PlaceForm.getValues()
-     * @return {Object[]} 
+     * @return {Object[]}
      */
     _validateForm : function(values) {
         var errors = [];
-        
+
         var loc = this.instance.getLocalization('validation');
         if(!values.place.dyntype)
         {
@@ -215,15 +215,15 @@ function(instance) {
     },
     /**
      * @method _validateFeedbackForm
-     * Validates feedback form data, returns an object array if any errors. 
-     * Error objects have field and error properties ({field : 'name', error: 'Name missing'}). 
+     * Validates feedback form data, returns an object array if any errors.
+     * Error objects have field and error properties ({field : 'name', error: 'Name missing'}).
      * @private
      * @param {Object} values form values as returned by Oskari.mapframework.bundle.myplaces2.view.PlaceForm.getValues()
-     * @return {Object[]} 
+     * @return {Object[]}
      */
     _validateFeedbackForm : function(values) {
         var errors = [];
-        
+
         var loc = this.instance.getLocalization('validation');
         if(!values.place.name)
         {
@@ -251,7 +251,7 @@ function(instance) {
      * @method _saveForm
      * @private
      * Handles save button on my places form.
-     * If a new category has been defined -> saves it and calls _savePlace() 
+     * If a new category has been defined -> saves it and calls _savePlace()
      * for saving the actual place data after making the new category available.
      */
     _saveForm : function(drawMode) {
@@ -273,7 +273,7 @@ function(instance) {
             this._showValidationErrorMessage(errors);
             return;
         }
-        
+
         this.__savePlace(formValues.place, drawMode);
     },
     /**
@@ -305,7 +305,7 @@ function(instance) {
         }
         // fetch the latest geometry if edited after FinishedDrawingEvent
         place.setGeometry(this.drawPlugin.getDrawing());
-        
+
         var sandbox = this.instance.sandbox;
         var serviceCallback = function(blnSuccess, model, blnNew) {
             if(blnSuccess) {
@@ -323,9 +323,9 @@ function(instance) {
                     sandbox.request(me, updateRequest);
                 } else {
                     var updateRequest = updateRequestBuilder(layerId, true);
-                    sandbox.request(me, updateRequest);                	
+                    sandbox.request(me, updateRequest);
                 }
-                
+
                 me._cleanupPopup();
 
                 var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -371,7 +371,7 @@ function(instance) {
         var olClass = geometry.CLASS_NAME;
         if('OpenLayers.Geometry.Point' === olClass) {
             return 'point';
-        } 
+        }
         else if('OpenLayers.Geometry.LineString' === olClass) {
             return 'line';
         }
@@ -383,7 +383,7 @@ function(instance) {
 }, {
     /**
      * @property {String[]} protocol
-     * @static 
+     * @static
      */
     protocol : ['Oskari.mapframework.module.Module']
 });

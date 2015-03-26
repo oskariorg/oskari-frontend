@@ -239,7 +239,7 @@ Oskari.clazz.define(
             me.filterDialog.setCloseButtonHandler(_.bind(me.turnOnClickOff, me));
         },
 
-        // function gives value to addLinkToAggregateValues (true/false) 
+        // function gives value to addLinkToAggregateValues (true/false)
         checkIfAggregateValuesAreAvailable: function () {
             this.service = this.instance.sandbox.getService(
                 'Oskari.analysis.bundle.analyse.service.AnalyseService'
