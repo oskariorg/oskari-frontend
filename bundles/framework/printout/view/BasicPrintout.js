@@ -929,7 +929,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
          */
         _createLegend: function () {
             var me = this;
-            // only if any statslayer visible 
+            // only if any statslayer visible
             me._setLegendVisibility();
             if (!me._hasStatsLayers()) {
                 return;

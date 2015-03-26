@@ -3,7 +3,7 @@
  *
  * Class for requesting removes features from map.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.RemoveFeaturesFromMapRequest', 
+Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.RemoveFeaturesFromMapRequest',
     /**
      * @method create called automatically on construction
      * @static

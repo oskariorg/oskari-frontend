@@ -35,7 +35,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.featureselector.plugin.VectorLayerPl
         },
     /**
      * @method hasUI
-     * @return {Boolean} 
+     * @return {Boolean}
      * This plugin doesn't have an UI so always returns false
      */
     hasUI : function() {
@@ -82,7 +82,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.featureselector.plugin.VectorLayerPl
         this._sandbox = null;
     },
 
-       /* @method start 
+       /* @method start
      * called from sandbox
      */
     start: function(sandbox) {
@@ -90,12 +90,12 @@ Oskari.clazz.define('Oskari.digiroad.bundle.featureselector.plugin.VectorLayerPl
     /**
      * @method stop
      * called from sandbox
-     * 
+     *
      */
     stop: function(sandbox) {
     },
-    
-    
+
+
     eventHandlers : {
         'AfterMapLayerAddEvent' : function(event) {
             this.afterMapLayerAddEvent(event);
@@ -128,28 +128,28 @@ Oskari.clazz.define('Oskari.digiroad.bundle.featureselector.plugin.VectorLayerPl
     },
 
     /**
-     * 
+     *
      */
     preselectLayers: function(layers)  {
         var sandbox = this._sandbox;
         for ( var i = 0 ; i < layers.length ; i++) {
             var layer = layers[i];
             var layerId = layer.getId();
-            
-            
-            if (!layer.isLayerOfType(this._layerType)) 
+
+
+            if (!layer.isLayerOfType(this._layerType))
                 continue;
-            
+
             sandbox.printDebug("preselecting " + layerId);
             this.addMapLayerToMap(layer,true,layer.isBaseLayer());
         }
 
     },
 
-    
+
     /***********************************************************
      * Handle AfterMapLaeyrAddEvent
-     * 
+     *
      * @param {Object}
      *            event
      */
@@ -193,7 +193,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.featureselector.plugin.VectorLayerPl
 
 //                      var layerScales = this.getMapModule().calculateLayerScales(layer
 //                              .getMaxScale(), layer.getMinScale());
-        
+
         var styleOpts = {
             "defaultStrokeColor": "#FF2222",
             "selectStrokeColor": "#FF0000"
@@ -225,7 +225,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.featureselector.plugin.VectorLayerPl
                 strategies.push(new OpenLayers.Strategy[s]());
             }
         }
-        
+
         var layerOpts = {
             styleMap : styleMap,
             strategies: strategies,
@@ -304,7 +304,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.featureselector.plugin.VectorLayerPl
                 'box': {keyMask: OpenLayers.Handler.MOD_ALT}
             }
         });
-        
+
         control.events.register("beforefeatureselected", this, function(e) {
             if(!layer.isInScale()) {
                 return false;
@@ -330,7 +330,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.featureselector.plugin.VectorLayerPl
                 sandbox.notifyAll(event);
             }
         });
-        
+
         this._map.addControl(control);
         control.activate();
         return control;
@@ -338,7 +338,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.featureselector.plugin.VectorLayerPl
 
     /***********************************************************
      * Handle AfterMapLayerRemoveEvent
-     * 
+     *
      * @param {Object}
      *            event
      */
@@ -374,7 +374,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.featureselector.plugin.VectorLayerPl
                 .getLayersByName('layer_' + layer.getId());
     },
     /**
-     * 
+     *
      */
     handleFeaturesAvailableEvent : function(event) {
         var layer = event.getMapLayer();

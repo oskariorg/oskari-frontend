@@ -1,4 +1,4 @@
-Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.request.StartDrawingRequest', 
+Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.request.StartDrawingRequest',
 
 function(config) {
     // TODO: do we pass selected category colors here?

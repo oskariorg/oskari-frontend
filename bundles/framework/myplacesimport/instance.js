@@ -58,12 +58,12 @@ function () {
             request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
             sandbox.request(this, request);
         }
-        
+
         this.registerTool(isGuest);
     },
     /**
      * Requests the tool to be added to the toolbar.
-     * 
+     *
      * @method registerTool
      */
     registerTool: function(isGuest) {
@@ -88,7 +88,7 @@ function () {
     },
     /**
      * Opens the flyout when the tool gets clicked.
-     * 
+     *
      * @method startTool
      */
     startTool: function() {
@@ -111,7 +111,7 @@ function () {
     },
     /**
      * Adds the user layer to the map layer service and to the map.
-     * 
+     *
      * @method addUserLayer
      * @param {JSON} layerJson
      */
@@ -135,7 +135,7 @@ function () {
     },
     /**
      * Creates the import service and registers it to the sandbox.
-     * 
+     *
      * @method createService
      * @param  {Oskari.mapframework.sandbox.Sandbox} sandbox
      * @return {Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService}
@@ -150,7 +150,7 @@ function () {
     },
     /**
      * Returns the import service.
-     * 
+     *
      * @method getService
      * @return {Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService}
      */
@@ -159,7 +159,7 @@ function () {
     },
     /**
      * Creates the user layers tab and adds it to the personaldata bundle.
-     * 
+     *
      * @method addTab
      * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
      * @return {Oskari.mapframework.bundle.myplacesimport.UserLayersTab}

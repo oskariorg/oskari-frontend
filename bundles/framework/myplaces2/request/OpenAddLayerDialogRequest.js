@@ -1,11 +1,11 @@
 /**
  * @class Oskari.mapframework.bundle.myplaces2.request.OpenAddLayerDialogRequest
  * Requests the add layer dialog to be opened
- * 
+ *
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.OpenAddLayerDialogRequest', 
+Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.OpenAddLayerDialogRequest',
 
 /**
  * @method create called automatically on construction

@@ -14,7 +14,7 @@ Oskari.clazz.define(
         handleRequest: function (core, request) {
             // Set the score based on the given value
             this.instance.plugins["Oskari.userinterface.Flyout"].getEl().find("div#raty-star").raty('score',request.getScore());
-            
+
             //set metadata id
             this.instance.plugins["Oskari.userinterface.Flyout"].getEl().find("input#primaryTargetCode").val(request.getMetadataId());
 

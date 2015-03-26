@@ -19,7 +19,7 @@
  * @TODO DELETE
  *
  */
-Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.service.MyPlacesWFSTStore', 
+Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.service.MyPlacesWFSTStore',
 
 /**
  * @method create called automatically on construction
@@ -123,7 +123,7 @@ function(url, uuid) {
             if(featAtts['publisher_name']) {
                 category.setPublic(true);
             }
-             
+
 
             list.push(category);
         }
@@ -353,7 +353,7 @@ function(url, uuid) {
 	        }
             return;
         }
-            
+
         var list = [];
         for (var n = 0; n < feats.length; n++) {
             var f = feats[n];

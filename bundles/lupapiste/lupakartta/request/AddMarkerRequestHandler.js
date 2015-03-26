@@ -8,4 +8,4 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.lupakartta.request.AddMarkerRequest
     }
 }, {
     protocol : ['Oskari.mapframework.core.RequestHandler']
-}); 
+});

@@ -1,9 +1,9 @@
 /**
  * @class Oskari.mapframework.bundle.parcel.event.ParcelInfoLayerRegisterEvent
- * 
+ *
  * Use to notify ParcelInfo bundle that the given layer should be followed by that bundle.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.parcel.event.ParcelInfoLayerRegisterEvent', 
+Oskari.clazz.define('Oskari.mapframework.bundle.parcel.event.ParcelInfoLayerRegisterEvent',
 /**
  * @method create called automatically on construction
  * @static

@@ -356,13 +356,34 @@ div.analyse-filter-popup-content {
 
     div.analyse-filter-clicked-features {
 
-        div.clicked-features-title {
+        div.clicked-features-title, div.clicked-features-checkboxes {
             display: inline-block;
-            margin-right: 25px;
+        }
+
+        div.clicked-features-title {
+            float: left;
+        }
+
+        div.filter-by-geometry-checkbox, div.clicked-features-checkbox {
+            margin-left: 25px;
+            margin-top: 5px;
+        }
+
+        div.filter-by-geometry-checkbox {
+            margin-bottom: 5px;
+        }
+
+        div.filter-by-geometry-radio {
+            display: inline-block;
+            margin-left: 50px!important;
         }
 
         label {
             margin-left: 8px;
+        }
+
+        input:disabled + label {
+            opacity: 0.5;
         }
 
     }
@@ -388,6 +409,7 @@ div.analyse-filter-popup-content {
 
 div.analyse-filter-popup-content div.filter-option {
     padding-bottom: 10px;
+    margin-top: 5px;
 
     div.manage-filter-option {
         display: inline-block;

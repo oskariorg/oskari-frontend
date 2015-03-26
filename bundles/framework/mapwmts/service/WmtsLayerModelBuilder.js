@@ -23,7 +23,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WmtsLayerModelBuilder', fu
 
         layer.setOriginalMatrixSetData(mapLayerJson.tileMatrixSetData);
         var tileMatrixSetId = mapLayerJson.tileMatrixSetId;
-        
+
         if (mapLayerJson.formats) {
             layer.setQueryFormat(mapLayerJson.formats.value);
             layer.setAvailableQueryFormats(mapLayerJson.formats.available);

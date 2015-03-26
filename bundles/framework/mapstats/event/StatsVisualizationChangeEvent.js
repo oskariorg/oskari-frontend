@@ -1,7 +1,7 @@
 /**
  * @class Oskari.mapframework.bundle.mapstats.event.StatsVisualizationChangeEvent
- * 
- * 
+ *
+ *
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.event.StatsVisualizationChangeEvent',
 /**
@@ -33,7 +33,7 @@ function(layer, params) {
     /**
      * @method getParams
      * Returns the params used to generate the new style.
-     * @return {Object} 
+     * @return {Object}
      */
     getParams : function() {
         return this._params;

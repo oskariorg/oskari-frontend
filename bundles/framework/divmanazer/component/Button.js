@@ -80,7 +80,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
             } else {
                 Oskari.getSandbox().printWarn("Oskari.userinterface.component.Button.setId: No UI");
             }
-        },        
+        },
         /**
          * @method setEnabled
          * Enables/Disables the button

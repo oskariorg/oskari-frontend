@@ -240,7 +240,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                     height = event.getHeight();
 
                 okBtn.addClass('primary');
-                url = event.getUrl();                
+                url = event.getUrl();
                 //url = this.sandbox.getLocalizedProperty(this.conf.publishedMapUrl) + event.getId();
                 iframeCode = '<div class="codesnippet"><code>&lt;iframe src="' + url + '" style="border: none;';
                 if (width !== null && width !== undefined) {
@@ -250,7 +250,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                 if (height !== null && height !== undefined) {
                     iframeCode += ' height: ' + height + ';';
                 }
-                
+
                 iframeCode += '"&gt;&lt;/iframe&gt;</code></div>';
 
                 content = loc.published.desc + '<br/><br/>' + iframeCode;

@@ -2,7 +2,7 @@
  * @class Oskari.harava.bundle.mapmodule.request.AddControlToMapRequestHandler
  * Handles Oskari.harava.bundle.mapmodule.request.AddControlToMapRequest to add OpenLayers control to map.
  */
-Oskari.clazz.define('Oskari.harava.bundle.mapmodule.request.AddControlToMapRequestHandler', 
+Oskari.clazz.define('Oskari.harava.bundle.mapmodule.request.AddControlToMapRequestHandler',
 /**
  * @method create called automatically on construction
  * @static
@@ -17,7 +17,7 @@ function(sandbox, mapModule) {
     this.mapModule = mapModule;
 }, {
 	/**
-	 * @method handleRequest 
+	 * @method handleRequest
 	 * Add control to map
 	 * @param {Oskari.mapframework.core.Core} core
 	 * 		reference to the application core (reference sandbox core.getSandbox())

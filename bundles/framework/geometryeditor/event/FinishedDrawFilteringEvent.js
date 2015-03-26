@@ -1,7 +1,7 @@
 /**
  * @class Oskari.mapframework.ui.module.common.geometryeditor.DrawFilterPlugin.event.FinishedDrawFilteringEvent
- * 
- * Used to notify components that the drawing has been finished. 
+ *
+ * Used to notify components that the drawing has been finished.
  */
 Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFilterPlugin.event.FinishedDrawFilteringEvent',
 /**
@@ -35,7 +35,7 @@ function(geometry, blnEdit, creatorId) {
     },
     /**
      * @method isModification
-     * Returns true if drawing was initially opened for editing (not a new one) 
+     * Returns true if drawing was initially opened for editing (not a new one)
      * @return {Boolean}
      */
     isModification : function() {

@@ -1,7 +1,7 @@
 /**
  * @class Oskari.mapframework.bundle.mapmyplaces.event.MyPlacesVisualizationChangeEvent
- * 
- * 
+ *
+ *
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.event.MyPlacesVisualizationChangeEvent',
 /**

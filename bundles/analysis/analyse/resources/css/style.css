@@ -188,11 +188,22 @@ div.analyse-filter-popup-content {
     div.analyse-filter-popup-content div.analyse-filter:last-child {
       border-bottom: none;
       padding-bottom: 0; }
+  div.analyse-filter-popup-content div.analyse-filter-clicked-features div.clicked-features-title, div.analyse-filter-popup-content div.analyse-filter-clicked-features div.clicked-features-checkboxes {
+    display: inline-block; }
   div.analyse-filter-popup-content div.analyse-filter-clicked-features div.clicked-features-title {
+    float: left; }
+  div.analyse-filter-popup-content div.analyse-filter-clicked-features div.filter-by-geometry-checkbox, div.analyse-filter-popup-content div.analyse-filter-clicked-features div.clicked-features-checkbox {
+    margin-left: 25px;
+    margin-top: 5px; }
+  div.analyse-filter-popup-content div.analyse-filter-clicked-features div.filter-by-geometry-checkbox {
+    margin-bottom: 5px; }
+  div.analyse-filter-popup-content div.analyse-filter-clicked-features div.filter-by-geometry-radio {
     display: inline-block;
-    margin-right: 25px; }
+    margin-left: 50px !important; }
   div.analyse-filter-popup-content div.analyse-filter-clicked-features label {
     margin-left: 8px; }
+  div.analyse-filter-popup-content div.analyse-filter-clicked-features input:disabled + label {
+    opacity: 0.5; }
   div.analyse-filter-popup-content div.bbox-title, div.analyse-filter-popup-content div.bbox-radio {
     display: inline-block; }
   div.analyse-filter-popup-content div.bbox-title {
@@ -203,7 +214,8 @@ div.analyse-filter-popup-content {
       margin-top: 5px; }
 
 div.analyse-filter-popup-content div.filter-option {
-  padding-bottom: 10px; }
+  padding-bottom: 10px;
+  margin-top: 5px; }
   div.analyse-filter-popup-content div.filter-option div.manage-filter-option {
     display: inline-block;
     vertical-align: middle; }

@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamBlnElement',
         this._validator = validator;
     }, {
         __name: 'elf-license.ParamBlnElement',
-        __qname: 'Oskari.elf.license.elements.ParamBlnElement',       
+        __qname: 'Oskari.elf.license.elements.ParamBlnElement',
         /**
          * Get Qualified name
          * @method getQName

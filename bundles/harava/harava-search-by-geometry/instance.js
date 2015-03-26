@@ -24,7 +24,7 @@ function() {
 
 	/**
 	 * @method getName
-	 * @return {String} the name for the component 
+	 * @return {String} the name for the component
 	 */
 	getName : function() {
 		return this.__name;
@@ -75,26 +75,26 @@ function() {
     	if(me.started){
     		return;
     	}
-    	
+
     	me.started = true;
-    	
+
     	var sandbox = Oskari.$("sandbox");
         me.sandbox = sandbox;
-        
+
         sandbox.register(me);
         var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
         var locale = this.getLocalization('display');
         var searchPlugin = Oskari.clazz.create('Oskari.harava.bundle.mapmodule.plugin.HaravaDrawSearchGeometryPlugin', locale);
         mapModule.registerPlugin(searchPlugin);
         mapModule.startPlugin(searchPlugin);
-        
-    	// request    	
+
+    	// request
     	this.requestHandlers = {
     			StartGeometrySearchRequest : Oskari.clazz.create('Oskari.harava.bundle.mapmodule.request.StartGeometrySearchRequestHandler', sandbox, searchPlugin),
     			StopGeometrySearchRequest : Oskari.clazz.create('Oskari.harava.bundle.mapmodule.request.StopGeometrySearchRequestHandler', sandbox, searchPlugin),
     			ToggleVisibilityGeometrySearchRequest : Oskari.clazz.create('Oskari.harava.bundle.mapmodule.request.ToggleVisibilityGeometrySearchRequestHandler', sandbox, searchPlugin)
     	};
-    	
+
         sandbox.addRequestHandler('StartGeometrySearchRequest', this.requestHandlers.StartGeometrySearchRequest);
     	sandbox.addRequestHandler('StopGeometrySearchRequest', this.requestHandlers.StopGeometrySearchRequest);
     	sandbox.addRequestHandler('ToggleVisibilityGeometrySearchRequest', this.requestHandlers.ToggleVisibilityGeometrySearchRequest);
@@ -111,7 +111,7 @@ function() {
             sandbox.unregisterFromEventByName(this, p);
         }
 
-        // request handler cleanup 
+        // request handler cleanup
         sandbox.removeRequestHandler('StartGeometrySearchRequest', this.requestHandlers['StartGeometrySearchRequest']);
         sandbox.removeRequestHandler('StopGeometrySearchRequest', this.requestHandlers['StopGeometrySearchRequest']);
         sandbox.removeRequestHandler('ToggleVisibilityGeometrySearchRequest', this.requestHandlers['ToggleVisibilityGeometrySearchRequest']);
@@ -129,7 +129,7 @@ function() {
 	 * implements Module protocol init method - initializes request handlers
 	 */
 	init : function() {
-		
+
 	},
     /**
      * @method update
@@ -140,7 +140,7 @@ function() {
 }, {
 	/**
      * @property {String[]} protocol
-     * @static 
+     * @static
      */
     protocol : ['Oskari.bundle.BundleInstance']
 });

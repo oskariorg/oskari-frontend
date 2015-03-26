@@ -3,7 +3,7 @@
  *
  * MapLayer of type WMTS
  */
-Oskari.clazz.define('Oskari.mapframework.wmts.domain.WmtsLayer', 
+Oskari.clazz.define('Oskari.mapframework.wmts.domain.WmtsLayer',
 /**
  * @method create called automatically on construction
  * @static
@@ -118,7 +118,7 @@ function() {
     },
     /**
      * @method getWmtsUrls
-     * @return {String[]} 
+     * @return {String[]}
      * Gets array of layer wmts image urls
      */
     getWmtsUrls : function() {
@@ -167,7 +167,7 @@ function() {
      * @param {String[]} options for GFI output
      */
     setAvailableQueryFormats: function (options) {
-        
+
         this._availableQueryFormats = options || [];
     },
     /**

@@ -101,7 +101,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.Flyout',
                 sandbox = me.instance.getSandbox();
             flyout.empty();
 
-            // check if the user is logged in 
+            // check if the user is logged in
             if (!sandbox.getUser().isLoggedIn()) {
                 this.view = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.NotLoggedIn',
                     this.instance,

@@ -5,7 +5,7 @@
  * This enchancement adds all preselected layers on map and moves to start
  * position
  */
-Oskari.clazz.define('Oskari.mapframework.enhancement.mapfull.StartMapWithConfigurationsEnhancement', 
+Oskari.clazz.define('Oskari.mapframework.enhancement.mapfull.StartMapWithConfigurationsEnhancement',
 
 function(preSelectedJson, mapConfigurations) {
 

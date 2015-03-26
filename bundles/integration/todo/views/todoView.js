@@ -1,8 +1,8 @@
 define([
-    "_bundle/collections/todoCollection", 
-    "_bundle/views/itemView", 
-    "text!_bundle/templates/stats.html", 
-    "text!_bundle/templates/view.html"], 
+    "_bundle/collections/todoCollection",
+    "_bundle/views/itemView",
+    "text!_bundle/templates/stats.html",
+    "text!_bundle/templates/view.html"],
     function(TodoCollection, ItemView, StatsTemplate, ViewTemplate) {
     // Create our global collection of **Todos**.
     var Todos = new TodoCollection;
@@ -41,7 +41,7 @@ define([
 
             this.footer = this.$('footer');
             this.main = $('#main');
-            
+
             Todos.fetch();
         },
         // Re-rendering the App just means refreshing the statistics -- the rest

@@ -40,6 +40,9 @@ Oskari.clazz.define(
         /* optional options */
         me._options = options || {};
 
+        /* optional attributes */
+        me._attributes = {};
+
         /* modules can "tag" the layers with this for easier reference */
         me._metaType = null;
 
@@ -266,10 +269,14 @@ Oskari.clazz.define(
          */
         getName: function (lang) {
             if (this._name && typeof this._name === 'object') {
-                if (lang) {
-                    return this._name[lang];
+                if (!lang) {
+                    lang = Oskari.getLang();
                 }
-                return this._name[Oskari.getLang()];
+                var value = this._name[lang];
+                if(!value) {
+                    value = this._name[Oskari.getDefaultLanguage()];
+                }
+                return value;
             }
             return this._name;
         },
@@ -325,10 +332,14 @@ Oskari.clazz.define(
          */
         getOrganizationName: function (lang) {
             if (this._organizationName && typeof this._organizationName === 'object') {
-                if (lang) {
-                    return this._organizationName[lang];
+                if (!lang) {
+                    lang = Oskari.getLang();
                 }
-                return this._organizationName[Oskari.getLang()];
+                var value = this._organizationName[lang];
+                if(!value) {
+                    value = this._organizationName[Oskari.getDefaultLanguage()];
+                }
+                return value;
             }
             return this._organizationName;
         },
@@ -351,10 +362,14 @@ Oskari.clazz.define(
          */
         getInspireName: function (lang) {
             if (this._inspireName && typeof this._inspireName === 'object') {
-                if (lang) {
-                    return this._inspireName[lang];
+                if (!lang) {
+                    lang = Oskari.getLang();
                 }
-                return this._inspireName[Oskari.getLang()];
+                var value = this._inspireName[lang];
+                if(!value) {
+                    value = this._inspireName[Oskari.getDefaultLanguage()];
+                }
+                return value;
             }
             return this._inspireName;
         },
@@ -394,10 +409,14 @@ Oskari.clazz.define(
          */
         getDescription: function (lang) {
             if (this._description && typeof this._description === 'object') {
-                if (lang) {
-                    return this._description[lang];
+                if (!lang) {
+                    lang = Oskari.getLang();
                 }
-                return this._description[Oskari.getLang()];
+                var value = this._description[lang];
+                if(!value) {
+                    value = this._description[Oskari.getDefaultLanguage()];
+                }
+                return value;
             }
             return this._description;
         },
@@ -737,6 +756,10 @@ Oskari.clazz.define(
          * adds layer tool to tools
          */
         addTool: function (tool) {
+            if(!tool || this.getTool(tool.getName())) {
+                // check for duplicates and invalid param
+                return;
+            }
             this._tools.push(tool);
         },
 
@@ -761,7 +784,7 @@ Oskari.clazz.define(
                     }
                 }
             }
-            return tool;
+            return null;
         },
         /**
          * @method setLegendImage
@@ -934,6 +957,21 @@ Oskari.clazz.define(
         getOptions: function () {
             return this._options;
         },
+        /**
+         * @method getAttributes
+         * @return {Object} optional layer attributes like heatmap-parameters
+         */
+        getAttributes: function () {
+            return this._attributes || {};
+        },
+        /**
+         * @method setAttributes
+         * @param {Object} optional layer attributes like heatmap-parameters
+         */
+        setAttributes: function (param) {
+            this._attributes = param;
+        },
+
         /**
          * @method hasFeatureData
          * @return {Boolean} true if the layer has feature data

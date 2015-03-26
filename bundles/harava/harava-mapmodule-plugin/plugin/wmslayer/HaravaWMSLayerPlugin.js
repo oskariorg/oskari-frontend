@@ -38,7 +38,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
     },
     /**
      * @method hasUI
-     * @return {Boolean} 
+     * @return {Boolean}
      * This plugin doesn't have an UI so always returns false
      */
     hasUI : function() {
@@ -173,7 +173,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
     },
     /**
      * Handle _afterMapLayerAddEvent
-     * @private 
+     * @private
      * @param {Oskari.mapframework.event.common.AfterMapLayerAddEvent}
      *            event
      */
@@ -193,11 +193,11 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
         if(!layer.isLayerOfType('WMS')) {
             return;
         }
-        this._sandbox.printDebug(" [SnappyWMSLayer]  Creating " + 
-                                 layer.getId() + 
-                                 " KEEP ON TOP ? " + 
-                                 keepLayerOnTop + 
-                                 " BASE? " + 
+        this._sandbox.printDebug(" [SnappyWMSLayer]  Creating " +
+                                 layer.getId() +
+                                 " KEEP ON TOP ? " +
+                                 keepLayerOnTop +
+                                 " BASE? " +
                                  isBaseMap);
 
         var markerLayer = this._map.getLayersByName("Markers");
@@ -227,7 +227,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
                     .getSubLayers()[i].getMinScale());
 
                     var WMS = Oskari.$("SnappyWMSLayer");
-                    var openLayer = new WMS('basemap_' + layer.getSubLayers()[i].getId(), 
+                    var openLayer = new WMS('basemap_' + layer.getSubLayers()[i].getId(),
                                             layer.getSubLayers()[i].getWmsUrls(), {
                         layers : layer.getSubLayers()[i].getWmsName(),
                         transparent : true,
@@ -358,7 +358,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
             if(layer.getSubLayers().length > 0) {
                 for(var i = 0; i < layer.getSubLayers().length; i++) {
 		    var subtmp = layer.getSubLayers()[i];
-                    var remLayer = 
+                    var remLayer =
 			this._map.getLayersByName('basemap_' + subtmp.getId());
 		    if (remLayer && remLayer[0] && remLayer[0].destroy) {
 			remLayer[0].destroy();
@@ -376,8 +376,8 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
     },
     /**
      * @method getOLMapLayers
-     * Returns references to OpenLayers layer objects for requested layer or null if layer is not added to map. 
-     * @param {Oskari.mapframework.domain.WmsLayer} layer 
+     * Returns references to OpenLayers layer objects for requested layer or null if layer is not added to map.
+     * @param {Oskari.mapframework.domain.WmsLayer} layer
      * @return {OpenLayers.Layer[]}
      */
     getOLMapLayers : function(layer) {

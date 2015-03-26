@@ -104,7 +104,7 @@ Oskari.clazz.define(
                     me._hideResultsInPlugin(true);
                 });
 
-                // store data for later reuse 
+                // store data for later reuse
                 me.toolContentDivData = {
                     className: 'measureline',
                     title: me._title,

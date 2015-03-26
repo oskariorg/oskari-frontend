@@ -15,7 +15,7 @@ function(instance, localization) {
     this.loc = localization;
     this.tabsContainer = undefined;
     this.tabPanels = {};
-    
+
     this.linkTemplate = jQuery('<a href="JavaScript:void(0);"></a>');
     this.iconTemplate = jQuery('<div class="icon"></div>');
 }, {
@@ -39,7 +39,7 @@ function(instance, localization) {
     },
     initContainer: function() {
         this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabDropdownContainer', this.loc['nocategories']);
-    },  
+    },
     addTabContent : function(container) {
         var me = this;
         this.initTabContent();
@@ -52,7 +52,7 @@ function(instance, localization) {
     eventHandlers : {
         /**
          * @method MyPlaces.MyPlacesChangedEvent
-         * Updates the category tabs and grids inside them with current data 
+         * Updates the category tabs and grids inside them with current data
          */
         'MyPlaces.MyPlacesChangedEvent' : function(event) {
             var service = this.instance.sandbox.getService('Oskari.mapframework.bundle.publishedmyplaces.service.MyPlacesService');
@@ -67,7 +67,7 @@ function(instance, localization) {
                     return false;
                 };
             }
-*/ 
+*/
             var editLinkClosure = function(id) {
                 return function() {
                     var request = me.instance.sandbox.getRequestBuilder('MyPlaces.EditCategoryRequest')(id);
@@ -99,25 +99,25 @@ function(instance, localization) {
                 this._populatePlaces(id);
                 panel.getContainer().empty();
                 panel.grid.renderTo(panel.getContainer());
-                
+
                 var editLink = this.linkTemplate.clone();
                 editLink.addClass('categoryOp');
                 editLink.append(this.loc.editCategory);
                 editLink.bind('click', editLinkClosure(id));
                 panel.getContainer().append(editLink);
-                
+
                 var deleteLink = this.linkTemplate.clone();
                 deleteLink.addClass('categoryOp');
                 deleteLink.append(this.loc.deleteCategory);
                 deleteLink.bind('click', deletelinkClosure(id));
                 panel.getContainer().append(deleteLink);
-                
+
 /*
                 var publishLink = this.linkTemplate.clone();
                 publishLink.addClass('categoryOp');
                 var isPublic = categories[i].isPublic();
                 var publishIcon = this.iconTemplate.clone();
-                
+
                 if(isPublic) {
                     publishIcon.addClass('icon-public');
                     publishLink.attr('title', this.loc.publishCategory.publicTooltip);
@@ -133,7 +133,7 @@ function(instance, localization) {
             }
             this._removeObsoleteCategories();
         }
-    }, 
+    },
     /**
      * @method _showPlace
      * Moves the map so the given geometry is visible on viewport. Adds the myplaces
@@ -145,10 +145,10 @@ function(instance, localization) {
     _showPlace : function(geometry, categoryId) {
         // center map on selected place
         var center = geometry.getCentroid();
-        var mapmoveRequest = this.instance.sandbox.getRequestBuilder('MapMoveRequest')(center.x, center.y, geometry.getBounds(), false);         
+        var mapmoveRequest = this.instance.sandbox.getRequestBuilder('MapMoveRequest')(center.x, center.y, geometry.getBounds(), false);
         this.instance.sandbox.request(this.instance, mapmoveRequest);
         // add the myplaces layer to map
-        var layerId = 'myplaces_' + categoryId; 
+        var layerId = 'myplaces_' + categoryId;
         var layer = this.instance.sandbox.findMapLayerFromSelectedMapLayers(layerId);
         if(!layer) {
             var request = this.instance.sandbox.getRequestBuilder('AddMapLayerRequest')(layerId, true);
@@ -170,8 +170,8 @@ function(instance, localization) {
     },
     /**
      * @method _deletePlace
-     * Confirms delete for given place and deletes it if confirmed. Also shows 
-     * notification about cancel, deleted or error on delete. 
+     * Confirms delete for given place and deletes it if confirmed. Also shows
+     * notification about cancel, deleted or error on delete.
      * @param {Object} data grid data object for place
      * @private
      */
@@ -188,17 +188,17 @@ function(instance, localization) {
 			dialog.close();
             var service = sandbox.getService('Oskari.mapframework.bundle.publishedmyplaces.service.MyPlacesService');
             var callback = function(isSuccess) {
-            	
+
             	/* let's refresh map also if there */
             	var categoryId = data.categoryId;
-            	var layerId = 'myplaces_' + categoryId; 
+            	var layerId = 'myplaces_' + categoryId;
         		var layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
         		if(layer) {
         			var updateRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest')
         			var updateRequest = updateRequestBuilder(layerId, true);
-                    sandbox.request(me.instance, updateRequest);    
+                    sandbox.request(me.instance, updateRequest);
         		}
-            	
+
                 if(isSuccess) {
                     dialog.show(loc.title, loc.success);
                 }
@@ -209,7 +209,7 @@ function(instance, localization) {
             };
             service.deleteMyPlace(data.id, callback);
     	});
-    	var cancelBtn = dialog.createCloseButton(loc.btnCancel);    
+    	var cancelBtn = dialog.createCloseButton(loc.btnCancel);
         var confirmMsg = loc.confirm + '"' + data.name + '"' + '?';
     	dialog.show(loc.title, confirmMsg, [cancelBtn, okBtn]);
     	dialog.makeModal();
@@ -226,7 +226,7 @@ function(instance, localization) {
         var olClass = geometry.CLASS_NAME;
         if (('OpenLayers.Geometry.MultiPoint' === olClass)||('OpenLayers.Geometry.Point' === olClass)) {
         	return 'point';
-        } 
+        }
         else if (('OpenLayers.Geometry.MultiLineString' === olClass)||('OpenLayers.Geometry.LineString' === olClass)) {
         	return 'line';
         }
@@ -244,7 +244,7 @@ function(instance, localization) {
     _createCategoryTab : function(category) {
         var me = this;
         var id = category.getId();
-        
+
         var panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
         panel.setId(id);
         panel.setTitle(category.getName());
@@ -259,7 +259,7 @@ function(instance, localization) {
             var shape = me._getDrawModeFromGeometry(data.geometry);
             linkIcon.addClass('myplaces-' + shape);
             link.append(linkIcon);
-            
+
             link.append(name);
             link.bind('click', function() {
                 me._showPlace(data.geometry,data.categoryId);
@@ -310,7 +310,7 @@ function(instance, localization) {
         var gridModel = Oskari.clazz.create('Oskari.userinterface.component.GridModel');
         gridModel.setIdField('id');
         panel.grid.setDataModel(gridModel);
-        
+
         for(var i = 0; i < places.length; ++i) {
             // check if this category
             if(places[i].getCategoryID() != categoryId) {
@@ -353,7 +353,7 @@ function(instance, localization) {
      */
     _removeObsoleteCategories : function() {
             var service = this.instance.sandbox.getService('Oskari.mapframework.bundle.publishedmyplaces.service.MyPlacesService');
-        
+
             for(var categoryId in this.tabPanels) {
                 var category = service.findCategory(categoryId);
                 if(!category) {

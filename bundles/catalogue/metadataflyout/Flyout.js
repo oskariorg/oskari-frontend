@@ -129,7 +129,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
 
         /**
          * @method setContentState
-         
+
          * restore state from store
          */
         setContentState: function (contentState) {

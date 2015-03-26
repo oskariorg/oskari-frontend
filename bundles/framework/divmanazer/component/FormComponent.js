@@ -56,7 +56,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormComponent',
         /**
          * @method isEnabled
          *     Override if the component can actually be disabled.
-         * @return {Boolean} enabled 
+         * @return {Boolean} enabled
          */
         isEnabled: function () {
             'use strict';
@@ -99,7 +99,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormComponent',
 
         /**
          * @method setHandler
-         * @param {Function} handler 
+         * @param {Function} handler
          */
         setHandler: function (handler) {
             'use strict';
@@ -124,7 +124,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormComponent',
 
         /**
          * @method getName
-         * @return {String} name 
+         * @return {String} name
          */
         getName: function () {
             'use strict';
@@ -135,7 +135,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormComponent',
 
         /**
          * @method setName
-         * @param {String} name 
+         * @param {String} name
          */
         setName: function (name) {
             'use strict';
@@ -146,7 +146,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormComponent',
 
         /**
          * @method isRequired
-         * @return {Boolean} required 
+         * @return {Boolean} required
          */
         isRequired: function () {
             'use strict';
@@ -155,7 +155,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormComponent',
 
         /**
          * @method setRequired
-         * @param {Boolean} required 
+         * @param {Boolean} required
          */
         setRequired: function (required) {
             'use strict';
@@ -178,7 +178,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormComponent',
 
         /**
          * @method getTitle
-         * @return {String} title 
+         * @return {String} title
          */
         getTitle: function () {
             'use strict';
@@ -189,7 +189,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormComponent',
 
         /**
          * @method setTitle
-         * @param {String} title 
+         * @param {String} title
          */
         setTitle: function (title) {
             'use strict';
@@ -200,7 +200,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormComponent',
 
         /**
          * @method getTooltip
-         * @return {String} 
+         * @return {String}
          */
         getTooltip: function () {
             'use strict';
@@ -222,7 +222,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormComponent',
 
         /**
          * @method getValue
-         * @return {} 
+         * @return {}
          */
         getValue: function () {
             'use strict';

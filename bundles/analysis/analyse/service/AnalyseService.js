@@ -39,7 +39,7 @@ Oskari.clazz.define(
         /**
          * @public @method sendAnalyseData
          * Sends the data to backend for analysis.
-         *         
+         *
          * @param {Object} data the data to send
          * @param {Function} success the success callback
          * @param {Function} failure the failure callback

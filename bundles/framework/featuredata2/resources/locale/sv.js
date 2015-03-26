@@ -96,23 +96,23 @@ Oskari.registerLocalization({
                 "refreshButton": "Uppdatera filter",
                 "addFilter": "Tilllägg en ny filter",
                 "removeFilter": "Ta bort en filter",
-                "bbox": { 
-                    "title": "Filter på grund av kartvyn", 
-                    "on": "Ta med endast objekt som syns på kartvyn.", 
-                    "off": "Ta med alla objekt." 
+                "bbox": {
+                    "title": "Filter på grund av kartvyn",
+                    "on": "Ta med endast objekt som syns på kartvyn.",
+                    "off": "Ta med alla objekt."
                 },
-                "clickedFeatures": { 
-                    "title": "Filter på grund av objektval", 
-                    "label": "Ta med endast objekt utvalda på kartan." 
+                "clickedFeatures": {
+                    "title": "Filter på grund av objektval",
+                    "label": "Ta med endast objekt utvalda på kartan."
                 },
                 "values": {
                     "title": "Filter på grund av attribut",
-                    "placeholders": { 
-                        "case-sensitive": "Bokstavsstorlek verkar på val.", 
-                        "attribute": "Attribut", 
-                        "boolean": "Logisk operator", 
-                        "operator": "Operator", 
-                        "attribute-value": "Värde" 
+                    "placeholders": {
+                        "case-sensitive": "Bokstavsstorlek verkar på val.",
+                        "attribute": "Attribut",
+                        "boolean": "Logisk operator",
+                        "operator": "Operator",
+                        "attribute-value": "Värde"
                     },
                     "equals": "är lika med",
                     "like": "är ungefär lika med",
@@ -123,22 +123,22 @@ Oskari.registerLocalization({
                     "greaterThanOrEqualTo": "är större än eller lika med",
                     "lessThanOrEqualTo": "är mindre än eller lika med"
                 },
-                "aggregateAnalysisFilter": { 
-                    "addAggregateFilter": "Välj ett statistiskt mått.", 
-                    "aggregateValueSelectTitle": "Använd ett statistiskt mått på analys", 
-                    "selectAggregateAnalyse": "Välj en analys för statistiska mått", 
-                    "selectIndicator": "Välj en indikator", 
-                    "selectReadyButton": "Färdig", 
-                    "getAggregateAnalysisFailed": "Statistiska måttet kunde inte hitttas.", 
-                    "noAggregateAnalysisPopupTitle": "Analyslager kunde inte hittas.", 
-                    "noAggregateAnalysisPopupContent": "Du har gjort inga analys för statistiska mått. Du kan göra dem med analys funktion och efter det använda det med filter." 
+                "aggregateAnalysisFilter": {
+                    "addAggregateFilter": "Välj ett statistiskt mått.",
+                    "aggregateValueSelectTitle": "Använd ett statistiskt mått på analys",
+                    "selectAggregateAnalyse": "Välj en analys för statistiska mått",
+                    "selectIndicator": "Välj en indikator",
+                    "selectReadyButton": "Färdig",
+                    "getAggregateAnalysisFailed": "Statistiska måttet kunde inte hitttas.",
+                    "noAggregateAnalysisPopupTitle": "Analyslager kunde inte hittas.",
+                    "noAggregateAnalysisPopupContent": "Du har gjort inga analys för statistiska mått. Du kan göra dem med analys funktion och efter det använda det med filter."
                 },
-                "validation": { 
-                    "title": "Uppdatering av filter misslyckades beroende av följande orsaker: ", 
-                    "attribute_missing": "The attribut finns inte.", 
-                    "operator_missing": "Operator finns inte.", 
-                    "value_missing": "Värde finns inte.", 
-                    "boolean_operator_missing": "Logisk operator finns inte." 
+                "validation": {
+                    "title": "Uppdatering av filter misslyckades beroende av följande orsaker: ",
+                    "attribute_missing": "The attribut finns inte.",
+                    "operator_missing": "Operator finns inte.",
+                    "value_missing": "Värde finns inte.",
+                    "boolean_operator_missing": "Logisk operator finns inte."
                 }
             }
         }

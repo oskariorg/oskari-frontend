@@ -1,7 +1,7 @@
 /**
  * @class Oskari.mapframework.bundle.mapfull.request.MapWindowFullScreenRequest
  * Request enabling map window full screen mode or the normal view.
- * 
+ *
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */

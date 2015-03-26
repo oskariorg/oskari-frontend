@@ -62,7 +62,7 @@ if (!Function.prototype.bind) {
                     capabilities.groups.sort(sortFunction);
                     _.each(capabilities.groups, function (group) {
                         me._sortCapabilities(group);
-                    }); 
+                    });
                 }
             },
             _getPropertyComparatorFor: function (property) {
@@ -132,7 +132,7 @@ if (!Function.prototype.bind) {
                     if(!data) {
                         return {
                             tileMatrix : this.getOriginalMatrixSetData()
-                        };  
+                        };
                     }
                     else {
                         mapLayer.setOriginalMatrixSetData(data.tileMatrix);
@@ -175,13 +175,13 @@ if (!Function.prototype.bind) {
                 }
                 var found = false;
 
-                // check layers directly under this 
+                // check layers directly under this
                 _.each(capabilities.layers, function (layer) {
                     if (!found) {
                         found = me.setupCapabilities(layerName, layer, additionalId);
                     }
                 });
-                // if not found, check any groups under this 
+                // if not found, check any groups under this
                 if (!found && capabilities.groups) {
                     _.each(capabilities.groups, function (group) {
                         if (!found) {

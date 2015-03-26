@@ -1,6 +1,6 @@
 Oskari.clazz.define(
         'Oskari.lupapiste.bundle.myplaces2.request.StopDrawingRequestPluginHandler',
-        
+
         function(sandbox, drawPlugin) {
             this.sandbox = sandbox;
             this.drawPlugin = drawPlugin;

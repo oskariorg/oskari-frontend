@@ -264,7 +264,7 @@ Oskari.registerLocalization(
             },
             "filter": {
                 "title": "Filtrering",
-                "description": "Välj objekt från analyslager:",
+                "description": "Filtrering för analyslager:",
                 "clearButton": "Töm filter",
                 "refreshButton": "Uppdatera filter",
                 "addFilter": "Tilllägg en ny filter.",

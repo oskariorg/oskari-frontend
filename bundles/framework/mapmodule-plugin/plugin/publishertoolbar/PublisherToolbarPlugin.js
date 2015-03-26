@@ -263,7 +263,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                             show: false,
                             toolbarContainer: me.getElement().find('.' + me.toolbarContent),
                             closeBoxCallback: function () {
-                                // this is useless, I guess.  
+                                // this is useless, I guess.
                                 //view.prepareMode(false);
                             }
                         }
@@ -297,7 +297,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 return;
             }
 
-            // 
+            //
             var resourcesPath = me.getMapModule().getImageUrl(),
                 imgPath = resourcesPath + '/framework/mapmodule-plugin/resources/images/',
                 styledImg = imgPath + 'menu-' + style + '.png',

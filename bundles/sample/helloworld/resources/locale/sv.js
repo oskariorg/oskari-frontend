@@ -2,7 +2,7 @@ Oskari.registerLocalization({
     "lang" : "sv",
     "key" : "helloworld",
     "value" : {
-        "title" : "Hello World",        
+        "title" : "Hello World",
         "tile" : {
             "title" : "Hello World!"
         },

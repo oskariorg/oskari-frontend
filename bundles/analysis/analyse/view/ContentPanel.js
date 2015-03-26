@@ -429,7 +429,6 @@ Oskari.clazz.define(
                 if (this.featureLayer) {
                     this.featureLayer.addFeatures([feature]);
                 }
-
                 this.view.refreshAnalyseData(feature.id);
             }
         },
@@ -890,7 +889,7 @@ Oskari.clazz.define(
                 } else {
                     // pressed finished drawing, act like dblclick
                     this.drawPlugin.forceFinishDraw();
-                }   
+                }
             }
         },
 
@@ -1013,7 +1012,29 @@ Oskari.clazz.define(
         _createFeatureLayer: function (mapModule) {
             var layer = new OpenLayers.Layer.Vector('AnalyseFeatureLayer');
 
-            mapModule.getMap().addLayer(layer);
+            //add select possibility to temp layers
+            // requires highlight refactoring so is not in use yet
+            /*
+            var highlightControl = new OpenLayers.Control.SelectFeature(
+                    layer,
+                    {
+                        hover: true,
+                        highlightOnly: true,
+                        renderIntent: "temporary"
+                    });
+
+            var selectControl = new OpenLayers.Control.SelectFeature(
+                    layer,
+                    {
+                        clickout: true
+                    });
+
+            this.mapModule.getMap().addControl(highlightControl);
+            this.mapModule.getMap().addControl(selectControl);
+
+            highlightControl.activate();
+            selectControl.activate();
+            */
 
             return layer;
         },

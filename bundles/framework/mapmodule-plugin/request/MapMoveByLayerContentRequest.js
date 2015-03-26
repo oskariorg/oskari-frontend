@@ -41,4 +41,4 @@ function(mapLayerId) {
      * @static
      */
     'protocol' : ['Oskari.mapframework.request.Request']
-}); 
+});

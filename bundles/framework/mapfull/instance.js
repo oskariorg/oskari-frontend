@@ -424,7 +424,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
 
         /**
          * @private @method _createServices
-         * Setup services for this application. 
+         * Setup services for this application.
          * Mainly Oskari.mapframework.service.MapLayerService, but also hacks in
          * WMTS support and if conf.disableDevelopmentMode == 'true' -> disables
          * debug messaging and initializes

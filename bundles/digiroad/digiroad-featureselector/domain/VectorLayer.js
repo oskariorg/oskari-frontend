@@ -66,7 +66,7 @@ function() {
             this._strategyTypes = types;
         }
     }
-    
+
 }, {
     "extend": ["Oskari.mapframework.domain.AbstractLayer"]
 });

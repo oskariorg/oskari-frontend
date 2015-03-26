@@ -2,7 +2,7 @@
  * @class 'Oskari.mapframework.bundle.mapfull.request.MapWindowFullScreenRequestHandler
  * Tells the mapfull to toggle between normal and full screen mode.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.request.MapWindowFullScreenRequestHandler', 
+Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.request.MapWindowFullScreenRequestHandler',
 /**
  * @method create called automatically on construction
  * @static
@@ -13,7 +13,7 @@ function(mapfull) {
     this.mapfull = mapfull;
 }, {
     /**
-     * @method handleRequest 
+     * @method handleRequest
      * Toggles between the normal and the full screen mode of the map window.
      * @param {Oskari.mapframework.core.Core} core
      *      reference to the application core (reference sandbox core.getSandbox())

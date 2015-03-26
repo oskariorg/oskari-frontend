@@ -1,7 +1,7 @@
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.RealtimePlugin.event.RefreshLayerEvent
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.RealtimePlugin.event.RefreshLayerEvent', 
+Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.RealtimePlugin.event.RefreshLayerEvent',
 /**
  * @method create called automatically on construction
  * @static
@@ -13,7 +13,7 @@ function(_layer) {
     __name : "Realtime.RefreshLayerEvent",
     /**
      * @method getName
-     * @return {String} the name for the event 
+     * @return {String} the name for the event
      */
     getName : function() {
         return this.__name;

@@ -19,7 +19,7 @@
  * @TODO DELETE
  *
  */
-Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.service.MyPlacesWFSTStore', 
+Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.service.MyPlacesWFSTStore',
 
 /**
  * @method create called automatically on construction
@@ -92,7 +92,7 @@ function(url, uuid) {
         });
     },
 
-    
+
     /**
      * @method  _formatColorFromServer
      * @private
@@ -172,7 +172,7 @@ function(url, uuid) {
 	        }
             return;
         }
-            
+
         var list = [];
         for (var n = 0; n < feats.length; n++) {
             var f = feats[n];
@@ -315,7 +315,7 @@ function(url, uuid) {
         var fid = p.featureType + '.' + list[0];
         var me = this;
         var filter = this._createUuidFidFilter([fid]);
-        
+
         p.filterDelete(filter, {
         	callback: function(resp) {
         		me._handleDeleteMyPlacesResponse(resp, list, callback);
@@ -379,7 +379,7 @@ function(url, uuid) {
                     me._handleGetEditedFeaturesResponse(elementsLoaded, segmentsLoaded, cb);
                 }
             }
-        });        
+        });
     },
 
     /**
@@ -466,7 +466,7 @@ function(url, uuid) {
             cb(false);
         }
     },
-    
+
     /**
      * @method deleteEditedFeatures
      * Deletes a list of edited features from backend.
@@ -479,7 +479,7 @@ function(url, uuid) {
         var uuid = this.uuid;
         var fid = p.featureType + '.' + featIds[0];
         var filter = this._createUuidFidFilter([fid]);
-        
+
         p.filterDelete(filter, {
         	callback: function(resp) {
         		if(resp.error) {
@@ -490,7 +490,7 @@ function(url, uuid) {
         	}
         });
     },
-    
+
     /**
      * @method getFeedbackFeatures
      * Retrieves the feedback polygons from the backend and sends them to the callback function.
@@ -552,7 +552,7 @@ function(url, uuid) {
             }
         });
     },
-    
+
     /**
      * @method _handleCommitFeedbackResponse
      * Calls the callback function if the response was a succesful one.
@@ -566,7 +566,7 @@ function(url, uuid) {
             callback(false);
         }
     },
-    
+
     /**
      * @method deleteFeedback
      * Deletes a feedback feature from the backend.
@@ -578,7 +578,7 @@ function(url, uuid) {
         var uuid = this.uuid;
         var fid = p.featureType + '.' + featureId;
         var filter = this._createUuidFidFilter([fid]);
-        
+
         p.filterDelete(filter, {
             callback: function(resp) {
                 if(resp.error) {
@@ -589,7 +589,7 @@ function(url, uuid) {
             }
         });
     },
-    
+
     /**
      * @method getNewRestrictions
      * @param {Function} cb
@@ -617,7 +617,7 @@ function(url, uuid) {
             }
         })
     },
-    
+
     /**
      * @method commitNewRestriction
      * @param {Object} restriction an OpenLayers feature object
@@ -638,7 +638,7 @@ function(url, uuid) {
             }
         });
     },
-    
+
     /**
      * @method _createUuidFidFilter
      * Creates an OpenLayers.Logical filter combining feature id and the user id.

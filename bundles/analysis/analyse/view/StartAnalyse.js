@@ -316,6 +316,22 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             // Show the possible warning of exceeding the feature property count.
             me.showInfos();
         },
+
+        _getClickedFeaturesGeometries: function () {
+            var me = this,
+                sandbox = me.instance.getSandbox(),
+                geometries = [];
+                layers = sandbox.findAllSelectedMapLayers();
+
+            _.forEach(layers, function (layer) {
+                if (layer._clickedGeometries && layer._clickedGeometries.length > 0) {
+                    _.forEach(layer._clickedGeometries, function (clickedFeature) {
+                        geometries.push(clickedFeature[1]);
+                    });
+                }
+            });
+            return geometries;
+        },
         /**
          * @method setFilterJson
          * Sets the filter JSON object for a given layer.
@@ -898,7 +914,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 layersContainer = contentPanel.getLayersContainer(),
                 sandbox = me.instance.getSandbox(),
                 layers = sandbox.findAllSelectedMapLayers(),
-                features = contentPanel.getFeatures(),
                 selectedLayer = me._getSelectedMapLayer(),
                 selectedLayerAvailable,
                 templateOpt = me.template.option,
@@ -908,7 +923,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 contentOptionsMap,
                 contentOptionDivs;
 
-            layers = layers.concat(features);
+            this.features = contentPanel.getFeatures();
+            layers = layers.concat(this.features);
             // Add property types for WFS layer, if not there
             me._addPropertyTypes(layers);
 
@@ -2463,6 +2479,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     } else {
                         filterJson.featureIds = [];
                     }
+                    // If the user wanted to filter with other layers geometry,
+                    // get the geometry
+                    if (filterJson.filterByGeometryMethod) {
+                        filterJson.geometries = me._getClickedFeaturesGeometries();
+                        delete filterJson.bbox;
+                    }
                     data.filter1 = JSON.stringify(filterJson);
                 }
                 // Applies to clip as well, but we changed its method to
@@ -2641,6 +2663,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 filterIcon = tools.find('div.filter'),
                 popupContent,
                 prevJson,
+                selectedLayer,
+                isLayerSelected,
                 editDialog = Oskari.clazz.create(
                     'Oskari.userinterface.component.FilterDialog',
                     me.loc
@@ -2651,9 +2675,21 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
             filterIcon.unbind('click');
             filterIcon.bind('click', function () {
+                var clickedGeometries = me._getClickedFeaturesGeometries();
                 if (!me._filterPopups[layer.getId()]) {
                     prevJson = me.getFilterJson(layer.getId());
-                    editDialog.createFilterDialog(layer, prevJson);
+                    selectedLayer = me._getSelectedMapLayer();
+                    //Check weather the layer is selected of not
+                    if (parseInt(layerId) === selectedLayer._id) {
+                        layer["_isLayerSelected"] = true;
+                    } else {
+                        layer["_isLayerSelected"] = false;
+                    }
+                    // Check if there are selected features
+                    if (clickedGeometries.length > 0) {
+                        var clickedFeatures = true;
+                    }
+                    editDialog.createFilterDialog(layer, prevJson, null, clickedFeatures);
                     me._filterPopups[layer.getId()] = true;
                     me._userSetFilter[layer.getId()] = true;
                     // If there's already filter values for current layer, populate the dialog with them.
@@ -2897,7 +2933,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             } else {
                 this._enableAllParamsSelection();
             }
-            
+
         },
 
         _checkMethodSelection: function () {

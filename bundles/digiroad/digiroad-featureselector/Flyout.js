@@ -14,7 +14,7 @@ function(instance) {
     this.container = null;
     this.state = null;
     this.loc = instance.getLocalization("gridheaders");
-    
+
     this.grids = {};
     this.gridDataArrays = {};
     this.gridColumnArrays = {};
@@ -23,20 +23,20 @@ function(instance) {
 }, {
 	/**
 	 * @method getName
-	 * @return {String} the name for the component 
+	 * @return {String} the name for the component
 	 */
     getName: function() {
         return 'Oskari.digiroad.bundle.featureselector.Flyout';
     },
 	/**
 	 * @method setEl
-	 * @param {Object} el 
+	 * @param {Object} el
 	 * 		reference to the container in browser
-	 * @param {Number} width 
+	 * @param {Number} width
 	 * 		container size(?) - not used
-	 * @param {Number} height 
-	 * 		container size(?) - not used 
-	 * 
+	 * @param {Number} height
+	 * 		container size(?) - not used
+	 *
 	 * Interface method implementation
 	 */
     setEl: function(el, width, height) {
@@ -46,53 +46,53 @@ function(instance) {
 		}
     },
 	/**
-	 * @method startPlugin 
-	 * 
-	 * Interface method implementation, assigns the HTML templates that will be used to create the UI 
+	 * @method startPlugin
+	 *
+	 * Interface method implementation, assigns the HTML templates that will be used to create the UI
 	 */
     startPlugin: function() {
 		var me = this;
 		this.template = jQuery('<div></div>');
     },
 	/**
-	 * @method stopPlugin 
-	 * 
-	 * Interface method implementation, does nothing atm 
+	 * @method stopPlugin
+	 *
+	 * Interface method implementation, does nothing atm
 	 */
 	stopPlugin: function() {
 
 	},
 	/**
-	 * @method getTitle 
-	 * @return {String} localized text for the title of the flyout 
+	 * @method getTitle
+	 * @return {String} localized text for the title of the flyout
 	 */
 	getTitle: function() {
 		return this.instance.getLocalization('title');
 	},
 	/**
-	 * @method getDescription 
-	 * @return {String} localized text for the description of the flyout 
+	 * @method getDescription
+	 * @return {String} localized text for the description of the flyout
 	 */
 	getDescription: function() {
 		return this.instance.getLocalization('desc');
 	},
 	/**
-	 * @method getOptions 
-	 * Interface method implementation, does nothing atm 
+	 * @method getOptions
+	 * Interface method implementation, does nothing atm
 	 */
 	getOptions: function() {
 
 	},
 	/**
-	 * @method setState 
+	 * @method setState
 	 * @param {Object} state
 	 * 		state that this component should use
-	 * Interface method implementation, does nothing atm 
+	 * Interface method implementation, does nothing atm
 	 */
 	setState: function(state) {
 		this.state = state;
 	},
-	
+
 	/**
 	 * @method createUI
 	 * Creates the UI for a fresh start
@@ -100,7 +100,7 @@ function(instance) {
     createUI: function() {
         var me = this;
         var sandbox = me.instance.getSandbox();
-        
+
 		// clear container
 		var cel = jQuery(this.container);
 		cel.empty();
@@ -127,7 +127,7 @@ function(instance) {
 	    if(flyoutContainer.hasClass('oskari-closed')) {
 	        flyoutContainer.removeClass('oskari-closed').addClass('featureselector-closed');
 	    }
-	    
+
     	for(var i = 0; i < features.length; ++i) {
             f = {};
             feature = features[i];
@@ -196,7 +196,7 @@ function(instance) {
                 "name": "Tunnus",
                 "field": this.instance.targetLayers[layerName].objectId
             }];
-        
+
         var gridHeaders = objectId.concat(gridHeadersBase);
 
         grid = this._createGrid(layerName, domContainer, gridData, gridHeaders);
@@ -280,7 +280,7 @@ function(instance) {
                 oid = dataArray[row][me.instance.targetLayers[layerName].objectId],
                 feature = me.instance.features[oid],
                 columnId = grid.getColumns()[cell].id;
-            
+
             var eventBuilder = sandbox.getEventBuilder("FeatureSelector.FeatureHighlightEvent");
             if(eventBuilder) {
                 var event = eventBuilder(layerName, feature, highlightType);
@@ -322,7 +322,7 @@ function(instance) {
 
         for(var i = 0; i < header.length; ++i) {
             var col = header[i];
-            
+
             switch(col.editor) {
 	            case "integer":
 	                col.editor = Slick.Editors.Integer;
@@ -343,7 +343,7 @@ function(instance) {
 
         return header;
     },
-    
+
     /**
      * @method _getFormatterForHeader
      * Returns a SlickGrid formatter and options for SelectOption.
@@ -367,7 +367,7 @@ function(instance) {
 }, {
 	/**
 	 * @property {String[]} protocol
-	 * @static 
+	 * @static
 	 */
     'protocol' : ['Oskari.userinterface.Flyout']
 });

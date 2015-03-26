@@ -374,7 +374,7 @@ Oskari.clazz.define("Oskari.harava.bundle.MapQuestionsBundleInstance",
                 sandbox.unregisterFromEventByName(this, p);
             }
 
-            // request handler cleanup 
+            // request handler cleanup
             sandbox.removeRequestHandler('ShowQuestionStepRequest', this.requestHandlers['showQuestionStepRequest']);
             sandbox.removeRequestHandler('ShowQuestionToolsRequest', this.requestHandlers['showQuestionToolsRequestHandler']);
             sandbox.removeRequestHandler('HideQuestionToolsRequest', this.requestHandlers['hideQuestionToolsRequestHandler']);

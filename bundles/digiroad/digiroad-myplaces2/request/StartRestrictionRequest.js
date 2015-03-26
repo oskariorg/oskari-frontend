@@ -1,4 +1,4 @@
-Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.request.StartRestrictionRequest', 
+Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.request.StartRestrictionRequest',
 
 function(config) {
 

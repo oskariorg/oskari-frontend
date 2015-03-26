@@ -14,7 +14,7 @@ function(getInfoPlugin) {
     this.getInfoPlugin = getInfoPlugin;
 }, {
     /**
-     * @method handleRequest 
+     * @method handleRequest
      * Handles requests regarding GFI functionality.
      * @param {Oskari.mapframework.core.Core} core
      *      reference to the application core (reference sandbox core.getSandbox())

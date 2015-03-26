@@ -1,6 +1,6 @@
 /**
  * @class Oskari.mapframework.bundle.parcel.view.ParcelPrintForm1
- * 
+ *
  * Shows a form for my place. For requests for name and description.
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.parcel.view.ParcelPrintForm1",
@@ -14,7 +14,7 @@ function(instance) {
     this.initialValues = undefined;
     this._formUi = undefined;
     this.isEnabled = false;
-    
+
     var loc = instance.getLocalization('parcelprintform1');
 
     this.template = jQuery('<div class="parcelprintform1">' +
@@ -127,7 +127,7 @@ function(instance) {
         },
             /**
      * @method getForm
-     * @return {jQuery} jquery reference for the form 
+     * @return {jQuery} jquery reference for the form
      */
     getForm : function() {
         var ui = this.template.clone();
@@ -149,11 +149,11 @@ function(instance) {
     /**
      * @method getValues
      * Returns form values as an object
-     * @return {Object} 
+     * @return {Object}
      */
     getValues : function() {
         var values = {};
-        // infobox will make us lose our reference so search 
+        // infobox will make us lose our reference so search
         // from document using the form-class
         var onScreenForm = this._getOnScreenForm();
 
@@ -231,13 +231,13 @@ function(instance) {
     /**
      * @method setValues
      * Sets form values from object.
-     * @param {Object} data place data as formatted in #getValues() 
+     * @param {Object} data place data as formatted in #getValues()
      */
     setValues : function(data) {
-        // infobox will make us lose our reference so search 
+        // infobox will make us lose our reference so search
         // from document using the form-class
         var onScreenForm = this._getOnScreenForm();
-        
+
         if(onScreenForm.length > 0) {
             // found form on screen
             onScreenForm.find('input[name=placename]').val(data.place.name);
@@ -249,7 +249,7 @@ function(instance) {
              onScreenForm.find('#area_property_id').text(data.place.area);
              onScreenForm.find('input[name=reporter]').val(data.place.reporter);
         }
-        
+
         this.initialValues = data;
     },
         enableDisableFields : function() {
@@ -257,11 +257,11 @@ function(instance) {
         },
     /**
      * @method _getOnScreenForm
-     * Returns reference to the on screen version shown by OpenLayers 
+     * Returns reference to the on screen version shown by OpenLayers
      * @private
      */
     _getOnScreenForm : function() {
-        // unbind live so 
+        // unbind live so
         return jQuery('div.parcelprintform1');
     },
         /**

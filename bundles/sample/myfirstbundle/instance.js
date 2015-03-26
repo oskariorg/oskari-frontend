@@ -1,9 +1,9 @@
 /**
  * @class Oskari.sample.bundle.myfirstbundle.SimpleHelloWorldBundleInstance
- * 
- * This bundle demonstrates a simplest possible bundle 
+ *
+ * This bundle demonstrates a simplest possible bundle
  * that will just alert a Hello World message on startup.
- * 
+ *
  * Add this to startupsequence to get this bundle started
  {
             title : 'myfirstbundle',

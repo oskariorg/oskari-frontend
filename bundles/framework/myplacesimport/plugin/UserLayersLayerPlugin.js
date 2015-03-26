@@ -23,7 +23,7 @@ Oskari.clazz.define(
         /**
          * Interface method for the plugin protocol.
          * Registers self as a layerPlugin to mapmodule with mapmodule.setLayerPlugin()
-         * 
+         *
          * @method register
          */
         register: function () {
@@ -33,7 +33,7 @@ Oskari.clazz.define(
         /**
          * Interface method for the plugin protocol
          * Unregisters self from mapmodules layerPlugins
-         * 
+         *
          * @method unregister
          */
         unregister: function () {
@@ -95,7 +95,7 @@ Oskari.clazz.define(
 
         /**
          * Adds given user layers to map if of type 'userlayer'
-         * 
+         *
          * @method preselectLayers
          * @param {Oskari.mapframework.domain.WfsLayer[]} layers
          */
@@ -167,7 +167,7 @@ Oskari.clazz.define(
 
         /**
          * Make use of the layer bounding box information to set appropriate map view
-         * 
+         *
          * @method handleBounds
          * @private
          * @param {Oskari.mapframework.bundle.myplacesimport.domain.UserLayer}
@@ -243,7 +243,7 @@ Oskari.clazz.define(
 
         /**
          * Removes the OpenLayers layer from the map
-         * 
+         *
          * @method _removeMapLayerFromMap
          * @private
          * @param {Oskari.mapframework.bundle.myplacesimport.domain.UserLayer} layer
@@ -257,7 +257,7 @@ Oskari.clazz.define(
 
         /**
          * Changes the OpenLayers layer opacity.
-         * 
+         *
          * @method _changeMapLayerOpacity
          * @private
          * @param {Oskari.mapframework.bundle.myplacesimport.domain.UserLayer} layer
@@ -270,7 +270,7 @@ Oskari.clazz.define(
 
         /**
          * Changes the OpenLayers layer visibility.
-         * 
+         *
          * @method _changeMapLayerVisibility
          * @private
          * @param {Oskari.mapframework.bundle.myplacesimport.domain.UserLayer}
@@ -283,7 +283,7 @@ Oskari.clazz.define(
 
         /**
          * Executes a callback on an OpenLayers layer if it's found on the map.
-         * 
+         *
          * @method _modifyOL
          * @private
          * @param {Oskari.mapframework.bundle.myplacesimport.domain.UserLayer} layer
@@ -299,7 +299,7 @@ Oskari.clazz.define(
         /**
          * Returns references to OpenLayers layer objects for requested layer
          * or null if layer is not added to map.
-         * 
+         *
          * @method getOLMapLayers
          * @param {Oskari.mapframework.bundle.myplacesimport.domain.UserLayer} layer
          * @return {OpenLayers.Layer[]}

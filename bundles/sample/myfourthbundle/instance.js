@@ -1,7 +1,7 @@
 /**
  * @class Oskari.sample.bundle.myfourthbundle.ToolbarRequestBundleInstance
- * 
- * This bundle demonstrates how bundle can react to events by 
+ *
+ * This bundle demonstrates how bundle can react to events by
  * registering itself to sandbox as a module.
  *
  * Add this to startupsequence to get this bundle started
@@ -46,7 +46,7 @@ function() {
     getName : function() {
         return this.__name;
     },
-        
+
     /**
      * @method update
      * BundleInstance protocol method
@@ -59,16 +59,16 @@ function() {
      */
     start : function() {
         var me = this;
-        
+
         // Should this not come as a param?
         	var conf = me.conf ;
 		var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
 		var sandbox = Oskari.getSandbox(sandboxName);
         this.sandbox = sandbox;
-        
+
         // register to sandbox as a module
         sandbox.register(me);
-        
+
         var reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
         if(reqBuilder) {
             // got builder -> toolbar is loaded
@@ -82,7 +82,7 @@ function() {
             }));
         }
     },
-    
+
     /**
      * @method init
      * Module protocol method
@@ -91,14 +91,14 @@ function() {
         // headless module so nothing to return
         return null;
     },
-    
+
     /**
      * @method onEvent
      * Module protocol method/Event dispatch
      */
     onEvent : function(event) {
     },
-    
+
     /**
      * @method stop
      * BundleInstance protocol method
@@ -114,7 +114,7 @@ function() {
      * Convenience method to call from Tile and Flyout
      * Returns JSON presentation of bundles localization data for current language.
      * If key-parameter is not given, returns the whole localization data.
-     * 
+     *
      * @param {String} key (optional) if given, returns the value for key
      * @return {String/Object} returns single localization string or
      *      JSON object for complete data depending on localization
@@ -130,6 +130,6 @@ function() {
         return this._localization;
     }
 }, {
-    protocol : [ 'Oskari.bundle.BundleInstance', 
+    protocol : [ 'Oskari.bundle.BundleInstance',
                  'Oskari.mapframework.module.Module']
 });

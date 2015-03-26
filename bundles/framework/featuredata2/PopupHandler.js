@@ -96,7 +96,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
 
             // Safety check at not show more than one popup
             if(jQuery('.tools_selection').is(':visible')) {
-                return;   
+                return;
             }
 
             // close popup so we can update the selection geometry

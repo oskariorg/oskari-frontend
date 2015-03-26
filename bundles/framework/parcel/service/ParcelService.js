@@ -1,6 +1,6 @@
 /**
  * @class Oskari.mapframework.bundle.parcel.service.ParcelService
- * 
+ *
  * Service object that handles transaction related function calls and delegates the
  * WFST actions to {Oskari.mapframework.bundle.parcel.service.ParcelWfst}.
  * Plot actions to {Oskari.mapframework.bundle.parcel.service.ParcelPlot}.
@@ -22,14 +22,14 @@ function(instance) {
     this.kvp_uid = '12345'; // TODO: get that from url params or via sandbox.user
 }, {
     /**
-     * @return {String} Serive class name. 
+     * @return {String} Serive class name.
      */
     getQName : function() {
         return "Oskari.mapframework.bundle.parcel.service.ParcelService";
     },
 
     /**
-     * @return {String} Serive name. 
+     * @return {String} Serive name.
      */
     getName : function() {
         return "ParcelService";

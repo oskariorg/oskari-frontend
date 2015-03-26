@@ -26,7 +26,7 @@ function() {
 
 	/**
 	 * @method getName
-	 * @return {String} the name for the component 
+	 * @return {String} the name for the component
 	 */
 	getName : function() {
 		return this.__name;
@@ -161,7 +161,7 @@ function() {
             popups : []
         };
         var popups = this.popupPlugin.getPopups();
-        
+
         for(var id in popups) {
             var popup = popups[id];
             var data = {
@@ -172,13 +172,13 @@ function() {
             };
             state.popups.push(data);
         }
-        
+
         return state;
     }
 }, {
 	/**
 	 * @property {String[]} protocol
-	 * @static 
+	 * @static
 	 */
 	protocol : ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
 });

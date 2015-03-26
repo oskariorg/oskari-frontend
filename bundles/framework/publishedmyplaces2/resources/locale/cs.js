@@ -159,11 +159,11 @@ Oskari.registerLocalization({
         "deleted": "Mapová vrstva smazána"
       },
       "categoryToPublic": {
-        "title": "Změnit mapovou vrstvu na veřejnou",        
+        "title": "Změnit mapovou vrstvu na veřejnou",
         "message": "Měníte mapovou vrstvu {0} na veřejnou. Můžete sdílet odkazy na veřejnou mapovou vrstvu s jinými uživateli internetu nebo vložit mapovou vrstvu do mapového okna na jiné webové stránce. Ostatní uživatelé tuto mapovou vrstvu uvidí také."
       },
       "categoryToPrivate": {
-        "title": "Změnit mapovou vrstvu na soukromou",        
+        "title": "Změnit mapovou vrstvu na soukromou",
         "message": "Měníte mapovou vrstvu {0} na soukromou. Pak nebude možné ji sdílet s jinými uživateli nebo ji vkládat do jiné webové stránky. Ostatní uživatelé tuto mapovou vrstvu již neuvidí."
       },
       "error": {

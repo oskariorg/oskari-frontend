@@ -106,11 +106,11 @@ Oskari.registerLocalization({
         "deleted": "Map layer deleted"
       },
       "categoryToPublic": {
-        "title": "Make map layer public",        
+        "title": "Make map layer public",
         "message": "You are making the map layer \"{0}\" public. You can share links to a public map layer with other internet users or embed the map layer as a map window on another website. Other users can also view the map layer in Paikkatietoikkuna."
       },
       "categoryToPrivate": {
-        "title": "Make map layer private",        
+        "title": "Make map layer private",
         "message": "You are making the map layer \"{0}\" private. After this it will no longer be possible to share it with other users or embed it on another website. Other users can no longer view the map layer in Paikkatietoikkuna."
       },
       "error": {

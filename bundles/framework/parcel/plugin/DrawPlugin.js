@@ -418,16 +418,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
                 this._updateLayerOrder();
             });
 
-            // Todo: styles from file
-            /* OpenLayers.Request.GET({
-                url: "/Oskari/resources/parcel/sld/parcel.xml",
-                success: function(req) {
-                    var format = new OpenLayers.Format.SLD();
-                    me.sld = format.read(req.responseXML || req.responseText);
-                }
-            });
-            */
-
             this.splitter = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.split.ParcelSplit', this);
             this.splitter.init();
         },
@@ -978,17 +968,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
             var event = this._sandbox.getEventBuilder('ParcelInfo.ParcelLayerRegisterEvent')([this.getDrawingLayer(), this.getEditLayer()]);
             this._sandbox.notifyAll(event);
 
-            for (i = 0; i < data.length; i++) {
-                switch (data[i].geom_type) {
-                case 'selectedpartparcel':
+            _.each(data, function(item) {
+                if('selectedpartparcel' === item.geom_type) {
                     selectedFeature = partInd;
-                    /* falls through */
-                case 'partparcel':
-                    newPolygons.push(data[i].geometry);
-                    partInd = partInd + 1;
-                    break;
                 }
-            }
+                if('partparcel' === item.geom_type) {
+                    newPolygons.push(item.geometry);
+                    partInd++;
+                }
+            });
             var centroid = newPolygons[selectedFeature].getCentroid(),
                 isInside = newPolygons[selectedFeature].containsPoint(centroid);
             this.hotspot = {

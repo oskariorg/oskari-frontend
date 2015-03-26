@@ -23,10 +23,54 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
             filterContent: '<div class="analyse-filter-popup-content">' +
                 //'<div class="analyse-filter filter-title"></div>' +
                 '</div>',
-            filterContentBBOX: '<div class="analyse-filter analyse-filter-popup-bbox">' + '<div class="bbox-title"></div>' + '<div class="bbox-radio">' + '<div class="bbox-on">' + '<input id="analyse-filter-bbox-on" type="radio" name="filter-bbox" value="true" />' + '<label for="analyse-filter-bbox-on"></label>' + '</div>' + '<div class="bbox-off">' + '<input id="analyse-filter-bbox-off" type="radio" name="filter-bbox" value="false" checked="checked" />' + '<label for="analyse-filter-bbox-off"></label>' + '</div>' + '</div>' + '</div>',
-            filterClickedFeatures: '<div class="analyse-filter analyse-filter-clicked-features">' + '<div class="clicked-features-title"></div>' + '<input type="checkbox" name="analyse-clicked-features" id="analyse-clicked-features" />' + '<label for="analyse-clicked-features"></label>' + '</div>',
+            filterContentBBOX: '<div class="analyse-filter analyse-filter-popup-bbox">' +
+                                    '<div class="bbox-title"></div>' +
+                                    '<div class="bbox-radio">' +
+                                        '<div class="bbox-on">' +
+                                            '<input id="analyse-filter-bbox-on" type="radio" name="filter-bbox" value="true" />' +
+                                            '<label for="analyse-filter-bbox-on"></label>' +
+                                        '</div>' +
+                                        '<div class="bbox-off">' +
+                                            '<input id="analyse-filter-bbox-off" type="radio" name="filter-bbox" value="false" checked="checked" />' +
+                                            '<label for="analyse-filter-bbox-off"></label>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</div>',
+            filterClickedFeatures: '<div class="analyse-filter analyse-filter-clicked-features">' +
+                                        '<div class="clicked-features-title"></div>' +
+                                        '<div class="clicked-features-checkboxes">' +
+                                            '<div class="clicked-features-checkbox">' +
+                                                '<input type="checkbox" name="analyse-clicked-features" id="analyse-clicked-features" />' +
+                                                '<label id="filter-clicked-features" for="analyse-clicked-features"></label>' +
+                                            '</div>' +
+                                            '<div class="filter-by-geometry-checkbox">' +
+                                                '<input type="checkbox" name="analyse-filter-by-geometry" id="analyse-filter-by-geometry" />' +
+                                                '<label id="filter-by-geometry-label" for="analyse-filter-by-geometry"></label>' +
+                                            '</div>' +
+                                            '<div class="filter-by-geometry-radio">' + 
+                                                '<div class="filter-by-geometry-intersect">' + 
+                                                    '<input id="analyse-filter-by-geometry-intersect" type="radio" name="filter-by-geometry" value="Intersects" disabled/>' + 
+                                                    '<label id="filter-by-geometry-intersect-label" for="analyse-filter-by-geometry-intersect"></label>' + 
+                                                '</div>' + 
+                                                '<div class="filter-by-geometry-contains">' + 
+                                                    '<input id="analyse-filter-by-geometry-contains" type="radio" name="filter-by-geometry" value="Within" disabled/>' + 
+                                                    '<label id="filter-by-geometry-contains-label" for="analyse-filter-by-geometry-contains"></label>' + 
+                                                '</div>' + 
+                                            '</div>' + 
+                                        '</div>' +
+                                    '</div>',
             filterContentValues: '<div class="analyse-filter analyse-filter-popup-values">' + '<div class="values-title"></div>' + '</div>',
-            filterContentOption: '<div class="filter-option">' + '<input name="case-sensitive" type="checkbox"></input>' + '<select class="attribute"></select>' + '<select class="operator"></select>' + '<input name="attribute-value" class="filter-input-value" type="text"></input>' + '</div>',
+            filterContentOption: '<div>' +
+                                    '<div class="case-sensitive-filtering">' +
+                                        '<input name="case-sensitive" type="checkbox"></input>' +
+                                        '<label for="case-sensitive">Ota huomioon kirjainkoko</label>' +
+                                    '</div>' +
+                                    '<div class="filter-option">' +
+                                        '<select class="attribute"></select>' +
+                                        '<select class="operator"></select>' +
+                                        '<input name="attribute-value" class="filter-input-value" type="text"></input>' +
+                                    '</div>' +
+                                '</div>',
             manageFilterOption: '<div class="manage-filter-option">' + '<div class="add-filter-option">+</div>' + '<div class="remove-filter-option">-</div>' + '</div>',
             filterBooleanOption: '<select class="boolean"></select>',
             option: '<option></option>'
@@ -43,7 +87,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
          * @method _createFilterDialog
          * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
          */
-        createFilterDialog: function (layer, prevJson,  cb) {
+        createFilterDialog: function (layer, prevJson,  cb, clickedFeatures) {
             var me = this,
                 closeButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
                 // Clears the filter values
@@ -67,10 +111,10 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
             // Create filter dialog content
             layerAttributes = me._layer.getFilterJson();
             if (layerAttributes === null) {
-                me._loadWFSLayerPropertiesAndTypes(me._layer.getId(), prevJson, cb);
+                me._loadWFSLayerPropertiesAndTypes(me._layer.getId(), prevJson, cb, clickedFeatures);
                 return;
             }
-            popupContent = this.getFilterDialogContent(me._layer);
+            popupContent = this.getFilterDialogContent(me._layer, clickedFeatures);
             popupTitle = this.loc.filter.description + " " + me._layer.getName();
 
             // Create the actual popup dialog
@@ -89,7 +133,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
             clearButton.addClass('analyse-clear-filter');
             clearButton.setHandler(function () {
                 // Sets the dialog content to its original state
-                me.popup.setContent(me.getFilterDialogContent(me._layer));
+                me.popup.setContent(me.getFilterDialogContent(me._layer, clickedFeatures));
                 if (me._clearButtonHandler) {
                     me._clearButtonHandler.apply();
                 }
@@ -136,10 +180,11 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
          * @method getFilterDialogContent
          * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
          */
-        getFilterDialogContent: function (layer) {
+        getFilterDialogContent: function (layer, clickedFeatures) {
             var content = jQuery(this.__filterTemplates.filterContent),
                 bboxSelection = jQuery(this.__filterTemplates.filterContentBBOX),
                 clickedFeaturesSelection = jQuery(this.__filterTemplates.filterClickedFeatures),
+                byGeometrySelection = jQuery(this.__filterTemplates.filterByGeometry),
                 valuesSelection = jQuery(this.__filterTemplates.filterContentValues),
                 filterOption;
 
@@ -154,8 +199,36 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
             // Filter clicked features
             if (typeof this.fixedOptions.clickedFeaturesSelection === "undefined") {
                 clickedFeaturesSelection.find('div.clicked-features-title').html('<h4>' + this.loc.filter.clickedFeatures.title + '</h4>');
-                clickedFeaturesSelection.find('label').html(this.loc.filter.clickedFeatures.label);
+                clickedFeaturesSelection.find('label').html(this.loc.filter.clickedFeatures.clickedFeaturesLabel);
+                clickedFeaturesSelection.find('#filter-by-geometry-label').html(this.loc.filter.clickedFeatures.filterByGeometryLabel);
+                clickedFeaturesSelection.find('#filter-by-geometry-intersect-label').html(this.loc.filter.clickedFeatures.filterByGeometryIntersect);
+                clickedFeaturesSelection.find('#filter-by-geometry-contains-label').html(this.loc.filter.clickedFeatures.filterByGeometryContains);
                 content.append(clickedFeaturesSelection);
+
+                //Check conditions for clicked features
+
+                // jos ei ole ollenkaan valittuja kohteita
+                if (!clickedFeatures) {
+                    clickedFeaturesSelection.find('#analyse-clicked-features').prop({'disabled': true, 'checked': false});
+                    clickedFeaturesSelection.find('#analyse-filter-by-geometry').prop({'disabled': true, 'checked': false});
+                } else if (layer._isLayerSelected === true && layer._clickedFeatureIds.length > 0) {
+                    clickedFeaturesSelection.find('#analyse-clicked-features').prop('checked', true);
+                    clickedFeaturesSelection.find('#analyse-filter-by-geometry').prop({'disabled': true, 'checked': false});
+                } else if (layer._clickedFeatureIds.length === 0) {
+                    clickedFeaturesSelection.find('#analyse-clicked-features').prop({'disabled': true, 'checked': false});
+                } else {
+                    clickedFeaturesSelection.find('#analyse-clicked-features').prop({'disabled': true, 'checked': false});
+                    clickedFeaturesSelection.find('#analyse-filter-by-geometry').prop({'disabled': true, 'checked': false});
+                }
+
+                clickedFeaturesSelection.find('#analyse-filter-by-geometry').on("click", function () {
+                    if (clickedFeaturesSelection.find('#analyse-filter-by-geometry').prop('checked') === true) {
+                        clickedFeaturesSelection.find('input[name="filter-by-geometry"]').prop('disabled', false);
+                    } else {
+                        clickedFeaturesSelection.find('input[name="filter-by-geometry"]').prop('disabled', true);
+                        clickedFeaturesSelection.find('input[name="filter-by-geometry"]').prop('checked', false);
+                    }
+                });
             }
 
             // Filter values selection
@@ -194,10 +267,6 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                 // BBOX disabled
                 bboxDiv.find('div.bbox-off').find('input[name=filter-bbox]').attr('checked', 'checked');
                 bboxDiv.find('div.bbox-on').find('input[name=filter-bbox]').removeAttr('checked');
-            }
-
-            if (values.featureIds) {
-                clickedFeaturesDiv.find('input[name=analyse-clicked-features]').attr('checked', 'checked');
             }
 
             if (values.filters && values.filters.length) {
@@ -310,7 +379,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
 
             // Add link to filter with aggregate values if there are any
             if (this.fixedOptions.addLinkToAggregateValues === true) {
-                filterOption
+                filterOption.find('.filter-option')
                     .addClass("filter-option-aggregate")
                     .find('input[name=attribute-value]')
                     .wrap('<div class="attribute-value-block"></div>')
@@ -318,7 +387,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
             }
 
             // Add the buttons to remove this filter and to add a new filter.
-            filterOption.append(this._addManageFilterOption(layer));
+            filterOption.find('.filter-option').append(this._addManageFilterOption(layer));
 
             return filterOption;
         },
@@ -413,7 +482,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                 prevSibling = parent.prev('div.filter-option'),
                 manageFilterOption = this._addManageFilterOption(layer);
 
-            // Replace the boolean operator select with the 
+            // Replace the boolean operator select with the
             prevSibling.find('select.boolean').replaceWith(manageFilterOption);
             // Unless this is the last filter option, remove it.
             if (prevSibling && prevSibling.length) {
@@ -525,6 +594,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
             var filterValues = {},
                 bboxValue,
                 clickedFeatures,
+                filterByGeometry,
                 domFilters,
                 domFilter,
                 filter,
@@ -547,6 +617,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
 
             if (typeof this.fixedOptions.clickedFeaturesSelection === "undefined") {
                 clickedFeatures = jQuery(popupContent).find('input[name=analyse-clicked-features]').is(':checked');
+                filterByGeometry = jQuery(popupContent).find('input[name=filter-by-geometry]:checked').val();
             } else {
                 clickedFeatures = this.fixedOptions.clickedFeaturesSelection;
             }
@@ -554,6 +625,9 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                 // At this point, just set this to 'true', since we can't
                 // get hold of the layer - and consequently the clicked features - yet.
                 filterValues.featureIds = true;
+            }
+            if (filterByGeometry) {
+                filterValues.filterByGeometryMethod = filterByGeometry;
             }
 
             // Get the actual filters.
@@ -669,7 +743,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
          * Load analysis layers in start.
          *
          */
-        _loadWFSLayerPropertiesAndTypes:function (layer_id, prevJson, cb) {
+        _loadWFSLayerPropertiesAndTypes:function (layer_id, prevJson, cb, clickedFeatures) {
             var me = this,
                 url = me.sandbox.getAjaxUrl()
 
@@ -679,7 +753,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
 
                 function (response) {
                     if (response) {
-                        me._handleWFSLayerPropertiesAndTypesResponse(response, prevJson, cb);
+                        me._handleWFSLayerPropertiesAndTypesResponse(response, prevJson, cb, clickedFeatures);
                     }
                 },
                 // Error callback
@@ -720,7 +794,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
          * @private
          * @param {JSON} propertyJson properties and property types of WFS layer JSON returned by server.
          */
-        _handleWFSLayerPropertiesAndTypesResponse: function (propertyJson, prevJson, cb) {
+        _handleWFSLayerPropertiesAndTypesResponse: function (propertyJson, prevJson, cb, clickedFeatures) {
             var me = this,
                 prevJson,
                 fields = propertyJson.propertyTypes;
@@ -735,7 +809,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                 }
             }
             this._layer.setFilterJson(layerAttributes);
-            this.createFilterDialog(this._layer, prevJson, cb);
+            this.createFilterDialog(this._layer, prevJson, cb, clickedFeatures);
         },
 
         /**

@@ -14,7 +14,7 @@ Oskari.clazz.define(
     }, {
         /**
          * Parses any additional fields to model
-         * 
+         *
          * @param {Oskari.mapframework.bundle.myplacesimport.domain.UserLayer} layer partially populated layer
          * @param {Object} mapLayerJson JSON presentation of the layer
          * @param {Oskari.mapframework.service.MapLayerService} maplayerService not really needed here

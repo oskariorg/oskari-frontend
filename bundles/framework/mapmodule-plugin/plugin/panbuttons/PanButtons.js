@@ -73,7 +73,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                     }
                 }
             });
-    
+
             left.bind('mouseover', function (event) {
                 panbuttonDivImg.addClass('left');
             });
@@ -85,7 +85,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                     me.getMapModule().panMapByPixels(-100, 0, true);
                 }
             });
-            
+
             right.bind('mouseover', function (event) {
                 panbuttonDivImg.addClass('right');
             });
@@ -109,7 +109,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                     me.getMapModule().panMapByPixels(0, -100, true);
                 }
             });
-            
+
             bottom.bind('mouseover', function (event) {
                 panbuttonDivImg.addClass('down');
             });

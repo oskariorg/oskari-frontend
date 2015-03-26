@@ -86,7 +86,7 @@ function(instance) {
     notifyUser : function() {
         var me = this;
         var status = this.container.children('.oskari-tile-status');
-        
+
         // stop current animation
         status.stop();
         // blink 2 times
@@ -114,7 +114,7 @@ function(instance) {
                     me._blink(element, --count);
                 }
             });
-        });  
+        });
     },
     /**
      * @method refresh

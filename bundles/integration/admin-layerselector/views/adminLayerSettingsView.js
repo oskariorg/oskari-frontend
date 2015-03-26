@@ -173,7 +173,7 @@ define([
                 }
             },
             __isSupportedLayerType : function(layerType) {
-                var types = _.map(this.supportedTypes, function(type){ 
+                var types = _.map(this.supportedTypes, function(type){
                     return type.id;
                 });
                 return _.contains(types, layerType);
@@ -403,7 +403,7 @@ define([
 
                 dialog.show(me.instance.getLocalization('admin')['warningTitle'], confirmMsg, [btn, cancelBtn]);
                 dialog.makeModal();
-                
+
             },
             /**
             * @method _showDialog
@@ -429,7 +429,7 @@ define([
                     sandbox = me.instance.getSandbox();
                 // Progress spinner
                 me.progressSpinner.start();
-                
+
                 jQuery.ajax({
                     type: 'POST',
                     data: data,
@@ -633,7 +633,7 @@ define([
                         dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                         btn = dialog.createCloseButton(me.instance.getLocalization().ok),
                         cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-                    
+
                     btn.addClass('primary');
                     cancelBtn.setTitle(me.instance.getLocalization().cancel);
 

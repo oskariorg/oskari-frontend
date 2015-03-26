@@ -1,6 +1,6 @@
 /**
  * @class Oskari.digiroad.bundle.featureselector.FeatureSelectorBundleInstance
- * 
+ *
  */
 Oskari.clazz.define("Oskari.digiroad.bundle.featureselector.FeatureSelectorBundleInstance",
 
@@ -34,17 +34,17 @@ function() {
         return this.__name;
     },
     /**
-     * @method getTitle 
+     * @method getTitle
      * Extension protocol method
-     * @return {String} localized text for the title of the component 
+     * @return {String} localized text for the title of the component
      */
     getTitle: function() {
         return this.getLocalization('title');
     },
     /**
-     * @method getDescription 
+     * @method getDescription
      * Extension protocol method
-     * @return {String} localized text for the description of the component 
+     * @return {String} localized text for the description of the component
      */
     getDescription: function() {
         return this.getLocalization('desc');
@@ -64,7 +64,7 @@ function() {
      * Convenience method to call from Tile and Flyout
      * Returns JSON presentation of bundles localization data for current language.
      * If key-parameter is not given, returns the whole localization data.
-     * 
+     *
      * @param {String} key (optional) if given, returns the value for key
      * @return {String/Object} returns single localization string or
      *      JSON object for complete data depending on localization
@@ -129,7 +129,7 @@ function() {
 
         // list of layers that should get added when the bundle starts.
         this.targetLayers = this.conf.targetLayers;
-        
+
         // register to sandbox as a module
         sandbox.register(me);
         // register to listening events
@@ -145,7 +145,7 @@ function() {
         //Let's extend UI with Flyout and Tile
         var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
         sandbox.request(this, request);
-        
+
         // draw ui
         me._createUI();
     },
@@ -172,11 +172,11 @@ function() {
 
         return handler.apply(this, [event]);
     },
-    
+
     /**
      * @static
      * @property eventHandlers
-     * Best practices: defining which 
+     * Best practices: defining which
      * events bundle is listening and how bundle reacts to them
      */
     eventHandlers : {
@@ -198,7 +198,7 @@ function() {
         var layerName = event.getLayerName().replace(/_vector$/, ""); // layerName is eg. 'nopeusrajoitus_vector'
         var features = event.getFeatures();
         var objectId = this.targetLayers[layerName].objectId;
-        
+
         for(var i = 0; i < features.length; ++i) {
             this.features[features[i].data[objectId]] = features[i];
         }
@@ -209,7 +209,7 @@ function() {
         var layerName = event.getLayerName().replace(/_vector$/, "");
         var features = event.getFeatures();
         var objectId = this.targetLayers[layerName].objectId;
-        
+
         if(features) {
             for(var i = 0; i < features.length; ++i) {
                 delete this.features[features[i].data[objectId]];
@@ -231,7 +231,7 @@ function() {
     afterMapLayerRemoveEvent: function(event) {
         var layer = event.getMapLayer(),
             layerId = layer.getId();
-        
+
         if(this._layerInTargetLayers(layer)) {
             this._removeVectorLayer(layerId);
             this.plugins['Oskari.userinterface.Flyout'].removeFeatures(layerId);

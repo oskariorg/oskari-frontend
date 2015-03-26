@@ -1,7 +1,7 @@
 /**
  * @class Oskari.lupapiste.bundle.myplaces2.MyPlacesBundleInstance
- * 
- * Registers and starts the 
+ *
+ * Registers and starts the
  * Oskari.lupapiste.bundle.myplaces2.plugin.CoordinatesPlugin plugin for main map.
  */
 Oskari.clazz.define("Oskari.lupapiste.bundle.myplaces2.view.MainView",
@@ -18,7 +18,7 @@ function(instance) {
     __name : 'MyPlacesMainView',
     /**
      * @method getName
-     * @return {String} the name for the component 
+     * @return {String} the name for the component
      */
     getName : function() {
         return this.__name;
@@ -42,21 +42,21 @@ function(instance) {
      */
     start : function() {
         var me = this;
-        
+
         var sandbox = this.instance.sandbox;
         sandbox.register(me);
         for(p in me.eventHandlers) {
             sandbox.registerForEventByName(me, p);
         }
-        
+
         var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-        
+
         // register plugin for map (drawing for my places)
         var drawPlugin = Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.plugin.DrawPlugin');
         mapModule.registerPlugin(drawPlugin);
         mapModule.startPlugin(drawPlugin);
         this.drawPlugin = drawPlugin;
-        
+
         // register plugin for map (hover tooltip for my places)
         // TODO: start when a myplaces layer is added and stop when last is removed?
         /*var hoverPlugin = Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.plugin.HoverPlugin');
@@ -152,7 +152,7 @@ function(instance) {
             };
             this.form.setValues(param);
         }
-        
+
         var content = [{
             html : me.form.getForm(categories),
             useButtons: true,
@@ -165,28 +165,28 @@ function(instance) {
             // ask toolbar to select default tool
             var toolbarRequest = me.instance.sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')();
             me.instance.sandbox.request(me, toolbarRequest);
-        }; 
+        };
         // save button
         content[0].actions[loc.buttons.save] = function() {
             me._saveForm();
-        }; 
+        };
 
         var request = sandbox.getRequestBuilder('InfoBox.ShowInfoBoxRequest')(this.popupId, loc.placeform.title, content, location, true);
         sandbox.request(me.getName(), request);
     },
     /**
      * @method _validateForm
-     * Validates form data, returns an object array if any errors. 
-     * Error objects have field and error properties ({field : 'name', error: 'Name missing'}). 
+     * Validates form data, returns an object array if any errors.
+     * Error objects have field and error properties ({field : 'name', error: 'Name missing'}).
      * @private
      * @param {Object} values form values as returned by Oskari.lupapiste.bundle.myplaces2.view.PlaceForm.getValues()
-     * @return {Object[]} 
+     * @return {Object[]}
      */
     _validateForm : function(values) {
         var errors = [];
         var categoryHandler = this.instance.getCategoryHandler();
         var errors = categoryHandler.validateCategoryFormValues(values.category);
-        
+
         var loc = this.instance.getLocalization('validation');
         if(!values.place.name)
         {
@@ -195,7 +195,7 @@ function(instance) {
         else if(categoryHandler.hasIllegalChars(values.place.name))
         {
             errors.push({name : 'name' , error: loc.placeNameIllegal});
-        } 
+        }
         if(categoryHandler.hasIllegalChars(values.place.desc))
         {
             errors.push({name : 'desc' , error: loc.descIllegal});
@@ -218,7 +218,7 @@ function(instance) {
      * @method _saveForm
      * @private
      * Handles save button on my places form.
-     * If a new category has been defined -> saves it and calls _savePlace() 
+     * If a new category has been defined -> saves it and calls _savePlace()
      * for saving the actual place data after making the new category available.
      */
     _saveForm : function() {
@@ -235,11 +235,11 @@ function(instance) {
             return;
         }
         // validation passed -> go save stuff
-        // new category given -> save it first 
+        // new category given -> save it first
         if(formValues.category) {
-            
+
             var category = this.instance.getCategoryHandler().getCategoryFromFormValues(formValues.category);
-            
+
             var serviceCallback = function(blnSuccess, model, blnNew) {
                 if(blnSuccess) {
                     // add category as a maplayer to oskari maplayer service
@@ -295,7 +295,7 @@ function(instance) {
         place.setCategoryID(values.category);
         // fetch the latest geometry if edited after FinishedDrawingEvent
         place.setGeometry(this.drawPlugin.getDrawing());
-        
+
         var sandbox = this.instance.sandbox;
         var serviceCallback = function(blnSuccess, model, blnNew) {
             if(blnSuccess) {
@@ -319,9 +319,9 @@ function(instance) {
                     }
                 } else {
                     var updateRequest = updateRequestBuilder(layerId, true);
-                    sandbox.request(me, updateRequest);                	
+                    sandbox.request(me, updateRequest);
                 }
-                
+
                 me._cleanupPopup();
 
                 var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -361,7 +361,7 @@ function(instance) {
 }, {
     /**
      * @property {String[]} protocol
-     * @static 
+     * @static
      */
     protocol : ['Oskari.mapframework.module.Module']
 });

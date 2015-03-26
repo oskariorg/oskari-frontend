@@ -78,7 +78,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabPanel',
         /**
          * @method setTitleIcon
          * Sets icon to panel header afetr title
-         * @param {String} icon 
+         * @param {String} icon
          */
         setTitleIcon: function (iconClass, clickHandler) {
             if (!this.header) {

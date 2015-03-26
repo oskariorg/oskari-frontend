@@ -11,7 +11,7 @@ Oskari.registerLocalization(
         "resultsTitle": "Sökresultat",
         "grid": {
             "address": "Adress",
-            "coordinates": "Koordinater",
+            "coordinates": "Koordinater"
         }
     }
 }

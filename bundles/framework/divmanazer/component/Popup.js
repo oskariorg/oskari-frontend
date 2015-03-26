@@ -102,9 +102,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          */
         createCloseButton: function (label) {
             var me = this,
-                okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-
-            okBtn.setTitle(label);
+                okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CloseButton');
+            if(label) {
+                okBtn.setTitle(label);
+            }
             okBtn.setHandler(function () {
                 me.close(true);
             });
@@ -254,7 +255,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 );
             }
         },
-        /** 
+        /**
          * @method setContent
          * Sets dialog content element
          * @param {HTML/DOM/jQueryObject}

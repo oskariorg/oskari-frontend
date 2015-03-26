@@ -267,7 +267,7 @@ Oskari.registerLocalization(
             },
             "filter": {
                 "title": "Suodatus",
-                "description": "Valitse kohteet tasolta:",
+                "description": "Suodatus tasolle:",
                 "cancelButton": "Poistu",
                 "clearButton": "Tyhjennä valinnat",
                 "refreshButton": "Päivitä suodatin",
@@ -280,7 +280,10 @@ Oskari.registerLocalization(
                 },
                 "clickedFeatures": {
                     "title": "Kohderajaus",
-                    "label": "Ota mukaan vain kartalta valitut kohteet."
+                    "clickedFeaturesLabel": "Ota mukaan vain kartalta valitut kohteet.",
+                    "filterByGeometryLabel": "Ota mukaan vain kohteet, jotka",
+                    "filterByGeometryIntersect": "leikkaavat valittua kohdetta",
+                    "filterByGeometryContains": "ovat valitun kohteen sisällä"
                 },
                 "values": {
                     "title": "Suodata kohteet ominaisuustietojen perusteella",

@@ -134,12 +134,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 allowedSiblings: [
                     'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
                     'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
-                    'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar',
+                    'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 ],
                 groupedSiblings: true
             },
 
-            'Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin': 
+            'Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin':
 {               allowedLocations: ['top left', 'top center', 'top right'],
                 allowedSiblings: [
                     'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
@@ -266,13 +266,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
 
         me.maplayerPanel = null;
         me.mainPanel = null;
+
+        //dig up the config from the instance used by the full map
+        var logoPluginConfig = _.cloneDeep(me.instance.getSandbox().findRegisteredModuleInstance("MainMapModuleLogoPlugin").getConfig());
+        logoPluginConfig.location = {
+            classes: me.logoPluginClasses.classes
+        };
         me.logoPlugin = Oskari.clazz.create(
             'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
-            {
-                location: {
-                    classes: me.logoPluginClasses.classes
-                }
-            }
+            logoPluginConfig
         );
         me.latestGFI = null;
     }, {
@@ -1804,7 +1806,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             }
 
             // Set the toolStyle to the config of each tool
-            // and change the style immedately. 
+            // and change the style immedately.
             for (i = 0; i < tools.length; i += 1) {
                 tool = tools[i];
                 // special object for zoombar
@@ -1897,7 +1899,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 tools = me.toolsPanel.getTools();
 
             // Set the font to the config of each tool
-            // and change the font immedately. 
+            // and change the font immedately.
             for (i = 0; i < tools.length; i += 1) {
                 tool = tools[i];
                 if (tool.config) {

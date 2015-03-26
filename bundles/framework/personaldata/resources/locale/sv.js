@@ -15,7 +15,7 @@ Oskari.registerLocalization({
         "delete": "Ta bort",
         "grid": {
           "name": "Namn",
-          "description": "Beskrivning", 
+          "description": "Beskrivning",
           "publish": "Vyn är offentlig",
           "edit": "Ändra",
           "delete": "Ta bort"

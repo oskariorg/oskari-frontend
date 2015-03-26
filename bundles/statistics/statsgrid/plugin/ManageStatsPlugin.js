@@ -584,7 +584,7 @@ Oskari.clazz.define(
                 // sendstats
                 var column = me._getColumnById(me._state.currentColumn);
                 me.sendStatsData(column);
-                /* 
+                /*
                 //TODO find a way to tell openlayers that some area should be hilighted without clicking them
                 me.selectedMunicipalities[column.code] = (item.sel == "checked");
                 */
@@ -1768,7 +1768,7 @@ Oskari.clazz.define(
             me.statsService.sendStatsData(me._layer, {
                 CHECKED_COUNT: this.getItemsByGroupingKey('checked').length, // how many municipalities there is checked
                 CUR_COL: curCol,
-                VIS_NAME: me._layer.getWmsName(), //"ows:kunnat2013",  
+                VIS_NAME: me._layer.getWmsName(), //"ows:kunnat2013",
                 VIS_ATTR: me._layer.getFilterPropertyName(), //"kuntakoodi",
                 VIS_CODES: munArray,
                 COL_VALUES: statArray
@@ -2405,13 +2405,13 @@ Oskari.clazz.define(
                         }
                     }
 
-                    //FIXME 
-                    //TODO we need to create grouping for statistical variables 
+                    //FIXME
+                    //TODO we need to create grouping for statistical variables
                     // instead of using subheader!
 
                     //reduce the number of variables
                     me.dataView.refresh();
-                    // setColumns fires slickgrid resizing (cssrules etc.) 
+                    // setColumns fires slickgrid resizing (cssrules etc.)
                     // => variables disappear
                     me.grid.setColumns(me.grid.getColumns());
                     // this prints variables again.
@@ -2435,7 +2435,7 @@ Oskari.clazz.define(
                 grid = this.grid,
                 regions = this.regionCategories[category],
                 currColumn;
-            
+
             this._setSelectedRegionCategory(category);
 
             // notify dataview that we are starting to update data

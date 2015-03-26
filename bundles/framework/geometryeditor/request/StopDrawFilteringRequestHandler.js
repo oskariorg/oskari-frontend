@@ -1,6 +1,6 @@
 Oskari.clazz.define(
         'Oskari.mapframework.ui.module.common.GeometryEditor.DrawFilterPlugin.request.StopDrawFilteringRequestPluginHandler',
-        
+
         function(sandbox, drawFilterPlugin) {
             this.sandbox = sandbox;
             this.drawFilterPlugin = drawFilterPlugin;

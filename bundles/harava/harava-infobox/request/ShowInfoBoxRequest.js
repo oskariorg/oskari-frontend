@@ -1,12 +1,12 @@
 /**
  * @class Oskari.harava.bundle.havaraInfobox.request.ShowInfoBoxRequest
  * Requests a map popup/infobox to be shown
- * 
+ *
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
 Oskari.clazz
-  .define('Oskari.harava.bundle.havaraInfobox.request.ShowInfoBoxRequest', 
+  .define('Oskari.harava.bundle.havaraInfobox.request.ShowInfoBoxRequest',
 	  /**
 	   * @method create called automatically on construction
 	   * @static
@@ -27,7 +27,7 @@ Oskari.clazz
 	   * 		popup height, if not set default is 150 px
 	   * @param {Boolean} centerMap
 	   * 		if true, centers map to selected coordinates, defaults to false
-	   *  
+	   *
 	   * contentData format example:
 	   * [{
 	   * 	html: "",
@@ -121,7 +121,7 @@ Oskari.clazz
 	    getCenterMap : function(){
 	    	return this._centerMap;
 	    }
-	    
+
 	  }, {
 	    /**
 	     * @property {String[]} protocol array of superclasses as {String}

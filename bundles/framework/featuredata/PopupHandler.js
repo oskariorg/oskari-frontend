@@ -3,7 +3,7 @@
  *
  * Handles map selection popup functionality.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.PopupHandler', 
+Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.PopupHandler',
 
 /**
  * @method create called automatically on construction
@@ -67,7 +67,7 @@ function(instance) {
             callback : function() {
                 selectionPlugin.startDrawing({drawMode : 'circle'});
             }
-        }      
+        }
     };
 }, {
 	/**
@@ -79,7 +79,7 @@ function(instance) {
 
         // Safety check at not show more than one popup
         if(jQuery('.tools_selection').is(':visible')) {
-            return;   
+            return;
         }
 
         // close popup so we can update the selection geometry
@@ -93,7 +93,7 @@ function(instance) {
         		me.buttons[tool].callback();
         		dialog.close();
                 me._selectionStarted();
-        		
+
         	};
         };
 
@@ -130,7 +130,7 @@ function(instance) {
 
     /**
     * @method _editDialog
-    * This method triggers when the selection starts 
+    * This method triggers when the selection starts
     * @private
     **/
 	_selectionStarted : function() {
@@ -179,7 +179,7 @@ function(instance) {
             me.instance.setGeometry(features);
             me.instance.getSelectionPlugin().stopDrawing();
             me.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'detach']);
-            editDialog.close();             
+            editDialog.close();
         });
 
         var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
