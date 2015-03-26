@@ -11,6 +11,6 @@
                 return this.models;
             }
         });
-        
+
     });
 }).call(this);

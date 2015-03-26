@@ -38,7 +38,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.Flyout',
             this.userGuideTabs = this.instance.getLocalization('tabs') || [];
             if (this.instance.getLocalization('tabs')) {
                 me.tabContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer');
-                
+
                 for (i = 0; i < me.userGuideTabs.length; i += 1) {
                     newtab = me.userGuideTabs[i];
                     tab = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
@@ -46,7 +46,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.Flyout',
                     tab.setContent(me.getLocalization('help').loadingtxt);
                     tab.tagsTxt = newtab.tags;
 
-                    me.tabContainer.addPanel(tab);   
+                    me.tabContainer.addPanel(tab);
                 }
                 me.tabContainer.insertTo(me.cel);
             }

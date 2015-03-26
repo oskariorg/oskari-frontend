@@ -1,6 +1,6 @@
 /**
  * Returns the content for the tooltip shown after the user hovers over a municipality on the map.
- * 
+ *
  * @class Oskari.mapframework.bundle.mapstats.event.HoverTooltipContentEvent
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.event.HoverTooltipContentEvent',

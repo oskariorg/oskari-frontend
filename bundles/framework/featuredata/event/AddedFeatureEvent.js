@@ -1,6 +1,6 @@
 /**
  * @class Oskari.mapframework.bundle.featuredata.event.AddedFeatureEvent
- * 
+ *
  * Used to notify components that the feature has been added.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.event.AddedFeatureEvent',

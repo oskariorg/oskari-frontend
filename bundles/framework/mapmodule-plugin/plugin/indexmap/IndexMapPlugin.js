@@ -131,7 +131,7 @@ Oskari.clazz.define(
             var me = this;
             icon.unbind('click');
             icon.bind('click', function (event) {
-                event.preventDefault();                
+                event.preventDefault();
                 var miniMap = me.getElement().find(
                     '.olControlOverviewMapElement'
                 );

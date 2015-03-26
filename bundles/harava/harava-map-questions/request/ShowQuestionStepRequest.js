@@ -1,11 +1,11 @@
 /**
  * @class Oskari.harava.bundle.mapquestions.request.ShowQuestionStepRequest
  * Requests a show question step
- * 
+ *
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
-Oskari.clazz.define('Oskari.harava.bundle.mapquestions.request.ShowQuestionStepRequest', 
+Oskari.clazz.define('Oskari.harava.bundle.mapquestions.request.ShowQuestionStepRequest',
 
 /**
  * @method create called automatically on construction

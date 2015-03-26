@@ -90,7 +90,7 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.myplaces2.view.CategoryForm",
          */
         getValues: function () {
             var values = {};
-            // infobox will make us lose our reference so search 
+            // infobox will make us lose our reference so search
             // from document using the form-class
             var onScreenForm = this._getOnScreenForm();
 
@@ -131,7 +131,7 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.myplaces2.view.CategoryForm",
          */
         setValues: function (data) {
             this.categoryId = data.id;
-            // infobox will make us lose our reference so search 
+            // infobox will make us lose our reference so search
             // from document using the form-class
             var onScreenForm = this._getOnScreenForm();
 

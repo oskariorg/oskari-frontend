@@ -118,7 +118,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.SketchLayerPlugin', function(
          */
         'Toolbar.ToolSelectedEvent' : function(event) {
             // this._WMSQueryTool = false;
-            
+
             // TODO: get rid of magic strings
             if(event.getToolName() == 'map_control_draw_area_tool') {
                 this._drawArea.activate();
@@ -128,7 +128,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.SketchLayerPlugin', function(
                     /* clear selected area */
                     this.clearBbox();
                 }
-            }      
+            }
         }
     },
 

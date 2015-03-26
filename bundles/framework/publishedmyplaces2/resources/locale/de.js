@@ -159,11 +159,11 @@ Oskari.registerLocalization({
         "deleted": "Kartenebene gelöscht"
       },
       "categoryToPublic": {
-        "title": "Kartenebene öffentlich machen",        
+        "title": "Kartenebene öffentlich machen",
         "message": "Sie machen die Kartenebene {0} öffentlich. Sie können Links zu einer öffentlichen Kartenebene mit anderen Internetnutzern teilen oder die Kartenebene in ein Kartenfenster auf einer anderen Webseite einbinden. Andere Nutzer können ebenfalls die Kartenebene betrachten."
       },
       "categoryToPrivate": {
-        "title": "Kartenebene nicht veröffentlichen",        
+        "title": "Kartenebene nicht veröffentlichen",
         "message": "Sie machen die Kartenebene {0} nicht öffentlich. Damit ist es nicht mehr möglich, sie mit anderen Nutzern zu teilen oder auf anderen Webseiten einzubinden. Andere Nutzer können die Kartenebene nicht länger betrachten."
       },
       "error": {

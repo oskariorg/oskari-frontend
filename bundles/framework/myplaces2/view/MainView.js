@@ -311,7 +311,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
                 return;
             }
             // validation passed -> go save stuff
-            // new category given -> save it first 
+            // new category given -> save it first
             if (formValues.category) {
                 var category = this.instance.getCategoryHandler().getCategoryFromFormValues(formValues.category);
                 var serviceCallback = function (blnSuccess, model, blnNew) {

@@ -1,6 +1,6 @@
 /**
  * @class Oskari.mapframework.bundle.parcel.request.CancelDrawingRequestHandler
- * 
+ *
  * Handle cancel drawing cancel request by forwarding the call to the {Oskari.mapframework.bundle.parcel.plugin.DrawPlugin}.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.parcel.request.CancelDrawingRequestHandler', function(drawPlugin) {

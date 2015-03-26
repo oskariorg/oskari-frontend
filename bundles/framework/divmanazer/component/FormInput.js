@@ -169,7 +169,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
             // Basic check before AH-1708
             value = value.replace('<','');
             value = value.replace('&','');
-            value = value.replace('\\','');            
+            value = value.replace('\\','');
             return value;
         },
 

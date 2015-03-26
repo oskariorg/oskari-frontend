@@ -123,7 +123,7 @@ function(name,viewClazz) {
 
         /* sandbox cleanup */
 
-      
+
 
         var request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
         sandbox.request(this, request);
@@ -139,23 +139,23 @@ function(name,viewClazz) {
      */
     startExtension : function() {
         var me = this;
-        var sandbox = me.sandbox; 
+        var sandbox = me.sandbox;
         var locFlyout = me.getLocalization('flyout');
-        
-        var viewCls = this._viewClazz ;        
+
+        var viewCls = this._viewClazz ;
         var view = Oskari.clazz.create(viewCls,this.getLocalization('view'),this,this.getConfiguration());
         this.view = view;
-        
+
         for(p in view.eventHandlers) {
             sandbox.registerForEventByName(view, p);
         }
 
-        me.plugins['Oskari.userinterface.Flyout'] = 
-            Oskari.clazz.create('Oskari.integration.bundle.backbone.Flyout', me, locFlyout, view);                       
+        me.plugins['Oskari.userinterface.Flyout'] =
+            Oskari.clazz.create('Oskari.integration.bundle.backbone.Flyout', me, locFlyout, view);
 
         var locTile = me.getLocalization('tile');
 
-        me.plugins['Oskari.userinterface.Tile'] = 
+        me.plugins['Oskari.userinterface.Tile'] =
             Oskari.clazz.create('Oskari.integration.bundle.backbone.Tile', me, locTile);
     },
     /**
@@ -193,14 +193,14 @@ function(name,viewClazz) {
     getName : function() {
         return this._name;
     },
-    
+
     /**
      * @method getConfiguration
      */
     getConfiguration : function() {
         return this.conf;
     }
-    
+
 }, {
     protocol : ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
 });

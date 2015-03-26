@@ -29,4 +29,4 @@ function(fid) {
     }
 }, {
     'protocol' : ['Oskari.mapframework.event.Event']
-}); 
+});

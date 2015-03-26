@@ -889,7 +889,7 @@ Oskari.clazz.define(
                 } else {
                     // pressed finished drawing, act like dblclick
                     this.drawPlugin.forceFinishDraw();
-                }   
+                }
             }
         },
 

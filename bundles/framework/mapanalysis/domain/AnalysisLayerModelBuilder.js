@@ -26,7 +26,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer
             layer.setLocales(mapLayerJson.locales);
         }
 		if(mapLayerJson.name){
-			layer.setName(mapLayerJson.name);	
+			layer.setName(mapLayerJson.name);
 		}
 		if (mapLayerJson.wpsName) {
 			layer.setWpsName(mapLayerJson.wpsName);

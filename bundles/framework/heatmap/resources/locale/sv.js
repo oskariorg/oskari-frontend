@@ -6,7 +6,10 @@ Oskari.registerLocalization({
         "tool_label_settings" : "Settings",
         "dialog" : {
             "title" : "Heatmap settings",
-            "propertyLabel" : "Weight property"
+            "propertyLabel" : "Weight property",
+            "radiusLabel" : "Radius",
+            "pixelsPerCellLabel" : "Pixels per cell",
+            "noneOption" : "None"
         }
     }
 });

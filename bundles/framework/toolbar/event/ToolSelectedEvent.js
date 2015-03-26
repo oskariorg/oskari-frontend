@@ -1,10 +1,10 @@
 /**
  * @class Oskari.mapframework.bundle.toolbar.event.ToolSelectedEvent
- * 
- * Used to notify components that a tool has been selected and 
- * components should cancel their tool related operations if any. 
+ *
+ * Used to notify components that a tool has been selected and
+ * components should cancel their tool related operations if any.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.event.ToolSelectedEvent', 
+Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.event.ToolSelectedEvent',
 /**
  * @method create called automatically on construction
  * @static

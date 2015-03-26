@@ -1,6 +1,6 @@
 /**
  * Requests a link to be added to a search result popup which triggers the action givem.
- * 
+ *
  * @class Oskari.mapframework.bundle.search.request.AddSearchResultActionRequest
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.search.request.AddSearchResultActionRequest',

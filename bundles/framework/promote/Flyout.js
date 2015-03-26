@@ -50,7 +50,7 @@ function(instance) {
      */
     startPlugin : function() {
         this.template = jQuery('<div class="promoteContainer">' +
-        		'<div class="promoteDescription"></div>'+ 
+        		'<div class="promoteDescription"></div>'+
                 '<div><a class="promoteSignup"></a></div>' +
                 '<div><a class="promoteRegister"></a></div>' +
             '</div>');
@@ -102,7 +102,7 @@ function(instance) {
         flyout.empty();
 
         var templateContainer = this.template.clone();
-        
+
         var templateDescription = templateContainer.find('div.promoteDescription');
         templateDescription.html(this.instance.getLocalization('desc'));
 

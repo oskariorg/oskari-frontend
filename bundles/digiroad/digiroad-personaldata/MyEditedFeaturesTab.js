@@ -17,7 +17,7 @@ function(instance, localization) {
     this.dataTypeLoc = Oskari.getLocalization("FeatureSelector")['gridheaders'];
     this.tabsContainer = undefined;
     this.tabPanels = {};
-    
+
     this.linkTemplate = jQuery('<a href="JavaScript:void(0);"></a>');
     this.iconTemplate = jQuery('<div class="icon"></div>');
 }, {
@@ -35,9 +35,9 @@ function(instance, localization) {
     },
     addTabContent : function(container) {
         var me = this;
-        
-        this.tabsContainer = 
-            Oskari.clazz.create('Oskari.userinterface.component.TabDropdownContainer', 
+
+        this.tabsContainer =
+            Oskari.clazz.create('Oskari.userinterface.component.TabDropdownContainer',
             this.loc['nocategories']);
         this.tabsContainer.insertTo(container);
     },
@@ -101,11 +101,11 @@ function(instance, localization) {
     _showPlace : function(geometry) {
         // center map on selected place
         var center = geometry.getCentroid();
-        var mapmoveRequest = this.instance.sandbox.getRequestBuilder('MapMoveRequest')(center.x, center.y, geometry.getBounds(), false); 
+        var mapmoveRequest = this.instance.sandbox.getRequestBuilder('MapMoveRequest')(center.x, center.y, geometry.getBounds(), false);
         this.instance.sandbox.request(this.instance, mapmoveRequest);
-        
+
         // add the myplaces layer to map
-        var layerId = "muokatut_kohteet"; 
+        var layerId = "muokatut_kohteet";
         var layer = this.instance.sandbox.findMapLayerFromSelectedMapLayers(layerId);
         if(!layer) {
             var request = this.instance.sandbox.getRequestBuilder('AddMapLayerRequest')(layerId, true);
@@ -115,8 +115,8 @@ function(instance, localization) {
 
     /**
      * @method _deletePlace
-     * Confirms delete for given place and deletes it if confirmed. Also shows 
-     * notification about cancel, deleted or error on delete. 
+     * Confirms delete for given place and deletes it if confirmed. Also shows
+     * notification about cancel, deleted or error on delete.
      * @param {Object} data grid data object for place
      * @private
      */
@@ -134,14 +134,14 @@ function(instance, localization) {
             var service = sandbox.getService('Oskari.digiroad.bundle.myplaces2.service.MyPlacesService');
             var callback = function(isSuccess) {
                 /* let's refresh map also if there */
-                var layerId = "muokatut_kohteet"; 
+                var layerId = "muokatut_kohteet";
                 var layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
                 if(layer) {
                     var updateRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest')
                     var updateRequest = updateRequestBuilder(layerId, true);
-                    sandbox.request(me.instance, updateRequest);    
+                    sandbox.request(me.instance, updateRequest);
                 }
-                
+
                 if(isSuccess) {
                     dialog.show(loc.title, loc.success);
                 }
@@ -158,7 +158,7 @@ function(instance, localization) {
             }
             service.deleteEditedFeature(protocolType, data.id, callback);
         });
-        var cancelBtn = dialog.createCloseButton(loc.btnCancel);    
+        var cancelBtn = dialog.createCloseButton(loc.btnCancel);
         var confirmMsg = loc.confirm;
         dialog.show(loc.title, confirmMsg, [cancelBtn, okBtn]);
         dialog.makeModal();
@@ -194,7 +194,7 @@ function(instance, localization) {
             //var shape = me._getDrawModeFromGeometry(data.geometry);
             linkIcon.addClass('myplaces-line');
             //link.append(linkIcon);
-            
+
             link.append(name);
             link.bind('click', function() {
                 me._showPlace(data.geometry);
@@ -203,7 +203,7 @@ function(instance, localization) {
             return link;
         };
         panel.grid.setColumnValueRenderer(visibleFields[0], nameRenderer);
-        
+
         var deleteRenderer = function(name, data) {
             var link = me.linkTemplate.clone();
             link.append(name);
@@ -241,7 +241,7 @@ function(instance, localization) {
         var gridModel = Oskari.clazz.create('Oskari.userinterface.component.GridModel');
         gridModel.setIdField('id');
         panel.grid.setDataModel(gridModel);
-        
+
         for(var i = 0; i < features.length; ++i) {
             var f = features[i];
             if(f.attributes['TIETOLAJI'] !== dataType) {continue;}

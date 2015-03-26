@@ -434,7 +434,7 @@ Oskari.clazz.define(
 
             json.data = [];
 
-            // if there was empty fields 
+            // if there was empty fields
             if (emptyFields.length > 0) {
                 var submitBtn = me.container.find('.submit-form-button'),
                     failedSubmit = me.localization.failedSubmit + '<br>' + emptyFields.join(', ');
@@ -453,7 +453,7 @@ Oskari.clazz.define(
                 }, 1500);
                 return null;
             } else {
-                // loop through all the regions and gather data 
+                // loop through all the regions and gather data
                 var municipalityRows = me.container.find('.municipality-row'),
                     i;
 

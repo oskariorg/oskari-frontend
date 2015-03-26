@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamEnumElement',
         this._validator = validator;
     }, {
         __name: 'elf-license.ParamEnumElement',
-        __qname: 'Oskari.elf.license.elements.ParamEnumElement',       
+        __qname: 'Oskari.elf.license.elements.ParamEnumElement',
         /**
          * Get Qualified name
          * @method getQName
@@ -69,7 +69,7 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamEnumElement',
                         data.append('<input type="radio" name="'+param.name+'" value="'+value+'">' + value + '<br>');
                     });
 
-                    data.find('input').first().prop("checked", true);            
+                    data.find('input').first().prop("checked", true);
                 }
                 // Checkbox list
                 else {

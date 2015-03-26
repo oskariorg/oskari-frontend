@@ -4,12 +4,12 @@
  * TODO: refactor OpenLayers global access
  * @deprecated
  */
-Oskari.clazz.define('Oskari.mapframework.enhancement.common.OpenLayersImagePathEnhancement', 
+Oskari.clazz.define('Oskari.mapframework.enhancement.common.OpenLayersImagePathEnhancement',
 
 /**
  * @method create called automatically on construction
  * @static
- */ 
+ */
 function() {
 
 }, {

@@ -18,15 +18,15 @@ function() {
      */
     startPlugin : function() {
         var el = this.getEl();
-        
+
         /* this gets the flyout part */
         var loc  = this.getLocalization();
         var msg = loc.message ;
-        
+
         el.append(msg);
-          
+
     },
-    
+
      /**
      * @method stopPlugin
      * called by host to stop flyout operations

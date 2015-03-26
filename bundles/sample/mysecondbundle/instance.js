@@ -1,7 +1,7 @@
 /**
  * @class Oskari.sample.bundle.mysecondbundle.ModuleHelloWorldBundleInstance
- * 
- * This bundle demonstrates how bundle can react to events by 
+ *
+ * This bundle demonstrates how bundle can react to events by
  * registering itself to sandbox as a module.
  *
  * Add this to startupsequence to get this bundle started

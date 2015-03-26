@@ -17,7 +17,6 @@ Oskari.clazz.define(
         this.defaultValues = defaultValues;
         this.saveButton = null;
         this.cancelButton = null;
-        this.saveButtonHandler = null;
         this.renderDialog = null;
         this.messageEnabled = false;
 
@@ -386,6 +385,12 @@ Oskari.clazz.define(
             });
 
             this._updatePreview(dialogContent);
+            var saveButtonHandler = function () {
+                me.renderDialog.close();
+                if (me.saveCallback) {
+                    me.saveCallback();
+                }
+            };
 
             // Optional dot message
             if (this.messageEnabled) {
@@ -398,11 +403,7 @@ Oskari.clazz.define(
                 });
                 input.keypress(function (evt) {
                     if (evt.keyCode === 13) {
-                        if (me.saveButtonHandler !== null) {
-                            me.saveButtonHandler();
-                        } else {
-                            me.renderDialog.close();
-                        }
+                        saveButtonHandler();
                     }
                 });
                 messageContainer.insertAfter(dialogContent.find('div.preview'));
@@ -410,16 +411,7 @@ Oskari.clazz.define(
 
             var saveBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton');
             saveBtn.addClass('primary showSelection');
-            if (this.saveButtonHandler !== null ){
-                saveBtn.setHandler(this.saveButtonHandler);
-            } else {
-                saveBtn.setHandler(function () {
-                    me.renderDialog.close();
-                    if (me.saveCallback) {
-                        me.saveCallback();
-                    }
-                });
-            }
+            saveBtn.setHandler(saveButtonHandler);
             this.saveButton = saveBtn;
 
             var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
@@ -451,6 +443,11 @@ Oskari.clazz.define(
             return this.renderDialog;
         },
 
+        /**
+         * @method setSaveHandler
+         * Sets a user defined handler for the save button
+         * @param {function} handler Save button handler
+         */
         setSaveHandler: function (param) {
             this.saveCallback = param;
         },
@@ -474,18 +471,6 @@ Oskari.clazz.define(
                         container.css('border', '1px solid');
                     }
                 }
-            }
-        },
-
-        /**
-         * @method setSaveHandler
-         * Sets a user defined handler for the save button
-         * @param {function} handler Save button handler
-         */
-        setSaveHandler: function(handler) {
-            this.saveButtonHandler = handler;
-            if (this.saveButton !== null) {
-                this.saveButton.setHandler(handler);
             }
         },
 

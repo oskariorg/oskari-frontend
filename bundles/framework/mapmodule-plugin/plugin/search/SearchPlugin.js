@@ -161,7 +161,7 @@ Oskari.clazz.define(
                 reqBuilder,
                 sandbox = me.getSandbox(),
                 content = el || me.getElement();
-            
+
             // Toggle map keyboard controls so the user can use arrowkeys in the search...
             me._inputField.focus(function() {
                 reqBuilder = sandbox.getRequestBuilder(
@@ -236,7 +236,7 @@ Oskari.clazz.define(
             if (conf && conf.font) {
                 me.changeFont(conf.font, el);
             }
-        }, 
+        },
 
         /**
          * @method _checkForEnter

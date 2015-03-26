@@ -1,7 +1,7 @@
 /**
  * @class Oskari.mapframework.bundle.personaldata.request.AddTabRequestHandler
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.request.AddTabRequestHandler', 
+Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.request.AddTabRequestHandler',
 /**
  * @method create called automatically on construction
  * @static
@@ -12,10 +12,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.request.AddTabReque
  */
 function(sandbox, personaldata) {
     this.sandbox = sandbox;
-    this.personaldata = personaldata; 
+    this.personaldata = personaldata;
 }, {
     /**
-     * @method handleRequest 
+     * @method handleRequest
      * @param {Oskari.mapframework.core.Core} core
      *      reference to the application core (reference sandbox core.getSandbox())
      * @param {Oskari.mapframework.bundle.personaldata.request.AddTabRequestHandler} request

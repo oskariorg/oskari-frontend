@@ -1,7 +1,7 @@
 /**
  * @class Oskari.mapframework.bundle.featuredata.service.GridJsonService
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.service.GridJsonService', 
+Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.service.GridJsonService',
 
 /**
  * @method create called automatically on construction
@@ -18,7 +18,7 @@ function(endpointUrl) {
     this.pendingOperations = {};
     // Latest WFS table query id
     this._wfsTableQueryId = 0;
-    
+
 }, {
     __qname : "Oskari.mapframework.bundle.featuredata.service.GridJsonService",
     /**
@@ -42,7 +42,7 @@ function(endpointUrl) {
      * Cancels any pending and aborts requests for WFS data for the given layer
      */
     cancelWFSGridUpdateForLayer : function(layerId) {
-        var operation = this.pendingOperations[layerId]; 
+        var operation = this.pendingOperations[layerId];
         if(operation) {
             if(operation.timer) {
                 clearTimeout(operation.timer);
@@ -57,11 +57,11 @@ function(endpointUrl) {
     /**
      * @method scheduleWFSGridUpdate
      * @param {Oskari.mapframework.domain.WfsLayer} wfsLayer
-     * @param {String} features selected on map 
+     * @param {String} features selected on map
      * @param {Number} mapWidth width of the map window
      * @param {Number} mapHeight height of the map window
      * @param {Function} onReady callback to call when data has been loaded
-     * Schedules an update for the WFS grid data. The update will begin after 
+     * Schedules an update for the WFS grid data. The update will begin after
      * #_gridPollingInterval ms.
      */
     scheduleWFSGridUpdate : function(wfsLayer, selectionGeometry, mapWidth, mapHeight, onReady) {
@@ -69,13 +69,13 @@ function(endpointUrl) {
         this.cancelWFSGridUpdateForLayer(wfsLayer.getId());
         var params = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata.domain.WfsGridUpdateParams', wfsLayer, selectionGeometry, mapWidth, mapHeight, onReady);
         //this._wfsGridUpdateRequest = Oskari.clazz.create('Oskari.mapframework.domain.WfsGridScheduledRequest', wfsLayer, bbox, mapWidth, mapHeight, onReady);
-        
+
         var me = this;
         // throttle requests with small delay
-        var timer = setTimeout(function() { 
-                me._processGridUpdate(params); 
+        var timer = setTimeout(function() {
+                me._processGridUpdate(params);
             }, this._gridPollingInterval);
-        
+
         this.pendingOperations[wfsLayer.getId()] = {
             timer : timer
         }
@@ -84,17 +84,17 @@ function(endpointUrl) {
      * @method _processGridUpdate
      * @private
      * @param {Oskari.mapframework.bundle.featuredata.domain.WfsGridUpdateParams} params
-     * 
+     *
      * Calls the #endpointUrl for the WFS grid data with the params given.
      */
     _processGridUpdate : function(params) {
         var me = this;
         var mapLayer = params.getMapLayer();
-        
+
         // clear timer that called this method
         this.pendingOperations[mapLayer.getId()].timer = null;
         delete this.pendingOperations[mapLayer.getId()].timer;
-         
+
         // Get json for table
         var onReady = function(response) {
             me.cancelWFSGridUpdateForLayer(mapLayer.getId());
@@ -113,12 +113,12 @@ function(endpointUrl) {
         var query =  jQuery.ajax({
             dataType : "json",
             type : "POST",
-            
+
             data : {
                 layerIds:mapLayer.getId(),
                 flow_pm_map_width  : params.getMapWidth(),
                 flow_pm_map_height : params.getMapHeight(),
-                mode: "data_to_table", 
+                mode: "data_to_table",
                 geojson : params.getGeometry(),
                 flow_pm_map_wfs_query_id : me._generateWfsTableQueryId()
             },
@@ -127,7 +127,7 @@ function(endpointUrl) {
                     x.overrideMimeType("application/j-son;charset=UTF-8");
                 }
             },
-            
+
             url : this.endpointUrl + "action_route=GetWfsFeatureData", //url, // "&actionKey=QUERY_FIND_RAW_DATA_TO_TABLE",
             success : onReady
         });
@@ -137,9 +137,9 @@ function(endpointUrl) {
      * @method _getLatestWfsTableQueryId
      * @private
      * @return {Number}
-     * 
+     *
      * Returns the latest query id so we can match it to a response from server.
-     * This way we know that we are working with the latest query data and will not overwrite 
+     * This way we know that we are working with the latest query data and will not overwrite
      * current data with old one.
      */
     _getLatestWfsTableQueryId : function() {
@@ -149,8 +149,8 @@ function(endpointUrl) {
     /**
      * @method _generateWfsTableQueryId
      * @private
-     * @return {Number} 
-     * 
+     * @return {Number}
+     *
      * Updates query id for a new ajax request and returns it
      */
     _generateWfsTableQueryId : function() {

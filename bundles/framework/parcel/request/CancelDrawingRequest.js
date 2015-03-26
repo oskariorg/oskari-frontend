@@ -1,6 +1,6 @@
 /**
  * @class Oskari.mapframework.parcel.request.CancelDrawingRequest
- * 
+ *
  * Informs that drawing operation is cancelled. This request does not require any properties.
  * Instead, the call itself informs about the state.
  */

@@ -431,7 +431,7 @@ Oskari.registerLocalization({
                 "temporalValidity":"Ajanmukaisuus",
                 "thematicClassificationCorrectness":"Luokittelun oikeellisuus",
                 "topologicalConsistency":"Topologinen eheys"
-                
+
             }
         },
         "tile": {

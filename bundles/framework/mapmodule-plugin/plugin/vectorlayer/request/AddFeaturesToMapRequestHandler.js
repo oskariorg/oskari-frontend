@@ -2,7 +2,7 @@
  * @class Oskari.mapframework.bundle.mapmodule.request.AddFeaturesToMapRequestHandler
  * Handles Oskari.mapframework.bundle.mapmodule.request.AddFeaturesToMapRequest requests
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddFeaturesToMapRequestHandler', 
+Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddFeaturesToMapRequestHandler',
 	/**
      * @method create called automatically on construction
      * @static
@@ -22,8 +22,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddFeaturesToM
          */
 	    handleRequest: function (core, request) {
 	        this.sandbox.printDebug('[Oskari.mapframework.bundle.mapmodule.request.AddFeaturesToMapRequestHandler] Add Features');
-	        this.vectorLayerPlugin.addFeaturesToMap(request.getGeometry(), request.getGeometryType(), 
-	        	request.getAttributes(), request.getLayer(), request.getOperation(), request.getKeepLayerOnTop(), 
+	        this.vectorLayerPlugin.addFeaturesToMap(request.getGeometry(), request.getGeometryType(),
+	        	request.getAttributes(), request.getLayer(), request.getOperation(), request.getKeepLayerOnTop(),
 	        	request.getStyle(), request.getCenterTo());
 	    }
 	}, {

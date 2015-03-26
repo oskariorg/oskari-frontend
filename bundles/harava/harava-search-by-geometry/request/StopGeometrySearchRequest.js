@@ -1,11 +1,11 @@
 /**
  * @class Oskari.harava.bundle.mapmodule.request.StopGeometrySearchRequest
  * Requests a stop geometry search
- * 
+ *
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
-Oskari.clazz.define('Oskari.harava.bundle.mapmodule.request.StopGeometrySearchRequest', 
+Oskari.clazz.define('Oskari.harava.bundle.mapmodule.request.StopGeometrySearchRequest',
 
 /**
  * @method create called automatically on construction

@@ -227,7 +227,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.service.ViewService
                         response.msg = 'ok';
                     }
                 } else if (layerMissing) {
-                    // not loaded yet and layer missing 
+                    // not loaded yet and layer missing
                     response.msg = 'notloaded';
                 } else {
                     // not loaded yet but all layers found

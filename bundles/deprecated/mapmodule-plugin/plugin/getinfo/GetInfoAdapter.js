@@ -1,5 +1,5 @@
-/* Copyright (c) 2006-2010 by OpenLayers Contributors (see authors.txt for 
- * full list of contributors). Published under the Clear BSD license.  
+/* Copyright (c) 2006-2010 by OpenLayers Contributors (see authors.txt for
+ * full list of contributors). Published under the Clear BSD license.
  * See http://svn.openlayers.org/trunk/openlayers/license.txt for the
  * full text of the license. */
 
@@ -21,7 +21,7 @@
  * the results using an OpenLayers.Format, and fires a 'getfeatureinfo' event
  * with the click position, the raw body of the response, and an array of
  * features if it successfully read the response.
- * 
+ *
  * Inherits from: - <OpenLayers.Control>
  */
 Oskari.$("OpenLayers.Control.GetInfoAdapter",OpenLayers.Class(OpenLayers.Control, {
@@ -31,7 +31,7 @@ Oskari.$("OpenLayers.Control.GetInfoAdapter",OpenLayers.Class(OpenLayers.Control
 	 * stops moving. Default is false.
 	 */
     hover: false,
-    
+
 
     /**
 	 * APIProperty: drillDown {Boolean} Drill down over all WMS layers in the
@@ -52,24 +52,24 @@ Oskari.$("OpenLayers.Control.GetInfoAdapter",OpenLayers.Class(OpenLayers.Control
 	 * object created when the hover option is set to false. Default is "click".
 	 */
     clickCallback: "click",
-    
+
     /**
 	 * APIProperty: handlerOptions {Object} Additional options for the handlers
 	 * used by this control, e.g. (start code) { "click": {delay: 100}, "hover":
 	 * {delay: 300} } (end)
 	 */
     handlerOptions: null,
-    
+
     /**
 	 * Property: handler {Object} Reference to the <OpenLayers.Handler> for this
 	 * control
 	 */
     handler: null,
-    
+
     /**
 	 * @property EVENT_TYPES
 	 * @static
-	 * 
+	 *
 	 * Supported event types (in addition to those from <OpenLayers.Control>):
 	 * beforegetfeatureinfo - Triggered before the request is sent. The event
 	 * object has an *xy* property with the position of the mouse click or hover
@@ -87,12 +87,12 @@ Oskari.$("OpenLayers.Control.GetInfoAdapter",OpenLayers.Class(OpenLayers.Control
 
     /**
 	 * Constructor: <OpenLayers.Control.WMSGetFeatureInfo>
-	 * 
+	 *
 	 * Parameters: options - {Object}
 	 */
     initialize: function(options) {
-	
-	
+
+
         // concatenate events specific to vector with those from the base
         this.EVENT_TYPES =
             //OpenLayers.Control.WMSGetFeatureInfo.prototype.EVENT_TYPES.concat(
@@ -103,12 +103,12 @@ Oskari.$("OpenLayers.Control.GetInfoAdapter",OpenLayers.Class(OpenLayers.Control
         options = options || {};
 		this.callback = options.callback ;
 		this.hoverCallback = options.hoverCallback ;
-        
+
         options.handlerOptions = options.handlerOptions || {};
 
         OpenLayers.Control.prototype.initialize.apply(this, [options]);
-        
-        
+
+
         if(this.drillDown === true) {
             this.hover = false;
         }
@@ -132,7 +132,7 @@ Oskari.$("OpenLayers.Control.GetInfoAdapter",OpenLayers.Class(OpenLayers.Control
 
     /**
 	 * Method: activate Activates the control.
-	 * 
+	 *
 	 * Returns: {Boolean} The control was effectively activated.
 	 */
     activate: function () {
@@ -146,7 +146,7 @@ Oskari.$("OpenLayers.Control.GetInfoAdapter",OpenLayers.Class(OpenLayers.Control
 
     /**
 	 * Method: deactivate Deactivates the control.
-	 * 
+	 *
 	 * Returns: {Boolean} The control was effectively deactivated.
 	 */
     deactivate: function () {
@@ -154,10 +154,10 @@ Oskari.$("OpenLayers.Control.GetInfoAdapter",OpenLayers.Class(OpenLayers.Control
             this, arguments
         );
     },
-    
+
     /**
 	 * Method: getInfoForClick Called on click
-	 * 
+	 *
 	 * Parameters: evt - {<OpenLayers.Event>}
 	 */
     getInfoForClick: function(evt) {
@@ -167,10 +167,10 @@ Oskari.$("OpenLayers.Control.GetInfoAdapter",OpenLayers.Class(OpenLayers.Control
         OpenLayers.Element.addClass(this.map.viewPortDiv, "olCursorWait");
         this.request(evt.xy, {});
     },
-   
+
     /**
 	 * Method: getInfoForHover Pause callback for the hover handler
-	 * 
+	 *
 	 * Parameters: evt - {Object}
 	 */
     getInfoForHover: function(evt) {
@@ -186,35 +186,35 @@ Oskari.$("OpenLayers.Control.GetInfoAdapter",OpenLayers.Class(OpenLayers.Control
 
     /**
 	 * Method: request Sends a GetFeatureInfo request to the WMS
-	 * 
+	 *
 	 * Parameters: clickPosition - {<OpenLayers.Pixel>} The position on the map
 	 * where the mouse event occurred. options - {Object} additional options for
 	 * this method.
-	 * 
+	 *
 	 * Valid options: - *hover* {Boolean} true if we do the request for the
 	 * hover handler
 	 */
     request: function(clickPosition, options) {
-      
+
         OpenLayers.Element.removeClass(this.map.viewPortDiv, "olCursorWait");
-        
-        
-        var loc = this.map.getLonLatFromViewPortPx(clickPosition); 
+
+
+        var loc = this.map.getLonLatFromViewPortPx(clickPosition);
         /*
-		 * 
+		 *
 		 */
         if(options.hover&&this.hoverCallback)
         	this.hoverCallback(loc,clickPosition,options);
         else if( this.callback )
         	this.callback(loc,clickPosition,options);
-        
+
     },
-    
-    
+
+
 
     /**
      * @property {String} CLASS_NAME
-     * @static  
+     * @static
      */
     CLASS_NAME: "OpenLayers.Control.GetInfoAdapter"
 }));

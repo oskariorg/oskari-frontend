@@ -339,7 +339,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             layersDiv.append(div);
             this._setLayerVisible(layer, true);
 
-            // remove text if nothing to select 
+            // remove text if nothing to select
             var baseLayersDiv = this.getElement().find(
                     'div.content div.baselayers'
                 ),

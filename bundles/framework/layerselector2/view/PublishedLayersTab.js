@@ -57,7 +57,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.PublishedLay
             }
             /* TODO: should open panels in this.accordion where groups[i] == panel.title
             if (state.groups && state.groups.length > 0) {
-                
+
             }
             */
         },

@@ -1,6 +1,6 @@
 /**
  * @class Oskari.mapframework.bundle.mapwfs.domain.WfsTileRequest
- * 
+ *
  * TODO: desc
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs.domain.WfsTileRequest',
@@ -27,7 +27,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs.domain.WfsTileRequest',
  *
  * @param {String} creator
  *            what created this request
- * 
+ *
  * @param {Number} sequenceNumber
  *            incrementing number to detect async issues
  */

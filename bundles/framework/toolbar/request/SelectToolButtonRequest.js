@@ -2,11 +2,11 @@
  * @class Oskari.mapframework.bundle.toolbar.request.SelectToolButtonRequest
  * Requests for toolbar to act as if user had clicked a button or returns a defuult tool if
  * create params aren't given.
- * 
+ *
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.SelectToolButtonRequest', 
+Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.SelectToolButtonRequest',
 /**
  * @method create called automatically on construction
  * @static

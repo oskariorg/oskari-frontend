@@ -62,7 +62,7 @@ Oskari = (function () {
          *
          * @param  {string} key Key
          *
-         * @return {string}     Localized value for key 
+         * @return {string}     Localized value for key
          */
         getLocalization: function (key, lang) {
             var l = lang || this.lang;
@@ -71,7 +71,7 @@ Oskari = (function () {
                     'getLocalization(): Missing key'
                 );
             }
-            
+
             if(this.localizations && this.localizations[l])
                 return this.localizations[l][key];
             else return null;
@@ -180,7 +180,7 @@ Oskari = (function () {
          * @public @method getSupportedLanguages
          *
          *
-         * @return {string[]} Supported languages 
+         * @return {string[]} Supported languages
          */
         getSupportedLanguages: function () {
             var langs = [],
@@ -200,7 +200,7 @@ Oskari = (function () {
          * @public @method getSupportedLocales
          *
          *
-         * @return {string[]} Supported locales 
+         * @return {string[]} Supported locales
          */
         getSupportedLocales: function () {
             return this.supportedLocales || [];
@@ -230,7 +230,7 @@ Oskari = (function () {
          * @public @method getDefaultLanguage
          *
          *
-         * @return {string} Default language 
+         * @return {string} Default language
          */
         getDefaultLanguage: function () {
             var supported = this.getSupportedLocales();
@@ -277,7 +277,7 @@ Oskari = (function () {
              * @param  {string}  fileName File name
              * @param  {string=} basePath Base path (unused)
              *
-             * @return {string} 
+             * @return {string}
              */
             'default': function (fileName, basePath) {
                 if (basePathForBundles) {
@@ -292,7 +292,7 @@ Oskari = (function () {
              * @param  {string}  fileName File name
              * @param  {string=} basePath Base path (unused)
              *
-             * @return {string} 
+             * @return {string}
              */
             dev: function (fileName, basePath) {
                 if (basePathForBundles) {
@@ -309,7 +309,7 @@ Oskari = (function () {
      * @param  {string}  fileName File name
      * @param  {string=} basePath Base path
      *
-     * @return {string} 
+     * @return {string}
      */
     function _buildPathForLoaderMode(fileName, basePath) {
         var pathBuilder = pathBuilders[mode];
@@ -341,7 +341,7 @@ Oskari = (function () {
      * @private @method _isPackedMode
      *
      *
-     * @return {boolean} 
+     * @return {boolean}
      */
     function _isPackedMode() {
         return !_isNotPackMode[mode];
@@ -351,7 +351,7 @@ Oskari = (function () {
      * @private @method _isPreloaded
      *
      *
-     * @return {boolean} 
+     * @return {boolean}
      */
     function _isPreloaded() {
         return _preloaded;
@@ -392,7 +392,7 @@ Oskari = (function () {
     }
 
     /**
-     * 
+     *
      */
     var O2ClassSystem = function () {
         this.packages = {};
@@ -418,7 +418,7 @@ Oskari = (function () {
          *
          * @param  {string} protocolName Protocol name
          *
-         * @return {Object}              Protocol 
+         * @return {Object}              Protocol
          */
         protocol: function (protocolName) {
             if (protocolName === null || protocolName === undefined) {
@@ -432,7 +432,7 @@ Oskari = (function () {
          *
          * @param  {string} packageName Package name
          *
-         * @return {Object}             Package definition 
+         * @return {Object}             Package definition
          */
         _getPackageDefinition: function (packageName) {
             var packageDefinition = this.packages[packageName];
@@ -524,7 +524,7 @@ Oskari = (function () {
          *
          * @param  {string} className Class name
          *
-         * @return {Object}           Class metadata 
+         * @return {Object}           Class metadata
          */
         getMetadata: function (className) {
             var classInfo;
@@ -544,7 +544,7 @@ Oskari = (function () {
          *
          * @param {string} basePkg   Base package
          * @param {string} pkg       Package
-         * @param {string} sp        
+         * @param {string} sp
          * @param {Object} classInfo ClassInfo
          * @param {Object} classMeta Class metadata
          *
@@ -598,7 +598,7 @@ Oskari = (function () {
          *                                     class prototype
          * @param  {Object}   metadata         Optional metadata for the class
          *
-         * @return {Object}                    ClassInfo 
+         * @return {Object}                    ClassInfo
          */
         define: function (className, classConstructor, prototype, metadata) {
             var classDefinition,
@@ -747,7 +747,7 @@ Oskari = (function () {
          * @param  {string} className   Class name
          * @param           constructor Constructor
          *
-         * @return {Object}             ClassInfo 
+         * @return {Object}             ClassInfo
          */
         lookup: function (className, constructor) {
             var classDefinition,
@@ -854,7 +854,7 @@ Oskari = (function () {
          *
          * @param  {Object} classInfo ClassInfo
          *
-         * @return {Object}           ClassInfo 
+         * @return {Object}           ClassInfo
          */
         _pullDown: function (classInfo) {
             var i,
@@ -1071,9 +1071,9 @@ Oskari = (function () {
          * @private @method _global
          *
          * @param {string} key   Key
-         * @param          value Value       
+         * @param          value Value
          *
-         * @return 
+         * @return
          */
         _global: function (key, value) {
             if (key === undefined) {
@@ -1154,7 +1154,7 @@ Oskari = (function () {
          * @public @method getState
          *
          *
-         * @return {number} Files loaded / Files requested 
+         * @return {number} Files loaded / Files requested
          */
         getState: function () {
             if (this.filesRequested === 0) {
@@ -1232,7 +1232,7 @@ Oskari = (function () {
          * @param  {string}     elementType Element type
          * @param  {Object=}    elementId   Element ID
          *
-         * @return {Element} 
+         * @return {Element}
          */
         _buildScriptTag: function (filename, callback, elementType, elementId) {
             var script = document.createElement('script');
@@ -1408,7 +1408,7 @@ Oskari = (function () {
          * @private @method _getSerial
          *
          *
-         * @return {number} 
+         * @return {number}
          */
         _getSerial: function () {
             this.serial += 1;
@@ -2013,7 +2013,7 @@ D         * @param {Object} classInfo ClassInfo
          * @param  {string} biid Bundle implementation ID
          * @param  {string} bid  Bundle ID
          *
-         * @return {Object}      Bundle 
+         * @return {Object}      Bundle
          */
         createBundle: function (biid, bid) {
             var bundle,
@@ -2241,7 +2241,7 @@ D         * @param {Object} classInfo ClassInfo
          *
          * @param  {string} biid Bundle instance ID
          *
-         * @return {Object}      Bundle instance 
+         * @return {Object}      Bundle instance
          */
         getBundleInstanceByName: function (biid) {
             return this.bundleInstances[biid];
@@ -2616,7 +2616,7 @@ D         * @param {Object} classInfo ClassInfo
          * @public @method getConfiguration
          *
          *
-         * @return {Object} 
+         * @return {Object}
          */
         getConfiguration: function () {
             return this.appConfig;
@@ -2823,7 +2823,7 @@ D         * @param {Object} classInfo ClassInfo
          * @public @method Oskari.$
          *
          *
-         * @return {} 
+         * @return {}
          */
         '$': function () {
             return ga.apply(cs, arguments);
@@ -2848,7 +2848,7 @@ D         * @param {Object} classInfo ClassInfo
          * @public @method Oskari.getLoaderMode
          *
          *
-         * @return {string} Loader mode 
+         * @return {string} Loader mode
          */
         getLoaderMode: function () {
             return mode;
@@ -2968,45 +2968,45 @@ D         * @param {Object} classInfo ClassInfo
                         if(pp.key && pp.lang){
                             loc = Oskari.getLocalization(pp.key, pp.lang);
                         }
-                        
-                        if(loc && loc !== null){              
+
+                        if(loc && loc !== null){
                             pp.value = jQuery.extend(true, {}, loc, pp.value);
                         }
-                        
+
                     } else {
                         if(pp.key && pp.lang){
                             loc = Oskari.getLocalization(pp.key, pp.lang);
                         }
-                        
-                        if(loc && loc !== null){              
+
+                        if(loc && loc !== null){
                             pp.value = jQuery.extend(true, {}, pp.value, loc);
                         }
                     }
-                    
+
                     blocale.setLocalization(pp.lang, pp.key, pp.value);
                 }
-                
+
             } else {
                 if(override && override === true){
                     if(props.key && props.lang){
                         loc = Oskari.getLocalization(props.key, props.lang);
                     }
-                    
-                    if(loc && loc !== null){              
+
+                    if(loc && loc !== null){
                         props.value = jQuery.extend(true, {}, loc, props.value);
                     }
-                    
+
                 } else {
                     if(props.key && props.lang){
                         loc = Oskari.getLocalization(props.key, props.lang);
                     }
-                    
-                    if(loc && loc !== null){              
+
+                    if(loc && loc !== null){
                         props.value = jQuery.extend(true, {}, props.value, loc);
                     }
                 }
                 blocale.setLocalization(props.lang,props.key,props.value);
-                
+
             }
         },
 
@@ -3015,7 +3015,7 @@ D         * @param {Object} classInfo ClassInfo
          *
          * @param  {string} key Key
          *
-         * @return {string} 
+         * @return {string}
          */
         getLocalization: function (key, lang) {
             return blocale.getLocalization(key, lang);
@@ -3192,13 +3192,13 @@ D         * @param {Object} classInfo ClassInfo
         _slicer: Array.prototype.slice,
 
         /**
-         * @method category 
+         * @method category
          * Adds a set of methods to class
          *
          * @param  {Object}            prototype    Prototype
          * @param  {string}            categoryName Category name
          *
-         * @return {Oskari.ModuleSpec}              this 
+         * @return {Oskari.ModuleSpec}              this
          */
         category: function (prototype, categoryName) {
             var classInfo = cs.category(
@@ -3218,7 +3218,7 @@ D         * @param {Object} classInfo ClassInfo
          * @param  {}                  prototype    Prototype
          * @param  {string}            categoryName Category name
          *
-         * @return {Oskari.ModuleSpec}              this 
+         * @return {Oskari.ModuleSpec}              this
          */
         methods: function (prototype, categoryName) {
             var classInfo = cs.category(
@@ -3239,7 +3239,7 @@ D         * @param {Object} classInfo ClassInfo
          *
          * @param  {Object|Object[]}   clazz Class or an array of classes
          *
-         * @return {Oskari.ModuleSpec}       this 
+         * @return {Oskari.ModuleSpec}       this
          */
         extend: function (clazz) {
             var classInfo;
@@ -3261,7 +3261,7 @@ D         * @param {Object} classInfo ClassInfo
          * Creates an instance of this clazz
          *
          *
-         * @return {Object} Class instance 
+         * @return {Object} Class instance
          */
         create: function () {
             return cs.createWithClassInfo(this.classInfo, arguments);
@@ -3272,7 +3272,7 @@ D         * @param {Object} classInfo ClassInfo
          * Returns the class name
          *
          *
-         * @return {string} Class name 
+         * @return {string} Class name
          */
         name: function () {
             return this.className;
@@ -3283,7 +3283,7 @@ D         * @param {Object} classInfo ClassInfo
          * Returns class metadata
          *
          *
-         * @return {Object} Class metadata 
+         * @return {Object} Class metadata
          */
         metadata: function () {
             return cs.getMetadata(this.className);
@@ -3336,7 +3336,7 @@ D         * @param {Object} classInfo ClassInfo
          * @method builder
          *
          *
-         * @return {function} 
+         * @return {function}
          */
         builder: function () {
             return cs.getBuilderFromClassInfo(this.classInfo);
@@ -3357,7 +3357,7 @@ D         * @param {Object} classInfo ClassInfo
      * @param  {Object}   proto       Prototype
      * @param  {Object}   metas       Metadata
      *
-     * @return {Object}               Class instance 
+     * @return {Object}               Class instance
      */
     Oskari1BuilderAPI.cls = function (className, constructor, proto, metas) {
         var classInfo;
@@ -3438,7 +3438,7 @@ D         * @param {Object} classInfo ClassInfo
      * @param  {function} constructor Constructor
      * @param  {Object}   proto       Prototype
      *
-     * @return {Object} 
+     * @return {Object}
      */
     Oskari1BuilderAPI.requestCls = function (requestName, constructor, proto) {
         var className,
@@ -3498,7 +3498,7 @@ D         * @param {Object} classInfo ClassInfo
      * @param  {string} bundleId  Bundle ID
      * @param  {string} className Class name
      *
-     * @return {Object}           Bundle instance 
+     * @return {Object}           Bundle instance
      */
     Oskari1BuilderAPI.bundleCls = function (bundleId, className) {
         var rv;
@@ -3582,7 +3582,7 @@ D         * @param {Object} classInfo ClassInfo
     };
 
     /**
-     * @static @method Oskari.tileCls 
+     * @static @method Oskari.tileCls
      *
      * @param  {string} className Class name
      *

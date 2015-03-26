@@ -137,7 +137,7 @@ Oskari.clazz.define(
             // hackish way of hooking into layers redraw calls
             var original = openLayer.redraw;
             openLayer.redraw = function() {
-            	// mergeNewParams triggers a new redraw so we need to use 
+            	// mergeNewParams triggers a new redraw so we need to use
             	// a flag variable to detect if we should redraw or calculate new SLD
             	if(this.____oskariFlagSLD === true) {
             		this.____oskariFlagSLD = false;
@@ -222,7 +222,7 @@ Oskari.clazz.define(
             return this.getMap().getLayersByName('layer_' + layer.getId());
         },
         __getSLD: function(layer) {
-			 return '<?xml version="1.0" ?>' +
+			 var SLD = '<?xml version="1.0" ?>' +
 			'<StyledLayerDescriptor version="1.0.0" xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.0.0/StyledLayerDescriptor.xsd">'+
 			'<NamedLayer>'+
 			'<Name>'+ layer.getSLDNamedLayer() + '</Name>'+
@@ -233,61 +233,69 @@ Oskari.clazz.define(
 			'<ogc:Function name="gs:Heatmap">'+
 			'<ogc:Function name="parameter">'+
 			'<ogc:Literal>data</ogc:Literal>'+
-			'</ogc:Function>'+
-			'<ogc:Function name="parameter">'+
-			'<ogc:Literal>weightAttr</ogc:Literal>'+
-			'<ogc:Literal>'+layer.getSelectedHeatmapProperty()+'</ogc:Literal>'+
-			'</ogc:Function>'+
-			'<ogc:Function name="parameter">'+
-			'<ogc:Literal>radiusPixels</ogc:Literal>'+
-			'<ogc:Function name="env">'+
-			'<ogc:Literal>radius</ogc:Literal>'+
-			'<ogc:Literal>'+layer.getRadius()+'</ogc:Literal>'+
-			'</ogc:Function>'+
-			'</ogc:Function>'+
-			'<ogc:Function name="parameter">'+
-			'<ogc:Literal>pixelsPerCell</ogc:Literal>'+
-			'<ogc:Literal>'+ 10 +'</ogc:Literal>'+
-			'</ogc:Function>'+
-			'<ogc:Function name="parameter">'+
-			'<ogc:Literal>outputBBOX</ogc:Literal>'+
-			'<ogc:Function name="env">'+
-			'<ogc:Literal>wms_bbox</ogc:Literal>'+
-			'</ogc:Function>'+
-			'</ogc:Function>'+
-			'<ogc:Function name="parameter">'+
-			'<ogc:Literal>outputWidth</ogc:Literal>'+
-			'<ogc:Function name="env">'+
-			'<ogc:Literal>wms_width</ogc:Literal>'+
-			'</ogc:Function>'+
-			'</ogc:Function>'+
-			'<ogc:Function name="parameter">'+
-			'<ogc:Literal>outputHeight</ogc:Literal>'+
-			'<ogc:Function name="env">'+
-			'<ogc:Literal>wms_height</ogc:Literal>'+
-			'</ogc:Function>'+
-			'</ogc:Function>'+
-			'</ogc:Function>'+
-			'</Transformation>'+
-			'<Rule>'+
-			'<RasterSymbolizer>'+
-			'<Geometry>'+
-			'<ogc:PropertyName>' + layer.getGeometryProperty() + '</ogc:PropertyName></Geometry>'+
-			'<Opacity>1</Opacity>'+
-			'<ColorMap type="ramp" >'+
-			// TODO: make color map configurable
-			'<ColorMapEntry color="#FFFFFF" quantity="0" label="nodata" opacity="0"/>'+
-			'<ColorMapEntry color="#FFFFFF" quantity="0.02" label="nodata" opacity="0"/>'+
-			'<ColorMapEntry color="#4444FF" quantity=".1" label="nodata"/>'+
-			'<ColorMapEntry color="#FF0000" quantity=".5" label="values" />'+
-			'<ColorMapEntry color="#FFFF00" quantity="1.0" label="values" />'+
-			'</ColorMap>'+
-			'</RasterSymbolizer>'+
-			'</Rule>'+
-			'</FeatureTypeStyle>'+
-			'</UserStyle>'+
-			'</NamedLayer>'+
-			'</StyledLayerDescriptor>';
+			'</ogc:Function>';
+			if(layer.getWeightedHeatmapProperty()) {
+				SLD = SLD +
+					'<ogc:Function name="parameter">'+
+					'<ogc:Literal>weightAttr</ogc:Literal>'+
+					'<ogc:Literal>'+layer.getWeightedHeatmapProperty()+'</ogc:Literal>'+
+					'</ogc:Function>';
+			}
+			SLD = SLD +
+				'<ogc:Function name="parameter">'+
+				'<ogc:Literal>radiusPixels</ogc:Literal>'+
+				'<ogc:Function name="env">'+
+				'<ogc:Literal>radius</ogc:Literal>'+
+				'<ogc:Literal>'+layer.getRadius()+'</ogc:Literal>'+
+				'</ogc:Function>'+
+				'</ogc:Function>'+
+				'<ogc:Function name="parameter">'+
+				'<ogc:Literal>pixelsPerCell</ogc:Literal>'+
+				'<ogc:Literal>'+ layer.getPixelsPerCell() +'</ogc:Literal>'+
+				'</ogc:Function>'+
+				'<ogc:Function name="parameter">'+
+				'<ogc:Literal>outputBBOX</ogc:Literal>'+
+				'<ogc:Function name="env">'+
+				'<ogc:Literal>wms_bbox</ogc:Literal>'+
+				'</ogc:Function>'+
+				'</ogc:Function>'+
+				'<ogc:Function name="parameter">'+
+				'<ogc:Literal>outputWidth</ogc:Literal>'+
+				'<ogc:Function name="env">'+
+				'<ogc:Literal>wms_width</ogc:Literal>'+
+				'</ogc:Function>'+
+				'</ogc:Function>'+
+				'<ogc:Function name="parameter">'+
+				'<ogc:Literal>outputHeight</ogc:Literal>'+
+				'<ogc:Function name="env">'+
+				'<ogc:Literal>wms_height</ogc:Literal>'+
+				'</ogc:Function>'+
+				'</ogc:Function>'+
+				'</ogc:Function>'+
+				'</Transformation>'+
+				'<Rule>'+
+				'<RasterSymbolizer>'+
+				'<Geometry>'+
+				'<ogc:PropertyName>' + layer.getGeometryProperty() + '</ogc:PropertyName></Geometry>'+
+				'<Opacity>1</Opacity>'+
+				'<ColorMap type="ramp" >';
+
+			// setup color map
+			//'<ColorMapEntry color="#FFFFFF" quantity="0.02" opacity="0"/>';
+			var colors = layer.getColorConfig();
+			var entryTemplate = _.template('<ColorMapEntry color="${color}" quantity="${quantity}" opacity="${opacity}" />');
+			_.each(colors, function(color) {
+				SLD = SLD + entryTemplate(color);
+			});
+			SLD = SLD +
+				'</ColorMap>'+
+				'</RasterSymbolizer>'+
+				'</Rule>'+
+				'</FeatureTypeStyle>'+
+				'</UserStyle>'+
+				'</NamedLayer>'+
+				'</StyledLayerDescriptor>';
+			return SLD;
         },
         /**
          * @method _afterChangeMapLayerOpacityEvent

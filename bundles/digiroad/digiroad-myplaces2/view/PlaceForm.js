@@ -1,6 +1,6 @@
 /**
  * @class Oskari.digiroad.bundle.myplaces2.view.PlaceForm
- * 
+ *
  * Shows a form for my place
  */
 Oskari.clazz.define("Oskari.digiroad.bundle.myplaces2.view.PlaceForm",
@@ -13,17 +13,17 @@ function(instance) {
     this.instance = instance;
     this.placeId = undefined;
     this.initialValues = undefined;
-    
+
     var loc = instance.getLocalization('placeform');
 
     this.template = jQuery('<div class="myplacesform">' +
-            '<div class="field">' + 
-                '<div class="help icon-info" ' + 
+            '<div class="field">' +
+                '<div class="help icon-info" ' +
                 'title="' + loc.tooltip + '"></div>' +
                 '<label for="placedyntype">' + loc.placedyntype.label + '</label><br/>' +
                 '<select name="placedyntype"></select>' +
             '</div>' +
-            '<div class="field">' +  
+            '<div class="field">' +
                 '<input type="text" name="placedynvalue" placeholder="' + loc.placedynvalue.placeholder + '"/>' +
             '</div>' +
         '</div>');
@@ -34,7 +34,7 @@ function(instance) {
     /**
      * @method getForm
      * @param {Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory[]} categories array containing available categories
-     * @return {jQuery} jquery reference for the form 
+     * @return {jQuery} jquery reference for the form
      */
     getForm : function(categories) {
         var ui = this.template.clone();
@@ -51,7 +51,7 @@ function(instance) {
             }
             selection.append(option);
         }
-        
+
         if(this.initialValues) {
             ui.find('select[name=placedyntype]').attr("value", this.initialValues.place.dyntype);
             ui.find('input[name=placedynvalue]').attr("value", this.initialValues.place.dynvalue);
@@ -61,14 +61,14 @@ function(instance) {
     /**
      * @method getValues
      * Returns form values as an object
-     * @return {Object} 
+     * @return {Object}
      */
     getValues : function() {
         var values = {};
-        // infobox will make us lose our reference so search 
+        // infobox will make us lose our reference so search
         // from document using the form-class
         var onScreenForm = this._getOnScreenForm();
-        
+
         if(onScreenForm.length > 0) {
             // found form on screen
             var dynType = onScreenForm.find('select[name=placedyntype]').val();
@@ -86,11 +86,11 @@ function(instance) {
     /**
      * @method setValues
      * Sets form values from object.
-     * @param {Object} data place data as formatted in #getValues() 
+     * @param {Object} data place data as formatted in #getValues()
      */
     setValues : function(data) {
         this.placeId = data.place.id;
-        // infobox will make us lose our reference so search 
+        // infobox will make us lose our reference so search
         // from document using the form-class
         var onScreenForm = this._getOnScreenForm();
 
@@ -99,13 +99,13 @@ function(instance) {
             onScreenForm.find('select[name=placedyntype]').val(data.place.dyntype);
             onScreenForm.find('input[name=placedynvalue]').val(data.place.dynvalue);
         }
-        
+
         this.initialValues = data;
     },
 
     /**
      * @method destroy
-     * Removes eventlisteners 
+     * Removes eventlisteners
      */
     destroy : function() {
         // unbind live bindings
@@ -118,11 +118,11 @@ function(instance) {
     },
     /**
      * @method _getOnScreenForm
-     * Returns reference to the on screen version shown by OpenLayers 
+     * Returns reference to the on screen version shown by OpenLayers
      * @private
      */
     _getOnScreenForm : function() {
-        // unbind live so 
+        // unbind live so
         return jQuery('div.myplacesform');
     }
 });

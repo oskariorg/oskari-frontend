@@ -1,6 +1,6 @@
 /**
  * @class Oskari.integration.bundle.bb.View
- * 
+ *
  */
 Oskari.clazz.define('Oskari.integration.bundle.bb.View', function(locale,instance,conf) {
     this.locale = locale;
@@ -15,7 +15,7 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.View', function(locale,instanc
     "setEl" : function(el) {
         this.container = el;
     },
-    
+
     /**
      * @method getEl
      * gets the (jQuery) element for this view
@@ -23,24 +23,24 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.View', function(locale,instanc
     "getEl" : function() {
         return this.container;
     },
-    
+
     /**
      * @propertyc
-     * requirements to be processed with require() 
+     * requirements to be processed with require()
      */
     "requirements" : [],
-    
+
     /**
      * @method render
-     * 
+     *
      * method that will receive in arguments any requiremends defined
      * in requirements property
-     * 
+     *
      */
     "render" : function() {
         throw "Abstract";
     },
-    
+
     /**
      * @method getLocalization
      *
@@ -49,37 +49,37 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.View', function(locale,instanc
     "getLocalization" : function() {
         return this.locale;
     },
-    
+
     /**
      * @method getConfiguration
-     * 
+     *
      * gets configuration for this bundle
      */
     "getConfiguration" : function() {
-        return this.conf;  
+        return this.conf;
     },
-    
+
     /**
      * @method getSandbox
-     * 
+     *
      * returns sandbox for binding to Oskari app functionality
-     *  
+     *
      */
     "getSandbox" : function() {
-        return this.instance.getSandbox();  
+        return this.instance.getSandbox();
     },
-    
+
     /**
      * @method getLang
      * helper to get current language from Oskari
-     * 
+     *
      */
     "getLang" : function()  {
         return Oskari.getLang();
-    },    
+    },
     /**
      * @method onEvent
-     * 
+     *
      * Dispatches events to eventhandlers declared
      */
     onEvent : function(event) {
@@ -91,18 +91,18 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.View', function(locale,instanc
         return handler.apply(this, [event]);
 
     },
-    
+
     slicer : Array.prototype.slice,
-    
+
     /**
-     * @method request 
+     * @method request
      *
-     * helper function to wrap passing requests 
+     * helper function to wrap passing requests
      */
     request: function() {
         return this.getSandbox().requestByName(this.instance,arguments[0],this.slicer.apply(arguments,1));
     },
-    
+
     /**
      * @method getName
      * returns identifier used to connect to sandbox (borrowed from instance)

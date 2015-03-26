@@ -173,7 +173,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 type: 'POST',
                 url: ajaxUrl + 'action_route=SaveLayerPermission',
                 lang: Oskari.getLang(),
-                timestamp: new Date().getTime(),               
+                timestamp: new Date().getTime(),
                 data: saveData,
                 success: function () {
                     me.updatePermissionsTable(me.activeRole, "ROLE");
@@ -239,15 +239,15 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 select = jQuery(this.container).find('select.admin-layerrights-role'),
                 option = select.find('option[value=' + role.id +']');
 
-            if (operation == 'remove') { 
-                option.remove(); 
-            } 
-            if (operation == 'update') { 
-                option.html(role.name); 
+            if (operation == 'remove') {
+                option.remove();
+            }
+            if (operation == 'update') {
+                option.html(role.name);
             }
             if (operation == 'add') {
                 select.append("<option value=" + role.id +">" + role.name + "</option>");
-            } 
+            }
         },
 
         /**
@@ -273,7 +273,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 headerRow.append(thCell);
             });
             thead.append(headerRow);
-            
+
             // Create rows
             jQuery.each(layerRightsJSON, function(index, layerRight) {
                 var layer = service.findMapLayer(layerRight.id),
@@ -295,10 +295,10 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                         cell.html(value);
                     } else {
                         cell = me._templates.checkBox.clone();
-                        cell.attr('data-right', header.id);                        
+                        cell.attr('data-right', header.id);
                         if(value){
                             cell.attr('checked', 'checked');
-                        }                        
+                        }
                     }
                     cell.attr('title', tooltip);
                     dataCell.append(cell);

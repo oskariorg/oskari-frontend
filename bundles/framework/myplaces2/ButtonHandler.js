@@ -318,7 +318,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
             'Toolbar.ToolSelectedEvent': function (event) {
                 if (!this.ignoreEvents) {
                     // changed tool -> cancel any drawing
-                    // do not trigger when we return drawing tool to 
+                    // do not trigger when we return drawing tool to
                     this.sendStopDrawRequest(true);
                     this.instance.enableGfi(true);
                 }
@@ -391,7 +391,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
 
             'DrawPlugin.ActiveDrawingEvent': function (event) {
                 if (this.instance.view.drawPluginId !== event.getCreatorId()) return;
-                
+
                 var geom = event.getDrawing(),
                     mode = event.getDrawMode(),
                     resultText = this.instance.getDrawPlugin().getMapModule().formatMeasurementResult(geom, mode);

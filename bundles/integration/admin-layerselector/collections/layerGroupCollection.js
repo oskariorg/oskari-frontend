@@ -11,7 +11,7 @@
              * @method initialize
              */
             initialize: function(models,title) {
-                this.name = title; 
+                this.name = title;
                 this.searchIndex = {};
                 if(!models || models.length === 0) {
                     // setup empty collection
@@ -28,7 +28,7 @@
             },
 
             /**
-             * Sets a new name 
+             * Sets a new name
              * @method setTitle
              * @param {String} value
              */
@@ -52,10 +52,10 @@
                         });
                     }
                 }
-                
+
                 // Make sure all supported languages are present
                 var supportedLanguages = Oskari.getSupportedLanguages();
-                
+
                 for (var j = 0; j < supportedLanguages.length; j++) {
                     if (!usedLanguages[supportedLanguages[j]]) {
                         names.push({
@@ -68,16 +68,16 @@
             },
             /**
              * Returns title / name of this layerGroup
-             * @method getTitle 
+             * @method getTitle
              * @return {String}
              */
             getTitle : function() {
                 return this.name;
             },
             /**
-             * Get all layer 
-             * 
-             * @method getLayers 
+             * Get all layer
+             *
+             * @method getLayers
              * @return {Layer[]}
              */
             getLayers : function() {
@@ -85,8 +85,8 @@
             },
             /**
              * Remove all layers
-             * 
-             * @method addLayer 
+             *
+             * @method addLayer
              * @param {LayerModel} layer
              */
             resetLayers : function() {
@@ -94,13 +94,13 @@
                 this.reset();
             },
             /**
-             * Returns search index. i.e. full name of a layer as a string 
-             * @method addLayer 
+             * Returns search index. i.e. full name of a layer as a string
+             * @method addLayer
              * @param {LayerModel} layer
              * @return {String} name+inspireName+organizationName
              */
             _getSearchIndex : function(layerModel) {
-                var val = layerModel.getName() +  ' ' + 
+                var val = layerModel.getName() +  ' ' +
                     layerModel.getInspireName() +  ' ' +
                     layerModel.getOrganizationName();
                 // TODO: maybe filter out undefined texts
@@ -108,7 +108,7 @@
             },
             /**
              * Checks if layer matches with the keyword
-             * @method matchesKeyword 
+             * @method matchesKeyword
              * @param {LayerId} id
              * @param {String} keyword
              * @return {boolean} true if keyword is found from layer name
@@ -119,6 +119,6 @@
             }
 
         });
-        
+
     });
 }).call(this);

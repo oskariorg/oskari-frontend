@@ -30,7 +30,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Fieldset',
 
         /**
          * @method isEnabled
-         * @return {Boolean} enabled 
+         * @return {Boolean} enabled
          */
         isEnabled: function () {
             'use strict';

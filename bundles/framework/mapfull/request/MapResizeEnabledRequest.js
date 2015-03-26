@@ -1,7 +1,7 @@
 /**
  * @class Oskari.mapframework.bundle.mapfull.request.MapResizeEnabledRequest
  * Request enabling window resize
- * 
+ *
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */

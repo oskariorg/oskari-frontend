@@ -1,6 +1,6 @@
 /**
  * @class Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.event.AddedFeatureEvent
- * 
+ *
  * Used to notify components that the feature has been added.
  */
 Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.event.AddedFeatureEvent',

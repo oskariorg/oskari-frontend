@@ -1,11 +1,11 @@
 /**
  * @class Oskari.harava.bundle.mapquestions.request.HideQuestionToolsRequest
  * Requests a change visibility of question tool
- * 
+ *
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
-Oskari.clazz.define('Oskari.harava.bundle.mapquestions.request.VisibilityQuestionRequest', 
+Oskari.clazz.define('Oskari.harava.bundle.mapquestions.request.VisibilityQuestionRequest',
 
 /**
  * @method create called automatically on construction

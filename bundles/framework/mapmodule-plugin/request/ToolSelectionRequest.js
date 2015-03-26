@@ -1,9 +1,9 @@
 /**
  * @class Oskari.mapframework.bundle.mapmodule.request.ToolSelectionRequest
- * 
+ *
  * Requests a tool to be activated on the map. Currently also used to trigger history navigation.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.ToolSelectionRequest', 
+Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.ToolSelectionRequest',
 /**
  * @method create called automatically on construction
  * @static
@@ -62,7 +62,7 @@ function(toolId) {
     },
     /**
      * @method getToolName
-     * If the toolId has . this returns the last part of the toolId, otherwise returns the toolId as is 
+     * If the toolId has . this returns the last part of the toolId, otherwise returns the toolId as is
      * @return {String}
      */
     getToolName : function() {

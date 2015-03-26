@@ -77,7 +77,7 @@ Oskari.clazz.define(
             };
             */
             if (navigator.geolocation) {
-                // if users just ignores/closes the browser dialog 
+                // if users just ignores/closes the browser dialog
                 // -> error handler won't be called in most browsers
                 navigator.geolocation.getCurrentPosition(
                     function (position) {

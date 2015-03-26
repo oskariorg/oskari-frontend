@@ -15,7 +15,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatacatalogue.request.AddSearch
     this.instance = instance;
 }, {
     /**
-     * @method handleRequest 
+     * @method handleRequest
      * Add metadatacatalogue results to show licence element.
      * @param {Oskari.mapframework.core.Core} core
      *      reference to the application core (reference sandbox core.getSandbox())

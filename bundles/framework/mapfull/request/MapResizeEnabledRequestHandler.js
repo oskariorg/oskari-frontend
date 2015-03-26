@@ -2,7 +2,7 @@
  * @class 'Oskari.mapframework.bundle.mapfull.request.MapResizeEnabledRequestHandler
  * Tells the mapfull whether resize is enabled.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.request.MapResizeEnabledRequestHandler', 
+Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.request.MapResizeEnabledRequestHandler',
 /**
  * @method create called automatically on construction
  * @static
@@ -13,7 +13,7 @@ function(mapfull) {
     this.mapfull = mapfull;
 }, {
     /**
-     * @method handleRequest 
+     * @method handleRequest
      * Shows/hides the maplayer specified in the request in OpenLayers implementation.
      * @param {Oskari.mapframework.core.Core} core
      *      reference to the application core (reference sandbox core.getSandbox())

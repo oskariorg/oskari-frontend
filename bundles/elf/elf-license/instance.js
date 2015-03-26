@@ -22,7 +22,7 @@ function () {
             '   <div class="elf_license_dialog_license_data">' +
             '      <div class="elf_license_dialog_description"></div>' +
             '      <div class="elf_license_dialog_licensemodels_title"></div>' +
-            '      <div class="elf_license_dialog_licensemodels">' +            
+            '      <div class="elf_license_dialog_licensemodels">' +
             '      </div>' +
             '   <div class="help"></div>'+
             '   </div>' +
@@ -112,17 +112,17 @@ function () {
         return this.__name;
     },
     eventHandlers: {
-        
+
     },
     /**
      * DefaultExtension method for doing stuff after the bundle has started.
-     * 
+     *
      * @method afterStart
      */
     afterStart: function (sandbox) {
         var me = this,
             conf = me.conf;
-        
+
         me._locale =  this.getLocalization();
         me._sandbox = sandbox;
 
@@ -143,7 +143,7 @@ function () {
 
         // Create validators
         me._validator.number = Oskari.clazz.create('Oskari.elf.license.validator.NumberValidator',me, false, true);
-        
+
         // Create elements
         me._paramEnumElement = Oskari.clazz.create('Oskari.elf.license.elements.ParamEnumElement', me, me._validator);
         me._paramDisplayElement = Oskari.clazz.create('Oskari.elf.license.elements.ParamDisplayElement', me, me._validator);
@@ -181,7 +181,7 @@ function () {
      * Get license information
      * @method _getLicenseInfo
      * @private
-     * 
+     *
      * @param {Object} metadata metadata information
      */
     _getLicenseInfo: function(metadata) {
@@ -382,7 +382,7 @@ function () {
         title.removeClass('text');
 
         // If  founded models then shows them
-        if(data.licenseModels.length > 0)  { 
+        if(data.licenseModels.length > 0)  {
             title.html(me._locale.dialog.licenseModelsTitle);
         }
         // If not found then shows message
@@ -391,7 +391,7 @@ function () {
             // If user has already logged in  then shows at no right to anyone license
             if (me._sandbox.getUser().isLoggedIn()) {
                 title.html(me._locale.dialog.noRightToAnyLicenseModels);
-            } 
+            }
             // Else if user has not logged in then show log in message
             else {
                 title.html(me._locale.dialog.loginShort);
@@ -489,7 +489,7 @@ function () {
     _deactivateLicense: function(){
         var me = this,
             data = me._getLicenseInputValues();
-        
+
         me._progressSpinner.start();
 
         me.licenseService.doDeactivateLicense({
@@ -499,7 +499,7 @@ function () {
         }, function (response) {
             me._progressSpinner.stop();
 
-            if (response) {                
+            if (response) {
                 if(response.success && response.success === true) {
                     me._dialog.close();
                     me._showMessage(me._locale.success.deactivateLicense.title, me._locale.success.deactivateLicense.message);
@@ -562,7 +562,7 @@ function () {
         title.removeClass('text');
 
         // If  founded models then shows them
-        if(data.licenseModels.length > 0)  { 
+        if(data.licenseModels.length > 0)  {
             title.html(me._locale.dialog.licenseModelsTitle);
             dialogContent.find('.help').html(me._locale.dialog.help.info);
             jQuery.each(data.licenseModels, function(index, model){
@@ -582,7 +582,7 @@ function () {
             // If user has already logged in  then shows at no right to anyone license
             if (me._sandbox.getUser().isLoggedIn()) {
                 title.html(me._locale.dialog.noRightToAnyLicenseModels);
-            } 
+            }
             // Else if user has not logged in then show log in message
             else {
                 title.html(me._locale.dialog.loginShort);
@@ -798,7 +798,7 @@ function () {
      * Get form element
      * @method _getFormElement
      * @private
-     * 
+     *
      * @param {Object} param the license model param
      *
      * @return {Object} jQuery element object

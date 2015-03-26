@@ -266,10 +266,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
             return this.plugins['Oskari.userinterface.Flyout'].getContentState();
             /*
         var state = {
-            
-            
+
+
         };
-        
+
         return state;
         */
         }

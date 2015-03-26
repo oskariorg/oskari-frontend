@@ -86,7 +86,7 @@ define([
                 this.render();
             },
             /**
-             * Setup supported layer types based on what this bundle can handle and 
+             * Setup supported layer types based on what this bundle can handle and
              * which layer types are supported by started application (layer models registered).
              *
              * NOTE! This must be done here so layer type specific templates have time to load.
@@ -106,8 +106,8 @@ define([
                 // filter out ones that are not registered in current appsetup
                 var sandbox = this.instance.sandbox,
                     mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
-                this.supportedTypes = _.filter(this.supportedTypes, function(type){ 
-                    return mapLayerService.hasSupportForLayerType(type.id) 
+                this.supportedTypes = _.filter(this.supportedTypes, function(type){
+                    return mapLayerService.hasSupportForLayerType(type.id)
                 });
                 // setup templates for layer types/require only ones supported
                 _.each(this.supportedTypes, function(type) {
@@ -188,7 +188,7 @@ define([
                         var tab = this.tabTemplate({
                             "lcId" : group.id
                         });
-                        
+
                         // grouping edit panels
                         groupPanel.find('.accordion-header')
                             .append(this.__createGroupingPanel(this.options.tabId, group));
@@ -200,7 +200,7 @@ define([
                     this.$el.prepend(this.filterTemplate({
                         instance: this.options.instance
                     }));
-                    
+
                     // grouping add panel
                     var newGroup = this.layerGroupingModel.getTemplateGroup();
                     var btnConfig = {};
@@ -223,7 +223,7 @@ define([
                 var selectedLayers = this.options.instance.sandbox.findAllSelectedMapLayers();
                 for(var i = 0; i < selectedLayers.length; ++i) {
                     this.setLayerSelected(selectedLayers[i].getId(), true);
-                }                            
+                }
                 this.filterLayers(this.filterField.getValue());
                 */
 
@@ -292,7 +292,7 @@ define([
                 e.stopPropagation();
                 var element = jQuery(e.currentTarget),
                     grouping = element.parents('.accordion-header');
-                // if there is no accordion-header 
+                // if there is no accordion-header
                 if (grouping.length == 0) {
                     element.parents('.admin-add-class').removeClass('show-add-class');;
                 }
@@ -484,13 +484,13 @@ define([
                         }
                     });
                 });
-                
+
                 cancelBtn.setHandler(function() {
                    dialog.close();
                 });
 
                 dialog.show(me.instance.getLocalization('admin')['warningTitle'], confirmMsg, [btn, cancelBtn]);
-                dialog.makeModal();                
+                dialog.makeModal();
             },
             /**
             * @method _showDialog

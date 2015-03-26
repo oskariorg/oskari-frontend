@@ -1,9 +1,9 @@
 /**
  * @class Oskari.lupapiste.bundle.myplaces2.event.FinishedDrawingEvent
- * 
- * Used to notify components that the drawing has been finished. 
+ *
+ * Used to notify components that the drawing has been finished.
  */
-Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.event.FinishedDrawingEvent', 
+Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.event.FinishedDrawingEvent',
 /**
  * @method create called automatically on construction
  * @static
@@ -34,7 +34,7 @@ function(geometry, blnEdit) {
     },
     /**
      * @method isModification
-     * Returns true if drawing was initially opened for editing (not a new one) 
+     * Returns true if drawing was initially opened for editing (not a new one)
      * @return {Boolean}
      */
     isModification : function() {

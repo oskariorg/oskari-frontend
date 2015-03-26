@@ -1,5 +1,5 @@
 define(['text!_bundle/templates/item.html'],function(Template) {
-    
+
     return Backbone.View.extend({
 
         //... is a list tag.

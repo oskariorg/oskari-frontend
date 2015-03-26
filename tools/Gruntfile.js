@@ -168,6 +168,17 @@ module.exports = function (grunt) {
                 },
                 files: '<%= compress.zip.files %>'
             }
+        },
+
+        trimtrailingspaces: {
+            main: {
+              src: ['../bundles/**/*.js'],
+              options: {
+                filter: 'isFile',
+                encoding: 'utf8',
+                failIfTrimmed: false
+              }
+            }
         }
     });
 
@@ -182,6 +193,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-sass');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
     grunt.loadNpmTasks('grunt-contrib-compress');
+    grunt.loadNpmTasks('grunt-trimtrailingspaces');
 
     // Default task(s).
     grunt.registerTask('default', ['karma:dev', 'compileAppSetupToStartupSequence', 'compileDev', 'karma:dev:run', 'watch']);

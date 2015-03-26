@@ -1,6 +1,6 @@
 OpenLayers.Handler.PorttiDrag = OpenLayers.Class(OpenLayers.Handler, {
 
-    /** 
+    /**
      * Property: started
      * {Boolean} When a mousedown or touchstart event is received,
      *   we want to record it, but not set 'dragging' until the mouse
@@ -15,7 +15,7 @@ OpenLayers.Handler.PorttiDrag = OpenLayers.Class(OpenLayers.Handler, {
      */
     stopDown: true,
 
-    /** 
+    /**
      * Property: dragging
      * {Boolean}
      */
@@ -28,13 +28,13 @@ OpenLayers.Handler.PorttiDrag = OpenLayers.Class(OpenLayers.Handler, {
      */
     touch: false,
 
-    /** 
+    /**
      * Property: last
      * {<OpenLayers.Pixel>} The last pixel location of the drag.
      */
     last: null,
 
-    /** 
+    /**
      * Property: start
      * {<OpenLayers.Pixel>} The first pixel location of the drag.
      */
@@ -407,7 +407,7 @@ OpenLayers.Handler.PorttiDrag = OpenLayers.Class(OpenLayers.Handler, {
      * {Boolean} Let the event propagate.
      */
     touchend: function (evt) {
-        // override evt.xy with last position since touchend does 
+        // override evt.xy with last position since touchend does
         // not have any touch position
         evt.xy = this.last;
         return this.dragend(evt);

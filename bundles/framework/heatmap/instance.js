@@ -84,10 +84,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapBundleInstance',
             var loc = Oskari.getLocalization(this.getName());
 
             // add heatmap tool for layer
-            var label = loc.tool_label || 'Heatmap',
+            var label = loc.tool_label,
                 tool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
             if(layerModel.isLayerOfType('HEATMAP')) {
-                label = 'Settings';
+                label = loc.tool_label_settings;
             }
             tool.setName("heatmap");
             tool.setTitle(label);
@@ -97,7 +97,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapBundleInstance',
                 if(layerModel.isLayerOfType('HEATMAP')) {
                     dialog.showDialog(layerModel, function(values) {
                         me.__setupHeatmap(layerModel, values, false);
-                    });
+                    }, false);
                 }
                 else {
                     var layer = Oskari.clazz.create('Oskari.mapframework.bundle.heatmap.domain.HeatmapLayer');
@@ -109,15 +109,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapBundleInstance',
                     me.__addTool(layer, true);
                     dialog.showDialog(layer, function(values) {
                         me.__setupHeatmap(layer, values, true);
-                    });
+                    }, true);
                 }
             });
 
             service.addToolForLayer(layerModel, tool, suppressEvent);
         },
         __setupHeatmap : function(layer, values, isNew) {
-            layer.setRadius(values.radius || 10);
-            layer.setSelectedHeatmapProperty(values.property);
+            layer.setRadius(values.radius);
+            layer.setWeightedHeatmapProperty(values.property);
+            layer.setPixelsPerCell(values.pixelsPerCell);
             if(isNew) {
                 this.sandbox.printDebug('Register and setup heatmap with values', values, layer);
                 var service = this.getLayerService();

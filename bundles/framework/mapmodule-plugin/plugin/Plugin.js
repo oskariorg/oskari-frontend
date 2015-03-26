@@ -1,6 +1,6 @@
 /**
  * @class Oskari.mapframework.ui.module.common.mapmodule.Plugin
- * 
+ *
  * Interface/protocol definition for map plugins
  */
 Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.Plugin',
@@ -26,7 +26,7 @@ function() {
     /**
      * @method setMapModule
      * Sets reference to reference to map module
-     * @param {Oskari.mapframework.ui.module.common.MapModule} mapModule 
+     * @param {Oskari.mapframework.ui.module.common.MapModule} mapModule
      */
     setMapModule : function(mapModule) {
         throw "Implement your own";
@@ -74,7 +74,7 @@ function() {
 
     /**
      * @property {Object} eventHandlers
-     * Best practices: defining which 
+     * Best practices: defining which
      * events bundle is listening and how bundle reacts to them
      * @static
      */

@@ -708,7 +708,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
 
             // data url link
             if (!layer.getMetadataIdentifier()) {
-                //Check if sublayers have metadata info     
+                //Check if sublayers have metadata info
                 subLayers = layer.getSubLayers();
 
                 if (subLayers && subLayers.length > 0) {

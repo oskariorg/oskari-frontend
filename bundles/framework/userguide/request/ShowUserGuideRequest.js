@@ -1,8 +1,8 @@
 
 /**
  * @class Oskari.mapframework.bundle.userguide.request.ShowUserGuideRequest
- * 
- *   
+ *
+ *
  */
 Oskari.clazz
   .define(
@@ -25,7 +25,7 @@ Oskari.clazz
       getUuid : function() {
         return this._uuid;
       },
-      
+
       getContext: function() {
         return this._context;
       },
@@ -33,7 +33,7 @@ Oskari.clazz
       getExtension: function() {
         return this._extension;
       },
-      
+
       getEl: function() {
         return this._el;
       } ,
@@ -46,9 +46,9 @@ Oskari.clazz
       getContent: function() {
         return this._content;
       }
-      
+
     },
-    
+
     {
       'protocol' : ['Oskari.mapframework.request.Request']
     });

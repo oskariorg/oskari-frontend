@@ -6,7 +6,7 @@
  * textfield.
  * Opposite of
  * Oskari.mapframework.bundle.mapmodule.request.DisableMapKeyboardMovementRequest
- * 
+ *
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */

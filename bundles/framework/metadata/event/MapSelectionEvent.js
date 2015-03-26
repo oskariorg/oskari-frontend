@@ -1,9 +1,9 @@
 /**
  * @class Oskari.mapframework.bundle.metadata.event.MapSelectionEvent
- * 
- * Used to notify components that the drawing has been finished. 
+ *
+ * Used to notify components that the drawing has been finished.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.metadata.event.MapSelectionEvent', 
+Oskari.clazz.define('Oskari.mapframework.bundle.metadata.event.MapSelectionEvent',
 /**
  * @method create called automatically on construction
  * @static

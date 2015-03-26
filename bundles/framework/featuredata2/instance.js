@@ -182,7 +182,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
         },
         /**
          * Fetches reference to the map layer service
-         * @return {Oskari.mapframework.service.MapLayerService} 
+         * @return {Oskari.mapframework.service.MapLayerService}
          */
         getLayerService : function() {
             return this.sandbox.getService('Oskari.mapframework.service.MapLayerService');

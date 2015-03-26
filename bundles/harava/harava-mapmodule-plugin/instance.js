@@ -23,7 +23,7 @@ function() {
 
 	/**
 	 * @method getName
-	 * @return {String} the name for the component 
+	 * @return {String} the name for the component
 	 */
 	getName : function() {
 		return this.__name;
@@ -52,23 +52,23 @@ function() {
     	if(me.started){
     		return;
     	}
-    	
+
     	me.started = true;
-    	
+
     	var sandbox = Oskari.$("sandbox");
         me.sandbox = sandbox;
-        
+
         var conf = me.conf;
-        
+
         sandbox.register(me);
         var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
         plugin = Oskari.clazz.create('Oskari.harava.bundle.mapmodule.plugin.AttributionPlugin', conf);
         mapModule.registerPlugin(plugin);
         mapModule.startPlugin(plugin);
         this.plugin = plugin;
-        
+
         sandbox.register(me);
-    	
+
     	// request
     	var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
     	this.requestHandlers = {
@@ -79,7 +79,7 @@ function() {
         sandbox.addRequestHandler('UpdateMapRequest', this.requestHandlers.updateMapRequest);
         sandbox.addRequestHandler('AddControlToMapRequest', this.requestHandlers.addControlToMapRequest);
         sandbox.addRequestHandler('ZoomToExtentRequest', this.requestHandlers.zoomToExtentRequest);
-        
+
     },
 
     /**
@@ -93,7 +93,7 @@ function() {
             sandbox.unregisterFromEventByName(this, p);
         }
 
-        // request handler cleanup 
+        // request handler cleanup
         sandbox.removeRequestHandler('UpdateMapRequest', this.requestHandlers['updateMapRequest']);
         sandbox.removeRequestHandler('AddControlToMapRequest', this.requestHandlers['addControlToMapRequest']);
         sandbox.removeRequestHandler('ZoomToExtentRequest', this.requestHandlers['zoomToExtentRequest']);
@@ -111,7 +111,7 @@ function() {
 	 * implements Module protocol init method - initializes request handlers
 	 */
 	init : function() {
-		
+
 	},
     /**
      * @method update
@@ -122,7 +122,7 @@ function() {
 }, {
 	/**
      * @property {String[]} protocol
-     * @static 
+     * @static
      */
     protocol : ['Oskari.bundle.BundleInstance']
 });
