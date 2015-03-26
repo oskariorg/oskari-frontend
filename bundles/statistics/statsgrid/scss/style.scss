@@ -245,6 +245,8 @@
     @include box-shadow(2px 2px 2px silver);
     min-width: 100px;
     z-index: 20;
+    max-height: 40%;
+    overflow-y: auto;
 
     .slick-header-menuitem {
 
