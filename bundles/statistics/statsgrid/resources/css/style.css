@@ -137,7 +137,9 @@
   -moz-box-shadow: 2px 2px 2px #c0c0c0;
   box-shadow: 2px 2px 2px #c0c0c0;
   min-width: 100px;
-  z-index: 20; }
+  z-index: 20;
+  max-height: 40%;
+  overflow-y: auto; }
   .slick-header-menu .slick-header-menuitem a, .slick-header-menu .slick-header-menuitem li, .slick-header-menu .slick-header-menuitem div {
     display: block;
     padding: 2px 4px; }
