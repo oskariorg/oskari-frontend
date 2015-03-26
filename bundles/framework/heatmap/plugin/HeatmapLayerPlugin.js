@@ -187,8 +187,7 @@ Oskari.clazz.define(
             }
             var remLayer;
             if (layer.isBaseLayer() || layer.isGroupLayer()) {
-                var baseLayerId = '',
-                    i;
+                var i;
                 if (layer.getSubLayers().length > 0) {
                     for (i = 0; i < layer.getSubLayers().length; i += 1) {
                         var subtmp = layer.getSubLayers()[i];

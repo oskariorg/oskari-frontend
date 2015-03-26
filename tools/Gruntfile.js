@@ -403,15 +403,6 @@ module.exports = function (grunt) {
                 // only run the given copy tasks
                 grunt.task.run('copy:' + copyApps[i]);
             }
-/*
-            finalFiles.push({
-                expand: true,
-                cwd: '../',
-                src: ['bundles/**/resources/images/*.{png,jpg,jpeg,svg,gif}'],
-                dest: dest + '/images/',
-                flatten: true
-            });
-*/
             // add final copy settings to be run after compilation
             grunt.config.set('copy.final.files', finalFiles);
         } else {
@@ -555,7 +546,7 @@ module.exports = function (grunt) {
             processedAppSetup = parser.getComponents(options.appSetupFile),
             i,
             pasFiles,
-            findImageDir = '../images/',
+            findImageDir = '\.\./images/',
             findImageDirRegExp = new RegExp(findImageDir, 'g'),
             replaceImageDir = './images/';
 

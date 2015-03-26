@@ -223,6 +223,9 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                     me.getMap().setLayerIndex(openLayer, 0);
                 }
 
+                // Set queryable
+                layer.setQueryable(true);
+
             me.getSandbox().printDebug(
                 '#!#! CREATED OPENLAYER.LAYER.ArcGis93Rest for ArcGisLayer ' +
                 layer.getId()
