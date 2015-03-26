@@ -155,6 +155,7 @@ Oskari.clazz.define(
          * @static @property eventHandlers
          */
         eventHandlers: {
+
             'DrawPlugin.FinishedDrawingEvent': function (event) {
                 if (this.drawPluginId !== event.getCreatorId()) {
                     return;
@@ -407,7 +408,8 @@ Oskari.clazz.define(
          *
          */
         addGeometry: function (geometry, name) {
-            var feature,
+            var me = this,
+                feature,
                 mode = this._getDrawModeFromGeometry(geometry),
                 style;
 
@@ -421,7 +423,7 @@ Oskari.clazz.define(
                 style.strokeWidth = 2;
                 style.strokeColor = '#000000';
                 style.strokeOpacity = 1;
-                feature = new OpenLayers.Feature.Vector(geometry, null, style);
+                feature = new OpenLayers.Feature.Vector(geometry, null);
                 this.getFeatures().push(
                     this._createFakeLayer(feature.id, mode, name)
                 );
@@ -429,6 +431,30 @@ Oskari.clazz.define(
                 if (this.featureLayer) {
                     this.featureLayer.addFeatures([feature]);
                 }
+                this.featureLayer.events.on({
+                    'featureselected': function (event) {
+                        var wkt = new OpenLayers.Format.WKT(),
+                            featureWKT = wkt.write(event.feature);
+                            map = me.mapModule.getMap(),
+                            sandbox = me.mapModule.getSandbox(),
+                            layers = sandbox.findAllSelectedMapLayers();
+
+                        _.forEach(layers, function (layer) {
+                            var featureIds = [],
+                                keepCollection = false,
+                                builder = sandbox.getEventBuilder('WFSFeaturesSelectedEvent');
+
+                            var event = builder(featureIds, layer, keepCollection);
+                            sandbox.notifyAll(event);
+                        });
+
+                        me.selectedGeometry = featureWKT;
+
+                    },
+                    'featureunselected': function(feature) {
+                        me.selectedGeometry = undefined;
+                    }
+                });
                 this.view.refreshAnalyseData(feature.id);
             }
         },
@@ -889,7 +915,7 @@ Oskari.clazz.define(
                 } else {
                     // pressed finished drawing, act like dblclick
                     this.drawPlugin.forceFinishDraw();
-                }
+                }   
             }
         },
 
@@ -1014,8 +1040,8 @@ Oskari.clazz.define(
 
             //add select possibility to temp layers
             // requires highlight refactoring so is not in use yet
-            /*
-            var highlightControl = new OpenLayers.Control.SelectFeature(
+
+            this.highlightControl = new OpenLayers.Control.SelectFeature(
                     layer,
                     {
                         hover: true,
@@ -1023,22 +1049,39 @@ Oskari.clazz.define(
                         renderIntent: "temporary"
                     });
 
-            var selectControl = new OpenLayers.Control.SelectFeature(
+            this.selectControl = new OpenLayers.Control.SelectFeature(
                     layer,
                     {
                         clickout: true
                     });
 
-            this.mapModule.getMap().addControl(highlightControl);
-            this.mapModule.getMap().addControl(selectControl);
+            this.mapModule.getMap().addControl(this.highlightControl);
+            this.mapModule.getMap().addControl(this.selectControl);
 
-            highlightControl.activate();
-            selectControl.activate();
-            */
-
+            this.highlightControl.activate();
+            this.selectControl.activate();
             return layer;
         },
-
+        /**
+         * Activates featureLayer Highlight and Select Controls
+         *
+         * @method _activateSelectControls
+         * @private
+         */
+        _activateSelectControls: function () {
+            this.highlightControl.activate();
+            this.selectControl.activate();
+        },
+        /**
+         * Deactivates featureLayer Highlight and Select Controls
+         *
+         * @method _deactivateSelectControls
+         * @private
+         */
+        _deactivateSelectControls: function () {
+            this.highlightControl.deactivate();
+            this.selectControl.deactivate();
+        },
         /**
          * Destroys the feature layer and removes it from the map.
          *
