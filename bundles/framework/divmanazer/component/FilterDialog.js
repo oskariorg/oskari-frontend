@@ -53,7 +53,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                                                     '<label id="filter-by-geometry-intersect-label" for="analyse-filter-by-geometry-intersect"></label>' + 
                                                 '</div>' + 
                                                 '<div class="filter-by-geometry-contains">' + 
-                                                    '<input id="analyse-filter-by-geometry-contains" type="radio" name="filter-by-geometry" value="Contains" disabled/>' + 
+                                                    '<input id="analyse-filter-by-geometry-contains" type="radio" name="filter-by-geometry" value="Within" disabled/>' + 
                                                     '<label id="filter-by-geometry-contains-label" for="analyse-filter-by-geometry-contains"></label>' + 
                                                 '</div>' + 
                                             '</div>' + 
@@ -211,10 +211,10 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                 if (!clickedFeatures) {
                     clickedFeaturesSelection.find('#analyse-clicked-features').prop({'disabled': true, 'checked': false});
                     clickedFeaturesSelection.find('#analyse-filter-by-geometry').prop({'disabled': true, 'checked': false});
-                } else if (layer._isLayerSelected === true && layer._clickedGeometries.length > 0) {
+                } else if (layer._isLayerSelected === true && layer._clickedFeatureIds.length > 0) {
                     clickedFeaturesSelection.find('#analyse-clicked-features').prop('checked', true);
                     clickedFeaturesSelection.find('#analyse-filter-by-geometry').prop({'disabled': true, 'checked': false});
-                } else if (layer._clickedGeometries.length === 0) {
+                } else if (layer._clickedFeatureIds.length === 0) {
                     clickedFeaturesSelection.find('#analyse-clicked-features').prop({'disabled': true, 'checked': false});
                 } else {
                     clickedFeaturesSelection.find('#analyse-clicked-features').prop({'disabled': true, 'checked': false});
