@@ -425,6 +425,7 @@ Oskari.clazz.define(
                     var request = me.sandbox.getRequestBuilder('userinterface.UpdateExtensionRequest')(me, 'close', me.getName());
                     me.sandbox.request(me.getName(), request);
                     this.analyse.setEnabled(false);
+                    this.analyse.contentPanel._deactivateSelectControls();
                     this.analyse.hide();
                 }
             }

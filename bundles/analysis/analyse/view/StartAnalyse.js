@@ -317,19 +317,27 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             me.showInfos();
         },
 
+
         _getClickedFeaturesGeometries: function () {
             var me = this,
                 sandbox = me.instance.getSandbox(),
-                geometries = [];
+                geometries = [],
+                selectedFeatureGeom = this.contentPanel.selectedGeometry,
                 layers = sandbox.findAllSelectedMapLayers();
 
-            _.forEach(layers, function (layer) {
-                if (layer._clickedGeometries && layer._clickedGeometries.length > 0) {
-                    _.forEach(layer._clickedGeometries, function (clickedFeature) {
-                        geometries.push(clickedFeature[1]);
-                    });
-                }
-            });
+            if (_.isString(selectedFeatureGeom)) {
+                geometries.push(selectedFeatureGeom);
+
+            } else {
+                _.forEach(layers, function (layer) {
+                    if (layer._clickedFeatureIds && layer._clickedFeatureIds.length > 0) {
+                        _.forEach(layer._clickedGeometries, function (clickedFeature) {
+                            geometries.push(clickedFeature[1]);
+                        });
+                    }
+                });
+            }
+
             return geometries;
         },
         /**
@@ -2162,6 +2170,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         refreshAnalyseData: function (layer_id) {
             // Remove old
             this.contentPanel.emptyLayers();
+            this.contentPanel._activateSelectControls();
             this._addAnalyseData(this.contentPanel, layer_id);
 
         },
@@ -2689,7 +2698,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     if (clickedGeometries.length > 0) {
                         var clickedFeatures = true;
                     }
-                    editDialog.createFilterDialog(layer, prevJson, null, clickedFeatures);
+                    editDialog.createFilterDialog(layer, prevJson, null, clickedFeatures, me.features);
                     me._filterPopups[layer.getId()] = true;
                     me._userSetFilter[layer.getId()] = true;
                     // If there's already filter values for current layer, populate the dialog with them.
@@ -2933,7 +2942,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             } else {
                 this._enableAllParamsSelection();
             }
-
+            
         },
 
         _checkMethodSelection: function () {
