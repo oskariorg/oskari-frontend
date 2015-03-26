@@ -457,8 +457,7 @@ define([
                                 createLayer.find('.admin-add-layer-btn').attr('title', me.instance.getLocalization('admin').addLayerDesc);
                             }
                             form.remove();
-
-                            // FIXME this doesn't seem to do anything? remove's trigger re-renders the layer view, this doesn't
+                            
                             //trigger event to View.js so that it can act accordingly
                             accordion.trigger({
                                 type: 'adminAction',
