@@ -47,7 +47,12 @@ Now supports zoomScale in search results.
 
 ### elf/elf-language-selector
 
-Hardcodings removed and now uses the configured supported languages. 
+Hardcodings removed and now uses the configured supported languages.
+
+### integration/admin-layerselector
+
+Management of ArcGis93-type maplayers (Rest feature layer type) in Oskari maplayer configuration
+Inserting/editing/removing ArcGisRest-layers in admin-layer UI.
 
 ### core
 
@@ -133,6 +138,14 @@ Metadatacatalogue bundle now requires vectorlayer plugin to be in use in fronten
 ### core/abstractmapmodule
 
 GetImageUrl() always return now '/Oskari/bundles' folder location.
+
+### arcgis
+
+New layer type `arcgis93layer`  (ArcGis93Layer.js) for ArcGis REST server layer (feature, group)
+
+### framework/mapmodule-plugin/plugin/getinfo
+
+Get feature info support for `arcgis93layer`
 
 ### framework/mapmodule-plugin/plugin/vectorlayer
 
