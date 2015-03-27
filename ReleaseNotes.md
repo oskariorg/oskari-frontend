@@ -44,6 +44,11 @@ Adds 'Feature Data' tool for any layers that are capable of showing it (WFS-base
 
 Now handles MapLayerEvent with type 'tool' and updates the selected layers tools accordingly.
 
+### framework/mapmodule-plugin
+
+bringToTop() now supports buffer as a second parameter. Buffer adds this integer value to layer z-index. If parameter is not set then using default 1;
+
+
 ### framework/mapmodule-plugin - SearchPlugin
 
 Now supports zoomScale in search results.

@@ -1020,15 +1020,27 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         },
 
         /**
-         * @method bringToTop
-         * @param {OpenLayers.Layer} layer The new topmost layer
          * Brings map layer to top
+         * @method bringToTop
+         *
+         * @param {OpenLayers.Layer} layer The new topmost layer
+         * @param {Integer} buffer Add this buffer to z index. If it's undefined, using 1.
          */
-        bringToTop: function(layer) {
-            var zIndex;
+        bringToTop: function(layer, buffer) {
+            var zIndex,
+                layerZIndex = 0;
             if (layer !== null) {
-                zIndex = Math.max(this._map.Z_INDEX_BASE.Feature,layer.getZIndex());
-                layer.setZIndex(zIndex+1);
+                if(layer.getZIndex()) {
+                    layerZIndex = layer.getZIndex();
+                }
+
+                zIndex = Math.max(this._map.Z_INDEX_BASE.Feature,layerZIndex);
+                if(buffer && buffer>0) {
+                    layer.setZIndex(zIndex+buffer);
+                }
+                else {
+                    layer.setZIndex(zIndex+1);
+                }
             }
             this.orderLayersByZIndex();
         },

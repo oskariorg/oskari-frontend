@@ -1129,14 +1129,16 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
                 }
             }
             // Update also the split line
-            var lines = me.sourceLayer.features[0].geometry.components;
-            for (i = 0; i < lines.length; i += 1) {
-                points = lines[i].components;
-                for (j = 0; j < points.length - 1; j += 1) {
-                    if ((ngbs.indexOf(points[j].id) >= 0) && (ngbs.indexOf(points[j + 1].id) >= 0)) {
-                        points.splice(j + 1, 0, vertex);
-                        me.sourceLayer.redraw();
-                        break;
+            if(me.sourceLayer.features[0].geometry) {
+                var lines = me.sourceLayer.features[0].geometry.components;
+                for (i = 0; i < lines.length; i += 1) {
+                    points = lines[i].components;
+                    for (j = 0; j < points.length - 1; j += 1) {
+                        if ((ngbs.indexOf(points[j].id) >= 0) && (ngbs.indexOf(points[j + 1].id) >= 0)) {
+                            points.splice(j + 1, 0, vertex);
+                            me.sourceLayer.redraw();
+                            break;
+                        }
                     }
                 }
             }
