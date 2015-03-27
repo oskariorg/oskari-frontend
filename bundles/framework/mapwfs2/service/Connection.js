@@ -5,7 +5,9 @@ Oskari.clazz.define(
     'Oskari.mapframework.bundle.mapwfs2.service.Connection',
     /**
      * @static @method create called automatically on construction
-     *
+     * For debugging you can add:
+     * - this.cometd.addListener('/service/**', console.log); // debug
+     * - this.cometd.addListener('/meta/**', console.log); // debug
      * @param {Object} config
      * @param {Object} plugin
      *
@@ -59,8 +61,6 @@ Oskari.clazz.define(
                 me._metaConnect.apply(me, arguments);
             }
         );
-        //this.cometd.addListener('/service/**', this.getData); // debug
-        //this.cometd.addListener('/meta/**', this.getData); // debug
 
         if (!me._lazy) {
             me.connect(); // init conn
@@ -238,14 +238,4 @@ Oskari.clazz.define(
 
             plugin.showErrorPopup(message, layer, once);
         }
-
-        /**
-         * @method getData
-         * @param {Object} data
-         */
-        /*
-    , getData : function (data) {
-        console.log("getData:", data);
-    }
-    */
     });
