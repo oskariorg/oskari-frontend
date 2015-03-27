@@ -2,6 +2,17 @@
 
 ## 1.28
 
+### Generic
+
+Cleaned up deprecated code/bundles. Removed:
+
+    - bundles/deprecated/*
+    - bundles/framework/featuredata/*
+    - bundles/framework/mapwfs/*
+    - sources/deprecated/*
+    - packages/framework/bundle/featuredata
+    - packages/framework/bundle/mapwfs
+
 ### framework/heatmap
 
 *New bundle!* Adds heatmap functionality to layers configured to support it (WMS-layers only at the moment). Configuration is done by adding the following information to a layers JSON:
@@ -14,12 +25,14 @@
         }
     }
 
-SelectedLayers bundle will show heatmap-enabled layers with an additional "Heatmap" tool in the layer frame to access the functionality.
+SelectedLayers bundle will show heatmap-enabled layers with an additional "Heatmap" tool in the layer frame to access the functionality. Note! Generated SLD expects Geoserver as the WMS-service.
 
 ### divmanazer components
 
 Popup.createCloseButton('label') label parameter is now optional. Popup now uses button component
 Oskari.userinterface.component.buttons.CloseButton and sets the button title if label is given.
+
+Fixed VisualizationForm open issue when form is opened second time after that when it's closed by pressing Cancel button.
 
 ### mapwfs2
 
@@ -32,6 +45,15 @@ Adds 'Feature Data' tool for any layers that are capable of showing it (WFS-base
 ### layerselection2
 
 Now handles MapLayerEvent with type 'tool' and updates the selected layers tools accordingly.
+
+### analysis/analyse
+
+Analysis now supports do geometry filter.
+
+### framework/mapmodule-plugin
+
+bringToTop() now supports buffer as a second parameter. Buffer adds this integer value to layer z-index. If parameter is not set then using default 1;
+
 
 ### framework/mapmodule-plugin - SearchPlugin
 
