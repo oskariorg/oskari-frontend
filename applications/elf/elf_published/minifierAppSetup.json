@@ -75,6 +75,9 @@
                 "core-base": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 },
+                "maparcgis": {
+                    "bundlePath": "../../../packages/arcgis/bundle/"
+                },
                 "oskariui": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 },
