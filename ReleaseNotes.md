@@ -25,7 +25,7 @@ Cleaned up deprecated code/bundles. Removed:
         }
     }
 
-SelectedLayers bundle will show heatmap-enabled layers with an additional "Heatmap" tool in the layer frame to access the functionality.
+SelectedLayers bundle will show heatmap-enabled layers with an additional "Heatmap" tool in the layer frame to access the functionality. Note! Generated SLD expects Geoserver as the WMS-service.
 
 ### divmanazer components
 
