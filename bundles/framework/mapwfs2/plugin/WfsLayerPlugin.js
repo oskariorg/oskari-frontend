@@ -222,7 +222,7 @@ Oskari.clazz.define(
                  */
                 MapLayerVisibilityChangedEvent: function (event) {
                     me.mapLayerVisibilityChangedHandler(event);
-                    if (event.getMapLayer().hasFeatureData())  && me.getConfig() && me.getConfig().deferSetLocation) {
+                    if (event.getMapLayer().hasFeatureData() && me.getConfig() && me.getConfig().deferSetLocation) {
                         me.getSandbox().printDebug(
                             'sending deferred setLocation'
                         );

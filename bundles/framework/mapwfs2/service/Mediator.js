@@ -567,7 +567,7 @@ Oskari.clazz.category(
                     'longitude': lonlat.lon,
                     'latitude': lonlat.lat,
                     'keepPrevious': keepPrevious,
-                    'geomRequest': geomRequest//,
+                    'geomRequest': geomRequest,
                     'jobId': this.getJobId()
                 });
             }
