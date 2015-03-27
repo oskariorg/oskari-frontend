@@ -16,7 +16,7 @@ Oskari.clazz.define(
         this.config = config;
         this.plugin = plugin;
         this.connection = this.plugin.getConnection();
-        this.jobId = 0;
+        this.__lastRequestId = 0;
         this.cometd = this.connection.get();
         this.layerProperties = {};
 
@@ -49,14 +49,12 @@ Oskari.clazz.define(
         },
 
         /**
-        * Get job id
-        * @method getJobId
-        * @returns {Integer} job id
+        * Get the next sequence value for a new request
+        * @method getNextRequestId
+        * @returns {Integer} request id
         */
-        getJobId: function() {
-            var me = this;
-            me.jobId++;
-            return me.jobId;
+        getNextRequestId: function() {
+            return this.__lastRequestId++;
         },
 
         /**
@@ -422,7 +420,7 @@ Oskari.clazz.category(
                 this.cometd.publish('/service/wfs/addMapLayer', {
                     'layerId': id,
                     'styleName': style,
-                    'jobId': this.getJobId()
+                    'reqId': this.getNextRequestId()
                 });
             }
         },
@@ -437,7 +435,7 @@ Oskari.clazz.category(
             if (this.connection.isConnected()) {
                 this.cometd.publish('/service/wfs/removeMapLayer', {
                     'layerId': id,
-                    'jobId': this.getJobId()
+                    'reqId': this.getNextRequestId()
                 });
             }
         },
@@ -452,13 +450,13 @@ Oskari.clazz.category(
          * sends message to /service/wfs/highlightFeatures
          */
         highlightMapLayerFeatures: function (id, featureIds, keepPrevious, geomRequest) {
-            if (this.connection.isConnected()) {
+            if (this.connection.isConnected() && featureIds && featureIds.length > 0) {
                 this.cometd.publish('/service/wfs/highlightFeatures', {
                     'layerId': id,
                     'featureIds': featureIds,
                     'keepPrevious': keepPrevious,
                     'geomRequest': geomRequest,
-                    'jobId': this.getJobId()
+                    'reqId': this.getNextRequestId()
                 });
             }
         },
@@ -483,7 +481,7 @@ Oskari.clazz.category(
                     'zoom': zoom,
                     'grid': grid,
                     'tiles': tiles,
-                    'jobId': this.getJobId()
+                    'reqId': this.getNextRequestId()
                 });
             }
         },
@@ -500,7 +498,7 @@ Oskari.clazz.category(
                 this.cometd.publish('/service/wfs/setMapSize', {
                     'width': width,
                     'height': height,
-                    'jobId': this.getJobId()
+                    'reqId': this.getNextRequestId()
                 });
             }
         },
@@ -517,7 +515,7 @@ Oskari.clazz.category(
                 this.cometd.publish('/service/wfs/setMapLayerStyle', {
                     'layerId': id,
                     'styleName': style,
-                    'jobId': this.getJobId()
+                    'reqId': this.getNextRequestId()
                 });
             }
         },
@@ -547,7 +545,7 @@ Oskari.clazz.category(
                     'dot_color': style.dot.color, // check somewhere that first char is # - _prefixColorForServer @ MyPlacesWFSTStore.js
                     'dot_shape': style.dot.shape,
                     'dot_size': style.dot.size,
-                    'jobId': this.getJobId()
+                    'reqId': this.getNextRequestId()
                 });
             }
         },
@@ -568,7 +566,7 @@ Oskari.clazz.category(
                     'latitude': lonlat.lat,
                     'keepPrevious': keepPrevious,
                     'geomRequest': geomRequest,
-                    'jobId': this.getJobId()
+                    'reqId': this.getNextRequestId()
                 });
             }
         },
@@ -587,7 +585,7 @@ Oskari.clazz.category(
             if (this.connection.isConnected()) {
                 this.cometd.publish('/service/wfs/setFilter', {
                     'filter': filter,
-                    'jobId': this.getJobId()
+                    'reqId': this.getNextRequestId()
                 });
             }
         },
@@ -605,7 +603,7 @@ Oskari.clazz.category(
             if (this.connection.isConnected()) {
                 this.cometd.publish('/service/wfs/setPropertyFilter', {
                     'filter': filter,
-                    'jobId': this.getJobId()
+                    'reqId': this.getNextRequestId()
                 });
             }
         },
@@ -622,7 +620,7 @@ Oskari.clazz.category(
                 this.cometd.publish('/service/wfs/setMapLayerVisibility', {
                     'layerId': id,
                     'visible': visible,
-                    'jobId': this.getJobId()
+                    'reqId': this.getNextRequestId()
                 }
                 );
             }
