@@ -100,10 +100,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrate
                     tileSize: this.layer.map.getTileSize()
 
                 });
-            /*this.layer.events.on( {
-                    "moveend" : this.updateMoveEnd,
-                    scope : this
-                });*/
             this.layer.events.on({
                 "refresh": this.updateRefresh,
                 scope: this
@@ -123,10 +119,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrate
                 return false;
             }
 
-            /*this.layer.events.un( {
-                    "moveend" : this.update,
-                    scope : this
-                });*/
             this.layer.events.un({
                 "refresh": this.update,
                 scope: this
@@ -136,10 +128,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrate
             return true;
         },
 
-        updateRefresh: function (options) {
+        updateRefresh: function () {
             this.update();
         },
-        updateMoveEnd: function (options) {
+        updateMoveEnd: function () {
             this.update();
         },
 
@@ -267,7 +259,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrate
         merge: function (resp) {
             // this will NOT destroy ANY features
             // we'll just trigger a unload job
-            // this.layer.destroyFeatures();
             var features = resp.features;
             if (features && features.length > 0) {
                 this.layer.addFeatures(features);

@@ -5,12 +5,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.TileCache",
     }, {
         mget: function (layerId, style, bbox) {
             var dataByLayerId = this.data[layerId];
-            if (!dataByLayerId)
-                return;
+            if (!dataByLayerId) return;
 
             var dataByStyle = dataByLayerId[style];
-            if (!dataByStyle)
-                return;
+            if (!dataByStyle) return;
 
             return dataByStyle[bbox];
         },
@@ -45,12 +43,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.TileCache",
 
         mdel: function (layerId, style, bbox) {
             var dataByLayerId = this.data[layerId];
-            if (!dataByLayerId)
-                return;
+            if (!dataByLayerId) return;
 
             var dataByStyle = dataByLayerId[style];
-            if (!dataByStyle)
-                return;
+            if (!dataByStyle) return;
 
             if (bbox === null || bbox === undefined) {
                 dataByStyle = undefined;
@@ -59,8 +55,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.TileCache",
             }
 
             var dataByBbox = dataByStyle[bbox];
-            if (!dataByBbox)
-                return;
+            if (!dataByBbox) return;
 
             dataByBbox = undefined;
             delete dataByStyle[bbox];
