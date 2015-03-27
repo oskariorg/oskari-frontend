@@ -1030,7 +1030,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var zIndex,
                 layerZIndex = 0;
             if (layer !== null) {
-                if(layer.getZIndex()) {
+                if(layer.getZIndex) {
                     layerZIndex = layer.getZIndex();
                 }
 
