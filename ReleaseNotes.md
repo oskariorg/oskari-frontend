@@ -2,6 +2,17 @@
 
 ## 1.28
 
+### Generic
+
+Cleaned up deprecated code/bundles. Removed:
+
+    - bundles/deprecated/*
+    - bundles/framework/featuredata/*
+    - bundles/framework/mapwfs/*
+    - sources/deprecated/*
+    - packages/framework/bundle/featuredata
+    - packages/framework/bundle/mapwfs
+
 ### framework/heatmap
 
 *New bundle!* Adds heatmap functionality to layers configured to support it (WMS-layers only at the moment). Configuration is done by adding the following information to a layers JSON:
