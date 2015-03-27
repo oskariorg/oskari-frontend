@@ -32,6 +32,8 @@ SelectedLayers bundle will show heatmap-enabled layers with an additional "Heatm
 Popup.createCloseButton('label') label parameter is now optional. Popup now uses button component
 Oskari.userinterface.component.buttons.CloseButton and sets the button title if label is given.
 
+Fixed VisualizationForm open issue when form is opened second time after that when it's closed by pressing Cancel button.
+
 ### mapwfs2
 
 ModelBuilder no longer assumes featuredata2 is present in the application setup. Feature data tool is not added to layers by default.
@@ -43,6 +45,15 @@ Adds 'Feature Data' tool for any layers that are capable of showing it (WFS-base
 ### layerselection2
 
 Now handles MapLayerEvent with type 'tool' and updates the selected layers tools accordingly.
+
+### analysis/analyse
+
+Analysis now supports do geometry filter.
+
+### framework/mapmodule-plugin
+
+bringToTop() now supports buffer as a second parameter. Buffer adds this integer value to layer z-index. If parameter is not set then using default 1;
+
 
 ### framework/mapmodule-plugin - SearchPlugin
 

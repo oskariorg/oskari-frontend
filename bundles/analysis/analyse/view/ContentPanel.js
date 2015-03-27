@@ -178,7 +178,7 @@ Oskari.clazz.define(
 
             },
 
-            WFSFeatureGeometriesEvent: function (event) {
+            'WFSFeatureGeometriesEvent': function (event) {
                 if (!this.instance.analyse.isEnabled) {
                     return;
                 }
@@ -213,7 +213,7 @@ Oskari.clazz.define(
                 }
             },
 
-            WFSFeaturesSelectedEvent: function (event) {
+            'WFSFeaturesSelectedEvent': function (event) {
                 if (this.drawFilterMode) {
                     return;
                 }
@@ -221,6 +221,15 @@ Oskari.clazz.define(
                     this.selectedGeometry = null;
                     this._disableAllDrawFilterButtons();
                 }
+            },
+
+            'AfterMapMoveEvent': function (event) {
+                if (this.drawFilterMode) {
+                    return;
+                }
+                var olMap = this.mapModule.getMap(),
+                layer = olMap.getLayersByName('AnalyseFeatureLayer')[0];
+                this.mapModule.bringToTop(layer, 20);
             }
         },
 
@@ -1036,12 +1045,13 @@ Oskari.clazz.define(
          * @return {OpenLayers.Layer.Vector}
          */
         _createFeatureLayer: function (mapModule) {
-            var layer = new OpenLayers.Layer.Vector('AnalyseFeatureLayer');
+            var me = this,
+                layer = new OpenLayers.Layer.Vector('AnalyseFeatureLayer');
 
             //add select possibility to temp layers
             // requires highlight refactoring so is not in use yet
 
-            this.highlightControl = new OpenLayers.Control.SelectFeature(
+            me.highlightControl = new OpenLayers.Control.SelectFeature(
                     layer,
                     {
                         hover: true,
@@ -1049,17 +1059,16 @@ Oskari.clazz.define(
                         renderIntent: "temporary"
                     });
 
-            this.selectControl = new OpenLayers.Control.SelectFeature(
+            me.selectControl = new OpenLayers.Control.SelectFeature(
                     layer,
                     {
                         clickout: true
                     });
 
-            this.mapModule.getMap().addControl(this.highlightControl);
-            this.mapModule.getMap().addControl(this.selectControl);
+            me.mapModule.getMap().addControl(this.highlightControl);
+            me.mapModule.getMap().addControl(this.selectControl);
+            me._activateSelectControls();
 
-            this.highlightControl.activate();
-            this.selectControl.activate();
             return layer;
         },
         /**

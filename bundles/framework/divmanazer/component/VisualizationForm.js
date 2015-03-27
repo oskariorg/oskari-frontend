@@ -221,12 +221,13 @@ Oskari.clazz.define(
                     if (me.dialog) {
                         me.dialog.close(true);
                     }
-                    if (formClazz !== me.dialogFormClazz) {
-                        me.dialog = formClazz.showForm(e.target);
-                        me.dialogFormClazz = formClazz;
-                    } else {
+
+                    if (formClazz === me.dialogFormClazz) {
                         delete me.dialogFormClazz;
                     }
+                    
+                    me.dialog = formClazz.showForm(e.target);
+                    me.dialogFormClazz = formClazz;                    
                 }
             };
         },
