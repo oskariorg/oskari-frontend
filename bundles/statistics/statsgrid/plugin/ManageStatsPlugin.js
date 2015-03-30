@@ -2270,6 +2270,18 @@ Oskari.clazz.define(
                     i,
                     input;
 
+                //disable filter by region if anything else but municipalities is chosen
+                if (args.column.id === 'indicator42013total') {
+                    if (me.filterWithRegion === false) {
+                        if (menu.items.length === 3) {
+                            this.filterByRegionLink = menu.items[2];
+                            menu.items.splice(2);
+                        }
+                    } else if (me.filterWithRegion === true) {
+                        menu.items.push(this.filterByRegionLink);
+                    }
+                } 
+
                 if (args.column.id === 'municipality') {
                     menu.items = [];
 
@@ -2391,6 +2403,11 @@ Oskari.clazz.define(
                     args.grid.setColumns(newColumns);
                 } else if (/^category_/.test(args.command)) {
                     me.changeGridRegion(_.last(args.command.split('_')));
+                    if ((_.last(args.command.split('_'))) !== "KUNTA") {
+                        me.filterWithRegion = false;
+                    } else {
+                        me.filterWithRegion = true;
+                    }
                 } else if (args.command === 'filter') {
                     me._createFilterPopup(args.column, this);
                 } else if (args.command === 'filterByRegion') {
