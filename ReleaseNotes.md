@@ -38,6 +38,8 @@ Fixed VisualizationForm open issue when form is opened second time after that wh
 
 ModelBuilder no longer assumes featuredata2 is present in the application setup. Feature data tool is not added to layers by default.
 
+Added a statushandler to keep track of requests in progress and errors. Still work-in-progress and can change completely.
+
 ### featuredata2
 
 Adds 'Feature Data' tool for any layers that are capable of showing it (WFS-based layer types).
