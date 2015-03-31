@@ -56,13 +56,29 @@ Analysis now supports do geometry filter.
 
 bringToTop() now supports buffer as a second parameter. Buffer adds this integer value to layer z-index. If parameter is not set then using default 1;
 
-### faramework/mapmodule-plugin  - MarkersPlugin
+### framework/mapmodule-plugin  - FeatureDataPlugin
+
+Fixed plugin locale handling.
+
+### framework/mapmodule-plugin  - LogoPlugin
+
+Fixed plugin locale handling.
+
+### framework/mapmodule-plugin  - MarkersPlugin
 
 Fixed at Markers layer stays on top of map layers.
+
+### framework/mapmodule-plugin  - MyLocationPlugin
+
+Fixed plugin locale handling.
 
 ### framework/mapmodule-plugin - SearchPlugin
 
 Now supports zoomScale in search results.
+
+### framework/publisher
+
+Fixed tools states when changing language.
 
 ### elf/elf-lang-overrides
 
