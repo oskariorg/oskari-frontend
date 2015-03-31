@@ -40,6 +40,8 @@ ModelBuilder no longer assumes featuredata2 is present in the application setup.
 
 Added a statushandler to keep track of requests in progress and errors. Still work-in-progress and can change completely.
 
+Now limits setLocation calls to single layer/request when triggered by 'MapLayerVisibilityChangedEvent' (using config.deferSetLocation=true).
+
 ### featuredata2
 
 Adds 'Feature Data' tool for any layers that are capable of showing it (WFS-based layer types).
