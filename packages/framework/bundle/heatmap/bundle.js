@@ -33,6 +33,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.heatmap.HeatmapBundle", function
         }, {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/heatmap/domain/HeatmapLayer.js"
+        }, {
+            "type" : "text/css",
+            "src" : "../../../../bundles/framework/heatmap/resources/css/heatmap.css"
+        }, {
+        // NOTE! EXTERNAL LIBRARY!
+            "type": "text/javascript",
+            "src": "../../../../libraries/colpick-jQuery-Color-Picker-master/js/colpick.js"
+        }, {
+            "type" : "text/css",
+            "src" : "../../../../libraries/colpick-jQuery-Color-Picker-master/css/colpick.css"
         }],
         "locales": [{
             "lang": "en",

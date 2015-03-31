@@ -63,6 +63,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.domain.HeatmapLayer',
             }
             return null;
         },
+        setSelectedTheme: function (el) {
+            this._selectedTheme = el;
+        },
+        getSelectedTheme: function () {
+            if (this._selectedTheme) {
+                return this._selectedTheme;
+            }
+        },
+        setColorSetup: function (colorSetup) {
+            this._selectedColors = colorSetup;
+        },
+        getColorSetup: function () {
+            if (this._selectedColors) {
+                return this._selectedColors;
+            }
+        },
         getSLDNamedLayer : function() {
             var attr = this.getAttributes();
             var name = this.getLayerName();
@@ -72,13 +88,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.domain.HeatmapLayer',
             }
             return name;
         },
+        setColorConfig : function (colorConfig) {
+            this._colorConfig = [
+            { color : colorConfig[0], quantity : 0.02, opacity : 0 },
+            { color : colorConfig[1], quantity : 0.1, opacity : 1 },
+            { color : colorConfig[2], quantity : 0.5, opacity : 1 },
+            { color : colorConfig[3], quantity : 1, opacity : 1 }]
+        },
+
         getColorConfig : function() {
-            return [
-                { color : "#FFFFFF", quantity : 0.02, opacity : 0 },
-                { color : "#4444FF", quantity : 0.1, opacity : 1 },
-                { color : "#FF0000", quantity : 0.5, opacity : 1 },
-                { color : "#FFFF00", quantity : 1, opacity : 1 }
-            ];
+            return this._colorConfig;
         }
 
     }, {

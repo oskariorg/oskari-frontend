@@ -8,6 +8,8 @@ Oskari.registerLocalization({
             "title" : "Heatmap asetukset",
             "propertyLabel" : "Painotettava muuttuja",
             "radiusLabel" : "Säde",
+            "colorThemesLabel" : "Väriteemat",
+            "colorPickerLabel" : "Valitse värit",
             "pixelsPerCellLabel" : "Pixels per cell",
             "noneOption" : "Ei valintaa"
         }

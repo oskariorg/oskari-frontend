@@ -119,6 +119,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapBundleInstance',
             layer.setRadius(values.radius);
             layer.setWeightedHeatmapProperty(values.property);
             layer.setPixelsPerCell(values.pixelsPerCell);
+            layer.setColorConfig(values.colorConfig);
+            layer.setColorSetup(values.colorSetup);
+            layer.setSelectedTheme(values.selectedTheme);
             if(isNew) {
                 this.sandbox.printDebug('Register and setup heatmap with values', values, layer);
                 var service = this.getLayerService();

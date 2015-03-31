@@ -8,6 +8,8 @@ Oskari.registerLocalization({
             "title" : "Heatmap settings",
             "propertyLabel" : "Weight property",
             "radiusLabel" : "Radius",
+            "colorThemesLabel" : "Color themes",
+            "colorPickerLabel" : "Choose colors",
             "pixelsPerCellLabel" : "Pixels per cell",
             "noneOption" : "None"
         }
