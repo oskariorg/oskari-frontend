@@ -15,7 +15,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
             'main' : _.template('<div>' +
             	'</div>'),
             'propertySelect' : _.template('<div><span>${label}</span></div>'),
-            'select' : _.template('<select name="properties">' +
+            'select' : _.template('<select name="heatmapProperties">' +
             			'<option value="">${label}</option>' +
             			'<% _.forEach(props, function(value) {  %>' +
             				'<option>${value}</option>'+
@@ -46,12 +46,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
                             '<div class="color-box color-picker box-1" color="#818282" style="background-color:#818282"></div>' +
                             '<div class="color-box color-picker box-2" color="#818282" style="background-color:#818282"></div>' +
                             '<div class="color-box color-picker box-3" color="#818282" style="background-color:#818282"></div>' +
-                            '</div>'),
-            'radius' : _.template('<div><span>${label}</span></div>' +
-                            '<div class="opacity-slider" style="display:inline-block">' + 
-                                '<input type="text" name="opacity-slider" class="opacity-slider opacity" id="opacity-slider" />' +
-                            '</div>'
-                )
+                            '</div>')
 
         },
 
@@ -74,6 +69,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
 			radiusInput.setValue(layer.getRadius());
 			radiusInput.setMin(1);
 			radiusInput.setMax(300);
+            jQuery(radiusInput.getElement()).find("input").attr("name", "heatmap-input");
 			content.append(radiusInput.getElement());
 
 			var ppcInput = Oskari.clazz.create('Oskari.userinterface.component.NumberInput');
@@ -81,6 +77,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
 			ppcInput.setValue(layer.getPixelsPerCell());
 			ppcInput.setMin(1);
 			ppcInput.setMax(300);
+            jQuery(ppcInput.getElement()).find("input").attr("name", "heatmap-input");
 			content.append(ppcInput.getElement());
 
     		var propertyElement = null;
@@ -167,6 +164,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
                 delete me.dialog;
             });
     		dialog.show(this.loc.title, content, [cancelBtn, okBtn]);
+            jQuery(dialog.dialog[0]).find(".actions").addClass("heatmap-actions");
     		dialog.makeDraggable();
 			this.dialog = dialog;
     	},
@@ -183,6 +181,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
             return me.colors;
         },
 
+        //Returns colors that are selected with color picker
         getColorSetup: function (content) {
             var me = this,
                 selectedColors = [];
