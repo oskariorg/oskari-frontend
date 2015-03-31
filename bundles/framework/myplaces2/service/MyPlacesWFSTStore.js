@@ -218,8 +218,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
                     'uuid': uuid
                 };
                 feat = new OpenLayers.Feature.Vector(null, featAtts);
-
-                // console.log('saving category - id: ' + m_id);
+                
                 if (!m_id) {
                     feat.toState(OpenLayers.State.INSERT);
                 } else {
@@ -488,8 +487,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
                 };
 
                 feat = new OpenLayers.Feature.Vector(geom, featAtts);
-
-                // console.log('saving place - id: ' + m_id);
+                
                 if (!m_id) {
                     feat.toState(OpenLayers.State.INSERT);
                 } else {
@@ -587,11 +585,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
                 };
 
                 feat = new OpenLayers.Feature.Vector(null, featAtts);
-
-                // console.log('Deleting place - id: ' + m_id);
-
                 feat.fid = p.featureType + '.' + m_id;
-
                 feat.state = OpenLayers.State.DELETE;
                 features.push(feat);
             }

@@ -24,12 +24,8 @@ function(sandbox, instance) {
      *      request to handle
      */
     handleRequest : function(core, request) {
-//        console.log("Caught request");
         if (this.instance) {
-//            console.log("Opening dialog...");
             this.instance.openAddLayerDialog(request.getOriginator(), request.getSide());
-        } else {
-//            console.log("No MyPlacesTab in instance: ", this.instance);
         }
     }
 }, {

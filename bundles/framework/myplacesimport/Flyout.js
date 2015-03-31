@@ -134,8 +134,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                 fileSize = null,
                 fileInput = me.container.find('input[name=file-import]');
 
-            //console.log(me.instance.conf.maxFileSizeMb+ ' is size limit');
-
             // Checks modern browsers (FF, Safari, Opera, Chore and IE 10 >)
             if(fileInput[0]  && fileInput[0].files) {
                 fileSize = fileInput[0].files[0].size //size in kb
@@ -215,7 +213,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                             var executed = 0;
                             me.container.find('iframe').on('load', function() {
                                 if (executed > 0) {
-                                    console.log('called more than once');
                                     return;
                                 }
                                 executed++;

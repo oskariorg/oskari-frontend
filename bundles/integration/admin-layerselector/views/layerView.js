@@ -40,18 +40,14 @@ define([
                 me.subLayerTemplate = _.template(SubLayerTemplate);
                 // listenTo will remove dead listeners, use it instead of on()
                 this.listenTo(this.model, 'add', function() {
-                    //console.log('layerView add', arguments);
                     me.render();
                 });
                 this.listenTo(this.model, 'change', function() {
-                    //console.log('layerView change', arguments);
                     me.render();
                 });
                 this.listenTo(this.model, 'remove', function() {
-                    //console.log('layerView remove', arguments);
                     me.render();
                 });
-                //this.model.on('change', this.render, this);
                 this.supportedTypes = this.options.supportedTypes;
                 me.render();
             },

@@ -354,7 +354,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
 
             sandbox.removeRequestHandler('printout.PrintMapRequest', this.printoutHandler);
             this.printoutHandler = null;
-            //            console.log("Stoppetystop");
             var request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
             sandbox.request(this, request);
 

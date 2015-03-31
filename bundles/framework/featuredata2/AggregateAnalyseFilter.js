@@ -163,7 +163,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.aggregateAnalyseFil
                 url: url,
                 success: function (result) {
                     me.handleResult(result);
-                    console.log("json", result);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     var error = me._getErrorText(jqXHR, textStatus, errorThrown);
