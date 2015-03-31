@@ -1642,6 +1642,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 );
             }
             Oskari.setLang(lang);
+
             var me = this,
                 i,
                 tool,
@@ -1651,8 +1652,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 if (tool._isPluginStarted) {
                     // FIXME no restarts, it breaks stuff... add a changeLanguage function or smthn...
                     // stop and start if enabled to change language
-                    me.toolsPanel.activatePreviewPlugin(tool, false);
-                    me.toolsPanel.activatePreviewPlugin(tool, true);
+                    me.toolsPanel.activatePreviewPlugin(tool, false, true);
+                    me.toolsPanel.activatePreviewPlugin(tool, true, true);
                 }
             }
             // stop and start if enabled to change language

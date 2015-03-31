@@ -544,8 +544,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
          * Enables or disables a plugin on map
          * @param {Object} tool tool definition as in #tools property
          * @param {Boolean} enabled, true to enable plugin, false to disable
+         * @param {Boolean} localeChange, true to not reset config when disabling plugin, false to reset config
          */
-        activatePreviewPlugin: function(tool, enabled) {
+        activatePreviewPlugin: function(tool, enabled, localeChange) {
             var me = this,
                 sandbox = me._sandbox;
 
@@ -634,6 +635,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
 
                     tool.plugin.setToolbarContainer();
                     me.toolbarConfig.classes = tool.plugin.getToolConfs();
+
                     var _addToolGroup = function(groupName, options, toolOption, toggleToolHandler) {
                         var i,
                             ilen,
@@ -659,6 +661,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                                 toolButton.selectTool = jQuery(me.templates.toolOption).clone();
                                 toolButton.selectTool.find('label')
                                     .attr('for', 'tool-opt-' + toolName).append(me.loc.toolbarToolNames[toolName]);
+
                                 if (me.toolbarConfig[buttonGroup.name] && me.toolbarConfig[buttonGroup.name][toolName]) {
                                     toolButton.selectTool.find('input').attr('checked', 'checked');
                                 }
@@ -716,11 +719,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                         }
                         options.append(selectTool);
                     }
+                } else if(tool.id.indexOf('SearchPlugin') >= 0 || tool.id.indexOf('MyLocationPlugin') >= 0 ) {
+
                 }
             } else {
                 // toolbar (bundle) needs to be notified
+                
+                // MyLocationPlugin
                 if (tool.id.indexOf('PublisherToolbarPlugin') >= 0) {
-                    me.toolbarConfig = {};
+                    if (!localeChange) {
+                       me.toolbarConfig = {};
+                    }
+
                     // remove buttons, handlers and toolbar toolbar tools
                     for (i = 0, ilen = me.buttonGroups.length; i < ilen; i++) {
                         buttonGroup = me.buttonGroups[i];
