@@ -34,6 +34,8 @@ Oskari.clazz.define(
                     '<div class="mapplugin mylocationplugin icon mylocation-rounded-dark"></div>'
                 ),
                 me = this;
+            
+            me._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage()).plugin.MyLocationPlugin;
 
             el.click(function () {
                 me._setupLocation();
