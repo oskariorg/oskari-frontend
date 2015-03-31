@@ -32,6 +32,8 @@ Oskari.clazz.define(
             var me = this,
                 ajaxUrl = null;
 
+            me._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage()).plugin.SearchPlugin;
+
             me.template = jQuery(
                 '<div class="mapplugin search default-search-div">' +
                 '  <div class="search-textarea-and-button">' +

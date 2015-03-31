@@ -223,16 +223,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
                 var mapLayer = event.getMapLayer();
                 var mapLayerId = mapLayer.getId();
                 var mapLayerBackendStatus = mapLayer.getBackendStatus();
-                /*console.log("ABOUT to show information for "+mapLayerId,mapLayer,mapLayerBackendStatus);*/
-
-                /*if(!mapLayerBackendStatus) {
-             this.showFeedbackDialog('missing_backendstatus_status');
-             return;
-             }*/
-
                 var backendExtendedStatusForLayer = this.backendExtendedStatus[mapLayerId];
-
-                /*console.log("MIGHT show information for "+mapLayerId,mapLayer,backendExtendedStatusForLayer);*/
 
                 if (!backendExtendedStatusForLayer) {
                     this.showFeedbackDialog('missing_backendstatus_information');
@@ -244,8 +235,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
                     this.showFeedbackDialog('missing_backendstatus_infourl');
                     return;
                 }
-
-                /*console.log("WOULD show information for "+mapLayerId,mapLayer,infoUrl);*/
 
                 this.openURLinWindow(infoUrl);
             },

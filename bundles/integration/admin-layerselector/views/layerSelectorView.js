@@ -167,7 +167,6 @@ define([
 
                 // Check that data for classes is fetched
                 // FIXME we shouldn't need to do this everytime, just once?
-                //console.log("Getting inspire themes and map layer classes");
                 this.inspireTabModel.getClasses('getInspireName');
                 this.organizationTabModel.getClasses('getOrganizationName');
                 return true;

@@ -80,10 +80,8 @@ define([
                     // listenTo will remove dead listeners, use it instead of on()
                     var me = this;
                     this.listenTo(this.model, 'change', function() {
-//                        console.log('model change', arguments);
                         me.render();
                     });
-                    //this.model.on('change', this.render, this);
                 }
                 var me = this;
 
@@ -384,10 +382,6 @@ define([
                                     callback();
                                 }
                             }
-                            /* else {
-                                //problem
-                                console.log('Removing layer did not work.')
-                            }*/
                         },
                         error: function (jqXHR, textStatus) {
                             if (jqXHR.status !== 0) {

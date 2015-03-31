@@ -351,7 +351,6 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                     value = td.prop('checked');
 
                     if (cleanDataObj[right] !== value) {
-                        //console.log("Dirty value on " + right + ": " + cleanDataObj[right] + " : " + value);
                         dirty = true;
                     }
                     dataObj[right] = value;
@@ -360,17 +359,14 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 if (cleanDataObj.resourceName !== dataObj.resourceName) {
                     // Don't save stuff in the wrong place...
                     dirty = false;
-                    //console.err("Resource name mismatch: " + cleanDataObj.resourceName + ", " + dataObj.resourceName);
                 }
 
                 if (cleanDataObj.namespace !== dataObj.namespace) {
                     // Don't save stuff in the wrong place...
                     dirty = false;
-                    //console.err("Namespace mismatch: " + cleanDataObj.namespace + ", " + dataObj.namespace);
                 }
 
                 if (dirty) {
-                    //console.log(dataObj);
                     data.push(dataObj);
                 }
             }

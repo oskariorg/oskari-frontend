@@ -21,8 +21,7 @@ Oskari.clazz.define(
         loc = Oskari.getLocalization('DivManazer');
         if (loc) {
             loc = loc.LanguageSelect;
-        } else if (console && console.warn){
-            console.warn('Couldn\'t find DivManazer localization.');
+        } else  {
             loc = {
                 languages: {}
             };

@@ -505,7 +505,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
                     } else if (zoom > 5) {
                         tolerance = 50;
                     }
-                    //console.log(tolerance);
                     hoverOnPlace = olGeometry.atPoint(lonlat, tolerance, tolerance);
                 } else {
                     hoverOnPlace = olGeometry.atPoint(lonlat);

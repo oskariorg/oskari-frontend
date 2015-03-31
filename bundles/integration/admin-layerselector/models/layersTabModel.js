@@ -202,9 +202,6 @@
                         me.loadGroups(pResp, groupingMethod);
                     },
                     error: function (jqXHR, textStatus) {
-                        /*if (jqXHR.status !== 0) {
-                            //                            console.log("Error while retrieving classes" + textStatus);
-                        }*/
                     }
                 });
             },
@@ -216,7 +213,6 @@
              * @param {Array} classes
              */
             loadGroups: function (classes, groupingMethod) {
-                //console.log("loadClasses");
                 var me = this;
                 var groups = me.layerGroups;
                 var results = classes[this.type];

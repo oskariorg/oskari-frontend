@@ -63,7 +63,6 @@ define([
                 // listenTo will remove dead listeners, use it instead of on()
                 var me = this;
                 this.listenTo(this.layerGroupingModel, 'change:layerGroups', function() {
-                    //console.log('tabPanelView change groups', arguments);
                     me.render();
                 });
                 this.listenTo(this.layerGroupingModel, 'adminAction', function(e) {

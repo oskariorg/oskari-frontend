@@ -125,6 +125,8 @@ Oskari.clazz.define(
                 }
             }
 
+            me._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage()).plugin.LogoPlugin;
+
             me._createServiceLink(mapUrl);
             me._createTermsLink(termsUrl);
             me._createDataSourcesLink();
