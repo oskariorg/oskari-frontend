@@ -216,7 +216,6 @@ Oskari.clazz.define(
                 if (this.analyse && this.analyse.isEnabled) {
                     //this.analyse.refreshAnalyseData();
                 }
-                this.isMapStateChanged = true;
             },
             AfterMapLayerAddEvent: function (event) {
                 this.isMapStateChanged = true;

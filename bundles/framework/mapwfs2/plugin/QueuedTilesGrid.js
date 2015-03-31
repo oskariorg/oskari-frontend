@@ -190,7 +190,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesGrid",
 
             var tileLayout = this.calculateGridLayout(bounds, extent, resolution);
 
-            var tileoffsetx = Math.round(tileLayout.tileoffsetx); // heaven help us
+            var tileoffsetx = Math.round(tileLayout.tileoffsetx);
             var tileoffsety = Math.round(tileLayout.tileoffsety);
 
             var tileoffsetlon = tileLayout.tileoffsetlon;
@@ -272,11 +272,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesGrid",
          */
 
         addTile: function (bounds, position) {
-            /*  var bfix = bounds;//.transform(map.projection, map.displayProjection);
-                var boundsGeom = bfix.toGeometry();
-              var boundsFeature = new OpenLayers.Feature.Vector(boundsGeom);
-
-              this.layer.addFeatures([boundsFeature]);*/
             return new OpenLayers.Tile(this.layer, bounds, position, "", this.tileSize);
         },
 

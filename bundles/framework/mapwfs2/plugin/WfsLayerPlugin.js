@@ -165,9 +165,8 @@ Oskari.clazz.define(
             return {
                 /**
                  * @method AfterMapMoveEvent
-                 * @param {Object} event
                  */
-                AfterMapMoveEvent: function (event) {
+                AfterMapMoveEvent: function () {
                     if (me.getConfig() && me.getConfig().deferSetLocation) {
                         me.getSandbox().printDebug(
                             'setLocation deferred (to aftermapmove)'
@@ -223,13 +222,11 @@ Oskari.clazz.define(
                  */
                 MapLayerVisibilityChangedEvent: function (event) {
                     me.mapLayerVisibilityChangedHandler(event);
-                    if (event.getMapLayer().hasFeatureData()) {
-                        if (me.getConfig() && me.getConfig().deferSetLocation) {
-                            me.getSandbox().printDebug(
-                                'sending deferred setLocation'
-                            );
-                            me.mapMoveHandler();
-                        }
+                    if (event.getMapLayer().hasFeatureData() && me.getConfig() && me.getConfig().deferSetLocation) {
+                        me.getSandbox().printDebug(
+                            'sending deferred setLocation'
+                        );
+                        me.mapMoveHandler();
                     }
                 },
 
@@ -354,7 +351,8 @@ Oskari.clazz.define(
 
             for (i = 0; i < layers.length; i += 1) {
                 if (layers[i].hasFeatureData()) {
-                    layers[i].setActiveFeatures([]); /// clean features lists
+                    // clean features lists
+                    layers[i].setActiveFeatures([]);
                     if (grid !== null && grid !== undefined) {
                         layerId = layers[i].getId();
                         tiles = me.getNonCachedGrid(layerId, grid);
@@ -377,52 +375,50 @@ Oskari.clazz.define(
 
             // update zoomLevel and highlight pictures
             // must be updated also in map move, because of hili in bordertiles
-       //     if (me.zoomLevel !== zoom) {
-                me.zoomLevel = zoom;
+            me.zoomLevel = zoom;
 
-                // TODO 472: if no connection or the layer is not registered, get highlight with URL
-                for (x = 0; x < me.activeHighlightLayers.length; x += 1) {
-                    if (me.getConnection().isLazy() &&
-                        (!me.getConnection().isConnected() ||
-                            !sandbox.findMapLayerFromSelectedMapLayers(me.activeHighlightLayers[x].getId()))) {
+            srs = map.getSrsName();
+            bbox = map.getExtent();
+            zoom = map.getZoom();
 
-                        // FIXME can't we just do this stuff once outside the loop?
-                        srs = map.getSrsName();
-                        bbox = map.getExtent();
-                        zoom = map.getZoom();
-                        fids = me.activeHighlightLayers[x].getClickedFeatureListIds();
-                        me.removeHighlightImages(
-                            me.activeHighlightLayers[x]
-                        );
-                        me.getHighlightImage(
-                            me.activeHighlightLayers[x],
-                            srs, [
-                                bbox.left,
-                                bbox.bottom,
-                                bbox.right,
-                                bbox.top
-                            ],
-                            zoom,
-                            fids
+            // if no connection or the layer is not registered, get highlight with URL
+            for (x = 0; x < me.activeHighlightLayers.length; x += 1) {
+                if (me.getConnection().isLazy() &&
+                    (!me.getConnection().isConnected() ||
+                        !sandbox.findMapLayerFromSelectedMapLayers(me.activeHighlightLayers[x].getId()))) {
+                    
+                    fids = me.activeHighlightLayers[x].getClickedFeatureListIds();
+                    me.removeHighlightImages(
+                        me.activeHighlightLayers[x]
+                    );
+                    me.getHighlightImage(
+                        me.activeHighlightLayers[x],
+                        srs, [
+                            bbox.left,
+                            bbox.bottom,
+                            bbox.right,
+                            bbox.top
+                        ],
+                        zoom,
+                        fids
+                    );
+                }
+            }
+
+            layers.forEach(function (layer) {
+                if (layer.hasFeatureData()) {
+                    fids = me.getAllFeatureIds(layer);
+                    me.removeHighlightImages(layer);
+                    if (me._highlighted) {
+                        me.getIO().highlightMapLayerFeatures(
+                            layer.getId(),
+                            fids,
+                            false,
+                            geomRequest
                         );
                     }
                 }
-
-                layers.forEach(function (layer) {
-                    if (layer.hasFeatureData()) {
-                        fids = me.getAllFeatureIds(layer);
-                        me.removeHighlightImages(layer);
-                        if (me._highlighted) {
-                            me.getIO().highlightMapLayerFeatures(
-                                layer.getId(),
-                                fids,
-                                false,
-                                geomRequest
-                            );
-                        }
-                    }
-                });
-           // }
+            });
         },
 
         /**
@@ -540,7 +536,7 @@ Oskari.clazz.define(
                 me.removeHighlightImages();
             }
 
-            // TODO 472: if no connection or the layer is not registered, get highlight with URl
+            // if no connection or the layer is not registered, get highlight with URl
             if (connection.isLazy() && (!connection.isConnected() ||
                     !sandbox.findMapLayerFromSelectedMapLayers(layerId))) {
 
@@ -668,7 +664,8 @@ Oskari.clazz.define(
 
             layers.forEach(function (layer) {
                 if (layer.hasFeatureData()) {
-                    layer.setActiveFeatures([]); /// clean features lists
+                    // clean features lists
+                    layer.setActiveFeatures([]);
                     if (grid !== null && grid !== undefined) {
                         layerId = layer.getId();
                         tiles = me.getNonCachedGrid(layerId, grid);
@@ -796,8 +793,6 @@ Oskari.clazz.define(
             removeLayers = map.getLayersByName(layerName);
 
             removeLayers.forEach(function (removeLayer) {
-                // FIXME what use is the layer index here?
-                map.getLayerIndex(removeLayer);
                 removeLayer.destroy();
             });
         },
@@ -832,7 +827,7 @@ Oskari.clazz.define(
             wfsReqExp = new RegExp(
                 this.__layerPrefix + layerPart + '_(.*)',
                 'i'
-            ); // that's all folks
+            );
             return this.getMap().getLayersByName(wfsReqExp);
         },
 
@@ -893,40 +888,29 @@ Oskari.clazz.define(
                 wfsMapImageLayer;
 
             /** Safety checks */
-            if (!imageUrl || !boundsObj) {
-                return;
-            }
+            if (!imageUrl || !boundsObj) return;
 
             if (layerType === me.__typeHighlight) {
-                ols = new OpenLayers.Size(
-                    imageSize.width,
-                    imageSize.height
-                );
-
-                layerScales = me.getMapModule().calculateLayerScales(
-                    layer.getMaxScale(),
-                    layer.getMinScale()
-                );
+                ols = new OpenLayers.Size(imageSize.width,imageSize.height);
+                layerScales = me.getMapModule().calculateLayerScales(layer.getMaxScale(),layer.getMinScale());
 
                 wfsMapImageLayer = new OpenLayers.Layer.Image(
-                    layerName,
-                    imageUrl,
-                    boundsObj,
-                    ols, {
+                    layerName,imageUrl,
+                    boundsObj, ols, {
                         scales: layerScales,
                         transparent: true,
                         format: 'image/png',
                         isBaseLayer: false,
                         displayInLayerSwitcher: false,
                         visibility: true,
-                        buffer: 0
-                    }
+                        buffer: 0 }
                 );
 
                 wfsMapImageLayer.opacity = layer.getOpacity() / 100;
                 map.addLayer(wfsMapImageLayer);
                 wfsMapImageLayer.setVisibility(true);
-                wfsMapImageLayer.redraw(true); // also for draw
+                // also for draw
+                wfsMapImageLayer.redraw(true);
 
                 // if removed set to same index [but if wfsMapImageLayer created
                 // in add (sets just in draw - not needed then here)]
@@ -935,62 +919,34 @@ Oskari.clazz.define(
                 }
 
                 // highlight picture on top of normal layer images
-                normalLayerExp = new RegExp(
-                    me.__layerPrefix + layerId + '_' + me.__typeNormal
-                );
-                highlightLayerExp = new RegExp(
-                    me.__layerPrefix + layerId + '_' + me.__typeHighlight
-                );
+                normalLayerExp = new RegExp(me.__layerPrefix + layerId + '_' + me.__typeNormal);
+                highlightLayerExp = new RegExp(me.__layerPrefix + layerId + '_' + me.__typeHighlight);
                 normalLayer = map.getLayersByName(normalLayerExp);
                 highlightLayer = map.getLayersByName(highlightLayerExp);
 
                 if (normalLayer.length > 0 && highlightLayer.length > 0) {
-                    normalLayerIndex = map.getLayerIndex(
-                        normalLayer[normalLayer.length - 1]
-                    );
-                    map.setLayerIndex(
-                        highlightLayer[0],
-                        normalLayerIndex + 10
-                    );
+                    normalLayerIndex = map.getLayerIndex(normalLayer[normalLayer.length - 1]);
+                    map.setLayerIndex(highlightLayer[0],normalLayerIndex + 10);
                 }
             } else { // "normal"
                 BBOX = boundsObj.toArray(false);
                 bboxKey = BBOX.join(',');
                 style = layer.getCurrentStyle().getName();
-                tileToUpdate = me._tilesToUpdate.mget(
-                    layerId,
-                    '',
-                    bboxKey
-                );
+                tileToUpdate = me._tilesToUpdate.mget(layerId,'',bboxKey);
 
                 // put the data in cache
-                if (!boundaryTile) { // normal case and cached
-                    me._tileData.mput(
-                        layerId,
-                        style,
-                        bboxKey,
-                        imageUrl
-                    );
-                } else { // temp cached and redrawn if gotten better
-                    dataForTileTemp = me._tileDataTemp.mget(
-                        layerId,
-                        style,
-                        bboxKey
-                    );
-                    if (dataForTileTemp) {
-                        return;
-                    }
-                    me._tileDataTemp.mput(
-                        layerId,
-                        style,
-                        bboxKey,
-                        imageUrl
-                    );
+                // normal case and cached
+                if (!boundaryTile) {
+                    me._tileData.mput(layerId,style,bboxKey,imageUrl);
                 }
-
-                if (tileToUpdate) {
-                    tileToUpdate.draw(); // QUEUES updates!
+                // temp cached and redrawn if gotten better
+                else {
+                    dataForTileTemp = me._tileDataTemp.mget(layerId,style,bboxKey);
+                    if (dataForTileTemp) return;                    
+                    me._tileDataTemp.mput(layerId,style,bboxKey,imageUrl);
                 }
+                // QUEUES updates!
+                if (tileToUpdate) tileToUpdate.draw();
             }
         },
 
@@ -1044,11 +1000,12 @@ Oskari.clazz.define(
                             );
 
                         if (dataForTile) {
+                            // remove from drawing
                             this._plugin._tilesToUpdate.mdel(
                                 this.layerId,
                                 '',
                                 bboxKey
-                            ); // remove from drawing
+                            );
                         } else {
                             // temp cache
                             dataForTile = this._plugin._tileDataTemp.mget(
@@ -1057,15 +1014,13 @@ Oskari.clazz.define(
                                 bboxKey
                             );
 
+                            // put in drawing
                             this._plugin._tilesToUpdate.mput(
                                 this.layerId,
                                 '',
                                 bboxKey,
                                 theTile
-                            ); // put in drawing
-
-                            // DEBUG image (red)
-                            //dataForTile = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+                            );
                         }
 
                         return dataForTile;
@@ -1249,7 +1204,8 @@ Oskari.clazz.define(
         },
 
         getGrid: function () {
-            var bounds,
+            var me = this,
+                bounds,
                 clen,
                 grid = null,
                 iCol,
@@ -1275,10 +1231,7 @@ Oskari.clazz.define(
                         tile = row[iCol];
 
                         // if failed grid
-                        if (typeof tile.bounds.left === 'undefined' ||
-                            typeof tile.bounds.bottom === 'undefined' ||
-                            typeof tile.bounds.right === 'undefined' ||
-                            typeof tile.bounds.top === 'undefined') {
+                        if (me._isTile(tile) === false) {
                             return null;
                         }
 
@@ -1294,6 +1247,27 @@ Oskari.clazz.define(
             }
             return grid;
         },
+
+        /**
+         * Checks at tile is ok.
+         * @method _isTile
+         * @private
+         * 
+         * @param {Object} tile
+         *
+         * @return {Boolean} is tile ok
+         */
+         _isTile: function(tile){
+            if (typeof tile.bounds.left === 'undefined')
+                return false;
+            if (typeof tile.bounds.bottom === 'undefined')
+                return false;
+            if (typeof tile.bounds.right === 'undefined')
+                return false;
+            if (typeof tile.bounds.top === 'undefined')
+                return false;
+            return true;
+         },
 
         /*
          * @method getPrintTiles
@@ -1390,7 +1364,8 @@ Oskari.clazz.define(
          * Checks if the arrays are equal
          */
         isArrayEqual: function (current, old) {
-            if (old.length !== current.length) { // same size?
+            // same size?
+            if (old.length !== current.length) {
                 return false;
             }
             var i;
@@ -1502,8 +1477,7 @@ Oskari.clazz.define(
                     var i;
 
                     for (i = 0; i < a.length; i += 1) {
-                        // FIXME use ===, check that it works
-                        if (a[i] == obj) {
+                        if (a[i] === obj) {
                             return true;
                         }
                     }

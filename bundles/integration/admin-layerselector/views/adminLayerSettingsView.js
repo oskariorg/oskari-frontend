@@ -425,6 +425,7 @@ define([
             _addLayerAjax: function(data, element){
                 var me = this,
                     form = element.parents('.admin-add-layer'),
+                    accordion = element.parents('.accordion'),
                     createLayer,
                     sandbox = me.instance.getSandbox();
                 // Progress spinner
@@ -456,11 +457,7 @@ define([
                                 createLayer.find('.admin-add-layer-btn').attr('title', me.instance.getLocalization('admin').addLayerDesc);
                             }
                             form.remove();
-                            if (callback) {
-                                callback();
-                            }
-
-                            // FIXME this doesn't seem to do anything? remove's trigger re-renders the layer view, this doesn't
+                            
                             //trigger event to View.js so that it can act accordingly
                             accordion.trigger({
                                 type: 'adminAction',
@@ -627,8 +624,8 @@ define([
                 // Layer class id aka. orgName id aka groupId
                 data.groupId = lcId;
 
-                if (data.layerUrl !== me.model.getInterfaceUrl() ||
-                    data.layerName !== me.model.getLayerName()) {
+                if ((data.layerUrl !== me.model.getInterfaceUrl() && me.model.getInterfaceUrl() )||
+                    (data.layerName !== me.model.getLayerName() && me.model.getLayerName()) ) {
                     var confirmMsg = me.instance.getLocalization('admin').confirmResourceKeyChange,
                         dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                         btn = dialog.createCloseButton(me.instance.getLocalization().ok),
