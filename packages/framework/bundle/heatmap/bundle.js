@@ -35,7 +35,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.heatmap.HeatmapBundle", function
             "src": "../../../../bundles/framework/heatmap/domain/HeatmapLayer.js"
         }, {
             "type" : "text/css",
-            "src" : "../../../../bundles/framework/heatmap/resources/css/heatmap.css"
+            "src" : "../../../../bundles/framework/heatmap/resources/css/style.css"
         }, {
         // NOTE! EXTERNAL LIBRARY!
             "type": "text/javascript",
