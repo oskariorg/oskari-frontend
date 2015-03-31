@@ -56,6 +56,9 @@ Analysis now supports do geometry filter.
 
 bringToTop() now supports buffer as a second parameter. Buffer adds this integer value to layer z-index. If parameter is not set then using default 1;
 
+### faramework/mapmodule-plugin  - MarkersPlugin
+
+Fixed at Markers layer stays on top of map layers.
 
 ### framework/mapmodule-plugin - SearchPlugin
 

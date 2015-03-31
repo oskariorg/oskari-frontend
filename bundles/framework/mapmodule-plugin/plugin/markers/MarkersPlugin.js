@@ -525,8 +525,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 this._map.Z_INDEX_BASE.Feature,
                 layer.getZIndex()
             ) + 1;
-            //layer.setZIndex(index);
-            //layer.setVisibility(true);
+            layer.setZIndex(index);
+            layer.setVisibility(true);
         },
 
         /**
