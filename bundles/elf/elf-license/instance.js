@@ -868,7 +868,7 @@ function () {
                 } else if (type === 'text') {
                     inputValues = [element.find('div').attr('data-value')];
                 } else if (type === 'boolean') {
-                    inputValues = element.find('div').attr('data-value');
+                    inputValues = element.find('div').attr('data-value') == 'true';
                 } else if (type === 'enum') {
                     inputValues = [];
                     element.find('li').each(function(){
@@ -882,6 +882,8 @@ function () {
             value.values = inputValues;
             values.push(value);
         });
+
+
         return values;
     }
 }, {
