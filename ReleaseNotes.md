@@ -297,6 +297,11 @@ if (reqBuilder) {
 }
 ```
 
+### sample/tetris
+
+*New bundle!* Created new easter fun "tetris" bundle. This bundle add new Tile and Flyout for playing tetris game.
+You can start this bundle also in sample applications in Oskari/applications/sample/tetris/index.html
+
 ### Folder structure changes
 
 Preparing for version 2 of the changes, please change your bundles to following folder structure.
