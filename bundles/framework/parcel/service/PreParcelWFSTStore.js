@@ -226,7 +226,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.PreParcelWFSTStor
 
                 feat = new OpenLayers.Feature.Vector(null, featAtts);
 
-                // console.log('saving preparcel - id: ' + m_id);
                 if (!p_id) {
                     feat.toState(OpenLayers.State.INSERT);
                 } else {
@@ -454,7 +453,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.PreParcelWFSTStor
 
                 feat = new OpenLayers.Feature.Vector(geom, featAtts);
 
-                // console.log('saving parcel - id: ' + m_id);
                 if (!m_id) {
                     feat.toState(OpenLayers.State.INSERT);
                 } else {
@@ -541,11 +539,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.PreParcelWFSTStor
                 };
 
                 feat = new OpenLayers.Feature.Vector(null, featAtts);
-
-                // console.log('Deleting preparcel_data - id: ' + m_id);
-
                 feat.fid = p.featureType + '.' + m_id;
-
                 feat.state = OpenLayers.State.DELETE;
                 features.push(feat);
             }

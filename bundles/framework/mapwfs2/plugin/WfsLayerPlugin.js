@@ -226,7 +226,7 @@ Oskari.clazz.define(
                         me.getSandbox().printDebug(
                             'sending deferred setLocation'
                         );
-                        me.mapMoveHandler();
+                        me.mapMoveHandler(event.getMapLayer().getId());
                     }
                 },
 
@@ -322,7 +322,7 @@ Oskari.clazz.define(
         /**
          * @method mapMoveHandler
          */
-        mapMoveHandler: function () {
+        mapMoveHandler: function (reqLayerId) {
             var me = this,
                 sandbox = me.getSandbox(),
                 map = sandbox.getMap(),
@@ -333,7 +333,7 @@ Oskari.clazz.define(
                 grid,
                 fids,
                 layerId,
-                layers,
+                layers = [],
                 i,
                 tiles,
                 x;
@@ -346,8 +346,15 @@ Oskari.clazz.define(
 
             // update cache
             this.refreshCaches();
-
-            layers = sandbox.findAllSelectedMapLayers();
+            if(reqLayerId) {
+                var layer = sandbox.findMapLayerFromSelectedMapLayers(reqLayerId);
+                if(layer) {
+                    layers.push(layer);
+                }
+            }
+            else {
+                layers = sandbox.findAllSelectedMapLayers();
+            }
 
             for (i = 0; i < layers.length; i += 1) {
                 if (layers[i].hasFeatureData()) {

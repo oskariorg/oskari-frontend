@@ -241,8 +241,7 @@ function(url, uuid) {
             };
 
             var feat = new OpenLayers.Feature.Vector(geom, featAtts);
-
-            // console.log('saving place - id: ' + m_id);
+            
             if (!m_id) {
                 feat.toState(OpenLayers.State.INSERT);
             } else {

@@ -302,8 +302,6 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
             me._cancelAjaxRequest('deactivateLicense');
             me._startAjaxRequest(dteMs, 'deactivateLicense');
 
-            console.dir(data);
-
             jQuery.ajax({
                 dataType : "json",
                 type : "DELETE",

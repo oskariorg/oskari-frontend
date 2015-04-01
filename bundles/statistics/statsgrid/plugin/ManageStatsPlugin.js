@@ -872,7 +872,6 @@ Oskari.clazz.define(
                     state.indicators.push(indicator);
                 },
                 function () {
-                    //console.log('FAIL!', console.log(arguments));
                 }
             );
         },

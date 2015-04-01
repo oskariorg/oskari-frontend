@@ -14,11 +14,8 @@ Oskari.clazz.define(
      */
     function (sandbox) {
     	this.sandbox = sandbox;
-    	this.status = {};
-    	var status = this.status;
-    	window.sami = function() {
-    		console.log(status);
-    	};
+    	var status = {};
+    	this.status = status;
     }, {
     	__log : function() {
             //console.log.apply(console, arguments);

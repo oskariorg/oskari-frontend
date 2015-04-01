@@ -187,7 +187,6 @@ function(url, uuid) {
             };
             var feat = new OpenLayers.Feature.Vector(null, featAtts);
 
-            // console.log('saving category - id: ' + m_id);
             if (!m_id) {
                 feat.toState(OpenLayers.State.INSERT);
             } else {
@@ -199,7 +198,6 @@ function(url, uuid) {
         }
         p.commit(features, {
             callback : function(response) {
-
                 me._handleCommitCategoriesResponse(response, list, callback);
             }
         });
@@ -437,7 +435,6 @@ function(url, uuid) {
 
             var feat = new OpenLayers.Feature.Vector(geom, featAtts);
 
-            // console.log('saving place - id: ' + m_id);
             if (!m_id) {
                 feat.toState(OpenLayers.State.INSERT);
             } else {
@@ -521,10 +518,7 @@ function(url, uuid) {
 
             var feat = new OpenLayers.Feature.Vector(null, featAtts);
 
-            // console.log('Deleting place - id: ' + m_id);
-
             feat.fid = p.featureType + '.' + m_id;
-
             feat.state = OpenLayers.State.DELETE;
             features.push(feat);
         }

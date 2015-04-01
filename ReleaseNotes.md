@@ -40,6 +40,8 @@ ModelBuilder no longer assumes featuredata2 is present in the application setup.
 
 Added a statushandler to keep track of requests in progress and errors. Still work-in-progress and can change completely.
 
+Now limits setLocation calls to single layer/request when triggered by 'MapLayerVisibilityChangedEvent' (using config.deferSetLocation=true).
+
 ### featuredata2
 
 Adds 'Feature Data' tool for any layers that are capable of showing it (WFS-based layer types).
@@ -56,13 +58,29 @@ Analysis now supports do geometry filter.
 
 bringToTop() now supports buffer as a second parameter. Buffer adds this integer value to layer z-index. If parameter is not set then using default 1;
 
-### faramework/mapmodule-plugin  - MarkersPlugin
+### framework/mapmodule-plugin  - FeatureDataPlugin
+
+Fixed plugin locale handling.
+
+### framework/mapmodule-plugin  - LogoPlugin
+
+Fixed plugin locale handling.
+
+### framework/mapmodule-plugin  - MarkersPlugin
 
 Fixed at Markers layer stays on top of map layers.
+
+### framework/mapmodule-plugin  - MyLocationPlugin
+
+Fixed plugin locale handling.
 
 ### framework/mapmodule-plugin - SearchPlugin
 
 Now supports zoomScale in search results.
+
+### framework/publisher
+
+Fixed tools states when changing language.
 
 ### elf/elf-lang-overrides
 
@@ -278,6 +296,11 @@ if (reqBuilder) {
     this.sandbox.request(this.getName(), request2);
 }
 ```
+
+### sample/tetris
+
+*New bundle!* Created new easter fun "tetris" bundle. This bundle add new Tile and Flyout for playing tetris game.
+You can start this bundle also in sample applications in Oskari/applications/sample/tetris/index.html
 
 ### Folder structure changes
 

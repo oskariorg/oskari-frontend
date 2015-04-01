@@ -663,7 +663,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
 
                     layer.selected = isChecked;
                     if (isChecked) {
-                        console.log("Moving to base layers");
                         me.plugin.addBaseLayer(layer);
                     } else {
                         me.plugin.removeBaseLayer(layer);
