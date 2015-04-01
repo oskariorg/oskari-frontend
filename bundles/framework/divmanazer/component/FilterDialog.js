@@ -206,11 +206,10 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                 content.append(clickedFeaturesSelection);
 
                 //Check conditions for clicked features
-
-                // jos ei ole ollenkaan valittuja kohteita
                 if (!clickedFeatures) {
                     clickedFeaturesSelection.find('#analyse-clicked-features').prop({'disabled': true, 'checked': false});
-                    clickedFeaturesSelection.find('#analyse-filter-by-geometry').prop({'disabled': true, 'checked': false});
+                    clickedFeaturesSelection.find('#analyse-filter-by-geometry').prop({'checked': false, 'disabled': true});
+                    clickedFeaturesSelection.find('input[name="filter-by-geometry"]').prop({'disabled': true, 'checked': false});
                 } else if (layer._isLayerSelected === true && layer._clickedFeatureIds.length > 0) {
                     clickedFeaturesSelection.find('#analyse-clicked-features').prop('checked', true);
                     clickedFeaturesSelection.find('#analyse-filter-by-geometry').prop({'disabled': true, 'checked': false});
@@ -298,9 +297,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
             }
             if (values.filterByGeometryMethod) {
                 dialog.find('#analyse-filter-by-geometry').prop('checked', true);
-
                 var method = values.filterByGeometryMethod;
-                dialog.find('input[name=filter-by-geometry]').prop('disabled', false);
                 dialog.find('input[value=' + method+ ']').prop('checked', true);
             }
         },
