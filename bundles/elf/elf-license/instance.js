@@ -849,9 +849,9 @@ function () {
 
             if(!readOnly || readOnly === false || readOnly === 'false') {
                 if (type === 'int') {
-                    inputValues = element.find('input').val();
+                    inputValues = parseInt(element.find('input').val(), 10);
                 } else if (type === 'text') {
-                    inputValues = element.find('input').val();
+                    inputValues = [element.find('input').val()];
                 } else if (type === 'boolean') {
                     inputValues = element.find('input').is(':checked');
                 } else if (type === 'enum') {
@@ -864,9 +864,9 @@ function () {
                 }
             } else {
                 if (type === 'int') {
-                    inputValues = element.find('div').attr('data-value');
+                    inputValues = parseInt(element.find('div').attr('data-value'), 10);
                 } else if (type === 'text') {
-                    inputValues = element.find('div').attr('data-value');
+                    inputValues = [element.find('div').attr('data-value')];
                 } else if (type === 'boolean') {
                     inputValues = element.find('div').attr('data-value');
                 } else if (type === 'enum') {

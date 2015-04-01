@@ -71,7 +71,7 @@ div.elf_license_dialog {
   .elf_license_dialog_license_price .license_user_data {
     overflow: auto;
     width: 100%;
-    max-height: 330px; }
+    max-height: 190px; }
   .elf_license_dialog_license_price .license_user_data .elf_license_user_data_table .elf_license_user_data_label {
     font-size: 12px;
     color: #000000;
