@@ -4,6 +4,7 @@ define([
         'text!_bundle/templates/adminGroupSettingsTemplate.html',
         'text!_bundle/templates/group/subLayerTemplate.html',
         'text!_bundle/templates/capabilitiesTemplate.html',
+        'text!_bundle/templates/layersWithErrorsPopupTemplate.html',
         '_bundle/collections/userRoleCollection',
         '_bundle/models/layerModel'
     ],
@@ -13,6 +14,7 @@ define([
         GroupSettingsTemplate,
         SubLayerTemplate,
         CapabilitiesTemplate,
+        LayersWithErrorsPopupTemplate,
         userRoleCollection,
         layerModel
     ) {
@@ -193,6 +195,7 @@ define([
                     urlSource = [],
                     i,
                     j;
+
                 if (!me.model) {
                     me.model = this._createNewModel(layerType);
                     this.listenTo(this.model, 'change', this.render);
@@ -843,7 +846,10 @@ define([
              * @param  {String} response  GetWSCapabilities response
              */
             __capabilitiesResponseHandler : function(layerType, response) {
-                var me = this;
+                var me = this,
+                    warningDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                    warningDialogOkBtn = warningDialog.createCloseButton(me.instance.getLocalization().ok),
+                    warningMessage;
                 if(layerType === 'wmslayer') {
                     me.model.setCapabilitiesResponse(response);
                 }
@@ -855,6 +861,13 @@ define([
                     //me.model.change();
                 } else if(layerType === 'wfslayer') {
                     me.model.setCapabilitiesResponse(response);
+                    //check layers with error and act accordingly.
+                    var capabilities = me.model.get("capabilities");
+                    if (capabilities && capabilities.layersWithErrors && capabilities.layersWithErrors.length > 0) {
+                        warningMessage = _.template(LayersWithErrorsPopupTemplate, {"capabilities": capabilities, title: me.instance.getLocalization('admin')['warning_some_of_the_layers_could_not_be_parsed']});
+                        warningDialog.show(me.instance.getLocalization('admin')['warningTitle'], warningMessage, [warningDialogOkBtn]);
+                        warningDialog.makeModal();
+                    }
                 }
             },
             handleCapabilitiesSelection: function (e) {
