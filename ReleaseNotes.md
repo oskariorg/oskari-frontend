@@ -54,6 +54,10 @@ Now handles MapLayerEvent with type 'tool' and updates the selected layers tools
 
 Analysis now supports do geometry filter.
 
+### framework/maplegend
+
+Now handles only these layers where have a legend url and also legend image can be loaded succesfully.
+
 ### framework/mapmodule-plugin
 
 bringToTop() now supports buffer as a second parameter. Buffer adds this integer value to layer z-index. If parameter is not set then using default 1;
