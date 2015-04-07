@@ -185,7 +185,8 @@ Oskari.registerLocalization(
             "errorSaveGroupLayer": "NOT TRANSLATED",
             "errorTitle" : "Fel",
             "warningTitle" : "Varning",
-            "successTitle" : "Lagrat"
+            "successTitle" : "Lagrat",
+            "warning_some_of_the_layers_could_not_be_parsed":"NOT TRANSLATED"
         },
         "cancel": "Tillbaka",
         "add": "Tillägg",

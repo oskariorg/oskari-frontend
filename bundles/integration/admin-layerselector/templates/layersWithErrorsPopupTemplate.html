@@ -1,0 +1,6 @@
+<p><%=title%></p>
+<ul>
+    <% _.each(capabilities.layersWithErrors, function(layer) { %>
+        <li class="capabilitieslayer error" data-layername="<%= layer.layerName %>" title="<%=layer.title?layer.title+" - ":""%><%=layer.errorMessage%>"><%= layer.layerName %></li>
+    <% }); %>
+</ul>
