@@ -66,9 +66,25 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadatacatalogue.MetadataCatalogue
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/catalogue/metadatacatalogue/resources/locale/fi.js"
 		},{
+			"lang" : "fr",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/catalogue/metadatacatalogue/resources/locale/fr.js"
+		},{
 			"lang" : "en",
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/catalogue/metadatacatalogue/resources/locale/en.js"
+		},{
+			"lang" : "sl",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/catalogue/metadatacatalogue/resources/locale/sl.js"
+		},{
+			"lang" : "nb",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/catalogue/metadatacatalogue/resources/locale/nb.js"
+		},{
+			"lang" : "nl",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/catalogue/metadatacatalogue/resources/locale/nl.js"
 		},{
 			"lang" : "sv",
 			"type" : "text/javascript",

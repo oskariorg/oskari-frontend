@@ -3,11 +3,11 @@ Oskari.registerLocalization(
     "lang": "sl",
     "key": "MapModule",
     "value": {
-        "status_update_map": "Posodabljanje karte",
+        "status_update_map": "Nalaganje karte",
         "zoombar_tooltip": {
             "zoomLvl-0": "Karta za ozadje",
             "zoomLvl-1": "Država",
-            "zoomLvl-2": "Provinca",
+            "zoomLvl-2": "Pokrajina",
             "zoomLvl-3": "",
             "zoomLvl-4": "Mesto",
             "zoomLvl-5": "",
@@ -22,22 +22,22 @@ Oskari.registerLocalization(
         "plugin": {
             "LogoPlugin": {
                 "terms": "Pogoji uporabe",
-                "dataSources": "NOT TRANSLATED",
-                "layersHeader": "NOT TRANSLATED",
-                "indicatorsHeader": "NOT TRANSLATED"
+                "dataSources": "Viri podatkov",
+                "layersHeader": "Sloji karte",
+                "indicatorsHeader": "Indikatorji"
             },
             "DataSourcePlugin": {
                 "link": "Vir podatkov",
                 "popup": {
                     "title": "Viri podatkov",
-                    "content": "NOT TRANSLATED"
+                    "content": "NI PREVEDENO"
                 },
                 "button": {
                     "close": "Zapri"
                 }
             },
             "LayerSelectionPlugin": {
-                "title": "Objektni podatek",
+                "title": "Sloji karte",
                 "chooseDefaultBaseLayer": "Izberi karto za ozadje"
             },
             "SearchPlugin": {
@@ -45,34 +45,66 @@ Oskari.registerLocalization(
                 "search": "Išči",
                 "title": "Rezultati iskanja",
                 "close": "Zapri rezultate iskanja",
-                "noresults": "Ni rezultatov",
+                "noresults": "Ni iskanih podatkov. Ponovno določi iskalni niz.",
                 "toomanyresults": "Najdenih je bilo več kot 100 rezultatov. Prosimo omejite iskanje.",
                 "column_name": "Ime",
                 "column_village": "Občina",
                 "column_type": "Tip"
             },
             "GetInfoPlugin": {
-                "title": "Sloj karte",
-                "layer": "NOT TRANSLATED",
-                "places": "NOT TRANSLATED",
-                "description": "NOT TRANSLATED",
-                "link": "NOT TRANSLATED",
-                "name": "NOT TRANSLATED"
+                "title": "Podatki o pojavu",
+                "layer": "Sloj na karti",
+                "places": "Pojavi",
+                "description": "Opis",
+                "link": "Spletni naslov",
+                "name": "Ime"
             },
             "PublisherToolbarPlugin": {
-                "test": "NOT TRANSLATED",
+                "test": "test",
                 "history": {
-                    "reset": "NOT TRANSLATED",
-                    "back": "NOT TRANSLATED",
-                    "next": "NOT TRANSLATED"
+                    "reset": "Povratek v privzet pogled",
+                    "back": "Povratek v predhodni pogled",
+                    "next": "Premik na naslednji pogled"
                 },
                 "measure": {
-                    "line": "NOT TRANSLATED",
-                    "area": "NOT TRANSLATED"
+                    "line": "Izmeri razdaljo",
+                    "area": "Izmeri površino"
+                }
+            },
+            "MarkersPlugin": {
+                "buttons": {
+                    "add": "Oznake na karti",
+                    "clear": "Izbriši vse oznake"
+                },
+                "form": {
+                    "title": "Slog za točkovni pojav",
+                    "tooltip": "",
+                    "symbol": {
+                        "label": "Ikona"
+                    },
+                    "size": {
+                        "label": "Velikost"
+                    },
+                    "color": {
+                        "label": "Barva",
+                        "labelOr": "ali",
+                        "labelCustom": "Uporabniška barva (RGB 0-255)"
+                    },
+                    "preview": {
+                        "label": "Predogled"
+                    },
+                    "message": {
+                        "label": "Besedilo na karti",
+                        "hint": "Izpiši obvestilo"
+                    }
+                },
+                "dialog": {
+                    "title": "Oznake na karti",
+                    "message": "Izberi novo lokacijo markerja s klikom na karti."
                 }
             },
             "MyLocationPlugin": {
-                "tooltip": "NOT TRANSLATED"
+                "tooltip": "Centriraj karto glede na tvojo lokacijo"
             }
         }
     }

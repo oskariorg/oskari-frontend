@@ -34,14 +34,6 @@ Oskari.clazz.define("Oskari.elf.geolocator.Bundle", function() {
             "src" : "../../../../bundles/elf/elf-geolocator/resources/css/style.css"
         }],
         "locales" : [{
-            "lang": "fi",
-            "type": "text/javascript",
-            "src": "../../../../bundles/elf/elf-geolocator/resources/locale/fi.js"
-        }, {
-            "lang": "sv",
-            "type": "text/javascript",
-            "src": "../../../../bundles/elf/elf-geolocator/resources/locale/sv.js"
-        }, {
             "lang": "en",
             "type": "text/javascript",
             "src": "../../../../bundles/elf/elf-geolocator/resources/locale/en.js"
@@ -49,6 +41,38 @@ Oskari.clazz.define("Oskari.elf.geolocator.Bundle", function() {
             "lang": "es",
             "type": "text/javascript",
             "src": "../../../../bundles/elf/elf-geolocator/resources/locale/es.js"
+        }, {
+            "lang": "fi",
+            "type": "text/javascript",
+            "src": "../../../../bundles/elf/elf-geolocator/resources/locale/fi.js"
+        }, {
+            "lang": "fr",
+            "type": "text/javascript",
+            "src": "../../../../bundles/elf/elf-geolocator/resources/locale/fr.js"
+        }, {
+            "lang": "is",
+            "type": "text/javascript",
+            "src": "../../../../bundles/elf/elf-geolocator/resources/locale/is.js"
+        }, {
+            "lang": "it",
+            "type": "text/javascript",
+            "src": "../../../../bundles/elf/elf-geolocator/resources/locale/it.js"
+        }, {
+            "lang": "nb",
+            "type": "text/javascript",
+            "src": "../../../../bundles/elf/elf-geolocator/resources/locale/nb.js"
+        }, {
+            "lang": "nl",
+            "type": "text/javascript",
+            "src": "../../../../bundles/elf/elf-geolocator/resources/locale/nl.js"
+        }, {
+            "lang": "sl",
+            "type": "text/javascript",
+            "src": "../../../../bundles/elf/elf-geolocator/resources/locale/sl.js"
+        }, {
+            "lang": "sv",
+            "type": "text/javascript",
+            "src": "../../../../bundles/elf/elf-geolocator/resources/locale/sv.js"
         }]
     },
     "bundle" : {

@@ -114,6 +114,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundle", func
             "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher/resources/locale/fi.js"
         }, {
+            "lang": "fr",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/publisher/resources/locale/fr.js"
+        }, {
             "lang": "el",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher/resources/locale/el.js"
@@ -129,6 +133,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundle", func
             "lang": "lv",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher/resources/locale/lv.js"
+        }, {
+            "lang": "nb",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/publisher/resources/locale/nb.js"
         }, {
             "lang": "nl",
             "type": "text/javascript",

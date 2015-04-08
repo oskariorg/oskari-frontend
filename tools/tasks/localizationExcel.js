@@ -25,6 +25,7 @@ module.exports = function (grunt) {
                     var fp = path.normalize(filepath),
                         pathTokens = fp.split(path.sep),
                         bundleName = pathTokens[pathTokens.length - 2];
+						console.log(fp,bundleName);
 
                     for (i = 0; i < locales.length; i += 1) {
                         grunt.config.set(
@@ -348,7 +349,7 @@ module.exports = function (grunt) {
             // Read english locale
             // TODO move source locale to options
             fs.readFile(
-                bundleDir + 'locale' + path.sep + templateLocale + '.js',
+                bundleDir + 'resources' + path.sep + 'locale' + path.sep + templateLocale + '.js',
                 {
                     encoding: 'utf8'
                 },
@@ -369,7 +370,7 @@ module.exports = function (grunt) {
 
             // Read old locale
             fs.readFile(
-                bundleDir + 'locale' + path.sep + locale + '.js', {
+                bundleDir + 'resources' + path.sep + 'locale' + path.sep + locale + '.js', {
                     encoding: 'utf8'
                 },
                 function (err, data) {
@@ -584,7 +585,7 @@ module.exports = function (grunt) {
             var getLocalization = function (filePath, fileName) {
                 var data = null;
                 // read template
-                if (fs.existsSync(filePath + path.sep + 'en.js')) {
+                if (fs.existsSync(filePath + path.sep + templateLocale + '.js')) {
                     data = fs.readFileSync(
                         filePath + path.sep + templateLocale + '.js',
                         {
@@ -644,6 +645,8 @@ module.exports = function (grunt) {
                             cells = result.worksheet.sheetData[0].row[i].c;
                             if (localeFile === null) {
                                 localeDir = '..' + path.sep + getCellValue(cells[0]).substring(8);
+								localeDir = localeDir.replace('\\bundle\\','\\');
+								localeDir = localeDir.replace('\\locale','\\resources\\locale');
                                 localeFile = getCellValue(cells[1]);
                                 getLocalization(
                                     localeDir,

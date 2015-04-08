@@ -119,17 +119,37 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.PublishedMyPla
         }],
 
         "locales" : [{
+            "lang" : "en",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/publishedmyplaces2/resources/locale/en.js"
+        }, {
+            "lang" : "es",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/publishedmyplaces2/resources/locale/es.js"
+        }, {
             "lang" : "fi",
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/publishedmyplaces2/resources/locale/fi.js"
         }, {
-            "lang" : "sv",
+            "lang" : "fr",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/publishedmyplaces2/resources/locale/sv.js"
+            "src" : "../../../../bundles/framework/publishedmyplaces2/resources/locale/fr.js"
         }, {
-            "lang" : "en",
+            "lang" : "is",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/publishedmyplaces2/resources/locale/en.js"
+            "src" : "../../../../bundles/framework/publishedmyplaces2/resources/locale/is.js"
+        }, {
+            "lang" : "it",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/publishedmyplaces2/resources/locale/it.js"
+        }, {
+            "lang" : "nb",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/publishedmyplaces2/resources/locale/nb.js"
+        }, {
+            "lang" : "nl",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/publishedmyplaces2/resources/locale/nl.js"
         }, {
             "lang" : "cs",
             "type" : "text/javascript",
@@ -139,9 +159,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.PublishedMyPla
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/publishedmyplaces2/resources/locale/de.js"
         }, {
-            "lang" : "es",
+            "lang" : "sl",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/publishedmyplaces2/resources/locale/es.js"
+            "src" : "../../../../bundles/framework/publishedmyplaces2/resources/locale/sl.js"
+        }, {
+            "lang" : "sv",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/publishedmyplaces2/resources/locale/sv.js"
         }
        ]
 	},
