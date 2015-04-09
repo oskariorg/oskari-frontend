@@ -51,9 +51,6 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
                 +        '<div class="search-results"></div>'
                 +    '</div>'
                 +'</div>',
-            button:  '<div class="geolocator-button">' +
-                '<input type="button" />' +
-                '</div>',
             addInput:
             '<div class="additional-input">' +
             '   <div class="controls">' +
@@ -125,7 +122,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
                     'elf-geolocator-region', this.sandbox),
                 searchButton = searchUi.find('div.commit input[type="submit"]'),
                 countryInput = this.templates.countryAutoInput.clone();
-                geolocButton = this.templates.button.clone(),
+
                 normalCheck = this.templates.addInput.clone(),
                 regionCheck = this.templates.addInput.clone(),
                 fuzzyCheck = this.templates.addInput.clone(),
@@ -229,13 +226,6 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
                     searchUi.show();
                 });
 
-            geolocButton.find('input')
-                .attr('title', this.loc.geolocDesc)
-                .val(this.loc.geolocButton)
-                .on('click', function (e) {
-                    me.instance.startTool();
-                });
-
             container.find('div.search-fields')
                 .append(searchInput.getField())
                 .append(countryInput)
@@ -254,9 +244,6 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
                     .append(regionCheck)
                     .append(fuzzyCheck)
                     .append(exonymCheck);
-
-            container.find('div.search-buttons')
-                .append(geolocButton);
 
             resultsUi.find('div.header-results span.title')
                 .append(this.__getSearchResultsTitle());
