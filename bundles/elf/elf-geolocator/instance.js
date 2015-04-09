@@ -160,7 +160,9 @@ Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
          * @param  {Object} result
          */
         resultClicked: function (result) {
-            if (!result) return;
+            if (!result) {
+                return;
+            }
 
             var sandbox = this.getSandbox(),
                 zoomLevel = sandbox.getMap().getZoom(),

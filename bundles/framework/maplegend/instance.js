@@ -141,29 +141,27 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
         eventHandlers: {
             /**
              * @method AfterMapLayerRemoveEvent
-             * @param {Oskari.mapframework.event.common.AfterMapLayerRemoveEvent} event
              *
              * Calls flyouts handleLayerSelectionChanged() method
              */
-            'AfterMapLayerRemoveEvent': function (event) {
+            'AfterMapLayerRemoveEvent': function () {
                 this.plugins['Oskari.userinterface.Flyout'].refresh();
             },
             /**
              * @method AfterMapLayerAddEvent
-             * @param {Oskari.mapframework.event.common.AfterMapLayerAddEvent} event
              *
              * Calls flyouts handleLayerSelectionChanged() method
              */
-            'AfterMapLayerAddEvent': function (event) {
+            'AfterMapLayerAddEvent': function () {
                 this.plugins['Oskari.userinterface.Flyout'].refresh();
             },
             /**
              * @method AfterChangeMapLayerStyleEvent
              */
-            'AfterChangeMapLayerStyleEvent': function (event) {
+            'AfterChangeMapLayerStyleEvent': function () {
                 this.plugins['Oskari.userinterface.Flyout'].refresh();
             },
-            'AfterRearrangeSelectedMapLayerEvent': function (event) {
+            'AfterRearrangeSelectedMapLayerEvent': function () {
                 this.plugins['Oskari.userinterface.Flyout'].refresh();
             },
             /**
@@ -245,7 +243,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
          * (re)creates the UI for "all layers" functionality
          */
         createUi: function () {
-            var me = this;
             this.plugins['Oskari.userinterface.Flyout'].createUi();
             this.plugins['Oskari.userinterface.Tile'].refresh();
         },
@@ -264,14 +261,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
          */
         getState: function () {
             return this.plugins['Oskari.userinterface.Flyout'].getContentState();
-            /*
-        var state = {
-
-
-        };
-
-        return state;
-        */
         }
     }, {
         /**
