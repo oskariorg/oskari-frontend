@@ -56,7 +56,7 @@ Analysis now supports do geometry filter.
 
 ### framework/maplegend
 
-Now handles only these layers where have a legend url and also legend image can be loaded succesfully.
+Now handles only these layers where have a legend url and also it can be loaded succesfully. Informs the user if any legend images will not be displayed.
 
 ### framework/mapmodule-plugin
 
