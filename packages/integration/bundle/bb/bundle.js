@@ -33,7 +33,7 @@ Oskari.clazz.define("Oskari.integration.bundle.bb.BackBoneBundle", function() {
     "source" : {
         "scripts" : [{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/integration/bb/comp.js"
+            "src" : "../../../../libraries/backbone/comp.js"
 
         }, {
             "type" : "text/javascript",
