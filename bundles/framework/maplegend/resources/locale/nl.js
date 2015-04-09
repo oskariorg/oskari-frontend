@@ -3,6 +3,7 @@ Oskari.registerLocalization({
     "key": "maplegend",
     "value": {
         "title": "Legenda's",
-        "desc": ""
+        "desc": "",
+        "noLegendsText": "No map legends available"
     }
 });
