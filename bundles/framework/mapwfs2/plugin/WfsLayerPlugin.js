@@ -529,6 +529,10 @@ Oskari.clazz.define(
 
             if (!event.isKeepSelection()) {
                 layer.setClickedFeatureListIds(wfsFeatureIds);
+                if (wfsFeatureIds.length === 0) {
+                    layer.setClickedFeatureIds(wfsFeatureIds);
+                    layer.setClickedGeometries(wfsFeatureIds);
+                }
             } else {
                 // Merge tmpIds to ids
                 tmpIds.forEach(function (id) {
