@@ -5,7 +5,7 @@ Oskari.registerLocalization(
     "value": {
         "title": "Tetris",
         "desc": "",
-        "flyout": {        	
+        "flyout": {
         	"playText": "Let's play some Tetris",
             "playButtonText": "Play",
             "gameOverText": "Game Over",
