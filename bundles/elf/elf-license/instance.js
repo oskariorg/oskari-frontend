@@ -51,7 +51,7 @@ function () {
             '<div class="license_user_data">'+
             '   <table class="elf_license_user_data_table"></table>' +
             '</div>' +
-            '<div class="validto_summary"><span class="title"></span><span class="validto"></span></div>'+
+            '<div class="validto_summary"></div>'+
             '<div class="clear"></div>'+
             '<div class="help"></div></div>'),
         licenceModelSummaryDetails: jQuery('<div><div class="license_basic_data">' +
@@ -452,9 +452,11 @@ function () {
         }
 
         if(licenseData.validTo){
-            var validToElem = modelDetails.find('.validto_summary');
-            validToElem.find('.title').html(me._locale.dialog.validTo);
-            validToElem.find('.validto').html(licenseData.validTo);
+            var validToElem = modelDetails.find('.validto_summary'),
+                validText = me._locale.dialog.validTo;
+            validText = validText.replace('{day}',licenseData.validTo);
+
+            validToElem.html(validText);
         }
 
         licenseDetails.append(modelDetails);
