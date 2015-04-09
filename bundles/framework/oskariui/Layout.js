@@ -15,13 +15,13 @@ function() {
 	 * @method applyLayout
 	 * applies this layout with given DomManager
 	 */
-	applyLayout : function(domManager) {
+	applyLayout : function() {
 
 	},
 	/**
 	 * @method removeLayout
 	 */
-	removeLayout : function(domManager) {
+	removeLayout : function() {
 
 	}
 }, {
