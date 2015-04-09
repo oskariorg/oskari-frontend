@@ -214,10 +214,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                 legendUrl = layer.getLegendImage ? layer.getLegendImage() : null;
 
             if (imagesAdded[legendUrl]) {
+                me._checkNoLegendText();
                 return null;
             }
 
             if (!(legendUrl && legendUrl !== '')) {
+                me._checkNoLegendText();
                 return null;
             }
 
