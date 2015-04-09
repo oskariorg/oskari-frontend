@@ -3,6 +3,7 @@ Oskari.registerLocalization({
     "key": "maplegend",
     "value": {
         "title": "Υπομνήματα",
-        "desc": ""
+        "desc": "",
+        "noLegendsText": "No map legends available"
     }
 });
