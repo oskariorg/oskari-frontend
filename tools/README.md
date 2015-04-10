@@ -1,5 +1,11 @@
 # Usage notes for tools
 
+## Trimming trailing spaces from code
+
+Run command: 
+	
+	npm run trim
+
 ## Localization 
 
 ### Generate excel-sheets of current bundle-localizations
