@@ -15,7 +15,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSStatusChanged',
  * @param {String} layerId
  */
 function(layerId) {
-    this._layerId = layer;
+    this._layerId = layerId;
     this._type = undefined;
     this._status = undefined;
 }, {
@@ -41,11 +41,11 @@ function(layerId) {
     },
 
     /**
-     * @method getLayer
-     * @return {String} layer
+     * @method getLayerId
+     * @return {String} layer id
      */
     getLayerId : function() {
-        return this._layer;
+        return this._layerId;
     },
 
     /**
