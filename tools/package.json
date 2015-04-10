@@ -62,7 +62,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "trim" : "./node_modules/.bin/grunt trimtrailingspaces"
+    "trim" : "./node_modules/.bin/grunt trimtrailingspaces",
+    "lint" : "./node_modules/.bin/jshint ../bundles"
   },
   "devDependencies": {
     "grunt-trimtrailingspaces": "^1.1.0",
