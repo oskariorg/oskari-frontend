@@ -145,3 +145,10 @@ div.mapplugins .mappluginsContainer .mappluginsContent div.featuredataplugin.map
     }
 
 }
+
+div.mapplugins .mappluginsContainer .mappluginsContent div.featuredataplugin.mapplugin.error a {
+    color: red;
+}
+div.mapplugins .mappluginsContainer .mappluginsContent div.featuredataplugin.mapplugin.loading {
+    background: url("../images/ajax-loader.gif") no-repeat 0 0 / cover;
+}
