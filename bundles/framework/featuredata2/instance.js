@@ -238,6 +238,44 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          * @static
          */
         eventHandlers: {
+            'WFSStatusChanged': function (event) {
+                if(event.getLayerId() === undefined) {
+                    return;
+                }
+                if(!this.__loadingStatus) {
+                    this.__loadingStatus = {};
+                }
+                var id = '' + event.getLayerId();
+                if(event.getStatus() === event.status.loading)  {
+                    this.__loadingStatus['' + event.getLayerId()] = 'loading';
+                    this.plugin.showLoadingIndicator(true);
+                }
+
+                if(event.getStatus() === event.status.complete)  {
+                    delete this.__loadingStatus['' + event.getLayerId()];
+                }
+                if(event.getStatus() === event.status.error)  {
+                    this.__loadingStatus['' + event.getLayerId()] = 'error';
+                }
+                var status = {
+                    loading : [],
+                    error : []
+                };
+                _.each(this.__loadingStatus, function(value, key) {
+                    status[value].push(key);
+                });
+                if(status.loading.length === 0) {
+                    // no layers in loading state
+                    this.plugin.showLoadingIndicator(false);
+                }
+                // setup error indicator based on error statuses
+                this.plugin.showErrorIndicator(status.error.length > 0);
+
+                // TODO: For debugging, remove when stable
+                if(Oskari.__debugWFS === true) {
+                    console.log('WFSStatusChanged', event, status);
+                }
+            },
             'MapLayerEvent': function (event) {
                 if(event.getOperation() !== 'add')  {
                     // only handle add layer
