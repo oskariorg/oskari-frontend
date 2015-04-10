@@ -67,6 +67,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             }
             me.setVisible(false);
         },
+        showLoadingIndicator : function(blnLoad) {
+            if(blnLoad) {
+                this.getElement().addClass('loading');
+            }
+            else {
+                this.getElement().removeClass('loading');
+            }
+        },
+        showErrorIndicator : function(blnLoad) {
+            if(blnLoad) {
+                this.getElement().addClass('error');
+            }
+            else {
+                this.getElement().removeClass('error');
+            }
+        },
 
         _setLayerToolsEditModeImpl: function () {
             if (!this.inLayerToolsEditMode()) {
