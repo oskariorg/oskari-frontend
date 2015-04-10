@@ -13,6 +13,10 @@ Cleaned up deprecated code/bundles. Removed:
     - packages/framework/bundle/featuredata
     - packages/framework/bundle/mapwfs
 
+### tools
+
+Added script shortcuts for linting and trimming trailing spaces from bundles. Run `npm run trim` and `npm run lint` respectively.
+
 ### framework/heatmap
 
 *New bundle!* Adds heatmap functionality to layers configured to support it (WMS-layers only at the moment). Configuration is done by adding the following information to a layers JSON:
@@ -39,6 +43,13 @@ Fixed VisualizationForm open issue when form is opened second time after that wh
 ModelBuilder no longer assumes featuredata2 is present in the application setup. Feature data tool is not added to layers by default.
 
 Added a statushandler to keep track of requests in progress and errors. Still work-in-progress and can change completely.
+To enable debug messages in developer console run:
+
+    Oskari.__debugWFS = true;
+
+To get the tracking info in developer console run:
+
+    Oskari.___getWFSStatus();
 
 Now limits setLocation calls to single layer/request when triggered by 'MapLayerVisibilityChangedEvent' (using config.deferSetLocation=true).
 
