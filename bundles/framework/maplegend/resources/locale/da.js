@@ -4,7 +4,8 @@ Oskari.registerLocalization(
     "key": "maplegend",
     "value": {
         "title": "Tegnforklaringer",
-        "desc": ""
+        "desc": "",
+        "noLegendsText": "No map legends available"
     }
 }
 );

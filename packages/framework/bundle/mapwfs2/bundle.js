@@ -24,7 +24,7 @@ function() {
 
         "scripts" : [{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/comp.js"
+            "src" : "../../../../libraries/cometd/comp.js"
         },{
             "type" : "text/javascript",
             "src" : "../../../../libraries/jquery/plugins/jquery.cookie.js"

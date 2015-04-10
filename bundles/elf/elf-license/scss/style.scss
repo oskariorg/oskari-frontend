@@ -3,7 +3,7 @@
 $dialogWidth: 820px;
 $dialogWidthPros: 94%;
 $dialogDataHeight: 320px;
-$maxHeight: 260px;
+$maxHeight: 230px;
 
 div.elf_license_dialog {
 	div.content {
@@ -132,7 +132,7 @@ div.elf_license_dialog {
 	.license_user_data {
 		overflow: auto;
 		width: 100%;
-		max-height: 330px;
+		max-height: 190px;
 	}
 
 	.license_user_data  {
@@ -143,6 +143,7 @@ div.elf_license_dialog {
 				color: #000000;
 				font-weight: bold;
 				padding: 4px;
+				width: 40%;
 			}
 
 			.elf_license_user_data {

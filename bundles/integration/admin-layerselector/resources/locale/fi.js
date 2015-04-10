@@ -184,7 +184,8 @@ Oskari.registerLocalization({
             "errorSaveGroupLayer": "Karttatasoryhmän tallennus epäonnistui.",
             "errorTitle": "Virhe",
             "warningTitle": "Varoitus",
-            "successTitle": "Tallennettu"
+            "successTitle": "Tallennettu",
+            "warning_some_of_the_layers_could_not_be_parsed":"Osaa tasoista ei voitu parsia."
         },
         "cancel": "Peruuta",
         "add": "Lisää",

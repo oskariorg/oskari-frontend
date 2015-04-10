@@ -54,6 +54,10 @@ Now handles MapLayerEvent with type 'tool' and updates the selected layers tools
 
 Analysis now supports do geometry filter.
 
+### framework/maplegend
+
+Now handles only these layers where have a legend url and also it can be loaded succesfully. Informs the user if any legend images will not be displayed.
+
 ### framework/mapmodule-plugin
 
 bringToTop() now supports buffer as a second parameter. Buffer adds this integer value to layer z-index. If parameter is not set then using default 1;
@@ -296,6 +300,11 @@ if (reqBuilder) {
     this.sandbox.request(this.getName(), request2);
 }
 ```
+
+### sample/tetris
+
+*New bundle!* Created new easter fun "tetris" bundle. This bundle add new Tile and Flyout for playing tetris game.
+You can start this bundle also in sample applications in Oskari/applications/sample/tetris/index.html
 
 ### Folder structure changes
 

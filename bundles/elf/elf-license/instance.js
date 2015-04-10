@@ -51,7 +51,7 @@ function () {
             '<div class="license_user_data">'+
             '   <table class="elf_license_user_data_table"></table>' +
             '</div>' +
-            '<div class="validto_summary"><span class="title"></span><span class="validto"></span></div>'+
+            '<div class="validto_summary"></div>'+
             '<div class="clear"></div>'+
             '<div class="help"></div></div>'),
         licenceModelSummaryDetails: jQuery('<div><div class="license_basic_data">' +
@@ -452,9 +452,11 @@ function () {
         }
 
         if(licenseData.validTo){
-            var validToElem = modelDetails.find('.validto_summary');
-            validToElem.find('.title').html(me._locale.dialog.validTo);
-            validToElem.find('.validto').html(licenseData.validTo);
+            var validToElem = modelDetails.find('.validto_summary'),
+                validText = me._locale.dialog.validTo;
+            validText = validText.replace('{day}',licenseData.validTo);
+
+            validToElem.html(validText);
         }
 
         licenseDetails.append(modelDetails);
@@ -849,9 +851,9 @@ function () {
 
             if(!readOnly || readOnly === false || readOnly === 'false') {
                 if (type === 'int') {
-                    inputValues = element.find('input').val();
+                    inputValues = parseInt(element.find('input').val(), 10);
                 } else if (type === 'text') {
-                    inputValues = element.find('input').val();
+                    inputValues = [element.find('input').val()];
                 } else if (type === 'boolean') {
                     inputValues = element.find('input').is(':checked');
                 } else if (type === 'enum') {
@@ -864,11 +866,11 @@ function () {
                 }
             } else {
                 if (type === 'int') {
-                    inputValues = element.find('div').attr('data-value');
+                    inputValues = parseInt(element.find('div').attr('data-value'), 10);
                 } else if (type === 'text') {
-                    inputValues = element.find('div').attr('data-value');
+                    inputValues = [element.find('div').attr('data-value')];
                 } else if (type === 'boolean') {
-                    inputValues = element.find('div').attr('data-value');
+                    inputValues = element.find('div').attr('data-value') == 'true';
                 } else if (type === 'enum') {
                     inputValues = [];
                     element.find('li').each(function(){
@@ -882,6 +884,8 @@ function () {
             value.values = inputValues;
             values.push(value);
         });
+
+
         return values;
     }
 }, {

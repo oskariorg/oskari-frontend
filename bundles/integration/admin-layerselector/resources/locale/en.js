@@ -184,7 +184,8 @@ Oskari.registerLocalization({
             "errorSaveGroupLayer": "Failed to save grouplayer.",
             "errorTitle": "Error",
             "warningTitle": "Warning",
-            "successTitle": "Saved"
+            "successTitle": "Saved",
+            "warning_some_of_the_layers_could_not_be_parsed":"Some of the layers could not be parsed."
         },
         "cancel": "Cancel",
         "add": "Add",

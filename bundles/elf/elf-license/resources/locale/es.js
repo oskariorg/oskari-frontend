@@ -60,7 +60,7 @@ Oskari.registerLocalization({
                 "title": "License deactivate",
                 "message": "Do you want deactivate your license?"
             },
-            "validTo": "Subscription validity period"
+            "validTo": "Subscription valid for {day}"
         },
         "buttons": {
             "close": "Close",

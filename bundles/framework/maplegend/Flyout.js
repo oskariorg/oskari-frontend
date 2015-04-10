@@ -20,7 +20,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
         this.templateLayer = null;
         this.templateLayerLegend = null;
         this.state = null;
-
+        this.templateNoLegend = jQuery('<div class="no-maplegend"></div>');
+        this._legendImagesNotLoaded = {};
     }, {
         /**
          * @method getName
@@ -31,16 +32,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
         },
         /**
          * @method setEl
-         * @param {Object} el
-         *      reference to the container in browser
-         * @param {Number} width
-         *      container size(?) - not used
-         * @param {Number} height
-         *      container size(?) - not used
+         * @param {Object} el reference to the container in browser
          *
          * Interface method implementation
          */
-        setEl: function (el, width, height) {
+        setEl: function (el) {
             this.container = el[0];
             if (!jQuery(this.container).hasClass('maplegend')) {
                 jQuery(this.container).addClass('maplegend');
@@ -96,7 +92,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
         setState: function (state) {
             this.state = state;
         },
-        setContentState: function (state) {
+        setContentState: function () {
 
         },
         getContentState: function () {
@@ -140,12 +136,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                 groupAttr = layer.getName();
                 layerContainer = this._createLayerContainer(layer);
 
-                accordionPanel =
-                    Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                accordionPanel.open();
-                accordionPanel.setTitle(layer.getName());
-                accordionPanel.getContainer().append(me._createLayerContainer(layer));
-                accordion.addPanel(accordionPanel);
+                if(layerContainer !== null) {
+                    accordionPanel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+                    accordionPanel.open();
+                    accordionPanel.setTitle(layer.getName());
+                    accordionPanel.getContainer().append(layerContainer);
+                    accordion.addPanel(accordionPanel);
+                }
             }
 
         },
@@ -165,43 +162,47 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
             var imagesAdded = {};
             /* main layer div */
             var legendDiv = me._createLegendDiv(layer, imagesAdded);
-            if (legendDiv) {
-                layerDiv.append(legendDiv);
-            }
+            if (legendDiv && legendDiv !== null) {
+                layerDiv.append(legendDiv);            
 
-            /* optional sublayers */
-            var sublayers = layer.getSubLayers ? layer.getSubLayers() : null,
-                sl,
-                sublayer,
-                subLayerlegendDiv;
-            if (sublayers) {
-                for (sl = 0; sl < sublayers.length; sl += 1) {
-                    sublayer = sublayers[sl];
-                    subLayerlegendDiv = me._createLegendDiv(sublayer, imagesAdded);
-                    if (!subLayerlegendDiv) {
-                        continue;
+                /* optional sublayers */
+                var sublayers = layer.getSubLayers ? layer.getSubLayers() : null,
+                    sl,
+                    sublayer,
+                    subLayerlegendDiv;
+                
+                if (sublayers) {
+                    for (sl = 0; sl < sublayers.length; sl += 1) {
+                        sublayer = sublayers[sl];
+                        subLayerlegendDiv = me._createLegendDiv(sublayer, imagesAdded);
+                        if (!subLayerlegendDiv && subLayerlegendDiv !== null) {
+                            continue;
+                        }
+                        layerDiv.append(subLayerlegendDiv);
                     }
-                    layerDiv.append(subLayerlegendDiv);
                 }
-            }
+                
 
-            /* metadata link */
-            var uuid = layer.getMetadataIdentifier(),
-                tools = layerDiv.find('.maplegend-tools');
-            if (!uuid) {
-                // no functionality -> hide
-                tools.find('div.layer-description').hide();
+                /* metadata link */
+                var uuid = layer.getMetadataIdentifier(),
+                    tools = layerDiv.find('.maplegend-tools');
+                if (!uuid) {
+                    // no functionality -> hide
+                    tools.find('div.layer-description').hide();
+                } else {
+                    tools.find('div.icon-info').bind('click', function () {
+                        var rn = 'catalogue.ShowMetadataRequest';
+
+                        sandbox.postRequestByName(rn, [{
+                            uuid: uuid
+                        }]);
+                    });
+                }
+
+                return layerDiv;
             } else {
-                tools.find('div.icon-info').bind('click', function () {
-                    var rn = 'catalogue.ShowMetadataRequest';
-
-                    sandbox.postRequestByName(rn, [{
-                        uuid: uuid
-                    }]);
-                });
+                return null;
             }
-
-            return layerDiv;
         },
 
         /**
@@ -211,24 +212,64 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
         _createLegendDiv: function (layer, imagesAdded) {
             var me = this,
                 legendUrl = layer.getLegendImage ? layer.getLegendImage() : null;
-            if (!(legendUrl && legendUrl !== '' && !imagesAdded[legendUrl])) {
-                return;
+
+            if (imagesAdded[legendUrl]) {
+                me._checkNoLegendText();
+                return null;
             }
 
+            if (!(legendUrl && legendUrl !== '')) {
+                me._checkNoLegendText();
+                return null;
+            }
+
+            if(me._legendImagesNotLoaded[legendUrl]) {
+                me._checkNoLegendText();
+                return null;
+            }
 
             var legendDiv = me.templateLayerLegend.clone(),
-                imgDiv = legendDiv.find('img');
-            /*var legendUrl =
-            'http://kartta.liikennevirasto.fi/maaliikenne/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=liikennemaarat&style=KAVLras';*/
+                imgDiv = legendDiv.find('img'),
+                img = new Image();
+
+                       
             imagesAdded[legendUrl] = true;
-            var img = new Image();
+
             img.onload = function () {
                 imgDiv.attr('src', legendUrl);
-                img.onload = null;
+                img.onload = null;            
+                me._checkNoLegendText();
             };
+
+            img.onerror = function () {
+                img.onerror = null;
+                legendDiv.parent().parent().parent().remove();
+                me._legendImagesNotLoaded[legendUrl] = true;
+                me._checkNoLegendText();
+            };
+
             img.src = legendUrl;
 
             return legendDiv;
+        },
+        /**
+        * Check if any legends images not founded. If not founded then inform the user.
+        * @method _checkNoLegendText
+        * @private
+        */
+        _checkNoLegendText: function(){
+            var me = this,
+                noLegendText = this.instance.getLocalization('noLegendsText'),
+                legendDivs = jQuery('.oskari-flyoutcontent.maplegend').find('.accordion_panel'),
+                noLegendContainer = me.templateNoLegend.clone();
+            
+            jQuery('.no-maplegend').remove();
+            
+            if(legendDivs.length === 0) {
+                noLegendContainer.html(noLegendText);
+                jQuery('.oskari-flyoutcontent.maplegend').append(noLegendContainer);
+            }
+
         }
     }, {
         /**
