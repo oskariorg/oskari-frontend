@@ -241,7 +241,7 @@ function(url, uuid) {
             };
 
             var feat = new OpenLayers.Feature.Vector(geom, featAtts);
-            
+
             if (!m_id) {
                 feat.toState(OpenLayers.State.INSERT);
             } else {

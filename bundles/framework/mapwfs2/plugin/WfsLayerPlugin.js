@@ -393,7 +393,7 @@ Oskari.clazz.define(
                 if (me.getConnection().isLazy() &&
                     (!me.getConnection().isConnected() ||
                         !sandbox.findMapLayerFromSelectedMapLayers(me.activeHighlightLayers[x].getId()))) {
-                    
+
                     fids = me.activeHighlightLayers[x].getClickedFeatureListIds();
                     me.removeHighlightImages(
                         me.activeHighlightLayers[x]
@@ -953,7 +953,7 @@ Oskari.clazz.define(
                 // temp cached and redrawn if gotten better
                 else {
                     dataForTileTemp = me._tileDataTemp.mget(layerId,style,bboxKey);
-                    if (dataForTileTemp) return;                    
+                    if (dataForTileTemp) return;
                     me._tileDataTemp.mput(layerId,style,bboxKey,imageUrl);
                 }
                 // QUEUES updates!
@@ -1263,7 +1263,7 @@ Oskari.clazz.define(
          * Checks at tile is ok.
          * @method _isTile
          * @private
-         * 
+         *
          * @param {Object} tile
          *
          * @return {Boolean} is tile ok

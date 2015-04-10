@@ -100,7 +100,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
                 }));
 
                 content.append(colorThemes);
-                
+
 
                 //colorpicker -->
                 var colorPicker = jQuery(this.__templates.colorpicker( {
