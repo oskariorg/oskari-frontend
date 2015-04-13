@@ -109,13 +109,14 @@ function () {
                 var data = {
                     actionElement: jQuery('<div class="ratingInfo"></div>'),
                     callback: function(metadata) {
-                        me.sandbox.postRequestByName('catalogue.ShowFeedbackRequest', [metadata.rating, metadata.id, metadata]);
+                        me.sandbox.postRequestByName('catalogue.ShowFeedbackRequest', [metadata]);
                     },
                     bindCallbackTo: null,
                     actionTextElement: null,
                     actionText: null,
                     showAction: function(metadata) {
-                        this.actionText = me._getMetadataRating(metadata);
+                        //add the span with metadata's id to be able to identify and update rating later
+                        this.actionText = '<span id="metadataRatingSpan_'+metadata.id+'" style="display:none;"/>'+me._getMetadataRating(metadata);
                         return true;//return metadata.license && metadata.license !== null;
                     }
                 };
@@ -123,7 +124,11 @@ function () {
                 me.sandbox.request(me, request);
             }
         },
-
+        updateMetadataRating: function(metadata) {
+            var idSpan = $('#metadataRatingSpan_'+metadata.id);
+            var container = idSpan.parent();
+            container.html(idSpan.html()+this._getMetadataRating(metadata)); 
+        },
         init: function () {
             return null;
         },
