@@ -451,6 +451,7 @@ Oskari.clazz.define(
                         if (isNaN(value)) {
                             value = parseFloat(value);
                         }
+                        // FIXME: parseFloat returns 6 for "006A" which is wrong!
                         if (isNaN(value) && (typeof row[key] === 'string' && row[key].length)) {
                             notNumeric[key] = true;
                         } else {
