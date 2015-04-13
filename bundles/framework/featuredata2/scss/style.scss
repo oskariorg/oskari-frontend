@@ -152,3 +152,10 @@ div.mapplugins .mappluginsContainer .mappluginsContent div.featuredataplugin.map
 div.mapplugins .mappluginsContainer .mappluginsContent div.featuredataplugin.mapplugin.loading {
     background: url("../images/ajax-loader.gif") no-repeat 0 0 / cover;
 }
+
+div.oskari-flyoutcontent.featuredata ul.tabsItem li a.loading {
+  color : #939393;
+}
+div.oskari-flyoutcontent.featuredata ul.tabsItem li a.error {
+  color: red;
+}
