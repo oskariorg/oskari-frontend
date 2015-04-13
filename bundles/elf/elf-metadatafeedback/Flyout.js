@@ -253,12 +253,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
               } else {
 
                 me.instance.addFeedbackService.addFeedback(params, function(e) {
-                  alert('add feedback success '+e);
-
-
-                  //TODO: update the ratinginfo in the list. BUT HOW???
-
-
+                  //TODO: update the ratinginfo in the list.
                 },
                 function(e) {
                     me._showMessage(me.locale.errorPopup.title, me.locale.errorPopup.savingTheFeedbackFailed);

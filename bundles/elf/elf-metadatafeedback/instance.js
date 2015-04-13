@@ -208,24 +208,22 @@ function () {
          */
         _getMetadataRating: function(metadata) {
             var me = this;
-            //TODO: REMOVE TEST DATA GENERATION
-            if (typeof metadata.rating === "undefined") {
-                metadata.rating = ""+Math.random()*5;
-                metadata.numRatings = ""+parseInt(Math.random()*100);
-            }
-
-
-            var ratingSymbols = me._generateRatingSymbols(metadata.rating);
             var ratingContainer = me.templates.ratingContainer.clone();
-            for (j = 0; j < 5; j++) {
-                starContainer = me.templates.starItem.clone();
-                starContainer.addClass(ratingSymbols[j]);
-                starContainer.data('starId', 'rating-star-' + metadata.id + '-' + j);
-                ratingContainer.append(starContainer);
+            if (typeof metadata.rating !== "undefined") {
+                var ratingSymbols = me._generateRatingSymbols(metadata.rating);
+                for (j = 0; j < 5; j++) {
+                    starContainer = me.templates.starItem.clone();
+                    starContainer.addClass(ratingSymbols[j]);
+                    starContainer.data('starId', 'rating-star-' + metadata.id + '-' + j);
+                    ratingContainer.append(starContainer);
+                }
+
+                numRatingsContainer = me.templates.numRatings.clone();
+                var numRatingsText = metadata.numRatings !== undefined ? "("+metadata.numRatings +")" : "&nbsp;";
+                numRatingsContainer.append(numRatingsText);
+                ratingContainer.append(numRatingsContainer);
+
             }
-            numRatingsContainer = me.templates.numRatings.clone();
-            numRatingsContainer.append("(" + metadata.numRatings + ")");
-            ratingContainer.append(numRatingsContainer);
             return ratingContainer.html();
         },
         /**

@@ -539,8 +539,9 @@ div.userfeedback-values  {
 
 div.ratingInfo {
   display: table;
-  width: 120px;
+  width: 140px;
   margin-left: 5px;
+  table-layout: fixed;
 }
 
 div.ratingStar {
