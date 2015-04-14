@@ -6,22 +6,22 @@ Oskari.registerLocalization(
         "title": "Geolocator",
         "desc": "ELF Geolocator",
         "tool": {
-            "tooltip": "Sök plats genom att klicka kartan."
+            "tooltip": "Sök platser genom att klicka på kartan"
         },
         "tab": {
             "title": "Platser",
-            "searchTitle": "Sökord",
-            "searchPlaceholder": "Sök ortnamn, adress eller fastighetsbeteckning.",
+            "searchTitle": "Sökterm",
+            "searchPlaceholder": "Sök ortnamn, adress eller fastighetsbeteckning",
             "regionTitle": "Begränsa sök med område",
-            "regionPlaceholder": "Välj en kommun eller ett förvaltningsområde för att minska sökresultat.",
-            "additionalsTitle": "Mera sökalternativ",
+            "regionPlaceholder": "Filtrera sökningen efter kommun eller administrativ enhet",
+            "additionalsTitle": "Sökalternativ",
             "normalTitle": "Sök",
             "normalDesc": "Jämt sök (Case-sensitive)",
             "restrictedTitle": "Begränsa sök",
             "restrictedDesc": "Begränsa sök med område",
             "fuzzyTitle": "Ungefärlig sökning",
-            "fuzzyDesc": "Platser med likandanna namn som sökordet",
-            "exonymTitle": "Eksonyms hämtad",
+            "fuzzyDesc": "Platser med liknande namn som sökordet",
+            "exonymTitle": "Exonym sökning",
             "exonymDesc": "Utländska namn för platser",
             "searchButton": "Sök",
             "resultsTitle": "Sökresultat",
@@ -31,9 +31,9 @@ Oskari.registerLocalization(
             "backButton": "Tillbaka",
             "geolocButton": "Locate nearest place",
             "geolocDesc": "Click map for to locate nearest place",
-            "noResults": "Inga resultat för din sökning",
+            "noResults": "Inga sökresultat",
             "errors": {
-                "searchTermMissing": "Sökord är obligatorisk.",
+                "searchTermMissing": "Sökord krävs",
                 "searchFailed": "Sök misslyckades. Prova på nytt senare."
             },
             "grid": {

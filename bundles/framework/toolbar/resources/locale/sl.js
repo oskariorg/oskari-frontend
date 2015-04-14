@@ -14,22 +14,22 @@ Oskari.registerLocalization(
             },
             "history": {
                 "reset": "Vrnitev na privzet pogled",
-                "back": "Nazaj",
-                "next": "Naprej"
+                "back": "Nazaj na prejšnji pogled.",
+                "next": "Naprej na naslednji pogled."
             },
-            "pan": "Premakni pogled karte",
-            "zoom": "Povečaj",
+            "pan": "Premakni pogled karte s potegom miške.",
+            "zoom": "Povečaj pogled karte.",
             "measure": {
                 "line": "Izmeri razdaljo",
                 "area": "Izmeri površino"
             }
         },
         "measure": {
-            "title": "Meritve",
+            "title": "Rezultati meritev",
             "close": "Prekliči",
             "guidance": {
-                "measureline": "Izmeri linijo na karti. Dvoklikni za končanje merjenja.",
-                "measurearea": "Izmeri površino na karti. Dvoklikni za končanje merjenja."
+                "measureline": "Nariši črto na karti in izmeri njeno dolžino. Klikni na začetno točko, nato na vse lomne točke in dvoklikni na končno točko za končanje merjenja.",
+                "measurearea": "Nariši območje na karti in izmeri njegovo površino. Klikni na začetno točko oboda, nato na vse lomne točke in dvoklikni na končno točko za končanje merjenja."
             }
         }
     }

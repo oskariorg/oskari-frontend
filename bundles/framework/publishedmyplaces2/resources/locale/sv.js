@@ -3,47 +3,47 @@ Oskari.registerLocalization(
     "lang": "sv",
     "key": "PublishedMyPlaces",
     "value": {
-        "title": "Objekt",
+        "title": "Platser",
         "desc": "",
         "category": {
-            "defaultName": "Mina kartlager",
-            "organization": "Mina objekt",
-            "inspire": "Mina objekt"
+            "defaultName": "Mitt kartlager",
+            "organization": "Mina platser",
+            "inspire": "Mina platser"
         },
         "guest": {
-            "loginShort": "Logga in för att använda"
+            "loginShort": "Logga in för att lägga till dina egna platser på en karta."
         },
         "tab": {
-            "title": "Objekt",
-            "nocategories": "Du har ännu inte lagrat objekten.",
-            "maxFeaturesExceeded": "Du har för många egna platser. Alla platser kunde inte laddas.",
+            "title": "Platser",
+            "nocategories": "Du har inte några sparade platser ännu.",
+            "maxFeaturesExceeded": "Du har överskridit det maximala beloppet för de egna platserna. Alla platser har inte laddats.",
             "publishCategory": {
-                "privateTooltip": "Kartlagret är privat. Klicka på lagret för att offentliggöra det.",
-                "publicTooltip": "Kartlagret är offentliggöra. Klicka på lagret för att privat det."
+                "privateTooltip": "Detta kartlager är privat. Klicka här för att publicera den.",
+                "publicTooltip": "Detta kartlager är offentlig. Klicka här för att avpublicera det."
             },
-            "addCategory": "Tillägg kartlager",
-            "editCategory": "Editera kartlager",
-            "deleteCategory": "Ta bort kartlager",
-            "edit": "Editera",
+            "addCategory": "Lägg till kartlagret",
+            "editCategory": "Redigera kartlagret",
+            "deleteCategory": "Ta bort kartlagret",
+            "edit": "Redigera",
             "delete": "Ta bort",
             "grid": {
-                "name": "Namn",
-                "desc": "Beskrivning",
+                "name": "Ortnamn",
+                "desc": "Ortnamnsbeskrivning",
                 "createDate": "Skapad",
                 "updateDate": "Uppdaterad",
-                "measurement": "Längd/area",
-                "edit": "Editera",
+                "measurement": "Storlek",
+                "edit": "Redigera",
                 "delete": "Ta bort"
             },
             "notification": {
                 "delete": {
-                    "title": "Ta bort objekt",
-                    "confirm": "Vill du ta bort detta objekt?",
+                    "title": "Ta bort plats",
+                    "confirm": "Vill du ta bort denna plats?",
                     "btnDelete": "Ta bort",
-                    "btnCancel": "Tillbaka",
-                    "success": "Objektet har tagits bort.",
-                    "error": "Objektet kunde inte tas bort. Prova på nytt senare.",
-                    "cancel": "Objektet har inte tagits bort."
+                    "btnCancel": "Avbryt",
+                    "success": "Platsen har tagits bort.",
+                    "error": "Platsen kunde inte tas bort. Prova på nytt senare.",
+                    "cancel": "Platsen har inte tagits bort."
                 }
             }
         },
@@ -53,7 +53,7 @@ Oskari.registerLocalization(
                 "tooltip": "Mät avstånd",
                 "add": "",
                 "next": "",
-                "edit": "Editera linjen genom att klicka och dra brytningspunkterna.",
+                "edit": "Du kan redigera linjen genom att klicka och dra i brytningspunkterna.",
                 "noResult": "0 m"
             },
             "measurearea": {
@@ -61,80 +61,80 @@ Oskari.registerLocalization(
                 "tooltip": "Mät areal",
                 "add": "",
                 "next": "",
-                "edit": "Editera områdets form genom att klicka och dra brytningspunkterna på omkretslinjen.",
+                "edit": "Redigera områdets form genom att klicka och dra i brytningspunkterna på omkretslinjen.",
                 "noResult": "0 m²"
             },
             "point": {
-                "title": "Tillägg punkt",
-                "tooltip": "Tillägg punkt",
-                "add": "Tillägg punkt genom att klicka på kartan.",
-                "next": "Du kan lagra eller tillägga fler punkter till samma området.",
+                "title": "Lägg till punkt",
+                "tooltip": "Lägg till en punkt till \"Mina platser\"",
+                "add": "Rita en punkt genom att klicka på kartan.",
+                "next": "En plats kan innehålla en eller flera punkter.",
                 "edit": "Flytta på punkten genom att klicka och dra.",
-                "save": "Lagra läge"
+                "save": "Spara som min plats"
             },
             "line": {
-                "title": "Tillägg linje",
-                "tooltip": "Tillägg linje",
-                "add": "Tillägg en brytningspunkt på linjen genom att klicka på kartan. Sluta rita genom att dubbelklicka eller klicka på 'Sluta rita'.",
-                "next": "Du kan lagra eller tillägga fler linjer till samma området.",
-                "edit": "Editera linjen genom att klicka och dra brytningspunkterna.",
-                "save": "Lagra form",
+                "title": "Lägg till linje",
+                "tooltip": "Lägg till en linje till \"Mina platser\".",
+                "add": "Rita en linje genom att lägga till brytpunkter till kartan. Du kan lägga till brytpunkter genom att klicka på kartan. Sluta rita genom att dubbelklicka eller genom att klicka på \"Spara som min plats\".",
+                "next": "En plats kan innehålla en eller flera linjer.",
+                "edit": "Redigera linjen genom att klicka och dra i brytningspunkterna.",
+                "save": "Spara som min plats",
                 "noResult": "0 m"
             },
             "area": {
-                "title": "Tillägg område",
-                "tooltip": "Tillägg område",
-                "add": "Tillägg områdets hörnpunkter genom att klicka på kartan. Sluta rita genom att dubbelklicka eller klicka på 'Sluta rita'. Håll ned Alt-tangenten för att skapa hål i polygonerna.",
-                "next": "Du kan lagra eller tillägga fler polygoner till samma området.",
-                "edit": "Editera områdets form genom att klicka och dra brytningspunkterna på omkretslinjen.",
-                "save": "Lagra form",
+                "title": "Lägg till område",
+                "tooltip": "Lägg till ett område till \"Mina platser\".",
+                "add": "Rita ett område genom att lägga till kantlinjens brytpunkter till kartan. Du kan lägga till brytpunkter genom att klicka på kartan. Sluta dra genom att dubbelklicka eller genom att klicka på \"Spara som min plats\".",
+                "next": "En plats kan innehålla en eller flera områden.",
+                "edit": "Redigera området genom att klicka och dra i brytningspunkterna.",
+                "save": "Spara som min plats",
                 "noResult": "0 m²"
             }
         },
         "buttons": {
             "ok": "OK",
-            "cancel": "Tillbaka",
+            "cancel": "Avbryt",
             "close": "Avbryt",
-            "finish": "Lagra rita",
-            "save": "Lagra",
-            "saveAsMyPlace": "Lagra",
-            "movePlaces": "Flytta objekt och ta bort",
+            "finish": "Spara som min plats",
+            "save": "Spara",
+            "saveAsMyPlace": "Spara som min plats",
+            "movePlaces": "Flytta platserna och ta bort lagret",
             "deleteCategory": "Ta bort",
-            "deleteCategoryAndPlaces": "Ta bort kategori inklusive objekt",
-            "changeToPublic": "Ändra till offentlig",
-            "changeToPrivate": "Ändra till privat"
+            "deleteCategoryAndPlaces": "Ta bort kartlagret och dess platser",
+            "changeToPublic": "Publicera",
+            "changeToPrivate": "Avpublicera"
         },
         "placeform": {
             "title": "Uppgifter om objektet",
-            "tooltip": "När du lägger ett objekt på kartan lagras det i dina objekt. Ge objektet ett namn och en beskrivning. Du kan välja vilket kartlager du vill lagra objektet på eller tillägga ett nytt kartlager genom att välja 'Ny nivå' från rullgardinsmenyn för kartlager.",
+            "tooltip": "Platsen sparas till \"Mina platser\". Du kan se dem på menyn \"Mina uppgifter\". Vänligen ge platsen ett namn och beskrivning. Platsens namn och beskrivning är obligatoriska. Du kan också skriva texten som ska visas på kartan förutom platsen, länken till webbplatsen för att få mer information om platsen och länken till bilden om platsen. Skapa slutligen ett ny kartlager eller välj en av de befintliga kartlager där platsen kommer att läggas till.",
             "placename": {
-                "placeholder": "Namnge objektet"
+                "placeholder": "Platsnamn"
             },
             "placelink": {
-                "placeholder": "Ge URL-address"
+                "placeholder": "Länk till information om platsen"
             },
             "placedesc": {
-                "placeholder": "Beskriv objektet"
+                "placeholder": "Platsbeskrivning"
             },
             "placeAttention": {
-                "placeholder": "Obs tekst"
+                "placeholder": "Placera text på kartan"
             },
             "measurement": {
                 "line": "Linjelängd:",
-                "area": "Area:"
+                "area": "Områdesstorlek:"
             },
             "category": {
                 "label": "Kartlager",
-                "newLayer": "Ny nivå...",
-                "choose": "eller välj från nivåer:"
+                "newLayer": "Skapa ett nytt kartlager",
+                "choose": "eller välja ett av dina befintliga kartlager:"
             },
             "imagelink": {
-                "placeholder": "Bild-URL",
-                "previewLabel": "Förhandsvisning av fotot",
-                "add": "Ny nivå"
+                "placeholder": "Länk till bilden",
+                "previewLabel": "Förhandsvisning av bilden",
+                "add": "Nytt kartlager"
             },
             "rendering": {
-                "label": "Stil för objekt",
+                "label": "Placera stil",
                 "point": {
                     "tooltip": "Punkt"
                 }
@@ -155,13 +155,13 @@ Oskari.registerLocalization(
                 "line": {
                     "label": "Linje",
                     "color": "Färg",
-                    "size": "Tjocklek"
+                    "size": "Bredd"
                 },
                 "area": {
                     "label": "Område",
                     "fillcolor": "Ifyllnadsfärg",
                     "linecolor": "Linjens färg",
-                    "size": "Linjens tjocklek"
+                    "size": "Linjens bredd"
                 }
             },
             "visibleFields": {
@@ -171,28 +171,28 @@ Oskari.registerLocalization(
                 "image": "Bild"
             },
             "edit": {
-                "title": "Editera kartlagret",
-                "save": "Lagra",
-                "cancel": "Tillbaka"
+                "title": "Redigera kartlagret",
+                "save": "Spara",
+                "cancel": "Avbryt"
             },
             "rendering": {
-                "label": "Stil för objekt",
+                "label": "Placera stil",
                 "point": {
-                    "tooltip": "Editera punktens stil"
+                    "tooltip": "Redigera punktens stil"
                 },
                 "area": {
-                    "tooltip": "Editera områdets stil"
+                    "tooltip": "Redigera områdets stil"
                 },
                 "line": {
-                    "tooltip": "Editera linjens stil"
+                    "tooltip": "Redigera linjens stil"
                 }
             }
         },
         "pointform": {
-            "title": "Visualisering av punktobjekt",
-            "tooltip": "Punktens stil",
+            "title": "Punktens stil",
+            "tooltip": "NOT TRANSLATED",
             "symbol": {
-                "label": "Ikon för punktobjekt"
+                "label": "Ikon"
             },
             "size": {
                 "label": "Storlek"
@@ -206,15 +206,15 @@ Oskari.registerLocalization(
                 "label": "Förhandsgranska"
             },
             "buttons": {
-                "save": "Lagra",
-                "cancel": "Tillbaka"
+                "save": "Spara",
+                "cancel": "Ångra"
             }
         },
         "lineform": {
-            "title": "Visualisering av linje",
+            "title": "Linjens stil",
             "tooltip": "",
             "style": {
-                "label": "Linjens stil"
+                "label": "Stil"
             },
             "cap": {
                 "label": "Linjens ändpunkter"
@@ -234,27 +234,27 @@ Oskari.registerLocalization(
                 "label": "Förhandsgranska"
             },
             "buttons": {
-                "save": "Lagra",
-                "cancel": "Tillbaka"
+                "save": "Spara",
+                "cancel": "Avbryt"
             }
         },
         "areaform": {
-            "title": "Visualisering av området",
+            "title": "Områdets stil",
             "tooltip": "",
             "linestyle": {
                 "label": "Konturlinjens stil"
             },
             "linecap": {
-                "label": "Linjens ändpunkter"
+                "label": "Konturlinjens ändpunkter"
             },
             "linecorner": {
-                "label": "Hörn"
+                "label": "Konturlinjens hörn"
             },
             "linewidth": {
-                "label": "Bredd"
+                "label": "Konturlinjens bredd"
             },
             "linecolor": {
-                "label": "Linjens färg",
+                "label": "Konturlinjens färg",
                 "labelOr": "eller",
                 "labelCustom": "Egen RGB-färg (0-255)"
             },
@@ -264,64 +264,64 @@ Oskari.registerLocalization(
                 "labelCustom": "Egen RGB-färg (0-255)"
             },
             "fill": {
-                "label": "Ifyllnandsmönster för område"
+                "label": "Ifyllnandsmönster"
             },
             "preview": {
                 "label": "Förhandsvisning"
             },
             "buttons": {
-                "save": "Lagra",
-                "cancel": "Tillbaka"
+                "save": "Spara",
+                "cancel": "Avbryt"
             }
         },
         "notification": {
             "placeAdded": {
-                "title": "Objektet har lagrats",
-                "message": "Objektet finns i menyn Mina uppgifter"
+                "title": "Platsen har sparats.",
+                "message": "Du kan hitta platsen i menyn \"Mina uppgifter\"."
             },
             "categorySaved": {
-                "title": "Kartlagret har lagrats",
-                "message": "दndringar i kartlagret har lagrats"
+                "title": "Kartlagret har sparats.",
+                "message": "Ändringar i kartlagret har sparats."
             },
             "categoryDelete": {
-                "title": "Ta bort kartlager",
-                "deleteConfirmMove": "Kartlager: {0} innehåller {1} st. objekt. Vill du ta bort nivån och flytta objekten på den till det förvalda kartlagret {2} ?",
+                "title": "Ta bort kartlagret",
+                "deleteConfirmMove": "Kartlager: {0} innehåller {1} st. objekt. Vill du ta bort nivån och flytta objekten på den till det förvalda kartlagret {2} eller vill du ta bort kartlagret och dess platser?",
                 "deleteConfirm": "Vill du ta bort kartlagret {0}?",
-                "deleted": "Kartlagret borttaget"
+                "deleted": "Kartlagret har tagtits bort."
             },
             "categoryToPublic": {
-                "title": "Offentliggör kartlagret",
-                "message": "Du håller på att offentliggöra kartlagret \"{0}\". Du kan skicka länkar till ett offentligt kartlager till andra internetanvändare eller inbädda det som en karta i en annan webbtjänst. Andra användare kan även titta på kartlagret i Paikkatietoikkuna."
+                "title": "Publicera kartlagret",
+                "message": "Du publicerar kartlagret \"{0}\". Du kan dela ett offentligt kartlager till andra internetanvändare eller inbädda det som en karta i en annan webbtjänst. Andra användare kan även titta på kartlagret i Paikkatietoikkuna."
             },
             "categoryToPrivate": {
-                "title": "Gör kartlagret privat",
-                "message": "Du håller på att göra kartlagret \"{0}\" privat. Efter detta kan du inte längre skicka länkar från kart-lagret eller inbädda det som en karta, andra användare kan inte heller titta på det i Paikkatietoikkuna."
+                "title": "Avpublicera kartlagret",
+                "message": "Du håller på att avpublicera kartlagret \"{0}\". Efter detta kan du inte längre dela kart-lagret eller inbädda det som en karta. Andra användare kan inte heller titta på det i Paikkatietoikkuna."
             },
             "error": {
-                "addCategory": "Kartlagret kunde inte lagras. Objektet har inte lagrats.",
-                "editCategory": "Kartlagret kunde inte lagras.",
-                "savePlace": "Objektet kunde inte lagras.",
+                "addCategory": "Kartlagret kunde inte sparas. Platsen har inte sparats. Försök på nytt senare.",
+                "editCategory": "Kartlagret kunde inte sparas. Försök på nytt senare.",
+                "savePlace": "Platsen kunde inte sparas. Försök på nytt senare.",
                 "title": "Fel!",
-                "generic": "Systemfel. Försök på nytt senare.",
-                "deleteCategory": "Fel i borttagningen!",
-                "deleteDefault": "Den förvalda kartlagret kan inte tas bort."
+                "generic": "Ett systemfel inträffade. Försök på nytt senare.",
+                "deleteCategory": "Fel i borttagningen. Försök på nytt senare.",
+                "deleteDefault": "Det förvalda kartlagret kan inte tas bprt-"
             }
         },
         "validation": {
             "title": "Brister i uppgifterna:",
-            "placeName": "Objektets namn saknas.",
-            "categoryName": "kartlagrets namn saknas.",
-            "placeNameIllegal": "I objekts namnet ingår otillåtna tecken. Tillåtna är alla bokstäver i det svenska alfabetet, siffror, mellanslag och bindestreck.",
-            "descIllegal": "I objekts beskrivning ingår otillåtna tecken. Tillåtna är alla bokstäver i det svenska alfabetet, siffror, mellanslag och bindestreck.",
-            "categoryNameIllegal": "I kartlagers beskrivning ingår otillåtna tecken. Tillåtna är alla bokstäver i det svenska alfabetet, siffror, mellanslag och bindestreck.",
+            "placeName": "Platsnamnet saknas.",
+            "categoryName": "Kartlagrets namn saknas.",
+            "placeNameIllegal": "Platsnamnet innehåller otillåtna tecken. De tillåtna tecken är bokstäver (az, AZ och å, ä, ö, Å, Ä, Ö), siffror (0-9), backsteg och bindestreck (-).",
+            "descIllegal": "Platsens beskrivning innehåller otillåtna tecken. De tillåtna tecken är bokstäver (az, AZ och å, ä, ö, Å, Ä, Ö), siffror (0-9), backsteg och bindestreck (-).",
+            "categoryNameIllegal": "Kartlagrets namn innehåller otillåtna tecken. De tillåtna tecken är bokstäver (az, AZ och å, ä, ö, Å, Ä, Ö), siffror (0-9), backsteg och bindestreck (-).",
             "dotSize": "Punkternas storlek är utanför de tillåtna gränserna (1-5).",
-            "dotColor": "Punktens färg är felaktig.",
-            "dotShape": "Punktens form är felaktig.",
+            "dotColor": "Punktens färg är ogiltig. Färgvärdena måste vara mellan 0 och 255.",
+            "dotShape": "Punktens form är ogiltig.",
             "lineSize": "Linjens storlek är utanför de tillåtna gränserna (1-50).",
-            "lineColor": "Linjens färg är felaktig.",
+            "lineColor": "Linjens färg är ogiltig. Färgvärdena måste vara mellan 0 och 255.",
             "areaLineSize": "Områdets konturlinje är utanför de tillåtna gränserna (0-50).",
-            "areaLineColor": "Färgen på områdets omkretslinje är felaktig.",
-            "areaFillColor": "Områdets ifyllnadsfärg är felaktig."
+            "areaLineColor": "Områdets konturlinjefärg är ogiltig. Färgvärdena måste vara mellan 0 och 255.",
+            "areaFillColor": "Områdets ifyllnadsfärg är ogiltig. Färgvärdena måste vara mellan 0 och 255."
         }
     }
 }

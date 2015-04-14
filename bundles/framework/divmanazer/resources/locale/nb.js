@@ -1,10 +1,22 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "nb",
     "key": "DivManazer",
     "value": {
+        "buttons": {
+            "add": "Legg til",
+            "cancel": "Avbryt",
+            "close": "Lukk",
+            "delete": "Slett",
+            "edit": "Editer",
+            "exit": "Avslutt",
+            "ok": "OK",
+            "save": "Lagre",
+            "search": "Søk"
+        },
         "LanguageSelect": {
             "title": "Språk",
-            "tooltip": "NOT TRANSLATED",
+            "tooltip": "Velg språk",
             "languages": {
                 "af": "afrikaans",
                 "ak": "akan",
@@ -125,6 +137,131 @@ Oskari.registerLocalization({
                 "zh": "kinesisk",
                 "zu": "zulu"
             }
+        },
+        "VisualizationForm": {
+            "tooltips": {
+                "dot": "Tilpass punktstil",
+                "area": "Tilpass arealstil",
+                "line": "Tilpass linjestil"
+            },
+            "dot": {
+                "title": "Punktstil",
+                "tooltip": "",
+                "symbol": {
+                    "label": "Ikon"
+                },
+                "size": {
+                    "label": "Størrelse"
+                },
+                "color": {
+                    "label": "Farge",
+                    "labelOr": "eller",
+                    "labelCustom": "Spesialfarge (RGB 0-255)"
+                },
+                "preview": {
+                    "label": "Forhånsdvisning"
+                },
+                "buttons": {
+                    "save": "Lagre",
+                    "cancel": "Avbryt"
+                }
+            },
+            "line": {
+                "title": "Linjestil",
+                "tooltip": "",
+                "style": {
+                    "label": "Linje"
+                },
+                "cap": {
+                    "label": "Endepunkt"
+                },
+                "corner": {
+                    "label": "Hjørner"
+                },
+                "width": {
+                    "label": "Bredde"
+                },
+                "color": {
+                    "label": "Farge",
+                    "labelOr": "eller",
+                    "labelCustom": "Spesialfarge (RGB 0-255)"
+                },
+                "preview": {
+                    "label": "Forhånsdvisning"
+                },
+                "buttons": {
+                    "save": "Lagre",
+                    "cancel": "Avbryt"
+                }
+            },
+            "area": {
+                "title": "Arealstil",
+                "tooltip": "",
+                "linestyle": {
+                    "label": "Linje"
+                },
+                "linecap": {
+                    "label": "Endepunkt"
+                },
+                "linecorner": {
+                    "label": "Hjørner"
+                },
+                "linewidth": {
+                    "label": "Linjebredde"
+                },
+                "linecolor": {
+                    "label": "Linjefarge",
+                    "labelOr": "eller",
+                    "labelCustom": "Spesialfarge (RGB 0-255)"
+                },
+                "color": {
+                    "label": "Fyllfarge",
+                    "labelOr": "eller",
+                    "labelCustom": "Spesialfarge (RGB 0-255)"
+                },
+                "fill": {
+                    "label": "Mønster"
+                },
+                "preview": {
+                    "label": "Forhånsdvisning"
+                },
+                "buttons": {
+                    "save": "Lagre",
+                    "cancel": "Avbryt"
+                }
+            }
+        },
+        "Grid": {
+            "columnSelector": {
+                "title": "Egenskaper",
+                "tooltip": "Vis kolonner"
+            },
+            "export": {
+                "title": "Eksporter data",
+                "export": "Eksport",
+                "additional": {
+                    "title": "Tillegssinstillinger",
+                    "dataSource": "Datakilde",
+                    "metadata": "Metadatalenke"
+                },
+                "columns": {
+                    "title": "Kolonner",
+                    "all": "Alle",
+                    "visible": "Åpne"
+                },
+                "format": {
+                    "title": "Filformat",
+                    "xlsx": "Excel",
+                    "csv": "CSV"
+                },
+                "delimiter": {
+                    "title": "CSV filseparator",
+                    "comma": "Komma",
+                    "semicolon": "Semikolon",
+                    "tabulator": "Tabulator"
+                }
+            }
         }
     }
-});
+}
+);

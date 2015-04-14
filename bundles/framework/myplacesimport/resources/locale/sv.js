@@ -3,15 +3,15 @@ Oskari.registerLocalization(
     "lang": "sv",
     "key": "MyPlacesImport",
     "value": {
-        "title": "Datamängd importering",
-        "desc": "Du kan importera dina egna datamängder i shape-, gpx- eller mif/mid filformat i zip-paketet eller kmz filformat.",
-        "help": "Du kan importera dina egna datamängder i shape-, gpx- eller mif/mid filformat i zip-paketet eller kmz filformat.",
+        "title": "Dataset importering",
+        "desc": "Du kan importera dina egna dataset i shape-, gpx- eller mif/mid filformat i zip-paketet eller kmz filformat.",
+        "help": "Välj en fil från din dator eller ge en länk till den fil som innehåller ditt dataset. Filen kan vara i shp, zip eller kml / kmz-format. Du kan skapa zip-filer från shapefiler genom zippa filerna med ändelsen shp, SHX, DBF och PRJ till samma zip-fil. Också kml / KMZ-filer från Google maps kan kopplas på samma sätt.",
         "tool": {
-            "tooltip": "Importera egen datamängd"
+            "tooltip": "Importera ditt eget dataset"
         },
         "flyout": {
-            "title": "Datamängd importering",
-            "description": "Du kan importera dina egna datamängder i shape-, gpx- eller mif/mid filformat i zip-paketet eller kmz filformat.",
+            "title": "Dataset importering",
+            "description": "Du kan importera dina egna dataset i shape-, gpx- eller mif/mid filformat i zip-paketet eller kmz filformat. Du kan importera filer med högst 5000 objekt.",
             "actions": {
                 "cancel": "Avbryt",
                 "next": "Nästa"
@@ -25,30 +25,30 @@ Oskari.registerLocalization(
                 }
             },
             "layer": {
-                "title": "Spara kartlager information:",
+                "title": "Spara dataset information:",
                 "name": "Namn",
                 "desc": "Beskrivning",
                 "source": "Datakälla",
-                "style": "Kartlager stil"
+                "style": "Dataset stil definitioner:"
             },
             "validations": {
                 "error": {
                     "title": "Fel",
-                    "message": "Fil och kartlager namn fattas."
+                    "message": "Filen har inte valts och namnet på kartlagret saknas."
                 }
             },
             "finish": {
                 "success": {
-                    "title": "Importering av datamängd lyckades.",
-                    "message": "Du hittar kartlager i \"Mina uppgifter\"."
+                    "title": "Importering av dataset lyckades.",
+                    "message": "Du kan hitta kartlagret i menyn \"Mina uppgifter\"."
                 },
                 "failure": {
-                    "title": "Systemfel. Försök på nytt senare."
+                    "title": "Dataset importen lyckades inte. Försök på nytt senare."
                 }
             }
         },
         "tab": {
-            "title": "Datamängder",
+            "title": "Dataset",
             "grid": {
                 "name": "Namn",
                 "description": "Beskrivning",
@@ -63,8 +63,8 @@ Oskari.registerLocalization(
                 "delete": "Ta bort"
             },
             "notification": {
-                "deletedTitle": "Ta bort kartlager",
-                "deletedMsg": "Kartlagret borttaget"
+                "deletedTitle": "Ta bort dataset",
+                "deletedMsg": "Datasetet har tagits bort"
             },
             "error": {
                 "title": "Fel!",
@@ -72,8 +72,8 @@ Oskari.registerLocalization(
             }
         },
         "layer": {
-            "organization": "Egna datamängder",
-            "inspire": "Egna datamängder"
+            "organization": "Egna dataset",
+            "inspire": "Egna dataset"
         }
     }
 }

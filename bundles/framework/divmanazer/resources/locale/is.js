@@ -1,19 +1,31 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "is",
     "key": "DivManazer",
     "value": {
+        "buttons": {
+            "add": "Bæta við",
+            "cancel": "Hætta við",
+            "close": "Loka",
+            "delete": "Eyða",
+            "edit": "Breyta",
+            "exit": "Hætta",
+            "ok": "Í lagi",
+            "save": "Vista",
+            "search": "Leita"
+        },
         "LanguageSelect": {
             "title": "tungumál",
-            "tooltip": "NOT TRANSLATED",
+            "tooltip": "Velja tungumál",
             "languages": {
                 "af": "afríkanska",
-                "ak": "akan",
+                "ak": "akanmál",
                 "am": "amharíska",
                 "ar": "arabíska",
-                "az": "aserska",
+                "az": "aserbaídsjanska",
                 "be": "hvítrússneska",
                 "bg": "búlgarska",
-                "bm": "bambara",
+                "bm": "bambaríska",
                 "bn": "bengalska",
                 "bo": "tíbeska",
                 "br": "bretónska",
@@ -125,6 +137,131 @@ Oskari.registerLocalization({
                 "zh": "kínverska",
                 "zu": "súlú"
             }
+        },
+        "VisualizationForm": {
+            "tooltips": {
+                "dot": "Breyta stíl á punktafitju",
+                "area": "Breyta stíl á svæðisfitju",
+                "line": "Breyta stíl á línufitju"
+            },
+            "dot": {
+                "title": "Stíll punktafitju",
+                "tooltip": "",
+                "symbol": {
+                    "label": "Tákn"
+                },
+                "size": {
+                    "label": "Stærð"
+                },
+                "color": {
+                    "label": "Litur",
+                    "labelOr": "eða",
+                    "labelCustom": "Sérsniðinn litur (RGB 0-255)"
+                },
+                "preview": {
+                    "label": "Forskoðun"
+                },
+                "buttons": {
+                    "save": "Vista",
+                    "cancel": "Hætta við"
+                }
+            },
+            "line": {
+                "title": "Stíll línufitju",
+                "tooltip": "",
+                "style": {
+                    "label": "Dash"
+                },
+                "cap": {
+                    "label": "Endingar"
+                },
+                "corner": {
+                    "label": "Horn"
+                },
+                "width": {
+                    "label": "Breidd"
+                },
+                "color": {
+                    "label": "Litur",
+                    "labelOr": "eða",
+                    "labelCustom": "Sérsniðinn litur (RGB 0-255)"
+                },
+                "preview": {
+                    "label": "Forskoðun"
+                },
+                "buttons": {
+                    "save": "Vista",
+                    "cancel": "Hætta við"
+                }
+            },
+            "area": {
+                "title": "Stíll svæðisfitju",
+                "tooltip": "",
+                "linestyle": {
+                    "label": "Brotin lína"
+                },
+                "linecap": {
+                    "label": "Endingar á línum"
+                },
+                "linecorner": {
+                    "label": "Hornlínur"
+                },
+                "linewidth": {
+                    "label": "Línubreidd"
+                },
+                "linecolor": {
+                    "label": "Litur á línu",
+                    "labelOr": "eða",
+                    "labelCustom": "Sérsniðinn litur (RGB 0-255)"
+                },
+                "color": {
+                    "label": "Fylla lit",
+                    "labelOr": "eða",
+                    "labelCustom": "Sérsniðinn litur (RGB 0-255)"
+                },
+                "fill": {
+                    "label": "Fylla mynstur"
+                },
+                "preview": {
+                    "label": "Forskoðun"
+                },
+                "buttons": {
+                    "save": "Vista",
+                    "cancel": "Hætta við"
+                }
+            }
+        },
+        "Grid": {
+            "columnSelector": {
+                "title": "Eiginleikar",
+                "tooltip": "Sýna dálka"
+            },
+            "export": {
+                "title": "Flytja út gögn",
+                "export": "Flytja út",
+                "additional": {
+                    "title": "Aðrar stillingar",
+                    "dataSource": "Gagnaheimild",
+                    "metadata": "Hlekkur á lýsigögn"
+                },
+                "columns": {
+                    "title": "Dálkar",
+                    "all": "Allt",
+                    "visible": "Opnað"
+                },
+                "format": {
+                    "title": "Skráarsnið",
+                    "xlsx": "Excel",
+                    "csv": "CSV"
+                },
+                "delimiter": {
+                    "title": "Skilur að CSV-skrár",
+                    "comma": "Komma",
+                    "semicolon": "Semíkomma",
+                    "tabulator": "Tabulator"
+                }
+            }
         }
     }
-});
+}
+);

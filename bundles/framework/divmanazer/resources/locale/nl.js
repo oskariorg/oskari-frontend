@@ -1,10 +1,22 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "nl",
     "key": "DivManazer",
     "value": {
+        "buttons": {
+            "add": "Toevoegen",
+            "cancel": "Annuleren",
+            "close": "Sluiten",
+            "delete": "Verwijderen",
+            "edit": "Wijzigen",
+            "exit": "Exit",
+            "ok": "OK",
+            "save": "Opslaan",
+            "search": "Zoeken"
+        },
         "LanguageSelect": {
             "title": "Taal",
-            "tooltip": "NOT TRANSLATED",
+            "tooltip": "Selecteer taal",
             "languages": {
                 "af": "Afrikaans",
                 "ak": "Akan",
@@ -125,6 +137,131 @@ Oskari.registerLocalization({
                 "zh": "Chinees",
                 "zu": "Zoeloe"
             }
+        },
+        "VisualizationForm": {
+            "tooltips": {
+                "dot": "Wijzigen point feature style",
+                "area": "Wijzigen area feature style",
+                "line": "Wijzigen line feature style"
+            },
+            "dot": {
+                "title": "Point feature style",
+                "tooltip": "",
+                "symbol": {
+                    "label": "Icon"
+                },
+                "size": {
+                    "label": "Grootte"
+                },
+                "color": {
+                    "label": "Kleur",
+                    "labelOr": "of",
+                    "labelCustom": "Aanpassen kleur (RGB 0-255)"
+                },
+                "preview": {
+                    "label": "Voorbeeld"
+                },
+                "buttons": {
+                    "save": "Opslaan",
+                    "cancel": "Annuleren"
+                }
+            },
+            "line": {
+                "title": "Line feature style",
+                "tooltip": "",
+                "style": {
+                    "label": "Dash"
+                },
+                "cap": {
+                    "label": "Einden"
+                },
+                "corner": {
+                    "label": "Hoeken"
+                },
+                "width": {
+                    "label": "Breedte"
+                },
+                "color": {
+                    "label": "Kleur",
+                    "labelOr": "of",
+                    "labelCustom": "Aanpassen kleur (RGB 0-255)"
+                },
+                "preview": {
+                    "label": "Voorbeeld"
+                },
+                "buttons": {
+                    "save": "Opslaan",
+                    "cancel": "Annuleren"
+                }
+            },
+            "area": {
+                "title": "Area feature style",
+                "tooltip": "",
+                "linestyle": {
+                    "label": "Lijn dash"
+                },
+                "linecap": {
+                    "label": "Lijn einde"
+                },
+                "linecorner": {
+                    "label": "Lijn hoeken"
+                },
+                "linewidth": {
+                    "label": "Lijn breedte"
+                },
+                "linecolor": {
+                    "label": "Lijn kleur",
+                    "labelOr": "of",
+                    "labelCustom": "Aanpassen kleur (RGB 0-255)"
+                },
+                "color": {
+                    "label": "Opvul kleur",
+                    "labelOr": "of",
+                    "labelCustom": "Aanpassen kleur (RGB 0-255)"
+                },
+                "fill": {
+                    "label": "Opvul patroon"
+                },
+                "preview": {
+                    "label": "Voorbeeld"
+                },
+                "buttons": {
+                    "save": "Opslaan",
+                    "cancel": "Annuleren"
+                }
+            }
+        },
+        "Grid": {
+            "columnSelector": {
+                "title": "Eigenschappen",
+                "tooltip": "Toon kolommen"
+            },
+            "export": {
+                "title": "Export data",
+                "export": "Export",
+                "additional": {
+                    "title": "aanvullende instellingen",
+                    "dataSource": "Data source",
+                    "metadata": "Metadata link"
+                },
+                "columns": {
+                    "title": "Kolommen",
+                    "all": "Alle",
+                    "visible": "Geopend"
+                },
+                "format": {
+                    "title": "File format",
+                    "xlsx": "Excel",
+                    "csv": "CSV"
+                },
+                "delimiter": {
+                    "title": "CSV-file separator",
+                    "comma": "Komma",
+                    "semicolon": "Puntkomma",
+                    "tabulator": "Tab"
+                }
+            }
         }
     }
-});
+}
+);

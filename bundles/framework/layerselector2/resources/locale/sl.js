@@ -10,19 +10,19 @@ Oskari.registerLocalization(
             "generic": "Sistemska napaka! Prosim poskusi kasneje.",
             "loadFailed": "Napaka v nalaganju slojev karte. Osveži stran v brskalniku in izberi sloje karte.",
             "noResults": "Iskanje ni vrnilo rezultatov.",
-            "noResultsForKeyword": "NOT TRANSLATED",
-            "minChars": "NOT TRANSLATED"
+            "noResultsForKeyword": "Za to ključno besedo ni slojev na karti.",
+            "minChars": "Vpiši vsaj štiri znake. Dovoljeni znaki so črke a-z, kot tudi  å, ä in ö, številke, vračalke in vezaji."
         },
         "loading": "Nalaganje...",
         "filter": {
             "text": "Išči sloje karte",
-            "keywordsTitle": "NOT TRANSLATED",
-            "shortDescription": "NOT TRANSLATED",
-            "description": "NOT TRANSLATED",
+            "keywordsTitle": "Ključne besede:",
+            "shortDescription": "Iskanje slojev karte s pomočjo imen slojev karte, imena ponudnika podatkov, ali ključne besede, ki opisuje sloj karte.",
+            "description": "Vpišite del imena sloja karte, ime ponudnika podatkov ali ključno besedo, ki opisuje sloj na karti. Iskanje po ključnih besedah se prične, ko so vpisani najmanj štirje znaki. Dovoljeni znaki so črke a-z, kot tudi  å, ä in ö, številke, vračalke in vezaji.",
             "inspire": "Po temi",
             "organization": "Po ponudniku podatkov",
             "published": "Uporabniki",
-            "didYouMean": "NOT TRANSLATED"
+            "didYouMean": "Ali si mislil:"
         },
         "published": {
             "organization": "Objavljen sloj karte",
@@ -30,36 +30,36 @@ Oskari.registerLocalization(
         },
         "tooltip": {
             "type-base": "Karta za ozadje",
-            "type-wms": "Sloj karte",
-            "type-wfs": "Podatkovni poizvod"
+            "type-wms": "Sloj karte (WMS, WMTS)",
+            "type-wfs": "Podatkovni proizvod (WFS)"
         },
         "backendStatus": {
             "OK": {
                 "tooltip": "Sloj karte je trenutno na voljo",
-                "iconClass": "NOT TRANSLATED"
+                "iconClass": "backendstatus-ok"
             },
             "DOWN": {
                 "tooltip": "Sloj karte trenutno ni na voljo",
-                "iconClass": "NOT TRANSLATED"
+                "iconClass": "backendstatus-down"
             },
             "MAINTENANCE": {
                 "tooltip": "Sloj karte v naslednjih dneh občasno ne bo na voljo",
-                "iconClass": "NOT TRANSLATED"
+                "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
                 "tooltip": "",
-                "iconClass": "NOT TRANSLATED"
+                "iconClass": "backendstatus-ok"
             }
         },
         "buttons": {
-            "ok": "NOT TRANSLATED"
+            "ok": "OK"
         },
         "types": {
-            "syn": "NOT TRANSLATED",
-            "lk": "NOT TRANSLATED",
-            "vk": "NOT TRANSLATED",
-            "ak": "NOT TRANSLATED",
-            "yk": "NOT TRANSLATED"
+            "syn": "Sinonim",
+            "lk": "Povezan koncept",
+            "vk": "Koordinatni koncept",
+            "ak": "Podrejen koncept",
+            "yk": "Nadrejen koncept"
         }
     }
 }

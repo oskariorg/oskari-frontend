@@ -8,15 +8,15 @@ Oskari.registerLocalization(
         "feedback": {
             "missing_backendstatus_status": {
                 "title": "Kartlager",
-                "message": "Kartlagrets tillgänglighetinformation finns ej"
+                "message": "Statusinformationen för det här kartlagret är inte tillgängligt."
             },
             "missing_backendstatus_information": {
                 "title": "Kartlager",
-                "message": "Kartlagrets tillgänglighetinformation finns ej"
+                "message": "Statusinformationen för det här kartlagret är inte tillgängligt."
             },
             "missing_backendstatus_infourl": {
                 "title": "Kartlager",
-                "message": "Kartlagrets tillgänglighetinformation finns ej"
+                "message": "Statusinformationen för det här kartlagret är inte tillgängligt."
             }
         }
     }
