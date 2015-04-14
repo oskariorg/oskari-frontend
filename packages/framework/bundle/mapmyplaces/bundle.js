@@ -60,6 +60,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapmyplaces.MapMyPlacesBundle", 
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/mapmyplaces/resources/locale/nl.js"
             }, {
+                "lang": "nn",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/mapmyplaces/resources/locale/nn.js"
+            }, {
                 "lang": "sl",
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/mapmyplaces/resources/locale/sl.js"

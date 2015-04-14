@@ -70,6 +70,14 @@ Oskari.clazz.define(
                 "type": "text/javascript",
                 "src": "../../../../bundles/catalogue/metadataflyout/resources/locale/es.js"
             }, {
+                "lang": "is",
+                "type": "text/javascript",
+                "src": "../../../../bundles/catalogue/metadataflyout/resources/locale/is.js"
+            }, {
+                "lang": "it",
+                "type": "text/javascript",
+                "src": "../../../../bundles/catalogue/metadataflyout/resources/locale/it.js"
+            }, {
                 "lang": "sl",
                 "type": "text/javascript",
                 "src": "../../../../bundles/catalogue/metadataflyout/resources/locale/sl.js"
@@ -81,6 +89,10 @@ Oskari.clazz.define(
                 "lang": "nl",
                 "type": "text/javascript",
                 "src": "../../../../bundles/catalogue/metadataflyout/resources/locale/nl.js"
+            }, {
+                "lang": "nn",
+                "type": "text/javascript",
+                "src": "../../../../bundles/catalogue/metadataflyout/resources/locale/nn.js"
             }, {
                 "lang": "sv",
                 "type": "text/javascript",

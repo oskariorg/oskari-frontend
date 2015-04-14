@@ -112,6 +112,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatedisplay.CoordinateDisp
             "type": "text/javascript",
             "src": "../../../../bundles/framework/coordinatedisplay/resources/locale/nb.js"
         }, {
+            "lang": "nn",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/coordinatedisplay/resources/locale/nn.js"
+        }, {
             "lang": "pl",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/coordinatedisplay/resources/locale/pl.js"

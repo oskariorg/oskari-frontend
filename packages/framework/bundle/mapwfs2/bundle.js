@@ -141,6 +141,10 @@ function() {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/mapwfs2/resources/locale/nl.js"
         }, {
+            "lang" : "nn",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/mapwfs2/resources/locale/nn.js"
+        }, {
             "lang" : "sl",
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/mapwfs2/resources/locale/sl.js"
