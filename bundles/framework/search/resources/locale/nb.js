@@ -1,35 +1,35 @@
 Oskari.registerLocalization(
 {
-    "lang": "nb",
+    "lang": "nn",
     "key": "Search",
     "value": {
         "title": "Søk",
         "desc": "",
-        "tabTitle": "Geografisk søk",
-        "invalid_characters": "Søk inneholder ulovlige tegn. Tillatte tegn er bokstavene a-z samt å, ä og ö, tall,  spørsmålstegn (?), stjerne (*) og bindestrek (-).",
-        "searchDescription": "Søk ved hjelp av stedsnavn, adresse eller eiendomsident",
+        "tabTitle": "Stadsøk",
+        "invalid_characters": "Søket inneheld ulovlege teikn. Tillatne teikn er bokstavane a-z samt å, ä og ö, tala,  spørsmålsteikn (?), stjerne (*) og bindestrek (-).",
+        "searchDescription": "Søk ved hjelp av stadnamn, adresse eller eigedomsinformasjon",
         "searchButton": "Søk",
-        "searchAssistance": "Skriv søkeord",
-        "searchResultCount": "Ditt søk resulterte i",
-        "searchResultCount2": "resultater",
-        "searchResultDescriptionMoreResults": "Tilpass søket for å få færre resultater",
-        "searchResultDescriptionOrdering": "Du kan sortere resultatene ved å klikke på kolonneoverskriftene.",
-        "searchResults": "Søkeresultat",
-        "searchResultsDescription": "resultater etter søkeord",
+        "searchAssistance": "Skriv søkjeord",
+        "searchResultCount": "Søket ditt resulterte i",
+        "searchResultCount2": "resultat",
+        "searchResultDescriptionMoreResults": "Juster søket for å få færre resultat",
+        "searchResultDescriptionOrdering": "Du kan sortere resultata ved å klikke på kolonneoverskriftene.",
+        "searchResults": "Søkjeresultat",
+        "searchResultsDescription": "resultat etter søkjeord",
         "searchservice_search_alert_title": "Feil",
-        "searchservice_search_not_found_anything_text": "Fant ingen resultater",
-        "too_short": "Søkeordet er for kort",
-        "cannot_be_empty": "Søkeordet må inneholde minst ett tegn. Tillatte tegn er bokstavene a-z samt å, ä og ö, tall, spørsmålstegn (?), stjerne (*) og bindestrek (-).",
-        "too_many_stars": "Søkeordet inneholder for mange stjerner. Det kan inneholde opptil N stjerner.",
-        "generic_error": "Søk feilet. Prøv igjen seinere.",
+        "searchservice_search_not_found_anything_text": "Fann ingen resultat",
+        "too_short": "Søkjeordet er for kort",
+        "cannot_be_empty": "Søkjeordet må innehalde minst eitt teikn. Tillatne teikn er bokstavane a-z samt å, ä og ö, tall, spørsmålsteikn (?), stjerne (*) og bindestrek (-).",
+        "too_many_stars": "Søkjeordet inneheld for mange stjerner. Det kan innehalde opptil N stjerner.",
+        "generic_error": "Søket feila. Prøv om att seinare.",
         "grid": {
-            "name": "Stedsnavn",
+            "name": "Stadnamn",
             "village": "Kommune",
             "type": "Type"
         },
         "resultBox": {
             "close": "Lukk",
-            "title": "Søkeresultater"
+            "title": "Søkjeresultat"
         }
     }
 }

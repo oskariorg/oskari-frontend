@@ -1,13 +1,13 @@
 Oskari.registerLocalization(
 {
-    "lang": "nb",
+    "lang": "nn",
     "key": "MapMyPlaces",
     "value": {
         "title": "NOT TRANSLATED",
         "desc": "",
         "object-data": "Objektdata",
         "layer": {
-            "organization": "Mine steder",
+            "organization": "Mine stader",
             "inspire": "Mine kartlag"
         }
     }

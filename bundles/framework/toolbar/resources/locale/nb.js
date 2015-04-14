@@ -1,35 +1,35 @@
 Oskari.registerLocalization(
 {
-    "lang": "nb",
+    "lang": "nn",
     "key": "Toolbar",
     "value": {
         "buttons": {
             "link": {
-                "tooltip": "Lenke",
+                "tooltip": "Lenkje",
                 "ok": "OK",
-                "title": "Lag en lenke til kartutsnittet"
+                "title": "Lag ei lenkje til kartutsnittet"
             },
             "print": {
                 "tooltip": "Skriv ut kartutsnittet"
             },
             "history": {
                 "reset": "Gå til standard kartutsnitt",
-                "back": "Gå tilbake til forrige kartutsnitt",
+                "back": "Gå attende til det førre kartutsnittet",
                 "next": "Gå til neste kartutsnitt"
             },
-            "pan": "Panorer i kartet ved å flytte musepekeren",
+            "pan": "Panorer i kartet ved å flytte musepeikaren",
             "zoom": "Zoom i kartutsnittet",
             "measure": {
-                "line": "Mål en linje på kartet",
-                "area": "Mål et areal på kartet"
+                "line": "Mål ei line på kartet",
+                "area": "Mål eit areal på kartet"
             }
         },
         "measure": {
-            "title": "Måleresultater",
+            "title": "Måleresultat",
             "close": "Avbryt",
             "guidance": {
-                "measureline": "Tegn en linje og mål avstanden på kartet. Klikk startpunktet på linjen for å starte målingen. Klikk deretter på alle knekkpunkt på linja. Dobbelklikk på endepunktet for å fullføre målingen.",
-                "measurearea": "Tegn et areal mål flaten på kartet. Klikk startpunktet på avgrensningslinjen for å starte målingen. Klikk deretter på alle knekkpunkt på linja. Dobbelklikk på endepunktet for å fullføre målingen."
+                "measureline": "Teikn ei line og mål avstanden på kartet. Klikk startpunktet på lina for å starte målinga. Klikk deretter på alle knekkpunkta på lina. Dobbelklikk på endepunktet for å fullføre målinga.",
+                "measurearea": "Teikn eit areal og mål flaten på kartet. Klikk startpunktet på avgrensingslina for å starte målinga. Klikk deretter på alle knekkpunkta på lina. Dobbelklikk på endepunktet for å fullføre målinga."
             }
         }
     }
