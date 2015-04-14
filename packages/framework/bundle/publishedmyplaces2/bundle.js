@@ -151,6 +151,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.PublishedMyPla
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/publishedmyplaces2/resources/locale/nl.js"
         }, {
+            "lang" : "nn",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/publishedmyplaces2/resources/locale/nn.js"
+        }, {
             "lang" : "cs",
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/publishedmyplaces2/resources/locale/cs.js"

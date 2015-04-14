@@ -113,6 +113,10 @@ function() {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/mapfull/resources/locale/nl.js"
         }, {
+            "lang": "nn",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/mapfull/resources/locale/nn.js"
+        }, {
             "lang": "sl",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/mapfull/resources/locale/sl.js"

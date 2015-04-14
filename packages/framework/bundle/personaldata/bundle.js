@@ -116,9 +116,17 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundle"
             "type": "text/javascript",
             "src": "../../../../bundles/framework/personaldata/resources/locale/lv.js"
         }, {
+            "lang": "nb",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/personaldata/resources/locale/nb.js"
+        }, {
             "lang": "nl",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/personaldata/resources/locale/nl.js"
+        }, {
+            "lang": "nn",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/personaldata/resources/locale/nn.js"
         }, {
             "lang": "pl",
             "type": "text/javascript",
