@@ -98,7 +98,16 @@ Oskari.registerLocalization({
 		"actionButtons": {
               "save":"Save",
 			  "cancel":"Cancel"
+		},
+		"errorPopup": {
+			"title":"Error!",
+            "savingTheFeedbackFailed": "Saving the feedback failed.",
+            "formValidationFailed":"Validation of form failed.",
+            "okButtonText":"OK"
+		},
+		"successPopup": {
+			"title":"Success!",
+            "savingTheFeedbackSuccesful": "Saving the feedback was succesful."
 		}
-
     }
 });

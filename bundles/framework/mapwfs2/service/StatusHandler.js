@@ -1,15 +1,14 @@
 /**
- * @class Oskari.mapframework.bundle.mapwfs2.service.ErrorHandler
+ * @class Oskari.mapframework.bundle.mapwfs2.service.StatusHandler
  *
- * Handles Connection's IO
+ * Keeps track of WFS process statuses
  */
 Oskari.clazz.define(
     'Oskari.mapframework.bundle.mapwfs2.service.StatusHandler',
     /**
      * @static @method create called automatically on construction
      *
-     * @param {Object} config
-     * @param {Object} plugin
+     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
      *
      */
     function (sandbox) {

@@ -1229,7 +1229,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 nameA = nameA.toLowerCase();
             }
             numericValue = parseFloat(nameA);
-            if (!isNaN(numericValue)) {
+            // parseFloat returns 6 for input "006A". 
+            // Check that there isn't any letters in the nameA -> same length
+            // TODO: how about zero padded numbers? for example "002.1"
+            if (!isNaN(numericValue) && ('' + numericValue).length === nameA.length) {
                 nameA = numericValue;
             }
 

@@ -519,6 +519,19 @@
                 },
                 "Require-Bundle-Instance": []
             }
+        }, {
+            "instanceProps": {},
+            "title": "ELF metadatafeedback",
+            "bundleinstancename": "elf-metadatafeedback",
+            "bundlename": "elf-metadatafeedback",
+            "metadata": {
+                "Import-Bundle": {
+                    "elf-metadatafeedback": {
+                        "bundlePath": "../../../packages/elf/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
         }
     ]
 }

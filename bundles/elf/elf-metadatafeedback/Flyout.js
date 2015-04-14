@@ -215,12 +215,8 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
         this.resized = false;
 
     }, {
-
-        setMetadataInstance: function(metadata) {
+        setMetadata: function(metadata) {
           this._metadata = metadata;
-        },
-        getMetadataInstance: function() {
-          return this._metadata;
         },
         getName: function () {
             return 'Oskari.catalogue.bundle.metadatafeedback.Flyout';
@@ -253,15 +249,19 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
               } else {
 
                 me.instance.addFeedbackService.addFeedback(params, function(e) {
-                  //TODO: update the ratinginfo in the list.
+                    me._showMessage(me.locale.successPopup.title, me.locale.successPopup.savingTheFeedbackSuccesful);
+                    me._resetForm();
+                    //update the ratinginfo in the search result list.
+                    me._metadata.rating = e[0].rating;
+                    me.instance.updateMetadataRating(me._metadata);
+
+                    me.instance.sandbox.postRequestByName(
+                        'userinterface.UpdateExtensionRequest',
+                        [me.instance, 'close']
+                    );
                 },
                 function(e) {
                     me._showMessage(me.locale.errorPopup.title, me.locale.errorPopup.savingTheFeedbackFailed);
-
-
-                    //me.instance._updateRating(me._metadataInstance);
-
-
                     /*
                     me.instance.sandbox.postRequestByName(
                         'userinterface.UpdateExtensionRequest',
@@ -275,6 +275,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
 
             var cancelBtn = contents.find("button.cancel");
             cancelBtn.click(function() {
+                me._resetForm();
                 me.instance.sandbox.postRequestByName(
                     'userinterface.UpdateExtensionRequest',
                     [me.instance, 'close']
@@ -406,6 +407,14 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
           return validationOk ? params : validationOk;
 
         },
+        /**
+         * @method _resetForm
+         * Reset form values after cancel or succesful save
+         */
+         _resetForm: function() {
+             jQuery('.userfeedback-values').find(':input').val(''); 
+         },
+
         /**
          * @method _showMessage
          * Shows user a message with ok button
