@@ -1,10 +1,11 @@
 Oskari.registerLocalization(
 {
-    "lang": "nb",
+    "lang": "nn",
     "key": "maplegend",
     "value": {
-        "title": "Tegnforklaringer",
-        "desc": ""
+        "title": "Teiknforklaringar",
+        "desc": "",
+        "noLegendsText": "NOT TRANSLATED"
     }
 }
 );

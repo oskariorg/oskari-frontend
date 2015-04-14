@@ -1,48 +1,48 @@
 Oskari.registerLocalization(
 {
-    "lang": "nb",
+    "lang": "nn",
     "key": "FeatureData2",
     "value": {
         "title": "NOT TRANSLATED",
         "desc": "",
-        "loading": "Laster…",
+        "loading": "Lastar …",
         "showmore": "Vis",
-        "nodata": "Valgt kartlag inneholder ikke data.",
+        "nodata": "Vald kartlag inneheld ikkje data",
         "featureNameAll": "Datatype",
-        "errorscale": "Data i dette kartlaget kan ikke vises i denne målestokken. Vennligst tilpass målestokken.",
-        "errordata": "Serverdata inneholder feil. Vennligst oppfrisk kartet ved å bevege det.",
-        "columnSelectorTooltip": "Velg synlige kolonner.",
+        "errorscale": "Data i dette kartlaget kan ikkje visast i denne målestokken. Ver grei og tilpass målestokken",
+        "errordata": "Serverdata inneheld feil. Oppfrisk kartet ved å røre det.",
+        "columnSelectorTooltip": "Vel synlege kolonnar.",
         "popup": {
-            "title": "Velg forekomster på kartet",
+            "title": "Vel førekomstar på kartet",
             "instructions": "NOT TRANSLATED",
             "link": {
-                "title": "Velg flere forekomster"
+                "title": "Vel fleire førekomstar"
             },
             "button": {
                 "cancel": "Avbryt",
-                "empty": "Slett valg",
-                "show": "Vis forekomster",
+                "empty": "Slett val",
+                "show": "Vis førekomstar",
                 "close": "Lukk",
-                "edit": "Editér"
+                "edit": "Rediger"
             },
             "tools": {
                 "point": {
-                    "tooltip": "Legg et punkt til kartet"
+                    "tooltip": "Legg eit punkt til kartet"
                 },
                 "line": {
-                    "tooltip": "Legg et linje til kartet"
+                    "tooltip": "Legg ei line til kartet"
                 },
                 "polygon": {
-                    "tooltip": "Legg et areal til kartet"
+                    "tooltip": "Legg eit areal til kartet"
                 },
                 "square": {
-                    "tooltip": "Legg et rektangulært areal til kartet"
+                    "tooltip": "Legg eit rektangulært areal til kartet"
                 },
                 "circle": {
-                    "tooltip": "Legg et sirkulært areal til kartet"
+                    "tooltip": "Legg eit sirkulært areal til kartet"
                 },
                 "select": {
-                    "tooltip": "Velg forekomster"
+                    "tooltip": "Vel førekomstar"
                 }
             }
         },
@@ -51,37 +51,37 @@ Oskari.registerLocalization(
             "show": "Vis",
             "hide": "Skjul",
             "hidden": "Kartlaget er midlertidig skjult",
-            "out-of-scale": "Kartlaget kan ikke vises i demme nålestokken",
-            "move-to-scale": "Vennligst gå til passende målestokk",
-            "out-of-content-area": "Kartlaget inneholder ingen data i dette området",
-            "move-to-content-area": "Vennligst flytt til en passende lokalitet",
-            "description": "Beskrivelse",
-            "object-data": "Forekomster",
+            "out-of-scale": "Kartlaget kan ikkje visast i denne nålestokken",
+            "move-to-scale": "Ver grei og skift til passande målestokk",
+            "out-of-content-area": "Kartlaget inneheld ingen data i dette området",
+            "move-to-content-area": "Ver grei og flytt til ein passande lokalitet",
+            "description": "Framstilling",
+            "object-data": "Førekomstar",
             "rights": {
-                "notavailable": "Kan ikke publiseres",
-                "guest": "Innlogging kreves for å publisere dette kartlaget",
-                "loggedin": "Kan publiseres",
-                "official": "Spesielle rettigheter kreves for publisering",
-                "need-login": "Innlogging kreves for å publisere dette kartlaget",
+                "notavailable": "Kan ikkje publiserast",
+                "guest": "Du må logge inn for å publisere dette kartlaget",
+                "loggedin": "Kan publiserast",
+                "official": "Spesielle rettar krevst for publisering",
+                "need-login": "Du må logge inn for å publisere dette kartlaget",
                 "can_be_published_by_provider": {
-                    "label": "Kan publiseres av datatilbyder",
-                    "tooltip": "Det er kun dataleverandør som kan publisere kartlaget i et 'embedded' kart"
+                    "label": "Kan publiserast av datatilbydar",
+                    "tooltip": "Det er berre dataleverandør som kan publisere kartlaget i eit 'embedded' kart"
                 },
                 "can_be_published": {
-                    "label": "Kan publiseres",
-                    "tooltip": "Kartlaget kan publiseres i et 'embedded' kart. Ikke tidsbegrenset."
+                    "label": "Kan publiserast",
+                    "tooltip": "Kartlaget kan publiserast i eit 'embedded' kart. Ikkje tidsavgrensa."
                 },
                 "can_be_published_map_user": {
-                    "label": "Kan publiseres",
-                    "tooltip": "Kartlaget kan publiseres i et 'embedded' kart. Kan være tidsbegrenset."
+                    "label": "Kan publiserast",
+                    "tooltip": "Kartlaget kan publiseres i eit 'embedded' kart. Kan vere tidsavgrensa."
                 },
                 "no_publication_permission": {
-                    "label": "Kan ikke publiseres",
-                    "tooltip": "Kartlaget kan ikke publiseres i et 'embedded' kart. Datatilbyder har ikke gitt tillatelse."
+                    "label": "Kan ikkje publiserast",
+                    "tooltip": "Kartlaget kan ikkje publiserast i eit 'embedded' kart. Datatilbydar har ikkje tillatt det."
                 },
                 "can_be_published_by_authority": {
-                    "label": "Kan publiseres",
-                    "tooltip": "Kartlaget kan publiseres i et 'embedded' kart. Ikke tidsbegrenset."
+                    "label": "Kan publiserast",
+                    "tooltip": "Kartlaget kan publiserast i eit 'embedded' kart. Ikkje tidsavgrensa."
                 }
             },
             "tooltip": {
@@ -91,55 +91,55 @@ Oskari.registerLocalization(
             },
             "filter": {
                 "title": "Filter",
-                "description": "Velg forekomster fra kartlaget",
+                "description": "Vel førekomstar frå kartlaget",
                 "cancelButton": "Avbryt",
                 "clearButton": "Tøm filter",
                 "refreshButton": "Oppfrisk filteret",
                 "addFilter": "Legg til nytt filter",
                 "removeFilter": "Slett filter",
                 "bbox": {
-                    "title": "Kartvindu-filter",
-                    "on": "Kun den synlige forekomsten i kartvinduet",
-                    "off": "Alle forekomster"
+                    "title": "Kartvindauge-filter",
+                    "on": "Berre den synlege førekomsten i kartvindauget",
+                    "off": "Alle førekomstar"
                 },
                 "clickedFeatures": {
-                    "title": "Filter for valg av forekomster",
-                    "label": "Kun valgte forekomster"
+                    "title": "Filter for val av førekomstar",
+                    "label": "Kun valgde førekomstar"
                 },
                 "values": {
-                    "title": "Filtrér forekomster basert på egenskaper",
+                    "title": "Filtrér førekomstar basert på eigenskapar",
                     "placeholders": {
                         "case-sensitive": "Filteret er versalsensitivt",
-                        "attribute": "Egenskap",
+                        "attribute": "Eigenskap",
                         "boolean": "Logisk operator",
                         "operator": "Operator",
                         "attribute-value": "Verdi"
                     },
                     "equals": "er lik",
-                    "like": "er omtrentlig lik",
-                    "notEquals": "er ikke lik",
-                    "notLike": "er ikke omtrentlig lik",
+                    "like": "er omtrentleg lik",
+                    "notEquals": "er ikkje lik",
+                    "notLike": "er ikkje omtrentleg lik",
                     "greaterThan": "er større enn",
                     "lessThan": "er mindre enn",
                     "greaterThanOrEqualTo": "er større enn eller lik",
                     "lessThanOrEqualTo": "er mindre enn eller lik"
                 },
                 "aggregateAnalysisFilter": {
-                    "addAggregateFilter": "Velg aggregert verdi",
+                    "addAggregateFilter": "Vel aggregert verdi",
                     "aggregateValueSelectTitle": "Bruk aggregert verdi i filteret",
-                    "selectAggregateAnalyse": "Velg aggregert analyse",
-                    "selectIndicator": "Velg indikator",
+                    "selectAggregateAnalyse": "Vel aggregert analyse",
+                    "selectIndicator": "Vel indikator",
                     "selectReadyButton": "Klar",
-                    "getAggregateAnalysisFailed": "Aggregerte data ikke funnet",
+                    "getAggregateAnalysisFailed": "Aggregerte data ikkje funne",
                     "noAggregateAnalysisPopupTitle": "NOT TRANSLATED",
-                    "noAggregateAnalysisPopupContent": "Du har ikke gjort noen aggregert analyse. Du kan sette sammen dine egne aggregerte data ved hjelp av analysefunksjonen, og deretter filtrere på verdier."
+                    "noAggregateAnalysisPopupContent": "Du har ikkje gjort noka aggregert analyse. Du kan setje saman dine eigne aggregerte data ved hjelp av analysefunksjonen, og så filtrere på verdiar."
                 },
                 "validation": {
-                    "title": "Filteret kunne ikke oppfriskes på grunn av følgende feil:",
-                    "attribute_missing": "Attributten mangler",
-                    "operator_missing": "Operatoren mangler",
-                    "value_missing": "Verdien mangler",
-                    "boolean_operator_missing": "Logisk operator mangler"
+                    "title": "Filteret kunne ikkje oppfriskast på grunn av føljande feil:",
+                    "attribute_missing": "Eigenskapen manglar",
+                    "operator_missing": "Operatoren manglar",
+                    "value_missing": "Verdien manglar",
+                    "boolean_operator_missing": "Logisk operator manglar"
                 }
             }
         }

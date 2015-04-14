@@ -284,6 +284,11 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
 
             var el = me.getEl();
             el.append(contents);
+
+            //prevent keypress f in textareas from toggling the full map
+            jQuery('.userfeedback-values').find('textarea').on('keydown', function(e) {
+              e.stopPropagation();
+            });
         },
 
         stopPlugin: function () {

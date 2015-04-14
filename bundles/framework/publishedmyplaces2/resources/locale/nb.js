@@ -1,25 +1,25 @@
 Oskari.registerLocalization(
 {
-    "lang": "nb",
+    "lang": "nn",
     "key": "PublishedMyPlaces",
     "value": {
-        "title": "Steder",
+        "title": "Stader",
         "desc": "",
         "category": {
             "defaultName": "Mitt kartlag",
-            "organization": "Mine steder",
-            "inspire": "Mine steder"
+            "organization": "Mine stader",
+            "inspire": "Mine stader"
         },
         "guest": {
-            "loginShort": "Logg inn for å legge til dine steder på et kart"
+            "loginShort": "Logg inn for å legge til stadene dine på eit kart"
         },
         "tab": {
-            "title": "Steder",
-            "nocategories": "Du har ikke noen lagrede steder ennå",
-            "maxFeaturesExceeded": "Du har overskredet antall egne steder. Ikke alle steder er lastet.",
+            "title": "Stader",
+            "nocategories": "Du har ikkje nokon lagra stader ennå",
+            "maxFeaturesExceeded": "Du har for mange eigne stader. Ikkje alle stader er lasta.",
             "publishCategory": {
                 "privateTooltip": "Dette kartlaget er privat. Klikk her for å publisere.",
-                "publicTooltip": "Dette kartlaget er for almennheten. Klikk her for å avslutte publisering."
+                "publicTooltip": "Dette kartlaget er offentleg. Klikk her for å avslutte publisering."
             },
             "addCategory": "Legg til kartlaget",
             "editCategory": "Tilpass kartlaget",
@@ -27,23 +27,23 @@ Oskari.registerLocalization(
             "edit": "Tilpass",
             "delete": "Slett",
             "grid": {
-                "name": "Stedsnavn",
-                "desc": "Stedsbeskrivelse",
-                "createDate": "Opprettet",
+                "name": "Stadnamn",
+                "desc": "Framstilling av staden",
+                "createDate": "Oppretta",
                 "updateDate": "Oppdatert",
-                "measurement": "Størrelse",
+                "measurement": "Storleik",
                 "edit": "Tilpass",
                 "delete": "Slett"
             },
             "notification": {
                 "delete": {
-                    "title": "Slett sted",
+                    "title": "Slett stad",
                     "confirm": "Vil du slette dette stedet?",
                     "btnDelete": "Slett",
                     "btnCancel": "Avbryt",
-                    "success": "Stedet er slettet",
-                    "error": "Stedet kunne ikke slettes. Prøv igjen seinere",
-                    "cancel": "Stedet har ikke blitt slettet"
+                    "success": "Staden er sletta",
+                    "error": "Steden kunne ikkje slettast. Prøv om att seinere",
+                    "cancel": "Staden har ikkje blitt sletta"
                 }
             }
         },
@@ -53,7 +53,7 @@ Oskari.registerLocalization(
                 "tooltip": "Mål avstand",
                 "add": "",
                 "next": "",
-                "edit": "Du kan tilpasse linjen ved å klikke og dra i knekkpunkt",
+                "edit": "Du kan tilpasse lina ved å klikke og dra i knekkpunkt",
                 "noResult": "0 m"
             },
             "measurearea": {
@@ -61,33 +61,33 @@ Oskari.registerLocalization(
                 "tooltip": "Mål areal",
                 "add": "",
                 "next": "",
-                "edit": "Du kan tilpasse området ved å klikke og dra i knekkpunkt på avgrensningslinjen",
+                "edit": "Du kan tilpasse området ved å klikke og dra i knekkpunkt på avgrensingslina",
                 "noResult": "0 m²"
             },
             "point": {
                 "title": "Legg til punkt",
-                "tooltip": "Legg et punkt til \"Mine steder\"",
-                "add": "Plassér et punkt ved å klikke i kartet",
-                "next": "Ett sted kan inneholde ett eller flere punkt",
+                "tooltip": "Legg eit punkt til \"Mine stader\"",
+                "add": "Plassér eit punkt ved å klikke i kartet",
+                "next": "Eitt sted kan innehalde eitt eller fleire punkt",
                 "edit": "Flytt punktet ved å klikke og dra",
-                "save": "Lagre som mitt sted"
+                "save": "Lagre som min stad"
             },
             "line": {
-                "title": "Legg til linje",
-                "tooltip": "Legg en linje til \"Mine steder\"",
-                "add": "Tegn en linje ved å plassere knekkpunkt i kartet.  Du kan legge til knekkpunkt ved å klikke i kartet. Avslutt ved å dobbeltklikke eller ved å klikke på \"Lagre som mitt sted\".",
-                "next": "Ett sted kan inneholde en eller flere linjer",
-                "edit": "Tilpass linjen ved å klikke og dra knekkpunkt",
-                "save": "Lagre som mitt sted",
+                "title": "Legg til line",
+                "tooltip": "Legg ei line til \"Mine stader\"",
+                "add": "Teikn ei line ved å plassere knekkpunkt i kartet.  Du kan legge til knekkpunkt ved å klikke i kartet. Avslutt ved å dobbeltklikke eller ved å klikke på \"Lagre som min stad\".",
+                "next": "Ein stad kan innehalde ei eller fleire liner",
+                "edit": "Tilpass lina ved å klikke og dra knekkpunkt",
+                "save": "Lagre som min stad",
                 "noResult": "0 m"
             },
             "area": {
                 "title": "Legg til område",
-                "tooltip": "Legg et område til \"Mine steder\"",
-                "add": "Tegn et område ved å plassere knekkpunkt i kartet.  Du kan legge til knekkpunkt ved å klikke i kartet. Avslutt ved å dobbeltklikke eller ved å klikke på \"Lagre som mitt sted\".",
-                "next": "Ett sted kan inneholde ett eller flere områder",
+                "tooltip": "Legg eit område til \"Mine stader\"",
+                "add": "Teikn eit område ved å plassere knekkpunkt i kartet.  Du kan legge til knekkpunkt ved å klikke i kartet. Avslutt ved å dobbeltklikke eller ved å klikke på \"Lagre som min stad\".",
+                "next": "Ein stad kan inneholde eitt eller fleire område",
                 "edit": "Tilpass området ved å klikke og dra knekkpunkt",
-                "save": "Lagre som mitt sted",
+                "save": "Lagre som min stad",
                 "noResult": "0 m²"
             }
         },
@@ -95,46 +95,46 @@ Oskari.registerLocalization(
             "ok": "OK",
             "cancel": "Avbryt",
             "close": "Avbryt",
-            "finish": "Lagre som mitt sted",
+            "finish": "Lagre som min stad",
             "save": "Lagre",
-            "saveAsMyPlace": "Lagre som mitt sted",
-            "movePlaces": "Flytt stedene og slett laget",
+            "saveAsMyPlace": "Lagre som min stad",
+            "movePlaces": "Flytt stadene og slett laget",
             "deleteCategory": "Slett",
-            "deleteCategoryAndPlaces": "Slett laget med tilhørende steder",
+            "deleteCategoryAndPlaces": "Slett laget med tilhøyrande stader",
             "changeToPublic": "Publisér",
             "changeToPrivate": "Avslutt publisering"
         },
         "placeform": {
-            "title": "Stedsdata",
-            "tooltip": "Stedet er lagret i \"Mine steder\" og er synlige på menyen \"Mine data\". Vennligst legg inn data for stedet. Stedsnavn og beskrivelse er obligatorisk. Du kan også legge inn tekst som vises på kartet ved siden av stedet, lenke til nettsted for mer informasjon om stedet og lenke til bilde. Lag til slutt et nytt kartlag eller velg et eksisterende kartlag der stedet vil bli lagt til.",
+            "title": "Staddata",
+            "tooltip": "Staden er lagra i \"Mine stader\" og er synlege på menyen \"Mine data\". Ver grei og legg inn data for staden. Stadnamn og framstilling er obligatorisk. Du kan også legge inn tekst som synast på kartet ved sida av staden, lenkje til nettstad for meir informasjon om staden og lenkje til bilete. Lag til slutt eit nytt kartlag eller vel eit eksistarende kartlag der steden vil bli lagt til.",
             "placename": {
-                "placeholder": "Stedsnavn"
+                "placeholder": "Stadnamn"
             },
             "placelink": {
-                "placeholder": "Lenke til informasjon om stedet"
+                "placeholder": "Lenkje til informasjon om staden"
             },
             "placedesc": {
-                "placeholder": "Beskrivelse"
+                "placeholder": "Framstilling"
             },
             "placeAttention": {
                 "placeholder": "Plassér tekst på kartet"
             },
             "measurement": {
-                "line": "Linjelengde:",
+                "line": "Linelengde:",
                 "area": "Areal:"
             },
             "category": {
                 "label": "Kartlag",
                 "newLayer": "Lag nytt kartlag",
-                "choose": "eller velg et av dine eksisterende kartlag"
+                "choose": "eller vel eit av dei eksisterande kartlaga dine"
             },
             "imagelink": {
-                "placeholder": "Lenke til bildet",
-                "previewLabel": "Forhåndsvis bilde",
+                "placeholder": "Lenkje til biletet",
+                "previewLabel": "Førehandsvis bilete",
                 "add": "Nytt kartlag"
             },
             "rendering": {
-                "label": "Sted utforming",
+                "label": "Stad utforming",
                 "point": {
                     "tooltip": "Punkt"
                 }
@@ -142,33 +142,33 @@ Oskari.registerLocalization(
         },
         "categoryform": {
             "name": {
-                "label": "Navn",
-                "placeholder": "Navn på kartlag"
+                "label": "Namn",
+                "placeholder": "Namn på kartlag"
             },
             "drawing": {
                 "label": "Utforming",
                 "point": {
                     "label": "Punkt",
                     "color": "Farge",
-                    "size": "Størrelse"
+                    "size": "Storleik"
                 },
                 "line": {
-                    "label": "Linje",
+                    "label": "Line",
                     "color": "Farge",
-                    "size": "Bredde"
+                    "size": "Breidde"
                 },
                 "area": {
                     "label": "Område",
                     "fillcolor": "Fyllfarge",
-                    "linecolor": "Kantlinjefarge",
-                    "size": "Kantlinjebredde"
+                    "linecolor": "Kantlinefarge",
+                    "size": "Kantlinebreidde"
                 }
             },
             "visibleFields": {
-                "label": "Synlige stedsdata",
-                "placename": "Navn",
-                "placedesc": "Beskrivelse",
-                "image": "Bilde"
+                "label": "Synlege staddata",
+                "placename": "Namn",
+                "placedesc": "Framstilling",
+                "image": "Bilete"
             },
             "edit": {
                 "title": "Tilpass kartlaget",
@@ -176,7 +176,7 @@ Oskari.registerLocalization(
                 "cancel": "Avbryt"
             },
             "rendering": {
-                "label": "Sted utforming",
+                "label": "Stad utforming",
                 "point": {
                     "tooltip": "Tilpass punktstil"
                 },
@@ -184,7 +184,7 @@ Oskari.registerLocalization(
                     "tooltip": "Tilpass områdestil"
                 },
                 "line": {
-                    "tooltip": "Tilpass linjestil"
+                    "tooltip": "Tilpass linestil"
                 }
             }
         },
@@ -195,7 +195,7 @@ Oskari.registerLocalization(
                 "label": "Ikon"
             },
             "size": {
-                "label": "Størrelse"
+                "label": "Storleik"
             },
             "color": {
                 "label": "Farge",
@@ -203,7 +203,7 @@ Oskari.registerLocalization(
                 "labelCustom": "Spesialfarge (RGB 0-255)"
             },
             "preview": {
-                "label": "Forhåndsvisning"
+                "label": "Førehandsvising"
             },
             "buttons": {
                 "save": "Lagre",
@@ -211,7 +211,7 @@ Oskari.registerLocalization(
             }
         },
         "lineform": {
-            "title": "Linjestil",
+            "title": "Linestil",
             "tooltip": "",
             "style": {
                 "label": "Utforming"
@@ -220,10 +220,10 @@ Oskari.registerLocalization(
                 "label": "Endepunkt"
             },
             "corner": {
-                "label": "Hjørner"
+                "label": "Hjørne"
             },
             "width": {
-                "label": "Bredde"
+                "label": "Breidde"
             },
             "color": {
                 "label": "Farge",
@@ -231,7 +231,7 @@ Oskari.registerLocalization(
                 "labelCustom": "Spesialfarge (RGB 0-255)"
             },
             "preview": {
-                "label": "Forhåndsvisning"
+                "label": "Førehandsvising"
             },
             "buttons": {
                 "save": "Lagre",
@@ -242,19 +242,19 @@ Oskari.registerLocalization(
             "title": "Områdestil",
             "tooltip": "",
             "linestyle": {
-                "label": "Kantlinje stil"
+                "label": "Kantline stil"
             },
             "linecap": {
-                "label": "Kantlinje endepunkt"
+                "label": "Kantline endepunkt"
             },
             "linecorner": {
-                "label": "Kantlinje hjørner"
+                "label": "Kantline hjørne"
             },
             "linewidth": {
-                "label": "Kantlinje bredde"
+                "label": "Kantline bredde"
             },
             "linecolor": {
-                "label": "Kantlinje farge",
+                "label": "Kantline farge",
                 "labelOr": "eller",
                 "labelCustom": "Spesialfarge (RGB 0-255)"
             },
@@ -267,7 +267,7 @@ Oskari.registerLocalization(
                 "label": "Mønster"
             },
             "preview": {
-                "label": "Forhåndsvisning"
+                "label": "Førehandsvising"
             },
             "buttons": {
                 "save": "Lagre",
@@ -276,52 +276,52 @@ Oskari.registerLocalization(
         },
         "notification": {
             "placeAdded": {
-                "title": "Stedet har blitt lagret",
-                "message": "Du kan finne stedet i menyen \"Mine data\""
+                "title": "Staden er lagra",
+                "message": "Du kan finne staden i menyen \"Mine data\""
             },
             "categorySaved": {
-                "title": "Kartlaget har blitt lagret",
-                "message": "Endringene av kartlaget har blitt lagret"
+                "title": "Kartlaget er lagra",
+                "message": "Endringane av kartlaget er laga"
             },
             "categoryDelete": {
                 "title": "Slett kartlaget",
-                "deleteConfirmMove": "Kartlaget \"{0}\" inneholder {1} steder. Vil du slette kartlaget og flytte stedene til standard kartlag \"{2}\" eller vil du slette kartlaget med tilhørende steder?",
-                "deleteConfirm": "Ønsker du å slette kartlaget {0}?",
-                "deleted": "Katlaget er sletet"
+                "deleteConfirmMove": "Kartlaget \"{0}\" inneheld {1} stader. Vil du slette kartlaget og flytte stadene til standard kartlag \"{2}\" eller vil du slette kartlaget med tilhøyrande stader?",
+                "deleteConfirm": "Ønskjer du å slette kartlaget {0}?",
+                "deleted": "Katlaget er sletta"
             },
             "categoryToPublic": {
                 "title": "Publiser kartlaget",
-                "message": "Du er i ferd med å publisere kartlaget \"{0}\".  Deretter kan du dele kartlaget på nettet eller bruke det som et kartlag i en annen nett-tjeneste. Andre brukere av Paikkatietoikkuna kan også se kartlaget."
+                "message": "Du er i ferd med å publisere kartlaget \"{0}\".  Deretter kan du dele kartlaget på nettet eller bruke det som eit kartlag i ei anna nett-teneste. Andre brukarar av Paikkatietoikkuna kan også sjå kartlaget."
             },
             "categoryToPrivate": {
                 "title": "Avbryt publisering av kartlag",
-                "message": "Du er i ferd med å avbryte publisering av kartlaget \"{0}\".  Det vil ikke lenger bli mulig å dele kartlaget på nettet eller bruke det som et kartlag i en annen nett-tjeneste. Andre brukere av Paikkatietoikkuna kan ikke lenger se kartlaget."
+                "message": "Du er i ferd med å avbryte publisering av kartlaget \"{0}\".  Det vil ikkje lenger bli mogleg å dele kartlaget på nettet eller bruke det som eit kartlag i ei anna nett-teneste. Andre brukarar av Paikkatietoikkuna kan ikkje lenger shå kartlaget."
             },
             "error": {
-                "addCategory": "Kartlaget kunne ikke lagres. Stedet ble ikke lagret. Vennligst prøv igjen seinere.",
-                "editCategory": "Kartlaget kunne ikke lagres. Vennligst prøv igjen seinere.",
-                "savePlace": "Stedet kunne ikke lagres. Vennligst prøv igjen seinere.",
+                "addCategory": "Kartlaget kunne ikkje lagrast. Staden blei ikkje lagra. Ver grei og prøv om att seinare.",
+                "editCategory": "Kartlaget kunne ikke lagrast. Ver grei og prøv om att seinare.",
+                "savePlace": "Staden kunne ikkje lagrast. Ver grei og prøv om att seinare.",
                 "title": "Feil!",
-                "generic": "Systemfeil. Vennligst prøv igjen seinere.",
-                "deleteCategory": "Det oppstod en feil under sletting. Vennligst prøv igjen seinere.",
-                "deleteDefault": "Standard kartlag kan ikke slettes."
+                "generic": "Systemfeil. Ver grei og prøv om att seinare.",
+                "deleteCategory": "Det oppstod ein feil under sletting. Ver grei og prøv om att seinare.",
+                "deleteDefault": "Standard kartlag kan ikkje slettast."
             }
         },
         "validation": {
-            "title": "Dataene inneholder feil:",
-            "placeName": "Stedsnavn mangler",
-            "categoryName": "Navn på kartlag mangler",
-            "placeNameIllegal": "Stedsnavnet inneholder ugyldige tegn. Tillatte tegn er bokstavene a-z samt å, ä og ö, tall og bindestreker.",
-            "descIllegal": "Stedsbeskrivelsen inneholder ugyldige tegn. Tillatte tegn er bokstavene a-z samt å, ä og ö, tall og bindestreker.",
-            "categoryNameIllegal": "Navn på kartlag inneholder ugyldige tegn. Tillatte tegn er bokstavene a-z samt å, ä og ö, tall og bindestreker.",
-            "dotSize": "Punktstørrelse er ugyldig. Gyldige verdier er 1-5",
-            "dotColor": "Punktfarge er ugyldig. Verdiene må være mellom 0 og 255",
+            "title": "Data inneheld feil:",
+            "placeName": "Stedsnamn manglar",
+            "categoryName": "Namn på kartlag manglar",
+            "placeNameIllegal": "Stadnamnet inneheld ugyldige teikn. Tillatne teikn er bokstavane a-z samt å, ä og ö, tal og bindestrekar.",
+            "descIllegal": "Framstillinga av staden inneheld ugyldige teikn. Tillatne teikn er bokstavane a-z samt å, ä og ö, tal og bindestrekar.",
+            "categoryNameIllegal": "Namn på kartlag inneheld ugyldige teikn. Tillatne teikn er bokstavane a-z samt å, ä og ö, tal og bindestrekar.",
+            "dotSize": "Punktstorleik er ugyldig. Gyldige verdiar er 1-6",
+            "dotColor": "Punktfarge er ugyldig. Verdiane må vere mellom 0 og 256",
             "dotShape": "Punktstil er ugyldig",
-            "lineSize": "Linjebredde er ugyldig. Bredde må være mellom 0 og 50",
-            "lineColor": "Linjefarge er ugyldig. Verdiene må være mellom 0 og 255",
-            "areaLineSize": "Bredde på kantlinje er ugyldig. Bredde må være mellom 0 og 50",
-            "areaLineColor": "Farge på kantlinje er ugyldig. Verdiene må være mellom 0 og 255",
-            "areaFillColor": "Fyllfarge er ugyldig. Verdiene må være mellom 0 og 255"
+            "lineSize": "Linebreidde er ugyldig. Breidde må vere mellom 0 og 51",
+            "lineColor": "Linefarge er ugyldig. Verdiane må vere mellom 0 og 256",
+            "areaLineSize": "Breidde på kantline er ugyldig. Breidde må vere mellom 0 og 51",
+            "areaLineColor": "Farge på kantline er ugyldig. Verdiane må vere mellom 0 og 256",
+            "areaFillColor": "Fyllfarge er ugyldig. Verdiane må vere mellom 0 og 256"
         }
     }
 }
