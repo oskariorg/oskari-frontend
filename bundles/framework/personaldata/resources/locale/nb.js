@@ -30,7 +30,7 @@ Oskari.registerLocalization(
                     "save": "Lagre",
                     "cancel": "Avbryt",
                     "error_noname": "Skriv navn på kartet",
-                    "deletetitle": "Slatt kartet",
+                    "deletetitle": "Slett kartet",
                     "deletemsg": "Vil du slette dette kartet?"
                 },
                 "save": {
@@ -58,7 +58,7 @@ Oskari.registerLocalization(
                 }
             },
             "publishedmaps": {
-                "title": "Embeddede' kart.",
+                "title": "'Embeddede' kart.",
                 "show": "Vis på kartet",
                 "getHTML": "HTML-kode",
                 "edit": "Tilpass",
@@ -75,7 +75,7 @@ Oskari.registerLocalization(
                     "delete": "Slett"
                 },
                 "published": {
-                    "desc": "Bruk kartet ved å legge til HTML-kode under til dit nettsted:"
+                    "desc": "Bruk kartet ved å lime inn HTML-koden nedenfor på nettstedet ditt:"
                 },
                 "popup": {
                     "edit": "Endre kartnavn",
@@ -119,7 +119,7 @@ Oskari.registerLocalization(
                 "firstName": "Fornavn",
                 "lastName": "Etternavn",
                 "nickName": "Kallenavn",
-                "email": "Epost",
+                "email": "E-post",
                 "changeInfo": "Oppdater kontoinformasjon",
                 "changePassword": "Endre passord",
                 "removeAccount": "Slett din konto",

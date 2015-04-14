@@ -178,7 +178,7 @@ Oskari.registerLocalization(
                 "gmd:MD_RestrictionCode": {
                     "copyright": {
                         "label": "Kopibeskyttet",
-                        "description": "Beskyttelse mot ulovlig kopiering etter åndsverksloven."
+                        "description": "Beskyttelse mot ulovlig kopiering etter åndsverkloven."
                     },
                     "patent": {
                         "label": "Patentert",
@@ -186,7 +186,7 @@ Oskari.registerLocalization(
                     },
                     "patentPending": {
                         "label": "Påvente av patent",
-                        "description": "Produsert eller solgt mens man venter på en forestående patent."
+                        "description": "Produsert eller solgt mens man venter på et forestående patent"
                     },
                     "trademark": {
                         "label": "Varemerke",
@@ -198,7 +198,7 @@ Oskari.registerLocalization(
                     },
                     "intellectualPropertyRights": {
                         "label": "Åndsverk",
-                        "description": "Rettigheter i forhold til åndsverksloven."
+                        "description": "Rettigheter i forhold til åndsverkloven."
                     },
                     "restricted": {
                         "label": "Beskyttet",
@@ -224,7 +224,7 @@ Oskari.registerLocalization(
                     },
                     "collectionSession": {
                         "label": "Datainnsamling",
-                        "description": "Metadata er som er knyttet til innsamlingen av data."
+                        "description": "Metadata er knyttet til innsamlingen av data."
                     },
                     "dataset": {
                         "label": "Datasett",
@@ -235,7 +235,7 @@ Oskari.registerLocalization(
                         "description": "Metadata er gitt for datasett serier."
                     },
                     "nonGeographicDataset": {
-                        "label": "Ikke stedfestede data",
+                        "label": "Ikke stedsdata.",
                         "description": "Metadataene gjelder for ikke stedfestede data."
                     },
                     "dimensionGroup": {
@@ -331,7 +331,7 @@ Oskari.registerLocalization(
                         "description": "Miljøressurser, vern, bevaring og forurensing."
                     },
                     "geoscientificInformation": {
-                        "label": "Geovitenskapelig info",
+                        "label": "Geovitenskapelig informasjon",
                         "description": "Vitenskaper som omhandler sammensetning struktur og opphav av jordens berggrunn, og dens kjemiske og geofysiske egenskaper."
                     },
                     "health": {
@@ -392,7 +392,7 @@ Oskari.registerLocalization(
                 "classification": "Klassifikasjoner",
                 "descriptiveKeyword": "Nøkkelord",
                 "distributionFormat": "Distribusjonsformat",
-                "fileIdentifier": "Fil id",
+                "fileIdentifier": "Filident",
                 "legalConstraint": "Lovlige begrensninger",
                 "lineageStatement": "Prosesshistorie",
                 "metadataCharacterSet": "Metadata tegnsett",

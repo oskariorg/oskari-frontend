@@ -12,7 +12,7 @@ Oskari.registerLocalization(
         },
         "edit": {
             "popup": {
-                "title": "Åpner 'embedded' kart for editering",
+                "title": "Åpner 'embedded' kart for redigering",
                 "msg": "Oppdaterer data for kart som er 'embedded' tidligere"
             }
         },
@@ -74,7 +74,7 @@ Oskari.registerLocalization(
                 "lefthanded": "Venstrehånds",
                 "righthanded": "Høyrehånds",
                 "userlayout": "Egendefinert layout",
-                "usereditmode": "Start editering",
+                "usereditmode": "Start redigering",
                 "usereditmodeoff": "Avslutt editering"
             },
             "data": {
@@ -167,7 +167,7 @@ Oskari.registerLocalization(
             "layerselection": {
                 "label": "Vis kartlag i menyen",
                 "info": "Velg kartlag som bakgrunn.Du kan velge standard bakgrunnslag i vinduet for forhåndsvisning",
-                "tooltip": "NOT TRANSLATED",
+                "tooltip": "Bakgrunnen er vist i det nederste kartlaget. Kun ett kartlag kan bli vises om gangen.  Brukeren kan skifte bakgrunn dersom det er valgt flere lag. Standard kartlag kan velges i forhåndsvisningen.",
                 "promote": "Vil du også vise satellitt/flyfoto?"
             },
             "preview": "Forhåndsvisning av 'embedded' kart",
@@ -181,7 +181,7 @@ Oskari.registerLocalization(
                 "domainStart": "Angi nettsted uten http og www",
                 "name": "Kartvnavn er påkrevd",
                 "nohelp": "Brukerveiledning er ikke tilgjengelig",
-                "saveFailed": "Embedding' av kart feilet. Vennligst prøv igjen seinere",
+                "saveFailed": "'Embedding' av kart feilet. Vennligst prøv igjen seinere",
                 "nameIllegalCharacters": "Kartnavn inneholder ugyldige tegn. Tillatte tegn er bokstavene a-z samt å, ä og ö, tall og bindestreker.",
                 "domainIllegalCharacters": "Navn på nettsted inneholder ugyldige tegn. Tillatte tegn er bokstavene a-z samt å, ä og ö, tall og bindestreker."
             }
@@ -200,7 +200,7 @@ Oskari.registerLocalization(
             "layerlist_empty": "De valgte kartlagene kan ikke publiseres i et 'embedded' kart. Kontrollér rettighetene for publisering i menyen \"Valgte kartlag\" før du lager kartet",
             "layerlist_denied": "Kartlaget kan ikke publiseres i et 'embedded' kart",
             "denied_tooltip": "Dataprodusentene har ikke gitt tillatelse til å publisere de valgte kartlagene i et 'embedded' kart. Kontrollér rettighetene for publisering i menyen \"Valgte kartlag\" før du lager kartet",
-            "myPlacesDisclaimer": "NB. Du publiserer dit eget kartlag",
+            "myPlacesDisclaimer": "NB. Du publiserer ditt eget kartlag",
             "buttons": {
                 "continue": "Fortsett",
                 "continueAndAccept": "Akseptér vilkår for bruk og fortsett",

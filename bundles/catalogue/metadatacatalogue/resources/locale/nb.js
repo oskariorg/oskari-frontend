@@ -43,7 +43,7 @@ Oskari.registerLocalization(
         "invalid_characters": "Søk inneholder ulovlige tegn Tillatte tegn er bokstavene a-z samt å, ä og ö, tall,  backspaces, spørsmålstegn (?), stjerne (*) og bindestrek (-).",
         "too_short": "Søkeordet er for kort",
         "cannot_be_empty": "Søkeordet må inneholde minst ett tegn. Tillatte tegn er bokstavene a-z samt å, ä og ö, tall,  backspaces, spørsmålstegn (?), stjerne (*) og bindestrek (-).",
-        "too_many_stars": "Søkeordet inneolder for mange stjerner. Det kan inneholde opptin N stjerner.",
+        "too_many_stars": "Søkeordet inneholder for mange stjerner. Det kan inneholde opptil N stjerner.",
         "searching": "Søker…",
         "grid": {
             "name": "Navn",

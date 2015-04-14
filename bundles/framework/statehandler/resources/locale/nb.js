@@ -6,7 +6,7 @@ Oskari.registerLocalization(
         "session": {
             "expiring": {
                 "title": "Din arbeidsøkt er i ferd med å gå ut",
-                "message": "Din arbeidsøkt er i ferd med å gå ut. Vennligst klikk {extend} for å forbli inlogget.",
+                "message": "Din arbeidsøkt er i ferd med å gå ut. Vennligst klikk {extend} for å forbli innlogget.",
                 "extend": "Fortsett arbeidsøkt"
             },
             "expired": {

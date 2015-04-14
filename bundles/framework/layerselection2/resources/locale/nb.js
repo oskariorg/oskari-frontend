@@ -95,7 +95,7 @@ Oskari.registerLocalization(
                 },
                 "validation": {
                     "title": "Filteret kunne ikke oppfriskes på grunn av følgende feil:",
-                    "attribute_missing": "Attributten mangler",
+                    "attribute_missing": "Egenskapen mangler",
                     "operator_missing": "Operatoren mangler",
                     "value_missing": "Vedien mangler",
                     "boolean_operator_missing": "Logisk operator mangler"

@@ -23,14 +23,14 @@ Oskari.registerLocalization(
                 "empty": "Slett valg",
                 "show": "Vis forekomster",
                 "close": "Lukk",
-                "edit": "Editér"
+                "edit": "Rediger"
             },
             "tools": {
                 "point": {
                     "tooltip": "Legg et punkt til kartet"
                 },
                 "line": {
-                    "tooltip": "Legg et linje til kartet"
+                    "tooltip": "Legg en linje til kartet"
                 },
                 "polygon": {
                     "tooltip": "Legg et areal til kartet"
@@ -51,7 +51,7 @@ Oskari.registerLocalization(
             "show": "Vis",
             "hide": "Skjul",
             "hidden": "Kartlaget er midlertidig skjult",
-            "out-of-scale": "Kartlaget kan ikke vises i demme nålestokken",
+            "out-of-scale": "Kartlaget kan ikke vises i denne målestokken",
             "move-to-scale": "Vennligst gå til passende målestokk",
             "out-of-content-area": "Kartlaget inneholder ingen data i dette området",
             "move-to-content-area": "Vennligst flytt til en passende lokalitet",
@@ -136,7 +136,7 @@ Oskari.registerLocalization(
                 },
                 "validation": {
                     "title": "Filteret kunne ikke oppfriskes på grunn av følgende feil:",
-                    "attribute_missing": "Attributten mangler",
+                    "attribute_missing": "Egenskapen mangler",
                     "operator_missing": "Operatoren mangler",
                     "value_missing": "Verdien mangler",
                     "boolean_operator_missing": "Logisk operator mangler"

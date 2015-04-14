@@ -19,7 +19,7 @@ Oskari.registerLocalization(
             "maxFeaturesExceeded": "Du har overskredet antall egne steder. Ikke alle steder er lastet.",
             "publishCategory": {
                 "privateTooltip": "Dette kartlaget er privat. Klikk her for å publisere.",
-                "publicTooltip": "Dette kartlaget er for almennheten. Klikk her for å avslutte publisering."
+                "publicTooltip": "Dette kartlaget er offentlig. Klikk her for å avslutte publisering."
             },
             "addCategory": "Legg til kartlaget",
             "editCategory": "Tilpass kartlaget",
@@ -287,7 +287,7 @@ Oskari.registerLocalization(
                 "title": "Slett kartlaget",
                 "deleteConfirmMove": "Kartlaget \"{0}\" inneholder {1} steder. Vil du slette kartlaget og flytte stedene til standard kartlag \"{2}\" eller vil du slette kartlaget med tilhørende steder?",
                 "deleteConfirm": "Ønsker du å slette kartlaget {0}?",
-                "deleted": "Katlaget er sletet"
+                "deleted": "Katlaget er slettet"
             },
             "categoryToPublic": {
                 "title": "Publiser kartlaget",

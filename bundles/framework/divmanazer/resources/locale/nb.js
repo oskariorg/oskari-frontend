@@ -8,7 +8,7 @@ Oskari.registerLocalization(
             "cancel": "Avbryt",
             "close": "Lukk",
             "delete": "Slett",
-            "edit": "Editer",
+            "edit": "Rediger",
             "exit": "Avslutt",
             "ok": "OK",
             "save": "Lagre",

@@ -11,7 +11,7 @@ Oskari.registerLocalization(
         "tab": {
             "title": "Steder",
             "searchTitle": "Søkeord",
-            "searchPlaceholder": "Søk lokalitet ved stedsnavn, adresse eller eiendomsident",
+            "searchPlaceholder": "Søk sted ved stedsnavn, adresse eller eiendomsident",
             "regionTitle": "Regionfilter",
             "regionPlaceholder": "Filtrér søk på kommune eller administrativ enhet",
             "additionalsTitle": "Søkealternativer",

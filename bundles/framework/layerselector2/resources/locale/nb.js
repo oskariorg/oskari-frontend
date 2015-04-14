@@ -10,7 +10,7 @@ Oskari.registerLocalization(
             "generic": "Systemfeil. Vennligst prøv igjen seinere.",
             "loadFailed": "Feil ved lasting av kartlag. Frisk opp nettleser og velg kartlag på ny.",
             "noResults": "Ingen resultater funnet.",
-            "noResultsForKeyword": "Ingen kartleg samsvarte med nøkkelordet.",
+            "noResultsForKeyword": "Ingen kartlag samsvarte med nøkkelordet.",
             "minChars": "Skriv minst fire tegn. Tillatte tegn er bokstavene a-z samt å, ä og ö, tall og bindestreker."
         },
         "loading": "Søker…",
@@ -40,11 +40,11 @@ Oskari.registerLocalization(
             },
             "DOWN": {
                 "tooltip": "Kartlaget er for tiden utilgjengelig",
-                "iconClass": "backendstatus-down"
+                "iconClass": "backendstatus-nede"
             },
             "MAINTENANCE": {
                 "tooltip": "Kartlaget kan være midlertidig utilgjengelig de nærmeste dagene",
-                "iconClass": "backendstatus-maintenance"
+                "iconClass": "backendstatus-vedlikehold"
             },
             "UNKNOWN": {
                 "tooltip": "",
