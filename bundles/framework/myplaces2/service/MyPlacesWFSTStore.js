@@ -218,7 +218,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
                     'uuid': uuid
                 };
                 feat = new OpenLayers.Feature.Vector(null, featAtts);
-                
+
                 if (!m_id) {
                     feat.toState(OpenLayers.State.INSERT);
                 } else {
@@ -487,7 +487,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
                 };
 
                 feat = new OpenLayers.Feature.Vector(geom, featAtts);
-                
+
                 if (!m_id) {
                     feat.toState(OpenLayers.State.INSERT);
                 } else {

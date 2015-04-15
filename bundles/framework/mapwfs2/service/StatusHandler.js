@@ -1,24 +1,30 @@
 /**
- * @class Oskari.mapframework.bundle.mapwfs2.service.ErrorHandler
+ * @class Oskari.mapframework.bundle.mapwfs2.service.StatusHandler
  *
- * Handles Connection's IO
+ * Keeps track of WFS process statuses
  */
 Oskari.clazz.define(
     'Oskari.mapframework.bundle.mapwfs2.service.StatusHandler',
     /**
      * @static @method create called automatically on construction
      *
-     * @param {Object} config
-     * @param {Object} plugin
+     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
      *
      */
     function (sandbox) {
     	this.sandbox = sandbox;
     	var status = {};
     	this.status = status;
+        // TODO: For debugging, remove when stable
+    	Oskari.___getWFSStatus = function() {
+    		console.log(status);
+    	};
     }, {
     	__log : function() {
-            //console.log.apply(console, arguments);
+            // TODO: For debugging, remove when stable
+            if(Oskari.__debugWFS === true) {
+                console.log.apply(console, arguments);
+            }
     	},
     	getMapLayer : function(layerId) {
             var service = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
@@ -34,6 +40,15 @@ Oskari.clazz.define(
     		}
     		return this.status[layerId];
     	},
+        clearStatus : function(layerId) {
+            delete this.status['' + layerId];
+
+            var sb = this.sandbox;
+            var loadEvent = sb.getEventBuilder('WFSStatusChangedEvent')(layerId);
+            loadEvent.setRequestType(loadEvent.type.image);
+            loadEvent.setStatus(loadEvent.status.complete);
+            sb.notifyAll(loadEvent);
+        },
     	handleChannelRequest : function(layerId, type, reqId) {
     		var status = this.getLayerStatus(layerId);
             this.__log('Request data for layer: ' + layerId + ' (req:' + reqId + ')');
@@ -41,20 +56,33 @@ Oskari.clazz.define(
     			type: type,
     			reqId : reqId
     		});
+            var sb = this.sandbox;
+            var loadEvent = sb.getEventBuilder('WFSStatusChangedEvent')(layerId);
+            loadEvent.setStatus(loadEvent.status.loading);
+            loadEvent.setRequestType(loadEvent.type.image);
+            sb.notifyAll(loadEvent);
     	},
     	__handleCompleted : function(data) {
 
             var status = this.getLayerStatus(data.layerId);
             status.inProgress = _.filter(status.inProgress, function(progress) {
-			  return progress.reqId !== data.reqId;
+            	// TODO: add type check here, so later req of same type removes all previous "pending" requests
+			  	return progress.reqId !== data.reqId;
 			});
+            var sb = this.sandbox;
+            var loadEvent = sb.getEventBuilder('WFSStatusChangedEvent')(data.layerId);
+            loadEvent.setRequestType(loadEvent.type.image);
 			if(data.success) {
             	this.__log('Back to normal for layer:', data.layerId, status.error);
 				status.error = [];
+                loadEvent.setStatus(loadEvent.status.complete);
 			}
 			else {
 				status.error.push('error');
+                loadEvent.setStatus(loadEvent.status.error);
 			}
+            sb.notifyAll(loadEvent);
+            this.__log('WFS complete', data);
     	},
     	handleChannelStatus : function(data) {
     		// {"layerId":"5","message":"started","reqId":9}
@@ -75,14 +103,14 @@ Oskari.clazz.define(
     	},
     	handleError : function(error) {
             this.__log('Error on layer ' +  error.layerId + ':' + error.message);
-            /*
             var status = this.getLayerStatus(error.layerId);
             status.error.push(error.message);
 
-			var event = Oskari.clazz.create('Oskari.mapframework.bundle.mapwfs2.event.WFSStatusChanged', 'mylayer_1');
-			event.setStatus(event.status.loading);
-			event.setRequestType(event.type.image);
-			*/
+            var sb = this.sandbox;
+            var loadEvent = sb.getEventBuilder('WFSStatusChangedEvent')(error.layerId);
+            loadEvent.setStatus(loadEvent.status.error);
+            loadEvent.setRequestType(loadEvent.type.image);
+            sb.notifyAll(loadEvent);
        	}
 
 	});

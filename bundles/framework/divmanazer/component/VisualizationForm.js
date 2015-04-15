@@ -225,9 +225,9 @@ Oskari.clazz.define(
                     if (formClazz === me.dialogFormClazz) {
                         delete me.dialogFormClazz;
                     }
-                    
+
                     me.dialog = formClazz.showForm(e.target);
-                    me.dialogFormClazz = formClazz;                    
+                    me.dialogFormClazz = formClazz;
                 }
             };
         },

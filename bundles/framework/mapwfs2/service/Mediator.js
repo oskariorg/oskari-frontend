@@ -69,35 +69,27 @@ Oskari.clazz.define(
 
             var channels = {
                 '/wfs/properties': function () {
-                    //self.statusChange.apply(self, arguments);
                     self.getWFSProperties.apply(self, arguments);
                 },
                 '/wfs/feature': function () {
-                    //self.statusChange.apply(self, arguments);
                     self.getWFSFeature.apply(self, arguments);
                 },
                 '/wfs/featureGeometries': function () {
-                    //self.statusChange.apply(self, arguments);
                     self.getWFSFeatureGeometries.apply(self, arguments);
                 },
                 '/wfs/mapClick': function () {
-                    //self.statusChange.apply(self, arguments);
                     self.getWFSMapClick.apply(self, arguments);
                 },
                 '/wfs/filter': function () {
-                    //self.statusChange.apply(self, arguments);
                     self.getWFSFilter.apply(self, arguments);
                 },
                 '/wfs/propertyfilter': function () {
-                    //self.statusChange.apply(self, arguments);
                     self.getWFSFilter.apply(self, arguments);
                 },
                 '/wfs/image': function () {
-                    //self.statusChange.apply(self, arguments);
                     self.getWFSImage.apply(self, arguments);
                 },
                 '/wfs/reset': function () {
-                    //self.statusChange.apply(self, arguments);
                     self.resetWFS.apply(self, arguments);
                 },
                 '/error': function () {
@@ -128,7 +120,13 @@ Oskari.clazz.define(
                     // skip reqId in init message
                     message.reqId = this.getNextRequestId();
                 }
-                this.statusHandler.handleChannelRequest(message.layerId, channel, message.reqId);
+                if(channel === '/service/wfs/removeMapLayer') {
+                    this.statusHandler.clearStatus(message.layerId);
+                }
+                else if(channel === '/service/wfs/setLocation') {
+                    // only setup in setLocation?
+                    this.statusHandler.handleChannelRequest(message.layerId, channel, message.reqId);
+                }
                 this.cometd.publish(channel, message);
             }
         },

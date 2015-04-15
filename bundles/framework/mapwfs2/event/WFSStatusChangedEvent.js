@@ -1,26 +1,28 @@
 /**
- * @class Oskari.mapframework.bundle.mapwfs2.event.WFSStatusChanged
+ * @class Oskari.mapframework.bundle.mapwfs2.event.WFSStatusChangedEvent
  *
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSStatusChanged',
+Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSStatusChangedEvent',
 /**
  * @method create called automatically on construction
  * @static
  *
  * Setup status and type of the request with setters:
- * var event = Oskari.clazz.create('Oskari.mapframework.bundle.mapwfs2.event.WFSStatusChanged', 'mylayer_1');
+ * var sb = Oskari.getSandbox();
+ * var event = sb.getEventBuilder('WFSStatusChangedEvent')('mylayer_1');
  * event.setStatus(event.status.loading);
  * event.setRequestType(event.type.image);
+ * sb.notifyAll(event);
  *
  * @param {String} layerId
  */
 function(layerId) {
-    this._layerId = layer;
+    this._layerId = layerId;
     this._type = undefined;
     this._status = undefined;
 }, {
     /** @static @property __name event name */
-    __name : "WFSStatusChanged",
+    __name : "WFSStatusChangedEvent",
     status : {
     	'loading' : 1,
     	'complete' : 200,
@@ -41,11 +43,11 @@ function(layerId) {
     },
 
     /**
-     * @method getLayer
-     * @return {String} layer
+     * @method getLayerId
+     * @return {String} layer id
      */
     getLayerId : function() {
-        return this._layer;
+        return this._layerId;
     },
 
     /**

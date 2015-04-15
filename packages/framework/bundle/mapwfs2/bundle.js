@@ -24,7 +24,7 @@ function() {
 
         "scripts" : [{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/comp.js"
+            "src" : "../../../../libraries/cometd/comp.js"
         },{
             "type" : "text/javascript",
             "src" : "../../../../libraries/jquery/plugins/jquery.cookie.js"
@@ -39,7 +39,7 @@ function() {
             "src" : "../../../../bundles/framework/mapwfs2/service/StatusHandler.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/event/WFSStatusChanged.js"
+            "src" : "../../../../bundles/framework/mapwfs2/event/WFSStatusChangedEvent.js"
         },{
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/mapwfs2/plugin/QueuedTilesGrid.js"

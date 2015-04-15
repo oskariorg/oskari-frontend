@@ -44,9 +44,12 @@ Oskari.clazz.define(
         me.cometd.configure({
             url: me.cometURL,
             //logLevel : "debug",
-            backoffIncrement: me._backoffIncrement, // if connection can't be established add this time to waiting time before trying again (ms)
-            maxBackoff: me._maxBackoff, // maximum time of backoff (not incremented after reaching) (ms)
-            maxNetworkDelay: me._maxNetworkDelay // max request time before considering that the request failed (ms)
+            // if connection can't be established add this time to waiting time before trying again (ms)
+            backoffIncrement: me._backoffIncrement,
+            // maximum time of backoff (not incremented after reaching) (ms)
+            maxBackoff: me._maxBackoff,
+            // max request time before considering that the request failed (ms)
+            maxNetworkDelay: me._maxNetworkDelay
         });
 
         me.cometd.addListener(
@@ -63,7 +66,8 @@ Oskari.clazz.define(
         );
 
         if (!me._lazy) {
-            me.connect(); // init conn
+            // init conn
+            me.connect();
         }
 
         // Disconnect when the page unloads

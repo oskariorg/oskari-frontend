@@ -59,7 +59,7 @@ Oskari.clazz.define('Oskari.sample.bundle.tetris.Flyout',
             var loc = this.instance.getLocalization('flyout'),
                 elParent,
                 elId;
-            
+
 
             //set id to flyouttool-close
             elParent = this.container.parentElement.parentElement;
@@ -163,7 +163,7 @@ Oskari.clazz.define('Oskari.sample.bundle.tetris.Flyout',
          * utitity to temporarily support rightjs sliders (again)
          */
         refresh: function () {
-            
+
         }
     }, {
         /**

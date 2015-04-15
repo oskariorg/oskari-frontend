@@ -454,7 +454,7 @@ define([
                                 createLayer.find('.admin-add-layer-btn').attr('title', me.instance.getLocalization('admin').addLayerDesc);
                             }
                             form.remove();
-                            
+
                             //trigger event to View.js so that it can act accordingly
                             accordion.trigger({
                                 type: 'adminAction',

@@ -88,7 +88,7 @@ function(instance) {
      * Creates the UI for a fresh start
      */
     refresh : function() {
-        
+
     }
 }, {
     /**

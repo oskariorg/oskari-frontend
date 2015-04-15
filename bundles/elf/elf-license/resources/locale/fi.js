@@ -60,7 +60,7 @@ Oskari.registerLocalization({
                 "title": "Lisenssin peruuttaminen",
                 "message": "Haluatko lopettaa lisenssin tlauksen?"
             },
-            "validTo": "Tilauksen voimassaoloaika"
+            "validTo": "Tilaus voimassa {day} asti"
         },
         "buttons": {
         	"close": "Sulje",

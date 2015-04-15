@@ -32,16 +32,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
         },
         /**
          * @method setEl
-         * @param {Object} el
-         *      reference to the container in browser
-         * @param {Number} width
-         *      container size(?) - not used
-         * @param {Number} height
-         *      container size(?) - not used
+         * @param {Object} el reference to the container in browser
          *
          * Interface method implementation
          */
-        setEl: function (el, width, height) {
+        setEl: function (el) {
             this.container = el[0];
             if (!jQuery(this.container).hasClass('maplegend')) {
                 jQuery(this.container).addClass('maplegend');
@@ -97,7 +92,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
         setState: function (state) {
             this.state = state;
         },
-        setContentState: function (state) {
+        setContentState: function () {
 
         },
         getContentState: function () {
@@ -168,14 +163,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
             /* main layer div */
             var legendDiv = me._createLegendDiv(layer, imagesAdded);
             if (legendDiv && legendDiv !== null) {
-                layerDiv.append(legendDiv);            
+                layerDiv.append(legendDiv);
 
                 /* optional sublayers */
                 var sublayers = layer.getSubLayers ? layer.getSubLayers() : null,
                     sl,
                     sublayer,
                     subLayerlegendDiv;
-                
+
                 if (sublayers) {
                     for (sl = 0; sl < sublayers.length; sl += 1) {
                         sublayer = sublayers[sl];
@@ -186,7 +181,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                         layerDiv.append(subLayerlegendDiv);
                     }
                 }
-                
+
 
                 /* metadata link */
                 var uuid = layer.getMetadataIdentifier(),
@@ -219,10 +214,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                 legendUrl = layer.getLegendImage ? layer.getLegendImage() : null;
 
             if (imagesAdded[legendUrl]) {
+                me._checkNoLegendText();
                 return null;
             }
 
             if (!(legendUrl && legendUrl !== '')) {
+                me._checkNoLegendText();
                 return null;
             }
 
@@ -235,12 +232,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                 imgDiv = legendDiv.find('img'),
                 img = new Image();
 
-                       
+
             imagesAdded[legendUrl] = true;
 
             img.onload = function () {
                 imgDiv.attr('src', legendUrl);
-                img.onload = null;            
+                img.onload = null;
                 me._checkNoLegendText();
             };
 
@@ -265,9 +262,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                 noLegendText = this.instance.getLocalization('noLegendsText'),
                 legendDivs = jQuery('.oskari-flyoutcontent.maplegend').find('.accordion_panel'),
                 noLegendContainer = me.templateNoLegend.clone();
-            
+
             jQuery('.no-maplegend').remove();
-            
+
             if(legendDivs.length === 0) {
                 noLegendContainer.html(noLegendText);
                 jQuery('.oskari-flyoutcontent.maplegend').append(noLegendContainer);

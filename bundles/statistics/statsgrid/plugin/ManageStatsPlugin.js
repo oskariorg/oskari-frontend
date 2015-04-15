@@ -2279,7 +2279,7 @@ Oskari.clazz.define(
                     } else if (me.filterWithRegion === true) {
                         menu.items.push(this.filterByRegionLink);
                     }
-                } 
+                }
 
                 if (args.column.id === 'municipality') {
                     menu.items = [];

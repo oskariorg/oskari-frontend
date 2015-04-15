@@ -82,6 +82,21 @@ div.mapplugins .mappluginsContainer .mappluginsContent div.featuredataplugin.map
   line-height: 28px;
   margin: 10px auto;
   padding: 0 9px; }
-  div.mapplugins .mappluginsContainer .mappluginsContent div.featuredataplugin.mapplugin a {
-    color: white;
-    text-decoration: none; }
+
+div.mapplugins .mappluginsContainer .mappluginsContent div.featuredataplugin.mapplugin.loading {
+  background: url("../images/ajax-loader.gif") no-repeat 0 0 / cover;
+}
+
+div.mapplugins .mappluginsContainer .mappluginsContent div.featuredataplugin.mapplugin.error a {
+    color: red;
+}
+div.mapplugins .mappluginsContainer .mappluginsContent div.featuredataplugin.mapplugin a {
+  color: white;
+  text-decoration: none; }
+
+div.oskari-flyoutcontent.featuredata ul.tabsItem li a.loading {
+  color : #939393;
+}
+div.oskari-flyoutcontent.featuredata ul.tabsItem li a.error {
+  color: red;
+}

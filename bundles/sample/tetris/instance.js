@@ -1,7 +1,7 @@
 /**
  * @class Oskari.sample.bundle.tetris.BundleInstance
  *
- 
+
  * See Oskari.sample.bundle.tetris.Bundle for bundle definition.
  *
  */

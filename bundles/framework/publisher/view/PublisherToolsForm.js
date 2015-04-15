@@ -724,7 +724,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 }
             } else {
                 // toolbar (bundle) needs to be notified
-                
+
                 // MyLocationPlugin
                 if (tool.id.indexOf('PublisherToolbarPlugin') >= 0) {
                     if (!localeChange) {

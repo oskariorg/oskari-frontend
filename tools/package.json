@@ -61,7 +61,9 @@
     "yuidocjs": "0.3.45"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "trim" : "./node_modules/.bin/grunt trimtrailingspaces",
+    "lint" : "./node_modules/.bin/jshint ../bundles"
   },
   "devDependencies": {
     "grunt-trimtrailingspaces": "^1.1.0",

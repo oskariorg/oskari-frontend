@@ -1,5 +1,19 @@
 # Usage notes for tools
 
+## Testing code with JSHint
+
+Run command: 
+	
+	npm run lint
+
+This tests everything under 'bundles' directory
+
+## Trimming trailing spaces from code
+
+Run command: 
+	
+	npm run trim
+
 ## Localization 
 
 ### Generate excel-sheets of current bundle-localizations
