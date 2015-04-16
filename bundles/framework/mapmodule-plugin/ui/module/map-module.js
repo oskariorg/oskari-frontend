@@ -1029,7 +1029,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         bringToTop: function(layer, buffer) {
             var zIndex,
                 layerZIndex = 0;
-            if (layer !== null) {
+            if (!layer) {
                 if(layer.getZIndex) {
                     layerZIndex = layer.getZIndex();
                 }

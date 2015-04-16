@@ -224,7 +224,7 @@ Oskari.clazz.define(
             },
 
             'AfterMapMoveEvent': function (event) {
-                if (this.drawFilterMode) {
+                if (this.drawFilterMode || !this.instance.analyse.isEnabled) {
                     return;
                 }
                 var olMap = this.mapModule.getMap(),
