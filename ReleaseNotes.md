@@ -1,5 +1,379 @@
 # Release Notes
 
+## 1.28
+
+### Generic
+
+Cleaned up deprecated code/bundles. Removed:
+
+    - bundles/deprecated/*
+    - bundles/framework/featuredata/*
+    - bundles/framework/mapwfs/*
+    - sources/deprecated/*
+    - packages/framework/bundle/featuredata
+    - packages/framework/bundle/mapwfs
+
+### tools
+
+Added script shortcuts for linting and trimming trailing spaces from bundles. Run `npm run trim` and `npm run lint` respectively.
+
+### framework/heatmap
+
+*New bundle!* Adds heatmap functionality to layers configured to support it (WMS-layers only at the moment). Configuration is done by adding the following information to a layers JSON:
+
+    {
+        attributes : {
+          geometryProperty : "the_geom",
+          layerWorkspace : "ows",
+          heatmap : ["properties to use", "as heatmap weighted property"]
+        }
+    }
+
+SelectedLayers bundle will show heatmap-enabled layers with an additional "Heatmap" tool in the layer frame to access the functionality. Note! Generated SLD expects Geoserver as the WMS-service.
+
+### divmanazer components
+
+Popup.createCloseButton('label') label parameter is now optional. Popup now uses button component
+Oskari.userinterface.component.buttons.CloseButton and sets the button title if label is given.
+
+Fixed VisualizationForm open issue when form is opened second time after that when it's closed by pressing Cancel button.
+
+### mapwfs2
+
+ModelBuilder no longer assumes featuredata2 is present in the application setup. Feature data tool is not added to layers by default.
+
+Added a statushandler to keep track of requests in progress and errors. Still work-in-progress and can change completely.
+To enable debug messages in developer console run:
+
+    Oskari.__debugWFS = true;
+
+To get the tracking info in developer console run:
+
+    Oskari.___getWFSStatus();
+
+Now limits setLocation calls to single layer/request when triggered by 'MapLayerVisibilityChangedEvent' (using config.deferSetLocation=true).
+
+New event WFSStatusChanged is sent when layer update is requested/completed/resulted in error.
+
+### featuredata2
+
+Adds 'Feature Data' tool for any layers that are capable of showing it (WFS-based layer types).
+
+Now shows a status indicator for layers (loading/error) based on WFSStatusChanged event (sent by mapwfs2).
+
+### layerselection2
+
+Now handles MapLayerEvent with type 'tool' and updates the selected layers tools accordingly.
+
+### analysis/analyse
+
+Analysis now supports do geometry filter.
+
+### framework/maplegend
+
+Now handles only these layers where have a legend url and also it can be loaded succesfully. Informs the user if any legend images will not be displayed.
+
+### framework/mapmodule-plugin
+
+bringToTop() now supports buffer as a second parameter. Buffer adds this integer value to layer z-index. If parameter is not set then using default 1;
+
+### framework/mapmodule-plugin  - FeatureDataPlugin
+
+Fixed plugin locale handling.
+
+### framework/mapmodule-plugin  - LogoPlugin
+
+Fixed plugin locale handling.
+
+### framework/mapmodule-plugin  - MarkersPlugin
+
+Fixed at Markers layer stays on top of map layers.
+
+### framework/mapmodule-plugin  - MyLocationPlugin
+
+Fixed plugin locale handling.
+
+### framework/mapmodule-plugin - SearchPlugin
+
+Now supports zoomScale in search results.
+
+### framework/publisher
+
+Fixed tools states when changing language.
+
+### elf/elf-lang-overrides
+
+*New bundle!* This bundle is used to override default locales in ELF application.
+
+### elf/elf-license
+
+*New bundle!* Extends metadatacatalogue search to show user license information. User can unconclude/conclude license to it self.
+
+### elf/elf-language-selector
+
+Hardcodings removed and now uses the configured supported languages.
+
+### integration/admin-layerselector
+
+Management of ArcGis93-type maplayers (Rest feature layer type) in Oskari maplayer configuration
+Inserting/editing/removing ArcGisRest-layers in admin-layer UI.
+
+### core
+
+#### localization handling
+
+Oskari.getLocalization() now supports language as a second parameter. Notice that the locale still won't be loaded automatically.
+
+Oskari.registerLocalization() now supports override languages a second parameter. Locales are merged to each other. 
+Notice that at this not override old locales, so if you want override default locales the language override bundle need start first.
+
+#### AbstractLayer
+
+AbstractLayer: if name, description, Inspire theme and organization is missing for users language the default language version is used.
+AbstractLayer now checks for duplicates before adding tools.
+Added new Object-typed field for generic layer attributes (setAttributes()/getAttributes()).
+
+#### default language
+
+Oskari.getDefaultLanguage() no longer crashes if supported locales are not set. Returns Oskari.getLang() in such case.
+
+#### MapLayerService and MapLayerEvent
+
+New method added to service addToolForLayer(layer, tool) for adding tools for layers. Signals other components with 
+MapLayerEvent typed as 'tool' about the updated layer.
+
+MapLayerService now parses attributes from layer JSON.
+
+### framework/admin-layerrights
+
+Fixed layer table breaking when layer name is short.
+
+### framework/personaldata
+
+Personaldata bundle supports now logInUrl configuration. 
+
+LogInUrl config can be a:
+* string, when using this login url for all languages
+* object, when try to get current locale log in url. If not found then using default locale.
+
+```javascript
+// Example 1. String logInUrl configuration.
+{
+    "conf" : {
+        "logInUrl": "/web/en/login"
+    }
+}
+
+// Example 2. Object logInUrl configuration.
+{
+    "conf" : {
+        "logInUrl": {
+            "en": /web/en/login",
+            "fi": /web/fi/login",
+            "sv": /web/sv/login"
+        }
+    }
+}
+```
+
+### framework/userguide
+
+Renamed function Flyout.getUserGuideTabs() to Flyout.getUserGuides().
+
+Can now be configured with alternative flyout implementation that will get content from server based on 
+configured tags (defaults to "userguide"). Includes current language as a tag if includeLang is 
+configured as true (defaults to false).
+
+    {
+        "conf" : {
+            "flyoutClazz": "Oskari.mapframework.bundle.userguide.SimpleFlyout",
+            "tags" : "userguide",
+            "includeLang" : true
+        }
+    }
+
+
+### catalogue/metadatagatalogue
+
+Show metadata coverage on the map tool is added to Metadatacatalogue search results.
+
+Metadatacatalogue bundle now requires vectorlayer plugin to be in use in frontend.
+
+### core/abstractmapmodule
+
+GetImageUrl() always return now '/Oskari/bundles' folder location.
+
+### arcgis
+
+New layer type `arcgis93layer`  (ArcGis93Layer.js) for ArcGis REST server layer (feature, group)
+
+### framework/mapmodule-plugin/plugin/getinfo
+
+Get feature info support for `arcgis93layer`
+
+### framework/mapmodule-plugin/plugin/vectorlayer
+
+Added handling for two *new requests* (MapModulePlugin.AddFeaturesToMapRequest and MapModulePlugin.RemoveFeaturesFromMapRequest).
+
+### framework/mapmodule-plugin/plugin/vectorlayer/MapModulePlugin.AddFeaturesToMapRequest
+
+Added support to add features to map. Supported formats are 'WKT' and 'GeoJSON'
+
+Features can be added via requests as follows:
+
+```javascript
+var reqBuilder = this.sandbox.getRequestBuilder('MapModulePlugin.AddFeaturesToMapRequest');
+if (reqBuilder) {
+    var layer = null,
+        layerJson = {
+            wmsName: '',
+            type: 'vectorlayer'
+            isQueryable: false,
+            opacity: 60,
+            orgName: 'Test organization',
+            inspire: 'Test inspire',
+            id: 'Test layer',
+            name: 'Test layer'
+        },
+        style = OpenLayers.Util.applyDefaults(style, OpenLayers.Feature.Vector.style['default']),
+        mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService'),
+        vectorlayer = mapLayerService.createMapLayer(layerJson);
+    
+    style.pointRadius = 8;
+    style.strokeColor = '#D3BB1B';
+    style.fillColor = '#FFDE00';
+    style.fillOpacity = 0.6;
+    style.strokeOpacity = 0.8;
+    style.strokeWidth = 2;
+    style.cursor = 'pointer';
+
+    // Example 1 add features on the map and also create layer to selected layer list and also map layers list
+    var request1 = reqBuilder(
+        'POLYGON ((199519.8148320266 7256441.554606095, 199519.8148320266 7779004.414678753, 614614.2197851419 7779004.414678753, 614614.2197851419 7256441.554606095, 199519.8148320266 7256441.554606095))',
+        'WKT',
+        { id: 1},
+        vectorlayer,
+        'replace',
+        true,
+        style,
+        true
+    );
+    this.sandbox.request(this.getName(), request1);
+
+    // Example 2 Shows only features on the map
+    var request2 = reqBuilder(
+        'POLYGON ((199519.8148320266 7256441.554606095, 199519.8148320266 7779004.414678753, 614614.2197851419 7779004.414678753, 614614.2197851419 7256441.554606095, 199519.8148320266 7256441.554606095))',
+        'WKT',
+        { id: 1 },
+        null, // no layer specification --> not add layer to selected layer list and map layers list
+        'replace',
+        true,
+        style,
+        true
+    );
+    this.sandbox.request(this.getName(), request2);
+}
+```
+
+### framework/mapmodule-plugin/plugin/vectorlayer/MapModulePlugin.RemoveFeaturesFromMapRequest
+
+Added support to remove features to map.
+
+Features can be removed via requests as follows:
+
+```javascript
+var reqBuilder = this.sandbox.getRequestBuilder('MapModulePlugin.RemoveFeaturesFromMapRequest');
+if (reqBuilder) {
+    var layer = null,
+        layerJson = {
+            wmsName: '',
+            type: 'vectorlayer'
+            isQueryable: false,
+            opacity: 60,
+            orgName: 'Test organization',
+            inspire: 'Test inspire',
+            id: 'Test layer',
+            name: 'Test layer'
+        },
+        mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService'),
+        vectorlayer = mapLayerService.createMapLayer(layerJson);
+
+    // Example 1 remove all features from the map
+    var request1 = reqBuilder(
+        null,
+        null,
+        vectorLayer
+    );
+    this.sandbox.request(this.getName(), request1);
+
+    // Example 2 Removes selected features from map
+    var request2 = reqBuilder(
+        'id',
+        1,
+        vectorLayer
+    );
+    this.sandbox.request(this.getName(), request2);
+}
+```
+
+### sample/tetris
+
+*New bundle!* Created new easter fun "tetris" bundle. This bundle add new Tile and Flyout for playing tetris game.
+You can start this bundle also in sample applications in Oskari/applications/sample/tetris/index.html
+
+### Folder structure changes
+
+Preparing for version 2 of the changes, please change your bundles to following folder structure.
+
+```
+<your root dir>
+|--bundles
+|  |--<mynamespace>
+|     |--<bundle-identifier>
+|           |--instance.js
+|           |--resources
+|           |  |--css
+|           |  |  |--style.css
+|           |  |--images
+|           |  |  |--image.png
+|           |  |--locales
+|           |      |--en.js
+|           |      |--fi.js
+|           |      |--sv.js
+|           |--scss
+|              |--style.scss
+|--packages
+|  |--<mynamespace>
+|     |--bundle
+|        |--<bundle-identifier>
+|           |--bundle.js
+```
+
+#### Migration Guide (Preparing for version 2 of changes)
+* Create `<bundle-identifier>` folder under the `bundles/<mynamespace>` folder
+* Move all files and folders in `bundles/<mynamespace>/bundle/<bundle-identifier>` folder under the `bundles/<mynamespace>/<bundle-identifier>` folder
+* Delete `bundles/<mynamespace>/bundle/<bundle-identifier>` folder
+* Delete also `bundles/<mynamespace>/bundle` folder if it's empty
+* Create `resources` folder under the `bundles/<mynamespace>/<bundle-identifier>` folder
+* Move all files and folders in `resources/<mynamespace>/bundle/<bundle-identifier>` folder under the `bundles/<mynamespace>/<bundle-identifier>/resources` folder
+* Delete `resources/<mynamespace>/bundle/<bundle-identifier>` folder
+* Delete also `resources/<mynamespace>/bundle` folder if it's empty
+* Check all stylesheet files under the `bundles/<mynamespace>/<bundle-identifier>/resources/css` folder at the images paths are correct (`../images`)
+* Create `locale` folder under the `bundles/<mynamespace>/<bundle-identifier>/resources` folder
+* Move all files in `bundles/<mynamespace>/<bundle-identifier>/locale` folder under the `bundles/<mynamespace>/<bundle-identifier>/resources/locale` folder
+* Delete `resources/<mynamespace>/bundle/<bundle-identifier>/locale` folder
+* Create `scss` folder under the `bundles/<mynamespace>/<bundle-identifier>` folder
+* Move all files and folders in `bundles/<mynamespace>/bundle/<bundle-identifier>/scss` folder under the `bundles/<mynamespace>/<bundle-identifier>` folder
+* Delete `bundles/<mynamespace>/bundle/<bundle-identifier>/scss` folder
+* Fix all bundle file locations on the `packages/<mynamespace>/bundle/<bundle-identifier>/bundle.js` file
+** JavaScript files: `bundles/<mynamespace>/<bundle-identifier>/..`
+** Locale files: `bundles/<mynamespace>/<bundle-identifier>/resources/locale/..`
+** CSS files: `bundles/<mynamespace>/<bundle-identifier>/resources/css/..`
+
+#### Grunt tool
+
+Grunt tool has been modified to support folder structure changes.
+
 ## 1.27.3
 
 GetInfoPlugin now handles it's config correctly again.

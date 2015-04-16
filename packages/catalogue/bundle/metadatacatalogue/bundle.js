@@ -26,57 +26,57 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadatacatalogue.MetadataCatalogue
 			/* service */
 			{
 	            "type": "text/javascript",
-	            "src": "../../../../bundles/catalogue/bundle/metadatacatalogue/service/MetadataOptionService.js"
+	            "src": "../../../../bundles/catalogue/metadatacatalogue/service/MetadataOptionService.js"
 	        }, {
 	            "type": "text/javascript",
-	            "src": "../../../../bundles/catalogue/bundle/metadatacatalogue/service/MetadataSearchService.js"
+	            "src": "../../../../bundles/catalogue/metadatacatalogue/service/MetadataSearchService.js"
 	        }, 
 	        /* plugin */
 	        {
 	            "type": "text/javascript",
-	            "src": "../../../../bundles/framework/bundle/featuredata2/plugin/MapSelectionPlugin.js"
+	            "src": "../../../../bundles/framework/featuredata2/plugin/MapSelectionPlugin.js"
 	        }, 
 	        /* event */
 	        {
 	            "type": "text/javascript",
-	            "src": "../../../../bundles/catalogue/bundle/metadatacatalogue/event/FinishedDrawingEvent.js"
+	            "src": "../../../../bundles/catalogue/metadatacatalogue/event/FinishedDrawingEvent.js"
 	        }, 
 	        /* instance */
 	        {
 				"type" : "text/javascript",
-				"src" : "../../../../bundles/catalogue/bundle/metadatacatalogue/instance.js"
+				"src" : "../../../../bundles/catalogue/metadatacatalogue/instance.js"
 			}, 
 			/* request */
 	        {
 	            "type": "text/javascript",
-	            "src": "../../../../bundles/catalogue/bundle/metadatacatalogue/request/AddSearchResultActionRequest.js"
+	            "src": "../../../../bundles/catalogue/metadatacatalogue/request/AddSearchResultActionRequest.js"
 	        }, {
 	            "type": "text/javascript",
-	            "src": "../../../../bundles/catalogue/bundle/metadatacatalogue/request/AddSearchResultActionRequestHandler.js"
+	            "src": "../../../../bundles/catalogue/metadatacatalogue/request/AddSearchResultActionRequestHandler.js"
 	        },
 	        /* css */
 			{
 				"type" : "text/css",
-				"src" : "../../../../resources/catalogue/bundle/metadatacatalogue/css/style.css"
+				"src" : "../../../../bundles/catalogue/metadatacatalogue/resources/css/style.css"
 			}
 		], 
 		"locales" : [  
 		{
 			"lang" : "fi",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/catalogue/bundle/metadatacatalogue/locale/fi.js"
+			"src" : "../../../../bundles/catalogue/metadatacatalogue/resources/locale/fi.js"
 		},{
 			"lang" : "en",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/catalogue/bundle/metadatacatalogue/locale/en.js"
+			"src" : "../../../../bundles/catalogue/metadatacatalogue/resources/locale/en.js"
 		},{
 			"lang" : "sv",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/catalogue/bundle/metadatacatalogue/locale/sv.js"
+			"src" : "../../../../bundles/catalogue/metadatacatalogue/resources/locale/sv.js"
 		},{
 			"lang" : "es",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/catalogue/bundle/metadatacatalogue/locale/es.js"
+			"src" : "../../../../bundles/catalogue/metadatacatalogue/resources/locale/es.js"
 		}],
 		"resources" : []
 	},

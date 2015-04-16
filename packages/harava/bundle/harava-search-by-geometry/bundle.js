@@ -26,56 +26,56 @@ function() {
 
 		"scripts" : [{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/harava/bundle/harava-search-by-geometry/instance.js"
+			"src" : "../../../../bundles/harava/harava-search-by-geometry/instance.js"
 		}, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/harava/bundle/harava-search-by-geometry/plugin/drawsearchgeometry/HaravaDrawSearchGeometryPlugin.js"
+            "src" : "../../../../bundles/harava/harava-search-by-geometry/plugin/drawsearchgeometry/HaravaDrawSearchGeometryPlugin.js"
         }, 
         /*
          * Requests and handlers
          **/
         {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/harava/bundle/harava-search-by-geometry/request/StartGeometrySearchRequest.js"
+            "src" : "../../../../bundles/harava/harava-search-by-geometry/request/StartGeometrySearchRequest.js"
         },
         {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/harava/bundle/harava-search-by-geometry/request/StartGeometrySearchRequestHandler.js"
+            "src" : "../../../../bundles/harava/harava-search-by-geometry/request/StartGeometrySearchRequestHandler.js"
         },
         {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/harava/bundle/harava-search-by-geometry/request/StopGeometrySearchRequest.js"
+            "src" : "../../../../bundles/harava/harava-search-by-geometry/request/StopGeometrySearchRequest.js"
         },
         {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/harava/bundle/harava-search-by-geometry/request/StopGeometrySearchRequestHandler.js"
+            "src" : "../../../../bundles/harava/harava-search-by-geometry/request/StopGeometrySearchRequestHandler.js"
         },
         {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/harava/bundle/harava-search-by-geometry/request/ToggleVisibilityGeometrySearchRequest.js"
+            "src" : "../../../../bundles/harava/harava-search-by-geometry/request/ToggleVisibilityGeometrySearchRequest.js"
         },
         {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/harava/bundle/harava-search-by-geometry/request/ToggleVisibilityGeometrySearchRequestHandler.js"
+            "src" : "../../../../bundles/harava/harava-search-by-geometry/request/ToggleVisibilityGeometrySearchRequestHandler.js"
         },
         /* Resources */
         {
 		    "type" : "text/css",
-		    "src" : "../../../../resources/harava/bundle/harava-search-by-geometry/css/style.css"	  
+		    "src" : "../../../../bundles/harava/harava-search-by-geometry/resources/css/style.css"	  
 		}],
 		/* Locales */
 		"locales" : [{
 			"lang" : "fi",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/harava/bundle/harava-search-by-geometry/locale/fi.js"
+			"src" : "../../../../bundles/harava/harava-search-by-geometry/resources/locale/fi.js"
 		}, {
 			"lang" : "sv",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/harava/bundle/harava-search-by-geometry/locale/sv.js"
+			"src" : "../../../../bundles/harava/harava-search-by-geometry/resources/locale/sv.js"
 		}, {
 			"lang" : "en",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/harava/bundle/harava-search-by-geometry/locale/en.js"
+			"src" : "../../../../bundles/harava/harava-search-by-geometry/resources/locale/en.js"
 		}
 		]
 	},

@@ -22,33 +22,33 @@ Oskari.clazz.define("Oskari.elf.geolocator.Bundle", function() {
 
         "scripts" : [{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/elf/bundle/elf-geolocator/instance.js"
+            "src" : "../../../../bundles/elf/elf-geolocator/instance.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/elf/bundle/elf-geolocator/GeoLocatorSearchTab.js"
+            "src" : "../../../../bundles/elf/elf-geolocator/GeoLocatorSearchTab.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/elf/bundle/elf-geolocator/service/GeoLocatorSearchService.js"
+            "src" : "../../../../bundles/elf/elf-geolocator/service/GeoLocatorSearchService.js"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/elf/bundle/elf-geolocator/css/style.css"
+            "src" : "../../../../bundles/elf/elf-geolocator/resources/css/style.css"
         }],
         "locales" : [{
             "lang": "fi",
             "type": "text/javascript",
-            "src": "../../../../bundles/elf/bundle/elf-geolocator/locale/fi.js"
+            "src": "../../../../bundles/elf/elf-geolocator/resources/locale/fi.js"
         }, {
             "lang": "sv",
             "type": "text/javascript",
-            "src": "../../../../bundles/elf/bundle/elf-geolocator/locale/sv.js"
+            "src": "../../../../bundles/elf/elf-geolocator/resources/locale/sv.js"
         }, {
             "lang": "en",
             "type": "text/javascript",
-            "src": "../../../../bundles/elf/bundle/elf-geolocator/locale/en.js"
+            "src": "../../../../bundles/elf/elf-geolocator/resources/locale/en.js"
         }, {
             "lang": "es",
             "type": "text/javascript",
-            "src": "../../../../bundles/elf/bundle/elf-geolocator/locale/es.js"
+            "src": "../../../../bundles/elf/elf-geolocator/resources/locale/es.js"
         }]
     },
     "bundle" : {

@@ -33,27 +33,27 @@ function() {
 
         "scripts" : [{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/admin/bundle/admin/instance.js"
+            "src" : "../../../../bundles/admin/admin/instance.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/admin/bundle/admin/DefaultViews.js"
+            "src" : "../../../../bundles/admin/admin/DefaultViews.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/admin/bundle/admin/Flyout.js"
+            "src" : "../../../../bundles/admin/admin/Flyout.js"
         }],
 
         "locales" : [{
             "lang" : "fi",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/admin/bundle/admin/locale/fi.js"
+            "src" : "../../../../bundles/admin/admin/resources/locale/fi.js"
         }, {
             "lang" : "sv",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/admin/bundle/admin/locale/sv.js"
+            "src" : "../../../../bundles/admin/admin/resources/locale/sv.js"
         }, {
             "lang" : "en",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/admin/bundle/admin/locale/en.js"
+            "src" : "../../../../bundles/admin/admin/resources/locale/en.js"
         }]
     },
     "bundle" : {

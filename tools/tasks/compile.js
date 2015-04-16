@@ -44,6 +44,8 @@ module.exports = function(grunt) {
             for (var i = 0; i < files.length; ++i) {
                 if (!fs.existsSync(files[i])) {
                     var msg = 'Couldnt locate ' + files[i]; 
+                    grunt.log.warn(msg);
+                    grunt.fail.fatal(msg);
                     throw msg;
                 }
                 // do not put duplicates on compiled code
@@ -57,11 +59,25 @@ module.exports = function(grunt) {
 
             // minify or concatenate the files
             if (!concat) {
-                result = UglifyJS.minify(okFiles, {
-                    //outSourceMap : "out.js.map",
-                    warnings : true,
-                    compress : true
-                });
+                try {
+                    result = UglifyJS.minify(okFiles, {
+                        //outSourceMap : "out.js.map",
+                        warnings : true,
+                        compress : true
+                    });
+                } catch (e) {
+                    console.log(e);
+                    var err = new Error('Uglification failed.');
+                    if (e.message) {
+                        err.message += '\n' + e.message + '. \n';
+                        if (e.line) {
+                            err.message += 'Line ' + e.line + ' in ' + src + '\n';
+                        }
+                    }
+                    err.origError = e;
+                    grunt.log.warn('Uglifying sources ' + okFiles.join() + ' failed.');
+                    grunt.fail.warn(err);
+                }
             } else {
                 // emulate the result uglify creates, but only concatenating
                 result = {"code" : ""};

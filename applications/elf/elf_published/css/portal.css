@@ -1081,10 +1081,6 @@ select {
   margin: 0 0 15px;
 }
 
-.portlet-borderless-container {
-  margin-bottom: 20px;
-}
-
 /* Portal menu 'toggle' (i.e. the yellow bar on the left of the oskari menu) */
 .sidebar-toggle {
   background-color: #FFDE00;
@@ -1094,4 +1090,19 @@ select {
   top: 0;
   width: 200px;
   z-index: 3;
+}
+
+#contentMap {
+  margin-left: 170px !important;
+}
+
+#maptools{
+  width: 170px !important;
+  height: 100% !important;
+  overflow:auto;
+  position: fixed !important;
+}
+
+div.toolrow {
+  border-color: #FFFFFF !important;
 }
