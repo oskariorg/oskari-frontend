@@ -852,6 +852,48 @@ Oskari.clazz.define(
                     this.updateGrid();
                 }
             }
+        },
+        /**
+         * Shows/removes a loading indicator for the layer
+         * @param  {String}  layerId    
+         * @param  {Boolean} blnLoading true to show, false to remove
+         */
+        showLoadingIndicator : function(layerId, blnLoading) {
+            this.__addOrRemoveClassFromHeader(
+                this.layers[layerId], blnLoading, 'loading');
+        },
+        /**
+         * Shows/removes an error indicator for the layer
+         * @param  {String}  layerId    
+         * @param  {Boolean} blnError true to show, false to remove
+         */
+        showErrorIndicator : function(layerId, blnError) {
+            this.__addOrRemoveClassFromHeader(
+                this.layers[layerId], blnError, 'error');
+        },
+        /**
+         * Actual implementation to show/remove indicator. Just 
+         * adds a class to the header of a panel
+         * @private
+         * @param  {Oskari.userinterface.component.TabPanel} panel
+         * @param  {Boolean} blnAdd  true to show, false to remove
+         * @param  {String} strClass class to toggle
+         */
+        __addOrRemoveClassFromHeader : function(panel, blnAdd, strClass) {
+            if(panel) {
+                link = panel.getHeader().find('a');
+            }
+            if(!link) {
+                // not found
+                return;
+            }
+            // setup indicator
+            if(blnAdd) {
+                link.addClass(strClass);
+            }
+            else {
+                link.removeClass(strClass);
+            }
         }
     }, {
         /**

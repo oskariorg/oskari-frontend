@@ -403,6 +403,10 @@ div.analyse-filter-popup-content {
             margin-top: 5px;
         }
 
+        input:disabled + label {
+            opacity: 0.5;
+        }
+
     }
 
 }
