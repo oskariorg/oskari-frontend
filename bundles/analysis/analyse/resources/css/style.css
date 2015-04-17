@@ -212,6 +212,8 @@ div.analyse-filter-popup-content {
     margin-left: 25px; }
     div.analyse-filter-popup-content div.bbox-radio div.bbox-on, div.analyse-filter-popup-content div.bbox-radio div.bbox-off {
       margin-top: 5px; }
+    div.analyse-filter-popup-content div.bbox-radio input:disabled + label {
+      opacity: 0.5; }
 
 div.analyse-filter-popup-content div.filter-option {
   padding-bottom: 10px;

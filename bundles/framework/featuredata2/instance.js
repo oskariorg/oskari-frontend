@@ -238,7 +238,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          * @static
          */
         eventHandlers: {
-            'WFSStatusChanged': function (event) {
+            'WFSStatusChangedEvent': function (event) {
                 if(event.getLayerId() === undefined) {
                     return;
                 }
@@ -249,13 +249,19 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 if(event.getStatus() === event.status.loading)  {
                     this.__loadingStatus['' + event.getLayerId()] = 'loading';
                     this.plugin.showLoadingIndicator(true);
+                    this.plugins['Oskari.userinterface.Flyout'].showLoadingIndicator(event.getLayerId(), true);
+                    this.plugins['Oskari.userinterface.Flyout'].showErrorIndicator(event.getLayerId(), false);
                 }
 
                 if(event.getStatus() === event.status.complete)  {
                     delete this.__loadingStatus['' + event.getLayerId()];
+                    this.plugins['Oskari.userinterface.Flyout'].showLoadingIndicator(event.getLayerId(), false);
+                    this.plugins['Oskari.userinterface.Flyout'].showErrorIndicator(event.getLayerId(), false);
                 }
                 if(event.getStatus() === event.status.error)  {
                     this.__loadingStatus['' + event.getLayerId()] = 'error';
+                    this.plugins['Oskari.userinterface.Flyout'].showLoadingIndicator(event.getLayerId(), false);
+                    this.plugins['Oskari.userinterface.Flyout'].showErrorIndicator(event.getLayerId(), true);
                 }
                 var status = {
                     loading : [],

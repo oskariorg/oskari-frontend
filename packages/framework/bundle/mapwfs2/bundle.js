@@ -39,7 +39,7 @@ function() {
             "src" : "../../../../bundles/framework/mapwfs2/service/StatusHandler.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/event/WFSStatusChanged.js"
+            "src" : "../../../../bundles/framework/mapwfs2/event/WFSStatusChangedEvent.js"
         },{
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/mapwfs2/plugin/QueuedTilesGrid.js"

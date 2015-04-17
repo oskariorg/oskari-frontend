@@ -53,9 +53,13 @@ To get the tracking info in developer console run:
 
 Now limits setLocation calls to single layer/request when triggered by 'MapLayerVisibilityChangedEvent' (using config.deferSetLocation=true).
 
+New event WFSStatusChanged is sent when layer update is requested/completed/resulted in error.
+
 ### featuredata2
 
 Adds 'Feature Data' tool for any layers that are capable of showing it (WFS-based layer types).
+
+Now shows a status indicator for layers (loading/error) based on WFSStatusChanged event (sent by mapwfs2).
 
 ### layerselection2
 

@@ -27,6 +27,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.domain.HeatmapLayer',
     			me[key] = value;
     		});
     		this.init();
+            this.setMaxScale(null);
+            this.setMinScale(null);
             this._styles = [];
             // initial opacity to 70%
             this.setOpacity(70);
