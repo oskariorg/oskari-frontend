@@ -221,6 +221,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 return;
             }
 
+            if (newLayerConf.url) {
+                layer.setLayerUrls(this.parseUrls(newLayerConf.url));
+            }
+
             if (newLayerConf.dataUrl) {
                 layer.setDataUrl(newLayerConf.dataUrl);
             }
@@ -878,7 +882,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
             layer.setGfiContent(jsonLayer.gfiContent);
 
-            if(jsonLayer.wmsUrl) {
+            /*prefer url - param, fall back to wmsUrl if not available*/
+            if (jsonLayer.url) {
+                layer.setLayerUrls(this.parseUrls(jsonLayer.url));
+            } else if (jsonLayer.wmsUrl) {
                 layer.setLayerUrls(this.parseUrls(jsonLayer.wmsUrl));
             }
 
