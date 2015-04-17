@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "et",
     "key": "Printout",
     "value": {
@@ -25,24 +26,29 @@ Oskari.registerLocalization({
             "size": {
                 "label": "Suurus",
                 "tooltip": "Vali trükimall. Vastavalt uuendatakse kaardi eelvaadet.",
-                "options": [{
-                    "id": "A4",
-                    "label": "A4 püstformaat",
-                    "classForPreview": "preview-portrait",
-                    "selected": true
-                }, {
-                    "id": "A4_Landscape",
-                    "label": "A4 põikformaat",
-                    "classForPreview": "preview-landscape"
-                }, {
-                    "id": "A3",
-                    "label": "A3 püstformaat",
-                    "classForPreview": "preview-portrait"
-                }, {
-                    "id": "A3_Landscape",
-                    "label": "A3 põikformaat",
-                    "classForPreview": "preview-landscape"
-                }]
+                "options": [
+                    {
+                        "id": "A4",
+                        "label": "A4 püstformaat",
+                        "classForPreview": "preview-portrait",
+                        "selected": true
+                    },
+                    {
+                        "id": "A4_Landscape",
+                        "label": "A4 põikformaat",
+                        "classForPreview": "preview-landscape"
+                    },
+                    {
+                        "id": "A3",
+                        "label": "A3 püstformaat",
+                        "classForPreview": "preview-portrait"
+                    },
+                    {
+                        "id": "A3_Landscape",
+                        "label": "A3 põikformaat",
+                        "classForPreview": "preview-landscape"
+                    }
+                ]
             },
             "preview": {
                 "label": "Eelvaade",
@@ -52,17 +58,15 @@ Oskari.registerLocalization({
                     "extent": "Kaardi ulatust väljastuseks saab hinnata eelvaadel",
                     "restriction": "Eelvaade ei näita kõiki kaardikihte"
                 }
-
             },
-
             "buttons": {
                 "save": "Tee väljatrükk",
                 "ok": "OK",
-                "back" : "NOT TRANSLATED",
+                "back": "NOT TRANSLATED",
                 "cancel": "Tühista"
             },
             "location": {
-                "label": "Asukoht ja suumi tase ",
+                "label": "Asukoht ja suumi tase",
                 "tooltip": "Väljatrüki mõõtkava vastab kaardi mõõtkavale lehitsejas.",
                 "zoomlevel": "Suumi tase"
             },
@@ -72,75 +76,83 @@ Oskari.registerLocalization({
             },
             "format": {
                 "label": "Formaat",
-                "tooltip": "Vali failiformaat ",
-                "options": [{
-                    "id": "png",
-                    "format": "image/png",
-                    "label": "PNG kujutis"
-                }, {
-                    "id": "pdf",
-                    "format": "application/pdf",
-                    "selected": true,
-                    "label": "PDF dokument"
-                }]
+                "tooltip": "Vali failiformaat",
+                "options": [
+                    {
+                        "id": "png",
+                        "format": "image/png",
+                        "label": "PNG kujutis"
+                    },
+                    {
+                        "id": "pdf",
+                        "format": "application/pdf",
+                        "selected": true,
+                        "label": "PDF dokument"
+                    }
+                ]
             },
             "mapTitle": {
                 "label": "Lisa pealkiri",
                 "tooltip": "lisa kaardi pealkiri"
             },
             "content": {
-                "options": [{
-                    "id": "pageLogo",
-                    "label": "Lisa Oskari logo",
-                    "tooltip": "Vajadusel saab logo peita",
-                    "checked": "checked"
-                }, {
-                    "id": "pageScale",
-                    "label": "Lisa kaardile mõõtkava",
-                    "tooltip": "Lisa kaardile mõõtkava",
-                    "checked": "checked"
-                }, {
-                    "id": "pageDate",
-                    "label": "Lisa kuupäev",
-                    "tooltip": "Võid lisada väljatrükile kuupäeva",
-                    "checked": "checked"
-                }]
+                "options": [
+                    {
+                        "id": "pageLogo",
+                        "label": "Lisa Oskari logo",
+                        "tooltip": "Vajadusel saab logo peita",
+                        "checked": "checked"
+                    },
+                    {
+                        "id": "pageScale",
+                        "label": "Lisa kaardile mõõtkava",
+                        "tooltip": "Lisa kaardile mõõtkava",
+                        "checked": "checked"
+                    },
+                    {
+                        "id": "pageDate",
+                        "label": "Lisa kuupäev",
+                        "tooltip": "Võid lisada väljatrükile kuupäeva",
+                        "checked": "checked"
+                    }
+                ]
             },
             "legend": {
                 "label": "NOT TRANSLATED",
                 "tooltip": "NOT TRANSLATED",
-                "options": [{
-                    "id": "oskari_legend_NO",
-                    "loca": "NO",
-                    "label": "NOT TRANSLATED",
-                    "tooltip": "NOT TRANSLATED",
-                    "selected": true
-
-                }, {
-                    "id": "oskari_legend_LL",
-                    "loca": "LL",
-                    "label": "NOT TRANSLATED",
-                    "tooltip": "NOT TRANSLATED"
-
-                }, {
-                    "id": "oskari_legend_LU",
-                    "loca": "LU",
-                    "label": "NOT TRANSLATED",
-                    "tooltip": "NOT TRANSLATED"
-
-                }, {
-                    "id": "oskari_legend_RU",
-                    "loca": "RU",
-                    "label": "NOT TRANSLATED",
-                    "tooltip": "NOT TRANSLATED"
-
-                }, {
-                    "id": "oskari_legend_RL",
-                    "loca": "RL",
-                    "label": "NOT TRANSLATED",
-                    "tooltip": "NOT TRANSLATED"
-
-                }]
+                "options": [
+                    {
+                        "id": "oskari_legend_NO",
+                        "loca": "NO",
+                        "label": "NOT TRANSLATED",
+                        "tooltip": "NOT TRANSLATED",
+                        "selected": true
+                    },
+                    {
+                        "id": "oskari_legend_LL",
+                        "loca": "LL",
+                        "label": "NOT TRANSLATED",
+                        "tooltip": "NOT TRANSLATED"
+                    },
+                    {
+                        "id": "oskari_legend_LU",
+                        "loca": "LU",
+                        "label": "NOT TRANSLATED",
+                        "tooltip": "NOT TRANSLATED"
+                    },
+                    {
+                        "id": "oskari_legend_RU",
+                        "loca": "RU",
+                        "label": "NOT TRANSLATED",
+                        "tooltip": "NOT TRANSLATED"
+                    },
+                    {
+                        "id": "oskari_legend_RL",
+                        "loca": "RL",
+                        "label": "NOT TRANSLATED",
+                        "tooltip": "NOT TRANSLATED"
+                    }
+                ]
             },
             "help": "Abi",
             "error": {
@@ -164,4 +176,5 @@ Oskari.registerLocalization({
             }
         }
     }
-});
+}
+);

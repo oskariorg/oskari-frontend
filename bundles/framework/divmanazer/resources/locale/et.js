@@ -1,7 +1,19 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "et",
     "key": "DivManazer",
     "value": {
+        "buttons": {
+            "add": "NOT TRANSLATED",
+            "cancel": "NOT TRANSLATED",
+            "close": "NOT TRANSLATED",
+            "delete": "NOT TRANSLATED",
+            "edit": "NOT TRANSLATED",
+            "exit": "NOT TRANSLATED",
+            "ok": "NOT TRANSLATED",
+            "save": "NOT TRANSLATED",
+            "search": "NOT TRANSLATED"
+        },
         "LanguageSelect": {
             "title": "Keel",
             "tooltip": "NOT TRANSLATED",
@@ -125,6 +137,131 @@ Oskari.registerLocalization({
                 "zh": "hiina",
                 "zu": "suulu"
             }
+        },
+        "VisualizationForm": {
+            "tooltips": {
+                "dot": "NOT TRANSLATED",
+                "area": "NOT TRANSLATED",
+                "line": "NOT TRANSLATED"
+            },
+            "dot": {
+                "title": "NOT TRANSLATED",
+                "tooltip": "",
+                "symbol": {
+                    "label": "NOT TRANSLATED"
+                },
+                "size": {
+                    "label": "NOT TRANSLATED"
+                },
+                "color": {
+                    "label": "NOT TRANSLATED",
+                    "labelOr": "NOT TRANSLATED",
+                    "labelCustom": "NOT TRANSLATED"
+                },
+                "preview": {
+                    "label": "NOT TRANSLATED"
+                },
+                "buttons": {
+                    "save": "NOT TRANSLATED",
+                    "cancel": "NOT TRANSLATED"
+                }
+            },
+            "line": {
+                "title": "NOT TRANSLATED",
+                "tooltip": "",
+                "style": {
+                    "label": "NOT TRANSLATED"
+                },
+                "cap": {
+                    "label": "NOT TRANSLATED"
+                },
+                "corner": {
+                    "label": "NOT TRANSLATED"
+                },
+                "width": {
+                    "label": "NOT TRANSLATED"
+                },
+                "color": {
+                    "label": "NOT TRANSLATED",
+                    "labelOr": "NOT TRANSLATED",
+                    "labelCustom": "NOT TRANSLATED"
+                },
+                "preview": {
+                    "label": "NOT TRANSLATED"
+                },
+                "buttons": {
+                    "save": "NOT TRANSLATED",
+                    "cancel": "NOT TRANSLATED"
+                }
+            },
+            "area": {
+                "title": "NOT TRANSLATED",
+                "tooltip": "",
+                "linestyle": {
+                    "label": "NOT TRANSLATED"
+                },
+                "linecap": {
+                    "label": "NOT TRANSLATED"
+                },
+                "linecorner": {
+                    "label": "NOT TRANSLATED"
+                },
+                "linewidth": {
+                    "label": "NOT TRANSLATED"
+                },
+                "linecolor": {
+                    "label": "NOT TRANSLATED",
+                    "labelOr": "NOT TRANSLATED",
+                    "labelCustom": "NOT TRANSLATED"
+                },
+                "color": {
+                    "label": "NOT TRANSLATED",
+                    "labelOr": "NOT TRANSLATED",
+                    "labelCustom": "NOT TRANSLATED"
+                },
+                "fill": {
+                    "label": "NOT TRANSLATED"
+                },
+                "preview": {
+                    "label": "NOT TRANSLATED"
+                },
+                "buttons": {
+                    "save": "NOT TRANSLATED",
+                    "cancel": "NOT TRANSLATED"
+                }
+            }
+        },
+        "Grid": {
+            "columnSelector": {
+                "title": "NOT TRANSLATED",
+                "tooltip": "NOT TRANSLATED"
+            },
+            "export": {
+                "title": "NOT TRANSLATED",
+                "export": "NOT TRANSLATED",
+                "additional": {
+                    "title": "NOT TRANSLATED",
+                    "dataSource": "NOT TRANSLATED",
+                    "metadata": "NOT TRANSLATED"
+                },
+                "columns": {
+                    "title": "NOT TRANSLATED",
+                    "all": "NOT TRANSLATED",
+                    "visible": "NOT TRANSLATED"
+                },
+                "format": {
+                    "title": "NOT TRANSLATED",
+                    "xlsx": "NOT TRANSLATED",
+                    "csv": "NOT TRANSLATED"
+                },
+                "delimiter": {
+                    "title": "NOT TRANSLATED",
+                    "comma": "NOT TRANSLATED",
+                    "semicolon": "NOT TRANSLATED",
+                    "tabulator": "NOT TRANSLATED"
+                }
+            }
         }
     }
-});
+}
+);
