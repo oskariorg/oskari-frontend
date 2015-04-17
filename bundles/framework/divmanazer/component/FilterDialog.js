@@ -225,9 +225,22 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                 clickedFeaturesSelection.find('#analyse-filter-by-geometry').on("click", function () {
                     if (clickedFeaturesSelection.find('#analyse-filter-by-geometry').prop('checked') === true) {
                         clickedFeaturesSelection.find('input[name="filter-by-geometry"]').prop('disabled', false);
+                        bboxSelection.find('div.bbox-on').find('input[name=filter-bbox]').prop({'disabled': true, 'checked':false});
+                        bboxSelection.find('div.bbox-off').find('input[name=filter-bbox]').prop('checked', true);
+                        
                     } else {
                         clickedFeaturesSelection.find('input[name="filter-by-geometry"]').prop('disabled', true);
                         clickedFeaturesSelection.find('input[name="filter-by-geometry"]').prop('checked', false);
+                        bboxSelection.find('div.bbox-on').find('input[name=filter-bbox]').prop('disabled', false);
+                    }
+                });
+
+                clickedFeaturesSelection.find('#analyse-clicked-features').on("click", function () {
+                    if (clickedFeaturesSelection.find('#analyse-clicked-features').prop('checked') === true) {
+                        bboxSelection.find('div.bbox-on').find('input[name=filter-bbox]').prop({'disabled': true, 'checked':false});
+                        bboxSelection.find('div.bbox-off').find('input[name=filter-bbox]').prop('checked', true);
+                    } else {
+                        bboxSelection.find('div.bbox-on').find('input[name=filter-bbox]').prop('disabled', false);
                     }
                 });
             }
@@ -299,11 +312,14 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
             }
             if (values.featureIds) {
                 dialog.find('#analyse-clicked-features').prop('checked', true);
+                bboxDiv.find('div.bbox-on').find('input[name=filter-bbox]').prop({'disabled': true, 'checked':false});
+                bboxDiv.find('div.bbox-off').find('input[name=filter-bbox]').prop('checked', true);
             }
             if (values.filterByGeometryMethod) {
                 dialog.find('#analyse-filter-by-geometry').prop('checked', true);
                 var method = values.filterByGeometryMethod;
                 dialog.find('input[value=' + method+ ']').prop('checked', true);
+                bboxDiv.find('div.bbox-on').find('input[name=filter-bbox]').prop({'disabled': true, 'checked':false});
             }
         },
 
