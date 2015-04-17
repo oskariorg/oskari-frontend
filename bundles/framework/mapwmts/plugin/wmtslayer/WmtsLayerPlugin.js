@@ -46,6 +46,26 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
             var me = this;
 
             return {
+                MapLayerEvent: function(event) {
+
+                    //Maplayer updated -> url might have changed (case forceProxy). Update that. 
+                    var op = event.getOperation(),
+                        layer = this.getSandbox().findMapLayerFromSelectedMapLayers(event.getLayerId());
+
+                    //not a selected map layer -> still need to update the layerconfig in "all available"
+                    if (!layer) {
+                        layer = me.getSandbox().findMapLayerFromAllAvailable(event.getLayerId());
+                        if (layer && layer.isLayerOfType('WMTS')) {
+                            layer._wmtsurl = null;
+                        }
+
+                    } else if (op === 'update' && layer && layer.isLayerOfType('WMTS')) {
+
+                        //if _wmtsurl of the layer has been set -> nullify that so that the next time url will be determined by the layerUrls array
+                        layer._wmtsurl = null;
+                        me._replaceMapLayer(layer);
+                    }
+                },
                 AfterMapLayerRemoveEvent: function (event) {
                     me.afterMapLayerRemoveEvent(event);
                 },
@@ -59,7 +79,29 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                 }
             };
         },
+        /**
+         * Replaces a layer on the map with a layer created with an updated config. If layer hasn't been added to map nothing is done.
+         * @param {Oskari layerconfig} layer
+         *
+         */
+        _replaceMapLayer: function(layer) {
+            var me = this;
+            var olMapLayers = me.getOLMapLayers(layer),
+                olMapLayer,
+                matrixData = me.__calculateMatrix(layer.getWmtsMatrixSet()),
+                sandbox = me.getSandbox();
+            if (olMapLayers && olMapLayers.length) {
+                //layer added to map -> recreate with the new config
+                olMapLayer = olMapLayers[0];
+                var oldLayerIndex = this._map.getLayerIndex(olMapLayer); 
+                var layerConfig = me._getLayerConfig(layer, matrixData, sandbox);
+                var newLayer = new OpenLayers.Layer.WMTS(layerConfig);
 
+                this._map.removeLayer(olMapLayer);
+                this._map.addLayer(newLayer);
+                this._map.setLayerIndex(newLayer, oldLayerIndex);
+            }
+        },
         /**
          *
          */
@@ -88,8 +130,25 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
             var me = this,
                 map = me.getMap(),
                 matrixData = this.__calculateMatrix(layer.getWmtsMatrixSet()),
-                sandbox = me.getSandbox();
+                sandbox = me.getSandbox(),
+                layerConfig = me._getLayerConfig(layer, matrixData, sandbox);
 
+            sandbox.printDebug(
+                '[WmtsLayerPlugin] creating WMTS Layer ' +
+                layerConfig.name + ' / ' + layerConfig.matrixSet + '/' +
+                layerConfig.layer + '/' + layerConfig.url
+            );
+
+            var wmtsLayer = new OpenLayers.Layer.WMTS(layerConfig);
+            wmtsLayer.opacity = layer.getOpacity() / 100;
+
+            sandbox.printDebug(
+                '[WmtsLayerPlugin] created WMTS layer ' + wmtsLayer
+            );
+
+            map.addLayers([wmtsLayer]);
+        },
+        _getLayerConfig: function(layer, matrixData, sandbox) {
             // default params and options
             var layerConfig = {
                 name: this.__getLayerName(layer),
@@ -127,20 +186,8 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                 }
             }
 
-            sandbox.printDebug(
-                '[WmtsLayerPlugin] creating WMTS Layer ' +
-                layerConfig.name + ' / ' + layerConfig.matrixSet + '/' +
-                layerConfig.layer + '/' + layerConfig.url
-            );
+            return layerConfig;
 
-            var wmtsLayer = new OpenLayers.Layer.WMTS(layerConfig);
-            wmtsLayer.opacity = layer.getOpacity() / 100;
-
-            sandbox.printDebug(
-                '[WmtsLayerPlugin] created WMTS layer ' + wmtsLayer
-            );
-
-            map.addLayers([wmtsLayer]);
         },
         __calculateMatrix : function(matrixSet) {
             var matrixIds = [],

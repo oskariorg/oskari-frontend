@@ -113,6 +113,7 @@ Oskari.registerLocalization(
             "wmsNameDesc": "Unik eller teknisk namn för kartlager",
             "username": "Användarsnamn",
             "password": "Lösenord",
+            "attributes": "Attribut",
             "addInspireName": "Ämnets namn",
             "addInspireNameTitle": "Ämnets namn",
             "addOrganizationName": "Data&shy;producentens namn",
