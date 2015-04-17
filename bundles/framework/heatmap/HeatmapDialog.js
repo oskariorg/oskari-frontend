@@ -94,46 +94,46 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
 	    		propertySelector.val(layer.getWeightedHeatmapProperty());
 	    		propertyElement.append(propertySelector);
 	    		content.append(propertyElement);
+            }
+            
+            var colorThemes = jQuery(this.__templates.colorThemes({
+                label: this.loc.colorThemesLabel
+            }));
 
-                var colorThemes = jQuery(this.__templates.colorThemes({
-                    label: this.loc.colorThemesLabel
-                }));
-
-                content.append(colorThemes);
+            content.append(colorThemes);
 
 
-                //colorpicker -->
-                var colorPicker = jQuery(this.__templates.colorpicker( {
-                    label: this.loc.colorPickerLabel
-                }));
-                var colorbox = colorPicker.find('.color-picker');
-                jQuery(colorbox).colpick({
-                    layout:'rgbhex',
-                    onSubmit:function(hsb,hex,rgb,el) {
-                        jQuery(el).css('background-color', '#'+ hex);
-                        jQuery(el).attr("color", '#'+ hex);
-                        $(el).colpickHide();
-                    }
-                });
-
-                content.append(colorPicker);
-
-                // set latest selected color theme checked
-                var selectedColorTheme = layer.getSelectedTheme();
-                if (selectedColorTheme) {
-                    jQuery(content).find("input[id="+ selectedColorTheme.id + "]").attr("checked", true);
-                } else {
-                    jQuery(content).find("input[id=theme1]").attr("checked", true);
+            //colorpicker -->
+            var colorPicker = jQuery(this.__templates.colorpicker( {
+                label: this.loc.colorPickerLabel
+            }));
+            var colorbox = colorPicker.find('.color-picker');
+            jQuery(colorbox).colpick({
+                layout:'rgbhex',
+                onSubmit:function(hsb,hex,rgb,el) {
+                    jQuery(el).css('background-color', '#'+ hex);
+                    jQuery(el).attr("color", '#'+ hex);
+                    $(el).colpickHide();
                 }
+            });
 
-                //set colors for colorboxes
-                var colorSetup = layer.getColorSetup();
-                if (colorSetup) {
-                    jQuery(content).find('.box-1').attr({"color": colorSetup[0], "style": "background-color:" + colorSetup[0]});
-                    jQuery(content).find('.box-2').attr({"color": colorSetup[1], "style": "background-color:" + colorSetup[1]});
-                    jQuery(content).find('.box-3').attr({"color": colorSetup[2], "style": "background-color:" + colorSetup[2]});
-                }
-    		}
+            content.append(colorPicker);
+
+            // set latest selected color theme checked
+            var selectedColorTheme = layer.getSelectedTheme();
+            if (selectedColorTheme) {
+                jQuery(content).find("input[id="+ selectedColorTheme.id + "]").attr("checked", true);
+            } else {
+                jQuery(content).find("input[id=theme1]").attr("checked", true);
+            }
+
+            //set colors for colorboxes
+            var colorSetup = layer.getColorSetup();
+            if (colorSetup) {
+                jQuery(content).find('.box-1').attr({"color": colorSetup[0], "style": "background-color:" + colorSetup[0]});
+                jQuery(content).find('.box-2').attr({"color": colorSetup[1], "style": "background-color:" + colorSetup[1]});
+                jQuery(content).find('.box-3').attr({"color": colorSetup[2], "style": "background-color:" + colorSetup[2]});
+            }
 
 			var okBtn = null;
             if(isNew) {

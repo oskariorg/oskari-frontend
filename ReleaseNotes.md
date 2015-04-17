@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.28.1
+
+### heatmap
+
+Now works correctly when there are no weighted properties.
+
 ## 1.28
 
 ### Generic
