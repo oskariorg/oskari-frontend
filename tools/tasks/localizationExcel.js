@@ -431,6 +431,7 @@ module.exports = function (grunt) {
         'import-l10n-excel',
         'Import localization excel files',
         function () {
+		
             var fs = require('fs'),
                 file = this.data[0].file;
 
@@ -647,6 +648,7 @@ module.exports = function (grunt) {
                                 localeDir = '..' + path.sep + getCellValue(cells[0]).substring(8);
 								localeDir = localeDir.replace('\\bundle\\','\\');
 								localeDir = localeDir.replace('\\locale','\\resources\\locale');
+								//console.log('######', localeDir);
                                 localeFile = getCellValue(cells[1]);
                                 getLocalization(
                                     localeDir,

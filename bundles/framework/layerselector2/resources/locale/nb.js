@@ -1,28 +1,28 @@
 Oskari.registerLocalization(
 {
-    "lang": "nb",
+    "lang": "nn",
     "key": "LayerSelector",
     "value": {
         "title": "Kartlag",
         "desc": "",
         "errors": {
             "title": "Feil!",
-            "generic": "Systemfeil. Vennligst prøv igjen seinere.",
-            "loadFailed": "Feil ved lasting av kartlag. Frisk opp nettleser og velg kartlag på ny.",
-            "noResults": "Ingen resultater funnet.",
+            "generic": "Systemfeil. Ver grei og prøv om att seinare.",
+            "loadFailed": "Feil ved lasting av kartlag. Frisk opp nettlesar og vel kartlag på ny.",
+            "noResults": "Ingen resultat funne.",
             "noResultsForKeyword": "Ingen kartleg samsvarte med nøkkelordet.",
-            "minChars": "Skriv minst fire tegn. Tillatte tegn er bokstavene a-z samt å, ä og ö, tall og bindestreker."
+            "minChars": "Skriv minst fire teikn. Tillatne teikn er bokstavane a-z samt å, ä og ö, tal og bindestrekar."
         },
-        "loading": "Søker…",
+        "loading": "Søkjer…",
         "filter": {
             "text": "Søk kartlag.",
             "keywordsTitle": "Nøkkelord:",
-            "shortDescription": "Søk kartlag ved hjelp av navn på kartlag, dataprodusent eller nøkkelord.",
-            "description": "Søk kartlag ved hjelp av del av navn på kartlag, dataprodusent eller nøkkelord. Søket starter når minst fire tegn er skrevet. Tillatte tegn er bokstavene a-z samt å, ä og ö, tall og bindestreker.",
+            "shortDescription": "Søk kartlag ved hjelp av namn på kartlag, dataprodusent eller nøkkelord.",
+            "description": "Søk kartlag ved hjelp av del av namn på kartlag, dataprodusent eller nøkkelord. Søket startar når minst fire teikn er skrive. Tillatne teikn er bokstavane a-z samt å, ä og ö, tal og bindestrekar.",
             "inspire": "Tematisk",
-            "organization": "Dataeier",
-            "published": "Brukere",
-            "didYouMean": "Mente du:"
+            "organization": "Dataeigar",
+            "published": "Brukarar",
+            "didYouMean": "Meinte du:"
         },
         "published": {
             "organization": "Publisert kartlag",
@@ -35,16 +35,16 @@ Oskari.registerLocalization(
         },
         "backendStatus": {
             "OK": {
-                "tooltip": "Kartlaget er tilgjengelig",
-                "iconClass": "backendstatus-ok"
+                "tooltip": "Kartlaget er tilgjengeleg",
+                "iconClass": "backendstatus OK"
             },
             "DOWN": {
-                "tooltip": "Kartlaget er for tiden utilgjengelig",
-                "iconClass": "backendstatus-down"
+                "tooltip": "Kartlaget er for tida utilgjengeleg",
+                "iconClass": "backendstatus nede"
             },
             "MAINTENANCE": {
-                "tooltip": "Kartlaget kan være midlertidig utilgjengelig de nærmeste dagene",
-                "iconClass": "backendstatus-maintenance"
+                "tooltip": "Kartlaget kan vere midlertidig utilgjengeleg dei nærmaste dagane",
+                "iconClass": "backend-status-vedlikehald"
             },
             "UNKNOWN": {
                 "tooltip": "",

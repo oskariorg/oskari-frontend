@@ -1,14 +1,14 @@
 Oskari.registerLocalization(
 {
-    "lang": "nn",
+    "lang": "et",
     "key": "MapMyPlaces",
     "value": {
         "title": "NOT TRANSLATED",
         "desc": "",
-        "object-data": "Objektdata",
+        "object-data": "NOT TRANSLATED",
         "layer": {
-            "organization": "Mine stader",
-            "inspire": "Mine kartlag"
+            "organization": "NOT TRANSLATED",
+            "inspire": "NOT TRANSLATED"
         }
     }
 }

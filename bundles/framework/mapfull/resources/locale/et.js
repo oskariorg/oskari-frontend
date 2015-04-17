@@ -1,9 +1,9 @@
 Oskari.registerLocalization(
 {
-    "lang": "nn",
+    "lang": "et",
     "key": "Generic",
     "value": {
-        "default-style": "Standard stil"
+        "default-style": "NOT TRANSLATED"
     }
 }
 );

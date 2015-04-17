@@ -1,6 +1,6 @@
 Oskari.registerLocalization(
 {
-    "lang": "nb",
+    "lang": "nn",
     "key": "coordinatedisplay",
     "value": {
         "title": "",
@@ -12,7 +12,7 @@ Oskari.registerLocalization(
             },
             "compass": {
                 "N": "N:",
-                "E": "Ø:"
+                "E": "A:"
             }
         }
     }
