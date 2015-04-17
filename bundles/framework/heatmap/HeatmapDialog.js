@@ -82,7 +82,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
 
     		var propertyElement = null;
     		var propertySelector = null;
-    		// only show select if there is something to select?
+    		// only show select if there is something to select
     		if(layer.getHeatmapProperties().length > 0) {
     			propertyElement =  jQuery(this.__templates.propertySelect({
 	    			label : this.loc.propertyLabel
@@ -95,7 +95,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
 	    		propertyElement.append(propertySelector);
 	    		content.append(propertyElement);
             }
-            
+
             var colorThemes = jQuery(this.__templates.colorThemes({
                 label: this.loc.colorThemesLabel
             }));
