@@ -1,5 +1,19 @@
 # Release Notes
 
+## 1.28.1
+
+### heatmap
+
+Now works correctly when there are no weighted properties.
+
+### publisher
+
+No longer assumes a LogoPlugin being present in the main map.
+
+### featuredata2
+
+Error handling approved for missing DOM-elements.
+
 ## 1.28
 
 ### Generic
