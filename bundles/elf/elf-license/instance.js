@@ -51,6 +51,8 @@ function () {
             '<div class="license_user_data">'+
             '   <table class="elf_license_user_data_table"></table>' +
             '</div>' +
+            '<div class="license_id"></div>'+
+            '<div class="service_url"></div>'+
             '<div class="validto_summary"></div>'+
             '<div class="clear"></div>'+
             '<div class="help"></div></div>'),
@@ -436,6 +438,8 @@ function () {
         me._showLicenseDetails();
         licenseDetails.empty();
 
+        licenseDetails.addClass('large');
+
         modelDetails.find('.elf_name').html(model.name);
         modelDetails.find('.license_basic_data').append('<div></div>');
         modelDetails.find('.help').html(me._locale.dialog.help.orderDetails);
@@ -451,11 +455,27 @@ function () {
             });
         }
 
+        // Show license id
+        if(licenseData.licenseId){
+            var licenceIdElem = modelDetails.find('.license_id'),
+                licenceIdText = me._locale.dialog.licenseId;
+            licenceIdText = licenceIdText.replace('{licenseid}',licenseData.licenseId);
+            licenceIdElem.html(licenceIdText);
+        }
+
+        // Show service URL
+        if(licenseData.secureServiceURL){
+            var licenceServiceURLElem = modelDetails.find('.service_url'),
+                licenceServiceURLText = me._locale.dialog.licenseServiceUrl;
+            licenceServiceURLText = licenceServiceURLText.replace('{serviceurl}', '<a href="' + licenseData.secureServiceURL + '" target="_blank">' + licenseData.secureServiceURL + '</a>');
+            licenceServiceURLElem.html(licenceServiceURLText);            
+        }
+        
+        // Show valid to
         if(licenseData.validTo){
             var validToElem = modelDetails.find('.validto_summary'),
                 validText = me._locale.dialog.validTo;
             validText = validText.replace('{day}',licenseData.validTo);
-
             validToElem.html(validText);
         }
 
@@ -709,6 +729,7 @@ function () {
         jQuery('.elf_license_dialog_license_details').show();
         jQuery('.elf_license_dialog_license_data').hide();
         jQuery('.elf_license_dialog_license_price').hide();
+        jQuery('.elf_license_dialog_license_details').removeClass('large');
         me._checkButtonsVisibility();
     },
     /**
