@@ -69,6 +69,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundle", func
             "type": "text/javascript",
             "src": "../../../../bundles/framework/maplegend/resources/locale/et.js"
         }, {
+            "lang": "et",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/maplegend/resources/locale/et.js"
+        }, {
             "lang": "fi",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/maplegend/resources/locale/fi.js"
@@ -105,13 +109,17 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundle", func
             "type": "text/javascript",
             "src": "../../../../bundles/framework/maplegend/resources/locale/lv.js"
         }, {
+            "lang": "nb",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/maplegend/resources/locale/nb.js"
+        }, {
             "lang": "nl",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/maplegend/resources/locale/nl.js"
         }, {
-            "lang": "nb",
+            "lang": "nn",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/maplegend/resources/locale/nb.js"
+            "src": "../../../../bundles/framework/maplegend/resources/locale/nn.js"
         }, {
             "lang": "pl",
             "type": "text/javascript",

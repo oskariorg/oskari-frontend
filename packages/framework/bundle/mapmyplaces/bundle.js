@@ -60,6 +60,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapmyplaces.MapMyPlacesBundle", 
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/mapmyplaces/resources/locale/nl.js"
             }, {
+                "lang": "nn",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/mapmyplaces/resources/locale/nn.js"
+            }, {
                 "lang": "sl",
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/mapmyplaces/resources/locale/sl.js"
@@ -75,6 +79,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapmyplaces.MapMyPlacesBundle", 
                 "lang": "es",
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/mapmyplaces/resources/locale/es.js"
+            }, {
+                "lang": "et",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/mapmyplaces/resources/locale/et.js"
             }]
         },
         "bundle": {

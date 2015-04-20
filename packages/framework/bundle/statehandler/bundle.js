@@ -89,6 +89,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.statehandler.StateHandlerBundle"
             "type": "text/javascript",
             "src": "../../../../bundles/framework/statehandler/resources/locale/nl.js"
         }, {
+            "lang": "nn",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/statehandler/resources/locale/nn.js"
+        }, {
             "lang": "sl",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/statehandler/resources/locale/sl.js"

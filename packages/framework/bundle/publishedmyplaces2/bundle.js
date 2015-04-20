@@ -127,6 +127,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.PublishedMyPla
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/publishedmyplaces2/resources/locale/es.js"
         }, {
+            "lang" : "et",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/publishedmyplaces2/resources/locale/et.js"
+        }, {
             "lang" : "fi",
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/publishedmyplaces2/resources/locale/fi.js"
@@ -150,6 +154,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.PublishedMyPla
             "lang" : "nl",
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/publishedmyplaces2/resources/locale/nl.js"
+        }, {
+            "lang" : "nn",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/publishedmyplaces2/resources/locale/nn.js"
         }, {
             "lang" : "cs",
             "type" : "text/javascript",
