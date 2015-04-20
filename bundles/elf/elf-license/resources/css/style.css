@@ -101,6 +101,10 @@ div.elf_license_dialog {
     width: 40%; }
   .elf_license_dialog_license_price .license_user_data .elf_license_user_data_table .elf_license_user_data {
     padding: 4px; }
+    .elf_license_dialog_license_price .license_user_data .elf_license_user_data_table .elf_license_user_data .elf_license_input .license_enum_list {
+      list-style-type: none;
+      margin-left: 0;
+      padding-lefT: 0; }
   .elf_license_dialog_license_price .price_summary {
     border-top: 1px solid #000;
     font-weight: bold;

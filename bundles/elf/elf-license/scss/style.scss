@@ -166,6 +166,14 @@ div.elf_license_dialog {
 
 			.elf_license_user_data {
 				padding: 4px;
+
+				.elf_license_input {
+					.license_enum_list {
+						list-style-type: none;
+						margin-left: 0;
+						padding-lefT: 0;
+					}
+				}
 			}
 		}
 	}

@@ -78,15 +78,16 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamEnumElement',
                 }
             } else {
                 if(param.selections.length>0) {
-                    var list = jQuery('<ul></ul>');
-                    data.append(list);
+                    var list = jQuery('<ul class="license_enum_list"></ul>');                    
 
                     jQuery.each(param.selections, function(index, value){
                         var valueEl = readOnlyElement.clone();
                         valueEl.attr('data-value', value);
                         valueEl.html(value);
-                        data.append(valueEl);
+                        list.append(valueEl);
                     });
+
+                    data.append(list);
                 }
             }
 

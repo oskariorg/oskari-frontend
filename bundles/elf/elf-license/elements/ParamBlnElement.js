@@ -71,7 +71,7 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamBlnElement',
             } else {
                 var valueEl = readOnlyElement.clone();
                 valueEl.attr('data-value', param.value);
-                valueEl.html(param.value);
+                valueEl.html('' + param.value + '');
                 data.append(valueEl);
             }
 
