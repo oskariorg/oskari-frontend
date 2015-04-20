@@ -13,12 +13,17 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WmtsLayerModelBuilder', fu
             style,
             wmsUrls;
 
-        if(mapLayerJson.wmsName) {
-            layer.setWmtsName(mapLayerJson.wmsName);
+        if(mapLayerJson.layerName) {
+            layer.setWmtsName(mapLayerJson.layerName);
         }
-        if(mapLayerJson.wmsUrl) {
-            layer.setLayerUrls(maplayerService.parseUrls(mapLayerJson.wmsUrl));
+        if (mapLayerJson.url) {
+            layer.setLayerUrls(maplayerService.parseUrls(mapLayerJson.url))
         }
+
+        if (mapLayerJson.attributes) {
+            layer.setAttributes(mapLayerJson.attributes);
+        }
+
         maplayerService.populateStyles(layer, mapLayerJson);
 
         layer.setOriginalMatrixSetData(mapLayerJson.tileMatrixSetData);

@@ -112,6 +112,7 @@ Oskari.registerLocalization({
             "wmsNameDesc": "Karttatason yksilöivä eli tekninen nimi",
             "username": "Käyttäjätunnus",
             "password": "Salasana",
+            "attributes": "Attribuutit",
             "addInspireName": "Aiheen nimi",
             "addInspireNameTitle": "Aiheen nimi",
             "addOrganizationName": "Tiedontuottajan nimi",

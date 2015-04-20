@@ -582,10 +582,12 @@ define([
                 if(data.layerType === 'wmslayer') {
                     data.xslt = form.find('#add-layer-xslt').val();
                     data.gfiType = form.find('#add-layer-responsetype').val();
+                    data.attributes = form.find('#add-layer-attributes').val();
                 }
                 else if(data.layerType === 'wmtslayer') {
                     data.matrixSetId = form.find('#add-layer-matrixSetId').val();
                     data.matrixSet = form.find('#add-layer-matrixSet').val();
+                    data.attributes = form.find('#add-layer-attributes').val();
                 }
                 else if(data.layerType === 'wfslayer') {
                     admin = me.model.getAdmin();

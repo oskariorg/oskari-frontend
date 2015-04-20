@@ -112,6 +112,7 @@ Oskari.registerLocalization({
             "wmsNameDesc": "The unique name that identifies the map layer.",
             "username": "User name",
             "password": "Password",
+            "attributes": "Attributes",
             "addInspireName": "Theme name",
             "addInspireNameTitle": "The name of the Inspire theme.",
             "addOrganizationName": "Organization",
