@@ -163,11 +163,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
 
                 for (i = 0; i < plugins.length; i += 1) {
                     try {
-                        // FIXME this is prolly the wrong place for getConfig...
-                        // I _think_ plugins contains plugin definitions, not plugin instances...
                         plugins[i].instance = Oskari.clazz.create(
                             plugins[i].id,
-                            plugins[i].config || (plugins[i].getConfig ? plugins[i].getConfig() : {}),
+                            plugins[i].config || {},
                             plugins[i].state
                         );
                         module.registerPlugin(plugins[i].instance);
