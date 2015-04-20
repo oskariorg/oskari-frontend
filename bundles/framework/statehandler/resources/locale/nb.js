@@ -1,17 +1,17 @@
 Oskari.registerLocalization(
 {
-    "lang": "nn",
+    "lang": "nb",
     "key": "StateHandler",
     "value": {
         "session": {
             "expiring": {
-                "title": "Arbeidsøkta di er i ferd med å gå ut",
-                "message": "Arbeidsøkta di er i ferd med å gå ut. Ver grei og klikk {extend} for framleis å vere innlogga",
-                "extend": "Hald fram arbeidsøkta"
+                "title": "Din arbeidsøkt er i ferd med å gå ut",
+                "message": "Din arbeidsøkt er i ferd med å gå ut. Vennligst klikk {extend} for å forbli innlogget.",
+                "extend": "Fortsett arbeidsøkt"
             },
             "expired": {
-                "title": "Arbeidsøkta di har gått ut",
-                "message": "Arbeidsøkta di har gått ut. Ver grei og oppfrisk sida for å logge inn att."
+                "title": "Din arbeidsøkt har gått ut",
+                "message": "Din arbeidsøkt har gått ut. Vennligst last side på nytt for å logge inn igjen."
             }
         }
     }

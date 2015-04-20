@@ -202,13 +202,17 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.MyPlacesBundle", funct
             "type": "text/javascript",
             "src": "../../../../bundles/framework/myplaces2/resources/locale/lv.js"
         }, {
+            "lang": "nb",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/myplaces2/resources/locale/nb.js"
+        }, {
             "lang": "nl",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/myplaces2/resources/locale/nl.js"
         }, {
-            "lang": "nb",
+            "lang": "nn",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/myplaces2/resources/locale/nb.js"
+            "src": "../../../../bundles/framework/myplaces2/resources/locale/nn.js"
         }, {
             "lang": "nn",
             "type": "text/javascript",

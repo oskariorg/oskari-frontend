@@ -1,10 +1,10 @@
 Oskari.registerLocalization(
 {
-    "lang": "nn",
+    "lang": "nb",
     "key": "Promote",
     "value": {
-        "title": "Brukarar som er logga inn",
-        "desc": "Fleire funksjoner er tilgjengelige om du loggar inn"
+        "title": "Brukere som er logget inn",
+        "desc": "Mer funksjonalitet er tilgjengelig hvis du logger inn"
     }
 }
 );
