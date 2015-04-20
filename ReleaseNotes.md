@@ -12,7 +12,7 @@ No longer assumes a LogoPlugin being present in the main map.
 
 ### featuredata2
 
-Error handling approved for missing DOM-elements.
+Error handling improved for missing DOM-elements.
 
 ## 1.28
 
