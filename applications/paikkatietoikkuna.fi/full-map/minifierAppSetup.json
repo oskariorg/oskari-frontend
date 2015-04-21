@@ -510,7 +510,7 @@
 		    "metadata" : {
 		        "Import-Bundle" : {
 		            "routesearch" : {
-		                "bundlePath" : "../../../packages/framework/bundle/"
+		                "bundlePath" : "../../../packages/paikkatietoikkuna/bundle/"
 		            }
 		        }
 		    }
