@@ -129,6 +129,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundle", func
             "lang": "hu",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher/resources/locale/hu.js"
+        },{
+            "lang" : "is",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/catalogue/metadatacatalogue/resources/locale/is.js"
         }, {
             "lang": "lv",
             "type": "text/javascript",

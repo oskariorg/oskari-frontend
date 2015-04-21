@@ -93,6 +93,10 @@ function() {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/mapfull/resources/locale/es.js"
         }, {
+            "lang": "et",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/mapfull/resources/locale/et.js"
+        }, {
             "lang": "fi",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/mapfull/resources/locale/fi.js"

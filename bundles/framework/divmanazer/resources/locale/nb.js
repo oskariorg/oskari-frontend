@@ -1,6 +1,6 @@
 Oskari.registerLocalization(
 {
-    "lang": "nn",
+    "lang": "nb",
     "key": "DivManazer",
     "value": {
         "buttons": {
@@ -16,7 +16,7 @@ Oskari.registerLocalization(
         },
         "LanguageSelect": {
             "title": "Språk",
-            "tooltip": "Vel språk",
+            "tooltip": "Velg språk",
             "languages": {
                 "af": "afrikaans",
                 "ak": "akan",
@@ -151,7 +151,7 @@ Oskari.registerLocalization(
                     "label": "Ikon"
                 },
                 "size": {
-                    "label": "Storleik"
+                    "label": "Størrelse"
                 },
                 "color": {
                     "label": "Farge",
@@ -159,7 +159,7 @@ Oskari.registerLocalization(
                     "labelCustom": "Spesialfarge (RGB 0-255)"
                 },
                 "preview": {
-                    "label": "Førehandsvising"
+                    "label": "Forhånsdvisning"
                 },
                 "buttons": {
                     "save": "Lagre",
@@ -167,19 +167,19 @@ Oskari.registerLocalization(
                 }
             },
             "line": {
-                "title": "Linestil",
+                "title": "Linjestil",
                 "tooltip": "",
                 "style": {
-                    "label": "Linestil"
+                    "label": "Linje"
                 },
                 "cap": {
                     "label": "Endepunkt"
                 },
                 "corner": {
-                    "label": "Hjørne"
+                    "label": "Hjørner"
                 },
                 "width": {
-                    "label": "Breidde"
+                    "label": "Bredde"
                 },
                 "color": {
                     "label": "Farge",
@@ -187,7 +187,7 @@ Oskari.registerLocalization(
                     "labelCustom": "Spesialfarge (RGB 0-255)"
                 },
                 "preview": {
-                    "label": "Førehandsvising"
+                    "label": "Forhånsdvisning"
                 },
                 "buttons": {
                     "save": "Lagre",
@@ -198,19 +198,19 @@ Oskari.registerLocalization(
                 "title": "Arealstil",
                 "tooltip": "",
                 "linestyle": {
-                    "label": "Linestil"
+                    "label": "Linje"
                 },
                 "linecap": {
                     "label": "Endepunkt"
                 },
                 "linecorner": {
-                    "label": "Hjørne"
+                    "label": "Hjørner"
                 },
                 "linewidth": {
-                    "label": "Linebreidde"
+                    "label": "Linjebredde"
                 },
                 "linecolor": {
-                    "label": "Linefarge",
+                    "label": "Linjefarge",
                     "labelOr": "eller",
                     "labelCustom": "Spesialfarge (RGB 0-255)"
                 },
@@ -223,7 +223,7 @@ Oskari.registerLocalization(
                     "label": "Mønster"
                 },
                 "preview": {
-                    "label": "Førehandsvising"
+                    "label": "Forhånsdvisning"
                 },
                 "buttons": {
                     "save": "Lagre",
@@ -233,21 +233,21 @@ Oskari.registerLocalization(
         },
         "Grid": {
             "columnSelector": {
-                "title": "Eigenskapar",
+                "title": "Egenskaper",
                 "tooltip": "Vis kolonner"
             },
             "export": {
                 "title": "Eksporter data",
                 "export": "Eksport",
                 "additional": {
-                    "title": "Tilleggsinstillingar",
-                    "dataSource": "Datakjelde",
+                    "title": "Tillegssinstillinger",
+                    "dataSource": "Datakilde",
                     "metadata": "Metadatalenke"
                 },
                 "columns": {
                     "title": "Kolonner",
                     "all": "Alle",
-                    "visible": "Opne"
+                    "visible": "Åpne"
                 },
                 "format": {
                     "title": "Filformat",

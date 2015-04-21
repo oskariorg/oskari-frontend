@@ -1,6 +1,6 @@
 Oskari.registerLocalization(
 {
-    "lang": "nb",
+    "lang": "nn",
     "key": "MapModule",
     "value": {
         "status_update_map": "Laster kartet…",
@@ -22,15 +22,15 @@ Oskari.registerLocalization(
         "plugin": {
             "LogoPlugin": {
                 "terms": "Bruksvilkår",
-                "dataSources": "Datakilder",
+                "dataSources": "Datakjelder",
                 "layersHeader": "Kartlag",
-                "indicatorsHeader": "Indikatorer"
+                "indicatorsHeader": "Indikatorar"
             },
             "DataSourcePlugin": {
-                "link": "Datakilder",
+                "link": "Datakjelder",
                 "popup": {
-                    "title": "Datakilder",
-                    "content": "IKKE OVERSATT"
+                    "title": "Datakjelder",
+                    "content": "IKKJE OMSETT"
                 },
                 "button": {
                     "close": "Lukk"
@@ -38,33 +38,33 @@ Oskari.registerLocalization(
             },
             "LayerSelectionPlugin": {
                 "title": "Kartlag",
-                "chooseDefaultBaseLayer": "Velg bakgrunnskart"
+                "chooseDefaultBaseLayer": "Vel bakgrunnskart"
             },
             "SearchPlugin": {
                 "placeholder": "Søk posisjon",
                 "search": "Søk",
-                "title": "Søkeresultat",
-                "close": "Lukk søkeresultat",
-                "noresults": "Ingen resultater funnet. Vennligst endre søket.",
-                "toomanyresults": "Over 100 resultater funnet. Vennligst endre søket.",
-                "column_name": "Navn",
+                "title": "Søkjeresultat",
+                "close": "Lukk søkjeresultat",
+                "noresults": "Ingen resultat funn. Ver grei og endre søket.",
+                "toomanyresults": "Over 100 resultat funne. Ver grei og endre søket.",
+                "column_name": "Namn",
                 "column_village": "Kommune",
                 "column_type": "Type"
             },
             "GetInfoPlugin": {
-                "title": "Forekomstdata",
+                "title": "Førekomstdata",
                 "layer": "Kartlag",
-                "places": "Forekomster",
-                "description": "Beskrivelse",
+                "places": "Førekomstar",
+                "description": "Framstilling",
                 "link": "Nettadresse",
-                "name": "Navn"
+                "name": "Namn"
             },
             "PublisherToolbarPlugin": {
                 "test": "test",
                 "history": {
-                    "reset": "Gå til standard visning",
-                    "back": "Gå tilbake til forrige visning",
-                    "next": "Gå til neste visning"
+                    "reset": "Gå til standard vising",
+                    "back": "Gå tilbake til førre vising",
+                    "next": "Gå til neste vising"
                 },
                 "measure": {
                     "line": "Mål avstand",
@@ -74,7 +74,7 @@ Oskari.registerLocalization(
             "MarkersPlugin": {
                 "buttons": {
                     "add": "Kartmarkør",
-                    "clear": "Slett alle markører"
+                    "clear": "Slett alle markørar"
                 },
                 "form": {
                     "title": "Punktstil",
@@ -83,7 +83,7 @@ Oskari.registerLocalization(
                         "label": "Ikon"
                     },
                     "size": {
-                        "label": "Størrelse"
+                        "label": "Storleik"
                     },
                     "color": {
                         "label": "Farge",
@@ -91,20 +91,20 @@ Oskari.registerLocalization(
                         "labelCustom": "Spesialfarge (RGB 0-255)"
                     },
                     "preview": {
-                        "label": "Forhåndsvisning"
+                        "label": "Førhandsvising"
                     },
                     "message": {
                         "label": "Tekst på kartet",
-                        "hint": "Skriv en melding"
+                        "hint": "Skriv ei melding"
                     }
                 },
                 "dialog": {
                     "title": "Kartmarkør",
-                    "message": "Velg en ny posisjon for markøren ved å klikke på kartet"
+                    "message": "Vel ein ny posisjon for markøren ved å klikke på kartet"
                 }
             },
             "MyLocationPlugin": {
-                "tooltip": "Sentrér kartet på din posisjon"
+                "tooltip": "Sentrér kartet på posisjonen din"
             }
         }
     }
