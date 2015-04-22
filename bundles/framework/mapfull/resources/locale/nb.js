@@ -1,6 +1,6 @@
 Oskari.registerLocalization(
 {
-    "lang": "nn",
+    "lang": "nb",
     "key": "Generic",
     "value": {
         "default-style": "Standard stil"

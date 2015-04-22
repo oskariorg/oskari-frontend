@@ -25,7 +25,6 @@ module.exports = function (grunt) {
                     var fp = path.normalize(filepath),
                         pathTokens = fp.split(path.sep),
                         bundleName = pathTokens[pathTokens.length - 2];
-						console.log(fp,bundleName);
 
                     for (i = 0; i < locales.length; i += 1) {
                         grunt.config.set(
@@ -466,6 +465,7 @@ module.exports = function (grunt) {
                 templateLocale = this.data[0].templateLocale,
                 textNode;
 
+			
             grunt.log.writeln('Parsing', file);
             // xl/sharedStrings.xml, Shared strings <si><t>val, 0-based index
             // (partially?) styled strings <si><r><t><_>val, <si><r><t>val
@@ -648,7 +648,6 @@ module.exports = function (grunt) {
                                 localeDir = '..' + path.sep + getCellValue(cells[0]).substring(8);
 								localeDir = localeDir.replace('\\bundle\\','\\');
 								localeDir = localeDir.replace('\\locale','\\resources\\locale');
-								//console.log('######', localeDir);
                                 localeFile = getCellValue(cells[1]);
                                 getLocalization(
                                     localeDir,

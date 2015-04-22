@@ -1,11 +1,11 @@
 Oskari.registerLocalization(
 {
-    "lang": "nn",
+    "lang": "nb",
     "key": "PersonalData",
     "value": {
         "title": "Mine data",
         "desc": "Mine data",
-        "notLoggedIn": "Mine data innehelde brukarprofilen din og dine lagra førekomstar, kart, 'embeddede' kart, indikatorar, analyser og datasett. <a href='/web/nb/login'>Logg inn for å sjekke dine data</a>.",
+        "notLoggedIn": "Mine data inneholder din brukerprofil og dine lagrede forekomster, kart, 'embeddede' kart, indikatorer, analyser og datasett. <a href='/web/nb/login'>Logg inn for å sjekke dine data</a>.",
         "notLoggedInText": "NOT TRANSLATED",
         "tabs": {
             "myviews": {
@@ -15,8 +15,8 @@ Oskari.registerLocalization(
                 "unpublish": "Avbryt publisering",
                 "delete": "Slett",
                 "grid": {
-                    "name": "Namn",
-                    "description": "Framstilling",
+                    "name": "Navn",
+                    "description": "Beskrivelse",
                     "publish": "Publisert",
                     "edit": "Tilpass",
                     "delete": "Slett"
@@ -24,21 +24,21 @@ Oskari.registerLocalization(
                 "popup": {
                     "edit": "Tilpass kartet",
                     "title": "Lagre kartet",
-                    "label": "Namn på kartet",
-                    "name_placeholder": "Gi kartet eit namn",
-                    "description_placeholder": "Skriv ei framstilling om innhaldet i kartet",
+                    "label": "Navn på kartet",
+                    "name_placeholder": "Gi kartet et navn",
+                    "description_placeholder": "Gi kartet en beskrivelse",
                     "save": "Lagre",
                     "cancel": "Avbryt",
-                    "error_noname": "Skriv namn på kartet",
+                    "error_noname": "Skriv navn på kartet",
                     "deletetitle": "Slett kartet",
                     "deletemsg": "Vil du slette dette kartet?"
                 },
                 "save": {
-                    "success": "Kartet er lagra",
-                    "error_noname": "Kartnamnet kan ikkje vere tomt",
-                    "error_illegalchars": "Kartnamn inneheld ugyldige teikn. Tillatne teikn er bokstavane a-z samt å, ä og ö, tal og bindestrekar.",
+                    "success": "Kartet er lagret",
+                    "error_noname": "Kartnavnet kan ikke være tomt",
+                    "error_illegalchars": "Kartnavn inneholder ugyldige tegn. Tillatte tegn er bokstavene a-z samt å, ä og ö, tall og bindestreker.",
                     "msg": {
-                        "view_name": "Kartnamn"
+                        "view_name": "Kartnavn"
                     }
                 },
                 "button": {
@@ -49,16 +49,16 @@ Oskari.registerLocalization(
                 },
                 "error": {
                     "title": "Feil!",
-                    "generic": "Systemfeil. Ver grei og prøv om att seinare.",
-                    "notsaved": "Kartet kunne ikkje lagrast. Ver grei og prøv om att seinare.",
-                    "notdeleted": "Kartet kunne ikkje slettast. Ver grei og prøv om att seinare.",
-                    "makePublic": "Kartet kunne ikkje publiserast. Ver grei og prøv om att seinare.",
-                    "makePrivate": "Det var ikke mogleg å avbryte publiseringa. Ver grei og prøv om att seinare.",
-                    "loadfailed": "Kartene kunne ikkje lastast ned. Ver grei og prøv om att seinare."
+                    "generic": "Systemfeil. Vennligst prøv igjen seinere.",
+                    "notsaved": "Kartet kunne ikke lagres. Vennligst prøv igjen seinere.",
+                    "notdeleted": "Kartet kunne ikke slettes. Vennligst prøv igjen seinere.",
+                    "makePublic": "Kartet kunne ikke publiseres. Vennligst prøv igjen seinere.",
+                    "makePrivate": "Det var ikke mulig å avbryte publiseringen. Vennligst prøv igjen seinere.",
+                    "loadfailed": "Kartene kunne ikke lastes ned. Vennligst prøv igjen seinere."
                 }
             },
             "publishedmaps": {
-                "title": "Embeddede' kart.",
+                "title": "'Embeddede' kart.",
                 "show": "Vis på kartet",
                 "getHTML": "HTML-kode",
                 "edit": "Tilpass",
@@ -66,37 +66,37 @@ Oskari.registerLocalization(
                 "unpublish": "Avbryt publisering av kartet",
                 "delete": "Slett",
                 "grid": {
-                    "name": "Namn",
-                    "domain": "Nettstad",
+                    "name": "Navn",
+                    "domain": "Nettsted",
                     "publish": "Status",
-                    "show": "Handlingar",
+                    "show": "Handlinger",
                     "html": "HTML-kode",
                     "edit": "Tilpass",
                     "delete": "Slett"
                 },
                 "published": {
-                    "desc": "Bruk kartet ved å lime inn HTML-koden nedenfor på nettstaden din:"
+                    "desc": "Bruk kartet ved å lime inn HTML-koden nedenfor på nettstedet ditt:"
                 },
                 "popup": {
-                    "edit": "Endre kartnamn",
+                    "edit": "Endre kartnavn",
                     "title": "Lagre kartet",
-                    "label": "Kartnamn",
-                    "placeholder": "Gi kartet eit namn",
+                    "label": "Kartnavn",
+                    "placeholder": "Gi kartet et navn",
                     "save": "Lagre",
                     "cancel": "Avbryt",
-                    "error_noname": "Gi kartet eit namn",
+                    "error_noname": "Gi kartet et navn",
                     "deletetitle": "Slett 'embedded' kart",
-                    "deletemsg": "Vil du slette dette 'embeddede' kartet? Etterpå vil ikkje kartet bli vist på nettsida di",
+                    "deletemsg": "Vil du slette dette 'embeddede' kartet. Etterpå vil ikke kartet vises på din nettside",
                     "showErrorTitle": "Ufullstendig kart",
-                    "showConfirmMissing": "Kartet er ufullstendig. Nokre kartlag er ikkje tilgjengelege. Vil du likevel opne kartet?",
-                    "showConfirmNotLoaded": "Alle kartlag kunne ikkje lastast ned. Ver grei og prøv om att seinare."
+                    "showConfirmMissing": "Kartet er ufullstendig. Noen kartlag er ikke tilgjengelige. Vil du likevel åpne kartet?",
+                    "showConfirmNotLoaded": "Alle kartlag kunne ikke lastes ned. Vennligst prøv igjen seinere."
                 },
                 "save": {
-                    "success": "Kartet er lagra",
-                    "error_noname": "Kartnamnet kan ikkje vere tomt",
-                    "error_illegalchars": "Kartnamnet inneheld ugyldige teikn. Tillatne teikn er bokstavane a-z samt å, ä og ö, tal og bindestrekar.",
+                    "success": "Kartet er lagret",
+                    "error_noname": "Kartnavnet kan ikke være tomt",
+                    "error_illegalchars": "Kartnavn inneholder ugyldige tegn. Tillatte tegn er bokstavene a-z samt å, ä og ö, tall og bindestreker.",
                     "msg": {
-                        "view_name": "Kartnamn"
+                        "view_name": "Kartnavn"
                     }
                 },
                 "button": {
@@ -107,22 +107,22 @@ Oskari.registerLocalization(
                 },
                 "error": {
                     "title": "Feil!",
-                    "generic": "Systemfeil. Ver grei og prøv om att seinare.",
-                    "notsaved": "'Embedded' kart kunne ikkje lagrast. Ver grei og prøv om att seinare.",
-                    "notdeleted": "'Embedded' kart kunne ikkje slettast. Ver grei og prøv om att seinare.",
-                    "makePublic": "'Embedded' kart kunne ikkje publiserast. Ver grei og prøv om att seinare.",
-                    "makePrivate": "Det var ikke moleg å avbryte publiseringa av 'embedded' kart. Ver grei og prøv om att seinare."
+                    "generic": "Systemfeil. Vennligst prøv igjen seinere.",
+                    "notsaved": "'Embedded' kart kunne ikke lagres. Vennligst prøv igjen seinere.",
+                    "notdeleted": "'Embedded' kart kunne ikke slettes. Vennligst prøv igjen seinere.",
+                    "makePublic": "'Embedded' kart kunne ikke publiseres. Vennligst prøv igjen seinere.",
+                    "makePrivate": "Det var ikke mulig å avbryte publiseringen av 'embedded' kart. Vennligst prøv igjen seinere."
                 }
             },
             "account": {
                 "title": "Min konto",
-                "firstName": "Fornamn",
-                "lastName": "Etternamn",
-                "nickName": "Kallenamn",
+                "firstName": "Fornavn",
+                "lastName": "Etternavn",
+                "nickName": "Kallenavn",
                 "email": "E-post",
                 "changeInfo": "Oppdater kontoinformasjon",
                 "changePassword": "Endre passord",
-                "removeAccount": "Slett kontoen din",
+                "removeAccount": "Slett din konto",
                 "changeInfoUrl": "NOT TRANSLATED"
             }
         },

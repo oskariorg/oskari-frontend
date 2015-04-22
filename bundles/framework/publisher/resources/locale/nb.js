@@ -1,34 +1,34 @@
 Oskari.registerLocalization(
 {
-    "lang": "nn",
+    "lang": "nb",
     "key": "Publisher",
     "value": {
         "title": "Publisering av kart",
         "flyouttitle": "Lag 'embeddede' kart",
         "desc": "",
         "published": {
-            "title": "Kart for 'embedding' er laga",
-            "desc": "Kartet er laga. 'Embed' kartet ved å lime HTML-koden nedenfor på din nettstad"
+            "title": "Kart for 'embedding' er laget",
+            "desc": "Kartet er laget. 'Embed' kartet ved å legge inn HTML-koden under i din nettsted, og du har kartet på nettstedet"
         },
         "edit": {
             "popup": {
-                "title": "Opnar 'embedded' kart for redigering",
-                "msg": "Oppdaterer data for kart som er 'embedded' tidlegare"
+                "title": "Åpner 'embedded' kart for redigering",
+                "msg": "Oppdaterer data for kart som er 'embedded' tidligere"
             }
         },
         "BasicView": {
             "title": "Legg til kartet",
             "titleEdit": "Tilpass det 'embedded' kartet",
             "domain": {
-                "title": "Nettstad",
-                "label": "Nettstad for 'embedded' kart",
-                "placeholder": "Nettadresse utan http eller www",
-                "tooltip": "Oppgi domenenamn for nettstaden (url uten http, www eller underadresse), til dømes: homepage.com."
+                "title": "Nettsted",
+                "label": "Nettsted for 'embedded' kart",
+                "placeholder": "Nettadresse uten http eller www",
+                "tooltip": "Oppgi domenenavn for nettstedet (url uten http, www eller underadresse), for eksempel: homepage.com."
             },
             "name": {
-                "label": "Kartnamn",
-                "placeholder": "obligatorisk",
-                "tooltip": "Gi kartet eit namn. Merk at namnet skal vere på same språk som brukargrensesnittet."
+                "label": "Kartnavn",
+                "placeholder": "påkrevd",
+                "tooltip": "Gi kartet et beskrivende navn. Merk at navnet skal være på samme språk som brukergrensesnittet."
             },
             "language": {
                 "label": "Språk",
@@ -37,45 +37,45 @@ Oskari.registerLocalization(
                     "sv": "Svensk",
                     "en": "Engelsk"
                 },
-                "tooltip": "Vel språk for grensesnitt og data på kartet"
+                "tooltip": "Velg språk for grensesnitt og data på kartet"
             },
             "size": {
-                "label": "Storleik",
-                "tooltip": "Vel eller legg inn storleiken på kartet som skal byggast inne på nettsteden din. Du kan sjå endringar i vindauget for førehandsvising."
+                "label": "Størrelse",
+                "tooltip": "Velg eller angi størrelsen på kartet som skal bygges inne på ditt nettsted. Du kan se endringer i vinduet for forhåndsvisning."
             },
             "tools": {
-                "label": "verktøy",
-                "tooltip": "Vel verktøy som skal visast på kartet. Du kan sjå plasseringa av verktøyet i vindauget for førehandsvising.",
+                "label": "Verktøy",
+                "tooltip": "Velg verktøy som skal vises på kartet. Du kan se plasseringen av verktøy i vinduet for forhåndsvisning.",
                 "ScaleBarPlugin": "Målestokk",
                 "IndexMapPlugin": "Indekskart",
                 "PanButtons": "Panoreringsverktøy",
                 "Portti2Zoombar": "Zoom",
-                "MyLocationPlugin": "Sentrer på brukarposisjon",
+                "MyLocationPlugin": "Sentrer på brukerposisjon",
                 "ControlsPlugin": "Panorér kartet",
-                "SearchPlugin": "Adresse- og stadnamnsøk",
-                "FeaturedataPlugin": "Førekomstdata",
-                "GetInfoPlugin": "Spørjeverktøy for førekomstar",
+                "SearchPlugin": "Adresse- og stedsnavnssøk",
+                "FeaturedataPlugin": "Forekomstdata",
+                "GetInfoPlugin": "Spørreverktøy for forekomster",
                 "PublisherToolbarPlugin": "Kartverktøy",
-                "selectDrawLayer": "Vel lag for nye førekomstar"
+                "selectDrawLayer": "Velg lag for nye forekomster"
             },
             "toolbarToolNames": {
-                "history_back": "Flytt attende",
-                "history_forward": "Flytt framover",
+                "history_back": "Flytt tilbake",
+                "history_forward": "Flytt fremover",
                 "measureline": "Mål avstand",
                 "measurearea": "Mål areal",
-                "drawTools": "Teikneverktøy",
-                "point": "Tillat brukarar å legge til punktførekomstar",
-                "line": "Tillat brukarar å legge til lineførekomstar",
-                "area": "Tillat brukarar å legge til arealførekomstar"
+                "drawTools": "Tegneverktøy",
+                "point": "Tillat brukere å legge til punktforekomster",
+                "line": "Tillat brukere å legge til linjeforekomster",
+                "area": "Tillat brukere å legge til arealforekomster"
             },
             "toollayout": {
-                "label": "verktøyplassering",
-                "tooltip": "Vel plassering av verktøyet på kartet",
-                "lefthanded": "Venstrehands",
-                "righthanded": "Høgrehands",
-                "userlayout": "Eigendefinert layout",
+                "label": "Verktøyplassering",
+                "tooltip": "Velg plassering av verktøyet på kartet",
+                "lefthanded": "Venstrehånds",
+                "righthanded": "Høyrehånds",
+                "userlayout": "Egendefinert layout",
                 "usereditmode": "Start redigering",
-                "usereditmodeoff": "Avslutt redigering"
+                "usereditmodeoff": "Avslutt editering"
             },
             "data": {
                 "label": "Statistikk",
@@ -88,15 +88,15 @@ Oskari.registerLocalization(
                 "fields": {
                     "colours": {
                         "label": "Fargetabell",
-                        "placeholder": "Vel fargetabell",
-                        "buttonLabel": "Vel",
+                        "placeholder": "Velg fargetabell",
+                        "buttonLabel": "Velg",
                         "light_grey": "Lys grå",
                         "dark_grey": "Mørk grå",
                         "blue": "Blå",
-                        "red": "Raud",
-                        "green": "Grøn",
+                        "red": "Rød",
+                        "green": "Grønn",
                         "yellow": "Gul",
-                        "custom": "Eigen fargetabell",
+                        "custom": "Egen fargetabell",
                         "customLabels": {
                             "bgLabel": "Bakgrunnsidentifikator",
                             "titleLabel": "Tekstidentifikator",
@@ -112,28 +112,28 @@ Oskari.registerLocalization(
                     "toolStyles": {
                         "label": "Verktøystil",
                         "default": "Standard stil",
-                        "rounded-dark": "Avrunda (mørk)",
-                        "rounded-light": "Avrunda (lys)",
-                        "sharp-dark": "Vinkla (mørk)",
-                        "sharp-light": "Vinkla (lys)",
+                        "rounded-dark": "Avrundet (mørk)",
+                        "rounded-light": "Avrundet (lys)",
+                        "sharp-dark": "Vinklet (mørk)",
+                        "sharp-light": "Vinklet (lys)",
                         "3d-dark": "Tredimensjonal (mørk)",
                         "3d-light": "Tredimensjonal (lys)"
                     }
                 },
                 "popup": {
-                    "title": "Vel fargetabell",
+                    "title": "Velg fargetabell",
                     "close": "Lukk",
                     "gfiDialog": {
-                        "title": "Førekomstinformasjon",
-                        "featureName": "Førehandsvising",
-                        "featureDesc": "Fargetabellen gjeld berre farge på popup-vindauge for førekomstinformasjon og val av kartlag"
+                        "title": "Forekomstinformasjon",
+                        "featureName": "Forhåndsvisning",
+                        "featureDesc": "Fargetabellen gjelder bare farge på popup-vindu for forekomstinformasjon og valg av kartlag"
                     }
                 }
             },
             "layers": {
-                "add": "Lag nytt lag for nye førekomstar",
+                "add": "Lag nytt lag for nye forekomster",
                 "label": "Kartlag",
-                "addselect": "Legg til teikning i kartet",
+                "addselect": "Legg til tegning til kartet",
                 "defaultLayer": "(Standard kartlag)",
                 "useAsDefaultLayer": "Bruk som standard lag"
             },
@@ -145,9 +145,9 @@ Oskari.registerLocalization(
                 "medium": "Medium",
                 "large": "Stor",
                 "fill": "Fyll mellomrom",
-                "custom": "Spesialstorleik",
-                "width": "breidde",
-                "height": "høgde",
+                "custom": "Spesialstørrelse",
+                "width": "bredde",
+                "height": "høyde",
                 "separator": "x"
             },
             "buttons": {
@@ -161,54 +161,54 @@ Oskari.registerLocalization(
             "confirm": {
                 "replace": {
                     "title": "Vil du bytte ut det 'embeddede' kartet?",
-                    "msg": "Endringane i kartet som er 'embedded' tidlegare vil visast umiddelbart på kartet. Du treng ikkje legge inn HTML-koden på nettstaden din på ny"
+                    "msg": "Endringene i kartet som er 'embedded' tidligere vil vises umiddelbart på kartet. Du trenger ikke angi HTML-koden til nettstedet på ny"
                 }
             },
             "layerselection": {
                 "label": "Vis kartlag i menyen",
-                "info": "Vel kartlag som bakgrunn.Du kan velje standard bakgrunnslag i vindauget for førehandsvising",
-                "tooltip": "Bakgrunnen er vist i det nedste kartlaget. Berre eitt kartlag kan bli vist om gongen.  Brukaren kan skifte bakgrunn dersom det er vald fleire lag. Det førehandsinnstilte kartlaget kan veljast i førehandsvisinga.",
+                "info": "Velg kartlag som bakgrunn.Du kan velge standard bakgrunnslag i vinduet for forhåndsvisning",
+                "tooltip": "Bakgrunnen er vist i det nederste kartlaget. Kun ett kartlag kan bli vises om gangen.  Brukeren kan skifte bakgrunn dersom det er valgt flere lag. Standard kartlag kan velges i forhåndsvisningen.",
                 "promote": "Vil du også vise satellitt/flyfoto?"
             },
-            "preview": "Førehandsvising av 'embedded' kart",
+            "preview": "Forhåndsvisning av 'embedded' kart",
             "location": "Posisjon og zoomnivå",
             "zoomlevel": "Zoomnivå",
             "help": "Hjelp",
             "error": {
                 "title": "Feil",
-                "size": "Feil i definisjon av storleikar",
-                "domain": "Nettstad er obligatorisk",
-                "domainStart": "Skriv inn nettstad utan http og www",
-                "name": "Kartvnamn er obligatorisk",
-                "nohelp": "Brukarrettleiing er ikkje tilgjengeleg",
-                "saveFailed": "Embedding' av kart feila. Ver grei og prøv om att seinare",
-                "nameIllegalCharacters": "Kartnamn inneheld ugyldige teikn. Tillatne teikn er bokstavane a-z samt å, ä og ö, tal og bindestrekar.",
-                "domainIllegalCharacters": "Namn på nettstaden inneheld ugyldige teikn. Tillatne teikn er bokstavane a-z samt å, ä og ö, tal og bindestrekar."
+                "size": "Feil i definisjon av størrelser",
+                "domain": "Nettsted er påkrevd",
+                "domainStart": "Angi nettsted uten http og www",
+                "name": "Kartvnavn er påkrevd",
+                "nohelp": "Brukerveiledning er ikke tilgjengelig",
+                "saveFailed": "'Embedding' av kart feilet. Vennligst prøv igjen seinere",
+                "nameIllegalCharacters": "Kartnavn inneholder ugyldige tegn. Tillatte tegn er bokstavene a-z samt å, ä og ö, tall og bindestreker.",
+                "domainIllegalCharacters": "Navn på nettsted inneholder ugyldige tegn. Tillatte tegn er bokstavene a-z samt å, ä og ö, tall og bindestreker."
             }
         },
         "NotLoggedView": {
-            "text": "Du kan opprette 'embeddede' kart etter at du har logga inn",
+            "text": "Du kan opprette 'embeddede' kart etter at du har logget inn",
             "signup": "Logg inn",
             "signupUrl": "NOT TRANSLATED",
             "register": "Registrer",
             "registerUrl": "NOT TRANSLATED"
         },
         "StartView": {
-            "text": "Du kan lage kartet og 'embedde' det inn på di eiga nettside",
+            "text": "Du kan lage kartet og 'embedde' det inn i ditt eget nettsted",
             "touLink": "Vis vilkår for bruk av 'embeddede' kart",
             "layerlist_title": "Kartlag som kan 'embeddes'",
-            "layerlist_empty": "Dei valde kartlaga kan ikkje publiserast i eit 'embedded' kart. Kontrollér vilkåra for publisering i menyen \"Valde kartlag\" før du lagar kartet",
-            "layerlist_denied": "Kartlaget kan ikkje publiserast i eit 'embedded' kart",
-            "denied_tooltip": "Dataprodusentene har ikkje gitt løyv til å publisere dei valde kartlaga i eit 'embedded' kart. Kontrollér vilkåra for publisering i menyen \"Valde kartlag\" før du lagar kartet",
-            "myPlacesDisclaimer": "NB. Du publiserer ditt eige kartlag",
+            "layerlist_empty": "De valgte kartlagene kan ikke publiseres i et 'embedded' kart. Kontrollér rettighetene for publisering i menyen \"Valgte kartlag\" før du lager kartet",
+            "layerlist_denied": "Kartlaget kan ikke publiseres i et 'embedded' kart",
+            "denied_tooltip": "Dataprodusentene har ikke gitt tillatelse til å publisere de valgte kartlagene i et 'embedded' kart. Kontrollér rettighetene for publisering i menyen \"Valgte kartlag\" før du lager kartet",
+            "myPlacesDisclaimer": "NB. Du publiserer ditt eget kartlag",
             "buttons": {
-                "continue": "hald fram",
-                "continueAndAccept": "Akseptér vilkår for bruk og hald fram",
+                "continue": "Fortsett",
+                "continueAndAccept": "Akseptér vilkår for bruk og fortsett",
                 "cancel": "Avbryt",
                 "close": "Lukk"
             },
             "tou": {
-                "notfound": "Vilkår for bruk blei ikkje funne",
+                "notfound": "Vilkår for bruk ble ikke funnet",
                 "reject": "Avslå",
                 "accept": "Aksepter"
             }
@@ -220,8 +220,8 @@ Oskari.registerLocalization(
             "selectAsBaselayer": "",
             "rights": {
                 "can_be_published_map_user": {
-                    "label": "Kartlaget kan publiserast i eit 'embedded' kart",
-                    "tooltip": "Kartlaget kan publiserast i eit 'embedded' kart. Talet på brukarar per uke kan vere avgrensa"
+                    "label": "Kartlaget kan publiseres i et 'embedded' kart",
+                    "tooltip": "Kartlaget kan publiseres i et 'embedded' kart. Antall brukere per uke kan være begrenset"
                 }
             }
         }

@@ -90,6 +90,10 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadatacatalogue.MetadataCatalogue
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/catalogue/metadatacatalogue/resources/locale/nb.js"
 		},{
+			"lang" : "nn",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/catalogue/metadatacatalogue/resources/locale/nn.js"
+		},{
 			"lang" : "nl",
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/catalogue/metadatacatalogue/resources/locale/nl.js"

@@ -86,6 +86,10 @@ Oskari.clazz.define(
                 "type": "text/javascript",
                 "src": "../../../../bundles/catalogue/metadataflyout/resources/locale/nb.js"
             }, {
+                "lang": "nn",
+                "type": "text/javascript",
+                "src": "../../../../bundles/catalogue/metadataflyout/resources/locale/nn.js"
+            }, {
                 "lang": "nl",
                 "type": "text/javascript",
                 "src": "../../../../bundles/catalogue/metadataflyout/resources/locale/nl.js"

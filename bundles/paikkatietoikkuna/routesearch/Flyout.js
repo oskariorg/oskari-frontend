@@ -287,6 +287,37 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                     }
                 )
             );
+
+            me.services.push(
+                me._routingService(
+                    '02.fi',
+                    '#F93F31',
+                    function (fromLoc, toLoc) {
+                        var url = 'https://www.fonecta.fi/kartat?';
+                        url += "from="+encodeURIComponent(fromLoc.name);
+                        if (fromLoc.village) {
+                            url += ',' + encodeURIComponent(fromLoc.village);
+                        }
+//                        url += ',_Finland';
+                        url += '&to=' + encodeURIComponent(toLoc.name);
+                        if (toLoc.village) {
+                            url += ',' + encodeURIComponent(toLoc.village);
+                        }
+//                        url += ',+Finland';
+                        url += "&rt=fastest";
+                        /*
+                            //these are assumably "supported", but don't seem to be doing anything much
+                            url += "&lon=24.823199999999996&lat=60.20618970377743&z=13";
+                        */
+                        console.log(url);
+                        return url;
+                    }
+                )
+            );
+
+
+
+
         },
 
         /**
@@ -311,7 +342,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                             );
                             this.el = el;
                         }
-                        if (fromLoc && fromLoc.name && toLoc && toLoc.name) {
+                        if (fromLoc && fromLoc.name && fromLoc.name.length && toLoc && toLoc.name && toLoc.name.length) {
                             el
                                 .attr('href', this.urlBuilder(fromLoc, toLoc))
                                 .attr('target', '_blank')

@@ -1,43 +1,43 @@
 Oskari.registerLocalization(
 {
-    "lang": "nn",
+    "lang": "nb",
     "key": "elf-geolocator",
     "value": {
-        "title": "NOT TRANSLATED",
-        "desc": "NOT TRANSLATED",
+        "title": "Geolocator",
+        "desc": "ELF Geolocator",
         "tool": {
             "tooltip": "Søk ved å klikke i kartet"
         },
         "tab": {
-            "title": "Stader",
-            "searchTitle": "Søkjeord",
-            "searchPlaceholder": "Søk stad ved stadnamn, adresse eller eigedomsinformasjont",
+            "title": "Steder",
+            "searchTitle": "Søkeord",
+            "searchPlaceholder": "Søk sted ved stedsnavn, adresse eller eiendomsident",
             "regionTitle": "Regionfilter",
-            "regionPlaceholder": "Filtrer søk på kommune eller administrativ eining",
-            "additionalsTitle": "Søkjealternativ",
+            "regionPlaceholder": "Filtrér søk på kommune eller administrativ enhet",
+            "additionalsTitle": "Søkealternativer",
             "normalTitle": "NOT TRANSLATED",
             "normalDesc": "NOT TRANSLATED",
             "restrictedTitle": "NOT TRANSLATED",
             "restrictedDesc": "NOT TRANSLATED",
-            "fuzzyTitle": "Fuzzy-søk",
-            "fuzzyDesc": "Stader med liknande namn",
+            "fuzzyTitle": "Fuzzy søk",
+            "fuzzyDesc": "Steder med lignende navn",
             "exonymTitle": "Eksonym-søk",
-            "exonymDesc": "Utanlandske stadnamn",
+            "exonymDesc": "Utenlandske stedsnavn",
             "searchButton": "Søk",
-            "resultsTitle": "Søkjeresultat",
+            "resultsTitle": "Søkeresultater",
             "fuzzyResultsTitle": "NOT TRANSLATED",
             "filterResultsTitle": "NOT TRANSLATED",
             "countryFilter": "NOT TRANSLATED",
             "backButton": "Tilbake",
             "geolocButton": "NOT TRANSLATED",
             "geolocDesc": "NOT TRANSLATED",
-            "noResults": "Ingen søkjeresultat",
+            "noResults": "Ingen søkeresultater",
             "errors": {
-                "searchTermMissing": "Søkjeord må skrivast inn",
-                "searchFailed": "Søket har feila. Ver grei og prøv om att seinare."
+                "searchTermMissing": "Søkeord er påkrevd",
+                "searchFailed": "Søket har feilet. Prøv igjen seinere."
             },
             "grid": {
-                "name": "Namn",
+                "name": "Navn",
                 "village": "Region",
                 "type": "Type"
             }

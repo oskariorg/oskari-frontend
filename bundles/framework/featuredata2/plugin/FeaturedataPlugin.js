@@ -68,6 +68,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             me.setVisible(false);
         },
         showLoadingIndicator : function(blnLoad) {
+            if(!this.getElement()) {
+                return;
+            }
             if(blnLoad) {
                 this.getElement().addClass('loading');
             }
@@ -76,6 +79,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             }
         },
         showErrorIndicator : function(blnLoad) {
+            if(!this.getElement()) {
+                return;
+            }
             if(blnLoad) {
                 this.getElement().addClass('error');
             }

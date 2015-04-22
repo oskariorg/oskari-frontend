@@ -105,6 +105,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.search.SearchBundle", function (
             "type": "text/javascript",
             "src": "../../../../bundles/framework/search/resources/locale/hu.js"
         }, {
+            "lang": "is",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/search/resources/locale/is.js"
+        }, {
+            "lang": "it",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/search/resources/locale/it.js"
+        }, {
             "lang": "lv",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/search/resources/locale/lv.js"

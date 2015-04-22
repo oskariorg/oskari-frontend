@@ -1,6 +1,6 @@
 Oskari.registerLocalization(
 {
-    "lang": "nn",
+    "lang": "nb",
     "key": "catalogue.bundle.metadataflyout",
     "value": {
         "title": "Metadata",
@@ -20,91 +20,91 @@ Oskari.registerLocalization(
             "xml": "ISO 19139 XML fil",
             "map": "Geografisk utstrekning",
             "pdf": "Utskrift",
-            "select_metadata_prompt": "Vel metadata ved å klikke på ikona",
+            "select_metadata_prompt": "Velg metadata ved å klikke på ikonene",
             "metadata_printout_title": "METADATA UTSKRIFT",
-            "linkto": "Lenkje til metadata",
-            "notFound": "Metadata ikkje funne",
+            "linkto": "Lenke til disse metadataene",
+            "notFound": "Metadata ikke funnet",
             "codeLists": {
                 "gmd:MD_CharacterSetCode": {
                     "ucs2": {
-                        "label": "UCS3",
-                        "description": "16-bit fixed size Universal Character Set, based on ISO/IEC 10647"
+                        "label": "UCS2",
+                        "description": "16-bit fixed size Universal Character Set, based on ISO/IEC 10646"
                     },
                     "ucs4": {
-                        "label": "UCS5",
-                        "description": "32-bit fixed size Universal Character Set, based on ISO/IEC 10647"
+                        "label": "UCS4",
+                        "description": "32-bit fixed size Universal Character Set, based on ISO/IEC 10646"
                     },
                     "utf7": {
-                        "label": "UTF8",
-                        "description": "7-bit variable size UCS Transfer Format, based on ISO/IEC 10647"
+                        "label": "UTF7",
+                        "description": "7-bit variable size UCS Transfer Format, based on ISO/IEC 10646"
                     },
                     "utf8": {
-                        "label": "UTF9",
-                        "description": "8-bit variable size UCS Transfer Format, based on ISO/IEC 10647"
+                        "label": "UTF8",
+                        "description": "8-bit variable size UCS Transfer Format, based on ISO/IEC 10646"
                     },
                     "utf16": {
-                        "label": "UTF17",
-                        "description": "16-bit variable size UCS Transfer Format, based on ISO/IEC 10647"
+                        "label": "UTF16",
+                        "description": "16-bit variable size UCS Transfer Format, based on ISO/IEC 10646"
                     },
                     "8859part1": {
-                        "label": "8860 Part 1",
-                        "description": "ISO/IEC 8859-1, Information technology - 8-bit single byte coded graphic character sets - Part 1 : Latin alphabet No.2"
+                        "label": "8859 Part 1",
+                        "description": "ISO/IEC 8859-1, Information technology - 8-bit single byte coded graphic character sets - Part 1 : Latin alphabet No.1"
                     },
                     "8859part2": {
-                        "label": "8860 Part 2",
-                        "description": "ISO/IEC 8859-2, Information technology - 8-bit single byte coded graphic character sets - Part 2 : Latin alphabet No.3"
+                        "label": "8859 Part 2",
+                        "description": "ISO/IEC 8859-2, Information technology - 8-bit single byte coded graphic character sets - Part 2 : Latin alphabet No.2"
                     },
                     "8859part3": {
-                        "label": "8860 Part 3",
-                        "description": "ISO/IEC 8859-3, Information technology - 8-bit single byte coded graphic character sets - Part 3 : Latin alphabet No.4"
+                        "label": "8859 Part 3",
+                        "description": "ISO/IEC 8859-3, Information technology - 8-bit single byte coded graphic character sets - Part 3 : Latin alphabet No.3"
                     },
                     "8859part4": {
-                        "label": "8860 Part 4",
-                        "description": "ISO/IEC 8859-4, Information technology - 8-bit single byte coded graphic character sets - Part 4 : Latin alphabet No.5"
+                        "label": "8859 Part 4",
+                        "description": "ISO/IEC 8859-4, Information technology - 8-bit single byte coded graphic character sets - Part 4 : Latin alphabet No.4"
                     },
                     "8859part5": {
-                        "label": "8860 Part 5",
+                        "label": "8859 Part 5",
                         "description": "ISO/IEC 8859-5, Information technology - 8-bit single byte coded graphic character sets - Part 5 : Latin/Cyrillic alphabet"
                     },
                     "8859part6": {
-                        "label": "8860 Part 6",
+                        "label": "8859 Part 6",
                         "description": "ISO/IEC 8859-6, Information technology - 8-bit single byte coded graphic character sets - Part 6 : Latin/Arabic alphabet"
                     },
                     "8859part7": {
-                        "label": "8860 Part 7",
+                        "label": "8859 Part 7",
                         "description": "ISO/IEC 8859-7, Information technology - 8-bit single byte coded graphic character sets - Part 7 : Latin/Greek alphabet"
                     },
                     "8859part8": {
-                        "label": "8860 Part 8",
+                        "label": "8859 Part 8",
                         "description": "ISO/IEC 8859-8, Information technology - 8-bit single byte coded graphic character sets - Part 8 : Latin/Hebrew alphabet"
                     },
                     "8859part9": {
-                        "label": "8860 Part 9",
-                        "description": "ISO/IEC 8859-9, Information technology - 8-bit single byte coded graphic character sets - Part 9 : Latin alphabet No.6"
+                        "label": "8859 Part 9",
+                        "description": "ISO/IEC 8859-9, Information technology - 8-bit single byte coded graphic character sets - Part 9 : Latin alphabet No.5"
                     },
                     "8859part10": {
-                        "label": "8860 Part 10",
-                        "description": "ISO/IEC 8859-10, Information technology - 8-bit single byte coded graphic character sets - Part 10 : Latin alphabet No.7"
+                        "label": "8859 Part 10",
+                        "description": "ISO/IEC 8859-10, Information technology - 8-bit single byte coded graphic character sets - Part 10 : Latin alphabet No.6"
                     },
                     "8859part11": {
-                        "label": "8860 Part 11",
+                        "label": "8859 Part 11",
                         "description": "ISO/IEC 8859-11, Information technology - 8-bit single byte coded graphic character sets - Part 11 : Latin/Thai alphabet"
                     },
                     "8859part13": {
-                        "label": "8860 Part 13",
-                        "description": "ISO/IEC 8859-13, Information technology - 8-bit single byte coded graphic character sets - Part 13 : Latin alphabet No.8"
+                        "label": "8859 Part 13",
+                        "description": "ISO/IEC 8859-13, Information technology - 8-bit single byte coded graphic character sets - Part 13 : Latin alphabet No.7"
                     },
                     "8859part14": {
-                        "label": "8860 Part 14",
+                        "label": "8859 Part 14",
                         "description": "ISO/IEC 8859-14, Information technology - 8-bit single byte coded graphic character sets - Part 14 : Latin alphabet No.8 (Celtic)"
                     },
                     "8859part15": {
-                        "label": "8860 Part 15",
-                        "description": "ISO/IEC 8859-15, Information technology - 8-bit single byte coded graphic character sets - Part 15 : Latin alphabet No.10"
+                        "label": "8859 Part 15",
+                        "description": "ISO/IEC 8859-15, Information technology - 8-bit single byte coded graphic character sets - Part 15 : Latin alphabet No.9"
                     },
                     "8859part16": {
-                        "label": "8860 Part 16",
-                        "description": "ISO/IEC 8859-16, Information technology - 8-bit single byte coded graphic character sets - Part 16 : Latin alphabet No.11"
+                        "label": "8859 Part 16",
+                        "description": "ISO/IEC 8859-16, Information technology - 8-bit single byte coded graphic character sets - Part 16 : Latin alphabet No.10"
                     },
                     "jis": {
                         "label": "JIS",
@@ -135,36 +135,36 @@ Oskari.registerLocalization(
                         "description": "Traditional Chinese code set used in Taiwan, Hong Kong of China and other areas"
                     },
                     "GB2312": {
-                        "label": "GB2313",
+                        "label": "GB2312",
                         "description": "Simplified Chinese code set"
                     }
                 },
                 "gmd:MD_ClassificationCode": {
                     "unclassified": {
                         "label": "Ugradert",
-                        "description": "Allment tilgjengelege data"
+                        "description": "Allment tilgjengelige data"
                     },
                     "restricted": {
-                        "label": "Restriksjonar",
-                        "description": "Avgrensa tilgang"
+                        "label": "Begrenset",
+                        "description": "Begrenset tilgang"
                     },
                     "confidential": {
                         "label": "Konfidensielt",
-                        "description": "Tilgjengeleg berre for dei som skal ha tilgang til denne informasjonen"
+                        "description": "Kun tilgjengelig for dem en kan betro informasjonen til"
                     },
                     "secret": {
-                        "label": "Hemmeleg",
-                        "description": "Hemmeleghalde, berre tilgjengeleg for ei utvald gruppe"
+                        "label": "Hemmelig",
+                        "description": "Hemmeligholdt, kun tilgjengelig for en utvalgt gruppe mennesker"
                     },
                     "topSecret": {
-                        "label": "Strengt hemmeleg",
-                        "description": "Den strengaste forma for gradering"
+                        "label": "Strengt Hemmelig",
+                        "description": "Den strengeste form for gradering"
                     }
                 },
                 "gmd:CI_DateTypeCode": {
                     "creation": {
                         "label": "Etablering",
-                        "description": "Dato som identifiserer når eit datasett/teneste blei oppretta"
+                        "description": "Dato som identifiserer når et datasett/tjeneste ble etablert (skapt)."
                     },
                     "publication": {
                         "label": "Publisering",
@@ -172,71 +172,71 @@ Oskari.registerLocalization(
                     },
                     "revision": {
                         "label": "Revidering",
-                        "description": "Dato som identifiserer når eit datasett/teneste blei revidert/oppdatert"
+                        "description": "Dato som identifiserer når et datasett/tjeneste ble revidert (oppdatert/forbedret)"
                     }
                 },
                 "gmd:MD_RestrictionCode": {
                     "copyright": {
-                        "label": "Kopiverna",
-                        "description": "Vern mot ulovleg kopiering etter åndsverkloven."
+                        "label": "Kopibeskyttet",
+                        "description": "Beskyttelse mot ulovlig kopiering etter åndsverkloven."
                     },
                     "patent": {
                         "label": "Patentert",
-                        "description": "Patentverna"
+                        "description": "Patentbeskyttet"
                     },
                     "patentPending": {
-                        "label": "Ventar på patent",
-                        "description": "Produsert eller seld medan ein ventar på eit patent i nær framtid"
+                        "label": "Påvente av patent",
+                        "description": "Produsert eller solgt mens man venter på et forestående patent"
                     },
                     "trademark": {
                         "label": "Varemerke",
-                        "description": "Offentleg registrert namn, symbol, logo eller anna som er reservert brukt av eigar eller forhandlar"
+                        "description": "Offentlig registrert navn, symbol, logo eller annet som er forbeholdt brukt av eier eller forhandler"
                     },
                     "license": {
                         "label": "Lisens",
-                        "description": "Formelt løyve til å ta I bruk eit datasett eller teneste."
+                        "description": "Formell tillatelse til å ta I bruk et datasett eller tjeneste."
                     },
                     "intellectualPropertyRights": {
                         "label": "Åndsverk",
-                        "description": "Rettigheter i forhold til åndsverksloven."
+                        "description": "Rettigheter i forhold til åndsverkloven."
                     },
                     "restricted": {
-                        "label": "Verna",
-                        "description": "Verna mot mot vanleg offentlig bruk, (Ikkje opne data)."
+                        "label": "Beskyttet",
+                        "description": "Beskyttet mot vanlig offentlig bruk, (Ikke åpne data)."
                     },
                     "otherRestrictions": {
-                        "label": "Andre restriksjonar",
-                        "description": "Restriksjonen er ikkje spesifisert."
+                        "label": "Andre restriksjoner",
+                        "description": "Restriksjonen er ikke spesifisert."
                     }
                 },
                 "gmd:MD_ScopeCode": {
                     "attribute": {
-                        "label": "Eigenskap",
-                        "description": "Metadata er gitt på eigenskapsnivå"
+                        "label": "Egenskap",
+                        "description": "Metadata er gitt på egenskapsnivå"
                     },
                     "attributeType": {
-                        "label": "Eigenskap type",
-                        "description": "Metadata er gitt for eigenskapstypar."
+                        "label": "Egenskap type",
+                        "description": "Metadata er gitt for egenskapstyper."
                     },
                     "collectionHardware": {
                         "label": "Maskinvare",
-                        "description": "Metadata gjeld instrument nytta ved innsamlinga."
+                        "description": "Metadata gjelder instrument benyttet ved innsamlingen."
                     },
                     "collectionSession": {
                         "label": "Datainnsamling",
-                        "description": "Metadata som er knytta til innsamlinga av data."
+                        "description": "Metadata er knyttet til innsamlingen av data."
                     },
                     "dataset": {
                         "label": "Datasett",
                         "description": "Metadata gitt for datasettet."
                     },
                     "series": {
-                        "label": "Datasett-serie",
-                        "description": "Metadata er gitt for datasett-seriar."
+                        "label": "Datasett serie",
+                        "description": "Metadata er gitt for datasett serier."
                     },
                     "nonGeographicDataset": {
-                        "label": "Ikkje staddata",
-                        "description": "Metadata gjeld for det som ikkje er staddata"
+                        "label": "Ikke stedsdata.",
+                        "description": "Metadataene gjelder for ikke stedfestede data."
                     },
                     "dimensionGroup": {
                         "label": "Gruppe",
@@ -248,57 +248,57 @@ Oskari.registerLocalization(
                     },
                     "featureType": {
                         "label": "Objekttype",
-                        "description": "Metadata gjeld for objekttypar."
+                        "description": "Metadataene gjelder for objekttyper."
                     },
                     "propertyType": {
-                        "label": "Eigarforhold type",
-                        "description": "Metadata er gitt på typar av eigarforhold."
+                        "label": "Eieforhold type",
+                        "description": "Metadata er gitt på typer av eieforhold."
                     },
                     "fieldSession": {
                         "label": "Kolonne gruppering",
-                        "description": "Metadata er gitt for ei gruppe felt/kolonnar i en tabell."
+                        "description": "Metadata er gitt for en gruppe felt/kolonner i en tabell."
                     },
                     "software": {
                         "label": "Programvare",
                         "description": "Metadata er gitt for programvare."
                     },
                     "service": {
-                        "label": "Teneste",
-                        "description": "Metadata gjeld for tenester som blir utføret."
+                        "label": "Tjeneste",
+                        "description": "Metadataene gjelder for tjenester som utføres."
                     },
                     "model": {
                         "label": "Modell",
-                        "description": "Metadata gjeld ein modell."
+                        "description": "Metadataene gjelder en modell."
                     },
                     "tile": {
                         "label": "Tittel",
-                        "description": "Metadata gjeld tittelen på eit tilknytta datasett."
+                        "description": "Metadataene gjelder tittelen på et avledet datasett."
                     }
                 },
                 "gmd:MD_SpatialRepresentationTypeCode": {
                     "vector": {
                         "label": "Vektor",
-                        "description": "Vektordata blir brukt for å skildre geografiske data."
+                        "description": "Vektordata brukes for å beskrive geografiske data."
                     },
                     "grid": {
-                        "label": "Rasterbilete",
-                        "description": "Rasterbilete (rutenett) blir brukt for å skildre geografiske data"
+                        "label": "Rasterbilde",
+                        "description": "Rasterbilde (rutenett) brukes for å beskrive geografiske data"
                     },
                     "textTable": {
                         "label": "Teksttabell",
-                        "description": "Tekst eller tabell blir brukr for å skildre geografiske data."
+                        "description": "Tekst eller tabell brukes for å beskrive geografiske data."
                     },
                     "tin": {
                         "label": "Tin",
-                        "description": "Triangulært irregulært nettverk (TIN)."
+                        "description": "Triangulert irregulært nettverk (TIN)."
                     },
                     "stereoModel": {
                         "label": "Stereomodell",
-                        "description": "Tredimensjonal framstilling ved bruk av eit biletepar."
+                        "description": "Tredimensjonal fremstilling ved bruk av et bildepar."
                     },
                     "video": {
                         "label": "Video",
-                        "description": "Opptak frå video."
+                        "description": "Opptak fra video."
                     }
                 },
                 "gmd:MD_TopicCategoryCode": {
@@ -307,76 +307,76 @@ Oskari.registerLocalization(
                         "description": "Avling, oppdrett av dyr og fisk, dyrking av planter"
                     },
                     "biota": {
-                        "label": "Biologisk mangfald",
-                        "description": "Flora og fauna i naturleg miljø."
+                        "label": "Biologisk mangfold",
+                        "description": "Flora og fauna i naturlig miljø."
                     },
                     "boundaries": {
                         "label": "Administrative grenser",
-                        "description": "Offentleg bestemte avgrensingar av eit landområde dvs. framstilling av landområde med utgangspunkt i rettsgyldige framstillingar"
+                        "description": "Offentlig bestemte avgrensinger av et landområde dvs. beskrivelse av landområder med utgangspunkt rettsgyldige betraktninger."
                     },
                     "climatologyMeteorologyAtmosphere": {
                         "label": "Klima, meteorologi, atmosfære",
-                        "description": "Atmosfæriske prosessar/fenomen."
+                        "description": "Atmosfæriske prosesser/fenomener."
                     },
                     "economy": {
                         "label": "Økonomi",
-                        "description": "Økonomisk aktivitet, tilstand og sysselsetjing. Skogbruk, Naturressursar"
+                        "description": "Økonomisk aktivitet, betingelser og sysselsetting. Skogbruk, Naturressurser"
                     },
                     "elevation": {
-                        "label": "Høgdedata",
-                        "description": "Høgde over bakken eller djupn i sjø/vatn"
+                        "label": "Høydedata",
+                        "description": "Høyde over bakken eller dybde i sjø/vann"
                     },
                     "environment": {
                         "label": "Miljødata",
-                        "description": "Miljøressursar, vern, bevaring og forureining."
+                        "description": "Miljøressurser, vern, bevaring og forurensing."
                     },
                     "geoscientificInformation": {
-                        "label": "Geovitskapleg info",
-                        "description": "Vitenskapar som omhandlar samansetjing, struktur og opphavet til berggrunnnen og dei kjemiske og geofysiske eigenskapane i jorda."
+                        "label": "Geovitenskapelig informasjon",
+                        "description": "Vitenskaper som omhandler sammensetning struktur og opphav av jordens berggrunn, og dens kjemiske og geofysiske egenskaper."
                     },
                     "health": {
                         "label": "Helse",
-                        "description": "Helse, helseteneste, sjukdom, økologi og tryggleik."
+                        "description": "Helse, helsetjeneste, sykdom, menneskelig økologi og sikkerhet."
                     },
                     "imageryBaseMapsEarthCover": {
                         "label": "Basis data",
-                        "description": "Primærdata, grunnkart og arealdekkjande bilete."
+                        "description": "Primærdata, grunnkart og arealdekkende bilder."
                     },
                     "intelligenceMilitary": {
                         "label": "Militære data",
-                        "description": "Militære installasjonar, strukturar og aktivitetar."
+                        "description": "Militære installasjoner, strukturer og aktiviteter."
                     },
                     "inlandWaters": {
                         "label": "Innsjø og vassdrag",
-                        "description": "Innanlands vassystem med karakteristika."
+                        "description": "Innenlands vannsystemer og deres karakteristika."
                     },
                     "location": {
-                        "label": "Posisjonsdata",
-                        "description": "Posisjonsdata og -informasjon"
+                        "label": "Posisjonsbestemmende data",
+                        "description": "Posisjonsbestemmmende informasjon og –tjenester."
                     },
                     "oceans": {
                         "label": "Kyst og sjø",
-                        "description": "Hav- og fjordområde med karakteristika."
+                        "description": "Hav- og fjordområder og deres karakteristika."
                     },
                     "planningCadastre": {
-                        "label": "Plan og eigedom",
-                        "description": "Informasjon om regulert arealbruk, eigedomar og planlagt arealbruk."
+                        "label": "Plan og eiendom",
+                        "description": "Informasjon om regulert arealbruk, eiendommer og planlagt arealbruk."
                     },
                     "society": {
                         "label": "Samfunn, kultur",
-                        "description": "Karakteristiske trekk ved samfunn og kulturar."
+                        "description": "Karakteristiske trekk ved samfunn og kulturer."
                     },
                     "structure": {
-                        "label": "Konstruksjonar",
-                        "description": "Menneskeskapte byggverk, anlegg og konstruksjonar."
+                        "label": "Konstruksjoner",
+                        "description": "Menneskeskapte byggverk, anlegg og konstruksjoner."
                     },
                     "transportation": {
                         "label": "Transport",
-                        "description": "Verkemiddel og anlegg knytta til transport av menneske og varer."
+                        "description": "Virkemidler og anlegg knyttet til transport av mennesker og varer."
                     },
                     "utilitiesCommunication": {
-                        "label": "Leidningsinformasjon",
-                        "description": "Infrastruktur knytta til energi, vann-, avløp-, og telekommunikasjon og tilhøyrande tenester."
+                        "label": "Ledningsinformasjon",
+                        "description": "Infrastruktur knyttet til energi, vann-, avløp-, og telekommunikasjon og deres tjenester."
                     }
                 }
             },
@@ -387,34 +387,34 @@ Oskari.registerLocalization(
             "heading": {
                 "abstractTextData": "NOT TRANSLATED",
                 "abstractTextService": "NOT TRANSLATED",
-                "accessConstraint": "Tilgangsrestriksjonar",
+                "accessConstraint": "Tilgangsrestriksjoner",
                 "citationDate": "Dato",
-                "classification": "Klassifikasjonar",
+                "classification": "Klassifikasjoner",
                 "descriptiveKeyword": "Nøkkelord",
                 "distributionFormat": "Distribusjonsformat",
-                "fileIdentifier": "Fil-id",
-                "legalConstraint": "Lovlege avgrensingar",
+                "fileIdentifier": "Filident",
+                "legalConstraint": "Lovlige begrensninger",
                 "lineageStatement": "Prosesshistorie",
-                "metadataCharacterSet": "Metadata teiknsett",
+                "metadataCharacterSet": "Metadata tegnsett",
                 "metadataDateStamp": "Metadata dato",
                 "metadataLanguage": "Metadata språk",
-                "metadataOrganisation": "Organisasjonsnamn",
-                "metadataStandardName": "Namn på metadatastandard",
-                "metadataStandardVersion": "Metadatastandard-versjon",
-                "onlineResource": "Direktekobla kjelder",
+                "metadataOrganisation": "Organisasjonsnavn",
+                "metadataStandardName": "Navn på metadatastandard",
+                "metadataStandardVersion": "Metadatastandard versjon",
+                "onlineResource": "Direktekoblede kilder",
                 "operatesOn": "Opererer med",
-                "otherConstraint": "Andre restriksjonar",
-                "reportConformance": "Samsvar",
-                "responsibleParty": "Ansvarleg aktør",
-                "resourceIdentifier": "Ressurs-id",
-                "resourceLanguage": "Ressursspråk",
+                "otherConstraint": "Andre restriksjoner",
+                "reportConformance": "Overensstemmelse",
+                "responsibleParty": "Ansvarlig aktør",
+                "resourceIdentifier": "Ressurs id",
+                "resourceLanguage": "Ressurs språk",
                 "scopeCode": "Ressurstype",
-                "serviceType": "Tenestetype",
-                "spatialRepresentationType": "Romleg representasjonstype",
-                "spatialResolution": "Romleg oppløysing",
+                "serviceType": "Tjenestetype",
+                "spatialRepresentationType": "Romlig representasjon type",
+                "spatialResolution": "Romlig oppløsning",
                 "temporalExtent": "Temporær utstrekning",
-                "topicCategory": "Tematiske hovudkategoriar",
-                "useLimitation": "Bruksavgrensingar",
+                "topicCategory": "Tematiske hovedkategorier",
+                "useLimitation": "Bruksbegrensninger",
                 "absoluteExternalPositionalAccuracy": "NOT TRANSLATED",
                 "accuracyOfTimeMeasurement": "NOT TRANSLATED",
                 "completenessCommission": "NOT TRANSLATED",
@@ -434,7 +434,7 @@ Oskari.registerLocalization(
         },
         "tile": {
             "title": "Metadata",
-            "tooltip": "Bruksvilkår og kor tilgjengelege datasetta er, er gjort greie for i metadata-utgreiinga."
+            "tooltip": "Bruksvilkår og tilgjengelighet til datasett er dokumentert i metadatabeskrivelsen."
         }
     }
 }
