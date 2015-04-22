@@ -1,5 +1,24 @@
 # Release Notes
 
+## 1.29
+
+### mapwfs2
+
+Fixed highligh error when user has highligted and unhighlighted feature and then moved map (the feature appears again highlighed).
+
+### divmanazer/Button
+
+Added blur and isFocus functions.
+
+### divmanazer/Popup
+
+Now checks correctly buttons focuses.
+
+
+### featuredata2/PopupHandler
+
+Unfocusing popup buttons.
+
 ## 1.28.1
 
 ### heatmap
