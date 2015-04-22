@@ -141,6 +141,7 @@ Oskari.clazz.define(
             if (conf && conf.stateful === true) {
                 sandbox.registerAsStateful(me.mediator.bundleId, me);
             }
+            this.__addTab();
         },
 
         /**
@@ -179,30 +180,42 @@ Oskari.clazz.define(
         },
 
         /**
+         * Adds a tab for analysis layers in PersonalData
+         */
+        __addTab : function() {
+            if(this.personalDataTab) {
+                // already added
+                return;
+            }
+            var reqBuilder = this.sandbox.getRequestBuilder(
+                'PersonalData.AddTabRequest'
+            );
+
+            if (!reqBuilder) {
+                // request not ready
+                return;
+            }
+            // Request tab to be added to personal data
+            var tab = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.analyse.view.PersonalDataTab',
+                this,
+                this.localization.personalDataTab
+            );
+            this.personalDataTab = tab;
+            this.sandbox.request(
+                this,
+                reqBuilder(
+                    this.localization.personalDataTab.title,
+                    tab.getContent()
+                )
+            );
+        },
+        /**
          * @static @property {Object} eventHandlers
          */
         eventHandlers: {
             'Personaldata.PersonaldataLoadedEvent': function (event) {
-                // Request tab to be added to personal data
-                var tab = Oskari.clazz.create(
-                    'Oskari.mapframework.bundle.analyse.view.PersonalDataTab',
-                    this,
-                    this.localization.personalDataTab
-                );
-                var reqBuilder = this.sandbox.getRequestBuilder(
-                    'PersonalData.AddTabRequest'
-                );
-
-                if (reqBuilder) {
-                    this.sandbox.request(
-                        this,
-                        reqBuilder(
-                            this.localization.personalDataTab.title,
-                            tab.getContent()
-                        )
-                    );
-                }
-                this.personalDataTab = tab;
+                this.__addTab();
             },
             MapLayerVisibilityChangedEvent: function (event) {
                 if (this.analyse && this.analyse.isEnabled && this.isMapStateChanged) {
