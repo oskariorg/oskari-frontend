@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
     }, {
         blur: function () {
             'use strict';
-            this._element.blur();
+            jQuery(this._element).blur();
         },
 
         focus: function () {
