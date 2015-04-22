@@ -530,6 +530,7 @@ define([
                     data = {},
                     wmsVersion = form.find('#add-layer-interface-version').val(),
                     createLayer,
+                    sandbox = me.instance.getSandbox(),
                     admin;
 
                 if (lcId === null || lcId === undefined || !lcId.length) {
@@ -560,7 +561,6 @@ define([
                     data['title_' + lang] = this.value;
                 });
 
-                data.layerName = form.find('#add-layer-layerName').val();
                 data.layerUrl = form.find('#add-layer-url').val();
                 if (typeof data.layerUrl === "undefined") {
                     data.layerUrl = form.find('#add-layer-interface').val();
@@ -598,12 +598,17 @@ define([
                         })
                     }
                 }
+                data.layerName = form.find('#add-layer-layerName').val();
                 data.gfiContent = form.find('#add-layer-gfi-content').val();
 
                 data.realtime = form.find('#add-layer-realtime').is(':checked');
                 data.refreshRate = form.find('#add-layer-refreshrate').val();
 
                 data.srs_name = form.find('#add-layer-srs_name').val();
+                if((data.srs_name === null || data.srs_name === undefined) && sandbox.getMap()) {
+                    data.srs_name = sandbox.getMap().getSrsName();
+                }
+                data.jobType =  form.find("input[type='radio'][name='jobtype']:checked").val();
 
                 data.username = form.find('#add-layer-username').val();
                 data.password = form.find('#add-layer-password').val();
@@ -769,7 +774,8 @@ define([
                 var serviceURL = form.find('#add-layer-interface').val(),
                     layerType = form.find('#add-layer-layertype').val(),
                     user = form.find('#add-layer-username').val(),
-                    pw =  form.find('#add-layer-password').val();
+                    pw =  form.find('#add-layer-password').val(),
+                    version =  form.find('#add-layer-version').val();
 
                 me.model.set({
                     '_layerUrls': [serviceURL]
@@ -778,7 +784,8 @@ define([
                 });
                 me.model.set({_admin:{
                     username: user,
-                    password: pw
+                    password: pw,
+                    version: version
                 }}, {
                     silent: true
                 });
@@ -789,7 +796,8 @@ define([
                         url: serviceURL,
                         type : layerType,
                         user: user,
-                        pw: pw
+                        pw: pw,
+                        version: version
                     },
                     url: baseUrl + 'action_route=GetWSCapabilities',
                     success: function (resp) {

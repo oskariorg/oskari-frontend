@@ -150,6 +150,13 @@ Oskari.registerLocalization({
             "matrixSetDesc": "WMTS-tason tiedot JSON-muodossa",
             "realtime": "Reaaliaikataso",
             "refreshRate": "Virkistystaajuus (sekunneissa)",
+            "serviceVersion":"Palvelu versio",
+            "jobTypeDesc":"WFS moottori",
+            "jobTypeDefault":"Oletus",
+            "jobTypes": {
+                "default": "Oletus",
+                "fe": "Kohde moottori"
+            },
             "generic": {
                 "placeholder": "Nimi kielellä {0}",
                 "descplaceholder": "Kuvaus kielellä {0}"

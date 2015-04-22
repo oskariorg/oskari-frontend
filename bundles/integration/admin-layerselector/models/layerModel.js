@@ -228,7 +228,28 @@ if (!Function.prototype.bind) {
                 }
                 return null;
             },
-
+            /**
+             * Returns service version if defined or null if not
+             * @return {String} version
+             */
+            getVersion: function () {
+                var adminBlock = this.getAdmin();
+                if (adminBlock) {
+                    return adminBlock.version;
+                }
+                return null;
+            },
+            /**
+             * Returns service  jobtype if defined or null if not
+             * @return {String} jobtype
+             */
+            getJobType: function () {
+                var adminBlock = this.getAdmin();
+                if (adminBlock) {
+                    return adminBlock.jobtype;
+                }
+                return null;
+            },
             /**
              * Returns interface url
              * @return {String} url
