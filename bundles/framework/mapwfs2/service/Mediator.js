@@ -561,6 +561,11 @@ Oskari.clazz.category(
          * sends message to /service/wfs/setMapClick
          */
         setMapClick: function (lonlat, keepPrevious, geomRequest) {
+            var me = this,
+                sandbox = this.plugin.getSandbox(),
+                map = sandbox.getMap(),
+                srs = map.getSrsName();
+
             this.lonlat = lonlat;
             this.sendMessage('/service/wfs/setMapClick', {
                 'longitude': lonlat.lon,
@@ -568,6 +573,24 @@ Oskari.clazz.category(
                 'keepPrevious': keepPrevious,
                 'geomRequest': geomRequest
             });
+
+
+            if(keepPrevious !== null && keepPrevious === false) {
+                me.setFilter({
+                    "type":"FeatureCollection",
+                    "features":[
+                    {
+                        "type":"Feature",
+                        "properties":{},
+                        "geometry":{
+                            "type":
+                            "Point",
+                            "coordinates":[lonlat.lon,lonlat.lat]
+                        }
+                    }],
+                    "crs":{"type":"name","properties":{"name":srs}}}
+                );
+            }
         },
 
         /**
