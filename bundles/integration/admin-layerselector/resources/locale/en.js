@@ -150,6 +150,13 @@ Oskari.registerLocalization({
             "matrixSetDesc": "JSON content for WMTS layer",
             "realtime": "Real time layer",
             "refreshRate": "Refresh rate (in seconds)",
+            "serviceVersion":"Service version",
+            "jobTypeDesc":"Job type",
+            "jobTypeDefault":"default",
+            "jobTypes": {
+                "default": "Default",
+                "fe": "Feature engine"
+            },
             "generic": {
                 "placeholder": "Name in {0}",
                 "descplaceholder": "Description in {0}"

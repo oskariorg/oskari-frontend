@@ -151,6 +151,13 @@ Oskari.registerLocalization(
             "matrixSetDesc": "Teknisk beskrivning av WMTS-tjänsten i JSON-format",
             "realtime": "Reaaliaikataso",
             "refreshRate": "Virkistystaajuus (sekunneissa)",
+            "serviceVersion":"Service version",
+            "jobTypeDesc":"Service job typ",
+            "jobTypeDefault":"default",
+            "jobTypes": {
+                "default": "Default",
+                "fe": "Feature engine"
+            },
             "generic": {
                 "placeholder": "Name in {0}",
                 "descplaceholder": "Description in {0}"

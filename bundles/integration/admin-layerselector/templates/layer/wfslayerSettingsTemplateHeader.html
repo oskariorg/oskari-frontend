@@ -1,21 +1,52 @@
 <% if(!model.getId()){ %>
-    <div class="add-layer-record">
-        <div class="add-layer-label-area">
-            <label for="add-layer-interface" class="add-layer-label"  title="<%= instance.getLocalization('admin').interfaceAddress %>"><%= instance.getLocalization('admin').interfaceAddress %></label>
-        </div>
-        <div class="add-layer-input-area">
-            <div class="input-controls">
-                <input type="text" id="add-layer-interface" class="add-layer-input mid"
-                    placeholder="<%= instance.getLocalization('admin').interfaceAddress %>"
-                    value="<%= model.getInterfaceUrl() %>" />
-                <div class="icon-close mid"></div>
-            </div>
-            <button id="add-layer-ws-button" class="fetch-ws-button"><%= instance.getLocalization('admin').getInfo %></button>
+<div class="add-layer-record">
+    <div class="add-layer-label-area">
+        <label for="add-layer-version" class="add-layer-label" title="<%= instance.getLocalization('admin').serviceVersion %>"><%= instance.getLocalization('admin').serviceVersion %></label>
+    </div>
+    <div class="add-layer-input-area">
+        <div class="input-controls">
+            <input
+                    type="text"
+                    id="add-layer-version"
+                    class="add-layer-input mid"
+                    placeholder="<%= instance.getLocalization('admin').serviceVersion %>"
+                    value="<%= model.getVersion() %>" />
         </div>
     </div>
+</div>
+
+<div class="add-layer-record">
+    <div class="add-layer-label-area">
+        <label for="add-layer-interface" class="add-layer-label"  title="<%= instance.getLocalization('admin').interfaceAddress %>"><%= instance.getLocalization('admin').interfaceAddress %></label>
+    </div>
+    <div class="add-layer-input-area">
+        <div class="input-controls">
+            <input type="text" id="add-layer-interface" class="add-layer-input mid"
+                   placeholder="<%= instance.getLocalization('admin').interfaceAddress %>"
+                   value="<%= model.getInterfaceUrl() %>" />
+            <div class="icon-close mid"></div>
+        </div>
+        <button id="add-layer-ws-button" class="fetch-ws-button"><%= instance.getLocalization('admin').getInfo %></button>
+    </div>
+</div>
 <% } %>
 
 <% if(model.getId()){ %>
+<div class="add-layer-record">
+    <div class="add-layer-label-area">
+        <label for="add-layer-version" class="add-layer-label" title="<%= instance.getLocalization('admin').serviceVersion %>"><%= instance.getLocalization('admin').serviceVersion %></label>
+    </div>
+    <div class="add-layer-input-area">
+        <div class="input-controls">
+            <input
+                    type="text"
+                    id="add-layer-version"
+                    class="add-layer-input mid"
+                    placeholder="<%= instance.getLocalization('admin').serviceVersion %>"
+                    value="<%= model.getVersion() %>" readonly />
+        </div>
+    </div>
+</div>
 <div class="add-layer-record">
     <div class="add-layer-label-area">
         <label for="add-layer-interface" class="add-layer-label"  title="<%= instance.getLocalization('admin').interfaceAddress %>"><%= instance.getLocalization('admin').interfaceAddress %></label>
