@@ -149,6 +149,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
                 }
                 this.blur();
             });
+            emptyBtn.blur();
             controlButtons.push(emptyBtn);
             var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             cancelBtn.setTitle(this.localization.button.cancel);
@@ -156,6 +157,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
                 dialog.close(true);
             });
             cancelBtn.addClass('primary');
+            cancelBtn.blur();
             controlButtons.push(cancelBtn);
 
             dialog.addClass('tools_selection');
