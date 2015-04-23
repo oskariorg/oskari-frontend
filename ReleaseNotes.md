@@ -14,10 +14,13 @@ Added blur and isFocus functions.
 
 Now checks correctly buttons focuses.
 
-
 ### featuredata2/PopupHandler
 
 Unfocusing popup buttons.
+
+### analysis
+
+Now adds the PersonalData tab correctly if started after PersonalData bundle. Previously expected to be started before PersonalData.
 
 ## 1.28.1
 
