@@ -155,7 +155,7 @@ Oskari.registerLocalization({
             "jobTypeDefault":"Oletus",
             "jobTypes": {
                 "default": "Oletus",
-                "fe": "Kohde moottori"
+                "fe": "Kohdemoottori"
             },
             "generic": {
                 "placeholder": "Nimi kielellä {0}",
