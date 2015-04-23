@@ -528,7 +528,7 @@ define([
                     lcId = accordion.attr('lcid'),
                     form = element.parents('.admin-add-layer'),
                     data = {},
-                    wmsVersion = form.find('#add-layer-interface-version').val(),
+                    interfaceVersion = form.find('#add-layer-interface-version').val(),
                     createLayer,
                     sandbox = me.instance.getSandbox(),
                     admin;
@@ -544,7 +544,7 @@ define([
                 }
 
                 // add layer type and version
-                data.version = (wmsVersion !== '') ? wmsVersion : form.find('#add-layer-interface-version > option').first().val();
+                data.version = (interfaceVersion !== '') ? interfaceVersion : form.find('#add-layer-interface-version > option').first().val();
 
                 // base and group are always of type wmslayer
                 data.layerType = me.model.getLayerType() + 'layer';
@@ -775,7 +775,7 @@ define([
                     layerType = form.find('#add-layer-layertype').val(),
                     user = form.find('#add-layer-username').val(),
                     pw =  form.find('#add-layer-password').val(),
-                    version =  form.find('#add-layer-version').val();
+                    version =  form.find('#add-layer-interface-version').val();
 
                 me.model.set({
                     '_layerUrls': [serviceURL]

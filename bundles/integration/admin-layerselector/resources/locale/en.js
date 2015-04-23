@@ -150,7 +150,6 @@ Oskari.registerLocalization({
             "matrixSetDesc": "JSON content for WMTS layer",
             "realtime": "Real time layer",
             "refreshRate": "Refresh rate (in seconds)",
-            "serviceVersion":"Service version",
             "jobTypeDesc":"Job type",
             "jobTypeDefault":"default",
             "jobTypes": {
