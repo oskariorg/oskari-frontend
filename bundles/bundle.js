@@ -3597,7 +3597,7 @@ D         * @param {Object} classInfo ClassInfo
     };
 
     /**
-     * @static @method Oskari.bundleCls
+     * @static @method Oskari.viewCls
      *
      * @param  {string} className Class name
      *
@@ -3620,4 +3620,136 @@ D         * @param {Object} classInfo ClassInfo
      * window.bundle = Oskari1LegacyAPI; window.Oskari = Oskari1LegacyAPI;
      */
     return Oskari1LegacyAPI;
+}());
+
+
+Oskari.util = (function () {
+    var util = {};
+
+    /**
+    * Checks at if value has leading zeros.
+    * @private @method isLeadingZero
+    *
+    * @param {Object} value checked value
+    */
+    function isLeadingZero(value){
+        var i;
+
+        if(typeof value === 'string' && value.length>0 && value[0] === '0') {
+            if(util.isDecimal(value) && value.length>1 && value[1] === '.') {
+                return false;
+            } else {
+                return true;
+            }
+        }
+        return false;
+    };
+    
+    /**
+    * Checks at if value is number.
+    * @static @method Oskari.util.isNumber
+    *
+    * @param {Object} value checked value
+    * @param {Boolean} keepLeadingZero, need keep leading zero
+    */
+    util.isNumber = function(value, keepLeadingZero) {
+        var reg = new RegExp('^[-+]?[0-9]+[.]?[0-9]*([eE][-+]?[0-9]+)?$'),
+            isNumber = true,
+            i;
+
+        if(typeof value === 'object') {
+            for(i=0; i<value.length; i++) {
+                if(keepLeadingZero && keepLeadingZero === true && isLeadingZero(value[i] + '')) {
+                   isNumber = false;
+                   break;
+                }
+                if(reg.test(value[i]) === false) {
+                    isNumber = false;
+                    break;
+                }
+            }
+        } else {
+            if(keepLeadingZero && keepLeadingZero === true && isLeadingZero(value + '')) {
+                isNumber = false;
+            } else {
+                isNumber = reg.test(value);
+            }
+        }
+        return isNumber;    
+    };
+
+    /**
+    * Checks at if value is decimal.
+    * @static @method Oskari.util.isDecimal
+    *
+    * @param {Object} value checked value
+    */
+    util.isDecimal = function(value){
+        var isDecimal = true,
+            i,
+            s,
+            val;
+        
+        if(!value || value === null || value === '') {
+            return false;
+        }
+
+        if(typeof value === 'object') {
+             for(i=0; i<value.length; i++) {
+                val = String(value[i]);
+                s = val.split('.');
+                if(s.length === 2 && !isLeadingZero(val) && !isNaN(s[0]) && !isNaN(s[1])){
+                    isDecimal = true;
+                } else {
+                    isDecimal = false;
+                }
+                if(isDecimal === false) {
+                    break;
+                }
+             }
+        } else {
+            val = value+'';
+            s = val.split('.');
+
+            if(s.length === 2 && !isNaN(s[0]) && !isNaN(s[1]) && 
+                ((isLeadingZero(s[0]) && s[0].length==1) || !isLeadingZero(s[0]))
+                ){
+                isDecimal = true;
+            } else {
+                isDecimal = false;
+            }
+        }
+        return isDecimal;
+    };
+
+    /**
+    * Checks decimals.
+    * @static @method Oskari.util.decimals
+    *
+    * @param {Object} value checked value
+    */
+    util.decimals = function(value){
+        var val,
+            maxDecimals = 0;
+
+        if(!value || value === null || value === '' || (isNaN(value) && typeof value !== 'object')) {
+            return null;
+        }
+        if(typeof value === 'object') {
+            for(i=0; i<value.length; i++) {
+                val = value[i] + '';
+                val = val.split('.');
+                if(val.length===2 && maxDecimals<val[1].length) {
+                    maxDecimals = val[1].length;
+                }
+            }
+            return maxDecimals;
+        } else {
+            val = value + '';
+            val = val.split('.');
+            return val.length === 2 ? val[1].length : 0;
+        }
+    }
+
+    return util;
 }());

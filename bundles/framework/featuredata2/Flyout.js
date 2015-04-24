@@ -442,6 +442,46 @@ Oskari.clazz.define(
                 key,
                 value;
 
+            var closureMagic = function (decimalCount) {
+                return function (value) {
+                    var parsed = parseFloat(value);
+                    if (!isNaN(parsed)) {
+                        return parsed.toFixed(decimalCount);
+                    } else {
+                        return value;
+                    }
+                };
+            };
+
+            // loopataan näkyvät kentät
+                // käydään arrayhyn koko sarakkeen arvot
+                // tarkistetaan sarakkeen arvot isNumberille --> jos kaikki numeroita niin haetaan maximi desimaali määrä sarakkeelle ja lisätään gridille
+            // looppi loppuu
+
+            //Oskari.util.isNumber
+
+            jQuery.each(visibleFields, function(index, field) {
+                var fieldValues = jQuery.grep(dataArray, function(value, index) {
+                    return index === field;
+                });
+
+                var isNumber = Oskari.util.isNumber(fieldValues, true);
+                if(isNumber === false) {
+                    notNumeric[field] = true;
+                } else {                    
+                    decimals[field] = Oskari.util.decimals(fieldValues);
+                    if (decimals[field]) {
+                        grid.setColumnValueRenderer(
+                            field,
+                            closureMagic(decimals[field])
+                        );
+                    }
+                }
+            });
+
+
+
+/*
             for (i = 0; i < dataArray.length; i += 1) {
                 row = dataArray[i];
                 for (j = 0; j < visibleFields.length; j += 1) {
@@ -463,16 +503,8 @@ Oskari.clazz.define(
                 }
             }
 
-            var closureMagic = function (decimalCount) {
-                return function (value) {
-                    var parsed = parseFloat(value);
-                    if (!isNaN(parsed)) {
-                        return parsed.toFixed(decimalCount);
-                    } else {
-                        return value;
-                    }
-                };
-            };
+
+            
 
             for (i = 0; i < visibleFields.length; i += 1) {
                 if (!notNumeric[visibleFields[i]] && decimals[visibleFields[i]]) {
@@ -481,7 +513,7 @@ Oskari.clazz.define(
                         closureMagic(decimals[visibleFields[i]])
                     );
                 }
-            }
+            }*/
         },
 
         // helper for removing item (indexOf is not in IE8)
