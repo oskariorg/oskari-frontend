@@ -85,7 +85,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
          * @param {OpenLayers.LonLat} lonLat Location
          */
         _reverseGeoCode: function (field, lonLat) {
-            // FIXME
+            //not implemented
         },
 
         /**
@@ -176,14 +176,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                     source: function (request, response) {
                         me._getSearchSuggestions(this, request, response);
                     }
-                }).data('autocomplete')._renderItem = function (ul, item) {
-                    var li = jQuery('<li>'),
-                        a = jQuery('<a href="#">');
-                    a.html(item.name + ', ' + item.village);
-                    li.append(a);
-                    ul.append(li);
-                    return li;
-                };
+                }).data('autocomplete')._renderItem = me._renderAutocompleteItem;
 
                 contents.eq(0).append(tmp.getField());
                 tmp = Oskari.clazz.create(
@@ -194,16 +187,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                 tmp.setHandler(function (event) {
                     me._fromMapButtonHandler(field, event);
                 });
-                /* FIXME ucomment when reverse geocode works
-                tmp.insertTo(contents.eq(0).find('.oskarifield:eq(' + i + ')'));
-                */
             }
 
             el.append(contents);
             me._initRoutingServices();
             me._updateRoutingLinks(true);
         },
-
+        _renderAutocompleteItem: function(ul, item) {
+            var li = jQuery('<li>'),
+                a = jQuery('<a href="#">');
+            a.html(item.name + ', ' + item.village);
+            li.append(a);
+            ul.append(li);
+            return li;
+        },
         /**
          * @method _initRoutingServices
          * @private
@@ -215,34 +212,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                 me._routingService(
                     'Matka.fi',
                     '#1A88CC',
-                    function (fromLoc, toLoc) {
-                        var url = 'http://www.matka.fi/fi/?keya=';
-                        url += fromLoc.name;
-                        if (fromLoc.village) {
-                            url += '%2C+' + fromLoc.village;
-                        }
-                        url += '&keyb=' + toLoc.name;
-                        if (toLoc.village) {
-                            url += '%2C+' + toLoc.village;
-                        }
-                        /* Ugly ISO-8859-1 encode,
-                         * replace with a lib if need be.
-                         */
-                        url = url.replace('Å', '%C5')
-                            .replace('å', '%E5')
-                            .replace('Ä', '%C4')
-                            .replace('ä', '%E4')
-                            .replace('Ö', '%D6')
-                            .replace('ö', '%F6')
-                            .replace('é', '%E9')
-                            .replace('É', '%C9')
-                            .replace('ü', '%FC')
-                            .replace('Ü', '%DC')
-                            .replace('\'', '%27')
-                            .replace(',', '%2C');
-
-                        return url;
-                    }
+                    me._matkaFiURLBuilder
                 )
             );
 
@@ -250,20 +220,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                 me._routingService(
                     'Google Maps',
                     '#88BE44',
-                    function (fromLoc, toLoc) {
-                        var url = 'https://www.google.fi/maps/dir/';
-                        url += encodeURIComponent(fromLoc.name);
-                        if (fromLoc.village) {
-                            url += ',+' + encodeURIComponent(fromLoc.village);
-                        }
-                        url += ',+Finland';
-                        url += '/' + encodeURIComponent(toLoc.name);
-                        if (toLoc.village) {
-                            url += ',+' + encodeURIComponent(toLoc.village);
-                        }
-                        url += ',+Finland';
-                        return url;
-                    }
+                    me._googleMapsURLBuilder
                 )
             );
 
@@ -271,20 +228,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                 me._routingService(
                     'HERE',
                     '#124191',
-                    function (fromLoc, toLoc) {
-                        var url = 'http://here.com/directions/drive/';
-                        url += fromLoc.name.replace(' ', '_');
-                        if (fromLoc.village) {
-                            url += ',_' + fromLoc.village.replace(' ', '_');
-                        }
-                        url += ',_Finland';
-                        url += '/' + toLoc.name.replace(' ', '_');
-                        if (toLoc.village) {
-                            url += ',_' + toLoc.village.replace(' ', '_');
-                        }
-                        url += ',_Finland';
-                        return url;
-                    }
+                    me._hereURLBuilder
                 )
             );
 
@@ -292,32 +236,100 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                 me._routingService(
                     '02.fi',
                     '#F93F31',
-                    function (fromLoc, toLoc) {
-                        var url = 'https://www.fonecta.fi/kartat?';
-                        url += "from="+encodeURIComponent(fromLoc.name);
-                        if (fromLoc.village) {
-                            url += ',' + encodeURIComponent(fromLoc.village);
-                        }
-//                        url += ',_Finland';
-                        url += '&to=' + encodeURIComponent(toLoc.name);
-                        if (toLoc.village) {
-                            url += ',' + encodeURIComponent(toLoc.village);
-                        }
-//                        url += ',+Finland';
-                        url += "&rt=fastest";
-                        /*
-                            //these are assumably "supported", but don't seem to be doing anything much
-                            url += "&lon=24.823199999999996&lat=60.20618970377743&z=13";
-                        */
-                        console.log(url);
-                        return url;
-                    }
+                    me._fonectaURLBuilder
                 )
             );
+        },
 
+        /**
+         * @method _matkaFiURLBuilder
+         * Builds URL for matka.fi routing service
+         * @private
+         */
+        _matkaFiURLBuilder: function(fromLoc, toLoc) {
+            var url = 'http://www.matka.fi/fi/?keya=';
+            url += fromLoc.name;
+            if (fromLoc.village) {
+                url += '%2C+' + fromLoc.village;
+            }
+            url += '&keyb=' + toLoc.name;
+            if (toLoc.village) {
+                url += '%2C+' + toLoc.village;
+            }
+            /* Ugly ISO-8859-1 encode,
+             * replace with a lib if need be.
+             */
+            url = url.replace('Å', '%C5')
+                .replace('å', '%E5')
+                .replace('Ä', '%C4')
+                .replace('ä', '%E4')
+                .replace('Ö', '%D6')
+                .replace('ö', '%F6')
+                .replace('é', '%E9')
+                .replace('É', '%C9')
+                .replace('ü', '%FC')
+                .replace('Ü', '%DC')
+                .replace('\'', '%27')
+                .replace(',', '%2C');
 
-
-
+            return url;
+        },
+        /**
+         * @method _googleMapsURLBuilder
+         * Builds URL for google maps routing service
+         * @private
+         */
+        _googleMapsURLBuilder: function (fromLoc, toLoc) {
+            var url = 'https://www.google.fi/maps/dir/';
+            url += encodeURIComponent(fromLoc.name);
+            if (fromLoc.village) {
+                url += ',+' + encodeURIComponent(fromLoc.village);
+            }
+            url += ',+Finland';
+            url += '/' + encodeURIComponent(toLoc.name);
+            if (toLoc.village) {
+                url += ',+' + encodeURIComponent(toLoc.village);
+            }
+            url += ',+Finland';
+            return url;
+        },
+        /**
+         * @method _hereURLBuilder
+         * Builds URL for Nokia Here routing service
+         * @private
+         */
+        _hereURLBuilder: function (fromLoc, toLoc) {
+            var url = 'http://here.com/directions/drive/';
+            url += fromLoc.name.replace(' ', '_');
+            if (fromLoc.village) {
+                url += ',_' + fromLoc.village.replace(' ', '_');
+            }
+            url += ',_Finland';
+            url += '/' + toLoc.name.replace(' ', '_');
+            if (toLoc.village) {
+                url += ',_' + toLoc.village.replace(' ', '_');
+            }
+            url += ',_Finland';
+            return url;
+        },
+        /**
+         * @method _matkaFiURLBuilder
+         * Builds URL for 02.fi (fonecta) routing service
+         * @private
+         */
+        _fonectaURLBuilder: function (fromLoc, toLoc) {
+            var url = 'https://www.fonecta.fi/kartat?';
+            url += "from="+encodeURIComponent(fromLoc.name);
+            if (fromLoc.village) {
+                url += ',' + encodeURIComponent(fromLoc.village);
+            }
+            url += '&to=' + encodeURIComponent(toLoc.name);
+            if (toLoc.village) {
+                url += ',' + encodeURIComponent(toLoc.village);
+            }
+            url += "&rt=fastest";
+            console.log(url);
+            return url;
         },
 
         /**
@@ -342,7 +354,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                             );
                             this.el = el;
                         }
-                        if (fromLoc && fromLoc.name && fromLoc.name.length && toLoc && toLoc.name && toLoc.name.length) {
+                        if (me._locationOk(fromLoc) && me._locationOk(toLoc)) {
                             el
                                 .attr('href', this.urlBuilder(fromLoc, toLoc))
                                 .attr('target', '_blank')
@@ -369,7 +381,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                 };
             return ret;
         },
-
+        /**
+         * @method _locationOk
+         * Checks that the location object isn't empty
+         * @private
+         * @param {object} loc Locationobject to verify
+         */
+        _locationOk: function(loc) {
+            return loc && loc.name && loc.name.length;
+        },
         /**
          * @method _updateRoutingLinks
          * @private

@@ -18,10 +18,19 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
             this.setName(name);
         }
     }, {
+        blur: function () {
+            'use strict';
+            jQuery(this._element).blur();
+        },
 
         focus: function () {
             'use strict';
             this._element.focus();
+        },
+
+        isFocus: function(){
+            'use strict';
+            return this._element === document.activeElement;
         },
 
         getName: function () {
@@ -155,8 +164,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
         setFocus: function(focus) {
             'use strict';
             Oskari.getSandbox().printWarn('Oskari.userinterface.component.Button: setFocus is deprecated, please use focus instead.');
-            if (focus) {
+            if (focus && focus === true) {
                 this.focus();
+            } else {
+                this.blur();
             }
         },
 

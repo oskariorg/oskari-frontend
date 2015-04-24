@@ -689,6 +689,10 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
             }
             extensionsByName = this.extensionsByName;
             extensionInfo = extensionsByName[extension.getName()];
+            if(!extensionInfo) {
+                // tried to control non-existing extension
+                return;
+            }
             extensionState = extensionInfo.state;
 
             state = request.getState();

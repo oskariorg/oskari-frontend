@@ -60,7 +60,9 @@ Oskari.registerLocalization({
                 "title": "Lisenssin peruuttaminen",
                 "message": "Haluatko lopettaa lisenssin tlauksen?"
             },
-            "validTo": "Tilaus voimassa {day} asti"
+            "validTo": "Tilaus voimassa {day} asti",
+            "licenseId": "Lisenssi id: {licenseid}",
+            "licenseServiceUrl": "Lisenssin rajapinnan osoite: {serviceurl}"
         },
         "buttons": {
         	"close": "Sulje",
