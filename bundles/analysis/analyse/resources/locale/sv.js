@@ -137,6 +137,7 @@ Oskari.registerLocalization(
             },
             "aggregate": {
                 "label": "Statistiska mått",
+                "labelTooltip": "Tunnusluvut, jotka lasketaan kohteiden ominaisuustietojen perusteella.",
                 "options": [
                     {
                         "id": "oskari_analyse_Count",
@@ -176,6 +177,7 @@ Oskari.registerLocalization(
             },
             "buffer_size": {
                 "label": "Zon storlek",
+                "labelTooltip": "Vyöhykkeen koko metreinä tai kilometreinä.",
                 "tooltip": "Ge zon storlek."
             },
             "buffer_units": {
@@ -184,6 +186,7 @@ Oskari.registerLocalization(
             },
             "analyse_name": {
                 "label": "Analys namn",
+                "labelTooltip": "Analyysiä kuvaava nimi",
                 "tooltip": "Ge analys namn"
             },
             "settings": {
@@ -192,17 +195,22 @@ Oskari.registerLocalization(
             },
             "intersect": {
                 "target": "Klippandes analyslager",
-                "label": "Klippande analyslager"
+                "targetLabelTooltip": "Analyysitaso, jonka kohteita leikataan leikkaavan tason kohteilla.",
+                "label": "Klippande analyslager",
+                "labelTooltip": "Analyysitaso, jonka kohteilla leikattavan tason kohteita leikataan."
             },
             "union": {
                 "label": "Kombinerande analyslager"
             },
             "layer_union": {
                 "label": "Kombinerande analyslager",
+                "labelTooltip": "Analyysitasot, joiden kohteet viedään samalle tasolle.",
                 "notAnalyseLayer": "Välj ett av analyslager",
                 "noLayersAvailable": "Analyslager som har samma attribut hittades inte. Du kan hitta mera analyslager genom att klicka \"Mera kartlager\"."
             },
             "areas_and_sectors": {
+                "label": "Vyöhykkeet ja sektorit",
+                "labelTooltip": "Vyöhykkeiden koko metreinä tai kilometreinä sekä vyöhykkeiden ja sektorien lukumäärä.",
                 "area_count": "Antal av zoner",
                 "area_size": "Storlek av zoner",
                 "sector_count": "Antal av sektorer",
@@ -211,13 +219,23 @@ Oskari.registerLocalization(
                 "sector_count_tooltip": "Ge sektorer antal."
             },
             "difference": {
-                "firstLayer": "Första analyslager",
-                "secondLayer": "Andra analyslager",
-                "field": "",
-                "keyField": ""
+                "firstLayer": "Aikaisempi ajankohta",
+                "firstLayerTooltip": "Alkuperäiset tiedot sisältävä analyysitaso.",
+                "firstLayerFieldTooltip": "Vertailtava ominaisuustieto ensimmäiseltä tasolta.",
+                "secondLayer": "Myöhempi ajankohta",
+                "secondLayerTooltip": "Muuttuneet tiedot sisältävä analyysitaso.",
+                "secondLayerFieldTooltip": "Vertailtava ominaisuustieto toiselta tasolta.",
+                "field": "Valitse ominaisuustieto",
+                "keyField": "Yhdistävä ominaisuustieto",
+                "keyFieldTooltip": "Ensimmäisen ja toisen tason kohteet yhdistävä ominaisuustieto, joka on yksikäsitteinen."
             },
             "spatial": {
                 "label": "Objekt för analys resultat",
+                "target": "Leikattava taso",
+                "targetTooltip": "Analyysitaso, jolta valitaan kohteita leikkaavan tason kohteiden perusteella.",
+                "intersectingLayer": "Leikkaava taso",
+                "intersectingLayerTooltip": "Analyysitaso, jonka kohteiden perusteella leikattavalta tasolta valitaan kohteita.",
+                "labelTooltipIntersect": "Analyysiin mukaan otettavat leikattavan tason kohteet. Leikkaavat kohteet ovat ainakin osittain leikkaavan tason kohteiden alueilla, sisältyvät kohteet ovat kokonaan.",
                 "options": [
                     {
                         "id": "oskari_analyse_intersect",
@@ -230,9 +248,19 @@ Oskari.registerLocalization(
                     }
                 ]
             },
+            "spatial_join": {
+                "firstLayer": "Ensimmäinen taso",
+                "firstLayerTooltip": "Ensimmäinen yhdistettävä taso, jolta ominaisuustiedot haetaan.",
+                "firstLayerFieldTooltip": "Ensimmäisen tason ominaisuustiedot, jotka otetaan analyysiin mukaan. Valitse enintään 10 ominaisuustietoa.",
+                "secondLayer": "Toinen taso",
+                "secondLayerTooltip": "Toinen yhdistettävä taso, jolta ominaisuustiedot haetaan.",
+                "secondLayerFieldTooltip": "Toisen tason ominaisuustiedot, jotka otetaan lopputulokseen mukaan. Valitse enintään 10 ominaisuustietoa." 
+            },
             "params": {
                 "label": "Attribut data för analys resultat",
                 "aggreLabel": "Attribut data för statistiska mått",
+                "aggreLabelTooltip": "Ominaisuustiedot, jotka otetaan analyysiin mukaan. Valitse enintään 10 ominaisuustietoa.",
+                "labelTooltip": "Ominaisuustiedot, jotka otetaan analyysiin mukaan. Valitse enintään 10 ominaisuustietoa.",
                 "tooltip": "",
                 "options": [
                     {

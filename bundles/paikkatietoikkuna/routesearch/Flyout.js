@@ -175,7 +175,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                     },
                     source: function (request, response) {
                         me._getSearchSuggestions(this, request, response);
-                    },
+                    }
                 }).data('autocomplete')._renderItem = me._renderAutocompleteItem;
 
                 contents.eq(0).append(tmp.getField());

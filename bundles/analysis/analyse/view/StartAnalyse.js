@@ -161,13 +161,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 '</div>',
             title:
                 '<div class="analyse_title_cont analyse_settings_cont">' +
-                '  <div class="settings_buffer_label"></div>' +
                 '  <input class="settings_buffer_field" type="text" />' +
                 '  <select id="oskari_analysis_analyse_view_start_analyse_settings_buffer_units" class="settings_buffer_units"></select>' +
                 '</div>',
             title_name:
                 '<div class="analyse_title_name analyse_settings_cont">' +
-                '  <div class="settings_name_label"></div>' +
                 '  <input class="settings_name_field" type="text" />' +
                 '</div>',
             title_color:
@@ -330,7 +328,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
             } else {
                 _.forEach(layers, function (layer) {
-                    if (layer._clickedFeatureIds && layer._clickedFeatureIds.length > 0) {
+                    if (layer._clickedFeatureIds && layer._clickedFeatureListIds.length > 0) {
                         _.forEach(layer._clickedGeometries, function (clickedFeature) {
                             geometries.push(clickedFeature[1]);
                         });
@@ -487,9 +485,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 tooltipCont = this.template.help.clone();
 
             panel.setTitle(this.loc.settings.label);
-            tooltipCont.attr('title', this.loc.settings.tooltip);
-            tooltipCont.addClass('header-icon-info');
-            headerPanel.append(tooltipCont);
 
             // Changing part of parameters ( depends on method)
             var extra = this.template.paramsOptionExtra.clone();
@@ -508,16 +503,14 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             if (selected_layers[0]) {
                 name = selected_layers[0].name.substring(0, 15) + name;
             }
+            
+            me._addTitle(contentPanel, me.loc.analyse_name.label, me.loc.analyse_name.labelTooltip);
             var analyseTitle = me.template.title_name.clone();
-            analyseTitle.find('.settings_name_label').html(
-                me.loc.analyse_name.label
-            );
             analyseTitle.find('.settings_name_field').attr({
                 'id': 'oskari_analysis_analyse_view_start_analyse_settings_name_field',
                 'value': name,
                 'placeholder': me.loc.analyse_name.tooltip
             });
-
             contentPanel.append(analyseTitle);
 
             return panel;
@@ -534,11 +527,15 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         _createColumnsSelector: function (columnsContainer, title) {
             var me = this,
                 columnsTitle = me.template.title_columns.clone(),
+                tooltipCont = me.template.help.clone(),
                 i,
                 option,
                 toolContainer;
 
             columnsTitle.find('.columns_title_label').html(title);
+            tooltipCont.attr('title', me.loc.params.labelTooltip);
+            tooltipCont.addClass('columns-icon-info');
+            columnsTitle.find('.columns_title_label').after(tooltipCont);
             columnsContainer.append(columnsTitle);
 
             var closureMagic = function (tool) {
@@ -1134,11 +1131,16 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          * @param {jQuery} contentPanel div to append extra params
          * @param {String} label        Label string
          */
-        _addTitle: function (contentPanel, label) {
-            var title = this.template.title_extra.clone();
+        _addTitle: function (contentPanel, label, labelTooltip) {
+            var title = this.template.title_extra.clone(),
+                tooltipCont = this.template.help.clone();
             title.find('.extra_title_label').html(label);
+            if (labelTooltip) {
+                tooltipCont.attr('title', labelTooltip);
+                tooltipCont.addClass('params-icon-info');
+                title.find('.extra_title_label').after(tooltipCont);
+            }
             contentPanel.append(title);
-
         },
 
         /**
@@ -1153,16 +1155,15 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
              *
              */
             buffer: function (me, contentPanel) {
-                var bufferTitle = me.template.title.clone(),
-                    bufferUnitSelect = bufferTitle.find(
+                var bufferOptions = me.template.title.clone(),
+                    bufferUnitSelect = bufferOptions.find(
                         'select.settings_buffer_units'
                     ),
+                    tooltipCont = this.template.help.clone(),
                     unit;
 
-                bufferTitle.find('.settings_buffer_label').html(
-                    me.loc.buffer_size.label
-                );
-                bufferTitle.find('.settings_buffer_field').attr({
+                this._addTitle(contentPanel, me.loc.buffer_size.label, this.loc.buffer_size.labelTooltip);
+                bufferOptions.find('.settings_buffer_field').attr({
                     'id': 'oskari_analysis_analyse_view_start_analyse_settings_buffer_field',
                     'value': '',
                     'placeholder': me.loc.buffer_size.tooltip
@@ -1177,7 +1178,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     }
                 }
 
-                contentPanel.append(bufferTitle);
+                contentPanel.append(bufferOptions);
             },
 
             /**
@@ -1191,7 +1192,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     option,
                     toolContainer;
                 // Title
-                me._addTitle(contentPanel, me.loc.aggregate.label);
+                me._addTitle(contentPanel, me.loc.aggregate.label, me.loc.aggregate.labelTooltip);
 
                 // sum, count, min, max, med
                 var closureMagic = function (tool) {
@@ -1251,7 +1252,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     toolContainer;
 
                 // Title
-                me._addTitle(contentPanel, me.loc.aggregate.label);
+                me._addTitle(contentPanel, me.loc.aggregate.label, me.loc.aggregate.labelTooltip);
 
                 // sum, count, min, max, med
                 var closureMagic = function (tool) {
@@ -1319,11 +1320,17 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     me.intersectOptionsMap[option.id] = option;
                 });
 
-                me._addTitle(contentPanel, me.loc.intersect.target);
-                targetLayerElem.html((targetLayer ? targetLayer.label : ''));
-                contentPanel.append(targetLayerElem);
-
-                me._addTitle(contentPanel, me.loc.intersect.label);
+                if (showSpatial) {
+                    me._addTitle(contentPanel, me.loc.spatial.target, me.loc.spatial.targetTooltip);
+                    targetLayerElem.html((targetLayer ? targetLayer.label : ''));
+                    contentPanel.append(targetLayerElem);
+                    me._addTitle(contentPanel, me.loc.spatial.intersectingLayer, me.loc.spatial.intersectingLayerTooltip);
+                } else {
+                    me._addTitle(contentPanel, me.loc.intersect.target, me.loc.intersect.targetLabelTooltip);
+                    targetLayerElem.html((targetLayer ? targetLayer.label : ''));
+                    contentPanel.append(targetLayerElem);
+                    me._addTitle(contentPanel, me.loc.intersect.label, me.loc.intersect.labelTooltip);
+                }
 
                 var closureMagic = function (tool) {
                     return function () {
@@ -1367,11 +1374,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 // Show spatial operator choice
                 if (showSpatial) {
                     //title spatial operator
-                    var titlespa = me.template.title_extra.clone();
-                    titlespa.find('.extra_title_label').html(
-                        me.loc.spatial.label
-                    );
-                    contentPanel.append(titlespa);
+                    me._addTitle(contentPanel, me.loc.spatial.label, me.loc.spatial.labelTooltipIntersect);
 
                     var selectSpatial = function (tool) {
                         return function () {
@@ -1420,7 +1423,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
              * @return {undefined}
              */
             layer_union: function (me, contentPanel) {
-                var selectedLayer = me._getSelectedMapLayer(),
+                var me = this,
+                    selectedLayer = me._getSelectedMapLayer(),
                     i,
                     option,
                     toolContainer,
@@ -1452,7 +1456,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     return;
                 }
 
-                me._addTitle(contentPanel, me.loc.layer_union.label);
+                me._addTitle(contentPanel, me.loc.layer_union.label, this.loc.layer_union.labelTooltip);
 
                 // layers
                 for (i = 0; i < me.unionOptions.length; i += 1) {
@@ -1490,6 +1494,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     labels = extraParams.find('label'),
                     keys = ['area_size', 'area_count', 'sector_count'];
 
+                this._addTitle(contentPanel, loc.label, loc.labelTooltip);
                 for (unit in me.bufferUnits) {
                     if (me.bufferUnits.hasOwnProperty(unit)) {
                         unitsSelect.append(
@@ -1535,12 +1540,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 me.differenceOptions = options;
                 me.differenceLayer = null;
                 // First layer is selected outside this panel, so no selection to be done here
-                me._addTitle(extraParams, loc.firstLayer);
+                me._addTitle(extraParams, loc.firstLayer, loc.firstLayerTooltip);
                 extraParams.append(jQuery('<span></span>').html((targetLayerOption ? targetLayerOption.label : '')));
 
                 // Field for first layer, it's well possible that the layer doesn't have any...
                 // TODO select matching field in second layer if possible (and if there's no user selection)
-                me._addTitle(extraParams, loc.field);
+                me._addTitle(extraParams, loc.field, loc.firstLayerFieldTooltip);
                 if (targetLayer && targetLayer.getFields) {
                     featureList = me.template.featureList.clone();
                     featureList.attr('id', 'analyse-layer1-field');
@@ -1553,7 +1558,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 }
 
                 // Second layer selection
-                me._addTitle(extraParams, loc.secondLayer);
+                me._addTitle(extraParams, loc.secondLayer, loc.secondLayerTooltip);
 
                 var closureMagic = function (tool) {
                     return function () {
@@ -1604,7 +1609,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 }
 
                 // Second layer field selection
-                me._addTitle(extraParams, loc.field);
+                me._addTitle(extraParams, loc.field, loc.secondLayerFieldTooltip);
                 featureList = me.template.featureList.clone();
                 featureList.attr('id', 'analyse-layer2-field');
                 if (me.differenceLayer && me.differenceLayer.getFields) {
@@ -1617,7 +1622,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 }
                 extraParams.append(featureList);
 
-                me._addTitle(extraParams, loc.keyField);
+                me._addTitle(extraParams, loc.keyField, loc.keyFieldTooltip);
                 extraParams.append(me._createJoinList(targetLayer));
 
                 contentPanel.append(extraParams);
@@ -1635,7 +1640,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 // - Second layer selection
                 // - Option selection for both layers
                 //   - combined max 10 options
-                var loc = me.loc.difference,
+                var loc = me.loc.spatial_join,
                     extraParams = me.template.difference.clone(),
                     featureList,
                     firstField,
@@ -1689,7 +1694,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 me.differenceOptions = options;
                 me.differenceLayer = null;
                 // First layer is selected outside this panel, so no selection to be done here
-                me._addTitle(extraParams, loc.firstLayer);
+                me._addTitle(extraParams, loc.firstLayer, loc.firstLayerTooltip);
                 extraParams.append(
                     jQuery('<span></span>').html(
                         (targetLayerOption ? targetLayerOption.label : '')
@@ -1698,7 +1703,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
                 // Field for first layer, it's well possible that the layer doesn't have any...
                 // TODO select matching field in second layer if possible (and if there's no user selection)
-                me._addTitle(extraParams, me.loc.params.label);
+                me._addTitle(extraParams, me.loc.params.label, loc.firstLayerFieldTooltip);
                 if (targetLayer && targetLayer.getFields) {
                     featureList = me.template.featureList.clone();
                     featureList.attr('id', 'analyse-layer1-field');
@@ -1716,7 +1721,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 }
 
                 // Second layer selection
-                me._addTitle(extraParams, loc.secondLayer);
+                me._addTitle(extraParams, loc.secondLayer, loc.secondLayerTooltip);
 
                 var closureMagic = function (tool) {
                     return function () {
@@ -1774,7 +1779,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 }
 
                 // Second layer field selection
-                me._addTitle(extraParams, me.loc.params.label);
+                me._addTitle(extraParams, me.loc.params.label, loc.secondLayerFieldTooltip);
                 featureList = me.template.featureList.clone();
                 featureList.attr('id', 'analyse-layer2-field');
                 if (me.differenceLayer && me.differenceLayer.getFields) {

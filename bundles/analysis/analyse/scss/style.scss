@@ -272,12 +272,39 @@ div.basic_analyse {
     font-weight: bold;
     margin: 5px 0;
 }
+
+.extra_title_label {
+    display: inline;    
+}
+
+.analyse_output_cont {
+
+    .columns_title_label {
+        display: inline-block;
+        width: 80%;
+    }
+}
+
+.analyse_title_columns {
+    display: inline-block;
+}
+
 .analyse_settings_cont {
     margin: 10px 5px;
 }
 
 .analyse_title_colcont {
     margin: 10px 5px;
+}
+
+.params-icon-info {
+    margin-right: 5px;
+    margin-top: 5px;
+}
+
+.columns-icon-info {
+    margin-right: 5px;
+    margin-top: 10px;
 }
 
 /* Buttons */
