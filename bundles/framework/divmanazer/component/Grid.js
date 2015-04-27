@@ -234,21 +234,20 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 // Let's not assume field order
                 for (field in value) {
                     if (value.hasOwnProperty(field) && (jQuery(subKeys[index]).data('key') === baseKey) && (jQuery(subKeys[index]).data('value') === field)) {
-                            cell = this.templateCell.clone();
-                            cell.addClass(baseKey);
-                            if (_.isArray(value[field])) {
-                                cell.append(value[field][0]);
-                            } else {
-                                cell.append(value[field]);
-                            }
-                            if (hidden) {
-                                cell.addClass('hidden');
-                            }
-                            row.append(cell);
-                            index = index + 1;
-                            found = true;
-                            break;
+                        cell = this.templateCell.clone();
+                        cell.addClass(baseKey);
+                        if (_.isArray(value[field])) {
+                            cell.append(value[field][0]);
+                        } else {
+                            cell.append(value[field]);
                         }
+                        if (hidden) {
+                            cell.addClass('hidden');
+                        }
+                        row.append(cell);
+                        index = index + 1;
+                        found = true;
+                        break;
                     }
                 }
             } while (found);

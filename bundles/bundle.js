@@ -72,9 +72,12 @@ Oskari = (function () {
                 );
             }
 
-            if(this.localizations && this.localizations[l])
+            if(this.localizations && this.localizations[l]) {
                 return this.localizations[l][key];
-            else return null;
+            }
+            else { 
+                return null;
+            }
         },
 
         /**
@@ -146,13 +149,10 @@ Oskari = (function () {
                     }
                 );
 
-            if (separators.length > 1) {
-
-                if (console && console.warn) {
-                    console.warn(
-                        'Found more than one separator for ' + this.getLang()
-                    );
-                }
+            if (separators.length > 1 &&console && console.warn) {
+                console.warn(
+                    'Found more than one separator for ' + this.getLang()
+                );
             }
 
             if (separators.length && separators[0]) {

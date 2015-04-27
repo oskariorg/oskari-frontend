@@ -253,8 +253,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
                     def = arguments[i];
                     for (n in def) {
                         if (def.hasOwnProperty(n) && obj[n] === undefined) {
-                                obj[n] = def[n];
-                            }
+                            obj[n] = def[n];
                         }
                     }
                 }
