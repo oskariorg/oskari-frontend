@@ -2,25 +2,33 @@
 
 ## 1.29
 
-### mapwfs2
+### analysis
 
-Fixed highligh error when user has highligted and unhighlighted feature and then moved map (the feature appears again highlighed).
+Now adds the PersonalData tab correctly if started after PersonalData bundle. Previously expected to be started before PersonalData.
 
 ### divmanazer/Button
 
 Added blur and isFocus functions.
 
+### divmanazer/Grid
+
+Sort improved for non numeric values.
+
 ### divmanazer/Popup
 
 Now checks correctly buttons focuses.
+
+### featuredata2/Flyout
+
+Sort improved for non numeric values.
 
 ### featuredata2/PopupHandler
 
 Unfocusing popup buttons.
 
-### analysis
+### mapwfs2
 
-Now adds the PersonalData tab correctly if started after PersonalData bundle. Previously expected to be started before PersonalData.
+Fixed highligh error when user has highligted and unhighlighted feature and then moved map (the feature appears again highlighed).
 
 ## 1.28.1
 
