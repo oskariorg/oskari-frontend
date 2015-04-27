@@ -1,39 +1,39 @@
 Oskari.registerLocalization(
 {
-    "lang": "et",
+    "lang": "en",
     "key": "MapWfs2",
     "value": {
-        "title": "NOT TRANSLATED",
+        "title": "MapWfs2",
         "desc": "",
-        "default-style": "NOT TRANSLATED",
-        "own-style": "NOT TRANSLATED",
+        "default-style": "Default style",
+        "own-style": "Own style",
         "tile": {
-            "title": "NOT TRANSLATED"
+            "title": "MapWfs2"
         },
         "flyout": {
-            "title": "NOT TRANSLATED",
-            "message": "NOT TRANSLATED"
+            "title": "MapWfs2",
+            "message": "MapWfs2"
         },
         "error": {
-            "title": "NOT TRANSLATED",
-            "connection_not_available": "NOT TRANSLATED",
-            "connection_broken": "NOT TRANSLATED",
-            "wfs_no_permissions": "NOT TRANSLATED",
-            "wfs_configuring_layer_failed": "NOT TRANSLATED",
-            "wfs_request_failed": "NOT TRANSLATED",
-            "features_parsing_failed": "NOT TRANSLATED"
+            "title": "Error",
+            "connection_not_available": "Connection to the WFS background service is unavailable.",
+            "connection_broken": "Connection to the WFS background service broke down.",
+            "wfs_no_permissions": "You do not have the permission to use WFS layer {layer}.",
+            "wfs_configuring_layer_failed": "Configuring WFS layer {layer} failed.",
+            "wfs_request_failed": "Request to WFS layer {layer} failed.",
+            "features_parsing_failed": "The feature parsing of WFS layer {layer}) failed."
         },
         "button": {
-            "cancel": "NOT TRANSLATED",
-            "show": "NOT TRANSLATED",
-            "close": "NOT TRANSLATED",
-            "edit": "NOT TRANSLATED"
+            "cancel": "Cancel",
+            "show": "Show places",
+            "close": "Close",
+            "edit": "Edit"
         },
         "popup": {
-            "title": "NOT TRANSLATED",
+            "title": "Own style",
             "button": {
-                "cancel": "NOT TRANSLATED",
-                "save": "NOT TRANSLATED"
+                "cancel": "Cancel",
+                "save": "Save"
             }
         }
     }
