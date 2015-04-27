@@ -434,13 +434,7 @@ Oskari.clazz.define(
         _addNumericColumnRenderers: function (grid) {
             var dataArray = grid.getDataModel().data,
                 visibleFields = grid.getVisibleFields(),
-                notNumeric = {},
-                decimals = {},
-                i,
-                j,
-                row,
-                key,
-                value;
+                decimals = {};
 
             var closureMagic = function (decimalCount) {
                 return function (value) {
@@ -453,22 +447,13 @@ Oskari.clazz.define(
                 };
             };
 
-            // loopataan näkyvät kentät
-                // käydään arrayhyn koko sarakkeen arvot
-                // tarkistetaan sarakkeen arvot isNumberille --> jos kaikki numeroita niin haetaan maximi desimaali määrä sarakkeelle ja lisätään gridille
-            // looppi loppuu
-
-            //Oskari.util.isNumber
-
             jQuery.each(visibleFields, function(index, field) {
-                var fieldValues = jQuery.grep(dataArray, function(value, index) {
+                var fieldValues = jQuery.grep(dataArray || [], function(value, index) {
                     return index === field;
                 });
 
                 var isNumber = Oskari.util.isNumber(fieldValues, true);
-                if(isNumber === false) {
-                    notNumeric[field] = true;
-                } else {                    
+                if(isNumber) {                    
                     decimals[field] = Oskari.util.decimals(fieldValues);
                     if (decimals[field]) {
                         grid.setColumnValueRenderer(
@@ -478,42 +463,6 @@ Oskari.clazz.define(
                     }
                 }
             });
-
-
-
-/*
-            for (i = 0; i < dataArray.length; i += 1) {
-                row = dataArray[i];
-                for (j = 0; j < visibleFields.length; j += 1) {
-                    key = visibleFields[j];
-                    value = row[key];
-                    if (!notNumeric[key] && value !== null && value !== undefined) {
-                        if (isNaN(value)) {
-                            value = parseFloat(value);
-                        }
-                        // FIXME: parseFloat returns 6 for "006A" which is wrong!
-                        if (isNaN(value) && (typeof row[key] === 'string' && row[key].length)) {
-                            notNumeric[key] = true;
-                        } else {
-                            value = value + '';
-                            value = value.split('.');
-                            decimals[key] = Math.max(decimals[key] || 0, value.length === 2 ? value[1].length : 0);
-                        }
-                    }
-                }
-            }
-
-
-            
-
-            for (i = 0; i < visibleFields.length; i += 1) {
-                if (!notNumeric[visibleFields[i]] && decimals[visibleFields[i]]) {
-                    grid.setColumnValueRenderer(
-                        visibleFields[i],
-                        closureMagic(decimals[visibleFields[i]])
-                    );
-                }
-            }*/
         },
 
         // helper for removing item (indexOf is not in IE8)
