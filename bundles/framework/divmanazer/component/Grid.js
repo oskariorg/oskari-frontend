@@ -7,11 +7,8 @@
  * to keep the table clean.
  */
 Oskari.clazz.define('Oskari.userinterface.component.Grid',
-
     /**
      * @static @method create called automatically on construction
-     *
-     *
      */
     function () {
         this.model = null;
@@ -57,7 +54,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         this.showColumnSelector = false;
         this.showExcelExporter = false;
         this.resizableColumns = false;
-
         this.uiNames = {};
         this.valueRenderer = {};
 
@@ -71,99 +67,81 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * Sets the data model the grid uses for rendering
          *
          * @param {Oskari.userinterface.component.GridModel} pData
-         *
          */
         setDataModel: function (pData) {
             this.model = pData;
         },
-
         /**
          * @method getDataModel
          * Returns the data model the grid uses for rendering
-         *
          *
          * @return {Oskari.userinterface.component.GridModel}
          */
         getDataModel: function () {
             return this.model;
         },
-
         /**
          * @public @method getDataSource
-         *
          *
          * @return {String} Datasource
          */
         getDataSource: function () {
             return this.dataSource;
         },
-
         /**
          * @public @method setDataSource
          *
          * @param {String} Datasource
-         *
          */
         setDataSource: function (dataSource) {
             this.dataSource = dataSource;
         },
-
         /**
          * @public @method getMetadataLink
-         *
          *
          * @return {String} Metadata link
          */
         getMetadataLink: function () {
             return this.metadataLink;
         },
-
         /**
          * @public @method setMetadataLink
          *
          * @param {String} Metadata link
-         *
          */
         setMetadataLink: function (metadataLink) {
             this.metadataLink = metadataLink;
         },
-
         /**
          * @method setColumnSelector
          * Sets the column selector visible or invisible
          *
          * @param {Boolean} newShowColumnSelector
          * Truth value for showing a column selector
-         *
          */
         setColumnSelector: function (newShowColumnSelector) {
             this.showColumnSelector = newShowColumnSelector;
         },
-
         /**
          * @method setExcelExporter
          * Sets the Excel exporter visible or invisible
          *
          * @param {Boolean} newShowExcelExporter
          * Truth value for showing an Excel exporter
-         *
          */
         setExcelExporter: function (newShowExcelExporter) {
             this.showExcelExporter = newShowExcelExporter;
         },
-
         /**
          * @method setResizableColumns
          * Sets the columns resizable or static
          *
          * @param {Boolean} newResizableColumns
          * Truth value for column resizability
-         *
          */
         setResizableColumns: function (newResizableColumns) {
             this.resizableColumns = newResizableColumns;
         },
-
         /**
          * @method setColumnUIName
          * Sets an UI text for a given field.
@@ -171,12 +149,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          *
          * @param {String} fieldName field name we want to replace in UI
          * @param {String} uiName field name we want to use instead in UI
-         *
          */
         setColumnUIName: function (fieldName, uiName) {
             this.uiNames[fieldName] = uiName;
         },
-
         /**
          * @method setColumnValueRenderer
          * When rendering the field value the given renderer function is called
@@ -192,28 +168,23 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @param {String} fieldName
          * Field name we want to process before showing in ui
          * @param {String} renderer function that will process the value
-         *
          */
         setColumnValueRenderer: function (fieldName, renderer) {
             this.valueRenderer[fieldName] = renderer;
         },
-
         getVisibleFields: function () {
             return this.fieldNames;
         },
-
         /**
          * @method setVisibleFields
          * If not given renders all data fields
          *
          * @param {String[]} pFieldNames
          * Fieldnames that should be rendered from data
-         *
          */
         setVisibleFields: function (pFieldNames) {
             this.fieldNames = pFieldNames;
         },
-
         /**
          * @method addSelectionListener
          * The callback function will receive reference to the grid in question
@@ -228,7 +199,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         addSelectionListener: function (pCallback) {
             this.selectionListeners.push(pCallback);
         },
-
         /**
          * @private @method _createSubTable
          * Creates columns from a subtable object.
@@ -237,7 +207,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @param {Number} columnIndex current column index
          * @param {String} key object key
          * @param {Object} value object value
-         *
          */
         _createSubTable: function (row, columnIndex, key, value) {
             var baseKey,
@@ -264,12 +233,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 found = false;
                 // Let's not assume field order
                 for (field in value) {
-                    if (value.hasOwnProperty(field)) {
-                        if ((jQuery(subKeys[index]).data('key') === baseKey) && (jQuery(subKeys[index]).data('value') === field)) {
+                    if (value.hasOwnProperty(field) && (jQuery(subKeys[index]).data('key') === baseKey) && (jQuery(subKeys[index]).data('value') === field)) {
                             cell = this.templateCell.clone();
                             cell.addClass(baseKey);
                             if (_.isArray(value[field])) {
-                                cell.append(value[field][0])
+                                cell.append(value[field][0]);
                             } else {
                                 cell.append(value[field]);
                             }
@@ -286,7 +254,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             } while (found);
             return index;
         },
-
         /**
          * @method setAdditionalDataHandler
          * If grid data has internal table structures, it can be hidden behind a
@@ -294,7 +261,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          *
          * @param {String} title text for the link
          * @param {function} handler callback to call when the link is clicked
-         *
          */
         setAdditionalDataHandler: function (title, handler) {
             this.additionalDataHandler = {
@@ -302,7 +268,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 handler: handler
             };
         },
-
         /**
          * @private @method _createAdditionalDataField
          * Renders the given data using #_renderAdditionalData() and wraps it
@@ -334,7 +299,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             return content;
 
         },
-
         /**
          * @private @method _renderAdditionalData
          * Renders the given data to a table or comma separated list depending
@@ -390,22 +354,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     fieldCell.append(field);
                     row.append(fieldCell);
 
-                    //row.append('<td>' + field + '</td>');
-                    try {
-                        type = typeof value;
-                        if (type === 'object') {
-                            innerTable = me._renderAdditionalData(value);
-                            valueCell.append(innerTable);
-                        } else if (type !== 'function') {
-                            valueCell.append(value);
-                        }
-                        /* else {
-                            // we have a problem, debug
-                            //alert(type + ':\r\n' +JSON.stringify(data));
-                        }*/
-                        row.append(valueCell);
-                    } catch (ignore) {}
-
+                    type = typeof value;
+                    if (type === 'object') {
+                        innerTable = me._renderAdditionalData(value);
+                        valueCell.append(innerTable);
+                    } else if (type !== 'function') {
+                        valueCell.append(value);
+                    }
+                    row.append(valueCell);
                     body.append(row);
                 }
             }
@@ -421,7 +377,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * Reference to the table DOM element whose header should be populated
          * @param {String[]} fieldNames
          * Names of the fields to render in render order
-         *
          */
         _renderHeader: function (table, fieldNames) {
             var me = this,
@@ -575,9 +530,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
 
                         if (parentItem.hasClass('closedSubTable')) {
                             table.find('th.hidden.' + thisKey).removeClass('hidden');
-                            // jQuery(this).parent().addClass('hidden');
                             table.find('td.hidden.' + thisKey).removeClass('hidden');
-                            // table.find('td.base.'+thisKey).addClass('hidden');
                             parentItem.removeClass('closedSubTable');
                             parentItem.addClass('openSubTable');
                         } else {
@@ -606,7 +559,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          *
          * @param {jQuery} table reference to the table DOM element whose body should be populated
          * @param {String[]} fieldNames names of the fields to render in render order
-         *
          */
         _renderBody: function (table, fieldNames) {
             var me = this,
@@ -668,7 +620,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 jQuery(this).parents('tr').bind('click', rowClicked);
             });
         },
-
         /**
          * @private @method _renderColumnSelector
          * Renders the column selector for the given table.
@@ -712,6 +663,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 columnSelector.css('visibility', 'hidden');
             });
             fields = me.model.getFields();
+
             // Add field names to the list
             for (i = 0; i < fields.length; i += 1) {
                 visibleField = false;
@@ -775,12 +727,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 columnSelector.css('visibility', 'hidden');
             });
         },
-
         /**
          * @private @method _enableColumnResizer
          * Enables column resizing functionality
-         *
-         *
          */
         _enableColumnResizer: function () {
             var pressed = false,
@@ -829,7 +778,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @param {Object} state
          * Tells into what state we are going to render this grid
          * (e.g. columnSelector: open tells that we want to show columnselector)
-         *
          */
         renderTo: function (container, state) {
             var me = this,
@@ -927,27 +875,15 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
 
         /**
          * @private @method _createExportForm
-         *
-         *
          * @return {Object} form
          */
         _createExportForm: function () {
             // TODO add checkboxes
-            var form = Oskari.clazz.create(
-                    'Oskari.userinterface.component.Form'
-                ),
-                columns = Oskari.clazz.create(
-                    'Oskari.userinterface.component.RadioButtonGroup'
-                ),
-                format = Oskari.clazz.create(
-                    'Oskari.userinterface.component.RadioButtonGroup'
-                ),
-                delimiter = Oskari.clazz.create(
-                    'Oskari.userinterface.component.RadioButtonGroup'
-                ),
-                additional = Oskari.clazz.create(
-                    'Oskari.userinterface.component.Fieldset'
-                ),
+            var form = Oskari.clazz.create('Oskari.userinterface.component.Form'),
+                columns = Oskari.clazz.create('Oskari.userinterface.component.RadioButtonGroup'),
+                format = Oskari.clazz.create('Oskari.userinterface.component.RadioButtonGroup'),
+                delimiter = Oskari.clazz.create('Oskari.userinterface.component.RadioButtonGroup'),
+                additional = Oskari.clazz.create('Oskari.userinterface.component.Fieldset'),
                 input,
                 me = this,
                 loc = me._loc['export'];
@@ -1057,7 +993,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * Notifies all selection listeners about selected data.
          *
          * @param {String} dataId id for the selected data
-         *
          */
         _dataSelected: function (dataId) {
             var i;
@@ -1066,7 +1001,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 this.selectionListeners[i](this, dataId);
             }
         },
-
         /**
          * @method select
          * Tries to find an object from #getDataModel() using the the id given
@@ -1078,7 +1012,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @param {String} value id for the data to be selected
          * @param {Boolean} keepPrevious
          * True to keep previous selection, false to clear before selecting
-         *
          */
         select: function (value, keepPrevious) {
             var key = this.model.getIdField(),
@@ -1100,22 +1033,17 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             }
             jQuery(rows[index]).addClass('selected');
         },
-
         /**
          * @method removeSelections
-         *
-         *
          */
         removeSelections: function () {
             var rows = this.table.find('tbody tr');
 
             rows.removeClass('selected');
         },
-
         /**
          * @method getSelection
          * Returns current selection visible on grid.
-         *
          *
          * @return {Object[]}
          * Subset of #getDataModel() that is currently selected in grid
@@ -1135,18 +1063,15 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             }
             return selection;
         },
-
         /**
          * @method getTable
          * Returns the grid table.
-         *
          *
          * @return {Object} table for the grid data
          */
         getTable: function () {
             return this.table;
         },
-
         /**
          * @private @method _getTableData
          *
@@ -1180,7 +1105,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
 
             return ret;
         },
-
         /**
          * @private @method _sortBy
          * Sorts the last search result by comparing given attribute on the search objects
@@ -1188,7 +1112,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @param {String} pAttribute
          * Attributename to sort by (e.g. result[pAttribute])
          * @param {Boolean} pDescending true if sort direction is descending
-         *
          */
         _sortBy: function (pAttribute, pDescending) {
             var me = this,
@@ -1203,9 +1126,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             dataArray.sort(function (a, b) {
                 return me._sortComparator(a, b, pAttribute, pDescending);
             });
-
         },
-
         /**
          * @private @method _getAttributeValue
          *
@@ -1234,7 +1155,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             }
             return nameA;
         },
-
         /**
          * @private @method _sortComparator
          * Compares the given attribute on given objects for sorting search
@@ -1245,7 +1165,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @param {String} pAttribute
          * Attributename to sort by (e.g. a[pAttribute])
          * @param {Boolean} pDescending true if sort direction is descending
-         *
          */
         _sortComparator: function (a, b, pAttribute, pDescending) {
             var nameA,
@@ -1271,7 +1190,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             }
             return value;
         },
-
         /**
          * @method _getLocalization
          * Returns the localization object for the given key.

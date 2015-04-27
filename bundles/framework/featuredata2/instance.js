@@ -75,25 +75,28 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          * implements BundleInstance protocol start methdod
          */
         "start": function () {
-            var me = this;
-
-            if (me.started) {
+            if (this.started) {
                 return;
             }
 
-            me.started = true;
-
-            var sandboxName = (this.conf ? this.conf.sandbox : null) || 'sandbox',
+            var me = this,
+                sandboxName = (this.conf ? this.conf.sandbox : null) || 'sandbox',
                 sandbox = Oskari.getSandbox(sandboxName),
-                p;
-
+                p,
+                localization,
+                layers = sandbox.findAllSelectedMapLayers(),
+                i;
+            
+            me.started = true;
             me.sandbox = sandbox;
 
             this.localization = Oskari.getLocalization(this.getName());
-
             sandbox.register(me);
+
             for (p in me.eventHandlers) {
-                sandbox.registerForEventByName(me, p);
+                if(me.eventHandlers.hasOwnProperty(p)) {
+                    sandbox.registerForEventByName(me, p);
+                }
             }
 
             //Let's extend UI
@@ -106,7 +109,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
             // draw ui
             me.createUi();
 
-            var localization = this.getLocalization('popup');
+            localization = this.getLocalization('popup');
 
             //sends request via config to add tool selection button
             if (this.conf && this.conf.selectionTools === true) {
@@ -120,13 +123,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                             me.popupHandler.showSelectionTools(me.conf.singleSelection);
                         }
                     };
-
                 sandbox.request(this, addBtnRequestBuilder('dialog', 'selectiontools', btn));
             }
 
             // check if preselected layers included wfs layers -> act if they are added now
-            var layers = sandbox.findAllSelectedMapLayers(),
-                i;
             for (i = 0; i < layers.length; ++i) {
                 if (layers[i].hasFeatureData()) {
                     this.plugin.refresh();
@@ -135,7 +135,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
             }
 
             sandbox.addRequestHandler('ShowFeatureDataRequest', this.requestHandlers.showFeatureHandler);
-
             this.__setupLayerTools();
         },
 
@@ -245,7 +244,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 if(!this.__loadingStatus) {
                     this.__loadingStatus = {};
                 }
-                var id = '' + event.getLayerId();
                 if(event.getStatus() === event.status.loading)  {
                     this.__loadingStatus['' + event.getLayerId()] = 'loading';
                     this.plugin.showLoadingIndicator(true);
@@ -370,7 +368,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
             /**
              * @method FeatureData.FinishedDrawingEvent
              */
-            'FeatureData.FinishedDrawingEvent': function (event) {
+            'FeatureData.FinishedDrawingEvent': function () {
                 if (!this.conf.singleSelection) {
                     return;
                 }
@@ -458,7 +456,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          * (re)creates the UI for "selected layers" functionality
          */
         createUi: function () {
-            var me = this;
             this.plugins['Oskari.userinterface.Flyout'].createUi();
 
             var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule'),

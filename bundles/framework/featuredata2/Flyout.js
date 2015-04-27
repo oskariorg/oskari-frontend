@@ -43,14 +43,10 @@ Oskari.clazz.define(
          * @method setEl
          * @param {Object} el
          *      reference to the container in browser
-         * @param {Number} width
-         *      container size(?) - not used
-         * @param {Number} height
-         *      container size(?) - not used
          *
          * Interface method implementation
          */
-        setEl: function (el, width, height) {
+        setEl: function (el) {
             this.container = el[0];
             if (!jQuery(this.container).hasClass('featuredata')) {
                 jQuery(this.container).addClass('featuredata');
@@ -343,7 +339,6 @@ Oskari.clazz.define(
                 content = jQuery('div.oskari-flyoutcontent.featuredata'),
                 flyout = content.parent().parent(),
                 container = content.parent(),
-                tabsContent = content.find('div.tabsContent'),
                 mouseOffsetX = 0,
                 mouseOffsetY = 0;
 
@@ -376,7 +371,7 @@ Oskari.clazz.define(
             });
 
             // End resizing
-            jQuery(document).mouseup(function (e) {
+            jQuery(document).mouseup(function () {
                 me.resizing = false;
                 me.resized = true;
             });
@@ -505,9 +500,7 @@ Oskari.clazz.define(
                 var hiddenFields = layer.getFields().slice(0);
 
                 // get data
-                var featureData,
-                    values,
-                    fields = layer.getFields().slice(0),
+                var fields = layer.getFields().slice(0),
                     locales = layer.getLocales().slice(0),
                     features = layer.getActiveFeatures().slice(0),
                     selectedFeatures = layer.getSelectedFeatures().slice(0); // filter
@@ -615,8 +608,6 @@ Oskari.clazz.define(
                 if (me.resizable) {
                     this._enableResize();
                 }
-            } else {
-                // Wrong tab selected -> ignore (shouldn't happen)
             }
         },
 
@@ -783,7 +774,7 @@ Oskari.clazz.define(
          *
          */
         setEnabled: function (isEnabled) {
-            if (this.active == isEnabled) {
+            if (this.active === isEnabled) {
                 return;
             }
 
@@ -836,7 +827,7 @@ Oskari.clazz.define(
         },
         /**
          * Shows/removes a loading indicator for the layer
-         * @param  {String}  layerId    
+         * @param  {String}  layerId
          * @param  {Boolean} blnLoading true to show, false to remove
          */
         showLoadingIndicator : function(layerId, blnLoading) {
@@ -845,7 +836,7 @@ Oskari.clazz.define(
         },
         /**
          * Shows/removes an error indicator for the layer
-         * @param  {String}  layerId    
+         * @param  {String}  layerId
          * @param  {Boolean} blnError true to show, false to remove
          */
         showErrorIndicator : function(layerId, blnError) {
@@ -853,7 +844,7 @@ Oskari.clazz.define(
                 this.layers[layerId], blnError, 'error');
         },
         /**
-         * Actual implementation to show/remove indicator. Just 
+         * Actual implementation to show/remove indicator. Just
          * adds a class to the header of a panel
          * @private
          * @param  {Oskari.userinterface.component.TabPanel} panel
