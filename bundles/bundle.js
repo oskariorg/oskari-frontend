@@ -3623,6 +3623,12 @@ D         * @param {Object} classInfo ClassInfo
 }());
 
 
+/* 
+* @class Oskari.util
+* Util class instance for static methods what may be used to for checks values. 
+* For example check at value is number or how many decimals this value have.
+*
+*/
 Oskari.util = (function () {
     var util = {};
 
