@@ -65,7 +65,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
          *      structure and if parameter key is given
          */
         getLocalization: function (key) {
-            console.log("instance, getLoc. key:", key);
             if (!this._localization) {
                 this._localization = Oskari.getLocalization(this.getName());
             }
