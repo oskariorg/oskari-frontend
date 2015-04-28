@@ -14,6 +14,9 @@ Added blur and isFocus functions.
 
 Sort improved for non numeric values.
 
+Improvements in Excel/csv export
+("only selected features" option, metadata request url, expanding object column values, type conversion in values)
+
 ### divmanazer/Popup
 
 Now checks correctly buttons focuses.
