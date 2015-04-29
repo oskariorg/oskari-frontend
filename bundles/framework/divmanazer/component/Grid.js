@@ -1254,9 +1254,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             if (data instanceof Date) {
                 data = String(data);
             }
-            else if (data instanceof Object) {
-
-            }
             else if (!isNaN(data)) {
                 data = String(data);
             }
