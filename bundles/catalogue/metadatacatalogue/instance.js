@@ -1031,11 +1031,20 @@ Oskari.clazz.define(
                         if(row.geom && row.geom != null) {
                             jQuery(cells[3]).addClass(me.resultHeaders[2].prop);
                             jQuery(cells[3]).attr('title', me.resultHeaders[2].tooltip);
-                            jQuery(cells[3]).find('div.showBbox').click(function () {
-                                var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
-                                me.sandbox.postRequestByName(rn, [row.geom, 'WKT', {id:row.id}, null, 'replace', true, style, true]);
-                                me._unactiveShowInfoAreaIcons();
-                                jQuery(this).removeClass('icon-info-area').addClass('icon-info-area-active');
+                            jQuery(cells[3]).find('div.showBbox').click(function () {                                
+                                // If show info area is active, remove geom from map
+                                if(jQuery(this).hasClass('icon-info-area-active')){
+                                    me._removeFeaturesFromMap();
+                                    jQuery(this).parent().attr('title', me.getLocalization('grid').showBBOX);
+                                }
+                                // Else show info area is not active, add geom to map
+                                else {
+                                    var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
+                                    me.sandbox.postRequestByName(rn, [row.geom, 'WKT', {id:row.id}, null, 'replace', true, style, true]);
+                                    me._unactiveShowInfoAreaIcons();
+                                    jQuery(this).removeClass('icon-info-area').addClass('icon-info-area-active');
+                                    jQuery(this).parent().attr('title', me.getLocalization('grid').removeBBOX);
+                                }
                             });
                         } else {
                             jQuery(cells[3]).find('div.showBbox').hide();
