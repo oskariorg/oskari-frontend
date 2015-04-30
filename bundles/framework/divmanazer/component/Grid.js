@@ -839,7 +839,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 exportButton.setTitle(me._loc['export']['export']);
                 exportButton.setHandler(function () {
                     var values = exportForm.getValues({});
-                    values.data = me._getTableData(values.columns !== 'all');
+                    values.data = me._getTableData(values.columns !== 'all', values.export_selection);
+                    exportForm.getElement().elements.layerName.value = me._getLayerName();
                     exportForm.getElement().elements.data.value = JSON.stringify(values.data);
                     exportForm.submit();
                     me.exportPopup.close(true);
@@ -851,7 +852,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     me.exportPopup = Oskari.clazz.create(
                         'Oskari.userinterface.component.Popup'
                     );
-
+                    // Selection state
+                    jQuery(exportForm.getElement()).find('input[name=export_selection]').prop('disabled',me.getSelection().length === 0);
                     me.exportPopup.makeModal();
 
                     me.exportPopup.show(
@@ -884,6 +886,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 delimiter = Oskari.clazz.create('Oskari.userinterface.component.RadioButtonGroup'),
                 additional = Oskari.clazz.create('Oskari.userinterface.component.Fieldset'),
                 input,
+                layerName,
                 me = this,
                 loc = me._loc['export'];
 
@@ -928,7 +931,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     }
                 ]
             );
-            delimiter.setValue(',');
+            delimiter.setValue(';');
 
             format.setName('format');
             format.setTitle(loc.format.title);
@@ -974,14 +977,28 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             input.setChecked(!!this.getMetadataLink());
             additional.addComponent(input);
 
+            input = Oskari.clazz.create(
+                'Oskari.userinterface.component.CheckboxInput'
+            );
+            input.setName('export_selection');
+            input.setTitle(loc.additional.export_selection);
+            input.setEnabled(me.getSelection().length > 1);
+            input.setChecked(false);
+            additional.addComponent(input);
+
             input = document.createElement('input');
             input.name = 'data';
             input.type = 'hidden';
+
+            layerName = document.createElement('input');
+            layerName.name = 'layerName';
+            layerName.type = 'hidden';
 
             form.addComponent(format);
             form.addComponent(columns);
             form.addComponent(delimiter);
             form.addComponent(additional);
+            form.getElement().appendChild(layerName);
             form.getElement().appendChild(input);
 
             return form;
@@ -1075,17 +1092,20 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @private @method _getTableData
          *
          * @param {Boolean} visible Return only visible columns
+         * @param {Boolean} selected Return only selected rows, if true
          *
          * @return {[][]}
          * Table data as a two dimensional array, first row is headers.
          */
-        _getTableData: function (visible) {
+        _getTableData: function (visible, selected) {
             var me = this,
                 model = me.getDataModel(),
                 data = model.getData(),
+                rows = me.table.find('tbody tr'),
                 fields = visible ? me.getVisibleFields() : model.getFields(),
                 ret = [],
-                row;
+                row,
+                i = 0;
 
             // Add headers
             ret.push([]);
@@ -1096,10 +1116,21 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             // Add data
             data.forEach(function (rowData) {
                 row = [];
-                fields.forEach(function (field) {
-                    row.push(rowData[field]);
-                });
-                ret.push(row);
+                if(selected) {
+                    if (jQuery(rows[i]).hasClass('selected')) {
+                        fields.forEach(function (field) {
+                            row.push(me._prepareData(rowData[field]));
+                        });
+                        ret.push(row);
+                    }
+                }
+                else {
+                    fields.forEach(function (field) {
+                        row.push(me._prepareData(rowData[field]));
+                    });
+                    ret.push(row);
+                }
+                i++;
             });
 
             return ret;
@@ -1205,6 +1236,28 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 ret = locale[this._defaultLocKey];
             }
             return ret;
+        },
+        /**
+         * @method _get Layer name (title of active tab header
+         * @return {String/null}
+         */
+        _getLayerName: function () {
+            return  jQuery('div.oskari-flyoutcontent.featuredata').find('li.active').text();
+        },
+        /**
+         * Prepare column data for excel export
+         * @param data
+         * @returns {*}
+         * @private
+         */
+        _prepareData: function (data) {
+            if (data instanceof Date) {
+                data = String(data);
+            }
+            else if (!isNaN(data)) {
+                data = String(data);
+            }
+            return data;
         }
     }
 );

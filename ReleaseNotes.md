@@ -6,6 +6,10 @@
 
 Now adds the PersonalData tab correctly if started after PersonalData bundle. Previously expected to be started before PersonalData.
 
+### catalogue/metadatagatalogue
+
+Improvements in show metadata coverage. Icons changes and now active metadata coverage is showed different icon.
+
 ### divmanazer/Button
 
 Added blur and isFocus functions.
@@ -13,6 +17,9 @@ Added blur and isFocus functions.
 ### divmanazer/Grid
 
 Sort improved for non numeric values.
+
+Improvements in Excel/csv export
+("only selected features" option, metadata request url, expanding object column values, type conversion in values)
 
 ### divmanazer/Popup
 

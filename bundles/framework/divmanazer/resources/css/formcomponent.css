@@ -1,5 +1,6 @@
 button.oskari-formcomponent, input[type=button].oskari-formcomponent, input[type=reset].oskari-formcomponent, input[type=submit].oskari-formcomponent {
-  margin-top: 6px; }
+  margin-top: 6px;
+  margin-right: 6px; }
 
 fieldset.oskari-formcomponent {
   border: 0;

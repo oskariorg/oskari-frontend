@@ -587,7 +587,7 @@ Oskari.clazz.define(
                     grid.setColumnSelector(true);
                     grid.setResizableColumns(true);
                     grid.setExcelExporter(
-                        layer.getPermission('publish') === 'publication_permission_ok'
+                        layer.getPermission('download') === 'download_permission_ok'
                     );
 
                     panel.grid = grid;
