@@ -6,6 +6,10 @@
 
 Now adds the PersonalData tab correctly if started after PersonalData bundle. Previously expected to be started before PersonalData.
 
+### catalogue/metadatagatalogue
+
+Improvements in show metadata coverage. Icons changes and now active metadata coverage is showed different icon.
+
 ### divmanazer/Button
 
 Added blur and isFocus functions.
