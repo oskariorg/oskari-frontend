@@ -42,6 +42,10 @@ Oskari.clazz.define("Oskari.elf.geolocator.Bundle", function() {
             "type": "text/javascript",
             "src": "../../../../bundles/elf/elf-geolocator/resources/locale/es.js"
         }, {
+            "lang": "et",
+            "type": "text/javascript",
+            "src": "../../../../bundles/elf/elf-geolocator/resources/locale/et.js"
+        }, {
             "lang": "fi",
             "type": "text/javascript",
             "src": "../../../../bundles/elf/elf-geolocator/resources/locale/fi.js"

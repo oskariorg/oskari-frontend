@@ -109,9 +109,17 @@ Oskari.clazz.define("Oskari.mapframework.bundle.userguide.UserGuideBundle", func
             "type": "text/javascript",
             "src": "../../../../bundles/framework/userguide/resources/locale/lv.js"
         }, {
+            "lang": "nb",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/userguide/resources/locale/nb.js"
+        }, {
             "lang": "nl",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/userguide/resources/locale/nl.js"
+        }, {
+            "lang": "nn",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/userguide/resources/locale/nn.js"
         }, {
             "lang": "pl",
             "type": "text/javascript",

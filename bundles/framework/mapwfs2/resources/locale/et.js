@@ -1,6 +1,6 @@
 Oskari.registerLocalization(
 {
-    "lang": "en",
+    "lang": "et",
     "key": "MapWfs2",
     "value": {
         "title": "MapWfs2",
