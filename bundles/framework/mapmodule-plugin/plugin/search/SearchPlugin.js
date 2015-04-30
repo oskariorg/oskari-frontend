@@ -460,11 +460,15 @@ Oskari.clazz.define(
          * @param {Object} result
          */
         _resultClicked: function(result) {
+            var zoom = result.zoomLevel;
+            if(result.zoomScale) {
+                zoom = {scale : result.zoomScale};
+            }
             this.getSandbox().request(
                 this.getName(),
                 this.getSandbox().getRequestBuilder(
                     'MapMoveRequest'
-                )(result.lon, result.lat, result.zoomLevel, false)
+                )(result.lon, result.lat, zoom, false)
             );
             this._setMarker(result);
         },

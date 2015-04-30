@@ -48,11 +48,11 @@ Oskari.registerLocalization(
         "searching": "Haetaan…",
         "grid": {
             "name": "Nimi",
+            "removeBBOX": "Poista aineiston kattavuus",
             "showBBOX": "Näytä aineiston kattavuus",
             "info": "Näytä metatiedot",
             "remove": "Poista hakutuloksista",
             "rating": "Arviointi"
-
         },
         "licenseText": "Hae lisenssi"
     }

@@ -80,10 +80,14 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultExtension',
          *      structure and if parameter key is given
          */
         getLocalization: function (key) {
+            console.log("##### key", key);
             if (!this._localization) {
+                console.log("---- key", key, "name", this.getName());
                 this._localization = Oskari.getLocalization(this.getName());
             }
             if (key) {
+                console.log("===== key", key);
+                console.log(this._localization);
                 return this._localization[key];
             }
             return this._localization;

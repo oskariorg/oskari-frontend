@@ -19,13 +19,15 @@ Oskari.clazz.define(
         this.__lastRequestId = 0;
         this.cometd = this.connection.get();
         this.layerProperties = {};
+        this.__connectionTries = 0;
+        this.__latestTry = 0;
 
         this.rootURL = location.protocol + '//' +
             this.config.hostname + this.config.port +
             this.config.contextPath;
 
         this.session = {
-            session: jQuery.cookie('JSESSIONID') || '',
+            session: this.__getApikey(),
             route: jQuery.cookie('ROUTEID') || ''
         };
 
@@ -110,6 +112,9 @@ Oskari.clazz.define(
             this.statusHandler.handleError(params.data);
         },
         statusChange : function(params) {
+            // reset connection backdown counters when receiving status messages
+            this.__connectionTries = 0;
+            this.__latestTry = 0;
             this.statusHandler.handleChannelStatus(params.data);
         },
         sendMessage : function(channel, message) {
@@ -130,6 +135,14 @@ Oskari.clazz.define(
                 this.cometd.publish(channel, message);
             }
         },
+        __getApikey : function() {
+            // prefer API key
+            if(this.plugin.getSandbox().getUser() && this.plugin.getSandbox().getUser().getAPIkey()) {
+                return this.plugin.getSandbox().getUser().getAPIkey();
+            }
+            // default to cookie...
+            return jQuery.cookie('JSESSIONID') || '';
+        },
 
         /**
          * @method startup
@@ -144,7 +157,13 @@ Oskari.clazz.define(
             }
 
             // update session and route
-            this.session.session = jQuery.cookie('JSESSIONID') || '';
+            this.session.session = this.__getApikey();
+            if(!this.session.session) {
+                // will not work correctly, try again in a bit
+                this.resetWFS();
+                return;
+            }
+            // TODO: get rid of ROUTEID by improving the apikey functionality in server side
             this.session.route = jQuery.cookie('ROUTEID') || '';
 
             var srs = this.plugin.getSandbox().getMap().getSrsName(),
@@ -420,7 +439,30 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
      * @param {Object} data
      */
     resetWFS: function (data) {
-        this.startup(null);
+        // reset any previous timer
+        clearTimeout(this.__resetTimeout);
+        var me = this;
+        var now = new Date().getTime();
+        var backdownBuffer = 1000 * Math.pow(2, this.__connectionTries);
+        var timeUntilNextTry = now - (this.__latestTry + backdownBuffer);
+        if(this.__connectionTries > 6) {
+            // notify failure to connect. We could timeout with big number and reset connectionTries?
+            me.plugin.showErrorPopup(
+                'connection_broken',
+                null,
+                true
+            );
+            return;
+        }
+        if(this.__connectionTries === 0 || timeUntilNextTry < 0) {
+            this.__latestTry = now;
+            this.__connectionTries++;
+            this.startup(null);
+            return;
+        }
+        this.__resetTimeout = setTimeout(function() {
+            me.resetWFS(data);
+        }, timeUntilNextTry + 10);
     }
 });
 
