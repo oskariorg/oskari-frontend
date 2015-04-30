@@ -2,6 +2,14 @@
 
 ## 1.29
 
+### core
+
+User now has an getAPIkey() function. Parsed from user data returned by GetAppSetup.
+
+### mapmodule-plugin/SearchPlugin
+
+Now handles zoomScale in search results correctly.
+
 ### analysis
 
 Now adds the PersonalData tab correctly if started after PersonalData bundle. Previously expected to be started before PersonalData.
@@ -35,7 +43,10 @@ Unfocusing popup buttons.
 
 ### mapwfs2
 
-Fixed highligh error when user has highligted and unhighlighted feature and then moved map (the feature appears again highlighed).
+Fixed highlight error when user has highligted and unhighlighted feature and then moved map (the feature appears again highlighed).
+
+Now prefers using APIkey from sandbox.getUser().getAPIkey() instead of JSESSIONID cookie as session info. Fails fast on init if session info
+is not available and backs down on tries to reconnect to prevent spamming messages.
 
 ## 1.28.1
 
