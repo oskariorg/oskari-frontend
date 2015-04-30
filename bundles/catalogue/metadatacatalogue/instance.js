@@ -27,9 +27,8 @@ Oskari.clazz.define(
             title: this.getLocalization('grid').name,
             prop: 'name'
         }, {
-            title: '', // this.getLocalization('grid').rating,
+            title: '',
             tooltip: ''
-//            prop: 'rating'
         }, {
             title: '',
             tooltip: this.getLocalization('grid').showBBOX,
@@ -136,7 +135,7 @@ Oskari.clazz.define(
                 '  <td></td>' +
                 '  <td></td>' +
                 '  <td><div class="actionPlaceholder"></div></td>' +
-                '  <td><div class="showBbox icon-zoomto"></div></td>' +
+                '  <td><div class="showBbox icon-info-area"></div></td>' +
                 '  <td><div class="layerInfo icon-info"></div></td>' +
                 '  <td><div class="resultRemove icon-close"></div></td>' +
                 '</tr>'

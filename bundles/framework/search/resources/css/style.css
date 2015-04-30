@@ -1,6 +1,4 @@
 /* Mixins */
-div.search .info {
-  padding-left: 5px; }
 div.search div.controls div.oskarifield {
   display: inline-block; }
   div.search div.controls div.oskarifield input[type=text] {
