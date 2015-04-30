@@ -48,6 +48,8 @@ Fixed highlight error when user has highligted and unhighlighted feature and the
 Now prefers using APIkey from sandbox.getUser().getAPIkey() instead of JSESSIONID cookie as session info. Fails fast on init if session info
 is not available and backs down on tries to reconnect to prevent spamming messages.
 
+Now buffers messages until init is completed. After init success, sends out the buffered messages.
+
 ## 1.28.1
 
 ### heatmap

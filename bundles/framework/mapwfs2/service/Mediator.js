@@ -21,6 +21,8 @@ Oskari.clazz.define(
         this.layerProperties = {};
         this.__connectionTries = 0;
         this.__latestTry = 0;
+        this.__initInProgress = false;
+        this.__bufferedMessages = [];
 
         this.rootURL = location.protocol + '//' +
             this.config.hostname + this.config.port +
@@ -94,6 +96,9 @@ Oskari.clazz.define(
                 '/wfs/reset': function () {
                     self.resetWFS.apply(self, arguments);
                 },
+                '/wfs/init': function () {
+                    self.handleInitResponse.apply(self, arguments);
+                },
                 '/error': function () {
                     self.handleError.apply(self, arguments);
                 },
@@ -108,19 +113,32 @@ Oskari.clazz.define(
                 }
             }
         },
+        handleInitResponse : function(data) {
+            this.statusHandler.__log('Init response', data);
+            var me = this;
+            this.__initInProgress = false;
+            if(data && data.successful === true) {
+                // reset connection backdown counters when receiving init success
+                this.__connectionTries = 0;
+                this.__latestTry = 0;
+                // send out any buffered messages
+                _.each(this.__bufferedMessages, function(item) {
+                    me.sendMessage(item.channel, item.message);
+                });
+                // clear the buffer
+                this.__bufferedMessages = [];
+            }
+        },
         handleError : function(params) {
             this.statusHandler.handleError(params.data);
         },
         statusChange : function(params) {
-            // reset connection backdown counters when receiving status messages
-            this.__connectionTries = 0;
-            this.__latestTry = 0;
             this.statusHandler.handleChannelStatus(params.data);
         },
         sendMessage : function(channel, message) {
             var isInit = (channel === '/service/wfs/init');
             // connected flag is not setup when init is called so ignore it.
-            if (this.connection.isConnected() || isInit) {
+            if (isInit || (this.connection.isConnected() && !this.__initInProgress)) {
                 if(!isInit) {
                     // skip reqId in init message
                     message.reqId = this.getNextRequestId();
@@ -133,6 +151,12 @@ Oskari.clazz.define(
                     this.statusHandler.handleChannelRequest(message.layerId, channel, message.reqId);
                 }
                 this.cometd.publish(channel, message);
+            }
+            else {
+                this.__bufferedMessages.push({
+                    channel : channel,
+                    message : message
+                });
             }
         },
         __getApikey : function() {
@@ -203,6 +227,7 @@ Oskari.clazz.define(
                     styleName: layer.getCurrentStyle().getName()
                 };
             });
+            this.__initInProgress = true;
             this.sendMessage('/service/wfs/init', message);
         }
     });
