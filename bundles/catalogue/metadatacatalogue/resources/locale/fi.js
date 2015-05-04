@@ -48,7 +48,7 @@ Oskari.registerLocalization(
         "searching": "Haetaan…",
         "grid": {
             "name": "Nimi",
-            "removeBBOX": "Poista aineiston kattavuus",
+            "removeBBOX": "Piilota aineiston kattavuus",
             "showBBOX": "Näytä aineiston kattavuus",
             "info": "Näytä metatiedot",
             "remove": "Poista hakutuloksista",

@@ -47,7 +47,7 @@ Oskari.registerLocalization(
         "searching": "Zoeken...",
         "grid": {
             "name": "Naam",
-            "removeBBOX": "Remove data coverage",
+            "removeBBOX": "Hide data coverage",
             "showBBOX": "NOT TRANSLATED",
             "info": "NOT TRANSLATED",
             "remove": "NOT TRANSLATED",
