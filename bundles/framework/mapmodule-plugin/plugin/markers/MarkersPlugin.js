@@ -279,7 +279,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             if (!suppressEvent) {
                 var removeEvent = sandbox.getEventBuilder(
                     'AfterRemoveMarkersEvent'
-                )();
+                )(optionalMarkerId);
                 sandbox.notifyAll(removeEvent);
             }
         },
@@ -411,6 +411,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             // check for existing marker
             if(this._markers[data.id]) {
                 // remove if found - will be replaced with new config
+                // event is suppressed as this is "modify"
                 this.removeMarkers(true, data.id);
             }
 
@@ -477,7 +478,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             if (!suppressEvent) {
                 var addEvent = me.getSandbox().getEventBuilder(
                     'AfterAddMarkerEvent'
-                )(data, id, events);
+                )(data, data.id, events);
                 me.getSandbox().notifyAll(addEvent);
             }
         },
