@@ -62,7 +62,10 @@ Oskari.registerLocalization({
             },
             "validTo": "Subscription valid for {day}",
             "licenseId": "License id: {licenseid}",
-            "licenseServiceUrl": "License service URL: {serviceurl}"
+            "licenseServiceUrl": "License service URL: {serviceurl}",
+            "licenceConcluded" : {
+                "message": "License concluded, see below for the license details."
+            }
         },
         "buttons": {
         	"close": "Close",

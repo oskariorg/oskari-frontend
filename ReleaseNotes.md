@@ -13,11 +13,7 @@ throughout Oskari code:
     - isDecimal()
     - decimals()
     - hexToRgb()
-    - rgbToHex
-
-### mapmodule-plugin/SearchPlugin
-
-Now handles zoomScale in search results correctly.
+    - rgbToHex()
 
 ### analysis
 
@@ -42,6 +38,10 @@ Improvements in Excel/csv export
 
 Now checks correctly buttons focuses.
 
+### elf/elf-license
+
+In successfully license conclude now shows same information popup as concluded license.
+
 ### featuredata2/Flyout
 
 Sort improved for non numeric values.
@@ -49,6 +49,10 @@ Sort improved for non numeric values.
 ### featuredata2/PopupHandler
 
 Unfocusing popup buttons.
+
+### mapmodule-plugin/SearchPlugin
+
+Now handles zoomScale in search results correctly.
 
 ### mapwfs2
 
