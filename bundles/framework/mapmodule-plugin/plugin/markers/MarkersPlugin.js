@@ -408,6 +408,13 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 return;
             }
 
+            // check for existing marker
+            if(this._markers[data.id]) {
+                // remove if found - will be replaced with new config
+                this.removeMarkers(true, data.id);
+            }
+
+
             // Image data already available
             var iconSrc = null;
             if (me._svg) {
