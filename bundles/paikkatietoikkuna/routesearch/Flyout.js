@@ -328,7 +328,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                 url += ',' + encodeURIComponent(toLoc.village);
             }
             url += "&rt=fastest";
-            console.log(url);
             return url;
         },
 
