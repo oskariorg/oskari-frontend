@@ -279,7 +279,7 @@ Oskari.clazz.define(
                         }
                         jQuery('#' + activeCell + 'ColorCell').css('border', '1px solid #000000');
                     }
-                    me.values.color = me.creator.rgbToHex(this.style.backgroundColor);
+                    me.values.color = Oskari.util.rgbToHex(this.style.backgroundColor);
                     me.activeColorCell = cellIndex;
                     if (cellIndex < 10) {
                         cellIndex = '0' + cellIndex.toString();
@@ -365,7 +365,7 @@ Oskari.clazz.define(
             // if the color is not picked from selection, it must be users own color
             // add color values to the input fields
             if (!statedChosenColor) {
-                var rgb = me.creator.hexToRgb(me.values.color);
+                var rgb = Oskari.util.hexToRgb(me.values.color);
                 dialogContent.find('input.custom-color.custom-red-value').val(rgb.r);
                 dialogContent.find('input.custom-color.custom-green-value').val(rgb.g);
                 dialogContent.find('input.custom-color.custom-blue-value').val(rgb.b);

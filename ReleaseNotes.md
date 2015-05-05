@@ -6,6 +6,15 @@
 
 User now has an getAPIkey() function. Parsed from user data returned by GetAppSetup.
 
+Oskari.util has been added to /Oskari/bundles/bundle.js. It holds generic helper-functions that are used 
+throughout Oskari code:
+
+    - isNumber()
+    - isDecimal()
+    - decimals()
+    - hexToRgb()
+    - rgbToHex()
+
 ### analysis
 
 Now adds the PersonalData tab correctly if started after PersonalData bundle. Previously expected to be started before PersonalData.

@@ -3729,7 +3729,7 @@ Oskari.util = (function () {
     };
 
     /**
-    * Checks decimals.
+    * Calculates the amount of decimals in value or maximum number of decimals in numbers of an array.
     * @static @method Oskari.util.decimals
     *
     * @param {Object} value checked value
@@ -3755,7 +3755,53 @@ Oskari.util = (function () {
             val = val.split('.');
             return val.length === 2 ? val[1].length : 0;
         }
-    }
+    };
+
+    /**
+     * Converts hexadecimal color values to decimal values (255,255,255)
+     * Green: hexToRgb("#0033ff").g
+     * http://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
+     * 
+     * @method hex
+     * hexadecimal color value e.g. '#00ff99'
+     */
+    util.hexToRgb = function(hex) {
+        // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+        var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+        hex = hex.replace(shorthandRegex, function (m, r, g, b) {
+            return r + r + g + g + b + b;
+        });
+
+        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16)
+        } : null;
+    };
+
+    /**
+     * Convert rgb values to hexadecimal color values
+     *
+     * @method rgbToHex
+     * @param {String} rgb decimal color values e.g. 'rgb(255,0,0)'
+     */
+    util.rgbToHex = function (rgb) {
+        if (rgb.charAt(0) === '#') {
+            return rgb.substring(1);
+        }
+        var parts = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/),
+            j;
+
+        delete(parts[0]);
+        for (j = 1; j <= 3; j += 1) {
+            parts[j] = parseInt(parts[j], 10).toString(16);
+            if (parts[j].length === 1) {
+                parts[j] = '0' + parts[j];
+            }
+        }
+        return parts.join('');
+    };
 
     return util;
 }());
