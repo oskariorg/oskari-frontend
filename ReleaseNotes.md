@@ -6,10 +6,6 @@
 
 User now has an getAPIkey() function. Parsed from user data returned by GetAppSetup.
 
-### mapmodule-plugin/SearchPlugin
-
-Now handles zoomScale in search results correctly.
-
 ### analysis
 
 Now adds the PersonalData tab correctly if started after PersonalData bundle. Previously expected to be started before PersonalData.
@@ -33,6 +29,10 @@ Improvements in Excel/csv export
 
 Now checks correctly buttons focuses.
 
+### elf/elf-license
+
+In successfully license conclude now shows same information popup as concluded license.
+
 ### featuredata2/Flyout
 
 Sort improved for non numeric values.
@@ -40,6 +40,10 @@ Sort improved for non numeric values.
 ### featuredata2/PopupHandler
 
 Unfocusing popup buttons.
+
+### mapmodule-plugin/SearchPlugin
+
+Now handles zoomScale in search results correctly.
 
 ### mapwfs2
 
