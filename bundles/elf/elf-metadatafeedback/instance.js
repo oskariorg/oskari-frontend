@@ -127,7 +127,7 @@ function () {
         updateMetadataRating: function(metadata) {
             var idSpan = $('#metadataRatingSpan_'+metadata.id);
             var container = idSpan.parent();
-            container.html(idSpan.html()+this._getMetadataRating(metadata)); 
+            container.html(idSpan.html()+this._getMetadataRating(metadata));
         },
         init: function () {
             return null;

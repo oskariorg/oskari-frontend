@@ -47,7 +47,7 @@ function () {
             '<div class="help"></div></div>'),
         licenceModelUnconcludeDetails: jQuery('<div><div class="license_basic_data">' +
             '   <div class="elf_name"></div>'+
-            '   <div class="elf_license_user_info"></div>' +                
+            '   <div class="elf_license_user_info"></div>' +
             '</div>'+
             '<div class="license_user_data">'+
             '   <table class="elf_license_user_data_table"></table>' +
@@ -241,7 +241,7 @@ function () {
         var me = this,
             data = me._getLicenseInputValues(),
             userInfo = jQuery('<div></div>');
-        
+
         me._progressSpinner.start();
 
         me.licenseService.doConludeLicense({
@@ -425,14 +425,14 @@ function () {
         licenseDetails.addClass('large');
 
         modelDetails.find('.elf_name').html(model.name);
-        
+
         if(infoForUser && infoForUser !== '') {
             userInfo.show();
             userInfo.append(infoForUser);
         } else {
             userInfo.hide();
         }
-        
+
 
         modelDetails.find('.license_basic_data').append('<div></div>');
         modelDetails.find('.help').html(me._locale.dialog.help.orderDetails);
@@ -461,9 +461,9 @@ function () {
             var licenceServiceURLElem = modelDetails.find('.service_url'),
                 licenceServiceURLText = me._locale.dialog.licenseServiceUrl;
             licenceServiceURLText = licenceServiceURLText.replace('{serviceurl}', '<a href="' + licenseData.secureServiceURL + '" target="_blank">' + licenseData.secureServiceURL + '</a>');
-            licenceServiceURLElem.html(licenceServiceURLText);            
+            licenceServiceURLElem.html(licenceServiceURLText);
         }
-        
+
         // Show valid to
         if(licenseData.validTo){
             var validToElem = modelDetails.find('.validto_summary'),

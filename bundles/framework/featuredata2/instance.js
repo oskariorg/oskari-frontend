@@ -86,7 +86,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 localization,
                 layers = sandbox.findAllSelectedMapLayers(),
                 i;
-            
+
             me.started = true;
             me.sandbox = sandbox;
 

@@ -1031,7 +1031,7 @@ Oskari.clazz.define(
                         if(row.geom && row.geom != null) {
                             jQuery(cells[3]).addClass(me.resultHeaders[2].prop);
                             jQuery(cells[3]).attr('title', me.resultHeaders[2].tooltip);
-                            jQuery(cells[3]).find('div.showBbox').click(function () {                                
+                            jQuery(cells[3]).find('div.showBbox').click(function () {
                                 // If show info area is active, remove geom from map
                                 if(jQuery(this).hasClass('icon-info-area-active')){
                                     me._removeFeaturesFromMap();
