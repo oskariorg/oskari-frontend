@@ -448,7 +448,7 @@ Oskari.clazz.define(
                 });
 
                 var isNumber = Oskari.util.isNumber(fieldValues, true);
-                if(isNumber) {                    
+                if(isNumber) {
                     decimals[field] = Oskari.util.decimals(fieldValues);
                     if (decimals[field]) {
                         grid.setColumnValueRenderer(
