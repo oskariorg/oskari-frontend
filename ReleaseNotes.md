@@ -54,6 +54,10 @@ Unfocusing popup buttons.
 
 Now handles zoomScale in search results correctly.
 
+### mapmodule-plugin/MarkersPlugin
+
+Removing single marker is now possible with 'MapModulePlugin.RemoveMarkersRequest'.
+
 ### mapwfs2
 
 Fixed highlight error when user has highligted and unhighlighted feature and then moved map (the feature appears again highlighed).

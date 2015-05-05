@@ -1027,21 +1027,14 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @param {Integer} buffer Add this buffer to z index. If it's undefined, using 1.
          */
         bringToTop: function(layer, buffer) {
-            var zIndex,
-                layerZIndex = 0;
-            if (!layer) {
-                if(layer.getZIndex) {
-                    layerZIndex = layer.getZIndex();
-                }
-
-                zIndex = Math.max(this._map.Z_INDEX_BASE.Feature,layerZIndex);
-                if(buffer && buffer>0) {
-                    layer.setZIndex(zIndex+buffer);
-                }
-                else {
-                    layer.setZIndex(zIndex+1);
-                }
+            if (!layer || !layer.getZIndex) {
+                return;
             }
+            var layerZIndex = layer.getZIndex();
+            var zIndex = Math.max(this._map.Z_INDEX_BASE.Feature,layerZIndex);
+            var buffer = buffer || 1;
+            
+            layer.setZIndex(zIndex + buffer);
             this.orderLayersByZIndex();
         },
 
