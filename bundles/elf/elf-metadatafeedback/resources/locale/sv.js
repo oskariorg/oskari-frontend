@@ -9,17 +9,7 @@ Oskari.registerLocalization({
 	        "subject": "Subject",
 	        "subjectPlaceholder": "Title for your feedback item",
 	        "ratingScore": "Rating score",
-	        "ratingJustification": "Rating justification",
-	        "userRole":"User role",
-	        "nonResearchEndUser": "Basic User",
-			"researchEndUser": "Researcher",
-			"scientificDataProducer": "Scientific Data Producer",
-			"commercialDataProducer": "Commercial Data Producer",
-			"userComment": "Comment",
-			"domainURN": "DomainURN",
-			"domainURNHelpBlock": "Add the relevant scientific domains and themes",
-			"tags": "Tags",
-			"tagsHelpBlock": "Adding tags helps other users to find relevant feedback"
+	        "ratingJustification": "Rating justification"
 		},
 		"targetSpecification": {
 			"targetSpecification": "Target specification",
@@ -28,51 +18,13 @@ Oskari.registerLocalization({
 			"targetCodeNotDefined": "Not defined.",
 			"targetCodespace": "Target codespace",
 			"primaryTargetCodeSpaceNotDefined": "Not defined.",
-			"natureOfTarget": "Nature of the target",
-			"natureOfTargetUnknown": "unknown",
-			"natureOfTargetAttribute": "attribute",
-			"natureOfTargetActivity": "activity",
-			"natureOfTargetDocument": "document",
-			"natureOfTargetMetadataDocument": "metadataDocument",
-			"natureOfTargetAttributeType": "attributeType",
-			"natureOfTargetCollectionHardware": "collectionHardware",
-			"natureOfTargetCollectionSession": "collectionSession",
-			"natureOfTargetDataset": "dataset",
-			"natureOfTargetSeries": "series",
-			"natureOfTargetNonGeographicDataset": "nonGeographicDataset",
-			"natureOfTargetDimensionGroup": "dimensionGroup",
-			"natureOfTargetFeature": "feature",
-			"natureOfTargetFeatureType": "featureType",
-			"natureOfTargetPropertyType": "propertyType",
-			"natureOfTargetFieldsession": "fieldSession",
-			"natureOfTargetSoftware": "software",
-			"natureOfTargetService": "service",
-			"natureOfTargetModel": "model",
-			"natureOfTargetTitle": "title",
-			"targetExtent": "Target Extent",
-			"addSpatialTemporalExtent": " Add spatial/temporal extent",
-			"multipleTargets":"Multiple targets"
+			"natureOfTarget": "Nature of the target"
 		},
 		"userInformation": {
 			"userInformation": "User information",
-			"userExperience": "User experience",
-			"expertiseLevel": "Expertise Level",
-			"noExpertise": "Level 1: No expertise",
-			"someExpertise": "Level 2: Some expertise",
-			"intermediateExpertise": "Level 3: Intermediate expertise",
-			"advancedUser": "Level 4: Advanced user",
-			"expertUser": "Level 5: Expert user",
-			"generalUserRole": "General User Role: ",
-			"basicUser": "Basic User",
-			"researcher": "Researcher",
-			"scientificDataProducer": "Scientific Data Producer",
-			"commercialDataProducer": "Commercial Data Producer",
-			"applicationDomain": " Application domain: ",
 			"userDetails": "User details",
 			"userName": "User name:",
-			"organisationName": "Organisation name:",
-			"positionName": "Position name:",
-			"contactRole": "Contact Role: ",
+			"contactRole": "User Role: ",
 			"ciRoleUser": "User",
 			"ciRoleResourceProvider": "Resource Provider",
 			"ciRoleCustodian": "Researcher",
@@ -86,14 +38,6 @@ Oskari.registerLocalization({
 			"ciRolePublisher": "Publisher",
 			"ciRoleAuthor": "Author",
 			"ciRoleCollaborator": "Collaborator"
-		},
-		"advancedUserFeedback": {
-			"advancedUserFeedback": "Advanced User Feedback (optional)",
-			"usageFeedback": "Usage feedback</small>",
-			"addUsageReport": " Add Usage Report",
-			"references": "References",
-			"addOnlineReference": " Add Online Reference",
-			"addPublication": " Add Publication"
 		},
 		"actionButtons": {
               "save":"Save",
@@ -111,3 +55,4 @@ Oskari.registerLocalization({
 		}
     }
 });
+

@@ -6,8 +6,9 @@ div.userfeedback-values {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
   line-height: 20px;
-  color: #333;
-  background-color: #fff; }
+  color: #333; }
+  div.userfeedback-values #step-2 {
+    display: none; }
   div.userfeedback-values a {
     color: #08c;
     text-decoration: none; }
@@ -70,13 +71,10 @@ div.userfeedback-values {
   div.userfeedback-values small {
     font-size: 85%; }
   div.userfeedback-values h2 {
-    margin: 10px 0;
     font-family: inherit;
     font-weight: bold;
     color: inherit;
     text-rendering: optimizelegibility;
-    line-height: 40px; }
-  div.userfeedback-values h2 {
     line-height: 40px;
     font-size: 31.5px; }
   div.userfeedback-values ul {
@@ -97,9 +95,8 @@ div.userfeedback-values {
     display: block;
     width: 100%;
     padding: 0;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     font-size: 21px;
-    line-height: 40px;
     color: #333;
     border: 0;
     border-bottom: 1px solid #e5e5e5; }
@@ -404,7 +401,8 @@ div.ratingInfo {
 div.ratingStar {
   display: table-cell;
   width: 16px;
-  cursor: pointer; }
+  cursor: pointer;
+  background-repeat: no-repeat; }
 
 div.numRatings {
   margin-left: 8px;

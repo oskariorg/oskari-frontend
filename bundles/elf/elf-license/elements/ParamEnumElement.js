@@ -52,7 +52,7 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamEnumElement',
                 readOnlyElement = jQuery('<span></span>'),
                 showInput = true;
 
-            if(readOnly && readOnly === true) {
+            if(readOnly) {
                 showInput = false;
             }
 
@@ -60,9 +60,9 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamEnumElement',
                 title = param.name;
             }
 
-            if(showInput === true) {
+            if(showInput) {
                 // Radio button list
-                if(param.multi === false) {
+                if(!param.multi) {
                     jQuery.each(param.options, function(index, value){
                         data.append('<input type="radio" name="'+param.name+'" value="'+value+'">' + value + '<br>');
                     });
@@ -84,7 +84,7 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamEnumElement',
                         valueEl.attr('data-value', value);
                         valueEl.html(value);
                         list.append(valueEl);
-                        if(param.multi === true && index < param.selections.length-1) {
+                        if(param.multi && index < param.selections.length-1) {
                             list.append(', ');
                         }
                     });

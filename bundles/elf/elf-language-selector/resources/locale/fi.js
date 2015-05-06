@@ -2,7 +2,7 @@ Oskari.registerLocalization({
     "lang": "fi",
     "key": "elf-language-selector",
     "value": {
-		"title" : "Valitse kieli",
+        "title" : "Valitse kieli",
         "change": "Valitse"
     }
 });

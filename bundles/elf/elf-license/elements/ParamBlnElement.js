@@ -53,7 +53,7 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamBlnElement',
                 readOnlyElement = jQuery('<div></div>'),
                 showInput = true;
 
-            if(readOnly && readOnly === true) {
+            if(readOnly) {
                 showInput = false;
             }
 
@@ -61,11 +61,11 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamBlnElement',
                 title = param.name;
             }
 
-            if(showInput === true) {
+            if(showInput) {
                 data.append('<input type="checkbox"></input>');
                 input = data.find('input');
 
-                if(param.value === true) {
+                if(param.value) {
                     input.prop('checked', true);
                 }
             } else {

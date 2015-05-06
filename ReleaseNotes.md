@@ -2,6 +2,12 @@
 
 ## 1.29
 
+### analyse
+
+Analyse parameters panel has now info buttons for parameter labels.
+
+### mapwfs2
+=======
 ### core
 
 User now has an getAPIkey() function. Parsed from user data returned by GetAppSetup.
