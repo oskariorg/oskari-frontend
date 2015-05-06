@@ -419,3 +419,8 @@ div.icon-star-on {
 
 div.icon-star-half {
   background-image: url('../images/star-half.png'); }
+
+
+div.userfeedback-values #step-2 {
+  display: none;
+}
