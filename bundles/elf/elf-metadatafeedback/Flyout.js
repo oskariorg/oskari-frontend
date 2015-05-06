@@ -22,8 +22,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
         this.tabsContainer = null;
         this.selectedTab = null;
         this.active = false;
-        // TODO: Remove unneeded fields
-        // TODO: Create and use localizations
         this.template = jQuery('<div class="userfeedback-values">' +
             '<div id="step-1">'+
                 '<h2 class="StepTitle">'+this.locale.userFeedback.userFeedback+'</h2>'+
@@ -35,42 +33,12 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
                 '<div id="raty-star">'+
                 '</div>'+
                 '<p><label >'+this.locale.userFeedback.ratingJustification+': </label><textarea id="justification" name="justification" maxlength="1000" class="span5" rows=4 required></textarea></p>'+
-                '<p>'+
-                  '<label >'+this.locale.userFeedback.userRole+': </label>'+
-                  '<select  id="userRole">'+
-                    '<option value="NonResearchEndUser">'+this.locale.userFeedback.nonResearchEndUser+'</option>'+
-//                    '<option value="ResearchEndUser">'+this.locale.userFeedback.researchEndUser+'</option>'+
-//                    '<option value="ScientificDataProducer">'+this.locale.userFeedback.scientificDataProducer+'</option>'+
-//                    '<option value="CommercialDataProducer">'+this.locale.userFeedback.commercialDataProducer+'</option>'+
-                  '</select>'+
-                '</p>'+
-                '<p><label >'+this.locale.userFeedback.userComment+': </label><textarea id="userComment" name="userComment" class="span5" rows="4" maxlength="1000"></textarea></p>'+
-/*
-                '<p><label >'+this.locale.userFeedback.domainURN+': </label></p>'+
-                '<ul id="manyDomains" class="unstyled">'+
-                  '<li>'+
-                    '<div class="form-horizontal">'+
-                      '<input class="span3" type="text" /><input type="button" class="btn" value="+" />'+
-                    '</div>'+
-                  '</li>'+
-                '</ul>'+
-                '<span class="help-block">'+this.locale.userFeedback.domainURNHelpBlock+'</span>'+
-                '<p><label >'+this.locale.userFeedback.tags+': </label></p>'+
-                '<ul id="manyTags" class="unstyled">'+
-                  '<li>'+
-                    '<div class="form-horizontal">'+
-                      '<input type="text" /><input type="button" class="btn" value="+" />'+
-                    '</div>'+
-                  '</li>'+
-                '</ul>'+
-                '<span class="help-block">'+this.locale.userFeedback.tagsHelpBlock+'</span>'+
-*/
               '</div>'+
               '<div id="step-2">'+
                 '<h2 class="StepTitle">'+this.locale.targetSpecification.targetSpecification+'</h2>'+
                 '<fieldset>'+
                   '<legend><small>'+this.locale.targetSpecification.targetIdentification+'</small></legend>'+
-                  '<p><label >'+this.locale.targetSpecification.targetCode+'</label><input id="primaryTargetCode" name="primaryTargetCode" value="'+this.locale.targetSpecification.targetCodeNotDefined+'" readonly="true"/></p>'+
+                  '<p><label >'+this.locale.targetSpecification.targetCode+'</label><input id="primaryTargetCode" name="primaryTargetCode" value="ELF METADATA" readonly="true"/></p>'+
                   '<p><label >'+this.locale.targetSpecification.targetCodespace+'</label><input id="primaryTargetCodeSpace" name="primaryTargetCodespace" value="'+this.locale.targetSpecification.primaryTargetCodeSpaceNotDefined+'" readonly="true"/></p>'+
                   '<p><label >'+this.locale.targetSpecification.natureOfTarget+'</label>'+
                     '<select id="natureOfTarget" disabled="disabled">'+
@@ -97,68 +65,12 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
                     '</select>'+
                   '</p>'+
                 '</fieldset>'+
-                /*
-                '<fieldset>'+
-                  '<legend><small>'+this.locale.targetSpecification.targetExtent+'</small></legend>'+
-                  '<div id="manyFocus" >'+
-                    '<p><label>'+
-                      '<input class= "btn btn-small" type="button" value="+" />'+this.locale.targetSpecification.addSpatialTemporalExtent+
-                    '</label></p>'+
-                    '<ul id="focusElementList"></ul>'+
-                  '</div>'+
-                '</fieldset>'+
-                '<fieldset>'+
-                  '<legend><small>'+this.locale.targetSpecification.multipleTargets+'</small></legend>'+
-                  '<div id="manyTarget">'+
-                    '<ul id="targetList"></ul>'+
-                  '</div>'+
-                  '<div id="manySecTarget">'+
-                    '<ul id="secTargetList"></ul>'+
-                  '</div>'+
-                  '<div id="manySupTarget">'+
-                    '<ul id="supTargetList"></ul>'+
-                  '</div>'+
-                '</fieldset>'+
-                */
               '</div>'+
               '<div id="step-3">'+
               '<h2 class="StepTitle">'+this.locale.userInformation.userInformation+'</h2>'+
                 '<fieldset>'+
-                  '<legend><small>'+this.locale.userInformation.userExperience+'</small></legend>'+
-                  '<p><label >'+this.locale.userInformation.expertiseLevel+'</label>'+
-                    '<select id="expertiseLevel">'+
-                      '<option value="1">'+this.locale.userInformation.noExpertise+'</option>'+
-                      '<option value="2">'+this.locale.userInformation.someExpertise+'</option>'+
-                      '<option value="3">'+this.locale.userInformation.intermediateExpertise+'</option>'+
-                      '<option value="4">'+this.locale.userInformation.advancedUser+'</option>'+
-                      '<option value="5">'+this.locale.userInformation.expertUser+'</option>'+
-                    '</select>'+
-                  '</p>'+
-                  '<p>'+
-                  '<label >'+this.locale.userInformation.generalUserRole+'</label>'+
-                  '<select  id="genUserRole">'+
-                    '<option value="NonResearchEndUser">'+this.locale.userInformation.basicUser+'</option>'+
-                    '<option value="ResearchEndUser">'+this.locale.userInformation.researcher+'</option>'+
-                    '<option value="ScientificDataProducer">'+this.locale.userInformation.scientificDataProducer+'</option>'+
-                    '<option value="CommercialDataProducer">'+this.locale.userInformation.commercialDataProducer+'</option>'+
-                  '</select>'+
-                '</p>'+
-                /*
-                '<p><label >'+this.locale.userInformation.applicationDomain+'</label></p>'+
-                '<ul id="manyUserApplications" class="unstyled">'+
-                  '<li>'+
-                    '<div class="form-horizontal">'+
-                      '<input class="span3" type="text" /><input type="button" class="btn" value="+" />'+
-                    '</div>'+
-                  '</li>'+
-                '</ul>'+
-                */
-                '</fieldset>'+
-                '<fieldset>'+
                   '<legend><small>'+this.locale.userInformation.userDetails+'</small></legend>'+
                   '<p><label >'+this.locale.userInformation.userName+'</label><input id="username" name="username" type="text"/></p>'+
-                  '<p><label >'+this.locale.userInformation.organisationName+'</label><input id="organisation" name="organisation" type="text"/>'+
-                  '<p><label >'+this.locale.userInformation.positionName+'</label><input id="position" name="position" type="text" />'+
                   '<label >'+this.locale.userInformation.contactRole+'</label>'+
                   '<select  id="ciRole">'+
                     '<option value="user">'+this.locale.userInformation.ciRoleUser+'</option>'+
@@ -175,31 +87,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
                     '<option value="author">'+this.locale.userInformation.ciRoleAuthor+'</option>'+
                     '<option value="collaborator">'+this.locale.userInformation.ciRoleCollaborator+'</option>'+
                   '</select>'+
-                '</fieldset>'+
-              '</div>'+
-              '<div id="step-4">'+
-              '<h2 class="StepTitle">'+this.locale.advancedUserFeedback.advancedUserFeedback+'</h2>'+
-                /*
-                '<fieldset>'+
-                  '<legend><small>'+this.locale.advancedUserFeedback.usageFeedback+'</small></legend>'+
-                  '<div id="manyUsageReports"><p><label><input type="button" class="btn btn-small" value="+" />'+this.locale.advancedUserFeedback.addUsageReport+'</label></p>'+
-                    '<ul id="usageElementList"></ul>'+
-                  '</div>'+
-                '</fieldset>'+
-                */
-                '<fieldset>'+
-                  '<legend><small>'+this.locale.advancedUserFeedback.references+'</small></legend>'+
-//                  '<div id="manyExternals"><p><label><input type="button" class="btn btn-small" value="+" />'+this.locale.advancedUserFeedback.addOnlineReference+'</label></p>'+
-//                    '<ul id="externalElementList"></ul>'+
-                    '<p><label >'+this.locale.advancedUserFeedback.addOnlineReference+':</label><input id="onlineReference" name="onlineReference" type="text" />'+
-
-                  '</div>'+
-
-/*
-                  '<div id="manyCitations"><p><label><input type="button" class="btn btn-small" value="+" />'+this.locale.advancedUserFeedback.addPublication+'</label></p>'+
-                    '<ul id="citationElementList"></ul>'+
-                  '</div>'+
-*/
                 '</fieldset>'+
               '</div>'+
               '<div>'+

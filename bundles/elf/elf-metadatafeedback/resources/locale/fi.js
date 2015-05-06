@@ -72,7 +72,7 @@ Oskari.registerLocalization({
 			"userName": "User name:",
 			"organisationName": "Organisation name:",
 			"positionName": "Position name:",
-			"contactRole": "Contact Role: ",
+			"contactRole": "User Role: ",
 			"ciRoleUser": "User",
 			"ciRoleResourceProvider": "Resource Provider",
 			"ciRoleCustodian": "Researcher",

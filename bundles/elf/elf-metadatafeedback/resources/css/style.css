@@ -404,6 +404,7 @@ div.ratingInfo {
 div.ratingStar {
   display: table-cell;
   width: 16px;
+  background-repeat: no-repeat;
   cursor: pointer; }
 
 div.numRatings {
