@@ -54,7 +54,7 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamTextElement',
                 readOnlyElement = jQuery('<div></div>'),
                 showInput = true;
 
-            if(readOnly && readOnly === true) {
+            if(readOnly) {
                 showInput = false;
             }
 
@@ -62,7 +62,7 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamTextElement',
                 title = param.name;
             }
 
-            if(showInput === true) {
+            if(showInput) {
                 data.append('<input type="text"></input>');
                 input = data.find('input');
                 if(param.values[0] && param.values[0] !== null) {

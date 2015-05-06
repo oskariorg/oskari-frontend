@@ -94,7 +94,7 @@ Oskari.clazz.define("Oskari.elf.extension.EnhancedExtension",
             me.sandbox = sandbox;
 
             /* stateful */
-            if (conf && conf.stateful === true) {
+            if (conf && conf.stateful) {
                 sandbox.registerAsStateful(this.mediator.bundleId, this);
             }
 

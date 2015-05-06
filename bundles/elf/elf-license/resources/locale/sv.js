@@ -2,7 +2,7 @@ Oskari.registerLocalization({
     "lang": "sv",
     "key": "elf-license",
     "value": {
-    	"getLicenseText": "License",
+        "getLicenseText": "License",
     	"errors": {
         	"cannotGetLicenseInformation": {
         		"title": "Error for getting license information",

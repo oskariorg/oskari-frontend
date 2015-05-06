@@ -182,7 +182,7 @@ function () {
         }, function (response) {
             me._progressSpinner.stop();
             if (response) {
-                if(response.userLicense && response.userLicense === true){
+                if(response.userLicense){
                     me._showLicenseDeactivateDialog(response, metadata);
                 } else {
                     me._showLicenseSubscriptionInformationDialog(response, metadata);
@@ -290,7 +290,7 @@ function () {
             doFadeout = true,
             doButton = false;
 
-        if(me._showsMessage === true) {
+        if(me._showsMessage) {
             return;
         }
 
@@ -315,7 +315,7 @@ function () {
 
         me._showsMessage = true;
 
-        if(doButton === false) {
+        if(!doButton) {
             dialog.show(title, message);
         } else {
             dialog.show(title, message, [btn]);
@@ -325,7 +325,7 @@ function () {
            me._showsMessage = false;
         });
 
-        if(doFadeout === true) {
+        if(!doFadeout) {
             dialog.fadeout(fadeoutTime);
         }
 
@@ -515,7 +515,7 @@ function () {
             me._progressSpinner.stop();
 
             if (response) {
-                if(response.success && response.success === true) {
+                if(response.success) {
                     me._dialog.close();
                     me._showMessage(me._locale.success.deactivateLicense.title, me._locale.success.deactivateLicense.message);
                 } else {
@@ -864,7 +864,7 @@ function () {
 
             var inputValues = null;
 
-            if(!readOnly || readOnly === false || readOnly === 'false') {
+            if(!readOnly || readOnly === 'false') {
                 if (type === 'int') {
                     inputValues = parseInt(element.find('input').val(), 10);
                 } else if (type === 'text') {

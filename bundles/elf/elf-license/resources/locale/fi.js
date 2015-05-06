@@ -4,7 +4,7 @@ Oskari.registerLocalization({
     "value": {
         "getLicenseText": "Lisenssi",
         "errors": {
-        	"cannotGetLicenseInformation": {
+            "cannotGetLicenseInformation": {
         		"title": "Virhe lisenssitietojen haussa",
         		"message": "Lisenssitietoja ei saada haettua"
         	},
