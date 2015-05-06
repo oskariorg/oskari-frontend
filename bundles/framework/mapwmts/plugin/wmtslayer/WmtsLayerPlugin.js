@@ -48,7 +48,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
             return {
                 MapLayerEvent: function(event) {
 
-                    //Maplayer updated -> url might have changed (case forceProxy). Update that. 
+                    //Maplayer updated -> url might have changed (case forceProxy). Update that.
                     var op = event.getOperation(),
                         layer = this.getSandbox().findMapLayerFromSelectedMapLayers(event.getLayerId());
 
@@ -93,7 +93,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
             if (olMapLayers && olMapLayers.length) {
                 //layer added to map -> recreate with the new config
                 olMapLayer = olMapLayers[0];
-                var oldLayerIndex = this._map.getLayerIndex(olMapLayer); 
+                var oldLayerIndex = this._map.getLayerIndex(olMapLayer);
                 var layerConfig = me._getLayerConfig(layer, matrixData, sandbox);
                 var newLayer = new OpenLayers.Layer.WMTS(layerConfig);
 

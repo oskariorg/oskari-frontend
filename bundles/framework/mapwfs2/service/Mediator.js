@@ -96,9 +96,6 @@ Oskari.clazz.define(
                 '/wfs/reset': function () {
                     self.resetWFS.apply(self, arguments);
                 },
-                '/wfs/init': function () {
-                    self.handleInitResponse.apply(self, arguments);
-                },
                 '/error': function () {
                     self.handleError.apply(self, arguments);
                 },
@@ -113,27 +110,31 @@ Oskari.clazz.define(
                 }
             }
         },
-        handleInitResponse : function(data) {
-            this.statusHandler.__log('Init response', data);
+        __handleInitStarted : function() {
             var me = this;
             this.__initInProgress = false;
-            if(data && data.successful === true) {
-                // reset connection backdown counters when receiving init success
-                this.__connectionTries = 0;
-                this.__latestTry = 0;
-                // send out any buffered messages
-                _.each(this.__bufferedMessages, function(item) {
-                    me.sendMessage(item.channel, item.message);
-                });
-                // clear the buffer
-                this.__bufferedMessages = [];
-            }
+            // send out any buffered messages
+            _.each(this.__bufferedMessages, function(item) {
+                me.sendMessage(item.channel, item.message);
+            });
+            // clear the buffer
+            this.__bufferedMessages = [];
+
+            // reset connection backdown counters when receiving init success
+            this.__connectionTries = 0;
+            this.__latestTry = 0;
         },
         handleError : function(params) {
             this.statusHandler.handleError(params.data);
         },
         statusChange : function(params) {
-            this.statusHandler.handleChannelStatus(params.data);
+            // handle init started
+            if(params.data.reqId === -1 && params.data.message === 'started') {
+                this.__handleInitStarted();
+            }
+            else {
+                this.statusHandler.handleChannelStatus(params.data);
+            }
         },
         sendMessage : function(channel, message) {
             var isInit = (channel === '/service/wfs/init');

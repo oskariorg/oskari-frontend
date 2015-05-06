@@ -16,7 +16,9 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
 
         me.state = state;
         me.dotForm = null;
-        me._markers = [];
+        me._markers = {};
+        me._markerFeatures = {};
+        me._nextMarkerId = 0;
         me._svg = false;
         me._defaultIconUrl = '/Oskari/bundles/framework/mapmodule-plugin/resources/images/marker.png';
         me._defaultIconUrlSize = 32;
@@ -48,6 +50,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         if ((conf) && (typeof conf.markerButton === "boolean")) {
             me._markerButton = conf.markerButton;
         }
+        this.__layer = undefined;
 
     }, {
         /**
@@ -115,14 +118,12 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @private @method _startPluginImpl
          * Interface method for the plugin protocol.
          * Creates the base marker layer.
-         *
-         *
          */
         _startPluginImpl: function () {
             var me = this,
                 p;
 
-            me._createMapMarkerLayer();
+            this.__layer = me._createMapMarkerLayer();
 
             var loc = me.getLocalization();
             me.dialog = Oskari.clazz.create(
@@ -174,15 +175,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                         );
                     }
                 }
-                /*,
-                'clear': {
-                    iconCls: 'selection-remove',
-                    tooltip: loc.buttons.clear,
-                    sticky: true,
-                    callback: function () {
-                        me.removeMarkers();
-                    }
-                }*/
             };
 
             // Is SVG supported?
@@ -206,6 +198,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             var markerLayer = new OpenLayers.Layer.Vector('Markers');
             this.getMap().addLayer(markerLayer);
             this.raiseMarkerLayer(markerLayer);
+            return markerLayer;
         },
 
         /**
@@ -218,6 +211,15 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 me.raiseMarkerLayer();
             };
         },
+        getMarkersLayer : function() {
+/*
+            var markerLayer = this.getMap().getLayersByName('Markers');
+            if (markerLayer !== null && markerLayer !== undefined && markerLayer[0] !== null && markerLayer[0] !== undefined) {
+                return markerLayer[0];
+            }
+            */
+            return this.__layer;
+        },
 
         /***********************************************************
          * Handle HideMapMarkerEvent
@@ -226,28 +228,58 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          *            event
          */
         afterHideMapMarkerEvent: function (event) {
-            var markerLayer = this.getMap().getLayersByName('Markers');
-            if (markerLayer !== null && markerLayer !== undefined && markerLayer[0] !== null && markerLayer[0] !== undefined) {
-                markerLayer[0].setVisibility(false);
+            var markerLayer = this.getMarkersLayer();
+            if (markerLayer) {
+                markerLayer.setVisibility(false);
             }
         },
 
         /**
          * Removes all markers from the layer
+         * @param {Boolean} suppressEvent true to suppress from sending event
          */
-        removeMarkers: function (noEvent) {
+        removeMarkers: function (suppressEvent, optionalMarkerId) {
             var me = this,
                 sandbox = me.getSandbox(),
-                markerLayers = me._map.getLayersByName('Markers');
-            if (markerLayers !== null && markerLayers !== undefined && markerLayers[0] !== null && markerLayers[0] !== undefined) {
-                markerLayers[0].removeAllFeatures();
+                markerLayer = this.getMarkersLayer();
+            if (!markerLayer) {
+                sandbox.printWarn('Tried to remove markers, but lost the layer');
+                return;
             }
-            me._markers.length = 0;
 
-            if (!noEvent) {
+            // remove all
+            if(!optionalMarkerId) {
+                // Openlayers
+                markerLayer.removeAllFeatures();
+                // internal data structure
+                for(var key in me._markers) {
+                    me._markers[key] = null;
+                    delete me._markers[key];
+                    me._markerFeatures[key] = null;
+                    delete me._markerFeatures[key];
+                }
+            }
+            // remove single marker
+            else {
+                var marker = me._markerFeatures[optionalMarkerId];
+                if(!marker) {
+                    sandbox.printWarn('Tried to remove non-existing marker with id: ' + optionalMarkerId);
+                    return;
+                }
+                // Openlayers
+                markerLayer.removeFeatures(marker);
+                // internal data structure
+                me._markers[optionalMarkerId] = null;
+                delete me._markers[optionalMarkerId];
+                me._markerFeatures[optionalMarkerId] = null;
+                delete me._markerFeatures[optionalMarkerId];
+            }
+
+
+            if (!suppressEvent) {
                 var removeEvent = sandbox.getEventBuilder(
                     'AfterRemoveMarkersEvent'
-                )();
+                )(optionalMarkerId);
                 sandbox.notifyAll(removeEvent);
             }
         },
@@ -257,9 +289,9 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @returns {*}
          */
         getMapMarkerBounds: function () {
-            var markerLayer = this.getMap().getLayersByName('Markers');
-            if (markerLayer && markerLayer[0]) {
-                return markerLayer[0].getDataExtent();
+            var markerLayer = this.getMarkersLayer();
+            if (markerLayer) {
+                return markerLayer.getDataExtent();
             }
         },
 
@@ -339,27 +371,50 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             }
         },
 
+        __getSanitizedMarker : function(markerData, id) {
+            // Validation: coordinates are needed
+            if ((typeof markerData.x === 'undefined') || (typeof markerData.y === 'undefined')) {
+                this.getSandbox().printWarn('Undefined coordinate in', markerData);
+                return null;
+            }
+
+            // Combine default values with given values
+            var data = jQuery.extend(true, _.cloneDeep(this._defaultData), markerData);
+
+            // generate id if not provided
+            if(!id) {
+                data.id = 'M' + this._nextMarkerId++;
+            }
+            return data;
+        },
+
         /**
          * Adds a marker to the map
-         * @param markerData
-         * @param events
+         * @param {Object} markerData
+         * @param {String} id
+         * @param {Object} events
+         * @param {Boolean} suppressEvent true to not send out an event about adding marker
          */
-        addMapMarker: function (markerData, id, events, noEvent) {
+        addMapMarker: function (markerData, id, events, suppressEvent) {
             var me = this,
                 size,
                 i;
 
             // Combine default values with given values
-            var data = jQuery.extend(true, _.cloneDeep(me._defaultData), markerData);
-
-            // Coordinates are needed
-            if ((typeof markerData.x === 'undefined') || (typeof markerData.y === 'undefined')) {
-                me.getSandbox().printWarn(
-                    'Undefined coordinate in', markerData, ' combined data is',
-                    data
-                );
+            var data = this.__getSanitizedMarker(markerData, id);
+            if(!data) {
+                // validation failed
+                this.getSandbox().printWarn('Error while adding marker');
                 return;
             }
+
+            // check for existing marker
+            if(this._markers[data.id]) {
+                // remove if found - will be replaced with new config
+                // event is suppressed as this is "modify"
+                this.removeMarkers(true, data.id);
+            }
+
 
             // Image data already available
             var iconSrc = null;
@@ -381,7 +436,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 size = this._getSizeInPixels(data.size);
             }
 
-            var markerLayers = this.getMap().getLayersByName('Markers'),
+            var markerLayer = this.getMarkersLayer(),
                 point = new OpenLayers.Geometry.Point(data.x, data.y),
                 newMarker = new OpenLayers.Feature.Vector(point, null, {
                     externalGraphic: iconSrc,
@@ -408,10 +463,11 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     }
                 }
             }
+            this._markerFeatures[data.id] = newMarker;
+            this._markers[data.id] = data;
 
-            this._markers.push(data);
-            markerLayers[0].addFeatures([newMarker]);
-            this.raiseMarkerLayer(markerLayers[0]);
+            markerLayer.addFeatures([newMarker]);
+            this.raiseMarkerLayer(markerLayer);
 
             // Save generated icon
             me._prevIconUrl = iconSrc;
@@ -419,10 +475,10 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             // Update the state
             me.updateState();
 
-            if (!noEvent) {
+            if (!suppressEvent) {
                 var addEvent = me.getSandbox().getEventBuilder(
                     'AfterAddMarkerEvent'
-                )(data, id, events);
+                )(data, data.id, events);
                 me.getSandbox().notifyAll(addEvent);
             }
         },
@@ -513,19 +569,11 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          *
          * @param markerLayer
          */
-        raiseMarkerLayer: function (markerLayer) {
-            var index,
-                layer = null;
-            if (typeof markerLayer !== 'undefined') {
-                layer = markerLayer;
-            } else {
-                layer = this._map.getLayersByName('Markers')[0];
+        raiseMarkerLayer: function (layer) {
+            if (!layer) {
+                layer = this.getMarkersLayer();
             }
-            index = Math.max(
-                this._map.Z_INDEX_BASE.Feature,
-                layer.getZIndex()
-            ) + 1;
-            layer.setZIndex(index);
+            this.getMapModule().bringToTop(layer);
             layer.setVisibility(true);
         },
 
@@ -572,52 +620,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 }
             }
             me._buttonsAdded = true;
-        },
-
-        /**
-         * Converts hexadecimal color values to decimal values (255,255,255)
-         * Green: hexToRgb("#0033ff").g
-         * http://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
-         *
-         * @method hex
-         * hexadecimal color value e.g. '#00ff99'
-         */
-        hexToRgb: function (hex) {
-            // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
-            var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-            hex = hex.replace(shorthandRegex, function (m, r, g, b) {
-                return r + r + g + g + b + b;
-            });
-
-            var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-            return result ? {
-                r: parseInt(result[1], 16),
-                g: parseInt(result[2], 16),
-                b: parseInt(result[3], 16)
-            } : null;
-        },
-
-        /**
-         * Convert rgb values to hexadecimal color values
-         *
-         * @method rgbToHex
-         * @param {String} rgb decimal color values e.g. 'rgb(255,0,0)'
-         */
-        rgbToHex: function (rgb) {
-            if (rgb.charAt(0) === '#') {
-                return rgb.substring(1);
-            }
-            var parts = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/),
-                j;
-
-            delete(parts[0]);
-            for (j = 1; j <= 3; j += 1) {
-                parts[j] = parseInt(parts[j], 10).toString(16);
-                if (parts[j].length === 1) {
-                    parts[j] = '0' + parts[j];
-                }
-            }
-            return parts.join('');
         },
 
         /**
@@ -737,9 +739,9 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 me.state = {};
             }
             me.state.markers = [];
-            for (i = 0; i < me._markers.length; i += 1) {
-                me.state.markers.push(me._markers[i]);
-            }
+            _.each(me._markers, function(value, key) {
+                me.state.markers.push(value);
+            });
         },
 
         /**

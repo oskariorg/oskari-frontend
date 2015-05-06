@@ -75,7 +75,7 @@ Oskari = (function () {
             if(this.localizations && this.localizations[l]) {
                 return this.localizations[l][key];
             }
-            else { 
+            else {
                 return null;
             }
         },
@@ -3623,9 +3623,9 @@ D         * @param {Object} classInfo ClassInfo
 }());
 
 
-/* 
+/*
 * @class Oskari.util
-* Util class instance for static methods what may be used to for checks values. 
+* Util class instance for static methods what may be used to for checks values.
 * For example check at value is number or how many decimals this value have.
 *
 */
@@ -3650,7 +3650,7 @@ Oskari.util = (function () {
         }
         return false;
     };
-    
+
     /**
     * Checks at if value is number.
     * @static @method Oskari.util.isNumber
@@ -3681,7 +3681,7 @@ Oskari.util = (function () {
                 isNumber = reg.test(value);
             }
         }
-        return isNumber;    
+        return isNumber;
     };
 
     /**
@@ -3695,7 +3695,7 @@ Oskari.util = (function () {
             i,
             s,
             val;
-        
+
         if(!value || value === null || value === '') {
             return false;
         }
@@ -3717,7 +3717,7 @@ Oskari.util = (function () {
             val = value+'';
             s = val.split('.');
 
-            if(s.length === 2 && !isNaN(s[0]) && !isNaN(s[1]) && 
+            if(s.length === 2 && !isNaN(s[0]) && !isNaN(s[1]) &&
                 ((isLeadingZero(s[0]) && s[0].length==1) || !isLeadingZero(s[0]))
                 ){
                 isDecimal = true;
@@ -3761,7 +3761,7 @@ Oskari.util = (function () {
      * Converts hexadecimal color values to decimal values (255,255,255)
      * Green: hexToRgb("#0033ff").g
      * http://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
-     * 
+     *
      * @method hex
      * hexadecimal color value e.g. '#00ff99'
      */

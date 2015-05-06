@@ -417,7 +417,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
          * Reset form values after cancel or succesful save
          */
          _resetForm: function() {
-             jQuery('.userfeedback-values').find(':input').val(''); 
+             jQuery('.userfeedback-values').find(':input').val('');
          },
 
         /**
