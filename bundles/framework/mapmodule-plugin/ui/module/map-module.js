@@ -1032,7 +1032,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
             var layerZIndex = layer.getZIndex();
             var zIndex = Math.max(this._map.Z_INDEX_BASE.Feature,layerZIndex);
-            var buffer = buffer || 1;
+            buffer = buffer || 1;
 
             layer.setZIndex(zIndex + buffer);
             this.orderLayersByZIndex();
