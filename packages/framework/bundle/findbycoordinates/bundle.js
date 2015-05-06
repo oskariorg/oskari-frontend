@@ -36,7 +36,39 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
             "type": "text/javascript",
             "src": "../../../../bundles/framework/findbycoordinates/resources/locale/en.js"
         }, {
+            "lang": "es",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/findbycoordinates/resources/locale/fi.js"
+        }, {
+            "lang": "et",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/findbycoordinates/resources/locale/sv.js"
+        }, {
             "lang": "fi",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/findbycoordinates/resources/locale/fi.js"
+        }, {
+            "lang": "is",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/findbycoordinates/resources/locale/sv.js"
+        }, {
+            "lang": "it",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/findbycoordinates/resources/locale/fi.js"
+        }, {
+            "lang": "nb",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/findbycoordinates/resources/locale/sv.js"
+        }, {
+            "lang": "nl",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/findbycoordinates/resources/locale/fi.js"
+        }, {
+            "lang": "nn",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/findbycoordinates/resources/locale/sv.js"
+        }, {
+            "lang": "sl",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/findbycoordinates/resources/locale/fi.js"
         }, {

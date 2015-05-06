@@ -47,6 +47,7 @@ Oskari.registerLocalization(
         "searching": "Leita...",
         "grid": {
             "name": "Nafn",
+            "removeBBOX": "Hide data coverage",
             "showBBOX": "NOT TRANSLATED",
             "info": "NOT TRANSLATED",
             "remove": "NOT TRANSLATED",

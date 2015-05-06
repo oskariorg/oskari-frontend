@@ -100,7 +100,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
         },
         onEvent: function (event) {
             _.each(this.tabs, function (tabDef) {
-                if (tabDef.instance.eventHandlers) {
+                if (tabDef.instance && tabDef.instance.eventHandlers) {
                     var handler = tabDef.instance.eventHandlers[event.getName()];
                     if (!handler) {
                         return;

@@ -71,8 +71,9 @@ Oskari.clazz.define("Oskari.sample.bundle.tetris.BundleInstance",
         "start": function () {
             var me = this;
 
-            if (me.started)
+            if (me.started) {
                 return;
+            }
 
             me.started = true;
 
@@ -121,8 +122,9 @@ Oskari.clazz.define("Oskari.sample.bundle.tetris.BundleInstance",
         onEvent: function (event) {
 
             var handler = this.eventHandlers[event.getName()];
-            if (!handler)
+            if (!handler) {
                 return;
+            }
 
             return handler.apply(this, [event]);
 
@@ -142,7 +144,6 @@ Oskari.clazz.define("Oskari.sample.bundle.tetris.BundleInstance",
                     // not me -> do nothing
                     return;
                 }
-                var doOpen = event.getViewState() !== "close";
             }
         },
 
@@ -152,18 +153,14 @@ Oskari.clazz.define("Oskari.sample.bundle.tetris.BundleInstance",
          */
         "stop": function () {
             var sandbox = this.sandbox,
-                p;
+                p,
+                request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
             for (p in this.eventHandlers) {
                 if (this.eventHandlers.hasOwnProperty(p)) {
                     sandbox.unregisterFromEventByName(this, p);
                 }
             }
-
-            var request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
-
             sandbox.request(this, request);
-
-            //this.sandbox.unregisterStateful(this.mediator.bundleId);
             this.sandbox.unregister(this);
             this.started = false;
         },
@@ -214,7 +211,6 @@ Oskari.clazz.define("Oskari.sample.bundle.tetris.BundleInstance",
          * (re)creates the UI for "selected layers" functionality
          */
         createUi: function () {
-            var me = this;
             this.plugins['Oskari.userinterface.Flyout'].createUi();
             this.plugins['Oskari.userinterface.Tile'].refresh();
         }

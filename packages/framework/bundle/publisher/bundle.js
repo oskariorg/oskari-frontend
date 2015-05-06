@@ -130,9 +130,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundle", func
             "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher/resources/locale/hu.js"
         },{
+            "lang" : "it",
+            "type" : "text/javascript",
+            "src": "../../../../bundles/framework/publisher/resources/locale/it.js"
+        },{
             "lang" : "is",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/catalogue/metadatacatalogue/resources/locale/is.js"
+            "src": "../../../../bundles/framework/publisher/resources/locale/is.js"
         }, {
             "lang": "lv",
             "type": "text/javascript",

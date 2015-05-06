@@ -47,6 +47,7 @@ Oskari.registerLocalization(
         "searching": "Søker…",
         "grid": {
             "name": "Navn",
+            "removeBBOX": "Hide data coverage",
             "showBBOX": "NOT TRANSLATED",
             "info": "NOT TRANSLATED",
             "remove": "NOT TRANSLATED",

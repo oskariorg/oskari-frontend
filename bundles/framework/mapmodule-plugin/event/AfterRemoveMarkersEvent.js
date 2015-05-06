@@ -8,13 +8,23 @@ Oskari.clazz.define(
     /**
      * @method create called automatically on construction
      * @static
+     * @param  {String} id optional id for marker that was removed, all markers cleared if undefined
      */
-    function () {},
+    function (id) {
+        this._id = id;
+    },
     {
         __name: 'AfterRemoveMarkersEvent',
 
         getName: function () {
             return this.__name;
+        },
+        /**
+         * @method getId
+         * @return {String} optional id for marker that was removed, refers to all if undefined
+         */
+        getId: function () {
+            return this._id;
         }
     },
     {

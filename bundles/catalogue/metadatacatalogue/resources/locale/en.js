@@ -46,6 +46,7 @@ Oskari.registerLocalization({
         "searching": "Searching…",
         "grid": {
             "name": "Name",
+            "removeBBOX": "Hide data coverage",
             "showBBOX": "Show data coverage",
             "info": "Show metadata",
             "remove": "Remove from search results",

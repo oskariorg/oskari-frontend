@@ -503,7 +503,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             if (selected_layers[0]) {
                 name = selected_layers[0].name.substring(0, 15) + name;
             }
-            
+
             me._addTitle(contentPanel, me.loc.analyse_name.label, me.loc.analyse_name.labelTooltip);
             var analyseTitle = me.template.title_name.clone();
             analyseTitle.find('.settings_name_field').attr({

@@ -43,14 +43,10 @@ Oskari.clazz.define(
          * @method setEl
          * @param {Object} el
          *      reference to the container in browser
-         * @param {Number} width
-         *      container size(?) - not used
-         * @param {Number} height
-         *      container size(?) - not used
          *
          * Interface method implementation
          */
-        setEl: function (el, width, height) {
+        setEl: function (el) {
             this.container = el[0];
             if (!jQuery(this.container).hasClass('featuredata')) {
                 jQuery(this.container).addClass('featuredata');
@@ -343,7 +339,6 @@ Oskari.clazz.define(
                 content = jQuery('div.oskari-flyoutcontent.featuredata'),
                 flyout = content.parent().parent(),
                 container = content.parent(),
-                tabsContent = content.find('div.tabsContent'),
                 mouseOffsetX = 0,
                 mouseOffsetY = 0;
 
@@ -376,7 +371,7 @@ Oskari.clazz.define(
             });
 
             // End resizing
-            jQuery(document).mouseup(function (e) {
+            jQuery(document).mouseup(function () {
                 me.resizing = false;
                 me.resized = true;
             });
@@ -434,34 +429,7 @@ Oskari.clazz.define(
         _addNumericColumnRenderers: function (grid) {
             var dataArray = grid.getDataModel().data,
                 visibleFields = grid.getVisibleFields(),
-                notNumeric = {},
-                decimals = {},
-                i,
-                j,
-                row,
-                key,
-                value;
-
-            for (i = 0; i < dataArray.length; i += 1) {
-                row = dataArray[i];
-                for (j = 0; j < visibleFields.length; j += 1) {
-                    key = visibleFields[j];
-                    value = row[key];
-                    if (!notNumeric[key] && value !== null && value !== undefined) {
-                        if (isNaN(value)) {
-                            value = parseFloat(value);
-                        }
-                        // FIXME: parseFloat returns 6 for "006A" which is wrong!
-                        if (isNaN(value) && (typeof row[key] === 'string' && row[key].length)) {
-                            notNumeric[key] = true;
-                        } else {
-                            value = value + '';
-                            value = value.split('.');
-                            decimals[key] = Math.max(decimals[key] || 0, value.length === 2 ? value[1].length : 0);
-                        }
-                    }
-                }
-            }
+                decimals = {};
 
             var closureMagic = function (decimalCount) {
                 return function (value) {
@@ -474,14 +442,22 @@ Oskari.clazz.define(
                 };
             };
 
-            for (i = 0; i < visibleFields.length; i += 1) {
-                if (!notNumeric[visibleFields[i]] && decimals[visibleFields[i]]) {
-                    grid.setColumnValueRenderer(
-                        visibleFields[i],
-                        closureMagic(decimals[visibleFields[i]])
-                    );
+            jQuery.each(visibleFields, function(index, field) {
+                var fieldValues = jQuery.grep(dataArray || [], function(value, index) {
+                    return index === field;
+                });
+
+                var isNumber = Oskari.util.isNumber(fieldValues, true);
+                if(isNumber) {
+                    decimals[field] = Oskari.util.decimals(fieldValues);
+                    if (decimals[field]) {
+                        grid.setColumnValueRenderer(
+                            field,
+                            closureMagic(decimals[field])
+                        );
+                    }
                 }
-            }
+            });
         },
 
         // helper for removing item (indexOf is not in IE8)
@@ -524,9 +500,7 @@ Oskari.clazz.define(
                 var hiddenFields = layer.getFields().slice(0);
 
                 // get data
-                var featureData,
-                    values,
-                    fields = layer.getFields().slice(0),
+                var fields = layer.getFields().slice(0),
                     locales = layer.getLocales().slice(0),
                     features = layer.getActiveFeatures().slice(0),
                     selectedFeatures = layer.getSelectedFeatures().slice(0); // filter
@@ -613,7 +587,7 @@ Oskari.clazz.define(
                     grid.setColumnSelector(true);
                     grid.setResizableColumns(true);
                     grid.setExcelExporter(
-                        layer.getPermission('publish') === 'publication_permission_ok'
+                        layer.getPermission('download') === 'download_permission_ok'
                     );
 
                     panel.grid = grid;
@@ -634,8 +608,6 @@ Oskari.clazz.define(
                 if (me.resizable) {
                     this._enableResize();
                 }
-            } else {
-                // Wrong tab selected -> ignore (shouldn't happen)
             }
         },
 
@@ -802,7 +774,7 @@ Oskari.clazz.define(
          *
          */
         setEnabled: function (isEnabled) {
-            if (this.active == isEnabled) {
+            if (this.active === isEnabled) {
                 return;
             }
 
@@ -855,7 +827,7 @@ Oskari.clazz.define(
         },
         /**
          * Shows/removes a loading indicator for the layer
-         * @param  {String}  layerId    
+         * @param  {String}  layerId
          * @param  {Boolean} blnLoading true to show, false to remove
          */
         showLoadingIndicator : function(layerId, blnLoading) {
@@ -864,7 +836,7 @@ Oskari.clazz.define(
         },
         /**
          * Shows/removes an error indicator for the layer
-         * @param  {String}  layerId    
+         * @param  {String}  layerId
          * @param  {Boolean} blnError true to show, false to remove
          */
         showErrorIndicator : function(layerId, blnError) {
@@ -872,7 +844,7 @@ Oskari.clazz.define(
                 this.layers[layerId], blnError, 'error');
         },
         /**
-         * Actual implementation to show/remove indicator. Just 
+         * Actual implementation to show/remove indicator. Just
          * adds a class to the header of a panel
          * @private
          * @param  {Oskari.userinterface.component.TabPanel} panel

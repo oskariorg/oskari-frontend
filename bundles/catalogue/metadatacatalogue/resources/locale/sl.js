@@ -47,6 +47,7 @@ Oskari.registerLocalization(
         "searching": "Iskanje…",
         "grid": {
             "name": "Ime",
+            "removeBBOX": "Hide data coverage",
             "showBBOX": "NOT TRANSLATED",
             "info": "NOT TRANSLATED",
             "remove": "NOT TRANSLATED",

@@ -7,24 +7,76 @@
 Analyse parameters panel has now info buttons for parameter labels.
 
 ### mapwfs2
+=======
+### core
 
-Fixed highligh error when user has highligted and unhighlighted feature and then moved map (the feature appears again highlighed).
+User now has an getAPIkey() function. Parsed from user data returned by GetAppSetup.
+
+Oskari.util has been added to /Oskari/bundles/bundle.js. It holds generic helper-functions that are used 
+throughout Oskari code:
+
+    - isNumber()
+    - isDecimal()
+    - decimals()
+    - hexToRgb()
+    - rgbToHex()
+
+### analysis
+
+Now adds the PersonalData tab correctly if started after PersonalData bundle. Previously expected to be started before PersonalData.
+
+### catalogue/metadatagatalogue
+
+Improvements in show metadata coverage. Icons changes and now active metadata coverage is showed different icon.
 
 ### divmanazer/Button
 
 Added blur and isFocus functions.
 
+### divmanazer/Grid
+
+Sort improved for non numeric values.
+
+Improvements in Excel/csv export
+("only selected features" option, metadata request url, expanding object column values, type conversion in values)
+
 ### divmanazer/Popup
 
 Now checks correctly buttons focuses.
+
+### elf/elf-license
+
+In successfully license conclude now shows same information popup as concluded license.
+
+### featuredata2/Flyout
+
+Sort improved for non numeric values.
 
 ### featuredata2/PopupHandler
 
 Unfocusing popup buttons.
 
-### analysis
+### mapmodule-plugin/SearchPlugin
 
-Now adds the PersonalData tab correctly if started after PersonalData bundle. Previously expected to be started before PersonalData.
+Now handles zoomScale in search results correctly.
+
+### mapmodule-plugin/MarkersPlugin
+
+Removing single marker is now possible with 'MapModulePlugin.RemoveMarkersRequest'.
+
+Modifying a marker is now possible by sending 'MapModulePlugin.AddMarkerRequest' with the same id and different values:
+
+    Oskari.getSandbox().postRequestByName('MapModulePlugin.AddMarkerRequest',[{x : 385868, y : 6671782, color: "ffde00" }, 'Marker1']);
+    Oskari.getSandbox().postRequestByName('MapModulePlugin.AddMarkerRequest',[{x : 385868, y : 6671782, color: "ff0000" }, 'Marker1']);
+
+### mapwfs2
+
+Fixed highlight error when user has highligted and unhighlighted feature and then moved map (the feature appears again highlighed).
+
+Now prefers using APIkey from sandbox.getUser().getAPIkey() instead of JSESSIONID cookie as session info. Fails fast on init if session info
+is not available and backs down on tries to reconnect to prevent spamming messages.
+
+Now buffers messages until init is completed. After init success, sends out the buffered messages.
 
 ## 1.28.1
 

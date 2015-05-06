@@ -19,13 +19,17 @@ Oskari.clazz.define(
         this.__lastRequestId = 0;
         this.cometd = this.connection.get();
         this.layerProperties = {};
+        this.__connectionTries = 0;
+        this.__latestTry = 0;
+        this.__initInProgress = false;
+        this.__bufferedMessages = [];
 
         this.rootURL = location.protocol + '//' +
             this.config.hostname + this.config.port +
             this.config.contextPath;
 
         this.session = {
-            session: jQuery.cookie('JSESSIONID') || '',
+            session: this.__getApikey(),
             route: jQuery.cookie('ROUTEID') || ''
         };
 
@@ -106,16 +110,36 @@ Oskari.clazz.define(
                 }
             }
         },
+        __handleInitStarted : function() {
+            var me = this;
+            this.__initInProgress = false;
+            // send out any buffered messages
+            _.each(this.__bufferedMessages, function(item) {
+                me.sendMessage(item.channel, item.message);
+            });
+            // clear the buffer
+            this.__bufferedMessages = [];
+
+            // reset connection backdown counters when receiving init success
+            this.__connectionTries = 0;
+            this.__latestTry = 0;
+        },
         handleError : function(params) {
             this.statusHandler.handleError(params.data);
         },
         statusChange : function(params) {
-            this.statusHandler.handleChannelStatus(params.data);
+            // handle init started
+            if(params.data.reqId === -1 && params.data.message === 'started') {
+                this.__handleInitStarted();
+            }
+            else {
+                this.statusHandler.handleChannelStatus(params.data);
+            }
         },
         sendMessage : function(channel, message) {
             var isInit = (channel === '/service/wfs/init');
             // connected flag is not setup when init is called so ignore it.
-            if (this.connection.isConnected() || isInit) {
+            if (isInit || (this.connection.isConnected() && !this.__initInProgress)) {
                 if(!isInit) {
                     // skip reqId in init message
                     message.reqId = this.getNextRequestId();
@@ -129,6 +153,20 @@ Oskari.clazz.define(
                 }
                 this.cometd.publish(channel, message);
             }
+            else {
+                this.__bufferedMessages.push({
+                    channel : channel,
+                    message : message
+                });
+            }
+        },
+        __getApikey : function() {
+            // prefer API key
+            if(this.plugin.getSandbox().getUser() && this.plugin.getSandbox().getUser().getAPIkey()) {
+                return this.plugin.getSandbox().getUser().getAPIkey();
+            }
+            // default to cookie...
+            return jQuery.cookie('JSESSIONID') || '';
         },
 
         /**
@@ -144,7 +182,13 @@ Oskari.clazz.define(
             }
 
             // update session and route
-            this.session.session = jQuery.cookie('JSESSIONID') || '';
+            this.session.session = this.__getApikey();
+            if(!this.session.session) {
+                // will not work correctly, try again in a bit
+                this.resetWFS();
+                return;
+            }
+            // TODO: get rid of ROUTEID by improving the apikey functionality in server side
             this.session.route = jQuery.cookie('ROUTEID') || '';
 
             var srs = this.plugin.getSandbox().getMap().getSrsName(),
@@ -184,6 +228,7 @@ Oskari.clazz.define(
                     styleName: layer.getCurrentStyle().getName()
                 };
             });
+            this.__initInProgress = true;
             this.sendMessage('/service/wfs/init', message);
         }
     });
@@ -420,7 +465,30 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
      * @param {Object} data
      */
     resetWFS: function (data) {
-        this.startup(null);
+        // reset any previous timer
+        clearTimeout(this.__resetTimeout);
+        var me = this;
+        var now = new Date().getTime();
+        var backdownBuffer = 1000 * Math.pow(2, this.__connectionTries);
+        var timeUntilNextTry = now - (this.__latestTry + backdownBuffer);
+        if(this.__connectionTries > 6) {
+            // notify failure to connect. We could timeout with big number and reset connectionTries?
+            me.plugin.showErrorPopup(
+                'connection_broken',
+                null,
+                true
+            );
+            return;
+        }
+        if(this.__connectionTries === 0 || timeUntilNextTry < 0) {
+            this.__latestTry = now;
+            this.__connectionTries++;
+            this.startup(null);
+            return;
+        }
+        this.__resetTimeout = setTimeout(function() {
+            me.resetWFS(data);
+        }, timeUntilNextTry + 10);
     }
 });
 

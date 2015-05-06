@@ -69,6 +69,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
                 this._localization = Oskari.getLocalization(this.getName());
             }
             if (key) {
+
                 return this._localization[key];
             }
             return this._localization;

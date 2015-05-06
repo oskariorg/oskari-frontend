@@ -20,6 +20,7 @@ Oskari.clazz.define(
         me.cometd = jQuery.cometd;
 
         me._connected = false;
+        me._handshakeInProcess = false;
         me._errorSub = null;
 
         me._connectionProblemWaitTime = 5000; // wait before say that we have disconnected (retry change)
@@ -55,6 +56,7 @@ Oskari.clazz.define(
         me.cometd.addListener(
             '/meta/handshake',
             function () {
+                me._handshakeInProcess = false;
                 me._metaHandshake.apply(me, arguments);
             }
         );
@@ -72,14 +74,16 @@ Oskari.clazz.define(
 
         // Disconnect when the page unloads
         jQuery(window).unload(function () {
-            me.disconnect();
-        });
+            me.disconnect(); });
     }, {
         /**
          * @method connect
          */
         connect: function () {
-            this.cometd.handshake();
+            if(!this._connected && !this._handshakeInProcess ){
+                this._handshakeInProcess = true;
+                this.cometd.handshake();
+            }
         },
 
         /**

@@ -519,6 +519,16 @@
                 },
                 "Require-Bundle-Instance": []
             }
+		}, {
+			"bundlename" : "findbycoordinates",
+			"bundleinstancename" : "findbycoordinates",
+			"metadata" : {
+				"Import-Bundle" : {
+					"findbycoordinates" : {
+						"bundlePath" : "../../../packages/framework/bundle/"
+					}
+				}
+			}
         }, {
             "instanceProps": {},
             "title": "ELF metadatafeedback",

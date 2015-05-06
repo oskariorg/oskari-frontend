@@ -35,13 +35,9 @@ Oskari.clazz.define('Oskari.sample.bundle.tetris.Flyout',
          *
          * @param {Object} el
          * Reference to the container in browser
-         * @param {Number} width
-         * Container size(?) - not used
-         * @param {Number} height
-         * Container size(?) - not used
          *
          */
-        setEl: function (el, width, height) {
+        setEl: function (el) {
             this.container = el[0];
             if (!jQuery(this.container).hasClass('tetris')) {
                 jQuery(this.container).addClass('tetris');
@@ -56,10 +52,8 @@ Oskari.clazz.define('Oskari.sample.bundle.tetris.Flyout',
          *
          */
         startPlugin: function () {
-            var loc = this.instance.getLocalization('flyout'),
-                elParent,
+            var elParent,
                 elId;
-
 
             //set id to flyouttool-close
             elParent = this.container.parentElement.parentElement;
@@ -134,7 +128,6 @@ Oskari.clazz.define('Oskari.sample.bundle.tetris.Flyout',
 
             container.empty();
             container.append(tetrisContainer);
-
 
             jQuery('.oskari__tetris').blockrain(
                 {
