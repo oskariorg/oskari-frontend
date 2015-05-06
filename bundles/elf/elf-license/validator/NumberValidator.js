@@ -83,7 +83,7 @@ Oskari.clazz.define('Oskari.elf.license.validator.NumberValidator',
                                     chars[''+key+''] = '';
                                 }
                             }
-                            
+
                             if(value === '-'){
                                 if(negative_exist === false){
                                     negative_exist = true;

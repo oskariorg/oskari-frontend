@@ -2,7 +2,7 @@
  * @class Oskari.mapframework.bundle.mapmodule.request.AddMarkerRequest
  * @param  {Object} data, the object should have atleast x and y keys with coordinates and can have
  *                        color, msg, shape, size and iconUrl.
- * @param  {String} id optional id for marker to add, one will be generated if not given. If a marker with same id 
+ * @param  {String} id optional id for marker to add, one will be generated if not given. If a marker with same id
  *                     exists, it will be replaced with this.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddMarkerRequest', function (data, id) {

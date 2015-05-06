@@ -53,7 +53,7 @@ function () {
             var conf = this.conf,
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
                 p;
-            
+
             sandbox = Oskari.getSandbox(sandboxName);
 
             this.sandbox = sandbox;

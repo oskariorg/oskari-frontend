@@ -97,7 +97,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
                 el = me.getEl();
 
             me.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer', this.locale['title']);
-            
+
             ratings.raty({
                 starOn: starOnImg,
                 starOff: starOffImg,
@@ -110,7 +110,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
                 if (!params) {
                     me._showMessage(me.locale.errorPopup.title, me.locale.errorPopup.formValidationFailed);
                 } else {
-                    me.instance.addFeedbackService.addFeedback(params, 
+                    me.instance.addFeedbackService.addFeedback(params,
                       function(e) {
                         me._showMessage(me.locale.successPopup.title, me.locale.successPopup.savingTheFeedbackSuccesful);
                         me._resetForm();
@@ -183,7 +183,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
                 sandbox = this.instance.sandbox,
                 dimReqBuilder = sandbox.getRequestBuilder('DimMapLayerRequest'),
                 hlReqBuilder = sandbox.getRequestBuilder('HighlightMapLayerRequest');
-            
+
             flyout.empty();
 
             // if previous panel is undefined -> just added first tab
@@ -211,7 +211,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
         /**
         * Update metadata feedback form.
         * @method updateFeedbackUI
-        * 
+        *
         * @param {Object} metadata the metadata object
         */
         updateFeedbackUI: function(metadata){
@@ -221,7 +221,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
                 user = sandbox.getUser();
 
             me._metadata = metadata;
-            
+
             // Set subject
             el.find('input#subject').val(metadata.name);
 
@@ -281,7 +281,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
               if (jQuery(input).attr('type') === 'button') {
                 return;
               }
-              
+
               /*remove red borders if any*/
               if (jQuery(input).hasClass('input-error')) {
                   jQuery(input).removeClass('input-error');
