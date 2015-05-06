@@ -63,6 +63,8 @@ Modifying a marker is now possible by sending 'MapModulePlugin.AddMarkerRequest'
     Oskari.getSandbox().postRequestByName('MapModulePlugin.AddMarkerRequest',[{x : 385868, y : 6671782, color: "ffde00" }, 'Marker1']);
     Oskari.getSandbox().postRequestByName('MapModulePlugin.AddMarkerRequest',[{x : 385868, y : 6671782, color: "ff0000" }, 'Marker1']);
 
+Removed possibility to attach eventlisteners to markers since it didn't work correctly. Planning to generate a MarkerClickedEvent on clicks that can be used for interaction.
+
 ### mapwfs2
 
 Fixed highlight error when user has highligted and unhighlighted feature and then moved map (the feature appears again highlighed).
