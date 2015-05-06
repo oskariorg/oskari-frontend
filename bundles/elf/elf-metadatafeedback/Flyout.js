@@ -123,7 +123,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
                             [me.instance, 'close']
                         );
                       },
-                      function(e) {
+                      function() {
                           me._showMessage(me.locale.errorPopup.title, me.locale.errorPopup.savingTheFeedbackFailed);
                       });
                     }
@@ -278,28 +278,24 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
           var validationOk = true;
 
           _.each(inputs, function(input) {
-              if (jQuery(input).attr('type') == 'button') {
+              if (jQuery(input).attr('type') === 'button') {
                 return;
               }
               
               /*remove red borders if any*/
               if (jQuery(input).hasClass('input-error')) {
-                jQuery(input).removeClass('input-error');
+                  jQuery(input).removeClass('input-error');
               }
 
               var value = jQuery(input).val();
               if (jQuery(input).attr('required') !== undefined && (!value || value.length === 0)) {
-                jQuery(input).addClass('input-error');
-                validationOk = false;
+                  jQuery(input).addClass('input-error');
+                  validationOk = false;
               }
 
               params[jQuery(input).attr('id')] = jQuery(input).val();
           });
-
-          console.log(params);
-
           return validationOk ? params : validationOk;
-
         },
         /**
          * @method _resetForm
@@ -317,8 +313,8 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
          * @param {String} message popup message
          */
         _showMessage: function (title, message) {
-                var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                    okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             okBtn.setTitle(this.locale.errorPopup.okButtonText);
             okBtn.addClass('primary');
             okBtn.setHandler(function () {

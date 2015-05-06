@@ -52,8 +52,9 @@ function () {
             /* sandbox */
             var conf = this.conf,
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
-                sandbox = Oskari.getSandbox(sandboxName),
                 p;
+            
+            sandbox = Oskari.getSandbox(sandboxName);
 
             this.sandbox = sandbox;
 
@@ -117,7 +118,7 @@ function () {
                     showAction: function(metadata) {
                         //add the span with metadata's id to be able to identify and update rating later
                         this.actionText = '<span id="metadataRatingSpan_'+metadata.id+'" style="display:none;"/>'+me._getMetadataRating(metadata);
-                        return true;//return metadata.license && metadata.license !== null;
+                        return true;
                     }
                 };
                 var request = reqBuilder(data);
@@ -255,7 +256,6 @@ function () {
             return ratingSymbols;
         },
         _updateRating: function(metadata) {
-            alert('TODO: update the rating of metadata in list');
         }
 
     },{

@@ -285,12 +285,14 @@ function () {
     _showMessage: function(title, message, time, fadeout, showOk, handler) {
         var me = this,
             dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-            btn = dialog.createCloseButton(me._locale.buttons.ok);
+            btn = dialog.createCloseButton(me._locale.buttons.ok),
             fadeoutTime = 5000,
             doFadeout = true,
             doButton = false;
 
-        if(me._showsMessage === true) return;
+        if(me._showsMessage === true) {
+            return;
+        }
 
         if(time && time !== null && !isNaN(time)) {
             fadeoutTime = time;
@@ -340,12 +342,10 @@ function () {
     _showLicenseDeactivateDialog: function(data, metadata, infoForUser){
         var me = this,
             dialogContent = me._templates.licenseDialog.clone(),
-            models = dialogContent.find('.elf_license_dialog_licensemodels'),
             title = dialogContent.find('.elf_license_dialog_licensemodels_title'),
             metadataTitle = '',
             cancelBtn = me._dialog.createCloseButton(this._locale.buttons.close),
-            deactivateBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
-            userInfo = dialogContent.find('.elf_license_dialog_user_info');
+            deactivateBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
 
         me._showLicenseModels();
         me._metadata = metadata;
@@ -393,7 +393,7 @@ function () {
         me._progressSpinner.insertTo(jQuery('.elf_license_dialog'));
 
         // If there is orderer licensemodel then open it
-        if(data.licenseModels.length == 1) {
+        if(data.licenseModels.length === 1) {
             me._showLicenseDeactivateParams(data.licenseModels[0], data, infoForUser);
         }
 
@@ -410,7 +410,6 @@ function () {
     _showLicenseDeactivateParams: function(model, licenseData, infoForUser) {
         var me = this,
             modelDetails = me._templates.licenceModelUnconcludeDetails.clone(),
-            userData = modelDetails.find('.license_user_data'),
             licenseDetails = jQuery('.elf_license_dialog_license_details'),
             basicData = modelDetails.find('.license_basic_data'),
             closeButtonEl = jQuery('.elf_license_close_button'),
@@ -444,7 +443,9 @@ function () {
             var userDataTable = modelDetails.find('.elf_license_user_data_table');
             jQuery.each(model.params, function(index, param){
                 var jQueryElement = me._getFormElement(param, true);
-                if(jQueryElement !== null) userDataTable.append(jQueryElement);
+                if(jQueryElement !== null) {
+                    userDataTable.append(jQueryElement);
+                }
             });
         }
 
@@ -466,8 +467,7 @@ function () {
 
         // Show valid to
         if(licenseData.validTo){
-            var validToElem = modelDetails.find('.validto_summary'),
-                validText = me._locale.dialog.validTo;
+            var validText = me._locale.dialog.validTo;
             validText = validText.replace('{day}',licenseData.validTo);
             validToElem.html(validText);
         }
@@ -614,7 +614,7 @@ function () {
         me._progressSpinner.insertTo(jQuery('.elf_license_dialog'));
 
         // If there is only one licensemodel then open it
-        if(data.licenseModels.length == 1) {
+        if(data.licenseModels.length === 1) {
             me._showLicenseParams(data.licenseModels[0], data);
         }
     },
@@ -626,8 +626,9 @@ function () {
     _goBack: function(){
         var me = this;
         me.nextBtn.setTitle(me._locale.buttons.next);
-        if(me._dialogStep === null) return;
-        if(me._dialogStep === 'step2') {
+        if(me._dialogStep === null) {
+            return;
+        } else if(me._dialogStep === 'step2') {
             me._showLicenseModels();
         } else if(me._dialogStep === 'step3') {
             me._showLicenseDetails();
@@ -640,9 +641,9 @@ function () {
      */
     _goNext: function(){
         var me = this;
-        if(me._dialogStep === null) return;
-
-        if(me._dialogStep === 'step2') {
+        if(me._dialogStep === null) {
+            return;
+        } else if(me._dialogStep === 'step2') {
             me._getPrice();
         } else if(me._dialogStep === 'step3') {
             me._concludeLicense();
@@ -746,7 +747,6 @@ function () {
     _showLicenseOrderSummaryDialog: function(model){
         var me = this,
             licenseSummary = me._templates.licenceModelSummaryDetails.clone(),
-            userData = licenseSummary.find('.license_user_data'),
             licensePrice = jQuery('.elf_license_dialog_license_price'),
             basicData = licenseSummary.find('.license_basic_data');
 
@@ -768,7 +768,9 @@ function () {
             var userDataTable = licenseSummary.find('.elf_license_user_data_table');
             jQuery.each(model.params, function(index, param){
                 var jQueryElement = me._getFormElement(param, true);
-                if(jQueryElement !== null) userDataTable.append(jQueryElement);
+                if(jQueryElement !== null) {
+                    userDataTable.append(jQueryElement);
+                }
             });
         }
 
@@ -785,7 +787,6 @@ function () {
     _showLicenseParams: function(model, licenseData) {
         var me = this,
             modelDetails = me._templates.licenceModelDetails.clone(),
-            userData = modelDetails.find('.license_user_data'),
             licenseDetails = jQuery('.elf_license_dialog_license_details'),
             basicData = modelDetails.find('.license_basic_data');
 
@@ -802,7 +803,9 @@ function () {
             var userDataTable = modelDetails.find('.elf_license_user_data_table');
             jQuery.each(model.params, function(index, param){
                 var jQueryElement = me._getFormElement(param);
-                if(jQueryElement !== null) userDataTable.append(jQueryElement);
+                if(jQueryElement !== null) {
+                    userDataTable.append(jQueryElement);
+                }
             });
         }
 
@@ -882,7 +885,7 @@ function () {
                 } else if (type === 'text') {
                     inputValues = [element.find('div').attr('data-value')];
                 } else if (type === 'boolean') {
-                    inputValues = element.find('div').attr('data-value') == 'true';
+                    inputValues = element.find('div').attr('data-value') === 'true';
                 } else if (type === 'enum') {
                     inputValues = [];
                     element.find('span').each(function(){
