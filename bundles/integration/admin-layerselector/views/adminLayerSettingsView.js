@@ -594,7 +594,7 @@ define([
                     // in insert all wfs properties are behind passthrough
                     if ((admin)&&(admin.passthrough)) {
                         _.forEach(admin.passthrough, function (value, key) {
-                            data[key] = form.find("#add-layer-passthrough-"+key).val();
+                            data[key] = typeof value === 'object' ? JSON.stringify(value) : value;
                         })
                     }
                 }
