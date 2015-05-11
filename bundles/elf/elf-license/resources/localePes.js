@@ -1,17 +1,17 @@
 Oskari.registerLocalization({
-    "lang": "en",
+    "lang": "es",
     "key": "elf-license",
     "value": {
         "getLicenseText": "License",
-    	"errors": {
-        	"cannotGetLicenseInformation": {
-        		"title": "Error for getting license information",
-        		"message": "Cannot get license information"
-        	},
-        	"failedGetLicenseInformation": {
-        		"title": "Failed to get license information",
-        		"message": "Cannot connect to license server"
-        	},
+        "errors": {
+            "cannotGetLicenseInformation": {
+                "title": "Error for getting license information",
+                "message": "Cannot get license information"
+            },
+            "failedGetLicenseInformation": {
+                "title": "Failed to get license information",
+                "message": "Cannot connect to license server"
+            },
             "cannotGetLicensePrice": {
                 "title": "Failed to get license price",
                 "message": "Cannot get license price"
@@ -27,10 +27,6 @@ Oskari.registerLocalization({
             "cannotDeactivateLicense": {
                 "title": "Failed to deactivate license",
                 "message": "Cannot deactivate license"
-            },
-            "checkFields": {
-                "title": "Check required values",
-                "message": "Missing values from"
             }
         },
         "success": {
@@ -40,8 +36,8 @@ Oskari.registerLocalization({
             }
         },
         "dialog": {
-        	"licenseTitle": "License details",
-        	"licenseModelsTitle": "Licensemodels:",
+            "licenseTitle": "License details",
+            "licenseModelsTitle": "Licensemodels:",
             "noRightToAnyLicenseModels": "You have no rights to any licensemodels.",
             "loginShort": "Log in to show licensemodels.",
             "licenseSummaryTitle": "License summary",
@@ -72,9 +68,9 @@ Oskari.registerLocalization({
             }
         },
         "buttons": {
-        	"close": "Close",
-        	"previous": "Previous",
-        	"next": "Next",
+            "close": "Close",
+            "previous": "Previous",
+            "next": "Next",
             "conclude": "Conclude",
             "ok": "OK",
             "deactivate": "Deactivate license",

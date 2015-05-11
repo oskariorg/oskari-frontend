@@ -1,5 +1,5 @@
 Oskari.registerLocalization({
-    "lang": "en",
+    "lang": "sv",
     "key": "elf-license",
     "value": {
         "getLicenseText": "License",

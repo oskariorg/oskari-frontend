@@ -136,3 +136,12 @@ div.elf_license_dialog {
     font-weight: bold; }
   .elf_license_success_message table tr td:first-child {
     width: 20%; }
+
+
+.elf_license_required {
+  color: #ff0000;
+}
+
+.elf_license_missing_valuelist {
+  padding-left: 10px;
+}
