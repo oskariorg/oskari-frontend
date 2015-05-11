@@ -41,15 +41,17 @@ OskariNavigation = OpenLayers.Class(OpenLayers.Control.Navigation, {
         var movementHook = function(actualmethod, ctx) {
             return function() {
                 var c = ctx || me;
-                actualmethod.apply(c, arguments);
+                var value = actualmethod.apply(c, arguments);
                 me.mapmodule.notifyMoveEnd();
+                return value;
             };
         };
         var clickHook = function(actualmethod, ctx) {
             return function() {
                 var c = ctx || me;
-                actualmethod.apply(c, arguments);
+                var value = actualmethod.apply(c, arguments);
                 me.__sendMapClickEvent(arguments[0]);
+                return value;
             };
         };
 
