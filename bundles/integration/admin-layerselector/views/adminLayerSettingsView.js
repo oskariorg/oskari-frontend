@@ -39,13 +39,14 @@ define([
                 'click .admin-remove-sublayer': 'removeLayer',
                 'click .show-edit-layer': 'clickLayerSettings',
                 'click .fetch-ws-button': 'fetchCapabilities',
-                // for wfs params editing - phase 3 'click .fetch-wfs-button': 'fetchWfsLayerConfiguration',
+                //'click .edit-wfs-button': 'editWfsLayerConfiguration',
                 'click .icon-close': 'clearInput',
                 'change .admin-layer-type': 'createLayerSelect',
                 'click .admin-add-group-ok': 'saveCollectionLayer',
                 'click .admin-add-group-cancel': 'hideLayerSettings',
                 'click .admin-remove-group': 'removeLayerCollection',
-                'click .add-layer-record.capabilities li': 'handleCapabilitiesSelection'
+                'click .add-layer-record.capabilities li': 'handleCapabilitiesSelection',
+                'change .admin-interface-version': 'handleInterfaceVersionChange'
             },
 
             /**
@@ -241,6 +242,10 @@ define([
                         var sldr = me.$el.find('.layout-slider');
                         sldr.slider('value', jQuery(this).val());
                     });
+                    if(layerType === 'wfslayer') {
+                        // Unique name field to readonly
+                        me.$el.find('#add-layer-layerName').prop('disabled',true);
+                    }
                 }
                 // Layer interface autocomplete
                 lcId = me.$el.parents('.accordion').attr('lcid');
@@ -327,6 +332,25 @@ define([
                     element.parents('.admin-add-layer').removeClass('show-edit-layer');
                     element.parents('.admin-add-layer').remove();
                 }
+            },
+            /**
+             * Handle interface version change
+             *
+             * @method handleInterfaceVersionChange
+             */
+            handleInterfaceVersionChange: function (e) {
+                e.stopPropagation();
+                var element = jQuery(e.currentTarget),
+                    form = element.parents('.admin-add-layer'),
+                    data = {},
+                    interfaceVersion = form.find('#add-layer-interface-version').val();
+
+                if(interfaceVersion === '2.0.0') {
+                    form.find("input[type='radio'][name='jobtype'][id='layer-jobtype-fe']").prop('checked', true);
+                } else {
+                    form.find("input[type='radio'][name='jobtype'][id='layer-jobtype-default']").prop('checked', true);
+                }
+
             },
 
             /**
@@ -813,43 +837,31 @@ define([
                 });
             },
             /**
-             * Fetch WFS layer configuration. AJAX call to get configuration for given wfs layer id
+             * Edit WFS layer configuration.
+             * Edit wfs spesific values  (adminBlock.passtrough fields)
              * Only for wfslayer-type
-             * TODO: add this to button click for wfs spesific editing popup
              *
-             * @method fetchWfsLayerConfiguration
+             * @method editWfsLayerConfiguration
              */
-            fetchWfsLayerConfiguration: function (e) {
-                var me = this,
-                    //element = jQuery(e.currentTarget),
-                    //form = element.parents('.add-wfs-layer-wrapper'),
-                    baseUrl = me.options.instance.getSandbox().getAjaxUrl();
-
-               // e.stopPropagation();
-
-              /*  var serviceURL = form.find('#add-layer-interface').val(),
-                    layerType = form.find('#add-layer-layertype').val(),
-                    user = form.find('#add-layer-username').val(),
-                    pw =  form.find('#add-layer-password').val();  */
+    /*        editWfsLayerConfiguration: function (e) {
+                e.stopPropagation();
+                var me = this;
+                e.preventDefault();
+                me._wfsEditDialog
+                ('Edit Wfs parameters');
 
 
-                jQuery.ajax({
-                    type: 'POST',
-                    data: {
-                        id: me.model.getId(),
-                        redis : 'no'
-                    },
-                    url: baseUrl + 'action_route=GetWFSLayerConfiguration',
-                    success: function (resp) {
-                        me.model.setWfsConfigurationResponse(resp);
-                    },
-                    error: function (jqXHR, textStatus) {
-                        if (jqXHR.status !== 0) {
-                            me._showDialog(me.instance.getLocalization('admin')['errorTitle'], me.instance.getLocalization('admin').metadataReadFailure);
-                        }
-                    }
-                });
             },
+            //TODO: editing of wfs spesific data
+            _wfsEditDialog: function (title) {
+                var me = this,
+                    dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                    okBtn = dialog.createCloseButton('Save'),
+                    content = jQuery('<div></div>').clone();
+
+                dialog.show(title, content, [okBtn]);
+
+            }, */
             /**
              * Acts on capabilities response based on layer type
              * @param  {String} layerType 'wmslayer'/'wmtslayer'/'wfslayer'
