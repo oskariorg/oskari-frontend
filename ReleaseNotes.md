@@ -2,6 +2,10 @@
 
 ## 1.29
 
+### publisher2
+
+*New bundle!* This is the first step of the refactoring of publisher. It is not yet ready for use!
+
 ### analyse
 
 Analyse parameters panel has now info buttons for parameter labels.
