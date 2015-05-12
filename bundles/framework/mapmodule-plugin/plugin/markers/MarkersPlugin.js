@@ -199,10 +199,11 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 markerLayer = new OpenLayers.Layer.Vector('Markers');
 
             // featureclick/nofeatureclick doesn't seem to be emitted, so working around that
-            markerLayer.events.register('click', this, function(e) {
+            markerLayer.events.register('mousedown', this, function(e) {
                 if (e.target && e.target._featureId) {
-                    me.__markerClicked(e.targ et._featureId)
+                    me.__markerClicked(e.target._featureId);
                 }
+                return true;
             });
             this.getMap().addLayer(markerLayer);
             this.raiseMarkerLayer(markerLayer);
