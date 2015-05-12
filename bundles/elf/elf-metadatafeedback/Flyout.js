@@ -38,8 +38,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
                 '<h2 class="StepTitle">'+this.locale.targetSpecification.targetSpecification+'</h2>'+
                 '<fieldset>'+
                   '<legend><small>'+this.locale.targetSpecification.targetIdentification+'</small></legend>'+
-                  '<p><label>'+this.locale.targetSpecification.targetCode+'</label><input id="primaryTargetCode" name="primaryTargetCode" value="ELF METADATA" readonly="true"/></p>'+
-                  '<p><label>'+this.locale.targetSpecification.targetCodespace+'</label><input id="primaryTargetCodeSpace" name="primaryTargetCodespace" value="'+this.locale.targetSpecification.primaryTargetCodeSpaceNotDefined+'" readonly="true"/></p>'+
+                  '<p><label>'+this.locale.targetSpecification.targetCode+'</label><input id="primaryTargetCode" name="primaryTargetCode" readonly="true"/></p>'+
                   '<p><label>'+this.locale.targetSpecification.natureOfTarget+'</label><input id="natureOfTarget" name="subject" type="text" required readonly="true"/></p>'+
                 '</fieldset>'+
               '</div>'+
@@ -97,7 +96,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
                 el = me.getEl();
 
             me.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer', this.locale['title']);
-            
+
             ratings.raty({
                 starOn: starOnImg,
                 starOff: starOffImg,
@@ -110,7 +109,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
                 if (!params) {
                     me._showMessage(me.locale.errorPopup.title, me.locale.errorPopup.formValidationFailed);
                 } else {
-                    me.instance.addFeedbackService.addFeedback(params, 
+                    me.instance.addFeedbackService.addFeedback(params,
                       function(e) {
                         me._showMessage(me.locale.successPopup.title, me.locale.successPopup.savingTheFeedbackSuccesful);
                         me._resetForm();
@@ -183,7 +182,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
                 sandbox = this.instance.sandbox,
                 dimReqBuilder = sandbox.getRequestBuilder('DimMapLayerRequest'),
                 hlReqBuilder = sandbox.getRequestBuilder('HighlightMapLayerRequest');
-            
+
             flyout.empty();
 
             // if previous panel is undefined -> just added first tab
@@ -211,7 +210,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
         /**
         * Update metadata feedback form.
         * @method updateFeedbackUI
-        * 
+        *
         * @param {Object} metadata the metadata object
         */
         updateFeedbackUI: function(metadata){
@@ -221,7 +220,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
                 user = sandbox.getUser();
 
             me._metadata = metadata;
-            
+
             // Set subject
             el.find('input#subject').val(metadata.name);
 
@@ -230,9 +229,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
 
             // Set metadata id
             el.find('input#primaryTargetCode').val(me._metadata.id);
-
-            // Set metadata codespace
-            el.find('input#primaryTargetCodeSpace').val('ELF METADATA');
 
             // Set user name
             el.find('input#username').val(user.getNickName());
@@ -281,7 +277,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
               if (jQuery(input).attr('type') === 'button') {
                 return;
               }
-              
+
               /*remove red borders if any*/
               if (jQuery(input).hasClass('input-error')) {
                   jQuery(input).removeClass('input-error');

@@ -205,32 +205,52 @@ function () {
         var me = this,
             data = me._getLicenseInputValues();
 
-        me._progressSpinner.start();
+        if(data.missingValues.length === 0) {
+            me._progressSpinner.start();
 
-        me.licenseService.doGetPrice({
-            data: data,
-            id: jQuery('.license_basic_data').attr('data-id'),
-            modelid: jQuery('.license_basic_data').attr('data-model-id')
-        }, function (response) {
-            me._progressSpinner.stop();
-            if (response) {
-                me._showLicenseOrderSummaryDialog(response);
-            } else {
-                me._showMessage(me._locale.errors.cannotGetLicensePrice.title, me._locale.errors.cannotGetLicensePrice.message);
-            }
-        }, function (response) {
-            var errorMsg = null;
-            me._progressSpinner.stop();
-            me.getSandbox().printWarn('ELF license price failed', [].slice.call(arguments));
-            if (response && response.responseText){
-                errorMsg = JSON.parse(response.responseText);
-            }
-            if (errorMsg && errorMsg !== null && errorMsg.error && errorMsg.error !== null) {
-                me._showMessage(me._locale.errors.cannotGetLicensePrice.title, errorMsg.error);
-            } else {
-               me._showMessage(me._locale.errors.cannotGetLicensePrice.title, me._locale.errors.cannotGetLicensePrice.message);
-            }
+            me.licenseService.doGetPrice({
+                data: data.values,
+                id: jQuery('.license_basic_data').attr('data-id'),
+                modelid: jQuery('.license_basic_data').attr('data-model-id')
+            }, function (response) {
+                me._progressSpinner.stop();
+                if (response) {
+                    me._showLicenseOrderSummaryDialog(response);
+                } else {
+                    me._showMessage(me._locale.errors.cannotGetLicensePrice.title, me._locale.errors.cannotGetLicensePrice.message);
+                }
+            }, function (response) {
+                var errorMsg = null;
+                me._progressSpinner.stop();
+                me.getSandbox().printWarn('ELF license price failed', [].slice.call(arguments));
+                if (response && response.responseText){
+                    errorMsg = JSON.parse(response.responseText);
+                }
+                if (errorMsg && errorMsg !== null && errorMsg.error && errorMsg.error !== null) {
+                    me._showMessage(me._locale.errors.cannotGetLicensePrice.title, errorMsg.error);
+                } else {
+                    me._showMessage(me._locale.errors.cannotGetLicensePrice.title, me._locale.errors.cannotGetLicensePrice.message);
+                }
+            });
+        } else {
+            me._showMissingValuesMessage(data);
+        }
+    },
+    /**
+    * Shows missing values message.
+    * @method
+    * @private
+    *
+    * @param {Object} data missing values data
+    */
+    _showMissingValuesMessage: function(data){
+        var me = this,
+            message = me._locale.errors.checkFields.message + ':<div><ul class="elf_license_missing_valuelist">';
+        jQuery.each(data.missingValues, function(index, value){
+            message += '<li>' + value.title + '</li>';
         });
+        message += '</ul></div>';
+        me._showMessage(me._locale.errors.checkFields.title, message,0, true,true);
     },
     /**
      * Conclude license
@@ -242,34 +262,38 @@ function () {
             data = me._getLicenseInputValues(),
             userInfo = jQuery('<div></div>');
 
-        me._progressSpinner.start();
+        if(data.missingValues.length === 0) {
+            me._progressSpinner.start();
 
-        me.licenseService.doConludeLicense({
-            data: data,
-            id: jQuery('.license_basic_data').attr('data-id'),
-            modelid: jQuery('.license_basic_data').attr('data-model-id')
-        }, function (response) {
-            me._progressSpinner.stop();
-            if (response) {
-                userInfo.css({ 'margin-top': '6px', 'margin-bottom': '6px'});
-                userInfo.html(me._locale.dialog.licenceConcluded.message);
-                me._showLicenseDeactivateDialog(response, me._metadata, userInfo);
-            } else {
-                me._showMessage(me._locale.errors.concludeNoResponse.title, me._locale.errors.concludeNoResponse.message);
-            }
-        }, function (response) {
-            var errorMsg = null;
-            me._progressSpinner.stop();
-            me.getSandbox().printWarn('ELF license conclude failed', [].slice.call(arguments));
-            if (response && response.responseText){
-                errorMsg = JSON.parse(response.responseText);
-            }
-            if (errorMsg && errorMsg !== null && errorMsg.error && errorMsg.error !== null) {
-                me._showMessage(me._locale.errors.failedConclude.title, errorMsg.error);
-            } else {
-               me._showMessage(me._locale.errors.failedConclude.title, me._locale.errors.failedConclude.message);
-            }
-        });
+            me.licenseService.doConludeLicense({
+                data: data.values,
+                id: jQuery('.license_basic_data').attr('data-id'),
+                modelid: jQuery('.license_basic_data').attr('data-model-id')
+            }, function (response) {
+                me._progressSpinner.stop();
+                if (response) {
+                    userInfo.css({ 'margin-top': '6px', 'margin-bottom': '6px'});
+                    userInfo.html(me._locale.dialog.licenceConcluded.message);
+                    me._showLicenseDeactivateDialog(response, me._metadata, userInfo);
+                } else {
+                    me._showMessage(me._locale.errors.concludeNoResponse.title, me._locale.errors.concludeNoResponse.message);
+                }
+            }, function (response) {
+                var errorMsg = null;
+                me._progressSpinner.stop();
+                me.getSandbox().printWarn('ELF license conclude failed', [].slice.call(arguments));
+                if (response && response.responseText){
+                    errorMsg = JSON.parse(response.responseText);
+                }
+                if (errorMsg && errorMsg !== null && errorMsg.error && errorMsg.error !== null) {
+                    me._showMessage(me._locale.errors.failedConclude.title, errorMsg.error);
+                } else {
+                   me._showMessage(me._locale.errors.failedConclude.title, me._locale.errors.failedConclude.message);
+                }
+            });
+        } else {
+            me._showMissingValuesMessage(data);
+        }
     },
     /**
      * Show message
@@ -310,6 +334,10 @@ function () {
             btn.setHandler(function(){
                 dialog.close();
                 handler();
+            });
+        } else {
+             btn.setHandler(function(){
+                dialog.close();
             });
         }
 
@@ -503,7 +531,7 @@ function () {
      */
     _deactivateLicense: function(){
         var me = this,
-            data = me._getLicenseInputValues();
+            data = me._getLicenseInputValues().values;
 
         me._progressSpinner.start();
 
@@ -851,11 +879,16 @@ function () {
      * @return {Object} license values
      */
     _getLicenseInputValues: function(){
-        var values = [];
+        var values = {
+            values: [],
+            missingValues: []
+        };
+
         jQuery('.elf_license_user_data div.elf_license_input:visible').each(function(){
             var element = jQuery(this),
                 type = element.attr('data-element-type'),
-                readOnly = element.attr('data-read-only');
+                readOnly = element.attr('data-read-only'),
+                multi = element.attr('data-multi');
 
             var value = {
                 name: element.attr('data-name'),
@@ -868,7 +901,11 @@ function () {
                 if (type === 'int') {
                     inputValues = parseInt(element.find('input').val(), 10);
                 } else if (type === 'text') {
-                    inputValues = [element.find('input').val()];
+                    inputValues = [];
+                    var val = element.find('input').val();
+                    if (val !== null && val !== '') {
+                        inputValues.push(val);
+                    }
                 } else if (type === 'boolean') {
                     inputValues = element.find('input').is(':checked');
                 } else if (type === 'enum') {
@@ -883,7 +920,11 @@ function () {
                 if (type === 'int') {
                     inputValues = parseInt(element.find('div').attr('data-value'), 10);
                 } else if (type === 'text') {
-                    inputValues = [element.find('div').attr('data-value')];
+                    inputValues = [];
+                    var val = element.find('div').attr('data-value');
+                    if (val !== null && val !== '') {
+                        inputValues.push(val);
+                    }                    
                 } else if (type === 'boolean') {
                     inputValues = element.find('div').attr('data-value') === 'true';
                 } else if (type === 'enum') {
@@ -897,7 +938,25 @@ function () {
             }
 
             value.values = inputValues;
-            values.push(value);
+
+            // Check values
+            // If type is enum and not multi then one value needed
+            if (type === 'enum' && multi !== true && multi !== 'true' && inputValues.length !== 1) {
+                value.title = element.attr('data-title');
+                values.missingValues.push(value);
+            } 
+            // Else if type is int
+            else if (type === 'int' && (inputValues === null || isNaN(inputValues))) {
+                value.title = element.attr('data-title');
+                values.missingValues.push(value);
+            }
+            // Else if type is text
+            else if (type === 'text' && (inputValues === null || inputValues.length === 0)) {
+                value.title = element.attr('data-title');
+                values.missingValues.push(value);
+            } else {
+                values.values.push(value);
+            }            
         });
 
 

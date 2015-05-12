@@ -4,7 +4,7 @@
             <label for="add-layer-interface-version" class="add-layer-label" title="<%= instance.getLocalization('admin').interfaceVersionDesc %>"><%= instance.getLocalization('admin').interfaceVersion %></label>
         </div>
         <div class="add-layer-input-area">
-            <select id="add-layer-interface-version" <% if(model.getId()){ %>readonly<% } %>>
+            <select id="add-layer-interface-version"  class="admin-interface-version"  <% if(model.getId()){ %>readonly<% } %>>
                 <option value="1.1.0" <% if(model.getVersion() == '1.1.0' ) { %>selected<% } %> >1.1.0</option>
                 <option value="2.0.0" <% if(model.getVersion() == '2.0.0' ) { %>selected<% } %> >2.0.0</option>
             </select>
@@ -46,7 +46,6 @@
             />
             <div class="icon-close mid"></div>
         </div>
-        <!-- button id="add-layer-wfs-button" class="fetch-wfs-button"><%= instance.getLocalization('admin').editWfs %></button -->
     </div>
 
 </div>

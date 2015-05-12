@@ -134,8 +134,12 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/framework/mapmodule-plugin/event/AfterAddMarkerEvent.js"
                 }, {
                     "type": "text/javascript",
+                    "src": "../../../../bundles/framework/mapmodule-plugin/event/MarkerClickEvent.js"
+                }, {
+                    "type": "text/javascript",
                     "src": "../../../../bundles/framework/mapmodule-plugin/event/AfterRemoveMarkersEvent.js"
                 },
+                
                 /**
                  * Search plugin
                  */

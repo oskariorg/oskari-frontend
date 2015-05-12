@@ -68,6 +68,7 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamEnumElement',
                     });
 
                     data.find('input').first().prop("checked", true);
+                    title += ' <span class="elf_license_required">*</span>';
                 }
                 // Checkbox list
                 else {
@@ -95,9 +96,10 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamEnumElement',
 
             // Add data to element
             data.attr('data-name', param.name);
-            data.attr('data-title', title);
+            data.attr('data-title', param.title || param.name);
             data.attr('data-element-type', 'enum');
             data.attr('data-read-only', readOnly);
+            data.attr('data-multi', param.multi);
 
             element.find('.elf_license_user_data_label').html(title);
             element.find('.elf_license_user_data').html(data);

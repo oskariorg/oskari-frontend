@@ -68,6 +68,7 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamIntElement',
                 input.on('keydown keyup keypress change blur focus paste', function(evt) {
                     me._validator.number.keyListener(evt);
                 });
+                title += ' <span class="elf_license_required">*</span>';
             } else {
                 var valueEl = readOnlyElement.clone();
                 valueEl.attr('data-value', param.value);
@@ -77,7 +78,7 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamIntElement',
 
             // Add data to element
             data.attr('data-name', param.name);
-            data.attr('data-title', title);
+            data.attr('data-title', param.title || param.name);
             data.attr('data-element-type', 'int');
             data.attr('data-read-only', readOnly);
 

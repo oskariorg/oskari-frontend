@@ -1,27 +1,21 @@
 /**
- * @class Oskari.mapframework.bundle.mapmodule.event.AfterAddMarkerEvent
+ * @class Oskari.mapframework.bundle.mapmodule.event.MarkerClickEvent
  *
- * Event is sent after a map marker is added
+ * Event is sent after a map marker is clicked
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.event.AfterAddMarkerEvent',
+Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.event.MarkerClickEvent',
     /**
      * @method create called automatically on construction
      * @static
      */
-    function (data, id) {
-        this._data = data;
+    function (id) {
         this._id = id;
     }, {
-        __name: 'AfterAddMarkerEvent',
+        __name: 'MarkerClickEvent',
 
         getName: function () {
             return this.__name;
         },
-
-        getData: function () {
-            return this._data;
-        },
-
         getID: function () {
             return this._id;
         }

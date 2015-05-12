@@ -86,7 +86,7 @@ Oskari.clazz.define("Oskari.elf.extension.EnhancedExtension",
          * BundleInstance protocol method
          */
         start: function () {
-            var me = this, 
+            var me = this,
                 conf = this.conf,
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
                 sandbox = Oskari.getSandbox(sandboxName);
