@@ -25,8 +25,10 @@ Oskari.clazz.define(
 
         if (allowedEvents === null || allowedEvents === undefined) {
             allowedEvents = {
-                AfterMapMoveEvent: true,
-                MapClickedEvent: true
+                'AfterMapMoveEvent': true,
+                'MapClickedEvent': true,
+                'AfterAddMarkerEvent' : true,
+                'MarkerClickEvent' : true
             };
         }
 

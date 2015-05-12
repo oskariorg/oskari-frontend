@@ -18,6 +18,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.event.MarkerClickEvent
         },
         getID: function () {
             return this._id;
+        },
+        /**
+         * Serialization for RPC
+         * @return {Object} object has key id which has the marker id
+         */
+        getParams: function () {
+            return {
+                id: this.getID()
+            };
         }
     }, {
         /**

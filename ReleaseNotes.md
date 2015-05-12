@@ -2,6 +2,13 @@
 
 ## 1.29
 
+### rpc
+
+New events are enabled by default: 
+
+ - 'AfterAddMarkerEvent' notifies a marker was added and includes an id for the marker
+ - 'MarkerClickEvent' notifies a marker being clickd and includes the id of the clicked marker
+
 ### analyse
 
 Analyse parameters panel has now info buttons for parameter labels.
