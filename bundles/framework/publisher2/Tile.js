@@ -34,7 +34,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.Tile',
          *
          * Interface method implementation
          */
-        setEl: function (el, width, height) {
+        setEl: function (el) {
             this.container = jQuery(el);
         },
         /**
@@ -78,7 +78,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.Tile',
          *      state that this component should use
          * Interface method implementation, does nothing atm
          */
-        setState: function (state) {},
+        setState: function () {},
         /**
          * @method refresh
          * Creates the UI for a fresh start

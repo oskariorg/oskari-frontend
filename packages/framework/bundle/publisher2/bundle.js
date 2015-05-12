@@ -58,15 +58,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher2.PublisherBundle", fun
             "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher2/view/PublisherLocationForm.js"
         }, {
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/publisher2/view/PublisherToolsForm.js"
-        }, {
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/publisher2/view/PublisherLayerForm.js"
-        }, {
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/publisher2/view/PublisherLayoutForm.js"
-        }, {
             "type": "text/css",
             "src": "../../../../bundles/framework/publisher2/resources/css/style.css"
         }, {
