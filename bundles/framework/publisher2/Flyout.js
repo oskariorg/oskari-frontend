@@ -39,7 +39,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.Flyout',
          *
          * Interface method implementation
          */
-        setEl: function (el, width, height) {
+        setEl: function (el) {
             this.container = el[0];
             if (!jQuery(this.container).hasClass('publisher')) {
                 jQuery(this.container).addClass('publisher');

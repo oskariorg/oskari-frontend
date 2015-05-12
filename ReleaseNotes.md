@@ -9,6 +9,10 @@ New events are enabled by default:
  - 'AfterAddMarkerEvent' notifies a marker was added and includes an id for the marker
  - 'MarkerClickEvent' notifies a marker being clickd and includes the id of the clicked marker
 
+### publisher2
+
+*New bundle!* This is the first step of the refactoring of publisher. It is not yet ready for use!
+
 ### analyse
 
 Analyse parameters panel has now info buttons for parameter labels.

@@ -178,42 +178,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.BasicPublisher',
             classes: 'bottom left'
         };
 
-        // Not sure where this should be...
-        me.layerSelectionClasses = {
-            lefthanded: 'top right',
-            righthanded: 'top left',
-            classes: 'top right'
-        };
-
-        me.toolLayouts = ['lefthanded', 'righthanded', 'userlayout'];
-
-        me.activeToolLayout = 'lefthanded';
-
-        me.sizeOptions = [{
-            id: 'small',
-            width: 580,
-            height: 387
-        }, {
-            id: 'medium',
-            width: 700,
-            height: 525,
-            selected: true // default option
-        }, {
-            id: 'large',
-            width: 1240,
-            height: 700
-        }, {
-            id: 'fill',
-            width: '',
-            height: ''
-        }, {
-            id: 'custom',
-            minWidth: 30,
-            minHeight: 20,
-            maxWidth: 4000,
-            maxHeight: 2000
-        }];
-
         me.grid = {};
         me.grid.selected = true;
 
@@ -290,7 +254,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.BasicPublisher',
          * rendered to
          */
         render: function (container) {
-            debugger;
             var me = this,
                 content = me.template.clone();
 
@@ -303,7 +266,40 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.BasicPublisher',
                 );
             me.accordion = accordion;
 
-            var form = Oskari.clazz.create(
+            me._createLocationPanel(accordion, content);
+
+            accordion.insertTo(contentDiv);
+
+            container.find('div.header div.icon-close').bind(
+                'click',
+                function () {
+                    me.instance.setPublishMode(false);
+                }
+            );
+            contentDiv.append(me._getButtons());
+
+            var inputs = me.mainPanel.find('input[type=text]');
+            inputs.focus(function () {
+                me.instance.sandbox.postRequestByName(
+                    'DisableMapKeyboardMovementRequest'
+                );
+            });
+            inputs.blur(function () {
+                me.instance.sandbox.postRequestByName(
+                    'EnableMapKeyboardMovementRequest'
+                );
+            });
+        },
+        /**
+         * @private @method _createLocationPanel
+         * Creates the first panel of publisher and adds it to accordion
+         *
+         *
+         * @param {String} accordion
+         */
+        _createLocationPanel: function (accordion, content) {
+            var me = this,
+                form = Oskari.clazz.create(
                 'Oskari.mapframework.bundle.publisher2.view.PublisherLocationForm',
                 me.loc,
                 me
@@ -325,67 +321,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.BasicPublisher',
             panel.open();
             // 1st panel: location panel
             accordion.addPanel(panel);
-
-            // add grid checkbox
-            var sandbox = me.instance.getSandbox(),
-                selectedLayers = sandbox.findAllSelectedMapLayers(),
-                showStats = false,
-                i,
-                layer,
-                mapModule = sandbox.findRegisteredModuleInstance(
-                    'MainMapModule'
-                );
-
-            me.mapModule = mapModule;
-
-            for (i = 0; i < selectedLayers.length; i += 1) {
-                layer = selectedLayers[i];
-                if (layer.getLayerType() === 'stats') {
-                    showStats = true;
-                }
-            }
-
-            if (showStats) {
-                me.showStats = true;
-
-                // The container where the grid will be rendered to.
-                me.statsContainer = jQuery(me.templates.publishedGridTemplate);
-
-                var dataPanel = me._createDataPanel();
-                dataPanel.open();
-                // 2nd (optional) panel: stats panel
-                accordion.addPanel(dataPanel);
-            }
-
-            // TODO we need to have a serious discussion with this one whenever layout is changed or
-            // copy location from config...
-            if (me.data && me.data.hasLayerSelectionPlugin && me.data.hasLayerSelectionPlugin.location) {
-                me.layerSelectionClasses.classes = me.data.hasLayerSelectionPlugin.location.classes;
-            }
-
-            accordion.insertTo(contentDiv);
-
-            // buttons
-            // close
-            container.find('div.header div.icon-close').bind(
-                'click',
-                function () {
-                    me.instance.setPublishMode(false);
-                }
-            );
-            contentDiv.append(me._getButtons());
-
-            var inputs = me.mainPanel.find('input[type=text]');
-            inputs.focus(function () {
-                me.instance.sandbox.postRequestByName(
-                    'DisableMapKeyboardMovementRequest'
-                );
-            });
-            inputs.blur(function () {
-                me.instance.sandbox.postRequestByName(
-                    'EnableMapKeyboardMovementRequest'
-                );
-            });
         },
 
         /**
@@ -482,7 +417,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.BasicPublisher',
                     'MainMapModule'
                 ),
                 plugins = mapModule.getPluginInstances(),
-                tools = me.toolsPanel.getTools(),
                 p,
                 plugin,
                 i;
@@ -498,21 +432,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.BasicPublisher',
                 }
             }
 
-            me.maplayerPanel.start();
-            if (me.data && me.data.hasLayerSelectionPlugin) {
-                // sets up initial data when editing published map
-                me.maplayerPanel.useConfig(me.data.hasLayerSelectionPlugin);
-            }
-
-            me._updateMapSize();
-
-            for (i = 0; i < tools.length; i += 1) {
-                if (tools[i].selected) {
-                    me.toolsPanel.activatePreviewPlugin(tools[i], true);
-                }
-            }
-            me.toolsPanel.activateFeatureDataPlugin(true);
-
             mapModule.registerPlugin(me.logoPlugin);
             this.logoPlugin.startPlugin(me.instance.sandbox);
         },
@@ -521,29 +440,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.BasicPublisher',
          * @private @method _disablePreview
          * Returns the main map from preview to normal state
          *
-         *
          */
         _disablePreview: function () {
             var me = this,
-                tools = me.toolsPanel.getTools(),
                 mapElement,
                 mapModule = me.instance.sandbox.findRegisteredModuleInstance('MainMapModule'),
                 plugin,
                 i;
-            // teardown preview plugins
-            for (i = 0; i < tools.length; i += 1) {
-                if (tools[i].plugin) {
-                    me.toolsPanel.activatePreviewPlugin(tools[i], false);
-                    mapModule.unregisterPlugin(tools[i].plugin);
-                    tools[i].plugin = undefined;
-                    delete tools[i].plugin;
-                }
-            }
-            me.toolsPanel.activateFeatureDataPlugin(false);
-
-            me.maplayerPanel.stop();
-
-            me.layoutPanel.stop();
 
             // return map size to normal
             mapElement = jQuery(mapModule.getMap().div);
@@ -551,8 +454,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.BasicPublisher',
             mapElement.width('');
             mapElement.height(jQuery(window).height());
 
-            // notify openlayers that size has changed
-            me._updateMapModuleSize();
             //mapModule.updateSize();
 
             // stop our logoplugin
@@ -579,5 +480,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.BasicPublisher',
             }
             // reset listing
             me.normalMapPlugins = [];
+        },
+        /**
+         * @method destroy
+         * Destroys/removes this view from the screen.
+         *
+         *
+         */
+        destroy: function () {
+            this.mainPanel.remove();
         }
     });

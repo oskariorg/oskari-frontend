@@ -244,6 +244,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             if (newLayerConf.maxScale) {
                 layer.setMaxScale(newLayerConf.maxScale);
             }
+            if (newLayerConf.opacity) {
+                layer.setOpacity(newLayerConf.opacity);
+            }
 
             if (newLayerConf.name) {
                 layer.setName(newLayerConf.name);

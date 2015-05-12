@@ -93,7 +93,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
             sandbox.request(this, request);
 
-            //sandbox.registerAsStateful(this.mediator.bundleId, this);
             // draw ui
             me._createUi();
 
@@ -157,7 +156,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
             sandbox.request(this, request);
 
-            //this.sandbox.unregisterStateful(this.mediator.bundleId);
             this.sandbox.unregister(this);
             this.started = false;
         },
@@ -256,16 +254,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             if (blnEnabled) {
                 me.disabledLayers = deniedLayers;
                 me.oskariLang = Oskari.getLang();
-                // remove denied
                 me._removeLayers();
 
                 map.addClass('mapPublishMode');
                 map.addClass('published');
                 me.sandbox.mapMode = 'mapPublishMode';
-                // close/hide flyout - TODO: how about other flyouts, popups/gfi?
+
                 jQuery(me.plugins['Oskari.userinterface.Flyout'].container).parent().parent().css('display', 'none');
 
-                // proceed with publisher view
                 me.publisher = Oskari.clazz.create(
                     'Oskari.mapframework.bundle.publisher2.view.BasicPublisher',
                     me,
@@ -279,22 +275,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 }
 
             } else {
-                //this._destroyGrid()?
-                jQuery('#contentMap').width('');
-                jQuery('.oskariui-left')
-                    .css({
-                        'width': '',
-                        'height': '',
-                        'float': ''
-                    })
-                    .removeClass('published-grid-left')
-                    .empty();
-                jQuery('.oskariui-center').css({
-                    'width': '100%',
-                    'float': ''
-                }).removeClass('published-grid-center');
-
-
+                me._destroyGrid();
                 Oskari.setLang(me.oskariLang);
                 if (me.publisher) {
                     jQuery(me.plugins['Oskari.userinterface.Flyout'].container).parent().parent().css('display', '');
@@ -319,10 +300,30 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             // publishing mode should be sent to mapfull to disable resizing
             requestBuilder = me.sandbox.getRequestBuilder('MapFull.MapResizeEnabledRequest');
             if (requestBuilder) {
-                // got the builder, request can be sent
                 request = requestBuilder(!blnEnabled);
                 me.sandbox.request(me, request);
             }
+        },
+
+        /**
+         * @method _destroyGrid
+         * Destroys Grid
+         * @private
+         */
+        _destroyGrid: function () {
+            jQuery('#contentMap').width('');
+            jQuery('.oskariui-left')
+                .css({
+                    'width': '',
+                    'height': '',
+                    'float': ''
+                })
+                .removeClass('published-grid-left')
+                .empty();
+            jQuery('.oskariui-center').css({
+                'width': '100%',
+                'float': ''
+            }).removeClass('published-grid-center');
         },
 
         /**
