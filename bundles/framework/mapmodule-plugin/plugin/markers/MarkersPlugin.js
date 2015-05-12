@@ -396,6 +396,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             var data = jQuery.extend(true, _.cloneDeep(this._defaultData), markerData);
 
             // generate id if not provided
+            data.id = id;
             if (!id) {
                 data.id = 'M' + this._nextMarkerId++;
             }
