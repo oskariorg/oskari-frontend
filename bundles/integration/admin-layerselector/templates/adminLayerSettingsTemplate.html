@@ -269,12 +269,44 @@
             <label for="add-layer-view-roles" class="add-class-label" title="<%= instance.getLocalization('admin').roles_for_admin %>"><%= instance.getLocalization('admin').viewingRightsRoles %></label>
         </div>
         <div class="add-class-input-area adjacent">
-             <% for(var i = 0; i < roles.length; i++) { %>
-             <div class="input-controls">
-                <label><%= roles[i].name %>  <input type="checkbox" id="layer-view-roles-<%= roles[i].id %>"  class="add-class-input" placeholder="placeholder"  value="<%= roles[i].id %>" /></label>
-             </div>
-            <% } %>
+
+             <table>
+                 <tr>
+                    <% for(var i = 0; i < roles.length; i++) { %>
+                        <th><%= roles[i].name %></th>
+                    <% } %> 
+                    <th>_</th>
+                 </tr>
+                 <tr>
+                    <% for(var i = 0; i < roles.length; i++) { %>
+                        <td><input type="checkbox" id="layer-publish-roles-<%= roles[i].id %>"  class="add-class-input" placeholder="placeholder"  value="<%= roles[i].id %>" /></td>
+                    <% } %>
+                    <td>Publish</td>
+                 </tr>
+                 <tr>
+                    <% for(var i = 0; i < roles.length; i++) { %>
+                        <td><input type="checkbox" id="layer-view-roles-<%= roles[i].id %>"  class="add-class-input" placeholder="placeholder"  value="<%= roles[i].id %>" /></td>
+                    <% } %>
+                    <td>View</td>
+                 </tr>
+                 <tr>
+                    <% for(var i = 0; i < roles.length; i++) { %>
+                        <td><input type="checkbox" id="layer-download-roles-<%= roles[i].id %>"  class="add-class-input" placeholder="placeholder"  value="<%= roles[i].id %>" /></td>
+                    <% } %>
+                    <td>Download</td>
+                 </tr>
+                 <tr>
+                    <% for(var i = 0; i < roles.length; i++) { %>
+                        <td><input type="checkbox" id="layer-enbedded-roles-<%= roles[i].id %>"  class="add-class-input" placeholder="placeholder"  value="<%= roles[i].id %>" /></td>
+                    <% } %>
+                    <td>Enbedded</td>
+                 </tr>
+
+             </table>
         </div>
+
+
+
     </div>
     <% } %>
 

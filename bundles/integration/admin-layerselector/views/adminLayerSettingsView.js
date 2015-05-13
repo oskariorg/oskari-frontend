@@ -649,6 +649,34 @@ define([
                     }
                 }
 
+//                layer-view-roles-2
+//                layer-publish-roles
+//                layer-download-roles
+//                layer-enbedded-roles 
+
+                data.downloadPermissions = '';
+                for (var i = 0; i < me.roles.length; i += 1) {
+                    if (form.find('#layer-download-roles-' + me.roles[i].id).is(':checked')) {
+                        data.downloadPermissions += me.roles[i].id + ',';
+                    }
+                }
+
+                data.enbeddedPermissions = '';
+                for (var i = 0; i < me.roles.length; i += 1) {
+                    if (form.find('#layer-enbedded-roles-' + me.roles[i].id).is(':checked')) {
+                        data.enbeddedPermissions += me.roles[i].id + ',';
+                    }
+                }
+
+                data.publishPermissions = '';
+                for (var i = 0; i < me.roles.length; i += 1) {
+                    if (form.find('#layer-publish-roles-' + me.roles[i].id).is(':checked')) {
+                        data.publishPermissions += me.roles[i].id + ',';
+                    }
+                }
+
+
+                debugger;
                 // Layer class id aka. orgName id aka groupId
                 data.groupId = lcId;
 
