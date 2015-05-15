@@ -69,6 +69,10 @@ Sort improved for non numeric values.
 
 Unfocusing popup buttons.
 
+### mapmodule-plugin/BackgroundLayerSelectionPlugin
+
+Fixed to show selected background layer.
+
 ### mapmodule-plugin/SearchPlugin
 
 Now handles zoomScale in search results correctly.
