@@ -47,9 +47,9 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         me._waitingUserClickToAddMarker = false;
 
         // Show the marker button
-        me._markerButton = true;
+        me._showMarkerButton = true;
         if ((conf) && (typeof conf.markerButton === "boolean")) {
-            me._markerButton = conf.markerButton;
+            me._showMarkerButton = conf.markerButton;
         }
         this.__layer = undefined;
 
@@ -73,13 +73,13 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 AfterHideMapMarkerEvent: function(event) {
                     me.afterHideMapMarkerEvent(event);
                 },
-                'Toolbar.ToolbarLoadedEvent': function(event) {
+                'Toolbar.ToolbarLoadedEvent': function() {
                     me._registerTools();
                 },
-                SearchClearedEvent: function(event) {
+                SearchClearedEvent: function() {
                     me.removeMarkers();
                 },
-                AfterRearrangeSelectedMapLayerEvent: function(event) {
+                AfterRearrangeSelectedMapLayerEvent: function() {
                     me.raiseMarkerLayer();
                 }
             };
@@ -124,8 +124,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * Creates the base marker layer.
          */
         _startPluginImpl: function() {
-            var me = this,
-                p;
+            var me = this;
 
             this.__layer = me._createMapMarkerLayer();
 
@@ -158,7 +157,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             me.setState(this.state);
         },
         /**
-         * Handle toolbar tool click. 
+         * Handle toolbar tool click.
          * Activate the "add marker mode" on map.
          */
         __toolButtonClicked : function() {
@@ -348,7 +347,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         _showForm: function(clickX, clickY) {
             this.stopMarkerAdd();
             var me = this;
-            var lonlat = me._map.getLonLatFromPixel({ 
+            var lonlat = me._map.getLonLatFromPixel({
                 x : clickX,
                 y : clickY
             });
@@ -400,12 +399,18 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          */
         stopMarkerAdd: function() {
             var me = this;
+            var sandbox = this.getSandBox();
             me._waitingUserClickToAddMarker = false;
             if (me.dialog) {
                 me.getMapModule().getMapEl().removeClass('cursor-crosshair');
                 me.dialog.close(true);
             }
-            jQuery('div.tool.marker-share.selected').removeClass('selected'); // Todo: more elegant way?
+
+            // ask toolbar to select default tool if available
+            var toolbarRequest = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest');
+            if(toolbarRequest) {
+                sandbox.request(me, toolbarRequest());
+            }
         },
 
         /**
@@ -632,13 +637,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 sandbox = this.getSandbox(),
                 reqBuilder;
 
-            // Is button available?
-            if (!me._markerButton) {
-                return;
-            }
-
-            // Already registered?
-            if (me._buttonsAdded) {
+            // Is button available or already added the button?
+            if (!me._showMarkerButton || me._buttonsAdded) {
                 return;
             }
 
@@ -646,20 +646,19 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 'Toolbar.AddToolButtonRequest'
             );
 
-            if (typeof reqBuilder === 'undefined') {
+            if (!reqBuilder) {
+                // Couldn't get the request, toolbar not loaded
                 return;
             }
 
             for (tool in me.buttons) {
                 if (me.buttons.hasOwnProperty(tool)) {
-                    if (reqBuilder) {
-                        request = reqBuilder(
-                            tool,
-                            me.buttonGroup,
-                            me.buttons[tool]
-                        );
-                        sandbox.request(me.getName(), request);
-                    }
+                    request = reqBuilder(
+                        tool,
+                        me.buttonGroup,
+                        me.buttons[tool]
+                    );
+                    sandbox.request(me.getName(), request);
                 }
             }
             me._buttonsAdded = true;
@@ -729,13 +728,15 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          */
         setState: function(state) {
             this.state = state;
-            this.removeMarkers(true); // remove markers without sending an AfterRemoveMarkersEvent
+            // remove markers without sending an AfterRemoveMarkersEvent
+            this.removeMarkers(true);
             if (this.state && this.state.markers) {
                 this.addMapMarkers(this.state.markers);
             }
         },
         /**
-         * Returns markers parameter for map link if any markers on map
+         * Returns markers parameter for map link if any markers on map:
+         * "&markers=shape|size|hexcolor|x_y|User input text___shape|size|hexcolor|x_y|input 2"
          * @return {String} link parameters
          */
         getStateParameters: function() {
@@ -756,7 +757,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 markerParams.push(str);
             });
             if (markerParams.length > 0) {
-                //markers=shape|size|hexcolor|x_y|User input text___shape|size|hexcolor|x_y|input 2";
                 return '&markers=' + markerParams.join(MARKER_SEPARATOR);
             }
             return '';
@@ -806,10 +806,10 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         /**
          * @method getOLMapLayers
          * Returns references to OpenLayers layer objects for requested layer or null if layer is not added to map.
-         * @param {Oskari.mapframework.domain.WmsLayer} layer
          * @return null
          */
-        getOLMapLayers: function(layer) {
+        getOLMapLayers: function() {
+            // TODO: Should return the markers layer?
             return null;
         }
 
