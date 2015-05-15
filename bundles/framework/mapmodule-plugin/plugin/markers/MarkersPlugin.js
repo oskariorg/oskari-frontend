@@ -44,6 +44,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         me.buttons = null;
         me.dialog = null;
         me._buttonsAdded = false;
+        me._waitingUserClickToAddMarker = false;
 
         // Show the marker button
         me._markerButton = true;
@@ -66,6 +67,9 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             var me = this;
 
             return {
+                MapClickedEvent: function(event) {
+                    me.__mapClick(event);
+                },
                 AfterHideMapMarkerEvent: function(event) {
                     me.afterHideMapMarkerEvent(event);
                 },
@@ -136,43 +140,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     tooltip: loc.buttons.add,
                     sticky: true,
                     callback: function() {
-                        me.enableGfi(false);
-                        me._map.events.register('click', me, me._showForm);
-                        var diaLoc = loc.dialog,
-                            controlButtons = [],
-                            clearBtn = Oskari.clazz.create(
-                                'Oskari.userinterface.component.Button'
-                            ),
-                            cancelBtn = Oskari.clazz.create(
-                                'Oskari.userinterface.component.buttons.CancelButton'
-                            );
-
-                        clearBtn.setTitle(loc.buttons.clear);
-                        clearBtn.setHandler(function() {
-                            me.removeMarkers();
-                            me.stopMarkerAdd();
-                            me.enableGfi(true);
-                        });
-                        controlButtons.push(clearBtn);
-                        cancelBtn.setHandler(function() {
-                            me.stopMarkerAdd();
-                            me.enableGfi(true);
-                        });
-                        cancelBtn.setPrimary(true);
-                        controlButtons.push(cancelBtn);
-
-                        me.dialog.show(
-                            diaLoc.title,
-                            diaLoc.message,
-                            controlButtons
-                        );
-                        me.getMapModule().getMapEl().addClass(
-                            'cursor-crosshair'
-                        );
-                        me.dialog.moveTo(
-                            '#toolbar div.toolrow[tbgroup=default-selectiontools]',
-                            'bottom'
-                        );
+                        me.__toolButtonClicked();
                     }
                 }
             };
@@ -189,6 +157,51 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             // Creates markers on the map
             me.setState(this.state);
         },
+        /**
+         * Handle toolbar tool click. 
+         * Activate the "add marker mode" on map.
+         */
+        __toolButtonClicked : function() {
+            var me = this;
+            me.enableGfi(false);
+            me._waitingUserClickToAddMarker = true;
+            var loc = me.getLocalization();
+            var diaLoc = loc.dialog,
+                controlButtons = [],
+                clearBtn = Oskari.clazz.create(
+                    'Oskari.userinterface.component.Button'
+                ),
+                cancelBtn = Oskari.clazz.create(
+                    'Oskari.userinterface.component.buttons.CancelButton'
+                );
+
+            clearBtn.setTitle(loc.buttons.clear);
+            clearBtn.setHandler(function() {
+                me.removeMarkers();
+                me.stopMarkerAdd();
+                me.enableGfi(true);
+            });
+            controlButtons.push(clearBtn);
+            cancelBtn.setHandler(function() {
+                me.stopMarkerAdd();
+                me.enableGfi(true);
+            });
+            cancelBtn.setPrimary(true);
+            controlButtons.push(cancelBtn);
+
+            me.dialog.show(
+                diaLoc.title,
+                diaLoc.message,
+                controlButtons
+            );
+            me.getMapModule().getMapEl().addClass(
+                'cursor-crosshair'
+            );
+            me.dialog.moveTo(
+                '#toolbar div.toolrow[tbgroup=default-selectiontools]',
+                'bottom'
+            );
+        },
 
         /**
          * Creates a marker layer
@@ -197,19 +210,37 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         _createMapMarkerLayer: function() {
             var me = this,
                 markerLayer = new OpenLayers.Layer.Vector('Markers');
-
+            markerLayer.events.fallThrough = true;
             // featureclick/nofeatureclick doesn't seem to be emitted, so working around that
-            markerLayer.events.register('mousedown', this, function(e) {
+            markerLayer.events.register('click', this, function(e) {
+                if(me._waitingUserClickToAddMarker) {
+                    // adding a marker, handled in __mapClick()
+                    return true;
+                }
+                // clicking on map, check if marker is hit
                 if (e.target && e.target._featureId) {
                     me.__markerClicked(e.target._featureId);
                 }
                 return true;
             });
+
             this.getMap().addLayer(markerLayer);
             this.raiseMarkerLayer(markerLayer);
             return markerLayer;
         },
+        /**
+         * Handles generic map click
+         * @private
+         * @param  {Oskari.mapframework.bundle.mapmodule.event.MapClickedEvent} event map click
+         */
+        __mapClick : function(event) {
 
+            // adding a marker
+            if(this._waitingUserClickToAddMarker) {
+                this._showForm(event.getMouseX(), event.getMouseY());
+                return;
+            }
+        },
         /**
          * Called when a marker has been clicked.
          * @method  __markerClicked
@@ -314,11 +345,14 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @param e
          * @private
          */
-        _showForm: function(e) {
+        _showForm: function(clickX, clickY) {
+            this.stopMarkerAdd();
             var me = this;
-            me.stopMarkerAdd();
-            var lonlat = me._map.getLonLatFromPixel(e.xy),
-                loc = me.getLocalization().form;
+            var lonlat = me._map.getLonLatFromPixel({ 
+                x : clickX,
+                y : clickY
+            });
+            var loc = me.getLocalization().form;
             me.dotForm = Oskari.clazz.create(
                 'Oskari.userinterface.component.visualization-form.DotForm',
                 me,
@@ -366,7 +400,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          */
         stopMarkerAdd: function() {
             var me = this;
-            me._map.events.unregister('click', me, me._showForm);
+            me._waitingUserClickToAddMarker = false;
             if (me.dialog) {
                 me.getMapModule().getMapEl().removeClass('cursor-crosshair');
                 me.dialog.close(true);
