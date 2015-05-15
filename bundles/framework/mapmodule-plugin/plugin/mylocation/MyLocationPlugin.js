@@ -18,7 +18,7 @@ Oskari.clazz.define(
         me._clazz =
             'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin';
         me._defaultLocation = 'top right';
-        me._index = 6;
+        me._index = 4;
         me._name = 'MyLocationPlugin';
     }, {
         /**
