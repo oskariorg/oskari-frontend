@@ -38,6 +38,10 @@ Now adds the PersonalData tab correctly if started after PersonalData bundle. Pr
 
 Improvements in show metadata coverage. Icons changes and now active metadata coverage is showed different icon.
 
+### coordinatedisplay/CoordinatesPlugin
+
+Moved plugin location to bottom of MyLocationPlugin.
+
 ### divmanazer/Button
 
 Added blur and isFocus functions.
@@ -81,6 +85,10 @@ Modifying a marker is now possible by sending 'MapModulePlugin.AddMarkerRequest'
 Removed possibility to attach eventlisteners to markers since it didn't work correctly. Planning to generate a MarkerClickedEvent on clicks that can be used for interaction.
 
 MarkerClickEvent is now sent when a marker is clicked. Id of the clicked marker is sent with the event.
+
+### mapmodule-plugin/MyLocationPlugin
+
+Moved plugin location to top of CoordinatesPlugin.
 
 ### mapwfs2
 
