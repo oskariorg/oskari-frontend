@@ -399,7 +399,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          */
         stopMarkerAdd: function() {
             var me = this;
-            var sandbox = this.getSandBox();
+            var sandbox = this.getSandbox();
             me._waitingUserClickToAddMarker = false;
             if (me.dialog) {
                 me.getMapModule().getMapEl().removeClass('cursor-crosshair');
@@ -694,13 +694,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             // enable or disable wfs highlight
             if (hiReqBuilder) {
                 sandbox.request(this.getName(), hiReqBuilder(blnEnable));
-            }
-
-            gfiReqBuilder = this.getSandbox().getRequestBuilder(
-                'MapModulePlugin.GetFeatureInfoActivationRequest'
-            );
-            if (gfiReqBuilder) {
-                this.getSandbox().request(this, gfiReqBuilder(blnEnable));
             }
         },
 
