@@ -30,6 +30,10 @@ Oskari.clazz.define("Oskari.tampere.bundle.tampere.AdminWfsSearchChannelBundle",
 			},
 			{
 				"type" : "text/javascript",
+				"src" : "../../../../bundles/tampere/admin-wfs-search-channel/Channels.js"
+			},
+			{
+				"type" : "text/javascript",
 				"src" : "../../../../bundles/tampere/admin-wfs-search-channel/Tile.js"
 			},
 			{
@@ -37,19 +41,27 @@ Oskari.clazz.define("Oskari.tampere.bundle.tampere.AdminWfsSearchChannelBundle",
 				"src" : "../../../../bundles/tampere/admin-wfs-search-channel/resources/css/style.css"
 			}, 
 			{
-				"language" : "fi",
+	            "src" : "../../../../libraries/chosen/chosen.jquery.js",
+	            "type" : "text/javascript"
+       		},
+       		{
+	            "src" : "../../../../libraries/chosen/chosen.css",
+	            "type" : "text/css"
+        	}],
+
+        	"locales": [{
+				"lang" : "fi",
 				"type" : "text/javascript",
 				"src" : "../../../../bundles/tampere/admin-wfs-search-channel/resources/locale/fi.js"
 			},{
-				"language" : "en",
+				"lang" : "en",
 				"type" : "text/javascript",
 				"src" : "../../../../bundles/tampere/admin-wfs-search-channel/resources/locale/en.js"
 			},{
-				"language" : "sv",
+				"lang" : "sv",
 				"type" : "text/javascript",
 				"src" : "../../../../bundles/tampere/admin-wfs-search-channel/resources/locale/sv.js"
-			}],
-		"resources" : []
+			}]
 	},
 	"bundle" : {
 		"manifest" : {

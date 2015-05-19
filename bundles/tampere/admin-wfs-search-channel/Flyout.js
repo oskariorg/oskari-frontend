@@ -15,12 +15,16 @@ Oskari.clazz.define('Oskari.tampere.bundle.tampere.AdminWfsSearchChannel.Flyout'
      */
     function (instance) {
         this.instance = instance;
+        this.sandbox = instance.getSandbox();
         this.container = null;
-        this.state = null;
-        this._templates = {
-            admin_wfs_search_channel: jQuery('<div class="oskari__adminwfssearchchannel"></div>')
-        };
+        this.state = {};
+        this.tabsContainer = null;
+        this._localization = this.instance.getLocalization('flyout');
     }, {
+         tabs: [{
+            'id': 'admin-wfs-search-channel-tab',
+            'clazz': 'Oskari.tampere.bundle.tampere.admin-wfs-search-channel.Channels'
+        }],
         /**
          * @method getName
          * @return {String} the name for the component
@@ -42,10 +46,10 @@ Oskari.clazz.define('Oskari.tampere.bundle.tampere.AdminWfsSearchChannel.Flyout'
          *
          */
         setEl: function (el, width, height) {
-            this.container = el[0];
-            if (!jQuery(this.container).hasClass('admin__wfs-search-channel')) {
-                jQuery(this.container).addClass('admin__wfs-search-channel');
-            }
+            this.container = jQuery(el[0]);
+            // if (!jQuery(this.container).hasClass('admin__wfs-search-channel')) {
+            //     jQuery(this.container).addClass('admin__wfs-search-channel');
+            // }
         },
         /**
         * @public @method startPlugin
@@ -55,14 +59,56 @@ Oskari.clazz.define('Oskari.tampere.bundle.tampere.AdminWfsSearchChannel.Flyout'
         *
         */
         startPlugin: function () {
-            var loc = this.instance.getLocalization('flyout'),
-                elParent,
-                elId;
+            this.createUI();
+        },
+        /* App specific methods */
+        createUI: function () {
+            if (this.tabsContainer) {
+                return;
+            }
+            var me = this,
+                tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer');
+            this.tabsContainer = tabsContainer;
 
-            //set id to flyouttool-close
-            elParent = this.container.parentElement.parentElement;
-            elId = jQuery(elParent).find('.oskari-flyouttoolbar').find('.oskari-flyouttools').find('.oskari-flyouttool-close');
-            elId.attr('id', 'oskari_admin_wfs_search_channel_flyout_oskari_flyouttool_close');
+            _.each(this.tabs, function (tabDef) {
+                var tab = Oskari.clazz.create(tabDef.clazz, me._getLocalization(tabDef.id), me.instance);
+                tab.setId(tabDef.id);
+                tabsContainer.addPanel(tab);
+                tabDef.instance = tab;
+            });
+            tabsContainer.insertTo(this.container);
+        },
+        getEventHandlers: function () {
+            var list = {};
+            _.each(this.tabs, function (tabDef) {
+                var p;
+                if (tabDef.instance.eventHandlers) {
+                    for (p in tabDef.instance.eventHandlers) {
+                        if (tabDef.instance.eventHandlers.hasOwnProperty(p)) {
+                            list[p] = true;
+                        }
+                    }
+                }
+            });
+            return list;
+        },
+        onEvent: function (event) {
+            _.each(this.tabs, function (tabDef) {
+                if (tabDef.instance.eventHandlers) {
+                    var handler = tabDef.instance.eventHandlers[event.getName()];
+                    if (!handler) {
+                        return;
+                    }
+                    handler.apply(tabDef.instance, [event]);
+
+                }
+            });
+        },
+        /**
+         * @method _getLocalization
+         */
+        _getLocalization: function (key) {
+            return this._localization[key];
         },
         /**
          * @public @method stopPlugin
@@ -81,7 +127,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.tampere.AdminWfsSearchChannel.Flyout'
          * @return {String} localized text for the title of the flyout
          */
         getTitle: function () {
-            return this.instance.getLocalization('title');
+            return this._getLocalization('title');
         },
 
         /**
@@ -91,7 +137,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.tampere.AdminWfsSearchChannel.Flyout'
          * @return {String} localized text for the description of the flyout.
          */
         getDescription: function () {
-            return this.instance.getLocalization('desc');
+            return this._getLocalization('desc');
         },
 
         /**
@@ -116,25 +162,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.tampere.AdminWfsSearchChannel.Flyout'
             this.state = state;
 
         },
-
-        /**
-         * @public @method createUi
-         * Creates the UI for a fresh start
-         *
-         *
-         */
-        createUi: function () {
-            var me = this,
-                container = jQuery(me.container),
-                adminWfsSearchChannelContainer = me._templates.admin_wfs_search_channel,
-                loc = this.instance.getLocalization('flyout');
-
-            container.empty();
-            container.append(adminWfsSearchChannelContainer);
-
-
-        },
-
         /**
          * @method refresh
          * utitity to temporarily support rightjs sliders (again)
