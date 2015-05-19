@@ -575,8 +575,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 mapHeight,
                 totalWidth = size.width,
                 totalHeight = size.height;
-
-            if (totalWidth === null || totalWidth === undefined || totalWidth === '') {
+            // check if we actually had .row-fluid structure
+            if (container.length > 0 && (totalWidth === null || totalWidth === undefined || totalWidth === '')) {
                 // Ugly hack, container has a nasty habit of overflowing the viewport...
                 totalWidth = jQuery(window).width() - container.offset().left;
             }
