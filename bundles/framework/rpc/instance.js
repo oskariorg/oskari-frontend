@@ -326,10 +326,21 @@ Oskari.clazz.define(
          */
         _domainMatch: function (origin) {
             'use strict';
+            var sb = this.sandbox;
+            if(!origin) {
+                sb.printWarn('No origin in RPC message');
+                // no origin, always deny
+                return false;
+            }
             // Allow subdomains and different ports
             var domain = this.conf.domain,
                 ret = origin.indexOf(domain) !== -1,
                 parts;
+
+            // always allow from localhost
+            if(origin.indexOf('http://localhost') === 0) {
+                return true;
+            }
 
             if (ret) {
                 parts = origin.split(domain);
@@ -342,6 +353,9 @@ Oskari.clazz.define(
                     // origin must have a protocol
                     ret = false;
                 }
+            }
+            if(!ret) {
+                sb.printWarn('Origin not allowed for RPC: ' + origin);
             }
 
             return ret;

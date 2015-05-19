@@ -9,6 +9,9 @@ New events are enabled by default:
  - 'AfterAddMarkerEvent' notifies a marker was added and includes an id for the marker
  - 'MarkerClickEvent' notifies a marker being clickd and includes the id of the clicked marker
 
+Now always allows messages from origin starting with 'http://localhost' to help with developing features. 
+Prints warnings if RPC messages come from other than allowed origins.
+
 ### publisher2
 
 *New bundle!* This is the first step of the refactoring of publisher. It is not yet ready for use!
