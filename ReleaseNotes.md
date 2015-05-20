@@ -11,6 +11,7 @@ New events are enabled by default:
 
 Now always allows messages from origin starting with 'http://localhost' to help with developing features. 
 Prints warnings if RPC messages come from other than allowed origins.
+GetLayers-call now returns the layers UI-name in addition to id, opacity and visibility.
 
 ### publisher2
 
