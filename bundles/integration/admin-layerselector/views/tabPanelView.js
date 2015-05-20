@@ -21,9 +21,7 @@ define([
 
         return Backbone.View.extend({
             tagName: 'div',
-
             className: 'tab-content',
-
             /**
              * This object contains backbone event-handling.
              * It binds methods to certain events fired by different elements.
@@ -36,12 +34,9 @@ define([
                 "click .accordion-header": "toggleLayerGroup",
                 "click .admin-add-layer-btn": "toggleAddLayer",
                 "click .admin-add-layer-cancel": "hideAddLayer",
-
                 "click .admin-edit-grouping-btn": "toggleGroupingSettings",
                 "click .admin-add-grouping-cancel": "toggleGroupingSettings",
-
                 "click .admin-add-grouping-btn": "toggleAddLayerGrouping",
-
                 "click .admin-add-grouping-ok": "saveLayerGrouping",
                 "click .admin-remove-grouping": "removeLayerGrouping",
                 "click .show-add-class": "catchClicks"
@@ -69,12 +64,8 @@ define([
                     // route adminAction from model to an ui element that View.js listens
                     this.$el.trigger(e);
                 });
-
                 this.addGroupingButtonTemplate = _.template(AddGroupingButtonTemplate);
                 this.addGroupingTemplate = _.template(AddGroupingTemplate);
-
-                //this.addInspireTemplate = _.template(AdminAddInspireTemplate);
-                //this.addOrganizationTemplate = _.template(AdminAddOrganizationTemplate);
                 this.addLayerBtnTemplate = _.template(AdminAddLayerBtnTemplate);
                 this.filterTemplate = _.template(FilterLayersTemplate);
                 this.tabTemplate = _.template(TabPanelTemplate);
@@ -93,7 +84,6 @@ define([
              * for existing layers
              */
             __setupSupportedLayerTypes : function() {
-                var me = this;
                 // generic list of layertypes supported
                 this.supportedTypes = [
                     {id : "wfslayer", localeKey : "wfs"},
@@ -106,7 +96,7 @@ define([
                 var sandbox = this.instance.sandbox,
                     mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
                 this.supportedTypes = _.filter(this.supportedTypes, function(type){
-                    return mapLayerService.hasSupportForLayerType(type.id)
+                    return mapLayerService.hasSupportForLayerType(type.id);
                 });
                 // setup templates for layer types/require only ones supported
                 _.each(this.supportedTypes, function(type) {
@@ -116,7 +106,7 @@ define([
                     var file = 'text!_bundle/templates/layer/' + type.id + 'SettingsTemplateHeader.html';
                     require([file], function(header) {
                         type.headerTemplate = _.template(header);
-                    }, function(err) {
+                    }, function() {
                         sandbox.printWarn('No admin header template for layertype: ' + type.id + " file was: " + file);
                     });
                 });
@@ -127,7 +117,7 @@ define([
                     var file = 'text!_bundle/templates/layer/' + type.id + 'SettingsTemplateFooter.html';
                     require([file], function(footer) {
                         type.footerTemplate = _.template(footer);
-                    }, function(err) {
+                    }, function() {
                         sandbox.printWarn('No admin footer template for layertype: ' + type.id + " file was: " + file);
                     });
                 });
@@ -178,7 +168,7 @@ define([
                         }
                         // At this point we want to add new layer button only for organization
                         // if we enable on inspire tab -> layer will use the inspire theme id as organization id
-                        if (this.options.tabId == 'organization') {
+                        if (this.options.tabId === 'organization') {
                             groupContainer.append(this.addLayerBtnTemplate({
                                 instance: this.options.instance
                             }));
@@ -203,7 +193,7 @@ define([
                     // grouping add panel
                     var newGroup = this.layerGroupingModel.getTemplateGroup();
                     var btnConfig = {};
-                    if (this.options.tabId == 'inspire') {
+                    if (this.options.tabId === 'inspire') {
                         btnConfig.title = this.options.instance.getLocalization('admin').addInspire;
                         btnConfig.desc = this.options.instance.getLocalization('admin').addInspireDesc;
                     }
@@ -269,8 +259,6 @@ define([
              */
             filterLayers: function (e) {
                 e.stopPropagation();
-                //var element = jQuery(e.currentTarget);
-                //this.layerGroupingModel.getFilteredLayerGroups(element.val());
             },
             /**
              * Shows grouping settings (name localization) when admin clicks
@@ -284,7 +272,7 @@ define([
                 var element = jQuery(e.currentTarget),
                     grouping = element.parents('.accordion-header');
                 // if there is no accordion-header
-                if (grouping.length == 0) {
+                if (grouping.length === 0) {
                     element.parents('.admin-add-class').removeClass('show-add-class');;
                 }
                 // if there is accordion header, toggle visibility of settings
@@ -305,7 +293,7 @@ define([
              *
              * @method hideGroupingSettings
              */
-            hideGroupingSettings: function (e) {
+            hideGroupingSettings: function () {
                 jQuery('.admin-add-class').removeClass('show-add-class');
             },
 
@@ -330,8 +318,6 @@ define([
              * @method toggleAddLayer
              */
             toggleAddLayer: function (e) {
-                //add layer
-                var me = this;
                 e.stopPropagation();
                 var element = jQuery(e.currentTarget),
                     layer = element.parent(),
@@ -418,7 +404,7 @@ define([
                     id : element.parents('.accordion').attr('lcid')
                 };
 
-                addClass.find('[id$=-name]').filter('[id^=add-class-]').each(function (index) {
+                addClass.find('[id$=-name]').filter('[id^=add-class-]').each(function () {
                     lang = this.id.substring(10, this.id.indexOf("-name"));
                     data["name_" + lang] = this.value;
                 });
@@ -460,13 +446,11 @@ define([
                    dialog.close();
                    me.layerGroupingModel.remove(groupId, function(err, info) {
                         if(info && info.responseText) {
-                            try {
-                                var obj = JSON.parse(info.responseText);
-                                if(obj.info && obj.info.code && loc.errors[obj.info.code]) {
-                                    me.__showDialog(loc.errors.title, loc.errors[obj.info.code], element);
-                                }
-                                return;
-                            } catch(ignored) {}
+                            var obj = JSON.parse(info.responseText);
+                            if(obj.info && obj.info.code && loc.errors[obj.info.code]) {
+                                me.__showDialog(loc.errors.title, loc.errors[obj.info.code], element);
+                            }
+                            return;                            
                         }
                         if(err) {
                             me._showDialog(me.instance.getLocalization('admin')['errorTitle'], err);

@@ -31,16 +31,15 @@ function(instance, locale, ui) {
     getName : function() {
         return 'Oskari.integration.bundle.bb.Flyout';
     },
-    setEl : function(el, width, height) {
+    setEl : function(el) {
         this.container = jQuery(el);
     },
     getEl : function() {
         return this.container;
     },
     startPlugin : function() {
-        var me = this;
-        var locale = me.locale;
-        var ui = me.ui;
+        var me = this,
+            ui = me.ui;
         ui.setEl(me.container);
         me.container.append(this.locale.fetchingLayers);
     },

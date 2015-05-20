@@ -125,7 +125,7 @@
                         }
                     },
                     error: function (jqXHR, textStatus) {
-                        if(callback /* && jqXHR.status !== 0 */) {
+                        if(callback) {
                             callback("Error while saving group:" + textStatus);
                         }
                     }
@@ -152,13 +152,14 @@
                             if(origBefore) {
                                 origBefore(req);
                             }
-                        }
+                        };
                         me.__tryRestMethods('POST', config);
                     }
                     else if(config.__oskariError) {
                         config.__oskariError(jqXHR, textStatus, errorThrown);
                     }
-                }
+                };
+
                 if(!config.__oskariError) {
                     config.__oskariError = config.error;
                     config.error = errorHandler;
@@ -201,7 +202,7 @@
                         me.layerGroups = [];
                         me.loadGroups(pResp, groupingMethod);
                     },
-                    error: function (jqXHR, textStatus) {
+                    error: function () {
                     }
                 });
             },
@@ -283,8 +284,12 @@
                     if(name_b) {
                         name_b = name_b.toLowerCase();
                     }
-                    if(name_a > name_b) return 1;
-                    if(name_a < name_b) return -1;
+                    if(name_a > name_b) {
+                        return 1;
+                    }
+                    if(name_a < name_b) {
+                        return -1;
+                    }
                     return 0;
                 });
             },
@@ -318,18 +323,18 @@
              * @private
              */
             _mapLayersForGroup: function (group, groupingMethod) {
-                var me = this;
-                // FIXME: this needs some performance tuning
                 _.each(this.layers.models, function(layer) {
-                    if (layer.getMetaType &&
-                        layer.getMetaType() == 'published' ||
-                        layer.getMetaType() == 'myplaces') {
+                    if (layer.getMetaType && 
+                        (layer.getMetaType() === 'published' ||
+                        layer.getMetaType() === 'myplaces')) {
                         // skip published layers
                         return;
                     }
-                    var groupAttr = layer[groupingMethod]();
-                    if(group.name === groupAttr) {
-                        group.add(layer);
+                    if(layer[groupingMethod]) {
+                        var groupAttr = layer[groupingMethod]();
+                        if(group.name === groupAttr) {
+                            group.add(layer);
+                        }
                     }
                 });
             },
@@ -351,14 +356,14 @@
                 this.__tryRestMethods("DELETE", {
                     dataType: 'json',
                     url: me.baseURL + me.actions.remove + "&id=" + id + "&iefix=" + (new Date()).getTime(),
-                    success: function (pResp) {
+                    success: function () {
                         me._removeClass(id);
                         if(callback) {
                             callback();
                         }
                     },
                     error: function (jqXHR, textStatus) {
-                        if(callback /* && jqXHR.status !== 0 */) {
+                        if(callback) {
                             callback("Error while removing group: " + textStatus, jqXHR);
                         }
                     }
@@ -376,9 +381,8 @@
                 var foundIndex = -1;
                 for (var i = groups.length - 1; i >= 0; i -= 1) {
                     /// === wont match it correctly for some reason, maybe string from DOM attribute <> integer
-                    if (groups[i].id == id) {
+                    if (groups[i].id === id) {
                         foundIndex = i;
-                        //groups.splice(foundIndex, 1);
                         break;
                     }
                 }
@@ -395,7 +399,7 @@
                             modelId: layer.getId()
                         });
                     });
-                    if(layers.length == 0) {
+                    if(layers.length === 0) {
                         // trigger change event so that DOM will be re-rendered
                         // if there was no layers
                         this.trigger('change:layerGroups');
@@ -445,8 +449,7 @@
             getGroup: function (groupId) {
                 var groups = this.layerGroups;
                 for (var i = 0; i <  groups.length; ++i) {
-                    /// === wont match it correctly for some reason, maybe string from DOM attribute <> integer
-                    if (groups[i].id == groupId) {
+                    if (('' + groups[i].id) === ('' + groupId)) {
                         return groups[i];
                     }
                 }

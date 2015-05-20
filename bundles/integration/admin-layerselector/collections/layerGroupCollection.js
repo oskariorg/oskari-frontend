@@ -90,7 +90,6 @@
              * @param {LayerModel} layer
              */
             resetLayers : function() {
-                //this.models = [];
                 this.reset();
             },
             /**
@@ -115,7 +114,7 @@
              */
             matchesKeyword : function(layerId, keyword) {
                 var searchableIndex = this.searchIndex[layerId];
-                return searchableIndex.indexOf(keyword.toLowerCase()) != -1;
+                return searchableIndex.indexOf(keyword.toLowerCase()) !== -1;
             }
 
         });
