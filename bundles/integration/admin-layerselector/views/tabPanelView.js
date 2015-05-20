@@ -214,17 +214,8 @@ define([
                     }
                     var groupingPanelContainer = this.$el.find('.oskarifield');
                     groupingPanelContainer.append(this.addGroupingButtonTemplate({ loc: btnConfig }));
+
                     groupingPanelContainer.append(this.__createGroupingPanel(this.options.tabId, newGroup));
-
-
-
-                    /*// TODO: at some point it could be nice to filter layers also.
-                var selectedLayers = this.options.instance.sandbox.findAllSelectedMapLayers();
-                for(var i = 0; i < selectedLayers.length; ++i) {
-                    this.setLayerSelected(selectedLayers[i].getId(), true);
-                }
-                this.filterLayers(this.filterField.getValue());
-                */
 
                     // hide layers
                     this.$el.find('div.content').hide();
@@ -261,6 +252,7 @@ define([
                             }
                         }
                 };
+
                 // override some UI texts for inspire theme form
                 if(tabId === 'inspire') {
                     groupingConfig.title = adminLoc.addInspireName;
@@ -477,7 +469,6 @@ define([
                             } catch(ignored) {}
                         }
                         if(err) {
-                            // TODO: handle error
                             me._showDialog(me.instance.getLocalization('admin')['errorTitle'], err);
                             return;
                         }
