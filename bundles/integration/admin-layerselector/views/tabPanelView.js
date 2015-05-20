@@ -100,7 +100,7 @@ define([
                 });
                 // setup templates for layer types/require only ones supported
                 _.each(this.supportedTypes, function(type) {
-                    if(type.header === false) {
+                    if(!type.header) {
                         return;
                     }
                     var file = 'text!_bundle/templates/layer/' + type.id + 'SettingsTemplateHeader.html';
@@ -111,7 +111,7 @@ define([
                     });
                 });
                 _.each(this.supportedTypes, function(type) {
-                    if(type.footer === false) {
+                    if(!type.footer) {
                         return;
                     }
                     var file = 'text!_bundle/templates/layer/' + type.id + 'SettingsTemplateFooter.html';

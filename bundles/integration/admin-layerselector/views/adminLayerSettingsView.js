@@ -509,12 +509,10 @@ define([
                                     }
 
                                     err = loc[err] || err;
-                                    if (errVar) {
-                                        if (loc[errVar]) {
-                                            err += loc[errVar];
-                                        } else {
-                                            err += errVar;
-                                        }
+                                    if (errVar && loc[errVar]) {
+                                        err += loc[errVar];
+                                    } else if (errVar) {
+                                        err += errVar;
                                     }
                                 }
                             }
