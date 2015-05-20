@@ -75,6 +75,7 @@ Oskari.clazz.define(
                 '    <label>' +
                 '        <span></span>' +
                 '        <select name="choose-param-for-search" required="required"></select>' +
+                '        <div class="remove--param icon-close hidden"></div>' +
                 '    </label>' +
                 '</fieldset>' +
                 '<fieldset></fieldset>' +
@@ -82,7 +83,7 @@ Oskari.clazz.define(
             );
 
             jQuery.each(Oskari.getSupportedLanguages(), function(index, item) {
-                me.templates.form.details = jQuery(
+                me.templates.form.detailinputs = jQuery(
                 '    <label>' +
                 '        <span></span>' +
                 '        <input type="text" name="details-topic-'+item+'" language="details-name-'+item+'" required="required" />' +
@@ -91,7 +92,11 @@ Oskari.clazz.define(
                 '        <input type="text" class="no-span-text" language="details-desc-'+item+'" required="required" />' +
                 '    </label>'
                 );
-                me.templates.form.find('.details--wrapper').append(me.templates.form.details);
+                me.templates.form.find('.details--wrapper').append(me.templates.form.detailinputs);
+            });
+
+            me.templates.form.find(".remove--param").click(function(event){
+                jQuery(this).parent().remove();
             });
 
             //me.templates.form.attr('action', me.sandbox.getAjaxUrl() + me.instance.conf.restUrl);
@@ -112,10 +117,12 @@ Oskari.clazz.define(
                 'Oskari.userinterface.component.Button'
             );
             btn.setTitle(me._getLocalization("new-params-btn"));
-            btn.addClass('no-span-text');          
+            btn.addClass('no-span-text');
             jQuery(btn.getElement()).click(
                 function (event) {
-                    jQuery(this).before(jQuery(this).prev("label").clone());
+                    var newParams = jQuery(this).prev("label").clone(true);
+                    newParams.find(".remove--param").removeClass("hidden");
+                    jQuery(this).before(newParams);
                 }
             );
             btn.insertTo(firstFieldset);
@@ -213,57 +220,72 @@ Oskari.clazz.define(
         //     var selectorsContainer = me.templates.form.find('div.roleSelect');
         //     selectorsContainer.append(me.templates.roleSelect);
         // },
-        /**
-         * @method fetchUsers
-         */
-        // fetchUsers: function (container) {
-        //     // Remove old list from container
-        //     container.find('ul').remove();
-        //     // get users with ajax
-        //     var me = this;
-        //     jQuery.ajax({
-        //         type: 'GET',
-        //         url: me.sandbox.getAjaxUrl() + me.instance.conf.restUrl,
-        //         success: function (data) {
-        //             me._createList(me, data.users, me.state.filter);
-        //         },
-        //         error: function (jqXHR, textStatus, errorThrown) {
-        //             var error = me._getErrorText(jqXHR, textStatus, errorThrown);
 
-        //             me._openPopup(
-        //                 me._getLocalization('fetch_failed'),
-        //                 error
-        //             );
-        //         }
-        //     });
-        // },
+//          * @method fetchUsers
+//          */
+         fetchChannels: function (container) {
+            // Remove old list from container
+            container.find('ul').remove();
+            // get users with ajax
+            var me = this;
+
+            var data = {"channels":[
+            {
+                "id":1,
+                "choose-wfs-layer": 1,
+                "details-topic-fi": "Testi",
+                "details-desc-fi": "Description",
+                "details-topic-sv": "Testi sv",
+                "details-desc-sv": "Description sv",
+                "params": [1,2]
+            }
+            ]};
+            setTimeout(function(){
+                me._createList(me, data.channels, null)
+            }, 1000);    
+            // jQuery.ajax({
+            //     type: 'GET',
+            //     url: me.sandbox.getAjaxUrl() + me.instance.conf.restUrl,
+            //     success: function (data) {
+            //         me._createList(me, data.channels, me.state.filter);
+            //     },
+            //     error: function (jqXHR, textStatus, errorThrown) {
+            //         var error = me._getErrorText(jqXHR, textStatus, errorThrown);
+
+            //         me._openPopup(
+            //             me._getLocalization('fetch_failed'),
+            //             error
+            //         );
+            //     }
+            // });
+        },
 
         /**
          * @method _createList
          */
-        // _createList: function (me, users, filter) {
-        //     var list = me.templates.list.clone(),
-        //         i,
-        //         user,
-        //         hasFilter = filter !== null && filter !== undefined && filter.length > 0,
-        //         matches;
+        _createList: function (me, channels, filter) {
+            var list = me.templates.list.clone(),
+                i,
+                user,
+                hasFilter = filter !== null && filter !== undefined && filter.length > 0,
+                matches;
 
-        //     me.users = users;
-        //     for (i = 0; i < users.length; i += 1) {
-        //         user = users[i];
-        //         matches = !hasFilter || user.firstName.contains(filter) || user.lastName.contains(filter) || user.user.contains(filter);
-        //         if (matches) {
-        //             list.append(
-        //                 me._populateItem(
-        //                     me.templates.item.clone(true, true),
-        //                     user
-        //                 )
-        //             );
-        //         }
-        //     }
-        //     // Add list to container
-        //     me.container.append(list);
-        // },
+            me.channels = channels;
+            for (i = 0; i < channels.length; i += 1) {
+                channel = channels[i];
+                matches = !hasFilter || channel.name_fi.contains(filter);
+                if (matches) {
+                    list.append(
+                        me._populateItem(
+                            me.templates.item.clone(true, true),
+                            channel
+                        )
+                    );
+                }
+            }
+            // Add list to container
+            me.container.append(list);
+        },
 
         /**
          * @method _filterList
@@ -271,7 +293,7 @@ Oskari.clazz.define(
         _filterList: function (event, me) {
             var filter = jQuery(event.target).parent().find('input[type=search]').val();
             me.state.filter = filter;
-            //me.fetchUsers(me.container);
+            me.fetchChannels(me.container);
         },
 
         /**
@@ -330,26 +352,25 @@ Oskari.clazz.define(
          * @method _populateItem
          * Populates an item fragment
          */
-        _populateItem: function (item, user) {
+        _populateItem: function (item, channel) {
             var me = this;
 
-            item.attr('data-id', user.id);
+            item.attr('data-id', channel.id);
             item.find('h3').html(
-                user.user +
-                ' (' + user.firstName + ' ' + user.lastName + ')'
+                channel["details-topic-"+Oskari.getLang()]
             );
             return item;
         },
 
         /**
-         * @method _getUser
+         * @method _getChannel
          * Gets user by id
          */
-        _getUser: function (uid) {
+        _getChannel: function (uid) {
             var i;
-            for (i = 0; i < this.users.length; i += 1) {
-                if (this.users[i].id === uid) {
-                    return this.users[i];
+            for (i = 0; i < this.channels.length; i += 1) {
+                if (this.channels[i].id === uid) {
+                    return this.channels[i];
                 }
             }
             return null;
@@ -369,7 +390,7 @@ Oskari.clazz.define(
 
             if (uid && uid.length) {
                 target.hide();
-                me._populateForm(form, me._getUser(parseInt(uid, 10)));
+                me._populateForm(form, me._getChannel(parseInt(uid, 10)));
                 item.append(form);
             } else {
                 target.hide();
@@ -475,37 +496,36 @@ Oskari.clazz.define(
          * @method _populateForm
          * Populates given form with given user's data.
          */
-        _populateForm: function (fragment, user) {
+        _populateForm: function (fragment, channel) {
             var me = this;
             fragment.find('fieldset:first-child input').each(function (index) {
-                var el = jQuery(this),
-                    elName = el.attr('name');
-                if (user) {
-                    el.val(user[elName]);
-                } else {
-                    // password is required when creating a new user
-                    if (elName === 'pass' || elName === 'pass_retype') {
-                        el.attr('required', 'required');
+                var el = jQuery(this), elName = "";
+                    if(!el.hasClass('no-span-text')){
+                        elName = el.attr('name');
+                    }else{
+                        elName = el.attr('language');
                     }
+                if (channel) {
+                    el.val(channel[elName]);
                 }
             });
-            if (user) {
-                var select = fragment.find('select'),
-                    i;
-                for (i = 0; i < user.roles.length; i += 1) {
-                    var opt = select.find(
-                        'option[value=' + user.roles[i] + ']'
-                    );
-                    opt.attr('selected', 'selected');
-                }
-                fragment.attr('method', 'POST');
-            } else {
-                fragment.attr('method', 'PUT');
-            }
+            // if (channel) {
+            //     var select = fragment.find('select'),
+            //         i;
+            //     for (i = 0; i < user.roles.length; i += 1) {
+            //         var opt = select.find(
+            //             'option[value=' + user.roles[i] + ']'
+            //         );
+            //         opt.attr('selected', 'selected');
+            //     }
+            //     fragment.attr('method', 'POST');
+            // } else {
+            //     fragment.attr('method', 'PUT');
+            // }
 
-            fragment.submit(function (event) {
-                return me._submitForm(event, me);
-            });
+            // fragment.submit(function (event) {
+            //     return me._submitForm(event, me);
+            // });
             return fragment;
         },
 
@@ -541,45 +561,13 @@ Oskari.clazz.define(
 
             me._initTemplates();
             me.container = me.templates.main.clone(true);
-           //me.fetchUsers(me.container);
+            me.fetchChannels(me.container);
 
             btn.setHandler(function (event) {
                 me._openForm(event, me);
             });
             btn.insertTo(me.container);
             return me.container;
-        },
-
-        handleRoleChange: function (role, operation) {
-            var me = this,
-                select = jQuery(me.container).find('select.roles'),
-                option = select.find('option[value=' + role.id + ']'),
-                selecttemplate = jQuery(me.templates.form).find('select.roles'),
-                optiontemplate = selecttemplate.find(
-                    'option[value=' + role.id + ']'
-                );
-
-            if (operation === 'remove') {
-                option.remove();
-                optiontemplate.remove();
-            }
-            if (operation === 'update') {
-                option.html(role.name);
-                optiontemplate.html(role.name);
-            }
-            if (operation === 'add') {
-                select.append(
-                    '<option value="' + role.id + '">' + role.name + '</option>'
-                );
-                selecttemplate.append(
-                    '<option value="' + role.id + '">' + role.name + '</option>'
-                );
-            }
-        },
-        eventHandlers: {
-            RoleChangedEvent: function (event) {
-                this.handleRoleChange(event.getRole(), event.getOperation());
-            }
         }
 
     }, {

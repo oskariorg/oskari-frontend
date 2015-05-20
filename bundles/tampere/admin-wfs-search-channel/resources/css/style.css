@@ -70,11 +70,20 @@
 .admin-channels form label input {
 	display: block;
 	float: left;
-	width: 15em;
+	width: 14em;
 }
 .admin-channels form label select {
 	display: block;
 	float: left;
 	width: 15em;
+}
+
+.admin-channels div.hidden{
+	display: none;
+}
+
+.admin-channels div.remove--param{
+	left: 6px;
+	top: 11px;
 }
 
