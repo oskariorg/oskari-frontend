@@ -9,6 +9,9 @@ New events are enabled by default:
  - 'AfterAddMarkerEvent' notifies a marker was added and includes an id for the marker
  - 'MarkerClickEvent' notifies a marker being clickd and includes the id of the clicked marker
 
+Now always allows messages from origin starting with 'http://localhost' to help with developing features. 
+Prints warnings if RPC messages come from other than allowed origins.
+
 ### publisher2
 
 *New bundle!* This is the first step of the refactoring of publisher. It is not yet ready for use!
@@ -60,6 +63,17 @@ Now checks correctly buttons focuses.
 ### elf/elf-license
 
 In successfully license conclude now shows same information popup as concluded license.
+
+### elf/geolocator search
+
+Location type based scaling is available when locating the search item
+Default setup is in ELFGEOLOCATOR_CHANNEL.json
+Override setup will be set in oskari-ext.properties
+
+(#) Optional setup for location type based scaling - default is oskari-server\service-search-nls\src\main\resources\fi\nls\oskari\search\channel\ELFGEOLOCATOR_CHANNEL.json
+(#) e.g.
+search.channel.ELFGEOLOCATOR_CHANNEL.service.locationtype.json=/opt/jetty/webapps/root/setup/test.json
+
 
 ### featuredata2/Flyout
 

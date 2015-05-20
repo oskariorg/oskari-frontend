@@ -500,7 +500,8 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
                     'type': result.type,
                     'rank': result.rank,
                     'lon': result.lon,
-                    'lat': result.lat
+                    'lat': result.lat,
+                    'zoomScale': result.zoomScale
                 });
             });
 
