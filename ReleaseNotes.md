@@ -72,7 +72,7 @@ Override setup will be set in oskari-ext.properties
 
 (#) Optional setup for location type based scaling - default is oskari-server\service-search-nls\src\main\resources\fi\nls\oskari\search\channel\ELFGEOLOCATOR_CHANNEL.json
 (#) e.g.
-search.channel.ELFGEOLOCATOR_CHANNEL.service.locationtype.json=/omat/jetty/webapps/root/setup/test.json
+search.channel.ELFGEOLOCATOR_CHANNEL.service.locationtype.json=/opt/jetty/webapps/root/setup/test.json
 
 
 ### featuredata2/Flyout
