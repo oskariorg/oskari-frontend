@@ -15,6 +15,7 @@ Oskari.registerLocalization(
         "popup": {
             "title": "Markera objekt på kartan",
             "instructions": "NOT TRANSLATED",
+            "selectAll": "Select from all layers",
             "link": {
                 "title": "Välj fler funktioner"
             },

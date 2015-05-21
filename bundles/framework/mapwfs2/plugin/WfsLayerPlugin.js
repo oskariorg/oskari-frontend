@@ -99,11 +99,17 @@ Oskari.clazz.define(
                 me
             );
 
+             me.WFSLayerService = Oskari.clazz.create(
+            'Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService', sandbox);
+
+            sandbox.registerService(me.WFSLayerService);
+
             me._io = Oskari.clazz.create(
                 'Oskari.mapframework.bundle.mapwfs2.service.Mediator',
                 me._config,
                 me
             );
+
 
             // register domain model
             mapLayerService = sandbox.getService(
@@ -394,7 +400,7 @@ Oskari.clazz.define(
                     (!me.getConnection().isConnected() ||
                         !sandbox.findMapLayerFromSelectedMapLayers(me.activeHighlightLayers[x].getId()))) {
 
-                    fids = me.activeHighlightLayers[x].getClickedFeatureListIds();
+                    fids = me.activeHighlightLayers[x].getClickedFeatureIds();
                     me.removeHighlightImages(
                         me.activeHighlightLayers[x]
                     );
@@ -414,7 +420,7 @@ Oskari.clazz.define(
 
             layers.forEach(function (layer) {
                 if (layer.hasFeatureData()) {
-                    fids = me.getAllFeatureIds(layer);
+                    fids = me.WFSLayerService.getWFSFeaturesSelections(layer.getId());
                     me.removeHighlightImages(layer);
                     if (me._highlighted) {
                         me.getIO().highlightMapLayerFeatures(
@@ -520,42 +526,23 @@ Oskari.clazz.define(
                 map = sandbox.getMap(),
                 layer = event.getMapLayer(),
                 layerId = layer.getId(),
-                ids = layer.getClickedFeatureListIds(),
                 srs,
-                tmpIds = event.getWfsFeatureIds(),
                 geomRequest = true,
                 wfsFeatureIds = event.getWfsFeatureIds(),
                 zoom;
 
-            if (!event.isKeepSelection()) {
-                layer.setClickedFeatureListIds(wfsFeatureIds);
-                if (wfsFeatureIds.length === 0) {
-                    layer.setClickedFeatureIds(wfsFeatureIds);
-                    layer.setClickedGeometries(wfsFeatureIds);
-                }
-            } else {
-                // Merge tmpIds to ids
-                tmpIds.forEach(function (id) {
-                    if (ids.indexOf(id) === -1) {
-                        ids.push(id);
-                    }
-                });
-            }
+            me.removeHighlightImages(layer);
 
-            // remove highlight image
             if (!event.isKeepSelection()) {
-                me.removeHighlightImages();
+                return;
             }
 
             // if no connection or the layer is not registered, get highlight with URl
-            if (connection.isLazy() && (!connection.isConnected() ||
-                    !sandbox.findMapLayerFromSelectedMapLayers(layerId))) {
-
+            if (connection.isLazy() && (!connection.isConnected() || !sandbox.findMapLayerFromSelectedMapLayers(layerId))) {
                 srs = map.getSrsName();
                 bbox = map.getExtent();
                 zoom = map.getZoom();
 
-                layer.setClickedFeatureListIds(wfsFeatureIds);
                 this.getHighlightImage(
                     layer,
                     srs, [
@@ -568,14 +555,13 @@ Oskari.clazz.define(
                     wfsFeatureIds
                 );
             }
-            if (me._highlighted) {
-                me.getIO().highlightMapLayerFeatures(
-                    layerId,
-                    wfsFeatureIds,
-                    event.isKeepSelection(),
-                    geomRequest
-                );
-            }
+
+            me.getIO().highlightMapLayerFeatures(
+                layerId,
+                wfsFeatureIds,
+                true,
+                geomRequest
+            );
         },
 
         /**
@@ -703,12 +689,12 @@ Oskari.clazz.define(
          * @param {Object} event
          */
         setFilterHandler: function (event) {
-            /// clean selected features lists
-            var layers = this.getSandbox().findAllSelectedMapLayers();
+            var WFSLayerService = this.WFSLayerService;
+                layers = this.getSandbox().findAllSelectedMapLayers();
 
             layers.forEach(function (layer) {
                 if (layer.hasFeatureData()) {
-                    layer.setSelectedFeatures([]);
+                    WFSLayerService.emptyWFSFeatureSelections(layer);
                 }
             });
 
@@ -721,16 +707,17 @@ Oskari.clazz.define(
          */
         setPropertyFilterHandler: function (event) {
             /// clean selected features lists
-            var layers = this.getSandbox().findAllSelectedMapLayers();
+            var me = this,
+                layers = this.getSandbox().findAllSelectedMapLayers();
 
             layers.forEach(function (layer) {
                 if (layer.hasFeatureData() &&
                     layer.getId() === event.getLayerId()) {
-                    layer.setSelectedFeatures([]);
+                    me.WFSLayerService.emptyWFSFeatureSelections(layer);
                 }
             });
 
-            this.getIO().setPropertyFilter(
+            me.getIO().setPropertyFilter(
                 event.getFilters(),
                 event.getLayerId()
             );
