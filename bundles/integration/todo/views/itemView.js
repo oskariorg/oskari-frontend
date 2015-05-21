@@ -54,8 +54,9 @@ define(['text!_bundle/templates/item.html'],function(Template) {
         },
         // If you hit `enter`, we're through editing the item.
         updateOnEnter : function(e) {
-            if(e.keyCode == 13)
+            if(e.keyCode === 13) {
                 this.close();
+            }
         },
         // Remove the item, destroy the model.
         clear : function() {

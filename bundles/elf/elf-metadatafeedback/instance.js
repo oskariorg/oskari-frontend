@@ -255,7 +255,7 @@ function () {
             }
             return ratingSymbols;
         },
-        _updateRating: function(metadata) {
+        _updateRating: function() {
         }
 
     },{

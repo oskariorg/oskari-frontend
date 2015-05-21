@@ -265,7 +265,8 @@ Oskari.clazz.define(
                             return {
                                 id: layer.getId(),
                                 opacity: layer.getOpacity(),
-                                visible: layer.isVisible()
+                                visible: layer.isVisible(),
+                                name : layer.getName()
                             };
                         });
                     }

@@ -11,6 +11,7 @@ New events are enabled by default:
 
 Now always allows messages from origin starting with 'http://localhost' to help with developing features. 
 Prints warnings if RPC messages come from other than allowed origins.
+GetLayers-call now returns the layers UI-name in addition to id, opacity and visibility.
 
 ### publisher2
 
@@ -36,6 +37,14 @@ throughout Oskari code:
 ### analysis
 
 Now adds the PersonalData tab correctly if started after PersonalData bundle. Previously expected to be started before PersonalData.
+
+### admin-layerselector
+
+Fixed theme or organization locale labels when adding new group.
+
+### admin-users
+
+Fixed admin-users bundle user search.
 
 ### catalogue/metadatagatalogue
 
