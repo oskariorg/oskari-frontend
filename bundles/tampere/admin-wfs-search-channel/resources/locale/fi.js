@@ -24,23 +24,14 @@
 				"details-desc-en" : "Kuvaus englanniksi",
 				"details-desc-sv" : "Kuvaus ruotsiksi",
 				"new-params-btn" : "Uusi ominaisuus",
-
-                "firstName": "Etunimi",
-                "lastName": "Sukunimi",
-                "user": "Nimimerkki",
-                "pass": "Salasana",
-                "pass_retype": "Salasana uudestaan",
-                "addRole": "Lisää rooli(t)",
-                "password_mismatch": "Salasanat eivät täsmää.",
-                "password_too_short": "Salasanan pitää olla vähintään 8 merkkiä.",
                 "form_invalid": "Puuttuvia/vääräarvoisia kenttiä",
                 "field_required": "Kenttä \"{fieldName}\" on pakollinen",
-                "confirm_delete": "Haluatko varmasti poistaa käyttäjän {user}?",
+                "confirm_delete": "Haluatko varmasti poistaa kanavan {channel}?",
                 "delete_failed": "Poistaminen epäonnistui",
-                "fetch_failed": "Käyttäjien hakeminen epäonnistui",
-                "save_failed": "Save failed",
-                "noMatch": "No results matched",
-                "selectRole": "Select role"
+                "fetch_failed": "Kanavoiden hakeminen epäonnistui",
+                "layers_failed": "Tasojen hakeminen epäonnistui",
+                "save_failed": "Tallennus epäonnistui",
+                "noMatch": "Haulla ei löytynyt tuloksia",
             }
         },
         "save": "tallenna"

@@ -34,9 +34,6 @@
 	float: right;
 	margin: 5px 5px 5px 0;
 }
-.admin-channels div.add-role {
-	padding: 25px 0px 0px 0px;
-}
 .admin-channels form {
 	margin-bottom: 2em;
 }
@@ -48,6 +45,11 @@
 .admin-channels .no-span-text{
 	margin-left: 14em;
 }
+
+.admin-channels .btn--center{
+	margin-left: 14em;
+}
+
 .admin-channels form fieldset:nth-of-type(2) input:last-child {
 	float: right;
 }
@@ -75,10 +77,10 @@
 .admin-channels form label select {
 	display: block;
 	float: left;
-	width: 15em;
+	width: 14em;
 }
 
-.admin-channels div.hidden{
+.admin-channels div.hidden, input.hidden{
 	display: none;
 }
 

@@ -1,7 +1,7 @@
 /**
  * @class Oskari.tampere.bundle.tampere.admin-wfs-search-channel.Channels
  *
- * Renders the "admin users" flyout.
+ * Renders the "admin channels" flyout.
  *
  */
 Oskari.clazz.define(
@@ -74,7 +74,7 @@ Oskari.clazz.define(
                 '           <div class="details--wrapper"></div>' +
                 '    <label>' +
                 '        <span></span>' +
-                '        <select name="choose-param-for-search" required="required"></select>' +
+                '        <select name="choose-param-for-search" required="required"><option value="te">te</option></select>' +
                 '        <div class="remove--param icon-close hidden"></div>' +
                 '    </label>' +
                 '</fieldset>' +
@@ -89,7 +89,7 @@ Oskari.clazz.define(
                 '        <input type="text" name="details-topic-'+item+'" language="details-name-'+item+'" required="required" />' +
                 '    </label>' +
                 '    <label>' +
-                '        <input type="text" class="no-span-text" language="details-desc-'+item+'" required="required" />' +
+                '        <input type="text" name="details-desc-'+item+'" class="no-span-text" language="details-desc-'+item+'" required="required" />' +
                 '    </label>'
                 );
                 me.templates.form.find('.details--wrapper').append(me.templates.form.detailinputs);
@@ -117,7 +117,7 @@ Oskari.clazz.define(
                 'Oskari.userinterface.component.Button'
             );
             btn.setTitle(me._getLocalization("new-params-btn"));
-            btn.addClass('no-span-text');
+            btn.addClass('btn--center');
             jQuery(btn.getElement()).click(
                 function (event) {
                     var newParams = jQuery(this).prev("label").clone(true);
@@ -137,9 +137,10 @@ Oskari.clazz.define(
             btn = Oskari.clazz.create(
                 'Oskari.userinterface.component.buttons.DeleteButton'
             );
+            btn.addClass('delete--channel hidden');
             jQuery(btn.getElement()).click(
                 function (event) {
-                    me._deleteUser(event, me);
+                    me._deleteChannel(event, me);
                 }
             );
             btn.insertTo(buttonFieldset);
@@ -175,65 +176,71 @@ Oskari.clazz.define(
             );
             btn.insertTo(me.templates.item.find('div.header'));
             me.templates.main.append(me.templates.search);
-            //me.createRolesSelect();
+            me.createWfsLayerSelect();
         },
         /**
-         * Create roles drop down select
-         *
-         * @method createRolesSelect
-         * @param container parent element
-         * @param data contains all the roles
+         * @method [createWfsLayerSelect], reads wfs layers from Oskari and loops them into select
+         * @return {[type]}
          */
-        // createRolesSelect: function () {
-        //     var me = this;
-        //     // Indicators' select container etc.
-        //     me.templates.roleSelect = jQuery(
-        //         '<div class="role-cont">' +
-        //         '  <div class="role selector-cont">' +
-        //         '    <span>' + me._getLocalization('selectRole') + '</span>' +
-        //         '    <select name="roles" multiple class="roles">' +
-        //         '      <option value=""></option>' +
-        //         '    </select>' +
-        //         '  </div>' +
-        //         '</div>'
-        //     );
-        //     var sel = me.templates.roleSelect.find('select'),
-        //         i,
-        //         ilen,
-        //         roleData,
-        //         value,
-        //         name,
-        //         opt,
-        //         roles = me.instance.storedRoles;
+        createWfsLayerSelect: function (){
+            var me = this;
+            var epsg = this.sandbox.getMap().getSrsName(),
+                    ajaxUrl = this.sandbox.getAjaxUrl(),
+                    timeStamp = new Date().getTime();
 
-        //     for (i = 0, ilen = roles.length; i < ilen; i += 1) {
-        //         roleData = roles[i];
+            jQuery.ajax({
+                type: "GET",
+                dataType: 'json',
+                data : {
+                    timestamp : timeStamp,
+                    epsg : epsg
+                },
+                beforeSend: function (x) {
+                    if (x && x.overrideMimeType) {
+                        x.overrideMimeType("application/json;charset=UTF-8");
+                    }
+                },
+                url: ajaxUrl + 'action_route=GetMapLayers&lang=' + Oskari.getLang(),
+                success: function (data) {
+                    var allLayers = data.layers;
+                    var wfsLayers = jQuery.grep(allLayers, function(layer,index){
+                        return layer.type.toLowerCase() === 'wfslayer';
+                    });
 
-        //         if (roleData.hasOwnProperty('id')) {
-        //             value = roleData.id;
-        //             name = roleData.name;
-        //             opt = jQuery('<option value="' + value + '">' + name + '</option>');
-        //             sel.append(opt);
-        //         }
-        //     }
+                    jQuery.each(wfsLayers, function(index, layer){
+                        me.templates.form.find('select[name=choose-wfs-layer]').append(jQuery('<option>', { 
+                            value: layer.id,
+                            text : layer.name[Oskari.getLang()]
+                        }));
+                    });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    var error = me._getErrorText(jqXHR, textStatus, errorThrown);
 
-        //     var selectorsContainer = me.templates.form.find('div.roleSelect');
-        //     selectorsContainer.append(me.templates.roleSelect);
-        // },
+                    me._openPopup(
+                        me._getLocalization('layers_failed'),
+                        error
+                    );
+                }
+            });
+        },
 
-//          * @method fetchUsers
-//          */
+        /**
+         * [fetchChannels fetchChannels]
+         * @param  {[type]}
+         * @return {[type]}
+         */
          fetchChannels: function (container) {
             // Remove old list from container
             container.find('ul').remove();
-            // get users with ajax
+            // get channels with ajax
             var me = this;
 
             var data = {"channels":[
             {
                 "id":1,
                 "choose-wfs-layer": 1,
-                "details-topic-fi": "Testi",
+                "details-topic-fi": "Testi Topic",
                 "details-desc-fi": "Description",
                 "details-topic-sv": "Testi sv",
                 "details-desc-sv": "Description sv",
@@ -266,14 +273,14 @@ Oskari.clazz.define(
         _createList: function (me, channels, filter) {
             var list = me.templates.list.clone(),
                 i,
-                user,
+                channel,
                 hasFilter = filter !== null && filter !== undefined && filter.length > 0,
                 matches;
 
             me.channels = channels;
             for (i = 0; i < channels.length; i += 1) {
                 channel = channels[i];
-                matches = !hasFilter || channel.name_fi.contains(filter);
+                matches = !hasFilter || channel["details-topic-"+Oskari.getLang()].contains(filter);
                 if (matches) {
                     list.append(
                         me._populateItem(
@@ -317,18 +324,18 @@ Oskari.clazz.define(
         },
 
         /**
-         * @method _deleteUser
-         * Gets user id based on event target and deletes it
+         * @method _deleteChannel
+         * Gets channel id based on event target and deletes it
          */
-        _deleteUser: function (event, me) {
+        _deleteChannel: function (event, me) {
             var item = jQuery(event.target).parents('li'),
                 uid = parseInt(item.attr('data-id')),
-                user = me._getUser(uid);
+                channel = me._getChannel(uid);
 
-            if (!window.confirm(me._getLocalization('confirm_delete').replace('{user}', user.user))) {
+            if (!window.confirm(me._getLocalization('confirm_delete').replace('{channel}', channel["details-topic-"+Oskari.getLang()]))) {
                 return;
             }
-            // It's more than likely that the delete will succeed...
+
             item.hide();
             jQuery.ajax({
                 type: 'DELETE',
@@ -343,7 +350,7 @@ Oskari.clazz.define(
                 },
                 success: function (data) {
                     item.remove();
-                    me.fetchUsers(me.container);
+                    me.fetchChannels(me.container);
                 }
             });
         },
@@ -364,7 +371,7 @@ Oskari.clazz.define(
 
         /**
          * @method _getChannel
-         * Gets user by id
+         * Gets channel by id
          */
         _getChannel: function (uid) {
             var i;
@@ -392,6 +399,7 @@ Oskari.clazz.define(
                 target.hide();
                 me._populateForm(form, me._getChannel(parseInt(uid, 10)));
                 item.append(form);
+                form.find('.delete--channel').removeClass('hidden');
             } else {
                 target.hide();
                 me._populateForm(form, null);
@@ -433,14 +441,7 @@ Oskari.clazz.define(
                     );
                 }
             });
-            // check that password and password_retype have matching values
-            pass = form.find('input[name=pass]').val();
-            if (pass !== form.find('input[name=pass_retype]').val()) {
-                errors.push(me._getLocalization('password_mismatch'));
-            }
-            if (pass.length > 0 && pass.length < 8) {
-                errors.push(me._getLocalization('password_too_short'));
-            }
+
             if (errors.length) {
                 me._openPopup(
                     me._getLocalization('form_invalid'),
@@ -463,42 +464,43 @@ Oskari.clazz.define(
         _submitForm: function (event, me) {
             event.preventDefault(); // We don't want the form to submit
             var frm = jQuery(event.target);
-            if (me._formIsValid(frm, me)) {
+            console.dir(frm.serialize());
+           // if (me._formIsValid(frm, me)) {
                 /**
                 if (data.roles )
                     */
-                jQuery.ajax({
-                    type: frm.attr('method'),
-                    url: me.sandbox.getAjaxUrl() + me.instance.conf.restUrl,
-                    data: frm.serialize(),
-                    success: function (data) {
-                        me._closeForm(frm);
-                        // FIXME fetch users
-                        me.fetchUsers(me.container);
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        var error = me._getErrorText(
-                            jqXHR,
-                            textStatus,
-                            errorThrown
-                        );
-                        me._openPopup(
-                            me._getLocalization('save_failed'),
-                            error
-                        );
-                    }
-                });
-            }
-            return false;
+                // jQuery.ajax({
+                //     type: frm.attr('method'),
+                //     url: me.sandbox.getAjaxUrl() + me.instance.conf.restUrl,
+                //     data: frm.serialize(),
+                //     success: function (data) {
+                //         me._closeForm(frm);
+                //         // FIXME fetch channels
+                //         me.fetchChannels(me.container);
+                //     },
+                //     error: function (jqXHR, textStatus, errorThrown) {
+                //         var error = me._getErrorText(
+                //             jqXHR,
+                //             textStatus,
+                //             errorThrown
+                //         );
+                //         me._openPopup(
+                //             me._getLocalization('save_failed'),
+                //             error
+                //         );
+                //     }
+                // });
+           // }
+            //return false;
         },
 
         /**
          * @method _populateForm
-         * Populates given form with given user's data.
+         * Populates given form with given channel's data.
          */
         _populateForm: function (fragment, channel) {
             var me = this;
-            fragment.find('fieldset:first-child input').each(function (index) {
+            fragment.find('fieldset:first-child input').not(':input[type=button]').each(function (index) {
                 var el = jQuery(this), elName = "";
                     if(!el.hasClass('no-span-text')){
                         elName = el.attr('name');
@@ -509,23 +511,23 @@ Oskari.clazz.define(
                     el.val(channel[elName]);
                 }
             });
-            // if (channel) {
-            //     var select = fragment.find('select'),
-            //         i;
-            //     for (i = 0; i < user.roles.length; i += 1) {
-            //         var opt = select.find(
-            //             'option[value=' + user.roles[i] + ']'
-            //         );
-            //         opt.attr('selected', 'selected');
-            //     }
-            //     fragment.attr('method', 'POST');
-            // } else {
-            //     fragment.attr('method', 'PUT');
-            // }
+            if (channel) {
+                // var select = fragment.find('select'),
+                //     i;
+                // for (i = 0; i < user.roles.length; i += 1) {
+                //     var opt = select.find(
+                //         'option[value=' + user.roles[i] + ']'
+                //     );
+                //     opt.attr('selected', 'selected');
+                // }
+                fragment.attr('method', 'POST');
+            } else {
+                fragment.attr('method', 'PUT');
+            }
 
-            // fragment.submit(function (event) {
-            //     return me._submitForm(event, me);
-            // });
+            fragment.submit(function (event) {
+                return me._submitForm(event, me);
+            });
             return fragment;
         },
 
