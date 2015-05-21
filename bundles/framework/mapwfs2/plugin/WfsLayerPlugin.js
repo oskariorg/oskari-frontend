@@ -928,7 +928,7 @@ Oskari.clazz.define(
                 }
             } else { // "normal"
                 BBOX = boundsObj.toArray(false);
-                bboxKey = BBOX.join(',');
+                bboxKey = this.bboxkeyStrip(BBOX);
                 style = layer.getCurrentStyle().getName();
                 tileToUpdate = me._tilesToUpdate.mget(layerId,'',bboxKey);
 
@@ -986,7 +986,7 @@ Oskari.clazz.define(
                         bounds = this.adjustBounds(bounds);
 
                         var BBOX = bounds.toArray(false),
-                            bboxKey = BBOX.join(','),
+                            bboxKey = this._plugin.bboxkeyStrip(BBOX);
                             layer = this._plugin.getSandbox().findMapLayerFromSelectedMapLayers(
                                 this.layerId
                             ),
@@ -1085,7 +1085,8 @@ Oskari.clazz.define(
                         this._plugin._tiles[tile.id] = tile;
 
                         var BBOX = bounds.toArray(false),
-                            bboxKey = BBOX.join(',');
+                            me = this,
+                            bboxKey = this._plugin.bboxkeyStrip(BBOX);
 
                         this._plugin._tilesToUpdate.mput(
                             this.layerId,
@@ -1313,11 +1314,12 @@ Oskari.clazz.define(
                 style = layer.getCurrentStyle().getName(),
                 result = [],
                 i,
+                me = this,
                 bboxKey,
                 dataForTile;
 
             for (i = 0; i < grid.bounds.length; i += 1) {
-                bboxKey = grid.bounds[i].join(',');
+                bboxKey = me.bboxkeyStrip(grid.bounds[i]);
                 dataForTile = this._tileData.mget(layerId, style, bboxKey);
                 if (!dataForTile) {
                     result.push(grid.bounds[i]);
@@ -1521,6 +1523,20 @@ Oskari.clazz.define(
          */
         setHighlighted: function (highlighted) {
             this._highlighted = highlighted;
+        },
+        /**
+         * Strip bbox for unique key because of some inaccucate cases
+         * OL computation (init grid in tilesizes)  is inaccurate in last decimal
+         * @param bbox
+         * @returns {string}
+         */
+        bboxkeyStrip: function (bbox) {
+            var stripbox = [];
+            if (!bbox) return;
+            for (var i = bbox.length; i--;) {
+                stripbox[i] = bbox[i].toPrecision(13);
+            }
+            return stripbox.join(',');
         }
     }, {
         extend: ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],

@@ -2502,12 +2502,7 @@ D         * @param {Object} classInfo ClassInfo
             isSingleton = metas.Singleton;
 
             if (!recData.hasOwnProperty('bundleinstancename')) {
-                if (console && console.warn) {
-                    console.warn('Bundle is missing bundleinstancename, ' +
-                            'using bundlename in its place.',
-                        recData
-                        );
-                }
+                // Bundle is missing bundleinstancename, using bundlename in its place.
                 bundleinstancename = bundlename;
             }
 
