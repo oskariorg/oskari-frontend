@@ -243,9 +243,9 @@ Oskari.clazz.define(
             me.users = users;
             for (i = 0; i < users.length; i += 1) {
                 user = users[i];
-                matches = !hasFilter || user.firstName.toLowerCase().indexOf(filter.toLowerCase()) > -1 || 
+                matches = !hasFilter || user.firstName.toLowerCase().indexOf(filter.toLowerCase()) > -1 ||
                     user.lastName.toLowerCase().indexOf(filter.toLowerCase()) > -1 || user.user.toLowerCase().indexOf(filter.toLowerCase()) > -1;
- 
+
                 if (matches) {
                     list.append(
                         me._populateItem(

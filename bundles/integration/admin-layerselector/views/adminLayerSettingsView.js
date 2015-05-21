@@ -84,7 +84,6 @@ define([
                         me.render();
                     });
                 }
-                
 
                 this.supportedTypes = this.options.supportedTypes;
                 this.render();
@@ -564,7 +563,7 @@ define([
                     var lang = this.id.substring(10, this.id.indexOf('-name'));
                     data['name_' + lang] = this.value;
                 });
-                
+
                 form.find('[id$=-title]').filter('[id^=add-layer-]').each(function () {
                     var lang = this.id.substring(10, this.id.indexOf('-title'));
                     data['title_' + lang] = this.value;

@@ -30,11 +30,9 @@ if (!Function.prototype.bind) {
                 // exted given object (layer) with this one
                 if (model) {
                     for (var key in model) {
-                        if(model[key]) {
+                        if(model[key] && typeof model[key] === 'function') {
                             var prop = model[key];
-                            if (typeof prop === 'function') {
-                                this[key] = prop.bind(this.attributes);
-                            }
+                            this[key] = prop.bind(this.attributes);
                         }
                     }
                 }
@@ -324,7 +322,7 @@ if (!Function.prototype.bind) {
                         langList.push(lang);
                     }
                 });
-                
+
                 return langList;
             }
         });

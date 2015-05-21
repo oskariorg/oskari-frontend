@@ -324,7 +324,7 @@
              */
             _mapLayersForGroup: function (group, groupingMethod) {
                 _.each(this.layers.models, function(layer) {
-                    if (layer.getMetaType && 
+                    if (layer.getMetaType &&
                         (layer.getMetaType() === 'published' ||
                         layer.getMetaType() === 'myplaces')) {
                         // skip published layers
