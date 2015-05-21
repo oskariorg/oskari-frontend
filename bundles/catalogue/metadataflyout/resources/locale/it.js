@@ -1,28 +1,29 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "it",
     "key": "catalogue.bundle.metadataflyout",
     "value": {
-        "title": "Metadata",
+        "title": "Metadati",
         "desc": "",
         "layer": {
-            "name": "Metadata",
+            "name": "Metadati",
             "description": "",
-            "orgName": "Metadata catalogue",
-            "inspire": "Metadata"
+            "orgName": "Catalogo dei metadati",
+            "inspire": "Metadati"
         },
         "flyout": {
-            "title": "Metadata",
-            "abstract": "Basic information",
-            "inspire": "Inspire metadata",
+            "title": "Metadati",
+            "abstract": "Informazioni di base",
+            "inspire": "Metadati inspire",
             "jhs": "ISO 19115 metadata",
+            "quality": "NOT TRANSLATED",
             "xml": "ISO 19139 XML file",
-            "quality":"NOT TRANSLATED",
-            "map": "Geographic extent",
-            "pdf": "Printout",
-            "select_metadata_prompt": "Select metadata by clicking the icons.",
-            "metadata_printout_title": "METADATA PRINTOUT",
-            "linkto": "Link to this metadata",
-            "notFound": "Metadata was not found",
+            "map": "Estensione geografica",
+            "pdf": "Stampa",
+            "select_metadata_prompt": "Scegli metadati cliccando sulle icone.",
+            "metadata_printout_title": "STAMPA DEI METADATI",
+            "linkto": "Collegamento a questo metadato",
+            "notFound": "Metadato non trovato",
             "codeLists": {
                 "gmd:MD_CharacterSetCode": {
                     "ucs2": {
@@ -37,7 +38,6 @@ Oskari.registerLocalization({
                         "label": "UTF7",
                         "description": "7-bit variable size UCS Transfer Format, based on ISO/IEC 10646"
                     },
-
                     "utf8": {
                         "label": "UTF8",
                         "description": "8-bit variable size UCS Transfer Format, based on ISO/IEC 10646"
@@ -108,275 +108,275 @@ Oskari.registerLocalization({
                     },
                     "jis": {
                         "label": "JIS",
-                        "description": "Japanese code set used for electronic transmission"
+                        "description": "Serie di codici giapponesi utilizzata per la trasmissione elettronica"
                     },
                     "shiftJIS": {
                         "label": "Shift JIS",
-                        "description": "Japanese code set used on MS-DOS machines"
+                        "description": "Serie di codici giapponesi utilizzata su macchine MS- DOS"
                     },
                     "eucJP": {
                         "label": "EUC JP",
-                        "description": "Japanese code set used on UNIX based machines"
+                        "description": "Serie di codici giapponesi utilizzata su macchine UNIX"
                     },
                     "usAscii": {
                         "label": "US ASCII",
-                        "description": "United States ASCII code set (ISO 646 US)"
+                        "description": "Serie di codici ASCII degli Stati Uniti (ISO 646 US)"
                     },
                     "ebcdic": {
                         "label": "EBCDIC",
-                        "description": "IBM mainframe code set"
+                        "description": "Serie di codici di IBM mainframe"
                     },
                     "eucKR": {
                         "label": "EUC KR",
-                        "description": "Korean code set"
+                        "description": "Serie di codici Coreani"
                     },
                     "big5": {
                         "label": "Big 5",
-                        "description": "Traditional Chinese code set used in Taiwan, Hong Kong of China and other areas"
+                        "description": "Serie tradizionale di codici cinesi utilizzati a Taiwan, Hong Kong e in altre aree"
                     },
                     "GB2312": {
                         "label": "GB2312",
-                        "description": "Simplified Chinese code set"
+                        "description": "Serie semplificata di codici cinesi"
                     }
                 },
                 "gmd:MD_ClassificationCode": {
                     "unclassified": {
-                        "label": "Unclassified",
-                        "description": "Available for general disclosure"
+                        "label": "Non classificato",
+                        "description": "Disponibile per la divulgazione generale"
                     },
                     "restricted": {
-                        "label": "Restricted",
-                        "description": "Not for general disclosure"
+                        "label": "Limitato",
+                        "description": "Non disponibile per la divulgazione generale"
                     },
                     "confidential": {
-                        "label": "Confidential",
-                        "description": "Available for someone who can be entrusted with information"
+                        "label": "Riservato",
+                        "description": "Disponibile per qualcuno a cui possano essere affidate informazioni"
                     },
                     "secret": {
-                        "label": "Secret",
-                        "description": "Kept or meant to be kept private, unknown, or hidden from all but a select group of people"
+                        "label": "Segreto",
+                        "description": "Mantenuto o destinato ad essere mantenuto privato, sconosciuto, o nascosto a tutti tranne un gruppo di persone selezionate"
                     },
                     "topSecret": {
-                        "label": "Top secret",
-                        "description": "Of the highest secrecy"
+                        "label": "Di massima segretezza",
+                        "description": "Massima riservatezza"
                     }
                 },
                 "gmd:CI_DateTypeCode": {
                     "creation": {
-                        "label": "Creation",
-                        "description": "Date identifies when the resource was brought into existence."
+                        "label": "Creazione",
+                        "description": "La data identifica quando la risorsa è stata creata"
                     },
                     "publication": {
-                        "label": "Publication",
-                        "description": "Date identifies when the resource was issued."
+                        "label": "Pubblicazione",
+                        "description": "La data identifica quando la risorsa è stata pubblicata"
                     },
                     "revision": {
-                        "label": "Revision",
-                        "description": "Date identifies when the resource was examined or re-examined and improved or amended."
+                        "label": "Revisione",
+                        "description": "La data identifica quando la risorsa è stata esaminata, riesaminata, migliorata o modificata"
                     }
                 },
                 "gmd:MD_RestrictionCode": {
                     "copyright": {
-                        "label": "Copyright",
-                        "description": "Exclusive right to the publication, production, or sale of the rights to a literary, dramatic, musical, or artistic work, or to the use of a commercial print or label, granted by law for a specified period of time to an author, composer, artist, distributor"
+                        "label": "Diritti d'autore",
+                        "description": "Diritto esclusivo di pubblicazione, produzione o vendita dei diritti di un'opera letteraria, teatrale, musicale o artistica, o  d' uso di una stampa commerciale o un'etichetta, concesso dalla legge ad un autore, compositore, artista o distributore per un periodo di tempo definito."
                     },
                     "patent": {
-                        "label": "Patent",
-                        "description": "Government has granted exclusive right to make, sell, use or license an invention or discovery"
+                        "label": "Brevetto",
+                        "description": "Lo Stato ha concesso il diritto esclusivo di realizzare, vendere, utilizzare o concedere in licenza un 'invenzione o una scoperta"
                     },
                     "patentPending": {
-                        "label": "Pending patent",
-                        "description": "Produced or sold information awaiting a patent"
+                        "label": "In attesa di brevetto",
+                        "description": "Informazione prodotta o venduta in attesa di un brevetto"
                     },
                     "trademark": {
-                        "label": "Trademark",
-                        "description": "A name, symbol, or other device identifying a product, officially registered and legally restricted to the use of the owner or manufacturer"
+                        "label": "Marchio",
+                        "description": "Nome, simbolo o altro dispositivo che identifica un prodotto, ufficialmente registrato e il cui uso è legalmente esclusivo del proprietario o produttore"
                     },
                     "license": {
-                        "label": "License",
-                        "description": "Formal permission to do something"
+                        "label": "Licenza",
+                        "description": "Permesso formale di fare qualcosa"
                     },
                     "intellectualPropertyRights": {
-                        "label": "Intellectual property rights",
-                        "description": "Rights to financial benefit from and control of distribution of non-tangible property that is a result of creativity"
+                        "label": "Diritti di proprietà intellettuale",
+                        "description": "Diritto al beneficio economico e al controllo della distribuzione della proprietà immateriale risultato della creatività"
                     },
                     "restricted": {
-                        "label": "Restricted",
-                        "description": "Withheld from general circulation or disclosure"
+                        "label": "Limitato",
+                        "description": "Trattenuto dalla circolazione generale o divulgazione"
                     },
                     "otherRestrictions": {
-                        "label": "Other restrictions",
-                        "description": "Limitation not listed"
+                        "label": "Altre restrizioni",
+                        "description": "Limitazioni non elencate"
                     }
                 },
                 "gmd:MD_ScopeCode": {
                     "attribute": {
-                        "label": "Attribute",
-                        "description": "Information applies to the attribute class"
+                        "label": "Attributo",
+                        "description": "L'informazione si applica alla classe dell'attributo"
                     },
                     "attributeType": {
-                        "label": "Attribute type",
-                        "description": "Information applies to the characteristic of a feature"
+                        "label": "Tipo di attributo",
+                        "description": "L'informazione si applica alla caratteristica dell'elemento"
                     },
                     "collectionHardware": {
-                        "label": "Collection hardware",
-                        "description": "Information applies to the collection hardware class"
+                        "label": "?",
+                        "description": "?"
                     },
                     "collectionSession": {
-                        "label": "Collection session",
-                        "description": "Information applies to the collection session"
+                        "label": "?",
+                        "description": "?"
                     },
                     "dataset": {
                         "label": "Dataset",
-                        "description": "Information applies to the dataset"
+                        "description": "L'informazione si applica al dataset"
                     },
                     "series": {
-                        "label": "Series",
-                        "description": "Information applies to the series"
+                        "label": "Serie",
+                        "description": "L'informazione si applica alle serie"
                     },
                     "nonGeographicDataset": {
-                        "label": "Non geographic dataset",
-                        "description": "Information applies to non-geographic data"
+                        "label": "Dataset non geografico",
+                        "description": "L'informazione si applica al dataset non geografico"
                     },
                     "dimensionGroup": {
-                        "label": "Dimension group",
-                        "description": "Information applies to a dimension group"
+                        "label": "?",
+                        "description": "?"
                     },
                     "feature": {
-                        "label": "Feature",
-                        "description": "Information applies to a feature"
+                        "label": "Elemento",
+                        "description": "L'informazione si applica all'elemento"
                     },
                     "featureType": {
-                        "label": "Feature type",
-                        "description": "Information applies to a feature type"
+                        "label": "Tipo di elemento",
+                        "description": "L'informazione si applica al tipo di elemento"
                     },
                     "propertyType": {
-                        "label": "Property type",
-                        "description": "Information applies to a property type"
+                        "label": "Tipo di proprietà",
+                        "description": "L'informazione si applica al tipo di proprietà"
                     },
                     "fieldSession": {
-                        "label": "Field session",
-                        "description": "Information applies to a field session"
+                        "label": "NOT TRANSLATED",
+                        "description": "NOT TRANSLATED"
                     },
                     "software": {
                         "label": "Software",
-                        "description": "Information applies to a computer program or routine"
+                        "description": "L'informazione si applica ad un programma o ad una procedura"
                     },
                     "service": {
-                        "label": "Service",
-                        "description": "Information applies to a capability which a service provider entity makes available to a service user entity through a set of interfaces that define a behaviour, such as a use case"
+                        "label": "Servizio",
+                        "description": "L'informazione si applica alla capacità che un fornitore di servizi di mette a disposizione di un utente del servizio attraverso un insieme di interfacce che definiscono un comportamento, come un caso di utilizzo"
                     },
                     "model": {
-                        "label": "Model",
-                        "description": "Information applies to a copy or imitation of an existing or hypothetical object"
+                        "label": "Modello",
+                        "description": "L'informazioni si applica ad una copia o imitazione di un oggetto esistente o ipotetico"
                     },
                     "tile": {
-                        "label": "Tile",
-                        "description": "Information applies to a tile, a spatial subset of geographic data"
+                        "label": "Sezione",
+                        "description": "L'informazione si applica ad una sezione, cioè un sottoinsieme spaziale di dati geografici"
                     }
                 },
                 "gmd:MD_SpatialRepresentationTypeCode": {
                     "vector": {
-                        "label": "Vector",
-                        "description": "Vector data is used to represent geographic data"
+                        "label": "Vettore",
+                        "description": "Il vettore è utilizzato per rappresentare i dati geografici"
                     },
                     "grid": {
-                        "label": "Grid",
-                        "description": "Grid data is used to represent geographic data"
+                        "label": "Griglia",
+                        "description": "La griglia è utilizzata per rappresentare i dati geografici"
                     },
                     "textTable": {
-                        "label": "Text, table",
-                        "description": "Textual or tabular data is used to represent geographic data"
+                        "label": "Testo, Tabella",
+                        "description": "Dati in forma di tabella o testuali sono usati per rappresentare dati geografici"
                     },
                     "tin": {
                         "label": "TIN",
                         "description": "Triangulated irregular network"
                     },
                     "stereoModel": {
-                        "label": "Stereo model",
-                        "description": "Three-dimensional view formed by the intersecting homologous rays of an overlapping pair of images"
+                        "label": "Modello stereoscopico",
+                        "description": "Vista tridimensionale formata dalle intersezioni di raggi omologhi di una coppia di immagini sovrapposte"
                     },
                     "video": {
                         "label": "Video",
-                        "description": "Scene from a video recording"
+                        "description": "Scene da una registrazione video"
                     }
                 },
                 "gmd:MD_TopicCategoryCode": {
                     "farming": {
-                        "label": "Farming",
-                        "description": "Rearing of animals and/or cultivation of plants. Examples: agriculture, irrigation, aquaculture, plantations, herding, pests and diseases affecting crops and livestock"
+                        "label": "Agricoltura",
+                        "description": "Allevamento di animali e/o coltivazione di piante. Esempi: agricoltura, irrigazione, acquacoltura, piantagioni, pastorizia, parassiti e malattie che colpiscono le colture e il bestiame"
                     },
                     "biota": {
                         "label": "Biota",
-                        "description": "Flora and/or fauna in natural environment. Examples: wildlife, vegetation, biological sciences, ecology, wilderness, sealife, wetlands, habitat"
+                        "description": "Flora e/o fauna nell'ambiente naturale. Esempi: fauna selvatica, vegetazione, scienze biologiche, ecologia, area selvatica, forme di vita marina, zone umide, habitat"
                     },
                     "boundaries": {
-                        "label": "Boundaries",
-                        "description": "Legal land descriptions. Examples: political and administrative boundaries"
+                        "label": "Confini",
+                        "description": "Informazioni geopolitiche. Esempi: confini politici e amministrativi"
                     },
                     "climatologyMeteorologyAtmosphere": {
-                        "label": "Climatology, meteorology, atmosphere",
-                        "description": "Processes and phenomena of the atmosphere. Examples: cloud cover, weather, climate, atmospheric conditions, climate change, precipitation"
+                        "label": "Climatologia, meteorologia, atmosfera",
+                        "description": "Processi e fenomeni dell'atmosfera. Esempi: copertura nuvolosa, tempo, clima, condizioni atmosferiche, cambiamento climatico, precipitazioni"
                     },
                     "economy": {
-                        "label": "Economy",
-                        "description": "Economic activities, conditions and employment. Examples: production, labour, revenue, commerce, industry, tourism and ecotourism, forestry, fisheries, commercial or subsistence hunting, exploration and exploitation of resources such as minerals, oil and gas"
+                        "label": "Economia",
+                        "description": "Attività, condizioni e occupazioni economiche. Esempi: produzione, lavoro, reddito, commercio, industria, turismo e ecoturismo, silvicoltura, pesca, caccia commerciale o di sussistenza, esplorazione e sfruttamento delle risorse minerali, petrolio e gas"
                     },
                     "elevation": {
-                        "label": "Elevation",
-                        "description": "Height above or below sea level. Examples: altitude, bathymetry, digital elevation models, slope, derived products"
+                        "label": "Altitudine",
+                        "description": "Altezza sopra o sotto il livello del mare. Esempi: altitudine, batimetria, modelli digitali di elevazione, pendenza, prodotti derivati"
                     },
                     "environment": {
-                        "label": "Environment",
-                        "description": "Environmental resources, protection and conservation. Examples: environmental pollution, waste storage and treatment, environmental impact assessment, monitoring environmental risk, nature reserves, landscape"
+                        "label": "Ambiente",
+                        "description": "Risorse, protezione e conservazione dell'ambiente. Esempi: inquinamento ambientale, stoccaggio e trattamento dei rifiuti, valutazione di impatto ambientale, monitoraggio del rischio ambientale, riserve naturali, paesaggio"
                     },
                     "geoscientificInformation": {
-                        "label": "Geoscientific information",
-                        "description": "Information pertaining to earth sciences. Examples: geophysical features and processes, geology, minerals, sciences dealing with the composition, structure and origin of the earth s rocks, risks of earthquakes, volcanic activity, landslides, gravity information, soils, permafrost, hydrogeology, erosion"
+                        "label": "Informazioni geoscientifiche",
+                        "description": "Informazioni riguardanti le scienze della terra. Esempi: caratteristiche e processi geofisici, geologia, minerali, scienze che si occupano della composizione, della struttura e dell'origine delle rocce della terra, rischio di terremoti, attività vulcaniche, frane, informazioni sulla gravità, suoli, permafrost, idrogeologia, erosione"
                     },
                     "health": {
-                        "label": "Health",
-                        "description": "Health, health services, human ecology, and safety. Examples: disease and illness, factors affecting health, hygiene, substance abuse, mental and physical health, health services"
+                        "label": "Salute",
+                        "description": "Salute, servizi sanitari, ecologia umana, e sicurezza. Esempi: patologie e malattie, fattori che influenzano la salute, igiene, abuso di sostanze, salute mentale e fisica, servizi sanitari"
                     },
                     "imageryBaseMapsEarthCover": {
-                        "label": "Imagery base maps earth cover",
-                        "description": "Base maps. Examples: land cover, topographic maps, imagery, unclassified images, annotations"
+                        "label": "Immagini di sfondo",
+                        "description": "Mappe di base. Esempi: copertura del suolo, carte topografiche, immagini, immagini non classificate, annotazioni"
                     },
                     "intelligenceMilitary": {
-                        "label": "Intelligence military",
-                        "description": "Military bases, structures, activities. Examples: barracks, training grounds, military transportation, information collection"
+                        "label": "Sicurezza militare",
+                        "description": "Basi militari, strutture, attività. Esempi: caserme, campi di allenamento, trasporto militare, raccolta di informazioni"
                     },
                     "inlandWaters": {
-                        "label": "Inland waters",
-                        "description": "Inland water features, drainage systems and their characteristics. Examples: rivers and glaciers, salt lakes, water utilization plans, dams, currents, floods, water quality, hydrographic charts"
+                        "label": "Acque interne",
+                        "description": "Caratteristiche delle acque interne, sistemi di drenaggio e loro caratteristiche. Esempi: fiumi e ghiacciai, laghi salati, piani di utilizzo di acqua, dighe, correnti, inondazioni, qualità dell'acqua, carte idrografiche"
                     },
                     "location": {
-                        "label": "Location",
-                        "description": "Positional information and services. Examples: addresses, geodetic networks, control points, postal zones and services, place names"
+                        "label": "Posizione",
+                        "description": "Informazioni e servizi di posizionamento. Esempi: indirizzi, reti geodetiche, punti di controllo, zone e servizi postali, nomi di località"
                     },
                     "oceans": {
-                        "label": "Oceans",
-                        "description": "Features and characteristics of salt water bodies (excluding inland waters). Examples: tides, tidal waves, coastal information, reefs"
+                        "label": "Oceani",
+                        "description": "Elementi e caratteristiche dei corpi idrici salati (escluse le acque interne). Esempi: maree, onde di marea, informazioni sulla costa, scogliere"
                     },
                     "planningCadastre": {
-                        "label": "Planning cadastre",
-                        "description": "Information used for appropriate actions for future use of the land. Examples: land use maps, zoning maps, cadastral surveys, land ownership"
+                        "label": "Catasto",
+                        "description": "Informazioni utilizzate per azioni adeguate all'uso futuro del territorio. Esempi: mappe di uso del suolo, mappe di zonizzazione, indagini catastali, proprietà fondiaria"
                     },
                     "society": {
-                        "label": "Society",
-                        "description": "Characteristics of society and cultures. Examples: settlements, anthropology, archaeology, education, traditional beliefs, manners and customs, demographic data, recreational areas and activities, social impact assessments, crime and justice, census information"
+                        "label": "Società",
+                        "description": "Caratteristiche della società e culture. Esempi: insediamenti, antropologia, archeologia, istruzione, credenze tradizionali, costumi, dati demografici, aree e attività ricreative, valutazioni di impatto sociale, criminalità e giustizia, censimenti"
                     },
                     "structure": {
-                        "label": "Structure",
-                        "description": "Man-made construction. Examples: buildings, museums, churches, factories, housing, monuments, shops, towers"
+                        "label": "Struttura",
+                        "description": "Costruzioni antropiche. Esempi: edifici, musei, chiese, fabbriche, abitazioni, monumenti, negozi, torri"
                     },
                     "transportation": {
-                        "label": "Transportation",
-                        "description": "Means and aids for conveying persons and/or goods. Examples: roads, airports/airstrips, shipping routes, tunnels, nautical charts, vehicle or vessel location, aeronautical charts, railways"
+                        "label": "Trasporti",
+                        "description": "Mezzi e aiuti per il trasporto di persone e/o merci. Esempi: strade, aeroporti/piste di atterraggio, rotte di navigazione, gallerie, carte nautiche, posizionamento di veicoli o navi, carte aeronautiche, ferrovie"
                     },
                     "utilitiesCommunication": {
-                        "label": "Utilities communication",
-                        "description": "Energy, water and waste systems and communications infrastructure and services. Examples: hydroelectricity, geothermal, solar and nuclear sources of energy, water purification and distribution, sewage collection and disposal, electricity and gas distribution, data communication, telecommunication, radio, communication networks"
+                        "label": "Infrastrutture",
+                        "description": "Infrastrutture e servizi per la distribuzione dell'acqua, dell'energia, per lo smaltimento dei rifiuti e per le comunicazioni. Esempi: fonti di energia solare, idroelettrica, geotermica e nucleare, depurazione e distribuzione dell'acqua, raccolta delle acque reflue e smaltimento,reti di distribuzione del gas e dell'energia elettrica, comunicazione dei dati, telecomunicazioni, radio, reti per le comunicazioni"
                     }
                 }
             },
@@ -385,58 +385,57 @@ Oskari.registerLocalization({
                 "qualityPassFalse": "NOT TRANSLATED"
             },
             "heading": {
-                "abstractTextData": "Abstract text (data)",
-                "abstractTextService": "Abstract text (service)",
-                "accessConstraint": "Access constraints",
-                "citationDate": "Date",
-                "classification": "Classifications",
-                "descriptiveKeyword": "Keywords",
-                "distributionFormat": "Distribution format",
-                "fileIdentifier": "File identifier",
-                "legalConstraint": "Legal constraints",
-                "lineageStatement": "Lineage statement",
-                "metadataCharacterSet": "Metadata characterset",
-                "metadataDateStamp": "Metadata date",
-                "metadataLanguage": "Metadata language",
-                "metadataOrganisation": "Organisation name",
-                "metadataStandardName": "Metadata standard name",
-                "metadataStandardVersion": "Metadata standard version",
-                "onlineResource": "Online resources",
-                "operatesOn": "Operates on",
-                "otherConstraint": "Other constraints",
-                "reportConformance": "Conformance",
-                "responsibleParty": "Responsible party",
-                "resourceIdentifier": "Resource identifier",
-                "resourceLanguage": "Resource language",
-                "scopeCode": "Resource type",
-                "serviceType": "Service type",
-                "spatialRepresentationType": "Spatial representation type",
-                "spatialResolution": "Spatial resolution",
-                "temporalExtent": "Temporal extents",
-                "topicCategory": "Topic categories",
-                "useLimitation": "Use limitations",
-
-                "absoluteExternalPositionalAccuracy":"NOT TRANSLATED",
-                "accuracyOfTimeMeasurement":"NOT TRANSLATED",
-                "completenessCommission":"NOT TRANSLATED",
-                "completenessOmission":"NOT TRANSLATED",
-                "conceptualConsistency":"NOT TRANSLATED",
-                "domainConsistency":"NOT TRANSLATED",
-                "formatConsistency":"NOT TRANSLATED",
-                "griddedDataPositionalAccuracy":"NOT TRANSLATED",
-                "nonQuantitativeAttributeAccuracy":"NOT TRANSLATED",
-                "quantitativeAttributeAccuracy":"NOT TRANSLATED",
-                "relativeInternalPositionalAccuracy":"NOT TRANSLATED",
-                "temporalConsistency":"NOT TRANSLATED",
-                "temporalValidity":"NOT TRANSLATED",
-                "thematicClassificationCorrectness":"NOT TRANSLATED",
-                "topologicalConsistency":"NOT TRANSLATED"
-
+                "abstractTextData": "Riassunto (dato)",
+                "abstractTextService": "Riassunto (servizio)",
+                "accessConstraint": "Restrizioni d'accesso",
+                "citationDate": "Data",
+                "classification": "Classificazioni",
+                "descriptiveKeyword": "Parole chiave",
+                "distributionFormat": "Formato di distribuzione",
+                "fileIdentifier": "Identificatore del file",
+                "legalConstraint": "Restrizioni giuridiche",
+                "lineageStatement": "Dichiarazione legale",
+                "metadataCharacterSet": "Caratteri dei metadati",
+                "metadataDateStamp": "Data dei metadati",
+                "metadataLanguage": "Lingua dei matadati",
+                "metadataOrganisation": "Nome dell'organizzazione",
+                "metadataStandardName": "Nome standard dei metadati",
+                "metadataStandardVersion": "Versione standard dei metadati",
+                "onlineResource": "Risorse online",
+                "operatesOn": "Opera su",
+                "otherConstraint": "Altri vincoli",
+                "reportConformance": "Conformità",
+                "responsibleParty": "Soggetto responsabile",
+                "resourceIdentifier": "Identificatore della risorsa",
+                "resourceLanguage": "Lingua della risorsa",
+                "scopeCode": "Tipo di risorsa",
+                "serviceType": "Tipo di serviizo",
+                "spatialRepresentationType": "Tipo di rappresentaizone spaziale",
+                "spatialResolution": "Risoluzione spaziale",
+                "temporalExtent": "Estensione temporale",
+                "topicCategory": "Categorie di argomenti",
+                "useLimitation": "Limitaizoni d'uso",
+                "absoluteExternalPositionalAccuracy": "NOT TRANSLATED",
+                "accuracyOfTimeMeasurement": "NOT TRANSLATED",
+                "completenessCommission": "NOT TRANSLATED",
+                "completenessOmission": "NOT TRANSLATED",
+                "conceptualConsistency": "NOT TRANSLATED",
+                "domainConsistency": "NOT TRANSLATED",
+                "formatConsistency": "NOT TRANSLATED",
+                "griddedDataPositionalAccuracy": "NOT TRANSLATED",
+                "nonQuantitativeAttributeAccuracy": "NOT TRANSLATED",
+                "quantitativeAttributeAccuracy": "NOT TRANSLATED",
+                "relativeInternalPositionalAccuracy": "NOT TRANSLATED",
+                "temporalConsistency": "NOT TRANSLATED",
+                "temporalValidity": "NOT TRANSLATED",
+                "thematicClassificationCorrectness": "NOT TRANSLATED",
+                "topologicalConsistency": "NOT TRANSLATED"
             }
         },
         "tile": {
-            "title": "Metadata",
-            "tooltip": "The terms of use and the availability of the dataset are documented in the metadata description."
+            "title": "Metadati",
+            "tooltip": "Le condizioni d'uso e la disponibilità dei datasets sono documentati nella descrizione dei metadati."
         }
     }
-});
+}
+);

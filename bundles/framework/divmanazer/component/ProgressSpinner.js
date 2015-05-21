@@ -75,7 +75,9 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
                 Spinner = this._Spinner,
                 opts = this.opts;
 
-            if(!data) return;
+            if(!data) {
+                return;
+            }
 
             if (data.spinner) {
                 data.spinner.stop();
@@ -103,7 +105,9 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
             $el = $(el);
             data = $el.data();
 
-            if(!data) return;
+            if(!data) {
+                return;
+            }
 
             if (data.spinner) {
                 data.spinner.stop();
@@ -248,10 +252,8 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
                 for (i = 1; i < arguments.length; i += 1) {
                     def = arguments[i];
                     for (n in def) {
-                        if (def.hasOwnProperty(n)) {
-                            if (obj[n] === undefined) {
-                                obj[n] = def[n];
-                            }
+                        if (def.hasOwnProperty(n) && obj[n] === undefined) {
+                            obj[n] = def[n];
                         }
                     }
                 }

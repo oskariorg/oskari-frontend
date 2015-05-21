@@ -241,7 +241,8 @@ Oskari.registerLocalization({
                 "additional": {
                     "title": "Lisäasetukset",
                     "dataSource": "Tietolähde",
-                    "metadata": "Metatietolinkki"
+                    "metadata": "Metatietolinkki",
+                    "export_selection": "Vie vain valitut kohteet"
                 },
                 "columns": {
                     "title": "Sarakkeet",

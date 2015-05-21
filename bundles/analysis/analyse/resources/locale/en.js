@@ -135,6 +135,7 @@ Oskari.registerLocalization(
             },
             "aggregate": {
                 "label": "Key ratio",
+                "labelTooltip": "Tunnusluvut, jotka lasketaan kohteiden ominaisuustietojen perusteella.",
                 "options": [
                     {
                         "id": "oskari_analyse_Count",
@@ -174,6 +175,7 @@ Oskari.registerLocalization(
             },
             "buffer_size": {
                 "label": "Buffer size",
+                "labelTooltip": "Vyöhykkeen koko metreinä tai kilometreinä.",
                 "tooltip": "Give the buffer size."
             },
             "buffer_units": {
@@ -182,6 +184,7 @@ Oskari.registerLocalization(
             },
             "analyse_name": {
                 "label": "Analysis name",
+                "labelTooltip": "Analyysiä kuvaava nimi",
                 "tooltip": "Give the analysis a name."
             },
             "settings": {
@@ -190,17 +193,22 @@ Oskari.registerLocalization(
             },
             "intersect": {
                 "target": "The layer to be intersected",
-                "label": "Intersecting layers"
+                "targetLabelTooltip": "Analyysitaso, jonka kohteita leikataan leikkaavan tason kohteilla.",
+                "label": "Intersecting layers",
+                "labelTooltip": "Analyysitaso, jonka kohteilla leikattavan tason kohteita leikataan."
             },
             "union": {
                 "label": "The layer to be combined"
             },
             "layer_union": {
                 "label": "The layers to be combined",
+                "labelTooltip": "Analyysitasot, joiden kohteet viedään samalle tasolle.",
                 "notAnalyseLayer": "Select one analysis layer.",
                 "noLayersAvailable": "The layers with similar attributes could not be found. You can search the layers by clicking \"Add map layer\"."
             },
             "areas_and_sectors": {
+                "label" : "Vyöhykkeet ja sektorit",
+                "labelTooltip": "Vyöhykkeiden koko metreinä tai kilometreinä sekä vyöhykkeiden ja sektorien lukumäärä.",
                 "area_count": "The number of the buffers",
                 "area_size": "The buffer size",
                 "sector_count": "The number of the sectors",
@@ -228,9 +236,17 @@ Oskari.registerLocalization(
                     }
                 ]
             },
+            "spatial_join": {
+                "firstLayerTooltip": "Ensimmäinen yhdistettävä taso, jolta ominaisuustiedot haetaan.",
+                "firstLayerFieldTooltip": "Ensimmäisen tason ominaisuustiedot, jotka otetaan analyysiin mukaan. Valitse enintään 10 ominaisuustietoa.",
+                "secondLayerTooltip": "Toinen yhdistettävä taso, jolta ominaisuustiedot haetaan.",
+                "secondLayerFieldTooltip": "Toisen tason ominaisuustiedot, jotka otetaan lopputulokseen mukaan. Valitse enintään 10 ominaisuustietoa."
+            },
             "params": {
                 "label": "The attributes to be included in the result",
                 "aggreLabel": "The attributes for key ratios",
+                "aggreLabelTooltip": "Ominaisuustiedot, jotka otetaan analyysiin mukaan. Valitse enintään 10 ominaisuustietoa.",
+                "labelTooltip": "Ominaisuustiedot, jotka otetaan analyysiin mukaan. Valitse enintään 10 ominaisuustietoa.",
                 "tooltip": "",
                 "options": [
                     {

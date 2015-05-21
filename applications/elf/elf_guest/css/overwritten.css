@@ -79,10 +79,7 @@ table {
         background-repeat: no-repeat;
     }
 
-    .toolrow[tbgroup=default-selectiontools] {
-       display: none !important;
-    }
-    .default-selectiontools{
+    .default-selectiontools {
         display:none !important;
     }
     .marker-share {

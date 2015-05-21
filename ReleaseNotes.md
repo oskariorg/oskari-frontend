@@ -1,5 +1,112 @@
 # Release Notes
 
+## 1.29
+
+### rpc
+
+New events are enabled by default: 
+
+ - 'AfterAddMarkerEvent' notifies a marker was added and includes an id for the marker
+ - 'MarkerClickEvent' notifies a marker being clickd and includes the id of the clicked marker
+
+Now always allows messages from origin starting with 'http://localhost' to help with developing features. 
+Prints warnings if RPC messages come from other than allowed origins.
+GetLayers-call now returns the layers UI-name in addition to id, opacity and visibility.
+
+### publisher2
+
+*New bundle!* This is the first step of the refactoring of publisher. It is not yet ready for use!
+
+### analyse
+
+Analyse parameters panel has now info buttons for parameter labels.
+
+### core
+
+User now has an getAPIkey() function. Parsed from user data returned by GetAppSetup.
+
+Oskari.util has been added to /Oskari/bundles/bundle.js. It holds generic helper-functions that are used 
+throughout Oskari code:
+
+    - isNumber()
+    - isDecimal()
+    - decimals()
+    - hexToRgb()
+    - rgbToHex()
+
+### analysis
+
+Now adds the PersonalData tab correctly if started after PersonalData bundle. Previously expected to be started before PersonalData.
+
+### catalogue/metadatagatalogue
+
+Improvements in show metadata coverage. Icons changes and now active metadata coverage is showed different icon.
+
+### coordinatedisplay/CoordinatesPlugin
+
+Moved plugin location to bottom of MyLocationPlugin.
+
+### divmanazer/Button
+
+Added blur and isFocus functions.
+
+### divmanazer/Grid
+
+Sort improved for non numeric values.
+
+Improvements in Excel/csv export
+("only selected features" option, metadata request url, expanding object column values, type conversion in values)
+
+### divmanazer/Popup
+
+Now checks correctly buttons focuses.
+
+### elf/elf-license
+
+In successfully license conclude now shows same information popup as concluded license.
+
+### featuredata2/Flyout
+
+Sort improved for non numeric values.
+
+### featuredata2/PopupHandler
+
+Unfocusing popup buttons.
+
+### mapmodule-plugin/BackgroundLayerSelectionPlugin
+
+Fixed to show selected background layer.
+
+### mapmodule-plugin/SearchPlugin
+
+Now handles zoomScale in search results correctly.
+
+### mapmodule-plugin/MarkersPlugin
+
+Removing single marker is now possible with 'MapModulePlugin.RemoveMarkersRequest'.
+
+Modifying a marker is now possible by sending 'MapModulePlugin.AddMarkerRequest' with the same id and different values:
+
+    Oskari.getSandbox().postRequestByName('MapModulePlugin.AddMarkerRequest',[{x : 385868, y : 6671782, color: "ffde00" }, 'Marker1']);
+    Oskari.getSandbox().postRequestByName('MapModulePlugin.AddMarkerRequest',[{x : 385868, y : 6671782, color: "ff0000" }, 'Marker1']);
+
+Removed possibility to attach eventlisteners to markers since it didn't work correctly. Planning to generate a MarkerClickedEvent on clicks that can be used for interaction.
+
+MarkerClickEvent is now sent when a marker is clicked. Id of the clicked marker is sent with the event.
+
+### mapmodule-plugin/MyLocationPlugin
+
+Moved plugin location to top of CoordinatesPlugin.
+
+### mapwfs2
+
+Fixed highlight error when user has highligted and unhighlighted feature and then moved map (the feature appears again highlighed).
+
+Now prefers using APIkey from sandbox.getUser().getAPIkey() instead of JSESSIONID cookie as session info. Fails fast on init if session info
+is not available and backs down on tries to reconnect to prevent spamming messages.
+
+Now buffers messages until init is completed. After init success, sends out the buffered messages.
+
 ## 1.28.1
 
 ### heatmap

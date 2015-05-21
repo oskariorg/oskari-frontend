@@ -39,18 +39,21 @@ function () {
             '   </div>' +
             '</div>'),
         licenceModelDetails: jQuery('<div><div class="license_basic_data">' +
-                '<div class="elf_name"></div>'+
-            '</div>'+
-            '<div class="license_user_data">'+
+            '   <div class="elf_name"></div>' +
+            '</div>' +
+            '<div class="license_user_data">' +
             '   <table class="elf_license_user_data_table"></table>' +
             '</div>' +
             '<div class="help"></div></div>'),
         licenceModelUnconcludeDetails: jQuery('<div><div class="license_basic_data">' +
-                '<div class="elf_name"></div>'+
+            '   <div class="elf_name"></div>'+
+            '   <div class="elf_license_user_info"></div>' +
             '</div>'+
             '<div class="license_user_data">'+
             '   <table class="elf_license_user_data_table"></table>' +
             '</div>' +
+            '<div class="license_id"></div>'+
+            '<div class="service_url"></div>'+
             '<div class="validto_summary"></div>'+
             '<div class="clear"></div>'+
             '<div class="help"></div></div>'),
@@ -66,24 +69,7 @@ function () {
             '<div class="help"></div>'+
             '</div>'),
         licenseUserData: jQuery('<tr><td class="elf_license_user_data_label"></td><td class="elf_license_user_data"></td></tr>'),
-        licenseInput: jQuery('<div class="elf_license_input"></div>'),
-        licenceConcludeSuccessMessage: jQuery('<div class="elf_license_success_message">'+
-            '   <div class="headtitle"></div>'+
-            '   <table>'+
-            '       <tr>' +
-            '           <td><div class="productid title"></div></td>'+
-            '           <td><div class="productid value"></div></td>'+
-            '       </tr>' +
-            '       <tr>' +
-            '           <td><div class="licenseid title"></div></td>'+
-            '           <td><div class="licenseid value"></div></td>'+
-            '       </tr>' +
-            '       <tr>' +
-            '           <td><div class="validto title"></div></td>'+
-            '           <td><div class="validto value"></div></td>'+
-            '       </tr>' +
-            '   </table>'+
-            '</div>')
+        licenseInput: jQuery('<div class="elf_license_input"></div>')
     };
     this._dialogStep = null;
     this._validator = {
@@ -196,7 +182,7 @@ function () {
         }, function (response) {
             me._progressSpinner.stop();
             if (response) {
-                if(response.userLicense && response.userLicense === true){
+                if(response.userLicense){
                     me._showLicenseDeactivateDialog(response, metadata);
                 } else {
                     me._showLicenseSubscriptionInformationDialog(response, metadata);
@@ -219,32 +205,52 @@ function () {
         var me = this,
             data = me._getLicenseInputValues();
 
-        me._progressSpinner.start();
+        if(data.missingValues.length === 0) {
+            me._progressSpinner.start();
 
-        me.licenseService.doGetPrice({
-            data: data,
-            id: jQuery('.license_basic_data').attr('data-id'),
-            modelid: jQuery('.license_basic_data').attr('data-model-id')
-        }, function (response) {
-            me._progressSpinner.stop();
-            if (response) {
-                me._showLicenseOrderSummaryDialog(response);
-            } else {
-                me._showMessage(me._locale.errors.cannotGetLicensePrice.title, me._locale.errors.cannotGetLicensePrice.message);
-            }
-        }, function (response) {
-            var errorMsg = null;
-            me._progressSpinner.stop();
-            me.getSandbox().printWarn('ELF license price failed', [].slice.call(arguments));
-            if (response && response.responseText){
-                errorMsg = JSON.parse(response.responseText);
-            }
-            if (errorMsg && errorMsg !== null && errorMsg.error && errorMsg.error !== null) {
-                me._showMessage(me._locale.errors.cannotGetLicensePrice.title, errorMsg.error);
-            } else {
-               me._showMessage(me._locale.errors.cannotGetLicensePrice.title, me._locale.errors.cannotGetLicensePrice.message);
-            }
+            me.licenseService.doGetPrice({
+                data: data.values,
+                id: jQuery('.license_basic_data').attr('data-id'),
+                modelid: jQuery('.license_basic_data').attr('data-model-id')
+            }, function (response) {
+                me._progressSpinner.stop();
+                if (response) {
+                    me._showLicenseOrderSummaryDialog(response);
+                } else {
+                    me._showMessage(me._locale.errors.cannotGetLicensePrice.title, me._locale.errors.cannotGetLicensePrice.message);
+                }
+            }, function (response) {
+                var errorMsg = null;
+                me._progressSpinner.stop();
+                me.getSandbox().printWarn('ELF license price failed', [].slice.call(arguments));
+                if (response && response.responseText){
+                    errorMsg = JSON.parse(response.responseText);
+                }
+                if (errorMsg && errorMsg !== null && errorMsg.error && errorMsg.error !== null) {
+                    me._showMessage(me._locale.errors.cannotGetLicensePrice.title, errorMsg.error);
+                } else {
+                    me._showMessage(me._locale.errors.cannotGetLicensePrice.title, me._locale.errors.cannotGetLicensePrice.message);
+                }
+            });
+        } else {
+            me._showMissingValuesMessage(data);
+        }
+    },
+    /**
+    * Shows missing values message.
+    * @method
+    * @private
+    *
+    * @param {Object} data missing values data
+    */
+    _showMissingValuesMessage: function(data){
+        var me = this,
+            message = me._locale.errors.checkFields.message + ':<div><ul class="elf_license_missing_valuelist">';
+        jQuery.each(data.missingValues, function(index, value){
+            message += '<li>' + value.title + '</li>';
         });
+        message += '</ul></div>';
+        me._showMessage(me._locale.errors.checkFields.title, message,0, true,true);
     },
     /**
      * Conclude license
@@ -254,42 +260,40 @@ function () {
     _concludeLicense: function() {
         var me = this,
             data = me._getLicenseInputValues(),
-            msg = me._templates.licenceConcludeSuccessMessage.clone();
+            userInfo = jQuery('<div></div>');
 
-        msg.find('.headtitle').html(me._locale.dialog.conclude.title);
-        msg.find('.productid.title').html(me._locale.dialog.conclude.productid);
-        msg.find('.licenseid.title').html(me._locale.dialog.conclude.licenseid);
-        msg.find('.validto.title').html(me._locale.dialog.conclude.validto);
+        if(data.missingValues.length === 0) {
+            me._progressSpinner.start();
 
-        me._progressSpinner.start();
-
-        me.licenseService.doConludeLicense({
-            data: data,
-            id: jQuery('.license_basic_data').attr('data-id'),
-            modelid: jQuery('.license_basic_data').attr('data-model-id')
-        }, function (response) {
-            me._progressSpinner.stop();
-            if (response) {
-                msg.find('.productid.value').html(response.productId);
-                msg.find('.licenseid.value').html(response.licenseId);
-                msg.find('.validto.value').html(response.validTo);
-                me._showMessage(me._locale.dialog.concludeSuccessTitle, msg, null, false, true, function(){me._dialog.close();});
-            } else {
-                me._showMessage(me._locale.errors.concludeNoResponse.title, me._locale.errors.concludeNoResponse.message);
-            }
-        }, function (response) {
-            var errorMsg = null;
-            me._progressSpinner.stop();
-            me.getSandbox().printWarn('ELF license conclude failed', [].slice.call(arguments));
-            if (response && response.responseText){
-                errorMsg = JSON.parse(response.responseText);
-            }
-            if (errorMsg && errorMsg !== null && errorMsg.error && errorMsg.error !== null) {
-                me._showMessage(me._locale.errors.failedConclude.title, errorMsg.error);
-            } else {
-               me._showMessage(me._locale.errors.failedConclude.title, me._locale.errors.failedConclude.message);
-            }
-        });
+            me.licenseService.doConludeLicense({
+                data: data.values,
+                id: jQuery('.license_basic_data').attr('data-id'),
+                modelid: jQuery('.license_basic_data').attr('data-model-id')
+            }, function (response) {
+                me._progressSpinner.stop();
+                if (response) {
+                    userInfo.css({ 'margin-top': '6px', 'margin-bottom': '6px'});
+                    userInfo.html(me._locale.dialog.licenceConcluded.message);
+                    me._showLicenseDeactivateDialog(response, me._metadata, userInfo);
+                } else {
+                    me._showMessage(me._locale.errors.concludeNoResponse.title, me._locale.errors.concludeNoResponse.message);
+                }
+            }, function (response) {
+                var errorMsg = null;
+                me._progressSpinner.stop();
+                me.getSandbox().printWarn('ELF license conclude failed', [].slice.call(arguments));
+                if (response && response.responseText){
+                    errorMsg = JSON.parse(response.responseText);
+                }
+                if (errorMsg && errorMsg !== null && errorMsg.error && errorMsg.error !== null) {
+                    me._showMessage(me._locale.errors.failedConclude.title, errorMsg.error);
+                } else {
+                   me._showMessage(me._locale.errors.failedConclude.title, me._locale.errors.failedConclude.message);
+                }
+            });
+        } else {
+            me._showMissingValuesMessage(data);
+        }
     },
     /**
      * Show message
@@ -305,12 +309,14 @@ function () {
     _showMessage: function(title, message, time, fadeout, showOk, handler) {
         var me = this,
             dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-            btn = dialog.createCloseButton(me._locale.buttons.ok);
+            btn = dialog.createCloseButton(me._locale.buttons.ok),
             fadeoutTime = 5000,
             doFadeout = true,
             doButton = false;
 
-        if(me._showsMessage === true) return;
+        if(me._showsMessage) {
+            return;
+        }
 
         if(time && time !== null && !isNaN(time)) {
             fadeoutTime = time;
@@ -329,11 +335,15 @@ function () {
                 dialog.close();
                 handler();
             });
+        } else {
+             btn.setHandler(function(){
+                dialog.close();
+            });
         }
 
         me._showsMessage = true;
 
-        if(doButton === false) {
+        if(!doButton) {
             dialog.show(title, message);
         } else {
             dialog.show(title, message, [btn]);
@@ -343,7 +353,7 @@ function () {
            me._showsMessage = false;
         });
 
-        if(doFadeout === true) {
+        if(!doFadeout) {
             dialog.fadeout(fadeoutTime);
         }
 
@@ -355,11 +365,11 @@ function () {
      *
      * @param {Object} data license information data
      * @param {Object} metadata the metadata
+     * @param {Object} infoForUser jQuery element
      */
-    _showLicenseDeactivateDialog: function(data, metadata){
+    _showLicenseDeactivateDialog: function(data, metadata, infoForUser){
         var me = this,
             dialogContent = me._templates.licenseDialog.clone(),
-            models = dialogContent.find('.elf_license_dialog_licensemodels'),
             title = dialogContent.find('.elf_license_dialog_licensemodels_title'),
             metadataTitle = '',
             cancelBtn = me._dialog.createCloseButton(this._locale.buttons.close),
@@ -404,13 +414,15 @@ function () {
         }
 
         me._dialog.show(me._locale.dialog.licenseTitle + ' - ' + metadataTitle, dialogContent, [cancelBtn, deactivateBtn]);
-        me._dialog.makeModal();
+        if(!infoForUser) {
+            me._dialog.makeModal();
+        }
 
         me._progressSpinner.insertTo(jQuery('.elf_license_dialog'));
 
         // If there is orderer licensemodel then open it
-        if(data.licenseModels.length == 1) {
-            me._showLicenseDeactivateParams(data.licenseModels[0], data);
+        if(data.licenseModels.length === 1) {
+            me._showLicenseDeactivateParams(data.licenseModels[0], data, infoForUser);
         }
 
     },
@@ -421,22 +433,34 @@ function () {
      *
      * @param {Object} model license model
      * @param {Object} licenseData license data
+     * @param {Object} infoForUSer jQuery element
      */
-    _showLicenseDeactivateParams: function(model, licenseData) {
+    _showLicenseDeactivateParams: function(model, licenseData, infoForUser) {
         var me = this,
             modelDetails = me._templates.licenceModelUnconcludeDetails.clone(),
-            userData = modelDetails.find('.license_user_data'),
             licenseDetails = jQuery('.elf_license_dialog_license_details'),
             basicData = modelDetails.find('.license_basic_data'),
             closeButtonEl = jQuery('.elf_license_close_button'),
             deactivateButtonEl = jQuery('.elf_license_deactivate_button'),
             closeButtonMargin = closeButtonEl.outerWidth() - closeButtonEl.width(),
-            validToElem = modelDetails.find('.validto_summary');
+            validToElem = modelDetails.find('.validto_summary'),
+            userInfo = modelDetails.find('.elf_license_user_info');
 
         me._showLicenseDetails();
         licenseDetails.empty();
 
+        licenseDetails.addClass('large');
+
         modelDetails.find('.elf_name').html(model.name);
+
+        if(infoForUser && infoForUser !== '') {
+            userInfo.show();
+            userInfo.append(infoForUser);
+        } else {
+            userInfo.hide();
+        }
+
+
         modelDetails.find('.license_basic_data').append('<div></div>');
         modelDetails.find('.help').html(me._locale.dialog.help.orderDetails);
 
@@ -447,15 +471,32 @@ function () {
             var userDataTable = modelDetails.find('.elf_license_user_data_table');
             jQuery.each(model.params, function(index, param){
                 var jQueryElement = me._getFormElement(param, true);
-                if(jQueryElement !== null) userDataTable.append(jQueryElement);
+                if(jQueryElement !== null) {
+                    userDataTable.append(jQueryElement);
+                }
             });
         }
 
-        if(licenseData.validTo){
-            var validToElem = modelDetails.find('.validto_summary'),
-                validText = me._locale.dialog.validTo;
-            validText = validText.replace('{day}',licenseData.validTo);
+        // Show license id
+        if(licenseData.licenseId){
+            var licenceIdElem = modelDetails.find('.license_id'),
+                licenceIdText = me._locale.dialog.licenseId;
+            licenceIdText = licenceIdText.replace('{licenseid}',licenseData.licenseId);
+            licenceIdElem.html(licenceIdText);
+        }
 
+        // Show service URL
+        if(licenseData.secureServiceURL){
+            var licenceServiceURLElem = modelDetails.find('.service_url'),
+                licenceServiceURLText = me._locale.dialog.licenseServiceUrl;
+            licenceServiceURLText = licenceServiceURLText.replace('{serviceurl}', '<a href="' + licenseData.secureServiceURL + '" target="_blank">' + licenseData.secureServiceURL + '</a>');
+            licenceServiceURLElem.html(licenceServiceURLText);
+        }
+
+        // Show valid to
+        if(licenseData.validTo){
+            var validText = me._locale.dialog.validTo;
+            validText = validText.replace('{day}',licenseData.validTo);
             validToElem.html(validText);
         }
 
@@ -490,7 +531,7 @@ function () {
      */
     _deactivateLicense: function(){
         var me = this,
-            data = me._getLicenseInputValues();
+            data = me._getLicenseInputValues().values;
 
         me._progressSpinner.start();
 
@@ -502,14 +543,12 @@ function () {
             me._progressSpinner.stop();
 
             if (response) {
-                if(response.success && response.success === true) {
+                if(response.success) {
                     me._dialog.close();
                     me._showMessage(me._locale.success.deactivateLicense.title, me._locale.success.deactivateLicense.message);
                 } else {
                     me._showMessage(me._locale.errors.cannotDeactivateLicense.title, me._locale.errors.cannotDeactivateLicense.message);
                 }
-                // TODO show really necessary details of deactivating license
-                //me._showLicenseOrderSummaryDialog(response);
             } else {
                 me._showMessage(me._locale.errors.cannotDeactivateLicense.title, me._locale.errors.cannotDeactivateLicense.message);
             }
@@ -603,7 +642,7 @@ function () {
         me._progressSpinner.insertTo(jQuery('.elf_license_dialog'));
 
         // If there is only one licensemodel then open it
-        if(data.licenseModels.length == 1) {
+        if(data.licenseModels.length === 1) {
             me._showLicenseParams(data.licenseModels[0], data);
         }
     },
@@ -615,8 +654,9 @@ function () {
     _goBack: function(){
         var me = this;
         me.nextBtn.setTitle(me._locale.buttons.next);
-        if(me._dialogStep === null) return;
-        if(me._dialogStep === 'step2') {
+        if(me._dialogStep === null) {
+            return;
+        } else if(me._dialogStep === 'step2') {
             me._showLicenseModels();
         } else if(me._dialogStep === 'step3') {
             me._showLicenseDetails();
@@ -629,9 +669,9 @@ function () {
      */
     _goNext: function(){
         var me = this;
-        if(me._dialogStep === null) return;
-
-        if(me._dialogStep === 'step2') {
+        if(me._dialogStep === null) {
+            return;
+        } else if(me._dialogStep === 'step2') {
             me._getPrice();
         } else if(me._dialogStep === 'step3') {
             me._concludeLicense();
@@ -709,6 +749,7 @@ function () {
         jQuery('.elf_license_dialog_license_details').show();
         jQuery('.elf_license_dialog_license_data').hide();
         jQuery('.elf_license_dialog_license_price').hide();
+        jQuery('.elf_license_dialog_license_details').removeClass('large');
         me._checkButtonsVisibility();
     },
     /**
@@ -734,7 +775,6 @@ function () {
     _showLicenseOrderSummaryDialog: function(model){
         var me = this,
             licenseSummary = me._templates.licenceModelSummaryDetails.clone(),
-            userData = licenseSummary.find('.license_user_data'),
             licensePrice = jQuery('.elf_license_dialog_license_price'),
             basicData = licenseSummary.find('.license_basic_data');
 
@@ -756,7 +796,9 @@ function () {
             var userDataTable = licenseSummary.find('.elf_license_user_data_table');
             jQuery.each(model.params, function(index, param){
                 var jQueryElement = me._getFormElement(param, true);
-                if(jQueryElement !== null) userDataTable.append(jQueryElement);
+                if(jQueryElement !== null) {
+                    userDataTable.append(jQueryElement);
+                }
             });
         }
 
@@ -773,7 +815,6 @@ function () {
     _showLicenseParams: function(model, licenseData) {
         var me = this,
             modelDetails = me._templates.licenceModelDetails.clone(),
-            userData = modelDetails.find('.license_user_data'),
             licenseDetails = jQuery('.elf_license_dialog_license_details'),
             basicData = modelDetails.find('.license_basic_data');
 
@@ -790,7 +831,9 @@ function () {
             var userDataTable = modelDetails.find('.elf_license_user_data_table');
             jQuery.each(model.params, function(index, param){
                 var jQueryElement = me._getFormElement(param);
-                if(jQueryElement !== null) userDataTable.append(jQueryElement);
+                if(jQueryElement !== null) {
+                    userDataTable.append(jQueryElement);
+                }
             });
         }
 
@@ -836,11 +879,16 @@ function () {
      * @return {Object} license values
      */
     _getLicenseInputValues: function(){
-        var values = [];
+        var values = {
+            values: [],
+            missingValues: []
+        };
+
         jQuery('.elf_license_user_data div.elf_license_input:visible').each(function(){
             var element = jQuery(this),
                 type = element.attr('data-element-type'),
-                readOnly = element.attr('data-read-only');
+                readOnly = element.attr('data-read-only'),
+                multi = element.attr('data-multi');
 
             var value = {
                 name: element.attr('data-name'),
@@ -849,11 +897,15 @@ function () {
 
             var inputValues = null;
 
-            if(!readOnly || readOnly === false || readOnly === 'false') {
+            if(!readOnly || readOnly === 'false') {
                 if (type === 'int') {
                     inputValues = parseInt(element.find('input').val(), 10);
                 } else if (type === 'text') {
-                    inputValues = [element.find('input').val()];
+                    inputValues = [];
+                    var val = element.find('input').val();
+                    if (val !== null && val !== '') {
+                        inputValues.push(val);
+                    }
                 } else if (type === 'boolean') {
                     inputValues = element.find('input').is(':checked');
                 } else if (type === 'enum') {
@@ -868,12 +920,16 @@ function () {
                 if (type === 'int') {
                     inputValues = parseInt(element.find('div').attr('data-value'), 10);
                 } else if (type === 'text') {
-                    inputValues = [element.find('div').attr('data-value')];
+                    inputValues = [];
+                    var val = element.find('div').attr('data-value');
+                    if (val !== null && val !== '') {
+                        inputValues.push(val);
+                    }                    
                 } else if (type === 'boolean') {
-                    inputValues = element.find('div').attr('data-value') == 'true';
+                    inputValues = element.find('div').attr('data-value') === 'true';
                 } else if (type === 'enum') {
                     inputValues = [];
-                    element.find('li').each(function(){
+                    element.find('span').each(function(){
                         inputValues.push(jQuery(this).attr('data-value'));
                     });
                 } else {
@@ -882,7 +938,25 @@ function () {
             }
 
             value.values = inputValues;
-            values.push(value);
+
+            // Check values
+            // If type is enum and not multi then one value needed
+            if (type === 'enum' && multi !== true && multi !== 'true' && inputValues.length !== 1) {
+                value.title = element.attr('data-title');
+                values.missingValues.push(value);
+            } 
+            // Else if type is int
+            else if (type === 'int' && (inputValues === null || isNaN(inputValues))) {
+                value.title = element.attr('data-title');
+                values.missingValues.push(value);
+            }
+            // Else if type is text
+            else if (type === 'text' && (inputValues === null || inputValues.length === 0)) {
+                value.title = element.attr('data-title');
+                values.missingValues.push(value);
+            } else {
+                values.values.push(value);
+            }            
         });
 
 

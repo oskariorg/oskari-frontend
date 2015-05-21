@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "et",
     "key": "maplegend",
     "value": {
@@ -6,4 +7,5 @@ Oskari.registerLocalization({
         "desc": "",
         "noLegendsText": "No map legends available"
     }
-});
+}
+);

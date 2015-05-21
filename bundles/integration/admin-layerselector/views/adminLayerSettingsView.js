@@ -39,13 +39,14 @@ define([
                 'click .admin-remove-sublayer': 'removeLayer',
                 'click .show-edit-layer': 'clickLayerSettings',
                 'click .fetch-ws-button': 'fetchCapabilities',
-                // for wfs params editing - phase 3 'click .fetch-wfs-button': 'fetchWfsLayerConfiguration',
+                //'click .edit-wfs-button': 'editWfsLayerConfiguration',
                 'click .icon-close': 'clearInput',
                 'change .admin-layer-type': 'createLayerSelect',
                 'click .admin-add-group-ok': 'saveCollectionLayer',
                 'click .admin-add-group-cancel': 'hideLayerSettings',
                 'click .admin-remove-group': 'removeLayerCollection',
-                'click .add-layer-record.capabilities li': 'handleCapabilitiesSelection'
+                'click .add-layer-record.capabilities li': 'handleCapabilitiesSelection',
+                'change .admin-interface-version': 'handleInterfaceVersionChange'
             },
 
             /**
@@ -241,6 +242,10 @@ define([
                         var sldr = me.$el.find('.layout-slider');
                         sldr.slider('value', jQuery(this).val());
                     });
+                    if(layerType === 'wfslayer') {
+                        // Unique name field to readonly
+                        me.$el.find('#add-layer-layerName').prop('disabled',true);
+                    }
                 }
                 // Layer interface autocomplete
                 lcId = me.$el.parents('.accordion').attr('lcid');
@@ -327,6 +332,25 @@ define([
                     element.parents('.admin-add-layer').removeClass('show-edit-layer');
                     element.parents('.admin-add-layer').remove();
                 }
+            },
+            /**
+             * Handle interface version change
+             *
+             * @method handleInterfaceVersionChange
+             */
+            handleInterfaceVersionChange: function (e) {
+                e.stopPropagation();
+                var element = jQuery(e.currentTarget),
+                    form = element.parents('.admin-add-layer'),
+                    data = {},
+                    interfaceVersion = form.find('#add-layer-interface-version').val();
+
+                if(interfaceVersion === '2.0.0') {
+                    form.find("input[type='radio'][name='jobtype'][id='layer-jobtype-fe']").prop('checked', true);
+                } else {
+                    form.find("input[type='radio'][name='jobtype'][id='layer-jobtype-default']").prop('checked', true);
+                }
+
             },
 
             /**
@@ -528,8 +552,9 @@ define([
                     lcId = accordion.attr('lcid'),
                     form = element.parents('.admin-add-layer'),
                     data = {},
-                    wmsVersion = form.find('#add-layer-interface-version').val(),
+                    interfaceVersion = form.find('#add-layer-interface-version').val(),
                     createLayer,
+                    sandbox = me.instance.getSandbox(),
                     admin;
 
                 if (lcId === null || lcId === undefined || !lcId.length) {
@@ -543,7 +568,7 @@ define([
                 }
 
                 // add layer type and version
-                data.version = (wmsVersion !== '') ? wmsVersion : form.find('#add-layer-interface-version > option').first().val();
+                data.version = (interfaceVersion !== '') ? interfaceVersion : form.find('#add-layer-interface-version > option').first().val();
 
                 // base and group are always of type wmslayer
                 data.layerType = me.model.getLayerType() + 'layer';
@@ -560,7 +585,6 @@ define([
                     data['title_' + lang] = this.value;
                 });
 
-                data.layerName = form.find('#add-layer-layerName').val();
                 data.layerUrl = form.find('#add-layer-url').val();
                 if (typeof data.layerUrl === "undefined") {
                     data.layerUrl = form.find('#add-layer-interface').val();
@@ -582,26 +606,33 @@ define([
                 if(data.layerType === 'wmslayer') {
                     data.xslt = form.find('#add-layer-xslt').val();
                     data.gfiType = form.find('#add-layer-responsetype').val();
+                    data.attributes = form.find('#add-layer-attributes').val();
                 }
                 else if(data.layerType === 'wmtslayer') {
                     data.matrixSetId = form.find('#add-layer-matrixSetId').val();
                     data.matrixSet = form.find('#add-layer-matrixSet').val();
+                    data.attributes = form.find('#add-layer-attributes').val();
                 }
                 else if(data.layerType === 'wfslayer') {
                     admin = me.model.getAdmin();
                     // in insert all wfs properties are behind passthrough
                     if ((admin)&&(admin.passthrough)) {
                         _.forEach(admin.passthrough, function (value, key) {
-                            data[key] = form.find("#add-layer-passthrough-"+key).val();
+                            data[key] = typeof value === 'object' ? JSON.stringify(value) : value;
                         })
                     }
                 }
+                data.layerName = form.find('#add-layer-layerName').val();
                 data.gfiContent = form.find('#add-layer-gfi-content').val();
 
                 data.realtime = form.find('#add-layer-realtime').is(':checked');
                 data.refreshRate = form.find('#add-layer-refreshrate').val();
 
                 data.srs_name = form.find('#add-layer-srs_name').val();
+                if((data.srs_name === null || data.srs_name === undefined) && sandbox.getMap()) {
+                    data.srs_name = sandbox.getMap().getSrsName();
+                }
+                data.jobType =  form.find("input[type='radio'][name='jobtype']:checked").val();
 
                 data.username = form.find('#add-layer-username').val();
                 data.password = form.find('#add-layer-password').val();
@@ -618,6 +649,34 @@ define([
                     }
                 }
 
+//                layer-view-roles-2
+//                layer-publish-roles
+//                layer-download-roles
+//                layer-enbedded-roles 
+
+                data.downloadPermissions = '';
+                for (var i = 0; i < me.roles.length; i += 1) {
+                    if (form.find('#layer-download-roles-' + me.roles[i].id).is(':checked')) {
+                        data.downloadPermissions += me.roles[i].id + ',';
+                    }
+                }
+
+                data.enbeddedPermissions = '';
+                for (var i = 0; i < me.roles.length; i += 1) {
+                    if (form.find('#layer-enbedded-roles-' + me.roles[i].id).is(':checked')) {
+                        data.enbeddedPermissions += me.roles[i].id + ',';
+                    }
+                }
+
+                data.publishPermissions = '';
+                for (var i = 0; i < me.roles.length; i += 1) {
+                    if (form.find('#layer-publish-roles-' + me.roles[i].id).is(':checked')) {
+                        data.publishPermissions += me.roles[i].id + ',';
+                    }
+                }
+
+
+                debugger;
                 // Layer class id aka. orgName id aka groupId
                 data.groupId = lcId;
 
@@ -767,7 +826,8 @@ define([
                 var serviceURL = form.find('#add-layer-interface').val(),
                     layerType = form.find('#add-layer-layertype').val(),
                     user = form.find('#add-layer-username').val(),
-                    pw =  form.find('#add-layer-password').val();
+                    pw =  form.find('#add-layer-password').val(),
+                    version =  form.find('#add-layer-interface-version').val();
 
                 me.model.set({
                     '_layerUrls': [serviceURL]
@@ -776,7 +836,8 @@ define([
                 });
                 me.model.set({_admin:{
                     username: user,
-                    password: pw
+                    password: pw,
+                    version: version
                 }}, {
                     silent: true
                 });
@@ -787,7 +848,8 @@ define([
                         url: serviceURL,
                         type : layerType,
                         user: user,
-                        pw: pw
+                        pw: pw,
+                        version: version
                     },
                     url: baseUrl + 'action_route=GetWSCapabilities',
                     success: function (resp) {
@@ -803,43 +865,31 @@ define([
                 });
             },
             /**
-             * Fetch WFS layer configuration. AJAX call to get configuration for given wfs layer id
+             * Edit WFS layer configuration.
+             * Edit wfs spesific values  (adminBlock.passtrough fields)
              * Only for wfslayer-type
-             * TODO: add this to button click for wfs spesific editing popup
              *
-             * @method fetchWfsLayerConfiguration
+             * @method editWfsLayerConfiguration
              */
-            fetchWfsLayerConfiguration: function (e) {
-                var me = this,
-                    //element = jQuery(e.currentTarget),
-                    //form = element.parents('.add-wfs-layer-wrapper'),
-                    baseUrl = me.options.instance.getSandbox().getAjaxUrl();
-
-               // e.stopPropagation();
-
-              /*  var serviceURL = form.find('#add-layer-interface').val(),
-                    layerType = form.find('#add-layer-layertype').val(),
-                    user = form.find('#add-layer-username').val(),
-                    pw =  form.find('#add-layer-password').val();  */
+    /*        editWfsLayerConfiguration: function (e) {
+                e.stopPropagation();
+                var me = this;
+                e.preventDefault();
+                me._wfsEditDialog
+                ('Edit Wfs parameters');
 
 
-                jQuery.ajax({
-                    type: 'POST',
-                    data: {
-                        id: me.model.getId(),
-                        redis : 'no'
-                    },
-                    url: baseUrl + 'action_route=GetWFSLayerConfiguration',
-                    success: function (resp) {
-                        me.model.setWfsConfigurationResponse(resp);
-                    },
-                    error: function (jqXHR, textStatus) {
-                        if (jqXHR.status !== 0) {
-                            me._showDialog(me.instance.getLocalization('admin')['errorTitle'], me.instance.getLocalization('admin').metadataReadFailure);
-                        }
-                    }
-                });
             },
+            //TODO: editing of wfs spesific data
+            _wfsEditDialog: function (title) {
+                var me = this,
+                    dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                    okBtn = dialog.createCloseButton('Save'),
+                    content = jQuery('<div></div>').clone();
+
+                dialog.show(title, content, [okBtn]);
+
+            }, */
             /**
              * Acts on capabilities response based on layer type
              * @param  {String} layerType 'wmslayer'/'wmtslayer'/'wfslayer'

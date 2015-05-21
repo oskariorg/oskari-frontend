@@ -92,7 +92,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
          * Handles tool button click -> opens selection tool dialog
          */
         "showSelectionTools": function (singleSelection) {
-            var me = this;
+            var me = this,
+                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                popupLoc = this.localization.title,
+                content = me.template.wrapper.clone(),
+                buttonName;;
 
             // Safety check at not show more than one popup
             if(jQuery('.tools_selection').is(':visible')) {
@@ -114,19 +118,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
                 };
             };
 
-            //Main dialog
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                popupLoc = this.localization.title,
-                content = me.template.wrapper.clone(),
-                buttonName;
-
             for (buttonName in this.buttons) {
-                var btnContainer = me.template.toolsButton.clone(),
-                    button = this.buttons[buttonName];
-                btnContainer.attr("title", button.tooltip);
-                btnContainer.addClass(button.iconCls);
-                btnContainer.bind('click', closureMagic(buttonName));
-                content.append(btnContainer);
+                if(this.buttons.hasOwnProperty(buttonName)) {
+                    var btnContainer = me.template.toolsButton.clone(),
+                        button = this.buttons[buttonName];
+                    btnContainer.attr("title", button.tooltip);
+                    btnContainer.addClass(button.iconCls);
+                    btnContainer.bind('click', closureMagic(buttonName));
+                    content.append(btnContainer);
+                }
             }
 
             var instructions = me.template.instructions.clone();
@@ -149,6 +149,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
                 }
                 this.blur();
             });
+            emptyBtn.blur();
             controlButtons.push(emptyBtn);
             var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             cancelBtn.setTitle(this.localization.button.cancel);
@@ -156,6 +157,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
                 dialog.close(true);
             });
             cancelBtn.addClass('primary');
+            cancelBtn.blur();
             controlButtons.push(cancelBtn);
 
             dialog.addClass('tools_selection');
@@ -170,7 +172,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
          **/
         _selectionStarted: function () {
             var me = this,
-                sandbox = me._sandbox,
                 editDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 title = me.localization.title,
                 dialogContent = me.template.wrapper.clone(),

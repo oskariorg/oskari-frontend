@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "et",
     "key": "LayerSelector",
     "value": {
@@ -61,4 +62,5 @@ Oskari.registerLocalization({
             "yk": "NOT TRANSLATED"
         }
     }
-});
+}
+);

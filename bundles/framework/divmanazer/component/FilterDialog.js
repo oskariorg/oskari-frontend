@@ -227,7 +227,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                         clickedFeaturesSelection.find('input[name="filter-by-geometry"]').prop('disabled', false);
                         bboxSelection.find('div.bbox-on').find('input[name=filter-bbox]').prop({'disabled': true, 'checked':false});
                         bboxSelection.find('div.bbox-off').find('input[name=filter-bbox]').prop('checked', true);
-                        
+
                     } else {
                         clickedFeaturesSelection.find('input[name="filter-by-geometry"]').prop('disabled', true);
                         clickedFeaturesSelection.find('input[name="filter-by-geometry"]').prop('checked', false);

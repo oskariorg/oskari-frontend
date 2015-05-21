@@ -8,10 +8,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.event.AfterAddMarkerEv
      * @method create called automatically on construction
      * @static
      */
-    function (data, id, events) {
+    function (data, id) {
         this._data = data;
         this._id = id;
-        this._events = events;
     }, {
         __name: 'AfterAddMarkerEvent',
 
@@ -26,9 +25,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.event.AfterAddMarkerEv
         getID: function () {
             return this._id;
         },
-
-        getEvents: function () {
-            return this._events;
+        /**
+         * Serialization for RPC
+         * @return {Object} object has key id which has the marker id of the clicked
+         */
+        getParams: function () {
+            return {
+                id: this.getID()
+            };
         }
     }, {
         /**

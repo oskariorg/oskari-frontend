@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "nl",
     "key": "Toolbar",
     "value": {
@@ -13,7 +14,7 @@ Oskari.registerLocalization({
             },
             "history": {
                 "reset": "Terug naar standaardweergave",
-                "back": "Terug ",
+                "back": "Terug",
                 "next": "Verder"
             },
             "pan": "Verschuif kaartweergave",
@@ -32,4 +33,5 @@ Oskari.registerLocalization({
             }
         }
     }
-});
+}
+);

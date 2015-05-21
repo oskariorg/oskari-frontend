@@ -15,7 +15,8 @@ OskariPinchZoom = OpenLayers.Class(OpenLayers.Control.PinchZoom, {
       this.mapmodule = mapmodule;
     },
     pinchDone: function() {
-        OpenLayers.Control.PinchZoom.prototype.pinchDone.apply(this, arguments);
+        var value = OpenLayers.Control.PinchZoom.prototype.pinchDone.apply(this, arguments);
         this.mapmodule.notifyMoveEnd();
+        return value;
     }
 });

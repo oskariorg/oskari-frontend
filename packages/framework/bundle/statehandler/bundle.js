@@ -61,17 +61,45 @@ Oskari.clazz.define("Oskari.mapframework.bundle.statehandler.StateHandlerBundle"
             "type": "text/javascript",
             "src": "../../../../bundles/framework/statehandler/resources/locale/en.js"
         }, {
-            "lang": "sv",
+            "lang": "es",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/statehandler/resources/locale/sv.js"
+            "src": "../../../../bundles/framework/statehandler/resources/locale/es.js"
         }, {
             "lang": "fi",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/statehandler/resources/locale/fi.js"
         }, {
-            "lang": "es",
+            "lang": "fr",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/statehandler/resources/locale/es.js"
+            "src": "../../../../bundles/framework/statehandler/resources/locale/fr.js"
+        }, {
+            "lang": "it",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/statehandler/resources/locale/it.js"
+        }, {
+            "lang": "is",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/statehandler/resources/locale/is.js"
+        }, {
+            "lang": "nb",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/statehandler/resources/locale/nb.js"
+        }, {
+            "lang": "nl",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/statehandler/resources/locale/nl.js"
+        }, {
+            "lang": "nn",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/statehandler/resources/locale/nn.js"
+        }, {
+            "lang": "sl",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/statehandler/resources/locale/sl.js"
+        }, {
+            "lang": "sv",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/statehandler/resources/locale/sv.js"
         }
         ]
     },

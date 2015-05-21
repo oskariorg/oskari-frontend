@@ -1,17 +1,29 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "nn",
     "key": "DivManazer",
     "value": {
+        "buttons": {
+            "add": "Legg til",
+            "cancel": "Avbryt",
+            "close": "Lukk",
+            "delete": "Slett",
+            "edit": "Rediger",
+            "exit": "Avslutt",
+            "ok": "OK",
+            "save": "Lagre",
+            "search": "Søk"
+        },
         "LanguageSelect": {
             "title": "Språk",
-            "tooltip": "NOT TRANSLATED",
+            "tooltip": "Vel språk",
             "languages": {
                 "af": "afrikaans",
                 "ak": "akan",
                 "am": "amharisk",
                 "ar": "arabisk",
                 "az": "aserbajdsjansk",
-                "be": "kviterussisk",
+                "be": "hviterussisk",
                 "bg": "bulgarsk",
                 "bm": "bambara",
                 "bn": "bengali",
@@ -38,8 +50,8 @@ Oskari.registerLocalization({
                 "fr": "fransk",
                 "fy": "vestfrisisk",
                 "ga": "irsk",
-                "gd": "skotsk-gælisk",
-                "gl": "galicisk",
+                "gd": "skotsk gælisk",
+                "gl": "galisisk",
                 "gu": "gujarati",
                 "ha": "hausa",
                 "he": "hebraisk",
@@ -56,7 +68,7 @@ Oskari.registerLocalization({
                 "ka": "georgisk",
                 "ki": "kikuyu",
                 "kk": "kasakhisk",
-                "kl": "kalaallisut; grønlandsk",
+                "kl": "grønlandsk",
                 "km": "khmer",
                 "kn": "kannada",
                 "ko": "koreansk",
@@ -78,15 +90,15 @@ Oskari.registerLocalization({
                 "ms": "malayisk",
                 "mt": "maltesisk",
                 "my": "burmesisk",
-                "nb": "bokmål",
+                "nb": "norsk bokmål",
                 "nd": "nord-ndebele",
-                "ne": "nepalsk",
+                "ne": "nepali",
                 "nl": "nederlandsk",
-                "nn": "nynorsk",
+                "nn": "norsk nynorsk",
                 "om": "oromo",
                 "or": "oriya",
                 "os": "ossetisk",
-                "pa": "panjabi",
+                "pa": "punjabi",
                 "pl": "polsk",
                 "ps": "pashto",
                 "pt": "portugisisk",
@@ -95,7 +107,7 @@ Oskari.registerLocalization({
                 "rn": "rundi",
                 "ro": "rumensk",
                 "ru": "russisk",
-                "rw": "kinjarwanda",
+                "rw": "kinyarwanda",
                 "se": "nordsamisk",
                 "sg": "sango",
                 "si": "singalesisk",
@@ -107,12 +119,12 @@ Oskari.registerLocalization({
                 "sr": "serbisk",
                 "sv": "svensk",
                 "sw": "swahili",
-                "ta": "tamil",
+                "ta": "tamilsk",
                 "te": "telugu",
                 "th": "thai",
                 "ti": "tigrinja",
-                "tn": "tswana",
-                "to": "tonga (Tonga-øyane)",
+                "tn": "setswana",
+                "to": "tongansk",
                 "tr": "tyrkisk",
                 "ts": "tsonga",
                 "ug": "uigurisk",
@@ -125,6 +137,131 @@ Oskari.registerLocalization({
                 "zh": "kinesisk",
                 "zu": "zulu"
             }
+        },
+        "VisualizationForm": {
+            "tooltips": {
+                "dot": "Tilpass punktstil",
+                "area": "Tilpass arealstil",
+                "line": "Tilpass linjestil"
+            },
+            "dot": {
+                "title": "Punktstil",
+                "tooltip": "",
+                "symbol": {
+                    "label": "Ikon"
+                },
+                "size": {
+                    "label": "Storleik"
+                },
+                "color": {
+                    "label": "Farge",
+                    "labelOr": "eller",
+                    "labelCustom": "Spesialfarge (RGB 0-255)"
+                },
+                "preview": {
+                    "label": "Førehandsvising"
+                },
+                "buttons": {
+                    "save": "Lagre",
+                    "cancel": "Avbryt"
+                }
+            },
+            "line": {
+                "title": "Linestil",
+                "tooltip": "",
+                "style": {
+                    "label": "Linestil"
+                },
+                "cap": {
+                    "label": "Endepunkt"
+                },
+                "corner": {
+                    "label": "Hjørne"
+                },
+                "width": {
+                    "label": "Breidde"
+                },
+                "color": {
+                    "label": "Farge",
+                    "labelOr": "eller",
+                    "labelCustom": "Spesialfarge (RGB 0-255)"
+                },
+                "preview": {
+                    "label": "Førehandsvising"
+                },
+                "buttons": {
+                    "save": "Lagre",
+                    "cancel": "Avbryt"
+                }
+            },
+            "area": {
+                "title": "Arealstil",
+                "tooltip": "",
+                "linestyle": {
+                    "label": "Linestil"
+                },
+                "linecap": {
+                    "label": "Endepunkt"
+                },
+                "linecorner": {
+                    "label": "Hjørne"
+                },
+                "linewidth": {
+                    "label": "Linebreidde"
+                },
+                "linecolor": {
+                    "label": "Linefarge",
+                    "labelOr": "eller",
+                    "labelCustom": "Spesialfarge (RGB 0-255)"
+                },
+                "color": {
+                    "label": "Fyllfarge",
+                    "labelOr": "eller",
+                    "labelCustom": "Spesialfarge (RGB 0-255)"
+                },
+                "fill": {
+                    "label": "Mønster"
+                },
+                "preview": {
+                    "label": "Førehandsvising"
+                },
+                "buttons": {
+                    "save": "Lagre",
+                    "cancel": "Avbryt"
+                }
+            }
+        },
+        "Grid": {
+            "columnSelector": {
+                "title": "Eigenskapar",
+                "tooltip": "Vis kolonner"
+            },
+            "export": {
+                "title": "Eksporter data",
+                "export": "Eksport",
+                "additional": {
+                    "title": "Tilleggsinstillingar",
+                    "dataSource": "Datakjelde",
+                    "metadata": "Metadatalenke"
+                },
+                "columns": {
+                    "title": "Kolonner",
+                    "all": "Alle",
+                    "visible": "Opne"
+                },
+                "format": {
+                    "title": "Filformat",
+                    "xlsx": "Excel",
+                    "csv": "CSV"
+                },
+                "delimiter": {
+                    "title": "CSV filseparator",
+                    "comma": "Komma",
+                    "semicolon": "Semikolon",
+                    "tabulator": "Tabulator"
+                }
+            }
         }
     }
-});
+}
+);

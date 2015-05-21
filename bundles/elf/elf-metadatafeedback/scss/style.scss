@@ -7,7 +7,10 @@ div.userfeedback-values  {
   font-size: 14px;
   line-height: 20px;
   color: #333;
-  background-color: #fff;
+
+  #step-2 {
+    display: none;
+  }
 
   a {
     color: #08c;
@@ -109,15 +112,10 @@ div.userfeedback-values  {
   }
 
   h2 {
-    margin: 10px 0;
     font-family: inherit;
     font-weight: bold;
     color: inherit;
     text-rendering: optimizelegibility;
-    line-height: 40px;
-  }
-
-  h2 {
     line-height: 40px;
     font-size: 31.5px;
   }
@@ -150,9 +148,8 @@ div.userfeedback-values  {
     display: block;
     width: 100%;
     padding: 0;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     font-size: 21px;
-    line-height: 40px;
     color: #333;
     border: 0;
     border-bottom: 1px solid #e5e5e5;
@@ -548,6 +545,7 @@ div.ratingStar {
   display: table-cell;
   width: 16px;
   cursor: pointer;
+  background-repeat: no-repeat;
 }
 
 div.numRatings {

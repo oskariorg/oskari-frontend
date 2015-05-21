@@ -79,6 +79,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @throws error if layer with the same id already exists
          */
         addLayer: function (layerModel, suppressEvent) {
+            if(!layerModel) {
+                this._sandbox.printWarn('Called addLayer without a layer!');
+                return;
+            }
             // if parent id is present, forward to addSubLayer()
             if(layerModel.getParentId() != -1) {
                 this.addSubLayer(layerModel.getParentId(), layerModel, suppressEvent);
@@ -221,6 +225,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 return;
             }
 
+            if (newLayerConf.url) {
+                layer.setLayerUrls(this.parseUrls(newLayerConf.url));
+            }
+
             if (newLayerConf.dataUrl) {
                 layer.setDataUrl(newLayerConf.dataUrl);
             }
@@ -235,6 +243,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             if (newLayerConf.maxScale) {
                 layer.setMaxScale(newLayerConf.maxScale);
+            }
+            if (newLayerConf.opacity) {
+                layer.setOpacity(newLayerConf.opacity);
             }
 
             if (newLayerConf.name) {
@@ -743,7 +754,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             var layer = this.createLayerTypeInstance(mapLayerJson.type, mapLayerJson.params, mapLayerJson.options);
             if (!layer) {
-                this._sandbox.printDebug("[MapLayerService] Unknown layer type: " + mapLayerJson.type);
+                this._sandbox.printWarn("[MapLayerService] Unknown layer type: " + mapLayerJson.type);
                 return null;
             }
             //these may be implemented as jsonHandler
@@ -878,7 +889,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
             layer.setGfiContent(jsonLayer.gfiContent);
 
-            if(jsonLayer.wmsUrl) {
+            /*prefer url - param, fall back to wmsUrl if not available*/
+            if (jsonLayer.url) {
+                layer.setLayerUrls(this.parseUrls(jsonLayer.url));
+            } else if (jsonLayer.wmsUrl) {
                 layer.setLayerUrls(this.parseUrls(jsonLayer.wmsUrl));
             }
 

@@ -4,14 +4,14 @@ Oskari.registerLocalization(
     "key": "DivManazer",
     "value": {
         "buttons": {
-            "add": "Tillägg",
+            "add": "Lägg till",
             "cancel": "Avbryt",
             "close": "Stäng",
             "delete": "Ta bort",
-            "edit": "Editera",
+            "edit": "Redigera",
             "exit": "Avsluta",
             "ok": "OK",
-            "save": "Lagra",
+            "save": "Spara",
             "search": "Sök"
         },
         "LanguageSelect": {
@@ -140,15 +140,15 @@ Oskari.registerLocalization(
         },
         "VisualizationForm": {
             "tooltips": {
-                "dot": "Editera punktens stil",
-                "area": "Editera områdets stil",
-                "line": "Editera linjens stil"
+                "dot": "Redigera punktens stil",
+                "area": "Redigera områdets stil",
+                "line": "Redigera linjens stil"
             },
             "dot": {
-                "title": "Visualisering av punktobjekt",
-                "tooltip": "Punktens stil",
+                "title": "Punktens stil",
+                "tooltip": "NOT TRANSLATED",
                 "symbol": {
-                    "label": "Ikon för punktobjekt"
+                    "label": "Ikon"
                 },
                 "size": {
                     "label": "Storlek"
@@ -162,8 +162,8 @@ Oskari.registerLocalization(
                     "label": "Förhandsgranska"
                 },
                 "buttons": {
-                    "save": "Lagra",
-                    "cancel": "Tillbaka"
+                    "save": "Spara",
+                    "cancel": "Avbryt"
                 }
             },
             "line": {
@@ -190,8 +190,8 @@ Oskari.registerLocalization(
                     "label": "Förhandsgranska"
                 },
                 "buttons": {
-                    "save": "Lagra",
-                    "cancel": "Tillbaka"
+                    "save": "Spara",
+                    "cancel": "Avbryt"
                 }
             },
             "area": {
@@ -204,10 +204,10 @@ Oskari.registerLocalization(
                     "label": "Linjens ändpunkter"
                 },
                 "linecorner": {
-                    "label": "Hörn"
+                    "label": "Linjens hörn"
                 },
                 "linewidth": {
-                    "label": "Bredd"
+                    "label": "Linjens bredd"
                 },
                 "linecolor": {
                     "label": "Linjens färg",
@@ -226,8 +226,8 @@ Oskari.registerLocalization(
                     "label": "Förhandsvisning"
                 },
                 "buttons": {
-                    "save": "Lagra",
-                    "cancel": "Tillbaka"
+                    "save": "Spara",
+                    "cancel": "Avbryt"
                 }
             }
         },
@@ -242,7 +242,8 @@ Oskari.registerLocalization(
                 "additional": {
                     "title": "Ytterligare inställningar",
                     "dataSource": "Datakälla",
-                    "metadata": "Metadata"
+                    "metadata": "Metadata länk",
+                    "export_selection": "Exportera utvald objekter"
                 },
                 "columns": {
                     "title": "Kolumner",

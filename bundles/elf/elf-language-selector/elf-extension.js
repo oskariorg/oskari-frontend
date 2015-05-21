@@ -72,7 +72,6 @@ Oskari.clazz.define("Oskari.elf.extension.EnhancedExtension",
          *      structure and if parameter key is given
          */
         getLocalization: function (key) {
-
             if (!this._localization) {
                 this._localization = Oskari.getLocalization(this.getName());
             }
@@ -87,17 +86,15 @@ Oskari.clazz.define("Oskari.elf.extension.EnhancedExtension",
          * BundleInstance protocol method
          */
         start: function () {
-            var me = this;
-            var conf = this.conf;
-            var sandboxName = (conf ? conf.sandbox : null) || 'sandbox';
-            var sandbox = Oskari.getSandbox(sandboxName);
+            var me = this,
+                conf = this.conf,
+                sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
+                sandbox = Oskari.getSandbox(sandboxName);
 
             me.sandbox = sandbox;
 
-            //this.setLocalization(this.locales[Oskari.getLang()] || this.locales['en']);
-
             /* stateful */
-            if (conf && conf.stateful === true) {
+            if (conf && conf.stateful) {
                 sandbox.registerAsStateful(this.mediator.bundleId, this);
             }
 
@@ -281,7 +278,7 @@ Oskari.clazz.define("Oskari.elf.extension.EnhancedExtension",
             var flyoutCls = Oskari.cls()
                 .extend('Oskari.userinterface.extension.DefaultFlyout');
 
-            flyoutCls.setTitle = function (title) {
+            flyoutCls.setTitle = function () {
 
             };
 

@@ -1,4 +1,17 @@
+
+    <div class="add-layer-record">
+        <div class="add-layer-label-area">
+            <label for="add-layer-interface-version" class="add-layer-label" title="<%= instance.getLocalization('admin').interfaceVersionDesc %>"><%= instance.getLocalization('admin').interfaceVersion %></label>
+        </div>
+        <div class="add-layer-input-area">
+            <select id="add-layer-interface-version"  class="admin-interface-version"  <% if(model.getId()){ %>readonly<% } %>>
+                <option value="1.1.0" <% if(model.getVersion() == '1.1.0' ) { %>selected<% } %> >1.1.0</option>
+                <option value="2.0.0" <% if(model.getVersion() == '2.0.0' ) { %>selected<% } %> >2.0.0</option>
+            </select>
+        </div>
+    </div>
 <% if(!model.getId()){ %>
+
     <div class="add-layer-record">
         <div class="add-layer-label-area">
             <label for="add-layer-interface" class="add-layer-label"  title="<%= instance.getLocalization('admin').interfaceAddress %>"><%= instance.getLocalization('admin').interfaceAddress %></label>
@@ -6,8 +19,8 @@
         <div class="add-layer-input-area">
             <div class="input-controls">
                 <input type="text" id="add-layer-interface" class="add-layer-input mid"
-                    placeholder="<%= instance.getLocalization('admin').interfaceAddress %>"
-                    value="<%= model.getInterfaceUrl() %>" />
+                       placeholder="<%= instance.getLocalization('admin').interfaceAddress %>"
+                       value="<%= model.getInterfaceUrl() %>" />
                 <div class="icon-close mid"></div>
             </div>
             <button id="add-layer-ws-button" class="fetch-ws-button"><%= instance.getLocalization('admin').getInfo %></button>
@@ -33,7 +46,6 @@
             />
             <div class="icon-close mid"></div>
         </div>
-        <!-- button id="add-layer-wfs-button" class="fetch-wfs-button"><%= instance.getLocalization('admin').editWfs %></button -->
     </div>
 
 </div>

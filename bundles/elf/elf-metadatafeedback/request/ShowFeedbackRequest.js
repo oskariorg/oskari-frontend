@@ -6,9 +6,7 @@
 Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.request.ShowFeedbackRequest',
 
     /* constructor */
-    function (score, metadataId, metadata) {
-        this._score = score;
-        this._metadataId = metadataId;
+    function (metadata) {
         this._metadata = metadata;
     }, {
         __name: 'catalogue.ShowFeedbackRequest',
@@ -20,27 +18,22 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.request.ShowFeedba
             return this.__name;
         },
         /**
-         * @method getScore
-         * @return {Number} feedback score value
+         * @method getRating
+         * @return {Number} feedback rating value
          */
-        getScore: function () {
-            return this._score;
+        getRating: function () {
+            return this._metadata.rating;
         },
         /**
          * @method getMetadataId
-         * @return {String} metadataid
+         * @return {Number} id of the metadata
          */
         getMetadataId: function () {
-            return this._metadataId;
+            return this._metadata.id;
         },
-        /**
-         * @method getMetadata
-         * @return {Object} metadata object
-         */
-        getMetadata: function () {
+        getMetadata: function() {
             return this._metadata;
         }
-
     }, {
         protocol: ['Oskari.mapframework.request.Request']
     });

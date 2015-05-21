@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "et",
     "key": "Toolbar",
     "value": {
@@ -32,4 +33,5 @@ Oskari.registerLocalization({
             }
         }
     }
-});
+}
+);

@@ -25,9 +25,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.aggregateAnalyseFil
          * Adds multiLevelSelect or shows advertisingtext after user clicks the link to filter with aggregate value
          */
         addAggregateFilterFunctionality: function(aggregateAnalysis) {
-            var me = this,
-                aggregateAnalysis = aggregateAnalysis;
-
+            var me = this;
             me.content = me.filterDialog.popup.dialog.find('.analyse-filter-popup-content');
 
             if (me.filterDialog.popup.dialog.find('.add-link')) {
@@ -46,7 +44,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.aggregateAnalyseFil
                             me.aggregateAnalyseFilter._blink(jQuery(event.target).parent().parent().find('input'));
                         });
                     }
-                })
+                });
             }
         },
 
@@ -55,7 +53,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.aggregateAnalyseFil
          * shows text advertising analyse aggregate values if user doesn't have any
          */
         showAdvertisingText: function() {
-            var loc = this.instance.getLocalization('layer');
+            var loc = this.instance.getLocalization('layer'),
                 dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton'),
                 title = loc.filter.aggregateAnalysisFilter.noAggregateAnalysisPopupTitle,
@@ -73,7 +71,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.aggregateAnalyseFil
          * blinks the input element when aggregate value is selected
          */
         _blink : function(element) {
-            var me = this;
             if(!element) {
                 return;
             }
@@ -130,19 +127,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.aggregateAnalyseFil
                     var indexofChangedValue = _.indexOf(me._cachedAggregateValue, _valueDifference[0]);
                     me._cachedAggregateValue = value;
                     if (indexofChangedValue === 0) {
-                        var keyValue = value[0];
-                        me.getAggregateAnalysisJSON(keyValue);
+                        me.getAggregateAnalysisJSON(value[0]);
                     }
                     if (indexofChangedValue === 1) {
-                        var keyValue = value[1];
-                        if (keyValue !== "undefined") {
-                            me.parseLastSelect(keyValue);
+                        if (value[1] !== "undefined") {
+                            me.parseLastSelect(value[1]);
                         }
                     }
                     if (indexofChangedValue === 2) {
-                        var keyValue = value[2];
-                        if (keyValue !== "undefined") {
-                            me.useAggregateValue(keyValue, callback);
+                        if (value[2] !== "undefined") {
+                            me.useAggregateValue(value[2], callback);
                         }
                     }
                 }
@@ -220,10 +214,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.aggregateAnalyseFil
             var datasets = me.indicatorData[keyValue];
             var options = [];
             for(var key in datasets) {
-                options.push({
-                    title : key + ':   ' + datasets[key],
-                    value : datasets[key]
-                })
+                if(datasets.hasOwnProperty(key)){
+                    options.push({
+                        title : key + ':   ' + datasets[key],
+                        value : datasets[key]
+                    });
+                }
             }
             var updateLastValues = {multiple: true, options: options};
             me.selectValues[index] = updateLastValues;
@@ -276,7 +272,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.aggregateAnalyseFil
                     error = err;
                 }
             } catch (ignore) {
-
+                return '';
             }
             return error;
         }

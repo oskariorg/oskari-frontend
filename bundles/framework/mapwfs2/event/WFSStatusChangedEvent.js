@@ -24,15 +24,15 @@ function(layerId) {
     /** @static @property __name event name */
     __name : "WFSStatusChangedEvent",
     status : {
-    	'loading' : 1,
-    	'complete' : 200,
-    	'error' : 500
+        'loading' : 1,
+        'complete' : 200,
+        'error' : 500
     },
     type : {
-    	'image' : 1,
-    	'highlight' : 2,
-    	'feature' : 3,
-    	'mapClick' : 4
+        'image' : 1,
+        'highlight' : 2,
+        'feature' : 3,
+        'mapClick' : 4
     },
     /**
      * @method getName

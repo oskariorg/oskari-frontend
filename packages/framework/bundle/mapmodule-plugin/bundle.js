@@ -134,8 +134,12 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/framework/mapmodule-plugin/event/AfterAddMarkerEvent.js"
                 }, {
                     "type": "text/javascript",
+                    "src": "../../../../bundles/framework/mapmodule-plugin/event/MarkerClickEvent.js"
+                }, {
+                    "type": "text/javascript",
                     "src": "../../../../bundles/framework/mapmodule-plugin/event/AfterRemoveMarkersEvent.js"
                 },
+                
                 /**
                  * Search plugin
                  */
@@ -427,6 +431,10 @@ Oskari.clazz.define(
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/mapmodule-plugin/resources/locale/fi.js"
             }, {
+                //"lang" : "fr",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/mapmodule-plugin/resources/locale/fr.js"
+            }, {
                 //"lang" : "ka",
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/mapmodule-plugin/resources/locale/ka.js"
@@ -443,6 +451,14 @@ Oskari.clazz.define(
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/mapmodule-plugin/resources/locale/hu.js"
             }, {
+                //"lang" : "is",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/mapmodule-plugin/resources/locale/is.js"
+            }, {
+                //"lang" : "it",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/mapmodule-plugin/resources/locale/it.js"
+            }, {
                 //"lang" : "lv",
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/mapmodule-plugin/resources/locale/lv.js"
@@ -450,6 +466,14 @@ Oskari.clazz.define(
                 //"lang" : "nl",
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/mapmodule-plugin/resources/locale/nl.js"
+            }, {
+                //"lang" : "nb",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/mapmodule-plugin/resources/locale/nb.js"
+            }, {
+                //"lang" : "nn",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/mapmodule-plugin/resources/locale/nn.js"
             }, {
                 //"lang" : "pl",
                 "type": "text/javascript",

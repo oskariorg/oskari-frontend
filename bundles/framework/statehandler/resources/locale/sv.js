@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "sv",
     "key": "StateHandler",
     "value": {
@@ -14,4 +15,5 @@ Oskari.registerLocalization({
             }
         }
     }
-});
+}
+);

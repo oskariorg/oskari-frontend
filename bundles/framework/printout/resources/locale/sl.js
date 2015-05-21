@@ -3,48 +3,48 @@ Oskari.registerLocalization(
     "lang": "sl",
     "key": "Printout",
     "value": {
-        "title": "Natisni kartni pogled",
-        "flyouttitle": "Natisni kartni pogled",
+        "title": "Natisni pogled karte",
+        "flyouttitle": "Natisni pogled karte",
         "desc": "",
-        "btnTooltip": "NOT TRANSLATED",
+        "btnTooltip": "Natisni",
         "BasicView": {
-            "title": "Natisni kartni pogled",
+            "title": "Natisni pogled karte",
             "name": {
-                "label": "NOT TRANSLATED",
-                "placeholder": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED"
+                "label": "Ime karte",
+                "placeholder": "zahtevano",
+                "tooltip": "Določi opisno ime za karto. Prosim, da upoštevaš jezik uporabniškega vmesnika."
             },
             "language": {
-                "label": "NOT TRANSLATED",
+                "label": "Jezik",
                 "options": {
-                    "fi": "NOT TRANSLATED",
-                    "sv": "NOT TRANSLATED",
-                    "en": "NOT TRANSLATED"
+                    "fi": "Finski",
+                    "sv": "Švedski",
+                    "en": "Angleški"
                 },
-                "tooltip": "NOT TRANSLATED"
+                "tooltip": "Izberi jezik, ki bo uporabljen pri izrisu.  Bodi pozoren na jezik uporabniškega vmesnika in nabora podatkov."
             },
             "size": {
                 "label": "Velikost",
-                "tooltip": "Izberi nastavitve strani tiskanja| Predogled karte je potrebno posodobiti,",
+                "tooltip": "Izberi velikost lista za izris. Zadnje spremembe vidiš v oknu za predogled.",
                 "options": [
                     {
                         "id": "A4",
-                        "label": "A4 stoječe",
-                        "classForPreview": "predogled-stoječe",
-                        "selected": "pravilno"
+                        "label": "A4 pokončno",
+                        "classForPreview": "predogled-pokončno",
+                        "selected": true
                     },
                     {
-                        "id": "A4_Landscape",
+                        "id": "A4_Ležeče",
                         "label": "A4 ležeče",
                         "classForPreview": "predogled-ležeče"
                     },
                     {
                         "id": "A3",
-                        "label": "A3 stoječe",
-                        "classForPreview": "predogled-stoječe"
+                        "label": "A3 pokončno",
+                        "classForPreview": "predogled-pokončno"
                     },
                     {
-                        "id": "A3_Landscape",
+                        "id": "A3_Ležeče",
                         "label": "A3 ležeče",
                         "classForPreview": "predogled-ležeče"
                     }
@@ -52,31 +52,31 @@ Oskari.registerLocalization(
             },
             "preview": {
                 "label": "Predogled",
-                "tooltip": "Za odprtje večjega predogleda klikni na majhen predogled",
+                "tooltip": "Velikost predogleda lahko povečaš s klikom nanj.",
                 "pending": "Predogled bo kmalu osvežen",
                 "notes": {
-                    "extent": "Predogled se lahko uporablja, da ugotovimo kolikšen je obseg karte na natisu",
-                    "restriction": "V predogledu niso vidi vsi sloji karte"
+                    "extent": "Velikost izrisa za tiskanje lahko preveriš v oknu za predogled.",
+                    "restriction": "V predogledu niso vidni vsi sloji karte."
                 }
             },
             "buttons": {
                 "save": "Natisni",
                 "ok": "V redu",
-                "back" : "NOT TRANSLATED",
+                "back": "Prejšnji",
                 "cancel": "Prekini"
             },
             "location": {
-                "label": "Lokacija in povečava",
-                "tooltip": "Merilo natis se ujema z merilo na karti in v brskalniku",
+                "label": "Lokacija in raven povečave",
+                "tooltip": "Merilo izrisa se ujema z merilom na karti v brskalniku",
                 "zoomlevel": "Povečava"
             },
             "settings": {
                 "label": "Več nastavitev",
-                "tooltip": "Naredi dodatne nastavitve kot so format, naslov in lestvica"
+                "tooltip": "Izberi dodatne informacije za izris, kot so: format datoteke, naslov, merilo in datum."
             },
             "format": {
-                "label": "Format",
-                "tooltip": "Izberi format",
+                "label": "Format datoteke",
+                "tooltip": "Izberi format datoteke",
                 "options": [
                     {
                         "id": "png",
@@ -86,89 +86,89 @@ Oskari.registerLocalization(
                     {
                         "id": "pdf",
                         "format": "aplikacija/pdf",
-                        "selected": "pravilno",
+                        "selected": true,
                         "label": "PDF dokument"
                     }
                 ]
             },
             "mapTitle": {
-                "label": "Dodaj naslov",
-                "tooltip": "dodaj naslov za karto"
+                "label": "Naslov karte",
+                "tooltip": "Dodaj naslov karte"
             },
             "content": {
                 "options": [
                     {
-                        "id": "Logo strani",
-                        "label": "Dodaj Oskari logo",
-                        "tooltip": "Po potrebi lahko logo skriješ",
+                        "id": "LogoStrani",
+                        "label": "Pri izrisu dodaj Oskari logo",
+                        "tooltip": "Če želiš lahko Oskari logo skriješ",
                         "checked": "preverjeno"
                     },
                     {
-                        "id": "stranMerilo",
+                        "id": "meriloStrani",
                         "label": "Dodaj merilo na karto",
-                        "tooltip": "Dodaj merilo na karto",
+                        "tooltip": "Če želiš, dodaj merilo na karto.",
                         "checked": "preverjeno"
                     },
                     {
-                        "id": "stranDatum",
-                        "label": "Dodaj datum",
-                        "tooltip": "Natisu lahko dodaš datum",
+                        "id": "datumStrani",
+                        "label": "Prikaži datum na izrisu",
+                        "tooltip": "Lahko dodaš datum na izris",
                         "checked": "preverjeno"
                     }
                 ]
             },
             "legend": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
+                "label": "Legenda karte",
+                "tooltip": "Določi položaj legende na karti. Če položaj legende ne bo določen, legenda ne bo prikazana.",
                 "options": [
                     {
-                        "id": "NOT TRANSLATED",
-                        "loca": "NOT TRANSLATED",
-                        "label": "NOT TRANSLATED",
-                        "tooltip": "NOT TRANSLATED",
+                        "id": "oskari_legenda_NE",
+                        "loca": "NE",
+                        "label": "Ni legende karte",
+                        "tooltip": "Legenda karte ni prikazana na izrisu",
                         "selected": true
                     },
                     {
-                        "id": "NOT TRANSLATED",
-                        "loca": "NOT TRANSLATED",
-                        "label": "NOT TRANSLATED",
-                        "tooltip": "NOT TRANSLATED"
+                        "id": "oskari_legenda_LS",
+                        "loca": "LS",
+                        "label": "Levi spodnji vogal",
+                        "tooltip": "Legenda karte je prikazana na levem spodnjem vogalu izrisa."
                     },
                     {
-                        "id": "NOT TRANSLATED",
-                        "loca": "NOT TRANSLATED",
-                        "label": "NOT TRANSLATED",
-                        "tooltip": "NOT TRANSLATED"
+                        "id": "oskari_legenda_LZ",
+                        "loca": "LZ",
+                        "label": "Levi zgornji vogal",
+                        "tooltip": "Legenda karte je prikazana na levem zgornjem vogalu izrisa."
                     },
                     {
-                        "id": "NOT TRANSLATED",
-                        "loca": "NOT TRANSLATED",
-                        "label": "NOT TRANSLATED",
-                        "tooltip": "NOT TRANSLATED"
+                        "id": "oskari_legenda_DZ",
+                        "loca": "DZ",
+                        "label": "Desni zgornji vogal",
+                        "tooltip": "Legenda karte je prikazana na desnem zgornjem vogalu izrisa."
                     },
                     {
-                        "id": "NOT TRANSLATED",
-                        "loca": "NOT TRANSLATED",
-                        "label": "NOT TRANSLATED",
-                        "tooltip": "NOT TRANSLATED"
+                        "id": "oskari_legenda_DS",
+                        "loca": "DS",
+                        "label": "Desni spodnji vogal",
+                        "tooltip": "Legenda karte je prikazana na desnem spodnjem vogalu izrisa."
                     }
                 ]
             },
             "help": "Pomoč",
             "error": {
                 "title": "Napaka",
-                "size": "NOT TRANSLATED",
-                "name": "NOT TRANSLATED",
+                "size": "Napaka pri določitvi velikosti",
+                "name": "Ime je zahtevana informacija",
                 "nohelp": "Pomoč ni na voljo.",
-                "saveFailed": "Natis karte ni uspel| Poskusi kasneje.",
-                "nameIllegalCharacters": "NOT TRANSLATED"
+                "saveFailed": "Tiskanje izrisa karte ni uspelo. Poskusi kasneje.",
+                "nameIllegalCharacters": "Ime vsebuje nedovoljene znake. Dovoljeni znaki so črke a-z, številke, vračalke in vezaji."
             }
         },
         "StartView": {
-            "text": "Izdelan kartni pogled lahko natisneš",
+            "text": "Pogled karte, ki si ga pripravil lahko natisneš v obliki PNG slike ali PDF datoteke.",
             "info": {
-                "maxLayers": "Natisneš lahko največ 8 slojev na enkrat",
-                "printoutProcessingTime": "Pri izbiri več slojev na enkrat postopek natisa traja malo dlje"
+                "maxLayers": "Natisneš lahko največ 8 slojev karte na enkrat",
+                "printoutProcessingTime": "Tiskanje izrisa karte lahko traja nekaj časa, ko je izbranih več slojev karte."
             },
             "buttons": {
                 "continue": "Nadaljuj",

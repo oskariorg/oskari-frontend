@@ -127,7 +127,7 @@ module.exports = function (grunt) {
         genL10nExcels: {
             target: {
                 expand: true,
-                src: ['../bundles/**/bundle/*/']
+                src: ['../bundles/*/*/']
             }
         },
         compress: {

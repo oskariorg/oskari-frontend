@@ -34,14 +34,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.promote.PromoteBundle", function
 		}],
 
 		"locales" : [{
-			"lang" : "fi",
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/promote/resources/locale/fi.js"
-		}, {
-			"lang" : "sv",
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/promote/resources/locale/sv.js"
-		}, {
 			"lang" : "en",
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/promote/resources/locale/en.js"
@@ -49,6 +41,46 @@ Oskari.clazz.define("Oskari.mapframework.bundle.promote.PromoteBundle", function
 			"lang" : "es",
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/promote/resources/locale/es.js"
+		}, {
+			"lang" : "et",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/promote/resources/locale/et.js"
+		}, {
+			"lang" : "fi",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/promote/resources/locale/fi.js"
+		}, {
+			"lang" : "fr",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/promote/resources/locale/fr.js"
+		}, {
+			"lang" : "is",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/promote/resources/locale/is.js"
+		}, {
+			"lang" : "it",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/promote/resources/locale/it.js"
+		}, {
+			"lang" : "nb",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/promote/resources/locale/nb.js"
+		}, {
+			"lang" : "nl",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/promote/resources/locale/nl.js"
+		}, {
+			"lang" : "nn",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/promote/resources/locale/nn.js"
+		}, {
+			"lang" : "sl",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/promote/resources/locale/sl.js"
+		}, {
+			"lang" : "sv",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/promote/resources/locale/sv.js"
 		}]
 	},
 	"bundle" : {
