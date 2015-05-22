@@ -74,7 +74,7 @@ Oskari.clazz.define(
                 '           <div class="details--wrapper"></div>' +
                 '    <label>' +
                 '        <span></span>' +
-                '        <select name="choose-param-for-search" required="required"><option value="te">te</option></select>' +
+                '        <select name="choose-param-for-search" required="required"></select>' +
                 '        <div class="remove--param icon-close hidden"></div>' +
                 '    </label>' +
                 '</fieldset>' +
@@ -97,7 +97,13 @@ Oskari.clazz.define(
 
             me.templates.form.find(".remove--param").click(function(event){
                 jQuery(this).parent().remove();
+                event.preventDefault;
             });
+
+             me.templates.form.find("select[name=choose-wfs-layer]").change(function(event) {
+                 me.getWFSLayerColumns(jQuery(this).val(), jQuery(this).parents('fieldset'));
+                 event.preventDefault;
+             });
 
             //me.templates.form.attr('action', me.sandbox.getAjaxUrl() + me.instance.conf.restUrl);
             me.templates.form.find('input,select').each(function (index) {
@@ -211,6 +217,44 @@ Oskari.clazz.define(
                         me.templates.form.find('select[name=choose-wfs-layer]').append(jQuery('<option>', { 
                             value: layer.id,
                             text : layer.name[Oskari.getLang()]
+                        }));
+                    });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    var error = me._getErrorText(jqXHR, textStatus, errorThrown);
+
+                    me._openPopup(
+                        me._getLocalization('layers_failed'),
+                        error
+                    );
+                }
+            });
+        },
+
+        /**
+         * [getWFSLayerColumns description]
+         * @param  {[type]}
+         * @return {[type]}
+         */
+        getWFSLayerColumns: function (layer_id, el) {
+            var me = this;
+
+            var url = this.sandbox.getAjaxUrl() + 'action_route=GetWFSDescribeFeature&layer_id=' + layer_id;
+            jQuery.ajax({
+                type: 'GET',
+                dataType: 'json',
+                url: url,
+                beforeSend: function (x) {
+                    if (x && x.overrideMimeType) {
+                        x.overrideMimeType('application/j-son;charset=UTF-8');
+                    }
+                },
+                success: function (data) {
+                    jQuery(el).find('select[name=choose-param-for-search]').empty();
+                    jQuery.each(data.propertyTypes, function(name, type){
+                        jQuery(el).find('select[name=choose-param-for-search]').append(jQuery('<option>', { 
+                            value: type,
+                            text : name
                         }));
                     });
                 },
