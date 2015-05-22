@@ -1,3 +1,4 @@
+
 /**
  * @class Oskari.mapframework.bundle.featuredata2.Flyout
  *
@@ -136,6 +137,7 @@ Oskari.clazz.define(
                 );
 
             flyout.empty();
+            me.WFSLayerService = sandbox.getService('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
 
             // if previous panel is undefined -> just added first tab
             // if selectedPanel is undefined -> just removed last tab
@@ -732,7 +734,11 @@ Oskari.clazz.define(
             if (keepCollection === undefined) {
                 keepCollection = sandbox.isCtrlKeyDown();
             }
-            var event = builder(featureIds, layer, keepCollection);
+            if (!keepCollection) {
+                this.WFSLayerService.emptyWFSFeatureSelections(layer);
+            }
+            this.WFSLayerService.setWFSFeaturesSelections(layer._id, featureIds);
+            var event = builder(this.WFSLayerService.getWFSFeaturesSelections(layer._id), layer, true);
             sandbox.notifyAll(event);
         },
 
@@ -757,7 +763,7 @@ Oskari.clazz.define(
                 panel.grid.select(fids[0], event.isKeepSelection());
                 if (fids.length > 1) {
                     for (i = 1; i < fids.length; i += 1) {
-                        panel.grid.select(fids[i], true);
+                        panel.grid.select(fids[i], event.isKeepSelection());
                     }
                 }
             } else {

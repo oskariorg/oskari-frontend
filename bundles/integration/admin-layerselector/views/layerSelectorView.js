@@ -32,7 +32,7 @@ define([
                 this.instance = this.options.instance;
                 this.el = this.options.el;
                 this.appTemplate = _.template(ViewTemplate);
-                this.tabTitleTemplate = _.template(TabTitleTemplate)
+                this.tabTitleTemplate = _.template(TabTitleTemplate);
                 this.selectedType = 'organization';
                 _.bindAll(this);
                 //render this view immediately after initialization.
@@ -46,9 +46,6 @@ define([
              */
             render: function () {
                 this.el.html(this.appTemplate);
-                // TODO this is empty rendering for inspire tab - instead, we should render
-                // somekind of notification that we are wating for data.
-                // this._renderLayerGroups(null, 'inspire');
             },
 
             /**
@@ -154,9 +151,6 @@ define([
                 // render organizations
                 this._renderLayerGroups(this.organizationTabModel, 'organization');
 
-                // FIXME: not really comfortable with this but need
-                // the references on layer forms and instance is available
-                // maybe create a service to store these?
                 this.instance.models.inspire = this.inspireTabModel;
                 this.instance.models.organization = this.organizationTabModel;
 
@@ -166,7 +160,6 @@ define([
                 jQuery('.tab-content.organization').show();
 
                 // Check that data for classes is fetched
-                // FIXME we shouldn't need to do this everytime, just once?
                 this.inspireTabModel.getClasses('getInspireName');
                 this.organizationTabModel.getClasses('getOrganizationName');
                 return true;
@@ -189,13 +182,12 @@ define([
                 target.parent().addClass('active');
 
                 // change focus and visibility
-                // TODO: part of this should be done through CSS classes
-                if (type == 'inspire') {
+                if (type === 'inspire') {
                     jQuery('.tab-content.organization').hide();
                     jQuery('.tab-content.inspire').show();
                     jQuery('.tab-content.inspire').find('.admin-filter-input').focus();
                     this.selectedType = type;
-                } else if (type == 'organization') {
+                } else if (type === 'organization') {
                     jQuery('.tab-content.inspire').hide();
                     jQuery('.tab-content.organization').show();
                     jQuery('.tab-content.organization').find('.admin-filter-input').focus();

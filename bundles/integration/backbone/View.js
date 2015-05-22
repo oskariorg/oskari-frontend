@@ -85,8 +85,9 @@ Oskari.clazz.define('Oskari.integration.bundle.backbone.View', function(locale,i
     onEvent : function(event) {
 
         var handler = this.eventHandlers[event.getName()];
-        if(!handler)
+        if(!handler) {
             return;
+        }
 
         return handler.apply(this, [event]);
 

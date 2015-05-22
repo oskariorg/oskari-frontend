@@ -381,7 +381,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 var evt = this.sandbox.getEventBuilder("WFSSetFilter")(features);
                 this.sandbox.notifyAll(evt);
 
-                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'detach']);
+                //this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'detach']);
             }
         },
 

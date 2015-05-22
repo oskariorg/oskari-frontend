@@ -25,10 +25,10 @@ Oskari.clazz.define('Oskari.integration.bundle.todo.View', function() {
      *
      */
     "eventHandlers" : {
-        "MapLayerVisibilityChangedEvent" : function(event) {
+        "MapLayerVisibilityChangedEvent" : function() {
 
         },
-        "AfterMapMoveEvent" : function(event) {
+        "AfterMapMoveEvent" : function() {
 
         }
     },
@@ -56,8 +56,6 @@ Oskari.clazz.define('Oskari.integration.bundle.todo.View', function() {
         var me = this;
         var container = this.getEl();
         container.addClass("todo");
-
-        var locale = this.getLocalization();
 
         /* _bundle - path conf is set in bundle loader based on bundle.js */
 

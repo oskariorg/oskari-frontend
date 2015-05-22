@@ -38,6 +38,14 @@ throughout Oskari code:
 
 Now adds the PersonalData tab correctly if started after PersonalData bundle. Previously expected to be started before PersonalData.
 
+### admin-layerselector
+
+Fixed theme or organization locale labels when adding new group.
+
+### admin-users
+
+Fixed admin-users bundle user search.
+
 ### catalogue/metadatagatalogue
 
 Improvements in show metadata coverage. Icons changes and now active metadata coverage is showed different icon.

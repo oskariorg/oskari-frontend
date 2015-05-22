@@ -36,7 +36,10 @@ Oskari.clazz.define(
         this._previousTimer = null;
         this._featureUpdateFrequence = 200;
         this.statusHandler = Oskari.clazz.create(
-            'Oskari.mapframework.bundle.mapwfs2.service.StatusHandler', plugin.getSandbox());
+        'Oskari.mapframework.bundle.mapwfs2.service.StatusHandler', plugin.getSandbox());
+
+        this.WFSLayerService = plugin.getSandbox().getService('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
+        
     }, {
 
         /**
@@ -307,33 +310,36 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
         var sandbox = this.plugin.getSandbox(),
             me = this,
             layer = sandbox.findMapLayerFromSelectedMapLayers(data.data.layerId),
-            keepPrevious = data.data.keepPrevious,
+            topWFSLayerId = me.WFSLayerService.getTopWFSLayer(),
+            selectionMode = data.data.keepPrevious,
             featureIds = [],
-            i;
+            selectFeatures;
+
 
         if (data.data.features !== 'empty') {
-            layer.setSelectedFeatures([]);
-            // empty selected
             for (i = 0; i < data.data.features.length; i += 1) {
                 featureIds.push(data.data.features[i][0]);
             }
         }
 
-        if (keepPrevious) {
-            // No duplicates
-            featureIds = me.filterDuplicates(layer.getClickedFeatureIds(), featureIds);
-            if(featureIds.length < 1) return;
-            layer.setClickedFeatureIds(layer.getClickedFeatureIds().concat(featureIds));
+        // handle CTRL click (selection) and normal click (getInfo) differently
+        if (selectionMode) {
+            selectFeatures = true;
+
+            if (layer._id !== topWFSLayerId) {
+                return;
+            }
+            
+            me.WFSLayerService.setWFSFeaturesSelections(layer._id, featureIds);
+
+            var event = sandbox.getEventBuilder('WFSFeaturesSelectedEvent')(me.WFSLayerService.getWFSFeaturesSelections(layer._id), layer, selectFeatures);
+            sandbox.notifyAll(event);
         } else {
-            layer.setClickedFeatureIds(featureIds);
+            data.data.lonlat = this.lonlat;
+            me.WFSLayerService.emptyWFSFeatureSelections(layer);
+            var infoEvent = sandbox.getEventBuilder('GetInfoResultEvent')(data.data);
+            sandbox.notifyAll(infoEvent);
         }
-
-        var event = sandbox.getEventBuilder('WFSFeaturesSelectedEvent')(featureIds, layer, keepPrevious);
-        sandbox.notifyAll(event);
-
-        data.data.lonlat = this.lonlat;
-        var infoEvent = sandbox.getEventBuilder('GetInfoResultEvent')(data.data);
-        sandbox.notifyAll(infoEvent);
     },
     /**
      * @method getWFSFeatureGeometries
@@ -370,24 +376,31 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
      * Creates WFSFeaturesSelectedEvent
      */
     getWFSFilter: function (data) {
-        var layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId),
+        var me = this,
+            layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId),
             featureIds = [],
+            selectFeatures = true,
+            topWFSLayer = this.WFSLayerService.getTopWFSLayer(),
             i;
 
+        if (!me.WFSLayerService.isSelectFromAllLayers()) {
+            if (layer._id !== topWFSLayer) {
+                return;
+            }
+        }
         if (data.data.features !== 'empty') {
-            layer.setClickedFeatureIds([]);
             for (i = 0; i < data.data.features.length; i += 1) {
                 featureIds.push(data.data.features[i][0]);
             }
         }
 
         if (data.data.features !== 'empty') {
-            layer.setSelectedFeatures(data.data.features);
+            me.WFSLayerService.setWFSFeaturesSelections(layer._id, featureIds);
         } else {
-            layer.setSelectedFeatures([]);
+            me.WFSLayerService.emptyWFSFeatureSelections(layer);
         }
 
-        var event = this.plugin.getSandbox().getEventBuilder('WFSFeaturesSelectedEvent')(featureIds, layer, false);
+        var event = this.plugin.getSandbox().getEventBuilder('WFSFeaturesSelectedEvent')(featureIds, layer, selectFeatures);
         this.plugin.getSandbox().notifyAll(event);
     },
 
@@ -642,7 +655,7 @@ Oskari.clazz.category(
                 'geomRequest': geomRequest
             });
 
-
+            /**
             if(keepPrevious !== null && keepPrevious === false) {
                 me.setFilter({
                     "type":"FeatureCollection",
@@ -659,6 +672,7 @@ Oskari.clazz.category(
                     "crs":{"type":"name","properties":{"name":srs}}}
                 );
             }
+            */
         },
 
         /**
@@ -705,6 +719,7 @@ Oskari.clazz.category(
                 'visible': visible
             });
         },
+
         /**
          * @method filterDuplicates
          * @param {String []} a1    current array
@@ -712,19 +727,26 @@ Oskari.clazz.category(
          *
          * drop duplicates in concat array
          */
-        filterDuplicates: function (a1, a2) {
-            var a3 = [];
-            if (a1 && a2) {
-                a2.forEach(function (item2) {
-                    if (a1.indexOf(item2) < 0) {
-                        a3.push(item2);
+        filterDuplicates: function (previouslySelectedIds, selectedIds) {
+            var featureIds = [],
+                unselectedMode = false;
+            if (previouslySelectedIds && selectedIds) {
+                selectedIds.forEach(function (id) {
+                    if (previouslySelectedIds.indexOf(id) < 0) {
+                        featureIds.push(id);
+                    } else {
+                        previouslySelectedIds.splice(previouslySelectedIds.indexOf(id), 1);
+                        unselectedMode = true;
+
                     }
                 });
 
             }
-            return a3;
+            if (unselectedMode) {
+                return ['unselectMode', previouslySelectedIds.concat(featureIds)];
+            } else {
+                return ['selectMode', featureIds];
+            }
         }
-
-
     }
 );
