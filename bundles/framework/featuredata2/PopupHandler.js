@@ -18,6 +18,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
         var me = this,
             selectionPlugin = me.instance.getSelectionPlugin(),
             p;
+        this.WFSLayerService = this.instance.sandbox.getService('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
         this.buttons = {
             'point': {
                 iconCls: 'selection-point',
@@ -84,6 +85,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
             "wrapper": '<div></div>',
             "toolsButton": '<div style= "display: inline-block; border: 1px solid;"></div>',
             "instructions": '<div class="instructions" style="padding: 20px 0px 0px 0px;"></div>',
+            "selectAll": '<div class="selectAllFeatures">' +
+                '  <label>' +
+                '    <input type="checkbox" name="selectAll" />' +
+                '    <span></span>' +
+                '  </label>' +
+                '</div>',
             "link": '<div class="link"><a href="javascript:void(0);"></a></div></div>'
         },
 
@@ -111,7 +118,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
             var closureMagic = function (tool) {
                 return function () {
                     me.buttons[tool].callback();
-                    dialog.close();
                     if (!singleSelection) {
                         me._selectionStarted();
                     }
@@ -133,6 +139,17 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
             instructions.append(this.localization.instructions);
             content.append(instructions);
 
+            var selectAll = me.template.selectAll.clone();
+            selectAll.find('span').html(this.localization.selectAll);
+            selectAll.bind('click', function () {
+                if (selectAll.find('input').prop('checked') === true) {
+                    me.WFSLayerService.setSelectFromAllLayers(true);
+                } else {
+                    me.WFSLayerService.setSelectFromAllLayers(false);
+                }
+            });
+            content.append(selectAll);
+
             var controlButtons = [];
             var emptyBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             emptyBtn.setTitle(this.localization.button.empty);
@@ -142,9 +159,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
                 var layers = sandbox.findAllSelectedMapLayers();
                 for (var i = 0; i < layers.length; ++i) {
                     if (layers[i].hasFeatureData()) {
-                        var eBuilder = sandbox.getEventBuilder('WFSFeaturesSelectedEvent'),
-                        event = eBuilder([], layers[i], false);
-                        sandbox.notifyAll(event);
+                        me.WFSLayerService.emptyWFSFeatureSelections(layers[i]);
                     }
                 }
                 this.blur();

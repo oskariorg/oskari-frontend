@@ -10,9 +10,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.event.FinishedDrawi
  * @param {OpenLayers.Geometry} geometry the drawing that was finished
  * @param {Boolean} blnEdit true if the geometry was opened in edit mode
  */
-function(geometry, blnEdit) {
+function(geometry, blnEdit, blnSelectAllLayers) {
     this._drawing = geometry;
     this._modification = (blnEdit == true);
+    this._selectAllLayers = blnSelectAllLayers;
 }, {
     /** @static @property __name event name */
     __name : "FeatureData.FinishedDrawingEvent",
@@ -39,6 +40,14 @@ function(geometry, blnEdit) {
      */
     isModification : function() {
         return this._modification;
+    },
+    /**
+     * @method selectFromAllLayers
+     * Returns true if the user wants to select from all layers
+     * @return {Boolean}
+     */
+    selectFromAllLayers: function () {
+        return this._selectAllLayers;
     }
 }, {
     /**

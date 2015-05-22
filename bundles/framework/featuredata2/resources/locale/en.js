@@ -14,6 +14,7 @@ Oskari.registerLocalization({
         "popup": {
             "title": "Select features on the map.",
             "instructions": " ",
+            "selectAll": "Select from all layers",
             "link": {
                 "title": "Select more features"
             },

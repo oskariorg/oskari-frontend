@@ -13,7 +13,8 @@ Oskari.registerLocalization({
         "columnSelectorTooltip": "Näytä sarakkeet",
         "popup": {
             "title": "Valitse kohteita kartalta",
-            "instructions": " ",
+            "instructions": "",
+            "selectAll": "kaikilta karttatasoilta",
             "link": {
                 "title": "Lisää valinta"
             },
