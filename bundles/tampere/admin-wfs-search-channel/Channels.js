@@ -371,7 +371,7 @@ Oskari.clazz.define(
             item.hide();
             jQuery.ajax({
                 type: 'DELETE',
-                url: me.sandbox.getAjaxUrl() + me.instance.conf.restUrl + '&id=' + uid,
+                url: me.sandbox.getAjaxUrl() + 'action_route=SearchWFSChannel&id='+ uid,
                 error: function (jqXHR, textStatus, errorThrown) {
                     var error = me._getErrorText(jqXHR, textStatus, errorThrown);
                     me._openPopup(
@@ -496,34 +496,34 @@ Oskari.clazz.define(
         _submitForm: function (event, me) {
             event.preventDefault(); // We don't want the form to submit
             var frm = jQuery(event.target);
-            console.dir(frm.serialize());
-           // if (me._formIsValid(frm, me)) {
+
+            if (me._formIsValid(frm, me)) {
                 /**
                 if (data.roles )
                     */
-                // jQuery.ajax({
-                //     type: frm.attr('method'),
-                //     url: me.sandbox.getAjaxUrl() + me.instance.conf.restUrl,
-                //     data: frm.serialize(),
-                //     success: function (data) {
-                //         me._closeForm(frm);
-                //         // FIXME fetch channels
-                //         me.fetchChannels(me.container);
-                //     },
-                //     error: function (jqXHR, textStatus, errorThrown) {
-                //         var error = me._getErrorText(
-                //             jqXHR,
-                //             textStatus,
-                //             errorThrown
-                //         );
-                //         me._openPopup(
-                //             me._getLocalization('save_failed'),
-                //             error
-                //         );
-                //     }
-                // });
-           // }
-            //return false;
+                jQuery.ajax({
+                    type: frm.attr('method'),
+                    url: me.sandbox.getAjaxUrl() + 'action_route=SearchWFSChannel'.
+                    data: frm.serialize(),
+                    success: function (data) {
+                        me._closeForm(frm);
+                        // FIXME fetch channels
+                        me.fetchChannels(me.container);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        var error = me._getErrorText(
+                            jqXHR,
+                            textStatus,
+                            errorThrown
+                        );
+                        me._openPopup(
+                            me._getLocalization('save_failed'),
+                            error
+                        );
+                    }
+                });
+           }
+            return false;
         },
 
         /**
