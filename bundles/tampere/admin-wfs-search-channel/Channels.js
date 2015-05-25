@@ -292,7 +292,7 @@ Oskari.clazz.define(
             }
             ]};
             setTimeout(function(){
-                me._createList(me, data.channels, null)
+                me._createList(me, data.channels, me.state.filter);
             }, 1000);    
             // jQuery.ajax({
             //     type: 'GET',
@@ -324,7 +324,7 @@ Oskari.clazz.define(
             me.channels = channels;
             for (i = 0; i < channels.length; i += 1) {
                 channel = channels[i];
-                matches = !hasFilter || channel["details-topic-"+Oskari.getLang()].contains(filter);
+                matches = !hasFilter || channel["details-topic-"+Oskari.getLang()].toLowerCase().indexOf(filter.toLowerCase()) > -1;
                 if (matches) {
                     list.append(
                         me._populateItem(
