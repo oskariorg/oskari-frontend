@@ -1,4 +1,4 @@
-define(["bundles/framework/bundle/mapwmts/service/WmtsLayerModelBuilder"], function() {
+define(["bundles/framework/mapwmts/service/WmtsLayerModelBuilder"], function() {
     Oskari.cls('Oskari.mapframework.wmts.service.WmtsLayerModelBuilder').category({
         /**
          * parses any additional fields to model

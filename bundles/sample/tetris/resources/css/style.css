@@ -1,0 +1,8 @@
+.oskari__tetris {
+	width:470px;
+	height: 500px;
+}
+
+.oskari__tetris .blockrain-score {
+	color: #000000;
+}

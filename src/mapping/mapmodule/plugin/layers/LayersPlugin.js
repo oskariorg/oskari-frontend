@@ -1,3 +1,3 @@
-define(["bundles/framework/bundle/mapmodule-plugin/plugin/layers/LayersPlugin"], function (LayersPlugin) {
+define(["bundles/framework/mapmodule-plugin/plugin/layers/LayersPlugin"], function (LayersPlugin) {
     // load helper
 });

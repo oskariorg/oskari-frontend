@@ -1,0 +1,66 @@
+/* Mixins */
+@mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    -o-border-radius: $radius;
+    -ms-border-radius: $radius;
+    border-radius: $radius;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box;
+}
+
+div.search {
+
+    div.controls {
+
+        div.oskarifield {
+            display: inline-block;
+
+            input[type=text] {
+                @include border-radius(4px 0 0 4px);
+                box-sizing: border-box;
+                width: 300px;
+            }
+
+        }
+
+        .oskari-button {
+            @include border-radius(0 4px 4px 0);
+        }
+
+    }
+
+    div.searchDescription {
+        margin: 0;
+        margin-bottom: 8px;
+    }
+
+    div.searchContainer {
+        height: 90%;
+    }
+
+    div.resultList {
+        height: 90%;
+        overflow: auto;
+        padding: 0;
+        margin : 5px;
+        border: 1px solid #DDDDDD;
+
+        h3 {
+            margin: 0 6px;
+            padding-bottom: 0;
+        }
+
+    }
+
+    table.search_result {
+        margin-bottom: 0;
+
+        th { 
+            text-align: left; 
+        }
+
+    }
+
+}

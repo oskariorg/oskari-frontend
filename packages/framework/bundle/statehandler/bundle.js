@@ -21,37 +21,37 @@ Oskari.clazz.define("Oskari.mapframework.bundle.statehandler.StateHandlerBundle"
         "scripts" : [
 		{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/statehandler/instance.js"
+            "src" : "../../../../bundles/framework/statehandler/instance.js"
         },{
             "type" : "text/javascript",
             "src" : "../../../../libraries/jquery/plugins/jquery.cookie.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/statehandler/state-methods.js"
+            "src" : "../../../../bundles/framework/statehandler/state-methods.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/statehandler/session-methods.js"
+            "src" : "../../../../bundles/framework/statehandler/session-methods.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/statehandler/plugin/Plugin.js"
+            "src" : "../../../../bundles/framework/statehandler/plugin/Plugin.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/statehandler/plugin/SaveViewPlugin.js"
+            "src" : "../../../../bundles/framework/statehandler/plugin/SaveViewPlugin.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/statehandler/request/SetStateRequest.js"
+            "src" : "../../../../bundles/framework/statehandler/request/SetStateRequest.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/statehandler/request/SetStateRequestHandler.js"
+            "src" : "../../../../bundles/framework/statehandler/request/SetStateRequestHandler.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/statehandler/event/StateSavedEvent.js"
+            "src" : "../../../../bundles/framework/statehandler/event/StateSavedEvent.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/statehandler/request/SaveStateRequest.js"
+            "src" : "../../../../bundles/framework/statehandler/request/SaveStateRequest.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/statehandler/request/SaveStateRequestHandler.js"
+            "src" : "../../../../bundles/framework/statehandler/request/SaveStateRequestHandler.js"
         }
         ],
 
@@ -59,15 +59,47 @@ Oskari.clazz.define("Oskari.mapframework.bundle.statehandler.StateHandlerBundle"
         {
             "lang": "en",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/statehandler/locale/en.js"
+            "src": "../../../../bundles/framework/statehandler/resources/locale/en.js"
         }, {
-            "lang": "sv",
+            "lang": "es",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/statehandler/locale/sv.js"
+            "src": "../../../../bundles/framework/statehandler/resources/locale/es.js"
         }, {
             "lang": "fi",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/statehandler/locale/fi.js"
+            "src": "../../../../bundles/framework/statehandler/resources/locale/fi.js"
+        }, {
+            "lang": "fr",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/statehandler/resources/locale/fr.js"
+        }, {
+            "lang": "it",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/statehandler/resources/locale/it.js"
+        }, {
+            "lang": "is",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/statehandler/resources/locale/is.js"
+        }, {
+            "lang": "nb",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/statehandler/resources/locale/nb.js"
+        }, {
+            "lang": "nl",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/statehandler/resources/locale/nl.js"
+        }, {
+            "lang": "nn",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/statehandler/resources/locale/nn.js"
+        }, {
+            "lang": "sl",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/statehandler/resources/locale/sl.js"
+        }, {
+            "lang": "sv",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/statehandler/resources/locale/sv.js"
         }
         ]
     },

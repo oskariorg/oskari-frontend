@@ -1,0 +1,99 @@
+/* Mixins */
+.featuredata {
+  /* Selected row hightlighting */
+  /* Override common table settings */
+  /* Override sort img position */ }
+  .featuredata div.tab-content {
+    max-height: 535px;
+    overflow: auto; }
+  .featuredata tbody tr.selected {
+    background-color: #FDF8D9; }
+  .featuredata th, .featuredata td {
+    text-align: left;
+    padding-left: 2px;
+    padding-right: 15px; }
+  .featuredata th.asc, .featuredata th.desc {
+    background-position: right center; }
+  .featuredata td.link {
+    padding: 20px 0px 0px 0px;
+    color: #0091FF;
+    text-decoration: underline;
+    display: block; }
+  .featuredata div.icon-funnel {
+    cursor: pointer; }
+
+div.analyse-filter-popup-content div.filter-option {
+  padding-bottom: 10px; }
+  div.analyse-filter-popup-content div.filter-option div.manage-filter-option {
+    display: inline-block;
+    vertical-align: middle; }
+    div.analyse-filter-popup-content div.filter-option div.manage-filter-option div.add-filter-option, div.analyse-filter-popup-content div.filter-option div.manage-filter-option div.remove-filter-option {
+      cursor: pointer;
+      display: inline-block;
+      /* These are icons, so it's OK to have a custom font here. */
+      font-size: 48px;
+      font-weight: bold;
+      margin-left: 5px;
+      min-width: 16px;
+      text-align: center; }
+  div.analyse-filter-popup-content div.filter-option.filter-option-aggregate {
+    padding-bottom: 25px; }
+    div.analyse-filter-popup-content div.filter-option.filter-option-aggregate div.attribute-value-block {
+      position: relative;
+      display: inline-block; }
+      div.analyse-filter-popup-content div.filter-option.filter-option-aggregate div.attribute-value-block div.add-link {
+        position: absolute;
+        top: 40px; }
+  div.analyse-filter-popup-content div.filter-option .filter-input-value {
+    width: 160px;
+    margin: 1px; }
+  div.analyse-filter-popup-content div.filter-option input[name="case-sensitive"] {
+    margin-right: 5px; }
+  div.analyse-filter-popup-content div.filter-option select.attribute {
+    width: 150px; }
+  div.analyse-filter-popup-content div.filter-option select.boolean {
+    margin-top: 10px;
+    width: 65px; }
+  div.analyse-filter-popup-content div.filter-option select.operator {
+    width: 210px; }
+
+div.oskariTabs .tabsHeader ul li a {
+  display: inline-block; }
+div.oskariTabs .tabsHeader ul li .union-filter {
+  display: inline-block;
+  margin-right: 10px; }
+
+div.flyout-resizer {
+  float: right;
+  cursor: nw-resize; }
+
+div.mapplugins .mappluginsContainer .mappluginsContent div.featuredataplugin.mapplugin {
+  clear: both;
+  display: block;
+  background: #3c3c3c;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -o-border-radius: 2px;
+  -ms-border-radius: 2px;
+  border-radius: 2px;
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding-box;
+  background-clip: padding-box;
+  line-height: 28px;
+  margin: 10px auto;
+  padding: 0 9px; }
+  div.mapplugins .mappluginsContainer .mappluginsContent div.featuredataplugin.mapplugin a {
+    color: white;
+    text-decoration: none; }
+
+div.mapplugins .mappluginsContainer .mappluginsContent div.featuredataplugin.mapplugin.error a {
+  color: red; }
+
+div.mapplugins .mappluginsContainer .mappluginsContent div.featuredataplugin.mapplugin.loading {
+  background: url("../images/ajax-loader.gif") no-repeat 0 0/cover; }
+
+div.oskari-flyoutcontent.featuredata ul.tabsItem li a.loading {
+  color: #939393; }
+
+div.oskari-flyoutcontent.featuredata ul.tabsItem li a.error {
+  color: red; }

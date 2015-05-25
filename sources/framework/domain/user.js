@@ -27,12 +27,14 @@ Oskari.clazz.define('Oskari.mapframework.domain.User',
             this._firstName = userData.firstName;
             this._lastName = userData.lastName;
             this._nickName = userData.nickName;
-            this._loginName = userData.loginName;
+            // TODO: remove loginName as it's misleading and use email instead
+            this._email = userData.email || userData.loginName;
             this._uuid = userData.userUUID;
             this._roles = userData.roles || [];
             if (userData.userUUID) {
                 this._loggedIn = true;
             }
+            this._apiKey = userData.apikey;
         }
     }, {
         /**
@@ -76,6 +78,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.User',
             return this._nickName;
         },
         /**
+         * @deprecated Use getEmail() instead!
          * @method getLoginName
          * Loginname for the user
          *
@@ -83,7 +86,17 @@ Oskari.clazz.define('Oskari.mapframework.domain.User',
          *            loginName
          */
         getLoginName: function () {
-            return this._loginName;
+            return this.getEmail();
+        },
+        /**
+         * @method getLoginName
+         * Loginname for the user
+         *
+         * @return {String}
+         *            loginName
+         */
+        getEmail: function () {
+            return this._email;
         },
         /**
          * @method getUuid
@@ -94,6 +107,15 @@ Oskari.clazz.define('Oskari.mapframework.domain.User',
          */
         getUuid: function () {
             return this._uuid;
+        },
+        /**
+         * @method getAPIkey
+         * API-key for the user
+         *
+         * @return {String}
+         */
+        getAPIkey: function () {
+            return this._apiKey;
         },
         /**
          * @method isLoggedIn

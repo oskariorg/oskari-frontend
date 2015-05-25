@@ -100,14 +100,16 @@ Oskari.clazz.define(
         /**
          * @method getImageUrl
          * Returns a base url for plugins to show. Can be set in constructor and
-         * defaults to "/Oskari/resources" if not set.
+         * defaults to "/Oskari/bundles" if not set.
          * @return {String}
          */
         getImageUrl: function () {
             if (!this._imageUrl) {
                 // default if not set
-                return '/Oskari/resources';
+                return '/Oskari/bundles';
             }
+            return '/Oskari/bundles';
+            // TODO Oskari2 change, fixed temporary to always return /Oskari/bundles -folder. Remove this when configs are updated.
             return this._imageUrl;
         },
         /**

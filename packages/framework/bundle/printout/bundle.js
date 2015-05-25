@@ -23,143 +23,143 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundle", functi
 
         "scripts": [{
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/jquery.imagesLoaded.js"
+            "src": "../../../../bundles/framework/printout/jquery.imagesLoaded.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/instance.js"
+            "src": "../../../../bundles/framework/printout/instance.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/Flyout.js"
+            "src": "../../../../bundles/framework/printout/Flyout.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/Tile.js"
+            "src": "../../../../bundles/framework/printout/Tile.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/plugin/LegendPlugin.js"
+            "src": "../../../../bundles/framework/printout/plugin/LegendPlugin.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/service/PrintService.js"
+            "src": "../../../../bundles/framework/printout/service/PrintService.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/view/StartView.js"
+            "src": "../../../../bundles/framework/printout/view/StartView.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/view/BasicPrintout.js"
+            "src": "../../../../bundles/framework/printout/view/BasicPrintout.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/request/PrintMapRequest.js"
+            "src": "../../../../bundles/framework/printout/request/PrintMapRequest.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/request/PrintMapRequestHandler.js"
+            "src": "../../../../bundles/framework/printout/request/PrintMapRequestHandler.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/event/PrintableContentEvent.js"
+            "src": "../../../../bundles/framework/printout/event/PrintableContentEvent.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/event/PrintWithoutUIEvent.js"
+            "src": "../../../../bundles/framework/printout/event/PrintWithoutUIEvent.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/event/PrintWithParcelUIEvent.js"
+            "src": "../../../../bundles/framework/printout/event/PrintWithParcelUIEvent.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/event/PrintCanceledEvent.js"
+            "src": "../../../../bundles/framework/printout/event/PrintCanceledEvent.js"
         }, {
             "type": "text/css",
-            "src": "../../../../resources/framework/bundle/printout/css/style.css"
+            "src": "../../../../bundles/framework/printout/resources/css/style.css"
         }],
 
         "locales": [{
             "lang": "hy",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/locale/hy.js"
+            "src": "../../../../bundles/framework/printout/resources/locale/hy.js"
         }, {
             "lang": "bg",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/locale/bg.js"
+            "src": "../../../../bundles/framework/printout/resources/locale/bg.js"
         }, {
             "lang": "cs",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/locale/cs.js"
+            "src": "../../../../bundles/framework/printout/resources/locale/cs.js"
         }, {
             "lang": "da",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/locale/da.js"
+            "src": "../../../../bundles/framework/printout/resources/locale/da.js"
         }, {
             "lang": "de",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/locale/de.js"
+            "src": "../../../../bundles/framework/printout/resources/locale/de.js"
         }, {
             "lang": "en",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/locale/en.js"
+            "src": "../../../../bundles/framework/printout/resources/locale/en.js"
         }, {
             "lang": "es",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/locale/es.js"
+            "src": "../../../../bundles/framework/printout/resources/locale/es.js"
         }, {
             "lang": "et",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/locale/et.js"
+            "src": "../../../../bundles/framework/printout/resources/locale/et.js"
         }, {
             "lang": "fi",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/locale/fi.js"
+            "src": "../../../../bundles/framework/printout/resources/locale/fi.js"
         }, {
             "lang": "el",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/locale/el.js"
+            "src": "../../../../bundles/framework/printout/resources/locale/el.js"
         }, {
             "lang": "hr",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/locale/hr.js"
+            "src": "../../../../bundles/framework/printout/resources/locale/hr.js"
         }, {
             "lang": "hu",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/locale/hu.js"
+            "src": "../../../../bundles/framework/printout/resources/locale/hu.js"
         }, {
             "lang": "lv",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/locale/lv.js"
+            "src": "../../../../bundles/framework/printout/resources/locale/lv.js"
         }, {
             "lang": "nl",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/locale/nl.js"
+            "src": "../../../../bundles/framework/printout/resources/locale/nl.js"
         }, {
             "lang": "pl",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/locale/pl.js"
+            "src": "../../../../bundles/framework/printout/resources/locale/pl.js"
         }, {
             "lang": "pt",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/locale/pt.js"
+            "src": "../../../../bundles/framework/printout/resources/locale/pt.js"
         }, {
             "lang": "ro",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/locale/ro.js"
+            "src": "../../../../bundles/framework/printout/resources/locale/ro.js"
         }, {
             "lang": "sr",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/locale/sr.js"
+            "src": "../../../../bundles/framework/printout/resources/locale/sr.js"
         }, {
             "lang": "sl",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/locale/sl.js"
+            "src": "../../../../bundles/framework/printout/resources/locale/sl.js"
         }, {
             "lang": "sk",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/locale/sk.js"
+            "src": "../../../../bundles/framework/printout/resources/locale/sk.js"
         }, {
             "lang": "sq",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/locale/sq.js"
+            "src": "../../../../bundles/framework/printout/resources/locale/sq.js"
         }, {
             "lang": "sv",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/locale/sv.js"
+            "src": "../../../../bundles/framework/printout/resources/locale/sv.js"
         }, {
             "lang": "uk",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/locale/uk.js"
+            "src": "../../../../bundles/framework/printout/resources/locale/uk.js"
         }]
     },
     "bundle": {

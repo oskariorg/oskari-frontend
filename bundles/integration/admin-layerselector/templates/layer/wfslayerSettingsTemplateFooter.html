@@ -1,0 +1,17 @@
+<div class="add-layer-record">
+    <div class="add-layer-label-area">
+        <label for="add-layer-jobtype" class="add-class-label" title="<%= instance.getLocalization('admin').jobTypeDesc %>"><%= instance.getLocalization('admin').jobTypeDesc %></label>
+    </div>
+    <div class="add-layer-input-area adjacent">
+        <div class="input-controls">
+            <label><%= instance.getLocalization('admin').jobTypes["default"] %>  <input type="radio" name="jobtype" id="layer-jobtype-default" <% if(model.getVersion() == '1.1.0' ) { %>checked<% } %>
+                                                                                         class="add-class-input" placeholder="placeholder"  value="default" /></label>
+        </div>
+        <div class="input-controls">
+            <label><%= instance.getLocalization('admin').jobTypes["fe"] %>  <input type="radio" name="jobtype" id="layer-jobtype-fe" <% if(model.getVersion() == '2.0.0' ) { %>checked<% } %> class="add-class-input" placeholder="placeholder"  value="oskari-feature-engine" /></label>
+        </div>
+        <!-- button id="add-layer-wfs-button" class="edit-wfs-button"><%= instance.getLocalization('admin').editWfs %></button -->
+
+    </div>
+</div>
+

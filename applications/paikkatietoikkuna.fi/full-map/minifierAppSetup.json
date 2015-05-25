@@ -510,7 +510,7 @@
 		    "metadata" : {
 		        "Import-Bundle" : {
 		            "routesearch" : {
-		                "bundlePath" : "../../../packages/framework/bundle/"
+		                "bundlePath" : "../../../packages/paikkatietoikkuna/bundle/"
 		            }
 		        }
 		    }
@@ -530,6 +530,16 @@
 			"metadata" : {
 				"Import-Bundle" : {
 					"findbycoordinates" : {
+						"bundlePath" : "../../../packages/framework/bundle/"
+					}
+				}
+			}
+		}, {
+			"bundlename" : "heatmap",
+			"bundleinstancename" : "heatmap",
+			"metadata" : {
+				"Import-Bundle" : {
+					"heatmap" : {
 						"bundlePath" : "../../../packages/framework/bundle/"
 					}
 				}

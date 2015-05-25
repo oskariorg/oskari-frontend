@@ -52,10 +52,8 @@ function() {
  * metadata
  */
 {
-
 	"protocol" : ["Oskari.bundle.Bundle"],
 	"source" : {
-
 		"scripts" : [{
 			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/service/map-layer-service.js"

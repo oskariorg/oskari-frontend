@@ -35,143 +35,141 @@ Oskari.clazz.define("Oskari.userinterface.bundle.bootstrap.UserInterfaceBundle",
          */
         "scripts" : [{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/instance.js"
+            "src" : "../../../../bundles/framework/divmanazer/instance.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/bootstrap/bundle/divmanazer/instance.js"
+            "src" : "../../../../bundles/bootstrap/divmanazer/instance.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/request/AddExtensionRequest.js"
+            "src" : "../../../../bundles/framework/divmanazer/request/AddExtensionRequest.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/request/AddExtensionRequestHandler.js"
+            "src" : "../../../../bundles/framework/divmanazer/request/AddExtensionRequestHandler.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/request/RemoveExtensionRequest.js"
+            "src" : "../../../../bundles/framework/divmanazer/request/RemoveExtensionRequest.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/request/RemoveExtensionRequestHandler.js"
+            "src" : "../../../../bundles/framework/divmanazer/request/RemoveExtensionRequestHandler.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/request/UpdateExtensionRequest.js"
+            "src" : "../../../../bundles/framework/divmanazer/request/UpdateExtensionRequest.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/request/UpdateExtensionRequestHandler.js"
+            "src" : "../../../../bundles/framework/divmanazer/request/UpdateExtensionRequestHandler.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/request/ModalDialogRequest.js"
+            "src" : "../../../../bundles/framework/divmanazer/request/ModalDialogRequest.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/request/ModalDialogRequestHandler.js"
+            "src" : "../../../../bundles/framework/divmanazer/request/ModalDialogRequestHandler.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/event/ExtensionUpdatedEvent.js"
+            "src" : "../../../../bundles/framework/divmanazer/event/ExtensionUpdatedEvent.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/component/Accordion.js"
+            "src" : "../../../../bundles/framework/divmanazer/component/Accordion.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/component/AccordionPanel.js"
+            "src" : "../../../../bundles/framework/divmanazer/component/AccordionPanel.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/component/TabContainer.js"
+            "src" : "../../../../bundles/framework/divmanazer/component/TabContainer.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/component/TabDropdownContainer.js"
+            "src" : "../../../../bundles/framework/divmanazer/component/TabDropdownContainer.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/component/TabPanel.js"
+            "src" : "../../../../bundles/framework/divmanazer/component/TabPanel.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/component/Badge.js"
+            "src" : "../../../../bundles/framework/divmanazer/component/Badge.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/component/Alert.js"
+            "src" : "../../../../bundles/framework/divmanazer/component/Alert.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/component/Popup.js"
+            "src" : "../../../../bundles/framework/divmanazer/component/Popup.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/component/Overlay.js"
+            "src" : "../../../../bundles/framework/divmanazer/component/Overlay.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/component/Button.js"
+            "src" : "../../../../bundles/framework/divmanazer/component/Button.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/component/Form.js"
+            "src" : "../../../../bundles/framework/divmanazer/component/Form.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/component/UIHelper.js"
+            "src" : "../../../../bundles/framework/divmanazer/component/UIHelper.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/component/FormInput.js"
+            "src" : "../../../../bundles/framework/divmanazer/component/FormInput.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/component/Popover.js"
+            "src" : "../../../../bundles/framework/divmanazer/component/Popover.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/component/Grid.js"
+            "src" : "../../../../bundles/framework/divmanazer/component/Grid.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/component/GridModel.js"
+            "src" : "../../../../bundles/framework/divmanazer/component/GridModel.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/component/ProgressSpinner.js"
+            "src" : "../../../../bundles/framework/divmanazer/component/ProgressSpinner.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/extension/DefaultTile.js"
+            "src" : "../../../../bundles/framework/divmanazer/extension/DefaultTile.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/extension/DefaultFlyout.js"
+            "src" : "../../../../bundles/framework/divmanazer/extension/DefaultFlyout.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/extension/DefaultExtension.js"
+            "src" : "../../../../bundles/framework/divmanazer/extension/DefaultExtension.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/extension/DefaultView.js"
+            "src" : "../../../../bundles/framework/divmanazer/extension/DefaultView.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/extension/DefaultLayout.js"
-        },  {
+            "src" : "../../../../bundles/framework/divmanazer/extension/DefaultLayout.js"
+        },
+        {
             "type" : "text/css",
-            "src" : "../../../../resources/bootstrap/bundle/divmanazer/css/divman.css"
-        }, {
-            "type" : "text/css",
-            "src" : "../../../../resources/framework/bundle/divmanazer/css/accordion.css"
+            "src" : "../../../../bundles/bootstrap/divmanazer/resources/css/divman.css"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/framework/bundle/divmanazer/css/tab.css"
+            "src" : "../../../../bundles/framework/divmanazer/resources/css/accordion.css"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/framework/bundle/divmanazer/css/modal.css"
+            "src" : "../../../../bundles/framework/divmanazer/resources/css/tab.css"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/framework/bundle/divmanazer/css/badge.css"
+            "src" : "../../../../bundles/framework/divmanazer/resources/css/modal.css"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/framework/bundle/divmanazer/css/alert.css"
+            "src" : "../../../../bundles/framework/divmanazer/resources/css/badge.css"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/framework/bundle/divmanazer/css/forminput.css"
+            "src" : "../../../../bundles/framework/divmanazer/resources/css/alert.css"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/framework/bundle/divmanazer/css/grid.css"
+            "src" : "../../../../bundles/framework/divmanazer/resources/css/forminput.css"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/framework/bundle/divmanazer/css/popup.css"
+            "src" : "../../../../bundles/framework/divmanazer/resources/css/grid.css"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/framework/bundle/divmanazer/css/button.css"
+            "src" : "../../../../bundles/framework/divmanazer/resources/css/popup.css"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/framework/bundle/divmanazer/css/overlay.css"
+            "src" : "../../../../bundles/framework/divmanazer/resources/css/button.css"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/framework/bundle/divmanazer/css/popover.css"
-        }/*, {
-         "type" : "text/javascript",
-         "src" : "../../../../resources/framework/bundle/divmanazer/js/jquery.event.drag-1.5.min.js"
-         }*/]
+            "src" : "../../../../bundles/framework/divmanazer/resources/css/overlay.css"
+        }, {
+            "type" : "text/css",
+            "src" : "../../../../bundles/framework/divmanazer/resources/css/popover.css"
+        }]
     },
     "bundle" : {
         /**

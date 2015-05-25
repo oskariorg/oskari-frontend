@@ -6,7 +6,7 @@
  * 
  * See bundle documentation at http://www.oskari.org/trac/wiki/DocumentationBundleMapfull
  */
-define(["bundles/framework/bundle/mapfull/instance"], function(MapFull) {
+define(["bundles/framework/mapfull/instance"], function(MapFull) {
     Oskari
         .cls("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance")
         .category({

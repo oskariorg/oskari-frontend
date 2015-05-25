@@ -79,6 +79,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @throws error if layer with the same id already exists
          */
         addLayer: function (layerModel, suppressEvent) {
+            if(!layerModel) {
+                this._sandbox.printWarn('Called addLayer without a layer!');
+                return;
+            }
             // if parent id is present, forward to addSubLayer()
             if(layerModel.getParentId() != -1) {
                 this.addSubLayer(layerModel.getParentId(), layerModel, suppressEvent);
@@ -96,6 +100,24 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             if (suppressEvent !== true) {
                 // notify components of added layer if not suppressed
                 var event = this._sandbox.getEventBuilder('MapLayerEvent')(layerModel.getId(), 'add');
+                this._sandbox.notifyAll(event);
+            }
+        },
+        /**
+         * Adds a tool the layer and notifies other components about is with MapLayerEvent typed with 'tool'
+         * @param {Oskari.mapframework.domain.AbstractLayer} layerModel   layer to modify
+         * @param {Oskari.mapframework.domain.Tool} tool                  tool to add
+         * @param {Boolean} suppressEvent true to not send event (notify manually later to signal a batch update)
+         */
+        addToolForLayer : function(layerModel, tool, suppressEvent) {
+            if(!layerModel || !tool) {
+                throw new Error('Invalid params');
+            }
+            layerModel.addTool(tool);
+
+            if (suppressEvent !== true) {
+                // notify components of modified layer tools if not suppressed
+                var event = this._sandbox.getEventBuilder('MapLayerEvent')(layerModel.getId(), 'tool');
                 this._sandbox.notifyAll(event);
             }
         },
@@ -203,6 +225,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 return;
             }
 
+            if (newLayerConf.url) {
+                layer.setLayerUrls(this.parseUrls(newLayerConf.url));
+            }
+
             if (newLayerConf.dataUrl) {
                 layer.setDataUrl(newLayerConf.dataUrl);
             }
@@ -217,6 +243,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             if (newLayerConf.maxScale) {
                 layer.setMaxScale(newLayerConf.maxScale);
+            }
+            if (newLayerConf.opacity) {
+                layer.setOpacity(newLayerConf.opacity);
             }
 
             if (newLayerConf.name) {
@@ -254,6 +283,11 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 layer.setAdmin(newLayerConf.admin);
             }
 
+            // optional attributes
+            if (newLayerConf.attributes) {
+                layer.setAttributes(newLayerConf.attributes);
+            }
+            
             // wms specific
             // TODO: we need to figure this out some other way
             // we could remove the old layer and create a new one in admin bundle
@@ -720,7 +754,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             var layer = this.createLayerTypeInstance(mapLayerJson.type, mapLayerJson.params, mapLayerJson.options);
             if (!layer) {
-                this._sandbox.printDebug("[MapLayerService] Unknown layer type: " + mapLayerJson.type);
+                this._sandbox.printWarn("[MapLayerService] Unknown layer type: " + mapLayerJson.type);
                 return null;
             }
             //these may be implemented as jsonHandler
@@ -799,6 +833,11 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 layer.setGeometryWKT(mapLayerJson.geom);
             }
 
+            // optional attributes
+            if (mapLayerJson.attributes) {
+                layer.setAttributes(mapLayerJson.attributes);
+            }
+
             // permissions
             if (mapLayerJson.permissions) {
                 for (var perm in mapLayerJson.permissions) {
@@ -850,7 +889,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
             layer.setGfiContent(jsonLayer.gfiContent);
 
-            if(jsonLayer.wmsUrl) {
+            /*prefer url - param, fall back to wmsUrl if not available*/
+            if (jsonLayer.url) {
+                layer.setLayerUrls(this.parseUrls(jsonLayer.url));
+            } else if (jsonLayer.wmsUrl) {
                 layer.setLayerUrls(this.parseUrls(jsonLayer.wmsUrl));
             }
 

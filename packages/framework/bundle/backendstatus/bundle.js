@@ -23,23 +23,31 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
 
 		"scripts" : [{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/backendstatus/instance.js"
+			"src" : "../../../../bundles/framework/backendstatus/instance.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/backendstatus/event/BackendStatusChangedEvent.js"
+			"src" : "../../../../bundles/framework/backendstatus/event/BackendStatusChangedEvent.js"
 		}],
 		"locales" : [{
 			"lang" : "fi",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/backendstatus/locale/fi.js"
+			"src" : "../../../../bundles/framework/backendstatus/resources/locale/fi.js"
 		}, {
 			"lang" : "sv",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/backendstatus/locale/sv.js"
+			"src" : "../../../../bundles/framework/backendstatus/resources/locale/sv.js"
 		}, {
 			"lang" : "en",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/backendstatus/locale/en.js"
+			"src" : "../../../../bundles/framework/backendstatus/resources/locale/en.js"
+		}, {
+			"lang" : "sl",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/backendstatus/resources/locale/sl.js"
+		}, {
+			"lang" : "es",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/backendstatus/resources/locale/es.js"
 		}]
 	},
 	"bundle" : {
