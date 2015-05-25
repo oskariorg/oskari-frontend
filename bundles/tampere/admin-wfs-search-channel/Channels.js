@@ -86,10 +86,10 @@ Oskari.clazz.define(
                 me.templates.form.detailinputs = jQuery(
                 '    <label>' +
                 '        <span></span>' +
-                '        <input type="text" name="details-topic-'+item+'" language="details-name-'+item+'" required="required" />' +
+                '        <input type="text" name="details-topic-'+item+'" class="details-topic" language="details-name-'+item+'" required="required" />' +
                 '    </label>' +
                 '    <label>' +
-                '        <input type="text" name="details-desc-'+item+'" class="no-span-text" language="details-desc-'+item+'" required="required" />' +
+                '        <input type="text" name="details-desc-'+item+'" class="no-span-text details-desc" language="details-desc-'+item+'" required="required" />' +
                 '    </label>'
                 );
                 me.templates.form.find('.details--wrapper').append(me.templates.form.detailinputs);
@@ -212,7 +212,10 @@ Oskari.clazz.define(
                     var wfsLayers = jQuery.grep(allLayers, function(layer,index){
                         return layer.type.toLowerCase() === 'wfslayer';
                     });
-
+                    me.templates.form.find('select[name=choose-wfs-layer]').append(jQuery('<option>', { 
+                            value: "",
+                            text : ""
+                    }));
                     jQuery.each(wfsLayers, function(index, layer){
                         me.templates.form.find('select[name=choose-wfs-layer]').append(jQuery('<option>', { 
                             value: layer.id,
@@ -238,35 +241,47 @@ Oskari.clazz.define(
          */
         getWFSLayerColumns: function (layer_id, el) {
             var me = this;
+            if(layer_id != "" && layer_id != null){
+                var url = this.sandbox.getAjaxUrl() + 'action_route=GetWFSDescribeFeature&layer_id=' + layer_id;
+                jQuery.ajax({
+                    type: 'GET',
+                    dataType: 'json',
+                    url: url,
+                    beforeSend: function (x) {
+                        if (x && x.overrideMimeType) {
+                            x.overrideMimeType('application/j-son;charset=UTF-8');
+                        }
+                    },
+                    success: function (data) {
+                        jQuery(el).find('select[name=choose-param-for-search]').empty();
 
-            var url = this.sandbox.getAjaxUrl() + 'action_route=GetWFSDescribeFeature&layer_id=' + layer_id;
-            jQuery.ajax({
-                type: 'GET',
-                dataType: 'json',
-                url: url,
-                beforeSend: function (x) {
-                    if (x && x.overrideMimeType) {
-                        x.overrideMimeType('application/j-son;charset=UTF-8');
+                        if(data.propertyTypes == null){
+
+                            me._openPopup(
+                                me._getLocalization('columns_failed'),
+                                me._getLocalization('no_columns_for_layer')
+                            );
+                            return false;
+                        }
+
+                        jQuery.each(data.propertyTypes, function(name, type){
+                            jQuery(el).find('select[name=choose-param-for-search]').append(jQuery('<option>', {
+                                type: type, 
+                                value: name,
+                                text : name
+                            }));
+                        });
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        var error = me._getErrorText(jqXHR, textStatus, errorThrown);
+
+                        me._openPopup(
+                            me._getLocalization('columns_failed'),
+                            error
+                        );
                     }
-                },
-                success: function (data) {
-                    jQuery(el).find('select[name=choose-param-for-search]').empty();
-                    jQuery.each(data.propertyTypes, function(name, type){
-                        jQuery(el).find('select[name=choose-param-for-search]').append(jQuery('<option>', { 
-                            value: type,
-                            text : name
-                        }));
-                    });
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    var error = me._getErrorText(jqXHR, textStatus, errorThrown);
-
-                    me._openPopup(
-                        me._getLocalization('layers_failed'),
-                        error
-                    );
-                }
-            });
+                });
+            }
         },
 
         /**
@@ -501,10 +516,29 @@ Oskari.clazz.define(
                 /**
                 if (data.roles )
                     */
+                var dataObject = {
+                    'id': frm.find("[name=id]").val(),
+                    'choose-wfs-layer': frm.find("[name=choose-wfs-layer]").val(),
+                    'topic' : {},
+                    'desc': {},
+                    'params' : {}
+                };
+
+                jQuery.each(Oskari.getSupportedLanguages(), function(index, item) {
+                    dataObject.topic[item] = frm.find("[name=details-topic-"+item+"]").val();
+                    dataObject.desc[item] = frm.find("[name=details-desc-"+item+"]").val();
+                });
+
+                jQuery.each(frm.find("[name=choose-param-for-search]"), function(index, item) {
+                    dataObject.params[index] = jQuery(this).val();
+                });
+
+                 console.dir(dataObject);
+
                 jQuery.ajax({
                     type: frm.attr('method'),
-                    url: me.sandbox.getAjaxUrl() + 'action_route=SearchWFSChannel'.
-                    data: frm.serialize(),
+                    url: me.sandbox.getAjaxUrl() + 'action_route=SearchWFSChannel',
+                    data: JSON.stringify(dataObject),
                     success: function (data) {
                         me._closeForm(frm);
                         // FIXME fetch channels

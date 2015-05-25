@@ -30,6 +30,8 @@
                 "delete_failed": "Poistaminen epäonnistui",
                 "fetch_failed": "Kanavoiden hakeminen epäonnistui",
                 "layers_failed": "Tasojen hakeminen epäonnistui",
+                "no_columns_for_layer": "Tasolle ei löytynyt ominaisuustietoja",
+                "columns_failed": "Ominaisuustietojen haku epäonnistui",
                 "save_failed": "Tallennus epäonnistui",
                 "noMatch": "Haulla ei löytynyt tuloksia",
             }
