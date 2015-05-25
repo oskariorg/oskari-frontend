@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.Tile',
         getName: function () {
             return 'Oskari.integration.bundle.bb.Tile';
         },
-        setEl: function (el, width, height) {
+        setEl: function (el) {
             this.container = $(el);
         },
         startPlugin: function () {
@@ -40,17 +40,9 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.Tile',
             this.state = state;
         },
         refresh: function () {
-            var me = this;
-            var instance = me.instance;
-            var cel = this.container;
-            var tpl = this.template;
-            var sandbox = instance.getSandbox();
-
-            /*var status = cel.children('.oskari-tile-status');*/
-            /*status.empty();*/
-
-            /*status.append('(' + layers.length + ')');*/
-
+            var me = this,
+                instance = me.instance,
+                cel = this.container;
         }
     }, {
         'protocol': ['Oskari.userinterface.Tile']

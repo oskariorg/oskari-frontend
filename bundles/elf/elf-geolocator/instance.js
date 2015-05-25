@@ -58,7 +58,7 @@ Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
             }
 
             var sandbox = this.getSandbox(),
-                zoomLevel = sandbox.getMap().getZoom(),
+                zoom =  sandbox.getMap().getZoom(),
                 srsName = sandbox.getMap().getSrsName(),
                 lonlat = new OpenLayers.LonLat(result.lon, result.lat),
                 popupId = "elf-geolocator-search-result",
@@ -70,9 +70,13 @@ Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
                 infoBoxReq,
                 infoBoxContent;
 
+            if(result.zoomScale) {
+                zoom = {scale : result.zoomScale};
+            }
+
             if (moveReqBuilder) {
                 moveReq = moveReqBuilder(
-                    result.lon, result.lat, zoomLevel, false, srsName);
+                    result.lon, result.lat, zoom, false, srsName);
                 sandbox.request(this, moveReq);
             }
 

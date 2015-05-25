@@ -83,10 +83,10 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.View', function(locale,instanc
      * Dispatches events to eventhandlers declared
      */
     onEvent : function(event) {
-
         var handler = this.eventHandlers[event.getName()];
-        if(!handler)
+        if(!handler) {
             return;
+        }
 
         return handler.apply(this, [event]);
 
