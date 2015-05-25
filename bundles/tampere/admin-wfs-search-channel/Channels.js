@@ -279,36 +279,22 @@ Oskari.clazz.define(
             container.find('ul').remove();
             // get channels with ajax
             var me = this;
+            
+            jQuery.ajax({
+                type: 'GET',
+                url: me.sandbox.getAjaxUrl() + 'action_route=SearchWFSChannel',
+                success: function (data) {
+                    me._createList(me, data.channels, me.state.filter);
+                 },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    var error = me._getErrorText(jqXHR, textStatus, errorThrown);
 
-            var data = {"channels":[
-            {
-                "id":1,
-                "choose-wfs-layer": 1,
-                "details-topic-fi": "Testi Topic",
-                "details-desc-fi": "Description",
-                "details-topic-sv": "Testi sv",
-                "details-desc-sv": "Description sv",
-                "params": [1,2]
-            }
-            ]};
-            setTimeout(function(){
-                me._createList(me, data.channels, me.state.filter);
-            }, 1000);    
-            // jQuery.ajax({
-            //     type: 'GET',
-            //     url: me.sandbox.getAjaxUrl() + me.instance.conf.restUrl,
-            //     success: function (data) {
-            //         me._createList(me, data.channels, me.state.filter);
-            //     },
-            //     error: function (jqXHR, textStatus, errorThrown) {
-            //         var error = me._getErrorText(jqXHR, textStatus, errorThrown);
-
-            //         me._openPopup(
-            //             me._getLocalization('fetch_failed'),
-            //             error
-            //         );
-            //     }
-            // });
+                     me._openPopup(
+                         me._getLocalization('fetch_failed'),
+                         error
+                     );
+                 }
+            });
         },
 
         /**
@@ -322,16 +308,18 @@ Oskari.clazz.define(
                 matches;
 
             me.channels = channels;
-            for (i = 0; i < channels.length; i += 1) {
-                channel = channels[i];
-                matches = !hasFilter || channel["details-topic-"+Oskari.getLang()].toLowerCase().indexOf(filter.toLowerCase()) > -1;
-                if (matches) {
-                    list.append(
-                        me._populateItem(
-                            me.templates.item.clone(true, true),
-                            channel
-                        )
-                    );
+            if(channels) {
+                for (i = 0; i < channels.length; i += 1) {
+                    channel = channels[i];
+                    matches = !hasFilter || channel["details-topic-"+Oskari.getLang()].toLowerCase().indexOf(filter.toLowerCase()) > -1;
+                    if (matches) {
+                        list.append(
+                            me._populateItem(
+                                me.templates.item.clone(true, true),
+                                channel
+                            )
+                        );
+                    }
                 }
             }
             // Add list to container
