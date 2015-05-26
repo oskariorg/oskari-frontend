@@ -123,7 +123,7 @@ Oskari.clazz.define(
                 'Oskari.userinterface.component.Button'
             );
             btn.setTitle(me._getLocalization("new-params-btn"));
-            btn.addClass('btn--center');
+            btn.addClass('btn--center new-params-btn');
             jQuery(btn.getElement()).click(
                 function (event) {
                     var newParams = jQuery(this).prev("label").clone(true);
@@ -379,7 +379,7 @@ Oskari.clazz.define(
                 uid = parseInt(item.attr('data-id')),
                 channel = me._getChannel(uid);
 
-            if (!window.confirm(me._getLocalization('confirm_delete').replace('{channel}', channel["details-topic-"+Oskari.getLang()]))) {
+            if (!window.confirm(me._getLocalization('confirm_delete').replace('{channel}', channel.topic[Oskari.getLang()]))) {
                 return;
             }
 
@@ -411,7 +411,7 @@ Oskari.clazz.define(
 
             item.attr('data-id', channel.id);
             item.find('h3').html(
-                channel["details-topic-"+Oskari.getLang()]
+                channel.topic[Oskari.getLang()]
             );
             return item;
         },
@@ -513,15 +513,16 @@ Oskari.clazz.define(
             var frm = jQuery(event.target);
 
             if (me._formIsValid(frm, me)) {
-                /**
-                if (data.roles )
-                    */
+
+                //FIXME
+                var url = "";
+
                 var dataObject = {
                     'id': frm.find("[name=id]").val(),
                     'choose-wfs-layer': frm.find("[name=choose-wfs-layer]").val(),
                     'topic' : {},
                     'desc': {},
-                    'params' : {}
+                    'params' : []
                 };
 
                 jQuery.each(Oskari.getSupportedLanguages(), function(index, item) {
@@ -530,18 +531,21 @@ Oskari.clazz.define(
                 });
 
                 jQuery.each(frm.find("[name=choose-param-for-search]"), function(index, item) {
-                    dataObject.params[index] = jQuery(this).val();
+                    dataObject.params.push(jQuery(this).val());
                 });
 
-                 console.dir(dataObject);
+                url += "id="+dataObject["id"];
+                url += "&wfsLayerId="+dataObject["choose-wfs-layer"];
+                url += "&desc="+JSON.stringify(dataObject.desc);
+                url += "&topic="+JSON.stringify(dataObject.topic);
+                url += "&paramsForSearch="+JSON.stringify(dataObject.params);
 
                 jQuery.ajax({
                     type: frm.attr('method'),
                     url: me.sandbox.getAjaxUrl() + 'action_route=SearchWFSChannel',
-                    data: JSON.stringify(dataObject),
+                    data: url,
                     success: function (data) {
                         me._closeForm(frm);
-                        // FIXME fetch channels
                         me.fetchChannels(me.container);
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
@@ -566,26 +570,31 @@ Oskari.clazz.define(
          */
         _populateForm: function (fragment, channel) {
             var me = this;
-            fragment.find('fieldset:first-child input').not(':input[type=button]').each(function (index) {
-                var el = jQuery(this), elName = "";
-                    if(!el.hasClass('no-span-text')){
-                        elName = el.attr('name');
-                    }else{
-                        elName = el.attr('language');
-                    }
-                if (channel) {
-                    el.val(channel[elName]);
-                }
-            });
+
             if (channel) {
-                // var select = fragment.find('select'),
-                //     i;
-                // for (i = 0; i < user.roles.length; i += 1) {
-                //     var opt = select.find(
-                //         'option[value=' + user.roles[i] + ']'
-                //     );
-                //     opt.attr('selected', 'selected');
-                // }
+                this._progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
+                me._progressSpinner.insertTo(jQuery(".admin-channels"));
+                me._progressSpinner.start();
+                fragment.find("[name=id]").val(channel.id);
+                fragment.find("[name=choose-wfs-layer]").val(channel.wfsId).trigger("change");
+                $.each(channel.topic, function(lang, text) {
+                    fragment.find("[name=details-topic-"+lang+"]").val(text);
+                });
+                $.each(channel.desc, function(lang, text) {
+                    fragment.find("[name=details-desc-"+lang+"]").val(text);
+                });
+                var paramsSelect =  fragment.find("[name=choose-param-for-search]");
+                $.each(channel.params_for_search, function(index, text) {
+                    if(index > 0){
+                        fragment.find(".new-params-btn").trigger("click");
+                    }
+                    //FIXME Dynamic option adding needs it
+                    setTimeout(function(){
+                        fragment.find("[name=choose-param-for-search]").eq(index).val(text);
+                        me._progressSpinner.stop();
+                    },600);
+                });
+               
                 fragment.attr('method', 'POST');
             } else {
                 fragment.attr('method', 'PUT');
