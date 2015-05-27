@@ -8,8 +8,13 @@ module.exports = function (grunt) {
             var locale = grunt.option('locale'),
                 locales,
                 path = require('path'),
+                fse = require('fs-extra'),
                 templateLocale = grunt.option('templateLocale') || 'en',
+                logpath = '..' + path.sep + 'dist' + path.sep + 'L10N' + path.sep + 'genL10nExcels.log' ,
                 i;
+
+            // log all lacking translation locations
+            global.logfile = logfile = fse.createOutputStream(logpath);
 
             if (!locale) {
                 // TODO: rather check languages based on bundles /locale/<lang>.js
@@ -153,6 +158,7 @@ module.exports = function (grunt) {
                 done(false);
             }
 
+
             var cleanup = function (finish, ret) {
                 // delete copied template...
                 var templateDir = localizationDir + path.sep + bundleName + '_' + locale;
@@ -189,7 +195,12 @@ module.exports = function (grunt) {
                     row = row.replace('{filename}', escape(filename));
                     row = row.replace('{key}', escape(key));
                     row = row.replace('{value}', escape(value));
-                    row = row.replace('{translation}', escape(translation));
+                    if(!translation){
+                        row = row.replace('{translation}', escape(value));
+                    }
+                    else {
+                        row = row.replace('{translation}', escape(translation));
+                    }
                     row = row.replace('{notes}', escape(notes));
                     //grunt.log.writeln(row);
                     output += row;
@@ -229,20 +240,40 @@ module.exports = function (grunt) {
                     var pathStack = stack || [],
                         translation,
                         i,
-                        p;
+                        p,
+                        note = getTranslationNote(pathStack);
+
                     // Print the node if its value is a string
                     if (typeof node === 'string' || node instanceof String) {
                         translation = getTranslation(pathStack);
                         if (!translation && pathStack.join('') === 'lang') {
                             translation = locale;
                         }
+                        if(!note) {
+                            //Add extra note, if lacking locale en and current lang
+                            if(!node){
+                                note = 'NO ' + templateLocale + ' TRANSLATION  - '
+                            }
+                            if(!translation){
+                                note = note + 'NO ' + locale +  ' TRANSLATION'
+                            }
+                            if(note){
+                                global.logfile.write( path.sep + 'Oskari' + bundleDir.substring(2) + 'locale' + ' <-> ' +
+                                    locale + '.js' + ' <-> ' +
+                                    pathStack.join('.') + ' <-> ' +
+                                    node + ' <-> ' + note + ' <-> ' +
+                                    localizationDir + path.sep + bundleName + '_' + locale + '.xlsx\n');
+                            }
+
+                        }
+
                         addExcelRow(
                             path.sep + 'Oskari' + bundleDir.substring(2) + 'locale',
                             locale + '.js',
                             pathStack.join('.'),
                             node,
                             translation,
-                            getTranslationNote(pathStack)
+                            note
                         );
                     } else if ((!!node) && (node.constructor === Object)) {
                         // Node value is an object, recurse
@@ -502,6 +533,7 @@ module.exports = function (grunt) {
                     return localization;
                 }
             };
+
             // Get the original translation. Returns '' if translation is not available.
             var getTranslation = function (pathStack) {
                 if (!translation) {
@@ -520,7 +552,13 @@ module.exports = function (grunt) {
             };
 
             // Sets a new translation value
-            var setNewValue = function (pathStack, val) {
+            /**
+             *
+             * @param pathStack
+             * @param val        new value
+             * @param val_en     if no value, use english and record lacking value
+             */
+            var setNewValue = function (pathStack, val, val_en) {
                 var currNode = sourceLocale,
                     i,
                     newValue = val && val.length ? val : 'NOT TRANSLATED';
@@ -563,7 +601,7 @@ module.exports = function (grunt) {
                     p;
 
                 if (typeof node === 'string' || node instanceof String) {
-                    setNewValue(pathStack, getTranslation(pathStack));
+                    setNewValue(pathStack, getTranslation(pathStack), getTranslation(pathStack, 'en'));
                 } else if (node.constructor === Object) {
                     // Node value is an object, recurse
                     for (p in node) {
@@ -662,7 +700,7 @@ module.exports = function (grunt) {
                                 localized = getCellValue(cells[4]);
 
                                 var pathStack = key.split(delimiter);
-                                setNewValue(pathStack, localized);
+                                setNewValue(pathStack, localized, original);
                             }
                         }
                     } else {
@@ -673,14 +711,14 @@ module.exports = function (grunt) {
 
             // Set user defined locale if available
             if (locale) {
-                setNewValue(['lang'], locale);
+                setNewValue(['lang'], locale, locale);
             }
             // Write file to targetFile
             fs.writeFileSync(
                 targetFile,
-                'Oskari.registerLocalization(\n' +
-                JSON.stringify(sourceLocale, null, 4) +
-                '\n);'
+                'Oskari.registerLocalization(\r\n' +
+                JSON.stringify(sourceLocale, null, 4).replace(/\n/g,'\r\n') +
+                '\r\n);'
             );
         }
     );
