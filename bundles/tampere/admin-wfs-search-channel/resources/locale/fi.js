@@ -24,6 +24,7 @@
 				"details-desc-en" : "Kuvaus englanniksi",
 				"details-desc-sv" : "Kuvaus ruotsiksi",
 				"new-params-btn" : "Uusi ominaisuus",
+                "details-default" : "Default -haku",
                 "form_invalid": "Puuttuvia/vääräarvoisia kenttiä",
                 "field_required": "Kenttä \"{fieldName}\" on pakollinen",
                 "confirm_delete": "Haluatko varmasti poistaa kanavan {channel}?",
@@ -33,6 +34,7 @@
                 "no_columns_for_layer": "Tasolle ei löytynyt ominaisuustietoja",
                 "columns_failed": "Ominaisuustietojen haku epäonnistui",
                 "save_failed": "Tallennus epäonnistui",
+                "search-channels": "Hae kanavia",
                 "noMatch": "Haulla ei löytynyt tuloksia",
             }
         },

@@ -68,7 +68,7 @@ Oskari.clazz.define("Oskari.tampere.bundle.tampere.AdminWfsSearchChannelBundle",
 			"Bundle-Identifier" : "admin-wfs-search-channel",
 			"Bundle-Name" : "admin-wfs-search-channel",
 			"Bundle-Author" : [{
-				"Name" : "Tuomas Ruohonen",
+				"Name" : "Dimenteq Oy",
 				"Organisation" : "Dimenteq Oy",
 				"Temporal" : {
 					"Start" : "2015",

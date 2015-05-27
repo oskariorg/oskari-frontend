@@ -71,7 +71,11 @@ Oskari.clazz.define(
                 '        <select name="choose-wfs-layer" required="required"></select>' +
                 '    </label>' +
                 '       <h4></h4>' +
-                '           <div class="details--wrapper"></div>' +
+                '           <div class="no-span-text default-checkbox">'+
+                '               <span></span>' +
+                '               <input type="checkbox" name="details-default"/>' +
+                '           </div>'+
+                '               <div class="details--wrapper"></div>' +
                 '    <label>' +
                 '        <span></span>' +
                 '        <select name="choose-param-for-search" required="required"></select>' +
@@ -326,7 +330,7 @@ Oskari.clazz.define(
             if(channels) {
                 for (i = 0; i < channels.length; i += 1) {
                     channel = channels[i];
-                    matches = !hasFilter || channel["details-topic-"+Oskari.getLang()].toLowerCase().indexOf(filter.toLowerCase()) > -1;
+                    matches = !hasFilter || channel.topic[Oskari.getLang()].toLowerCase().indexOf(filter.toLowerCase()) > -1;
                     if (matches) {
                         list.append(
                             me._populateItem(
@@ -338,7 +342,14 @@ Oskari.clazz.define(
                 }
             }
             // Add list to container
-            me.container.append(list);
+            if(list.children().length > 0){
+                me.container.append(list);
+            }else{
+                 me._openPopup(
+                     me._getLocalization('search-channels'),
+                     me._getLocalization('noMatch')
+                 );
+            }
         },
 
         /**
@@ -522,7 +533,8 @@ Oskari.clazz.define(
                     'choose-wfs-layer': frm.find("[name=choose-wfs-layer]").val(),
                     'topic' : {},
                     'desc': {},
-                    'params' : []
+                    'params' : [],
+                    'is-default' : frm.find("[name=details-default]").is(":checked")
                 };
 
                 jQuery.each(Oskari.getSupportedLanguages(), function(index, item) {
@@ -539,6 +551,7 @@ Oskari.clazz.define(
                 url += "&desc="+JSON.stringify(dataObject.desc);
                 url += "&topic="+JSON.stringify(dataObject.topic);
                 url += "&paramsForSearch="+JSON.stringify(dataObject.params);
+                url += "&isDefault="+dataObject["is-default"];
 
                 jQuery.ajax({
                     type: frm.attr('method'),
@@ -577,6 +590,7 @@ Oskari.clazz.define(
                 me._progressSpinner.start();
                 fragment.find("[name=id]").val(channel.id);
                 fragment.find("[name=choose-wfs-layer]").val(channel.wfsId).trigger("change");
+                fragment.find("[name=details-default]").attr('checked', channel.is_default);
                 $.each(channel.topic, function(lang, text) {
                     fragment.find("[name=details-topic-"+lang+"]").val(text);
                 });
