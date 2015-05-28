@@ -255,7 +255,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
             cancelBtn.setTitle(me.localization.button.cancel);
             cancelBtn.setHandler(function () {
                 editDialog.close();
+
                 me.instance.getSelectionPlugin().stopDrawing();
+                me.instance.getSelectionPlugin()._toggleControl();
             });
 
             editDialog.show(title, dialogContent, [cancelBtn, showSelectionsBtn]);
