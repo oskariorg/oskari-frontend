@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.BasicPublisher',
     function (instance, localization, data) {
         var me = this;
         me.data = data;
-
+        me.panels = [];
         me.instance = instance;
         me.template = jQuery(
             '<div class="basic_publisher">' +
@@ -207,6 +207,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.BasicPublisher',
 
             var panel = form.getPanel();
             panel.open();
+            me.panels.push(form);
             accordion.addPanel(panel);
         },
 
@@ -242,8 +243,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.BasicPublisher',
 
             var panel = form.getPanel();
             panel.open();
-            // 1st panel: location panel
+            me.panels.push(form);
             accordion.addPanel(panel);
+        },
+
+        _gatherSelections: function(){
+            var me = this,
+                selections = [];
+            jQuery.each(me.panels, function(index, panel){
+                selections.push(panel.getValues());
+            });
+            
+            //console.log(selections);
+
+            throw 'Not implemented yet!';
         },
 
         /**

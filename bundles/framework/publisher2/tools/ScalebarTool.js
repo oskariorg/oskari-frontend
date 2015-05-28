@@ -148,7 +148,7 @@ function(sandbox, mapmodule, localization) {
     getValues: function () {
     	var me = this,
     		saveState = {
-    			tool: me.getTool().name,
+    			tool: me.getTool().id,
     			show: me.state.enabled,
     			subTools : []
     		};

@@ -172,24 +172,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.MapToolsPanel',
          *     name : <name field value>,
          *     language : <language user selected>
          * }
-
-         FIXME: fixed this
          *
          * @method getValues
          * @return {Object}
          */
         getValues: function () {
-            var values = {},
-                fkey,
-                data;
+            var me = this,
+                values = {
+                    maptools: []
+                };
 
-            for (fkey in this.fields) {
-                if (this.fields.hasOwnProperty(fkey)) {
-                    data = this.fields[fkey];
-                    values[fkey] = data.field.getValue();
-                }
-            }
-            values.language = this.langField.field.getValue();
+            jQuery.each(me.tools, function(index, tool){
+                values.maptools.push(tool.getValues());
+            });
+            
             return values;
         },
 
@@ -202,16 +198,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.MapToolsPanel',
          * @return {Object[]}
          */
         validate: function () {
-            var errors = [],
-                fkey,
-                data;
-
-            for (fkey in this.fields) {
-                if (this.fields.hasOwnProperty(fkey)) {
-                    data = this.fields[fkey];
-                    errors = errors.concat(data.field.validate());
+            var errors = [];
+            jQuery.each(me.tools, function(index, tool){
+                if(tool.validate() === false ){
+                    errors.push(tool.getTool().id);
                 }
-            }
+            });
             return errors;
         }
     });
