@@ -19,11 +19,12 @@ Oskari.clazz.define(
             p;
         
         me.sandbox = sandbox;
-
         me.WFSFeatureSelections = [];
         me.selectedWFSLayers = [];
         me.selectFromAllLayers;
         me.topWFSLayer;
+        //flag for telling mediator's occasional wfs mapclick event that showing the popup is a no-no
+        me.selectionToolsActive;
 
         for (p in me.eventHandlers) {
             if (me.eventHandlers.hasOwnProperty(p)) {
@@ -87,7 +88,7 @@ Oskari.clazz.define(
         },
 
         /**
-         * @method setWFSFeaturesSelections
+         * @method setWFSLayerSelection
          * @param {Object} WFS layer; WFS Layer which is selected or unselected
          * @param {Boolean} status; true if WFS layer is selected and false if WFS layer is removed from selections
          * 
@@ -95,11 +96,10 @@ Oskari.clazz.define(
          */
         setWFSLayerSelection: function (layerId, status) {
             var me = this;
-
             if (status) {
                 me.selectedWFSLayers.push(layerId);
             } else {
-                _.pull(selectedWFSLayers, [layerId]);
+                _.pull(me.selectedWFSLayers, [layerId]);
             }
         },
 
@@ -140,25 +140,24 @@ Oskari.clazz.define(
          */
         setWFSFeaturesSelections: function (layerId, featureIds) {
             var me = this,
-                newFeatureIds,
-                featureAlreadySelected,
                 existingFeatureSelections = _.pluck(_.where(me.WFSFeatureSelections, {'layerId': layerId}), 'featureIds');
-
-            if (existingFeatureSelections.length > 0) {
-                featureAlreadySelected = existingFeatureSelections[0].indexOf(featureIds[0]);
-            }
-
-            if (_.isEmpty(existingFeatureSelections)) {
-                me.WFSFeatureSelections.push({'layerId' : layerId, 'featureIds': featureIds});
-            } else if (featureAlreadySelected < 0) {
-                _.remove(me.WFSFeatureSelections, {'layerId': layerId});
-                existingFeatureSelections[0].push(featureIds[0]);
-                me.WFSFeatureSelections.push({'layerId' : layerId, 'featureIds': existingFeatureSelections[0]});
+         
+            //no existing selections -> add all
+            if (!existingFeatureSelections || existingFeatureSelections.length === 0) {
+                existingFeatureSelections.push(featureIds);
             } else {
-                 _.remove(me.WFSFeatureSelections, {'layerId': layerId});
-                newFeatureIds = _.difference(existingFeatureSelections[0], featureIds);
-                me.WFSFeatureSelections.push({'layerId' : layerId, 'featureIds': newFeatureIds});
+                //existing selections found -> just add the features that weren't previously selected
+                _.each(featureIds, function(featureId) {
+                    if (existingFeatureSelections[0].indexOf(featureId) < 0) {
+                        existingFeatureSelections[0].push(featureId);
+                    }
+                });
+
             }
+            //clear old selection
+            _.remove(me.WFSFeatureSelections, {'layerId': layerId});
+            //add the updated selection
+            me.WFSFeatureSelections.push({'layerId' : layerId, 'featureIds': existingFeatureSelections[0]});
         },
 
         /**
@@ -213,4 +212,23 @@ Oskari.clazz.define(
         isSelectFromAllLayers: function () {
             return this.selectFromAllLayers;
         },
+        /**
+         * @method setSelectionToolsActive
+         * @param {boolean} selectionToolsActive; one or more of the selection tools is active -> gfi not allowed, not even by accident...
+         *
+         */
+        setSelectionToolsActive: function (selectionToolsActive) {
+            var me = this;
+            me.selectionToolsActive = selectionToolsActive;
+        },
+        /**
+         * @method selectionToolsActive
+         *
+         * @return {boolean} me.selectionToolsActive
+         *
+         * Tells the mediator that raising the mapclick is a no-no, because the selection tools are active.
+         */
+        isSelectionToolsActive: function () {
+            return this.selectionToolsActive;
+        }
     });

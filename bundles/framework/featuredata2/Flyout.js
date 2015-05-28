@@ -284,7 +284,8 @@ Oskari.clazz.define(
             var map = this.instance.sandbox.getMap(),
                 panel = this.layers['' + layer.getId()],
                 selection = null,
-                i;
+                i,
+                selectedFeatures;
 
             if (panel.grid) {
                 selection = panel.grid.getSelection();
@@ -298,24 +299,17 @@ Oskari.clazz.define(
 
             // in scale, proceed
             this._prepareData(layer);
-
             if (selection && selection.length > 0 && typeof selection[0].featureId !== 'undefined') {
                 for (i = 0; i < selection.length; i += 1) {
                     panel.grid.select(selection[i].featureId, true);
                 }
             }
 
-            // mapClick
-            if (panel.grid && layer.getClickedFeatureIds().length > 0) {
-                for (i = 0; i < layer.getClickedFeatureIds().length; i += 1) {
-                    panel.grid.select(layer.getClickedFeatureIds()[i], true);
-                }
-            }
-
             // filter
-            if (panel.grid && layer.getSelectedFeatures().length > 0) {
-                for (i = 0; i < layer.getSelectedFeatures().length; i += 1) {
-                    panel.grid.select(layer.getSelectedFeatures()[i][0], true);
+            selectedFeatures = this.WFSLayerService.getWFSFeaturesSelections(layer._id);
+            if (panel.grid &&  selectedFeatures && selectedFeatures.length > 0) {
+                for (i = 0; i < selectedFeatures.length; i++) {
+                    panel.grid.select(selectedFeatures[i], true);
                 }
             }
         },
@@ -642,7 +636,7 @@ Oskari.clazz.define(
                             }
                         }
                     }
-
+                    
                     for (j = 0; j < fields.length; j += 1) {
                         if (values[j] === null || values[j] === undefined || values[j] === '') {
                             featureData[fields[j]] = '';
@@ -767,7 +761,9 @@ Oskari.clazz.define(
                     }
                 }
             } else {
-                panel.grid.removeSelections();
+                if (panel && panel.grid) {
+                    panel.grid.removeSelections();
+                }
             }
         },
 
