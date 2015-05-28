@@ -73,16 +73,6 @@ Now checks correctly buttons focuses.
 
 In successfully license conclude now shows same information popup as concluded license.
 
-### elf/geolocator search
-
-Location type based scaling is available when locating the search item
-Default setup is in ELFGEOLOCATOR_CHANNEL.json
-Override setup will be set in oskari-ext.properties
-
-(#) Optional setup for location type based scaling - default is oskari-server\service-search-nls\src\main\resources\fi\nls\oskari\search\channel\ELFGEOLOCATOR_CHANNEL.json
-(#) e.g.
-search.channel.ELFGEOLOCATOR_CHANNEL.service.locationtype.json=/opt/jetty/webapps/root/setup/test.json
-
 
 ### featuredata2/Flyout
 
