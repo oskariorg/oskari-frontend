@@ -43,7 +43,7 @@ Oskari.registerLocalization(
                 "label": "Veličina",
                 "tooltip": "Izaberi ili definiši veličinu mape koja će biti ugrađena u vašu web prezentaciju. Mapa se prikazuje u izabranoj veličini."
             },
-            "tools": {
+            "maptools": {
                 "label": "Alati",
                 "tooltip": "Izaberi alate koji će biti prikazani na mapi. Njihova pozicija je prikazana u prikazu mape pre štampe",
                 "ScaleBarPlugin": "Razmernik",

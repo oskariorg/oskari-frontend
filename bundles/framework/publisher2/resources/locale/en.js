@@ -43,7 +43,7 @@ Oskari.registerLocalization(
                 "label": "Size",
                 "tooltip": "Select or define the size of the map to be embedded on your website. You can see changes in the map preview."
             },
-            "tools": {
+            "maptools": {
                 "label": "Tools",
                 "tooltip": "Select the tools to be shown on the map. You can see the tool placement in the map preview.",
                 "ScaleBarPlugin": "Scale bar",

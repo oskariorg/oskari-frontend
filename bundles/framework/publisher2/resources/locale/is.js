@@ -43,7 +43,7 @@ Oskari.registerLocalization(
                 "label": "Stærð",
                 "tooltip": "NOT TRANSLATED"
             },
-            "tools": {
+            "maptools": {
                 "label": "Verkfæri",
                 "tooltip": "Veldu verkfærin sem eiga að sjást á kortinu. Staðsetning þeirra er sýnd þegar kortið er forskoðað.",
                 "ScaleBarPlugin": "Mælikvarði",

@@ -53,122 +53,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.BasicPublisher',
 
         me.normalMapPlugins = [];
 
-        // These define where and what with plugins can be dropped in
-        me.toolDropRules = {
-            'Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin': {
-                allowedLocations: ['bottom left', 'bottom right'],
-                allowedSiblings: [
-                    'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
-                    'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin',
-                    'Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin'
-                ],
-                groupedSiblings: false
-            },
-
-            'Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin': {
-                // FIXME this should be moved to the left in righthanded layout
-                allowedLocations: ['bottom right'],
-                allowedSiblings: [
-                    'Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin',
-                    'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
-                    'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin'
-                ],
-                groupedSiblings: false
-            },
-
-            'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin': {
-                allowedLocations: ['bottom left', 'bottom right'],
-                allowedSiblings: [
-                    'Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin',
-                    'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
-                    'Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin'
-                ],
-                groupedSiblings: false
-            },
-
-            'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin': {
-                allowedLocations: ['bottom left', 'bottom right'],
-                allowedSiblings: [
-                    'Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin',
-                    'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin',
-                    'Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin'
-                ],
-                groupedSiblings: false
-            },
-
-            'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin': {
-                // Disabled for now, need to fix config reading first allowedLocations: ['top left', 'top right', 'bottom left', 'bottom right'],
-                allowedLocations: ['top right'],
-                allowedSiblings: [
-                    'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin',
-                    'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
-                    'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar',
-                    'Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin',
-                    'Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin'
-                ],
-                groupedSiblings: true
-            },
-
-            'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons': {
-                allowedLocations: ['top left', 'top right', 'bottom left', 'bottom right'],
-                allowedSiblings: [
-                    'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
-                    'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin',
-                    'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
-                ],
-                groupedSiblings: true
-            },
-
-            'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar': {
-                allowedLocations: ['top left', 'top right', 'bottom left', 'bottom right'],
-                allowedSiblings: [
-                    'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
-                    'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin',
-                    'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons'
-                ],
-                groupedSiblings: true
-            },
-
-            'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin': {
-                allowedLocations: ['top left', 'top right', 'bottom left', 'bottom right'],
-                allowedSiblings: [
-                    'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
-                    'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
-                    'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
-                ],
-                groupedSiblings: true
-            },
-
-            'Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin':
-{               allowedLocations: ['top left', 'top center', 'top right'],
-                allowedSiblings: [
-                    'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
-                    'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin',
-                    'Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin'
-                ],
-                groupedSiblings: false
-            },
-
-            'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin': {
-                allowedLocations: ['top left', 'top center', 'top right'],
-                allowedSiblings: [
-                    'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
-                    'Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin',
-                    'Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin'
-                ],
-                groupedSiblings: false
-            },
-
-            'Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin': {
-                allowedLocations: ['top left', 'top center', 'top right'],
-                allowedSiblings: [
-                    'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
-                    'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin',
-                    'Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin'
-                ],
-                groupedSiblings: false
-            }
-        };
 
         // TODO see if this and layerselection could be moved to tools...
         // just ignore them on ui creation or smthn
@@ -267,6 +151,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.BasicPublisher',
             me.accordion = accordion;
 
             me._createLocationPanel(accordion, content);
+            me._createMapToolsPanel(accordion, content);
 
             accordion.insertTo(contentDiv);
 
@@ -292,7 +177,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.BasicPublisher',
         },
         /**
          * @private @method _createLocationPanel
-         * Creates the first panel of publisher and adds it to accordion
+         * Creates the Location panel of publisher and adds it to accordion
          *
          *
          * @param {String} accordion
@@ -300,8 +185,46 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.BasicPublisher',
         _createLocationPanel: function (accordion, content) {
             var me = this,
                 form = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.publisher2.view.PublisherLocationForm',
+                'Oskari.mapframework.bundle.publisher2.view.PublisherLocationPanel',
+                me.instance.getSandbox(),
+                me.instance.getSandbox().findRegisteredModuleInstance("MainMapModule"),
                 me.loc,
+                me
+            );
+
+            me.locationForm = form;
+            if (me.data) {
+                content.find('div.header h3').append(me.loc.titleEdit);
+                form.init({
+                    domain: me.data.domain,
+                    name: me.data.name,
+                    lang: me.data.lang
+                });
+            } else {
+                content.find('div.header h3').append(me.loc.title);
+                form.init();
+            }
+
+            var panel = form.getPanel();
+            panel.open();
+            accordion.addPanel(panel);
+        },
+
+
+        /**
+         * @private @method _createMapToolsPanel
+         * Creates the MapTools panel of publisher and adds it to accordion
+         *
+         *
+         * @param {String} accordion
+         */
+        _createMapToolsPanel: function (accordion, content) {
+            var me = this,
+                form = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.publisher2.view.MapToolsPanel',
+                me.instance.getSandbox(),
+                me.instance.getSandbox().findRegisteredModuleInstance("MainMapModule"),
+                me.instance.localization.BasicView,
                 me
             );
             me.locationForm = form;
@@ -321,6 +244,61 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.BasicPublisher',
             panel.open();
             // 1st panel: location panel
             accordion.addPanel(panel);
+        },
+
+        /**
+         * @private @method _editToolLayoutOff
+         *
+         *
+         */
+        _editToolLayoutOff: function () {
+            var me = this,
+                sandbox = Oskari.getSandbox('sandbox');
+
+            if (!me.toolLayoutEditMode) {
+                return;
+            }
+
+            me.toolLayoutEditMode = false;
+            jQuery('#editModeBtn').val(me.loc.toollayout.usereditmode);
+            jQuery('.mapplugin').removeClass('toollayoutedit');
+
+            var draggables = jQuery('.mapplugin.ui-draggable');
+            draggables.css('position', '');
+            draggables.draggable('destroy');
+            jQuery('.mappluginsContent.ui-droppable').droppable('destroy');
+
+            var event = sandbox.getEventBuilder('LayerToolsEditModeEvent')(false);
+            sandbox.notifyAll(event);
+
+            // Set logoplugin and layerselection as well
+            // FIXME get this from logoPlugin's config, no need to traverse the DOM
+            if (me.logoPlugin) {
+                me.logoPluginClasses.classes = me.logoPlugin.getElement().parents('.mapplugins').attr('data-location');
+                me.logoPlugin.getElement().css('position', '');
+                //me.logoPlugin.setLocation(me.logoPluginClasses.classes);
+            }
+            if (me.maplayerPanel.plugin && me.maplayerPanel.plugin.getElement()) {
+                me.layerSelectionClasses.classes = me.maplayerPanel.plugin.getElement().parents('.mapplugins').attr('data-location');
+                //me.maplayerPanel.plugin.setLocation(me.layerSelectionClasses.classes);
+                me.maplayerPanel.plugin.getElement().css('position', '');
+            }
+
+            // set map controls back to original settings after editing tool layout
+            var controlsPluginTool = me.toolsPanel.getToolById('Oskari.mapframework.mapmodule.ControlsPlugin');
+            if (controlsPluginTool) {
+                me.toolsPanel.activatePreviewPlugin(controlsPluginTool, me.isMapControlActive);
+                delete me.isMapControlActive;
+            }
+
+            // Hide unneeded containers
+            var container;
+            jQuery('.mapplugins').each(function () {
+                container = jQuery(this);
+                if (container.find('.mappluginsContent').children().length === 0) {
+                    container.css('display', 'none');
+                }
+            });
         },
 
         /**

@@ -43,7 +43,7 @@ Oskari.registerLocalization(
                 "label": "Madhësia",
                 "tooltip": "Përzgjedh apo defino madhësinë e hartës që do të futet në ueb faqen tuaj. Parapamja e hartës suaj është paraqitur në madhësinë e zgjedhur"
             },
-            "tools": {
+            "maptools": {
                 "label": "Veglat (mjetet)",
                 "tooltip": "Përzgjedh veglat që do të paraqiten në hartë. Vendosja e tyre është paraqitur në parapamjen e hartës",
                 "ScaleBarPlugin": "Vija e shkallës",

@@ -43,7 +43,7 @@ Oskari.registerLocalization(
                 "label": "Méret",
                 "tooltip": "Válassza ki vagy határozza meg az Ön weboldalán beágyazandó térkép méretét. Az előnézet ebben a méretben jelenik meg."
             },
-            "tools": {
+            "maptools": {
                 "label": "Eszközök",
                 "tooltip": "Válassza ki a térképen megjelenítendő eszközöket. Az előnézetben ezek megjelennek.",
                 "ScaleBarPlugin": "Méretarány-skála",

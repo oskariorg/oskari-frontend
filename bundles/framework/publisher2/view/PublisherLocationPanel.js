@@ -1,22 +1,26 @@
 /**
- * @class Oskari.mapframework.bundle.publisher2.view.PublisherLocationForm
+ * @class Oskari.mapframework.bundle.publisher2.view.PublisherLocationPanel
  *
  * Represents the basic info (name, domain, language) view for the publisher
  * as an Oskari.userinterface.component.AccordionPanel
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherLocationForm',
+Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherLocationPanel',
 
     /**
      * @method create called automatically on construction
      * @static
+     * @param {Object} sandbox
+     * @param {Object} mapmodule
      * @param {Object} localization
      *       publisher localization data
      * @param {Oskari.mapframework.bundle.publisher2.view.BasicPublisher} publisher
      *       publisher reference for language change
      */
-    function (localization, publisher) {
+    function (sandbox, mapmodule, localization, publisher) {
         this.loc = localization;
         this._publisher = publisher;
+        this.sandbox = sandbox;
+        this.mapmodule = mapmodule;
         this.fields = {
             domain: {
                 label: localization.domain.label,
@@ -34,8 +38,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherLocatio
         this.langField = {
             template: jQuery('<div class="field">' +
                 '<div class="help icon-info" title="' + localization.language.tooltip + '" helptags="portti,help,publisher,language"></div>' +
-                //'<label for="language">' + localization.language.label + '</label><br clear="all" />' +
-                //'<select name="language"></select>' +
                 '</div>')
         };
     }, {

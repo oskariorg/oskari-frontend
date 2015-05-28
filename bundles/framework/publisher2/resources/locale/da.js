@@ -43,7 +43,7 @@ Oskari.registerLocalization(
                 "label": "Størrelse",
                 "tooltip": "Vælg eller definér størrelsen på det kort, der skal integreres på din hjemmeside. Forhåndsvisning af kort udstilles i den valgte størrelse."
             },
-            "tools": {
+            "maptools": {
                 "label": "Værktøjer",
                 "tooltip": "Vælg de værktøjer, der skal vises på kortet. Deres placering udstilles i forhåndsvisningen af kortet.",
                 "ScaleBarPlugin": "Skaleringslinje",
