@@ -43,7 +43,7 @@ Oskari.registerLocalization(
                 "label": "Kartan koko",
                 "tooltip": "Valitse koko, jossa upotettu kartta esitetään verkkosivulla. Leveyden on oltava vähintään 30 pikseliä ja korkeuden vähintään 20 pikseliä. Desimaalierottimena on piste. Valinnan tulokset esitetään esikatselukartassa."
             },
-            "tools": {
+            "maptools": {
                 "label": "Kartalla näytettävät työkalut",
                 "tooltip": "Valitse työkalut, jotka näytetään upotetussa kartassa. Näet työkalujen asettelun esikatselukartassa.",
                 "ScaleBarPlugin": "Mittakaavajana",

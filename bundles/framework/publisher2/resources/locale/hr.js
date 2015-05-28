@@ -42,7 +42,7 @@ Oskari.registerLocalization({
                 "label": "Veličina",
                 "tooltip": "Odaberi ili odredi veličinu karte koja će biti umetnuta u internet stranicu. Prethodni pregled karte prikazuje se u odabranoj veličini."
             },
-            "tools": {
+            "maptools": {
                 "label": "Alati",
                 "tooltip": "Odaberi alate koji će biti prikazani na karti. Njihov položaj prikazan je u prethodnom pregledu karte.",
                 "ScaleBarPlugin": "Linija mjerila",

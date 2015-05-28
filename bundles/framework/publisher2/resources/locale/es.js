@@ -43,7 +43,7 @@ Oskari.registerLocalization(
                 "label": "Tamaño",
                 "tooltip": "Seleccione o defina el tamaño del mapa que se incorporará en su portal web. La previsualización del mapa se mostrará en el tamaño seleccionado"
             },
-            "tools": {
+            "maptools": {
                 "label": "Herramientas",
                 "tooltip": "Seleccione las herramientras que se mostrarán en el mapa. Su ubicación se mostrará en la previsualización del mapa",
                 "ScaleBarPlugin": "Escala",

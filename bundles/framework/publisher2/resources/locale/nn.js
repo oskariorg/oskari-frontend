@@ -43,7 +43,7 @@ Oskari.registerLocalization(
                 "label": "Storleik",
                 "tooltip": "Vel eller legg inn storleiken på kartet som skal byggast inne på nettsteden din. Du kan sjå endringar i vindauget for førehandsvising."
             },
-            "tools": {
+            "maptools": {
                 "label": "verktøy",
                 "tooltip": "Vel verktøy som skal visast på kartet. Du kan sjå plasseringa av verktøyet i vindauget for førehandsvising.",
                 "ScaleBarPlugin": "Målestokk",

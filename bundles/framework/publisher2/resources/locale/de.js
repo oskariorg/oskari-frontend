@@ -45,7 +45,7 @@ Oskari.registerLocalization({
                 "label": "Größe",
                 "tooltip": "Wählen oder definieren Sie die Größe der Karte, die auf Ihrer Webseite eingebunden werden soll. Die Kartenvorschau wird in der gewählten Größe angezeigt."
             },
-            "tools": {
+            "maptools": {
                 "label": "Werkzeuge",
                 "tooltip": "Wählen Sie die Werkzeuge, die für die Karte verfügbar sein sollen. Deren Anordnung wird in der Kartenvorschau angezeigt.",
                 "ScaleBarPlugin": "Maßstab",

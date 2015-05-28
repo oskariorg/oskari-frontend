@@ -43,7 +43,7 @@ Oskari.registerLocalization(
                 "label": "Dimensão",
                 "tooltip": "Selecione ou defina a dimensão da carta a embutir no seu sítio web. A pré-visualização é apresentada na dimensão escolhida"
             },
-            "tools": {
+            "maptools": {
                 "label": "Ferramentas",
                 "tooltip": "Selecione as ferramentas a apresentar na carta. A sua colocação aparece na pré-visualização",
                 "ScaleBarPlugin": "Escala gráfica",
