@@ -1,0 +1,95 @@
+div.searchFromChannelsDescription {
+  margin: 0;
+  margin-bottom: 8px; }
+
+div.searchFromChannelsContainer {
+  height: 90%; }
+  div.searchFromChannelsContainer div.main {
+    width: 100%;
+    height: 100%; }
+  div.searchFromChannelsContainer div.moreLess {
+    padding: 10px 0; }
+/*  div.searchFromChannelsContainer th.name, div.searchFromChannelsContainer td.name {
+    text-align: left; }
+  div.searchFromChannelsContainer td.name {
+    padding-left: 8px;
+    padding-right: 8px; }
+  div.searchFromChannelsContainer th.rating, div.searchFromChannelsContainer td.rating {
+    text-align: right; }
+  div.searchFromChannelsContainer th.info, div.searchFromChannelsContainer td.info {
+    text-align: right;
+    width: 16px; }
+  div.searchFromChannelsContainer th.remove, div.searchFromChannelsContainer td.remove {
+    text-align: right;
+    width: 16px; }
+  div.searchFromChannelsContainer td.info div.layerInfo {
+    width: 16px;
+    height: 16px;
+    margin-left: 5px;
+    float: right;
+    cursor: pointer; }*/
+/*  div.searchFromChannelsContainer td.showBbox div.showBbox {
+    width: 16px;
+    height: 16px;
+    margin-left: 5px;
+    background-image: url("../images/zoom_to.png") !important;
+    background-repeat: no-repeat !important;
+    float: right;
+    cursor: pointer; }
+  div.searchFromChannelsContainer td.remove div.resultRemove {
+    width: 16px;
+    height: 16px;
+    margin-left: 5px;
+    margin-right: 5px;
+    float: right;
+    cursor: pointer; }
+  div.searchFromChannelsContainer tr.resultRow {
+    padding-left: 10px;
+    outline: 1pt solid #c0d0e0; }
+  div.searchFromChannelsContainer tr.spacerRow {
+    height: 7px; }
+  div.searchFromChannelsContainer td {
+    border: none; }
+  div.searchFromChannelsContainer td.spacer {
+    padding: 0; }
+  div.searchFromChannelsContainer table.metadataSearchResult {
+    float: left; }
+  div.searchFromChannelsContainer ul.layerList {
+    padding-left: 35px; }*/
+  div.searchFromChannelsContainer a.showLink {
+    display: inline-block;
+    margin-left: 15px; }
+  div.searchFromChannelsContainer a.modifyLink {
+    display: inline-block;
+    margin-left: 15px; }
+
+div.searchFromChannelsOptions div.checkboxes {
+  display: table-cell;
+  vertical-align: middle;
+  margin-left: 130px;
+  width: auto; }
+div.searchFromChannelsOptions div.searchFromChannelsRow {
+  margin-bottom: 10px; }
+div.searchFromChannelsOptions div.searchFromChannelsType {
+  width: 50%;
+  float: left; }
+div.searchFromChannelsOptions div.rowLabel {
+}
+/*div.metadataOptions #metadataCoverageButton {
+  min-width: 206px; }
+
+div.metadataResultHeader {
+  display: table;
+  width: 100%;
+  height: 35px; }
+  div.metadataResultHeader div.panelHeader {
+    margin-top: 10px;
+    margin-bottom: 20px; }
+  div.metadataResultHeader div.resultHeaderContainer {
+    display: table-row; }
+  div.metadataResultHeader div.resultLinks {
+    float: right;
+    text-align: right; }
+  div.metadataResultHeader div.resultTitle {
+    float: left;
+    text-align: left; }*/

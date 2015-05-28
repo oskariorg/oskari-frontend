@@ -1,0 +1,166 @@
+div.metadataCatalogueDescription {
+    margin: 0;
+    margin-bottom: 8px;
+}
+div.metadataCatalogueContainer {
+    height: 90%;
+
+    div.main {
+        width: 100%;
+        height: 100%;
+    }
+
+    div.moreLess {
+        padding: 10px 0;
+    }
+
+    th.name, td.name {
+        text-align: left;
+    }
+
+    td.name {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    th.rating, td.rating {
+        text-align: right;
+    }
+
+    th.info, td.info {
+        text-align: right;
+        width: 16px;
+    }
+
+    th.remove, td.remove {
+        text-align: right;
+        width: 16px;
+    }
+
+    td.info div.layerInfo {
+        width: 16px;
+        height: 16px;
+        margin-left: 5px;
+        float: right;
+        cursor: pointer;
+    }
+
+    td.showBbox div.showBbox {
+        width: 16px;
+        height: 16px;
+        margin-left: 5px;    
+        background-image: url("../images/zoom_to.png") !important;
+        background-repeat: no-repeat !important;
+        float: right; 
+        cursor: pointer;
+    }
+
+
+    td.remove div.resultRemove {
+        width: 16px;
+        height: 16px;
+        margin-left: 5px;
+        margin-right: 5px;
+        float: right;
+        cursor: pointer;
+    }
+
+    tr.resultRow {
+        padding-left: 10px;
+        outline: 1pt solid #c0d0e0;
+    }
+
+    tr.spacerRow {
+        height: 7px;
+    }
+
+    td {
+        border: none;
+    }
+
+    td.spacer {
+        padding: 0;
+    }
+
+    table.metadataSearchResult {
+        float: left;
+    }
+
+    ul.layerList {
+        padding-left: 35px;
+    }
+
+    a.showLink {
+        display: inline-block;
+        margin-left: 15px;
+    }
+
+    a.modifyLink {
+        display: inline-block;
+        margin-left: 15px;
+    }
+
+}
+
+div.metadataOptions {
+
+    div.checkboxes {
+        display: table-cell;
+        vertical-align: middle;
+        margin-left: 130px;
+        width: auto;
+    }
+
+    div.metadataRow {
+        margin-bottom: 10px;
+    }
+
+    div.metadataType {
+        display: table-cell;
+        vertical-align: middle;
+        padding-right: 10px;
+        width: auto;
+        white-space: nowrap;
+    }
+
+    div.rowLabel {
+        display: table-cell;
+        vertical-align: middle;
+        margin-left: 0;
+        min-width: 130px;
+        width: 130px;
+        white-space: nowrap;
+    }
+    #metadataCoverageButton {
+        min-width: 206px;
+    }
+
+}
+
+div.metadataResultHeader {
+    display: table;
+    width: 100%;
+    height: 35px;
+
+    div.panelHeader {
+        margin-top: 10px;
+        margin-bottom: 20px;
+    }
+
+    div.resultHeaderContainer {
+        display: table-row;
+    }
+
+    div.resultLinks {
+        float: right;
+        text-align: right;
+    }
+
+    div.resultTitle {
+        float: left;
+        text-align: left;
+    }
+
+}
+
+
