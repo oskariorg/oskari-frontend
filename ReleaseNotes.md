@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.30
+
+### core/sandbox
+
+Fixed sandbox.createURL(url). If the param url didn't include the domain part the port was included twice.
+
 ## 1.29
 
 ### rpc

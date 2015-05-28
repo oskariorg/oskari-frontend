@@ -819,9 +819,8 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
                 return window.location.protocol + baseUrl;
             }
             var serverUrl = window.location.protocol + '//'
-                     + window.location.host
-                     + ':' + window.location.port;
-            // starts with / -> fill in protocol + host + port
+                     + window.location.host;
+            // starts with / -> fill in protocol + host including port
             if(baseUrl.indexOf('/') === 0) {
                 return serverUrl + baseUrl;
             }
