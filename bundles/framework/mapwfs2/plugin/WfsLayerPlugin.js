@@ -689,16 +689,20 @@ Oskari.clazz.define(
          * @param {Object} event
          */
         setFilterHandler: function (event) {
-            var WFSLayerService = this.WFSLayerService;
-                layers = this.getSandbox().findAllSelectedMapLayers();
+            var WFSLayerService = this.WFSLayerService,
+                layers = this.getSandbox().findAllSelectedMapLayers(),
+                geoJson = event.getGeoJson();
 
-            layers.forEach(function (layer) {
-                if (layer.hasFeatureData()) {
-                    WFSLayerService.emptyWFSFeatureSelections(layer);
-                }
-            });
+            if (!this.getSandbox().isCtrlKeyDown()) {
+                layers.forEach(function (layer) {
+                    if (layer.hasFeatureData()) {
+                        WFSLayerService.emptyWFSFeatureSelections(layer);
+                    }
+                });
+            } 
+            this.getIO().setFilter(geoJson);
 
-            this.getIO().setFilter(event.getGeoJson());
+
         },
 
         /**
