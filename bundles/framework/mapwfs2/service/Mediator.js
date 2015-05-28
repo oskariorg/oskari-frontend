@@ -314,12 +314,16 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             selectionMode = data.data.keepPrevious,
             featureIds = [],
             selectFeatures;
-
-
+        
         if (data.data.features !== 'empty') {
             for (i = 0; i < data.data.features.length; i += 1) {
                 featureIds.push(data.data.features[i][0]);
             }
+        }
+
+        /*Ugly -> instead try to figure out _why_ the first click in the selection tool ends up in here*/
+        if (this.WFSLayerService && this.WFSLayerService.isSelectionToolsActive()) {
+            return;
         }
 
         // handle CTRL click (selection) and normal click (getInfo) differently
@@ -331,7 +335,6 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             }
             
             me.WFSLayerService.setWFSFeaturesSelections(layer._id, featureIds);
-
             var event = sandbox.getEventBuilder('WFSFeaturesSelectedEvent')(me.WFSLayerService.getWFSFeaturesSelections(layer._id), layer, selectFeatures);
             sandbox.notifyAll(event);
         } else {
@@ -400,7 +403,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             me.WFSLayerService.emptyWFSFeatureSelections(layer);
         }
 
-        var event = this.plugin.getSandbox().getEventBuilder('WFSFeaturesSelectedEvent')(featureIds, layer, selectFeatures);
+        var event = this.plugin.getSandbox().getEventBuilder('WFSFeaturesSelectedEvent')(me.WFSLayerService.getWFSFeaturesSelections(layer._id), layer, selectFeatures);
         this.plugin.getSandbox().notifyAll(event);
     },
 
@@ -646,7 +649,7 @@ Oskari.clazz.category(
                 sandbox = this.plugin.getSandbox(),
                 map = sandbox.getMap(),
                 srs = map.getSrsName();
-
+                
             this.lonlat = lonlat;
             this.sendMessage('/service/wfs/setMapClick', {
                 'longitude': lonlat.lon,

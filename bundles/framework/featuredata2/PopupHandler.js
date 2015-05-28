@@ -18,6 +18,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
         var me = this,
             selectionPlugin = me.instance.getSelectionPlugin(),
             p;
+
         this.WFSLayerService = this.instance.sandbox.getService('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
         this.buttons = {
             'point': {
@@ -110,6 +111,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
                 return;
             }
 
+            //Hacky... Set the flag for the mediator to know that no gfi-popups are allowed until the popup is closed...
+            me.WFSLayerService.setSelectionToolsActive(true);
+
             // close popup so we can update the selection geometry
             // this is done so we can optimize grid updates on normal updateExtensionRequests.
             // if the selection show wouldn't use this request but a custom one, this wouldn't be needed
@@ -169,6 +173,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
             var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             cancelBtn.setTitle(this.localization.button.cancel);
             cancelBtn.setHandler(function () {
+                me.WFSLayerService.setSelectionToolsActive(false);
+                //destroy the active sketch, disable the selected control
+                var selectionPlugin = me.instance.getSelectionPlugin();
+                selectionPlugin.drawLayer.removeAllFeatures();
+                selectionPlugin._toggleControl();
                 dialog.close(true);
             });
             cancelBtn.addClass('primary');
@@ -178,6 +187,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
             dialog.addClass('tools_selection');
             dialog.show(popupLoc, content, controlButtons);
             dialog.moveTo('#toolbar div.toolrow[tbgroup=default-selectiontools]', 'top');
+
+            //tick the select from all layers - checkbox, if it was on previously
+            if (me.WFSLayerService.isSelectFromAllLayers()) {
+                jQuery('input[type=checkbox][name=selectAll]').prop('checked', true);
+            }
+
         },
 
         /**
