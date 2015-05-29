@@ -276,7 +276,7 @@ Oskari.clazz.define(
             }
 
             var searchServName =
-                'Oskari.mapframework.bundle.search.service.SearchService';
+                'Oskari.tampere.bundle.searchfromchannels.service.WfsSearchService';
             me.searchService = Oskari.clazz.create(searchServName, searchAjaxUrl);
 
             var optionServName =
@@ -504,6 +504,14 @@ Oskari.clazz.define(
                 // TODO: make some gif go round and round so user knows
                 // something is happening
                 var searchKey = field.getValue(me.safeChars);
+                var channelIds = [];
+
+                me.optionPanel.find("input[name='channelChkBox']").each( function () {
+                    if(jQuery(this).is(":checked")){
+                        channelIds.push(jQuery(this).val());
+                    }
+                });
+                console.dir(channelIds);
 
                 if (!me._validateSearchKey(field.getValue(false))) {
                     field.setEnabled(true);
@@ -511,14 +519,20 @@ Oskari.clazz.define(
                     return;
                 }
 
+                me._progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
+                me._progressSpinner.insertTo(jQuery(".searchFromChannelsOptions"));
+                me._progressSpinner.start();
+
                 me.searchService.doSearch(
-                    searchKey,
+                    searchKey, channelIds,
                     function (data) {
+                        me._progressSpinner.stop();
                         field.setEnabled(true);
                         button.setEnabled(true);
                         me._renderResults(data, searchKey);
                     },
                     function (data) {
+                        me._progressSpinner.stop();
                         field.setEnabled(true);
                         button.setEnabled(true);
 
@@ -614,6 +628,7 @@ Oskari.clazz.define(
                 req = reqBuilder(title, content, priority, id);
 
             me.sandbox.request(me, req);
+            me._progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
 
             // Link to advanced search
             var moreLessLink = this.templates.moreLessLink.clone();
@@ -621,12 +636,16 @@ Oskari.clazz.define(
             moreLessLink.click(function () {
                 var advancedContainer = searchFromChannelsContainer.find('div.advanced');
                 if (moreLessLink.html() === me.getLocalization('showMore')) {
-                    // open advanced/toggle link text
+                    // open advanced/toggle link text                    
+                    me._progressSpinner.insertTo(jQuery(".searchFromChannelsOptions"));             
                     moreLessLink.html(me.getLocalization('showLess'));
                     if (advancedContainer.is(':empty')) {
+                        me._progressSpinner.start();
                         me.optionService.getOptions(function (data) {
+                            me._progressSpinner.stop();
                             me._createAdvancedPanel(data, advancedContainer, moreLessLink);
                         }, function (data) {
+                            me._progressSpinner.stop(); 
                             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                             var okBtn = dialog.createCloseButton('OK');
                             var title = me.getLocalization('channeloptionservice_alert_title');
@@ -638,6 +657,7 @@ Oskari.clazz.define(
                     }
                 } else {
                     // close advanced/toggle link text
+                    me._progressSpinner.stop();
                     moreLessLink.html(me.getLocalization('showMore'));
                     advancedContainer.hide();
                 }
@@ -692,12 +712,10 @@ Oskari.clazz.define(
                 resultList.append(me.getLocalization('searchservice_search_alert_title') + ': ' + me.getLocalization(result.errorText));
                 return;
             } else if (result.totalCount === 0) {
-                var alK = 'searchservice_search_alert_title',
-                    al = me.getLocalization(alK),
-                    nfK = 'searchservice_search_not_found_anything_text',
+                var nfK = 'searchservice_search_not_found_anything_text',
                     nf = me.getLocalization(nfK);
 
-                resultList.append(al + ': ' + nf);
+                resultList.append(nf);
                 return;
             } else {
                 info.append(me.getLocalization('searchResultCount') + ' ' +
@@ -807,11 +825,10 @@ Oskari.clazz.define(
             }
         },
 
-               _resultClicked: function (result) {
+        _resultClicked: function (result) {
             var me = this,
-                popupId = 'searchResultPopup',
-                inst = this.instance,
-                sandbox = inst.sandbox;
+            popupId = 'searchResultPopup',
+            sandbox = me.sandbox;
             // good to go
             // Note! result.ZoomLevel is deprecated. ZoomScale should be used instead
             var moveReqBuilder = sandbox.getRequestBuilder('MapMoveRequest'),
@@ -820,11 +837,11 @@ Oskari.clazz.define(
                 var zoom = {scale : result.zoomScale};
             }
             sandbox.request(
-                me.instance.getName(),
+                me.getName(),
                 moveReqBuilder(result.lon, result.lat, zoom, false)
             );
 
-            var loc = this.instance.getLocalization('resultBox'),
+            var loc = me.getLocalization('resultBox'),
                 resultActions = {},
                 action;
             for (var name in this.resultActions) {
@@ -845,7 +862,7 @@ Oskari.clazz.define(
                 var rN = 'InfoBox.HideInfoBoxRequest',
                     rB = sandbox.getRequestBuilder(rN),
                     request = rB(popupId);
-                sandbox.request(me.instance.getName(), request);
+                sandbox.request(me.getName(), request);
             };
 
             var rN = 'InfoBox.ShowInfoBoxRequest',
@@ -858,7 +875,7 @@ Oskari.clazz.define(
                     true
                 );
 
-            sandbox.request(this.instance.getName(), request);
+            sandbox.request(me.getName(), request);
         },
 
         _showError: function (error) {
@@ -871,7 +888,7 @@ Oskari.clazz.define(
             dialog.setId('oskari_search_error_popup');
 
             dialog.show(
-                this.getLocalization('metadataoptionservice_alert_title'),
+                this.getLocalization('searchservice_alert_title'),
                 error, [okButton]
             );
         },
@@ -899,18 +916,20 @@ Oskari.clazz.define(
                 newRow = me.templates.checkboxRow.clone();
                 newRow.find('div.rowLabel').text(me.getLocalization('advanced_topic'));
 
+                 if (dataFields.length === 0) {
+                    newRow.find('div.rowLabel').text(me.getLocalization('no_channels_found'));
+                    advancedContainer.append(newRow);
+                    return false;
+                }  
+
             for (i = 0; i < dataFields.length; i += 1) {
-                dataField = dataFields[i];
-                if (dataField.length === 0) {
-                    // no options to show -> skip
-                    continue;
-                }              
+                dataField = dataFields[i];            
 
                 value = dataField["wfsId"];
                 text = dataField.topic[Oskari.getLang()];
                 newCheckbox = me.templates.checkbox.clone();
                 newCheckboxDef = newCheckbox.find(':checkbox');
-                newCheckboxDef.attr('name', "channel");
+                newCheckboxDef.attr('name', "channelChkBox");
                 newCheckboxDef.attr('value', dataField["id"]);
                 if(dataField["is_default"]){
                     newCheckboxDef.attr('checked', true);
@@ -1402,6 +1421,39 @@ Oskari.clazz.define(
                 return me._searchResultComparator(a, b, pAttribute, pDescending);
             });
 
+        },
+
+         /**
+         * @private @method _searchResultComparator
+         * Compares the given attribute on given objects for sorting
+         * search result objects.
+         *
+         * @param {Object} a search result 1
+         * @param {Object} b search result 2
+         * @param {String} pAttribute attributename to sort by (e.g.
+         * a[pAttribute])
+         * @param {Boolean} pDescending true if sort direction is descending
+         *
+         */
+        _searchResultComparator: function (a, b, pAttribute, pDescending) {
+            var nameA = a[pAttribute].toLowerCase(),
+                nameB = b[pAttribute].toLowerCase(),
+                value = 0;
+            if (nameA === nameB || 'name' === pAttribute) {
+                // Because problem with address 1 and address 10 then
+                // id are ranked right
+                nameA = a.id;
+                nameB = b.id;
+            }
+            if (nameA < nameB) {
+                value = -1;
+            } else if (nameA > nameB) {
+                value = 1;
+            }
+            if (pDescending) {
+                value = value * -1;
+            }
+            return value;
         },
         /**
          * @method _searchResultComparator

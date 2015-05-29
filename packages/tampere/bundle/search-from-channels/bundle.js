@@ -26,6 +26,10 @@ Oskari.clazz.define("Oskari.tampere.bundle.searchfromchannels.SearchFromChannels
 			/* service */
 			{
 	            "type": "text/javascript",
+	            "src": "../../../../bundles/tampere/search-from-channels/service/WfsSearchService.js"
+	        },
+			{
+	            "type": "text/javascript",
 	            "src": "../../../../bundles/tampere/search-from-channels/service/ChannelOptionService.js"
 	        }, 
 	        /* plugin */
