@@ -111,13 +111,9 @@ Oskari.clazz.define(
         refresh: function () {
             var me = this,
                 conf = me.getConfig(),
-                mapUrl,
                 termsUrl;
 
             if (conf) {
-                mapUrl = me.getSandbox().getLocalizedProperty(
-                    conf.mapUrlPrefix
-                );
                 termsUrl = me.getSandbox().getLocalizedProperty(conf.termsUrl);
 
                 if (conf.font) {
@@ -127,29 +123,40 @@ Oskari.clazz.define(
 
             me._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage()).plugin.LogoPlugin;
 
-            me._createServiceLink(mapUrl);
+            me._createServiceLink();
             me._createTermsLink(termsUrl);
             me._createDataSourcesLink();
         },
 
         _createServiceLink: function (mapUrl) {
             var me = this,
+                mapUrl = me.__getMapUrl(),
                 link,
                 linkParams;
 
             link = me.getElement().find('.icon');
             link.unbind('click');
 
-            if (mapUrl) {
-                link.click(function (event) {
-                    if (!me.inLayerToolsEditMode()) {
-                        linkParams = me.getSandbox().generateMapLinkParameters({});
-                        window.open(mapUrl + linkParams, '_blank');
-                    }
-                });
-            }
+            link.click(function (event) {
+                if (!me.inLayerToolsEditMode()) {
+                    linkParams = me.getSandbox().generateMapLinkParameters({});
+                    window.open(mapUrl + linkParams, '_blank');
+                }
+            });
         },
 
+        /**
+         * Returns the map url for link tool
+         * @private
+         * @return {String} base URL for state parameters
+         */
+        __getMapUrl : function() {
+            var sandbox = this.getSandbox();
+            var url = sandbox.getLocalizedProperty(this.getConfig().mapUrlPrefix);
+
+            // setup current url as base if none configured
+            return sandbox.createURL(url || window.location.pathname, true);
+        },
         _createTermsLink: function (termsUrl) {
             var me = this,
                 link = me.getElement().find('.terms a');

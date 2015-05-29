@@ -45,7 +45,7 @@ Oskari.registerLocalization({
                 "label": "Velikost",
                 "tooltip": "Vyberte nebo definujte velikost mapy pro vložení do vaší webové stránky. Náhled mapy je zobrazen ve vybrané velikosti."
             },
-            "tools": {
+            "maptools": {
                 "label": "Nástroje",
                 "tooltip": "Vyberte nástroje zobrazené v mapě. Jejich umístění je zobrazeno v náhledu mapy.",
                 "ScaleBarPlugin": "Měřítko",

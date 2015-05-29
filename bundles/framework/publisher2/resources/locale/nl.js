@@ -43,7 +43,7 @@ Oskari.registerLocalization(
                 "label": "Grootte",
                 "tooltip": "Selecteer of definieer de grootte van de kaart die wordt geïntegreerd op uw website. De voorbeeldweergave van de kaart wordt weergegeven in de geselecteerde grootte."
             },
-            "tools": {
+            "maptools": {
                 "label": "Gereedschappen",
                 "tooltip": "Selecteer het gereedschap dat op de kaart moet worden getoond. Hun plaats wordt weergegeven in de voorbeeldweergave van de kaart.",
                 "ScaleBarPlugin": "Schaal lijn",

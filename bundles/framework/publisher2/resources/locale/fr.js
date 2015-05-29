@@ -43,7 +43,7 @@ Oskari.registerLocalization(
                 "label": "Taille",
                 "tooltip": "Sélectionnez ou définissez la taille de la carte à intégrer sur votre site internet. Vous pouvez voir les changements dans l’aperçu de la carte."
             },
-            "tools": {
+            "maptools": {
                 "label": "Outils",
                 "tooltip": "Sélectionnez les outils à afficher sur la carte. Vous pouvez voir le placement de l’outil dans l’aperçu de la carte.",
                 "ScaleBarPlugin": "Barre d’échelle",

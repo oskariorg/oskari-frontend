@@ -42,7 +42,7 @@ Oskari.registerLocalization({
                 "label": "Rozmiar",
                 "tooltip": "Wybierz i zdefiniuj rozmiar mapy, która będzie wbudowana na twojej stronie internetowej. Podgląd mapy jest wyświetlany w wybranym rozmiarze."
             },
-            "tools": {
+            "maptools": {
                 "label": "Narzędzia",
                 "tooltip": "Wybierz narzędzie, które będą pokazywane na mapie. Ich rozmieszczenie będzie wyświetlane w podglądzie mapy.",
                 "ScaleBarPlugin": "Linia skali",

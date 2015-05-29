@@ -24,40 +24,60 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher2.PublisherBundle", fun
         "scripts": [{
             "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher2/instance.js"
-        }, {
+        },
+        {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher2/Flyout.js"
-        }, {
+        },
+        {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher2/Tile.js"
-        }, {
+        },
+        {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher2/event/MapPublishedEvent.js"
-        }, {
+        },
+        {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher2/event/ToolStyleChangedEvent.js"
-        }, {
+        },
+        {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher2/event/ColourSchemeChangedEvent.js"
-        }, {
+        },
+        {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher2/event/FontChangedEvent.js"
-        }, {
+        },
+        {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher2/event/LayerToolsEditModeEvent.js"
-        }, {
+        },
+        {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher2/view/NotLoggedIn.js"
-        }, {
+        },
+        {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher2/view/StartView.js"
-        }, {
+        },
+        {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher2/view/BasicPublisher.js"
-        }, {
+        },
+        {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/publisher2/view/PublisherLocationForm.js"
-        }, {
+            "src": "../../../../bundles/framework/publisher2/view/PublisherLocationPanel.js"
+        },
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/publisher2/view/MapToolsPanel.js"
+        },
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/publisher2/tools/ScalebarTool.js"
+        },
+        {
             "type": "text/css",
             "src": "../../../../bundles/framework/publisher2/resources/css/style.css"
         }, {
