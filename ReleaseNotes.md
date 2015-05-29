@@ -13,6 +13,10 @@ Fixed the link tool to get path from browser if not provided in configuration.
 Removed default print tool as it requires backend support that hasn't been available in preconstructed views. One should use
 the printout bundle with corresponding backend implementation instead to get proper print functionality.
 
+### mapmodule-plugin/LogoPlugin
+
+The logo is now a link to the service even if configuration is not provided. Uses browser location by default.
+
 ## 1.29
 
 ### rpc
