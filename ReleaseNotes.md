@@ -5,6 +5,7 @@
 ### core/sandbox
 
 Fixed sandbox.createURL(url). If the param url didn't include the domain part the port was included twice.
+Sandbox.createURL(url, true) now takes a second parameter that can be used to prepare the querystring part of the URL.
 
 ### toolbar
 
@@ -15,7 +16,7 @@ the printout bundle with corresponding backend implementation instead to get pro
 
 ### mapmodule-plugin/LogoPlugin
 
-The logo is now a link to the service even if configuration is not provided. Uses browser location by default.
+The logo is now a link to the map service even if configuration is not provided. Uses browser location by default.
 
 ## 1.29
 

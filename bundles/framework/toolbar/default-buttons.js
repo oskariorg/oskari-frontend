@@ -193,14 +193,8 @@ Oskari.clazz.category(
                 url = sandbox.getLocalizedProperty(this.conf.mapUrlPrefix);
             }
 
-            if(!url) {
-                // setup current url as base if none configured
-                url = sandbox.createURL(window.location.pathname);
-            }
-            if(url.indexOf('?') === -1) {
-                url = url + '?';
-            }
-            return url;
+            // setup current url as base if none configured
+            return sandbox.createURL(url || window.location.pathname, true);
         }
 
     }

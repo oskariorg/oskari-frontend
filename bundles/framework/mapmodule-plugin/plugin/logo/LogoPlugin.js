@@ -154,14 +154,8 @@ Oskari.clazz.define(
             var sandbox = this.getSandbox();
             var url = sandbox.getLocalizedProperty(this.getConfig().mapUrlPrefix);
 
-            if(!url) {
-                // setup current url as base if none configured
-                url = sandbox.createURL(window.location.pathname);
-            }
-            if(url.indexOf('?') === -1) {
-                url = url + '?';
-            }
-            return url;
+            // setup current url as base if none configured
+            return sandbox.createURL(url || window.location.pathname, true);
         },
         _createTermsLink: function (termsUrl) {
             var me = this,
