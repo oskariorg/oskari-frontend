@@ -397,6 +397,7 @@ Oskari.clazz.define(
                 ),
                 tools = jQuery('#maptools');
 
+
             if (blnEnabled) {
                 map.addClass('mapAnalyseMode');
                 me.sandbox.mapMode = 'mapAnalyseMode';

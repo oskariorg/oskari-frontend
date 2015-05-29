@@ -60,6 +60,21 @@ div.analyse {
 
 }
 
+div.analyse-featurelist {
+    ul {
+        margin-top: 10px;
+        margin-bottom: 15px;
+    }
+
+    li {
+        list-style-type: none;
+    }
+}
+
+div.analyse-startview-label {
+    margin-top: 20px;
+}
+
 div.basic_analyse {
 
     > div.content {

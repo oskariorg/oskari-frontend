@@ -306,7 +306,7 @@ Oskari.clazz.define(
             }
 
             // filter
-            selectedFeatures = this.WFSLayerService.getWFSFeaturesSelections(layer._id);
+            selectedFeatures = this.WFSLayerService.getSelectedFeatureIds(layer._id);
             if (panel.grid &&  selectedFeatures && selectedFeatures.length > 0) {
                 for (i = 0; i < selectedFeatures.length; i++) {
                     panel.grid.select(selectedFeatures[i], true);
@@ -732,7 +732,7 @@ Oskari.clazz.define(
                 this.WFSLayerService.emptyWFSFeatureSelections(layer);
             }
             this.WFSLayerService.setWFSFeaturesSelections(layer._id, featureIds);
-            var event = builder(this.WFSLayerService.getWFSFeaturesSelections(layer._id), layer, true);
+            var event = builder(this.WFSLayerService.getSelectedFeatureIds(layer._id), layer, true);
             sandbox.notifyAll(event);
         },
 

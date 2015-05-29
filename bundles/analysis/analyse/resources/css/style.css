@@ -21,6 +21,15 @@ div.analyse div.startview div.error ul li {
 div.analyse div.startview div.icon-info {
   float: right; }
 
+div.analyse-featurelist ul {
+  margin-top: 10px;
+  margin-bottom: 15px; }
+div.analyse-featurelist li {
+  list-style-type: none; }
+
+div.analyse-startview-label {
+  margin-top: 20px; }
+
 div.basic_analyse > div.content {
   overflow: auto;
   height: 89%;
