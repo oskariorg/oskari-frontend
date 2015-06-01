@@ -98,9 +98,9 @@ Oskari.clazz.define(
         setWFSLayerSelection: function (layer, status) {
             var me = this;
             if (status) {
-                me.selectedWFSLayerIds.push(layer._id);
+                me.selectedWFSLayerIds.push(layer.getId());
             } else {
-                _.pull(me.selectedWFSLayerIds, [layerId]);
+                _.pull(me.selectedWFSLayerIds, [layer.getId()]);
             }
         },
 
