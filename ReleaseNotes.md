@@ -2,6 +2,10 @@
 
 ## 1.30
 
+### applications
+
+oskari.org application has been removed as the sample/servlet application is the same thing.
+
 ### tools
 
 Gruntfile reconfigured to use applications/sample/servlet as default application (instead of paikkatietoikkuna.fi).
