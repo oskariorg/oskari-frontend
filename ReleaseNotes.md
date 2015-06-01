@@ -5,6 +5,7 @@
 ### tools
 
 Gruntfile reconfigured to use applications/sample/servlet as default application (instead of paikkatietoikkuna.fi).
+Added shortcut to build script: 'npm run build'
 
 ### core/sandbox
 
