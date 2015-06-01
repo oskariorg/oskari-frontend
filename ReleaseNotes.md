@@ -6,6 +6,7 @@
 
 Fixed sandbox.createURL(url). If the param url didn't include the domain part the port was included twice.
 Sandbox.createURL(url, true) now takes a second parameter that can be used to prepare the querystring part of the URL.
+Sandbox.findRegisteredModuleInstance() now returns all registered modules if name parameter is not given (for debugging purposes).
 
 ### toolbar
 

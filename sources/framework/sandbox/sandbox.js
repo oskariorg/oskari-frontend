@@ -520,9 +520,12 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
          * Returns module with given name if it is registered to sandbox
          *
          * @param {String} name for the module
-         * @return {Oskari.mapframework.module.Module} registered module or null if not found
+         * @return {Oskari.mapframework.module.Module} registered module or null if not found, map of modules if name is not given
          */
         findRegisteredModuleInstance: function (name) {
+            if(!name) {
+                return this._modulesByName;
+            }
             return this._modulesByName[name];
         },
 
