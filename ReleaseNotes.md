@@ -2,6 +2,10 @@
 
 ## 1.30
 
+### tools
+
+Gruntfile reconfigured to use applications/sample/servlet as default application (instead of paikkatietoikkuna.fi).
+
 ### core/sandbox
 
 Fixed sandbox.createURL(url). If the param url didn't include the domain part the port was included twice.
