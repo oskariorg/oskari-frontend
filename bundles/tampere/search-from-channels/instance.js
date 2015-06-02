@@ -349,7 +349,7 @@ Oskari.clazz.define(
 
                 me.optionPanel.find("input[name='channelChkBox']").each( function () {
                     if(jQuery(this).is(":checked")){
-                        channelIds.push(jQuery(this).val());
+                        channelIds.push(parseInt(jQuery(this).val()));
                     }
                 });
 
@@ -606,8 +606,9 @@ Oskari.clazz.define(
 
         _resultClicked: function (result) {
             var me = this,
-            popupId = 'searchResultPopup',
-            sandbox = me.sandbox;
+                popupId = 'searchResultPopup',
+                sandbox = me.sandbox,
+                style = OpenLayers.Util.applyDefaults(style, OpenLayers.Feature.Vector.style['default']);
             // good to go
             // Note! result.ZoomLevel is deprecated. ZoomScale should be used instead
             var moveReqBuilder = sandbox.getRequestBuilder('MapMoveRequest'),
@@ -615,10 +616,23 @@ Oskari.clazz.define(
             if(result.zoomScale) {
                 var zoom = {scale : result.zoomScale};
             }
+            /*
             sandbox.request(
                 me.getName(),
                 moveReqBuilder(result.lon, result.lat, zoom, false)
             );
+*/
+
+            
+            style.pointRadius = 8;
+            style.strokeColor = '#D3BB1B';
+            style.fillColor = '#FFDE00';
+            style.fillOpacity = 0.6;
+            style.strokeOpacity = 0.8;
+            style.strokeWidth = 2;
+            style.cursor = 'pointer';
+            var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
+            sandbox.postRequestByName(rn, [result.GEOMETRY, 'WKT', {id:result.id}, null, 'replace', true, style, true]);
 
             var loc = me.getLocalization('resultBox'),
                 resultActions = {},
