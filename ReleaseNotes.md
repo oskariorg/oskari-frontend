@@ -6,12 +6,22 @@
 
 Fixed sandbox.createURL(url). If the param url didn't include the domain part the port was included twice.
 
+### framework/mapmodule-plugin/plugin/vectorlayer/AddFeaturesToMapRequest
+
+Fixed centerTo parameter handling.
+
+### admin-layerselector
+
+Fixed theme or organization locale inputs when adding new group.
+
 ### toolbar
 
 Fixed the link tool to get path from browser if not provided in configuration.
 
 Removed default print tool as it requires backend support that hasn't been available in preconstructed views. One should use
 the printout bundle with corresponding backend implementation instead to get proper print functionality.
+
+
 
 ## 1.29
 
