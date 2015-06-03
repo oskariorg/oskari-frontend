@@ -329,7 +329,13 @@ Oskari.clazz.define(
                 if (!value) {
                     // remove results when field is emptied
                     var resultList = searchFromChannelsContainer.find('div.resultList');
+                    var showMapBtns = me.optionPanel.find('div.showOnMapBtns');
+                    var info = me.optionPanel.find('div.info');
                     resultList.empty();
+                    showMapBtns.empty();
+                    info.empty();
+                    me._clearMapFromResults();
+                    me._closeMapPopup();
                 }
             });
             field.addClearButton('oskari_searchfromchannels_forminput_clearbutton');
@@ -349,6 +355,8 @@ Oskari.clazz.define(
                 showMapBtns.empty();
                 var info = me.optionPanel.find('div.info');
                 info.empty();
+                me._clearMapFromResults();
+                me._closeMapPopup();
 
                 // TODO: make some gif go round and round so user knows
                 // something is happening
@@ -621,8 +629,17 @@ Oskari.clazz.define(
             btn.insertTo(showOnMapBtns);
         },
 
-        _zoomMapToResults: function(result, showAll, tableBody) {
+        _clearMapFromResults: function(){
             var me = this;
+            var mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
+            var realLayer = mapModule._map.getLayersByName("vectorlayer_VECTOR");
+            if(realLayer[0] != null){
+                realLayer[0].removeAllFeatures();
+            }
+        },
+
+        _getVectorLayerStyle: function(){
+
             var style = OpenLayers.Util.applyDefaults(style, OpenLayers.Feature.Vector.style['default']);
             style.pointRadius = 8;
             style.strokeColor = '#D3BB1B';
@@ -632,14 +649,17 @@ Oskari.clazz.define(
             style.strokeWidth = 2;
             style.cursor = 'pointer';
 
+            return style;
+        },
+
+        _zoomMapToResults: function(result, showAll, tableBody) {
+            var me = this;
+
             var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
 
-            var mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
-            var realLayer = mapModule._map.getLayersByName("vectorlayer_VECTOR");
-            if(realLayer[0] != null){
-                realLayer[0].removeAllFeatures();
-            }
-            
+            me._clearMapFromResults();
+            me._closeMapPopup();
+
             //Fake layer for zoomin event
             var olLayer = new OpenLayers.Layer.Vector('templayer'),
              format = new OpenLayers.Format.WKT({}),
@@ -651,14 +671,14 @@ Oskari.clazz.define(
 
             jQuery.each(result.locations, function( i, value ){
                 if(showAll){
-                    me.sandbox.postRequestByName(rn, [value.GEOMETRY, 'WKT', {id:value.id}, null, null, true, style, false]);  
+                    me.sandbox.postRequestByName(rn, [value.GEOMETRY, 'WKT', {id:value.id}, null, null, true, me._getVectorLayerStyle(), false]);  
                     feature = format.read(value.GEOMETRY);
                     olLayer.addFeatures([feature]);
                 }else{
                     var row = tableBody.find("tr[name="+value.id+"]");
                     var firstCell = row.find("td:first-child");
                     if(firstCell.find("input").is(":checked")){
-                        me.sandbox.postRequestByName(rn, [value.GEOMETRY, 'WKT', {id:value.id}, null, null, true, style, false]); 
+                        me.sandbox.postRequestByName(rn, [value.GEOMETRY, 'WKT', {id:value.id}, null, null, true, me._getVectorLayerStyle(), false]); 
                         feature = format.read(value.GEOMETRY);
                         olLayer.addFeatures([feature]);
                     }
@@ -709,8 +729,7 @@ Oskari.clazz.define(
         _resultClicked: function (result) {
             var me = this,
                 popupId = 'searchResultPopup',
-                sandbox = me.sandbox,
-                style = OpenLayers.Util.applyDefaults(style, OpenLayers.Feature.Vector.style['default']);
+                sandbox = me.sandbox;
             // good to go
             // Note! result.ZoomLevel is deprecated. ZoomScale should be used instead
             var moveReqBuilder = sandbox.getRequestBuilder('MapMoveRequest'),
@@ -724,15 +743,8 @@ Oskari.clazz.define(
                 moveReqBuilder(result.lon, result.lat, zoom, false)
             );
 */          
-            style.pointRadius = 8;
-            style.strokeColor = '#D3BB1B';
-            style.fillColor = '#FFDE00';
-            style.fillOpacity = 0.6;
-            style.strokeOpacity = 0.8;
-            style.strokeWidth = 2;
-            style.cursor = 'pointer';
             var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
-            sandbox.postRequestByName(rn, [result.GEOMETRY, 'WKT', {id:result.id}, null, 'replace', true, style, true]);
+            sandbox.postRequestByName(rn, [result.GEOMETRY, 'WKT', {id:result.id}, null, 'replace', true, me._getVectorLayerStyle(), true]);
 
             var loc = me.getLocalization('resultBox'),
                 resultActions = {},
@@ -769,6 +781,12 @@ Oskari.clazz.define(
                 );
 
             sandbox.request(me.getName(), request);
+        },
+
+        _closeMapPopup: function (){
+            var me = this;
+            var request = me.sandbox.getRequestBuilder('InfoBox.HideInfoBoxRequest')(me.popupId);
+            me.sandbox.request(this, request);
         },
 
         _showError: function (error) {
