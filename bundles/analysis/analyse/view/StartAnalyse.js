@@ -98,6 +98,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
         me._userSetFilter = {};
 
+        me._param_footer = me.template.footer.clone();
+        me._param_footer.append(this.loc.aggregate.footer)
+
     }, {
         __templates: {
             content: '<div class="layer_data"></div>',
@@ -219,7 +222,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 '    <input class="settings_sector_count_field" type="text" pattern="^0*[1-9]$|^0*1[0-2]$" />' +
                 '  </label>' +
                 '</div>',
-            difference: '<div class="analyse_difference_cont"></div>'
+            difference: '<div class="analyse_difference_cont"></div>',
+            footer: '<div class="analyse_param_footer"></div>'
         },
 
         /**
@@ -1232,6 +1236,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         }
                     }
                 });
+
+                if(me._getNoDataValue()){
+                    toolContainer.append(me._param_footer);
+                }
+
             },
 
             aggregateNumeric: function (me, contentPanel) {

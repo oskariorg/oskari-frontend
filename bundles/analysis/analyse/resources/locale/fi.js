@@ -95,7 +95,7 @@ Oskari.registerLocalization(
                         "id": "oskari_analyse_aggregate",
                         "label": "Tunnuslukujen laskenta",
                         "classForPreview": "aggregate",
-                        "tooltip": "Tunnuslukujen laskenta -menetelmän avulla käyttäjä voi laskea valitsemistaan kohteista tunnuslukuja, kuten keskiarvon ja lukumäärän."
+                        "tooltip": "Tunnuslukujen laskenta -menetelmän avulla käyttäjä voi laskea valitsemistaan kohteista tunnuslukuja, kuten keskiarvon ja lukumäärän.\nTietosuojatut kohteet eivät ole mukana laskennassa."
                     },
                     {
                         "id": "oskari_analyse_union",
@@ -176,7 +176,8 @@ Oskari.registerLocalization(
                         "label": "Tietosuojattujen kohteiden lukumäärä"
                     }
                 ],
-                "attribute": "Valitse ominaisuustieto"
+                "attribute": "Valitse ominaisuustieto",
+                "footer" : "Tietosuojatut kohteet eivät ole mukana laskennassa"
             },
             "buffer_size": {
                 "label": "Vyöhykkeen koko",
