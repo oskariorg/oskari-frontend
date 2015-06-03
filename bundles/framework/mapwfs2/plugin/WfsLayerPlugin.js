@@ -420,7 +420,7 @@ Oskari.clazz.define(
 
             layers.forEach(function (layer) {
                 if (layer.hasFeatureData()) {
-                    fids = me.WFSLayerService.getWFSFeaturesSelections(layer.getId());
+                    fids = me.WFSLayerService.getSelectedFeatureIds(layer.getId());
                     me.removeHighlightImages(layer);
                     if (me._highlighted) {
                         me.getIO().highlightMapLayerFeatures(

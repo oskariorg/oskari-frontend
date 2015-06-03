@@ -380,6 +380,7 @@ Oskari.registerLocalization(
         },
         "StartView": {
             "text": "Analyysi-toiminnon avulla voit tehdä valitsemillesi kohdetietoja sisältäville paikkatietotuotteille tilastollisia analyyseja. Tallentamalla analyysin voit käyttää sitä myös myöhemmin.",
+            "layersWithFeatures": "Analyysissä voi tehdä valintoja vain yhdeltä tasolta kerrallaan. Valitse miltä tasolta haluat tehdä valinnat. Huom! Muut valinnat poistetaan.",
             "infoseen": {
                 "label": "Älä näytä tätä viestiä uudelleen."
             },

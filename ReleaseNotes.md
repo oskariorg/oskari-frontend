@@ -2,13 +2,20 @@
 
 ## 1.30
 
+### applications
+
+oskari.org application has been removed as the sample/servlet application is the same thing.
+
+### tools
+
+Gruntfile reconfigured to use applications/sample/servlet as default application (instead of paikkatietoikkuna.fi).
+Added shortcut to build script: 'npm run build'
+
 ### core/sandbox
 
 Fixed sandbox.createURL(url). If the param url didn't include the domain part the port was included twice.
-
-### framework/mapmodule-plugin/plugin/vectorlayer/AddFeaturesToMapRequest
-
-Fixed centerTo parameter handling.
+Sandbox.createURL(url, true) now takes a second parameter that can be used to prepare the querystring part of the URL.
+Sandbox.findRegisteredModuleInstance() now returns all registered modules if name parameter is not given (for debugging purposes).
 
 ### admin-layerselector
 
@@ -21,6 +28,13 @@ Fixed the link tool to get path from browser if not provided in configuration.
 Removed default print tool as it requires backend support that hasn't been available in preconstructed views. One should use
 the printout bundle with corresponding backend implementation instead to get proper print functionality.
 
+### mapmodule-plugin/LogoPlugin
+
+The logo is now a link to the map service even if configuration is not provided. Uses browser location by default.
+
+### mapmodule-plugin/VectorLayerPlugin/AddFeaturesToMapRequest
+
+Fixed centerTo parameter handling.
 
 
 ## 1.29

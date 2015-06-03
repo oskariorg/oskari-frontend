@@ -21,6 +21,7 @@ Oskari.clazz.define(
         me.sandbox = sandbox;
         me.WFSFeatureSelections = [];
         me.selectedWFSLayers = [];
+        me.selectedWFSLayerIds = [];
         me.selectFromAllLayers;
         me.topWFSLayer;
         //flag for telling mediator's occasional wfs mapclick event that showing the popup is a no-no
@@ -75,14 +76,14 @@ Oskari.clazz.define(
                 var me = this,
                     layer = event._mapLayer;
                 if (layer._layerType === "WFS") {
-                    me.setWFSLayerSelection(layer._id, true);
+                    me.setWFSLayerSelection(layer, true);
                 }
             },
             AfterMapLayerRemoveEvent: function (event) {
                 var me = this,
                     layer = event._mapLayer;
                 if (layer._layerType === "WFS") {
-                    me.setWFSLayerSelection(layer._id, false);
+                    me.setWFSLayerSelection(layer, false);
                 }
             }
         },
@@ -94,17 +95,17 @@ Oskari.clazz.define(
          * 
          * Handles the state of selected WFS layers
          */
-        setWFSLayerSelection: function (layerId, status) {
+        setWFSLayerSelection: function (layer, status) {
             var me = this;
             if (status) {
-                me.selectedWFSLayers.push(layerId);
+                me.selectedWFSLayerIds.push(layer.getId());
             } else {
-                _.pull(me.selectedWFSLayers, [layerId]);
+                _.pull(me.selectedWFSLayerIds, [layer.getId()]);
             }
         },
 
         /**
-         * @method getSelectedWFSLayers
+         * @method getSelectedWFSLayerIds
          * 
          * @return {Array} this.selectedWFSLayerIds; Ids of selected WFS layers
          */
@@ -161,14 +162,25 @@ Oskari.clazz.define(
         },
 
         /**
-         * @method getWFSFeaturesSelections
+         * @method getWFSSelections
+         *
+         * @return {array} this.WFSFeatureSelections
+         *
+         * Returns array of objects including slected layers id and selected features of layers.
+         */
+        getWFSSelections: function () {
+            return this.WFSFeatureSelections;
+        },
+
+        /**
+         * @method getSelectedFeatureIds
          * @param {Number} layerID; ID of layer whose selected featureIds are wanted
          *
          * @return {array} featureIds
          *
          * Returns selected featureIds of the given layer ID. If no layerId is given, returns all the selected featureIds.
          */
-        getWFSFeaturesSelections: function (layerId) {
+        getSelectedFeatureIds: function (layerId) {
             var me = this,
                 featureIds;
 
