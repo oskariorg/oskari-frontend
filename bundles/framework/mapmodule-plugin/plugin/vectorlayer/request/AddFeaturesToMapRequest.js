@@ -91,7 +91,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddFeaturesToM
          * @return {Boolean} kcenter map to features. Default true.
          */
         getCenterTo: function(){
-            if(this._centerTo && this._centerTo !== null) {
+            if(this._centerTo !== null) {
                 return this._centerTo;
             }
             else {

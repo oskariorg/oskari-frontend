@@ -26,6 +26,10 @@ Oskari.clazz.define(
         this.safeChars = false;
         this.resultHeaders = [
                 {
+                    title: '',
+                    prop: 'check'
+                },
+                {
                     title: this.getLocalization('grid').name,
                     prop: 'name'
                 }, {
@@ -55,6 +59,7 @@ Oskari.clazz.define(
                 '  <div class="moreLess"></div>' +
                 '  <div class="advanced"></div>' +
                 '  <div class="info"></div>' +
+                '  <div class="showOnMapBtns"></div>'+
                 '  <div class="resultList"></div>' +
                 '</div>'
             ),
@@ -84,6 +89,7 @@ Oskari.clazz.define(
             ),
             templateResultTableRow: jQuery(
                 '<tr>' +
+                '  <td><input type="checkbox"/></td>' +
                 '  <td><a href="JavaScript:void(0);"></a></td>' +
                 '  <td></td>' +
                 '  <td></td>' +
@@ -338,7 +344,9 @@ Oskari.clazz.define(
                 button.setEnabled(false);
 
                 var resultList = me.optionPanel.find('div.resultList');
+                var showMapBtns = me.optionPanel.find('div.showOnMapBtns');
                 resultList.empty();
+                showMapBtns.empty();
                 var info = me.optionPanel.find('div.info');
                 info.empty();
 
@@ -402,37 +410,17 @@ Oskari.clazz.define(
             var moreLessLink = this.templates.moreLessLink.clone();
             moreLessLink.html(me.getLocalization('showMore'));
 
-            me.optionService.getOptions(function (data) {
-
-                if(data.channels.length > 0){
-                    // Wfs search from channels tab OBS. this will be in UI if user has rights into channels
-                    var title = me.getLocalization('tabTitle'),
-                        content = searchFromChannelsContainer,
-                        priority = this.tabPriority,
-                        id = 'oskari_searchfromchannels_tabpanel_header',
-                        reqName = 'Search.AddTabRequest',
-                        reqBuilder = me.sandbox.getRequestBuilder(reqName),
-                        req = reqBuilder(title, content, priority, id);
-
-                    me.sandbox.request(me, req);  
-                
-                    me._createAdvancedPanel(data, advancedContainer, moreLessLink);    
-                }
-                
-            }, function (data) {
-                me._progressSpinner.stop(); 
-                var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                var okBtn = dialog.createCloseButton('OK');
-                var title = me.getLocalization('channeloptionservice_alert_title');
-                var msg = me.getLocalization('channeloptionservice_not_found_anything_text');
-                dialog.show(title, msg, [okBtn]);
-            });
+            //FIXME request needed that can be called from Admin searchchannels ui
+            me._getChannelsForAdvancedUi(searchFromChannelsContainer,advancedContainer,moreLessLink,true);
+            advancedContainer.hide();
      
             moreLessLink.click(function () {      
                 if (moreLessLink.html() === me.getLocalization('showMore')) {
                     // open advanced/toggle link text         
                     moreLessLink.html(me.getLocalization('showLess'));
                     if (!advancedContainer.is(':empty')) {
+                         advancedContainer.empty();
+                         me._getChannelsForAdvancedUi(searchFromChannelsContainer,advancedContainer,moreLessLink,false);
                          advancedContainer.show();
                     }
                 } else {
@@ -442,6 +430,43 @@ Oskari.clazz.define(
                 }
             });
             searchFromChannelsContainer.find('div.moreLess').append(moreLessLink);
+        },
+
+        _getChannelsForAdvancedUi: function(searchFromChannelsContainer,advancedContainer,moreLessLink, createTab) {
+            var me = this;
+            me._progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
+            me._progressSpinner.insertTo(jQuery(".searchFromChannelsOptions"));
+            me._progressSpinner.start();
+
+            me.optionService.getOptions(function (data) {
+
+            if(data.channels.length > 0){
+                if(createTab){
+                    // Wfs search from channels tab OBS. this will be in UI if user has rights into channels
+                    var title = me.getLocalization('tabTitle'),
+                        content = searchFromChannelsContainer,
+                        priority = this.tabPriority,
+                        id = 'oskari_searchfromchannels_tabpanel_header',
+                        reqName = 'Search.AddTabRequest',
+                        reqBuilder = me.sandbox.getRequestBuilder(reqName),
+                        req = reqBuilder(title, content, priority, id);
+
+                    me.sandbox.request(me, req);
+                }
+            
+                me._createAdvancedPanel(data, advancedContainer, moreLessLink);
+                me._progressSpinner.stop();    
+            }
+                
+            }, function (data) {
+                me._progressSpinner.stop();
+                var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                var okBtn = dialog.createCloseButton('OK');
+                var title = me.getLocalization('channeloptionservice_alert_title');
+                var msg = me.getLocalization('channeloptionservice_not_found_anything_text');
+                dialog.show(title, msg, [okBtn]);
+            });
+
         },
 
         _validateSearchKey: function (key) {
@@ -517,7 +542,7 @@ Oskari.clazz.define(
                 // move map etc
                 me._resultClicked(result.locations[0]);
                 // close flyout
-                inst.sandbox.postRequestByName(
+                me.sandbox.postRequestByName(
                     'userinterface.UpdateExtensionRequest',
                     [me.instance, 'close']
                 );
@@ -571,6 +596,82 @@ Oskari.clazz.define(
                 me.getLocalization('searchResults') + ' ' + result.totalCount + ' ' +
                 me.getLocalization('searchResultsDescription') + ' ' + searchKey + '</h3></div>');
             resultList.append(table);
+
+            var btn = Oskari.clazz.create(
+                'Oskari.userinterface.component.Button'
+            );
+            btn.setTitle(me.getLocalization("show-all-on-map"));
+            jQuery(btn.getElement()).click(
+                function (event) {
+                    me._zoomMapToResults(result, true, tableBody);
+                }
+            );
+            var showOnMapBtns = me.optionPanel.find('div.showOnMapBtns');
+            btn.insertTo(showOnMapBtns);
+
+            btn = Oskari.clazz.create(
+                'Oskari.userinterface.component.Button'
+            );
+            btn.setTitle(me.getLocalization("show-selected-on-map"));
+            jQuery(btn.getElement()).click(
+                function (event) {
+                    me._zoomMapToResults(result, false, tableBody);
+                }
+            );
+            btn.insertTo(showOnMapBtns);
+        },
+
+        _zoomMapToResults: function(result, showAll, tableBody) {
+            var me = this;
+            var style = OpenLayers.Util.applyDefaults(style, OpenLayers.Feature.Vector.style['default']);
+            style.pointRadius = 8;
+            style.strokeColor = '#D3BB1B';
+            style.fillColor = '#FFDE00';
+            style.fillOpacity = 0.6;
+            style.strokeOpacity = 0.8;
+            style.strokeWidth = 2;
+            style.cursor = 'pointer';
+
+            var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
+
+            var mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
+            var realLayer = mapModule._map.getLayersByName("vectorlayer_VECTOR");
+            if(realLayer[0] != null){
+                realLayer[0].removeAllFeatures();
+            }
+            
+            //Fake layer for zoomin event
+            var olLayer = new OpenLayers.Layer.Vector('templayer'),
+             format = new OpenLayers.Format.WKT({}),
+             feature,
+             geometry,
+             mapMoveRequest,
+             bounds, 
+             center;
+
+            jQuery.each(result.locations, function( i, value ){
+                if(showAll){
+                    me.sandbox.postRequestByName(rn, [value.GEOMETRY, 'WKT', {id:value.id}, null, null, true, style, false]);  
+                    feature = format.read(value.GEOMETRY);
+                    olLayer.addFeatures([feature]);
+                }else{
+                    var row = tableBody.find("tr[name="+value.id+"]");
+                    var firstCell = row.find("td:first-child");
+                    if(firstCell.find("input").is(":checked")){
+                        me.sandbox.postRequestByName(rn, [value.GEOMETRY, 'WKT', {id:value.id}, null, null, true, style, false]); 
+                        feature = format.read(value.GEOMETRY);
+                        olLayer.addFeatures([feature]);
+                    }
+                }
+                
+            });
+
+            bounds = olLayer.getDataExtent();
+            center = bounds.getCenterLonLat();
+
+            mapmoveRequest = me.sandbox.getRequestBuilder('MapMoveRequest')(center.lon, center.lat, bounds, false);
+            me.sandbox.request(me, mapmoveRequest);
+
         },
 
         _populateResultTable: function (resultsTableBody) {
@@ -593,13 +694,14 @@ Oskari.clazz.define(
             for (i = 0; i < locations.length; i += 1) {
                 row = locations[i];
                 resultContainer = me.templates.templateResultTableRow.clone();
+                resultContainer.attr("name",row.id);
                 cells = resultContainer.find('td');
-                titleCell = jQuery(cells[0]);
+                titleCell = jQuery(cells[1]);
                 title = titleCell.find('a');
                 title.append(row.name);
                 title.bind('click', closureMagic(row));
-                jQuery(cells[1]).append(row.village);
-                jQuery(cells[2]).append(row.type);
+                jQuery(cells[2]).append(row.village);
+                jQuery(cells[3]).append(row.type);
                 resultsTableBody.append(resultContainer);
             }
         },
@@ -621,9 +723,7 @@ Oskari.clazz.define(
                 me.getName(),
                 moveReqBuilder(result.lon, result.lat, zoom, false)
             );
-*/
-
-            
+*/          
             style.pointRadius = 8;
             style.strokeColor = '#D3BB1B';
             style.fillColor = '#FFDE00';
@@ -734,7 +834,7 @@ Oskari.clazz.define(
             }
 
             advancedContainer.append(newRow);
-            advancedContainer.hide();
+            //advancedContainer.hide();
         },
 
         /**
