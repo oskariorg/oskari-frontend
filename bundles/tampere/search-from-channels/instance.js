@@ -667,13 +667,15 @@ Oskari.clazz.define(
              geometry,
              mapMoveRequest,
              bounds, 
-             center;
+             center,
+             isSelected = false;
 
             jQuery.each(result.locations, function( i, value ){
                 if(showAll){
                     me.sandbox.postRequestByName(rn, [value.GEOMETRY, 'WKT', {id:value.id}, null, null, true, me._getVectorLayerStyle(), false]);  
                     feature = format.read(value.GEOMETRY);
                     olLayer.addFeatures([feature]);
+                    isSelected = true;
                 }else{
                     var row = tableBody.find("tr[name="+value.id+"]");
                     var firstCell = row.find("td:first-child");
@@ -681,16 +683,27 @@ Oskari.clazz.define(
                         me.sandbox.postRequestByName(rn, [value.GEOMETRY, 'WKT', {id:value.id}, null, null, true, me._getVectorLayerStyle(), false]); 
                         feature = format.read(value.GEOMETRY);
                         olLayer.addFeatures([feature]);
+                        isSelected = true;
                     }
                 }
                 
             });
+
+            if(isSelected){
 
             bounds = olLayer.getDataExtent();
             center = bounds.getCenterLonLat();
 
             mapmoveRequest = me.sandbox.getRequestBuilder('MapMoveRequest')(center.lon, center.lat, bounds, false);
             me.sandbox.request(me, mapmoveRequest);
+
+            }else{
+                var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                var okBtn = dialog.createCloseButton('OK');
+                var title = me.getLocalization('no_selected_rows_alert_title');
+                var msg = me.getLocalization('no_selected_rows_have_to_select');
+                dialog.show(title, msg, [okBtn]);
+            }
 
         },
 

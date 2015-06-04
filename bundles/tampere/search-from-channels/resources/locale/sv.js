@@ -28,6 +28,8 @@ Oskari.registerLocalization(
         "invalid_characters": "Hakusanassa on kiellettyjä merkkejä. Sallittuja merkkejä ovat aakkoset (A-Ö, a-ö), numerot (0-9), piste (.), pilkku (,), yhdysviiva (-) ja huutomerkki (!). Lisäksi sallittuja ovat kysymysmerkki (?), jolla voi korvata sanasta yhden merkin, ja jokerimerkki (*), jolla voi korvata sanan loppuosan. Jokerimerkki voi olla ainoastaan sanan lopussa. -sv", 
         "show-all-on-map": "Näytä kaikki kartalla -sv",
         "show-selected-on-map": "Näytä valitut kartalla -sv",
+        "no_selected_rows_alert_title": "Näytä valitut kartalla -sv",
+        "no_selected_rows_have_to_select": "Valitse haluamasi kohteet hakutuloksista (valintalaatikko) -sv",
          "grid": {
             "name": "Nimi -sv",
             "village": "Kunta -sv",
