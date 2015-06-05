@@ -15,11 +15,7 @@ div.mapplugin.scalebar {
         text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.35);
     }
 
-    .small  {
-      display: none;
-    }
-
-    .medium {
+    &.medium {
         div.olControlScaleLineTop {
             border-color: #FF0000;
         }
@@ -28,7 +24,7 @@ div.mapplugin.scalebar {
         }
     }
 
-    .large {
+    &.large {
         div.olControlScaleLineTop {
             border-color: #00FF00;
         }
@@ -37,7 +33,7 @@ div.mapplugin.scalebar {
         }
     }
 
-    .fill {
+    &.fill {
         div.olControlScaleLineTop {
             border-color: #0000FF;
         }
@@ -46,7 +42,7 @@ div.mapplugin.scalebar {
         }
     }
 
-    .custom {
+    &.custom {
         div.olControlScaleLineTop {
             border-color: #FF00FF;
         }
