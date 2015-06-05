@@ -150,8 +150,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.BasicPublisher',
                 );
             me.accordion = accordion;
 
+            // Create location panel
             me._createLocationPanel(accordion, content);
+            // Create map tools panel
             me._createMapToolsPanel(accordion, content);
+            // Create map size and mode panel
+            me._createMapSizeAndModePanel(accordion, content);
 
             accordion.insertTo(contentDiv);
 
@@ -180,7 +184,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.BasicPublisher',
          * Creates the Location panel of publisher and adds it to accordion
          *
          *
-         * @param {String} accordion
+         * @param {Object} accordion jQuery element
+         * @param {Object} content jQuery element
          */
         _createLocationPanel: function (accordion, content) {
             var me = this,
@@ -192,7 +197,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.BasicPublisher',
                 me
             );
 
-            me.locationForm = form;
             if (me.data) {
                 content.find('div.header h3').append(me.loc.titleEdit);
                 form.init({
@@ -217,7 +221,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.BasicPublisher',
          * Creates the MapTools panel of publisher and adds it to accordion
          *
          *
-         * @param {String} accordion
+         * @param {Object} accordion jQuery element
+         * @param {Object} content jQuery element
          */
         _createMapToolsPanel: function (accordion, content) {
             var me = this,
@@ -228,19 +233,36 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.BasicPublisher',
                 me.instance.localization.BasicView,
                 me
             );
-            me.locationForm = form;
+
+            var panel = form.getPanel();
+            panel.open();
+            me.panels.push(form);
+            accordion.addPanel(panel);
+        },
+
+        /**
+         * @private @method _createMapSizeAndModePanel
+         * Creates the Map size panel of publisher and adds it to accordion
+         *
+         *
+         * @param {Object} accordion jQuery element
+         * @param {Object} content jQuery element
+         */
+        _createMapSizeAndModePanel: function (accordion, content) {
+            var me = this,
+                form = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.publisher2.view.MapSizeAndModePanel',
+                me.instance.getSandbox(),
+                me.instance.getSandbox().findRegisteredModuleInstance("MainMapModule"),
+                me.instance.localization.BasicView,
+                me
+            );
+            
             if (me.data) {
-                content.find('div.header h3').append(me.loc.titleEdit);
-                form.init({
-                    domain: me.data.domain,
-                    name: me.data.name,
-                    lang: me.data.lang
-                });
+                form.init(me.data);
             } else {
-                content.find('div.header h3').append(me.loc.title);
                 form.init();
             }
-
             var panel = form.getPanel();
             panel.open();
             me.panels.push(form);
@@ -250,11 +272,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.BasicPublisher',
         _gatherSelections: function(){
             var me = this,
                 selections = [];
+            // FIXME Do forms validations before submit!!
             jQuery.each(me.panels, function(index, panel){
                 selections.push(panel.getValues());
             });
             
-            //console.log(selections);
+            console.log(selections);
 
             throw 'Not implemented yet!';
         },
@@ -426,6 +449,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.BasicPublisher',
             mapModule.registerPlugin(me.logoPlugin);
             this.logoPlugin.startPlugin(me.instance.sandbox);
         },
+
+
+
+        
 
         /**
          * @private @method _disablePreview

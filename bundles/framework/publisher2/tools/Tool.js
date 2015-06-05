@@ -1,11 +1,17 @@
-Oskari.clazz.define('Oskari.mapframework.publisher.tool.ScalebarTool', 
+/**
+* @class Oskari.mapframework.publisher.tool.Tool
+* Protocol/interface declaration for Publisher2 tool.
+* Provides an interface for bundles to add tool to publisher2.
+*/
+
+Oskari.clazz.define('Oskari.mapframework.publisher.tool.Tool', 
 function(sandbox, mapmodule, localization) {
     // tool index in group, 0 is top
     this.__index = 0;
     // the panel group where tool is appended
-    this.__group = 'maptools';
+	this.__group = 'maptools';
     // allowed locations
-    this.__allowedLocations = ['bottom right'];
+	this.__allowedLocations = ['bottom right'];
     // sandbox
     this.__sandbox = sandbox;
     // mapmodule
@@ -17,10 +23,11 @@ function(sandbox, mapmodule, localization) {
     // supported modes
     this.__supportedModes = ['full', 'mobile'];
     // tool state
-    this.state= {
-        enabled: false,
-        mode:null
-    };
+	this.state= {
+		enabled: false,
+		mode:null
+	};
+
 }, {
     /**
     * Get tool object.
@@ -31,8 +38,8 @@ function(sandbox, mapmodule, localization) {
     */
     getTool: function(){
         return {
-            id: 'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin',
-            name: 'scalebar',
+            id: '<plugin id>',
+            name: '<plugin name>',
             config: {}
         };
     },
@@ -44,22 +51,7 @@ function(sandbox, mapmodule, localization) {
 	* @param {Boolean} enabled is tool enabled or not
 	*/
    	setEnabled : function(enabled) {
-   		var me = this,
-            tool = me.getTool();
-
-   		me.state.enabled = enabled;
-
-        if(!me.__plugin && enabled) {
-            me.__plugin = Oskari.clazz.create(tool.id, tool.config);
-            me.__mapmodule.registerPlugin(me.__plugin);
-        }
-
-        if(enabled && enabled == true) {
-            Oskari.clazz.create(tool.id, tool.config);
-            me.__plugin.startPlugin(me.__sandbox);
-        } else {
-            me.__plugin.stopPlugin(me.__sandbox);
-        }                
+   		    
     },
     /**
     * Get extra options.
@@ -79,8 +71,7 @@ function(sandbox, mapmodule, localization) {
     * @returns {String} tool name
     */
     getName: function() {
-        var me = this;
-    	return me.__loc.ScaleBarPlugin;
+        
     },
     /**
     * Is displayed in mode.
@@ -92,10 +83,10 @@ function(sandbox, mapmodule, localization) {
     * @returns {Boolean} is displayed in wanted mode
     */
     isDisplayedInMode: function(mode) {
-    	var me = this,
+        var me = this,
             supportedModes = [];
 
-        supportedModes = jQuery.grep(me.__supportedModes, function(modename, index) {
+    	supportedModes = jQuery.grep(me.__supportedModes, function(modename, index) {
             return modename === mode;
         });
 
@@ -120,7 +111,7 @@ function(sandbox, mapmodule, localization) {
     */
     setMode: function(mode){
     	var me = this;
-        me.state.mode = mode;
+    	me.state.mode = mode;
 
         if(me.state.enabled === true && me.isDisplayedInMode(mode) === false) {
             me.setEnabled(false);
@@ -190,6 +181,7 @@ function(sandbox, mapmodule, localization) {
     validate: function() {
         // always valid
         return true;
+        // or tool create validation
     }
 }, { 
     'protocol' : ['Oskari.mapframework.publisher.Tool'] 
