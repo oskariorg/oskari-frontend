@@ -450,8 +450,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.BasicPublisher',
             this.logoPlugin.startPlugin(me.instance.sandbox);
         },
 
-
-
+        /**
+         * @method setMode
+         * @param {String} mode the mode
+         */
+        setMode: function (mode) {
+            var me = this;
+            jQuery.each(me.panels, function(index, panel){
+                if(typeof panel.setMode === 'function') {
+                    panel.setMode(mode);
+                }
+            });
+        },
         
 
         /**

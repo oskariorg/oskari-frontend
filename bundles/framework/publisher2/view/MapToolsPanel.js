@@ -23,9 +23,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.MapToolsPanel',
         this.sandbox = sandbox;
         this.mapmodule = mapmodule;
         this.tools = [];
+        this.panel = null;
         this.templates = {
             maptools: jQuery('<div class="tool "><label>' + '<input type="checkbox"/>' + '</label></div>'),
             help: jQuery('<div class="help icon-info"></div>')
+        };
+        this.modeField = {
+            template: jQuery('<div class="field">' +
+                '<div class="help icon-info" title="' + this.loc + '" helptags="portti,help,publisher,mode"></div>' +
+                '</div>')
         };
     }, {
         /**
@@ -160,8 +166,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.MapToolsPanel',
                     contentPanel.append(extraOptions);
                 }
             });
-
-
+        
+            me.panel = panel;
             return panel;
         },
 
@@ -187,6 +193,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.MapToolsPanel',
             });
             
             return values;
+        },
+
+        /**
+         * @method setMode
+         * @param {String} mode the mode
+         */
+        setMode: function (mode) {
+            var me = this,
+                cont = me.panel.getContainer();
+
+            // update tools
+            jQuery.each(me.tools, function(index, tool){
+                if(tool.isDisplayedInMode(mode) === true){
+                    cont.find('#tool-' + tool.getTool().id).attr('disabled', 'disabled');
+                } else {
+                    cont.find('#tool-' + tool.getTool().id).removeAttr('disabled');
+                }
+
+                if(typeof tool.setMode === 'function'){
+                    tool.setMode(mode);
+                }
+            });
         },
 
         /**

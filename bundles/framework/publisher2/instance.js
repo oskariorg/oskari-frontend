@@ -103,10 +103,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 me
             );
 
+            me.publishMapModeChangeHandler = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.publisher2.request.PublishMapModeRequestHandler',
+                me
+            );
+
             // register request handlers
             sandbox.addRequestHandler(
                 'Publisher2.PublishMapEditorRequest',
                 me.publishMapEditorRequestHandler
+            );
+
+            sandbox.addRequestHandler(
+                'Publisher2.PublishMapModeChangeRequest',
+                me.publishMapModeChangeHandler
             );
         },
 
@@ -216,6 +226,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             var me = this;
             me.plugins['Oskari.userinterface.Flyout'].createUi();
             me.plugins['Oskari.userinterface.Tile'].refresh();
+        },
+        /**
+         * @method setMode
+         * @param {String} mode the mode
+         */
+        setMode: function (mode) {
+            var me = this;
+            me.publisher.setMode(mode);
         },
 
         /**

@@ -90,6 +90,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher2.PublisherBundle", fun
         }, {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher2/request/PublishMapEditorRequestHandler.js"
+        }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/publisher2/request/PublishMapModeChangeRequest.js"
+        }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/publisher2/request/PublishMapModeChangeRequestHandler.js"
         }],
 
         "locales": [{

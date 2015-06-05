@@ -266,6 +266,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.MapSizeAndModePa
             if (reqBuilder) {
                 me.sandbox.request(me._publisher.instance, reqBuilder());
             }
+
+            me._updateMapMode();
+        },
+
+        /**
+        * @private @method _updateMapMode
+        * Update map mode
+        */
+        _updateMapMode: function () {
+            var me = this,
+                reqBuilder = me.sandbox.getRequestBuilder(
+                    'Publisher2.PublishMapModeChangeRequest'
+                ),
+                size = me._getSelectedMapSize();
+                
+            if (reqBuilder) {
+                me.sandbox.request(me._publisher.instance, reqBuilder(size.option.id));
+            }
         },
 
         /**

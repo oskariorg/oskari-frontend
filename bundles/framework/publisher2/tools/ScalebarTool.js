@@ -15,7 +15,7 @@ function(sandbox, mapmodule, localization) {
     // plugin
     this.__plugin = null;
     // supported modes
-    this.__supportedModes = ['full', 'mobile'];
+    this.__supportedModes = ['small', 'medium', 'large', 'fill'/*, 'custom'*/];
     // tool state
     this.state= {
         enabled: false,
@@ -57,6 +57,7 @@ function(sandbox, mapmodule, localization) {
         if(enabled && enabled == true) {
             Oskari.clazz.create(tool.id, tool.config);
             me.__plugin.startPlugin(me.__sandbox);
+            me.setMode(me.state.mode);
         } else {
             me.__plugin.stopPlugin(me.__sandbox);
         }                
@@ -121,12 +122,6 @@ function(sandbox, mapmodule, localization) {
     setMode: function(mode){
     	var me = this;
         me.state.mode = mode;
-
-        if(me.state.enabled === true && me.isDisplayedInMode(mode) === false) {
-            me.setEnabled(false);
-        } else if(me.state.enabled === false && me.isDisplayedInMode(mode) === true) {
-            me.setEnabled(true);
-        }
 
         if(me.__plugin && typeof me.__plugin.setMode === 'function'){
             me.__plugin.setMode(mode);
