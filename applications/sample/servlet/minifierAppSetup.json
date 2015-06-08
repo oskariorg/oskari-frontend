@@ -425,19 +425,6 @@
             },
             "instanceProps": {}
         }, {
-            "bundleinstancename": "statsgrid",
-            "bundlename": "statsgrid",
-            "metadata": {
-                "Import-Bundle": {
-                    "statsgrid": {
-                        "bundlePath": "../../../packages/statistics/bundle/"
-                    },
-                    "geostats": {
-                        "bundlePath": "../../../packages/libraries/bundle/"
-                    }
-                }
-            }
-        }, {
             "instanceProps": {},
             "title": "Karttatasot",
             "bundleinstancename": "admin-layerselector",
@@ -529,6 +516,18 @@
                         "bundlePath" : "../../../packages/framework/bundle/"
                     }
                 }
+            }
+        }, {
+            "title": "publishedstatehandler",
+            "bundleinstancename": "publishedstatehandler",
+            "bundlename": "publishedstatehandler",
+            "metadata": {
+                "Import-Bundle": {
+                    "publishedstatehandler": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
             }
         }
     ]

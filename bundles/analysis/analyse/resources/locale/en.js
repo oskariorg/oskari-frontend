@@ -95,7 +95,7 @@ Oskari.registerLocalization(
                         "id": "oskari_analyse_aggregate",
                         "label": "Key ratios computation",
                         "classForPreview": "aggregate",
-                        "tooltip": "By the method \"Key ratios computation\" you can count different key ratios (e.g. average and sum) based on the selected features."
+                        "tooltip": "By the method \"Key ratios computation\" you can count different key ratios (e.g. average and sum) based on the selected features. \nAuthorised features are not counted."
                     },
                     {
                         "id": "oskari_analyse_union",
@@ -171,7 +171,8 @@ Oskari.registerLocalization(
                         "label": "The number of authorised features"
                     }
                 ],
-                "attribute": "Select the attribute"
+                "attribute": "Select the attribute",
+                "footer" : "Authorised features are not counted"
             },
             "buffer_size": {
                 "label": "Buffer size",

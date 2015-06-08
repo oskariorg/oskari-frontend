@@ -250,20 +250,38 @@ module.exports = function (grunt) {
                             translation = locale;
                         }
                         if(!note) {
-                            //Add extra note, if lacking locale en and current lang
-                            if(!node){
-                                note = 'NO ' + templateLocale + ' TRANSLATION  - '
+
+                                // Add extra note, if lacking locale en and current lang
+                                if (!node) {
+                                    note = 'NO ' + templateLocale + ' TRANSLATION  - '
+                                }
+                                if (!translation) {
+                                    note = note + 'NO ' + locale + ' TRANSLATION'
+                                }
+                            if (note) {
+                                if (localizationDir + path.sep + bundleName + '_' + locale + '.xlsx' !== global.savfile) {
+                                    if (!node && !translation) {
+                                        // both translations are empty
+                                        grunt.log.writeln(
+                                            path.sep + 'Oskari' + bundleDir.substring(2) + 'locale' + ' <-> ' +
+                                            locale + '.js' + ' <-> ' +
+                                            pathStack.join('.') + ' <-> ' +
+                                            node + ' <-> ' + 'NO TRANSLATIONS: ' + templateLocale +
+                                            ',' + locale + ' <-> ' +
+                                            localizationDir + path.sep + bundleName + '_' + locale + '.xlsx\n'
+                                        );
+                                    }
+                                    else {
+                                        global.logfile.write(path.sep + 'Oskari' + bundleDir.substring(2) + 'locale' + ' <-> ' +
+                                        locale + '.js' + ' <-> ' +
+                                        pathStack.join('.') + ' <-> ' +
+                                        node + ' <-> MISSINGS TRANSLATIONS IN ' +
+                                        localizationDir + path.sep + bundleName + '_' + locale + '.xlsx\n');
+                                        global.savfile = localizationDir + path.sep + bundleName + '_' + locale + '.xlsx';
+                                    }
+                                }
                             }
-                            if(!translation){
-                                note = note + 'NO ' + locale +  ' TRANSLATION'
-                            }
-                            if(note){
-                                global.logfile.write( path.sep + 'Oskari' + bundleDir.substring(2) + 'locale' + ' <-> ' +
-                                    locale + '.js' + ' <-> ' +
-                                    pathStack.join('.') + ' <-> ' +
-                                    node + ' <-> ' + note + ' <-> ' +
-                                    localizationDir + path.sep + bundleName + '_' + locale + '.xlsx\n');
-                            }
+
 
                         }
 

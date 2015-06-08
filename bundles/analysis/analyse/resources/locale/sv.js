@@ -173,7 +173,8 @@ Oskari.registerLocalization(
                         "label": "Skyddad objekt"
                     }
                 ],
-                "attribute": "Välj en attribut"
+                "attribute": "Välj en attribut",
+                "footer" : "Skyddad objekt är inte räknad"
             },
             "buffer_size": {
                 "label": "Zon storlek",
