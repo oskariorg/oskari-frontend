@@ -22,7 +22,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
         conf.flyoutClazz = 'Oskari.mapframework.bundle.publisher2.Flyout';
         this.defaultConf = conf;
 
-
         this.publisher = null;
     }, {
         /**
@@ -58,41 +57,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
         setPublishMode: function (blnEnabled, deniedLayers, data) {
             var me = this,
                 map = jQuery('#contentMap'),
-                selectedLayers,
-                statsLayer,
-                i,
-                layer,
-                request,
                 requestBuilder;
 
-            // check if statsgrid mode is on
-            // -> disable statsgrid mode
-            selectedLayers = me.sandbox.findAllSelectedMapLayers();
-            statsLayer = null;
-            for (i = 0; i < selectedLayers.length; i += 1) {
-                layer = selectedLayers[i];
-                if (layer.getLayerType() === 'stats') {
-                    request = me.sandbox.getRequestBuilder('StatsGrid.StatsGridRequest')(false, layer);
-                    me.sandbox.request(me.getName(), request);
-                    statsLayer = layer;
-                    break;
-                }
-            }
-
+            var statsLayer = this._resetStatsUI();
             if (blnEnabled) {
-                me.disabledLayers = deniedLayers;
-                me.oskariLang = Oskari.getLang();
+                me.getService().setNonPublisherLayers(deniedLayers);
                 me.getService().removeLayers();
+                me.oskariLang = Oskari.getLang();
 
                 map.addClass('mapPublishMode');
                 map.addClass('published');
+                // FIXME: not like this! see removing...
                 me.sandbox.mapMode = 'mapPublishMode';
 
                 // hide flyout?
+                // TODO: move to default flyout/extension as "mode functionality"?
                 jQuery(me.getFlyout().container).parent().parent().css('display', 'none');
 
                 me.publisher = Oskari.clazz.create(
-                    'Oskari.mapframework.bundle.publisher2.view.BasicPublisher',
+                    'Oskari.mapframework.bundle.publisher2.view.PublisherSidebar',
                     me,
                     me.getLocalization('BasicView'),
                     data
@@ -107,7 +90,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 me._destroyGrid();
                 Oskari.setLang(me.oskariLang);
                 if (me.publisher) {
-                    jQuery(me.plugins['Oskari.userinterface.Flyout'].container).parent().parent().css('display', '');
+                    // show flyout?
+                    // TODO: move to default flyout/extension as "mode functionality"?
+                    jQuery(me.getFlyout().container).parent().parent().css('display', '');
                     // make sure edit mode is disabled
                     if (me.publisher.toolLayoutEditMode) {
                         me.publisher._editToolLayoutOff();
@@ -118,20 +103,45 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 // first return all needed plugins before adding the layers back
                 map.removeClass('mapPublishMode');
                 map.removeClass('published');
+                // FIXME: not like this! see setter...
                 if (me.sandbox._mapMode === 'mapPublishMode') {
                     delete me.sandbox._mapMode;
                 }
+                // return the layers that were removed for publishing.
                 me.getService().addLayers();
-                //postRequestByName brakes mode change functionality! me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close']);
-                request = me.sandbox.getRequestBuilder('userinterface.UpdateExtensionRequest')(me, 'close', me.getName());
-                me.sandbox.request(me.getName(), request);
+                me.getFlyout().close();
             }
             // publishing mode should be sent to mapfull to disable resizing
             requestBuilder = me.sandbox.getRequestBuilder('MapFull.MapResizeEnabledRequest');
             if (requestBuilder) {
-                request = requestBuilder(!blnEnabled);
-                me.sandbox.request(me, request);
+                me.sandbox.request(me, requestBuilder(!blnEnabled));
             }
+        },
+        /**
+         * Resets Thematic maps UI and returns the stats layer if found
+         * @return {Oskari.mapframework.bundle.mapstats.domain.StatsLayer} stats layer if one was in selected layers
+         */
+        _resetStatsUI : function() {
+            var me = this;
+            var sandbox = me.sandbox;
+            // check if statsgrid mode is on -> disable statsgrid mode
+            var statsLayers = _.filter(sandbox.findAllSelectedMapLayers(), function(layer) {
+                return layer.isLayerOfType('stats');
+            });
+
+            if(!statsLayers.length) {
+                // no statslayers
+                return;
+            }
+            // assume only one which is true for now.
+            var layer = statsLayers[0];
+
+            // TODO: replace with "ResetUIRequest" or similar (handled by divmanazer)
+            // or "ModeActivationEvent" which StatsGrid and others will listen and clear the UI.
+            var request = sandbox.getRequestBuilder('StatsGrid.StatsGridRequest')(false, layer);
+            sandbox.request(me.getName(), request);
+
+            return layer;
         },
 
         /**

@@ -1,9 +1,9 @@
 /**
- * @class Oskari.mapframework.bundle.publisher2.view.BasicPublisher
+ * @class Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
  * Renders the publishers "publish mode" sidebar view where the user can make
  * selections regarading the map to publish.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.BasicPublisher',
+Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar',
 
     /**
      * @static @method create called automatically on construction
