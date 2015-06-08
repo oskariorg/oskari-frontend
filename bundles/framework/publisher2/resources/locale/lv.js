@@ -3,9 +3,12 @@ Oskari.registerLocalization(
     "lang": "lv",
     "key": "Publisher2",
     "value": {
-        "title": "Izveidot karti",
-        "flyouttitle": "Izveidot karti",
-        "desc": "",
+        "tile" : {
+            "title": "Izveidot karti"
+        },
+        "flyout" : {
+            "title": "Izveidot karti"
+        },
         "published": {
             "title": "Jūsu karte ir izveidota",
             "desc": "Iegult karti pievienojot HTML kodu jūsu tīmekļa vietnes apakšā"

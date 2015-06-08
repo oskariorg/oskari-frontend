@@ -3,9 +3,12 @@ Oskari.registerLocalization(
     "lang": "sq",
     "key": "Publisher2",
     "value": {
-        "title": "Krijo hartën",
-        "flyouttitle": "Krijo hartën",
-        "desc": "",
+        "tile" : {
+            "title": "Krijo hartën"
+        },
+        "flyout" : {
+            "title": "Krijo hartën"
+        },
         "published": {
             "title": "Harta juaj është krijuar",
             "desc": "Futni hartën duke shtuar kodin HTML poshtë ueb faqes tuaj"

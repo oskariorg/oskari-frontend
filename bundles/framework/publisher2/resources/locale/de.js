@@ -2,9 +2,12 @@ Oskari.registerLocalization({
     "lang": "de",
     "key": "Publisher2",
     "value": {
-        "title": "Karte erzeugen",
-        "flyouttitle": "Karte erzeugen",
-        "desc": "",
+        "tile" : {
+            "title": "Karte erzeugen"
+        },
+        "flyout" : {
+            "title": "Karte erzeugen"
+        },
         "published": {
             "title": "Ihre Karte wurde erzeugt",
             "desc": "Binden Sie die Karte auf Ihrer Webseite ein, indem Sie den untenstehenden HTML-Code einfügen."

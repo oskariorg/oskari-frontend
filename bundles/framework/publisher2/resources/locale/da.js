@@ -3,9 +3,12 @@ Oskari.registerLocalization(
     "lang": "da",
     "key": "Publisher2",
     "value": {
-        "title": "Opret kort",
-        "flyouttitle": "Opret kort",
-        "desc": "",
+        "tile" : {
+            "title": "Opret kort"
+        },
+        "flyout" : {
+            "title": "Opret kort"
+        },
         "published": {
             "title": "Dit kort er blevet oprettet",
             "desc": "Integrér kortet ved at tilføje en HTML-kode til din hjemmeside herunder"
