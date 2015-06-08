@@ -5,6 +5,7 @@
 ### divmanazer
 
 DefaultFlyout now has a close() function which closes the flyout.
+DefaultFlyout now onOpen() and onClose() functions that are called when flyout is opened/closed.
 
 ### applications
 

@@ -137,8 +137,20 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
                 builder = this.getSandbox().getEventBuilder(eventName),
                 evt = builder.apply(builder, args);
             return this.getSandbox().notifyAll(evt);
-        }
+        },
+        /**
+         * Hook function for bundle specific op. Called when flyout is opened.
+         */
+        onOpen : function() {
+            this.getSandbox().printDebug('Opened flyout ' + this.getName());
+        },
 
+        /**
+         * Hook function for bundle specific op. Called when flyout is closed.
+         */
+        onClose : function() {
+            this.getSandbox().printDebug('Closed flyout' + this.getName());
+        }
 
     }, {
         'protocol': ['Oskari.userinterface.Flyout']
