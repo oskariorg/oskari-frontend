@@ -225,7 +225,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.BasicPublisher',
                 'Oskari.mapframework.bundle.publisher2.view.MapToolsPanel',
                 me.instance.getSandbox(),
                 me.instance.getSandbox().findRegisteredModuleInstance("MainMapModule"),
-                me.instance.localization.BasicView,
+                me.loc,
                 me
             );
             me.locationForm = form;

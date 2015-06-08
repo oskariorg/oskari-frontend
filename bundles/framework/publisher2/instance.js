@@ -16,206 +16,33 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
      * @static
      */
     function () {
-        this.sandbox = null;
-        this.started = false;
-        this.plugins = {};
-        this.localization = null;
+        // override defaults
+        var conf = this.getConfiguration();
+        conf.name = 'Publisher2';
+        conf.flyoutClazz = 'Oskari.mapframework.bundle.publisher2.Flyout';
+        this.defaultConf = conf;
+
+
         this.publisher = null;
-        this.disabledLayers = null;
     }, {
         /**
-         * @static
-         * @property __name
+         * @method afterStart
          */
-        __name: 'Publisher2',
-        /**
-         * @method getName
-         * @return {String} the name for the component
-         */
-        getName: function () {
-            return this.__name;
+        afterStart: function () {
+            var sandbox = this.getSandbox();
+
+            this.__service = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.PublisherService', sandbox);
+            // create and register request handler
+            var reqHandler = Oskari.clazz.create(
+                    'Oskari.mapframework.bundle.publisher2.request.PublishMapEditorRequestHandler',
+                    this);
+            sandbox.addRequestHandler('Publisher2.PublishMapEditorRequest', reqHandler);
         },
         /**
-         * @method getSandbox
-         * @return {Oskari.mapframework.sandbox.Sandbox}
+         * @return {Oskari.mapframework.bundle.publisher2.PublisherService} service for state holding
          */
-        getSandbox: function () {
-            return this.sandbox;
-        },
-        /**
-         * @method getLocalization
-         * Returns JSON presentation of bundles localization data for current language.
-         * If key-parameter is not given, returns the whole localization data.
-         *
-         * @param {String} key (optional) if given, returns the value for key
-         * @return {String/Object} returns single localization string or
-         *      JSON object for complete data depending on localization
-         *      structure and if parameter key is given
-         */
-        getLocalization: function (key) {
-            if (!this._localization) {
-                this._localization = Oskari.getLocalization(this.getName());
-            }
-            if (key) {
-                return this._localization[key];
-            }
-            return this._localization;
-        },
-        /**
-         * @method start
-         * Implements BundleInstance protocol start method
-         */
-        start: function () {
-            var me = this,
-                conf = me.conf,
-                sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
-                sandbox = Oskari.getSandbox(sandboxName),
-                request,
-                p;
-
-            if (me.started) {
-                return;
-            }
-
-            me.started = true;
-
-            me.sandbox = sandbox;
-
-            this.localization = Oskari.getLocalization(this.getName());
-            sandbox.register(me);
-            for (p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.registerForEventByName(me, p);
-                }
-            }
-
-            //Let's extend UI
-            request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
-            sandbox.request(this, request);
-
-            // draw ui
-            me._createUi();
-
-
-            // create request handlers
-            me.publishMapEditorRequestHandler = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.publisher2.request.PublishMapEditorRequestHandler',
-                me
-            );
-
-            // register request handlers
-            sandbox.addRequestHandler(
-                'Publisher2.PublishMapEditorRequest',
-                me.publishMapEditorRequestHandler
-            );
-        },
-
-        /**
-         * @method init
-         * Implements Module protocol init method - does nothing atm
-         */
-        init: function () {
-            return null;
-        },
-
-        /**
-         * @method update
-         * Implements BundleInstance protocol update method - does nothing atm
-         */
-        update: function () {
-
-        },
-
-        /**
-         * @method onEvent
-         * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
-         * @param {Oskari.mapframework.event.Event} event a Oskari event object
-         */
-        onEvent: function (event) {
-            var handler = this.eventHandlers[event.getName()];
-            if (!handler) {
-                return;
-            }
-            return handler.apply(this, [event]);
-        },
-
-        /**
-         * @method stop
-         * Implements BundleInstance protocol stop method
-         */
-        stop: function () {
-            var sandbox = this.sandbox(),
-                request,
-                p;
-            for (p in this.eventHandlers) {
-                if (this.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.unregisterFromEventByName(this, p);
-                }
-            }
-
-            request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
-            sandbox.request(this, request);
-
-            this.sandbox.unregister(this);
-            this.started = false;
-        },
-        /**
-         * @method startExtension
-         * implements Oskari.userinterface.Extension protocol startExtension method
-         * Creates a flyout and a tile:
-         * Oskari.mapframework.bundle.publisher.Flyout
-         * Oskari.mapframework.bundle.publisher.Tile
-         */
-        startExtension: function () {
-            this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.publisher2.Flyout',
-                this
-            );
-            this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.publisher2.Tile',
-                this
-            );
-        },
-        /**
-         * @method stopExtension
-         * implements Oskari.userinterface.Extension protocol stopExtension method
-         * Clears references to flyout and tile
-         */
-        stopExtension: function () {
-            this.plugins['Oskari.userinterface.Flyout'] = null;
-            this.plugins['Oskari.userinterface.Tile'] = null;
-        },
-        /**
-         * @method getPlugins
-         * implements Oskari.userinterface.Extension protocol getPlugins method
-         * @return {Object} references to flyout and tile
-         */
-        getPlugins: function () {
-            return this.plugins;
-        },
-        /**
-         * @method getTitle
-         * @return {String} localized text for the title of the component
-         */
-        getTitle: function () {
-            return this.getLocalization('title');
-        },
-        /**
-         * @method getDescription
-         * @return {String} localized text for the description of the component
-         */
-        getDescription: function () {
-            return this.getLocalization('desc');
-        },
-        /**
-         * @method _createUi
-         * @private
-         * (re)creates the UI for "publisher" functionality
-         */
-        _createUi: function () {
-            var me = this;
-            me.plugins['Oskari.userinterface.Flyout'].createUi();
-            me.plugins['Oskari.userinterface.Tile'].refresh();
+        getService : function() {
+            return this.__service;
         },
 
         /**
@@ -251,16 +78,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                     break;
                 }
             }
+
             if (blnEnabled) {
                 me.disabledLayers = deniedLayers;
                 me.oskariLang = Oskari.getLang();
-                me._removeLayers();
+                me.getService().removeLayers();
 
                 map.addClass('mapPublishMode');
                 map.addClass('published');
                 me.sandbox.mapMode = 'mapPublishMode';
 
-                jQuery(me.plugins['Oskari.userinterface.Flyout'].container).parent().parent().css('display', 'none');
+                // hide flyout?
+                jQuery(me.getFlyout().container).parent().parent().css('display', 'none');
 
                 me.publisher = Oskari.clazz.create(
                     'Oskari.mapframework.bundle.publisher2.view.BasicPublisher',
@@ -292,7 +121,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 if (me.sandbox._mapMode === 'mapPublishMode') {
                     delete me.sandbox._mapMode;
                 }
-                me._addLayers();
+                me.getService().addLayers();
                 //postRequestByName brakes mode change functionality! me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close']);
                 request = me.sandbox.getRequestBuilder('userinterface.UpdateExtensionRequest')(me, 'close', me.getName());
                 me.sandbox.request(me.getName(), request);
@@ -324,94 +153,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 'width': '100%',
                 'float': ''
             }).removeClass('published-grid-center');
-        },
-
-        /**
-         * @method _addLayers
-         * Adds temporarily removed layers to map
-         * @private
-         */
-        _addLayers: function () {
-            var me = this,
-                sandbox = this.sandbox,
-                addRequestBuilder = sandbox.getRequestBuilder('AddMapLayerRequest'),
-                i,
-                layer;
-            if (me.disabledLayers) {
-                for (i = 0; i < me.disabledLayers.length; i += 1) {
-                    // remove
-                    layer = me.disabledLayers[i];
-                    sandbox.request(me, addRequestBuilder(layer.getId(), true));
-                }
-            }
-        },
-
-        /**
-         * @method _removeLayers
-         * Removes temporarily layers from map that the user cant publish
-         * @private
-         */
-        _removeLayers: function () {
-            var me = this,
-                sandbox = me.sandbox,
-                removeRequestBuilder = sandbox.getRequestBuilder('RemoveMapLayerRequest'),
-                i,
-                layer;
-            if (me.disabledLayers) {
-                for (i = 0; i < me.disabledLayers.length; i += 1) {
-                    // remove
-                    layer = me.disabledLayers[i];
-                    sandbox.request(me, removeRequestBuilder(layer.getId()));
-                }
-            }
-        },
-
-        /**
-         * @method hasPublishRight
-         * Checks if the layer can be published.
-         * @param
-         * {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer}
-         * layer
-         *      layer to check
-         * @return {Boolean} true if the layer can be published
-         */
-        hasPublishRight: function (layer) {
-            // permission might be "no_publication_permission"
-            // or nothing at all
-            return (layer.getPermission('publish') === 'publication_permission_ok');
-        },
-
-        /**
-         * @method getLayersWithoutPublishRights
-         * Checks currently selected layers and returns a subset of the list
-         * that has the layers that can't be published. If all selected
-         * layers can be published, returns an empty list.
-         * @return
-         * {Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Mixed}
-         * list of layers that can't be published.
-         */
-        getLayersWithoutPublishRights: function () {
-            var deniedLayers = [],
-                selectedLayers = this.sandbox.findAllSelectedMapLayers(),
-                i,
-                layer;
-            for (i = 0; i < selectedLayers.length; i += 1) {
-                layer = selectedLayers[i];
-                if (!this.hasPublishRight(layer)) {
-                    deniedLayers.push(layer);
-                }
-            }
-            return deniedLayers;
         }
     }, {
-        /**
-         * @property {String[]} protocol
-         * @static
-         */
-        protocol: [
-            'Oskari.bundle.BundleInstance',
-            'Oskari.mapframework.module.Module',
-            'Oskari.userinterface.Extension'
-        ]
+        "extend" : ["Oskari.userinterface.extension.DefaultExtension"]
     }
 );

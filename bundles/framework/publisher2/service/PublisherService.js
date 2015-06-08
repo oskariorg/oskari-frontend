@@ -1,0 +1,84 @@
+/*
+ * @class Oskari.mapframework.bundle.publisher2.PublisherService
+ *
+ */
+Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherService',
+
+    /**
+     * @method create called automatically on construction
+     * @static
+     * @param {Oskari.mapframework.bundle.publisher2.PublisherBundleInstance} instance
+     *      reference to component that created the tile
+     */
+    function (sandbox) {
+        this.__sandbox = sandbox;
+    }, {
+
+        /**
+         * @method getLayersWithoutPublishRights
+         * Checks currently selected layers and returns a subset of the list
+         * that has the layers that can't be published. If all selected
+         * layers can be published, returns an empty list.
+         * @return
+         * {Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Mixed}
+         * list of layers that can't be published.
+         */
+        getLayersWithoutPublishRights: function () {
+            var me = this,
+                deniedLayers = [],
+                selectedLayers = this.__sandbox.findAllSelectedMapLayers();
+
+            _.each(selectedLayers, function(layer) {
+                if (!me.hasPublishRight(layer)) {
+                    deniedLayers.push(layer);
+                }
+            });
+
+            return deniedLayers;
+        },
+        /**
+         * @method hasPublishRight
+         * Checks if the layer can be published.
+         * @param
+         * {Oskari.mapframework.domain.AbstractLayer} layer layer to check
+         * @return {Boolean} true if the layer can be published
+         */
+        hasPublishRight: function (layer) {
+            // permission might be "no_publication_permission"
+            // or nothing at all
+            return (layer.getPermission('publish') === 'publication_permission_ok');
+        },
+        setNonPublisherLayers : function(deniedList) {
+            this.disabledLayers = deniedList;
+        },
+        getNonPublisherLayers : function() {
+            if (!this.disabledLayers) {
+                return [];
+            }
+            return this.disabledLayers;
+        },
+        /**
+         * @method _addLayers
+         * Adds temporarily removed layers to map
+         * @private
+         */
+        addLayers: function () {
+            var sandbox = this.__sandbox;
+            _.each(this.getNonPublisherLayers(), function(layer) {
+                sandbox.postRequestByName('AddMapLayerRequest', [layer.getId(), true]);
+            });
+        },
+
+        /**
+         * @method _removeLayers
+         * Removes temporarily layers from map that the user cant publish
+         * @private
+         */
+        removeLayers: function () {
+            var sandbox = this.__sandbox;
+            _.each(this.getNonPublisherLayers(), function(layer) {
+                sandbox.postRequestByName('RemoveMapLayerRequest', [layer.getId()]);
+            });
+        }
+    }
+);

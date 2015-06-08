@@ -31,7 +31,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher2.PublisherBundle", fun
         },
         {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/publisher2/Tile.js"
+            "src": "../../../../bundles/framework/publisher2/service/PublisherService.js"
         },
         {
             "type": "text/javascript",
