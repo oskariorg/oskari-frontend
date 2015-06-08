@@ -48,9 +48,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherService',
             // or nothing at all
             return (layer.getPermission('publish') === 'publication_permission_ok');
         },
+        /**
+         * Stores references to layers that are not available for publishing
+         * @param {Oskari.mapframework.domain.AbstractLayer[]} deniedList
+         */
         setNonPublisherLayers : function(deniedList) {
             this.disabledLayers = deniedList;
         },
+        /**
+         * Returns layers that are not available for publishing
+         * @return {Oskari.mapframework.domain.AbstractLayer[]} 
+         */
         getNonPublisherLayers : function() {
             if (!this.disabledLayers) {
                 return [];
@@ -58,9 +66,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherService',
             return this.disabledLayers;
         },
         /**
-         * @method _addLayers
+         * @method addLayers
          * Adds temporarily removed layers to map
-         * @private
          */
         addLayers: function () {
             var sandbox = this.__sandbox;
@@ -70,9 +77,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherService',
         },
 
         /**
-         * @method _removeLayers
-         * Removes temporarily layers from map that the user cant publish
-         * @private
+         * @method removeLayers
+         * Removes temporarily layers from map that the user can't publish
          */
         removeLayers: function () {
             var sandbox = this.__sandbox;
