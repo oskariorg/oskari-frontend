@@ -2,6 +2,10 @@
 
 ## 1.30
 
+### divmanazer
+
+DefaultFlyout now has a close() function which closes the flyout.
+
 ### applications
 
 oskari.org application has been removed as the sample/servlet application is the same thing.

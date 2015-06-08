@@ -95,9 +95,15 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
         },
 
         /**
-         * @method getLocalization
-         * @return JSON localisation subset 'flyout'
+         * @method close
+         * Closes the flyout
          */
+        close : function() {
+            var instance = this.getExtension();
+            var sandbox = this.getSandbox();
+            sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [instance, 'close']);
+        },
+
         /**
          * @method getLocalization
          * @return JSON localisation subset 'flyout'
