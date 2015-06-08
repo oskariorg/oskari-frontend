@@ -11,12 +11,12 @@ Oskari.registerLocalization(
         "AnalyseView": {
             "title": "Analysis",
             "content": {
-                "label": "Data",
+                "label": "Map layers",
                 "drawToolsLabel": "Feature Tools",
                 "tooltip": "Select one map layer for analysis. You can search more map layers by clicking \"Add map layer\" and selecting a map layer from the list. You can focus your map view to the place you  want by dragging the map with a mouse or by clicking \"Search places\" and searching the place you want.",
                 "drawToolsTooltip": "By feature tools you can add new temporary features for analysis or cut an existing feature by cropping a part of it. You can add and cut point, line and area features.",
                 "features": {
-                    "title": "Adding Features",
+                    "title": "Add",
                     "buttons": {
                         "cancel": "Cancel",
                         "finish": "Done"
@@ -47,7 +47,7 @@ Oskari.registerLocalization(
                     }
                 },
                 "drawFilter": {
-                    "title": "Clipping Features",
+                    "title": "Clipping",
                     "buttons": {
                         "cancel": "Cancel",
                         "finish": "Done"
@@ -72,6 +72,30 @@ Oskari.registerLocalization(
                                 "title": "Clipping the area with another area",
                                 "message": "Draw an area on the area to be clipped by clicking its breaking points (incl. starting point). Finish the drawing by double clicking. You can move breakpoints by dragging them with mouse. The cut area is shown as blue. You can change the cut area by clicking another area. When the cutting is ready, click the \"Done\" button. Now you can use a cut area for analysis."
                             }
+                        }
+                    }
+                },
+                "selectionTools": {
+                    "title": "Selection",
+                    "description": "Selection applies only to the selected maplayer",
+                    "button": {
+                        "empty": "Remove selection"
+                    },
+                    "tools": {
+                        "point": {
+                            "tooltip": "Add a point feature to the map."
+                        },
+                        "line": {
+                            "tooltip": "Add a line feature to the map."
+                        },
+                        "polygon": {
+                            "tooltip": "Add an area feature to the map."
+                        },
+                        "square": {
+                            "tooltip": "Add a rectangular area feature to the map."
+                        },
+                        "circle": {
+                            "tooltip": "Add a circular area feature to the map."
                         }
                     }
                 },

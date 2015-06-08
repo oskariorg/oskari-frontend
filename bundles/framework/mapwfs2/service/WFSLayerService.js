@@ -23,9 +23,8 @@ Oskari.clazz.define(
         me.selectedWFSLayers = [];
         me.selectedWFSLayerIds = [];
         me.selectFromAllLayers;
-        me.topWFSLayer;
-        //flag for telling mediator's occasional wfs mapclick event that showing the popup is a no-no
         me.selectionToolsActive;
+        me.analysisWFSLayerId;
 
         for (p in me.eventHandlers) {
             if (me.eventHandlers.hasOwnProperty(p)) {
@@ -75,14 +74,14 @@ Oskari.clazz.define(
             AfterMapLayerAddEvent: function (event) {
                 var me = this,
                     layer = event._mapLayer;
-                if (layer._layerType === "WFS") {
+                if (layer.hasFeatureData()) {
                     me.setWFSLayerSelection(layer, true);
                 }
             },
             AfterMapLayerRemoveEvent: function (event) {
                 var me = this,
                     layer = event._mapLayer;
-                if (layer._layerType === "WFS") {
+                if (layer.hasFeatureData()) {
                     me.setWFSLayerSelection(layer, false);
                 }
             }
@@ -98,9 +97,9 @@ Oskari.clazz.define(
         setWFSLayerSelection: function (layer, status) {
             var me = this;
             if (status) {
-                me.selectedWFSLayerIds.push(layer._id);
+                me.selectedWFSLayerIds.push(layer.getId());
             } else {
-                _.pull(me.selectedWFSLayerIds, [layerId]);
+                _.pull(me.selectedWFSLayerIds, layer.getId());
             }
         },
 
@@ -120,16 +119,16 @@ Oskari.clazz.define(
          */
         getTopWFSLayer: function () {
             var me = this,
-                layers = me.sandbox.findAllSelectedMapLayers();
+                layers = me.sandbox.findAllSelectedMapLayers(),
+                topWFSLayer;
 
             for (i=0; i < layers.length; i++ ) {
                 var layer = layers[i];
-
-                if (layer._layerType === "WFS") {
-                    me.topWFSLayer = layer._id;
+                if (layer.hasFeatureData()) {
+                    topWFSLayer = layer._id;
                 }
             }
-            return me.topWFSLayer;
+            return topWFSLayer;
         },
 
         /**
@@ -183,9 +182,7 @@ Oskari.clazz.define(
         getSelectedFeatureIds: function (layerId) {
             var me = this,
                 featureIds;
-
             featureIds = _.pluck(_.where(me.WFSFeatureSelections, {'layerId': layerId}), 'featureIds');
-
             return featureIds[0];
         },
 
@@ -198,10 +195,21 @@ Oskari.clazz.define(
          */
         emptyWFSFeatureSelections: function (layer) {
             var me = this;
-
             _.remove(me.WFSFeatureSelections, {'layerId': layer._id});
             var event = me.sandbox.getEventBuilder('WFSFeaturesSelectedEvent')([], layer, false);
             me.sandbox.notifyAll(event);
+        },
+        /*
+         * @method emptyWFSFeatureSelections
+         *
+         * Convenience function to clear selections from all WFS layers 
+         */
+        emptyAllWFSFeatureSelections: function() {
+            var me = this;
+            _.each(this.WFSFeatureSelections, function(selection) {
+                var layer = me.sandbox.findMapLayerFromSelectedMapLayers(selection.layerId);
+                me.emptyWFSFeatureSelections(layer);
+            });
         },
         /**
          * @method setSelectFromAllLayers
@@ -242,5 +250,12 @@ Oskari.clazz.define(
          */
         isSelectionToolsActive: function () {
             return this.selectionToolsActive;
+        },
+
+        getAnalysisWFSLayerId: function() {
+            return this.analysisWFSLayerId;
+        },
+        setAnalysisWFSLayerId: function(layerId) {
+            this.analysisWFSLayerId = layerId;
         }
     });
