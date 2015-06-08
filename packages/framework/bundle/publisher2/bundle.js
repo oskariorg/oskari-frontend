@@ -55,11 +55,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher2.PublisherBundle", fun
         },
         {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/publisher2/view/NotLoggedIn.js"
+            "src": "../../../../bundles/framework/publisher2/view/FlyoutNotLoggedIn.js"
         },
         {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/publisher2/view/StartView.js"
+            "src": "../../../../bundles/framework/publisher2/view/FlyoutStartView.js"
         },
         {
             "type": "text/javascript",

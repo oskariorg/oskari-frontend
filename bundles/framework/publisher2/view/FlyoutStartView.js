@@ -6,7 +6,7 @@
  * move in to a publisher view. Also shows the user which layers the map will
  * have and if the user can't publish some layers.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.StartView',
+Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView',
 
     /**
      * @method create called automatically on construction

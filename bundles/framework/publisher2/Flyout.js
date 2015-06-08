@@ -48,12 +48,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.Flyout',
 
             // check if the user is logged in
             if (!sandbox.getUser().isLoggedIn()) {
-                this.view = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.NotLoggedIn',
+                this.view = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.FlyoutNotLoggedIn',
                     this.instance,
                     this.instance.getLocalization('NotLoggedView'));
             } else {
                 // proceed with publisher view
-                this.view = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.StartView',
+                this.view = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView',
                     this.instance,
                     this.instance.getLocalization('StartView'));
             }
