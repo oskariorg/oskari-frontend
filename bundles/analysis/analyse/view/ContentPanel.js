@@ -239,6 +239,8 @@ Oskari.clazz.define(
                     this.selectedGeometry = null;
                     this._disableAllDrawFilterButtons();
                 }
+
+                this._toggleEmptySelectionBtn(event.getWfsFeatureIds().length > 0);
             },
 
             'AfterMapMoveEvent': function (event) {
@@ -251,9 +253,11 @@ Oskari.clazz.define(
             },
             'AfterMapLayerAddEvent': function(event) {
                 this._toggleSelectionTools();
+                this._toggleEmptySelectionBtn((this.WFSLayerService.getWFSSelections() && this.WFSLayerService.getWFSSelections().length > 0));
             },
             'AfterMapLayerRemoveEvent': function(event) {
                 this._toggleSelectionTools();
+                this._toggleEmptySelectionBtn((this.WFSLayerService.getWFSSelections() && this.WFSLayerService.getWFSSelections().length > 0));
             }
         },
 
@@ -755,6 +759,7 @@ Oskari.clazz.define(
                 selectionToolTemplate = jQuery(me._templates.tool),
                 selectionToolButtonsContainer = selectionToolsContainer.find('div.toolContainerButtons');
                 hasWFSLayers = (me.WFSLayerService.getTopWFSLayer() !== undefined && me.WFSLayerService.getTopWFSLayer() !== null),
+                WFSSelections = (me.WFSLayerService.getWFSSelections() && me.WFSLayerService.getWFSSelections().length > 0)
                 selectionTools = [
                     {
                         tool:'point',
@@ -780,15 +785,15 @@ Oskari.clazz.define(
                     'Oskari.userinterface.component.buttons.CancelButton');
 
             emptyBtn.setHandler(function () {
-                if (!jQuery(this).hasClass('disabled') && me.WFSLayerService.getAnalysisWFSLayerId()) {
+                if (me.WFSLayerService.getAnalysisWFSLayerId()) {
                     me.WFSLayerService.emptyWFSFeatureSelections(me.sandbox.findMapLayerFromSelectedMapLayers(me.WFSLayerService.getAnalysisWFSLayerId()));
                 }
             });
             emptyBtn.setTitle(loc.content.selectionTools.button.empty);
             emptyBtn.insertTo(selectionToolButtonsContainer);
 
-            if (!hasWFSLayers) {
-                emptyBtn.addClass('disabled');
+            if (!WFSSelections) {
+                emptyBtn.setEnabled(false);
             }
             selectionToolsContainer.find('div.toolContainerButtons').append(emptyBtn);
             selectionToolsContainer.find('h4').html(loc.content.selectionTools.title);
@@ -834,6 +839,19 @@ Oskari.clazz.define(
                 selectionToolsToolContainer.find('div[class*=selection-]').addClass('disabled');
             }
             me.WFSLayerService.setSelectionToolsActive(analysisWFSLayerSelected);
+        },
+        /**
+         * @private @method _toggleEmptySelectionBtn
+         * Enables / disables the empty selections - button in selection tools
+         */
+        _toggleEmptySelectionBtn: function(enable) {
+            var me = this,
+                selectionToolsContainer = jQuery('div.toolContainer');
+            if (enable) {
+                selectionToolsContainer.find(".toolContainerButtons").find("input[type=button]").prop({'disabled': false});
+            } else {
+                selectionToolsContainer.find(".toolContainerButtons").find("input[type=button]").prop({'disabled': true});
+            }
         },
         /**
          * @private @method _createDrawControls
