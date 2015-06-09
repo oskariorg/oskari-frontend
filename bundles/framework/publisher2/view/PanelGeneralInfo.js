@@ -1,26 +1,21 @@
 /**
- * @class Oskari.mapframework.bundle.publisher2.view.PublisherLocationPanel
+ * @class Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
  *
  * Represents the basic info (name, domain, language) view for the publisher
  * as an Oskari.userinterface.component.AccordionPanel
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherLocationPanel',
+Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo',
 
     /**
      * @method create called automatically on construction
      * @static
      * @param {Object} sandbox
-     * @param {Object} mapmodule
      * @param {Object} localization
      *       publisher localization data
-     * @param {Oskari.mapframework.bundle.publisher2.view.BasicPublisher} publisher
-     *       publisher reference for language change
      */
-    function (sandbox, mapmodule, localization, publisher) {
+    function (sandbox, localization) {
         this.loc = localization;
-        this._publisher = publisher;
         this.sandbox = sandbox;
-        this.mapmodule = mapmodule;
         this.fields = {
             domain: {
                 label: localization.domain.label,
@@ -40,6 +35,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherLocatio
                 '<div class="help icon-info" title="' + localization.language.tooltip + '" helptags="portti,help,publisher,language"></div>' +
                 '</div>')
         };
+        this.panel = null;
     }, {
         /**
          * Creates the set of Oskari.userinterface.component.FormInput to be shown on the panel and
@@ -48,7 +44,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherLocatio
          * @method init
          * @param {Object} pData initial data
          */
-        init: function (pData) {
+        init: function (pData, languageChangedCB) {
             var me = this,
                 fkey,
                 data,
@@ -103,7 +99,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherLocatio
             langField.setValue(selectedLang);
             // plugins should change language when user changes selection
             langField.setHandler(function (value) {
-                me._publisher.setPluginLanguage(value);
+                languageChangedCB(value);
             });
             langElement.append(langField.getElement());
             me.langField.field = langField;
@@ -117,6 +113,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherLocatio
          * @return {Oskari.userinterface.component.AccordionPanel}
          */
         getPanel: function () {
+            if(this.panel) {
+                return this.panel;
+            }
             var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel'),
                 contentPanel = panel.getContainer(),
                 fkey,
@@ -130,6 +129,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherLocatio
                 }
             }
             contentPanel.append(this.langField.element);
+            this.panel = panel;
             return panel;
         },
 

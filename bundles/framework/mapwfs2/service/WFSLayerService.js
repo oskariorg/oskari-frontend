@@ -17,7 +17,7 @@ Oskari.clazz.define(
     function (sandbox) {
         var me = this,
             p;
-        
+
         me.sandbox = sandbox;
         me.WFSFeatureSelections = [];
         me.selectedWFSLayers = [];
@@ -91,7 +91,7 @@ Oskari.clazz.define(
          * @method setWFSLayerSelection
          * @param {Object} WFS layer; WFS Layer which is selected or unselected
          * @param {Boolean} status; true if WFS layer is selected and false if WFS layer is removed from selections
-         * 
+         *
          * Handles the state of selected WFS layers
          */
         setWFSLayerSelection: function (layer, status) {
@@ -105,7 +105,7 @@ Oskari.clazz.define(
 
         /**
          * @method getSelectedWFSLayerIds
-         * 
+         *
          * @return {Array} this.selectedWFSLayerIds; Ids of selected WFS layers
          */
         getSelectedWFSLayerIds: function () {
@@ -114,7 +114,7 @@ Oskari.clazz.define(
 
         /**
          * @method getTopWFSLayer
-         * 
+         *
          * @return {Number} me.topWFSLayer; Id of the top WFS layer
          */
         getTopWFSLayer: function () {
@@ -141,7 +141,7 @@ Oskari.clazz.define(
         setWFSFeaturesSelections: function (layerId, featureIds) {
             var me = this,
                 existingFeatureSelections = _.pluck(_.where(me.WFSFeatureSelections, {'layerId': layerId}), 'featureIds');
-         
+
             //no existing selections -> add all
             if (!existingFeatureSelections || existingFeatureSelections.length === 0) {
                 existingFeatureSelections.push(featureIds);
@@ -191,7 +191,7 @@ Oskari.clazz.define(
          * @param {Object} layer; layer whose selected features are going to be removed
          *
          *
-         * Changes the values of me.WFSFeatureSelections and sends WFSFeaturesSelectedEvent to notify others about it 
+         * Changes the values of me.WFSFeatureSelections and sends WFSFeaturesSelectedEvent to notify others about it
          */
         emptyWFSFeatureSelections: function (layer) {
             var me = this;
@@ -227,7 +227,7 @@ Oskari.clazz.define(
          *
          * @return {boolean} me.selectFromAllLayers
          *
-         * Tells weather the selection is made from all layers or not 
+         * Tells weather the selection is made from all layers or not
          */
         isSelectFromAllLayers: function () {
             return this.selectFromAllLayers;

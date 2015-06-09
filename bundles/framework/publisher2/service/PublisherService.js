@@ -7,8 +7,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherService',
     /**
      * @method create called automatically on construction
      * @static
-     * @param {Oskari.mapframework.bundle.publisher2.PublisherBundleInstance} instance
-     *      reference to component that created the tile
+     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
      */
     function (sandbox) {
         this.__sandbox = sandbox;
@@ -19,9 +18,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherService',
          * Checks currently selected layers and returns a subset of the list
          * that has the layers that can't be published. If all selected
          * layers can be published, returns an empty list.
-         * @return
-         * {Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Mixed}
-         * list of layers that can't be published.
+         * @return {Oskari.mapframework.domain.AbstractLayer[]} list of layers that can't be published.
          */
         getLayersWithoutPublishRights: function () {
             var me = this,
@@ -57,7 +54,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherService',
         },
         /**
          * Returns layers that are not available for publishing
-         * @return {Oskari.mapframework.domain.AbstractLayer[]} 
+         * @return {Oskari.mapframework.domain.AbstractLayer[]}
          */
         getNonPublisherLayers : function() {
             if (!this.disabledLayers) {

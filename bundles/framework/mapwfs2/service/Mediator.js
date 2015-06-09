@@ -39,7 +39,7 @@ Oskari.clazz.define(
         'Oskari.mapframework.bundle.mapwfs2.service.StatusHandler', plugin.getSandbox());
 
         this.WFSLayerService = plugin.getSandbox().getService('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
-        
+
     }, {
 
         /**
@@ -315,7 +315,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             selectionMode = data.data.keepPrevious,
             featureIds = [],
             selectFeatures;
-        
+
         if (data.data.features !== 'empty') {
             for (i = 0; i < data.data.features.length; i += 1) {
                 featureIds.push(data.data.features[i][0]);
@@ -336,7 +336,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             } else if (topWFSLayerId && layer._id !== topWFSLayerId) {
                 return;
             }
-            
+
             me.WFSLayerService.setWFSFeaturesSelections(layer._id, featureIds);
             var event = sandbox.getEventBuilder('WFSFeaturesSelectedEvent')(me.WFSLayerService.getSelectedFeatureIds(layer._id), layer, selectFeatures);
             sandbox.notifyAll(event);
@@ -654,7 +654,7 @@ Oskari.clazz.category(
                 sandbox = this.plugin.getSandbox(),
                 map = sandbox.getMap(),
                 srs = map.getSrsName();
-                
+
             this.lonlat = lonlat;
             this.sendMessage('/service/wfs/setMapClick', {
                 'longitude': lonlat.lon,
