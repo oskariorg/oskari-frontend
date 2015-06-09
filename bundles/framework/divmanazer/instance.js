@@ -1107,7 +1107,7 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
                     viewState: 'close'
                 };
                 me.applyTransition(flyout, 'close', me.flyoutTransitions);
-                
+
                 if(flyoutPlugin.onClose) {
                     flyoutPlugin.onClose();
                 }

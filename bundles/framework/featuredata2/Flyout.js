@@ -636,7 +636,7 @@ Oskari.clazz.define(
                             }
                         }
                     }
-                    
+
                     for (j = 0; j < fields.length; j += 1) {
                         if (values[j] === null || values[j] === undefined || values[j] === '') {
                             featureData[fields[j]] = '';

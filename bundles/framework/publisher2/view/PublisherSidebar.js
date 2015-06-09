@@ -263,7 +263,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             jQuery.each(me.panels, function(index, panel){
                 selections.push(panel.getValues());
             });
-            
+
             //console.log(selections);
 
             throw 'Not implemented yet!';
@@ -419,22 +419,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             var me = this,
                 mapModule = me.instance.sandbox.findRegisteredModuleInstance(
                     'MainMapModule'
-                ),
-                plugins = mapModule.getPluginInstances(),
-                p,
-                plugin,
-                i;
+                );
 
-            for (p in plugins) {
-                if (plugins.hasOwnProperty(p)) {
-                    plugin = plugins[p];
-                    if (plugin.hasUI && plugin.hasUI()) {
-                        plugin.stopPlugin(me.instance.sandbox);
-                        mapModule.unregisterPlugin(plugin);
-                        me.normalMapPlugins.push(plugin);
-                    }
+            _.each(mapModule.getPluginInstances(), function(plugin) {
+                if (plugin.hasUI && plugin.hasUI()) {
+                    plugin.stopPlugin(me.instance.sandbox);
+                    mapModule.unregisterPlugin(plugin);
+                    me.normalMapPlugins.push(plugin);
                 }
-            }
+            });
 
             mapModule.registerPlugin(me.logoPlugin);
             this.logoPlugin.startPlugin(me.instance.sandbox);

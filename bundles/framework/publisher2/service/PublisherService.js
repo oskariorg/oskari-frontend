@@ -54,7 +54,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherService',
         },
         /**
          * Returns layers that are not available for publishing
-         * @return {Oskari.mapframework.domain.AbstractLayer[]} 
+         * @return {Oskari.mapframework.domain.AbstractLayer[]}
          */
         getNonPublisherLayers : function() {
             if (!this.disabledLayers) {

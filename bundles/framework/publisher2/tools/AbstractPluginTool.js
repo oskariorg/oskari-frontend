@@ -1,4 +1,4 @@
-Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', 
+Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool',
 /**
  * Base-class for plugin based map tools for publisher bundle
  * @param  {[type]} sandbox      [description]
@@ -12,14 +12,14 @@ function(sandbox, mapmodule, localization) {
     this.__mapmodule = mapmodule;
     this.__loc = localization[this.group];
     this.__plugin = null;
-	this.state= {
-		enabled: false,
-		mode:null
-	};
+    this.state= {
+        enabled: false,
+        mode:null
+    };
 }, {
-	// override to change group
-	group : 'maptools',
-	// 'bottom left', 'bottom right' etc
+    // override to change group
+    group : 'maptools',
+    // 'bottom left', 'bottom right' etc
     allowedLocations : [],
     // List of plugin classes that can reside in same container(?) like 'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin'
     allowedSiblings : [],
@@ -34,32 +34,32 @@ function(sandbox, mapmodule, localization) {
     * @returns {Object} tool
     */
     getTool: function(){
-    	// override
+        // override
     },
-	/**
-	* Set enabled.
-	* @method setEnabled
-	* @public
-	*
-	* @param {Boolean} enabled is tool enabled or not
-	*/
-   	setEnabled : function(enabled) {
-   		var me = this,
+    /**
+    * Set enabled.
+    * @method setEnabled
+    * @public
+    *
+    * @param {Boolean} enabled is tool enabled or not
+    */
+    setEnabled : function(enabled) {
+        var me = this,
             tool = me.getTool();
 
-   		me.state.enabled = enabled;
+        me.state.enabled = enabled;
 
         if(!me.__plugin && enabled) {
             me.__plugin = Oskari.clazz.create(tool.id, tool.config);
             me.__mapmodule.registerPlugin(me.__plugin);
         }
 
-        if(enabled && enabled == true) {
+        if(enabled === true) {
             Oskari.clazz.create(tool.id, tool.config);
             me.__plugin.startPlugin(me.__sandbox);
         } else {
             me.__plugin.stopPlugin(me.__sandbox);
-        }                
+        }
     },
     /**
     * Get extra options.
@@ -69,7 +69,7 @@ function(sandbox, mapmodule, localization) {
     * @returns {Object} jQuery element
     */
     getExtraOptions: function() {
-    	return null;
+        return null;
     },
     /**
     * Get name.
@@ -79,7 +79,7 @@ function(sandbox, mapmodule, localization) {
     * @returns {String} tool name
     */
     getName: function() {
-    	return this.__loc[this.getTool().name];
+        return this.__loc[this.getTool().name];
     },
     /**
     * Is displayed in mode.
@@ -91,7 +91,7 @@ function(sandbox, mapmodule, localization) {
     * @returns {Boolean} is displayed in wanted mode
     */
     isDisplayedInMode: function(mode) {
-    	return true;
+        return true;
     },
     /**
     * Is displayed.
@@ -101,7 +101,7 @@ function(sandbox, mapmodule, localization) {
     * @returns {Boolean} is tool displayed
     */
     isDisplayed: function() {
-    	return true;
+        return true;
     },
     /**
     * Set mode to.
@@ -111,8 +111,8 @@ function(sandbox, mapmodule, localization) {
     * @param {String} mode the mode
     */
     setMode: function(mode){
-    	var me = this;
-    	me.state.mode = mode;
+        var me = this;
+        me.state.mode = mode;
     },
     /**
     * Get group
@@ -122,7 +122,7 @@ function(sandbox, mapmodule, localization) {
     * @returns {String} group id
     */
     getGroup : function() {
-    	return this.group;
+        return this.group;
     },
     /**
     * Get index
@@ -148,19 +148,19 @@ function(sandbox, mapmodule, localization) {
     * Get values.
     * @method getValues
     * @public
-    * 
+    *
     * @returns {Object} tool value object
     */
     getValues: function () {
-    	// TODO: this needs more thinking
-    	// tool should propably know where its config affects
-    	// maybe return that kind of object
-    	// mapfull.conf.plugins.push({id : this.getTool().id}) ???
-    	return {
-			tool: this.getTool().id,
-			show: this.state.enabled,
-			subTools : []
-		};
+        // TODO: this needs more thinking
+        // tool should propably know where its config affects
+        // maybe return that kind of object
+        // mapfull.conf.plugins.push({id : this.getTool().id}) ???
+        return {
+            tool: this.getTool().id,
+            show: this.state.enabled,
+            subTools : []
+        };
     },
     /**
     * Validate tool.
@@ -171,4 +171,4 @@ function(sandbox, mapmodule, localization) {
         // always valid
         return true;
     }
-}); 
+});
