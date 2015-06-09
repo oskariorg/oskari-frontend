@@ -6,7 +6,13 @@ Oskari.registerLocalization({
         "flyouttitle": "Analisi <font color=red>(BETA)</font>",
         "desc": "",
         "btnTooltip": "Analisi",
-        "notLoggedIn": "Solo gli utenti registrati possono fare analisi. <a href='/web/en/login'>Log in</a>.",
+        "NotLoggedView": {
+            "text": "Solo gli utenti registrati possono fare analisi.",
+            "signup": "Accedi",
+            "signupUrl": "/web/en/login",
+            "register": "Registrati",
+            "registerUrl": "/web/en/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+        },
         "AnalyseView": {
             "title": "Analisi",
             "content": {
