@@ -80,12 +80,12 @@ Oskari.registerLocalization(
                 "options": [
                     {
                         "id": "png",
-                        "format": "bild/png",
+                        "format": "image/png",
                         "label": "PNG bild"
                     },
                     {
                         "id": "pdf",
-                        "format": "applikation/pdf",
+                        "format": "application/pdf",
                         "selected": true,
                         "label": "PDF dokument"
                     }
