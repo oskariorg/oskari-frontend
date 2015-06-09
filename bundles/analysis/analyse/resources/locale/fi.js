@@ -17,12 +17,12 @@ Oskari.registerLocalization(
         "AnalyseView": {
             "title": "Analyysi",
             "content": {
-                "label": "Aineisto",
+                "label": "Karttatasot",
                 "drawToolsLabel": "Kohdetyökalut",
                 "tooltip": "Valitse yksi aineisto analyysin pohjaksi. Lisää karttatasoja voit hakea \"Lisää karttatasoja\"-painikkeella aukeavalta listalta. Kohdista karttanäkymä haluamaasi paikkaan joko siirtämällä karttaa hiirellä tai klikkaamalla \"Hae paikkahaulla\" ja hakemalla haluamasi paikka.",
                 "drawToolsTooltip": "Kohdetyökalujen avulla voit lisätä väliaikaisen kohteen analyysin tekemistä varten tai leikata olemassaolevaa kohdetta rajaamalla siitä vain osan. Voit lisätä pistemäisen, viivamaisen tai aluemaisen kohteen. Myös leikkaus onnistuu eri tyyppisille kohteille.",
                 "features": {
-                    "title": "Kohteen lisäys",
+                    "title": "Lisäys",
                     "buttons": {
                         "cancel": "Peruuta",
                         "finish": "Valmis"
@@ -53,7 +53,7 @@ Oskari.registerLocalization(
                     }
                 },
                 "drawFilter": {
-                    "title": "Kohteen leikkaus",
+                    "title": "Leikkaus",
                     "buttons": {
                         "cancel": "Peruuta",
                         "finish": "Valmis"
@@ -78,6 +78,30 @@ Oskari.registerLocalization(
                                 "title": "Alueen leikkaus toisella alueella",
                                 "message": "Piirrä alue leikattavan alueen päälle klikkaamalla viivan taitepisteitä (m.l. alkupiste). Lopeta viivan piirto tuplaklikkaamalla. Voit siirtää taitepisteitä raahaamalla niitä hiirellä. Näin alue on jaettu kahteen alueeseen. Leikkauksen lopputulos on merkitty sinisellä. Voit vaihtaa toiseen alueeseen klikkaamalla sitä. Kun olet valinnut haluamasi osan alueesta, paina \"Valmis\". Nyt voit käyttää leikattua alueen osaa analyyseissasi."
                             }
+                        }
+                    }
+                },
+                "selectionTools": {
+                    "title": "Valinta",
+                    "description": "Valinta kohdistuu vain valittuun karttatasoon",
+                    "button": {
+                        "empty": "Poista valinnat"
+                    },
+                    "tools": {
+                        "point": {
+                            "tooltip": "Lisää piste"
+                        },
+                        "line": {
+                            "tooltip": "Lisää viiva"
+                        },
+                        "polygon": {
+                            "tooltip": "Lisää alue"
+                        },
+                        "square": {
+                            "tooltip": "Lisää suorakulmio"
+                        },
+                        "circle": {
+                            "tooltip": "Lisää ympyrä"
                         }
                     }
                 },

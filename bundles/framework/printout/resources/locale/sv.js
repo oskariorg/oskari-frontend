@@ -34,7 +34,7 @@ Oskari.registerLocalization(
                         "selected": true
                     },
                     {
-                        "id": "A4_Landskap",
+                        "id": "A4_Landscape",
                         "label": "A4 landskap",
                         "classForPreview": "förhandsgranska-landscape"
                     },
@@ -44,7 +44,7 @@ Oskari.registerLocalization(
                         "classForPreview": "förhandsgranska-porträtt"
                     },
                     {
-                        "id": "A3_Landskap",
+                        "id": "A3_Landscape",
                         "label": "A3 landskap",
                         "classForPreview": "förhandsgranska-landskap"
                     }
@@ -80,12 +80,12 @@ Oskari.registerLocalization(
                 "options": [
                     {
                         "id": "png",
-                        "format": "bild/png",
+                        "format": "image/png",
                         "label": "PNG bild"
                     },
                     {
                         "id": "pdf",
-                        "format": "applikation/pdf",
+                        "format": "application/pdf",
                         "selected": true,
                         "label": "PDF dokument"
                     }
@@ -98,19 +98,19 @@ Oskari.registerLocalization(
             "content": {
                 "options": [
                     {
-                        "id": "sidLogo",
+                        "id": "pageLogo",
                         "label": "Visa finska geoportal Paikkatietoikkuna logotyp i utskriften.",
                         "tooltip": "Du kan dölja finska geoportal Paikkatietoikkuna logotyp vid behov.",
                         "checked": "kontrollerad"
                     },
                     {
-                        "id": "sidSkala",
+                        "id": "pageScale",
                         "label": "Lägg en skala till kartutskriften.",
                         "tooltip": "Lägg till skala till kartan, om du vill.",
                         "checked": "kontrollerad"
                     },
                     {
-                        "id": "sidDatum",
+                        "id": "pageDate",
                         "label": "Visa ett datum i kartutskriften.",
                         "tooltip": "Du kan lägga till ett datum till utskriften.",
                         "checked": "kontrollerad"

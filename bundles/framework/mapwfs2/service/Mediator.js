@@ -311,6 +311,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             me = this,
             layer = sandbox.findMapLayerFromSelectedMapLayers(data.data.layerId),
             topWFSLayerId = me.WFSLayerService.getTopWFSLayer(),
+            analysisWFSLayerId = me.WFSLayerService.getAnalysisWFSLayerId(),
             selectionMode = data.data.keepPrevious,
             featureIds = [],
             selectFeatures;
@@ -330,7 +331,9 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
         if (selectionMode) {
             selectFeatures = true;
 
-            if (layer._id !== topWFSLayerId) {
+            if (analysisWFSLayerId && layer._id !== analysisWFSLayerId) {
+                return;
+            } else if (topWFSLayerId && layer._id !== topWFSLayerId) {
                 return;
             }
 
@@ -384,12 +387,16 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             featureIds = [],
             selectFeatures = true,
             topWFSLayer = this.WFSLayerService.getTopWFSLayer(),
+            analysisWFSLayer = this.WFSLayerService.getAnalysisWFSLayerId(),
             i;
 
         if (!me.WFSLayerService.isSelectFromAllLayers()) {
-            if (layer._id !== topWFSLayer) {
+            if (analysisWFSLayer && layer._id !== analysisWFSLayer) {
+                return;
+            } else if (!analysisWFSLayer && layer._id !== topWFSLayer) {
                 return;
             }
+            
         }
         if (data.data.features !== 'empty') {
             for (i = 0; i < data.data.features.length; i += 1) {
@@ -399,9 +406,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
 
         if (data.data.features !== 'empty') {
             me.WFSLayerService.setWFSFeaturesSelections(layer._id, featureIds);
-        } else {
-            me.WFSLayerService.emptyWFSFeatureSelections(layer);
-        }
+        } 
 
         var event = this.plugin.getSandbox().getEventBuilder('WFSFeaturesSelectedEvent')(me.WFSLayerService.getSelectedFeatureIds(layer._id), layer, selectFeatures);
         this.plugin.getSandbox().notifyAll(event);

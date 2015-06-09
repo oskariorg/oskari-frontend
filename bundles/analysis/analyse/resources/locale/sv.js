@@ -17,12 +17,12 @@ Oskari.registerLocalization(
         "AnalyseView": {
             "title": "Analys",
             "content": {
-                "label": "Data",
+                "label": "Kartlager",
                 "drawToolsLabel": "Objekt verktyg",
                 "tooltip": "Välj ett kartlager för en grund av analys. Du kan söka mera kartlager för sin analys eller plats för att visa sin utvald plats.",
                 "drawToolsTooltip": "Man kan tilllägga tillfälliga objekt för sin analys aller klippa en befintlig objekt till flera objekt.",
                 "features": {
-                    "title": "Tillägg en objekt",
+                    "title": "Tillägg",
                     "buttons": {
                         "cancel": "Avbryt",
                         "finish": "Färdig"
@@ -53,7 +53,7 @@ Oskari.registerLocalization(
                     }
                 },
                 "drawFilter": {
-                    "title": "Objekt klippning",
+                    "title": "Klippning",
                     "buttons": {
                         "cancel": "Avbryt",
                         "finish": "Färdig"
@@ -78,6 +78,30 @@ Oskari.registerLocalization(
                                 "title": "Klippa en region med en annan region.",
                                 "message": "NOT TRANSLATED"
                             }
+                        }
+                    }
+                },
+                "selectionTools": {
+                    "title": "NOT TRANSLATED",
+                    "description": "NOT TRANSLATED",
+                    "button": {
+                        "empty": "Ta bort valda objekt"
+                    },
+                    "tools": {
+                        "point": {
+                            "tooltip": "Lägg en punkt på kartan."
+                        },
+                        "line": {
+                            "tooltip": "Lägg till en linje på kartan."
+                        },
+                        "polygon": {
+                            "tooltip": "Lägg till ett område på kartan."
+                        },
+                        "square": {
+                            "tooltip": "Lägg ett rektangulärt område på kartan."
+                        },
+                        "circle": {
+                            "tooltip": "Lägg ett cirkulärt område på kartan."
                         }
                     }
                 },

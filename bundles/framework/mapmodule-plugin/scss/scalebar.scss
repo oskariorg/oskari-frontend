@@ -14,6 +14,42 @@ div.mapplugin.scalebar {
         // Text shadow doesn't show up on IE9, but that's OK
         text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.35);
     }
+
+    &.medium {
+        div.olControlScaleLineTop {
+            border-color: #FF0000;
+        }
+        div.olControlScaleLineBottom {
+            border-color: #FF0000;
+        }
+    }
+
+    &.large {
+        div.olControlScaleLineTop {
+            border-color: #00FF00;
+        }
+        div.olControlScaleLineBottom {
+            border-color: #00FF00;
+        }
+    }
+
+    &.fill {
+        div.olControlScaleLineTop {
+            border-color: #0000FF;
+        }
+        div.olControlScaleLineBottom {
+            border-color: #0000FF;
+        }
+    }
+
+    &.custom {
+        div.olControlScaleLineTop {
+            border-color: #FF00FF;
+        }
+        div.olControlScaleLineBottom {
+            border-color: #FF00FF;
+        }
+    }
 }
 
 .right {
@@ -22,3 +58,5 @@ div.mapplugin.scalebar {
         direction: rtl;
     }
 }
+
+
