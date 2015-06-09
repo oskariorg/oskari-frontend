@@ -182,7 +182,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartView',
                         layerIdsToEmpty;
                     layersWithFeatures = _.map(WFSSelections, 'layerId');
                     me.emptySelectionsFromLayers = _.pull(layersWithFeatures, layerid);
-                })
+                });
                 me.content.find('div.content').append(labelTemplate);
                 me.content.find('div.content').append(layerList);
                 return true;

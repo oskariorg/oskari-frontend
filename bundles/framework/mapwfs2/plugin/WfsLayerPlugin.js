@@ -559,7 +559,7 @@ Oskari.clazz.define(
             me.getIO().highlightMapLayerFeatures(
                 layerId,
                 wfsFeatureIds,
-                true,
+                false,
                 geomRequest
             );
         },
