@@ -1,4 +1,4 @@
-Oskari.clazz.define('Oskari.mapframework.publisher.tool.ScalebarTool', 
+Oskari.clazz.define('Oskari.mapframework.publisher.tool.ScalebarTool',
 function() {
     this.__plugin = null;
 }, {
@@ -25,7 +25,7 @@ function() {
             config: {}
         };
     }
-}, { 
+}, {
     'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
-    'protocol' : ['Oskari.mapframework.publisher.Tool'] 
+    'protocol' : ['Oskari.mapframework.publisher.Tool']
 });

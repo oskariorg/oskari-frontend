@@ -22,7 +22,9 @@ Oskari.clazz.define(
         me.selectedGeometry = undefined;
         me.drawFilterMode = undefined;
         me.helpDialog = undefined;
-
+        me.selectionPluginId = undefined;
+        me.selectionPlugin = undefined;
+        me.WFSLayerService = undefined;
         me.init(view);
         me.start();
     }, {
@@ -41,6 +43,12 @@ Oskari.clazz.define(
                 '  <h4 class="title"></h4>' +
                 '</div>',
             drawFilter: '<div class="drawFilter"></div>',
+            selectionToolsContainer: '<div class="toolContainer">'+
+                '   <h4 class="title"></h4>'+
+                '   <div class="toolContainerToolDiv"></div>'+
+                '   <div class="toolContainerFooter"></div>'+
+                '   <div class="toolContainerButtons"></div>'+
+                '</div>',
             search: '<div class="analyse-search"></div>'
         },
 
@@ -105,6 +113,36 @@ Oskari.clazz.define(
             return this.selectedGeometry;
         },
 
+        /**
+         * @method parseFeatureFromClickedFeature
+         * Returns an OpenLayers feature or null.
+         *
+         *
+         * @return {OpenLayers.Feature.Vector}
+         */
+        parseFeatureFromClickedFeature: function(clickedGeometry) {
+            var data = clickedGeometry[1],
+                wkt = new OpenLayers.Format.WKT(),
+                feature = wkt.read(data),
+                gcn = feature.geometry.CLASS_NAME;
+
+            if (gcn === 'OpenLayers.Geometry.LineString') {
+                return OpenLayers.Feature.Vector(
+                    feature.geometry
+                );
+            } else if (gcn === 'OpenLayers.Geometry.MultiPolygon') {
+                return new OpenLayers.Feature.Vector(
+                    feature.geometry
+                );
+            } else if (gcn === 'OpenLayers.Geometry.Polygon') {
+                return OpenLayers.Feature.Vector(
+                    new OpenLayers.Geometry.MultiPolygon(
+                        [feature.geometry]
+                    )
+                );
+            }
+            return null;
+        },
         /**
          * @method getLayersContainer
          * Returns the element which the layer list is rendered into.
@@ -188,27 +226,7 @@ Oskari.clazz.define(
                 var clickedGeometries = event.getGeometries();
                 if (clickedGeometries.length > 0) {
                     var clickedGeometry = clickedGeometries[0];
-                    // var id = clickedGeometry[0];
-                    var data = clickedGeometry[1],
-                        wkt = new OpenLayers.Format.WKT(),
-                        feature = wkt.read(data),
-                        gcn = feature.geometry.CLASS_NAME;
-
-                    if (gcn === 'OpenLayers.Geometry.LineString') {
-                        this.selectedGeometry = new OpenLayers.Feature.Vector(
-                            feature.geometry
-                        );
-                    } else if (gcn === 'OpenLayers.Geometry.MultiPolygon') {
-                        this.selectedGeometry = new OpenLayers.Feature.Vector(
-                            feature.geometry
-                        );
-                    } else if (gcn === 'OpenLayers.Geometry.Polygon') {
-                        this.selectedGeometry = new OpenLayers.Feature.Vector(
-                            new OpenLayers.Geometry.MultiPolygon(
-                                [feature.geometry]
-                            )
-                        );
-                    }
+                    this.selectedGeometry = this.parseFeatureFromClickedFeature(clickedGeometry);
                     this._operateDrawFilters();
                 }
             },
@@ -230,6 +248,12 @@ Oskari.clazz.define(
                 var olMap = this.mapModule.getMap(),
                 layer = olMap.getLayersByName('AnalyseFeatureLayer')[0];
                 this.mapModule.bringToTop(layer, 20);
+            },
+            'AfterMapLayerAddEvent': function(event) {
+                this._toggleSelectionTools();
+            },
+            'AfterMapLayerRemoveEvent': function(event) {
+                this._toggleSelectionTools();
             }
         },
 
@@ -248,6 +272,7 @@ Oskari.clazz.define(
             me.view = view;
             me.instance = me.view.instance;
             me.sandbox = me.instance.getSandbox();
+            me.WFSLayerService = me.sandbox.getService('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
             me.loc = me.view.loc;
             me.mapModule = me.sandbox.findRegisteredModuleInstance(
                 'MainMapModule'
@@ -268,6 +293,9 @@ Oskari.clazz.define(
             me.layerType = 'ANALYSE_TEMP';
             me.linkAction = me.loc.content.search.resultLink;
             me.isStarted = false;
+
+            me.selectionPlugin = me._createselectionPlugin();
+            me.selectionPluginId = me.instance.getName();
 
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
@@ -448,17 +476,7 @@ Oskari.clazz.define(
                             sandbox = me.mapModule.getSandbox(),
                             layers = sandbox.findAllSelectedMapLayers();
 
-                        _.forEach(layers, function (layer) {
-                            var featureIds = [],
-                                keepCollection = false,
-                                builder = sandbox.getEventBuilder('WFSFeaturesSelectedEvent');
-
-                            var event = builder(featureIds, layer, keepCollection);
-                            sandbox.notifyAll(event);
-                        });
-
                         me.selectedGeometry = featureWKT;
-
                     },
                     'featureunselected': function(feature) {
                         me.selectedGeometry = undefined;
@@ -547,6 +565,7 @@ Oskari.clazz.define(
             panelHeader.append(tooltipCont);
             panelContainer.append(this._createDrawButtons(loc));
             panelContainer.append(this._createDrawFilterButtons(loc));
+            panelContainer.append(this._createSelectToolButtons(loc));
 
             return panel;
         },
@@ -571,6 +590,17 @@ Oskari.clazz.define(
             return drawPlugin;
         },
 
+        /**
+         * Creates and returns the map selection plugin needed here.
+         *
+         * @method _createselectionPlugin
+         * @private
+         * @return {Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin}
+         */
+        _createselectionPlugin: function () {
+            var selectionPlugin = this.sandbox.findRegisteredModuleInstance('MainMapModuleMapSelectionPlugin');
+            return selectionPlugin;
+        },
         /**
          * Creates and returns the draw filter plugin needed here.
          *
@@ -687,22 +717,124 @@ Oskari.clazz.define(
                 var drawFilterDiv = drawFilterTemplate.clone(),
                     groupName = 'analysis-selection-';
                 drawFilterDiv.addClass(groupName + drawFilter);
+
+                //disabled by default
                 drawFilterDiv.addClass('disabled');
                 drawFilterDiv.attr('title', me.loc.content.drawFilter.tooltip[drawFilter]);
                 drawFilterDiv.click(function () {
                     if (jQuery(this).hasClass('disabled')) {
                         return;
                     }
+
+                    //notify WFSLayerService that the selection tools ain't on any more.
+                    me.WFSLayerService.setSelectionToolsActive(false);
+
+
                     me._startNewDrawFiltering({
                         mode: drawFilter,
                         sourceGeometry: me.getSelectedGeometry()
                     });
                 });
                 container.append(drawFilterDiv);
+
                 return container;
             }, drawFilterContainer);
         },
 
+        /**
+         * Creates and returns the selection tool buttons from which the user can select features from wfs map layers
+         *
+         * @method _createSelectToolButtons
+         * @private
+         * @param {Object} loc
+         * @return {jQuery}
+         */
+        _createSelectToolButtons: function (loc) {
+            var me = this,
+                selectionToolsContainer = jQuery(me._templates.selectionToolsContainer).clone(),
+                selectionToolTemplate = jQuery(me._templates.tool),
+                selectionToolButtonsContainer = selectionToolsContainer.find('div.toolContainerButtons');
+                hasWFSLayers = (me.WFSLayerService.getTopWFSLayer() !== undefined && me.WFSLayerService.getTopWFSLayer() !== null),
+                selectionTools = [
+                    {
+                        tool:'point',
+                        cssClass:'point'    
+                    }, 
+                    {
+                        tool:'line', 
+                        cssClass:'line'    
+                    },
+                    {
+                        tool:'polygon',
+                        cssClass:'area'    
+                    },
+                    {
+                        tool:'square',
+                        cssClass:'square'    
+                    }, 
+                    {
+                        tool:'circle',
+                        cssClass:'circle'    
+                    }],
+                emptyBtn = Oskari.clazz.create(
+                    'Oskari.userinterface.component.buttons.CancelButton');
+
+            emptyBtn.setHandler(function () {
+                if (!jQuery(this).hasClass('disabled') && me.WFSLayerService.getAnalysisWFSLayerId()) {
+                    me.WFSLayerService.emptyWFSFeatureSelections(me.sandbox.findMapLayerFromSelectedMapLayers(me.WFSLayerService.getAnalysisWFSLayerId()));
+                }
+            });
+            emptyBtn.setTitle(loc.content.selectionTools.button.empty);
+            emptyBtn.insertTo(selectionToolButtonsContainer);
+
+            if (!hasWFSLayers) {
+                emptyBtn.addClass('disabled');
+            }
+            selectionToolsContainer.find('div.toolContainerButtons').append(emptyBtn);
+            selectionToolsContainer.find('h4').html(loc.content.selectionTools.title);
+            selectionToolsContainer.find('div.toolContainerFooter').html(loc.content.selectionTools.description);
+
+
+            return _.foldl(selectionTools, function (container, selectionTool) {
+                var selectionToolDiv = selectionToolTemplate.clone(),
+                    groupName = 'selection-';
+                selectionToolDiv.addClass(groupName + selectionTool.cssClass);
+                selectionToolDiv.attr('title', loc.content.selectionTools.tools[selectionTool.tool].tooltip);
+                if (!hasWFSLayers) {
+                    selectionToolDiv.addClass('disabled');
+                }
+                selectionToolDiv.click(function () {
+                    if (jQuery(this).hasClass('disabled')) {
+                        return;
+                    }
+                    me.WFSLayerService.setSelectionToolsActive(true);
+                    me.selectionPlugin.startDrawing({
+                        drawMode: selectionTool.tool
+                    });
+                });
+                container.find('div.toolContainerToolDiv').append(selectionToolDiv);
+
+
+                return container;
+            }, selectionToolsContainer);
+        },
+        /**
+         * @private @method _toggleSelectionTools
+         * Sets the selection tools' status after a map layer has been added or removed. Disables controls if no wfs layers selected, enables tools otherwise
+         *
+         */
+        _toggleSelectionTools: function() {
+            var me = this,
+                selectionToolsToolContainer = jQuery('div.toolContainerToolDiv'),
+                analysisWFSLayerSelected = (me.WFSLayerService.getAnalysisWFSLayerId() !== undefined && me.WFSLayerService.getAnalysisWFSLayerId() !== null);
+
+            if (analysisWFSLayerSelected) {
+                selectionToolsToolContainer.find('div[class*=selection-]').removeClass('disabled');
+            } else {
+                selectionToolsToolContainer.find('div[class*=selection-]').addClass('disabled');
+            }
+            me.WFSLayerService.setSelectionToolsActive(analysisWFSLayerSelected);
+        },
         /**
          * @private @method _createDrawControls
          * Creates and returns the draw control buttons where the user
@@ -742,7 +874,6 @@ Oskari.clazz.define(
 
             return [cancelBtn, finishBtn];
         },
-
         /**
          * Creates and returns the filter control buttons.
          *
@@ -1050,7 +1181,6 @@ Oskari.clazz.define(
 
             //add select possibility to temp layers
             // requires highlight refactoring so is not in use yet
-
             me.highlightControl = new OpenLayers.Control.SelectFeature(
                     layer,
                     {
@@ -1260,11 +1390,6 @@ Oskari.clazz.define(
             // enable or disable gfi requests
             if (gfiReqBuilder) {
                 sandbox.request(this.instance, gfiReqBuilder(activate));
-            }
-
-            // enable or disable wfs highlight
-            if (hiReqBuilder) {
-                sandbox.request(this.instance, hiReqBuilder(activate));
             }
         }
     }

@@ -559,7 +559,7 @@ Oskari.clazz.define(
             me.getIO().highlightMapLayerFeatures(
                 layerId,
                 wfsFeatureIds,
-                true,
+                false,
                 geomRequest
             );
         },
@@ -699,7 +699,7 @@ Oskari.clazz.define(
                         WFSLayerService.emptyWFSFeatureSelections(layer);
                     }
                 });
-            } 
+            }
             this.getIO().setFilter(geoJson);
 
 

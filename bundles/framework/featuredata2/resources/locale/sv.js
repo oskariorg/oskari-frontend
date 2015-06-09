@@ -20,7 +20,7 @@ Oskari.registerLocalization(
                 "title": "Välj fler funktioner"
             },
             "button": {
-                "cancel": "Avbryt",
+                "cancel": "Stäng",
                 "empty": "Ta bort valda objekt",
                 "show": "Visa funktioner",
                 "close": "Stäng",

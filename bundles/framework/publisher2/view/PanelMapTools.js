@@ -61,14 +61,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                 panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel'),
                 contentPanel = panel.getContainer(),
                 tools = this.tools,
-                tooltipCont = me.templates.help.clone(),
-
-                plugins,
-                enabledPlugins = null,
-                toolContainer,
-                pluginKey,
-                toolname,
-                extraOptions;
+                tooltipCont = me.templates.help.clone();
 
             panel.setTitle(me.loc[me.group].label);
             tooltipCont.attr('title', me.loc[me.group].tooltip);
@@ -82,8 +75,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             _.each(tools, function(tool) {
                 var ui = jQuery(me.templates.tool({name : tool.getName() }));
                 // TODO: setup values when editing an existing map
-                ui.find('input').attr('id', 'tool-' + pluginKey).change(function() {
-                    tool.setEnabled(jQuery(this).is(':checked'))
+                ui.find('input').change(function() {
+                    tool.setEnabled(jQuery(this).is(':checked'));
                 });
 
                 var extraOptions = tool.getExtraOptions();
@@ -113,7 +106,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             jQuery.each(me.tools, function(index, tool){
                 values.maptools.push(tool.getValues());
             });
-            
+
             return values;
         },
 

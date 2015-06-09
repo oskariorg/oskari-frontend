@@ -19,7 +19,7 @@ Oskari.registerLocalization({
                 "title": "Select more features"
             },
             "button": {
-                "cancel": "Cancel",
+                "cancel": "Close",
                 "empty": "Remove selection",
                 "show": "Show features",
                 "close": "Close",
