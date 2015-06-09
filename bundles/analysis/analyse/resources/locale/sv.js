@@ -7,7 +7,13 @@ Oskari.registerLocalization(
         "flyouttitle": "Analys <font color=red>(BETA)</font>",
         "desc": "",
         "btnTooltip": "Analys",
-        "notLoggedIn": "Endast inloggad användare kan göra analys. <a href='/web/sv/login'>Logga in</a>.",
+        "NotLoggedView": {
+            "text": "Endast inloggad användare kan göra analys",
+            "signup": "Logga in",
+            "signupUrl": "/web/sv/login",
+            "register": "Registrera dig",
+            "registerUrl": "/web/sv/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+        },
         "AnalyseView": {
             "title": "Analys",
             "content": {

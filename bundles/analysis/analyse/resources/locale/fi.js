@@ -7,7 +7,13 @@ Oskari.registerLocalization(
         "flyouttitle": "Analyysi <font color=red>(BETA)</font>",
         "desc": "",
         "btnTooltip": "Analyysi",
-        "notLoggedIn": "Vain kirjautunut käyttäjä voi tehdä WFS tasoille analyysejä. <a href='/web/fi/login'>Kirjaudu palveluun</a>.",
+        "NotLoggedView": {
+            "text": "Voit käyttää Analyysitoimintoa kirjauduttuasi palveluun.",
+            "signup": "Kirjaudu sisään",
+            "signupUrl": "/web/fi/login",
+            "register": "Rekisteröidy",
+            "registerUrl": "/web/fi/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+        },
         "AnalyseView": {
             "title": "Analyysi",
             "content": {

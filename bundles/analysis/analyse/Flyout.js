@@ -141,12 +141,10 @@ Oskari.clazz.define(
             var sandbox = this.instance.getSandbox();
 
             if (!sandbox.getUser().isLoggedIn()) {
-                this.tabsContainer = Oskari.clazz.create(
-                    'Oskari.userinterface.component.TabContainer',
-                    this.instance.getLocalization('notLoggedIn')
-                );
-                this.tabsContainer.insertTo(flyout);
-                return;
+                debugger;
+                this.view = Oskari.clazz.create('Oskari.analysis.bundle.analyse.view.NotLoggedIn',
+                    this.instance,
+                    this.instance.getLocalization('NotLoggedView'));
             }
             // Show info or not
             if (jQuery.cookie('analyse_info_seen') !== '1') {
