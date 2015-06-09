@@ -192,9 +192,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartView',
 
         getLayerName: function (layerId) {
             var layerId = layerId,
-                layerName, 
+                layerName,
                 layers;
-            
+
             layers = this.instance.sandbox.findAllSelectedMapLayers();
 
             _.forEach(layers, function (layer) {

@@ -82,7 +82,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                 var ui = jQuery(me.templates.tool({name : tool.getName() }));
                 // TODO: setup values when editing an existing map
                 ui.find('input').attr('id', 'tool-' + pluginKey).change(function() {
-                    tool.setEnabled(jQuery(this).is(':checked'))
+                    tool.setEnabled(jQuery(this).is(':checked'));
                 });
 
                 var extraOptions = tool.getExtraOptions();
@@ -112,7 +112,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             jQuery.each(me.tools, function(index, tool){
                 values.maptools.push(tool.getValues());
             });
-            
+
             return values;
         },
 

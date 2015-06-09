@@ -1,4 +1,4 @@
-Oskari.clazz.define('Oskari.mapframework.publisher.tool.IndexMapTool', 
+Oskari.clazz.define('Oskari.mapframework.publisher.tool.IndexMapTool',
 function() {
     this.__plugin = null;
 }, {
@@ -29,20 +29,20 @@ function() {
     * Get values.
     * @method getValues
     * @public
-    * 
+    *
     * @returns {Object} tool value object
     */
     getValues: function () {
-    	var me = this,
-    		saveState = {
-    			tool: me.getTool().id,
-    			show: me.state.enabled,
-    			subTools : []
-    		};
-    	
-    	return saveState;
+        var me = this,
+            saveState = {
+                tool: me.getTool().id,
+                show: me.state.enabled,
+                subTools : []
+            };
+
+        return saveState;
     }
 }, {
     'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
-    'protocol' : ['Oskari.mapframework.publisher.Tool'] 
-}); 
+    'protocol' : ['Oskari.mapframework.publisher.Tool']
+});

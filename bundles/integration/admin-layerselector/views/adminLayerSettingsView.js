@@ -681,7 +681,7 @@ define([
                     element = jQuery(e.currentTarget),
                     groupElement = element.parents('.admin-add-group'),
                     accordion = element.parents('.accordion');
-                
+
                 var sandbox = me.options.instance.getSandbox();
                 var data = {
                     groupId: accordion.attr('lcid'),

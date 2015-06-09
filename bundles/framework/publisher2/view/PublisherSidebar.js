@@ -263,7 +263,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             jQuery.each(me.panels, function(index, panel){
                 selections.push(panel.getValues());
             });
-            
+
             //console.log(selections);
 
             throw 'Not implemented yet!';

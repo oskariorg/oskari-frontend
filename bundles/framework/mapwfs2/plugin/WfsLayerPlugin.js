@@ -699,7 +699,7 @@ Oskari.clazz.define(
                         WFSLayerService.emptyWFSFeatureSelections(layer);
                     }
                 });
-            } 
+            }
             this.getIO().setFilter(geoJson);
 
 
