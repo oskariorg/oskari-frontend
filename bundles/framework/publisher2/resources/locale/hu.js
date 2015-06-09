@@ -3,9 +3,12 @@ Oskari.registerLocalization(
     "lang": "hu",
     "key": "Publisher2",
     "value": {
-        "title": "Térképkészítés",
-        "flyouttitle": "Térképkészítés",
-        "desc": "",
+        "tile" : {
+            "title": "Térképkészítés"
+        },
+        "flyout" : {
+            "title": "Térképkészítés"
+        },
         "published": {
             "title": "A térkép elkészült.",
             "desc": "Térkép beágyazása a weboldalon lévő HTML kóddal."

@@ -3,9 +3,12 @@ Oskari.registerLocalization(
     "lang": "pt",
     "key": "Publisher2",
     "value": {
-        "title": "Criar carta",
-        "flyouttitle": "Criar carta",
-        "desc": "",
+        "tile" : {
+            "title": "Criar carta"
+        },
+        "flyout" : {
+            "title": "Criar carta"
+        },
         "published": {
             "title": "Carta criada",
             "desc": "Embutir a carta adicionando o código HTML abaixo no seu navegador web"

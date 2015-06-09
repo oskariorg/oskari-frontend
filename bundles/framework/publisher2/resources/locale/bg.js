@@ -3,9 +3,12 @@ Oskari.registerLocalization(
     "lang": "bg",
     "key": "Publisher2",
     "value": {
-        "title": "Създаване на карта",
-        "flyouttitle": "Създаване на карта",
-        "desc": "",
+        "tile" : {
+            "title": "Създаване на карта"
+        },
+        "flyout" : {
+            "title": "Създаване на карта"
+        },
         "published": {
             "title": "Вашата карта беше създадена",
             "desc": "Прикачване на картата чрез добавяне на HTML код отдолу на Вашия уебсайт"

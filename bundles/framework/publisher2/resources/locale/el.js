@@ -2,9 +2,12 @@ Oskari.registerLocalization({
     "lang": "el",
     "key": "Publisher2",
     "value": {
-        "title": "Δημιουργία χάρτη",
-        "flyouttitle": "Δημιουργία χάρτη",
-        "desc": "",
+        "tile" : {
+            "title": "Δημιουργία χάρτη"
+        },
+        "flyout" : {
+            "title": "Δημιουργία χάρτη"
+        },
         "published": {
             "title": "Ο χάρτης σας δημιουργήθηκε",
             "desc": "Ενσωματώστε τον χάρτη εισάγοντας τον κώδικα HTML κάτω στον ιστότοπό σας"

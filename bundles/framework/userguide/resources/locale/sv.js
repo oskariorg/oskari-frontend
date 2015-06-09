@@ -16,6 +16,9 @@ Oskari.registerLocalization(
             "title": "Fel!",
             "generic": "Laddningen av anvisningarna misslyckades. Försök på nytt senare."
         },
+        "tabs": [
+            {"title": "Kartfönstret", "tags": "kartfönstret,snappguide"}
+        ],
         "help": {
             "tags": "kartfönstret,snappguide",
             "contentPart": "body"

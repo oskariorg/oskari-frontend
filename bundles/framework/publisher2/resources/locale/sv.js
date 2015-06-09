@@ -3,9 +3,12 @@ Oskari.registerLocalization(
     "lang": "sv",
     "key": "Publisher2",
     "value": {
-        "title": "Kartpublicering",
-        "flyouttitle": "Skapa inbäddad karta",
-        "desc": "",
+        "tile" : {
+            "title": "Kartpublicering"
+        },
+        "flyout" : {
+            "title": "Skapa inbäddad karta"
+        },
         "published": {
             "title": "Kartan har skapats för att kunna bäddas in",
             "desc": "Karta har skapats. Bädda in kartan genom att lägga till HTML-koden nedan till din webbplats och du har kartan på din webbplats:"

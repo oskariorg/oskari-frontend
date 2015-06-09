@@ -3,9 +3,12 @@ Oskari.registerLocalization(
     "lang": "es",
     "key": "Publisher2",
     "value": {
-        "title": "Publicar mapa",
-        "flyouttitle": "Generar mapa embebido",
-        "desc": "",
+        "tile" : {
+            "title": "Publicar mapa"
+        },
+        "flyout" : {
+            "title": "Generar mapa embebido"
+        },
         "published": {
             "title": "Se ha creado mapa para embeber",
             "desc": "Incorpore su mapa añadiendo el siguiente código HTML a tu portal web"

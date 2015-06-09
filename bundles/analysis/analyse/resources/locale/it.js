@@ -178,7 +178,8 @@ Oskari.registerLocalization({
                     "id": "oskari_analyse_NoDataCnt",
                     "label": "Unauthorized features"
                 }],
-                "attribute": "Scegli un attributo"
+                "attribute": "Scegli un attributo",
+                "footer" : "Authorised features are not counted"
             },
             "buffer_size": {
                 "label": "Dimensione Buffer",

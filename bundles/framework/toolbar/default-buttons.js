@@ -38,7 +38,7 @@ Oskari.clazz.category(
                 gfiReqBuilder = sandbox.getRequestBuilder(gfiRn),
                 group,
                 req;
-                
+
             var buttonGroups = [{
                     'name': 'history',
                     'buttons': {

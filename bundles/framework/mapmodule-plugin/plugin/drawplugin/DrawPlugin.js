@@ -51,8 +51,14 @@ Oskari.clazz.define(
                 // preselect it for modification
                 this.modifyControls.select.select(this.drawLayer.features[0]);
             } else {
+                // Solve OL problem in select modify feature
+                if(this.modifyControls.modify.feature){
+                     this.modifyControls.modify.feature = null;
+                }
                 // remove possible old drawing
                 this.drawLayer.destroyFeatures();
+
+
                 if (params.geometry) {
                     // sent existing geometry == edit mode
                     this.editMode = true;

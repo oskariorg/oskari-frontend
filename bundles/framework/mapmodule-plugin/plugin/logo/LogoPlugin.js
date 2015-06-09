@@ -128,7 +128,7 @@ Oskari.clazz.define(
             me._createDataSourcesLink();
         },
 
-        _createServiceLink: function (mapUrl) {
+        _createServiceLink: function () {
             var me = this,
                 mapUrl = me.__getMapUrl(),
                 link,

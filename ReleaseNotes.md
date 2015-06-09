@@ -2,10 +2,29 @@
 
 ## 1.30
 
+### divmanazer
+
+DefaultFlyout now has a close() function which closes the flyout.
+DefaultFlyout now onOpen() and onClose() functions that are called when flyout is opened/closed.
+
+### applications
+
+oskari.org application has been removed as the sample/servlet application is the same thing.
+
+### tools
+
+Gruntfile reconfigured to use applications/sample/servlet as default application (instead of paikkatietoikkuna.fi).
+Added shortcut to build script: 'npm run build'
+
 ### core/sandbox
 
 Fixed sandbox.createURL(url). If the param url didn't include the domain part the port was included twice.
 Sandbox.createURL(url, true) now takes a second parameter that can be used to prepare the querystring part of the URL.
+Sandbox.findRegisteredModuleInstance() now returns all registered modules if name parameter is not given (for debugging purposes).
+
+### admin-layerselector
+
+Fixed theme or organization locale inputs when adding new group.
 
 ### toolbar
 
@@ -17,6 +36,11 @@ the printout bundle with corresponding backend implementation instead to get pro
 ### mapmodule-plugin/LogoPlugin
 
 The logo is now a link to the map service even if configuration is not provided. Uses browser location by default.
+
+### mapmodule-plugin/VectorLayerPlugin/AddFeaturesToMapRequest
+
+Fixed centerTo parameter handling.
+
 
 ## 1.29
 

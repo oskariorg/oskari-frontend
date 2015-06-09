@@ -3,9 +3,12 @@ Oskari.registerLocalization(
     "lang": "it",
     "key": "Publisher2",
     "value": {
-        "title": "Pubblicazione della mappa",
-        "flyouttitle": "Crea mappa esterna",
-        "desc": "",
+        "tile" : {
+            "title": "Pubblicazione della mappa"
+        },
+        "flyout" : {
+            "title": "Crea mappa esterna"
+        },
         "published": {
             "title": "Mappa esterna creata",
             "desc": "La mappa è stata creata. Incorpora la mappa sul tuo sito web aggiungendo al sito il codice HTML qui sotto."

@@ -2,9 +2,12 @@ Oskari.registerLocalization({
     "lang": "hr",
     "key": "Publisher2",
     "value": {
-        "title": "Izradi kartu",
-        "flyouttitle": "Izradi kartu",
-        "desc": "",
+        "tile" : {
+            "title": "Izradi kartu"
+        },
+        "flyout" : {
+            "title": "Izradi kartu"
+        },
         "published": {
             "title": "Vaša karta je izrađena",
             "desc": "Umetni kartu dodavanjem donjeg HTML koda na internet stranicu."
