@@ -80,7 +80,7 @@ Oskari.registerLocalization(
                 "options": [
                     {
                         "id": "png",
-                        "format": "bild/png",
+                        "format": "image/png",
                         "label": "PNG bild"
                     },
                     {
