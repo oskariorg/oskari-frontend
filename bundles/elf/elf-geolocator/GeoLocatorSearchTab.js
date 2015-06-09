@@ -116,10 +116,6 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
                 regionInput = Oskari.clazz.create('Oskari.userinterface.component.FormInput','elf-geolocator-region', this.sandbox),
                 searchButton = searchUi.find('div.commit input[type="submit"]'),
                 countryInput = this.templates.countryAutoInput.clone(),
-                normalCheck = this.templates.addInput.clone(),
-                regionCheck = this.templates.addInput.clone(),
-                fuzzyCheck = this.templates.addInput.clone(),
-                exonymCheck = this.templates.addInputCbx.clone(),
                 backButton = resultsUi.find('div.header-results span.back');
 
             searchInput.setRequired(true, this.loc.errors.searchTermMissing);
@@ -135,21 +131,6 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
 
             countryInput.find('label')
                 .text(this.loc.countryFilter);
-
-            var closureMagic = function (tool) {
-                return function () {
-                    if(tool.attr('id') === 'elf-geolocator-search-exonym') {
-                        return;
-                    }
-                    me.getContent().find('div.input-fields').find('input').removeAttr('checked');
-                    me.regionInput.setEnabled(tool.attr('id') === 'elf-geolocator-search-region');
-                    me.getContent().find('#countries').removeAttr('disabled');
-                    if (tool.attr('id') !== 'elf-geolocator-search-normal') {
-                        me.getContent().find('#countries').attr('disabled', 'disabled');
-                    }
-                    tool.attr('checked', 'checked');
-                };
-            };
 
             searchButton.val(this.loc.searchButton).on('click submit', function (e) {
                     e.preventDefault();
