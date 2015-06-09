@@ -19,6 +19,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             tool: _.template('<div class="tool"><label><input type="checkbox"/>${name}</label><div class="extraOptions"></div></div>'),
             help: jQuery('<div class="help icon-info"></div>')
         };
+        this.data = null;
     }, {
         /**
          * Creates the set of Oskari.userinterface.component.FormInput to be shown on the panel and
@@ -85,7 +86,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                 contentPanel.append(ui);
 
             });
-
+            me.panel = panel;
             return panel;
         },
 
@@ -125,5 +126,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                 }
             });
             return errors;
-        }
+        },
+        /**
+         * @method setMode
+         * @param {String} mode the mode
+         */
+        setMode: function (mode) {
+            var me = this,
+                cont = me.panel.getContainer();
+
+            // update tools
+            jQuery.each(me.tools, function(index, tool){
+                if(tool.isDisplayedInMode(mode) === true){
+                    cont.find('#tool-' + tool.getTool().id).attr('disabled', 'disabled');
+                } else {
+                    cont.find('#tool-' + tool.getTool().id).removeAttr('disabled');
+                }
+
+                if(typeof tool.setMode === 'function'){
+                    tool.setMode(mode);
+                }
+            });
+        },
     });

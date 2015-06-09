@@ -55,10 +55,15 @@ function(sandbox, mapmodule, localization) {
         }
 
         if(enabled === true) {
-            Oskari.clazz.create(tool.id, tool.config);
             me.__plugin.startPlugin(me.__sandbox);
+
+            
         } else {
             me.__plugin.stopPlugin(me.__sandbox);
+        }
+
+        if(enabled === true && me.state.mode !== null && me.__plugin && typeof me.__plugin.setMode === 'function'){
+            me.__plugin.setMode(me.state.mode);
         }
     },
     /**
@@ -111,8 +116,12 @@ function(sandbox, mapmodule, localization) {
     * @param {String} mode the mode
     */
     setMode: function(mode){
-        var me = this;
+    	var me = this;
         me.state.mode = mode;
+
+        if(me.__plugin && typeof me.__plugin.setMode === 'function'){
+            me.__plugin.setMode(mode);
+        }
     },
     /**
     * Get group

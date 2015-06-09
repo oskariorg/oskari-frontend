@@ -167,12 +167,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
 
             // -- create panels --
             var genericInfoPanel = me._createGeneralInfoPanel();
+            me.panels.push(genericInfoPanel);
             accordion.addPanel(genericInfoPanel.getPanel());
+
+            var mapSizePanel = me._createMapSizePanel();
+            me.panels.push(genericInfoPanel);
+            accordion.addPanel(mapSizePanel.getPanel());
 
             var toolPanels = me._createToolPanels(accordion);
             _.each(toolPanels, function(panel) {
-                accordion.addPanel(panel);
+                me.panels.push(panel);
+                accordion.addPanel(panel.getPanel());
             });
+
+
 
             // -- render to UI and setup buttons --
             accordion.insertTo(contentDiv);
@@ -193,10 +201,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         },
         /**
          * @private @method _createGeneralInfoPanel
-         * Creates the Location panel of publisher and adds it to accordion
-         *
-         *
-         * @param {String} accordion
+         * Creates the Location panel of publisher
          */
         _createGeneralInfoPanel: function () {
             var me = this;
@@ -214,6 +219,39 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             // open generic info by default
             form.getPanel().open();
             return form;
+        },
+
+        /**
+         * @private @method _createMapSizePanel
+         * Creates the Map Sizes panel of publisher
+         */
+        _createMapSizePanel: function () {
+            var me = this,
+                sandbox = this.instance.getSandbox(),
+                mapModule = sandbox.findRegisteredModuleInstance("MainMapModule"),
+                form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapSize',
+                    sandbox, mapModule, me.loc, me.instance
+                );
+
+            // initialize form (restore data when editing)
+            form.init(me.data, function(value) {
+                me.setMode(value);
+            });
+
+            return form;
+        },
+
+        /**
+         * @method setMode
+         * @param {String} mode the mode
+         */
+        setMode: function (mode) {
+            var me = this;
+            jQuery.each(me.panels, function(index, panel){
+                if(typeof panel.setMode === 'function') {
+                    panel.setMode(mode);
+                }
+            });
         },
 
         setPluginLanguage : function() {
@@ -252,7 +290,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                     group, tools, sandbox, me.loc
                 );
                 panel.init(me.data);
-                panels.push(panel.getPanel());
+                panels.push(panel);
             });
             return panels;
         },

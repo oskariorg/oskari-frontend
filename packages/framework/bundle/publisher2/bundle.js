@@ -81,11 +81,23 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher2.PublisherBundle", fun
         },
         {
             "type": "text/javascript",
+            "src": "../../../../bundles/framework/publisher2/view/PanelMapSize.js"
+        },
+        {
+            "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher2/tools/ScalebarTool.js"
         },
         {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher2/tools/IndexMapTool.js"
+        },
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/publisher2/tools/PanButtonsTool.js"
+        },
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/publisher2/tools/ZoombarTool.js"
         },
 
         {
