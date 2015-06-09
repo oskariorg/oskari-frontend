@@ -1,6 +1,5 @@
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.ScalebarTool',
 function() {
-    this.__plugin = null;
 }, {
     index : 0,
     allowedLocations : ['bottom left', 'bottom right'],

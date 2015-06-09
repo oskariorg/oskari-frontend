@@ -6,12 +6,6 @@
 
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.Tool', 
 function(sandbox, mapmodule, localization) {
-    // tool index in group, 0 is top
-    this.__index = 0;
-    // the panel group where tool is appended
-	this.__group = 'maptools';
-    // allowed locations
-	this.__allowedLocations = ['bottom right'];
     // sandbox
     this.__sandbox = sandbox;
     // mapmodule
@@ -20,8 +14,6 @@ function(sandbox, mapmodule, localization) {
     this.__loc = localization;
     // plugin
     this.__plugin = null;
-    // supported modes
-    this.__supportedModes = ['full', 'mobile'];
     // tool state
 	this.state= {
 		enabled: false,
@@ -29,6 +21,19 @@ function(sandbox, mapmodule, localization) {
 	};
 
 }, {
+    // the panel group where tool is appended
+    group : 'maptools',
+    // tool index in group, 0 is top
+    index : 999,
+    // allowed locations
+    allowedLocations : ['top left', 'top right', 'bottom left', 'bottom right'],
+    allowedSiblings : [
+        'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
+        'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin',
+        'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons'
+    ],
+
+    groupedSiblings : true,
     /**
     * Get tool object.
     * @method getTool

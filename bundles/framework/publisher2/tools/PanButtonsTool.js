@@ -1,6 +1,5 @@
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.PanButtonsTool',
 function() {
-    this.__plugin = null;
 }, {
     index : 2,
     allowedLocations : ['top left', 'top right', 'bottom left', 'bottom right'],

@@ -1,15 +1,15 @@
-Oskari.clazz.define('Oskari.mapframework.publisher.tool.ZoombarTool',
+Oskari.clazz.define('Oskari.mapframework.publisher.tool.SearchTool',
 function() {
 }, {
-    index : 3,
-    allowedLocations : ['top left', 'top right', 'bottom left', 'bottom right'],
+    index : 4,
+    allowedLocations : ['top left', 'top center', 'top right'],
     allowedSiblings : [
         'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
-        'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin',
-        'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons'
+        'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin',
+        'Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin'
     ],
 
-    groupedSiblings : true,
+    groupedSiblings : false,
 
     /**
     * Get tool object.
@@ -19,8 +19,8 @@ function() {
     */
     getTool: function(){
         return {
-            id: 'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar',
-            name: 'Portti2Zoombar',
+            id: 'Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
+            name: 'SearchPlugin',
             config: {}
         };
     },

@@ -1,6 +1,5 @@
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.IndexMapTool',
 function() {
-    this.__plugin = null;
 }, {
     index : 1,
     allowedLocations : ['bottom left', 'bottom right'],
