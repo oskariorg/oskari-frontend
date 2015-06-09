@@ -3,9 +3,12 @@ Oskari.registerLocalization(
     "lang": "nl",
     "key": "Publisher2",
     "value": {
-        "title": "Kaart maken",
-        "flyouttitle": "Kaart maken",
-        "desc": "",
+        "tile" : {
+            "title": "Kaart maken"
+        },
+        "flyout" : {
+            "title": "Kaart maken"
+        },
         "published": {
             "title": "Uw kaart is gemaakt",
             "desc": "Integreer de kaart door de onderstaande HTML code toe te voegen aan uw website."

@@ -1,10 +1,10 @@
 /**
- * @class Oskari.mapframework.bundle.publisher2.view.MapSizeAndModePanel
+ * @class Oskari.mapframework.bundle.publisher2.view.PanelMapSize
  *
  * Represents the basic info (name, domain, language) view for the publisher
  * as an Oskari.userinterface.component.AccordionPanel
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.MapSizeAndModePanel',
+Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapSize',
 
     /**
      * @method create called automatically on construction
@@ -13,13 +13,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.MapSizeAndModePa
      * @param {Object} mapmodule
      * @param {Object} localization
      *       publisher localization data
-     * @param {Oskari.mapframework.bundle.publisher2.view.BasicPublisher} publisher
-     *       publisher reference for language change
+     * @param {Oskari.mapframework.bundle.publisher2.insatnce} instance the instance
      */
-    function (sandbox, mapmodule, localization, publisher) {
+    function (sandbox, mapmodule, localization, instance) {
         var me = this;
         me.loc = localization;
-        me._publisher = publisher;
+        me.instance = instance;
         me.sandbox = sandbox;
         me.mapmodule = mapmodule;
         me.sizeOptions = [{
@@ -52,6 +51,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.MapSizeAndModePa
         })[0];
 
         me.panel = null;
+        me.modeChangedCB = null;
 
         me.fields = {
             size: {
@@ -79,7 +79,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.MapSizeAndModePa
                 handler: function () {
                     me._updateMapSize();
                 },
-                placeholder: publisher.loc.sizes.width,
+                placeholder: me.loc.sizes.width,
                 value: me.selected.width
             },
             height: {
@@ -87,9 +87,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.MapSizeAndModePa
                 handler: function () {
                     me._updateMapSize();
                 },
-                placeholder: publisher.loc.sizes.height,
+                placeholder: me.loc.sizes.height,
                 value:me.selected.height
             }
+        };
+
+        this.templates = {
+            help: jQuery('<div class="help icon-info"></div>')
         };
     }, {
         /**
@@ -264,7 +268,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.MapSizeAndModePa
                     'MapFull.MapSizeUpdateRequest'
                 );
             if (reqBuilder) {
-                me.sandbox.request(me._publisher.instance, reqBuilder());
+                me.sandbox.request(me.instance, reqBuilder());
             }
 
             me._updateMapMode();
@@ -276,13 +280,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.MapSizeAndModePa
         */
         _updateMapMode: function () {
             var me = this,
-                reqBuilder = me.sandbox.getRequestBuilder(
-                    'Publisher2.PublishMapModeChangeRequest'
-                ),
                 size = me._getSelectedMapSize();
                 
-            if (reqBuilder) {
-                me.sandbox.request(me._publisher.instance, reqBuilder(size.option.id));
+            if (me.modeChangedCB) {
+                me.modeChangedCB(size.option.id);
             }
         },
 
@@ -347,8 +348,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.MapSizeAndModePa
          *
          * @method init
          * @param {Object} pData initial data
+         * @param {Object} modeChangedCB mode changed callback
          */
-        init: function (pData) {
+        init: function (pData, modeChangedCB) {
             var me = this,
                 fkey,
                 data,
@@ -356,9 +358,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.MapSizeAndModePa
                 selectedLang = Oskari.getLang(),
                 panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel'),
                 contentPanel = panel.getContainer(),
-                tooltipCont = me._publisher.templateHelp.clone(),
+                tooltipCont = me.templates.help.clone(),
                 customSizes = document.createElement('fieldset'),
                 firstCustomSizeAdded = false;
+            me.modeChangedCB = modeChangedCB;
 
             for (fkey in me.fields) {
                 if (me.fields.hasOwnProperty(fkey)) {

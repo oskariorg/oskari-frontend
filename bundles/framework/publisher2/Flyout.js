@@ -16,10 +16,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.Flyout',
      */
     function (instance) {
         this.instance = instance;
-        this.container = null;
-        this.state = null;
-        this.template = null;
-        this.view = null;
+        this.template = jQuery('<div></div>');
     }, {
         /**
          * @method getName
@@ -29,73 +26,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.Flyout',
             return 'Oskari.mapframework.bundle.publisher2.Flyout';
         },
         /**
-         * @method setEl
-         * @param {Object} el
-         *      reference to the container in browser
-         * @param {Number} width
-         *      container size(?) - not used
-         * @param {Number} height
-         *      container size(?) - not used
-         *
-         * Interface method implementation
-         */
-        setEl: function (el) {
-            this.container = el[0];
-            if (!jQuery(this.container).hasClass('publisher')) {
-                jQuery(this.container).addClass('publisher');
-            }
-        },
-        /**
          * @method startPlugin
          *
          * Interface method implementation, assigns the HTML templates
          * that will be used to create the UI
          */
         startPlugin: function () {
-            this.template = jQuery('<div></div>');
+            this.getEl().addClass('publisher');
         },
         /**
-         * @method stopPlugin
-         * Interface method implementation, does nothing atm
-         */
-        stopPlugin: function () {
-
-        },
-        /**
-         * @method getTitle
-         * @return {String} localized text for the title of the flyout
-         */
-        getTitle: function () {
-            return this.instance.getLocalization('flyouttitle');
-        },
-        /**
-         * @method getDescription
-         * @return {String} localized text for the description of the
-         * flyout
-         */
-        getDescription: function () {
-            return this.instance.getLocalization('desc');
-        },
-        /**
-         * @method getOptions
-         * Interface method implementation, does nothing atm
-         */
-        getOptions: function () {},
-        /**
-         * @method setState
-         * @param {Object} state
-         *      state that this component should use
-         * Interface method implementation, does nothing atm
-         */
-        setState: function (state) {
-            this.state = state;
-        },
-        /**
-         * @method createUi
+         * @method lazyRender
+         * Called when flyout is opened (by divmanazer)
          * Creates the UI for a fresh start.
          * Selects the view to show based on user (guest/loggedin)
          */
-        createUi: function () {
+        lazyRender: function () {
             var me = this,
                 flyout = jQuery(this.container),
                 sandbox = me.instance.getSandbox();
@@ -103,12 +48,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.Flyout',
 
             // check if the user is logged in
             if (!sandbox.getUser().isLoggedIn()) {
-                this.view = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.NotLoggedIn',
+                this.view = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.FlyoutNotLoggedIn',
                     this.instance,
                     this.instance.getLocalization('NotLoggedView'));
             } else {
                 // proceed with publisher view
-                this.view = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.StartView',
+                this.view = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView',
                     this.instance,
                     this.instance.getLocalization('StartView'));
             }
@@ -129,5 +74,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.Flyout',
          * @property {String[]} protocol
          * @static
          */
-        'protocol': ['Oskari.userinterface.Flyout']
+        "extend": ["Oskari.userinterface.extension.DefaultFlyout"]
     });

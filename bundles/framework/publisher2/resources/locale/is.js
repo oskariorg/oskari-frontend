@@ -3,9 +3,12 @@ Oskari.registerLocalization(
     "lang": "is",
     "key": "Publisher2",
     "value": {
-        "title": "NOT TRANSLATED",
-        "flyouttitle": "NOT TRANSLATED",
-        "desc": "",
+        "tile" : {
+            "title": "NOT TRANSLATED"
+        },
+        "flyout" : {
+            "title": "NOT TRANSLATED"
+        },
         "published": {
             "title": "NOT TRANSLATED",
             "desc": "Kortið þitt er tilbúið. Fella kortið inn í með því að bæta HTML-kóðanum fyrir neðan við heimasíðuna þína."

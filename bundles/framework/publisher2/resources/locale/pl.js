@@ -2,9 +2,12 @@ Oskari.registerLocalization({
     "lang": "pl",
     "key": "Publisher2",
     "value": {
-        "title": "Utwórz mapę",
-        "flyouttitle": "Utwórz mapę",
-        "desc": "",
+        "tile" : {
+            "title": "Utwórz mapę"
+        },
+        "flyout" : {
+            "title": "Utwórz mapę"
+        },
         "published": {
             "title": "Mapa została utworzona",
             "desc": "Wbuduj mapę poprzez dodanie poniższego kodu HTML do swojej strony."

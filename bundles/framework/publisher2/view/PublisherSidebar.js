@@ -1,9 +1,9 @@
 /**
- * @class Oskari.mapframework.bundle.publisher2.view.BasicPublisher
+ * @class Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
  * Renders the publishers "publish mode" sidebar view where the user can make
  * selections regarading the map to publish.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.BasicPublisher',
+Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar',
 
     /**
      * @static @method create called automatically on construction
@@ -150,23 +150,43 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.BasicPublisher',
                 );
             me.accordion = accordion;
 
-            // Create location panel
-            me._createLocationPanel(accordion, content);
-            // Create map tools panel
-            me._createMapToolsPanel(accordion, content);
-            // Create map size and mode panel
-            me._createMapSizeAndModePanel(accordion, content);
-
-            accordion.insertTo(contentDiv);
-
+            // setup title based on new/edit
+            var sidebarTitle = content.find('div.header h3');
+            if (me.data) {
+                sidebarTitle.append(me.loc.titleEdit);
+            } else {
+                sidebarTitle.append(me.loc.title);
+            }
+            // bind close from header (X)
             container.find('div.header div.icon-close').bind(
                 'click',
                 function () {
                     me.instance.setPublishMode(false);
                 }
             );
+
+            // -- create panels --
+            var genericInfoPanel = me._createGeneralInfoPanel();
+            me.panels.push(genericInfoPanel);
+            accordion.addPanel(genericInfoPanel.getPanel());
+
+            var mapSizePanel = me._createMapSizePanel();
+            me.panels.push(genericInfoPanel);
+            accordion.addPanel(mapSizePanel.getPanel());
+
+            var toolPanels = me._createToolPanels(accordion);
+            _.each(toolPanels, function(panel) {
+                me.panels.push(panel);
+                accordion.addPanel(panel.getPanel());
+            });
+
+
+
+            // -- render to UI and setup buttons --
+            accordion.insertTo(contentDiv);
             contentDiv.append(me._getButtons());
 
+            // disable keyboard map moving whenever a text-input is focused element
             var inputs = me.mainPanel.find('input[type=text]');
             inputs.focus(function () {
                 me.instance.sandbox.postRequestByName(
@@ -180,104 +200,109 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.BasicPublisher',
             });
         },
         /**
-         * @private @method _createLocationPanel
-         * Creates the Location panel of publisher and adds it to accordion
-         *
-         *
-         * @param {Object} accordion jQuery element
-         * @param {Object} content jQuery element
+         * @private @method _createGeneralInfoPanel
+         * Creates the Location panel of publisher
          */
-        _createLocationPanel: function (accordion, content) {
-            var me = this,
-                form = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.publisher2.view.PublisherLocationPanel',
-                me.instance.getSandbox(),
-                me.instance.getSandbox().findRegisteredModuleInstance("MainMapModule"),
-                me.loc,
-                me
+        _createGeneralInfoPanel: function () {
+            var me = this;
+            var sandbox = this.instance.getSandbox();
+            var form = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo',
+                sandbox, me.loc
             );
 
-            if (me.data) {
-                content.find('div.header h3').append(me.loc.titleEdit);
-                form.init({
-                    domain: me.data.domain,
-                    name: me.data.name,
-                    lang: me.data.lang
-                });
-            } else {
-                content.find('div.header h3').append(me.loc.title);
-                form.init();
-            }
+            // initialize form (restore data when editing)
+            form.init(me.data, function(value) {
+                me.setPluginLanguage(value);
+            });
 
-            var panel = form.getPanel();
-            panel.open();
-            me.panels.push(form);
-            accordion.addPanel(panel);
+            // open generic info by default
+            form.getPanel().open();
+            return form;
+        },
+
+        /**
+         * @private @method _createMapSizePanel
+         * Creates the Map Sizes panel of publisher
+         */
+        _createMapSizePanel: function () {
+            var me = this,
+                sandbox = this.instance.getSandbox(),
+                mapModule = sandbox.findRegisteredModuleInstance("MainMapModule"),
+                form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapSize',
+                    sandbox, mapModule, me.loc, me.instance
+                );
+
+            // initialize form (restore data when editing)
+            form.init(me.data, function(value) {
+                me.setMode(value);
+            });
+
+            return form;
+        },
+
+        /**
+         * @method setMode
+         * @param {String} mode the mode
+         */
+        setMode: function (mode) {
+            var me = this;
+            jQuery.each(me.panels, function(index, panel){
+                if(typeof panel.setMode === 'function') {
+                    panel.setMode(mode);
+                }
+            });
+        },
+
+        setPluginLanguage : function() {
+            alert('TODO');
         },
 
 
         /**
-         * @private @method _createMapToolsPanel
-         * Creates the MapTools panel of publisher and adds it to accordion
+         * @private @method _createToolPanels
+         * Finds classes annotated as 'Oskari.mapframework.publisher.Tool'.
+         * Determines tool groups from tools and creates tool panels for each group.
          *
-         *
-         * @param {Object} accordion jQuery element
-         * @param {Object} content jQuery element
+         * @return {Oskari.mapframework.bundle.publisher2.view.PanelMapTools[]} list of panels
          */
-        _createMapToolsPanel: function (accordion, content) {
-            var me = this,
-                form = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.publisher2.view.MapToolsPanel',
-                me.instance.getSandbox(),
-                me.instance.getSandbox().findRegisteredModuleInstance("MainMapModule"),
-                me.instance.localization.BasicView,
-                me
-            );
-
-            var panel = form.getPanel();
-            panel.open();
-            me.panels.push(form);
-            accordion.addPanel(panel);
-        },
-
-        /**
-         * @private @method _createMapSizeAndModePanel
-         * Creates the Map size panel of publisher and adds it to accordion
-         *
-         *
-         * @param {Object} accordion jQuery element
-         * @param {Object} content jQuery element
-         */
-        _createMapSizeAndModePanel: function (accordion, content) {
-            var me = this,
-                form = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.publisher2.view.MapSizeAndModePanel',
-                me.instance.getSandbox(),
-                me.instance.getSandbox().findRegisteredModuleInstance("MainMapModule"),
-                me.instance.localization.BasicView,
-                me
-            );
-            
-            if (me.data) {
-                form.init(me.data);
-            } else {
-                form.init();
-            }
-            var panel = form.getPanel();
-            panel.open();
-            me.panels.push(form);
-            accordion.addPanel(panel);
+        _createToolPanels: function () {
+            var me = this;
+            var sandbox = this.instance.getSandbox();
+            var mapmodule = sandbox.findRegisteredModuleInstance("MainMapModule");
+            var definedTools = Oskari.clazz.protocol('Oskari.mapframework.publisher.Tool');
+            var grouping = {};
+            // group tools per tool-group
+            _.each(definedTools, function(ignored, toolname) {
+                // TODO: document localization requirements!
+                var tool = Oskari.clazz.create(toolname, sandbox, mapmodule, me.loc);
+                var group = tool.getGroup();
+                if(!grouping[group]) {
+                    grouping[group] = [];
+                }
+                grouping[group].push(tool);
+            });
+            // create panel for each tool group
+            var panels = [];
+            _.each(grouping, function(tools, group) {
+                // TODO: document localization requirements!
+                var panel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
+                    group, tools, sandbox, me.loc
+                );
+                panel.init(me.data);
+                panels.push(panel);
+            });
+            return panels;
         },
 
         _gatherSelections: function(){
             var me = this,
                 selections = [];
-            // FIXME Do forms validations before submit!!
             jQuery.each(me.panels, function(index, panel){
                 selections.push(panel.getValues());
             });
             
-            console.log(selections);
+            //console.log(selections);
 
             throw 'Not implemented yet!';
         },
@@ -401,6 +426,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.BasicPublisher',
 
             return buttonCont;
         },
+        _publishMap : function(selections) {
+            alert('TODO publish:\n' + JSON.stringify(selections));
+        },
 
         /**
          * @method setEnabled
@@ -449,20 +477,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.BasicPublisher',
             mapModule.registerPlugin(me.logoPlugin);
             this.logoPlugin.startPlugin(me.instance.sandbox);
         },
-
-        /**
-         * @method setMode
-         * @param {String} mode the mode
-         */
-        setMode: function (mode) {
-            var me = this;
-            jQuery.each(me.panels, function(index, panel){
-                if(typeof panel.setMode === 'function') {
-                    panel.setMode(mode);
-                }
-            });
-        },
-        
 
         /**
          * @private @method _disablePreview

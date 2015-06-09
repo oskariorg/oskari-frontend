@@ -3,9 +3,12 @@ Oskari.registerLocalization(
     "lang": "en",
     "key": "Publisher2",
     "value": {
-        "title": "Map publishing",
-        "flyouttitle": "Create Embedded Map",
-        "desc": "",
+        "tile" : {
+            "title": "Map publishing"
+        },
+        "flyout" : {
+            "title": "Map publishing"
+        },
         "published": {
             "title": "Map created to embed",
             "desc": "Map has been created. Embed the map by adding the HTML code below to your website and you have the map on your website:"

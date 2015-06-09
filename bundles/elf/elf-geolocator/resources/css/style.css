@@ -37,6 +37,9 @@ div.geolocator-results div.search-results {
   div.geolocator-results div.search-results th {
     text-align: left;
     padding-left: 5px; }
+  div.geolocator-results div.search-results li.exonymList {
+    text-decoration: none !important;
+    margin-left: 40px; }
 
 .elf-fake-link {
   /* This should apparently look like a normal link */
