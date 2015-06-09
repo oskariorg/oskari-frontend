@@ -85,7 +85,7 @@ Oskari.registerLocalization(
                     },
                     {
                         "id": "pdf",
-                        "format": "applikation/pdf",
+                        "format": "application/pdf",
                         "selected": true,
                         "label": "PDF dokument"
                     }
