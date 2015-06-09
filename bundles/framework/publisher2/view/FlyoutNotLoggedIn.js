@@ -4,7 +4,7 @@
  * when logged in because maps are linked to a user. Asks the user to log in
  * and offers links to login/register.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.NotLoggedIn',
+Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutNotLoggedIn',
 
     /**
      * @method create called automatically on construction

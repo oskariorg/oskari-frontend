@@ -3,9 +3,12 @@ Oskari.registerLocalization(
     "lang": "en",
     "key": "Publisher2",
     "value": {
-        "title": "Publication de carte",
-        "flyouttitle": "Créer une carte intégrée",
-        "desc": "",
+        "tile" : {
+            "title": "Publication de carte"
+        },
+        "flyout" : {
+            "title": "Créer une carte intégrée"
+        },
         "published": {
             "title": "Carte créée pour être intégrée",
             "desc": "La carte a été créée. Intégrez la carte en ajoutant le code html ci-dessous à votre site internet. La carte se trouve ainsi sur votre site web :"

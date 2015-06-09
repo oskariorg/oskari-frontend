@@ -3,9 +3,12 @@ Oskari.registerLocalization(
     "lang": "fi",
     "key": "Publisher2",
     "value": {
-        "title": "Karttajulkaisu",
-        "flyouttitle": "Karttajulkaisu",
-        "desc": "",
+        "tile" : {
+            "title": "Karttajulkaisu"
+        },
+        "flyout" : {
+            "title": "Karttajulkaisu"
+        },
         "published": {
             "title": "Upotettava kartta valmis",
             "desc": "Julkaise upotettava kartta verkkosivullesi liittämällä alla oleva HTML-koodi verkkosivun koodiin:"

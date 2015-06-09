@@ -3,9 +3,12 @@ Oskari.registerLocalization(
     "lang": "ro",
     "key": "Publisher2",
     "value": {
-        "title": "Creare hartă",
-        "flyouttitle": "Creare hartă",
-        "desc": "",
+        "tile" : {
+            "title": "Creare hartă"
+        },
+        "flyout" : {
+            "title": "Creare hartă"
+        },
         "published": {
             "title": "Harta dvs. a fost creată",
             "desc": "Înglobare hartă prin adăugarea codului HTML de mai jos în site-ul web"

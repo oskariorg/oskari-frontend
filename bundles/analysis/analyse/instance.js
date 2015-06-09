@@ -141,6 +141,9 @@ Oskari.clazz.define(
             if (conf && conf.stateful === true) {
                 sandbox.registerAsStateful(me.mediator.bundleId, me);
             }
+
+            me.WFSLayerService = me.sandbox.getService('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
+
             this.__addTab();
         },
 
@@ -427,7 +430,7 @@ Oskari.clazz.define(
                 }
                 this.analyse.show();
                 this.analyse.setEnabled(true);
-
+                me.WFSLayerService.setSelectFromAllLayers(false);
             } else {
                 map.removeClass('mapAnalyseMode');
                 if (me.sandbox._mapMode === 'mapAnalyseMode') {
@@ -441,6 +444,7 @@ Oskari.clazz.define(
                     this.analyse.contentPanel._deactivateSelectControls();
                     this.analyse.hide();
                 }
+                me.WFSLayerService.setAnalysisWFSLayerId(null);
             }
             var reqBuilder = me.sandbox.getRequestBuilder(
                 'MapFull.MapSizeUpdateRequest'

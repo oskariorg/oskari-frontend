@@ -3,9 +3,12 @@ Oskari.registerLocalization(
     "lang": "nn",
     "key": "Publisher2",
     "value": {
-        "title": "Publisering av kart",
-        "flyouttitle": "Lag 'embeddede' kart",
-        "desc": "",
+        "tile" : {
+            "title": "Publisering av kart"
+        },
+        "flyout" : {
+            "title": "Lag 'embeddede' kart"
+        },
         "published": {
             "title": "Kart for 'embedding' er laga",
             "desc": "Kartet er laga. 'Embed' kartet ved å lime HTML-koden nedenfor på din nettstad"

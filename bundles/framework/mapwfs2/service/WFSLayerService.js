@@ -17,15 +17,14 @@ Oskari.clazz.define(
     function (sandbox) {
         var me = this,
             p;
-        
+
         me.sandbox = sandbox;
         me.WFSFeatureSelections = [];
         me.selectedWFSLayers = [];
         me.selectedWFSLayerIds = [];
         me.selectFromAllLayers;
-        me.topWFSLayer;
-        //flag for telling mediator's occasional wfs mapclick event that showing the popup is a no-no
         me.selectionToolsActive;
+        me.analysisWFSLayerId;
 
         for (p in me.eventHandlers) {
             if (me.eventHandlers.hasOwnProperty(p)) {
@@ -75,14 +74,14 @@ Oskari.clazz.define(
             AfterMapLayerAddEvent: function (event) {
                 var me = this,
                     layer = event._mapLayer;
-                if (layer._layerType === "WFS") {
+                if (layer.hasFeatureData()) {
                     me.setWFSLayerSelection(layer, true);
                 }
             },
             AfterMapLayerRemoveEvent: function (event) {
                 var me = this,
                     layer = event._mapLayer;
-                if (layer._layerType === "WFS") {
+                if (layer.hasFeatureData()) {
                     me.setWFSLayerSelection(layer, false);
                 }
             }
@@ -92,7 +91,7 @@ Oskari.clazz.define(
          * @method setWFSLayerSelection
          * @param {Object} WFS layer; WFS Layer which is selected or unselected
          * @param {Boolean} status; true if WFS layer is selected and false if WFS layer is removed from selections
-         * 
+         *
          * Handles the state of selected WFS layers
          */
         setWFSLayerSelection: function (layer, status) {
@@ -100,13 +99,13 @@ Oskari.clazz.define(
             if (status) {
                 me.selectedWFSLayerIds.push(layer.getId());
             } else {
-                _.pull(me.selectedWFSLayerIds, [layer.getId()]);
+                _.pull(me.selectedWFSLayerIds, layer.getId());
             }
         },
 
         /**
          * @method getSelectedWFSLayerIds
-         * 
+         *
          * @return {Array} this.selectedWFSLayerIds; Ids of selected WFS layers
          */
         getSelectedWFSLayerIds: function () {
@@ -115,21 +114,21 @@ Oskari.clazz.define(
 
         /**
          * @method getTopWFSLayer
-         * 
+         *
          * @return {Number} me.topWFSLayer; Id of the top WFS layer
          */
         getTopWFSLayer: function () {
             var me = this,
-                layers = me.sandbox.findAllSelectedMapLayers();
+                layers = me.sandbox.findAllSelectedMapLayers(),
+                topWFSLayer;
 
             for (i=0; i < layers.length; i++ ) {
                 var layer = layers[i];
-
-                if (layer._layerType === "WFS") {
-                    me.topWFSLayer = layer._id;
+                if (layer.hasFeatureData()) {
+                    topWFSLayer = layer._id;
                 }
             }
-            return me.topWFSLayer;
+            return topWFSLayer;
         },
 
         /**
@@ -142,7 +141,7 @@ Oskari.clazz.define(
         setWFSFeaturesSelections: function (layerId, featureIds) {
             var me = this,
                 existingFeatureSelections = _.pluck(_.where(me.WFSFeatureSelections, {'layerId': layerId}), 'featureIds');
-         
+
             //no existing selections -> add all
             if (!existingFeatureSelections || existingFeatureSelections.length === 0) {
                 existingFeatureSelections.push(featureIds);
@@ -183,9 +182,7 @@ Oskari.clazz.define(
         getSelectedFeatureIds: function (layerId) {
             var me = this,
                 featureIds;
-
             featureIds = _.pluck(_.where(me.WFSFeatureSelections, {'layerId': layerId}), 'featureIds');
-
             return featureIds[0];
         },
 
@@ -194,14 +191,25 @@ Oskari.clazz.define(
          * @param {Object} layer; layer whose selected features are going to be removed
          *
          *
-         * Changes the values of me.WFSFeatureSelections and sends WFSFeaturesSelectedEvent to notify others about it 
+         * Changes the values of me.WFSFeatureSelections and sends WFSFeaturesSelectedEvent to notify others about it
          */
         emptyWFSFeatureSelections: function (layer) {
             var me = this;
-
             _.remove(me.WFSFeatureSelections, {'layerId': layer._id});
             var event = me.sandbox.getEventBuilder('WFSFeaturesSelectedEvent')([], layer, false);
             me.sandbox.notifyAll(event);
+        },
+        /*
+         * @method emptyWFSFeatureSelections
+         *
+         * Convenience function to clear selections from all WFS layers 
+         */
+        emptyAllWFSFeatureSelections: function() {
+            var me = this;
+            _.each(this.WFSFeatureSelections, function(selection) {
+                var layer = me.sandbox.findMapLayerFromSelectedMapLayers(selection.layerId);
+                me.emptyWFSFeatureSelections(layer);
+            });
         },
         /**
          * @method setSelectFromAllLayers
@@ -219,7 +227,7 @@ Oskari.clazz.define(
          *
          * @return {boolean} me.selectFromAllLayers
          *
-         * Tells weather the selection is made from all layers or not 
+         * Tells weather the selection is made from all layers or not
          */
         isSelectFromAllLayers: function () {
             return this.selectFromAllLayers;
@@ -242,5 +250,12 @@ Oskari.clazz.define(
          */
         isSelectionToolsActive: function () {
             return this.selectionToolsActive;
+        },
+
+        getAnalysisWFSLayerId: function() {
+            return this.analysisWFSLayerId;
+        },
+        setAnalysisWFSLayerId: function(layerId) {
+            this.analysisWFSLayerId = layerId;
         }
     });

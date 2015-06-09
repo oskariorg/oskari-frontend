@@ -6,7 +6,7 @@
  * move in to a publisher view. Also shows the user which layers the map will
  * have and if the user can't publish some layers.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.StartView',
+Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView',
 
     /**
      * @method create called automatically on construction
@@ -19,6 +19,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.StartView',
     function (instance, localization) {
         var me = this;
         me.instance = instance;
+        me.service = instance.getService();
         me.template = jQuery('<div class="startview">' + '<div class="content"></div>' +
             '<div class="tou"><a href="JavaScript:void(0;)""></a></div>' +
             '<div class="buttons"></div>' + '</div>');
@@ -59,7 +60,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.StartView',
                 if (!me.hasAcceptedTou) {
                     me._markTouAccepted();
                 }
-                var layers = me.instance.getLayersWithoutPublishRights();
+                var layers = me.service.getLayersWithoutPublishRights();
                 me.instance.setPublishMode(true, layers);
             });
             me.buttons['continue'] = continueButton;
@@ -69,7 +70,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.StartView',
             var cancelButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
             cancelButton.setTitle(me.loc.buttons.cancel);
             cancelButton.setHandler(function () {
-                me.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'close']);
+                me.instance.getFlyout().close();
             });
             me.buttons.cancel = cancelButton;
 
@@ -103,7 +104,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.StartView',
             container.find('div.layerlist').remove();
             for (i = 0; i < selectedLayers.length; ++i) {
                 layer = selectedLayers[i];
-                if (!me.instance.hasPublishRight(layer) &&
+                if (!me.service.hasPublishRight(layer) &&
                         layer.getId().toString().indexOf('myplaces_') < 0) {
                     deniedLayers.push(layer);
                 } else {

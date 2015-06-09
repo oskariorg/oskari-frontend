@@ -182,7 +182,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartView',
                         layerIdsToEmpty;
                     layersWithFeatures = _.map(WFSSelections, 'layerId');
                     me.emptySelectionsFromLayers = _.pull(layersWithFeatures, layerid);
-                })
+                });
                 me.content.find('div.content').append(labelTemplate);
                 me.content.find('div.content').append(layerList);
                 return true;
@@ -192,9 +192,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartView',
 
         getLayerName: function (layerId) {
             var layerId = layerId,
-                layerName, 
+                layerName,
                 layers;
-            
+
             layers = this.instance.sandbox.findAllSelectedMapLayers();
 
             _.forEach(layers, function (layer) {

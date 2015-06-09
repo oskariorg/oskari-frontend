@@ -3,9 +3,12 @@ Oskari.registerLocalization(
     "lang": "hy",
     "key": "Publisher2",
     "value": {
-        "title": "Ստեղծել քարտեզ",
-        "flyouttitle": "Ստեղծել քարտեզ",
-        "desc": "",
+        "tile" : {
+            "title": "Ստեղծել քարտեզ"
+        },
+        "flyout" : {
+            "title": "Ստեղծել քարտեզ"
+        },
         "published": {
             "title": "Քարտեզը ստեղծված է",
             "desc": "Ստորև նշված HTML կոդի ավելացմամբ ներմուծել քարտեզը ձեր ինտերնետային կայք"

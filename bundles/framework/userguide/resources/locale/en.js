@@ -16,6 +16,9 @@ Oskari.registerLocalization(
             "title": "Error!",
             "generic": "Loading user guide failed. Please try again later."
         },
+        "tabs": [
+            {"title": "Map window", "tags": "map window,user guide"}
+        ],
         "help": {
             "tags": "map window,user guide",
             "contentPart": "body"

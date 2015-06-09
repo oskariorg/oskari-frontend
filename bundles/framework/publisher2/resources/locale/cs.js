@@ -2,9 +2,12 @@ Oskari.registerLocalization({
     "lang": "cs",
     "key": "Publisher2",
     "value": {
-        "title": "Vytvořit mapu",
-        "flyouttitle": "Vytvořit mapu",
-        "desc": "",
+        "tile" : {
+            "title": "Vytvořit mapu"
+        },
+        "flyout" : {
+            "title": "Vytvořit mapu"
+        },
         "published": {
             "title": "Vaše mapa byla vytvořena",
             "desc": "Vložte mapu do vaší webové stránky vložením HTML kódu uvedeného níže."

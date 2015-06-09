@@ -3,9 +3,12 @@ Oskari.registerLocalization(
     "lang": "uk",
     "key": "Publisher2",
     "value": {
-        "title": "Створити карту",
-        "flyouttitle": "Створити карту",
-        "desc": "",
+        "tile" : {
+            "title": "Створити карту"
+        },
+        "flyout" : {
+            "title": "Створити карту"
+        },
         "published": {
             "title": "Карту створено",
             "desc": "Щоб вбудувати карту у вебсайт додайте наступний HTML код"

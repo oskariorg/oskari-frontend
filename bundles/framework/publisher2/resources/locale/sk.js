@@ -3,9 +3,12 @@ Oskari.registerLocalization(
     "lang": "sk",
     "key": "Publisher2",
     "value": {
-        "title": "Vytvoriť mapu",
-        "flyouttitle": "Vytvoriť mapu",
-        "desc": "",
+        "tile" : {
+            "title": "Vytvoriť mapu"
+        },
+        "flyout" : {
+            "title": "Vytvoriť mapu"
+        },
         "published": {
             "title": "Vaša mapa bola vytvorená",
             "desc": "Vložte mapu na Vašu webovú stránku pridaním HTML kódu"

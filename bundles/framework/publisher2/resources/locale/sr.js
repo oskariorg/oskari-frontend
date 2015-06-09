@@ -3,9 +3,12 @@ Oskari.registerLocalization(
     "lang": "sr",
     "key": "Publisher2",
     "value": {
-        "title": "Napravi mapu",
-        "flyouttitle": "Napravi mapu",
-        "desc": "",
+        "tile" : {
+            "title": "Napravi mapu"
+        },
+        "flyout" : {
+            "title": "Napravi mapu"
+        },
         "published": {
             "title": "Vaša mapa je napravljena",
             "desc": "Ugradjivanje mape dodavanjem HTML koda na vaš web sajt"

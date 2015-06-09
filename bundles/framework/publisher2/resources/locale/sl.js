@@ -3,9 +3,12 @@ Oskari.registerLocalization(
     "lang": "sl",
     "key": "Publisher2",
     "value": {
-        "title": "Objava karte",
-        "flyouttitle": "Izdelaj karto",
-        "desc": "",
+        "tile" : {
+            "title": "Objava karte"
+        },
+        "flyout" : {
+            "title": "Izdelaj karto"
+        },
         "published": {
             "title": "Karta je izdelana",
             "desc": "Dodaj izdelano karto na svojo spletno stran z dodajanjem spodnje kode HTML:"
