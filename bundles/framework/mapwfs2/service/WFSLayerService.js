@@ -135,29 +135,41 @@ Oskari.clazz.define(
          * @method setWFSFeaturesSelections
          * @param {Number} layeIdr; LayerID whose feature selections are chenged
          * @param {Array} featureIds; featureIds that are selected or removed from selection
+         * @param {Boolean} makeNewSelection; true if user makes selections with selection tool without Ctrl
          *
          * Handles status of selected features
          */
-        setWFSFeaturesSelections: function (layerId, featureIds) {
+        setWFSFeaturesSelections: function (layerId, featureIds, makeNewSelection) {
             var me = this,
-                existingFeatureSelections = _.pluck(_.where(me.WFSFeatureSelections, {'layerId': layerId}), 'featureIds');
+                newFeatureIds,
+                existingFeatureSelections;
 
-            //no existing selections -> add all
-            if (!existingFeatureSelections || existingFeatureSelections.length === 0) {
-                existingFeatureSelections.push(featureIds);
+            if (makeNewSelection) {
+                _.remove(me.WFSFeatureSelections, {'layerId': layerId});
+                me.WFSFeatureSelections.push({'layerId' : layerId, 'featureIds': featureIds});
             } else {
-                //existing selections found -> just add the features that weren't previously selected
-                _.each(featureIds, function(featureId) {
-                    if (existingFeatureSelections[0].indexOf(featureId) < 0) {
-                        existingFeatureSelections[0].push(featureId);
-                    }
-                });
+                existingFeatureSelections = _.pluck(_.where(me.WFSFeatureSelections, {'layerId': layerId}), 'featureIds');
+                //no existing selections -> add all
+                if (!existingFeatureSelections || existingFeatureSelections.length === 0) {
+                    existingFeatureSelections.push(featureIds);
+                } else {
+                    //existing selections found -> just add the features that weren't previously selected
+                    _.each(featureIds, function(featureId) {
+                        // add the features that weren't previously selected
+                        if (existingFeatureSelections[0].indexOf(featureId) < 0) {
+                            existingFeatureSelections[0].push(featureId);
+                        // remove the features that were previously selected
+                        } else {
+                            _.pull(existingFeatureSelections[0], featureId);
+                        }
+                    });
 
+                }
+                //clear old selection
+                _.remove(me.WFSFeatureSelections, {'layerId': layerId});
+                //add the updated selection
+                me.WFSFeatureSelections.push({'layerId' : layerId, 'featureIds': existingFeatureSelections[0]});
             }
-            //clear old selection
-            _.remove(me.WFSFeatureSelections, {'layerId': layerId});
-            //add the updated selection
-            me.WFSFeatureSelections.push({'layerId' : layerId, 'featureIds': existingFeatureSelections[0]});
         },
 
         /**

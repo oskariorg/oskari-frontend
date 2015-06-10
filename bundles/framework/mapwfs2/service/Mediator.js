@@ -307,6 +307,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
      * Creates WFSFeaturesSelectedEvent
      */
     getWFSMapClick: function (data) {
+        debugger;
         var sandbox = this.plugin.getSandbox(),
             me = this,
             layer = sandbox.findMapLayerFromSelectedMapLayers(data.data.layerId),
@@ -377,19 +378,26 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
     /**
      * @method getWFSFilter
      * @param {Object} data
+     * @param {Boolean} makeNewSelection; true if user makes selections with selection tool without Ctrl
      *
      * Handles one layer's features per response
      * Creates WFSFeaturesSelectedEvent
      */
     getWFSFilter: function (data) {
+        debugger;
         var me = this,
             layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId),
             featureIds = [],
             selectFeatures = true,
             topWFSLayer = this.WFSLayerService.getTopWFSLayer(),
             analysisWFSLayer = this.WFSLayerService.getAnalysisWFSLayerId(),
-            i;
+            i,
+            makeNewSelection = false;
 
+        //if user has not used Ctrl during selection, make totally new selection
+        if (!data.data.keepPrevious) {
+            makeNewSelection = true;
+        } 
         if (!me.WFSLayerService.isSelectFromAllLayers()) {
             if (analysisWFSLayer && layer._id !== analysisWFSLayer) {
                 return;
@@ -405,7 +413,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
         }
 
         if (data.data.features !== 'empty') {
-            me.WFSLayerService.setWFSFeaturesSelections(layer._id, featureIds);
+            me.WFSLayerService.setWFSFeaturesSelections(layer._id, featureIds, makeNewSelection);
         } 
 
         var event = this.plugin.getSandbox().getEventBuilder('WFSFeaturesSelectedEvent')(me.WFSLayerService.getSelectedFeatureIds(layer._id), layer, selectFeatures);
@@ -690,12 +698,14 @@ Oskari.clazz.category(
          *
          * sends message to /service/wfs/setFilter
          */
-        setFilter: function (geojson) {
+        setFilter: function (geojson, keepPrevious) {
+            debugger;
             var filter = {
                 geojson: geojson
             };
             this.sendMessage('/service/wfs/setFilter', {
-                'filter': filter
+                'filter': filter,
+                'keepPrevious': keepPrevious
             });
         },
         /**

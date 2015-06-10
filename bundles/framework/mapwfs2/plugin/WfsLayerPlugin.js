@@ -691,16 +691,10 @@ Oskari.clazz.define(
         setFilterHandler: function (event) {
             var WFSLayerService = this.WFSLayerService,
                 layers = this.getSandbox().findAllSelectedMapLayers(),
+                keepPrevious = this.getSandbox().isCtrlKeyDown(),
                 geoJson = event.getGeoJson();
 
-            if (!this.getSandbox().isCtrlKeyDown()) {
-                layers.forEach(function (layer) {
-                    if (layer.hasFeatureData()) {
-                        WFSLayerService.emptyWFSFeatureSelections(layer);
-                    }
-                });
-            }
-            this.getIO().setFilter(geoJson);
+            this.getIO().setFilter(geoJson, keepPrevious);
 
 
         },
