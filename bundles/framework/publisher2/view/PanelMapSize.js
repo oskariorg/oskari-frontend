@@ -106,7 +106,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapSize',
             if(!this.panel) {
                 return;
             }
-            
+
             var me = this,
                 mapDiv = me.mapmodule.getMapEl(),
                 size = me._getSelectedMapSize(),
@@ -281,7 +281,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapSize',
         _updateMapMode: function () {
             var me = this,
                 size = me._getSelectedMapSize();
-                
+
             if (me.modeChangedCB) {
                 me.modeChangedCB(size.option.id);
             }
@@ -387,7 +387,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapSize',
             panel.setTitle(me.loc.size.label);
             tooltipCont.attr('title', me.loc.size.tooltip);
             contentPanel.append(tooltipCont);
-            customSizes.className = 'customsize';            
+            customSizes.className = 'customsize';
 
             for (fkey in this.fields) {
                 if (this.fields.hasOwnProperty(fkey)) {
@@ -483,5 +483,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapSize',
          */
         _getSizeLabel: function (label, option) {
             return (label + ' (' + option.width + ' x ' + option.height + 'px)');
-        },
+        }
     });

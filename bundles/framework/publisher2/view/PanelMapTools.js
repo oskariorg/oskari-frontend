@@ -147,5 +147,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                     tool.setMode(mode);
                 }
             });
-        },
+        }
     });
