@@ -1135,10 +1135,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 analysisWFSLayer,
                 selectedFids,
                 selectedGeometry = null,
-                feature = null,
-                wkt = new OpenLayers.Format.WKT(),
-                event,
-                sandbox = me.instance.getSandbox();
+                feature = null;
 
             if (analysisWFSLayerId) {
                 analysisWFSLayer = me.instance.getSandbox().findMapLayerFromSelectedMapLayers(me.WFSLayerService.getAnalysisWFSLayerId());

@@ -758,9 +758,9 @@ Oskari.clazz.define(
                 selectionToolsContainer = jQuery(me._templates.selectionToolsContainer).clone(),
                 selectionToolTemplate = jQuery(me._templates.tool),
                 selectionToolButtonsContainer = selectionToolsContainer.find('div.toolContainerButtons');
-                hasWFSLayers = (me.WFSLayerService.getTopWFSLayer() !== undefined && me.WFSLayerService.getTopWFSLayer() !== null),
-                WFSSelections = (me.WFSLayerService.getWFSSelections() && me.WFSLayerService.getWFSSelections().length > 0)
-                selectionTools = [
+            var hasWFSLayers = (me.WFSLayerService.getTopWFSLayer() !== undefined && me.WFSLayerService.getTopWFSLayer() !== null);
+            var WFSSelections = (me.WFSLayerService.getWFSSelections() && me.WFSLayerService.getWFSSelections().length > 0);
+            var selectionTools = [
                     {
                         tool:'point',
                         cssClass:'point'
@@ -780,10 +780,9 @@ Oskari.clazz.define(
                     {
                         tool:'circle',
                         cssClass:'circle'
-                    }],
-                emptyBtn = Oskari.clazz.create(
-                    'Oskari.userinterface.component.buttons.CancelButton');
+                    }];
 
+            var emptyBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
             emptyBtn.setHandler(function () {
                 if (me.WFSLayerService.getAnalysisWFSLayerId()) {
                     me.WFSLayerService.emptyWFSFeatureSelections(me.sandbox.findMapLayerFromSelectedMapLayers(me.WFSLayerService.getAnalysisWFSLayerId()));
@@ -845,8 +844,7 @@ Oskari.clazz.define(
          * Enables / disables the empty selections - button in selection tools
          */
         _toggleEmptySelectionBtn: function(enable) {
-            var me = this,
-                selectionToolsContainer = jQuery('div.toolContainer');
+            var selectionToolsContainer = jQuery('div.toolContainer');
             if (enable) {
                 selectionToolsContainer.find(".toolContainerButtons").find("input[type=button]").prop({'disabled': false});
             } else {
@@ -1395,9 +1393,6 @@ Oskari.clazz.define(
                 ),
                 gfiReqBuilder = sandbox.getRequestBuilder(
                     'MapModulePlugin.GetFeatureInfoActivationRequest'
-                ),
-                hiReqBuilder = sandbox.getRequestBuilder(
-                    'WfsLayerPlugin.ActivateHighlightRequest'
                 );
 
             // notify components to reset any saved "selected place" data

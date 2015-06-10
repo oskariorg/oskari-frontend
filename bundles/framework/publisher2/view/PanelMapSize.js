@@ -26,10 +26,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapSize',
             width: 580,
             height: 387
         }, {
+            // default option
             id: 'medium',
             width: 700,
             height: 525,
-            selected: true // default option
+            selected: true
         }, {
             id: 'large',
             width: 1240,
@@ -108,7 +109,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapSize',
             }
 
             var me = this,
-                mapDiv = me.mapmodule.getMapEl(),
                 size = me._getSelectedMapSize(),
                 customsize = me.panel.getContainer().find('.customsize'),
                 widthInput = customsize.find('input[name=width]'),
@@ -168,8 +168,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapSize',
         _calculateGridWidth: function () {
             var sandbox = Oskari.getSandbox('sandbox'),
                 columns,
-                statsGrid = sandbox.getStatefulComponents().statsgrid, // get state of statsgrid
                 width = 160;
+            // TODO: do not reference statsgrid directly... 
+            // perhaps save indicators to a service that can be referenced or something
+            // get state of statsgrid
+            var statsGrid = sandbox.getStatefulComponents().statsgrid;
 
             if (statsGrid &&
                 statsGrid.state &&
@@ -355,7 +358,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapSize',
                 fkey,
                 data,
                 field,
-                selectedLang = Oskari.getLang(),
                 panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel'),
                 contentPanel = panel.getContainer(),
                 tooltipCont = me.templates.help.clone(),

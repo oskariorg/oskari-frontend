@@ -15,10 +15,10 @@ function(sandbox, mapmodule, localization) {
     // plugin
     this.__plugin = null;
     // tool state
-	this.state= {
-		enabled: false,
-		mode:null
-	};
+    this.state= {
+        enabled: false,
+        mode:null
+    };
 
 }, {
     // the panel group where tool is appended
@@ -48,14 +48,14 @@ function(sandbox, mapmodule, localization) {
             config: {}
         };
     },
-	/**
-	* Set enabled.
-	* @method setEnabled
-	* @public
-	*
-	* @param {Boolean} enabled is tool enabled or not
-	*/
-   	setEnabled : function(enabled) {
+    /**
+    * Set enabled.
+    * @method setEnabled
+    * @public
+    *
+    * @param {Boolean} enabled is tool enabled or not
+    */
+    setEnabled : function(enabled) {
 
     },
     /**
@@ -66,7 +66,7 @@ function(sandbox, mapmodule, localization) {
     * @returns {Object} jQuery element
     */
     getExtraOptions: function() {
-    	return null;
+        return null;
     },
     /**
     * Get name.
@@ -91,7 +91,7 @@ function(sandbox, mapmodule, localization) {
         var me = this,
             supportedModes = [];
 
-    	supportedModes = jQuery.grep(me.__supportedModes, function(modename, index) {
+        supportedModes = jQuery.grep(me.__supportedModes, function(modename) {
             return modename === mode;
         });
 
@@ -105,7 +105,7 @@ function(sandbox, mapmodule, localization) {
     * @returns {Boolean} is tool displayed
     */
     isDisplayed: function() {
-    	return true;
+        return true;
     },
     /**
     * Set mode to.
@@ -115,8 +115,8 @@ function(sandbox, mapmodule, localization) {
     * @param {String} mode the mode
     */
     setMode: function(mode){
-    	var me = this;
-    	me.state.mode = mode;
+        var me = this;
+        me.state.mode = mode;
 
         if(me.state.enabled === true && me.isDisplayedInMode(mode) === false) {
             me.setEnabled(false);
@@ -136,8 +136,8 @@ function(sandbox, mapmodule, localization) {
     * @returns {Integer} group id
     */
     getGroup : function() {
-    	var me = this;
-    	return me.__group;
+        var me = this;
+        return me.__group;
     },
     /**
     * Get index
@@ -169,14 +169,14 @@ function(sandbox, mapmodule, localization) {
     * @returns {Object} tool value object
     */
     getValues: function () {
-    	var me = this,
-    		saveState = {
-    			tool: me.getTool().id,
-    			show: me.state.enabled,
-    			subTools : []
-    		};
+        var me = this,
+            saveState = {
+                tool: me.getTool().id,
+                show: me.state.enabled,
+                subTools : []
+            };
 
-    	return saveState;
+        return saveState;
     },
     /**
     * Validate tool.

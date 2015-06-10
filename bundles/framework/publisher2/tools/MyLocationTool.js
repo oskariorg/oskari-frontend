@@ -4,9 +4,9 @@ function() {
     index : 4,
     allowedLocations : ['top left', 'top right', 'bottom left', 'bottom right'],
     allowedSiblings : [
-	    'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
-	    'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
-	    'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
+        'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
+        'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
+        'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
     ],
 
     groupedSiblings : true,
