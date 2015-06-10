@@ -4,7 +4,7 @@
 * Provides an interface for bundles to add tool to publisher2.
 */
 
-Oskari.clazz.define('Oskari.mapframework.publisher.tool.Tool', 
+Oskari.clazz.define('Oskari.mapframework.publisher.tool.Tool',
 function(sandbox, mapmodule, localization) {
     // sandbox
     this.__sandbox = sandbox;
@@ -56,7 +56,7 @@ function(sandbox, mapmodule, localization) {
 	* @param {Boolean} enabled is tool enabled or not
 	*/
    	setEnabled : function(enabled) {
-   		    
+
     },
     /**
     * Get extra options.
@@ -76,7 +76,7 @@ function(sandbox, mapmodule, localization) {
     * @returns {String} tool name
     */
     getName: function() {
-        
+
     },
     /**
     * Is displayed in mode.
@@ -165,7 +165,7 @@ function(sandbox, mapmodule, localization) {
     * Get values.
     * @method getValues
     * @public
-    * 
+    *
     * @returns {Object} tool value object
     */
     getValues: function () {
@@ -175,7 +175,7 @@ function(sandbox, mapmodule, localization) {
     			show: me.state.enabled,
     			subTools : []
     		};
-    	
+
     	return saveState;
     },
     /**
@@ -188,6 +188,6 @@ function(sandbox, mapmodule, localization) {
         return true;
         // or tool create validation
     }
-}, { 
-    'protocol' : ['Oskari.mapframework.publisher.Tool'] 
-}); 
+}, {
+    'protocol' : ['Oskari.mapframework.publisher.Tool']
+});

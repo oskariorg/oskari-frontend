@@ -214,7 +214,7 @@ Oskari.clazz.define(
         /*
          * @method emptyWFSFeatureSelections
          *
-         * Convenience function to clear selections from all WFS layers 
+         * Convenience function to clear selections from all WFS layers
          */
         emptyAllWFSFeatureSelections: function() {
             var me = this;

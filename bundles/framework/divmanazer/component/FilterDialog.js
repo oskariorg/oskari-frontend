@@ -187,8 +187,8 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                 filterOption,
                 selectedFeatureIds = this.WFSLayerService.getSelectedFeatureIds(layer._id),
                 me = this,
-                bboxSelectionDisabled = (typeof this.fixedOptions.clickedFeaturesSelection === "undefined" && 
-                                            this.selectedFeatureIds && 
+                bboxSelectionDisabled = (typeof this.fixedOptions.clickedFeaturesSelection === "undefined" &&
+                                            this.selectedFeatureIds &&
                                             this.getSelectedFeatureIds.length > 0);
 
             // The BBOX filter selection
@@ -224,7 +224,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
             return content;
         },
         _setClickedFeaturesSelectionChangeEventHandlers: function(clickedFeaturesContainer, bboxSelectionContainer, clickedFeatures, selectedTemporaryFeatures) {
-            var me = this;                
+            var me = this;
 
             clickedFeaturesContainer.find('#analyse-clicked-features').on("click", function () {
                 if (clickedFeaturesContainer.find('#analyse-clicked-features').prop('checked') === true) {
@@ -267,7 +267,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
             container.find('#analyse-clicked-features').prop({'disabled': !enable});
             if (check !== undefined) {
                 container.find('#analyse-clicked-features').prop({'checked': check});
-                 
+
             }
         },
 
@@ -276,7 +276,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                 check = false;
             }
             container.find('#analyse-filter-by-geometry').prop({'checked':check, 'disabled': !enable});
-            
+
             if (check) {
                 container.find('input[name="filter-by-geometry"]').prop({'disabled': !enable});
                 //check the first option.
@@ -325,7 +325,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                 bboxDiv.find('div.bbox-off').find('input[name=filter-bbox]').prop({'checked': true});
                 this._toggleOnlyClickedFeaturesSelection(clickedFeaturesDiv, clickedFeatures, false);
                 this._toggleOnlySelectedTemporaryFeaturesSelection(clickedFeaturesDiv, selectedTemporaryFeatures, false);
-            //no previous selections (bbox or no bbox, ) and no selected features -> select bbox by default. 
+            //no previous selections (bbox or no bbox, ) and no selected features -> select bbox by default.
             } else if (!clickedFeatures || !selectedTemporaryFeatures) {
                 this._toggleBBOXSelection(bboxDiv, true, true);
                 this._toggleOnlyClickedFeaturesSelection(clickedFeaturesDiv, clickedFeatures, false);
@@ -359,7 +359,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                     }
                 }
             }
-            
+
             //the selection had been made before and there still are features selected?
             if (values.featureIds && clickedFeatures) {
                 this._toggleOnlyClickedFeaturesSelection(clickedFeaturesDiv, true, true);
@@ -374,7 +374,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                 this._toggleBBOXSelection(bboxDiv, true, false);
                 this._toggleOnlyClickedFeaturesSelection(clickedFeaturesDiv, clickedFeatures, false);
             }
-            
+
         },
 
         /**
@@ -691,7 +691,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
             }
             if ('true' === bboxValue) {
                 filterValues.bbox = this.sandbox.getMap().getBbox();
-            } 
+            }
             else if ('false' === bboxValue) {
                 filterValues.noBBOX = true;
             }

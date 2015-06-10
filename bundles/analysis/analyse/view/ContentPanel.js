@@ -763,23 +763,23 @@ Oskari.clazz.define(
                 selectionTools = [
                     {
                         tool:'point',
-                        cssClass:'point'    
-                    }, 
+                        cssClass:'point'
+                    },
                     {
-                        tool:'line', 
-                        cssClass:'line'    
+                        tool:'line',
+                        cssClass:'line'
                     },
                     {
                         tool:'polygon',
-                        cssClass:'area'    
+                        cssClass:'area'
                     },
                     {
                         tool:'square',
-                        cssClass:'square'    
-                    }, 
+                        cssClass:'square'
+                    },
                     {
                         tool:'circle',
-                        cssClass:'circle'    
+                        cssClass:'circle'
                     }],
                 emptyBtn = Oskari.clazz.create(
                     'Oskari.userinterface.component.buttons.CancelButton');

@@ -704,12 +704,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 };
             }));
             radioButtonGroup.setHandler(selectionHandler);
-            
+
             // --> NÄMÄ?
             radioButtonGroup.insertTo(contentPanel);
             // <--
-            
-            
+
+
             customSizes.className = 'customsize';
             widthInput.setName('width');
             widthInput.setPlaceholder(me.loc.sizes.width);

@@ -78,7 +78,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin'
                 el.removeClass(me._prevMode);
             }
 
-            el.addClass(mode);            
+            el.addClass(mode);
             me._prevMode = mode;
         }
     }, {

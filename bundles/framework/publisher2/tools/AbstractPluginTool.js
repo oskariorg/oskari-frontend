@@ -57,7 +57,7 @@ function(sandbox, mapmodule, localization) {
         if(enabled === true) {
             me.__plugin.startPlugin(me.__sandbox);
 
-            
+
         } else {
             me.__plugin.stopPlugin(me.__sandbox);
         }

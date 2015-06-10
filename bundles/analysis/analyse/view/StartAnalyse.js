@@ -958,7 +958,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         option.id = (me.id_prefix + 'layer_' + option.id);
                     }
 
-                    //selections exist on some maplayer -> check that one. Otherwise use either the one that was selected before or the one that was added last 
+                    //selections exist on some maplayer -> check that one. Otherwise use either the one that was selected before or the one that was added last
                     if (allSelectedFeatures && allSelectedFeatures.length > 0) {
                         if (selectedFeaturesOnCurrentLayer && selectedFeaturesOnCurrentLayer.length > 0) {
                             option.checked = 'checked';
@@ -987,7 +987,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
             if (!selectedLayer && contentOptions.length) {
 
-                var checkedOptionsFound = _.find(contentOptions, {'checked':'checked'}); 
+                var checkedOptionsFound = _.find(contentOptions, {'checked':'checked'});
                 if (!checkedOptionsFound) {
                     _.first(contentOptions).checked = 'checked';
                 }
@@ -1030,7 +1030,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         } else {
                             //templayer or sumpin -> just set analysis layer null. Also, disable selection tools.
                             me.WFSLayerService.setAnalysisWFSLayerId(null);
-                            //TODO: maybe reconsider when to clear all selections. Might be useful to preserve the selections made on a wfs layer and use them 
+                            //TODO: maybe reconsider when to clear all selections. Might be useful to preserve the selections made on a wfs layer and use them
                             //if the user ticks on that layer again?
                             me.WFSLayerService.emptyAllWFSFeatureSelections();
                         }
@@ -1123,15 +1123,15 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
         /**
          * @method setContentPanelSelectedGeometry
-         * If no selected geometry found -> 
-         * Check if there are selections made prior to entering the analysis and fetch those from WFSLayerService. Return the first selected feature's geometry, if a selection exists. 
+         * If no selected geometry found ->
+         * Check if there are selections made prior to entering the analysis and fetch those from WFSLayerService. Return the first selected feature's geometry, if a selection exists.
          * Otherwise returns null.
          *
          * @return {OpenLayers.Feature.Vector} or null
          */
         setContentPanelSelectedGeometry: function() {
             var me = this,
-                analysisWFSLayerId = me.WFSLayerService.getAnalysisWFSLayerId(), 
+                analysisWFSLayerId = me.WFSLayerService.getAnalysisWFSLayerId(),
                 analysisWFSLayer,
                 selectedFids,
                 selectedGeometry = null,
@@ -2792,8 +2792,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 var clickedGeometries = me._getClickedFeaturesGeometries(),
                     selectedFeatures = me.WFSLayerService.getSelectedFeatureIds(layer.getId()),
                     boolSelectedFeatures = (selectedFeatures !== undefined && selectedFeatures.length > 0),
-                    boolSelectedTemporaryFeatures = (me.contentPanel.featureLayer !== undefined && 
-                                                me.contentPanel.featureLayer.selectedFeatures !== undefined && 
+                    boolSelectedTemporaryFeatures = (me.contentPanel.featureLayer !== undefined &&
+                                                me.contentPanel.featureLayer.selectedFeatures !== undefined &&
                                                 me.contentPanel.featureLayer.selectedFeatures.length > 0);
 
                 if (!me._filterPopups[layer.getId()]) {

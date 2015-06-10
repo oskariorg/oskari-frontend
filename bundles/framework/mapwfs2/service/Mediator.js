@@ -397,14 +397,14 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
         //if user has not used Ctrl during selection, make totally new selection
         if (!data.data.keepPrevious) {
             makeNewSelection = true;
-        } 
+        }
         if (!me.WFSLayerService.isSelectFromAllLayers()) {
             if (analysisWFSLayer && layer._id !== analysisWFSLayer) {
                 return;
             } else if (!analysisWFSLayer && layer._id !== topWFSLayer) {
                 return;
             }
-            
+
         }
         if (data.data.features !== 'empty') {
             for (i = 0; i < data.data.features.length; i += 1) {
@@ -414,7 +414,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
 
         if (data.data.features !== 'empty') {
             me.WFSLayerService.setWFSFeaturesSelections(layer._id, featureIds, makeNewSelection);
-        } 
+        }
 
         var event = this.plugin.getSandbox().getEventBuilder('WFSFeaturesSelectedEvent')(me.WFSLayerService.getSelectedFeatureIds(layer._id), layer, selectFeatures);
         this.plugin.getSandbox().notifyAll(event);
