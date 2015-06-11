@@ -4,14 +4,18 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool',
  * @param  {[type]} sandbox      [description]
  * @param  {[type]} mapmodule    [description]
  * @param  {[type]} localization [description]
+ * @param  {[type]} instance     [description]
+ * @param  {[type]} handlers     [description]
  * @return {[type]}              [description]
  */
-function(sandbox, mapmodule, localization) {
+function(sandbox, mapmodule, localization, instance, handlers) {
     this.__index = 0;
     this.__sandbox = sandbox;
     this.__mapmodule = mapmodule;
     this.__loc = localization[this.group];
+    this.__instance = instance;
     this.__plugin = null;
+    this.__handlers = handlers;
     this.state= {
         enabled: false,
         mode:null
@@ -56,8 +60,6 @@ function(sandbox, mapmodule, localization) {
 
         if(enabled === true) {
             me.__plugin.startPlugin(me.__sandbox);
-
-
         } else {
             me.__plugin.stopPlugin(me.__sandbox);
         }
