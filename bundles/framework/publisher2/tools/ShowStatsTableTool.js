@@ -25,7 +25,7 @@ function() {
         var me = this,
             statsGrid = me.__sandbox.getStatefulComponents().statsgrid,
             statsGridState = me._filterIndicators(_.clone(statsGrid.state, true)),
-            layer = me._getStatLayer();
+            layer = me._getStatsLayer();
         return {
             id: 'Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin',
             name: 'grid',
@@ -36,7 +36,13 @@ function() {
             }
         };
     },
-    _getStatLayer: function(){
+    /**
+    * Get stats layer.
+    * @method @private _getStatsLayer
+    *
+    * @return founded stats layer, if not found then null
+    */
+    _getStatsLayer: function(){
         var me = this,
             selectedLayers = me.__sandbox.findAllSelectedMapLayers(),
             statsLayer = null,
@@ -49,6 +55,7 @@ function() {
                 break;
             }
         }
+        return statsLayer;
     },
     /**
     * Set enabled.
@@ -60,7 +67,7 @@ function() {
     setEnabled : function(enabled) {
         var me = this,
             tool = me.getTool(),
-            statLayer = me._getStatLayer(),
+            statLayer = me._getStatsLayer(),
             request,
             elLeft,
             statsContainer;
@@ -99,6 +106,18 @@ function() {
         if(enabled === true && me.state.mode !== null && me.__plugin && typeof me.__plugin.setMode === 'function'){
             me.__plugin.setMode(me.state.mode);
         }
+    },
+    /**
+    * Is displayed.
+    * @method isDisplayed
+    * @public
+    *
+    * @returns {Boolean} is tool displayed
+    */
+    isDisplayed: function() {
+        var me = this,
+            statLayer = me._getStatsLayer();
+        return statLayer !== null;
     },
     /**
      * @private @method _filterIndicators
