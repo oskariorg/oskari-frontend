@@ -328,14 +328,18 @@ Oskari.registerLocalization(
                 "refreshButton": "Uppdatera filter",
                 "addFilter": "Tilllägg en ny filter.",
                 "removeFilter": "Ta bort en ny filter.",
+                "content": {
+                    "title": "NOT TRANSLATED"
+                },
                 "bbox": {
-                    "title": "Filter på grund av kartvyn",
                     "on": "Ta med endast objekt som syns på kartvyn.",
                     "off": "Ta med alla objekt."
                 },
                 "clickedFeatures": {
-                    "title": "Filter på grund av objekt",
-                    "label": "Ta med endast objekt utvalda på kartan."
+                    "clickedFeaturesLabel": "Ta med endast objekt utvalda på kartan.",
+                    "filterByGeometryLabel": "NOT TRANSLATED",
+                    "filterByGeometryIntersect": "NOT TRANSLATED",
+                    "filterByGeometryContains": "NOT TRANSLATED"
                 },
                 "values": {
                     "title": "Filtrera objekt på grund av attribut data",
@@ -345,6 +349,10 @@ Oskari.registerLocalization(
                         "boolean": "Logisk operator",
                         "operator": "Operator",
                         "attribute-value": "Värde"
+                    },
+                    "info": {
+                        "bboxOff":"NOT TRANSLATED",
+                        "filterByGeometrySelected":"NOT TRANSLATED"
                     },
                     "equals": "är lika med",
                     "like": "är ungefär lika med",
@@ -360,7 +368,8 @@ Oskari.registerLocalization(
                     "attribute_missing": "Attribut saknas.",
                     "operator_missing": "Operator saknas.",
                     "value_missing": "Värde saknas.",
-                    "boolean_operator_missing": "Logisk operator saknas."
+                    "boolean_operator_missing": "Logisk operator saknas.",
+                    "bbox_selected_with_no_properties":"NOT TRANSLATED"
                 }
             },
             "help": "Anvisning",

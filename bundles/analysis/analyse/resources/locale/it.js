@@ -269,14 +269,18 @@ Oskari.registerLocalization({
                 "refreshButton": "Aggiorna filtri",
                 "addFilter": "Aggiungi un nuovo filtro",
                 "removeFilter": "Rimuovi filtri",
+                "content": {
+                    "title": "NOT TRANSLATED"
+                },
                 "bbox": {
-                    "title": "Mappa dei filtri",
                     "on": "In uso",
                     "off": "Non in uso"
                 },
                 "clickedFeatures": {
-                    "title": "Filtri sulle feature",
-                    "label": "Includi solo le feature selezionate"
+                    "clickedFeaturesLabel": "Includi solo le feature selezionate",
+                    "filterByGeometryLabel": "NOT TRANSLATED",
+                    "filterByGeometryIntersect": "NOT TRANSLATED",
+                    "filterByGeometryContains": "NOT TRANSLATED"
                 },
                 "values": {
                     "title": "Filter",
@@ -286,6 +290,10 @@ Oskari.registerLocalization({
                         "boolean": "Operatore logico",
                         "operator": "Operatore",
                         "attribute-value": "Valore"
+                    },
+                    "info": {
+                        "bboxOff":"NOT TRANSLATED",
+                        "filterByGeometrySelected":"NOT TRANSLATED"
                     },
                     "equals": "=",
                     "like": "~=",
@@ -301,7 +309,8 @@ Oskari.registerLocalization({
                     "attribute_missing": "Manca l'attributo",
                     "operator_missing": "Manca l'operatore",
                     "value_missing": "Manca il valore",
-                    "boolean_operator_missing": "Manca l'operatore logico"
+                    "boolean_operator_missing": "Manca l'operatore logico",
+                    "bbox_selected_with_no_properties":"NOT TRANSLATED"
                 }
             },
             "help": "Help",
