@@ -5,13 +5,13 @@ Oskari.registerLocalization(
     "value": {
         "title": "Dataset importering",
         "desc": "Du kan importera dina egna dataset i shape-, gpx- eller mif/mid filformat i zip-paketet eller kmz filformat.",
-        "help": "Välj en fil från din dator eller ge en länk till den fil som innehåller ditt dataset. Filen kan vara i shp, zip eller kml / kmz-format. Du kan skapa zip-filer från shapefiler genom zippa filerna med ändelsen shp, SHX, DBF och PRJ till samma zip-fil. Också kml / KMZ-filer från Google maps kan kopplas på samma sätt.",
         "tool": {
             "tooltip": "Importera ditt eget dataset"
         },
         "flyout": {
             "title": "Dataset importering",
             "description": "Du kan importera dina egna dataset i shape-, gpx- eller mif/mid filformat i zip-paketet eller kmz filformat. Du kan importera filer med högst 5000 objekt.",
+            "help": "Välj en fil från din dator eller ge en länk till den fil som innehåller ditt dataset. Filen kan vara i shp, zip eller kml / kmz-format. Du kan skapa zip-filer från shapefiler genom zippa filerna med ändelsen shp, SHX, DBF och PRJ till samma zip-fil. \nOckså kml / KMZ-filer från Google maps kan kopplas på samma sätt. \nMif/mid data CRS måste vara kartans CRS",
             "actions": {
                 "cancel": "Avbryt",
                 "next": "Nästa"
