@@ -314,14 +314,18 @@ Oskari.registerLocalization(
                 "refreshButton": "Refresh the filter",
                 "addFilter": "Add a new filter.",
                 "removeFilter": "Remove the filter.",
+                "content": {
+                    "title": "NOT TRANSLATED"
+                },
                 "bbox": {
-                    "title": "Map window filter",
                     "on": "Only the features visible on the map window",
                     "off": "All features"
                 },
                 "clickedFeatures": {
-                    "title": "Feature selection filter",
-                    "label": "Only the features selected on the map"
+                    "clickedFeaturesLabel": "Only the features selected on the map",
+                    "filterByGeometryLabel": "NOT TRANSLATED",
+                    "filterByGeometryIntersect": "NOT TRANSLATED",
+                    "filterByGeometryContains": "NOT TRANSLATED"
                 },
                 "values": {
                     "title": "Filter",
@@ -331,6 +335,10 @@ Oskari.registerLocalization(
                         "boolean": "Logical operator",
                         "operator": "Operator",
                         "attribute-value": "Value"
+                    },
+                    "info": {
+                        "bboxOff":"NOT TRANSLATED",
+                        "filterByGeometrySelected":"NOT TRANSLATED"
                     },
                     "equals": "equals",
                     "like": "is like",
@@ -346,7 +354,8 @@ Oskari.registerLocalization(
                     "attribute_missing": "The attribute is missing.",
                     "operator_missing": "The operator is missing.",
                     "value_missing": "The value is missing.",
-                    "boolean_operator_missing": "The logical operator is missing."
+                    "boolean_operator_missing": "The logical operator is missing.",
+                    "bbox_selected_with_no_properties":"NOT TRANSLATED"
                 }
             },
             "help": "Help",

@@ -307,7 +307,6 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
      * Creates WFSFeaturesSelectedEvent
      */
     getWFSMapClick: function (data) {
-        debugger;
         var sandbox = this.plugin.getSandbox(),
             me = this,
             layer = sandbox.findMapLayerFromSelectedMapLayers(data.data.layerId),
@@ -384,7 +383,6 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
      * Creates WFSFeaturesSelectedEvent
      */
     getWFSFilter: function (data) {
-        debugger;
         var me = this,
             layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId),
             featureIds = [],
@@ -699,7 +697,6 @@ Oskari.clazz.category(
          * sends message to /service/wfs/setFilter
          */
         setFilter: function (geojson, keepPrevious) {
-            debugger;
             var filter = {
                 geojson: geojson
             };
