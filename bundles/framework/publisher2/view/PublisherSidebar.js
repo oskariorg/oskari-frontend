@@ -180,8 +180,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 accordion.addPanel(panel.getPanel());
             });
 
-
-
             // -- render to UI and setup buttons --
             accordion.insertTo(contentDiv);
             contentDiv.append(me._getButtons());
@@ -198,7 +196,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                     'EnableMapKeyboardMovementRequest'
                 );
             });
+
+            
         },
+
+        /**
+        * Initialize panels.
+        * @method @public initPanels
+        */
+        initPanels: function(){
+            var me = this;
+            _.each(me.panels, function(panel) {
+               if(panel.init) {
+                    panel.init();
+                }
+            });
+        },
+
         /**
         * Handles panels update map size changes
         * @method @private _handleMapSizeChange
@@ -302,11 +316,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             _.each(definedTools, function(ignored, toolname) {
                 // TODO: document localization requirements!
                 var tool = Oskari.clazz.create(toolname, sandbox, mapmodule, me.loc, me.instance, me.getHandlers());
-                var group = tool.getGroup();
-                if(!grouping[group]) {
-                    grouping[group] = [];
+                if(tool.isDisplayed() === true) {
+                    var group = tool.getGroup();
+                    if(!grouping[group]) {
+                        grouping[group] = [];
+                    }
+                    grouping[group].push(tool);
                 }
-                grouping[group].push(tool);
             });
             // create panel for each tool group
             var panels = [];
@@ -316,10 +332,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                     group, tools, sandbox, me.loc, me.instance
                 );
                 panel.init(me.data);
-                // TODO: need also check is displayed in mode ?
-                if(panel.isDisplayed() === true) {
-                    panels.push(panel);
-                }
+                panels.push(panel);
             });
             return panels;
         },

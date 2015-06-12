@@ -30,7 +30,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
          * @param {Object} pData initial data
          */
         init: function (pData) {
-            this.data = pData;
+            var me = this;
+            me.data = pData;
+            _.each(me.tools, function(tool) {
+                tool.init();
+            });
         },
         /**
         * Sort tools
@@ -148,23 +152,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                     tool.setMode(mode);
                 }
             });
-        },
-
-        /**
-        * Is panel displayed.
-        * @method isDisplayed
-        * @public
-        *
-        * @return {Boolean} true if any tool is visible, false if all tools are unvisible
-        */
-        isDisplayed: function() {
-            var me = this,
-                displayed = [];
-
-            displayed = jQuery.grep(me.tools, function(tool, index){
-                return tool.isDisplayed() === true;
-            });
-            
-            return displayed.length === me.tools.length;
         }
     });

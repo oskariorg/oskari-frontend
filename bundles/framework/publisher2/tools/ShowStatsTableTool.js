@@ -3,12 +3,8 @@ function() {
 }, {
     index : 0,
     group: 'data',
-    allowedLocations : ['bottom left', 'bottom right'],
-    allowedSiblings : [
-        'Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin',
-        'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
-        'Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin'
-    ],
+    allowedLocations : [],
+    allowedSiblings : [],
 
     groupedSiblings : false,
     templates: {
@@ -46,8 +42,7 @@ function() {
         var me = this,
             selectedLayers = me.__sandbox.findAllSelectedMapLayers(),
             statsLayer = null,
-            layer,
-            request;
+            layer;
         for (i = 0; i < selectedLayers.length; i += 1) {
             layer = selectedLayers[i];
             if (layer.getLayerType() === 'stats') {
@@ -67,7 +62,7 @@ function() {
     setEnabled : function(enabled) {
         var me = this,
             tool = me.getTool(),
-            statLayer = me._getStatsLayer(),
+            statsLayer = me._getStatsLayer(),
             request,
             elLeft,
             statsContainer;
@@ -79,12 +74,12 @@ function() {
                 'Oskari.statistics.bundle.statsgrid.StatisticsService',
                 me.__instance
             );
-            if(statLayer){
-                request = me.__sandbox.getRequestBuilder('StatsGrid.StatsGridRequest')(false, layer);
+            if(statsLayer){
+                request = me.__sandbox.getRequestBuilder('StatsGrid.StatsGridRequest')(false, statsLayer);
                 me.__sandbox.request(me.__instance, request);
             }
             me.__sandbox.registerService(me.statsService);            
-            me.__plugin = Oskari.clazz.create(tool.id, tool.config);
+            me.__plugin = Oskari.clazz.create(tool.id, tool.config, Oskari.getLocalization('StatsGrid'));
             me.__mapmodule.registerPlugin(me.__plugin);
             me.statsContainer = jQuery(me.templates.publishedGridTemplate);
         }
@@ -116,8 +111,8 @@ function() {
     */
     isDisplayed: function() {
         var me = this,
-            statLayer = me._getStatsLayer();
-        return statLayer !== null;
+            statsLayer = me._getStatsLayer();
+        return statsLayer !== null;
     },
     /**
      * @private @method _filterIndicators

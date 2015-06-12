@@ -31,9 +31,17 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     groupedSiblings : false,
 
     /**
+    * Initialize tool
+    * @method init
+    * @public
+    */
+    init: function(){
+        // override
+    },
+    /**
     * Get tool object.
     * @method getTool
-    * @private
+    * @rivate
     *
     * @returns {Object} tool
     */
@@ -181,5 +189,19 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     validate: function() {
         // always valid
         return true;
+    },
+    /**
+    * Stop tool.
+    * @method stop
+    * @public
+    */
+    stop: function(){
+        var me = this;
+
+        if(!me.__plugin) {
+            me.__mapmodule.unregisterPlugin(me.__plugin);
+            me.__plugin.stopPlugin(me.__sandbox);
+        }
     }
+
 });
