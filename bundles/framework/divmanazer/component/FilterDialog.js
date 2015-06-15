@@ -315,13 +315,13 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                 bboxOFF = filterContentBBOX.find('div.bbox-off').find("input[name=analysis-filter-radio]").is(':checked');
             if (bboxOFF) {
                 valuesSelection.find("div.values-additional-info").html(this.loc.filter.values.info.bboxOff);
-                valuesSelection.find("#filter-by-values-container").css({"display": "block"});
+                valuesSelection.find("div.filter-by-values-container").css({"display": "block"});
             } else if (filterByGeometryChecked || clickedFeatureSelectionChecked) {
                 valuesSelection.find("div.values-additional-info").html(this.loc.filter.values.info.filterByGeometrySelected);
-                valuesSelection.find("#filter-by-values-container").css({"display": "none"})
+                valuesSelection.find("div.filter-by-values-container").css({"display": "none"})
             } else {
                 valuesSelection.find("div.values-additional-info").html("");
-                valuesSelection.find("#filter-by-values-container").css({"display": "block"})
+                valuesSelection.find("div.filter-by-values-container").css({"display": "block"})
             }
         },
         /**
