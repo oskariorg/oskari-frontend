@@ -396,49 +396,15 @@ div.analyse-filter-popup-content {
       
     }
 
-    div.analyse-filter-clicked-features {
-
-        div.clicked-features-title, div.clicked-features-checkboxes {
-            display: inline-block;
-        }
-
-        div.clicked-features-title {
-            float: left;
-        }
-
-        div.filter-by-geometry-checkbox, div.clicked-features-checkbox {
-            margin-left: 25px;
-            margin-top: 5px;
-        }
-
-        div.filter-by-geometry-checkbox {
-            margin-bottom: 5px;
-        }
-
-        div.filter-by-geometry-radio {
-            display: inline-block;
-            margin-left: 50px!important;
-        }
-
-        label {
-            margin-left: 8px;
-        }
-
-        input:disabled + label {
-            opacity: 0.5;
-        }
-
-    }
-
-    div.bbox-title, div.bbox-radio {
+    div.filter-selections-title, div.filter-selection-radios {
         display: inline-block;
     }
 
-    div.bbox-title {
+    div.filter-selections-title {
         float: left;
     }
 
-    div.bbox-radio {
+    div.filter-selection-radios {
         margin-left: 25px;
 
         div.bbox-on, div.bbox-off {
@@ -448,7 +414,10 @@ div.analyse-filter-popup-content {
         input:disabled + label {
             opacity: 0.5;
         }
-
+    }
+    div.filter-by-geometry-methods {
+        display: inline-block;
+        margin-left: 25px!important;     
     }
 
 }

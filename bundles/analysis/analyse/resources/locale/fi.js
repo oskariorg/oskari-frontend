@@ -332,14 +332,15 @@ Oskari.registerLocalization(
                 "refreshButton": "Päivitä suodatin",
                 "addFilter": "Lisää uusi suodatin.",
                 "removeFilter": "Poista suodatin.",
+                "content": {
+                    "title": "Aluerajaus"
+                },
                 "bbox": {
-                    "title": "Ikkunarajaus",
                     "on": "Ota mukaan vain kartalla näkyvät kohteet.",
                     "off": "Ota mukaan kaikki kohteet."
                 },
                 "clickedFeatures": {
-                    "title": "Kohderajaus",
-                    "clickedFeaturesLabel": "Ota mukaan vain kartalta valitut kohteet.",
+                    "clickedFeaturesLabel": "Ota mukaan vain tasolta valitut kohteet.",
                     "filterByGeometryLabel": "Ota mukaan vain kohteet, jotka",
                     "filterByGeometryIntersect": "leikkaavat valittua kohdetta",
                     "filterByGeometryContains": "ovat valitun kohteen sisällä"
@@ -352,6 +353,10 @@ Oskari.registerLocalization(
                         "boolean": "Looginen operaattori",
                         "operator": "Operaattori",
                         "attribute-value": "Arvo"
+                    },
+                    "info": {
+                        "bboxOff":"Ilman maantieteellistä rajausta analyysi kohdistuu koko aineistoon. Lisää vähintään yksi ominaisuustietojen mukaan tehtävä suodatus.",
+                        "filterByGeometrySelected":"Voit suodattaa ominaisuustiedoilla vain, jos et käytä valittujen kohteiden suodatusta"
                     },
                     "equals": "on yhtäsuuri kuin",
                     "like": "on likimäärin yhtäsuuri kuin",
@@ -367,7 +372,8 @@ Oskari.registerLocalization(
                     "attribute_missing": "Ominaisuustieto puuttuu.",
                     "operator_missing": "Operaattori puuttuu.",
                     "value_missing": "Arvo puuttuu.",
-                    "boolean_operator_missing": "Looginen operaattori puuttuu."
+                    "boolean_operator_missing": "Looginen operaattori puuttuu.",
+                    "bbox_selected_with_no_properties":"Ilman maantieteellistä rajausta analyysi kohdistuu koko aineistoon.<br/> 1) Lisää ominaisuustietosuodatin tai<br/> 2) Käytä kartalla näkyviä kohteita."
                 }
             },
             "help": "Ohje",
