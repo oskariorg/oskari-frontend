@@ -58,8 +58,6 @@ Oskari.clazz.define(
                 '  <div class="controls"></div>' +
                 '  <div class="moreLess"></div>' +
                 '  <div class="advanced"></div>' +
-                '  <div class="info"></div>' +
-                '  <div class="showOnMapBtns"></div>'+
                 '  <div class="resultList"></div>' +
                 '</div>'
             ),
@@ -78,6 +76,20 @@ Oskari.clazz.define(
                 '  <div class="checkboxes"></div>' +
                 '</div>'
             ),
+            templateSearchResultsWindow: jQuery(
+            '<div class="window_search_results">' +
+            '  <div class="header">' +
+            '    <div class="icon-close">' +
+            '    </div>' +
+            '    <h3></h3>' +
+            '  </div>' +
+            '  <div class="content">' +
+            '   <div class="info"></div>' +
+            '       <div class="showOnMapBtns"></div>'+
+            '           <div class="resultList"></div>' +
+            '  </div>' +
+            '  </div>' +
+            '</div>'),
             templateResultTable: jQuery(
                 '<table class="search_result oskari-grid">' +
                 '  <thead><tr></tr></thead>' +
@@ -506,17 +518,34 @@ Oskari.clazz.define(
         },
 
         _renderResults: function (result, searchKey) {
+            var me = this,
+            searchResultWindow = me.templates.templateSearchResultsWindow.clone(),
+            resultList = null,
+            mapDiv = jQuery("#contentMap");
+
             if (!result || typeof result.totalCount !== 'number') {
                 return;
             }
 
-            var me = this,
-                resultList = me.optionPanel.find('div.resultList');
+            searchResultWindow.find('div.header h3').text(me.getLocalization('searchResults_header'));
 
-            resultList.empty();
-            me.lastResult = result;
+            searchResultWindow.find('div.header div.icon-close').bind(
+                'click',
+                function () {
+                    searchResultWindow.remove();
+                    me._updateMapModuleSize(mapDiv, searchResultWindow);
+                    me._clearMapFromResults();
+                    me._closeMapPopup();
 
-            var info = me.optionPanel.find('div.info');
+                    //FIXME
+                    me.sandbox.postRequestByName(
+                    'userinterface.UpdateExtensionRequest',
+                    [me.instance, 'attach']
+                );
+                }
+            );
+
+            var info = searchResultWindow.find('div.info');
             info.empty();
 
             // error handling
@@ -527,9 +556,16 @@ Oskari.clazz.define(
                 var nfK = 'searchservice_search_not_found_anything_text',
                     nf = me.getLocalization(nfK);
 
+                resultList = me.optionPanel.find('div.resultList');
                 resultList.append(nf);
                 return;
             } else {
+                // FIXME close flyout
+                me.sandbox.postRequestByName(
+                    'userinterface.UpdateExtensionRequest',
+                    [me.instance, 'close']
+                );
+
                 info.append(me.getLocalization('searchResultCount') + ' ' +
                     result.totalCount + ' ' + me.getLocalization('searchResultCount2'));
                 info.append('<br/>');
@@ -544,17 +580,21 @@ Oskari.clazz.define(
                 info.append(
                     me.getLocalization('searchResultDescriptionOrdering')
                 );
+
+                mapDiv.append(searchResultWindow);
+                me._updateMapModuleSize(mapDiv, searchResultWindow);               
+
+                resultList = searchResultWindow.find('div.resultList');
+                resultList.empty();
+                me.lastResult = result;
+
+             if (result.totalCount === 1) {
+                    // move map etc
+                    me._resultClicked(result.locations[0]);               
+                }
             }
 
-            if (result.totalCount === 1) {
-                // move map etc
-                me._resultClicked(result.locations[0]);
-                // close flyout
-                me.sandbox.postRequestByName(
-                    'userinterface.UpdateExtensionRequest',
-                    [me.instance, 'close']
-                );
-            }
+           
             // render results
             var table = me.templates.templateResultTable.clone(),
                 tableHeaderRow = table.find('thead tr'),
@@ -614,7 +654,7 @@ Oskari.clazz.define(
                     me._zoomMapToResults(result, true, tableBody);
                 }
             );
-            var showOnMapBtns = me.optionPanel.find('div.showOnMapBtns');
+            var showOnMapBtns = searchResultWindow.find('div.showOnMapBtns');
             btn.insertTo(showOnMapBtns);
 
             btn = Oskari.clazz.create(
@@ -629,13 +669,33 @@ Oskari.clazz.define(
             btn.insertTo(showOnMapBtns);
         },
 
-        _clearMapFromResults: function(){
+         _updateMapModuleSize: function (mapDiv, searchResultWindow) {
             var me = this;
-            var mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
-            var realLayer = mapModule._map.getLayersByName("vectorlayer_VECTOR");
-            if(realLayer[0] != null){
-                realLayer[0].removeAllFeatures();
+
+            if(searchResultWindow.find('div.resultList').is(":visible")){
+                mapDiv.css("margin-left",searchResultWindow.width());
+                jQuery(".oskariui-center").width(jQuery(".oskariui-center").width()-searchResultWindow.width());
+                jQuery(".fullscreenDiv").hide();
+            }else{
+                mapDiv.css("margin-left",jQuery("#maptools").width());
+                jQuery(".oskariui-center").width(jQuery(".oskariui-center").width()+searchResultWindow.width());
+                jQuery(".fullscreenDiv").show();
             }
+
+            var reqBuilder = me.sandbox.getRequestBuilder(
+                 'MapFull.MapSizeUpdateRequest'
+            );
+
+            if (reqBuilder) {
+                 me.sandbox.request(me, reqBuilder(true));
+            }
+        },
+
+        _clearMapFromResults: function(identifier, value, layer){
+            var me = this,
+             rn = 'MapModulePlugin.RemoveFeaturesFromMapRequest';
+
+            me.sandbox.postRequestByName(rn, [identifier, value, layer]);
         },
 
         _getVectorLayerStyle: function(){

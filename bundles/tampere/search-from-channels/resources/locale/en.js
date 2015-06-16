@@ -13,6 +13,7 @@ Oskari.registerLocalization(
         "channeloptionservice_alert_title" : "Hakukanavavat nouto -en",
         "channeloptionservice_not_found_anything_text": "Hakukanavoiden noutaminen epäonnistui. -en",
         "no_channels_found": "Hakukanavia ei löytynyt -en",
+        "searchResults_header": "Hakutulokset -en",
         "searchResultCount": "Antamallasi hakusanalla löytyi -en",
         "searchResultCount2": "hakutulosta.-en",
         "searchResultDescriptionMoreResults": "Tarkentamalla hakusanaa voit rajata hakutulosten määrää. -en",
