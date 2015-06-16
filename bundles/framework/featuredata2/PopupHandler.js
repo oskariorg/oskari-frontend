@@ -25,50 +25,70 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
                 iconCls: 'selection-point',
                 tooltip: me.localization.tools.point.tooltip,
                 sticky: false,
-                callback: function () {
-                    selectionPlugin.startDrawing({
-                        drawMode: 'point'
-                    });
+                callback: function (startDrawing) {
+                    if (startDrawing) {
+                        selectionPlugin.startDrawing({
+                            drawMode: 'point'
+                        });
+                    } else {
+                        selectionPlugin.stopDrawing();
+                    }
                 }
             },
             'line': {
                 iconCls: 'selection-line',
                 tooltip: me.localization.tools.line.tooltip,
                 sticky: false,
-                callback: function () {
-                    selectionPlugin.startDrawing({
-                        drawMode: 'line'
-                    });
+                callback: function (startDrawing) {
+                    if (startDrawing) {
+                        selectionPlugin.startDrawing({
+                            drawMode: 'line'
+                        });
+                    } else {
+                        selectionPlugin.stopDrawing();
+                    }
                 }
             },
             'polygon': {
                 iconCls: 'selection-area',
                 tooltip: me.localization.tools.polygon.tooltip,
                 sticky: false,
-                callback: function () {
-                    selectionPlugin.startDrawing({
-                        drawMode: 'polygon'
-                    });
+                callback: function (startDrawing) {
+                    if (startDrawing) {
+                        selectionPlugin.startDrawing({
+                            drawMode: 'polygon'
+                        });
+                    } else {
+                        selectionPlugin.stopDrawing();
+                    }
                 }
             },
             'square': {
                 iconCls: 'selection-square',
                 tooltip: me.localization.tools.square.tooltip,
                 sticky: false,
-                callback: function () {
-                    selectionPlugin.startDrawing({
-                        drawMode: 'square'
-                    });
+                callback: function (startDrawing) {
+                    if (startDrawing) {
+                        selectionPlugin.startDrawing({
+                            drawMode: 'square'
+                        });
+                    } else {
+                        selectionPlugin.stopDrawing();
+                    }
                 }
             },
             'circle': {
                 iconCls: 'selection-circle',
                 tooltip: me.localization.tools.circle.tooltip,
                 sticky: false,
-                callback: function () {
-                    selectionPlugin.startDrawing({
-                        drawMode: 'circle'
-                    });
+                callback: function (startDrawing) {
+                    if (startDrawing) {
+                        selectionPlugin.startDrawing({
+                            drawMode: 'circle'
+                        });
+                    } else {
+                        selectionPlugin.stopDrawing();
+                    }
                 }
             }
         };
@@ -104,40 +124,45 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
                 dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 popupLoc = this.localization.title,
                 content = me.template.wrapper.clone(),
-                buttonName;;
+                buttonName,
+                activeTool = null,
+                startDrawing;
 
             // Safety check at not show more than one popup
             if(jQuery('.tools_selection').is(':visible')) {
                 return;
             }
 
-            //Hacky... Set the flag for the mediator to know that no gfi-popups are allowed until the popup is closed...
-            me.WFSLayerService.setSelectionToolsActive(true);
-
             // close popup so we can update the selection geometry
             // this is done so we can optimize grid updates on normal updateExtensionRequests.
             // if the selection show wouldn't use this request but a custom one, this wouldn't be needed
             me.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'close']);
 
-            var closureMagic = function (tool) {
-                return function () {
-                    me.buttons[tool].callback();
+            
+            _.forEach(me.buttons, function (button) {
+                var btnContainer = me.template.toolsButton.clone();
+
+                btnContainer.attr("title", button.tooltip);
+                btnContainer.addClass(button.iconCls);
+                btnContainer.addClass("selection-tool");
+                btnContainer.bind('click', function () {
+                    me.removeButtonSelection(content);
+                    if (button === activeTool) {
+                        activeTool = null;
+                        startDrawing = false;
+                        button.callback(startDrawing);
+                    } else {
+                        activeTool = button;
+                        btnContainer.addClass("active");
+                        startDrawing = true;
+                        button.callback(startDrawing);
+                    }
                     if (!singleSelection) {
                         me._selectionStarted();
                     }
-                };
-            };
-
-            for (buttonName in this.buttons) {
-                if(this.buttons.hasOwnProperty(buttonName)) {
-                    var btnContainer = me.template.toolsButton.clone(),
-                        button = this.buttons[buttonName];
-                    btnContainer.attr("title", button.tooltip);
-                    btnContainer.addClass(button.iconCls);
-                    btnContainer.bind('click', closureMagic(buttonName));
-                    content.append(btnContainer);
-                }
-            }
+                });
+                content.append(btnContainer);
+            });
 
             var instructions = me.template.instructions.clone();
             instructions.append(this.localization.instructions);
@@ -173,7 +198,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
             var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             cancelBtn.setTitle(this.localization.button.cancel);
             cancelBtn.setHandler(function () {
-                me.WFSLayerService.setSelectionToolsActive(false);
                 //destroy the active sketch, disable the selected control
                 var selectionPlugin = me.instance.getSelectionPlugin();
                 selectionPlugin.drawLayer.removeAllFeatures();
@@ -193,6 +217,19 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
                 jQuery('input[type=checkbox][name=selectAll]').prop('checked', true);
             }
 
+        },
+
+        /**
+         * @method removeButtonSelection
+         * Handles active-class of tool buttons
+         */
+        removeButtonSelection: function (content) {
+            var me = this,
+                isActive = jQuery(content).find(".selection-tool").hasClass("active");
+
+            if (isActive) {
+                jQuery(content).find(".active").removeClass("active");
+            }
         },
 
         /**
