@@ -11,7 +11,7 @@ Oskari.registerLocalization({
         "errorscale": "Dane nie mogą zostać wyświetlone w tej skali. Zmieć skalę.",
         "errordata": "Dane dostarczone przez serwer zawierają błędy. Przesuń lekko mapę w celu akualizacji.",
         "columnSelectorTooltip": "Pokaż kolumny",
-        "popup": {
+        "selectionTools": {
             "title": "Wybierz właściwości na mapie",
             "instructions": " ",
             "link": {

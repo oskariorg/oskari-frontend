@@ -86,23 +86,6 @@ Oskari.registerLocalization(
                     "description": "Valinta kohdistuu vain valittuun karttatasoon",
                     "button": {
                         "empty": "Poista valinnat"
-                    },
-                    "tools": {
-                        "point": {
-                            "tooltip": "Lisää piste"
-                        },
-                        "line": {
-                            "tooltip": "Lisää viiva"
-                        },
-                        "polygon": {
-                            "tooltip": "Lisää alue"
-                        },
-                        "square": {
-                            "tooltip": "Lisää suorakulmio"
-                        },
-                        "circle": {
-                            "tooltip": "Lisää ympyrä"
-                        }
                     }
                 },
                 "search": {

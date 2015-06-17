@@ -571,7 +571,9 @@ Oskari.clazz.define(
         },
 
         _isStatsLayerVisible: function () {
-            var selectedLayers = this.getSandbox().findAllSelectedMapLayers();
+            var me = this,
+                sandbox = me.getSandbox() || Oskari.getSandbox();
+            var selectedLayers = sandbox.findAllSelectedMapLayers();
 
             return selectedLayers.some(function (layer) {
                 return layer._layerType === 'STATS';
@@ -580,7 +582,7 @@ Oskari.clazz.define(
 
         refresh: function (element) {
             var me = this,
-                el = element || me.getElement();
+                el = element || me.getElement() || jQuery('.mapplugin.manageClassificationPlugin');
 
             if (!el) {
                 return;

@@ -85,23 +85,6 @@ Oskari.registerLocalization({
                     "description": "NOT TRANSLATED",
                     "button": {
                         "empty": "Rimuovi selezione"
-                    },
-                    "tools": {
-                        "point": {
-                            "tooltip": "Aggiungi un elemento puntuale alla mappa."
-                        },
-                        "line": {
-                            "tooltip": "Aggiungi un elemento lineare alla mappa."
-                        },
-                        "polygon": {
-                            "tooltip": "Aggiungi un elemento areale alla mappa."
-                        },
-                        "square": {
-                            "tooltip": "Aggiungi un elemento rettangolare alla mappa."
-                        },
-                        "circle": {
-                            "tooltip": "Aggiungi un elemento circolare alla mappa."
-                        }
                     }
                 },
                 "search": {

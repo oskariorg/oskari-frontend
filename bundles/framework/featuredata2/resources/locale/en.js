@@ -11,7 +11,7 @@ Oskari.registerLocalization({
         "errorscale": "The feature data on this map layer cannot be shown on this scale level. Please change the scale level at scale bar.",
         "errordata": "The feature data at the server contains errors. Please update the map by moving it slightly.",
         "columnSelectorTooltip": "Select visible columns.",
-        "popup": {
+        "selectionTools": {
             "title": "Select features on the map.",
             "instructions": " ",
             "selectAll": "Select from all layers",

@@ -61,7 +61,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapSize',
                     me.sizeOptions.forEach(function (option) {
                         option.selected = option.id === value;
                     });
-                    me._updateMapSize();
+                    me.updateMapSize();
                 },
                 options: me.sizeOptions.map(function (option) {
                     var title = me.loc.sizes[option.id];
@@ -78,7 +78,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapSize',
             width: {
                 clazz: 'Oskari.userinterface.component.TextInput',
                 handler: function () {
-                    me._updateMapSize();
+                    me.updateMapSize();
                 },
                 placeholder: me.loc.sizes.width,
                 value: me.selected.width
@@ -86,7 +86,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapSize',
             height: {
                 clazz: 'Oskari.userinterface.component.TextInput',
                 handler: function () {
-                    me._updateMapSize();
+                    me.updateMapSize();
                 },
                 placeholder: me.loc.sizes.height,
                 value:me.selected.height
@@ -98,12 +98,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapSize',
         };
     }, {
         /**
-         * @private @method _updateMapSize
+         * @public @method updateMapSize
          * Adjusts the map size according to publisher selection
          *
          *
          */
-        _updateMapSize: function () {
+        updateMapSize: function () {
             if(!this.panel) {
                 return;
             }
@@ -206,7 +206,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapSize',
                 mapWidth,
                 mapHeight,
                 totalWidth = size.width,
-                totalHeight = size.height;
+                totalHeight = size.height,
+                statsContainer = jQuery('.publishedgrid');
 
             if (totalWidth === null || totalWidth === undefined || totalWidth === '') {
                 if(!container.length) {
@@ -222,7 +223,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapSize',
 
             dataContainer.toggleClass('oskari-closed', !me.isDataVisible);
 
-            if (me.isDataVisible) {
+            if (statsContainer.length>0) {
                 dataContainer.removeClass('oskari-closed');
                 gridHeight = totalHeight;
             } else {
@@ -250,10 +251,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapSize',
             mapDiv.width(mapWidth);
             mapDiv.height(mapHeight);
 
-            if (me.statsContainer) {
-                me.statsContainer.height(mapHeight);
+            if (statsContainer.length>0) {
+                statsContainer.height(mapHeight);
             }
 
+            // TODO grid plugin?
             if (me.gridPlugin) {
                 me.gridPlugin.setGridHeight();
             }
@@ -410,7 +412,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapSize',
             }
             contentPanel.append(customSizes);
             me.panel = panel;
-            me._updateMapSize();
+            me.updateMapSize();
         },
 
         /**
@@ -476,6 +478,36 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapSize',
                 errors.push('no_valid_width');
             }
             return errors;
+        },
+        /**
+        * Update mapmodule size.
+        * @method _updateMapModuleSize
+        * @private
+        **/
+        _updateMapModuleSize: function () {
+            var me = this,
+                reqBuilder = me.sandbox.getRequestBuilder(
+                    'MapFull.MapSizeUpdateRequest'
+                );
+
+            if (reqBuilder) {
+                me.sandbox.request(this.instance, reqBuilder());
+            }
+        },
+        /**
+        * Stop panel.
+        * @method stop
+        * @public
+        **/
+        stop: function(){
+            var me = this,
+                mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule'),
+                mapElement = jQuery(mapModule.getMap().div);
+            mapElement.width('');
+            mapElement.height(jQuery(window).height());
+
+            // notify openlayers that size has changed
+            me._updateMapModuleSize();
         },
         /**
          * Gets the label text for a size option. It changes based on grid visibility.
