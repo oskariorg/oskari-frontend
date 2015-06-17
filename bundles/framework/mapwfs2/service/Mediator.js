@@ -396,6 +396,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
         if (!data.data.keepPrevious) {
             makeNewSelection = true;
         }
+
         if (!me.WFSLayerService.isSelectFromAllLayers()) {
             if (analysisWFSLayer && layer._id !== analysisWFSLayer) {
                 return;
@@ -403,7 +404,12 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
                 return;
             }
 
+        } else {
+            if (data.data.features === 'empty') {
+                me.WFSLayerService.emptyAllWFSFeatureSelections();
+            }
         }
+
         if (data.data.features !== 'empty') {
             for (i = 0; i < data.data.features.length; i += 1) {
                 featureIds.push(data.data.features[i][0]);
@@ -412,6 +418,8 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
 
         if (data.data.features !== 'empty') {
             me.WFSLayerService.setWFSFeaturesSelections(layer._id, featureIds, makeNewSelection);
+        } else if (makeNewSelection = true) {
+            me.WFSLayerService.emptyWFSFeatureSelections(layer);
         }
 
         var event = this.plugin.getSandbox().getEventBuilder('WFSFeaturesSelectedEvent')(me.WFSLayerService.getSelectedFeatureIds(layer._id), layer, selectFeatures);
