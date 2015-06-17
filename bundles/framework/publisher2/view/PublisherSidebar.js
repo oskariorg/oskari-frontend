@@ -358,11 +358,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             var me = this,
                 sandbox = Oskari.getSandbox('sandbox');
 
-            if (!me.toolLayoutEditMode) {
-                return;
-            }
 
-            me.toolLayoutEditMode = false;
+            _.each(me.panels, function(panel) {
+               if(typeof panel.stop === 'function') {
+                    panel.stop();
+               }
+            });
+
+            
             jQuery('#editModeBtn').val(me.loc.toollayout.usereditmode);
             jQuery('.mapplugin').removeClass('toollayoutedit');
 
@@ -374,6 +377,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             var event = sandbox.getEventBuilder('LayerToolsEditModeEvent')(false);
             sandbox.notifyAll(event);
 
+/*
             // Set logoplugin and layerselection as well
             // FIXME get this from logoPlugin's config, no need to traverse the DOM
             if (me.logoPlugin) {
@@ -402,6 +406,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                     container.css('display', 'none');
                 }
             });
+*/
         },
 
         /**
@@ -525,35 +530,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 plugin,
                 i;
 
-            // return map size to normal
-            mapElement = jQuery(mapModule.getMap().div);
-            // remove width definition to resume size correctly
-            mapElement.width('');
-            mapElement.height(jQuery(window).height());
-
-            //mapModule.updateSize();
-
             // stop our logoplugin
             mapModule.unregisterPlugin(me.logoPlugin);
             me.logoPlugin.stopPlugin(me.instance.sandbox);
 
-            // stop our classify plugin
-            if (me.classifyPlugin) {
-                mapModule.unregisterPlugin(me.classifyPlugin);
-                me.classifyPlugin.stopPlugin(me.instance.sandbox);
-            }
-
-            // stop our grid plugin
-            if (me.gridPlugin) {
-                mapModule.unregisterPlugin(me.gridPlugin);
-                me.gridPlugin.stopPlugin(me.instance.sandbox);
-            }
-
+            jQuery('.mapplugin.manageClassificationPlugin').remove();
+            
             // resume normal plugins
             for (i = 0; i < me.normalMapPlugins.length; i += 1) {
                 plugin = me.normalMapPlugins[i];
                 mapModule.registerPlugin(plugin);
                 plugin.startPlugin(me.instance.sandbox);
+                if(plugin.showClassificationOptions){
+                    plugin.showClassificationOptions(true);
+                }
             }
             // reset listing
             me.normalMapPlugins = [];
