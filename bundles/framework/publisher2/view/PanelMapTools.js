@@ -10,11 +10,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
      * @method create called automatically on construction
      * @static
      */
-    function (group, tools, sandbox, localization) {
+    function (group, tools, sandbox, localization, instance) {
         this.group = group;
         this.tools = tools;
         this.loc = localization;
         this.sandbox = sandbox;
+        this.instance = instance;
         this.templates = {
             tool: _.template('<div class="tool"><label><input type="checkbox"/>${name}</label><div class="extraOptions"></div></div>'),
             help: jQuery('<div class="help icon-info"></div>')
@@ -29,7 +30,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
          * @param {Object} pData initial data
          */
         init: function (pData) {
-            this.data = pData;
+            var me = this;
+            me.data = pData;
+            _.each(me.tools, function(tool) {
+                tool.init();
+            });
         },
         /**
         * Sort tools
@@ -103,7 +108,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                     maptools: []
                 };
 
-            jQuery.each(me.tools, function(index, tool){
+            _.each(me.tools, function(tool){
                 values.maptools.push(tool.getValues());
             });
 
@@ -136,7 +141,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                 cont = me.panel.getContainer();
 
             // update tools
-            jQuery.each(me.tools, function(index, tool){
+            _.each(me.tools, function(tool){
                 if(tool.isDisplayedInMode(mode) === true){
                     cont.find('#tool-' + tool.getTool().id).attr('disabled', 'disabled');
                 } else {
