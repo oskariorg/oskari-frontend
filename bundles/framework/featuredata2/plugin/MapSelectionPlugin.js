@@ -73,6 +73,7 @@ Oskari.clazz.define(
          * clears the layer of any drawn features
          */
         stopDrawing: function () {
+            this.WFSLayerService.setSelectionToolsActive(false);
             // disable all draw controls
             this._toggleControl();
         },
@@ -103,8 +104,6 @@ Oskari.clazz.define(
          * @private
          */
         _finishedDrawing: function (isForced) {
-            this.WFSLayerService.setSelectionToolsActive(false);
-
             if (!this.editMode) {
                 // programmatically select the drawn feature ("not really supported by openlayers")
                 // http://lists.osgeo.org/pipermail/openlayers-users/2009-February/010601.html
