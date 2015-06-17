@@ -250,6 +250,11 @@ Oskari.clazz.define(
                 if (event.getViewState() !== 'close') {
                     plugin.focus();
                 }
+                ///remove the publishing rights filter... if some. or something.
+                else {
+                    console.log("Nullifying layerListFilteringMethod");
+                    plugin.setLayerListFilteringFunction(null);
+                }
             }
         },
 

@@ -121,6 +121,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         if(mainMapLogoPlugin) {
             logoPluginConfig = _.cloneDeep(mainMapLogoPlugin.getConfig());
         }
+
         // override location
         logoPluginConfig.location = {
             classes: me.logoPluginClasses.classes
@@ -171,8 +172,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             accordion.addPanel(genericInfoPanel.getPanel());
 
             var mapSizePanel = me._createMapSizePanel();
-            me.panels.push(genericInfoPanel);
+            me.panels.push(mapSizePanel);
             accordion.addPanel(mapSizePanel.getPanel());
+
+            var mapLayersPanel = me._createMapLayersPanel();
+            me.panels.push(mapLayersPanel);
+            accordion.addPanel(mapLayersPanel.getPanel());
 
             var toolPanels = me._createToolPanels(accordion);
             _.each(toolPanels, function(panel) {
@@ -232,6 +237,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapSize',
                     sandbox, mapModule, me.loc, me.instance
                 );
+
+            // initialize form (restore data when editing)
+            form.init(me.data, function(value) {
+                me.setMode(value);
+            });
+
+            return form;
+        },
+
+        /**
+         * @private @method _createMapLayersPanel
+         * Creates the Maplayers panel of publisher
+         */
+        _createMapLayersPanel: function () {
+            var me = this,
+                sandbox = this.instance.getSandbox(),
+                mapModule = sandbox.findRegisteredModuleInstance("MainMapModule");
+                form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
+                    sandbox, mapModule, me.loc, me.instance
+                );
+
 
             // initialize form (restore data when editing)
             form.init(me.data, function(value) {

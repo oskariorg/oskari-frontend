@@ -163,7 +163,23 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.LayerSelectorBund
             "lang": "uk",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/layerselector2/resources/locale/uk.js"
-        }]
+
+
+
+
+
+
+
+        }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/layerselector2/request/AddLayerListFilterRequest.js"
+        }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/layerselector2/request/AddLayerListFilterRequestHandler.js"
+        }
+
+
+        ]
     },
     "bundle": {
         "manifest": {
