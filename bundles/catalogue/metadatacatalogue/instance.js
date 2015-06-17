@@ -707,7 +707,7 @@ Oskari.clazz.define(
                 enableTransform: true
             };
 
-            this.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin', config);
+            this.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin', config, me.sandbox);
             mapModule.registerPlugin(this.selectionPlugin);
             mapModule.startPlugin(this.selectionPlugin);
             this.selectionPlugin.startDrawing({drawMode: 'square'});

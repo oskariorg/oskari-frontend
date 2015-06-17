@@ -374,9 +374,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 }
 
                 var features = this.selectionPlugin.getFeaturesAsGeoJSON();
-                this.selectionPlugin.stopDrawing();
-
-//                this.popupHandler.showSelectionTools(true);
 
                 var evt = this.sandbox.getEventBuilder("WFSSetFilter")(features);
                 this.sandbox.notifyAll(evt);
@@ -471,7 +468,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 id: "FeatureData"
                 //,multipart : true
             };
-            this.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin', config);
+            this.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin', config, this.sandbox);
             mapModule.registerPlugin(this.selectionPlugin);
             mapModule.startPlugin(this.selectionPlugin);
         }
