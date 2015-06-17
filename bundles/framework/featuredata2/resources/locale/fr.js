@@ -12,7 +12,7 @@ Oskari.registerLocalization(
         "errorscale": "Les données d'entités de cette couche cartographique ne peuvent être affichées à ce niveau d’échelle. Veuillez changer le niveau d’échelle sur la barre d’échelle.",
         "errordata": "Les données d'entités au niveau du serveur contiennent des erreurs. Veuillez mettre à jour la carte en la déplaçant légèrement.",
         "columnSelectorTooltip": "Sélectionnez des colonnes visibles.",
-        "popup": {
+        "selectionTools": {
             "title": "Sélectionnez des entités sur la carte.",
             "instructions": "NOT TRANSLATED",
             "link": {

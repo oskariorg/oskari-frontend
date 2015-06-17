@@ -11,7 +11,7 @@ Oskari.registerLocalization({
         "errorscale": "Die Daten können in dieser Maßstabsebene nicht angezeigt werden. Bitte wechseln Sie die Maßstabsebene.",
         "errordata": "Die vom Server bereitgestellten Daten weisen Fehler auf. Bitte verschieben Sie die Karte leicht, um Sie zu aktualisieren.",
         "columnSelectorTooltip": "Zeige Tabelle",
-        "popup": {
+        "selectionTools": {
             "title": "Wählen Sie ein Objekt auf der Karte",
             "instructions": " ",
             "link": {

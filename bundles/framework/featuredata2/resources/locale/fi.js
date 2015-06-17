@@ -11,7 +11,7 @@ Oskari.registerLocalization({
         "errorscale": "Kohdetietoja ei voida näyttää tällä mittakaavatasolla. Siirry sopivalle mittakaavatasolle mittakaavasäätimen avulla.",
         "errordata": "Palvelimelta saatu tieto oli virheellistä. Siirrä hieman karttaa päivittääksesi tiedot.",
         "columnSelectorTooltip": "Näytä sarakkeet",
-        "popup": {
+        "selectionTools": {
             "title": "Valitse kohteita kartalta",
             "instructions": "",
             "selectAll": "kaikilta karttatasoilta",

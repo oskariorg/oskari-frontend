@@ -2,6 +2,29 @@
 
 ## 1.30
 
+### highlight and feature selection renewed
+
+On the normal map mode feature is highlighted only when Ctrl is down, otherwise feature info is shown.
+When feature selection is made with selection tool, Ctrl will add features to selection. Feature info is never shown at the same time with selection.
+
+#### mapwfs2/service
+
+Mapwfs2 has now new service called WFSLayerService, which handles WFS layers' states, for example selected features, top WFS layer, selected WFS layers etc. Service should be used always when setting selected features, selection mode etc.
+
+Mediator uses now WFSLayerService for setting highlighted features.
+
+#### featuredata2/PopupHandler
+
+Selection tool stays selected unless user clicks the tool again to unselect it or selects another tool.
+
+renderSelectionToolButtons -function can be used to add selection tools to any container.
+
+#### analyse
+
+Selection tools are now available in analyse panel and they use the same functions as toolbars selection tools.
+
+Selection can be made only from the selected layer, and only one layer can have selections at a time.
+
 ### divmanazer
 
 DefaultFlyout now has a close() function which closes the flyout.

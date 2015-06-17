@@ -109,7 +109,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
             // draw ui
             me.createUi();
 
-            localization = this.getLocalization('popup');
+            localization = this.getLocalization('selectionTools');
 
             //sends request via config to add tool selection button
             if (this.conf && this.conf.selectionTools === true) {
@@ -120,7 +120,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                         tooltip: localization.tools.select.tooltip,
                         sticky: false,
                         callback: function () {
-                            me.popupHandler.showSelectionTools(me.conf.singleSelection);
+                            me.popupHandler.showSelectionTools();
                         }
                     };
                 sandbox.request(this, addBtnRequestBuilder('dialog', 'selectiontools', btn));

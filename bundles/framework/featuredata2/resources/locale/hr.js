@@ -11,7 +11,7 @@ Oskari.registerLocalization({
         "errorscale": "Podatke nije moguće pokazati u ovom mjerilu. Promijenite mjerilo.",
         "errordata": "Podaci sa servera sadrže greške. Pomaknite kartu kako biste je ažurirali.",
         "columnSelectorTooltip": "Prikaži stupce",
-        "popup": {
+        "selectionTools": {
             "title": "Odaberi značajke na karti",
             "instructions": " ",
             "link": {

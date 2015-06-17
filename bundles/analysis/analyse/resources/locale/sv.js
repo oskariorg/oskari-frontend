@@ -86,23 +86,6 @@ Oskari.registerLocalization(
                     "description": "NOT TRANSLATED",
                     "button": {
                         "empty": "Ta bort valda objekt"
-                    },
-                    "tools": {
-                        "point": {
-                            "tooltip": "Lägg en punkt på kartan."
-                        },
-                        "line": {
-                            "tooltip": "Lägg till en linje på kartan."
-                        },
-                        "polygon": {
-                            "tooltip": "Lägg till ett område på kartan."
-                        },
-                        "square": {
-                            "tooltip": "Lägg ett rektangulärt område på kartan."
-                        },
-                        "circle": {
-                            "tooltip": "Lägg ett cirkulärt område på kartan."
-                        }
                     }
                 },
                 "search": {
