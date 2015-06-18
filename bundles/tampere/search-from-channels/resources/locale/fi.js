@@ -31,6 +31,7 @@ Oskari.registerLocalization(
         "show-selected-on-map": "Näytä valitut kartalla",
         "no_selected_rows_alert_title": "Näytä valitut kartalla",
         "no_selected_rows_have_to_select": "Valitse haluamasi kohteet hakutuloksista (valintalaatikko)",
+        "back-to-search": "Takaisin hakuun",
          "grid": {
             "name": "Nimi",
             "village": "Kunta",

@@ -15,10 +15,9 @@ div.searchFromChannelsContainer a.modifyLink {
   display: inline-block;
   margin-left: 15px; }
 div.searchFromChannelsOptions div.checkboxes {
-  display: table-cell;
-  vertical-align: middle;
-  margin-left: 130px;
-  width: auto; }
+  float: left;
+  width: 100%;
+  padding-bottom: 10px; }
 div.searchFromChannelsOptions div.searchFromChannelsRow {
   margin-bottom: 10px; }
 div.searchFromChannelsOptions div.searchFromChannelsType {
@@ -29,15 +28,15 @@ div.searchFromChannelsOptions div.rowLabel {
 div.showOnMapBtns input{
   margin-right: 10px;
 }
-div.window_search_results div.info,div.showOnMapBtns,div.resultList{
-  padding: 10px;
+div.window_search_results div.returnTosearch,div.info,div.showOnMapBtns,div.resultList{
+  padding: 5px 10px;
 }
 div.window_search_results .resultList{
   overflow-y: scroll;
   position: absolute;
   width: 95%;
   bottom: 10px;
-  top: 215px;
+  top: 260px;
 }
 div.window_search_results>div.header {
   background-color: #fdf8d9;
