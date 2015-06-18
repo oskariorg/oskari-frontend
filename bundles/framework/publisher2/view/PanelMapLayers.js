@@ -437,12 +437,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                 input = layerContainer.find('input.baselayer');
                 input.attr('id', 'checkbox' + layer.getId());
 
-                if (shouldPreselectLayer(layer.getId()) && me.plugin && me.plugin.layerRefs) {
+                if (shouldPreselectLayer(layer.getId()) && me.showLayerSelection) {
                     input.attr('checked', 'checked');
                     layer.selected = true;
                     // Make sure the layer is added before making it a base layer
-                    me.plugin.addLayer(layer);
-                    me.plugin.addBaseLayer(layer);
+                    this.plugin.addLayer(layer);
+                    this.plugin.addBaseLayer(layer);
                 }
 
                 listContainer.prepend(layerContainer);
