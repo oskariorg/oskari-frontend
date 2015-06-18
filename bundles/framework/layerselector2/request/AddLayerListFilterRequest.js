@@ -28,7 +28,7 @@ Oskari.clazz
         },
         /**
          * @method getFilterFunction
-         * @return {String} a function used for filtering shown map layers by a function
+         * @return {String} a function used for filtering the map layers' list
          */
         getFilterFunction : function() {
             return this._filterFunction;

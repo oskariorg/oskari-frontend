@@ -17,47 +17,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
      * @param {Oskari.mapframework.bundle.publisher2.insatnce} instance the instance
      */
     function (sandbox, mapmodule, localization, instance) {
-
-
-    //TODO: catch all the layer change events - visibility changed, add, remove etc. and update the layers panel accordingly.
-    //sandbox.registerblaablaablaa
-    //init, getName, onEvent
-    //eventHandlers
         var me = this;
         me.loc = localization;
         me.instance = instance;
         me.sandbox = sandbox;
-        //TODO: replace me._publisher references with me.instance
-        me._publisher = instance;
-
-        sandbox.register(me);
-        for (var p in me.eventHandlers) {
-            if (me.eventHandlers.hasOwnProperty(p)) {
-                sandbox.registerForEventByName(me, p);
-            }
-        }
-        //TODO: Get these somewhere else...?
-        me.pluginConfig = {
-            location: {
-                classes: "top right"   
-            }
-        };
-        me.plugin = Oskari.clazz.create(
-            'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin',
-            me.pluginConfig
-        );
-        var mapModule = me.sandbox.findRegisteredModuleInstance(
-            'MainMapModule'
-        );
-        mapModule.registerPlugin(me.plugin);
-
-        me.panel = Oskari.clazz.create(
-            'Oskari.userinterface.component.AccordionPanel'
-        );
-        me.panel.setTitle(me.loc.layers.label);
-        
-
-//        me.plugin = null;
         me.isDataVisible = false;
 
         me.templateHelp = jQuery('<div class="help icon-info"></div>');
@@ -71,7 +34,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
             'data-sortable=\'{' + 'itemCss: "li.layer.selected", ' + 'handleCss: "div.layer-title" ' + '}\'>' +
             '</ul>'
         );
-        //me.templateLayer    = jQuery('<li class="tool"><input type="checkbox"/><label></label></li>');
         me.templateLayer = jQuery(
             '<li class="layer selected">' +
             '  <div class="layer-info">' +
@@ -128,17 +90,53 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
 
         me.showLayerSelection = false;
         me._sliders = {};
-
-
-
         me.addLayerListFilterRequestHandler = Oskari.clazz.create('Oskari.mapframework.bundle.layerselector2.request.AddLayerListFilterRequestHandler', me.sandbox, me.hasPublishRight);
         me.sandbox.addRequestHandler("AddLayerListFilterRequest", me.addLayerListFilterRequestHandler);
-
-
-
-
-
     }, {
+        /**
+         * @method init
+         * Creates the Oskari.userinterface.component.AccordionPanel where the UI is rendered and
+         * the Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin
+         */
+        init: function () {
+            var me = this;
+            for (var p in me.eventHandlers) {
+                if (me.eventHandlers.hasOwnProperty(p)) {
+                    me.sandbox.registerForEventByName(me, p);
+                }
+            }
+
+            if (!me.panel) {
+                me.panel = Oskari.clazz.create(
+                    'Oskari.userinterface.component.AccordionPanel'
+                );
+                me.panel.setTitle(me.loc.layers.label);
+            }
+        },
+        /**
+         * @method _initPlugin
+         * Initialises the LayerSelectionPlugin. Has to be called _after_ the publishersidebar is done collecting the "normal map" plugins.
+         *
+         */
+        _initPlugin: function() {
+            var me = this;
+            if (!me.plugin) {
+                //TODO: Get these somewhere else...?
+                me.pluginConfig = {
+                    location: {
+                        classes: "top right"   
+                    }
+                };
+                me.plugin = Oskari.clazz.create(
+                    'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin',
+                    me.pluginConfig
+                );
+                var mapModule = me.sandbox.findRegisteredModuleInstance(
+                    'MainMapModule'
+                );
+                mapModule.registerPlugin(me.plugin);
+            }
+        },
         /**
          * @method onEvent
          * @param {Oskari.mapframework.event.Event} event a Oskari event object
@@ -188,22 +186,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                 if (event._creator !== this.getName() && event._fromPosition !== event._toPosition) {
                     this.handleLayerOrderChanged(event._movedMapLayer, event._fromPosition, event._toPosition);
                 }
-
-
-                /*
-                if (event._creator !== this.getName() && event._fromPosition !== event._toPosition) {
-                    // Layer order has been changed by someone else, resort layers
-                    this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged();
-                    if (this.publisher) {
-                        this.publisher.maplayerPanel.handleLayerOrderChanged(event._movedMapLayer, event._fromPosition, event._toPosition);
-                        if (event._creator !== this.publisher.maplayerPanel.plugin.getName()) {
-                            this.publisher.maplayerPanel.handleLayerSelectionChanged();
-                        }
-                    }
-                }
-                */
             },
-
             /**
              * @method MapLayerEvent
              * @param {Oskari.mapframework.event.common.MapLayerEvent} event
@@ -211,8 +194,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
              * Calls flyouts handleLayerSelectionChanged() and handleDrawLayerSelectionChanged() functions
              */
             MapLayerEvent: function (event) {
-
-                debugger;
                 this.handleLayerSelectionChanged();
                 /*
                 this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged();
@@ -240,13 +221,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
 
         getName: function() {
             return "Oskari.mapframework.bundle.publisher2.view.PanelMapLayers";
-        },
-        /**
-         * @method init
-         * Creates the Oskari.userinterface.component.AccordionPanel where the UI is rendered and
-         * the Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin
-         */
-        init: function () {
         },
         /**
          * Prepopulates the form/plugin with given data
@@ -286,13 +260,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
          */
         enablePlugin: function (blnEnabled) {
             var me = this;
+
+            if (!me.plugin) {
+                me._initPlugin();
+            }
+
             if (blnEnabled) {
                 me.plugin.setLocation(me.plugin.getConfig().location.classes);
                 me.plugin.startPlugin(me.sandbox);
-                if (me._publisher.toolLayoutEditMode && me.plugin.getElement()) {
-                    me._publisher._makeDraggable(me.plugin.getElement());
-                }
-            } else if (me.isEnabled()) {
+//                if (me.instance.toolLayoutEditMode && me.plugin.getElement()) {
+//                    me.instance._makeDraggable(me.plugin.getElement());
+//                }
+            } else {
                 me.plugin.stopPlugin(me.sandbox);
             }
         },
@@ -306,29 +285,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
             return this.showLayerSelection;
         },
         /**
-         * Registers the plugin to MainMapModule
-         *
-         * @method start
-         */
-        start: function () {
-            debugger;
-            var me = this,
-                mapModule = me.sandbox.findRegisteredModuleInstance(
-                    'MainMapModule'
-                );
-
-            me.plugin = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin',
-                me.pluginConfig
-            );
-            mapModule.registerPlugin(me.plugin);
-
-
-            if (me.showLayerSelection) {
-                me.enablePlugin(true);
-            }
-        },
-        /**
          * Unregisters the plugin from MainMapModule
          *
          * @method stop
@@ -337,7 +293,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
             var mapModule = this.instance.sandbox.findRegisteredModuleInstance(
                 'MainMapModule'
             );
-
             this.enablePlugin(false);
             mapModule.unregisterPlugin(this.plugin);
         },
@@ -436,15 +391,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                 me._populateMapLayerPanel();
             });
 
-
-            //Layerselection is _always_ shown.?
-            //TODO: property probably not even needed?
-            //TODO: or then it is. Exciting.
-            //TODO: At least update the correct baselayers in da plugin if something something plöp plöp plöp.
-//            if (!this.showLayerSelection) {
-//                return;
-//            }
-
             var layers = this._getLayersList(),
                 i,
                 listContainer = this.templateList.clone(),
@@ -526,10 +472,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
             });
 
             contentPanel.append(buttonCont);
-            // There will be a button for adding more layers
-            //            if (this.config.layers.promote && this.config.layers.promote.length > 0) {
-            //                this._populateLayerPromotion(contentPanel);
-            //            }
         },
 
         /**
