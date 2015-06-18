@@ -480,21 +480,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapSize',
             return errors;
         },
         /**
-        * Update mapmodule size.
-        * @method _updateMapModuleSize
-        * @private
-        **/
-        _updateMapModuleSize: function () {
-            var me = this,
-                reqBuilder = me.sandbox.getRequestBuilder(
-                    'MapFull.MapSizeUpdateRequest'
-                );
-
-            if (reqBuilder) {
-                me.sandbox.request(this.instance, reqBuilder());
-            }
-        },
-        /**
         * Stop panel.
         * @method stop
         * @public
@@ -502,12 +487,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapSize',
         stop: function(){
             var me = this,
                 mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule'),
-                mapElement = jQuery(mapModule.getMap().div);
+                mapElement = jQuery(mapModule.getMap().div),
+                reqBuilder = me.sandbox.getRequestBuilder(
+                    'MapFull.MapSizeUpdateRequest'
+                );
+
             mapElement.width('');
             mapElement.height(jQuery(window).height());
-
-            // notify openlayers that size has changed
-            me._updateMapModuleSize();
+            
+            // FIXME: timing issue?
+            window.setTimeout(function(){
+                // notify openlayers that size has changed
+                if (reqBuilder) {
+                    me.sandbox.request(me.instance, reqBuilder());
+                }
+            }, 200);
         },
         /**
          * Gets the label text for a size option. It changes based on grid visibility.
