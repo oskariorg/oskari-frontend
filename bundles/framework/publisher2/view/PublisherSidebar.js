@@ -384,13 +384,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             var me = this,
                 sandbox = Oskari.getSandbox('sandbox');
 
-
             _.each(me.panels, function(panel) {
                if(typeof panel.stop === 'function') {
                     panel.stop();
                }
             });
-
             
             jQuery('#editModeBtn').val(me.loc.toollayout.usereditmode);
             jQuery('.mapplugin').removeClass('toollayoutedit');
@@ -516,6 +514,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             if (isEnabled) {
                 this._enablePreview();
             } else {
+                this._editToolLayoutOff();
                 this._disablePreview();
             }
         },
@@ -556,6 +555,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 plugin,
                 i;
 
+
             // stop our logoplugin
             mapModule.unregisterPlugin(me.logoPlugin);
             me.logoPlugin.stopPlugin(me.instance.sandbox);
@@ -567,8 +567,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 plugin = me.normalMapPlugins[i];
                 mapModule.registerPlugin(plugin);
                 plugin.startPlugin(me.instance.sandbox);
-                if(plugin.showClassificationOptions){
+                if(plugin.showClassificationOptions && plugin.isVisible && plugin.isVisible() === true){
                     plugin.showClassificationOptions(true);
+                }
+                if(plugin.refresh) {
+                    plugin.refresh();
                 }
             }
             // reset listing
