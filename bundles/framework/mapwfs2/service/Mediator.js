@@ -401,6 +401,9 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             if (analysisWFSLayer && layer._id !== analysisWFSLayer) {
                 return;
             } else if (!analysisWFSLayer && layer._id !== topWFSLayer) {
+                if (me.WFSLayerService.getSelectedFeatureIds(layer._id) !== 'empty') {
+                    me.WFSLayerService.emptyWFSFeatureSelections(layer);
+                }
                 return;
             }
 

@@ -74,8 +74,13 @@ Oskari.clazz.define(
          */
         stopDrawing: function () {
             this.WFSLayerService.setSelectionToolsActive(false);
+            this.drawLayer.removeAllFeatures();
             // disable all draw controls
             this._toggleControl();
+        },
+
+        removeFeatures: function () {
+            this.drawLayer.removeAllFeatures();
         },
 
         /**
@@ -127,7 +132,6 @@ Oskari.clazz.define(
 
                 this.getSandbox().notifyAll(event);
             }
-            this.drawLayer.removeAllFeatures();
         },
 
         /**
