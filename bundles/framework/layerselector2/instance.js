@@ -250,6 +250,10 @@ Oskari.clazz.define(
                 if (event.getViewState() !== 'close') {
                     plugin.focus();
                 }
+                ///remove the filtering, if any.
+                else {
+                    plugin.setLayerListFilteringFunction(null);
+                }
             }
         },
 
