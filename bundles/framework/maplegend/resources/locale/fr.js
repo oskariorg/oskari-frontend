@@ -4,7 +4,8 @@ Oskari.registerLocalization(
     "key": "maplegend",
     "value": {
         "title": "Légendes de carte",
-        "desc": ""
+        "desc": "",
+        "noLegendsText": "NOT TRANSLATED"
     }
 }
 );
