@@ -178,6 +178,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartView',
 
                         if (layerList.find("input")[0].checked !== true) {
                             layerList.find("input").attr('checked', true);
+                            layersWithFeatures = _.map(WFSSelections, 'layerId');
+                            me.emptySelectionsFromLayers = _.pull(layersWithFeatures, layerId);
                         }
                     }
                 );
