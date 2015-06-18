@@ -437,12 +437,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                 input = layerContainer.find('input.baselayer');
                 input.attr('id', 'checkbox' + layer.getId());
 
-                if (shouldPreselectLayer(layer.getId())) {
+                if (shouldPreselectLayer(layer.getId()) && me.plugin && me.plugin.layerRefs) {
                     input.attr('checked', 'checked');
                     layer.selected = true;
                     // Make sure the layer is added before making it a base layer
-                    this.plugin.addLayer(layer);
-                    this.plugin.addBaseLayer(layer);
+                    me.plugin.addLayer(layer);
+                    me.plugin.addBaseLayer(layer);
                 }
 
                 listContainer.prepend(layerContainer);
@@ -737,9 +737,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                         isChecked = checkbox.is(':checked');
 
                     layer.selected = isChecked;
-                    if (isChecked) {
+                    if (isChecked && me.plugin) {
                         me.plugin.addBaseLayer(layer);
-                    } else {
+                    } else if(me.plugin){
                         me.plugin.removeBaseLayer(layer);
                     }
                 };
