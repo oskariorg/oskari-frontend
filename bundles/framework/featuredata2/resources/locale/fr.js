@@ -15,6 +15,7 @@ Oskari.registerLocalization(
         "selectionTools": {
             "title": "Sélectionnez des entités sur la carte.",
             "instructions": "NOT TRANSLATED",
+            "selectAll": "NOT TRANSLATED",
             "link": {
                 "title": "Sélectionnez plus d'entités"
             },
