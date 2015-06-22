@@ -3,11 +3,6 @@
  */
 jQuery(document).ready(function() {
 	
-	if( jQuery.cookie('JSESSIONID') === undefined ||
-			jQuery.cookie('JSESSIONID') === '' ) {
-	jQuery.cookie('JSESSIONID','_'+(new Date().getTime()));
-	}
-	
     if(!ajaxUrl) {
         alert('Ajax URL not set - cannot proceed');
         return;
