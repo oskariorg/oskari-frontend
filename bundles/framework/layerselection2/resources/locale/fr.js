@@ -1,6 +1,6 @@
 Oskari.registerLocalization(
 {
-    "lang": "en",
+    "lang": "fr",
     "key": "LayerSelection",
     "value": {
         "title": "Couches sélectionnées",

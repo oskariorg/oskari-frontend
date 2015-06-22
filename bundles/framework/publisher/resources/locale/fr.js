@@ -1,6 +1,6 @@
 Oskari.registerLocalization(
 {
-    "lang": "en",
+    "lang": "fr",
     "key": "Publisher",
     "value": {
         "title": "Publication de carte",

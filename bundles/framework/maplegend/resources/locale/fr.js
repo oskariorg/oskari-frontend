@@ -5,7 +5,7 @@ Oskari.registerLocalization(
     "value": {
         "title": "Légendes de carte",
         "desc": "",
-        "noLegendsText": "NOT TRANSLATED"
+        "noLegendsText": "No map legends available"
     }
 }
 );

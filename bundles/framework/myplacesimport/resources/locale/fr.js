@@ -11,7 +11,7 @@ Oskari.registerLocalization(
         "flyout": {
             "title": "Importation de jeux de données",
             "description": "Vous pouvez importer votre propres jeux de données en fichier au format shp, gpx ou mif/mid sous forme de fichier zip ou bien au format de fichier kmz (kml compressé). Vous pouvez importer des fichiers contenant au maximum 5000 entités.",
-            "help": "NOT TRANSLATED",
+            "help": "Select a file from your computer or give a link to the file that contains your dataset. The file can be in the shp, zip or kml/kmz format. You can create zip files from shapefiles by zipping the files with suffix shp, shx, dbf and prj to the same zip file. \nAlso kml/kmz files from Google maps can be zipped same way.\nMif/mid data must be in current map CRS - look current CRS under zoombar",
             "actions": {
                 "cancel": "Annuler",
                 "next": "Suivant"
@@ -19,9 +19,9 @@ Oskari.registerLocalization(
             "file": {
                 "submit": "Envoyer",
                 "fileOverSizeError": {
-                    "title": "NOT TRANSLATED",
-                    "message": "NOT TRANSLATED",
-                    "close": "NOT TRANSLATED"
+                    "title": "Error",
+                    "message": "Your dataset is too large. Maximun size of the imported dataset is <xx> mb.",
+                    "close": "Close"
                 }
             },
             "layer": {
