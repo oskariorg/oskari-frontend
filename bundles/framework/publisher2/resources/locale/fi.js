@@ -59,17 +59,17 @@ Oskari.registerLocalization(
                 "FeaturedataPlugin": "Kohdetietotaulukko",
                 "GetInfoPlugin": "Kohdetietojen kyselytyökalu",
                 "PublisherToolbarPlugin": "Karttatyökalut",
-                "selectDrawLayer": "Valitse tallennustaso"
-            },
-            "toolbarToolNames": {
-                "history_back": "Siirtyminen edelliseen näkymään",
-                "history_forward": "Siirtyminen seuraavaan näkymään",
-                "measureline": "Matkan mittaus",
-                "measurearea": "Pinta-alan mittaus",
-                "drawTools": "Omien kohteiden tallennus",
-                "point": "Salli pisteiden tallennus.",
-                "line": "Salli viivojen tallennus.",
-                "area": "Salli alueiden tallennus."
+                "selectDrawLayer": "Valitse tallennustaso",
+                "toolbarToolNames": {
+                    "history_back": "Siirtyminen edelliseen näkymään",
+                    "history_forward": "Siirtyminen seuraavaan näkymään",
+                    "measureline": "Matkan mittaus",
+                    "measurearea": "Pinta-alan mittaus",
+                    "drawTools": "Omien kohteiden tallennus",
+                    "point": "Salli pisteiden tallennus.",
+                    "line": "Salli viivojen tallennus.",
+                    "area": "Salli alueiden tallennus."
+                }
             },
             "toollayout": {
                 "label": "Työkalujen asettelu kartalla",
