@@ -465,14 +465,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
             mapModule.startPlugin(plugin);
             this.plugin = plugin;
 
-            // used to get fullscreen selection even if selection tools are not enabled
-            var config = {
-                id: "FeatureData"
-                //,multipart : true
-            };
-            this.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin', config, this.sandbox);
-            mapModule.registerPlugin(this.selectionPlugin);
-            mapModule.startPlugin(this.selectionPlugin);
+            this.selectionPlugin = this.sandbox.findRegisteredModuleInstance("MainMapModuleMapSelectionPlugin");
+
+            if (!this.selectionPlugin) {
+                var config = {
+                    id: "FeatureData"
+                };
+                this.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin', config, this.sandbox);
+                mapModule.registerPlugin(this.selectionPlugin);
+                mapModule.startPlugin(this.selectionPlugin);
+            }
         }
     }, {
         /**

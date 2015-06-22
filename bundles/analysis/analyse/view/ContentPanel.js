@@ -299,6 +299,16 @@ Oskari.clazz.define(
             me.isStarted = false;
 
             me.selectionPlugin = me.sandbox.findRegisteredModuleInstance('MainMapModuleMapSelectionPlugin');
+
+            if (!me.selectionPlugin) {
+                var config = {
+                    id: "FeatureData"
+                };
+                me.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin', config, sandbox);
+                mapModule.registerPlugin(me.selectionPlugin);
+                mapModule.startPlugin(me.selectionPlugin);
+            }
+
             me.selectionPluginId = me.instance.getName();
 
             for (p in me.eventHandlers) {
@@ -681,7 +691,7 @@ Oskari.clazz.define(
                 toolDiv.click(function () {
                     //if selection tool is left active, deactivate it
                     me._deactivateSelectTools();
-                    
+
                     me._startNewDrawing({
                         drawMode: tool
                     });
