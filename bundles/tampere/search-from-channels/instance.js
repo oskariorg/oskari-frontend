@@ -208,10 +208,6 @@ Oskari.clazz.define(
             var optionServName =
                 'Oskari.tampere.bundle.searchfromchannels.service.ChannelOptionService';
             me.optionService = Oskari.clazz.create(optionServName, optionAjaxUrl);
-/*
-            var searchServName =
-                'Oskari.tampere.bundle.searchfromchannels.service.MetadataSearchService';
-            me.searchService = Oskari.clazz.create(searchServName, searchAjaxUrl);*/
 
             sandbox.register(me);
             var p;
@@ -249,6 +245,7 @@ Oskari.clazz.define(
         update: function () {
 
         },
+
         /**
          * @method onEvent
          * @param {Oskari.mapframework.event.Event} event a Oskari event
@@ -271,7 +268,20 @@ Oskari.clazz.define(
          * @static
          */
         eventHandlers: {
-
+            /**
+             * @method ExtensionUpdatedEvent
+             */
+            'userinterface.ExtensionUpdatedEvent': function (event) {
+                var me = this;
+                // ExtensionUpdateEvents are fired a lot, only let search extension event to be handled when enabled
+                if (event.getExtension().getName() !== 'Search') {
+                    // wasn't me -> do nothing
+                    return;
+                }
+                if (event.getViewState() !== 'close') {
+                    alert('TODO: search update')
+                }
+            }
         },
         /**
          * @method stop
@@ -371,8 +381,6 @@ Oskari.clazz.define(
                 me._clearMapFromResults();
                 me._closeMapPopup();
 
-                // TODO: make some gif go round and round so user knows
-                // something is happening
                 var searchKey = field.getValue(me.safeChars);
                 var channelIds = [];
 
@@ -542,25 +550,12 @@ Oskari.clazz.define(
                 types = [];
 
             jQuery.each(result.locations, function(index, val) {
-                if(jQuery.inArray(val.type, type) === -1) {
+                if(jQuery.inArray(val.type, types) === -1) {
                     types.push(val.type);
                 }
             });
 
             types.sort();
-
-            jQuery.each(types, function(index, type) {
-                var results = jQuery.grep(result.locations, function(r, i){
-                    r.type === type;
-                });
-                if(results.length>0) {
-                    // TODO group
-                    // TODO groupin sisältö
-                }
-            });
-
-
-
 
             if (!result || typeof result.totalCount !== 'number') {
                 return;
@@ -628,73 +623,78 @@ Oskari.clazz.define(
                     me._resultClicked(result.locations[0]);               
                 }
             }
-           
-            // render results
-            var table = me.templates.templateResultTable.clone(),
-                tableHeaderRow = table.find('thead tr'),
-                tableBody = table.find('tbody');
-            // header reference needs some closure magic to work here
-
-            var headerClosureMagic = function (scopedValue) {
-                return function () {
-                    // clear table for sorted results
-                    tableBody.empty();
-                    // default to descending sort
-                    var descending = false;
-                    // if last sort was made on the same column ->
-                    // change direction
-                    if (me.lastSort && me.lastSort.attr === scopedValue.prop) {
-                        descending = !me.lastSort.descending;
-                    }
-                    // sort the results
-                    me._sortResults(scopedValue.prop, descending);
-                    // populate table content
-                    me._populateResultTable(tableBody);
-                    // apply visual changes
-                    var headerContainer = tableHeaderRow.find('a:contains(' + scopedValue.title + ')');
-                    tableHeaderRow.find('th').removeClass('asc');
-                    tableHeaderRow.find('th').removeClass('desc');
-                    if (descending) {
-                        headerContainer.parent().addClass('desc');
-                    } else {
-                        headerContainer.parent().addClass('asc');
-                    }
-                    return false;
-                };
-            };
-            var i,
-                header,
-                link;
-            for (i = 0; i < this.resultHeaders.length; i += 1) {
-                header = me.templates.templateResultTableHeader.clone();
-                link = header.find('a');
-                link.append(this.resultHeaders[i].title);
-                link.bind('click', headerClosureMagic(this.resultHeaders[i]));
-                tableHeaderRow.append(header);
-            }
 
             //Accordion
             var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
                 container = jQuery('div.myAccordion'),
                 panel = null;
 
-            jQuery.each(new Array(10), function(panelData) {
-              panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-              panel.setTitle("JOOZ");
-              panel.setContent(table);
-              panel.setVisible(true);
+            jQuery.each(types, function(index, type) {
+                var results = jQuery.grep(result.locations, function(r, i){
+                    return r.type === type;
+                });
+                if(results.length>0) {
+                    panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+                    panel.setTitle(type);
 
-              //panelData.isOpen ? panel.open() : panel.close();
+                    // render results
+                    var table = me.templates.templateResultTable.clone(),
+                        tableHeaderRow = table.find('thead tr'),
+                        tableBody = table.find('tbody');
+                    // header reference needs some closure magic to work here
 
-              accordion.addPanel(panel);
+                    var headerClosureMagic = function (scopedValue, results) {
+                        return function () {
+                            // clear table for sorted results
+                            tableBody.empty();
+                            // default to descending sort
+                            var descending = false;
+                            // if last sort was made on the same column ->
+                            // change direction
+                            if (me.lastSort && me.lastSort.attr === scopedValue.prop) {
+                                descending = !me.lastSort.descending;
+                            }
+                            // sort the results
+                            me._sortResults(scopedValue.prop, descending, results);
+                            // populate table content
+                            me._populateResultTable(tableBody, results);
+                            // apply visual changes
+                            var headerContainer = tableHeaderRow.find('a:contains(' + scopedValue.title + ')');
+                            tableHeaderRow.find('th').removeClass('asc');
+                            tableHeaderRow.find('th').removeClass('desc');
+                            if (descending) {
+                                headerContainer.parent().addClass('desc');
+                            } else {
+                                headerContainer.parent().addClass('asc');
+                            }
+                            return false;
+                        };
+                    };
+                    var i,
+                        header,
+                        link;
+
+                    for (i = 0; i < me.resultHeaders.length; i += 1) {
+                        header = me.templates.templateResultTableHeader.clone();
+                        link = header.find('a');
+                        link.append(me.resultHeaders[i].title);
+                        link.bind('click', headerClosureMagic(me.resultHeaders[i], results));
+                        tableHeaderRow.append(header);
+                    }
+
+                    me._populateResultTable(tableBody, results);
+
+                    panel.setContent(table);
+                    panel.setVisible(true);
+                    accordion.addPanel(panel);
+                }
             });
 
-            this._populateResultTable(tableBody);
             resultList.append('<div><h3>' +
                 me.getLocalization('searchResults') + ' ' + result.totalCount + ' ' +
-                me.getLocalization('searchResultsDescription') + ' ' + searchKey + '</h3></div>');
+                me.getLocalization('searchResultsDescription') + ' ' + searchKey + '</h3></div>');   
+
             accordion.insertTo(resultList);
-            //resultList.append(table);
 
             var btn = Oskari.clazz.create(
                 'Oskari.userinterface.component.Button'
@@ -702,7 +702,7 @@ Oskari.clazz.define(
             btn.setTitle(me.getLocalization("show-all-on-map"));
             jQuery(btn.getElement()).click(
                 function (event) {
-                    me._zoomMapToResults(result, true, tableBody);
+                    me._zoomMapToResults(result, true, resultList.find('table.search_result'));
                 }
             );
             var showOnMapBtns = searchResultWindow.find('div.showOnMapBtns');
@@ -714,7 +714,7 @@ Oskari.clazz.define(
             btn.setTitle(me.getLocalization("show-selected-on-map"));
             jQuery(btn.getElement()).click(
                 function (event) {
-                    me._zoomMapToResults(result, false, tableBody);
+                    me._zoomMapToResults(result, false, resultList.find('table.search_result'));
                 }
             );
             btn.insertTo(showOnMapBtns);
@@ -744,7 +744,7 @@ Oskari.clazz.define(
                 optionPanel.parents('.oskari-flyout').removeClass('oskari-attached').addClass('oskari-closed');
                 menuBtn.removeClass('oskari-tile-attached"').addClass('oskari-tile-closed');
 
-            }else{
+            } else {
                 optionPanel.parents('.oskari-flyout').removeClass('oskari-closed').addClass('oskari-attached');
                 menuBtn.removeClass('oskari-tile-closed').addClass('oskari-tile-attached');
 
@@ -824,7 +824,6 @@ Oskari.clazz.define(
          */
         _zoomMapToResults: function(result, showAll, tableBody) {
             var me = this;
-
             var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
 
             me._clearMapFromResults();
@@ -832,13 +831,13 @@ Oskari.clazz.define(
 
             //Fake layer for zoomin event
             var olLayer = new OpenLayers.Layer.Vector('templayer'),
-             format = new OpenLayers.Format.WKT({}),
-             feature,
-             geometry,
-             mapMoveRequest,
-             bounds, 
-             center,
-             isSelected = false;
+                format = new OpenLayers.Format.WKT({}),
+                feature,
+                geometry,
+                mapMoveRequest,
+                bounds, 
+                center,
+                isSelected = false;
 
             jQuery.each(result.locations, function( i, value ){
                 if(showAll){
@@ -881,7 +880,7 @@ Oskari.clazz.define(
          * @param  {[type]} resultsTableBody [description]
          * @return {[type]}                  [description]
          */
-        _populateResultTable: function (resultsTableBody) {
+        _populateResultTable: function (resultsTableBody, data) {
             var me = this;
             // row reference needs some closure magic to work here
             var closureMagic = function (scopedValue) {
@@ -890,16 +889,15 @@ Oskari.clazz.define(
                     return false;
                 };
             };
-            var locations = this.lastResult.locations,
-                i,
+            var i,
                 row,
                 resultContainer,
                 cells,
                 titleCell,
                 title;
 
-            for (i = 0; i < locations.length; i += 1) {
-                row = locations[i];
+            for (i = 0; i < data.length; i += 1) {
+                row = data[i];
                 resultContainer = me.templates.templateResultTableRow.clone();
                 resultContainer.attr("name",row.id);
                 cells = resultContainer.find('td');
@@ -928,12 +926,7 @@ Oskari.clazz.define(
             if(result.zoomScale) {
                 var zoom = {scale : result.zoomScale};
             }
-            /*
-            sandbox.request(
-                me.getName(),
-                moveReqBuilder(result.lon, result.lat, zoom, false)
-            );
-*/          
+
             var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
             sandbox.postRequestByName(rn, [result.GEOMETRY, 'WKT', {id:result.id}, null, 'replace', true, me._getVectorLayerStyle(), true]);
 
@@ -1051,7 +1044,6 @@ Oskari.clazz.define(
             }
 
             advancedContainer.append(newRow);
-            //advancedContainer.hide();
         },
 
         /**
@@ -1064,16 +1056,16 @@ Oskari.clazz.define(
          * @param {Boolean} pDescending true if sort direction is descending
          *
          */
-        _sortResults: function (pAttribute, pDescending) {
+        _sortResults: function (pAttribute, pDescending, data) {
             var me = this;
-            if (!this.lastResult) {
+            if (!data) {
                 return;
             }
             this.lastSort = {
                 attr: pAttribute,
                 descending: pDescending
             };
-            this.lastResult.locations.sort(function (a, b) {
+            data.sort(function (a, b) {
                 return me._searchResultComparator(a, b, pAttribute, pDescending);
             });
 
