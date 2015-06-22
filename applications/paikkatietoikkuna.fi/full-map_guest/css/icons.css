@@ -846,14 +846,6 @@
     background-position: -2152px 0px !important;
 }
 
-.tool-feature-selection:hover {
-    width: 32px;
-    height: 32px;
-    background-image: url('../icons/icons.png') !important;
-    background-repeat: no-repeat !important;
-    background-position: -2152px -32px !important;
-}
-
 .tool-history-back {
     width: 32px;
     height: 32px;
