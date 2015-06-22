@@ -32,7 +32,6 @@ table {
     }
     #contentMap {
         height: 100%;
-        margin-left: 153px;
     }
 
     img.panbuttonDivImg {
@@ -75,7 +74,7 @@ table {
     .oskari-flyouttoolbar {    
     	background-color: white !important; 
 		background-image: url('ASDI_web_header.jpg');
-		background-position: -150px -24px !important;
+		background-position: -170px -23px !important;
     }
     
     .oskari-flyoutheading {
@@ -92,7 +91,6 @@ table {
   
     #logobar {
         height: 153px;
-        width: 153px;
         overflow: hidden;
         background-color: white;
         background-image: url('ASDI_web_header.jpg');
