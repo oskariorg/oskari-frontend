@@ -680,10 +680,8 @@ Oskari.clazz.define(
                 });
                 toolDiv.click(function () {
                     //if selection tool is left active, deactivate it
-                    if (jQuery(container.parent()).find('div[class*=selection-]').hasClass("active")) {
-                        jQuery(container.parent()).find(".active").removeClass("active");
-                        me.selectionPlugin.stopDrawing();
-                    }
+                    me._deactivateSelectTools();
+                    
                     me._startNewDrawing({
                         drawMode: tool
                     });
@@ -721,10 +719,8 @@ Oskari.clazz.define(
                 drawFilterDiv.attr('title', me.loc.content.drawFilter.tooltip[drawFilter]);
                 drawFilterDiv.click(function () {
                     //if selection tool is left active, deactivate it
-                    if (jQuery(container.parent()).find('div[class*=selection-]').hasClass("active")) {
-                        jQuery(container.parent()).find(".active").removeClass("active");
-                        me.selectionPlugin.stopDrawing();
-                    }
+                    me._deactivateSelectTools();
+
                     if (jQuery(this).hasClass('disabled')) {
                         return;
                     }
@@ -784,6 +780,21 @@ Oskari.clazz.define(
 
 
             return selectionToolsContainer;
+        },
+        /**
+         * Deactivates select tools
+         *
+         * @method _deactivateSelectTools
+         * @private
+         */
+        _deactivateSelectTools: function () {
+            var me = this,
+                toolsPanel = me.getDrawToolsPanel();
+            
+            if (toolsPanel.html.find('div[class*=selection-]').hasClass('active')) {
+                toolsPanel.html.find('div[class*=selection-]').removeClass('active');
+                me.selectionPlugin.stopDrawing();
+            }
         },
         /**
          * @private @method _toggleSelectionTools
