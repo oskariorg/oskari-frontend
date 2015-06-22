@@ -76,10 +76,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
             "type": "text/javascript",
             "src": "../../../../bundles/framework/findbycoordinates/resources/locale/sk.js"
         }, {
-            "lang": "sl",
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/findbycoordinates/resources/locale/sl.js"
-        }, {
             "lang": "sv",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/findbycoordinates/resources/locale/sv.js"
