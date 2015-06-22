@@ -25,6 +25,7 @@
 				"details-desc-sv" : "Kuvaus ruotsiksi -sv",
 				"new-params-btn" : "Uusi ominaisuus -sv",
                 "details-default" : "Default -haku -sv",
+                "details-isaddress" : "Osoitehaku tyyppinen -sv",
                 "form_invalid": "Puuttuvia/vääräarvoisia kenttiä -sv",
                 "field_required": "Kenttä \"{fieldName}\" on pakollinen -sv",
                 "confirm_delete": "Haluatko varmasti poistaa kanavan {channel}? -sv",

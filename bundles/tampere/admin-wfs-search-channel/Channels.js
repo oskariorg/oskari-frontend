@@ -75,6 +75,10 @@ Oskari.clazz.define(
                 '               <span></span>' +
                 '               <input type="checkbox" name="details-default"/>' +
                 '           </div>'+
+                '           <div class="no-span-text isaddress-checkbox">'+
+                '               <span></span>' +
+                '               <input type="checkbox" name="details-isaddress"/>' +
+                '           </div>'+
                 '               <div class="details--wrapper"></div>' +
                 '    <label>' +
                 '        <span></span>' +
@@ -534,7 +538,8 @@ Oskari.clazz.define(
                     'topic' : {},
                     'desc': {},
                     'params' : [],
-                    'is-default' : frm.find("[name=details-default]").is(":checked")
+                    'is-default' : frm.find("[name=details-default]").is(":checked"),
+                    'is-address' : frm.find("[name=details-isaddress]").is(":checked")
                 };
 
                 jQuery.each(Oskari.getSupportedLanguages(), function(index, item) {
@@ -551,7 +556,8 @@ Oskari.clazz.define(
                 url += "&desc="+JSON.stringify(dataObject.desc);
                 url += "&topic="+JSON.stringify(dataObject.topic);
                 url += "&paramsForSearch="+JSON.stringify(dataObject.params);
-                url += "&isDefault="+dataObject["is-default"];
+                url += "&isDefault="+dataObject["is-default"],
+                url += "&isAddress="+dataObject["is-address"];
 
                 jQuery.ajax({
                     type: frm.attr('method'),
@@ -591,6 +597,7 @@ Oskari.clazz.define(
                 fragment.find("[name=id]").val(channel.id);
                 fragment.find("[name=choose-wfs-layer]").val(channel.wfsId).trigger("change");
                 fragment.find("[name=details-default]").attr('checked', channel.is_default);
+                fragment.find("[name=details-isaddress]").attr('checked', channel.is_address);
                 $.each(channel.topic, function(lang, text) {
                     fragment.find("[name=details-topic-"+lang+"]").val(text);
                 });
