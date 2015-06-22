@@ -37,6 +37,8 @@
                 "save_failed": "Tallennus epäonnistui -en",
                 "search-channels": "Hae kanavia -en",
                 "noMatch": "Haulla ei löytynyt tuloksia -en",
+                "is_address_topic": "Osoitehaku tyyppi -en",
+                "is_address_info": "Kun osoitehaku tyyppi on valittuna voidaan valita vain kaksi ominaisuutta hakua varten -en"
             }
         },
         "save": "tallenna"
