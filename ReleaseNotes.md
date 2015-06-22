@@ -41,6 +41,10 @@ The logo is now a link to the map service even if configuration is not provided.
 
 Fixed centerTo parameter handling.
 
+### myplacesimport
+
+Coordinate reference system must be similiar to current map CRS (EPSG:3067 in Oskari) in Mif/mid data format
+
 
 ## 1.29
 
