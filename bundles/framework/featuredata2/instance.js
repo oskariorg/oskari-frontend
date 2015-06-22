@@ -369,18 +369,19 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
              * @method FeatureData.FinishedDrawingEvent
              */
             'FeatureData.FinishedDrawingEvent': function () {
-                if (!this.conf.singleSelection) {
-                    return;
+                var me = this;
+
+                if (!me.selectionPlugin) {
+                    me.selectionPlugin = me.sandbox.findRegisteredModuleInstance('MainMapModuleMapSelectionPlugin');
                 }
 
-                var features = this.selectionPlugin.getFeaturesAsGeoJSON();
+                var features = me.selectionPlugin.getFeaturesAsGeoJSON();
 
-                this.selectionPlugin.removeFeatures();
+                me.selectionPlugin.removeFeatures();
 
-                var evt = this.sandbox.getEventBuilder("WFSSetFilter")(features);
-                this.sandbox.notifyAll(evt);
+                var evt = me.sandbox.getEventBuilder("WFSSetFilter")(features);
+                me.sandbox.notifyAll(evt);
 
-                //this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'detach']);
             }
         },
 
