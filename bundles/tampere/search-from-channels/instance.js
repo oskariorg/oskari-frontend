@@ -284,7 +284,6 @@ Oskari.clazz.define(
                      
                     advancedContainer.empty();
                     me._getChannelsForAdvancedUi(searchFromChannelsContainer,advancedContainer,moreLessLink,false);
-                    //advancedContainer.hide();
                 }
             }
         },
@@ -999,6 +998,33 @@ Oskari.clazz.define(
         },
 
         /**
+        * Sort advanced options.
+        * @method _sortAdvanced
+        * @private
+        */
+        _sortAdvanced: function(a, b){
+            var topicA = a.topic[Oskari.getLang()];
+            var topicB = b.topic[Oskari.getLang()];
+            if(topicA === null){
+                topicA = '';
+            }
+            if(topicB === null){
+                topicB = '';
+            }
+
+            topicA = topicA.toLowerCase();
+            topicB = topicB.toLowerCase();
+
+            if (topicA < topicB) {
+                return -1;
+            } else if (topicA > topicB) {
+                return 1;
+            } else {
+                return 0;
+            }
+        },
+
+        /**
          * [_createAdvancedPanel creates checkboxes from channes by role]
          * @param  {[type]} data              [description]
          * @param  {[type]} advancedContainer [description]
@@ -1017,15 +1043,16 @@ Oskari.clazz.define(
                 newCheckbox,
                 newCheckboxDef;
 
-                newRow = null;
-                newRow = me.templates.checkboxRow.clone();
-                newRow.find('div.rowLabel').text(me.getLocalization('advanced_topic'));
+            newRow = me.templates.checkboxRow.clone();
+            newRow.find('div.rowLabel').text(me.getLocalization('advanced_topic'));
 
-                 if (dataFields.length === 0) {
-                    newRow.find('div.rowLabel').text(me.getLocalization('no_channels_found'));
-                    advancedContainer.append(newRow);
-                    return false;
-                }  
+            if (dataFields.length === 0) {
+                newRow.find('div.rowLabel').text(me.getLocalization('no_channels_found'));
+                advancedContainer.append(newRow);
+                return false;
+            }
+
+            dataFields.sort(me._sortAdvanced);
 
             for (i = 0; i < dataFields.length; i += 1) {
                 dataField = dataFields[i];            
