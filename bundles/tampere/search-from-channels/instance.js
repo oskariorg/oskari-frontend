@@ -536,9 +536,31 @@ Oskari.clazz.define(
          */
         _renderResults: function (result, searchKey) {
             var me = this,
-            searchResultWindow = me.templates.templateSearchResultsWindow.clone(),
-            resultList = null,
-            mapDiv = jQuery("#contentMap");
+                searchResultWindow = me.templates.templateSearchResultsWindow.clone(),
+                resultList = null,
+                mapDiv = jQuery("#contentMap"),
+                types = [];
+
+            jQuery.each(result.locations, function(index, val) {
+                if(jQuery.inArray(val.type, type) === -1) {
+                    types.push(val.type);
+                }
+            });
+
+            types.sort();
+
+            jQuery.each(types, function(index, type) {
+                var results = jQuery.grep(result.locations, function(r, i){
+                    r.type === type;
+                });
+                if(results.length>0) {
+                    // TODO group
+                    // TODO groupin sisältö
+                }
+            });
+
+
+
 
             if (!result || typeof result.totalCount !== 'number') {
                 return;
