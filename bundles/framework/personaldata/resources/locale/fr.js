@@ -6,7 +6,7 @@ Oskari.registerLocalization(
         "title": "Mes données",
         "desc": "Mes données",
         "notLoggedIn": "\"Mes données\" contient votre profil d’utilisateur et toutes vos caractéristiques enregistrées ainsi que vos vues cartographiques, cartes intégrées, indicateurs, analyses et fichiers de données. <a href='/web/fr/identification'>Identifiez-vous pour vérifier vos données</a>.",
-        "notLoggedInText": "NOT TRANSLATED",
+        "notLoggedInText": "Log in to check your data.",
         "tabs": {
             "myviews": {
                 "title": "Mes vues cartographiques",

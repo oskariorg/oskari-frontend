@@ -11,7 +11,7 @@ Oskari.registerLocalization({
         "errorscale": "Los datos no se pueden mostrar a este nivel de escala. Por favor, cambie el nivel de escala.",
         "errordata": "Los datos porporcionados por el servidor contienen errores. Por favor, muévase por el mapa ligeramente para actualizarlo.",
         "columnSelectorTooltip": "Muestra las columnas",
-        "popup": {
+        "selectionTools": {
             "title": "Selecciona los fenómenos en el mapa",
             "instructions": " ",
             "link": {

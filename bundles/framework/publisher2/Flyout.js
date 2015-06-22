@@ -65,6 +65,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.Flyout',
          * Calls the current views handleLayerSelectionChanged method if one is defined
          */
         handleLayerSelectionChanged: function () {
+            debugger;
             if (this.view && this.view.handleLayerSelectionChanged) {
                 this.view.handleLayerSelectionChanged();
             }

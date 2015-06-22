@@ -109,7 +109,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
             // draw ui
             me.createUi();
 
-            localization = this.getLocalization('popup');
+            localization = this.getLocalization('selectionTools');
 
             //sends request via config to add tool selection button
             if (this.conf && this.conf.selectionTools === true) {
@@ -120,7 +120,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                         tooltip: localization.tools.select.tooltip,
                         sticky: false,
                         callback: function () {
-                            me.popupHandler.showSelectionTools(me.conf.singleSelection);
+                            me.popupHandler.showSelectionTools();
                         }
                     };
                 sandbox.request(this, addBtnRequestBuilder('dialog', 'selectiontools', btn));
@@ -374,9 +374,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 }
 
                 var features = this.selectionPlugin.getFeaturesAsGeoJSON();
-                this.selectionPlugin.stopDrawing();
-
-//                this.popupHandler.showSelectionTools(true);
 
                 var evt = this.sandbox.getEventBuilder("WFSSetFilter")(features);
                 this.sandbox.notifyAll(evt);
@@ -471,7 +468,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 id: "FeatureData"
                 //,multipart : true
             };
-            this.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin', config);
+            this.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin', config, this.sandbox);
             mapModule.registerPlugin(this.selectionPlugin);
             mapModule.startPlugin(this.selectionPlugin);
         }

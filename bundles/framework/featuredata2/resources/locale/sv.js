@@ -12,7 +12,7 @@ Oskari.registerLocalization(
         "errorscale": "Uppgifter om objekt kan inte visas på denna skalnivå. Byt skalnivå.",
         "errordata": "Fel i data från servern. Flytta lite på kartan för att uppdatera den.",
         "columnSelectorTooltip": "Välj synliga kolumner",
-        "popup": {
+        "selectionTools": {
             "title": "Markera objekt på kartan",
             "instructions": "NOT TRANSLATED",
             "selectAll": "Select from all layers",

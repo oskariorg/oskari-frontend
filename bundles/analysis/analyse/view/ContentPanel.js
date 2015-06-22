@@ -298,7 +298,7 @@ Oskari.clazz.define(
             me.linkAction = me.loc.content.search.resultLink;
             me.isStarted = false;
 
-            me.selectionPlugin = me._createselectionPlugin();
+            me.selectionPlugin = me.sandbox.findRegisteredModuleInstance('MainMapModuleMapSelectionPlugin');
             me.selectionPluginId = me.instance.getName();
 
             for (p in me.eventHandlers) {
@@ -595,17 +595,6 @@ Oskari.clazz.define(
         },
 
         /**
-         * Creates and returns the map selection plugin needed here.
-         *
-         * @method _createselectionPlugin
-         * @private
-         * @return {Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin}
-         */
-        _createselectionPlugin: function () {
-            var selectionPlugin = this.sandbox.findRegisteredModuleInstance('MainMapModuleMapSelectionPlugin');
-            return selectionPlugin;
-        },
-        /**
          * Creates and returns the draw filter plugin needed here.
          *
          * @method _createDrawFilterPlugin
@@ -690,6 +679,11 @@ Oskari.clazz.define(
                     'id': 'oskari_analysis_analyse_view_analyse_content_features_' + tool
                 });
                 toolDiv.click(function () {
+                    //if selection tool is left active, deactivate it
+                    if (jQuery(container.parent()).find('div[class*=selection-]').hasClass("active")) {
+                        jQuery(container.parent()).find(".active").removeClass("active");
+                        me.selectionPlugin.stopDrawing();
+                    }
                     me._startNewDrawing({
                         drawMode: tool
                     });
@@ -726,6 +720,11 @@ Oskari.clazz.define(
                 drawFilterDiv.addClass('disabled');
                 drawFilterDiv.attr('title', me.loc.content.drawFilter.tooltip[drawFilter]);
                 drawFilterDiv.click(function () {
+                    //if selection tool is left active, deactivate it
+                    if (jQuery(container.parent()).find('div[class*=selection-]').hasClass("active")) {
+                        jQuery(container.parent()).find(".active").removeClass("active");
+                        me.selectionPlugin.stopDrawing();
+                    }
                     if (jQuery(this).hasClass('disabled')) {
                         return;
                     }
@@ -756,32 +755,15 @@ Oskari.clazz.define(
         _createSelectToolButtons: function (loc) {
             var me = this,
                 selectionToolsContainer = jQuery(me._templates.selectionToolsContainer).clone(),
-                selectionToolTemplate = jQuery(me._templates.tool),
-                selectionToolButtonsContainer = selectionToolsContainer.find('div.toolContainerButtons');
-            var hasWFSLayers = (me.WFSLayerService.getTopWFSLayer() !== undefined && me.WFSLayerService.getTopWFSLayer() !== null);
-            var WFSSelections = (me.WFSLayerService.getWFSSelections() && me.WFSLayerService.getWFSSelections().length > 0);
-            var selectionTools = [
-                    {
-                        tool:'point',
-                        cssClass:'point'
-                    },
-                    {
-                        tool:'line',
-                        cssClass:'line'
-                    },
-                    {
-                        tool:'polygon',
-                        cssClass:'area'
-                    },
-                    {
-                        tool:'square',
-                        cssClass:'square'
-                    },
-                    {
-                        tool:'circle',
-                        cssClass:'circle'
-                    }];
+                selectionToolDiv = jQuery(me._templates.tool).clone(),
+                selectionToolButtonsContainer = selectionToolsContainer.find('div.toolContainerButtons'),
+                hasWFSLayers = (me.WFSLayerService.getTopWFSLayer() !== undefined && me.WFSLayerService.getTopWFSLayer() !== null),
+                WFSSelections = (me.WFSLayerService.getWFSSelections() && me.WFSLayerService.getWFSSelections().length > 0);
 
+            //use the existing component to render selection buttons
+            me.selectionButtonsRenderer = Oskari.clazz.create("Oskari.mapframework.bundle.featuredata2.PopupHandler", me.instance);
+            me.selectionButtonsRenderer.renderSelectionToolButtons(selectionToolDiv);
+            
             var emptyBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
             emptyBtn.setHandler(function () {
                 if (me.WFSLayerService.getAnalysisWFSLayerId()) {
@@ -794,33 +776,14 @@ Oskari.clazz.define(
             if (!WFSSelections) {
                 emptyBtn.setEnabled(false);
             }
+
+            selectionToolsContainer.find('div.toolContainerToolDiv').append(selectionToolDiv);
             selectionToolsContainer.find('div.toolContainerButtons').append(emptyBtn);
             selectionToolsContainer.find('h4').html(loc.content.selectionTools.title);
             selectionToolsContainer.find('div.toolContainerFooter').html(loc.content.selectionTools.description);
 
 
-            return _.foldl(selectionTools, function (container, selectionTool) {
-                var selectionToolDiv = selectionToolTemplate.clone(),
-                    groupName = 'selection-';
-                selectionToolDiv.addClass(groupName + selectionTool.cssClass);
-                selectionToolDiv.attr('title', loc.content.selectionTools.tools[selectionTool.tool].tooltip);
-                if (!hasWFSLayers) {
-                    selectionToolDiv.addClass('disabled');
-                }
-                selectionToolDiv.click(function () {
-                    if (jQuery(this).hasClass('disabled')) {
-                        return;
-                    }
-                    me.WFSLayerService.setSelectionToolsActive(true);
-                    me.selectionPlugin.startDrawing({
-                        drawMode: selectionTool.tool
-                    });
-                });
-                container.find('div.toolContainerToolDiv').append(selectionToolDiv);
-
-
-                return container;
-            }, selectionToolsContainer);
+            return selectionToolsContainer;
         },
         /**
          * @private @method _toggleSelectionTools

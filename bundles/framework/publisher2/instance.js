@@ -82,10 +82,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 );
                 me.publisher.render(map);
                 me.publisher.setEnabled(true);
-                if (statsLayer) {
-                    me.publisher.initGrid(statsLayer);
-                }
-
+                me.publisher.initPanels();
             } else {
                 me._destroyGrid();
                 Oskari.setLang(me.oskariLang);

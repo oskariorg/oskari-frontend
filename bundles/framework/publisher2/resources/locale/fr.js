@@ -1,12 +1,12 @@
 Oskari.registerLocalization(
 {
-    "lang": "en",
+    "lang": "fr",
     "key": "Publisher2",
     "value": {
-        "tile" : {
+        "tile": {
             "title": "Publication de carte"
         },
-        "flyout" : {
+        "flyout": {
             "title": "Créer une carte intégrée"
         },
         "published": {

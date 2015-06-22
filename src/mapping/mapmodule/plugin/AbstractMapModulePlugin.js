@@ -253,13 +253,13 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
 
             for (handler in me._eventHandlers) {
                 if (me._eventHandlers.hasOwnProperty(handler)) {
-                    me._sandbox.unregisterFromEventByName(me, handler);
+                    sandbox.unregisterFromEventByName(me, handler);
                 }
             }
 
             for (handler in me._requestHandlers) {
                 if (me._requestHandlers.hasOwnProperty(handler)) {
-                    me._sandbox.removeRequestHandler(
+                    sandbox.removeRequestHandler(
                         handler,
                         this._requestHandlers[handler]
                     );
