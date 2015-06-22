@@ -28,25 +28,25 @@ div.searchFromChannelsOptions div.rowLabel {
 div.showOnMapBtns input{
   margin-right: 10px;
 }
-div.window_search_results div.returnTosearch,div.info,div.showOnMapBtns,div.resultList{
+div.searchFromChannels_window_search_results div.returnTosearch,div.info,div.showOnMapBtns,div.resultList{
   padding: 5px 10px;
 }
-div.window_search_results .resultList{
+div.searchFromChannels_window_search_results .resultList{
   overflow-y: scroll;
   position: absolute;
   width: 95%;
   bottom: 10px;
   top: 260px;
 }
-div.window_search_results>div.header {
+div.searchFromChannels_window_search_results>div.header {
   background-color: #fdf8d9;
   padding: 5px 10px;
   height: 37px;
 }
-div.window_search_results>div.header div.icon-close {
+div.searchFromChannels_window_search_results>div.header div.icon-close {
   float: right;
 }
-div.window_search_results{
+div.searchFromChannels_window_search_results{
   background: #FFF;
   position: absolute;
   bottom: 0;
@@ -54,5 +54,9 @@ div.window_search_results{
   left: 0;
   z-index: 2;
   width: 447px;
+}
+
+div.searchFromChannels_window_search_results .accordion_panel{
+  cursor: pointer;
 }
 

@@ -77,7 +77,7 @@ Oskari.clazz.define(
                 '</div>'
             ),
             templateSearchResultsWindow: jQuery(
-            '<div class="window_search_results">' +
+            '<div class="searchFromChannels_window_search_results">' +
             '  <div class="header">' +
             '    <div class="icon-close">' +
             '    </div>' +
@@ -275,11 +275,16 @@ Oskari.clazz.define(
                 var me = this;
                 // ExtensionUpdateEvents are fired a lot, only let search extension event to be handled when enabled
                 if (event.getExtension().getName() !== 'Search') {
-                    // wasn't me -> do nothing
                     return;
                 }
                 if (event.getViewState() !== 'close') {
-                    alert('TODO: search update')
+                    var searchFromChannelsContainer = jQuery(".searchFromChannelsContainer"),
+                    advancedContainer = searchFromChannelsContainer.find('div.advanced'),
+                    moreLessLink = searchFromChannelsContainer.find('a.moreLessLink');
+                     
+                    advancedContainer.empty();
+                    me._getChannelsForAdvancedUi(searchFromChannelsContainer,advancedContainer,moreLessLink,false);
+                    //advancedContainer.hide();
                 }
             }
         },
@@ -439,7 +444,6 @@ Oskari.clazz.define(
             var moreLessLink = this.templates.moreLessLink.clone();
             moreLessLink.html(me.getLocalization('showMore'));
 
-            //FIXME request needed that can be called from Admin searchchannels ui
             me._getChannelsForAdvancedUi(searchFromChannelsContainer,advancedContainer,moreLessLink,true);
             advancedContainer.hide();
      
@@ -448,8 +452,6 @@ Oskari.clazz.define(
                     // open advanced/toggle link text         
                     moreLessLink.html(me.getLocalization('showLess'));
                     if (!advancedContainer.is(':empty')) {
-                         advancedContainer.empty();
-                         me._getChannelsForAdvancedUi(searchFromChannelsContainer,advancedContainer,moreLessLink,false);
                          advancedContainer.show();
                     }
                 } else {
