@@ -242,7 +242,8 @@ Oskari.registerLocalization(
                 "additional": {
                     "title": "Paramètres supplémentaires",
                     "dataSource": "Source des données",
-                    "metadata": "Lien des métadonnées"
+                    "metadata": "Lien des métadonnées",
+                    "export_selection": "Export only selected features"
                 },
                 "columns": {
                     "title": "Colonnes",

@@ -16,7 +16,7 @@ Oskari.registerLocalization(
             "abstract": "Informations de base",
             "inspire": "Métadonnées Inspire",
             "jhs": "Métadonnées ISO 19115",
-            "quality": "NOT TRANSLATED",
+            "quality": "Data quality",
             "xml": "Fichier XML ISO 19139",
             "map": "Etendue géographique",
             "pdf": "Impression",
@@ -381,8 +381,8 @@ Oskari.registerLocalization(
                 }
             },
             "qualityContent": {
-                "qualityPassTrue": "NOT TRANSLATED",
-                "qualityPassFalse": "NOT TRANSLATED"
+                "qualityPassTrue": "Dataset is conformant to the specification.",
+                "qualityPassFalse": "Dataset is not conformant to the specification."
             },
             "heading": {
                 "abstractTextData": "Texte de résumé (données)",
@@ -415,21 +415,21 @@ Oskari.registerLocalization(
                 "temporalExtent": "Etendues temporelles",
                 "topicCategory": "Catégories de rubrique",
                 "useLimitation": "Restrictions d’utilisation",
-                "absoluteExternalPositionalAccuracy": "NOT TRANSLATED",
-                "accuracyOfTimeMeasurement": "NOT TRANSLATED",
-                "completenessCommission": "NOT TRANSLATED",
-                "completenessOmission": "NOT TRANSLATED",
-                "conceptualConsistency": "NOT TRANSLATED",
-                "domainConsistency": "NOT TRANSLATED",
-                "formatConsistency": "NOT TRANSLATED",
-                "griddedDataPositionalAccuracy": "NOT TRANSLATED",
-                "nonQuantitativeAttributeAccuracy": "NOT TRANSLATED",
-                "quantitativeAttributeAccuracy": "NOT TRANSLATED",
-                "relativeInternalPositionalAccuracy": "NOT TRANSLATED",
-                "temporalConsistency": "NOT TRANSLATED",
-                "temporalValidity": "NOT TRANSLATED",
-                "thematicClassificationCorrectness": "NOT TRANSLATED",
-                "topologicalConsistency": "NOT TRANSLATED"
+                "absoluteExternalPositionalAccuracy": "Absolute external positional accuracy",
+                "accuracyOfTimeMeasurement": "Accuracy of time measurement",
+                "completenessCommission": "Completeness commission",
+                "completenessOmission": "Completeness omission",
+                "conceptualConsistency": "Conceptual consistency",
+                "domainConsistency": "Domain consistency",
+                "formatConsistency": "Format consistency",
+                "griddedDataPositionalAccuracy": "Gridded data positional accuracy",
+                "nonQuantitativeAttributeAccuracy": "Non quantitative attribute accuracy",
+                "quantitativeAttributeAccuracy": "Quantitative attribute accuracy",
+                "relativeInternalPositionalAccuracy": "Relative internal positional accuracy",
+                "temporalConsistency": "Temporal consistency",
+                "temporalValidity": "Temporal validity",
+                "thematicClassificationCorrectness": "Thematic classification correctness",
+                "topologicalConsistency": "Topological consistency"
             }
         },
         "tile": {

@@ -242,7 +242,8 @@ Oskari.registerLocalization(
                 "additional": {
                     "title": "Dodatne možnosti",
                     "dataSource": "Vir podatkov",
-                    "metadata": "Metapodatkovna povezava"
+                    "metadata": "Metapodatkovna povezava",
+                    "export_selection": "NOT TRANSLATED"
                 },
                 "columns": {
                     "title": "Stolpci",

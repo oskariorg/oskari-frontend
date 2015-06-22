@@ -5,13 +5,13 @@ Oskari.registerLocalization(
     "value": {
         "title": "Uvoz nabora podatkov",
         "desc": "Lahko uvoziš lasten nabor podatkov v shp-, gpx- in mif/mid formatu v zip datoteki ali v kmz formatu (stisnjen kml).",
-        "help": "Izberi datoteko na svojem računalniku ali navedi povezavo do datoteke, ki vsebuje tvoj nabor podatkov.  Datoteka je lahko v formatu shp, zip ali kml/kmz. Zip datoteke lahko izdelaš iz shp datotek s stiskanjem datotek s priponami shp, shx, dbf, in prj v isto zip datoteko. Tudi Googlove kml/kmz datoteke lahko stisneš v zip na enak način.",
         "tool": {
             "tooltip": "Uvoz lastnega nabora podatkov"
         },
         "flyout": {
             "title": "Uvoz nabora podatkov",
             "description": "Lahko uvoziš lasten nabor podatkov v shp-, gpx- in mif/mid formatu v zip datoteki ali v kmz formatu (stisnjen kml). Lahko uvoziš podatke, ki vsebujejo največ do 5000 pojavov.",
+            "help": "NOT TRANSLATED",
             "actions": {
                 "cancel": "Prekliči",
                 "next": "Naslednji"

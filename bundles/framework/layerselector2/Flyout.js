@@ -283,7 +283,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                     );
                     groupList.push(group);
                 }
-                group.addLayer(layer);
+//                group.addLayer(layer);
+
+                if (!this.layerListFilteringFunction || (this.layerListFilteringFunction && this.layerListFilteringFunction(layer))) {
+                    group.addLayer(layer);
+                }
+
+
+
+
+
+
+
+
 
             }
             return groupList;
@@ -398,6 +410,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             // but saving time to do other finishing touches
             //var layerListContainer = jQuery(this.container).find('div.layerList');
             //this._populateLayerList(layerListContainer);
+        },
+
+
+
+
+
+        setLayerListFilteringFunction: function(layerListFilteringFunction) {
+            this.layerListFilteringFunction = layerListFilteringFunction;
         }
     }, {
 

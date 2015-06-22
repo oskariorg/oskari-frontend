@@ -121,6 +121,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         if(mainMapLogoPlugin) {
             logoPluginConfig = _.cloneDeep(mainMapLogoPlugin.getConfig());
         }
+
         // override location
         logoPluginConfig.location = {
             classes: me.logoPluginClasses.classes
@@ -173,6 +174,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             var mapSizePanel = me._createMapSizePanel();
             me.panels.push(mapSizePanel);
             accordion.addPanel(mapSizePanel.getPanel());
+
+            var mapLayersPanel = me._createMapLayersPanel();
+            me.panels.push(mapLayersPanel);
+            accordion.addPanel(mapLayersPanel.getPanel());
 
             var toolPanels = me._createToolPanels(accordion);
             _.each(toolPanels, function(panel) {
@@ -258,6 +263,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapSize',
                     sandbox, mapModule, me.loc, me.instance
                 );
+
+            // initialize form (restore data when editing)
+            form.init(me.data, function(value) {
+                me.setMode(value);
+            });
+
+            return form;
+        },
+
+        /**
+         * @private @method _createMapLayersPanel
+         * Creates the Maplayers panel of publisher
+         */
+        _createMapLayersPanel: function () {
+            var me = this,
+                sandbox = this.instance.getSandbox(),
+                mapModule = sandbox.findRegisteredModuleInstance("MainMapModule");
+                form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
+                    sandbox, mapModule, me.loc, me.instance
+                );
+
 
             // initialize form (restore data when editing)
             form.init(me.data, function(value) {
@@ -358,11 +384,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             var me = this,
                 sandbox = Oskari.getSandbox('sandbox');
 
-            if (!me.toolLayoutEditMode) {
-                return;
-            }
-
-            me.toolLayoutEditMode = false;
+            _.each(me.panels, function(panel) {
+               if(typeof panel.stop === 'function') {
+                    panel.stop();
+               }
+            });
+            
             jQuery('#editModeBtn').val(me.loc.toollayout.usereditmode);
             jQuery('.mapplugin').removeClass('toollayoutedit');
 
@@ -374,6 +401,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             var event = sandbox.getEventBuilder('LayerToolsEditModeEvent')(false);
             sandbox.notifyAll(event);
 
+/*
             // Set logoplugin and layerselection as well
             // FIXME get this from logoPlugin's config, no need to traverse the DOM
             if (me.logoPlugin) {
@@ -402,6 +430,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                     container.css('display', 'none');
                 }
             });
+*/
         },
 
         /**
@@ -485,6 +514,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             if (isEnabled) {
                 this._enablePreview();
             } else {
+                this._editToolLayoutOff();
                 this._disablePreview();
             }
         },
@@ -525,35 +555,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 plugin,
                 i;
 
-            // return map size to normal
-            mapElement = jQuery(mapModule.getMap().div);
-            // remove width definition to resume size correctly
-            mapElement.width('');
-            mapElement.height(jQuery(window).height());
-
-            //mapModule.updateSize();
 
             // stop our logoplugin
             mapModule.unregisterPlugin(me.logoPlugin);
             me.logoPlugin.stopPlugin(me.instance.sandbox);
 
-            // stop our classify plugin
-            if (me.classifyPlugin) {
-                mapModule.unregisterPlugin(me.classifyPlugin);
-                me.classifyPlugin.stopPlugin(me.instance.sandbox);
-            }
-
-            // stop our grid plugin
-            if (me.gridPlugin) {
-                mapModule.unregisterPlugin(me.gridPlugin);
-                me.gridPlugin.stopPlugin(me.instance.sandbox);
-            }
-
+            jQuery('.mapplugin.manageClassificationPlugin').remove();
+            
             // resume normal plugins
             for (i = 0; i < me.normalMapPlugins.length; i += 1) {
                 plugin = me.normalMapPlugins[i];
                 mapModule.registerPlugin(plugin);
                 plugin.startPlugin(me.instance.sandbox);
+                if(plugin.showClassificationOptions && plugin.isVisible && plugin.isVisible() === true){
+                    plugin.showClassificationOptions(true);
+                }
+                if(plugin.refresh) {
+                    plugin.refresh();
+                }
             }
             // reset listing
             me.normalMapPlugins = [];

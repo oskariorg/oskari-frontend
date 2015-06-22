@@ -15,6 +15,7 @@ Oskari.registerLocalization(
         "selectionTools": {
             "title": "Izberi pojave na karti",
             "instructions": "NOT TRANSLATED",
+            "selectAll": "NOT TRANSLATED",
             "link": {
                 "title": "Izberi več pojavov"
             },

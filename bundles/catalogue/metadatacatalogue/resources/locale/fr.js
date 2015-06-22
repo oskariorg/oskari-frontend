@@ -48,12 +48,12 @@ Oskari.registerLocalization(
         "grid": {
             "name": "Nom",
             "removeBBOX": "Hide data coverage",
-            "showBBOX": "NOT TRANSLATED",
-            "info": "NOT TRANSLATED",
-            "remove": "NOT TRANSLATED",
-            "rating": "NOT TRANSLATED"
+            "showBBOX": "Show data coverage",
+            "info": "Show metadata",
+            "remove": "Remove from search results",
+            "rating": "Rating"
         },
-        "licenseText": "NOT TRANSLATED"
+        "licenseText": "Get license"
     }
 }
 );
