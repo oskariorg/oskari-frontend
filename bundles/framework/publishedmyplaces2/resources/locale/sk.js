@@ -1,17 +1,17 @@
 Oskari.registerLocalization(
 {
     "lang": "sk",
-    "key": "MyPlaces2",
+    "key": "PublishedMyPlaces",
     "value": {
-        "title": "Umiestnenia",
+        "title": "Places",
         "desc": "",
         "category": {
-            "defaultName": "Moja mapová vrstva",
-            "organization": "Moje umiestnenia",
-            "inspire": "Umiestnenia"
+            "defaultName": "My map layer",
+            "organization": "My Places",
+            "inspire": "My Places"
         },
         "guest": {
-            "loginShort": "Prihlásiť sa na použitie"
+            "loginShort": "Log in to add your own places on a map."
         },
         "tab": {
             "title": "Places",
@@ -66,55 +66,55 @@ Oskari.registerLocalization(
             },
             "point": {
                 "title": "Add Point",
-                "tooltip": "Pridať bod",
+                "tooltip": "Add a point to the \"My places\".",
                 "add": "Draw a point by clicking the map.",
-                "next": "Môžete uložiť alebo nakresliť viac bodov do toho istého výkresu",
-                "edit": "Presuňte bod kliknutím a ťahaním",
-                "save": "Uložiť umiestnenie"
+                "next": "One place can contain one or more points.",
+                "edit": "Move the point by clicking and dragging.",
+                "save": "Save as my place"
             },
             "line": {
                 "title": "Add Line",
-                "tooltip": "Pridať líniu",
+                "tooltip": "Add a line to the \"My places\".",
                 "add": "Draw a line by adding the break points to the map. You can add the break points by clicking the map. Stop drawing by double clicking or by clicking \"Save as my place\".",
-                "next": "Možete uložiť alebo nakresliť viac línií do toho istého výkresu",
-                "edit": "Editovať líniu kliknutím a ťahaním jej lomových bodov",
-                "save": "Uložiť útvar",
+                "next": "One place can contain one or more lines.",
+                "edit": "Edit the line by clicking and dragging its break points.",
+                "save": "Save as my place",
                 "noResult": "0 m"
             },
             "area": {
                 "title": "Add Area",
-                "tooltip": "Pridať plochu",
+                "tooltip": "Add an area to the \"My places\".",
                 "add": "Draw an area by adding the edge line's break points to the map. You can add the break points by clicking the map. Stop drawing by double clicking or by clicking \"Save as my place\".",
-                "next": "Môžete uložiť alebo nakresliť viac polygónov do toho istého výkresu",
-                "edit": "Editovať tvar plochy kliknutím a ťahaním lomových bodov na jej obvodovej línii",
-                "save": "Uložiť útvar",
+                "next": "One place can contain one or more areas.",
+                "edit": "Edit the area by clicking and dragging the break points on its edge line.",
+                "save": "Save as my place",
                 "noResult": "0 m²"
             }
         },
         "buttons": {
             "ok": "OK",
-            "cancel": "Zrušiť",
+            "cancel": "Cancel",
             "close": "Cancel",
-            "finish": "Ukončiť kreslenie",
-            "save": "Uložiť",
+            "finish": "Save as my place",
+            "save": "Save",
             "saveAsMyPlace": "Save as my place",
-            "movePlaces": "Presuňte umiestnenie a vymažte",
-            "deleteCategory": "Vymazať",
-            "deleteCategoryAndPlaces": "Vymazať kategóriu a umiestnenia",
-            "changeToPublic": "Zverejniť",
-            "changeToPrivate": "Nezverejňujte"
+            "movePlaces": "Move the places and delete the layer",
+            "deleteCategory": "Delete",
+            "deleteCategoryAndPlaces": "Delete the map layer and its places",
+            "changeToPublic": "Publish",
+            "changeToPrivate": "Unpublish"
         },
         "placeform": {
-            "title": "Umiestni údaje",
-            "tooltip": "Umiestnenie na mape bude uložené do Mojich umiestnení. Pomenujte a popíšte dané miesto. Môžete vybrať mapovú vrstvu do ktorej sa uloží dané umiestnie alebo zvoľte novú mapovú vrstvu vybraním “Nová vrstva“ v rozbaľovacom menu mapovej vrstvy.",
+            "title": "Place data",
+            "tooltip": "The place is saved to \"My places\". You can view them on the menu \"My data\". Please give the data for the place. The place name and description are mandatory. You can also give the text to be shown on the map besides the place, the link to the website to get more information about the place and the link to the image about the place. Finally create a new map layer or select one of the existing map layers where the place will be added.",
             "placename": {
-                "placeholder": "Pomenujte umiestnenie"
+                "placeholder": "Place name"
             },
             "placelink": {
-                "placeholder": "Zadať URL"
+                "placeholder": "Link to the information about the place"
             },
             "placedesc": {
-                "placeholder": "Popíšte umiestenie"
+                "placeholder": "Place description"
             },
             "placeAttention": {
                 "placeholder": "Place text on the map"
@@ -124,7 +124,7 @@ Oskari.registerLocalization(
                 "area": "Area size:"
             },
             "category": {
-                "label": "Mapová vrstva",
+                "label": "Map layer",
                 "newLayer": "Create a new map layer",
                 "choose": "or select one of your existing map layers:"
             },
@@ -142,26 +142,26 @@ Oskari.registerLocalization(
         },
         "categoryform": {
             "name": {
-                "label": "Názov",
-                "placeholder": "Pomenovať mapovú vrstvu"
+                "label": "Name",
+                "placeholder": "Map layer name"
             },
             "drawing": {
-                "label": "Štýl",
+                "label": "Style",
                 "point": {
-                    "label": "Bod",
-                    "color": "Farba",
-                    "size": "Veľkosť"
+                    "label": "Point",
+                    "color": "Colour",
+                    "size": "Size"
                 },
                 "line": {
-                    "label": "Línia",
-                    "color": "Farba",
-                    "size": "Hrúbka"
+                    "label": "Line",
+                    "color": "Colour",
+                    "size": "Width"
                 },
                 "area": {
-                    "label": "Plocha",
-                    "fillcolor": "Farba výplne",
-                    "linecolor": "Farba línie",
-                    "size": "Hrúbka línie"
+                    "label": "Area",
+                    "fillcolor": "Fill colour",
+                    "linecolor": "Edge line colour",
+                    "size": "Edge line width"
                 }
             },
             "visibleFields": {
@@ -171,9 +171,9 @@ Oskari.registerLocalization(
                 "image": "Image"
             },
             "edit": {
-                "title": "Editovať mapovú vrstvu",
-                "save": "Uložiť",
-                "cancel": "Späť"
+                "title": "Edit the map layer",
+                "save": "Save",
+                "cancel": "Cancel"
             },
             "rendering": {
                 "label": "Place style",
@@ -276,52 +276,52 @@ Oskari.registerLocalization(
         },
         "notification": {
             "placeAdded": {
-                "title": "Umiestnenie bolo uložené",
-                "message": "Umiestnenie sa dá nájsť v menu Moje údaje"
+                "title": "The place has been saved.",
+                "message": "You can find the place in the menu \"My data\"."
             },
             "categorySaved": {
-                "title": "Mapová vrstva uložená",
-                "message": "Úpravy mapovej vrstvy uložené"
+                "title": "The map layer has been saved.",
+                "message": "The map layer editings have been saved."
             },
             "categoryDelete": {
-                "title": "Vymazať mapovú vrstvu",
-                "deleteConfirmMove": "Mapová vrstva {0} obsahuje {1} objekty. Chcete vymazať mapovú vrstvu a presunúť umiestnenia z nej na predvolenú mapovú vrstvu {02} ?",
-                "deleteConfirm": "Vymazať mapovú vrstvu {0}?",
-                "deleted": "Mapová vrstva vymazaná"
+                "title": "Delete the map layer",
+                "deleteConfirmMove": "The map layer \"{0}\" contains {1} places. Do you want to delete the map layer and move its places to the default map layer \"{2}\" or do you want to delete the map layer and its places?",
+                "deleteConfirm": "Do you want to delete the map layer {0}?",
+                "deleted": "The map layer has been deleted."
             },
             "categoryToPublic": {
-                "title": "Zverejniť mapovú vrstvu",
-                "message": "Zverejňujete  mapovú vrstvu {0}. Môžete zdieľať linky k zverejnenej mapovej vrstve s ostatnými internetovými používateľmi alebo môžete mapovú vrstvu vložiť ako mapové okno na inú webovú stránku. Mapová vrstva bude viditeľná aj pre ostatných užívateľov."
+                "title": "Publish the map layer",
+                "message": "You are publishing the map layer \"{0}\". After that you can in public share the map layer in the internet or embed it as a map layer on another web service. Also other users in Paikkatietoikkuna can view the map layer."
             },
             "categoryToPrivate": {
-                "title": "Nezverejňujte mapovú vrstvu",
-                "message": "Nezverejňujete mapovú vrstvu {0}. Po ukončení nebude možné sa o ňu podeliľ s ostatnými používateľmi alebo ju vložiť na inú webovú stránku. Mapová vrstva nebude viditeľná pre ostatných používateľov."
+                "title": "Unpublish the map layer",
+                "message": "You are unpublishing the map layer \"{0}\". After that it will no longer be possible to share the map layer in the internet anymore or embed it on another website. Other users in Paikkatietoikkuna can no longer view the map layer."
             },
             "error": {
-                "addCategory": "Mapová vrstva sa nedala uložiť. Umiestnenie nebolo uložené.",
-                "editCategory": "Mapová vrstva sa nedala uložiť.",
-                "savePlace": "Umiestnenie sa nedalo uložiť.",
-                "title": "Chyba!",
-                "generic": "Chyba systému. Skúste neskôr, prosím.",
-                "deleteCategory": "Počas vymazávania došlo k chybe!",
-                "deleteDefault": "Predvolená mapová vrstva sa nedá vymazať."
+                "addCategory": "The map layer could not be saved. The place has not been saved. Please try again later.",
+                "editCategory": "The map layer could not be saved. Please try again later.",
+                "savePlace": "The place could not be saved. Please try again later.",
+                "title": "Error!",
+                "generic": "The system error occurred. Please try again later.",
+                "deleteCategory": "The error occurred while deleting. Please try again later.",
+                "deleteDefault": "The default map layer cannot be deleted."
             }
         },
         "validation": {
-            "title": "Údaj obsahuje chyby:",
-            "placeName": "Chýba názov umiestnenia .",
-            "categoryName": "Názov mapovej vrstvy chýba",
-            "placeNameIllegal": "Názov objektu obsahuje nepovolené znaky. Povolené znaky sú písmená a-z, rovnako aj å, ä, ö, čísla, medzery a spojovníky.",
-            "descIllegal": "Popis objektu obsahuje nepovolené znaky. Povolené znaky sú písmená a-z, rovnako aj å, ä, ö, čísla, medzery a spojovníky.",
-            "categoryNameIllegal": "Popis vrstvy obsahuje nepovolené znaky. Povolené znaky sú písmená a-z, rovnako aj å, ä, ö, čísla, medzery a spojovníky.",
-            "dotSize": "Veľkosť bodky nezodpovedá veľkosti limitov (1-5).",
-            "dotColor": "Nesprávna farba bodky.",
+            "title": "The given data contains errors:",
+            "placeName": "Place name is missing.",
+            "categoryName": "Map layer name is missing.",
+            "placeNameIllegal": "The place name contains disallowed characters. The allowed characters are letters (a-z, A-Z and å,ä,ö,Å,Ä,Ö), numbers (0-9), backspaces and hyphens (-).",
+            "descIllegal": "The place description contains disallowed characters. The allowed characters are letters (a-z, A-Z and å,ä,ö,Å,Ä,Ö), numbers (0-9), backspaces and hyphens (-).",
+            "categoryNameIllegal": "The map layer name contains disallowed characters. The allowed characters are letters (a-z, A-Z and å,ä,ö,Å,Ä,Ö), numbers (0-9), backspaces and hyphens (-).",
+            "dotSize": "The point size is invalid. The size must be between 1 and 5.",
+            "dotColor": "The point colour is invalid. The colour values must be between 0 and 255.",
             "dotShape": "The point shape is invalid.",
-            "lineSize": "Veľkosť línie nezodpovedá veľkosti limitov (1-50)",
-            "lineColor": "Nesprávna farba čiary",
-            "areaLineSize": "Veľkosť obvodu plochy nezodpovedá limitom (0-50).",
-            "areaLineColor": "Nesprávna farba obvodovej línie plochy.",
-            "areaFillColor": "Nesprávna farba výplne."
+            "lineSize": "The line width is invalid. The size must be between 0 and 50.",
+            "lineColor": "The line colour is invalid. The colour values must be between 0 and 255.",
+            "areaLineSize": "The edge line width is invalid. The size must be between 0 and 50.",
+            "areaLineColor": "The edge line colour is invalid. The colour values must be between 0 and 255.",
+            "areaFillColor": "The fill colour is invalid. The colour values must be between 0 and 255."
         }
     }
 }

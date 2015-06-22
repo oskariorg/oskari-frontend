@@ -102,6 +102,10 @@ Oskari.clazz.define(
                 "type": "text/javascript",
                 "src": "../../../../bundles/catalogue/metadataflyout/resources/locale/nn.js"
             }, {
+                "lang": "sk",
+                "type": "text/javascript",
+                "src": "../../../../bundles/catalogue/metadataflyout/resources/locale/sk.js"
+            }, {
                 "lang": "sv",
                 "type": "text/javascript",
                 "src": "../../../../bundles/catalogue/metadataflyout/resources/locale/sv.js"
