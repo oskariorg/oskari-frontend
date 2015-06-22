@@ -318,8 +318,8 @@ Oskari.clazz.define(
         createUi: function () {
             var me = this,
                 searchFromChannelsContainer = me.templates.searchFromChannelsTab.clone();
-                me.optionPanel = me.templates.optionPanel.clone();
-
+                
+            me.optionPanel = me.templates.optionPanel.clone();
             searchFromChannelsContainer.append(me.optionPanel);
 
             var searchFromChannelsDescription = searchFromChannelsContainer.find(
@@ -673,11 +673,28 @@ Oskari.clazz.define(
                 tableHeaderRow.append(header);
             }
 
+            //Accordion
+            var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
+                container = jQuery('div.myAccordion'),
+                panel = null;
+
+            jQuery.each(new Array(10), function(panelData) {
+              panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+              panel.setTitle("JOOZ");
+              panel.setContent(table);
+              panel.setVisible(true);
+
+              //panelData.isOpen ? panel.open() : panel.close();
+
+              accordion.addPanel(panel);
+            });
+
             this._populateResultTable(tableBody);
             resultList.append('<div><h3>' +
                 me.getLocalization('searchResults') + ' ' + result.totalCount + ' ' +
                 me.getLocalization('searchResultsDescription') + ' ' + searchKey + '</h3></div>');
-            resultList.append(table);
+            accordion.insertTo(resultList);
+            //resultList.append(table);
 
             var btn = Oskari.clazz.create(
                 'Oskari.userinterface.component.Button'
