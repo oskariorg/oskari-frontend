@@ -104,9 +104,8 @@ Oskari.clazz.define(
             });
 
             me.templates.form.find('input[name=details-isaddress]').change(function() {
-                console.info("euifgweiof");
                 if(jQuery(this).is(":checked")) {
-                    me.templates.form.find(".remove--param").trigger('click');
+                    jQuery(this).parents("form").find(".remove--param").not(".hidden").parent("label").remove();
                 }
             });
 
@@ -120,7 +119,6 @@ Oskari.clazz.define(
                  event.preventDefault;
              });
 
-            //me.templates.form.attr('action', me.sandbox.getAjaxUrl() + me.instance.conf.restUrl);
             me.templates.form.find('input,select').each(function (index) {
                 var el = jQuery(this);
                 el.prev('span').html(me._getLocalization(el.attr('name')));
