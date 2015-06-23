@@ -110,7 +110,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                 me.panel = Oskari.clazz.create(
                     'Oskari.userinterface.component.AccordionPanel'
                 );
-                me.panel.setTitle(me.loc.layers.label);
+                me.panel.setTitle(me.loc.layerselection.label);
             }
         },
         /**
