@@ -69,6 +69,15 @@ Oskari.registerLocalization(
                     "point": "Salli pisteiden tallennus.",
                     "line": "Salli viivojen tallennus.",
                     "area": "Salli alueiden tallennus."
+                }, "layers": {
+                    "add": "Luo uusi tallennustaso",
+                    "label": "Näytettävät karttatasot",
+                    "addselect": "Lisää tallennustaso karttatasoihin",
+                    "defaultLayer": "(Oletusvalinta)",
+                    "useAsDefaultLayer": "Käytä oletuksena"
+                },
+                "myplaces": {
+                    "label": "Omat karttatasot"
                 }
             },
             "toollayout": {
@@ -132,16 +141,6 @@ Oskari.registerLocalization(
                         "featureDesc": "Värimaailma vaikuttaa kohdetietojen, omien kohteiden tietojen ja karttatasolaatikon väreihin."
                     }
                 }
-            },
-            "layers": {
-                "add": "Luo uusi tallennustaso",
-                "label": "Näytettävät karttatasot",
-                "addselect": "Lisää tallennustaso karttatasoihin",
-                "defaultLayer": "(Oletusvalinta)",
-                "useAsDefaultLayer": "Käytä oletuksena"
-            },
-            "myplaces": {
-                "label": "Omat karttatasot"
             },
             "sizes": {
                 "small": "Pieni",
