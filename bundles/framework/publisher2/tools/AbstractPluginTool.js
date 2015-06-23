@@ -171,15 +171,7 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     * @returns {Object} tool value object
     */
     getValues: function () {
-        // TODO: this needs more thinking
-        // tool should propably know where its config affects
-        // maybe return that kind of object
-        // mapfull.conf.plugins.push({id : this.getTool().id}) ???
-        return {
-            tool: this.getTool().id,
-            show: this.state.enabled,
-            subTools : []
-        };
+        // override
     },
     /**
     * Validate tool.

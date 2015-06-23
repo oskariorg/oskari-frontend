@@ -363,14 +363,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             return panels;
         },
 
+        /**
+        * Gather selections.
+        * @method _gatherSelections
+        * @private
+        */
         _gatherSelections: function(){
             var me = this,
-                selections = [];
+                selections = {};
             jQuery.each(me.panels, function(index, panel){
-                selections.push(panel.getValues());
+                jQuery.extend(true, selections, panel.getValues());
             });
 
-            //console.log(selections);
+            console.log(selections);
 
             throw 'Not implemented yet!';
         },
