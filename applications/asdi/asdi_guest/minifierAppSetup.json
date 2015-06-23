@@ -325,6 +325,26 @@
                     }
                 }
             }
+        }, {
+            "bundlename" : "admin-users",
+            "bundleinstancename" : "admin-users",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "admin-users" : {
+                        "bundlePath" : "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename" : "admin",
+            "bundleinstancename" : "admin",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "admin" : {
+                        "bundlePath" : "../../../packages/admin/bundle/"
+                    }
+                }
+            }
         }
 
     ]
