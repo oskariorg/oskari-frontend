@@ -83,18 +83,6 @@
                     "service-map": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     },
-                    "mapwfs2": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "mapanalysis": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "mapmyplaces": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "mapstats": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
                     "ui-components": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     }
