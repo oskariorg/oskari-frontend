@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "sk",
     "key": "userinterface.UserGuide",
     "value": {
@@ -6,7 +7,7 @@ Oskari.registerLocalization({
         "desc": "",
         "flyout": {
             "title": "Návod na obsluhu pre Oskari",
-            "loadingtxt": "NOT TRANSLATED"
+            "loadingtxt": "<p>Loading the guide...</p>"
         },
         "tile": {
             "title": "Návod na obsluhu pre mapu"
@@ -15,9 +16,16 @@ Oskari.registerLocalization({
             "title": "Chyba!",
             "generic": "Načítavanie návodu na obsluhu zlyhalo. Skúste neskôr, prosím."
         },
+        "tabs": [
+            {
+                "title": "Map window",
+                "tags": "map window,user guide"
+            }
+        ],
         "help": {
-            "tags": "NOT TRANSLATED",
-            "contentPart": "NOT TRANSLATED"
+            "tags": "map window,user guide",
+            "contentPart": "body"
         }
     }
-});
+}
+);

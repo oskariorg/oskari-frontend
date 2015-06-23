@@ -18,8 +18,8 @@ Oskari.registerLocalization(
                     "name": "Názov",
                     "description": "Popis",
                     "publish": "Zverejnený",
-                    "edit": "NOT TRANSLATED",
-                    "delete": "NOT TRANSLATED"
+                    "edit": "Edit",
+                    "delete": "Delete"
                 },
                 "popup": {
                     "edit": "Editovať informácie zobrazenia",
@@ -60,7 +60,7 @@ Oskari.registerLocalization(
             "publishedmaps": {
                 "title": "Vložené mapy",
                 "show": "Zobraziť na mape",
-                "getHTML": "NOT TRANSLATED",
+                "getHTML": "HTML code",
                 "edit": "Editovať",
                 "publish": "Zverejniť mapu",
                 "unpublish": "Nezverejňovať mapu",
@@ -69,13 +69,13 @@ Oskari.registerLocalization(
                     "name": "Názov",
                     "domain": "Mapové nastavenia",
                     "publish": "Stav",
-                    "show": "NOT TRANSLATED",
-                    "html": "NOT TRANSLATED",
-                    "edit": "NOT TRANSLATED",
-                    "delete": "NOT TRANSLATED"
+                    "show": "Actions",
+                    "html": "HTML code",
+                    "edit": "Edit",
+                    "delete": "Delete"
                 },
                 "published": {
-                    "desc": "NOT TRANSLATED"
+                    "desc": "Embed the map by adding the HTML code below to your website:"
                 },
                 "popup": {
                     "edit": "Zmeniť názov mapy",

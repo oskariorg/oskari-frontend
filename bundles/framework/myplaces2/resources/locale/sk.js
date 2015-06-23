@@ -14,89 +14,90 @@ Oskari.registerLocalization(
             "loginShort": "Prihlásiť sa na použitie"
         },
         "tab": {
-            "title": "NOT TRANSLATED",
-            "nocategories": "NOT TRANSLATED",
+            "title": "Places",
+            "nocategories": "You do not have any saved places yet.",
+            "maxFeaturesExceeded": "You have exceeded the maximum amount of the own places. All the places have not been loaded.",
             "publishCategory": {
-                "privateTooltip": "NOT TRANSLATED",
-                "publicTooltip": "NOT TRANSLATED"
+                "privateTooltip": "This map layer is private. Click here to publish it.",
+                "publicTooltip": "This map layer is public. Click here to unpublish it."
             },
-            "addCategory": "NOT TRANSLATED",
-            "editCategory": "NOT TRANSLATED",
-            "deleteCategory": "NOT TRANSLATED",
-            "edit": "NOT TRANSLATED",
-            "delete": "NOT TRANSLATED",
+            "addCategory": "Add the map layer",
+            "editCategory": "Edit the map layer",
+            "deleteCategory": "Delete the map layer",
+            "edit": "Edit",
+            "delete": "Delete",
             "grid": {
-                "name": "NOT TRANSLATED",
-                "desc": "NOT TRANSLATED",
-                "createDate": "NOT TRANSLATED",
-                "updateDate": "NOT TRANSLATED",
-                "measurement": "NOT TRANSLATED",
-                "edit": "NOT TRANSLATED",
-                "delete": "NOT TRANSLATED"
+                "name": "Place name",
+                "desc": "Place description",
+                "createDate": "Created",
+                "updateDate": "Updated",
+                "measurement": "Size",
+                "edit": "Edit",
+                "delete": "Delete"
             },
             "notification": {
                 "delete": {
-                    "title": "NOT TRANSLATED",
-                    "confirm": "NOT TRANSLATED",
-                    "btnDelete": "NOT TRANSLATED",
-                    "btnCancel": "NOT TRANSLATED",
-                    "success": "NOT TRANSLATED",
-                    "error": "NOT TRANSLATED",
-                    "cancel": "NOT TRANSLATED"
+                    "title": "Delete Place",
+                    "confirm": "Do you want to delete this place?",
+                    "btnDelete": "Delete",
+                    "btnCancel": "Cancel",
+                    "success": "The place has been deleted.",
+                    "error": "The place could not be deleted. Please try gain later.",
+                    "cancel": "The place has not been deleted."
                 }
             }
         },
         "tools": {
             "measureline": {
-                "title": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
+                "title": "Measure Distance",
+                "tooltip": "Measure Distance",
                 "add": "",
                 "next": "",
-                "edit": "NOT TRANSLATED",
-                "noResult": "NOT TRANSLATED"
+                "edit": "You can edit the line by clicking and dragging its breakpoints.",
+                "noResult": "0 m"
             },
             "measurearea": {
-                "title": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
+                "title": "Measure Area",
+                "tooltip": "Measure Area",
                 "add": "",
                 "next": "",
-                "edit": "NOT TRANSLATED",
-                "noResult": "NOT TRANSLATED"
+                "edit": "You can edit the area by clicking and dragging its breakpoints on its edge line.",
+                "noResult": "0 m²"
             },
             "point": {
-                "title": "NOT TRANSLATED",
+                "title": "Add Point",
                 "tooltip": "Pridať bod",
-                "add": "NOT TRANSLATED",
+                "add": "Draw a point by clicking the map.",
                 "next": "Môžete uložiť alebo nakresliť viac bodov do toho istého výkresu",
                 "edit": "Presuňte bod kliknutím a ťahaním",
                 "save": "Uložiť umiestnenie"
             },
             "line": {
-                "title": "NOT TRANSLATED",
+                "title": "Add Line",
                 "tooltip": "Pridať líniu",
-                "add": "NOT TRANSLATED",
+                "add": "Draw a line by adding the break points to the map. You can add the break points by clicking the map. Stop drawing by double clicking or by clicking \"Save as my place\".",
                 "next": "Možete uložiť alebo nakresliť viac línií do toho istého výkresu",
                 "edit": "Editovať líniu kliknutím a ťahaním jej lomových bodov",
                 "save": "Uložiť útvar",
-                "noResult": "NOT TRANSLATED"
+                "noResult": "0 m"
             },
             "area": {
-                "title": "NOT TRANSLATED",
+                "title": "Add Area",
                 "tooltip": "Pridať plochu",
-                "add": "NOT TRANSLATED",
+                "add": "Draw an area by adding the edge line's break points to the map. You can add the break points by clicking the map. Stop drawing by double clicking or by clicking \"Save as my place\".",
                 "next": "Môžete uložiť alebo nakresliť viac polygónov do toho istého výkresu",
                 "edit": "Editovať tvar plochy kliknutím a ťahaním lomových bodov na jej obvodovej línii",
                 "save": "Uložiť útvar",
-                "noResult": "NOT TRANSLATED"
+                "noResult": "0 m²"
             }
         },
         "buttons": {
             "ok": "OK",
             "cancel": "Zrušiť",
-            "close": "NOT TRANSLATED",
+            "close": "Cancel",
             "finish": "Ukončiť kreslenie",
             "save": "Uložiť",
-            "saveAsMyPlace": "NOT TRANSLATED",
+            "saveAsMyPlace": "Save as my place",
             "movePlaces": "Presuňte umiestnenie a vymažte",
             "deleteCategory": "Vymazať",
             "deleteCategoryAndPlaces": "Vymazať kategóriu a umiestnenia",
@@ -116,26 +117,26 @@ Oskari.registerLocalization(
                 "placeholder": "Popíšte umiestenie"
             },
             "placeAttention": {
-                "placeholder": "NOT TRANSLATED"
+                "placeholder": "Place text on the map"
             },
             "measurement": {
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "line": "Line length:",
+                "area": "Area size:"
             },
             "category": {
                 "label": "Mapová vrstva",
-                "newLayer": "NOT TRANSLATED",
-                "choose": "NOT TRANSLATED"
+                "newLayer": "Create a new map layer",
+                "choose": "or select one of your existing map layers:"
             },
             "imagelink": {
-                "placeholder": "NOT TRANSLATED",
-                "previewLabel": "NOT TRANSLATED",
-                "add": "NOT TRANSLATED"
+                "placeholder": "Link to the image",
+                "previewLabel": "Image preview",
+                "add": "New map layer"
             },
             "rendering": {
-                "label": "NOT TRANSLATED",
+                "label": "Place style",
                 "point": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": "Point"
                 }
             }
         },
@@ -164,10 +165,10 @@ Oskari.registerLocalization(
                 }
             },
             "visibleFields": {
-                "label": "NOT TRANSLATED",
-                "placename": "NOT TRANSLATED",
-                "placedesc": "NOT TRANSLATED",
-                "image": "NOT TRANSLATED"
+                "label": "Visible place data",
+                "placename": "Name",
+                "placedesc": "Description",
+                "image": "Image"
             },
             "edit": {
                 "title": "Editovať mapovú vrstvu",
@@ -175,102 +176,102 @@ Oskari.registerLocalization(
                 "cancel": "Späť"
             },
             "rendering": {
-                "label": "NOT TRANSLATED",
+                "label": "Place style",
                 "point": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": "Edit the point style"
                 },
                 "area": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": "Edit the area style"
                 },
                 "line": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": "Edit the line style"
                 }
             }
         },
         "pointform": {
-            "title": "NOT TRANSLATED",
+            "title": "Point style",
             "tooltip": "",
             "symbol": {
-                "label": "NOT TRANSLATED"
+                "label": "Icon"
             },
             "size": {
-                "label": "NOT TRANSLATED"
+                "label": "Size"
             },
             "color": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "Colour",
+                "labelOr": "or",
+                "labelCustom": "Custom RGB color (0-255)"
             },
             "preview": {
-                "label": "NOT TRANSLATED"
+                "label": "Preview"
             },
             "buttons": {
-                "save": "NOT TRANSLATED",
-                "cancel": "NOT TRANSLATED"
+                "save": "Save",
+                "cancel": "Cancel"
             }
         },
         "lineform": {
-            "title": "NOT TRANSLATED",
+            "title": "Line style",
             "tooltip": "",
             "style": {
-                "label": "NOT TRANSLATED"
+                "label": "Style"
             },
             "cap": {
-                "label": "NOT TRANSLATED"
+                "label": "Endings"
             },
             "corner": {
-                "label": "NOT TRANSLATED"
+                "label": "Corners"
             },
             "width": {
-                "label": "NOT TRANSLATED"
+                "label": "Width"
             },
             "color": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "Colour",
+                "labelOr": "or",
+                "labelCustom": "Custom RGB color (0-255)"
             },
             "preview": {
-                "label": "NOT TRANSLATED"
+                "label": "Preview"
             },
             "buttons": {
-                "save": "NOT TRANSLATED",
-                "cancel": "NOT TRANSLATED"
+                "save": "Save",
+                "cancel": "Cancel"
             }
         },
         "areaform": {
-            "title": "NOT TRANSLATED",
+            "title": "Area Style",
             "tooltip": "",
             "linestyle": {
-                "label": "NOT TRANSLATED"
+                "label": "Edge line style"
             },
             "linecap": {
-                "label": "NOT TRANSLATED"
+                "label": "Edge line endings"
             },
             "linecorner": {
-                "label": "NOT TRANSLATED"
+                "label": "Edge line corners"
             },
             "linewidth": {
-                "label": "NOT TRANSLATED"
+                "label": "Edge line width"
             },
             "linecolor": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "Edge line color",
+                "labelOr": "or",
+                "labelCustom": "Custom RGB color (0-255)"
             },
             "color": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "Fill colour",
+                "labelOr": "or",
+                "labelCustom": "Custom RGB color (0-255)"
             },
             "fill": {
-                "label": "NOT TRANSLATED"
+                "label": "Fill pattern"
             },
             "preview": {
-                "label": "NOT TRANSLATED"
+                "label": "Preview"
             },
             "buttons": {
-                "save": "NOT TRANSLATED",
-                "cancel": "NOT TRANSLATED"
+                "save": "Save",
+                "cancel": "Cancel"
             }
         },
         "notification": {
@@ -315,7 +316,7 @@ Oskari.registerLocalization(
             "categoryNameIllegal": "Popis vrstvy obsahuje nepovolené znaky. Povolené znaky sú písmená a-z, rovnako aj å, ä, ö, čísla, medzery a spojovníky.",
             "dotSize": "Veľkosť bodky nezodpovedá veľkosti limitov (1-5).",
             "dotColor": "Nesprávna farba bodky.",
-            "dotShape": "NOT TRANSLATED",
+            "dotShape": "The point shape is invalid.",
             "lineSize": "Veľkosť línie nezodpovedá veľkosti limitov (1-50)",
             "lineColor": "Nesprávna farba čiary",
             "areaLineSize": "Veľkosť obvodu plochy nezodpovedá limitom (0-50).",

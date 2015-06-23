@@ -175,6 +175,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartView',
                             .html(layerName);
 
                         layerList.find('ul').append(layerListRadioElement);
+
+                        if (layerList.find("input")[0].checked !== true) {
+                            layerList.find("input").attr('checked', true);
+                            layersWithFeatures = _.map(WFSSelections, 'layerId');
+                            me.emptySelectionsFromLayers = _.pull(layersWithFeatures, layerId);
+                        }
                     }
                 );
                 jQuery(layerList).find('input').on('click', function (el) {

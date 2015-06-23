@@ -375,6 +375,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
 
                 var features = this.selectionPlugin.getFeaturesAsGeoJSON();
 
+                this.selectionPlugin.removeFeatures();
+
                 var evt = this.sandbox.getEventBuilder("WFSSetFilter")(features);
                 this.sandbox.notifyAll(evt);
 
