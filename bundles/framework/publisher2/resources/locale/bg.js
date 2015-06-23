@@ -58,17 +58,28 @@ Oskari.registerLocalization(
                 "FeaturedataPlugin": "NOT TRANSLATED",
                 "GetInfoPlugin": "Инструмент за запитване относно даннните на мястото",
                 "PublisherToolbarPlugin": "NOT TRANSLATED",
-                "selectDrawLayer": "NOT TRANSLATED"
+                "selectDrawLayer": "NOT TRANSLATED",
+                "toolbarToolNames": {
+                    "history_back": "NOT TRANSLATED",
+                    "history_forward": "NOT TRANSLATED",
+                    "measureline": "NOT TRANSLATED",
+                    "measurearea": "NOT TRANSLATED",
+                    "point": "NOT TRANSLATED",
+                    "line": "NOT TRANSLATED",
+                    "area": "NOT TRANSLATED"
+                },
+                "layers": {
+                    "add": "NOT TRANSLATED",
+                    "addselect": "NOT TRANSLATED",
+                    "label": "Картни слоеве",
+                    "defaultLayer": "( Слой по подразбиране )",
+                    "useAsDefaultLayer": "Използване като слой по подразбиране"
+                },
+                "myplaces": {
+                    "label": "NOT TRANSLATED"
+                }
             },
-            "toolbarToolNames": {
-                "history_back": "NOT TRANSLATED",
-                "history_forward": "NOT TRANSLATED",
-                "measureline": "NOT TRANSLATED",
-                "measurearea": "NOT TRANSLATED",
-                "point": "NOT TRANSLATED",
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
-            },
+
             "toollayout": {
                 "label": "NOT TRANSLATED",
                 "tooltip": "NOT TRANSLATED",
@@ -130,16 +141,6 @@ Oskari.registerLocalization(
                         "featureDesc": "NOT TRANSLATED"
                     }
                 }
-            },
-            "layers": {
-                "add": "NOT TRANSLATED",
-                "addselect": "NOT TRANSLATED",
-                "label": "Картни слоеве",
-                "defaultLayer": "( Слой по подразбиране )",
-                "useAsDefaultLayer": "Използване като слой по подразбиране"
-            },
-            "myplaces": {
-                "label": "NOT TRANSLATED"
             },
             "sizes": {
                 "small": "Малък",

@@ -59,17 +59,27 @@ Oskari.registerLocalization(
                 "FeaturedataPlugin": "Feature data",
                 "GetInfoPlugin": "Atrašanās vietas vaicāšanas rīks",
                 "PublisherToolbarPlugin": "Map tools",
-                "selectDrawLayer": "Select layer for new features"
-            },
-            "toolbarToolNames": {
-                "history_back": "Move backwards",
-                "history_forward": "Move forward",
-                "measureline": "Measure distance",
-                "measurearea": "Measure area",
-                "drawTools": "Drawing tools",
-                "point": "Allow users to add point features.",
-                "line": "Allow users to add line features.",
-                "area": "Allow users to add area features."
+                "selectDrawLayer": "Select layer for new features",
+                "toolbarToolNames": {
+                    "history_back": "Move backwards",
+                    "history_forward": "Move forward",
+                    "measureline": "Measure distance",
+                    "measurearea": "Measure area",
+                    "drawTools": "Drawing tools",
+                    "point": "Allow users to add point features.",
+                    "line": "Allow users to add line features.",
+                    "area": "Allow users to add area features."
+                },
+                "layers": {
+                    "add": "Create new layer for new features.",
+                    "label": "Kartes slāņi",
+                    "addselect": "Add a drawing layer to the map",
+                    "defaultLayer": "(Noklusējuma slānis)",
+                    "useAsDefaultLayer": "Izmantot kā noklusējuma slāni"
+                },
+                "myplaces": {
+                    "label": "My map layers"
+                }
             },
             "toollayout": {
                 "label": "Tool Placement",
@@ -132,16 +142,6 @@ Oskari.registerLocalization(
                         "featureDesc": "The color scheme only defines the color of the popup windows for the feature info and map layer selection."
                     }
                 }
-            },
-            "layers": {
-                "add": "Create new layer for new features.",
-                "label": "Kartes slāņi",
-                "addselect": "Add a drawing layer to the map",
-                "defaultLayer": "(Noklusējuma slānis)",
-                "useAsDefaultLayer": "Izmantot kā noklusējuma slāni"
-            },
-            "myplaces": {
-                "label": "My map layers"
             },
             "sizes": {
                 "small": "Mazs",

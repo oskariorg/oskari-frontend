@@ -60,7 +60,27 @@ Oskari.registerLocalization({
                 "FeaturedataPlugin": "",
                 "GetInfoPlugin": "Ortsdaten-Abfrage",
                 "PublisherToolbarPlugin": "NOT TRANSLATED",
-                "selectDrawLayer": "NOT TRANSLATED"
+                "selectDrawLayer": "NOT TRANSLATED",
+                "toolbarToolNames": {
+                    "history_back": "Move backwards",
+                    "history_forward": "Move forward",
+                    "measureline": "Measure distance",
+                    "measurearea": "Measure area",
+                    "drawTools": "Drawing tools",
+                    "point": "Allow users to add point features.",
+                    "line": "Allow users to add line features.",
+                    "area": "Allow users to add area features."
+                },
+                "layers": {
+                    "add": "Create new layer for new features.",
+                    "label": "Kartenebenen",
+                    "addselect": "Add a drawing layer to the map",
+                    "defaultLayer": "(Standardebene)",
+                    "useAsDefaultLayer": "Als Standardebene verwenden"
+                },
+                "myplaces": {
+                    "label": "My map layers"
+                }
             },
             "toollayout": {
                 "label": "Tool layout",
@@ -75,13 +95,6 @@ Oskari.registerLocalization({
                 "label": "Statistics",
                 "tooltip": "Show the data related to map.",
                 "grid": "Show statistic grid"
-            },
-            "layers": {
-                "add": "NOT TRANSLATED",
-                "addselect": "NOT TRANSLATED",
-                "label": "Kartenebenen",
-                "defaultLayer": "(Standardebene)",
-                "useAsDefaultLayer": "Als Standardebene verwenden"
             },
             "sizes": {
                 "small": "Klein",
