@@ -23,6 +23,28 @@ function() {
             name: 'ScaleBarPlugin',
             config: {}
         };
+    },
+    /**
+    * Get values.
+    * @method getValues
+    * @public
+    *
+    * @returns {Object} tool value object
+    */
+    getValues: function () {    
+        var me = this;
+                
+        if(me.state.enabled === true) {
+            return {
+                mapfull: {
+                    conf: {
+                        plugins: [{ id: this.getTool().id }]
+                    }
+                }
+            };
+        } else {
+            return null;
+        }
     }
 }, {
     'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],

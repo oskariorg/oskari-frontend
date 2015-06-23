@@ -96,20 +96,54 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
         },
 
         /**
+        * Extends object recursive for keeping defaults array.
+        * @method _extendRecursive
+        * @private
+        *
+        * @param {Object} defaults the default extendable object
+        * @param {Object} extend extend object
+        *
+        * @return {Object} extended object
+        */
+        _extendRecursive: function(defaults, extend){
+            var me = this;
+
+            if (extend === null || jQuery.isEmptyObject(extend)) {
+                return defaults;
+            } else if (jQuery.isEmptyObject(defaults)) {
+                return jQuery.extend(true, defaults, extend);
+            } else if (jQuery.isArray(defaults)) {
+                if(jQuery.isArray(extend)){
+                    jQuery.each(extend, function(key, value) {
+                        defaults.push(value);
+                    });
+                }
+                return defaults;
+            } else {
+                jQuery.each(extend, function(key, value){
+                    if(defaults[key] === null) {
+                        defaults[key] = value;
+                    } else {
+                        defaults[key] = me._extendRecursive(defaults[key], value);
+                    }
+                    
+                });
+                return defaults;
+            }
+        },
+
+        /**
          * Returns the selections the user has done with the form inputs.
          * @method getValues
          * @return {Object}
          */
         getValues: function () {
-            // TODO: maybe merge the tool.getValues()
-            // under-construction and all that
             var me = this,
-                values = {
-                    maptools: []
-                };
+                values = {};
 
             _.each(me.tools, function(tool){
-                values.maptools.push(tool.getValues());
+                var value = tool.getValues();
+                me._extendRecursive(values, value);
             });
 
             return values;

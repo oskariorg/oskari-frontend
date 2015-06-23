@@ -23,15 +23,20 @@ function() {
     *
     * @returns {Object} tool value object
     */
-    getValues: function () {
-        var me = this,
-            saveState = {
-                tool: me.getTool().id,
-                show: me.state.enabled,
-                subTools : []
+    getValues: function () {    
+        var me = this;
+                
+        if(me.state.enabled === true) {
+            return {
+                mapfull: {
+                    conf: {
+                        plugins: [{ id: this.getTool().id }]
+                    }
+                }
             };
-
-        return saveState;
+        } else {
+            return null;
+        }
     }
 }, {
     'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],

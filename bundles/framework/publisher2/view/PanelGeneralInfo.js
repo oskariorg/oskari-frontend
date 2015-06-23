@@ -145,17 +145,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
          * @return {Object}
          */
         getValues: function () {
-            var values = {},
+            var values = {
+                    generalInfo: {}
+                },
                 fkey,
                 data;
 
             for (fkey in this.fields) {
                 if (this.fields.hasOwnProperty(fkey)) {
                     data = this.fields[fkey];
-                    values[fkey] = data.field.getValue();
+                    values.generalInfo[fkey] = data.field.getValue();
                 }
             }
-            values.language = this.langField.field.getValue();
+            values.generalInfo.language = this.langField.field.getValue();
             return values;
         },
 

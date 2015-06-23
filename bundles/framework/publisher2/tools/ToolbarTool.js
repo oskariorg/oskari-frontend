@@ -134,23 +134,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 config: {}
             };
         },
-        /**
-         * Get values.
-         * @method getValues
-         * @public
-         *
-         * @returns {Object} tool value object
-         */
-        getValues: function () {
-            var me = this,
-                saveState = {
-                    tool: me.getTool().id,
-                    show: me.state.enabled,
-                    subTools: []
-                };
 
-            return saveState;
-        },
         /**
          * Get extra options.
          * @method getExtraOptions
