@@ -115,7 +115,9 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             'toolOption': '<div class="tool-option"><label><input type="checkbox" /></label></div>',
             'toolOptionSettings': '<div class="tool-option-settings"></div>',
             'toolOptionSetting': '<div class="tool-option-setting"></div>',
-            'toolOptionSettingInput': '<label><input type="checkbox" /></label>'
+            'toolOptionSettingInput': '<label><input type="checkbox" /></label>',
+            'layerSelect': '<select class="publisher-select-layer"></select>',
+            'layerSelectOption': '<option></option>'
         },
 
 
