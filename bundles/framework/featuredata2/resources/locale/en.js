@@ -14,6 +14,7 @@ Oskari.registerLocalization({
         "selectionTools": {
             "title": "Select features on the map.",
             "instructions": " ",
+            "selectFromTop": "Select from the top layer",
             "selectAll": "Select from all layers",
             "link": {
                 "title": "Select more features"
