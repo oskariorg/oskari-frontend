@@ -59,18 +59,29 @@ Oskari.registerLocalization(
                 "FeaturedataPlugin": "Informazioni sull'elemento",
                 "GetInfoPlugin": "Strumento di interrogazione dei dati",
                 "PublisherToolbarPlugin": "Strumenti mappa",
-                "selectDrawLayer": "Seleziona il layer per creare nuovi elementi"
+                "selectDrawLayer": "Seleziona il layer per creare nuovi elementi",
+                "toolbarToolNames": {
+                    "history_back": "Sposta indietro",
+                    "history_forward": "Sposta avanti",
+                    "measureline": "Misura la distanza",
+                    "measurearea": "Misura l'area",
+                    "drawTools": "Strumenti di disegno",
+                    "point": "Consenti all'utente di aggiungere elementi puntuali.",
+                    "line": "Consenti all'utente di aggiungere elementi lineari",
+                    "area": "Consenti all'utente di aggiungere elementi areali"
+                },
+                "layers": {
+                    "add": "Crea un nuovo layer per nuovi elementi",
+                    "label": "Layer",
+                    "addselect": "Aggiungi un layer di annotazioni alla mappa.",
+                    "defaultLayer": "(Layer predefinito)",
+                    "useAsDefaultLayer": "Usa un layer predefinito"
+                },
+                "myplaces": {
+                    "label": "Il Mio Map Layer"
+                }
             },
-            "toolbarToolNames": {
-                "history_back": "Sposta indietro",
-                "history_forward": "Sposta avanti",
-                "measureline": "Misura la distanza",
-                "measurearea": "Misura l'area",
-                "drawTools": "Strumenti di disegno",
-                "point": "Consenti all'utente di aggiungere elementi puntuali.",
-                "line": "Consenti all'utente di aggiungere elementi lineari",
-                "area": "Consenti all'utente di aggiungere elementi areali"
-            },
+
             "toollayout": {
                 "label": "Posizionamento dei tool",
                 "tooltip": "Segli la posizione degli strumenti da visualizzare in mappa",
@@ -132,16 +143,6 @@ Oskari.registerLocalization(
                         "featureDesc": "Lo schema di colori definisce solo il colore delle finestre a scomparsa contenenti le informazioni sull'elemento e sulla selezione corrente."
                     }
                 }
-            },
-            "layers": {
-                "add": "Crea un nuovo layer per nuovi elementi",
-                "label": "Layer",
-                "addselect": "Aggiungi un layer di annotazioni alla mappa.",
-                "defaultLayer": "(Layer predefinito)",
-                "useAsDefaultLayer": "Usa un layer predefinito"
-            },
-            "myplaces": {
-                "label": "Il Mio Map Layer"
             },
             "sizes": {
                 "small": "Piccolo",

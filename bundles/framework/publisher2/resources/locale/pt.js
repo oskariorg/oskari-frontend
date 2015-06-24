@@ -57,16 +57,27 @@ Oskari.registerLocalization(
                 "SearchPlugin": "Pesquisa de endereço e nome de lugar",
                 "GetInfoPlugin": "Ferramenta de interrogação para lugares",
                 "PublisherToolbarPlugin": "NOT TRANSLATED",
-                "selectDrawLayer": "NOT TRANSLATED"
-            },
-            "toolbarToolNames": {
-                "history_back": "NOT TRANSLATED",
-                "history_forward": "NOT TRANSLATED",
-                "measureline": "NOT TRANSLATED",
-                "measurearea": "NOT TRANSLATED",
-                "point": "NOT TRANSLATED",
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "selectDrawLayer": "NOT TRANSLATED",
+                "toolbarToolNames": {
+                    "history_back": "Move backwards",
+                    "history_forward": "Move forward",
+                    "measureline": "Measure distance",
+                    "measurearea": "Measure area",
+                    "drawTools": "Drawing tools",
+                    "point": "Allow users to add point features.",
+                    "line": "Allow users to add line features.",
+                    "area": "Allow users to add area features."
+                },
+                "layers": {
+                    "add": "Create new layer for new features.",
+                    "addselect": "Add a drawing layer to the map",
+                    "label": "Camadas",
+                    "defaultLayer": "(Camada padrão)",
+                    "useAsDefaultLayer": "Use como camada padrão"
+                },
+                "myplaces": {
+                    "label": "My map layers"
+                }
             },
             "toollayout": {
                 "label": "NOT TRANSLATED",
@@ -129,16 +140,6 @@ Oskari.registerLocalization(
                         "featureDesc": "NOT TRANSLATED"
                     }
                 }
-            },
-            "layers": {
-                "add": "NOT TRANSLATED",
-                "addselect": "NOT TRANSLATED",
-                "label": "Camadas",
-                "defaultLayer": "(Camada padrão)",
-                "useAsDefaultLayer": "Use como camada padrão"
-            },
-            "myplaces": {
-                "label": "NOT TRANSLATED"
             },
             "sizes": {
                 "small": "Pequeno",

@@ -59,17 +59,27 @@ Oskari.registerLocalization(
                 "FeaturedataPlugin": "Objektuppgifter",
                 "GetInfoPlugin": "Verktyg för förfrågan som gäller uppgifter om objektet",
                 "PublisherToolbarPlugin": "Kartverktyg",
-                "selectDrawLayer": "Välj lager för nya funktioner"
-            },
-            "toolbarToolNames": {
-                "history_back": "Gå bakåt",
-                "history_forward": "Gå framåt",
-                "measureline": "Mät avstånd",
-                "measurearea": "Mät område",
-                "drawTools": "Ritningsverktyg",
-                "point": "Tillåt användare att lägga till punkter.",
-                "line": "Tillåt användare att lägga till linjer.",
-                "area": "Tillåt användare att lägga till områden."
+                "selectDrawLayer": "Välj lager för nya funktioner",
+                "toolbarToolNames": {
+                    "history_back": "Gå bakåt",
+                    "history_forward": "Gå framåt",
+                    "measureline": "Mät avstånd",
+                    "measurearea": "Mät område",
+                    "drawTools": "Ritningsverktyg",
+                    "point": "Tillåt användare att lägga till punkter.",
+                    "line": "Tillåt användare att lägga till linjer.",
+                    "area": "Tillåt användare att lägga till områden."
+                },
+                "layers": {
+                    "add": "Lägg till nytt lager för nya funktioner.",
+                    "label": "Kartlager",
+                    "addselect": "Lägg till ritningslager till kartan",
+                    "defaultLayer": "(Förvalt kartlager)",
+                    "useAsDefaultLayer": "Använd som förvalt kartlager."
+                },
+                "myplaces": {
+                    "label": "Mina kartlager"
+                }
             },
             "toollayout": {
                 "label": "Verktygs placering",
@@ -132,16 +142,6 @@ Oskari.registerLocalization(
                         "featureDesc": "Färgschemat påverkar bara färgen på popup-fönstret för faktarutan för kartobjektet och kartlagret."
                     }
                 }
-            },
-            "layers": {
-                "add": "Lägg till nytt lager för nya funktioner.",
-                "label": "Kartlager",
-                "addselect": "Lägg till ritningslager till kartan",
-                "defaultLayer": "(Förvalt kartlager)",
-                "useAsDefaultLayer": "Använd som förvalt kartlager."
-            },
-            "myplaces": {
-                "label": "Mina kartlager"
             },
             "sizes": {
                 "small": "Liten",

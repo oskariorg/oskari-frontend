@@ -59,18 +59,29 @@ Oskari.registerLocalization(
                 "FeaturedataPlugin": "Datos de objetos geográficos",
                 "GetInfoPlugin": "Herramienta de consulta para los datos de sitios",
                 "PublisherToolbarPlugin": "Herramientas de mapa",
-                "selectDrawLayer": "Selecciona la capa para nuevos objetos geográficos"
+                "selectDrawLayer": "Selecciona la capa para nuevos objetos geográficos",
+                "toolbarToolNames": {
+                    "history_back": "Mover atrás",
+                    "history_forward": "Mover adelante",
+                    "measureline": "Medir distancia",
+                    "measurearea": "Medir área",
+                    "drawTools": "Herramientas de dibujo",
+                    "point": "Permitir usuarios añadir objetos geográficos puntuales",
+                    "line": "Permitir usuarios añadir objetos geográficos lineales",
+                    "area": "Permitir usuarios añadir objetos geográficos superficiales"
+                },
+                "layers": {
+                    "add": "Crear nueva capa para nuevos objetos geográficos",
+                    "label": "Capas",
+                    "addselect": "Añadir una nueva capa de dibujo en el mapa.",
+                    "defaultLayer": "(Capa por defecto)",
+                    "useAsDefaultLayer": "Usar como capa por defecto"
+                },
+                "myplaces": {
+                    "label": "Mis capas del mapa."
+                }
             },
-            "toolbarToolNames": {
-                "history_back": "Mover atrás",
-                "history_forward": "Mover adelante",
-                "measureline": "Medir distancia",
-                "measurearea": "Medir área",
-                "drawTools": "Herramientas de dibujo",
-                "point": "Permitir usuarios añadir objetos geográficos puntuales",
-                "line": "Permitir usuarios añadir objetos geográficos lineales",
-                "area": "Permitir usuarios añadir objetos geográficos superficiales"
-            },
+
             "toollayout": {
                 "label": "Tool layout",
                 "tooltip": "Choose a layout for the tools shown on the map",
@@ -132,16 +143,6 @@ Oskari.registerLocalization(
                         "featureDesc": "El esquema de color solo define el color de la ventana emergente para la información del objeto geográfico y la selección de la capa del mapa."
                     }
                 }
-            },
-            "layers": {
-                "add": "Crear nueva capa para nuevos objetos geográficos",
-                "label": "Capas",
-                "addselect": "Añadir una nueva capa de dibujo en el mapa.",
-                "defaultLayer": "(Capa por defecto)",
-                "useAsDefaultLayer": "Usar como capa por defecto"
-            },
-            "myplaces": {
-                "label": "Mis capas del mapa."
             },
             "sizes": {
                 "small": "Pequeño",

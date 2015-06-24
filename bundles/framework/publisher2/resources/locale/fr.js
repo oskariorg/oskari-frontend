@@ -59,17 +59,27 @@ Oskari.registerLocalization(
                 "FeaturedataPlugin": "Données d'entité",
                 "GetInfoPlugin": "Outil de requête pour données d'entité",
                 "PublisherToolbarPlugin": "Outils de carte",
-                "selectDrawLayer": "Sélectionnez la couche pour les nouvelles entités"
-            },
-            "toolbarToolNames": {
-                "history_back": "Reculer",
-                "history_forward": "Avancer",
-                "measureline": "Mesurer la distance",
-                "measurearea": "Mesurer la zone",
-                "drawTools": "Outils de dessin",
-                "point": "Permet aux utilisateurs d’ajouter des caractéristiques de point.",
-                "line": "Permet aux utilisateurs d’ajouter des caractéristiques de ligne.",
-                "area": "Permet aux utilisateurs d’ajouter des caractéristiques de zone."
+                "selectDrawLayer": "Sélectionnez la couche pour les nouvelles entités",
+                "toolbarToolNames": {
+                    "history_back": "Reculer",
+                    "history_forward": "Avancer",
+                    "measureline": "Mesurer la distance",
+                    "measurearea": "Mesurer la zone",
+                    "drawTools": "Outils de dessin",
+                    "point": "Permet aux utilisateurs d’ajouter des caractéristiques de point.",
+                    "line": "Permet aux utilisateurs d’ajouter des caractéristiques de ligne.",
+                    "area": "Permet aux utilisateurs d’ajouter des caractéristiques de zone."
+                },
+                "layers": {
+                    "add": "Créez une nouvelle couche pour les nouvelles entités",
+                    "label": "Couches cartographiques",
+                    "addselect": "Ajouter une couche « dessin » à la carte",
+                    "defaultLayer": "(couche cartographique par défaut)",
+                    "useAsDefaultLayer": "Utiliser en tant que couche par défaut"
+                },
+                "myplaces": {
+                    "label": "Mes couches cartographiques"
+                }
             },
             "toollayout": {
                 "label": "Position de l'outil",
@@ -132,16 +142,6 @@ Oskari.registerLocalization(
                         "featureDesc": "Le jeu de couleurs définit uniquement la couleur de la fenêtre contextuelle pour les informations d'entité et la couche cartographique sélectionnées."
                     }
                 }
-            },
-            "layers": {
-                "add": "Créez une nouvelle couche pour les nouvelles entités",
-                "label": "Couches cartographiques",
-                "addselect": "Ajouter une couche « dessin » à la carte",
-                "defaultLayer": "(couche cartographique par défaut)",
-                "useAsDefaultLayer": "Utiliser en tant que couche par défaut"
-            },
-            "myplaces": {
-                "label": "Mes couches cartographiques"
             },
             "sizes": {
                 "small": "Petit",

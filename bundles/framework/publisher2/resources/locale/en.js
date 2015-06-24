@@ -59,18 +59,29 @@ Oskari.registerLocalization(
                 "FeaturedataPlugin": "Feature data",
                 "GetInfoPlugin": "Query tool for feature data",
                 "PublisherToolbarPlugin": "Map tools",
-                "selectDrawLayer": "Select layer for new features"
+                "selectDrawLayer": "Select layer for new features",
+                "toolbarToolNames": {
+                    "history_back": "Move backwards",
+                    "history_forward": "Move forward",
+                    "measureline": "Measure distance",
+                    "measurearea": "Measure area",
+                    "drawTools": "Drawing tools",
+                    "point": "Allow users to add point features.",
+                    "line": "Allow users to add line features.",
+                    "area": "Allow users to add area features."
+                },
+                "layers": {
+                    "add": "Create new layer for new features.",
+                    "label": "Map Layers",
+                    "addselect": "Add a drawing layer to the map",
+                    "defaultLayer": "(Default map layer)",
+                    "useAsDefaultLayer": "Use as the default layer."
+                },
+                "myplaces": {
+                    "label": "My map layers"
+                }
             },
-            "toolbarToolNames": {
-                "history_back": "Move backwards",
-                "history_forward": "Move forward",
-                "measureline": "Measure distance",
-                "measurearea": "Measure area",
-                "drawTools": "Drawing tools",
-                "point": "Allow users to add point features.",
-                "line": "Allow users to add line features.",
-                "area": "Allow users to add area features."
-            },
+
             "toollayout": {
                 "label": "Tool Placement",
                 "tooltip": "Select the placement for the tool to be shown on the map.",
@@ -132,16 +143,6 @@ Oskari.registerLocalization(
                         "featureDesc": "The color scheme only defines the color of the popup windows for the feature info and map layer selection."
                     }
                 }
-            },
-            "layers": {
-                "add": "Create new layer for new features.",
-                "label": "Map Layers",
-                "addselect": "Add a drawing layer to the map",
-                "defaultLayer": "(Default map layer)",
-                "useAsDefaultLayer": "Use as the default layer."
-            },
-            "myplaces": {
-                "label": "My map layers"
             },
             "sizes": {
                 "small": "Small",

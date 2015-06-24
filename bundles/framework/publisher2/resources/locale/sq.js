@@ -57,16 +57,27 @@ Oskari.registerLocalization(
                 "SearchPlugin": "Kërko emrin e adresës dhe të vendit",
                 "GetInfoPlugin": "Vegla pyetësor (query) për të dhënat për vendet",
                 "PublisherToolbarPlugin": "NOT TRANSLATED",
-                "selectDrawLayer": "NOT TRANSLATED"
-            },
-            "toolbarToolNames": {
-                "history_back": "NOT TRANSLATED",
-                "history_forward": "NOT TRANSLATED",
-                "measureline": "NOT TRANSLATED",
-                "measurearea": "NOT TRANSLATED",
-                "point": "NOT TRANSLATED",
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "selectDrawLayer": "NOT TRANSLATED",
+                "toolbarToolNames": {
+                    "history_back": "Move backwards",
+                    "history_forward": "Move forward",
+                    "measureline": "Measure distance",
+                    "measurearea": "Measure area",
+                    "drawTools": "Drawing tools",
+                    "point": "Allow users to add point features.",
+                    "line": "Allow users to add line features.",
+                    "area": "Allow users to add area features."
+                },
+                "layers": {
+                    "add": "Create new layer for new features.",
+                    "addselect": "Add a drawing layer to the map",
+                    "label": "Shtresat e hartës",
+                    "defaultLayer": "(Shtresa automatike/e parazgjedhur)",
+                    "useAsDefaultLayer": "Përdor si shtresë automatike/të parazgjedhur"
+                },
+                "myplaces": {
+                    "label": "My map layers"
+                }
             },
             "toollayout": {
                 "label": "NOT TRANSLATED",
@@ -129,16 +140,6 @@ Oskari.registerLocalization(
                         "featureDesc": "NOT TRANSLATED"
                     }
                 }
-            },
-            "layers": {
-                "add": "NOT TRANSLATED",
-                "addselect": "NOT TRANSLATED",
-                "label": "Shtresat e hartës",
-                "defaultLayer": "(Shtresa automatike/e parazgjedhur)",
-                "useAsDefaultLayer": "Përdor si shtresë automatike/të parazgjedhur"
-            },
-            "myplaces": {
-                "label": "NOT TRANSLATED"
             },
             "sizes": {
                 "small": "E vogël",
