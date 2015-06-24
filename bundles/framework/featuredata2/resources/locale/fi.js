@@ -14,6 +14,7 @@ Oskari.registerLocalization({
         "selectionTools": {
             "title": "Valitse kohteita kartalta",
             "instructions": "",
+            "selectFromTop": "päällimmäiseltä karttatasolta",
             "selectAll": "kaikilta karttatasoilta",
             "link": {
                 "title": "Lisää valinta"

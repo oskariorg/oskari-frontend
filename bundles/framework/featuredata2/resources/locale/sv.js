@@ -14,7 +14,8 @@ Oskari.registerLocalization(
         "columnSelectorTooltip": "Välj synliga kolumner",
         "selectionTools": {
             "title": "Markera objekt på kartan",
-            "instructions": "NOT TRANSLATED",
+            "instructions": "",
+            "selectFromTop": "Select from the top layer",
             "selectAll": "Select from all layers",
             "link": {
                 "title": "Välj fler funktioner"

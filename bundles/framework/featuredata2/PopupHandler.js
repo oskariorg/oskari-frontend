@@ -121,9 +121,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
             "wrapper": '<div></div>',
             "toolsButton": '<div style= "display: inline-block;"></div>',
             "instructions": '<div class="instructions" style="padding: 20px 0px 0px 0px;"></div>',
-            "selectAll": '<div class="selectAllFeatures">' +
-                '  <label>' +
-                '    <input type="checkbox" name="selectAll" />' +
+            "selectOptions": '<div>' +
+                '  <label id="select-from-top-layer" class="selectFeaturesOptions">' +
+                '    <input type="radio" name="selectOption" />' +
+                '    <span></span>' +
+                '  </label>' +
+                '  <label id="select-from-all-layers" class="selectFeaturesOptions">' +
+                '    <input type="radio" name="selectOption" />' +
                 '    <span></span>' +
                 '  </label>' +
                 '</div>',
@@ -156,16 +160,20 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
             instructions.append(this.loc.instructions);
             content.append(instructions);
 
-            var selectAll = me.template.selectAll.clone();
-            selectAll.find('span').html(this.loc.selectAll);
-            selectAll.bind('click', function () {
-                if (selectAll.find('input').prop('checked') === true) {
-                    me.WFSLayerService.setSelectFromAllLayers(true);
-                } else {
-                    me.WFSLayerService.setSelectFromAllLayers(false);
-                }
+            var selectOptions = me.template.selectOptions.clone(),
+                selectFromTop = jQuery(selectOptions).find('#select-from-top-layer'),
+                selectFromAll = jQuery(selectOptions).find('#select-from-all-layers');
+            selectFromTop.find('span').html(this.loc.selectFromTop);
+            selectFromTop.find('input').attr('checked', true);
+            selectFromAll.find('span').html(this.loc.selectAll);
+            
+            selectFromTop.bind('click', function () {
+                me.WFSLayerService.setSelectFromAllLayers(false);
             });
-            content.append(selectAll);
+            selectFromAll.bind('click', function () {
+                me.WFSLayerService.setSelectFromAllLayers(true);
+            });
+            content.append(selectOptions);
 
             var controlButtons = [];
             var emptyBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
