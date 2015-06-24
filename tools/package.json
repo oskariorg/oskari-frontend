@@ -64,6 +64,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "./node_modules/.bin/grunt release",
+    "build-paikkis": "./node_modules/.bin/grunt release:paikkis:../applications/paikkatietoikkuna.fi/full-map/minifierAppSetup.json,../applications/paikkatietoikkuna.fi/full-map_guest/minifierAppSetup.json,../applications/paikkatietoikkuna.fi/published-map/minifierAppSetup.json",
+    "build-asdi": "./node_modules/.bin/grunt release:asdi:../applications/asdi/asdi_guest/minifierAppSetup.json,../applications/asdi/asdi_published/minifierAppSetup.json",
+    "build-elf" : "./node_modules/.bin/grunt release:elf:../applications/elf/elf_guest/minifierAppSetup.json,../applications/elf/elf_published/minifierAppSetup.json",
     "trim": "./node_modules/.bin/grunt trimtrailingspaces",
     "lint": "./node_modules/.bin/jshint ../bundles"
   },

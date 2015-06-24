@@ -369,18 +369,19 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
              * @method FeatureData.FinishedDrawingEvent
              */
             'FeatureData.FinishedDrawingEvent': function () {
-                if (!this.conf.singleSelection) {
-                    return;
+                var me = this;
+
+                if (!me.selectionPlugin) {
+                    me.selectionPlugin = me.sandbox.findRegisteredModuleInstance('MainMapModuleMapSelectionPlugin');
                 }
 
-                var features = this.selectionPlugin.getFeaturesAsGeoJSON();
+                var features = me.selectionPlugin.getFeaturesAsGeoJSON();
 
-                this.selectionPlugin.removeFeatures();
+                me.selectionPlugin.removeFeatures();
 
-                var evt = this.sandbox.getEventBuilder("WFSSetFilter")(features);
-                this.sandbox.notifyAll(evt);
+                var evt = me.sandbox.getEventBuilder("WFSSetFilter")(features);
+                me.sandbox.notifyAll(evt);
 
-                //this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'detach']);
             }
         },
 
@@ -465,14 +466,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
             mapModule.startPlugin(plugin);
             this.plugin = plugin;
 
-            // used to get fullscreen selection even if selection tools are not enabled
-            var config = {
-                id: "FeatureData"
-                //,multipart : true
-            };
-            this.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin', config, this.sandbox);
-            mapModule.registerPlugin(this.selectionPlugin);
-            mapModule.startPlugin(this.selectionPlugin);
+            this.selectionPlugin = this.sandbox.findRegisteredModuleInstance("MainMapModuleMapSelectionPlugin");
+
+            if (!this.selectionPlugin) {
+                var config = {
+                    id: "FeatureData"
+                };
+                this.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin', config, this.sandbox);
+                mapModule.registerPlugin(this.selectionPlugin);
+                mapModule.startPlugin(this.selectionPlugin);
+            }
         }
     }, {
         /**
