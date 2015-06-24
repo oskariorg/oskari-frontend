@@ -46,6 +46,8 @@ Fixed sandbox.createURL(url). If the param url didn't include the domain part th
 Sandbox.createURL(url, true) now takes a second parameter that can be used to prepare the querystring part of the URL.
 Sandbox.findRegisteredModuleInstance() now returns all registered modules if name parameter is not given (for debugging purposes).
 
+Fixed sandbox.syncMapState(blnInitialMove, mapModule). If mapModule param is defined then calculate max zoom level there. If not then used default 13 max zoom level.
+
 ### admin-layerselector
 
 Fixed theme or organization locale inputs when adding new group.
@@ -57,6 +59,10 @@ Fixed the link tool to get path from browser if not provided in configuration.
 Removed default print tool as it requires backend support that hasn't been available in preconstructed views. One should use
 the printout bundle with corresponding backend implementation instead to get proper print functionality.
 
+### mapmodule-plugin/MapModule
+
+Added getMaxZoomLevel function. This return max OL zoom level.
+
 ### mapmodule-plugin/LogoPlugin
 
 The logo is now a link to the map service even if configuration is not provided. Uses browser location by default.
@@ -65,6 +71,13 @@ The logo is now a link to the map service even if configuration is not provided.
 
 Fixed centerTo parameter handling.
 
+### myplacesimport
+
+Coordinate reference system must be similiar to current map CRS (EPSG:3067 in Oskari) in Mif/mid data format
+
+### mapfull
+
+Fixed setState syncMapState function call to add mapmodule param.
 
 ## 1.29
 
