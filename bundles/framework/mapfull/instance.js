@@ -497,7 +497,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
 
             // map location needs to be set before layers are added
             // otherwise f.ex. wfs layers break on add
-            if (state.east && ignoreLocation !== true) {
+            if (state.east && ignoreLocation !== true) {                
                 me.getSandbox().getMap().moveTo(
                     state.east,
                     state.north,
@@ -505,7 +505,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 );
             }
 
-            me.getSandbox().syncMapState(true);
+            // mapmodule needed to set also param, because without it max zoomlevel check not working
+            me.getSandbox().syncMapState(true, mapmodule);
 
             // setting state
             if (state.selectedLayers) {

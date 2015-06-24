@@ -385,7 +385,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             // using panTo BREAKS IE on startup so do not
             // should we spam events on dragmoves?
             this._map.setCenter(lonlat, this._getMapZoom(), isDragging);
-            //this._map.panTo(lonlat, this._getMapZoom(), isDragging);
+
             if (zoomAdjust) {
                 this.adjustZoomLevel(zoomAdjust, true);
             }
@@ -649,6 +649,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var requestedZoomLevel = this._getNewZoomLevel(amount);
 
             this._map.zoomTo(requestedZoomLevel);
+            this._map.updateSize();
             this._updateDomainImpl();
             if (suppressEvent !== true) {
                 // send note about map change
@@ -657,20 +658,26 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         },
 
         /**
+        * @method getMaxZoomLevel
+        * Gets map max zoom level.
+        *
+        * @return {Integer} map max zoom level
+        */
+        getMaxZoomLevel: function(){
+            // getNumZoomLevels returns OL map resolutions length, so need decreased by one (this return max OL zoom)
+            return this._map.getNumZoomLevels() - 1;
+        },
+
+        /**
          * @method setZoomLevel
          * Sets the maps zoom level to given absolute number
-         * @param {Number} newZoomLevel absolute zoom level (0-12)
+         * @param {Number} newZoomLevel absolute zoom level
          * @param {Boolean} suppressEvent true to NOT send an event about the map move
          *  (other components wont know that the map has moved, only use when chaining moves and
          *     wanting to notify at end of the chain for performance reasons or similar) (optional)
          */
         setZoomLevel: function (newZoomLevel, suppressEvent) {
-            var currentZoomLevel = this._getMapZoom();
-            if (newZoomLevel === currentZoomLevel) {
-                // do nothing if requested zoom is same as current
-                return;
-            }
-            if (newZoomLevel < 0 || newZoomLevel > this._map.getNumZoomLevels) {
+            if (newZoomLevel < 0 || newZoomLevel > this._map.getNumZoomLevels()) {
                 newZoomLevel = this._getMapZoom();
             }
             this._map.zoomTo(newZoomLevel);
