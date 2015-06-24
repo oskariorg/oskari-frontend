@@ -59,18 +59,29 @@ Oskari.registerLocalization(
                 "FeaturedataPlugin": "Podatki o objektu",
                 "GetInfoPlugin": "Orodje za poizvedovanje podatkov o objektu",
                 "PublisherToolbarPlugin": "Orodja za karto",
-                "selectDrawLayer": "Izberi sloj za nove objekte"
+                "selectDrawLayer": "Izberi sloj za nove objekte",
+                "toolbarToolNames": {
+                    "history_back": "Nazaj",
+                    "history_forward": "Naprej",
+                    "measureline": "Izmeri razdaljo",
+                    "measurearea": "Izmeri območje",
+                    "drawTools": "Risalna orodja",
+                    "point": "Dovoli uporabnikom dodajanje točkovnih objektov",
+                    "line": "Dovoli uporabnikom dodajanje linijskih objektov",
+                    "area": "Dovoli uporabnikom dodajanje ploskovnih objektov"
+                },
+                "layers": {
+                    "add": "Ustvari nov sloj za nove objekte.",
+                    "label": "Sloji karte",
+                    "addselect": "Dodaj risalni sloj karti.",
+                    "defaultLayer": "(Privzet sloj)",
+                    "useAsDefaultLayer": "Uporabi kot privzet sloj"
+                },
+                "myplaces": {
+                    "label": "Moji sloji karte"
+                }
             },
-            "toolbarToolNames": {
-                "history_back": "Nazaj",
-                "history_forward": "Naprej",
-                "measureline": "Izmeri razdaljo",
-                "measurearea": "Izmeri območje",
-                "drawTools": "Risalna orodja",
-                "point": "Dovoli uporabnikom dodajanje točkovnih objektov",
-                "line": "Dovoli uporabnikom dodajanje linijskih objektov",
-                "area": "Dovoli uporabnikom dodajanje ploskovnih objektov"
-            },
+
             "toollayout": {
                 "label": "Pozicija orodja",
                 "tooltip": "Izberi položaj orodja na karti",
@@ -132,16 +143,6 @@ Oskari.registerLocalization(
                         "featureDesc": "Barvna shema določa barvo popup oken za informacije o objektu in izbiro sloja karte."
                     }
                 }
-            },
-            "layers": {
-                "add": "Ustvari nov sloj za nove objekte.",
-                "label": "Sloji karte",
-                "addselect": "Dodaj risalni sloj karti.",
-                "defaultLayer": "(Privzet sloj)",
-                "useAsDefaultLayer": "Uporabi kot privzet sloj"
-            },
-            "myplaces": {
-                "label": "Moji sloji karte"
             },
             "sizes": {
                 "small": "Majhen",

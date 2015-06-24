@@ -59,17 +59,27 @@ Oskari.registerLocalization(
                 "FeaturedataPlugin": "Førekomstdata",
                 "GetInfoPlugin": "Spørjeverktøy for førekomstar",
                 "PublisherToolbarPlugin": "Kartverktøy",
-                "selectDrawLayer": "Vel lag for nye førekomstar"
-            },
-            "toolbarToolNames": {
-                "history_back": "Flytt attende",
-                "history_forward": "Flytt framover",
-                "measureline": "Mål avstand",
-                "measurearea": "Mål areal",
-                "drawTools": "Teikneverktøy",
-                "point": "Tillat brukarar å legge til punktførekomstar",
-                "line": "Tillat brukarar å legge til lineførekomstar",
-                "area": "Tillat brukarar å legge til arealførekomstar"
+                "selectDrawLayer": "Vel lag for nye førekomstar",
+                "toolbarToolNames": {
+                    "history_back": "Flytt attende",
+                    "history_forward": "Flytt framover",
+                    "measureline": "Mål avstand",
+                    "measurearea": "Mål areal",
+                    "drawTools": "Teikneverktøy",
+                    "point": "Tillat brukarar å legge til punktførekomstar",
+                    "line": "Tillat brukarar å legge til lineførekomstar",
+                    "area": "Tillat brukarar å legge til arealførekomstar"
+                },
+                "layers": {
+                    "add": "Lag nytt lag for nye førekomstar",
+                    "label": "Kartlag",
+                    "addselect": "Legg til teikning i kartet",
+                    "defaultLayer": "(Standard kartlag)",
+                    "useAsDefaultLayer": "Bruk som standard lag"
+                },
+                "myplaces": {
+                    "label": "Mitt kartlag"
+                }
             },
             "toollayout": {
                 "label": "verktøyplassering",
@@ -132,16 +142,6 @@ Oskari.registerLocalization(
                         "featureDesc": "Fargetabellen gjeld berre farge på popup-vindauge for førekomstinformasjon og val av kartlag"
                     }
                 }
-            },
-            "layers": {
-                "add": "Lag nytt lag for nye førekomstar",
-                "label": "Kartlag",
-                "addselect": "Legg til teikning i kartet",
-                "defaultLayer": "(Standard kartlag)",
-                "useAsDefaultLayer": "Bruk som standard lag"
-            },
-            "myplaces": {
-                "label": "Mitt kartlag"
             },
             "sizes": {
                 "small": "Liten",

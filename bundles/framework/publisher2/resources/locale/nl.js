@@ -59,17 +59,27 @@ Oskari.registerLocalization(
                 "FeaturedataPlugin": "Feature data",
                 "GetInfoPlugin": "Querytool voor plaatsgegevens",
                 "PublisherToolbarPlugin": "kaart hulpmiddelen",
-                "selectDrawLayer": "Kies laag voor nieuwe features"
-            },
-            "toolbarToolNames": {
-                "history_back": "Ga terug",
-                "history_forward": "Ga vooruit",
-                "measureline": "Meet afstand",
-                "measurearea": "Meet gebied",
-                "drawTools": "Tekentools",
-                "point": "Sta gebruikers toe om punt features toe te voegen.",
-                "line": "Sta gebruikers toe om lijn features toe te voegen.",
-                "area": "Sta gebruikers toe om gebied features toe te voegen."
+                "selectDrawLayer": "Kies laag voor nieuwe features",
+                "toolbarToolNames": {
+                    "history_back": "Ga terug",
+                    "history_forward": "Ga vooruit",
+                    "measureline": "Meet afstand",
+                    "measurearea": "Meet gebied",
+                    "drawTools": "Tekentools",
+                    "point": "Sta gebruikers toe om punt features toe te voegen.",
+                    "line": "Sta gebruikers toe om lijn features toe te voegen.",
+                    "area": "Sta gebruikers toe om gebied features toe te voegen."
+                },
+                "layers": {
+                    "add": "Maak een nieuwe laag voor nieuwe features.",
+                    "label": "Kaartlagen",
+                    "addselect": "Voeg een teken laag om de kaart",
+                    "defaultLayer": "(standaard laag)",
+                    "useAsDefaultLayer": "Gebruik als standaardlaag"
+                },
+                "myplaces": {
+                    "label": "Mijn kaartlagen"
+                }
             },
             "toollayout": {
                 "label": "hulpmiddel Placement",
@@ -132,16 +142,6 @@ Oskari.registerLocalization(
                         "featureDesc": "Het kleurenschema definieert alleen de kleur van de pop-up vensters voor de feature info en kaartlaag selectie."
                     }
                 }
-            },
-            "layers": {
-                "add": "Maak een nieuwe laag voor nieuwe features.",
-                "label": "Kaartlagen",
-                "addselect": "Voeg een teken laag om de kaart",
-                "defaultLayer": "(standaard laag)",
-                "useAsDefaultLayer": "Gebruik als standaardlaag"
-            },
-            "myplaces": {
-                "label": "Mijn kaartlagen"
             },
             "sizes": {
                 "small": "Klein",

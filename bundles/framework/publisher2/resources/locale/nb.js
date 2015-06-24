@@ -59,18 +59,29 @@ Oskari.registerLocalization(
                 "FeaturedataPlugin": "Forekomstdata",
                 "GetInfoPlugin": "Spørreverktøy for forekomster",
                 "PublisherToolbarPlugin": "Kartverktøy",
-                "selectDrawLayer": "Velg lag for nye forekomster"
+                "selectDrawLayer": "Velg lag for nye forekomster",
+                "toolbarToolNames": {
+                    "history_back": "Flytt tilbake",
+                    "history_forward": "Flytt fremover",
+                    "measureline": "Mål avstand",
+                    "measurearea": "Mål areal",
+                    "drawTools": "Tegneverktøy",
+                    "point": "Tillat brukere å legge til punktforekomster",
+                    "line": "Tillat brukere å legge til linjeforekomster",
+                    "area": "Tillat brukere å legge til arealforekomster"
+                },
+                "layers": {
+                    "add": "Lag nytt lag for nye forekomster",
+                    "label": "Kartlag",
+                    "addselect": "Legg til tegning til kartet",
+                    "defaultLayer": "(Standard kartlag)",
+                    "useAsDefaultLayer": "Bruk som standard lag"
+                },
+                "myplaces": {
+                    "label": "Mitt kartlag"
+                }
             },
-            "toolbarToolNames": {
-                "history_back": "Flytt tilbake",
-                "history_forward": "Flytt fremover",
-                "measureline": "Mål avstand",
-                "measurearea": "Mål areal",
-                "drawTools": "Tegneverktøy",
-                "point": "Tillat brukere å legge til punktforekomster",
-                "line": "Tillat brukere å legge til linjeforekomster",
-                "area": "Tillat brukere å legge til arealforekomster"
-            },
+
             "toollayout": {
                 "label": "Verktøyplassering",
                 "tooltip": "Velg plassering av verktøyet på kartet",
@@ -132,16 +143,6 @@ Oskari.registerLocalization(
                         "featureDesc": "Fargetabellen gjelder bare farge på popup-vindu for forekomstinformasjon og valg av kartlag"
                     }
                 }
-            },
-            "layers": {
-                "add": "Lag nytt lag for nye forekomster",
-                "label": "Kartlag",
-                "addselect": "Legg til tegning til kartet",
-                "defaultLayer": "(Standard kartlag)",
-                "useAsDefaultLayer": "Bruk som standard lag"
-            },
-            "myplaces": {
-                "label": "Mitt kartlag"
             },
             "sizes": {
                 "small": "Liten",
