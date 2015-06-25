@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.30.2
+
+Gfi responses of type text/html now allows br-tags
+
 ## 1.30.1
 
 Couple of debuggers deleted.
