@@ -151,7 +151,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
 
             //renders selections tools to the content
             me.renderSelectionToolButtons(content);
-            
+
             var instructions = me.template.instructions.clone();
             instructions.append(this.loc.instructions);
             content.append(instructions);

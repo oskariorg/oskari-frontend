@@ -763,7 +763,7 @@ Oskari.clazz.define(
             //use the existing component to render selection buttons
             me.selectionButtonsRenderer = Oskari.clazz.create("Oskari.mapframework.bundle.featuredata2.PopupHandler", me.instance);
             me.selectionButtonsRenderer.renderSelectionToolButtons(selectionToolDiv);
-            
+
             var emptyBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
             emptyBtn.setHandler(function () {
                 if (me.WFSLayerService.getAnalysisWFSLayerId()) {
