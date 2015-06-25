@@ -117,6 +117,12 @@ Oskari.registerLocalization(
                         "tooltip": "Man kan kombinera sin utvalda objekt till en ny objekt."
                     },
                     {
+                        "id": "oskari_analyse_clip",
+                        "label": "Leikkaus",
+                        "classForPreview": "clip",
+                        "tooltip": "Leikkaus-menetelmän avulla käyttäjä voi leikata kohteita toisen karttatason kohteilla. Analyysin lopputulokseen otetaan mukaan ne leikattavan tason kohteet, jotka sisältyvät leikkaavan tason kohteiden alueisiin."
+                    },
+                    {
                         "id": "oskari_analyse_intersect",
                         "label": "Klippning",
                         "classForPreview": "intersect",
@@ -130,15 +136,14 @@ Oskari.registerLocalization(
                     },
                     {
                         "id": "oskari_analyse_areas_and_sectors",
-                        "label": "Union av analyslager",
-                        "classForPreview": "areas_and_sectors",
-                        "tooltip": "Man kan kombinera analyslager som har samma attribut data."
-                    },
-                    {
-                        "id": "oskari_analyse_areas_and_sectors",
                         "label": "Flera zoner",
                         "classForPreview": "areas_and_sectors",
                         "tooltip": "Man kan skapa flera zoner omkring utvalda objekt. Man kan välja sig själv zoners storlek och antal."
+                    }, {
+                        "id": "oskari_analyse_difference",
+                        "label": "Muutoksen laskenta",
+                        "classForPreview": "difference",
+                        "tooltip": ""
                     },
                     {
                         "id": "oskari_analyse_spatial_join",
@@ -396,6 +401,7 @@ Oskari.registerLocalization(
         },
         "StartView": {
             "text": "Man kan göra statistiska analys till kartlager som innehåller objekt data. Genom att lagra analys du kan använda resultat också senare.",
+            "layersWithFeatures": "Analyysissä voi tehdä valintoja vain yhdeltä tasolta kerrallaan. Valitse miltä tasolta haluat tehdä valinnat. Huom! Muut valinnat poistetaan.",
             "infoseen": {
                 "label": "Visa inte det här meddelande igen."
             },
