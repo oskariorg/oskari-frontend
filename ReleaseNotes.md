@@ -37,7 +37,8 @@ oskari.org application has been removed as the sample/servlet application is the
 ### tools
 
 Gruntfile reconfigured to use applications/sample/servlet as default application (instead of paikkatietoikkuna.fi).
-Added shortcut to build script: 'npm run build'
+Added shortcut to build script: 'npm run build' and examples for build-paikkis, build-asdi and build-elf.
+Release assumed path with Oskari/bundles with capital O when copying resources, now it works with oskari/bundles as well.
 
 ### core/sandbox
 
@@ -77,9 +78,6 @@ Coordinate reference system must be similiar to current map CRS (EPSG:3067 in Os
 ### mapfull
 
 Fixed setState syncMapState function call to add mapmodule param.
-
-
-
 
 ## 1.29
 

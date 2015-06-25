@@ -299,6 +299,16 @@ Oskari.clazz.define(
             me.isStarted = false;
 
             me.selectionPlugin = me.sandbox.findRegisteredModuleInstance('MainMapModuleMapSelectionPlugin');
+
+            if (!me.selectionPlugin) {
+                var config = {
+                    id: "FeatureData"
+                };
+                me.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin', config, sandbox);
+                mapModule.registerPlugin(me.selectionPlugin);
+                mapModule.startPlugin(me.selectionPlugin);
+            }
+
             me.selectionPluginId = me.instance.getName();
 
             for (p in me.eventHandlers) {
@@ -680,10 +690,8 @@ Oskari.clazz.define(
                 });
                 toolDiv.click(function () {
                     //if selection tool is left active, deactivate it
-                    if (jQuery(container.parent()).find('div[class*=selection-]').hasClass("active")) {
-                        jQuery(container.parent()).find(".active").removeClass("active");
-                        me.selectionPlugin.stopDrawing();
-                    }
+                    me._deactivateSelectTools();
+
                     me._startNewDrawing({
                         drawMode: tool
                     });
@@ -721,10 +729,8 @@ Oskari.clazz.define(
                 drawFilterDiv.attr('title', me.loc.content.drawFilter.tooltip[drawFilter]);
                 drawFilterDiv.click(function () {
                     //if selection tool is left active, deactivate it
-                    if (jQuery(container.parent()).find('div[class*=selection-]').hasClass("active")) {
-                        jQuery(container.parent()).find(".active").removeClass("active");
-                        me.selectionPlugin.stopDrawing();
-                    }
+                    me._deactivateSelectTools();
+
                     if (jQuery(this).hasClass('disabled')) {
                         return;
                     }
@@ -763,7 +769,7 @@ Oskari.clazz.define(
             //use the existing component to render selection buttons
             me.selectionButtonsRenderer = Oskari.clazz.create("Oskari.mapframework.bundle.featuredata2.PopupHandler", me.instance);
             me.selectionButtonsRenderer.renderSelectionToolButtons(selectionToolDiv);
-            
+
             var emptyBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
             emptyBtn.setHandler(function () {
                 if (me.WFSLayerService.getAnalysisWFSLayerId()) {
@@ -784,6 +790,21 @@ Oskari.clazz.define(
 
 
             return selectionToolsContainer;
+        },
+        /**
+         * Deactivates select tools
+         *
+         * @method _deactivateSelectTools
+         * @private
+         */
+        _deactivateSelectTools: function () {
+            var me = this,
+                toolsPanel = me.getDrawToolsPanel();
+            
+            if (toolsPanel.html.find('div[class*=selection-]').hasClass('active')) {
+                toolsPanel.html.find('div[class*=selection-]').removeClass('active');
+                me.selectionPlugin.stopDrawing();
+            }
         },
         /**
          * @private @method _toggleSelectionTools

@@ -19,14 +19,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
             mapModule = sandbox.findRegisteredModuleInstance('MainMapModule'),
             p;
 
-        // used to get fullscreen selection even if selection tools are not enabled
-        var config = {
-            id: "FeatureData"
-            //,multipart : true
-        };
         me.selectionPlugin = sandbox.findRegisteredModuleInstance("MainMapModuleMapSelectionPlugin");
 
         if (!me.selectionPlugin) {
+            var config = {
+                id: "FeatureData"
+            };
             me.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin', config, sandbox);
             mapModule.registerPlugin(me.selectionPlugin);
             mapModule.startPlugin(me.selectionPlugin);
@@ -155,7 +153,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
 
             //renders selections tools to the content
             me.renderSelectionToolButtons(content);
-            
+
             var instructions = me.template.instructions.clone();
             instructions.append(this.loc.instructions);
             content.append(instructions);

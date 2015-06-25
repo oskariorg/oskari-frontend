@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
         //user's own layers (not id's)
         myplaces: [],
 
-// defaultStateConfigs stores the default state values, which is used when reset configs
+        // defaultStateConfigs stores the default state values, which is used when reset configs
         defaultStateConfigs: {
             'toolbarConfig': {},
             'publishedmyplaces2Config': {
@@ -25,7 +25,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             }
         },
 
-// presetStateConfigs stores the preselected values which are different from the default values
+        // presetStateConfigs stores the preselected values which are different from the default values
         presetStateConfigs: {
             'toolbarConfig': {
                 'toolbarId': 'PublisherToolbar',
@@ -43,9 +43,9 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 }
             }
         },
-// toolbarConfig stores the current state
+        // toolbarConfig stores the current state
         toolbarConfig: {},
-// publishedmyplaces2Config stores the current state
+        // publishedmyplaces2Config stores the current state
         publishedmyplaces2Config: undefined,
 
         buttonGroups: [{
@@ -237,12 +237,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             var options,
                 i,
                 ilen,
-                j,
                 configName,
                 buttonGroup,
                 toolName,
                 toolButton,
-                reqBuilder,
                 isChecked;
 
             if (enabled) {
@@ -258,7 +256,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 tool.__plugin.setToolbarContainer();
                 me.toolbarConfig.classes = tool.__plugin.getToolConfs();
 
-                var _addToolGroup = function (groupName, options, toolOption, toggleToolHandler) {
+                var _addToolGroup = function (groupName, options, toolOption) {
                     var i,
                         ilen,
                         buttonGroup,
@@ -353,13 +351,15 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 for (i = 0, ilen = me.buttonGroups.length; i < ilen; i++) {
                     buttonGroup = me.buttonGroups[i];
                     for (toolName in buttonGroup.buttons) {
-                        configName = (buttonGroup.name === 'myplaces' ? 'publishedmyplaces2Config' : 'toolbarConfig');
-                        if (me[configName] && me[configName][buttonGroup.name] && me[configName][buttonGroup.name][toolName] === true) {
-                            // toolbar tool exists and needs to be removed
-                            toolButton = buttonGroup.buttons[toolName];
-                            sandbox.postRequestByName(
-                                'Toolbar.RemoveToolButtonRequest', [toolName, buttonGroup.name, toolButton.toolbarid]);
+                        if (buttonGroup.buttons.hasOwnProperty(toolName)) {
+                            configName = (buttonGroup.name === 'myplaces' ? 'publishedmyplaces2Config' : 'toolbarConfig');
+                            if (me[configName] && me[configName][buttonGroup.name] && me[configName][buttonGroup.name][toolName] === true) {
+                                // toolbar tool exists and needs to be removed
+                                toolButton = buttonGroup.buttons[toolName];
+                                sandbox.postRequestByName(
+                                    'Toolbar.RemoveToolButtonRequest', [toolName, buttonGroup.name, toolButton.toolbarid]);
 
+                            }
                         }
                     }
                 }
@@ -445,14 +445,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                         optionSettings.append(toolButton.toolOption);
 
                         // execute toolElement change function when checked
-                        if (isToolChecked) {
-                            request = me.__sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest')(toolName, buttonGroup.name, toolButton);
-                            me.__sandbox.request(me.__instance, request);
-                        } else {
-                            request = me.__sandbox.getRequestBuilder('Toolbar.RemoveToolButtonRequest')(toolName, buttonGroup.name, toolButton.toolbarid);
-                            me.__sandbox.request(me.__instance, request);
-                        }
-
+                        me._toggleToolButton(isToolChecked, toolName, buttonGroup, toolButton);
                     }
                 }
                 //add different settings
@@ -474,6 +467,26 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
 
                 toolElement.find('.tool-option-settings').remove();
                 toolElement = null;
+            }
+        },
+        /**
+        * Toggle tool button.
+        * @method _toggleToolButton
+        * @private
+        *
+        * @param  {Boolean} isToolChecked is tool checked
+        * @param  {String}  toolName the tool name
+        * @param  {Object}  buttonGroup the button group
+        * @param  {Object}  toolButton the tool button
+        */
+        _toggleToolButton: function(isToolChecked, toolName, buttonGroup, toolButton){
+            var me = this;
+            if (isToolChecked) {
+                request = me.__sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest')(toolName, buttonGroup.name, toolButton);
+                me.__sandbox.request(me.__instance, request);
+            } else {
+                request = me.__sandbox.getRequestBuilder('Toolbar.RemoveToolButtonRequest')(toolName, buttonGroup.name, toolButton.toolbarid);
+                me.__sandbox.request(me.__instance, request);
             }
         },
         _updateDrawLayerSelection: function () {
@@ -511,7 +524,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 addLayerButton;
 
             addLayerButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            // TODO I18N
             addLayerButton.setTitle(me.__loc.layers.add);
             addLayerButton.setHandler(function () {
                 // send OpenAddLayerDialogEvent
@@ -526,7 +538,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 addSelectLayerButton;
 
             addSelectLayerButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            // TODO I18N
             addSelectLayerButton.setTitle(this.__loc.layers.addselect);
             addSelectLayerButton.setHandler(function (event) {
                 var request = me.__sandbox.getRequestBuilder('AddMapLayerRequest')(me.publishedmyplaces2Config.layer, false);
@@ -574,7 +585,9 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 me[configToReset] = _.cloneDeep(me.defaultStateConfigs[configToReset]);
             } else {
                 for (config in me.defaultStateConfigs) {
-                    me[config] = _.cloneDeep(me.defaultStateConfigs[config]);
+                    if(me.defaultStateConfigs.hasOwnProperty(config)) {
+                        me[config] = _.cloneDeep(me.defaultStateConfigs[config]);
+                    }
                 }
             }
         },

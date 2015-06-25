@@ -56,7 +56,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             var me = this,
                 sandbox = me.getMapModule().getSandbox(),
                 layers = sandbox.findAllSelectedMapLayers(),
-                i, 
+                i,
                 isVisible = false;
 
             if(this.getElement()) {
@@ -72,7 +72,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
               this.getElement().show();
             }
             me.setVisible(isVisible);
-            
+
         },
         showLoadingIndicator : function(blnLoad) {
             if(!this.getElement()) {

@@ -442,6 +442,7 @@ Oskari.clazz.define(
                     me.sandbox.request(me.getName(), request);
                     this.analyse.setEnabled(false);
                     this.analyse.contentPanel._deactivateSelectControls();
+                    this.analyse.contentPanel._deactivateSelectTools();
                     this.analyse.hide();
                 }
                 me.WFSLayerService.setAnalysisWFSLayerId(null);

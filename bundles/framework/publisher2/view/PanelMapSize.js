@@ -169,7 +169,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapSize',
             var sandbox = Oskari.getSandbox('sandbox'),
                 columns,
                 width = 160;
-            // TODO: do not reference statsgrid directly... 
+            // TODO: do not reference statsgrid directly...
             // perhaps save indicators to a service that can be referenced or something
             // get state of statsgrid
             var statsGrid = sandbox.getStatefulComponents().statsgrid;
@@ -494,7 +494,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapSize',
 
             mapElement.width('');
             mapElement.height(jQuery(window).height());
-            
+
             // FIXME: timing issue?
             window.setTimeout(function(){
                 // notify openlayers that size has changed

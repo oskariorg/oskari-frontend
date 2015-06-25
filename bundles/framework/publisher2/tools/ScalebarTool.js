@@ -31,10 +31,10 @@ function() {
     *
     * @returns {Object} tool value object
     */
-    getValues: function () {    
+    getValues: function () {
         var me = this;
-                
-        if(me.state.enabled === true) {
+
+        if(me.state.enabled) {
             return {
                 mapfull: {
                     conf: {

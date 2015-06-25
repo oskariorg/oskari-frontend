@@ -126,7 +126,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                     } else {
                         defaults[key] = me._extendRecursive(defaults[key], value);
                     }
-                    
+
                 });
                 return defaults;
             }

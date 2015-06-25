@@ -124,7 +124,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                 //TODO: Get these somewhere else...?
                 me.pluginConfig = {
                     location: {
-                        classes: "top right"   
+                        classes: "top right"
                     }
                 };
                 me.plugin = Oskari.clazz.create(

@@ -497,7 +497,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
 
             // map location needs to be set before layers are added
             // otherwise f.ex. wfs layers break on add
-            if (state.east && ignoreLocation !== true) {                
+            if (state.east && ignoreLocation !== true) {
                 me.getSandbox().getMap().moveTo(
                     state.east,
                     state.north,

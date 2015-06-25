@@ -83,18 +83,6 @@
                     "service-map": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     },
-                    "mapwfs2": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "mapanalysis": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "mapmyplaces": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "mapstats": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
                     "ui-components": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     }
@@ -334,6 +322,26 @@
                 "Import-Bundle": {
                     "admin-layerrights": {
                         "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename" : "admin-users",
+            "bundleinstancename" : "admin-users",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "admin-users" : {
+                        "bundlePath" : "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename" : "admin",
+            "bundleinstancename" : "admin",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "admin" : {
+                        "bundlePath" : "../../../packages/admin/bundle/"
                     }
                 }
             }
