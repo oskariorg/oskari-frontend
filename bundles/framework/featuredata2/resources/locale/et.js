@@ -12,7 +12,7 @@ Oskari.registerLocalization(
         "errorscale": "Andmeid ei saa selles mõõtkavas näidata. Palun muuda mõõtkava.",
         "errordata": "Serverist edastatud andmed sisaldavad vigu. Palun nihuta kaarti veidi selle uuendamiseks.",
         "columnSelectorTooltip": "Näita veerge",
-        "popup": {
+        "selectionTools": {
             "title": "Vali nähtused kaardil",
             "instructions": "NOT TRANSLATED",
             "link": {

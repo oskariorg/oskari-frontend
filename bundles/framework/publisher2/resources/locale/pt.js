@@ -3,9 +3,12 @@ Oskari.registerLocalization(
     "lang": "pt",
     "key": "Publisher2",
     "value": {
-        "title": "Criar carta",
-        "flyouttitle": "Criar carta",
-        "desc": "",
+        "tile" : {
+            "title": "Criar carta"
+        },
+        "flyout" : {
+            "title": "Criar carta"
+        },
         "published": {
             "title": "Carta criada",
             "desc": "Embutir a carta adicionando o código HTML abaixo no seu navegador web"
@@ -43,7 +46,7 @@ Oskari.registerLocalization(
                 "label": "Dimensão",
                 "tooltip": "Selecione ou defina a dimensão da carta a embutir no seu sítio web. A pré-visualização é apresentada na dimensão escolhida"
             },
-            "tools": {
+            "maptools": {
                 "label": "Ferramentas",
                 "tooltip": "Selecione as ferramentas a apresentar na carta. A sua colocação aparece na pré-visualização",
                 "ScaleBarPlugin": "Escala gráfica",

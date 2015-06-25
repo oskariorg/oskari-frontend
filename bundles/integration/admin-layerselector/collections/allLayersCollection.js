@@ -11,7 +11,7 @@
                  *
                  * @method initialize
                  */
-                initialize: function (models) {},
+                initialize: function () {},
 
 
                 /**
@@ -34,13 +34,13 @@
                     for (var n = 0; n < layers.length; ++n) {
                         var layer = layers[n];
                         if (layer.getMetaType &&
-                            layer.getMetaType() == 'published' ||
-                            layer.getMetaType() == 'myplaces') {
+                            layer.getMetaType() === 'published' ||
+                            layer.getMetaType() === 'myplaces') {
                             // skip published layers
                             continue;
                         }
                         var groupAttr = layer[groupingMethod]();
-                        if (!group || group.getTitle() != groupAttr) {
+                        if (!group || group.getTitle() !== groupAttr) {
                             group = new LayerGroupCollection(null, groupAttr);
                             groupList.push(group);
                         }
@@ -59,15 +59,15 @@
                 _layerListComparator: function (a, b, groupingMethod) {
                     var nameA = a[groupingMethod]().toLowerCase();
                     var nameB = b[groupingMethod]().toLowerCase();
-                    if (nameA == nameB && (a.getName() && b.getName())) {
+                    if (nameA === nameB && (a.getName() && b.getName())) {
                         nameA = a.getName().toLowerCase();
                         nameB = b.getName().toLowerCase();
                     }
                     if (nameA < nameB) {
-                        return -1
+                        return -1;
                     }
                     if (nameA > nameB) {
-                        return 1
+                        return 1;
                     }
                     return 0;
                 },

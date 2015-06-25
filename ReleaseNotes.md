@@ -1,5 +1,86 @@
 # Release Notes
 
+## 1.30
+
+### highlight and feature selection renewed
+
+On the normal map mode feature is highlighted only when Ctrl is down, otherwise feature info is shown.
+When feature selection is made with selection tool, Ctrl will add features to selection. Feature info is never shown at the same time with selection.
+
+#### mapwfs2/service
+
+Mapwfs2 has now new service called WFSLayerService, which handles WFS layers' states, for example selected features, top WFS layer, selected WFS layers etc. Service should be used always when setting selected features, selection mode etc.
+
+Mediator uses now WFSLayerService for setting highlighted features.
+
+#### featuredata2/PopupHandler
+
+Selection tool stays selected unless user clicks the tool again to unselect it or selects another tool.
+
+renderSelectionToolButtons -function can be used to add selection tools to any container.
+
+#### analyse
+
+Selection tools are now available in analyse panel and they use the same functions as toolbars selection tools.
+
+Selection can be made only from the selected layer, and only one layer can have selections at a time.
+
+### divmanazer
+
+DefaultFlyout now has a close() function which closes the flyout.
+DefaultFlyout now onOpen() and onClose() functions that are called when flyout is opened/closed.
+
+### applications
+
+oskari.org application has been removed as the sample/servlet application is the same thing.
+
+### tools
+
+Gruntfile reconfigured to use applications/sample/servlet as default application (instead of paikkatietoikkuna.fi).
+Added shortcut to build script: 'npm run build' and examples for build-paikkis, build-asdi and build-elf.
+Release assumed path with Oskari/bundles with capital O when copying resources, now it works with oskari/bundles as well.
+
+Known issue with frontend build and Grunt: The used grunt-sass doesn't work on node.js 0.12.x. It works with (atleast) 0.10.x versions.
+
+### core/sandbox
+
+Fixed sandbox.createURL(url). If the param url didn't include the domain part the port was included twice.
+Sandbox.createURL(url, true) now takes a second parameter that can be used to prepare the querystring part of the URL.
+Sandbox.findRegisteredModuleInstance() now returns all registered modules if name parameter is not given (for debugging purposes).
+
+Fixed sandbox.syncMapState(blnInitialMove, mapModule). If mapModule param is defined then calculate max zoom level there. If not then used default 13 max zoom level.
+
+### admin-layerselector
+
+Fixed theme or organization locale inputs when adding new group.
+
+### toolbar
+
+Fixed the link tool to get path from browser if not provided in configuration.
+
+Removed default print tool as it requires backend support that hasn't been available in preconstructed views. One should use
+the printout bundle with corresponding backend implementation instead to get proper print functionality.
+
+### mapmodule-plugin/MapModule
+
+Added getMaxZoomLevel function. This return max OL zoom level.
+
+### mapmodule-plugin/LogoPlugin
+
+The logo is now a link to the map service even if configuration is not provided. Uses browser location by default.
+
+### mapmodule-plugin/VectorLayerPlugin/AddFeaturesToMapRequest
+
+Fixed centerTo parameter handling.
+
+### myplacesimport
+
+Coordinate reference system must be similiar to current map CRS (EPSG:3067 in Oskari) in Mif/mid data format
+
+### mapfull
+
+Fixed setState syncMapState function call to add mapmodule param.
+
 ## 1.29
 
 ### rpc
@@ -38,6 +119,14 @@ throughout Oskari code:
 
 Now adds the PersonalData tab correctly if started after PersonalData bundle. Previously expected to be started before PersonalData.
 
+### admin-layerselector
+
+Fixed theme or organization locale labels when adding new group.
+
+### admin-users
+
+Fixed admin-users bundle user search.
+
 ### catalogue/metadatagatalogue
 
 Improvements in show metadata coverage. Icons changes and now active metadata coverage is showed different icon.
@@ -64,6 +153,7 @@ Now checks correctly buttons focuses.
 ### elf/elf-license
 
 In successfully license conclude now shows same information popup as concluded license.
+
 
 ### featuredata2/Flyout
 

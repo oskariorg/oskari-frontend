@@ -1,3 +1,4 @@
+
 /**
  * @class Oskari.mapframework.bundle.featuredata2.Flyout
  *
@@ -136,6 +137,7 @@ Oskari.clazz.define(
                 );
 
             flyout.empty();
+            me.WFSLayerService = sandbox.getService('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
 
             // if previous panel is undefined -> just added first tab
             // if selectedPanel is undefined -> just removed last tab
@@ -282,7 +284,8 @@ Oskari.clazz.define(
             var map = this.instance.sandbox.getMap(),
                 panel = this.layers['' + layer.getId()],
                 selection = null,
-                i;
+                i,
+                selectedFeatures;
 
             if (panel.grid) {
                 selection = panel.grid.getSelection();
@@ -296,24 +299,17 @@ Oskari.clazz.define(
 
             // in scale, proceed
             this._prepareData(layer);
-
             if (selection && selection.length > 0 && typeof selection[0].featureId !== 'undefined') {
                 for (i = 0; i < selection.length; i += 1) {
                     panel.grid.select(selection[i].featureId, true);
                 }
             }
 
-            // mapClick
-            if (panel.grid && layer.getClickedFeatureIds().length > 0) {
-                for (i = 0; i < layer.getClickedFeatureIds().length; i += 1) {
-                    panel.grid.select(layer.getClickedFeatureIds()[i], true);
-                }
-            }
-
             // filter
-            if (panel.grid && layer.getSelectedFeatures().length > 0) {
-                for (i = 0; i < layer.getSelectedFeatures().length; i += 1) {
-                    panel.grid.select(layer.getSelectedFeatures()[i][0], true);
+            selectedFeatures = this.WFSLayerService.getSelectedFeatureIds(layer._id);
+            if (panel.grid &&  selectedFeatures && selectedFeatures.length > 0) {
+                for (i = 0; i < selectedFeatures.length; i++) {
+                    panel.grid.select(selectedFeatures[i], true);
                 }
             }
         },
@@ -732,7 +728,11 @@ Oskari.clazz.define(
             if (keepCollection === undefined) {
                 keepCollection = sandbox.isCtrlKeyDown();
             }
-            var event = builder(featureIds, layer, keepCollection);
+            if (!keepCollection) {
+                this.WFSLayerService.emptyWFSFeatureSelections(layer);
+            }
+            this.WFSLayerService.setWFSFeaturesSelections(layer._id, featureIds);
+            var event = builder(this.WFSLayerService.getSelectedFeatureIds(layer._id), layer, true);
             sandbox.notifyAll(event);
         },
 
@@ -757,11 +757,13 @@ Oskari.clazz.define(
                 panel.grid.select(fids[0], event.isKeepSelection());
                 if (fids.length > 1) {
                     for (i = 1; i < fids.length; i += 1) {
-                        panel.grid.select(fids[i], true);
+                        panel.grid.select(fids[i], event.isKeepSelection());
                     }
                 }
             } else {
-                panel.grid.removeSelections();
+                if (panel && panel.grid) {
+                    panel.grid.removeSelections();
+                }
             }
         },
 

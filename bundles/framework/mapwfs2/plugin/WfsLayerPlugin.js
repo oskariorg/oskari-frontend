@@ -99,11 +99,17 @@ Oskari.clazz.define(
                 me
             );
 
+             me.WFSLayerService = Oskari.clazz.create(
+            'Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService', sandbox);
+
+            sandbox.registerService(me.WFSLayerService);
+
             me._io = Oskari.clazz.create(
                 'Oskari.mapframework.bundle.mapwfs2.service.Mediator',
                 me._config,
                 me
             );
+
 
             // register domain model
             mapLayerService = sandbox.getService(
@@ -394,7 +400,7 @@ Oskari.clazz.define(
                     (!me.getConnection().isConnected() ||
                         !sandbox.findMapLayerFromSelectedMapLayers(me.activeHighlightLayers[x].getId()))) {
 
-                    fids = me.activeHighlightLayers[x].getClickedFeatureListIds();
+                    fids = me.activeHighlightLayers[x].getClickedFeatureIds();
                     me.removeHighlightImages(
                         me.activeHighlightLayers[x]
                     );
@@ -414,7 +420,7 @@ Oskari.clazz.define(
 
             layers.forEach(function (layer) {
                 if (layer.hasFeatureData()) {
-                    fids = me.getAllFeatureIds(layer);
+                    fids = me.WFSLayerService.getSelectedFeatureIds(layer.getId());
                     me.removeHighlightImages(layer);
                     if (me._highlighted) {
                         me.getIO().highlightMapLayerFeatures(
@@ -520,42 +526,23 @@ Oskari.clazz.define(
                 map = sandbox.getMap(),
                 layer = event.getMapLayer(),
                 layerId = layer.getId(),
-                ids = layer.getClickedFeatureListIds(),
                 srs,
-                tmpIds = event.getWfsFeatureIds(),
                 geomRequest = true,
                 wfsFeatureIds = event.getWfsFeatureIds(),
                 zoom;
 
-            if (!event.isKeepSelection()) {
-                layer.setClickedFeatureListIds(wfsFeatureIds);
-                if (wfsFeatureIds.length === 0) {
-                    layer.setClickedFeatureIds(wfsFeatureIds);
-                    layer.setClickedGeometries(wfsFeatureIds);
-                }
-            } else {
-                // Merge tmpIds to ids
-                tmpIds.forEach(function (id) {
-                    if (ids.indexOf(id) === -1) {
-                        ids.push(id);
-                    }
-                });
-            }
+            me.removeHighlightImages(layer);
 
-            // remove highlight image
             if (!event.isKeepSelection()) {
-                me.removeHighlightImages();
+                return;
             }
 
             // if no connection or the layer is not registered, get highlight with URl
-            if (connection.isLazy() && (!connection.isConnected() ||
-                    !sandbox.findMapLayerFromSelectedMapLayers(layerId))) {
-
+            if (connection.isLazy() && (!connection.isConnected() || !sandbox.findMapLayerFromSelectedMapLayers(layerId))) {
                 srs = map.getSrsName();
                 bbox = map.getExtent();
                 zoom = map.getZoom();
 
-                layer.setClickedFeatureListIds(wfsFeatureIds);
                 this.getHighlightImage(
                     layer,
                     srs, [
@@ -568,14 +555,13 @@ Oskari.clazz.define(
                     wfsFeatureIds
                 );
             }
-            if (me._highlighted) {
-                me.getIO().highlightMapLayerFeatures(
-                    layerId,
-                    wfsFeatureIds,
-                    event.isKeepSelection(),
-                    geomRequest
-                );
-            }
+
+            me.getIO().highlightMapLayerFeatures(
+                layerId,
+                wfsFeatureIds,
+                false,
+                geomRequest
+            );
         },
 
         /**
@@ -703,16 +689,14 @@ Oskari.clazz.define(
          * @param {Object} event
          */
         setFilterHandler: function (event) {
-            /// clean selected features lists
-            var layers = this.getSandbox().findAllSelectedMapLayers();
+            var WFSLayerService = this.WFSLayerService,
+                layers = this.getSandbox().findAllSelectedMapLayers(),
+                keepPrevious = this.getSandbox().isCtrlKeyDown(),
+                geoJson = event.getGeoJson();
 
-            layers.forEach(function (layer) {
-                if (layer.hasFeatureData()) {
-                    layer.setSelectedFeatures([]);
-                }
-            });
+            this.getIO().setFilter(geoJson, keepPrevious);
 
-            this.getIO().setFilter(event.getGeoJson());
+
         },
 
         /**
@@ -721,16 +705,17 @@ Oskari.clazz.define(
          */
         setPropertyFilterHandler: function (event) {
             /// clean selected features lists
-            var layers = this.getSandbox().findAllSelectedMapLayers();
+            var me = this,
+                layers = this.getSandbox().findAllSelectedMapLayers();
 
             layers.forEach(function (layer) {
                 if (layer.hasFeatureData() &&
                     layer.getId() === event.getLayerId()) {
-                    layer.setSelectedFeatures([]);
+                    me.WFSLayerService.emptyWFSFeatureSelections(layer);
                 }
             });
 
-            this.getIO().setPropertyFilter(
+            me.getIO().setPropertyFilter(
                 event.getFilters(),
                 event.getLayerId()
             );
@@ -941,7 +926,7 @@ Oskari.clazz.define(
                 }
             } else { // "normal"
                 BBOX = boundsObj.toArray(false);
-                bboxKey = BBOX.join(',');
+                bboxKey = this.bboxkeyStrip(BBOX);
                 style = layer.getCurrentStyle().getName();
                 tileToUpdate = me._tilesToUpdate.mget(layerId,'',bboxKey);
 
@@ -999,7 +984,7 @@ Oskari.clazz.define(
                         bounds = this.adjustBounds(bounds);
 
                         var BBOX = bounds.toArray(false),
-                            bboxKey = BBOX.join(','),
+                            bboxKey = this._plugin.bboxkeyStrip(BBOX);
                             layer = this._plugin.getSandbox().findMapLayerFromSelectedMapLayers(
                                 this.layerId
                             ),
@@ -1098,7 +1083,8 @@ Oskari.clazz.define(
                         this._plugin._tiles[tile.id] = tile;
 
                         var BBOX = bounds.toArray(false),
-                            bboxKey = BBOX.join(',');
+                            me = this,
+                            bboxKey = this._plugin.bboxkeyStrip(BBOX);
 
                         this._plugin._tilesToUpdate.mput(
                             this.layerId,
@@ -1326,11 +1312,12 @@ Oskari.clazz.define(
                 style = layer.getCurrentStyle().getName(),
                 result = [],
                 i,
+                me = this,
                 bboxKey,
                 dataForTile;
 
             for (i = 0; i < grid.bounds.length; i += 1) {
-                bboxKey = grid.bounds[i].join(',');
+                bboxKey = me.bboxkeyStrip(grid.bounds[i]);
                 dataForTile = this._tileData.mget(layerId, style, bboxKey);
                 if (!dataForTile) {
                     result.push(grid.bounds[i]);
@@ -1534,6 +1521,20 @@ Oskari.clazz.define(
          */
         setHighlighted: function (highlighted) {
             this._highlighted = highlighted;
+        },
+        /**
+         * Strip bbox for unique key because of some inaccucate cases
+         * OL computation (init grid in tilesizes)  is inaccurate in last decimal
+         * @param bbox
+         * @returns {string}
+         */
+        bboxkeyStrip: function (bbox) {
+            var stripbox = [];
+            if (!bbox) return;
+            for (var i = bbox.length; i--;) {
+                stripbox[i] = bbox[i].toPrecision(13);
+            }
+            return stripbox.join(',');
         }
     }, {
         extend: ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],

@@ -3,9 +3,12 @@ Oskari.registerLocalization(
     "lang": "da",
     "key": "Publisher2",
     "value": {
-        "title": "Opret kort",
-        "flyouttitle": "Opret kort",
-        "desc": "",
+        "tile" : {
+            "title": "Opret kort"
+        },
+        "flyout" : {
+            "title": "Opret kort"
+        },
         "published": {
             "title": "Dit kort er blevet oprettet",
             "desc": "Integrér kortet ved at tilføje en HTML-kode til din hjemmeside herunder"
@@ -43,7 +46,7 @@ Oskari.registerLocalization(
                 "label": "Størrelse",
                 "tooltip": "Vælg eller definér størrelsen på det kort, der skal integreres på din hjemmeside. Forhåndsvisning af kort udstilles i den valgte størrelse."
             },
-            "tools": {
+            "maptools": {
                 "label": "Værktøjer",
                 "tooltip": "Vælg de værktøjer, der skal vises på kortet. Deres placering udstilles i forhåndsvisningen af kortet.",
                 "ScaleBarPlugin": "Skaleringslinje",

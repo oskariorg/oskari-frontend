@@ -41,6 +41,17 @@ Oskari.clazz.define(
                     }
                 }
             );
+
+            me.templates.search.find('input').keyup(
+                function (event) {
+                    if (jQuery(this).val().length === 0) {
+                        me._filterList(event, me);
+                    }
+                }
+            );
+
+
+
             me.templates.search.find('div.icon-close').click(
                 function (event) {
                     jQuery(event.target)
@@ -232,7 +243,9 @@ Oskari.clazz.define(
             me.users = users;
             for (i = 0; i < users.length; i += 1) {
                 user = users[i];
-                matches = !hasFilter || user.firstName.contains(filter) || user.lastName.contains(filter) || user.user.contains(filter);
+                matches = !hasFilter || user.firstName.toLowerCase().indexOf(filter.toLowerCase()) > -1 ||
+                    user.lastName.toLowerCase().indexOf(filter.toLowerCase()) > -1 || user.user.toLowerCase().indexOf(filter.toLowerCase()) > -1;
+
                 if (matches) {
                     list.append(
                         me._populateItem(

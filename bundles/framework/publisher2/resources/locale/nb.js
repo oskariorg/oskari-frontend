@@ -3,9 +3,12 @@ Oskari.registerLocalization(
     "lang": "nb",
     "key": "Publisher2",
     "value": {
-        "title": "Publisering av kart",
-        "flyouttitle": "Lag 'embeddede' kart",
-        "desc": "",
+        "tile" : {
+            "title": "Publisering av kart"
+        },
+        "flyout" : {
+            "title": "Lag 'embeddede' kart"
+        },
         "published": {
             "title": "Kart for 'embedding' er laget",
             "desc": "Kartet er laget. 'Embed' kartet ved å legge inn HTML-koden under i din nettsted, og du har kartet på nettstedet"
@@ -43,7 +46,7 @@ Oskari.registerLocalization(
                 "label": "Størrelse",
                 "tooltip": "Velg eller angi størrelsen på kartet som skal bygges inne på ditt nettsted. Du kan se endringer i vinduet for forhåndsvisning."
             },
-            "tools": {
+            "maptools": {
                 "label": "Verktøy",
                 "tooltip": "Velg verktøy som skal vises på kartet. Du kan se plasseringen av verktøy i vinduet for forhåndsvisning.",
                 "ScaleBarPlugin": "Målestokk",

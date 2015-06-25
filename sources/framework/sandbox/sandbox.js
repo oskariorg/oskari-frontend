@@ -520,9 +520,12 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
          * Returns module with given name if it is registered to sandbox
          *
          * @param {String} name for the module
-         * @return {Oskari.mapframework.module.Module} registered module or null if not found
+         * @return {Oskari.mapframework.module.Module} registered module or null if not found, map of modules if name is not given
          */
         findRegisteredModuleInstance: function (name) {
+            if(!name) {
+                return this._modulesByName;
+            }
             return this._modulesByName[name];
         },
 
@@ -804,12 +807,27 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
          * window.location.protocol/host/port/path if needed.
          * @method createURL
          * @param  {String} baseUrl URL fragment or whole URL
+         * @param  {Boolean} prepQueryString if true, makes sure the url ends with ? or & character
          * @return {String} Usable URL or null if couldn't create it.
          */
-        createURL : function(baseUrl) {
+        createURL : function(baseUrl, prepQueryString) {
             if(!baseUrl) {
                 return null;
             }
+            var url = this.__constructUrl(baseUrl);
+            if(!!prepQueryString) {
+                url = this.__prepareQueryString(url);
+            }
+            return url;
+        },
+        /**
+         * Fills in missing details for base url. Uses window.location.protocol/host/port/path if needed.
+         * @method __constructUrl
+         * @private
+         * @param  {String} baseUrl baseUrl URL fragment or whole URL
+         * @return {String} Usable URL
+         */
+        __constructUrl : function(baseUrl) {
             // whole url, use as is
             if(baseUrl.indexOf('://') !== -1) {
                 return baseUrl;
@@ -819,13 +837,33 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
                 return window.location.protocol + baseUrl;
             }
             var serverUrl = window.location.protocol + '//'
-                     + window.location.host
-                     + ':' + window.location.port;
-            // starts with / -> fill in protocol + host + port
+                     + window.location.host;
+            // starts with / -> fill in protocol + host including port
             if(baseUrl.indexOf('/') === 0) {
                 return serverUrl + baseUrl;
             }
             return serverUrl + window.location.pathname + '/' + baseUrl;
+        },
+        /**
+         * Ensures that the given parameter has ? character and appends & to the end if 
+         * url-parameter doesn't end to '?' or '&' characters
+         * @method __prepareQueryString
+         * @private
+         * @param  {String} url
+         * @return {String} modified url that ends with ? or &
+         */
+        __prepareQueryString : function(url) {
+            if(!url) {
+                return null;
+            }
+            if(url.indexOf('?') === -1) {
+                url = url + '?';
+            }
+            var lastChar = url.charAt(url.length-1);
+            if(lastChar !== '&' && lastChar !== '?') {
+                url = url + '&';
+            }
+            return url;
         }
     }
 );

@@ -3,9 +3,12 @@ Oskari.registerLocalization(
     "lang": "it",
     "key": "Publisher2",
     "value": {
-        "title": "Pubblicazione della mappa",
-        "flyouttitle": "Crea mappa esterna",
-        "desc": "",
+        "tile" : {
+            "title": "Pubblicazione della mappa"
+        },
+        "flyout" : {
+            "title": "Crea mappa esterna"
+        },
         "published": {
             "title": "Mappa esterna creata",
             "desc": "La mappa è stata creata. Incorpora la mappa sul tuo sito web aggiungendo al sito il codice HTML qui sotto."
@@ -43,7 +46,7 @@ Oskari.registerLocalization(
                 "label": "Dimensione",
                 "tooltip": "Scegli o definisci la dimensione della mappa da incorporare al tuo sito web. Puoi vedere i cambiamenti nell'anteprima della mappa"
             },
-            "tools": {
+            "maptools": {
                 "label": "Strumenti",
                 "tooltip": "Selezionare gli strumenti da mostrare in mappa. Puoi vedere il posizionamento dello strumento nell'anteprima della mappa",
                 "ScaleBarPlugin": "Barra della scala",

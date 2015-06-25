@@ -3,9 +3,12 @@ Oskari.registerLocalization(
     "lang": "sk",
     "key": "Publisher2",
     "value": {
-        "title": "Vytvoriť mapu",
-        "flyouttitle": "Vytvoriť mapu",
-        "desc": "",
+        "tile" : {
+            "title": "Vytvoriť mapu"
+        },
+        "flyout" : {
+            "title": "Vytvoriť mapu"
+        },
         "published": {
             "title": "Vaša mapa bola vytvorená",
             "desc": "Vložte mapu na Vašu webovú stránku pridaním HTML kódu"
@@ -43,7 +46,7 @@ Oskari.registerLocalization(
                 "label": "Veľkosť",
                 "tooltip": "Vyberte alebo zadefinujte veľkosť mapy, ktorá má byť vložená na Vašu webovú stránku. Náhľad mapy je zobrazený vo vybratej veľkosti"
             },
-            "tools": {
+            "maptools": {
                 "label": "Nástroje",
                 "tooltip": "Vyberte nástroje, ktoré budú zobrazené na mape. Ich umiestnenie je zobrazené v náhľade mapy",
                 "ScaleBarPlugin": "Ryska mierky",

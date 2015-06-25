@@ -12,7 +12,7 @@ Oskari.registerLocalization(
         "errorscale": "Data i dette kartlaget kan ikkje visast i denne målestokken. Ver grei og tilpass målestokken",
         "errordata": "Serverdata inneheld feil. Oppfrisk kartet ved å røre det.",
         "columnSelectorTooltip": "Vel synlege kolonnar.",
-        "popup": {
+        "selectionTools": {
             "title": "Vel førekomstar på kartet",
             "instructions": "NOT TRANSLATED",
             "link": {

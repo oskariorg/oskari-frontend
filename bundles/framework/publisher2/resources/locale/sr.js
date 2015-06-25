@@ -3,9 +3,12 @@ Oskari.registerLocalization(
     "lang": "sr",
     "key": "Publisher2",
     "value": {
-        "title": "Napravi mapu",
-        "flyouttitle": "Napravi mapu",
-        "desc": "",
+        "tile" : {
+            "title": "Napravi mapu"
+        },
+        "flyout" : {
+            "title": "Napravi mapu"
+        },
         "published": {
             "title": "Vaša mapa je napravljena",
             "desc": "Ugradjivanje mape dodavanjem HTML koda na vaš web sajt"
@@ -43,7 +46,7 @@ Oskari.registerLocalization(
                 "label": "Veličina",
                 "tooltip": "Izaberi ili definiši veličinu mape koja će biti ugrađena u vašu web prezentaciju. Mapa se prikazuje u izabranoj veličini."
             },
-            "tools": {
+            "maptools": {
                 "label": "Alati",
                 "tooltip": "Izaberi alate koji će biti prikazani na mapi. Njihova pozicija je prikazana u prikazu mape pre štampe",
                 "ScaleBarPlugin": "Razmernik",

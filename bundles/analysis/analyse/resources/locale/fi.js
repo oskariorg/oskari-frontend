@@ -7,16 +7,22 @@ Oskari.registerLocalization(
         "flyouttitle": "Analyysi <font color=red>(BETA)</font>",
         "desc": "",
         "btnTooltip": "Analyysi",
-        "notLoggedIn": "Vain kirjautunut käyttäjä voi tehdä WFS tasoille analyysejä. <a href='/web/fi/login'>Kirjaudu palveluun</a>.",
+        "NotLoggedView": {
+            "text": "Voit käyttää Analyysitoimintoa kirjauduttuasi palveluun.",
+            "signup": "Kirjaudu sisään",
+            "signupUrl": "/web/fi/login",
+            "register": "Rekisteröidy",
+            "registerUrl": "/web/fi/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+        },
         "AnalyseView": {
             "title": "Analyysi",
             "content": {
-                "label": "Aineisto",
+                "label": "Karttatasot",
                 "drawToolsLabel": "Kohdetyökalut",
                 "tooltip": "Valitse yksi aineisto analyysin pohjaksi. Lisää karttatasoja voit hakea \"Lisää karttatasoja\"-painikkeella aukeavalta listalta. Kohdista karttanäkymä haluamaasi paikkaan joko siirtämällä karttaa hiirellä tai klikkaamalla \"Hae paikkahaulla\" ja hakemalla haluamasi paikka.",
                 "drawToolsTooltip": "Kohdetyökalujen avulla voit lisätä väliaikaisen kohteen analyysin tekemistä varten tai leikata olemassaolevaa kohdetta rajaamalla siitä vain osan. Voit lisätä pistemäisen, viivamaisen tai aluemaisen kohteen. Myös leikkaus onnistuu eri tyyppisille kohteille.",
                 "features": {
-                    "title": "Kohteen lisäys",
+                    "title": "Lisäys",
                     "buttons": {
                         "cancel": "Peruuta",
                         "finish": "Valmis"
@@ -47,7 +53,7 @@ Oskari.registerLocalization(
                     }
                 },
                 "drawFilter": {
-                    "title": "Kohteen leikkaus",
+                    "title": "Leikkaus",
                     "buttons": {
                         "cancel": "Peruuta",
                         "finish": "Valmis"
@@ -75,6 +81,13 @@ Oskari.registerLocalization(
                         }
                     }
                 },
+                "selectionTools": {
+                    "title": "Valinta",
+                    "description": "Valinta kohdistuu vain valittuun karttatasoon",
+                    "button": {
+                        "empty": "Poista valinnat"
+                    }
+                },
                 "search": {
                     "title": "Hae paikkahaulla",
                     "resultLink": "Tuo analyysiin"
@@ -95,7 +108,7 @@ Oskari.registerLocalization(
                         "id": "oskari_analyse_aggregate",
                         "label": "Tunnuslukujen laskenta",
                         "classForPreview": "aggregate",
-                        "tooltip": "Tunnuslukujen laskenta -menetelmän avulla käyttäjä voi laskea valitsemistaan kohteista tunnuslukuja, kuten keskiarvon ja lukumäärän."
+                        "tooltip": "Tunnuslukujen laskenta -menetelmän avulla käyttäjä voi laskea valitsemistaan kohteista tunnuslukuja, kuten keskiarvon ja lukumäärän.\nTietosuojatut kohteet eivät ole mukana laskennassa."
                     },
                     {
                         "id": "oskari_analyse_union",
@@ -176,7 +189,8 @@ Oskari.registerLocalization(
                         "label": "Tietosuojattujen kohteiden lukumäärä"
                     }
                 ],
-                "attribute": "Valitse ominaisuustieto"
+                "attribute": "Valitse ominaisuustieto",
+                "footer" : "Tietosuojatut kohteet eivät ole mukana laskennassa"
             },
             "buffer_size": {
                 "label": "Vyöhykkeen koko",
@@ -301,14 +315,15 @@ Oskari.registerLocalization(
                 "refreshButton": "Päivitä suodatin",
                 "addFilter": "Lisää uusi suodatin.",
                 "removeFilter": "Poista suodatin.",
+                "content": {
+                    "title": "Aluerajaus"
+                },
                 "bbox": {
-                    "title": "Ikkunarajaus",
                     "on": "Ota mukaan vain kartalla näkyvät kohteet.",
                     "off": "Ota mukaan kaikki kohteet."
                 },
                 "clickedFeatures": {
-                    "title": "Kohderajaus",
-                    "clickedFeaturesLabel": "Ota mukaan vain kartalta valitut kohteet.",
+                    "clickedFeaturesLabel": "Ota mukaan vain tasolta valitut kohteet.",
                     "filterByGeometryLabel": "Ota mukaan vain kohteet, jotka",
                     "filterByGeometryIntersect": "leikkaavat valittua kohdetta",
                     "filterByGeometryContains": "ovat valitun kohteen sisällä"
@@ -321,6 +336,10 @@ Oskari.registerLocalization(
                         "boolean": "Looginen operaattori",
                         "operator": "Operaattori",
                         "attribute-value": "Arvo"
+                    },
+                    "info": {
+                        "bboxOff":"Ilman maantieteellistä rajausta analyysi kohdistuu koko aineistoon. Lisää vähintään yksi ominaisuustietojen mukaan tehtävä suodatus.",
+                        "filterByGeometrySelected":"Voit suodattaa ominaisuustiedoilla vain, jos et käytä valittujen kohteiden suodatusta"
                     },
                     "equals": "on yhtäsuuri kuin",
                     "like": "on likimäärin yhtäsuuri kuin",
@@ -336,7 +355,8 @@ Oskari.registerLocalization(
                     "attribute_missing": "Ominaisuustieto puuttuu.",
                     "operator_missing": "Operaattori puuttuu.",
                     "value_missing": "Arvo puuttuu.",
-                    "boolean_operator_missing": "Looginen operaattori puuttuu."
+                    "boolean_operator_missing": "Looginen operaattori puuttuu.",
+                    "bbox_selected_with_no_properties":"Ilman maantieteellistä rajausta analyysi kohdistuu koko aineistoon.<br/> 1) Lisää ominaisuustietosuodatin tai<br/> 2) Käytä kartalla näkyviä kohteita."
                 }
             },
             "help": "Ohje",
@@ -380,6 +400,7 @@ Oskari.registerLocalization(
         },
         "StartView": {
             "text": "Analyysi-toiminnon avulla voit tehdä valitsemillesi kohdetietoja sisältäville paikkatietotuotteille tilastollisia analyyseja. Tallentamalla analyysin voit käyttää sitä myös myöhemmin.",
+            "layersWithFeatures": "Analyysissä voi tehdä valintoja vain yhdeltä tasolta kerrallaan. Valitse miltä tasolta haluat tehdä valinnat. Huom! Muut valinnat poistetaan.",
             "infoseen": {
                 "label": "Älä näytä tätä viestiä uudelleen."
             },

@@ -12,7 +12,7 @@ Oskari.registerLocalization(
         "errorscale": "Ekki er hægt að sýna fitjugögnin á þessu kortalagi í þessum mælikvarða. Breyttu mælikvarðanum á mælistikunni.",
         "errordata": "Fitjugögnin á gagnaþjóninum inniheldur villur. Uppfærðu kortið með því að færa það aðeins til.",
         "columnSelectorTooltip": "Veldu sýnilega dálka.",
-        "popup": {
+        "selectionTools": {
             "title": "Veldu fitjur á kortinu.",
             "instructions": "NOT TRANSLATED",
             "link": {

@@ -7,16 +7,22 @@ Oskari.registerLocalization(
         "flyouttitle": "Analys <font color=red>(BETA)</font>",
         "desc": "",
         "btnTooltip": "Analys",
-        "notLoggedIn": "Endast inloggad användare kan göra analys. <a href='/web/sv/login'>Logga in</a>.",
+        "NotLoggedView": {
+            "text": "Endast inloggad användare kan göra analys",
+            "signup": "Logga in",
+            "signupUrl": "/web/sv/login",
+            "register": "Registrera dig",
+            "registerUrl": "/web/sv/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+        },
         "AnalyseView": {
             "title": "Analys",
             "content": {
-                "label": "Data",
+                "label": "Kartlager",
                 "drawToolsLabel": "Objekt verktyg",
                 "tooltip": "Välj ett kartlager för en grund av analys. Du kan söka mera kartlager för sin analys eller plats för att visa sin utvald plats.",
                 "drawToolsTooltip": "Man kan tilllägga tillfälliga objekt för sin analys aller klippa en befintlig objekt till flera objekt.",
                 "features": {
-                    "title": "Tillägg en objekt",
+                    "title": "Tillägg",
                     "buttons": {
                         "cancel": "Avbryt",
                         "finish": "Färdig"
@@ -47,7 +53,7 @@ Oskari.registerLocalization(
                     }
                 },
                 "drawFilter": {
-                    "title": "Objekt klippning",
+                    "title": "Klippning",
                     "buttons": {
                         "cancel": "Avbryt",
                         "finish": "Färdig"
@@ -73,6 +79,13 @@ Oskari.registerLocalization(
                                 "message": "NOT TRANSLATED"
                             }
                         }
+                    }
+                },
+                "selectionTools": {
+                    "title": "NOT TRANSLATED",
+                    "description": "NOT TRANSLATED",
+                    "button": {
+                        "empty": "Ta bort valda objekt"
                     }
                 },
                 "search": {
@@ -104,6 +117,12 @@ Oskari.registerLocalization(
                         "tooltip": "Man kan kombinera sin utvalda objekt till en ny objekt."
                     },
                     {
+                        "id": "oskari_analyse_clip",
+                        "label": "Leikkaus",
+                        "classForPreview": "clip",
+                        "tooltip": "Leikkaus-menetelmän avulla käyttäjä voi leikata kohteita toisen karttatason kohteilla. Analyysin lopputulokseen otetaan mukaan ne leikattavan tason kohteet, jotka sisältyvät leikkaavan tason kohteiden alueisiin."
+                    },
+                    {
                         "id": "oskari_analyse_intersect",
                         "label": "Klippning",
                         "classForPreview": "intersect",
@@ -117,15 +136,14 @@ Oskari.registerLocalization(
                     },
                     {
                         "id": "oskari_analyse_areas_and_sectors",
-                        "label": "Union av analyslager",
-                        "classForPreview": "areas_and_sectors",
-                        "tooltip": "Man kan kombinera analyslager som har samma attribut data."
-                    },
-                    {
-                        "id": "oskari_analyse_areas_and_sectors",
                         "label": "Flera zoner",
                         "classForPreview": "areas_and_sectors",
                         "tooltip": "Man kan skapa flera zoner omkring utvalda objekt. Man kan välja sig själv zoners storlek och antal."
+                    }, {
+                        "id": "oskari_analyse_difference",
+                        "label": "Muutoksen laskenta",
+                        "classForPreview": "difference",
+                        "tooltip": ""
                     },
                     {
                         "id": "oskari_analyse_spatial_join",
@@ -173,7 +191,8 @@ Oskari.registerLocalization(
                         "label": "Skyddad objekt"
                     }
                 ],
-                "attribute": "Välj en attribut"
+                "attribute": "Välj en attribut",
+                "footer" : "Skyddad objekt är inte räknad"
             },
             "buffer_size": {
                 "label": "Zon storlek",
@@ -297,14 +316,18 @@ Oskari.registerLocalization(
                 "refreshButton": "Uppdatera filter",
                 "addFilter": "Tilllägg en ny filter.",
                 "removeFilter": "Ta bort en ny filter.",
+                "content": {
+                    "title": "NOT TRANSLATED"
+                },
                 "bbox": {
-                    "title": "Filter på grund av kartvyn",
                     "on": "Ta med endast objekt som syns på kartvyn.",
                     "off": "Ta med alla objekt."
                 },
                 "clickedFeatures": {
-                    "title": "Filter på grund av objekt",
-                    "label": "Ta med endast objekt utvalda på kartan."
+                    "clickedFeaturesLabel": "Ta med endast objekt utvalda på kartan.",
+                    "filterByGeometryLabel": "NOT TRANSLATED",
+                    "filterByGeometryIntersect": "NOT TRANSLATED",
+                    "filterByGeometryContains": "NOT TRANSLATED"
                 },
                 "values": {
                     "title": "Filtrera objekt på grund av attribut data",
@@ -314,6 +337,10 @@ Oskari.registerLocalization(
                         "boolean": "Logisk operator",
                         "operator": "Operator",
                         "attribute-value": "Värde"
+                    },
+                    "info": {
+                        "bboxOff":"NOT TRANSLATED",
+                        "filterByGeometrySelected":"NOT TRANSLATED"
                     },
                     "equals": "är lika med",
                     "like": "är ungefär lika med",
@@ -329,7 +356,8 @@ Oskari.registerLocalization(
                     "attribute_missing": "Attribut saknas.",
                     "operator_missing": "Operator saknas.",
                     "value_missing": "Värde saknas.",
-                    "boolean_operator_missing": "Logisk operator saknas."
+                    "boolean_operator_missing": "Logisk operator saknas.",
+                    "bbox_selected_with_no_properties":"NOT TRANSLATED"
                 }
             },
             "help": "Anvisning",
@@ -373,6 +401,7 @@ Oskari.registerLocalization(
         },
         "StartView": {
             "text": "Man kan göra statistiska analys till kartlager som innehåller objekt data. Genom att lagra analys du kan använda resultat också senare.",
+            "layersWithFeatures": "Analyysissä voi tehdä valintoja vain yhdeltä tasolta kerrallaan. Valitse miltä tasolta haluat tehdä valinnat. Huom! Muut valinnat poistetaan.",
             "infoseen": {
                 "label": "Visa inte det här meddelande igen."
             },

@@ -924,7 +924,7 @@ function () {
                     var val = element.find('div').attr('data-value');
                     if (val !== null && val !== '') {
                         inputValues.push(val);
-                    }                    
+                    }
                 } else if (type === 'boolean') {
                     inputValues = element.find('div').attr('data-value') === 'true';
                 } else if (type === 'enum') {
@@ -944,7 +944,7 @@ function () {
             if (type === 'enum' && multi !== true && multi !== 'true' && inputValues.length !== 1) {
                 value.title = element.attr('data-title');
                 values.missingValues.push(value);
-            } 
+            }
             // Else if type is int
             else if (type === 'int' && (inputValues === null || isNaN(inputValues))) {
                 value.title = element.attr('data-title');
@@ -956,7 +956,7 @@ function () {
                 values.missingValues.push(value);
             } else {
                 values.values.push(value);
-            }            
+            }
         });
 
 

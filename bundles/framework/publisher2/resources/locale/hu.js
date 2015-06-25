@@ -3,9 +3,12 @@ Oskari.registerLocalization(
     "lang": "hu",
     "key": "Publisher2",
     "value": {
-        "title": "Térképkészítés",
-        "flyouttitle": "Térképkészítés",
-        "desc": "",
+        "tile" : {
+            "title": "Térképkészítés"
+        },
+        "flyout" : {
+            "title": "Térképkészítés"
+        },
         "published": {
             "title": "A térkép elkészült.",
             "desc": "Térkép beágyazása a weboldalon lévő HTML kóddal."
@@ -43,7 +46,7 @@ Oskari.registerLocalization(
                 "label": "Méret",
                 "tooltip": "Válassza ki vagy határozza meg az Ön weboldalán beágyazandó térkép méretét. Az előnézet ebben a méretben jelenik meg."
             },
-            "tools": {
+            "maptools": {
                 "label": "Eszközök",
                 "tooltip": "Válassza ki a térképen megjelenítendő eszközöket. Az előnézetben ezek megjelennek.",
                 "ScaleBarPlugin": "Méretarány-skála",

@@ -35,6 +35,9 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.AnalyseBundle", function() {
             "src" : "../../../../bundles/analysis/analyse/view/StartView.js"
         }, {
             "type" : "text/javascript",
+            "src" : "../../../../bundles/analysis/analyse/view/NotLoggedIn.js"
+        }, {
+            "type" : "text/javascript",
             "src" : "../../../../bundles/analysis/analyse/view/StartAnalyse.js"
         }, {
             "type" : "text/javascript",

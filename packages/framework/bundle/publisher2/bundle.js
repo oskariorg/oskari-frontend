@@ -24,40 +24,103 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher2.PublisherBundle", fun
         "scripts": [{
             "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher2/instance.js"
-        }, {
+        },
+        {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher2/Flyout.js"
-        }, {
+        },
+        {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/publisher2/Tile.js"
-        }, {
+            "src": "../../../../bundles/framework/publisher2/service/PublisherService.js"
+        },
+        {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher2/event/MapPublishedEvent.js"
-        }, {
+        },
+        {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher2/event/ToolStyleChangedEvent.js"
-        }, {
+        },
+        {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher2/event/ColourSchemeChangedEvent.js"
-        }, {
+        },
+        {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher2/event/FontChangedEvent.js"
-        }, {
+        },
+        {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher2/event/LayerToolsEditModeEvent.js"
-        }, {
+        },
+        {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/publisher2/view/NotLoggedIn.js"
-        }, {
+            "src": "../../../../bundles/framework/publisher2/view/FlyoutNotLoggedIn.js"
+        },
+        {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/publisher2/view/StartView.js"
-        }, {
+            "src": "../../../../bundles/framework/publisher2/view/FlyoutStartView.js"
+        },
+        {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/publisher2/view/BasicPublisher.js"
-        }, {
+            "src": "../../../../bundles/framework/publisher2/view/PublisherSidebar.js"
+        },
+        {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/publisher2/view/PublisherLocationForm.js"
-        }, {
+            "src": "../../../../bundles/framework/publisher2/view/PanelGeneralInfo.js"
+        },
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/publisher2/view/PanelMapTools.js"
+        },
+
+
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/publisher2/tools/AbstractPluginTool.js"
+        },
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/publisher2/view/PanelMapSize.js"
+        },
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/publisher2/tools/ScalebarTool.js"
+        },
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/publisher2/tools/IndexMapTool.js"
+        },
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/publisher2/tools/PanButtonsTool.js"
+        },
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/publisher2/tools/ZoombarTool.js"
+        },
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/publisher2/tools/MyLocationTool.js"
+        },
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/publisher2/tools/SearchTool.js"
+        },
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/publisher2/tools/ControlsTool.js"
+        },
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/publisher2/tools/ShowStatsTableTool.js"
+        },
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/publisher2/tools/ClassifyTool.js"
+        },
+
+        {
             "type": "text/css",
             "src": "../../../../bundles/framework/publisher2/resources/css/style.css"
         }, {

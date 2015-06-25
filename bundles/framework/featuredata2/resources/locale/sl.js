@@ -12,7 +12,7 @@ Oskari.registerLocalization(
         "errorscale": "Podatki o pojavu na tej karti ne morejo biti prikazani v tem merilu. Prosim spremeni merilo na lestvici za merilo.",
         "errordata": "Podatki o pojavu na strežniku vsebujejo napake. Osveži podatke tako, da karto malenkost premakneš.",
         "columnSelectorTooltip": "Izberi vidne stolpce",
-        "popup": {
+        "selectionTools": {
             "title": "Izberi pojave na karti",
             "instructions": "NOT TRANSLATED",
             "link": {

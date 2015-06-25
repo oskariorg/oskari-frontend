@@ -3,9 +3,12 @@ Oskari.registerLocalization(
     "lang": "sl",
     "key": "Publisher2",
     "value": {
-        "title": "Objava karte",
-        "flyouttitle": "Izdelaj karto",
-        "desc": "",
+        "tile" : {
+            "title": "Objava karte"
+        },
+        "flyout" : {
+            "title": "Izdelaj karto"
+        },
         "published": {
             "title": "Karta je izdelana",
             "desc": "Dodaj izdelano karto na svojo spletno stran z dodajanjem spodnje kode HTML:"
@@ -43,7 +46,7 @@ Oskari.registerLocalization(
                 "label": "Velikost",
                 "tooltip": "Izberi ali določi velikost karte, ki bo vstavljena v spletno stran. Predogled karte je v tej izbrani velikosti."
             },
-            "tools": {
+            "maptools": {
                 "label": "Orodja",
                 "tooltip": "Izberi orodja, ki bodo prikazana na karti. Njihova postavitev je prikazana v predogledu karte.",
                 "ScaleBarPlugin": "Linijska lestvica",

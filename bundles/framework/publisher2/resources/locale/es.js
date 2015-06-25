@@ -3,9 +3,12 @@ Oskari.registerLocalization(
     "lang": "es",
     "key": "Publisher2",
     "value": {
-        "title": "Publicar mapa",
-        "flyouttitle": "Generar mapa embebido",
-        "desc": "",
+        "tile" : {
+            "title": "Publicar mapa"
+        },
+        "flyout" : {
+            "title": "Generar mapa embebido"
+        },
         "published": {
             "title": "Se ha creado mapa para embeber",
             "desc": "Incorpore su mapa añadiendo el siguiente código HTML a tu portal web"
@@ -43,7 +46,7 @@ Oskari.registerLocalization(
                 "label": "Tamaño",
                 "tooltip": "Seleccione o defina el tamaño del mapa que se incorporará en su portal web. La previsualización del mapa se mostrará en el tamaño seleccionado"
             },
-            "tools": {
+            "maptools": {
                 "label": "Herramientas",
                 "tooltip": "Seleccione las herramientras que se mostrarán en el mapa. Su ubicación se mostrará en la previsualización del mapa",
                 "ScaleBarPlugin": "Escala",

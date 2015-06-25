@@ -357,7 +357,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             }
 
             // 3rd panel: size panel
-            accordion.addPanel(me._createSizePanel());
+            accordion.addPanel(me._createSizePanel())
 
             // 4th panel: tools panel
             accordion.addPanel(me._createToolsPanel());
@@ -704,21 +704,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 };
             }));
             radioButtonGroup.setHandler(selectionHandler);
+
+            // --> NÄMÄ?
             radioButtonGroup.insertTo(contentPanel);
+            // <--
+
 
             customSizes.className = 'customsize';
-
             widthInput.setName('width');
             widthInput.setPlaceholder(me.loc.sizes.width);
             widthInput.setValue(selectedOption.width);
             widthInput.setHandler(function () {
                 me._updateMapSize();
             });
-            widthInput.insertTo(customSizes);
 
+            // --> NÄMÄ?
+            widthInput.insertTo(customSizes);
             customSizes.appendChild(
                 document.createTextNode(me.loc.sizes.separator)
             );
+            // <--
 
             heightInput.setName('height');
             heightInput.setPlaceholder(me.loc.sizes.height);

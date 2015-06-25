@@ -2,9 +2,12 @@ Oskari.registerLocalization({
     "lang": "pl",
     "key": "Publisher2",
     "value": {
-        "title": "Utwórz mapę",
-        "flyouttitle": "Utwórz mapę",
-        "desc": "",
+        "tile" : {
+            "title": "Utwórz mapę"
+        },
+        "flyout" : {
+            "title": "Utwórz mapę"
+        },
         "published": {
             "title": "Mapa została utworzona",
             "desc": "Wbuduj mapę poprzez dodanie poniższego kodu HTML do swojej strony."
@@ -42,7 +45,7 @@ Oskari.registerLocalization({
                 "label": "Rozmiar",
                 "tooltip": "Wybierz i zdefiniuj rozmiar mapy, która będzie wbudowana na twojej stronie internetowej. Podgląd mapy jest wyświetlany w wybranym rozmiarze."
             },
-            "tools": {
+            "maptools": {
                 "label": "Narzędzia",
                 "tooltip": "Wybierz narzędzie, które będą pokazywane na mapie. Ich rozmieszczenie będzie wyświetlane w podglądzie mapy.",
                 "ScaleBarPlugin": "Linia skali",

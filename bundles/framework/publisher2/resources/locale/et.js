@@ -3,9 +3,12 @@ Oskari.registerLocalization(
     "lang": "et",
     "key": "Publisher2",
     "value": {
-        "title": "Loo kaart",
-        "flyouttitle": "Loo kaart",
-        "desc": "",
+        "tile" : {
+            "title": "Loo kaart"
+        },
+        "flyout" : {
+            "title": "Loo kaart"
+        },
         "published": {
             "title": "Teie kaart on loodud",
             "desc": "Põimi kaart lisades alloleva HTML koodi oma veebilehele."
@@ -43,7 +46,7 @@ Oskari.registerLocalization(
                 "label": "Suurus",
                 "tooltip": "Vali või määra veebikohas põimitava kaardi suurus. Kaardi eelvaade kuvatakse valitud suuruses."
             },
-            "tools": {
+            "maptools": {
                 "label": "Tööriistad",
                 "tooltip": "Vali kaardil näidatavad tööriistad. Nende asukoht kuvatakse kaardi eelvaates.",
                 "ScaleBarPlugin": "Joonmõõtkava",

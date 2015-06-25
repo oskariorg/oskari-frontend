@@ -5,15 +5,22 @@
         </div>
         <% 
         var names = data.getNamesAsList();
+        var loc = (Oskari.getLocalization('DivManazer').LanguageSelect && Oskari.getLocalization('DivManazer').LanguageSelect.languages) ? Oskari.getLocalization('DivManazer').LanguageSelect.languages : {};
+        
         for (var i = 0; i < names.length; i++) {
-               var locale = names[i]; %>
+               var locale = names[i]; 
+               var locName = (loc[locale.lang] || locale.lang);
+               %>
         <div class="add-class-record">
             <div class="add-class-label-area">
-                <label for="add-class-<%= locale.lang %>-name" class="add-class-label" title="<%= localeInput ? localeInput.title : locale.lang %>"><%= localeInput[locale.lang] ? localeInput[locale.lang].lang : locale.lang + ':' %></label>
+                <label for="add-class-<%= locale.lang %>-name" class="add-class-label" title="<%= (loc[locale.lang] || locale.lang) %>">
+                    <%= locName + ':' %>
             </div>
             <div  class="add-class-input-area">
                 <div class="input-controls">
-                    <input type="text" id="add-class-<%= locale.lang %>-name" class="add-class-input" placeholder="<%= localeInput[locale.lang] ? localeInput[locale.lang].placeholder : localeInput['generic'].placeholder.replace('{0}', locale.lang) %>" <% if(locale != null && locale.name != null) { %>value="<%= locale.name %>"  <% } %> />
+                    <input type="text" id="add-class-<%= locale.lang %>-name" class="add-class-input" 
+                    placeholder="<%= localeInput['generic'].placeholder.replace('{0}', locName) %>" title="<%= localeInput['generic'].placeholder.replace('{0}', locName) %>"
+                    <% if(locale != null && locale.name != null) { %>value="<%= locale.name %>"  <% } %> />
                     <div class="icon-close"></div>
                 </div>
             </div>

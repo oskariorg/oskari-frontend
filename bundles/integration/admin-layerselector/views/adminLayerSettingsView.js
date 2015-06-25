@@ -19,8 +19,6 @@ define([
         layerModel
     ) {
         return Backbone.View.extend({
-            //<div class="admin-add-layer" data-id="<% if(model != null && model.getId()) { %><%= model.getId() %><% } %>">
-
             tagName: 'div',
             className: 'admin-add-layer',
 
@@ -56,6 +54,7 @@ define([
              * @method initialize
              */
             initialize: function () {
+                var me = this;
                 this.instance = this.options.instance;
                 // for new layers/sublayers, model is always null at this point
                 // if we get baseLayerId -> this is a sublayer
@@ -81,12 +80,10 @@ define([
                 this._rolesUpdateHandler();
                 if (this.model) {
                     // listenTo will remove dead listeners, use it instead of on()
-                    var me = this;
                     this.listenTo(this.model, 'change', function() {
                         me.render();
                     });
                 }
-                var me = this;
 
                 this.supportedTypes = this.options.supportedTypes;
                 this.render();
@@ -135,10 +132,6 @@ define([
 
                 // Append a progress spinner
                 spinnerContainer = me.instance.view.container.parent().parent();
-                // FF bug ?
-              /*  if (!spinnerContainer.has(me.progressSpinner).length > 0) {
-                    me.progressSpinner.insertTo(spinnerContainer);
-                } */
             },
             /**
              * @method _rolesUpdateHandler
@@ -187,8 +180,6 @@ define([
 
             createLayerForm: function (layerType) {
                 var me = this,
-                    supportedLanguages = Oskari.getSupportedLanguages(),
-                    opacity = 100,
                     lcId,
                     layerGroups,
                     urlInput,
@@ -228,7 +219,6 @@ define([
                 // if settings are hidden, we need to populate template and
                 // add it to the DOM
                 if (!me.$el.hasClass('show-edit-layer')) {
-                    // FIXME non-unique ID
                     me.$el.find('.layout-slider').slider({
                         min: 0,
                         max: 100,
@@ -293,7 +283,7 @@ define([
                 return new this.modelObj(layer);
             },
 
-            createGroupForm: function (groupTitle, e) {
+            createGroupForm: function (groupTitle) {
                 var me = this;
                 if (!me.model) {
                     if (groupTitle === 'baseName') {
@@ -342,7 +332,6 @@ define([
                 e.stopPropagation();
                 var element = jQuery(e.currentTarget),
                     form = element.parents('.admin-add-layer'),
-                    data = {},
                     interfaceVersion = form.find('#add-layer-interface-version').val();
 
                 if(interfaceVersion === '2.0.0') {
@@ -390,8 +379,6 @@ define([
                         url: sandbox.getAjaxUrl() + 'action_route=DeleteLayer',
                         success: function (resp) {
                             if (!resp) {
-                                // TODO this isn't fired on sublayer delete...
-                                //close this
                                 if (addLayerDiv.hasClass('show-edit-layer')) {
                                     addLayerDiv.removeClass('show-edit-layer');
                                     // FIXME this re-renders the layer view but doesn't update the model...
@@ -410,7 +397,7 @@ define([
                                 }
                             }
                         },
-                        error: function (jqXHR, textStatus) {
+                        error: function (jqXHR) {
                             if (jqXHR.status !== 0) {
                                 me._showDialog(me.instance.getLocalization('admin')['errorTitle'], me.instance.getLocalization('admin')['errorRemoveLayer']);
                             }
@@ -495,7 +482,7 @@ define([
                             me._showDialog(me.instance.getLocalization('admin')['successTitle'], me.instance.getLocalization('admin')['success']);
                         }
                     },
-                    error: function (jqXHR, textStatus) {
+                    error: function (jqXHR) {
                         me.progressSpinner.stop();
                         if (jqXHR.status !== 0) {
                             var loc = me.instance.getLocalization('admin'),
@@ -521,12 +508,10 @@ define([
                                     }
 
                                     err = loc[err] || err;
-                                    if (errVar) {
-                                        if (loc[errVar]) {
-                                            err += loc[errVar];
-                                        } else {
-                                            err += errVar;
-                                        }
+                                    if (errVar && loc[errVar]) {
+                                        err += loc[errVar];
+                                    } else if (errVar) {
+                                        err += errVar;
                                     }
                                 }
                             }
@@ -540,12 +525,11 @@ define([
              *
              * @method addLayer
              */
-            addLayer: function (e, callback) {
+            addLayer: function (e) {
                 if (e && e.stopPropagation) {
                     e.stopPropagation();
                 }
 
-                // FIXME don't get this from the event...
                 var me = this,
                     element = jQuery(e.currentTarget),
                     accordion = element.parents('.accordion'),
@@ -553,7 +537,6 @@ define([
                     form = element.parents('.admin-add-layer'),
                     data = {},
                     interfaceVersion = form.find('#add-layer-interface-version').val(),
-                    createLayer,
                     sandbox = me.instance.getSandbox(),
                     admin;
 
@@ -576,11 +559,12 @@ define([
                     data.layer_id = me.model.getId();
                 }
 
-                form.find('[id$=-name]').filter('[id^=add-layer-]').each(function (index) {
+                form.find('[id$=-name]').filter('[id^=add-layer-]').each(function () {
                     var lang = this.id.substring(10, this.id.indexOf('-name'));
                     data['name_' + lang] = this.value;
                 });
-                form.find('[id$=-title]').filter('[id^=add-layer-]').each(function (index) {
+
+                form.find('[id$=-title]').filter('[id^=add-layer-]').each(function () {
                     var lang = this.id.substring(10, this.id.indexOf('-title'));
                     data['title_' + lang] = this.value;
                 });
@@ -593,10 +577,8 @@ define([
                 data.opacity = form.find('#opacity-slider').val();
 
                 data.style = form.find('#add-layer-style').val();
-                data.minScale = form.find('#add-layer-minscale').val(); // || 16000000;
-                data.maxScale = form.find('#add-layer-maxscale').val(); // || 1;
-
-                //data.descriptionLink = form.find('#add-layer-').val();
+                data.minScale = form.find('#add-layer-minscale').val();
+                data.maxScale = form.find('#add-layer-maxscale').val();
                 data.legendImage = form.find('#add-layer-legendImage').val();
                 data.inspireTheme = form.find('#add-layer-inspire-theme').val();
                 data.metadataId = form.find('#add-layer-datauuid').val();
@@ -619,7 +601,7 @@ define([
                     if ((admin)&&(admin.passthrough)) {
                         _.forEach(admin.passthrough, function (value, key) {
                             data[key] = typeof value === 'object' ? JSON.stringify(value) : value;
-                        })
+                        });
                     }
                 }
                 data.layerName = form.find('#add-layer-layerName').val();
@@ -643,40 +625,24 @@ define([
                 }
 
                 data.viewPermissions = '';
+                data.downloadPermissions = '';
+                data.enbeddedPermissions = '';
+                data.publishPermissions = '';
                 for (var i = 0; i < me.roles.length; i += 1) {
                     if (form.find('#layer-view-roles-' + me.roles[i].id).is(':checked')) {
                         data.viewPermissions += me.roles[i].id + ',';
                     }
-                }
-
-//                layer-view-roles-2
-//                layer-publish-roles
-//                layer-download-roles
-//                layer-enbedded-roles 
-
-                data.downloadPermissions = '';
-                for (var i = 0; i < me.roles.length; i += 1) {
                     if (form.find('#layer-download-roles-' + me.roles[i].id).is(':checked')) {
                         data.downloadPermissions += me.roles[i].id + ',';
                     }
-                }
-
-                data.enbeddedPermissions = '';
-                for (var i = 0; i < me.roles.length; i += 1) {
                     if (form.find('#layer-enbedded-roles-' + me.roles[i].id).is(':checked')) {
                         data.enbeddedPermissions += me.roles[i].id + ',';
                     }
-                }
-
-                data.publishPermissions = '';
-                for (var i = 0; i < me.roles.length; i += 1) {
                     if (form.find('#layer-publish-roles-' + me.roles[i].id).is(':checked')) {
                         data.publishPermissions += me.roles[i].id + ',';
                     }
                 }
 
-
-                debugger;
                 // Layer class id aka. orgName id aka groupId
                 data.groupId = lcId;
 
@@ -715,10 +681,7 @@ define([
                     element = jQuery(e.currentTarget),
                     groupElement = element.parents('.admin-add-group'),
                     accordion = element.parents('.accordion');
-                /*
-                model.isBaseLayer() <- group vai base + layerType == 'collection'
-                groupId <- organization
-                */
+
                 var sandbox = me.options.instance.getSandbox();
                 var data = {
                     groupId: accordion.attr('lcid'),
@@ -731,7 +694,7 @@ define([
                     data.layer_id = me.model.getId();
                 }
 
-                groupElement.find('[id$=-name]').filter('[id^=add-group-]').each(function (index) {
+                groupElement.find('[id$=-name]').filter('[id^=add-group-]').each(function () {
                     var lang = this.id.substring(10, this.id.indexOf('-name'));
                     data['name_' + lang] = this.value;
                 });
@@ -739,7 +702,7 @@ define([
                 // permissions
                 if (!me.model.getId()) {
                     var checkedPermissions = [];
-                    groupElement.find('.layer-view-role').filter(':checked').each(function (index) {
+                    groupElement.find('.layer-view-role').filter(':checked').each(function () {
                         checkedPermissions.push(jQuery(this).data('role-id'));
                     });
 
@@ -751,13 +714,13 @@ define([
                     type: 'POST',
                     dataType: 'json',
                     data: data,
-                    beforeSend: function (x) {
+                    beforeSend: function () {
                         jQuery('body').css({
                             cursor: 'wait'
                         });
                     },
                     url: sandbox.getAjaxUrl() + 'action_route=SaveLayer',
-                    success: function (resp) {
+                    success: function () {
                         jQuery('body').css('cursor', '');
                         if (!me.model.getId()) {
                             //trigger event to View.js so that it can act accordingly
@@ -775,7 +738,7 @@ define([
                             });
                         }
                     },
-                    error: function (jqXHR, textStatus) {
+                    error: function () {
                         jQuery('body').css('cursor', '');
                         me._showDialog(me.instance.getLocalization('admin')['errorTitle'], me.instance.getLocalization('admin')['errorSaveGroupLayer']);
                     }
@@ -802,7 +765,7 @@ define([
                             modelId: me.model.getId()
                         });
                     },
-                    error: function (jqXHR, textStatus) {
+                    error: function () {
                         me._showDialog(me.instance.getLocalization('admin')['errorTitle'], me.instance.getLocalization('admin')['errorRemoveGroupLayer']);
                     }
                 });
@@ -856,7 +819,7 @@ define([
                         me.progressSpinner.stop();
                         me.__capabilitiesResponseHandler(layerType, resp);
                     },
-                    error: function (jqXHR, textStatus) {
+                    error: function (jqXHR) {
                         me.progressSpinner.stop();
                         if (jqXHR.status !== 0) {
                             me._showDialog(me.instance.getLocalization('admin')['errorTitle'], me.instance.getLocalization('admin').metadataReadFailure);
@@ -864,32 +827,6 @@ define([
                     }
                 });
             },
-            /**
-             * Edit WFS layer configuration.
-             * Edit wfs spesific values  (adminBlock.passtrough fields)
-             * Only for wfslayer-type
-             *
-             * @method editWfsLayerConfiguration
-             */
-    /*        editWfsLayerConfiguration: function (e) {
-                e.stopPropagation();
-                var me = this;
-                e.preventDefault();
-                me._wfsEditDialog
-                ('Edit Wfs parameters');
-
-
-            },
-            //TODO: editing of wfs spesific data
-            _wfsEditDialog: function (title) {
-                var me = this,
-                    dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                    okBtn = dialog.createCloseButton('Save'),
-                    content = jQuery('<div></div>').clone();
-
-                dialog.show(title, content, [okBtn]);
-
-            }, */
             /**
              * Acts on capabilities response based on layer type
              * @param  {String} layerType 'wmslayer'/'wmtslayer'/'wfslayer'
@@ -908,7 +845,6 @@ define([
                         caps = format.read(response.xml);
                     me.model.setOriginalMatrixSetData(caps);
                     me.model.setCapabilitiesResponse(response);
-                    //me.model.change();
                 } else if(layerType === 'wfslayer') {
                     me.model.setCapabilitiesResponse(response);
                     //check layers with error and act accordingly.

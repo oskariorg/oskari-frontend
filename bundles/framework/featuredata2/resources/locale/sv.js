@@ -12,14 +12,16 @@ Oskari.registerLocalization(
         "errorscale": "Uppgifter om objekt kan inte visas på denna skalnivå. Byt skalnivå.",
         "errordata": "Fel i data från servern. Flytta lite på kartan för att uppdatera den.",
         "columnSelectorTooltip": "Välj synliga kolumner",
-        "popup": {
+        "selectionTools": {
             "title": "Markera objekt på kartan",
-            "instructions": "NOT TRANSLATED",
+            "instructions": "",
+            "selectFromTop": "Select from the top layer",
+            "selectAll": "Select from all layers",
             "link": {
                 "title": "Välj fler funktioner"
             },
             "button": {
-                "cancel": "Avbryt",
+                "cancel": "Stäng",
                 "empty": "Ta bort valda objekt",
                 "show": "Visa funktioner",
                 "close": "Stäng",

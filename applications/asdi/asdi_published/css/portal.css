@@ -1096,10 +1096,6 @@ select {
   z-index: 3;
 }
 
-#contentMap {
-  margin-left: 170px !important;
-}
-
 #maptools{
   width: 170px !important;
   height: 100% !important;

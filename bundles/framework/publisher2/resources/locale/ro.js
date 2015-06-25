@@ -3,9 +3,12 @@ Oskari.registerLocalization(
     "lang": "ro",
     "key": "Publisher2",
     "value": {
-        "title": "Creare hartă",
-        "flyouttitle": "Creare hartă",
-        "desc": "",
+        "tile" : {
+            "title": "Creare hartă"
+        },
+        "flyout" : {
+            "title": "Creare hartă"
+        },
         "published": {
             "title": "Harta dvs. a fost creată",
             "desc": "Înglobare hartă prin adăugarea codului HTML de mai jos în site-ul web"
@@ -43,7 +46,7 @@ Oskari.registerLocalization(
                 "label": "Dimensiune",
                 "tooltip": "Selectare sau definire dimensiune hartă ce va fi înglobată în web site-ul dvs. Previzualizarea hărţii este afişată în dimensiunea selectată"
             },
-            "tools": {
+            "maptools": {
                 "label": "Instrumente",
                 "tooltip": "Selectare instrumente ce vor fi afişate pe hartă. Localizarea acestora este afişată în previzualizarea hărţii",
                 "ScaleBarPlugin": "Scara",

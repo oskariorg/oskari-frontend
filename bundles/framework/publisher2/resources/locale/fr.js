@@ -3,9 +3,12 @@ Oskari.registerLocalization(
     "lang": "en",
     "key": "Publisher2",
     "value": {
-        "title": "Publication de carte",
-        "flyouttitle": "Créer une carte intégrée",
-        "desc": "",
+        "tile" : {
+            "title": "Publication de carte"
+        },
+        "flyout" : {
+            "title": "Créer une carte intégrée"
+        },
         "published": {
             "title": "Carte créée pour être intégrée",
             "desc": "La carte a été créée. Intégrez la carte en ajoutant le code html ci-dessous à votre site internet. La carte se trouve ainsi sur votre site web :"
@@ -43,7 +46,7 @@ Oskari.registerLocalization(
                 "label": "Taille",
                 "tooltip": "Sélectionnez ou définissez la taille de la carte à intégrer sur votre site internet. Vous pouvez voir les changements dans l’aperçu de la carte."
             },
-            "tools": {
+            "maptools": {
                 "label": "Outils",
                 "tooltip": "Sélectionnez les outils à afficher sur la carte. Vous pouvez voir le placement de l’outil dans l’aperçu de la carte.",
                 "ScaleBarPlugin": "Barre d’échelle",

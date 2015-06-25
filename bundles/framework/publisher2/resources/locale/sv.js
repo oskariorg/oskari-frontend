@@ -3,9 +3,12 @@ Oskari.registerLocalization(
     "lang": "sv",
     "key": "Publisher2",
     "value": {
-        "title": "Kartpublicering",
-        "flyouttitle": "Skapa inbäddad karta",
-        "desc": "",
+        "tile" : {
+            "title": "Kartpublicering"
+        },
+        "flyout" : {
+            "title": "Skapa inbäddad karta"
+        },
         "published": {
             "title": "Kartan har skapats för att kunna bäddas in",
             "desc": "Karta har skapats. Bädda in kartan genom att lägga till HTML-koden nedan till din webbplats och du har kartan på din webbplats:"
@@ -43,7 +46,7 @@ Oskari.registerLocalization(
                 "label": "Storlek",
                 "tooltip": "Välj eller definiera storleken på kartan för att bäddas in på din webbplats.  Kartan förhandsvisas i den valda storleken."
             },
-            "tools": {
+            "maptools": {
                 "label": "Verktyg",
                 "tooltip": "Välj verktygen som visas på kartan. Du kan se deras placering på den förhandsvisade kartan.",
                 "ScaleBarPlugin": "Skalstock",

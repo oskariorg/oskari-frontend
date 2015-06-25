@@ -3,9 +3,12 @@ Oskari.registerLocalization(
     "lang": "sq",
     "key": "Publisher2",
     "value": {
-        "title": "Krijo hartën",
-        "flyouttitle": "Krijo hartën",
-        "desc": "",
+        "tile" : {
+            "title": "Krijo hartën"
+        },
+        "flyout" : {
+            "title": "Krijo hartën"
+        },
         "published": {
             "title": "Harta juaj është krijuar",
             "desc": "Futni hartën duke shtuar kodin HTML poshtë ueb faqes tuaj"
@@ -43,7 +46,7 @@ Oskari.registerLocalization(
                 "label": "Madhësia",
                 "tooltip": "Përzgjedh apo defino madhësinë e hartës që do të futet në ueb faqen tuaj. Parapamja e hartës suaj është paraqitur në madhësinë e zgjedhur"
             },
-            "tools": {
+            "maptools": {
                 "label": "Veglat (mjetet)",
                 "tooltip": "Përzgjedh veglat që do të paraqiten në hartë. Vendosja e tyre është paraqitur në parapamjen e hartës",
                 "ScaleBarPlugin": "Vija e shkallës",
