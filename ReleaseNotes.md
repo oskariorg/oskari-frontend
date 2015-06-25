@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.30.1
+
+Couple of debuggers deleted.
+
 ## 1.30
 
 ### highlight and feature selection renewed
