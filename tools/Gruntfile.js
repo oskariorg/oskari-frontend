@@ -587,12 +587,12 @@ module.exports = function (grunt) {
             });
         };
         var getResourcePaths = function(list) {
-            var TO_MATCH = 'Oskari' + path.sep + 'bundles',
+            var TO_MATCH = 'oskari' + path.sep + 'bundles',
                 matcherSize = TO_MATCH.length + 1;
             var value = [];
             _.each(list, function(dep) {
                 var actual =  dep.path || '';
-                var index = actual.indexOf(TO_MATCH);
+                var index = actual.toLowerCase().indexOf(TO_MATCH);
                 if(index !== -1) {
                     //console.log(actual.substring(index + matcherSize));
                     var imagePath = actual + path.sep + 'resources' + path.sep + 'images';
