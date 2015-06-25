@@ -65,7 +65,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
             filterContentOption: '<div class="filter-by-values-container">' +
                                     '<div class="case-sensitive-filtering">' +
                                         '<input name="case-sensitive" type="checkbox"></input>' +
-                                        '<label for="case-sensitive">Ota huomioon kirjainkoko</label>' +
+                                        '<label for="case-sensitive"></label>' +
                                     '</div>' +
                                     '<div class="filter-option">' +
                                         '<select class="attribute"></select>' +
@@ -445,6 +445,8 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                 attrPlaceHolder = this.loc.filter.values.placeholders.attribute,
                 opSelect = filterOption.find('select.operator'),
                 opPlaceHolder = this.loc.filter.values.placeholders.operator;
+
+            filterOption.find('label').html(this.loc.filter.values.placeholders['case-sensitive']);
 
             // Appends values to the attribute select.
             this._appendOptionValues(attrSelect, attrPlaceHolder, me._getLayerAttributes(layer));
