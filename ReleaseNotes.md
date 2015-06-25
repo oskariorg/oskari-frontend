@@ -40,6 +40,8 @@ Gruntfile reconfigured to use applications/sample/servlet as default application
 Added shortcut to build script: 'npm run build' and examples for build-paikkis, build-asdi and build-elf.
 Release assumed path with Oskari/bundles with capital O when copying resources, now it works with oskari/bundles as well.
 
+Known issue with frontend build and Grunt: The used grunt-sass doesn't work on node.js 0.12.x. It works with (atleast) 0.10.x versions.
+
 ### core/sandbox
 
 Fixed sandbox.createURL(url). If the param url didn't include the domain part the port was included twice.
