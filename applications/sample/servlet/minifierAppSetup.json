@@ -477,9 +477,6 @@
             }
         }, {
             "title" : "Admin - Users",
-            "fi" : "admin-users",
-            "sv" : "admin-users",
-            "en" : "admin-users",
             "bundlename" : "admin-users",
             "bundleinstancename" : "admin-users",
             "metadata" : {
@@ -487,10 +484,19 @@
                     "admin-users" : {
                         "bundlePath" : "../../../packages/framework/bundle/"
                      }
-                },
-                "Require-Bundle-Instance" : []
-            },
-            "instanceProps" : {}
+                }
+            }
+        }, {
+            "title" : "Admin Generic",
+            "bundlename" : "admin",
+            "bundleinstancename" : "admin",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "admin" : {
+                        "bundlePath" : "../../../packages/admin/bundle/"
+                     }
+                }
+            }
         }, {
             "title" : "myplacesimport",
             "fi" : "myplacesimport",
