@@ -205,7 +205,6 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             // FIXME this is unnecessary, we can do this with a css selector.
             parsedHTML.find('tr').removeClass('odd');
             parsedHTML.find('tr:even').addClass('odd');
-            parsedHTML.children("br").remove();
             response.append(parsedHTML.html());
         } else {
             response.append(datum.content);
