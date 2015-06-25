@@ -27,7 +27,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.NotLoggedIn',
          * @param {jQuery} container reference to DOM element this component will be rendered to
          */
         render: function (container) {
-            debugger;
             var me = this,
                 conf = me.instance.conf,
                 sandbox = me.instance.getSandbox(),
