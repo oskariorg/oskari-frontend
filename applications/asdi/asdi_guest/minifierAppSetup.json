@@ -62,6 +62,9 @@
                     "mapwmts": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     },
+                    "maparcgis": {
+                        "bundlePath": "../../../packages/arcgis/bundle/"
+                    },
                     "request-base": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     },
