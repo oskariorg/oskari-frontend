@@ -93,7 +93,7 @@ Fixed centerTo parameter handling.
 
 ### myplacesimport
 
-Coordinate reference system must be similiar to current map CRS (EPSG:3067 in Oskari) in Mif/mid data format
+If GDAL cannot determine CRS from the data, the import now assumes the current maps CRS (previously assumed EPSG:2393).
 
 ### mapfull
 
