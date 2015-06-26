@@ -1,5 +1,13 @@
 # Release Notes
 
+## 1.30.4
+
+Userguide styles and analysis localizations fixed.
+
+## 1.30.3
+
+ReleaseNotes updated
+
 ## 1.30.2
 
 Gfi responses of type text/html now allows br-tags
