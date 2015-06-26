@@ -16,6 +16,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.Flyout',
     }, {
 
         /**
+         * @method setEl
+         * @param {Object} el
+         *      reference to the container in browser
+         * @param {Number} width
+         *      container size(?) - not used
+         * @param {Number} height
+         *      container size(?) - not used
+         *
+         * Interface method implementation
+         */
+        setEl: function (el, width, height) {
+            this.container = el[0];
+            if (!jQuery(this.container).hasClass('userguide')) {
+                jQuery(this.container).addClass('userguide');
+            }
+        },
+
+        /**
          * @method startPlugin
          * called by host to start flyout operations
          */
