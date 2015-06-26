@@ -195,6 +195,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
             layerDiv.attr('layer_id', layer.getId());
             layerDiv.find('input').attr('id', 'oskari_layerselector2_layerlist_checkbox_layerid_' + layer.getId());
             layerDiv.find('.layer-title').append(layer.getName());
+            layerDiv.find('.layer-title').click(function(){
+                layerDiv.find('input').prop('checked', !layerDiv.find('input').prop('checked')).trigger('change');
+            });
+
             layerDiv.find('input').change(function () {
                 checkbox = jQuery(this);
                 if (checkbox.is(':checked')) {

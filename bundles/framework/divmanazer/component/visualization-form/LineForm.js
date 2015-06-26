@@ -64,7 +64,7 @@ Oskari.clazz.define(
             '<label>' + this.loc.color.labelOr + '</label>' +
             '</div>' +
             '<div class="color-source-selector">' +
-            '<label>' + this.loc.color.labelCustom + '</label>' +
+            '<label id="color-line-custom-rgb-label" for="color-line-custom-rgb">' + this.loc.color.labelCustom + '</label>' +
             '</div>' +
             '<div class="custom-colors"></div>' +
             '</div>' +
@@ -85,7 +85,7 @@ Oskari.clazz.define(
             '<div class="colorcolumn22"></div>' +
             '</div>' +
             '</div>');
-        this.templateColorSource = jQuery('<input type="checkbox" name="colorInput" value = "custom" class="color-source">');
+        this.templateColorSource = jQuery('<input type="checkbox" name="colorInput" value = "custom" class="color-source" id="color-line-custom-rgb">');
         this.templateColorValue = jQuery('<label class="color-label"></label><br><input type="text" name="color-input" value="0" disabled="disabled" class="custom-color">');
         this.minWidth = 1;
         this.maxWidth = 10;

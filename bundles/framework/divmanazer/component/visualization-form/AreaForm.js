@@ -98,7 +98,7 @@ Oskari.clazz.define(
             '<label>' + this.loc.linecolor.labelOr + '</label>' +
             '</div>' +
             '<div class="color-source-selector-line">' +
-            '<label>' + this.loc.linecolor.labelCustom + '</label>' +
+            '<label for="color-checkbox-0">' + this.loc.linecolor.labelCustom + '</label>' +
             '</div>' +
             '<div class="custom-colors-line"></div>' +
             '</div>' +
@@ -112,7 +112,7 @@ Oskari.clazz.define(
             '<label>' + this.loc.color.labelOr + '</label>' +
             '</div>' +
             '<div class="color-source-selector-fill">' +
-            '<label>' + this.loc.color.labelCustom + '</label>' +
+            '<label for="color-checkbox-1">' + this.loc.color.labelCustom + '</label>' +
             '</div>' +
             '<div class="custom-colors-fill"></div>' +
             '<label>' + this.loc.fill.label + '</label>' +
@@ -335,13 +335,13 @@ Oskari.clazz.define(
                 // Custom color
                 content = dialogContent.find('.color-source-selector-' + me.colorTypes[c]);
                 colorCheckbox = me.templateColorSource.clone();
-                colorCheckbox.attr('id', c + 'color-checkbox');
+                colorCheckbox.attr('id', 'color-checkbox-' + c);
                 // If the default value is not included in the color cells
                 if (me.activeColorCell[c] === -1) {
                     colorCheckbox.attr('checked', true);
                 }
                 colorCheckbox.change(function () {
-                    var colorTypeId = this.id.substring(0, 1);
+                    var colorTypeId = this.id.substring(this.id.length-1, this.id.length);
                     var colorType = (colorTypeId === '0') ? 'lineColor' : 'fillColor';
                     jQuery('input.custom-color.' + me.colorTypes[colorTypeId]).prop('disabled', !this.checked);
                     var cell = me.activeColorCell[colorTypeId].toString();
