@@ -1,5 +1,23 @@
 # Release Notes
 
+## 1.31
+
+### divmanazer/visualization-form
+
+Improved checkbox selection, now custom color selection can be done with clicking label.
+
+### layerselector2
+
+Improved checkbox selection, now layers can be selected/unselected by clicking layer name.
+
+## 1.30.4
+
+Userguide styles and analysis localizations fixed.
+
+## 1.30.3
+
+ReleaseNotes updated
+
 ## 1.30.2
 
 Gfi responses of type text/html now allows br-tags
