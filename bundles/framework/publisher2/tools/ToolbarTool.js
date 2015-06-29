@@ -381,6 +381,16 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             }
 
         },
+        /**
+         *  Manages drawlayer options in checked and unchecked cases
+         *
+         * @param element
+         * @param toolName
+         * @param groupName
+         * @param toolOption
+         * @param toggleToolHandler
+         * @private
+         */
         _toggleDrawTools: function (element, toolName, groupName, toolOption, toggleToolHandler) {
             var me = this,
                 buttonGroup,
@@ -519,6 +529,20 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             });
             return layerSelect;
         },
+        /**
+         * Manages drawlayer change in drawlayerselection
+         * @param addedDrawLayerId   drawlayer id
+         */
+        handleDrawLayerSelectionChanged: function (addedDrawLayerId) {
+            this.publishedmyplaces2Config.layer = addedDrawLayerId;
+            var layerSelect = this._updateDrawLayerSelection();
+            jQuery('.publisher-select-layer').replaceWith(layerSelect);
+        },
+        /**
+         * Add new draw layer button and its handler
+         * @returns {Oskari.userinterface.component.Button}
+         * @private
+         */
         _getAddLayerButton: function () {
             var me = this,
                 addLayerButton;
@@ -532,7 +556,11 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             });
             return addLayerButton;
         },
-
+        /**
+         * Add select-draw-layer-to-mapselection button and its handler
+         * @returns {Oskari.userinterface.component.Button}
+         * @private
+         */
         _getAddSelectLayerButton: function () {
             var me = this,
                 addSelectLayerButton;
