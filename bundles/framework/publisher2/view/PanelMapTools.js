@@ -32,9 +32,55 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
         init: function (pData) {
             var me = this;
             me.data = pData;
-            _.each(me.tools, function(tool) {
+            _.each(me.tools, function (tool) {
                 tool.init();
             });
+
+
+            for (var p in me.eventHandlers) {
+                if (me.eventHandlers.hasOwnProperty(p)) {
+                    me.sandbox.registerForEventByName(me, p);
+                }
+            }
+
+
+        },
+        /**
+         * @method onEvent
+         * @param {Oskari.mapframework.event.Event} event a Oskari event object
+         * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
+         */
+        onEvent: function (event) {
+            var handler = this.eventHandlers[event.getName()];
+            if (!handler) {
+                return;
+            }
+            return handler.apply(this, [event]);
+        },
+        /**
+         * @property {Object} eventHandlers
+         * @static
+         */
+        eventHandlers: {
+            /**
+             * @method MapLayerEvent
+             * @param {Oskari.mapframework.event.common.MapLayerEvent} event
+             *
+             * Calls  handleDrawLayerSelectionChanged() functions
+             */
+            MapLayerEvent: function (event) {
+                var me = this,
+                    toolbarTool = me._getToolbarTool('PublisherToolbarPlugin');
+                if (toolbarTool && (event.getOperation() === 'add')) {
+                    // handleDrawLayerSelectionChanged
+                    toolbarTool.handleDrawLayerSelectionChanged(
+                        event.getLayerId()
+                    );
+                }
+            }
+        },
+        getName: function() {
+            return "Oskari.mapframework.bundle.publisher2.view.PanelMapTools";
         },
         /**
         * Sort tools
@@ -147,6 +193,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             });
 
             return values;
+        },
+        /**
+         * Get tool by name
+         * @returns {Object} tool object
+         */
+        _getToolbarTool: function (name) {
+            var me = this,
+                bartool = null;
+            _.each(me.tools, function (tool) {
+                if( tool.getTool().name === name){
+                  bartool = tool;
+                }
+
+            });
+            return bartool;
         },
 
         /**
