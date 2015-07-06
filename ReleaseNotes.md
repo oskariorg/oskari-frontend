@@ -2,6 +2,10 @@
 
 ## 1.31
 
+### VectorLayerPlugin
+
+Vector layer plugin fixed so that more than one feature can be added at once to the layer.
+
 ### divmanazer/visualization-form
 
 Improved checkbox selection, now custom color selection can be done with clicking label.
