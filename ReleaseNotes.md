@@ -2,6 +2,14 @@
 
 ## 1.31
 
+### routingUI
+
+*New bundle(POC)!* Adds new tool for giving parameters to route and requests route with parameters. Listens RouteSuccessEvent to render route and instructions.
+
+### routingService
+
+*New bundle (POC)!* Gets route from the service with parameters got from UI. Sends RouteSuccessEvent with geoJson and route instructions.
+
 ### VectorLayerPlugin
 
 Vector layer plugin fixed so that more than one feature can be added at once to the layer.
