@@ -216,9 +216,11 @@ Oskari.clazz.define(
                 }
 
                 if (style && style !== null) {
-                    feature.style = style;
+                    for (i=0; i < feature.length; i++) {
+                        featureInstance = feature[i];
+                        featureInstance.style = style;
+                    }
                 }
-
 
                 olLayer.addFeatures(feature);
 
