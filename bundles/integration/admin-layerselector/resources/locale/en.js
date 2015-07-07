@@ -144,6 +144,7 @@ Oskari.registerLocalization({
             "gfiResponseTypeDesc": "Response type for Get Feature Info (GFI)",
             "gfiStyle": "GFI style (XSLT)",
             "gfiStyleDesc": "GFI style (XSLT)",
+            "manualRefresh": "Manual refresh",
             "matrixSetId": "WMTS TileMatrixSet ID",
             "matrixSetIdDesc": "The identifier for WMTS TileMatrixSet",
             "matrixSet": "JSON for WMTS layer",
