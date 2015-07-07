@@ -221,7 +221,14 @@ Oskari.clazz.define(
                 AfterChangeMapLayerStyleEvent: function (event) {
                     me.changeMapLayerStyleHandler(event);
                 },
-
+                /**
+                 * Refresh manual-refresh-flagged wfs layers
+                 * @param event
+                 * @constructor
+                 */
+                WFSRefreshManualLoadLayersEvent: function (event) {
+                    me.refreshManualLoadLayersHandler(event);
+                },
                 /**
                  * @method MapLayerVisibilityChangedEvent
                  * @param {Object} event
@@ -630,7 +637,59 @@ Oskari.clazz.define(
                 layer.setOpacity(opacity);
             });
         },
+        /**
+         * @method  refreshManualLoadLayersHandler
+         * @param {Object} event
+         */
+        refreshManualLoadLayersHandler: function (event) {
+            var bbox,
+                grid,
+                layerId,
+                layers,
+                me = this,
+                map = me.getSandbox().getMap(),
+                srs,
+                tiles,
+                zoom;
 
+            //me.getIO().setMapSize(event.getWidth(), event.getHeight());
+
+            // update tiles
+            srs = map.getSrsName();
+            bbox = map.getExtent();
+            zoom = map.getZoom();
+            grid = me.getGrid();
+
+            // update cache
+            me.refreshCaches();
+
+            layers = me.getSandbox().findAllSelectedMapLayers();
+
+            layers.forEach(function (layer) {
+                if (layer.hasFeatureData() && layer.isManualRefresh()) {
+                    // clean features lists
+                    layer.setActiveFeatures([]);
+                    if (grid !== null && grid !== undefined) {
+                        layerId = layer.getId();
+                        tiles = me.getNonCachedGrid(layerId, grid);
+                        me.getIO().setLocation(
+                            layerId,
+                            srs, [
+                                bbox.left,
+                                bbox.bottom,
+                                bbox.right,
+                                bbox.top
+                            ],
+                            zoom,
+                            grid,
+                            tiles,
+                            true
+                        );
+                        me._tilesLayer.redraw();
+                    }
+                }
+            });
+        },
         /**
          * @method mapSizeChangedHandler
          * @param {Object} event

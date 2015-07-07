@@ -45,6 +45,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                 sandbox = me.getSandbox();
             linkElement.bind('click', function () {
                 sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me._instance, 'detach']);
+                var event = sandbox.getEventBuilder('WFSRefreshManualLoadLayersEvent')();
+                sandbox.notifyAll(event);
                 return false;
             });
         },

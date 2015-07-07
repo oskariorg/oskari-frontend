@@ -249,6 +249,17 @@ if (!Function.prototype.bind) {
                 return null;
             },
             /**
+             * Returns wfs service manual refresh mode
+             * @return {Boolean} true/false
+             */
+            isManualRefresh: function () {
+                var adminBlock = this.getAdmin();
+                if (adminBlock) {
+                    return adminBlock.manualRefresh;
+                }
+                return false;
+            },
+            /**
              * Returns interface url
              * @return {String} url
              */

@@ -616,6 +616,8 @@ define([
                 }
                 data.jobType =  form.find("input[type='radio'][name='jobtype']:checked").val();
 
+                data.manualRefresh =  form.find("input[type='checkbox'][name='manualRefresh']:checked").val();
+
                 data.username = form.find('#add-layer-username').val();
                 data.password = form.find('#add-layer-password').val();
 

@@ -980,6 +980,17 @@ Oskari.clazz.define(
             return this._featureData;
         },
         /**
+         * @method isManualRefresh
+         * @return {Boolean} true/false
+         */
+        isManualRefresh: function () {
+            if (this.getAttributes().manualRefresh){
+                return this.getAttributes().manualRefresh
+            } else {
+                return false;
+            }
+        },
+        /**
          * @method getLayerName
          * @return {String} layer functional (not UI) name
          */
