@@ -13,7 +13,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingService.request.GetRouteR
      * @params {Object}
      *            fromlon, fromlat, tolon, tolat, via, date, time, timetype, via_time, zone, transport_types
      */
-        
     function(params) {
         this._routeparams = params;
     }, {

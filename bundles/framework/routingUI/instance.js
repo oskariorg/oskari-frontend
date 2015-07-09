@@ -49,7 +49,6 @@ function () {
             conf = me.conf,
             sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
             sandbox = Oskari.getSandbox(sandboxName),
-            request,
             p;
 
         this.sandbox = sandbox;
@@ -64,7 +63,7 @@ function () {
         this.localization = me.getLocalization();
 
         // stateful
-        if (conf && conf.stateful === true) {
+        if (conf && conf.stateful) {
             sandbox.registerAsStateful(this.mediator.bundleId, this);
         }
 
@@ -77,12 +76,11 @@ function () {
      */
     registerTool: function() {
         var me = this,
-            loc = this.getLocalization(),
             sandbox = this.getSandbox(),
             reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest'),
             request;
 
-        me.popup = Oskari.clazz.create("Oskari.mapframework.bundle.routingUI.PopupRouting", me),
+        me.popup = Oskari.clazz.create("Oskari.mapframework.bundle.routingUI.PopupRouting", me);
 
         me.buttonGroup = 'viewtools';
         me.toolName = 'routing';
@@ -153,7 +151,7 @@ function () {
             loc = me.localization.routeInstructions;
 
 
-        instructionDiv = '<div><li>' + loc.length + instructions.length + loc.meters + ', ' + loc.duration + instructions.duration + loc.seconds + '</li></div>'
+        instructionDiv = '<div><li>' + loc.length + instructions.length + loc.meters + ', ' + loc.duration + instructions.duration + loc.seconds + '</li></div>';
         me.popup.popupContent.append(instructionDiv);
     }
 }, {

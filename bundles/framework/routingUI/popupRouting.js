@@ -17,14 +17,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.PopupRouting",
         this.sandbox = this.instance.sandbox;
 
         this.loc = this.instance._localization.popup;
-        /*
-
-        this.routingService = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.routingService.service.RoutingServiceBundleInstance',
-                this, this.searchUrl);
-        */
-        
-        /* templates */
 
         this.template = {};
         for (p in this.__templates) {
@@ -52,7 +44,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.PopupRouting",
                 popup = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 popupLoc = this.loc.title,
                 instructions;
-            
             me.popupContent = me.template.wrapper.clone();
 
             instructions = me.template.instructions.clone();
@@ -154,10 +145,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.PopupRouting",
             finishingPointField.getField().addClass("routing-field");
             finishingPointField.setEnabled(false);
             me.popupContent.append(finishingPointField.getField());
-
-
         },
-        
         /**
          * @method setStartingPoint
          * Sets starting point to this.params

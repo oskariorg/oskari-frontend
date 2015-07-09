@@ -40,9 +40,7 @@ function () {
         var me = this,
             conf = me.conf,
             sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
-            sandbox = Oskari.getSandbox(sandboxName),
-            request,
-            p;
+            sandbox = Oskari.getSandbox(sandboxName);
 
         this.sandbox = sandbox;
         sandbox.register(this);
@@ -59,8 +57,9 @@ function () {
          */
         onEvent: function (event) {
             var handler = this.eventHandlers[event.getName()];
-            if (!handler)
+            if (!handler) {
                 return;
+            }
 
             return handler.apply(this, [event]);
         },
@@ -82,8 +81,7 @@ function () {
      *                 vialon - y coordinate of the via point
      *                 via_time - Minimum time spent at a via_point in minutes
      *                 zone - Ticket zone
-     *                 transport_types 
-     * 
+     *                 transport_types
      */
     getRoute: function (params) {
         var me = this;
