@@ -272,7 +272,11 @@ Oskari.registerLocalization(
                 "firstLayerFieldTooltip": "Result attributes from feature layer",
                 "secondLayer": "Source Layer",
                 "secondLayerTooltip": "Select a source map layer. Its attribute data will be retrieved into the feature level.",
-                "secondLayerFieldTooltip": "Result attributes from source layer"
+                "secondLayerFieldTooltip": "Result attributes from source layer",
+                "mode": "Spatial join mode",
+                "modeTooltip": "Choose if you want to use aggregate in spatial join",
+                "normalMode": "Normal spatial join",
+                "aggregateMode": "Aggregate"
             },
             "params": {
                 "label": "Result attributes",

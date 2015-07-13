@@ -271,7 +271,11 @@ Oskari.registerLocalization(
                 "firstLayerFieldTooltip": "Ensimmäisen tason ominaisuustiedot, jotka otetaan analyysiin mukaan. Valitse enintään 10 ominaisuustietoa.",
                 "secondLayer": "Toinen taso",
                 "secondLayerTooltip": "Toinen yhdistettävä taso, jolta ominaisuustiedot haetaan.",
-                "secondLayerFieldTooltip": "Toisen tason ominaisuustiedot, jotka otetaan lopputulokseen mukaan. Valitse enintään 10 ominaisuustietoa."
+                "secondLayerFieldTooltip": "Toisen tason ominaisuustiedot, jotka otetaan lopputulokseen mukaan. Valitse enintään 10 ominaisuustietoa.",
+                "mode": "Analyysimenetelmän tyyppi",
+                "modeTooltip": "Valitse haluatko käyttää analyysissä tunnuslukujen laskentaa",
+                "normalMode": "Tavallinen menetelmä",
+                "aggregateMode": "Tunnuslukujen laskenta"
             },
             "params": {
                 "label": "Lopputulokseen mukaan otettavat ominaisuustiedot",
