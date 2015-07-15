@@ -211,6 +211,7 @@ Oskari.registerLocalization(
                 "label": "Parameters",
                 "tooltip": "Give parameters for the analysis. The parameters depend on the selected filter and method."
             },
+            "showFeatureData" : "Open feature data when analysis is finished",
             "intersect": {
                 "target": "Layer to be intersected",
                 "targetLabelTooltip": "Select a map layer to be intersected with features on the intersecting layer.",

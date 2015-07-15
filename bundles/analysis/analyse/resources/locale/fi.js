@@ -210,6 +210,7 @@ Oskari.registerLocalization(
                 "label": "Parametrit",
                 "tooltip": "Anna parametrit analyysia varten. Parametrit riippuvat valitusta suodattimesta ja menetelmästä."
             },
+            "showFeatureData" : "Avaa kohdetietotaulukko analyysin valmistuttua",
             "intersect": {
                 "target": "Leikattava taso",
                 "targetLabelTooltip": "Analyysitaso, jonka kohteita leikataan leikkaavan tason kohteilla.",

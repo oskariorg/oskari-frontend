@@ -156,6 +156,13 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 '    <span></span>' +
                 '  </label>' +
                 '</div>',
+            checkboxLabel:
+                '<div class="columns_title_label">' +
+                '  <label>' +
+                '    <input type="checkbox" />' +
+                '    <span></span>' +
+                '  </label>' +
+                '</div>',
             radioToolOption:
                 '<div class="tool ">' +
                 '  <label>' +
@@ -518,6 +525,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 'placeholder': me.loc.analyse_name.tooltip
             });
             contentPanel.append(analyseTitle);
+
+            var showFeatureData = me.template.checkboxLabel.clone();
+            showFeatureData.find('input').attr('name', 'showFeatureData');
+            showFeatureData.find('label span').append(me.loc.showFeatureData);
+            contentPanel.append(showFeatureData);
 
             return panel;
         },
@@ -1271,6 +1283,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 }
 
                 contentPanel.append(bufferOptions);
+
+                contentPanel.parent().find('input[name=showFeatureData]').attr('checked', false);
             },
 
             /**
@@ -1324,6 +1338,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         }
                     }
                 });
+                
+                contentPanel.parent().find('input[name=showFeatureData]').attr('checked', true);
 
                 if(me._getNoDataValue()){
                     toolContainer.append(me._param_footer);
@@ -1383,7 +1399,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
             },
 
+            union: function (me,contentPanel) {
+                contentPanel.parent().find('input[name=showFeatureData]').attr('checked', false);
+            },
+
             clip: function (me, contentPanel) {
+                contentPanel.parent().find('input[name=showFeatureData]').attr('checked', false);
                 return me.extraParamBuilders.intersect(me, contentPanel, false);
             },
 
@@ -1422,6 +1443,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     targetLayerElem.html((targetLayer ? targetLayer.label : ''));
                     contentPanel.append(targetLayerElem);
                     me._addTitle(contentPanel, me.loc.spatial.intersectingLayer, me.loc.spatial.intersectingLayerTooltip);
+                    contentPanel.parent().find('input[name=showFeatureData]').attr('checked', true);
                 } else {
                     me._addTitle(contentPanel, me.loc.intersect.target, me.loc.intersect.targetLabelTooltip);
                     targetLayerElem.html((targetLayer ? targetLayer.label : ''));
@@ -1437,6 +1459,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         tool.selected = true;
                     };
                 };
+
                 options.forEach(function (option, i, options) {
                     optionChecked = (i === 0 ? 'checked' : undefined);
                     toolContainer = me.template.radioToolOption.clone();
@@ -1573,6 +1596,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         'id': option.id
                     });
                 }
+
+                contentPanel.parent().find('input[name=showFeatureData]').attr('checked', false);
             },
 
             /**
@@ -1609,6 +1634,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 });
 
                 contentPanel.append(extraParams);
+
+                contentPanel.parent().find('input[name=showFeatureData]').attr('checked', true);
             },
 
             /**
@@ -1723,6 +1750,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 extraParams.append(me._createJoinList(targetLayer));
 
                 contentPanel.append(extraParams);
+
+                contentPanel.parent().find('input[name=showFeatureData]').attr('checked', true);
             },
 
             /**
@@ -1968,6 +1997,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         );
                     });
                 }
+
+                contentPanel.parent().find('input[name=showFeatureData]').attr('checked', true);
             }
         },
 
@@ -2694,6 +2725,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 me = this,
                 mlays,
                 requestBuilder,
+                showFeatureDataReqBuilder,
                 request;
 
             mapLayerService = me.instance.mapLayerService;
@@ -2711,6 +2743,19 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 request = requestBuilder(mapLayer.getId());
                 me.instance.sandbox.request(this.instance, request);
             }
+
+            // show info box if wanted
+            if (me.mainPanel.find('input[name=showFeatureData]').checked = true) {
+                showFeatureDataReqBuilder = me.instance.sandbox.getRequestBuilder(
+                    'ShowFeatureDataRequest'
+                );
+
+                if (showFeatureDataReqBuilder) {
+                    request = showFeatureDataReqBuilder(mapLayer.getId());
+                    me.instance.sandbox.request(this.instance, request);
+                }
+            }
+
             // Remove old layers if any
             if (analyseJson.mergeLayers) {
                 mlays = analyseJson.mergeLayers;

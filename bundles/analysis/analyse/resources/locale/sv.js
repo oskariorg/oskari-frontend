@@ -212,6 +212,7 @@ Oskari.registerLocalization(
                 "label": "Parameter",
                 "tooltip": "Ge analys parameter. Parameter beror på utvald filter och metod."
             },
+            "showFeatureData" : "Open feature data when analysis is finished",
             "intersect": {
                 "target": "Klippandes analyslager",
                 "targetLabelTooltip": "Analyysitaso, jonka kohteita leikataan leikkaavan tason kohteilla.",
