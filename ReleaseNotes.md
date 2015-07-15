@@ -18,6 +18,15 @@ Vector layer plugin fixed so that more than one feature can be added at once to 
 
 Improved checkbox selection, now custom color selection can be done with clicking label.
 
+### Admin layerselector
+
+New checkbox "manual refresh" for WFS layer, when inserting new layers to Oskari environment
+
+### WFSLayerPlugin
+
+Manual refresh event for manual refresh wfs layers. Event is trigged when pushing "Feature Data" button
+
+
 ### layerselector2
 
 Improved checkbox selection, now layers can be selected/unselected by clicking layer name.
