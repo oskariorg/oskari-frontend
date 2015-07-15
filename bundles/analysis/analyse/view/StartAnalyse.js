@@ -2726,7 +2726,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 mlays,
                 requestBuilder,
                 showFeatureDataReqBuilder,
-                request;
+                request,
+                showFeatureData;
+
+            showFeatureData = me.mainPanel.find('input[name=showFeatureData]').checked;
 
             mapLayerService = me.instance.mapLayerService;
             // Create the layer model
@@ -2744,8 +2747,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 me.instance.sandbox.request(this.instance, request);
             }
 
-            // show info box if wanted
-            if (me.mainPanel.find('input[name=showFeatureData]').checked = true) {
+            // show featureData if wanted
+            if (showFeatureData) {
                 showFeatureDataReqBuilder = me.instance.sandbox.getRequestBuilder(
                     'ShowFeatureDataRequest'
                 );
