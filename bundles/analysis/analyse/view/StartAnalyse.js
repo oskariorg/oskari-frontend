@@ -100,7 +100,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
         me.WFSLayerService = me.instance.getSandbox().getService('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
         me._param_footer = me.template.footer.clone();
-        me._param_footer.append(this.loc.aggregate.footer)
+        me._param_footer.append(this.loc.aggregate.footer);
+        me._showFeatureData;
 
     }, {
         __templates: {
@@ -2612,6 +2613,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 selections = me._gatherSelections(),
                 functions = selections.methodParams.functions,
                 i,
+                showFeatureData,
                 showError = function (error) {
                     me.instance.showMessage(
                         me.loc.error.title,
@@ -2619,6 +2621,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     );
                 };
 
+            me._showFeatureData = me.mainPanel.find('input[name=showFeatureData]')[0].checked;
             // Check that parameters are a-okay
             if (me._checkSelections(selections)) {
 
@@ -2729,8 +2732,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 request,
                 showFeatureData;
 
-            showFeatureData = me.mainPanel.find('input[name=showFeatureData]').checked;
-
             mapLayerService = me.instance.mapLayerService;
             // Create the layer model
             mapLayer = mapLayerService.createMapLayer(analyseJson);
@@ -2748,7 +2749,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             }
 
             // show featureData if wanted
-            if (showFeatureData) {
+            if (me._showFeatureData) {
                 showFeatureDataReqBuilder = me.instance.sandbox.getRequestBuilder(
                     'ShowFeatureDataRequest'
                 );
