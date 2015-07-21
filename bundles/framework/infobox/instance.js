@@ -126,8 +126,18 @@ function() {
 		 * @method MapClickedEvent
 		 */
 		MapClickedEvent : function(e) {
-		}
+		},
+		'Publisher2.ColourSchemeChangedEvent': function(evt){
+            this._handleColourSchemeChangedEvent(evt);
+        },
+        'Publisher.ColourSchemeChangedEvent': function(evt){
+            this._handleColourSchemeChangedEvent(evt);
+        }
 	},
+
+	_handleColourSchemeChangedEvent: function(evt){
+		this.popupPlugin._changeColourScheme(evt.getColourScheme());
+    },
 
 	/**
 	 * @method stop

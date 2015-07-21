@@ -44,7 +44,6 @@ function() {
         if(enabled === true) {
             me.__plugin.showClassificationOptions(true);
         } else {
-            //me.__plugin.stopPlugin(me.__sandbox);
             me.__plugin.showClassificationOptions(false);
         }
 

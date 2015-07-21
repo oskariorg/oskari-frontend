@@ -98,8 +98,24 @@ Oskari.clazz.define(
                 },
                 'Realtime.RefreshLayerEvent': function (evt) {
                     this._refreshGfiInfo('update', evt.getMapLayer().getId());
+                },
+                'Publisher2.ColourSchemeChangedEvent': function(evt){
+                    this._handleColourSchemeChangedEvent(evt);
+                },
+                'Publisher.ColourSchemeChangedEvent': function(evt){
+                    this._handleColourSchemeChangedEvent(evt);
                 }
             };
+        },
+
+        _handleColourSchemeChangedEvent: function(evt){
+            if(this._config) {
+                this._config.colourScheme = evt.getColourScheme();
+            } else {
+                this._config = {
+                    colourScheme: evt.getColourScheme()
+                };
+            }
         },
 
         _createRequestHandlers: function () {
