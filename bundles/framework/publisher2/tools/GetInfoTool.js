@@ -143,7 +143,7 @@ function() {
             return {
                 mapfull: {
                     conf: {
-                        plugins: [{ 
+                        plugins: [{
                             id: this.getTool().id,
                             config: {
                                 colourScheme: me.values.colourScheme || {},
@@ -542,7 +542,7 @@ function() {
      */
     _getCssRgb: function (rgb) {
         return 'rgb(' + rgb.red + ', ' + rgb.green + ', ' + rgb.blue + ')';
-    },   
+    },
 
     /**
      * Sends an event to notify interested parties that the colour scheme has changed.

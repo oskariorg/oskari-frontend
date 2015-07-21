@@ -1339,7 +1339,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         }
                     }
                 });
-                
+
                 contentPanel.parent().find('input[name=showFeatureData]').attr('checked', true);
 
                 if(me._getNoDataValue()){
@@ -2471,7 +2471,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 var spatialOperator = container.find('input[name=spatial_join_mode]:checked').val();
             } else {
                 var spatialOperator = container.find('input[name=spatial]:checked').val();
-            }            
+            }
             spatialOperator = spatialOperator && spatialOperator.replace(this.id_prefix, '');
 
             // layer union
