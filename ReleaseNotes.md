@@ -26,10 +26,15 @@ New checkbox "manual refresh" for WFS layer, when inserting new layers to Oskari
 
 Manual refresh event for manual refresh wfs layers. Event is trigged when pushing "Feature Data" button
 
-
 ### layerselector2
 
 Improved checkbox selection, now layers can be selected/unselected by clicking layer name.
+
+### publisher2
+
+Added GetInfoTool. GetInfoTool has now colous schema selection on extra options.
+
+PanelMapSize renamed to PanelMapPreview. PanelMapPreview allow select map preview mode in two different modes (mobile/desktop).
 
 ## 1.30.4
 
