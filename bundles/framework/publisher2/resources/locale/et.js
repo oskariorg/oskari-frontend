@@ -43,8 +43,8 @@ Oskari.registerLocalization(
                 "tooltip": "Vali kaardiliidese ja kaardiandmete keel."
             },
             "size": {
-                "label": "Suurus",
-                "tooltip": "Vali või määra veebikohas põimitava kaardi suurus. Kaardi eelvaade kuvatakse valitud suuruses."
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Tööriistad",
@@ -168,7 +168,8 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Näita kaardikihte menüüs",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Vali taustakaardid. Võid määrata vaikimisi taustakaardi kaardi eelvaate aknas.",
                 "tooltip": "Taustakaarti kuvatakse kaardil kõige alumise kihina. Kui valid kõige alumiseks kihiks kaardikihte, on ainult üks kiht korraga nähtav ja võid nende vahel valida. Eelvaatele on võimalik valida vaikimisi taustakaardi.",
                 "promote": "Kas näidata aeropilte?"

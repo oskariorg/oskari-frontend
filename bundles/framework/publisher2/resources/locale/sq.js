@@ -43,8 +43,8 @@ Oskari.registerLocalization(
                 "tooltip": "Zgjedh gjuhën e ndërveprimit të hartës dhe të dhënave të hartës"
             },
             "size": {
-                "label": "Madhësia",
-                "tooltip": "Përzgjedh apo defino madhësinë e hartës që do të futet në ueb faqen tuaj. Parapamja e hartës suaj është paraqitur në madhësinë e zgjedhur"
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Veglat (mjetet)",
@@ -166,7 +166,8 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Paraqit shtresat e hartës në meny",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Përzgjedh hartat në sfond. Ju mund ta vendosni sfondin e parazgjedhur të hartës në dritaren e hartës për parapamje për shtypje",
                 "tooltip": "Harta në sfond paraqitet si shtresa e fundit e hartës. Kur i zgjedhni shtresat e hartës që të përdoren si shtresë e fundit, vetëm nga një shtresë mund të duket njëkohësisht, dhe ju mund të kaloni nga njëra tek tjetra. Ju mund ta vendosni hartën në sfond të parazgjedhur në hartën me parapamje",
                 "promote": "Paraqit imazhet ajrore?"

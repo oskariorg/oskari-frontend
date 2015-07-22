@@ -43,8 +43,8 @@ Oskari.registerLocalization(
                 "tooltip": "Valitse kieli, jota upotetussa kartassa käytetään. Valinta vaikuttaa sekä käyttöliittymään että kartta-aineistoon."
             },
             "size": {
-                "label": "Kartan koko",
-                "tooltip": "Valitse koko, jossa upotettu kartta esitetään verkkosivulla. Leveyden on oltava vähintään 30 pikseliä ja korkeuden vähintään 20 pikseliä. Desimaalierottimena on piste. Valinnan tulokset esitetään esikatselukartassa."
+                "label": "Kartan esikatselu",
+                "tooltip": "Valitse tila, jossa haluat esikatsella karttaa. Valinnan tulokset esitetään esikatselukartassa."
             },
             "maptools": {
                 "label": "Kartalla näytettävät työkalut",
@@ -143,14 +143,8 @@ Oskari.registerLocalization(
                 }
             },
             "sizes": {
-                "small": "Pieni",
-                "medium": "Keskikokoinen",
-                "large": "Suuri",
-                "fill": "Tilan täyttävä",
-                "custom": "Määritä oma koko",
-                "width": "leveys",
-                "height": "korkeus",
-                "separator": "x"
+                "mobile": "Mobiili",
+                "desktop": "Työpöytä"
             },
             "buttons": {
                 "save": "Tallenna",
@@ -167,7 +161,8 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Näytä karttatasovalikko upotetussa kartassa.",
+                "label": "Karttatasovalikko",
+                "fieldLabel": "Näytä karttatasovalikko upotetussa kartassa.",
                 "info": "Valitse taustakarttoina näytettävät karttatasot. Oletusvalinnan voit tehdä esikatselukartassa.",
                 "tooltip": "Taustakarttataso näkyy karttanäkymässä alimmaisena. Jos valitset useampia karttatasoja taustakarttatasoksi, kartalla näkyy kerralla vain yksi taustakarttataso. Käyttäjä voi halutessaan vaihtaa taustakarttatasoa. Oletusvalinnan voit tehdä esikatselukartassa.",
                 "promote": "Haluatko näyttää kartalla myös ilmakuvia?"

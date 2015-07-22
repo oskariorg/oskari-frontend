@@ -43,8 +43,8 @@ Oskari.registerLocalization(
                 "tooltip": "Seleccione el idioma de la interfaz y de los datos del mapa"
             },
             "size": {
-                "label": "Tamaño",
-                "tooltip": "Seleccione o defina el tamaño del mapa que se incorporará en su portal web. La previsualización del mapa se mostrará en el tamaño seleccionado"
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Herramientas",
@@ -169,7 +169,8 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Mostrar las capas en el menú",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Seleccione los mapas de fondo. Puede configurar el mapa de fondo en la ventana de previsualización del mapa",
                 "tooltip": "El mapa de fondo se muestra como la capa de fondo del mapa. Cuando seleccione las capas que va a utilizar como fondo, sólo una es visible cada vez, pudiendo intercambiarlas. Puede configurar el mapa de fondo por defecto en la previsualización del mapa",
                 "promote": "¿Mostrar imágenes por defecto?"

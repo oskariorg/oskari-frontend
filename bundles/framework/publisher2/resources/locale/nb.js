@@ -43,8 +43,8 @@ Oskari.registerLocalization(
                 "tooltip": "Velg språk for grensesnitt og data på kartet"
             },
             "size": {
-                "label": "Størrelse",
-                "tooltip": "Velg eller angi størrelsen på kartet som skal bygges inne på ditt nettsted. Du kan se endringer i vinduet for forhåndsvisning."
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Verktøy",
@@ -169,7 +169,8 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Vis kartlag i menyen",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Velg kartlag som bakgrunn.Du kan velge standard bakgrunnslag i vinduet for forhåndsvisning",
                 "tooltip": "Bakgrunnen er vist i det nederste kartlaget. Kun ett kartlag kan bli vises om gangen.  Brukeren kan skifte bakgrunn dersom det er valgt flere lag. Standard kartlag kan velges i forhåndsvisningen.",
                 "promote": "Vil du også vise satellitt/flyfoto?"

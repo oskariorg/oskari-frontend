@@ -43,8 +43,8 @@ Oskari.registerLocalization(
                 "tooltip": "Vybrať jazyk mapového rozhrania a mapových údajov"
             },
             "size": {
-                "label": "Veľkosť",
-                "tooltip": "Vyberte alebo zadefinujte veľkosť mapy, ktorá má byť vložená na Vašu webovú stránku. Náhľad mapy je zobrazený vo vybratej veľkosti"
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Nástroje",
@@ -168,7 +168,8 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Zobraziť mapové vrstvy v menu",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Vyberte podkladové mapy. Môžete si zvoliť predvolenú podkladovú mapu v okne pre náhľad mapy",
                 "tooltip": "Podkladová mapa je zobrazená ako spodná vrstva na mape. Keď si zvolíte aby sa mapové vrstvy použili ako spodná vrstva, iba jedna vrstva bude viditeľná a Vy môžete medzi nimi prepínať. Predvolenú podkladovú mapu si môžete nastaviť v zobrazení mapy",
                 "promote": "Zobraziť letecké snímky?"

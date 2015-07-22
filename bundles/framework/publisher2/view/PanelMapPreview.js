@@ -1,10 +1,10 @@
 /**
- * @class Oskari.mapframework.bundle.publisher2.view.PanelMapSize
+ * @class Oskari.mapframework.bundle.publisher2.view.PanelMapPreview
  *
  * Represents the basic info (name, domain, language) view for the publisher
  * as an Oskari.userinterface.component.AccordionPanel
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapSize',
+Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview',
 
     /**
      * @method create called automatically on construction
@@ -22,29 +22,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapSize',
         me.sandbox = sandbox;
         me.mapmodule = mapmodule;
         me.sizeOptions = [{
-            id: 'small',
+            id: 'mobile',
             width: 580,
             height: 387
         }, {
-            // default option
-            id: 'medium',
-            width: 700,
-            height: 525,
-            selected: true
-        }, {
-            id: 'large',
-            width: 1240,
-            height: 700
-        }, {
-            id: 'fill',
+            id: 'desktop',
             width: '',
-            height: ''
-        }, {
-            id: 'custom',
-            minWidth: 30,
-            minHeight: 20,
-            maxWidth: 4000,
-            maxHeight: 2000
+            height: '',
+            selected: true
         }];
 
         me.selected =  me.sizeOptions.filter(function (option) {
@@ -65,31 +50,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapSize',
                 },
                 options: me.sizeOptions.map(function (option) {
                     var title = me.loc.sizes[option.id];
-                    if ('custom' !== option.id && 'fill' !== option.id) {
-                        title = me._getSizeLabel(title, option);
-                    }
+                   
                     return {
                         title: title,
                         value: option.id
                     };
                 }),
                 value: me.selected.id
-            },
-            width: {
-                clazz: 'Oskari.userinterface.component.TextInput',
-                handler: function () {
-                    me.updateMapSize();
-                },
-                placeholder: me.loc.sizes.width,
-                value: me.selected.width
-            },
-            height: {
-                clazz: 'Oskari.userinterface.component.TextInput',
-                handler: function () {
-                    me.updateMapSize();
-                },
-                placeholder: me.loc.sizes.height,
-                value:me.selected.height
             }
         };
 
@@ -293,29 +260,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapSize',
         },
 
         /**
-         * @private @method _validateNumberRange
-         * Validates number in range
-         *
-         * @param {Object} value number to validate
-         * @param {Number} min min value
-         * @param {Number} max max value
-         *
-         * @return {Boolean} Number validity
-         */
-        _validateNumberRange: function (value, min, max) {
-            var ret = true;
-
-            if (isNaN(parseInt(value, 10))) {
-                ret = false;
-            } else if (!isFinite(value)) {
-                ret = false;
-            } else if (value < min || value > max) {
-                ret = false;
-            }
-            return ret;
-        },
-
-        /**
          * @private @method _getSelectedMapSize
          * Returns an object containing the user seleted/set map size and the corresponding size option
          *
@@ -330,13 +274,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapSize',
                 height = option.height,
                 validWidth = true,
                 validHeight = true;
-
-            if (option.id === 'custom') {
-                width = parseInt(me.panel.getContainer().find('.customsize input[name=width]').val(), 10);
-                height = parseInt(me.panel.getContainer().find('.customsize input[name=height]').val(), 10);
-                validWidth = me._validateNumberRange(width, option.minWidth, option.maxWidth);
-                validHeight = me._validateNumberRange(height, option.minHeight, option.maxHeight);
-            }
 
             return {
                 valid: validWidth && validHeight,
@@ -387,7 +324,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapSize',
                     data.field = field;
                 }
             }
-
             panel.setTitle(me.loc.size.label);
             tooltipCont.attr('title', me.loc.size.tooltip);
             contentPanel.append(tooltipCont);
@@ -451,34 +387,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapSize',
             return values;
         },
 
-        /**
-         * Returns any errors found in validation or an empty
-         * array if valid. Error object format is defined in Oskari.userinterface.component.FormInput
-         * validate() function.
-         *
-         * @method validate
-         * @return {Object[]}
-         */
-        validate: function () {
-            var errors = [],
-                fkey,
-                data,
-                selected = me._getSelectedMapSize();
-
-            for (fkey in this.fields) {
-                if (this.fields.hasOwnProperty(fkey)) {
-                    data = this.fields[fkey];
-                    errors = errors.concat(data.field.validate());
-                }
-            }
-            if(selected.validHeight === false) {
-                errors.push('no_valid_height');
-            }
-            if(selected.validWidth === false) {
-                errors.push('no_valid_width');
-            }
-            return errors;
-        },
         /**
         * Stop panel.
         * @method stop

@@ -43,8 +43,8 @@ Oskari.registerLocalization(
                 "tooltip": "Izberi jezik za uporabniški vmesnik karte in kartografske podatke."
             },
             "size": {
-                "label": "Velikost",
-                "tooltip": "Izberi ali določi velikost karte, ki bo vstavljena v spletno stran. Predogled karte je v tej izbrani velikosti."
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Orodja",
@@ -169,7 +169,8 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Pokaži sloje karte v meniju",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Izberi slog karte za ozadje. V oknu Predogled lahko določiš privzet sloj karte za ozadje.",
                 "tooltip": "Karta za ozadje je prikazana kot spodnji sloj karte. Ko izbiraš sloje karte, ki bodo uporabljeni kot spodnji sloj, bo od teh viden samo en sloj naenkrat in lahko preklapljaš med njimi. Privzeto karto za ozadje lahko nastaviš v predogledu karte.",
                 "promote": "Prikaži aeroposnetke?"

@@ -43,8 +43,8 @@ Oskari.registerLocalization(
                 "tooltip": "Selecione a língua do interface e dos dados da carta"
             },
             "size": {
-                "label": "Dimensão",
-                "tooltip": "Selecione ou defina a dimensão da carta a embutir no seu sítio web. A pré-visualização é apresentada na dimensão escolhida"
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Ferramentas",
@@ -166,7 +166,8 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Mostrar camadas no menu",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Selecionar cartografia de fundo. Pode definir a carta de fundo na janela de pré-visualização",
                 "tooltip": "A carta de fundo corresponde à camada mais baixa da carta. Quando uma camada é escolhida como mais baixa, só se pode visualizar uma camada de cada vez. Pode definir a camada de fundo na pré-visualização",
                 "promote": "Ver fotografia aérea?"

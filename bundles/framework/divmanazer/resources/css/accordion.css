@@ -23,3 +23,7 @@ div.accordion div.accordion_panel {
     display: inline-block;
     font-weight: bold;
     padding: 8px 10px 8px 12px; }
+
+    div.accordion div.accordion_panel div.header {
+      cursor: pointer;
+    }

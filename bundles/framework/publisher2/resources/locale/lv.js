@@ -43,8 +43,8 @@ Oskari.registerLocalization(
                 "tooltip": "Izvēlēties kartes saskarnes un kartes datu valodu"
             },
             "size": {
-                "label": "Izmērs",
-                "tooltip": "Izvēlaties vai iestatiet izmēru kartei, kas tiks iegulta jūsu tīmekļa vietnē. Kartes priekšskatījums tiks attēlots izvēlētajā lielumā"
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Rīki",
@@ -168,7 +168,8 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Rādīt izvēlnē kartes slāņus",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Izvēlēties fona kartes. Iestatīt noklusējuma fona karti kartes priekšskatījuma logā",
                 "tooltip": "Fona karte ir redzama kā kartes apakšējais slānis. Izvēloties kartes līmeņus izmantot kā apakšējo kārtu, vienlaikus ir redzams tikai viens slānis, un jūs varat pārslēgties starp tām. Var iestatīt noklusējuma fona karti kartes priekšskatījums",
                 "promote": "Vai rādīt aerofoto ainas?"

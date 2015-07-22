@@ -43,8 +43,8 @@ Oskari.registerLocalization(
                 "tooltip": "Välj språk för kartmaterial och användargränssnitt."
             },
             "size": {
-                "label": "Storlek",
-                "tooltip": "Välj eller definiera storleken på kartan för att bäddas in på din webbplats.  Kartan förhandsvisas i den valda storleken."
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Verktyg",
@@ -168,7 +168,8 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Visa kartlagren i menyn",
+                "label": "Kartlagren meny",
+                "fieldLabel": "Visa kartlagren i menyn",
                 "info": "Välj bakgrundskartlager. Du kan göra förval i förhandsgranskningsvyn.",
                 "tooltip": "Bakgrundskartlagret syns som kartans nedersta lager. När du väljer kartan som används som bakgrundskarta syns endast ett lager i taget och du kan växla mellan dem. Du kan göra förval i förhandsgranskningsvyn.",
                 "promote": "Vill du också visa flygbilder?"
