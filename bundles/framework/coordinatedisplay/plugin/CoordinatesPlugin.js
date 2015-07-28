@@ -15,7 +15,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatedisplay.plugin.Coordin
         this._clazz =
             'Oskari.mapframework.bundle.coordinatedisplay.plugin.CoordinatesPlugin';
         this._defaultLocation = 'top right';
-        this._index = 6;
+        this._index = 7;
         this._name = 'CoordinatesPlugin';
     }, {
         /**

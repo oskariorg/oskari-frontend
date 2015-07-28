@@ -1,0 +1,69 @@
+
+.mapplugin.coordinatetool {
+  position:relative;
+  margin: 0 auto;
+  z-index: 15000;
+  cursor: pointer;
+  width: 35px;
+  height: 35px;
+  margin-bottom: 10px !important;
+  background-repeat: no-repeat !important;
+}
+
+.mapplugin.coordinatetool.toolstyle-default{
+  background-image: url('../images/coordinates-style1-dark.png') !important;  
+}
+
+.mapplugin.coordinatetool.toolstyle-default.active{
+  background-image: url('../images/coordinates-style1-dark-active.png') !important;
+}
+
+.mapplugin.coordinatetool.toolstyle-rounded-dark{
+  background-image: url('../images/coordinates-style1-dark.png') !important;
+}
+
+.mapplugin.coordinatetool.toolstyle-rounded-dark.active{
+  background-image: url('../images/coordinates-style1-dark-active.png') !important;
+}
+
+.mapplugin.coordinatetool.toolstyle-rounded-light{
+  background-image: url('../images/coordinates-style1-light.png') !important;
+}
+
+.mapplugin.coordinatetool.toolstyle-rounded-light.active{
+  background-image: url('../images/coordinates-style1-light-active.png') !important;
+}
+
+
+.mapplugin.coordinatetool.toolstyle-sharp-dark{
+  background-image: url('../images/coordinates-style2-dark.png') !important;
+}
+
+.mapplugin.coordinatetool.toolstyle-sharp-dark.active{
+  background-image: url('../images/coordinates-style2-dark-active.png') !important;
+}
+
+.mapplugin.coordinatetool.toolstyle-sharp-light{
+  background-image: url('../images/coordinates-style2-light.png') !important;
+}
+
+.mapplugin.coordinatetool.toolstyle-sharp-light.active{
+  background-image: url('../images/coordinates-style2-light-active.png') !important;
+}
+
+
+.mapplugin.coordinatetool.toolstyle-3d-dark{
+  background-image: url('../images/coordinates-style3-dark.png') !important;
+}
+
+.mapplugin.coordinatetool.toolstyle-3d-dark.active{
+  background-image: url('../images/coordinates-style3-dark-active.png') !important;
+}
+
+.mapplugin.coordinatetool.toolstyle-3d-light{
+  background-image: url('../images/coordinates-style3-light.png') !important;
+}
+
+.mapplugin.coordinatetool.toolstyle-3d-light.active{
+  background-image: url('../images/coordinates-style3-light-active.png') !important;
+}
