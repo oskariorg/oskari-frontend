@@ -50,7 +50,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
                 },
                 options: me.sizeOptions.map(function (option) {
                     var title = me.loc.sizes[option.id];
-                   
+
                     return {
                         title: title,
                         value: option.id

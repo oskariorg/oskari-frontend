@@ -111,8 +111,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             html += '<div style="margin-top:10px;"><div style="width:56px;float:left;padding-top:7px;">E / lon:</div><div style="float:left;"><input type="text"></input></div><div style="clear:both;"></div></div>';
             html += '<div style="margin-top:10px;"><input type="checkbox" id="mousecoordinates"></input><label for="mousecoordinates">Näytä hiiren koordinaatit</label></div>';
             popup.find('.content').html(html);
-            
-        
+
+
             // Store coordinate value elements so we can update them fast
     //        me._latEl = el.find('div > div:last-child')[0];
 //            me._lonEl = el.find('div > div:last-child')[1];
@@ -213,7 +213,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             }
 
             var styleClass = 'toolstyle-' + (style ? style : 'default');
-            
+
             var classList = el.attr('class').split(/\s+/);
             for(var c=0;c<classList.length;c++){
                 var className = classList[c];
@@ -221,9 +221,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     el.removeClass(className);
                 }
             }
-            
-            
-            
+
+
+
             el.addClass(styleClass);
         },
     }, {
