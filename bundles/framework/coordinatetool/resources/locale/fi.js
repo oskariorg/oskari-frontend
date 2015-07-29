@@ -13,8 +13,8 @@ Oskari.registerLocalization(
             },
             "popup": {
                 "title": "Koordinaatit",
-                "searchButton": "Hae",
-                "info": "Klikkaa sijaintia kartalla nähdäksesi koordinaatit tai syötä koordinaatit ja hae",
+                "searchButton": "Keskitä kartta",
+                "info": "Klikkaa sijaintia kartalla nähdäksesi koordinaatit tai syötä koordinaatit ja paina 'Keskitä kartta'",
                 "showMouseCoordinates": "Näytä hiiren kursorin koordinaatit"
             },
             "compass": {

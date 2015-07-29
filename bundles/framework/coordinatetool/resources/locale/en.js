@@ -13,8 +13,8 @@ Oskari.registerLocalization(
             },
             "popup": {
                 "title": "Coordinates",
-                "searchButton": "Search",
-                "info": "Click the location on the map to view the coordinates or enter the coordinates and search",
+                "searchButton": "Center map",
+                "info": "Click the location on the map to view the coordinates or enter the coordinates and click 'Center map'",
                 "showMouseCoordinates": "Show mouse cursor coordinates"
             },
             "compass": {

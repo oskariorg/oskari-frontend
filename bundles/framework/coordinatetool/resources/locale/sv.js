@@ -13,7 +13,7 @@ Oskari.registerLocalization(
             },
             "popup": {
                 "title": "Koordinater",
-                "searchButton": "Sök",
+                "searchButton": "Centrum karta",
                 "info": "Klicka på den plats på kartan för att se koordinaterna eller mata in koordinaterna och sök",
                 "showMouseCoordinates": "Visa musen koordinaterna"
             },
