@@ -47,7 +47,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         /**
          * Get popup-
          * @method @private _getPopup
-         * 
+         *
          * @return {Object} jQuery popup object
          */
         _getPopup: function(){
@@ -114,7 +114,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         /**
          * Seet inputs disabled
          * @method  @private _setDisabledInputs
-         * 
+         *
          * @param {Boolean} disabled  disabled or not
          * @param {Boolean} clearText clear input values
          */
@@ -131,10 +131,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         /**
          * Validate lon and lat inputs.
          * @method  @private _isValidLonLat
-         * 
+         *
          * @param  {Object} lon lon coordinate
          * @param  {Object lat lat coordinate
-         * 
+         *
          * @return {Boolean} is valid or not
          */
         _isValidLonLat: function(lon,lat){
@@ -153,7 +153,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         /**
          * Center map to selected coordinates.
          * @method  @private _centerMapToSelectedCoordinates
-         * 
+         *
          * @return {[type]} [description]
          */
         _centerMapToSelectedCoordinates: function(){
@@ -163,7 +163,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 loc = me._locale;
             if(me._isValidLonLat(lonVal,latVal)) {
                 var moveReqBuilder = me._sandbox.getRequestBuilder('MapMoveRequest');
-                var moveReq = moveReqBuilder(lonVal, latVal);  
+                var moveReq = moveReqBuilder(lonVal, latVal);
                 me._sandbox.request(this, moveReq);
             } else {
                 if(!me._dialog) {
@@ -232,8 +232,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             popup.find('.oskari-button').unbind('click');
             popup.find('.oskari-button').bind('click', function(){
                 me._centerMapToSelectedCoordinates();
-            });            
-            
+            });
+
             // Set element on variables for later use
             me._popup = popup;
             me._latInput = popupContent.find('.lat-input');
@@ -263,7 +263,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         /**
          * Updates the given coordinates to the UI
          * @method @public refresh
-         * 
+         *
          * @param {Object} data contains lat/lon information to show on UI
          */
         refresh: function (data) {
@@ -283,7 +283,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             } else {
                 me._updateLonLat(data);
             }
-            
+
 
             // Change the style if in the conf
             if (conf && conf.toolStyle) {
@@ -334,7 +334,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                  */
                 MapClickedEvent: function (event) {
                     if(!this._showMouseCoordinates) {
-                        var lonlat = event.getLonLat(); 
+                        var lonlat = event.getLonLat();
                         this.refresh({
                             'lonlat': {
                                 'lat': Math.floor(lonlat.lat),
