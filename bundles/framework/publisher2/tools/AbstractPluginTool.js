@@ -16,6 +16,7 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     this.__instance = instance;
     this.__plugin = null;
     this.__handlers = handlers;
+    this.__started = false;
     this.state= {
         enabled: false,
         mode:null
@@ -68,8 +69,11 @@ function(sandbox, mapmodule, localization, instance, handlers) {
 
         if(enabled === true) {
             me.__plugin.startPlugin(me.__sandbox);
+            me.__started = true;
         } else {
-            me.__plugin.stopPlugin(me.__sandbox);
+            if(me.__started === true) {
+                me.__plugin.stopPlugin(me.__sandbox);
+            }
         }
 
         if(enabled === true && me.state.mode !== null && me.__plugin && typeof me.__plugin.setMode === 'function'){

@@ -43,8 +43,8 @@ Oskari.registerLocalization(
                 "tooltip": "Оберіть мову інтерфейсу карти та картографічних даних"
             },
             "size": {
-                "label": "Розмір",
-                "tooltip": "Оберіть розмір вбудованої карти. Попередній перегляд карти буде відображено у цьому розмірі."
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Інструменти",
@@ -166,7 +166,8 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Показувати шари в меню карти",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Оберіть фонову карту. Ви можете обрати типову фонову карту у вікні попереднього перегляду карти",
                 "tooltip": "Фонова карта показується як найнижчий шар карти. Якщо виберете декілька шарів як фонові, то лише один з них буде видимий і ви зможете переключатись між ними. Типовий фоновий шар ви можете встановити у вікні попереднього перегляду карти.",
                 "promote": "Показувати аерофотознімки?"

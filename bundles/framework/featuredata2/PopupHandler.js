@@ -164,7 +164,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
             selectFromTop.find('span').html(this.loc.selectFromTop);
             selectFromTop.find('input').attr('checked', true);
             selectFromAll.find('span').html(this.loc.selectAll);
-            
+
             selectFromTop.bind('click', function () {
                 me.WFSLayerService.setSelectFromAllLayers(false);
             });

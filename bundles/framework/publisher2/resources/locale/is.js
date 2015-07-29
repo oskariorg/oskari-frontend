@@ -43,8 +43,8 @@ Oskari.registerLocalization(
                 "tooltip": "Veldu tungumál fyrir notendaviðmótið og gögnin."
             },
             "size": {
-                "label": "Stærð",
-                "tooltip": "NOT TRANSLATED"
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Verkfæri",
@@ -168,7 +168,8 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Sýna kortalög í valmynd.",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Veldu bakgrunnskort. Hægt er að stilla sjálfgefin bakgrunnskort í forskoðunarglugganum.",
                 "tooltip": "NOT TRANSLATED",
                 "promote": "Sýna loftmyndir?"

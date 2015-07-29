@@ -800,7 +800,7 @@ Oskari.clazz.define(
         _deactivateSelectTools: function () {
             var me = this,
                 toolsPanel = me.getDrawToolsPanel();
-            
+
             if (toolsPanel.html.find('div[class*=selection-]').hasClass('active')) {
                 toolsPanel.html.find('div[class*=selection-]').removeClass('active');
                 me.selectionPlugin.stopDrawing();

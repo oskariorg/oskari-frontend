@@ -45,8 +45,8 @@ Oskari.registerLocalization({
                 "tooltip": "Vyberte jazyk prostředí a dat mapy."
             },
             "size": {
-                "label": "Velikost",
-                "tooltip": "Vyberte nebo definujte velikost mapy pro vložení do vaší webové stránky. Náhled mapy je zobrazen ve vybrané velikosti."
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Nástroje",
@@ -121,7 +121,8 @@ Oskari.registerLocalization({
                 }
             },
             "layerselection": {
-                "label": "Zobraz mapové vrstvy v menu",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Vyberte mapy pozadí. Defaultní mapu pozadí můžete nastavit v okně náhledu mapy.",
                 "tooltip": "Mapa pozadí je zobrazena jako spodní vrstva mapy. Když vyberete mapové vrstvy jako spodní vrstvu, bude vždy viditelná jen jedna vrstva. Mezi mapami pozadí lze přepínat. Defaultní mapu pozadí můžete nastavit v okně náhledu mapy.",
                 "promote": "Zobrazit letecké snímky?"

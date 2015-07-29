@@ -43,8 +43,8 @@ Oskari.registerLocalization(
                 "tooltip": "Scegli una lingua per l'interfaccia utente della mappa e per i dati mostrati in mappa"
             },
             "size": {
-                "label": "Dimensione",
-                "tooltip": "Scegli o definisci la dimensione della mappa da incorporare al tuo sito web. Puoi vedere i cambiamenti nell'anteprima della mappa"
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Strumenti",
@@ -169,7 +169,8 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Mosra i layer nel menu",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Seleziona il layer da usare come sfondo. Puoi selezionare lo sfondo predefinito nell'anteprima della mappa",
                 "tooltip": "Il layer di sfondo è mostrato come layer inferiore nella mappa. Può essere visualizzato un solo layer di sfondo alla volta. L'utente può cambiare lo sfondo della mappa se ci sono più layer selezionati come sfondo. Il layer di sfondo predefinito può essere selezionato nell'anteprima della mappa",
                 "promote": "Desideri visualizzare anche le immagini aeree?"

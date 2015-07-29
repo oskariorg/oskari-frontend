@@ -43,8 +43,8 @@ Oskari.registerLocalization(
                 "tooltip": "Kies de taal van de kaartinterface en kaartgegevens."
             },
             "size": {
-                "label": "Grootte",
-                "tooltip": "Selecteer of definieer de grootte van de kaart die wordt geïntegreerd op uw website. De voorbeeldweergave van de kaart wordt weergegeven in de geselecteerde grootte."
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Gereedschappen",
@@ -168,7 +168,8 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Toon de kaartlagen in het menu",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Selecteer achtergrondkaarten. U kunt de standaard achtergrondkaart instellen in het kaartvoorbeeldvenster.",
                 "tooltip": "De achtergrondkaart wordt getoond als de onderste laag. Wanneer u kaartlagen selecteert om te worden gebruikt als de onderste laag, dan is slechts één laag tegelijk zichtbaar en kunt u schakelen tussen deze lagen U kunt de standaard achtergrondkaart instellen in het kaartvoorbeeldvenster.",
                 "promote": "Luchtfoto's weergeven?"

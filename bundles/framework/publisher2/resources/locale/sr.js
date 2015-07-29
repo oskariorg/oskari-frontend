@@ -43,8 +43,8 @@ Oskari.registerLocalization(
                 "tooltip": "Izaberi jezik i podatke na mapi"
             },
             "size": {
-                "label": "Veličina",
-                "tooltip": "Izaberi ili definiši veličinu mape koja će biti ugrađena u vašu web prezentaciju. Mapa se prikazuje u izabranoj veličini."
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Alati",
@@ -167,7 +167,8 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Prikaz slojeva u meniju",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Izaberi osnovnu mapu. Možete da podesite početnu osnovnu mapu.",
                 "tooltip": "Osnovna mapa je prikazana kao sloj u pozadini. Samo jedan odabrani sloj može biti u pozadini. Možete podesiti početnu osnovnu mapu.",
                 "promote": "Prikaži avio slike?"

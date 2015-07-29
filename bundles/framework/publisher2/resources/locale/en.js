@@ -43,8 +43,8 @@ Oskari.registerLocalization(
                 "tooltip": "Select the laguage for the map user interface and data shown on the map."
             },
             "size": {
-                "label": "Size",
-                "tooltip": "Select or define the size of the map to be embedded on your website. You can see changes in the map preview."
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Tools",
@@ -169,6 +169,8 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "label": "Show map layers at the menu.",
                 "info": "Select the background map layer. You can select the default background map layer in the map preview.",
                 "tooltip": "The background map layer is shown at the bottom layer of the map. Only one background map layer can be shown at a time. The user can change the background map if there is more map layers selected to background maps. The default backgound map layer can be selected in the map preview.",

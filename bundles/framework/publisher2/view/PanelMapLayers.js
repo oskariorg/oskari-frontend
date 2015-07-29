@@ -376,7 +376,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
 
             // layer selection
             var toolContainer = this.templateTool.clone();
-            toolContainer.find('label').attr('for', 'show-map-layers-checkbox').append(this.loc.layerselection.label);
+            toolContainer.find('label').attr('for', 'show-map-layers-checkbox').append(this.loc.layerselection.fieldLabel);
             if (this.showLayerSelection) {
                 toolContainer.find('input').attr('checked', 'checked');
             }

@@ -126,16 +126,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             _.each(tools, function(tool) {
                 var ui = jQuery(me.templates.tool({name : tool.getName() }));
                 // TODO: setup values when editing an existing map
-                ui.find('input').change(function() {
-                    tool.setEnabled(jQuery(this).is(':checked'));
-                });
 
                 var extraOptions = tool.getExtraOptions(ui);
                 if(extraOptions) {
-                    ui.find(".extraOptions").append(extraOptions);
+                    ui.find('.extraOptions').append(extraOptions);
                 }
-                contentPanel.append(ui);
 
+                ui.find('input').change(function() {
+                    var enabled = jQuery(this).is(':checked');
+                    tool.setEnabled(enabled);
+                    if(enabled) {
+                        ui.find('.extraOptions').show();
+                    } else {
+                        ui.find('.extraOptions').hide();
+                    }
+                });
+
+                var initStateEnabled = ui.find('input').is(':checked');
+                tool.setEnabled(initStateEnabled);
+                if(initStateEnabled) {
+                    ui.find('.extraOptions').show();
+                } else {
+                    ui.find('.extraOptions').hide();
+                }
+
+                contentPanel.append(ui);
             });
             me.panel = panel;
             return panel;

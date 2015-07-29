@@ -171,9 +171,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             me.panels.push(genericInfoPanel);
             accordion.addPanel(genericInfoPanel.getPanel());
 
-            var mapSizePanel = me._createMapSizePanel();
-            me.panels.push(mapSizePanel);
-            accordion.addPanel(mapSizePanel.getPanel());
+            var mapPreviewPanel = me._createMapPreviewPanel();
+            me.panels.push(mapPreviewPanel);
+            accordion.addPanel(mapPreviewPanel.getPanel());
 
             var mapLayersPanel = me._createMapLayersPanel();
             me.panels.push(mapLayersPanel);
@@ -256,11 +256,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
          * @private @method _createMapSizePanel
          * Creates the Map Sizes panel of publisher
          */
-        _createMapSizePanel: function () {
+        _createMapPreviewPanel: function () {
             var me = this,
                 sandbox = this.instance.getSandbox(),
                 mapModule = sandbox.findRegisteredModuleInstance("MainMapModule"),
-                form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapSize',
+                form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview',
                     sandbox, mapModule, me.loc, me.instance
                 );
 

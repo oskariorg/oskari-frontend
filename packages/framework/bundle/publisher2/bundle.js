@@ -81,7 +81,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher2.PublisherBundle", fun
         },
         {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/publisher2/view/PanelMapSize.js"
+            "src": "../../../../bundles/framework/publisher2/view/PanelMapPreview.js"
         },
         {
             "type": "text/javascript",
@@ -126,6 +126,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher2.PublisherBundle", fun
         {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher2/tools/ClassifyTool.js"
+        },
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/publisher2/tools/GetInfoTool.js"
         },
 
         {
@@ -194,7 +198,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher2.PublisherBundle", fun
         },{
             "lang" : "is",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/catalogue/metadatacatalogue/resources/locale/is.js"
+            "src" : "../../../../bundles/framework/publisher2/resources/locale/is.js"
         }, {
             "lang": "lv",
             "type": "text/javascript",

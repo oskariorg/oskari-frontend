@@ -514,7 +514,11 @@ Oskari.clazz.define(
          * @param {String} id popup id
          */
         _changeColourScheme: function (colourScheme, div, id) {
-            div = div || jQuery('div#' + id);
+            if (id) {
+                div = div || jQuery('div#' + id) || jQuery('.olPopup:visible');
+            } else {
+                div = div || jQuery('.olPopup:visible');
+            }
 
             if (!colourScheme || !div) {
                 return;

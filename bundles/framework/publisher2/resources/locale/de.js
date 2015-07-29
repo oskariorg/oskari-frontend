@@ -45,8 +45,8 @@ Oskari.registerLocalization({
                 "tooltip": "Wählen Sie die Sprache der Benutzeroberfläche und Kartendaten."
             },
             "size": {
-                "label": "Größe",
-                "tooltip": "Wählen oder definieren Sie die Größe der Karte, die auf Ihrer Webseite eingebunden werden soll. Die Kartenvorschau wird in der gewählten Größe angezeigt."
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Werkzeuge",
@@ -121,7 +121,8 @@ Oskari.registerLocalization({
                 }
             },
             "layerselection": {
-                "label": "Zeige die Kartenebenen im Menü",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Wählen Sie Ihre Hintergrundkarten. Im Vorschaufenster können Sie eine Hintergrundkarte als Standard festlegen.",
                 "tooltip": "Die Hintergrundkarte wird als unterste Ebene der Karte angezeigt. Wenn Sie mehrere Hintergrundkarten ausgewählt haben, ist nur eine Hintergrundkarte sichtbar, Sie können zwischen diesen wechseln.  Im Vorschaufenster können Sie eine Hintergrundkarte als Standard festlegen.",
                 "promote": "Luftbilder anzeigen?"

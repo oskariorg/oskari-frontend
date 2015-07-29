@@ -2,6 +2,10 @@
 
 ## 1.31
 
+### coordinatestool
+
+*New  bundle!* Add new tool to show or set coordinates. Tool can present mouse move coordinates or map click coordinates to lon and lat inputs. You can also write your coordinates and then center map here.
+
 ### routingUI
 
 *New bundle(POC)!* Adds new tool for giving parameters to route and requests route with parameters. Listens RouteSuccessEvent to render route and instructions.
@@ -26,10 +30,19 @@ New checkbox "manual refresh" for WFS layer, when inserting new layers to Oskari
 
 Manual refresh event for manual refresh wfs layers. Event is trigged when pushing "Feature Data" button
 
-
 ### layerselector2
 
 Improved checkbox selection, now layers can be selected/unselected by clicking layer name.
+
+### publisher2
+
+Added GetInfoTool. GetInfoTool has now colous schema selection on extra options.
+
+PanelMapSize renamed to PanelMapPreview. PanelMapPreview allow select map preview mode in two different modes (mobile/desktop).
+
+### mapmodule-plugin/MapModule
+
+Added getMaxExtent function. This return max map extent.
 
 ## 1.30.4
 

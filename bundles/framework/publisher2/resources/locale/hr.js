@@ -42,8 +42,8 @@ Oskari.registerLocalization({
                 "tooltip": "Odaberi jezik sučelja karte i podataka o karti."
             },
             "size": {
-                "label": "Veličina",
-                "tooltip": "Odaberi ili odredi veličinu karte koja će biti umetnuta u internet stranicu. Prethodni pregled karte prikazuje se u odabranoj veličini."
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Alati",
@@ -165,7 +165,8 @@ Oskari.registerLocalization({
                 }
             },
             "layerselection": {
-                "label": "Prikaži slojeve karte u izborniku",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Odaberi karte pozadine. Možete postaviti zadanu pozadinsku kartu u preglednom prozoru karte.",
                 "tooltip": "Karta pozadine prikazuje se kao donji sloj karte. Kod odabira slojeva karte koji će se koristiti kao donji sloj u jednom trenutku vidljiv je samo jedan sloj i moguće se prebacivati iz sloja u sloj.U  prozoru pregleda moguće je postaviti zadanu pozadinsku kartu.",
                 "promote": "Prikaz zračnih snimki?"

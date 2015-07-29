@@ -236,7 +236,7 @@ Oskari.registerLocalization(
                 "area_count_tooltip": "Count between 0-12",
                 "area_size": "Buffer size",
                 "area_size_tooltip": "Size",
-                "sector_count": "Sector amount", 
+                "sector_count": "Sector amount",
                 "sector_count_tooltip": "Count between 0-12"
             },
             "difference": {

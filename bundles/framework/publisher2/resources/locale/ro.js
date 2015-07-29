@@ -43,8 +43,8 @@ Oskari.registerLocalization(
                 "tooltip": "Selectare limba pentru  interfaţă hărţii şi a datelor de hartă"
             },
             "size": {
-                "label": "Dimensiune",
-                "tooltip": "Selectare sau definire dimensiune hartă ce va fi înglobată în web site-ul dvs. Previzualizarea hărţii este afişată în dimensiunea selectată"
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Instrumente",
@@ -167,7 +167,8 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Afişare straturi de hartă în meniu",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Selectare hartă suport. Puteţi seta harta suport implicită în fereastra de previzualizare a hărţii",
                 "tooltip": "Harta suport este afişată ca ultimul strat al hărţii. Când selectaţi straturiel de hartă ce vor fi folosite ca ultim strat al hărţii, numai un strat va fi vizibil la un moment dat şi le puteţi inversa. Puteţi seta stratul suport implicit în previzualizarea hărţii",
                 "promote": "Afişaţi imaginile aeriene?"
