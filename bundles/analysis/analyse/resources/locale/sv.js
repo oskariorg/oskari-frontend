@@ -213,6 +213,8 @@ Oskari.registerLocalization(
                 "tooltip": "Ge analys parameter. Parameter beror på utvald filter och metod."
             },
             "showFeatureData" : "Open feature data when analysis is finished",
+            "showValuesCheckbox" : "Show calculated values without saving result",
+            "featureDataPopup" : "Aggregate values",
             "intersect": {
                 "target": "Klippandes analyslager",
                 "targetLabelTooltip": "Analyysitaso, jonka kohteita leikataan leikkaavan tason kohteilla.",

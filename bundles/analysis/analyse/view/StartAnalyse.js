@@ -101,7 +101,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         me.WFSLayerService = me.instance.getSandbox().getService('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
         me._param_footer = me.template.footer.clone();
         me._param_footer.append(this.loc.aggregate.footer);
-        me._showFeatureData;
+        me._showFeatureDataAfterAnalysis;
+        me._showFeatureDataWithoutSaving;
 
     }, {
         __templates: {
@@ -529,6 +530,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
             var showFeatureData = me.template.checkboxLabel.clone();
             showFeatureData.find('input').attr('name', 'showFeatureData');
+            showFeatureData.find('input').attr('id', 'showFeatureDataAfterAnalysis');
             showFeatureData.find('label span').append(me.loc.showFeatureData);
             contentPanel.append(showFeatureData);
 
@@ -1340,7 +1342,22 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     }
                 });
                 
-                contentPanel.parent().find('input[name=showFeatureData]').attr('checked', true);
+                var showDataInput = contentPanel.parent().find('#showFeatureDataAfterAnalysis');
+                showDataInput.attr('checked', true);
+
+                var showValuesCheckbox = me.template.checkboxLabel.clone();
+                showValuesCheckbox.addClass('show_data_in_popup');
+                showValuesCheckbox.find('input').attr('id', 'showFeatureDataWithoutSaving');
+                showValuesCheckbox.find('label span').append(me.loc.showValuesCheckbox);
+                contentPanel.parent().append(showValuesCheckbox);
+
+                showValuesCheckbox.find('input').change(function () {
+                    if (showValuesCheckbox.find('input')[0].checked) {
+                        showDataInput.attr({'checked': false, 'disabled' : true});
+                    } else {
+                        showDataInput.attr('disabled', false);
+                    }
+                });
 
                 if(me._getNoDataValue()){
                     toolContainer.append(me._param_footer);
@@ -2219,6 +2236,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             // Remove old content
             contentPanel.empty();
 
+            if (contentPanel.parent().find('.show_data_in_popup')) {
+                contentPanel.parent().find('.show_data_in_popup').remove();
+            }
+
             // Empty the attribute selector for preserved layer attributes
             // And create it unless the selected method is aggregate,
             // in which case create a dropdown to select an attribute to aggregate
@@ -2613,7 +2634,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 selections = me._gatherSelections(),
                 functions = selections.methodParams.functions,
                 i,
-                showFeatureData,
                 showError = function (error) {
                     me.instance.showMessage(
                         me.loc.error.title,
@@ -2621,7 +2641,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     );
                 };
 
-            me._showFeatureData = me.mainPanel.find('input[name=showFeatureData]')[0].checked;
+            me._showFeatureDataAfterAnalysis = me.mainPanel.find('input[name=showFeatureData]')[0].checked;
+            me._showFeatureDataWithoutSaving = me.mainPanel.find('#showFeatureDataWithoutSaving')[0].checked;
             // Check that parameters are a-okay
             if (me._checkSelections(selections)) {
 
@@ -2729,58 +2750,237 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 mlays,
                 requestBuilder,
                 showFeatureDataReqBuilder,
-                request,
-                showFeatureData;
+                request;
 
             mapLayerService = me.instance.mapLayerService;
             // Create the layer model
             mapLayer = mapLayerService.createMapLayer(analyseJson);
-            // Add the layer to the map layer service
-            mapLayerService.addLayer(mapLayer);
 
-            // Request the layer to be added to the map.
-            // instance.js handles things from here on.
-            requestBuilder = me.instance.sandbox.getRequestBuilder(
-                'AddMapLayerRequest'
-            );
-            if (requestBuilder) {
-                request = requestBuilder(mapLayer.getId());
-                me.instance.sandbox.request(this.instance, request);
-            }
+            if (me._showFeatureDataWithoutSaving) {
+                me._showFeatureDataPopup(mapLayer);
+            } else {
+                // Add the layer to the map layer service
+                mapLayerService.addLayer(mapLayer);
 
-            // show featureData if wanted
-            if (me._showFeatureData) {
-                showFeatureDataReqBuilder = me.instance.sandbox.getRequestBuilder(
-                    'ShowFeatureDataRequest'
+                // Request the layer to be added to the map.
+                // instance.js handles things from here on.
+                requestBuilder = me.instance.sandbox.getRequestBuilder(
+                    'AddMapLayerRequest'
                 );
-
-                if (showFeatureDataReqBuilder) {
-                    request = showFeatureDataReqBuilder(mapLayer.getId());
+                if (requestBuilder) {
+                    request = requestBuilder(mapLayer.getId());
                     me.instance.sandbox.request(this.instance, request);
                 }
-            }
 
-            // Remove old layers if any
-            if (analyseJson.mergeLayers) {
-                mlays = analyseJson.mergeLayers;
-                if (mlays.length > 0) {
-                    // TODO: shouldn't maplayerservice send removelayer request by default on remove layer?
-                    // also we need to do it before service.remove() to avoid problems on other components
-                    var removeMLrequestBuilder =
-                        me.instance.sandbox.getRequestBuilder(
-                            'RemoveMapLayerRequest'
-                        );
+                // show featureData if wanted
+                if (me._showFeatureDataAfterAnalysis) {
+                    showFeatureDataReqBuilder = me.instance.sandbox.getRequestBuilder(
+                        'ShowFeatureDataRequest'
+                    );
 
-                    for (i in mlays) {
-                        if (mlays.hasOwnProperty(i)) {
-                            request = removeMLrequestBuilder(mlays[i]);
-                            me.instance.sandbox.request(me.instance, request);
-                            mapLayerService.removeLayer(mlays[i]);
+                    if (showFeatureDataReqBuilder) {
+                        request = showFeatureDataReqBuilder(mapLayer.getId());
+                        me.instance.sandbox.request(this.instance, request);
+                    }
+                }
+
+                // Remove old layers if any
+                if (analyseJson.mergeLayers) {
+                    mlays = analyseJson.mergeLayers;
+                    if (mlays.length > 0) {
+                        // TODO: shouldn't maplayerservice send removelayer request by default on remove layer?
+                        // also we need to do it before service.remove() to avoid problems on other components
+                        var removeMLrequestBuilder =
+                            me.instance.sandbox.getRequestBuilder(
+                                'RemoveMapLayerRequest'
+                            );
+
+                        for (i in mlays) {
+                            if (mlays.hasOwnProperty(i)) {
+                                request = removeMLrequestBuilder(mlays[i]);
+                                me.instance.sandbox.request(me.instance, request);
+                                mapLayerService.removeLayer(mlays[i]);
+                            }
                         }
                     }
                 }
             }
         },
+
+        _showFeatureDataPopup: function (mapLayer) {
+            var me = this,
+                layer = mapLayer,
+                popup =  Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                model = Oskari.clazz.create('Oskari.userinterface.component.GridModel'),
+                grid = Oskari.clazz.create('Oskari.userinterface.component.Grid', me.instance.getLocalization('columnSelectorTooltip')),
+                k;
+           
+            model.setIdField('__fid');
+
+            // hidden fields (hide all - remove if not empty)
+            var hiddenFields = layer.getFields().slice(0);
+
+            // get data
+            var fields = layer.getFields().slice(0),
+                locales = layer.getLocales().slice(0),
+                features = layer.getActiveFeatures().slice(0),
+                selectedFeatures = layer.getSelectedFeatures().slice(0); // filter
+
+            me._addFeatureValues(model, fields, hiddenFields, features, selectedFeatures);
+            me._addFeatureValues(model, fields, hiddenFields, selectedFeatures, null);
+
+            fields = model.getFields();
+            hiddenFields.push('__fid');
+            hiddenFields.push('__centerX');
+            hiddenFields.push('__centerY');
+            hiddenFields.push('geometry');
+
+            popup.fields = fields;
+            popup.locales = locales;
+
+            // localizations
+            if (locales) {
+                for (k = 0; k < locales.length; k += 1) {
+                    grid.setColumnUIName(fields[k], locales[k]);
+                }
+            }
+
+            // helper function for visibleFields
+            var contains = function (a, obj) {
+                for (var i = 0; i < a.length; i += 1) {
+                    if (a[i] === obj) {
+                        return true;
+                    }
+                }
+                return false;
+            };
+
+            // filter out certain fields
+            var visibleFields = [],
+                i;
+
+            for (i = 0; i < fields.length; i += 1) {
+                if (!contains(hiddenFields, fields[i])) {
+                    visibleFields.push(fields[i]);
+                }
+            }
+
+            grid.setVisibleFields(visibleFields);
+            grid.setColumnSelector(true);
+            grid.setResizableColumns(true);
+
+            popup.grid = grid;
+
+            popup.grid.setDataModel(model);
+            me._addNumericColumnRenderers(popup.grid);
+            
+            popup.show(this.loc.featureDataPopup, popup.grid);
+        },
+        
+        /**
+         * @method _addFeatureValues
+         * @private
+         * @param {Oskari.userinterface.component.GridModel} grid
+         * @param {Object[]} features
+         *
+         * Adds features to the model data
+         */
+
+        _addFeatureValues: function (model, fields, hiddenFields, features, selectedFeatures) {
+            var i,
+                j,
+                k,
+                featureData,
+                urlLink,
+                values;
+
+            eachFeature:
+                for (i = 0; i < features.length; i += 1) {
+                    featureData = {};
+                    values = features[i];
+
+                    // remove from selected if in feature list
+                    if (selectedFeatures !== null && selectedFeatures !== undefined && selectedFeatures.length > 0) {
+                        for (k = 0; k < selectedFeatures.length; k += 1) {
+                            if (values[0] === selectedFeatures[k][0]) { // fid match
+                                selectedFeatures.splice(k, 1);
+                            }
+                        }
+                    }
+
+                    for (j = 0; j < fields.length; j += 1) {
+                        if (values[j] === null || values[j] === undefined || values[j] === '') {
+                            featureData[fields[j]] = '';
+                        } else {
+                            // Generate and url links
+                            if (this._isUrlValid(values[j])) {
+                                if (values[j].substring(0, 4) === 'http') {
+                                    urlLink = values[j];
+                                } else {
+                                    urlLink = 'http://' + values[j];
+                                }
+                                featureData[fields[j]] = '<a href="' + urlLink + '" target="_blank">' + values[j] + '</a>';
+                            } else {
+                                featureData[fields[j]] = values[j];
+                            }
+                            // remove from empty fields
+                            this.remove_item(hiddenFields, fields[j]);
+                        }
+                    }
+
+                    // Remove this when better solution to handle duplicates is implemented
+                    var tableData = model.getData();
+                    for (j = 0; j < tableData.length; j += 1) {
+                        if (tableData[j].__fid === featureData.__fid) {
+                            continue eachFeature;
+                        }
+                    }
+
+                    model.addData(featureData);
+                }
+        },
+
+        /**
+         * @method _addNumericColumnRenderers
+         * @private
+         * @param {Grid} Grid instance
+         * Adds column renderers for numeric columns, each renderer rendering
+         * the numbers with the highest decimal count found in the column.
+         */
+        _addNumericColumnRenderers: function (grid) {
+            var dataArray = grid.getDataModel().data,
+                visibleFields = grid.getVisibleFields(),
+                decimals = {};
+
+            var closureMagic = function (decimalCount) {
+                return function (value) {
+                    var parsed = parseFloat(value);
+                    if (!isNaN(parsed)) {
+                        return parsed.toFixed(decimalCount);
+                    } else {
+                        return value;
+                    }
+                };
+            };
+
+            jQuery.each(visibleFields, function(index, field) {
+                var fieldValues = jQuery.grep(dataArray || [], function(value, index) {
+                    return index === field;
+                });
+
+                var isNumber = Oskari.util.isNumber(fieldValues, true);
+                if(isNumber) {
+                    decimals[field] = Oskari.util.decimals(fieldValues);
+                    if (decimals[field]) {
+                        grid.setColumnValueRenderer(
+                            field,
+                            closureMagic(decimals[field])
+                        );
+                    }
+                }
+            });
+        },
+
 
         /**
          * @private @method _saveAnalyse
