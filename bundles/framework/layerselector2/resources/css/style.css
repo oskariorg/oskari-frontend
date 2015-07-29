@@ -14,7 +14,7 @@ div.layerselector2 div.layer {
     margin-right: 5px; }
     div.layerselector2 div.layer input[type=checkbox] {
       margin-top: -2px; }
-  div.layerselector2 div.layer div.layer-title {
+  div.layerselector2 div.layer label.layer-title {
     /* Let's just imagine this is tabular data... */
     font-size: 12px; }
   div.layerselector2 div.layer div.layer-tools {
