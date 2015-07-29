@@ -24,6 +24,11 @@ Oskari.registerLocalization(
             "tooltip" : {
                 "tool": "Show/Hide coordinates tool",
                 "close": "Close"
+            },
+            "checkValuesDialog": {
+                "button": "OK",
+                "title": "Check values",
+                "message": "Check the coordinate values"
             }
         }
     }

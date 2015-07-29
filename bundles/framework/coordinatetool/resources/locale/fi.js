@@ -24,6 +24,11 @@ Oskari.registerLocalization(
             "tooltip" : {
                 "tool": "Näytä/Sulje koordinaatit työkalu",
                 "close": "Sulje"
+            },
+            "checkValuesDialog": {
+                "button": "OK",
+                "title": "Tarkista arvot",
+                "message": "Tarkista koordinaattikenttien arvot"
             }
         }
     }

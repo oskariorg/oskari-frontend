@@ -24,6 +24,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         this._popup = null;
         this._latInput = null;
         this._lonInput = null;
+        this._dialog = null;
         this._templates = {
             coordinatetool: jQuery('<div class="mapplugin coordinatetool"></div>'),
             popup: jQuery('<div class="coordinatetool__popup divmanazerpopup">'+
@@ -158,13 +159,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         _centerMapToSelectedCoordinates: function(){
             var me = this,
                 lonVal = me._lonInput.val(),
-                latVal = me._latInput.val();
+                latVal = me._latInput.val(),
+                loc = me._locale;
             if(me._isValidLonLat(lonVal,latVal)) {
                 var moveReqBuilder = me._sandbox.getRequestBuilder('MapMoveRequest');
                 var moveReq = moveReqBuilder(lonVal, latVal);  
                 me._sandbox.request(this, moveReq);
             } else {
-                alert('tarkista koordinaattien arvot');
+                if(!me._dialog) {
+                    var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                    me._dialog = dialog;
+                }
+                var btn = me._dialog.createCloseButton(loc.checkValuesDialog.button);
+                btn.addClass('primary');
+                me._dialog.show(loc.checkValuesDialog.title, loc.checkValuesDialog.message, [btn]);
             }
         },
 

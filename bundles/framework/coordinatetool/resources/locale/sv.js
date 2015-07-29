@@ -24,6 +24,11 @@ Oskari.registerLocalization(
             "tooltip" : {
                 "tool": "Visa/stäng koordinaterna verktyget",
                 "close": "Stäng"
+            },
+             "checkValuesDialog": {
+                "button": "OK",
+                "title": "Kontrollsummevärden",
+                "message": "Kontrollera koordinatvärdena för fälten"
             }
         }
     }
