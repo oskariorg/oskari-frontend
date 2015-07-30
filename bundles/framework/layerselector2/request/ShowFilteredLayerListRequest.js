@@ -14,8 +14,9 @@ Oskari.clazz
      * @param {String}
      *            id layer identifier so we can select correct tab
      */
-        function(filterFunction) {
+        function(filterFunction, selectedFilter) {
             this._filterFunction = filterFunction;
+            this._selectedFilter = selectedFilter;
     }, {
         /** @static @property __name request name */
         __name : "ShowFilteredLayerListRequest",
@@ -28,10 +29,17 @@ Oskari.clazz
         },
         /**
          * @method getFilterFunction
-         * @return {String} a function used for filtering the map layers' list
+         * @return {Function} a function used for filtering the map layers' list
          */
         getFilterFunction : function() {
             return this._filterFunction;
+        },
+        /**
+         * @method  getSelectedFilter
+         * @return {String} default selected filter
+         */
+        getSelectedFilter: function(){
+            return this._selectedFilter;
         }
     }, {
         /**

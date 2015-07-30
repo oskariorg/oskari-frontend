@@ -24,9 +24,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.request.ShowFilte
             var layerSelector = this.sandbox.findRegisteredModuleInstance('LayerSelector'),
                 layerSelectorFlyout = layerSelector.plugins['Oskari.userinterface.Flyout'];
 
-            layerSelectorFlyout.setLayerListFilteringFunction(request.getFilterFunction());
-            this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [layerSelector, 'attach']);
-            layerSelectorFlyout.populateLayers();
+            if(request.getFilterFunction()) {
+                layerSelectorFlyout.setLayerListFilteringFunction(request.getFilterFunction());
+                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [layerSelector, 'attach']);
+                layerSelectorFlyout.populateLayers();
+            } else if(request.getSelectedFilter()){
+                layerSelectorFlyout.enableFilter(request.getSelectedFilter());
+            }
         }
     }, {
         /**

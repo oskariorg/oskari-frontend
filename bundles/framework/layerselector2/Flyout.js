@@ -159,6 +159,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                 }
             }
         },
+        /**
+         * Hande selected filter request
+         * @method  public enableFilter
+         * @param  {String} selectedFilter selected filter, can be a 'stats', 'newest' or 'publishable'
+         */
+        enableFilter: function(selectedFilter) {
+            var me = this,
+                filterButton = jQuery('.layer-filter .filter-'+selectedFilter).first();
+            filterButton.trigger('click');
+        },
 
         getContentState: function () {
             //"use strict";
