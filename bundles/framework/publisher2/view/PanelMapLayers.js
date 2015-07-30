@@ -90,8 +90,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
 
         me.showLayerSelection = false;
         me._sliders = {};
-        me.addLayerListFilterRequestHandler = Oskari.clazz.create('Oskari.mapframework.bundle.layerselector2.request.AddLayerListFilterRequestHandler', me.sandbox, me.hasPublishRight);
-        me.sandbox.addRequestHandler("AddLayerListFilterRequest", me.addLayerListFilterRequestHandler);
     }, {
         /**
          * @method init
@@ -856,7 +854,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
             return slider;
         },
         _openExtension: function (name) {
-            var requestName = 'AddLayerListFilterRequest';
+            var requestName = 'ShowFilteredLayerListRequest';
             this.instance.getSandbox().postRequestByName(
                 requestName,
                 [this.hasPublishRight]

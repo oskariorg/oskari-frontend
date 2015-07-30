@@ -1,8 +1,8 @@
 /**
- * @class Oskari.mapframework.bundle.layerselector2.request.AddLayerListFilterRequestHandler
- * Handles Oskari.mapframework.bundle.layerselector2.request.AddLayerListFilterRequest to filter layerlist by some condition.
+ * @class Oskari.mapframework.bundle.layerselector2.request.ShowFilteredLayerListRequestHandler
+ * Handles Oskari.mapframework.bundle.layerselector2.request.ShowFilteredLayerListRequest to filter layerlist by some condition.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.request.AddLayerListFilterRequestHandler',
+Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.request.ShowFilteredLayerListRequestHandler',
     /**
      * @method create called automatically on construction
      * @static

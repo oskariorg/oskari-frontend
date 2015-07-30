@@ -38,6 +38,8 @@ Added filter buttons on each tabs. User can now filter layers.
 
 Now not show group if group has not any layers.
 
+Renamed AddLayerListFilterRequest to ShowFilteredLayerListRequest.
+
 ### publisher2
 
 Added GetInfoTool. GetInfoTool has now colous schema selection on extra options.

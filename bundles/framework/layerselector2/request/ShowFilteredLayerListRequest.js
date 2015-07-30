@@ -1,12 +1,12 @@
 /**
- * @class Oskari.mapframework.bundle.layerselector2.request.AddLayerListFilterRequest
+ * @class Oskari.mapframework.bundle.layerselector2.request.ShowFilteredLayerListRequest
  * Forces filtering of the layers based on publishing rights for example.
  *
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
 Oskari.clazz
-    .define('Oskari.mapframework.bundle.layerselector2.request.AddLayerListFilterRequest',
+    .define('Oskari.mapframework.bundle.layerselector2.request.ShowFilteredLayerListRequest',
     /**
      * @method create called automatically on construction
      * @static
@@ -18,7 +18,7 @@ Oskari.clazz
             this._filterFunction = filterFunction;
     }, {
         /** @static @property __name request name */
-        __name : "AddLayerListFilterRequest",
+        __name : "ShowFilteredLayerListRequest",
         /**
          * @method getName
          * @return {String} request name
