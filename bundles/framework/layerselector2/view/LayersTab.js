@@ -128,7 +128,7 @@ Oskari.clazz.define(
         /**
          * Create UI
          * @method  @private _createUI
-         * 
+         *
          * @param  {String} oskarifieldId oskari field id
          */
         _createUI: function (oskarifieldId) {
@@ -217,7 +217,7 @@ Oskari.clazz.define(
             jQuery('.filter-newest').attr('title', me._locale.layerFilter.tooltips.remove);
             me._removeLayerFilters('stats');
             me._removeLayerFilters('publishable');
-            
+
             jQuery(newest).each(function(index, layer){
                 ids.push(layer.getId());
             });
@@ -272,7 +272,7 @@ Oskari.clazz.define(
         /**
          * Send selected filter to flyout
          * @method  @private _sendFilter
-         * 
+         *
          * @param  {Object} filterFunction filter function
          */
         _sendFilter: function(filterFunction){
@@ -287,7 +287,7 @@ Oskari.clazz.define(
         /**
          * Remove filters
          * @method  @private _removeLayerFilters
-         * 
+         *
          * @param  {String} filter the removable filter, if null then all cleared
          */
         _removeLayerFilters: function(filter){
@@ -313,7 +313,7 @@ Oskari.clazz.define(
         /**
          * Get filter field
          * @method  @public getFilterField
-         * 
+         *
          * @return {Oskari.userinterface.component.FormInput} field
          */
         getFilterField: function () {
@@ -374,7 +374,7 @@ Oskari.clazz.define(
         /**
          * Show layer groups
          * @method  @public showLayerGroups
-         * 
+         *
          * @param  {Array} groups
          */
         showLayerGroups: function (groups) {
