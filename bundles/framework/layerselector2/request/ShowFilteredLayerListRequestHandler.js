@@ -9,8 +9,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.request.ShowFilte
      * @param {Oskari.mapframework.bundle.featuredata2.plugin.mapmodule.OpenlayersPopupPlugin} featureData
      *          reference to featureData
      */
-    function(sandbox) {
+    function(sandbox, instance) {
         this.sandbox = sandbox;
+        this.instance = instance;
     }, {
         /**
          * @method handleRequest
@@ -30,6 +31,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.request.ShowFilte
                 layerSelectorFlyout.populateLayers();
             } else if(request.getSelectedFilter()){
                 layerSelectorFlyout.enableFilter(request.getSelectedFilter());
+            }
+
+            if(request.getOpenLayerList() && request.getOpenLayerList() === true){
+                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this.instance, 'attach']);
             }
         }
     }, {

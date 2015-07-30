@@ -109,7 +109,7 @@ Oskari.clazz.define(
             sandbox.request(me, request);
 
             // create and register request handler
-            var reqHandler = Oskari.clazz.create('Oskari.mapframework.bundle.layerselector2.request.ShowFilteredLayerListRequestHandler', sandbox);
+            var reqHandler = Oskari.clazz.create('Oskari.mapframework.bundle.layerselector2.request.ShowFilteredLayerListRequestHandler', sandbox, this);
             sandbox.addRequestHandler('ShowFilteredLayerListRequest', reqHandler);
 
             // draw ui

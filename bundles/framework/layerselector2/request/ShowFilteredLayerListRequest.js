@@ -14,9 +14,10 @@ Oskari.clazz
      * @param {String}
      *            id layer identifier so we can select correct tab
      */
-        function(filterFunction, selectedFilter) {
+        function(filterFunction, selectedFilter, openLayerList) {
             this._filterFunction = filterFunction;
             this._selectedFilter = selectedFilter;
+            this._openLayerList = openLayerList;
     }, {
         /** @static @property __name request name */
         __name : "ShowFilteredLayerListRequest",
@@ -40,6 +41,13 @@ Oskari.clazz
          */
         getSelectedFilter: function(){
             return this._selectedFilter;
+        },
+        /**
+         * @method  getOpenLayerList
+         * @return {Boolean} open layer list
+         */
+        getOpenLayerList: function(){
+            return this._openLayerList;
         }
     }, {
         /**

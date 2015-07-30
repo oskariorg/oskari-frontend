@@ -281,7 +281,7 @@ Oskari.clazz.define(
                 layerSelectorFlyout = this.instance.plugins['Oskari.userinterface.Flyout'];
 
             layerSelectorFlyout.setLayerListFilteringFunction(filterFunction);
-            sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this.instance, 'attach']);
+            
             layerSelectorFlyout.populateLayers();
         },
         /**

@@ -166,8 +166,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          */
         enableFilter: function(selectedFilter) {
             var me = this,
-                filterButton = jQuery('.layer-filter .filter-'+selectedFilter).first();
-            filterButton.trigger('click');
+                filterButton = jQuery('.layer-filter .filter-'+selectedFilter).first(),
+                filterIcon = filterButton.find('.filter-icon');
+            if(!filterIcon.hasClass('active')) {
+                filterButton.trigger('click');
+            }
         },
 
         getContentState: function () {
