@@ -60,6 +60,19 @@ Oskari.registerLocalization(
             "vk": "Concepto coordinado",
             "ak": "Concepto subordinado",
             "yk": "Concepto de orden superior"
+        },
+        "layerFilter": {
+            "buttons": {
+                "newest": "Uusimmat",
+                "stats": "Analysoitavissa",
+                "publishable": "Julkaistavissa"
+            },
+            "tooltips": {
+                "newest": "Suodata tasolistaukseen ## uusinta tasoa",
+                "stats": "Suodata tasolistaukseen vain analyysi karttatasot",
+                "publishable": "Suodata tasolistaukseen vain julkaistavissa olevat karttatasot",
+                "remove": "Poista suodatus"
+            }
         }
     }
 }

@@ -20,6 +20,7 @@ Oskari.clazz.define(
         this.showSearchSuggestions = (instance.conf && instance.conf.showSearchSuggestions === true);
         this.layerGroups = [];
         this.layerContainers = {};
+        this._filterNewestCount = 20;
         this.templates = {
             spinner: '<span class="spinner-text"></span>',
             shortDescription: '<div class="field-description"></div>',
@@ -32,7 +33,13 @@ Oskari.clazz.define(
             keywordContainer: '<a href="#"class="keyword-cont">' +
                 '  <span class="keyword"></span>' +
                 '</a>',
-            keywordType: '<div class="type"></div>'
+            keywordType: '<div class="type"></div>',
+            layerFilter: '<div class="layer-filter">'+
+                '<div class="filter-newest filter"><center><div class="filter-icon newest layer-newest-disabled"></div><div class="filter-text"><div></center></div>'+
+                '<div class="filter-stats filter filter-border"><center><div class="filter-icon stats layer-stats-disabled"></div><div class="filter-text"></div></center></div>'+
+                '<div class="filter-publishable filter filter-border"><center><div class="filter-icon publishable layer-publishable-disabled"></div><div class="filter-text"></div></center></div>'+
+                '<div style="clear:both;"></div>'+
+                '</div>'
         };
         this._createUI(id);
     }, {
@@ -54,13 +61,6 @@ Oskari.clazz.define(
                 filter: this.filterField.getValue(),
                 groups: []
             };
-            // TODO: groups listing
-            /*
-        var layerGroups = jQuery(this.container).find('div.layerList div.layerGroup.open');
-        for(var i=0; i < layerGroups.length; ++i) {
-            var group = layerGroups[i];
-            state.groups.push(jQuery(group).find('.groupName').text());
-        }*/
             return state;
         },
 
@@ -125,10 +125,17 @@ Oskari.clazz.define(
             });
         },
 
+        /**
+         * Create UI
+         * @method  @private _createUI
+         * 
+         * @param  {String} oskarifieldId oskari field id
+         */
         _createUI: function (oskarifieldId) {
             //"use strict";
             var me = this,
-                oskarifield;
+                oskarifield,
+                layerFilter = jQuery(me.templates.layerFilter);
 
             me._locale = me.instance._localization;
             me.tabPanel = Oskari.clazz.create(
@@ -155,8 +162,33 @@ Oskari.clazz.define(
 
             me._createInfoIcon(oskarifield);
 
+            layerFilter.find('.filter-newest .filter-text').html(me._locale.layerFilter.buttons.newest);
+            layerFilter.find('.filter-stats .filter-text').html(me._locale.layerFilter.buttons.stats);
+            layerFilter.find('.filter-publishable .filter-text').html(me._locale.layerFilter.buttons.publishable);
+            layerFilter.find('.filter-newest').attr('title',me._locale.layerFilter.tooltips.newest.replace('##', me._filterNewestCount));
+            layerFilter.find('.filter-stats').attr('title',me._locale.layerFilter.tooltips.stats);
+            layerFilter.find('.filter-publishable').attr('title',me._locale.layerFilter.tooltips.publishable);
+
+            layerFilter.find('.filter').unbind('click');
+            layerFilter.find('.filter').bind('click', function(){
+                var filterIcon = jQuery(this).find('.filter-icon');
+
+                if(filterIcon.hasClass('newest') && !filterIcon.hasClass('active')){
+                    me._addLayerFilterNewest();
+                } else if(filterIcon.hasClass('stats') && !filterIcon.hasClass('active')){
+                    me._addLayerFilterStats();
+                } else if(filterIcon.hasClass('publishable') && !filterIcon.hasClass('active')){
+                    me._addLayerFilterPublishable();
+                } else {
+                    me._addLayerFilterNone();
+                }
+            });
+
+            me.tabPanel.getContainer().append(layerFilter);
+
             me.tabPanel.getContainer().append(oskarifield);
             oskarifield.find('.spinner-text').hide();
+
             // add id to search input
             oskarifield.find('input').attr(
                 'id',
@@ -169,7 +201,121 @@ Oskari.clazz.define(
             );
             me.accordion.insertTo(me.tabPanel.getContainer());
         },
+        /**
+         * Add newest filter
+         * @method  @private_addLayerFilterNewest
+         */
+        _addLayerFilterNewest: function(){
+            var me = this,
+                filterFunction,
+                mapLayerService = this.instance.getSandbox().getService(
+                  'Oskari.mapframework.service.MapLayerService'
+                ),
+                newest = mapLayerService.getNewestLayers(me._filterNewestCount),
+                ids = [];
 
+            jQuery('.filter-newest').attr('title', me._locale.layerFilter.tooltips.remove);
+            me._removeLayerFilters('stats');
+            me._removeLayerFilters('publishable');
+            
+            jQuery(newest).each(function(index, layer){
+                ids.push(layer.getId());
+            });
+            filterFunction = function(layer){
+                return (jQuery.inArray(layer.getId(), ids) !== -1);
+            },
+            me._sendFilter(filterFunction);
+
+            jQuery('.filter-icon.newest').removeClass('layer-newest-disabled').addClass('layer-newest').addClass('active');
+        },
+        /**
+         * Add stats filter
+         * @method  @private _addLayerFilterStats
+         */
+        _addLayerFilterStats: function(){
+            var me = this,
+                filterFunction = function(layer){
+                    return (layer.getLayerType() === 'stats');
+                };
+            jQuery('.filter-stats').attr('title', me._locale.layerFilter.tooltips.remove);
+            me._removeLayerFilters('newest');
+            me._removeLayerFilters('publishable');
+            jQuery('.filter-icon.stats').removeClass('layer-stats-disabled').addClass('layer-stats').addClass('active');
+
+            me._sendFilter(filterFunction);
+        },
+        /**
+         * Add publishable filter
+         * @method  @private _addLayerFilterPublishable
+         */
+        _addLayerFilterPublishable: function(){
+            var me = this,
+                filterFunction = function(layer){
+                    return (layer.getPermission('publish') === 'publication_permission_ok');
+                };
+            jQuery('.filter-publishable').attr('title', me._locale.layerFilter.tooltips.remove);
+            me._removeLayerFilters('newest');
+            me._removeLayerFilters('stats');
+            jQuery('.filter-icon.publishable').removeClass('layer-publishable-disabled').addClass('layer-publishable').addClass('active');
+
+            me._sendFilter(filterFunction);
+        },
+        /**
+         * Add none filter
+         * @method  @private _addLayerFilterNone
+         */
+        _addLayerFilterNone: function(){
+            var me = this;
+            me._removeLayerFilters();
+            me._sendFilter(function(layer){ return true; });
+        },
+        /**
+         * Send selected filter to flyout
+         * @method  @private _sendFilter
+         * 
+         * @param  {Object} filterFunction filter function
+         */
+        _sendFilter: function(filterFunction){
+             var me = this,
+                sandbox = this.instance.getSandbox(),
+                layerSelectorFlyout = this.instance.plugins['Oskari.userinterface.Flyout'];
+
+            layerSelectorFlyout.setLayerListFilteringFunction(filterFunction);
+            sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this.instance, 'attach']);
+            layerSelectorFlyout.populateLayers();
+        },
+        /**
+         * Remove filters
+         * @method  @private _removeLayerFilters
+         * 
+         * @param  {String} filter the removable filter, if null then all cleared
+         */
+        _removeLayerFilters: function(filter){
+            var me = this;
+            if(!filter) {
+                jQuery('.filter-icon.newest').removeClass('layer-newest').removeClass('layer-newest-disabled').removeClass('active').addClass('layer-newest-disabled');
+                jQuery('.filter-icon.stats').removeClass('layer-stats').removeClass('layer-stats-disabled').removeClass('active').addClass('layer-stats-disabled');
+                jQuery('.filter-icon.publishable').removeClass('layer-publishable').removeClass('layer-publishable-disabled').removeClass('active').addClass('layer-publishable-disabled');
+                jQuery('.filter-newest').attr('title',me._locale.layerFilter.tooltips.newest.replace('##', me._filterNewestCount));
+                jQuery('.filter-stats').attr('title',me._locale.layerFilter.tooltips.stats);
+                jQuery('.filter-publishable').attr('title',me._locale.layerFilter.tooltips.publishable);
+            } else if (filter === 'newest') {
+                jQuery('.filter-icon.newest').removeClass('layer-newest').removeClass('layer-newest-disabled').removeClass('active').addClass('layer-newest-disabled');
+                jQuery('.filter-newest').attr('title',me._locale.layerFilter.tooltips.newest.replace('##', me._filterNewestCount));
+            } else if (filter === 'stats') {
+                jQuery('.filter-icon.stats').removeClass('layer-stats').removeClass('layer-stats-disabled').removeClass('active').addClass('layer-stats-disabled');
+                jQuery('.filter-stats').attr('title',me._locale.layerFilter.tooltips.stats);
+            } else if (filter === 'publishable') {
+                jQuery('.filter-icon.publishable').removeClass('layer-publishable').removeClass('layer-publishable-disabled').removeClass('active').addClass('layer-publishable-disabled');
+                jQuery('.filter-publishable').attr('title',me._locale.layerFilter.tooltips.publishable);
+            }
+        },
+        /**
+         * Get filter field
+         * @method  @public getFilterField
+         * 
+         * @return {Oskari.userinterface.component.FormInput} field
+         */
         getFilterField: function () {
             //"use strict";
             var me = this,
@@ -225,7 +371,12 @@ Oskari.clazz.define(
                 me._relatedKeywordsPopup(keyword, event, me);
             }
         },
-
+        /**
+         * Show layer groups
+         * @method  @public showLayerGroups
+         * 
+         * @param  {Array} groups
+         */
         showLayerGroups: function (groups) {
             //"use strict";
             var me = this,

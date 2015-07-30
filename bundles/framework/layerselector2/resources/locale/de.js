@@ -59,6 +59,19 @@ Oskari.registerLocalization({
             "vk": "Koordinieren Konzept",
             "ak": "Untergeordnete Konzept",
             "yk": "Ûbergeordnete Konzept"
+        },
+        "layerFilter": {
+            "buttons": {
+                "newest": "Uusimmat",
+                "stats": "Analysoitavissa",
+                "publishable": "Julkaistavissa"
+            },
+            "tooltips": {
+                "newest": "Suodata tasolistaukseen ## uusinta tasoa",
+                "stats": "Suodata tasolistaukseen vain analyysi karttatasot",
+                "publishable": "Suodata tasolistaukseen vain julkaistavissa olevat karttatasot",
+                "remove": "Poista suodatus"
+            }
         }
     }
 });

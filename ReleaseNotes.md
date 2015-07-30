@@ -34,6 +34,10 @@ Manual refresh event for manual refresh wfs layers. Event is trigged when pushin
 
 Improved checkbox selection, now layers can be selected/unselected by clicking layer name.
 
+Added filter buttons on each tabs. User can now filter layers.
+
+Now not show group if group has not any layers.
+
 ### publisher2
 
 Added GetInfoTool. GetInfoTool has now colous schema selection on extra options.
@@ -43,6 +47,10 @@ PanelMapSize renamed to PanelMapPreview. PanelMapPreview allow select map previe
 ### mapmodule-plugin/MapModule
 
 Added getMaxExtent function. This return max map extent.
+
+### Sandbox/map layer service
+
+Added new getNewestLayers(count) method to find newest layers corresponding to given count.
 
 ## 1.30.4
 
