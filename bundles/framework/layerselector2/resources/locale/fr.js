@@ -60,6 +60,19 @@ Oskari.registerLocalization(
             "vk": "Concept coordonné",
             "ak": "Concept secondaire",
             "yk": "Concept principal"
+        },
+        "layerFilter": {
+            "buttons": {
+                "newest": "Uusimmat",
+                "stats": "Analysoitavissa",
+                "publishable": "Julkaistavissa"
+            },
+            "tooltips": {
+                "newest": "Suodata tasolistaukseen ## uusinta tasoa",
+                "stats": "Suodata tasolistaukseen vain analyysi karttatasot",
+                "publishable": "Suodata tasolistaukseen vain julkaistavissa olevat karttatasot",
+                "remove": "Poista suodatus"
+            }
         }
     }
 }

@@ -484,6 +484,25 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             return list;
         },
         /**
+         * Get newest layers
+         * @method  @public getNewestLayers
+         * @param  {Integer} count how many newest layer wanted to get
+         * @return {{Mixed[]/Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Object[]}
+         */
+        getNewestLayers: function (count) {
+            var list = [],
+                i,
+                layer;
+            for (i = this._loadedLayersList.length-1; i >= 0; --i) {
+                layer = this._loadedLayersList[i];
+                list.push(layer);                
+                if(list.length === count) {
+                    break;
+                }
+            }
+            return list;
+        },
+        /**
          * @method getLayerByMetadataId
          * Returns an array of layers added to the service corresponding to given metadata identifier
          *
