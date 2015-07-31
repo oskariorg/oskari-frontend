@@ -289,7 +289,7 @@ Oskari.clazz.define(
                 grid = Oskari.clazz.create('Oskari.userinterface.component.Grid', me.instance.getLocalization('columnSelectorTooltip')),
                 content = me.template.wrapper.clone(),
                 k;
-           
+
             model.setIdField('__fid');
 
             // hidden fields (hide all - remove if not empty)
@@ -348,7 +348,7 @@ Oskari.clazz.define(
 
             popup.grid.setDataModel(model);
             me._addNumericColumnRenderers(popup.grid);
-            
+
             popup.grid.renderTo(content);
 
             var okBtn = popup.createCloseButton();

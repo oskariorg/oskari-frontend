@@ -168,8 +168,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             var me = this,
                 filterButton = jQuery('.layer-filter .filter-'+selectedFilter).first(),
                 filterIcon = filterButton.find('.filter-icon'),
-                active = jQuery('.layer-filter').find('.filter-icon.active');            
-            
+                active = jQuery('.layer-filter').find('.filter-icon.active');
+
             if(selectedFilter !== null) {
                 if(!filterIcon.hasClass('active')) {
                     filterButton.trigger('click');
