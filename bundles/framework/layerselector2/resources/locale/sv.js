@@ -44,7 +44,7 @@ Oskari.registerLocalization(
             },
             "MAINTENANCE": {
                 "tooltip": "Avbrott i kartlagrets tillgänglighet är att vänta inom de närmaste dagarna.",
-                "iconClass": "backendstatus-underhåll"
+                "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
                 "tooltip": "",

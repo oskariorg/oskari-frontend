@@ -40,11 +40,11 @@ Oskari.registerLocalization(
             },
             "DOWN": {
                 "tooltip": "Kartlaget er for tiden utilgjengelig",
-                "iconClass": "backendstatus-nede"
+                "iconClass": "backendstatus-down"
             },
             "MAINTENANCE": {
                 "tooltip": "Kartlaget kan være midlertidig utilgjengelig de nærmeste dagene",
-                "iconClass": "backendstatus-vedlikehold"
+                "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
                 "tooltip": "",

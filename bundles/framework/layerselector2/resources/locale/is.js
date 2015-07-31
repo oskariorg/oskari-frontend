@@ -36,19 +36,19 @@ Oskari.registerLocalization(
         "backendStatus": {
             "OK": {
                 "tooltip": "Kortalagið er nú fáanlegt.",
-                "iconClass": "netþjónn í lagi"
+                "iconClass": "backendstatus-ok"
             },
             "DOWN": {
                 "tooltip": "Kortalagið er ekki tiltækt í augnablikinu.",
-                "iconClass": "netþjónn liggur niðri"
+                "iconClass": "backendstatus-down"
             },
             "MAINTENANCE": {
                 "tooltip": "Kortalagið getur verið ófánlegt í nokkra daga.",
-                "iconClass": "viðhald á netþjóni"
+                "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
                 "tooltip": "",
-                "iconClass": "netþjónn í lagi"
+                "iconClass": "backendstatus-ok"
             }
         },
         "buttons": {
