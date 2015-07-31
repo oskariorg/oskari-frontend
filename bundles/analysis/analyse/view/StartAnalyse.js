@@ -1341,7 +1341,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         }
                     }
                 });
-                
+
                 var showDataInput = contentPanel.parent().find('#showFeatureDataAfterAnalysis');
                 showDataInput.attr('checked', true);
 
@@ -2816,7 +2816,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 model = Oskari.clazz.create('Oskari.userinterface.component.GridModel'),
                 grid = Oskari.clazz.create('Oskari.userinterface.component.Grid', me.instance.getLocalization('columnSelectorTooltip')),
                 k;
-           
+
             model.setIdField('__fid');
 
             // hidden fields (hide all - remove if not empty)
@@ -2875,10 +2875,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
             popup.grid.setDataModel(model);
             me._addNumericColumnRenderers(popup.grid);
-            
+
             popup.show(this.loc.featureDataPopup, popup.grid);
         },
-        
+
         /**
          * @method _addFeatureValues
          * @private

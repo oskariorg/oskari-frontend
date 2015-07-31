@@ -281,7 +281,7 @@ Oskari.clazz.define(
                 layerSelectorFlyout = this.instance.plugins['Oskari.userinterface.Flyout'];
 
             layerSelectorFlyout.setLayerListFilteringFunction(filterFunction);
-            
+
             layerSelectorFlyout.populateLayers();
         },
         /**
