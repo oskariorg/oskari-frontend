@@ -168,9 +168,10 @@ Oskari.clazz.define(
          * Request backend to delete analysis data for the layer. On success removes the layer
          * from map and layerservice. On failure displays a notification.
          * @param {Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer} layer analysis data to be destroyed
+         * @param {Boolean} should success dialog be shown or not. Optional, if not set, dialog is shown.
          * @private
          */
-        _deleteAnalysis: function (layer) {
+        _deleteAnalysis: function (layer, showDialog) {
             var me = this,
                 sandbox = this.instance.sandbox,
                 tokenIndex = layer.getId().lastIndexOf('_') + 1, // parse actual id from layer id
@@ -185,7 +186,7 @@ Oskari.clazz.define(
                 type: 'POST',
                 success: function (response) {
                     if (response && response.result === 'success') {
-                        me._deleteSuccess(layer);
+                        me._deleteSuccess(layer, showDialog);
                     } else {
                         me._deleteFailure();
                     }
@@ -200,9 +201,10 @@ Oskari.clazz.define(
          * Success callback for backend operation.
          * @method _deleteSuccess
          * @param {Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer} layer layer that was removed
+         * @param {Boolean} should success dialog be shown or not. Optional, if not set, dialog is shown.
          * @private
          */
-        _deleteSuccess: function (layer) {
+        _deleteSuccess: function (layer, showDialog) {
             var sandbox = this.instance.sandbox,
                 service = sandbox.getService(
                     'Oskari.mapframework.service.MapLayerService'
@@ -217,14 +219,16 @@ Oskari.clazz.define(
             sandbox.request(this.instance, request);
             service.removeLayer(layer.getId());
             // show msg to user about successful removal
-            var dialog = Oskari.clazz.create(
-                'Oskari.userinterface.component.Popup'
-            );
-            dialog.show(
-                this.loc.notification.deletedTitle,
-                this.loc.notification.deletedMsg
-            );
-            dialog.fadeout(3000);
+            if (showDialog) {
+                var dialog = Oskari.clazz.create(
+                    'Oskari.userinterface.component.Popup'
+                );
+                dialog.show(
+                    this.loc.notification.deletedTitle,
+                    this.loc.notification.deletedMsg
+                );
+                dialog.fadeout(3000);
+            }
         },
         /**
          * Failure callback for backend operation.

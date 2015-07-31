@@ -213,7 +213,6 @@ Oskari.registerLocalization(
             },
             "showFeatureData" : "Open feature data when analysis is finished",
             "showValuesCheckbox" : "Show calculated values without saving result",
-            "featureDataPopup" : "Aggregate values",
             "intersect": {
                 "target": "Layer to be intersected",
                 "targetLabelTooltip": "Select a map layer to be intersected with features on the intersecting layer.",

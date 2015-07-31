@@ -212,7 +212,6 @@ Oskari.registerLocalization(
             },
             "showFeatureData" : "Avaa kohdetietotaulukko analyysin valmistuttua",
             "showValuesCheckbox" : "Näytä lasketut arvot tallentamatta tulosta",
-            "featureDataPopup" : "Lasketut tunnusluvut",
             "intersect": {
                 "target": "Leikattava taso",
                 "targetLabelTooltip": "Analyysitaso, jonka kohteita leikataan leikkaavan tason kohteilla.",

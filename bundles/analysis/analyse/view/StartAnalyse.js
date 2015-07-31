@@ -233,7 +233,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 '  </label>' +
                 '</div>',
             difference: '<div class="analyse_difference_cont"></div>',
-            footer: '<div class="analyse_param_footer"></div>'
+            footer: '<div class="analyse_param_footer"></div>',
+            wrapper: '<div></div>',
         },
 
         /**
@@ -529,8 +530,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             contentPanel.append(analyseTitle);
 
             var showFeatureData = me.template.checkboxLabel.clone();
-            showFeatureData.find('input').attr('name', 'showFeatureData');
-            showFeatureData.find('input').attr('id', 'showFeatureDataAfterAnalysis');
+            showFeatureData.find('input').attr({'name': 'showFeatureData', 'id': 'showFeatureDataAfterAnalysis'});
             showFeatureData.find('label span').append(me.loc.showFeatureData);
             contentPanel.append(showFeatureData);
 
@@ -2238,6 +2238,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             // Remove old content
             contentPanel.empty();
 
+            contentPanel.parent().find('#showFeatureDataAfterAnalysis').attr('disabled',false);
+
             if (contentPanel.parent().find('.show_data_in_popup')) {
                 contentPanel.parent().find('.show_data_in_popup').remove();
             }
@@ -2758,12 +2760,14 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             // Create the layer model
             mapLayer = mapLayerService.createMapLayer(analyseJson);
 
+            //var layer = me.instance.sandbox.findMapLayerFromSelectedMapLayers(1019);
+
             if (me._showFeatureDataWithoutSaving) {
-                me._showFeatureDataPopup(mapLayer);
+                me.instance.sandbox.postRequestByName('ShowFeatureDataPopupRequest', [mapLayer]);
+                me.instance.personalDataTab._deleteAnalysis(mapLayer, false);
             } else {
                 // Add the layer to the map layer service
                 mapLayerService.addLayer(mapLayer);
-
                 // Request the layer to be added to the map.
                 // instance.js handles things from here on.
                 requestBuilder = me.instance.sandbox.getRequestBuilder(
@@ -2808,7 +2812,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 }
             }
         },
-
         _showFeatureDataPopup: function (mapLayer) {
             var me = this,
                 layer = mapLayer,
@@ -2982,8 +2985,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 }
             });
         },
-
-
         /**
          * @private @method _saveAnalyse
          * Save analyse data.
