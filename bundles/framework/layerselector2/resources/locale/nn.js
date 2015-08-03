@@ -36,15 +36,15 @@ Oskari.registerLocalization(
         "backendStatus": {
             "OK": {
                 "tooltip": "Kartlaget er tilgjengeleg",
-                "iconClass": "backendstatus OK"
+                "iconClass": "backendstatus-ok"
             },
             "DOWN": {
                 "tooltip": "Kartlaget er for tida utilgjengeleg",
-                "iconClass": "backendstatus nede"
+                "iconClass": "backendstatus-down"
             },
             "MAINTENANCE": {
                 "tooltip": "Kartlaget kan vere midlertidig utilgjengeleg dei nærmaste dagane",
-                "iconClass": "backend-status-vedlikehald"
+                "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
                 "tooltip": "",
@@ -63,15 +63,15 @@ Oskari.registerLocalization(
         },
         "layerFilter": {
             "buttons": {
-                "newest": "Uusimmat",
-                "stats": "Analysoitavissa",
-                "publishable": "Julkaistavissa"
+                "newest": "Newest",
+                "stats": "Analysable",
+                "publishable": "Publishable"
             },
             "tooltips": {
-                "newest": "Suodata tasolistaukseen ## uusinta tasoa",
-                "stats": "Suodata tasolistaukseen vain analyysi karttatasot",
-                "publishable": "Suodata tasolistaukseen vain julkaistavissa olevat karttatasot",
-                "remove": "Poista suodatus"
+                "newest": "Show ## newest map layers",
+                "stats": "Show only analysable map layers",
+                "publishable": "Show only publishable map layers",
+                "remove": "Remove filter"
             }
         }
     }

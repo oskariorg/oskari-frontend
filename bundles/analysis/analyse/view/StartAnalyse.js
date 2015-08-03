@@ -1341,7 +1341,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         }
                     }
                 });
-                
+
                 var showDataInput = contentPanel.parent().find('#showFeatureDataAfterAnalysis');
                 showDataInput.attr('checked', true);
 
@@ -2812,7 +2812,179 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 }
             }
         },
+        _showFeatureDataPopup: function (mapLayer) {
+            var me = this,
+                layer = mapLayer,
+                popup =  Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                model = Oskari.clazz.create('Oskari.userinterface.component.GridModel'),
+                grid = Oskari.clazz.create('Oskari.userinterface.component.Grid', me.instance.getLocalization('columnSelectorTooltip')),
+                k;
 
+            model.setIdField('__fid');
+
+            // hidden fields (hide all - remove if not empty)
+            var hiddenFields = layer.getFields().slice(0);
+
+            // get data
+            var fields = layer.getFields().slice(0),
+                locales = layer.getLocales().slice(0),
+                features = layer.getActiveFeatures().slice(0),
+                selectedFeatures = layer.getSelectedFeatures().slice(0); // filter
+
+            me._addFeatureValues(model, fields, hiddenFields, features, selectedFeatures);
+            me._addFeatureValues(model, fields, hiddenFields, selectedFeatures, null);
+
+            fields = model.getFields();
+            hiddenFields.push('__fid');
+            hiddenFields.push('__centerX');
+            hiddenFields.push('__centerY');
+            hiddenFields.push('geometry');
+
+            popup.fields = fields;
+            popup.locales = locales;
+
+            // localizations
+            if (locales) {
+                for (k = 0; k < locales.length; k += 1) {
+                    grid.setColumnUIName(fields[k], locales[k]);
+                }
+            }
+
+            // helper function for visibleFields
+            var contains = function (a, obj) {
+                for (var i = 0; i < a.length; i += 1) {
+                    if (a[i] === obj) {
+                        return true;
+                    }
+                }
+                return false;
+            };
+
+            // filter out certain fields
+            var visibleFields = [],
+                i;
+
+            for (i = 0; i < fields.length; i += 1) {
+                if (!contains(hiddenFields, fields[i])) {
+                    visibleFields.push(fields[i]);
+                }
+            }
+
+            grid.setVisibleFields(visibleFields);
+            grid.setColumnSelector(true);
+            grid.setResizableColumns(true);
+
+            popup.grid = grid;
+
+            popup.grid.setDataModel(model);
+            me._addNumericColumnRenderers(popup.grid);
+
+            popup.show(this.loc.featureDataPopup, popup.grid);
+        },
+
+        /**
+         * @method _addFeatureValues
+         * @private
+         * @param {Oskari.userinterface.component.GridModel} grid
+         * @param {Object[]} features
+         *
+         * Adds features to the model data
+         */
+
+        _addFeatureValues: function (model, fields, hiddenFields, features, selectedFeatures) {
+            var i,
+                j,
+                k,
+                featureData,
+                urlLink,
+                values;
+
+            eachFeature:
+                for (i = 0; i < features.length; i += 1) {
+                    featureData = {};
+                    values = features[i];
+
+                    // remove from selected if in feature list
+                    if (selectedFeatures !== null && selectedFeatures !== undefined && selectedFeatures.length > 0) {
+                        for (k = 0; k < selectedFeatures.length; k += 1) {
+                            if (values[0] === selectedFeatures[k][0]) { // fid match
+                                selectedFeatures.splice(k, 1);
+                            }
+                        }
+                    }
+
+                    for (j = 0; j < fields.length; j += 1) {
+                        if (values[j] === null || values[j] === undefined || values[j] === '') {
+                            featureData[fields[j]] = '';
+                        } else {
+                            // Generate and url links
+                            if (this._isUrlValid(values[j])) {
+                                if (values[j].substring(0, 4) === 'http') {
+                                    urlLink = values[j];
+                                } else {
+                                    urlLink = 'http://' + values[j];
+                                }
+                                featureData[fields[j]] = '<a href="' + urlLink + '" target="_blank">' + values[j] + '</a>';
+                            } else {
+                                featureData[fields[j]] = values[j];
+                            }
+                            // remove from empty fields
+                            this.remove_item(hiddenFields, fields[j]);
+                        }
+                    }
+
+                    // Remove this when better solution to handle duplicates is implemented
+                    var tableData = model.getData();
+                    for (j = 0; j < tableData.length; j += 1) {
+                        if (tableData[j].__fid === featureData.__fid) {
+                            continue eachFeature;
+                        }
+                    }
+
+                    model.addData(featureData);
+                }
+        },
+
+        /**
+         * @method _addNumericColumnRenderers
+         * @private
+         * @param {Grid} Grid instance
+         * Adds column renderers for numeric columns, each renderer rendering
+         * the numbers with the highest decimal count found in the column.
+         */
+        _addNumericColumnRenderers: function (grid) {
+            var dataArray = grid.getDataModel().data,
+                visibleFields = grid.getVisibleFields(),
+                decimals = {};
+
+            var closureMagic = function (decimalCount) {
+                return function (value) {
+                    var parsed = parseFloat(value);
+                    if (!isNaN(parsed)) {
+                        return parsed.toFixed(decimalCount);
+                    } else {
+                        return value;
+                    }
+                };
+            };
+
+            jQuery.each(visibleFields, function(index, field) {
+                var fieldValues = jQuery.grep(dataArray || [], function(value, index) {
+                    return index === field;
+                });
+
+                var isNumber = Oskari.util.isNumber(fieldValues, true);
+                if(isNumber) {
+                    decimals[field] = Oskari.util.decimals(fieldValues);
+                    if (decimals[field]) {
+                        grid.setColumnValueRenderer(
+                            field,
+                            closureMagic(decimals[field])
+                        );
+                    }
+                }
+            });
+        },
         /**
          * @private @method _saveAnalyse
          * Save analyse data.

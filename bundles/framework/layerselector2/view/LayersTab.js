@@ -135,7 +135,7 @@ Oskari.clazz.define(
             //"use strict";
             var me = this,
                 oskarifield,
-                layerFilter = jQuery(me.templates.layerFilter);
+                layerFilter;
 
             me._locale = me.instance._localization;
             me.tabPanel = Oskari.clazz.create(
@@ -162,29 +162,31 @@ Oskari.clazz.define(
 
             me._createInfoIcon(oskarifield);
 
-            layerFilter.find('.filter-newest .filter-text').html(me._locale.layerFilter.buttons.newest);
-            layerFilter.find('.filter-stats .filter-text').html(me._locale.layerFilter.buttons.stats);
-            layerFilter.find('.filter-publishable .filter-text').html(me._locale.layerFilter.buttons.publishable);
-            layerFilter.find('.filter-newest').attr('title',me._locale.layerFilter.tooltips.newest.replace('##', me._filterNewestCount));
-            layerFilter.find('.filter-stats').attr('title',me._locale.layerFilter.tooltips.stats);
-            layerFilter.find('.filter-publishable').attr('title',me._locale.layerFilter.tooltips.publishable);
+            if(!(this.instance.conf && this.instance.conf.hideLayerFilters && this.instance.conf.hideLayerFilters === true)) {
+                layerFilter = jQuery(me.templates.layerFilter);
+                layerFilter.find('.filter-newest .filter-text').html(me._locale.layerFilter.buttons.newest);
+                layerFilter.find('.filter-stats .filter-text').html(me._locale.layerFilter.buttons.stats);
+                layerFilter.find('.filter-publishable .filter-text').html(me._locale.layerFilter.buttons.publishable);
+                layerFilter.find('.filter-newest').attr('title',me._locale.layerFilter.tooltips.newest.replace('##', me._filterNewestCount));
+                layerFilter.find('.filter-stats').attr('title',me._locale.layerFilter.tooltips.stats);
+                layerFilter.find('.filter-publishable').attr('title',me._locale.layerFilter.tooltips.publishable);
 
-            layerFilter.find('.filter').unbind('click');
-            layerFilter.find('.filter').bind('click', function(){
-                var filterIcon = jQuery(this).find('.filter-icon');
+                layerFilter.find('.filter').unbind('click');
+                layerFilter.find('.filter').bind('click', function(){
+                    var filterIcon = jQuery(this).find('.filter-icon');
 
-                if(filterIcon.hasClass('newest') && !filterIcon.hasClass('active')){
-                    me._addLayerFilterNewest();
-                } else if(filterIcon.hasClass('stats') && !filterIcon.hasClass('active')){
-                    me._addLayerFilterStats();
-                } else if(filterIcon.hasClass('publishable') && !filterIcon.hasClass('active')){
-                    me._addLayerFilterPublishable();
-                } else {
-                    me._addLayerFilterNone();
-                }
-            });
-
-            me.tabPanel.getContainer().append(layerFilter);
+                    if(filterIcon.hasClass('newest') && !filterIcon.hasClass('active')){
+                        me._addLayerFilterNewest();
+                    } else if(filterIcon.hasClass('stats') && !filterIcon.hasClass('active')){
+                        me._addLayerFilterStats();
+                    } else if(filterIcon.hasClass('publishable') && !filterIcon.hasClass('active')){
+                        me._addLayerFilterPublishable();
+                    } else {
+                        me._addLayerFilterNone();
+                    }
+                });
+                me.tabPanel.getContainer().append(layerFilter);
+            }
 
             me.tabPanel.getContainer().append(oskarifield);
             oskarifield.find('.spinner-text').hide();
@@ -281,7 +283,7 @@ Oskari.clazz.define(
                 layerSelectorFlyout = this.instance.plugins['Oskari.userinterface.Flyout'];
 
             layerSelectorFlyout.setLayerListFilteringFunction(filterFunction);
-            
+
             layerSelectorFlyout.populateLayers();
         },
         /**

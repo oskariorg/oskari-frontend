@@ -935,7 +935,7 @@ Oskari.clazz.define(
                 );
                 clearTimeout(this._flyoutTimeOut);
                 this._flyoutTimeOut = setTimeout(function(){
-                    me.sandbox.postRequestByName(rn, [extension, 'attach', rn, '0', '424']);    
+                    me.sandbox.postRequestByName(rn, [extension, 'attach', rn, '0', '424']);
                 },100);
             } else {
                 me.sandbox.postRequestByName(rn, [extension, 'attach', rn, '0', '424']);

@@ -36,19 +36,19 @@ Oskari.registerLocalization(
         "backendStatus": {
             "OK": {
                 "tooltip": "Shtresa e hartës aktualisht është në dispozicion",
-                "iconClass": "NOT TRANSLATED"
+                "iconClass": "backendstatus-ok"
             },
             "DOWN": {
                 "tooltip": "Shtresa e hartës aktualisht nuk është në dispozicion",
-                "iconClass": "NOT TRANSLATED"
+                "iconClass": "backendstatus-down"
             },
             "MAINTENANCE": {
                 "tooltip": "Shtresa e hartës gjatë disa ditëve të ardhshme herë pas here mund të mos jetë në dispozicion",
-                "iconClass": "NOT TRANSLATED"
+                "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
                 "tooltip": "",
-                "iconClass": "NOT TRANSLATED"
+                "iconClass": "backendstatus-ok"
             }
         },
         "buttons": {
@@ -63,15 +63,15 @@ Oskari.registerLocalization(
         },
         "layerFilter": {
             "buttons": {
-                "newest": "Uusimmat",
-                "stats": "Analysoitavissa",
-                "publishable": "Julkaistavissa"
+                "newest": "Newest",
+                "stats": "Analysable",
+                "publishable": "Publishable"
             },
             "tooltips": {
-                "newest": "Suodata tasolistaukseen ## uusinta tasoa",
-                "stats": "Suodata tasolistaukseen vain analyysi karttatasot",
-                "publishable": "Suodata tasolistaukseen vain julkaistavissa olevat karttatasot",
-                "remove": "Poista suodatus"
+                "newest": "Show ## newest map layers",
+                "stats": "Show only analysable map layers",
+                "publishable": "Show only publishable map layers",
+                "remove": "Remove filter"
             }
         }
     }

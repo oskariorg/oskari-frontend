@@ -36,19 +36,19 @@ Oskari.registerLocalization(
         "backendStatus": {
             "OK": {
                 "tooltip": "Шар карти доступний",
-                "iconClass": "NOT TRANSLATED"
+                "iconClass": "backendstatus-ok"
             },
             "DOWN": {
                 "tooltip": "На даний момент шар карти недоступний",
-                "iconClass": "NOT TRANSLATED"
+                "iconClass": "backendstatus-down"
             },
             "MAINTENANCE": {
                 "tooltip": "Шар карти може бути тимчасово недоступний протягом наступних декількох днів",
-                "iconClass": "NOT TRANSLATED"
+                "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
                 "tooltip": "",
-                "iconClass": "NOT TRANSLATED"
+                "iconClass": "backendstatus-ok"
             }
         },
         "buttons": {
@@ -63,15 +63,15 @@ Oskari.registerLocalization(
         },
         "layerFilter": {
             "buttons": {
-                "newest": "Uusimmat",
-                "stats": "Analysoitavissa",
-                "publishable": "Julkaistavissa"
+                "newest": "Newest",
+                "stats": "Analysable",
+                "publishable": "Publishable"
             },
             "tooltips": {
-                "newest": "Suodata tasolistaukseen ## uusinta tasoa",
-                "stats": "Suodata tasolistaukseen vain analyysi karttatasot",
-                "publishable": "Suodata tasolistaukseen vain julkaistavissa olevat karttatasot",
-                "remove": "Poista suodatus"
+                "newest": "Show ## newest map layers",
+                "stats": "Show only analysable map layers",
+                "publishable": "Show only publishable map layers",
+                "remove": "Remove filter"
             }
         }
     }

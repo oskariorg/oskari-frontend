@@ -68,9 +68,9 @@ Oskari.registerLocalization(
                 "publishable": "Julkaistavissa"
             },
             "tooltips": {
-                "newest": "Suodata tasolistaukseen ## uusinta tasoa",
-                "stats": "Suodata tasolistaukseen vain analyysi karttatasot",
-                "publishable": "Suodata tasolistaukseen vain julkaistavissa olevat karttatasot",
+                "newest": "Näytä ## uusinta karttatasoa",
+                "stats": "Näytä vain analyysissa käytettävissä olevat karttatasot",
+                "publishable": "Näytä vain julkaistavissa olevat karttatasot",
                 "remove": "Poista suodatus"
             }
         }

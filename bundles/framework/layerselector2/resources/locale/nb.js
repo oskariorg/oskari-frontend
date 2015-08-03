@@ -40,11 +40,11 @@ Oskari.registerLocalization(
             },
             "DOWN": {
                 "tooltip": "Kartlaget er for tiden utilgjengelig",
-                "iconClass": "backendstatus-nede"
+                "iconClass": "backendstatus-down"
             },
             "MAINTENANCE": {
                 "tooltip": "Kartlaget kan være midlertidig utilgjengelig de nærmeste dagene",
-                "iconClass": "backendstatus-vedlikehold"
+                "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
                 "tooltip": "",
@@ -63,15 +63,15 @@ Oskari.registerLocalization(
         },
         "layerFilter": {
             "buttons": {
-                "newest": "Uusimmat",
-                "stats": "Analysoitavissa",
-                "publishable": "Julkaistavissa"
+                "newest": "Newest",
+                "stats": "Analysable",
+                "publishable": "Publishable"
             },
             "tooltips": {
-                "newest": "Suodata tasolistaukseen ## uusinta tasoa",
-                "stats": "Suodata tasolistaukseen vain analyysi karttatasot",
-                "publishable": "Suodata tasolistaukseen vain julkaistavissa olevat karttatasot",
-                "remove": "Poista suodatus"
+                "newest": "Show ## newest map layers",
+                "stats": "Show only analysable map layers",
+                "publishable": "Show only publishable map layers",
+                "remove": "Remove filter"
             }
         }
     }

@@ -36,19 +36,19 @@ Oskari.registerLocalization(
         "backendStatus": {
             "OK": {
                 "tooltip": "Kortalagið er nú fáanlegt.",
-                "iconClass": "netþjónn í lagi"
+                "iconClass": "backendstatus-ok"
             },
             "DOWN": {
                 "tooltip": "Kortalagið er ekki tiltækt í augnablikinu.",
-                "iconClass": "netþjónn liggur niðri"
+                "iconClass": "backendstatus-down"
             },
             "MAINTENANCE": {
                 "tooltip": "Kortalagið getur verið ófánlegt í nokkra daga.",
-                "iconClass": "viðhald á netþjóni"
+                "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
                 "tooltip": "",
-                "iconClass": "netþjónn í lagi"
+                "iconClass": "backendstatus-ok"
             }
         },
         "buttons": {
@@ -63,15 +63,15 @@ Oskari.registerLocalization(
         },
         "layerFilter": {
             "buttons": {
-                "newest": "Uusimmat",
-                "stats": "Analysoitavissa",
-                "publishable": "Julkaistavissa"
+                "newest": "Newest",
+                "stats": "Analysable",
+                "publishable": "Publishable"
             },
             "tooltips": {
-                "newest": "Suodata tasolistaukseen ## uusinta tasoa",
-                "stats": "Suodata tasolistaukseen vain analyysi karttatasot",
-                "publishable": "Suodata tasolistaukseen vain julkaistavissa olevat karttatasot",
-                "remove": "Poista suodatus"
+                "newest": "Show ## newest map layers",
+                "stats": "Show only analysable map layers",
+                "publishable": "Show only publishable map layers",
+                "remove": "Remove filter"
             }
         }
     }

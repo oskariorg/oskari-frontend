@@ -44,7 +44,7 @@ Oskari.registerLocalization(
             },
             "MAINTENANCE": {
                 "tooltip": "Avbrott i kartlagrets tillgänglighet är att vänta inom de närmaste dagarna.",
-                "iconClass": "backendstatus-underhåll"
+                "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
                 "tooltip": "",
@@ -63,15 +63,15 @@ Oskari.registerLocalization(
         },
         "layerFilter": {
             "buttons": {
-                "newest": "Uusimmat",
-                "stats": "Analysoitavissa",
-                "publishable": "Julkaistavissa"
+                "newest": "Nyaste",
+                "stats": "Analyserbar",
+                "publishable": "Publicerbar"
             },
             "tooltips": {
-                "newest": "Suodata tasolistaukseen ## uusinta tasoa",
-                "stats": "Suodata tasolistaukseen vain analyysi karttatasot",
-                "publishable": "Suodata tasolistaukseen vain julkaistavissa olevat karttatasot",
-                "remove": "Poista suodatus"
+                "newest": "Visa de ## nyaste kartlager",
+                "stats": "Visa endast kartlager som kan användas i den analys funktion",
+                "publishable": "Visa endast kartlager som kan publiceras med kart publicering funktion",
+                "remove": "Ta bort filter"
             }
         }
     }
