@@ -21,7 +21,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.request.ShowFeature
          *      request to handle
          */
         handleRequest : function(core, request) {
-            debugger;
             var mapLayer = request.getLayer(),
                 flyout = this.featureData.plugins["Oskari.userinterface.Flyout"];
 
