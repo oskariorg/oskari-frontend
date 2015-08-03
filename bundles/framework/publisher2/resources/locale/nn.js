@@ -60,6 +60,7 @@ Oskari.registerLocalization(
                 "GetInfoPlugin": "Spørjeverktøy for førekomstar",
                 "PublisherToolbarPlugin": "Kartverktøy",
                 "selectDrawLayer": "Vel lag for nye førekomstar",
+                "LayerSelectionPlugin":"NOT TRANSLATED",
                 "toolbarToolNames": {
                     "history_back": "Flytt attende",
                     "history_forward": "Flytt framover",

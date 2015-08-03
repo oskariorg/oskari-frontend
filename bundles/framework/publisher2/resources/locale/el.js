@@ -57,6 +57,7 @@ Oskari.registerLocalization({
                 "GetInfoPlugin": "Εργαλείο δημιουργίας ερωτημάτων για τοποθεσίες",
                 "PublisherToolbarPlugin": "NOT TRANSLATED",
                 "selectDrawLayer": "NOT TRANSLATED",
+                "LayerSelectionPlugin":"NOT TRANSLATED",
                 "toolbarToolNames": {
                     "history_back": "Move backwards",
                     "history_forward": "Move forward",

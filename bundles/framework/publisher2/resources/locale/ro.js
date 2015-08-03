@@ -59,6 +59,7 @@ Oskari.registerLocalization(
                 "GetInfoPlugin": "Instrument de căutare pentru datele locaţiei",
                 "PublisherToolbarPlugin": "NOT TRANSLATED",
                 "selectDrawLayer": "NOT TRANSLATED",
+                "LayerSelectionPlugin":"NOT TRANSLATED",
                 "toolbarToolNames": {
                     "history_back": "Move backwards",
                     "history_forward": "Move forward",

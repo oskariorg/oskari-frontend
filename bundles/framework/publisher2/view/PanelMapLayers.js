@@ -23,12 +23,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
         me.sandbox = sandbox;
         me.isDataVisible = false;
 
-        me.templateHelp = jQuery('<div class="help icon-info"></div>');
-        me.templateTool = jQuery(
-            '<div class="tool">' +
-            '  <label><input type="checkbox"/></label>' +
-            '</div>'
-        );
+        me.templateHelp = jQuery('<div class="help icon-info"></div>');   
         me.templateList = jQuery(
             '<ul class="selectedLayersList sortable" ' +
             'data-sortable=\'{' + 'itemCss: "li.layer.selected", ' + 'handleCss: "div.layer-title" ' + '}\'>' +
@@ -93,8 +88,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
     }, {
         /**
          * @method init
-         * Creates the Oskari.userinterface.component.AccordionPanel where the UI is rendered and
-         * the Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin
+         * Creates the Oskari.userinterface.component.AccordionPanel where the UI is rendered
          */
         init: function () {
             var me = this;
@@ -160,7 +154,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
              */
             AfterMapLayerAddEvent: function (event) {
                 if (!this.hasPublishRight(event._mapLayer)) {
-                    console.log("No publication rights. TODO: make some real blöb blöbb blöbbölböl");
+                    //TODO: ?
                 }
                 this.handleLayerSelectionChanged();
             },
@@ -251,29 +245,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
             return this.panel;
         },
         /**
-         * Controls the LayerSelectionPlugin by calling start/stop.
-         *
-         * @method enablePlugin
-         * @param {Boolean} true to start the plugin, false to stop it
-         */
-        enablePlugin: function (blnEnabled) {
-            var me = this;
-
-            if (!me.plugin) {
-                me._initPlugin();
-            }
-
-            if (blnEnabled) {
-                me.plugin.setLocation(me.plugin.getConfig().location.classes);
-                me.plugin.startPlugin(me.sandbox);
-//                if (me.instance.toolLayoutEditMode && me.plugin.getElement()) {
-//                    me.instance._makeDraggable(me.plugin.getElement());
-//                }
-            } else {
-                me.plugin.stopPlugin(me.sandbox);
-            }
-        },
-        /**
          * Returns the state of the plugin.
          *
          * @method isEnabled
@@ -281,18 +252,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
          */
         isEnabled: function () {
             return this.showLayerSelection;
-        },
-        /**
-         * Unregisters the plugin from MainMapModule
-         *
-         * @method stop
-         */
-        stop: function () {
-            var mapModule = this.instance.sandbox.findRegisteredModuleInstance(
-                'MainMapModule'
-            );
-            this.enablePlugin(false);
-            mapModule.unregisterPlugin(this.plugin);
         },
 
         /**
@@ -372,22 +331,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
             tooltipCont.attr('title', this.loc.layerselection.tooltip);
             contentPanel.append(tooltipCont);
 
-            // layer selection
-            var toolContainer = this.templateTool.clone();
-            toolContainer.find('label').attr('for', 'show-map-layers-checkbox').append(this.loc.layerselection.fieldLabel);
-            if (this.showLayerSelection) {
-                toolContainer.find('input').attr('checked', 'checked');
-            }
-            contentPanel.append(toolContainer);
             contentPanel.append(this.loc.layerselection.info);
-            toolContainer.find('input').attr('id', 'show-map-layers-checkbox').change(function () {
-                var checkbox = jQuery(this),
-                    isChecked = checkbox.is(':checked');
-                me.enablePlugin(isChecked);
-                me.showLayerSelection = isChecked;
-                contentPanel.empty();
-                me._populateMapLayerPanel();
-            });
 
             var layers = this._getLayersList(),
                 i,

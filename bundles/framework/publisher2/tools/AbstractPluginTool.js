@@ -26,6 +26,9 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     group : 'maptools',
     // 'bottom left', 'bottom right' etc
     allowedLocations : [],
+    //default location in lefthanded / righthanded layouts. Override.  
+    lefthanded: '',
+    righthanded: '',
     // List of plugin classes that can reside in same container(?) like 'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin'
     allowedSiblings : [],
     // ??
@@ -58,10 +61,10 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     */
     setEnabled : function(enabled) {
         var me = this,
-            tool = me.getTool();
+            tool = me.getTool(),
+            sandbox = me.__sandbox;
 
         me.state.enabled = enabled;
-
         if(!me.__plugin && enabled) {
             me.__plugin = Oskari.clazz.create(tool.id, tool.config);
             me.__mapmodule.registerPlugin(me.__plugin);
@@ -79,6 +82,8 @@ function(sandbox, mapmodule, localization, instance, handlers) {
         if(enabled === true && me.state.mode !== null && me.__plugin && typeof me.__plugin.setMode === 'function'){
             me.__plugin.setMode(me.state.mode);
         }
+        var event = sandbox.getEventBuilder('Publisher2.ToolEnabledChangedEvent')(me);
+        sandbox.notifyAll(event);
     },
     /**
     * Get extra options.
@@ -122,6 +127,18 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     isDisplayed: function() {
         return true;
     },
+
+    /**
+    * Whether or not to create a panel and checkbox for the tool in the tools' panel.
+    * @method isShownInToolsPanel
+    * @public
+    *
+    * @returns {Boolean} is the tool displayed in the tools' panel
+    */
+    isShownInToolsPanel: function() {
+        return true;
+    },
+
     /**
     * Set mode to.
     * @method setMode
@@ -178,6 +195,16 @@ function(sandbox, mapmodule, localization, instance, handlers) {
         // override
     },
     /**
+    * Get plugin.
+    * @method getPlugin
+    * @public
+    *
+    * @returns {Object} the tool's plugin
+    */
+    getPlugin: function () {
+        return this.__plugin;
+    },
+    /**
     * Validate tool.
     *
     * @returns {Object} errors object
@@ -200,5 +227,4 @@ function(sandbox, mapmodule, localization, instance, handlers) {
             me.__mapmodule.unregisterPlugin(me.__plugin);
         }
     }
-
 });

@@ -263,6 +263,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                 }
             });
         },
+        getTools: function() {
+            return this.tools;
+        },
         /**
         * Stop panel.
         * @method stop

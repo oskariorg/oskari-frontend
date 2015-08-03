@@ -60,6 +60,7 @@ Oskari.registerLocalization(
                 "GetInfoPlugin": "Atrašanās vietas vaicāšanas rīks",
                 "PublisherToolbarPlugin": "Map tools",
                 "selectDrawLayer": "Select layer for new features",
+                "LayerSelectionPlugin":"NOT TRANSLATED",
                 "toolbarToolNames": {
                     "history_back": "Move backwards",
                     "history_forward": "Move forward",
