@@ -80,8 +80,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                     me.getLocalization('BasicView'),
                     data
                 );
-                me.publisher.render(map);
+                //call set enabled before rendering the panels (avoid duplicate "normal map plugins")
                 me.publisher.setEnabled(true);
+                me.publisher.render(map);
                 me.publisher.initPanels();
             } else {
                 me._destroyGrid();

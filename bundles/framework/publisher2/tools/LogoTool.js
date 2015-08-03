@@ -1,18 +1,19 @@
-Oskari.clazz.define('Oskari.mapframework.publisher.tool.PanButtonsTool',
+Oskari.clazz.define('Oskari.mapframework.publisher.tool.LogoTool',
 function() {
 }, {
-    index : 2,
-    allowedLocations : ['top left', 'top right', 'bottom left', 'bottom right'],
-    lefthanded: 'top left',
-    righthanded: 'top right',
+    index : 1,
+    allowedLocations : ['bottom left', 'bottom right'],
+    lefthanded: 'bottom left',
+    righthanded: 'bottom right',
     allowedSiblings : [
-        'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
-        'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin',
-        'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
+        'Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin',
+        'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin',
+        'Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin'
     ],
 
-    groupedSiblings : true,
+    groupedSiblings : false,
 
+    //_showInToolsPanel: false,
     /**
     * Get tool object.
     * @method getTool
@@ -21,8 +22,8 @@ function() {
     */
     getTool: function(){
         return {
-            id: 'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
-            name: 'PanButtons',
+            id: 'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
+            name: 'LogoPlugin',
             config: {}
         };
     },
@@ -47,6 +48,9 @@ function() {
         } else {
             return null;
         }
+    },
+    isShownInToolsPanel: function() {
+        return false
     }
 }, {
     'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
