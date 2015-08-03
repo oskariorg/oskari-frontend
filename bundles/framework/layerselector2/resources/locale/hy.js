@@ -36,19 +36,19 @@ Oskari.registerLocalization(
         "backendStatus": {
             "OK": {
                 "tooltip": "Քարտեզի շերտը ժամանակավորապես հասանելի է",
-                "iconClass": "NOT TRANSLATED"
+                "iconClass": "backendstatus-ok"
             },
             "DOWN": {
                 "tooltip": "Քարտեզի շերտը ժամանակավորապես անհասանելի է",
-                "iconClass": "NOT TRANSLATED"
+                "iconClass": "backendstatus-down"
             },
             "MAINTENANCE": {
                 "tooltip": "Քարտեզի շերտը պարբերաբար անհասանելի կլինի հաջորդ մի քանի օրվա ընթացքում",
-                "iconClass": "NOT TRANSLATED"
+                "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
                 "tooltip": "",
-                "iconClass": "NOT TRANSLATED"
+                "iconClass": "backendstatus-ok"
             }
         },
         "buttons": {
@@ -60,6 +60,19 @@ Oskari.registerLocalization(
             "vk": "NOT TRANSLATED",
             "ak": "NOT TRANSLATED",
             "yk": "NOT TRANSLATED"
+        },
+        "layerFilter": {
+            "buttons": {
+                "newest": "Newest",
+                "stats": "Analysable",
+                "publishable": "Publishable"
+            },
+            "tooltips": {
+                "newest": "Show ## newest map layers",
+                "stats": "Show only analysable map layers",
+                "publishable": "Show only publishable map layers",
+                "remove": "Remove filter"
+            }
         }
     }
 }

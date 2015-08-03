@@ -211,6 +211,7 @@ Oskari.registerLocalization(
                 "tooltip": "Anna parametrit analyysia varten. Parametrit riippuvat valitusta suodattimesta ja menetelmästä."
             },
             "showFeatureData" : "Avaa kohdetietotaulukko analyysin valmistuttua",
+            "showValuesCheckbox" : "Näytä lasketut arvot tallentamatta tulosta",
             "intersect": {
                 "target": "Leikattava taso",
                 "targetLabelTooltip": "Analyysitaso, jonka kohteita leikataan leikkaavan tason kohteilla.",

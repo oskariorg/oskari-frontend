@@ -1,3 +1,15 @@
+div.layerselector2 div.layer-filter {
+  border: 1px solid #a4a4a4;
+  margin: 10px;
+  color: #949494; }
+div.layerselector2 div.filter {
+  width: 33%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  float: left;
+  cursor: pointer; }
+div.layerselector2 div.filter-border {
+  border-left: 1px solid #a4a4a4; }
 div.layerselector2 div.accordion div.accordion_panel div.content {
   padding: 0; }
 div.layerselector2 div.layer {
@@ -14,7 +26,7 @@ div.layerselector2 div.layer {
     margin-right: 5px; }
     div.layerselector2 div.layer input[type=checkbox] {
       margin-top: -2px; }
-  div.layerselector2 div.layer div.layer-title {
+  div.layerselector2 div.layer label.layer-title {
     /* Let's just imagine this is tabular data... */
     font-size: 12px; }
   div.layerselector2 div.layer div.layer-tools {

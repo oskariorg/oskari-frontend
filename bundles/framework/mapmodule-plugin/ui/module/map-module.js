@@ -1053,6 +1053,14 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             this._map.layers.sort(function(a, b){
                 return a.getZIndex()-b.getZIndex();
             });
+        },
+        /**
+         * Get map max extent.
+         * @method getMaxExtent
+         * @return {Object} max extent
+         */
+        getMaxExtent: function(){
+            return this._maxExtent;
         }
 
     }, {

@@ -159,6 +159,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                 }
             }
         },
+        /**
+         * Hande selected filter request
+         * @method  public enableFilter
+         * @param  {String} selectedFilter selected filter, can be a 'stats', 'newest' or 'publishable'
+         */
+        enableFilter: function(selectedFilter) {
+            var me = this,
+                filterButton = jQuery('.layer-filter .filter-'+selectedFilter).first(),
+                filterIcon = filterButton.find('.filter-icon'),
+                active = jQuery('.layer-filter').find('.filter-icon.active');
+
+            if(selectedFilter !== null) {
+                if(!filterIcon.hasClass('active')) {
+                    filterButton.trigger('click');
+                }
+            } else if(active.length>0 && me.layerTabs.length > 0) {
+                me.layerTabs[0]._removeLayerFilters();
+            }
+        },
 
         getContentState: function () {
             //"use strict";
@@ -281,24 +300,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                         'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
                         groupAttr
                     );
+
+
                     groupList.push(group);
                 }
-//                group.addLayer(layer);
 
                 if (!this.layerListFilteringFunction || (this.layerListFilteringFunction && this.layerListFilteringFunction(layer))) {
                     group.addLayer(layer);
                 }
-
-
-
-
-
-
-
-
-
             }
-            return groupList;
+            var sortedGroupList = jQuery.grep(groupList, function(group,index){
+                return group.getLayers().length > 0;
+            });
+            return sortedGroupList;
         },
 
         /**

@@ -31,7 +31,18 @@ Oskari.clazz.define(
         this.resizing = false;
         // The size of the layout has been changed (needed when changing tabs)
         this.resized = false;
+
+        // templates
+        this.template = {};
+        for (p in this.__templates) {
+            if (this.__templates.hasOwnProperty(p)) {
+                this.template[p] = jQuery(this.__templates[p]);
+            }
+        }
     }, {
+        __templates: {
+            wrapper : '<div></div>'
+        },
         /**
          * @method getName
          * @return {String} the name for the component
@@ -268,6 +279,80 @@ Oskari.clazz.define(
                 this.layers[layerId] = null;
                 delete this.layers[layerId];
             }
+        },
+
+        showFeatureDataInPopup: function (mapLayer) {
+            var me = this,
+                layer = mapLayer,
+                popup =  Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                model = Oskari.clazz.create('Oskari.userinterface.component.GridModel'),
+                grid = Oskari.clazz.create('Oskari.userinterface.component.Grid', me.instance.getLocalization('columnSelectorTooltip')),
+                content = me.template.wrapper.clone(),
+                k;
+
+            model.setIdField('__fid');
+
+            // hidden fields (hide all - remove if not empty)
+            var hiddenFields = layer.getFields().slice(0);
+
+            // get data
+            var fields = layer.getFields().slice(0),
+                locales = layer.getLocales().slice(0),
+                features = layer.getActiveFeatures().slice(0),
+                selectedFeatures = layer.getSelectedFeatures().slice(0); // filter
+
+            me._addFeatureValues(model, fields, hiddenFields, features, selectedFeatures);
+            me._addFeatureValues(model, fields, hiddenFields, selectedFeatures, null);
+
+            fields = model.getFields();
+            hiddenFields.push('__fid');
+            hiddenFields.push('__centerX');
+            hiddenFields.push('__centerY');
+            hiddenFields.push('geometry');
+
+            popup.fields = fields;
+            popup.locales = locales;
+
+            // localizations
+            if (locales) {
+                for (k = 0; k < locales.length; k += 1) {
+                    grid.setColumnUIName(fields[k], locales[k]);
+                }
+            }
+
+            // helper function for visibleFields
+            var contains = function (a, obj) {
+                for (var i = 0; i < a.length; i += 1) {
+                    if (a[i] === obj) {
+                        return true;
+                    }
+                }
+                return false;
+            };
+
+            // filter out certain fields
+            var visibleFields = [],
+                i;
+
+            for (i = 0; i < fields.length; i += 1) {
+                if (!contains(hiddenFields, fields[i])) {
+                    visibleFields.push(fields[i]);
+                }
+            }
+
+            grid.setVisibleFields(visibleFields);
+            grid.setColumnSelector(true);
+            grid.setResizableColumns(true);
+
+            popup.grid = grid;
+
+            popup.grid.setDataModel(model);
+            me._addNumericColumnRenderers(popup.grid);
+
+            popup.grid.renderTo(content);
+
+            var okBtn = popup.createCloseButton();
+            popup.show(me.instance.getLocalization('featureDataPopup'), content, [okBtn]);
         },
 
         /**

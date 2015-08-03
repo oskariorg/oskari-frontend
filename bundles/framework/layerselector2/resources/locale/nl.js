@@ -60,6 +60,19 @@ Oskari.registerLocalization(
             "vk": "coördineren concept",
             "ak": "ondergeschikte concept",
             "yk": "Overkoepelend concept"
+        },
+        "layerFilter": {
+            "buttons": {
+                "newest": "Newest",
+                "stats": "Analysable",
+                "publishable": "Publishable"
+            },
+            "tooltips": {
+                "newest": "Show ## newest map layers",
+                "stats": "Show only analysable map layers",
+                "publishable": "Show only publishable map layers",
+                "remove": "Remove filter"
+            }
         }
     }
 }

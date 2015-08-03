@@ -919,15 +919,27 @@ Oskari.clazz.define(
          * @param  {String} name
          */
         _openFlyoutAs: function (name) {
-            var extension = {
+            var me = this,
+                extension = {
                     getName: function () {
                         return name;
                     }
                 },
                 rn = 'userinterface.UpdateExtensionRequest';
 
-            this.sandbox.postRequestByName(
-                rn, [extension, 'attach', rn, '0', '424']);
+            if(name === 'LayerSelector') {
+                var requestName = 'ShowFilteredLayerListRequest';
+                me.sandbox.postRequestByName(
+                    requestName,
+                    [null, 'stats']
+                );
+                clearTimeout(this._flyoutTimeOut);
+                this._flyoutTimeOut = setTimeout(function(){
+                    me.sandbox.postRequestByName(rn, [extension, 'attach', rn, '0', '424']);
+                },100);
+            } else {
+                me.sandbox.postRequestByName(rn, [extension, 'attach', rn, '0', '424']);
+            }
         },
 
         /**

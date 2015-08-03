@@ -73,6 +73,7 @@ Oskari.clazz.define(
             }
             return this._localization;
         },
+
         /**
          * @method start
          * implements BundleInstance protocol start method
@@ -106,6 +107,10 @@ Oskari.clazz.define(
             //Let's extend UI
             request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(me);
             sandbox.request(me, request);
+
+            // create and register request handler
+            var reqHandler = Oskari.clazz.create('Oskari.mapframework.bundle.layerselector2.request.ShowFilteredLayerListRequestHandler', sandbox, this);
+            sandbox.addRequestHandler('ShowFilteredLayerListRequest', reqHandler);
 
             // draw ui
             me.createUi();

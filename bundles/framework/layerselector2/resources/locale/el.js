@@ -59,6 +59,19 @@ Oskari.registerLocalization({
             "vk": "NOT TRANSLATED",
             "ak": "NOT TRANSLATED",
             "yk": "NOT TRANSLATED"
+        },
+        "layerFilter": {
+            "buttons": {
+                "newest": "Newest",
+                "stats": "Analysable",
+                "publishable": "Publishable"
+            },
+            "tooltips": {
+                "newest": "Show ## newest map layers",
+                "stats": "Show only analysable map layers",
+                "publishable": "Show only publishable map layers",
+                "remove": "Remove filter"
+            }
         }
     }
 });

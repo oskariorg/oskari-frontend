@@ -1,4 +1,22 @@
 div.layerselector2 {
+    
+    div.layer-filter {
+        border: 1px solid #a4a4a4;
+        margin: 10px;
+        color: #949494;
+    }
+
+    div.filter {
+        width: 33%;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        float: left;
+        cursor:pointer;
+    }
+
+    div.filter-border {
+        border-left: 1px solid #a4a4a4;
+    }
 
     div.accordion {
 

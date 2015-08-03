@@ -60,6 +60,19 @@ Oskari.registerLocalization(
             "vk": "Koordinatni koncept",
             "ak": "Podrejen koncept",
             "yk": "Nadrejen koncept"
+        },
+        "layerFilter": {
+            "buttons": {
+                "newest": "Newest",
+                "stats": "Analysable",
+                "publishable": "Publishable"
+            },
+            "tooltips": {
+                "newest": "Show ## newest map layers",
+                "stats": "Show only analysable map layers",
+                "publishable": "Show only publishable map layers",
+                "remove": "Remove filter"
+            }
         }
     }
 }

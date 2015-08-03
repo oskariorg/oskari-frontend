@@ -43,6 +43,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.LayerSelectorBund
             "type": "text/javascript",
             "src": "../../../../bundles/framework/layerselector2/view/PublishedLayersTab.js"
         }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/layerselector2/request/ShowFilteredLayerListRequest.js"
+        }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/layerselector2/request/ShowFilteredLayerListRequestHandler.js"
+        },
+        {
             "type": "text/css",
             "src": "../../../../bundles/framework/layerselector2/resources/css/style.css"
         }],
@@ -163,23 +170,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.LayerSelectorBund
             "lang": "uk",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/layerselector2/resources/locale/uk.js"
-
-
-
-
-
-
-
-        }, {
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/layerselector2/request/AddLayerListFilterRequest.js"
-        }, {
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/layerselector2/request/AddLayerListFilterRequestHandler.js"
-        }
-
-
-        ]
+        }]
     },
     "bundle": {
         "manifest": {

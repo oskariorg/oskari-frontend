@@ -60,6 +60,19 @@ Oskari.registerLocalization(
             "vk": "Vieruskäsite",
             "ak": "Alakäsite",
             "yk": "Yläkäsite"
+        },
+        "layerFilter": {
+            "buttons": {
+                "newest": "Uusimmat",
+                "stats": "Analysoitavissa",
+                "publishable": "Julkaistavissa"
+            },
+            "tooltips": {
+                "newest": "Näytä ## uusinta karttatasoa",
+                "stats": "Näytä vain analyysissa käytettävissä olevat karttatasot",
+                "publishable": "Näytä vain julkaistavissa olevat karttatasot",
+                "remove": "Poista suodatus"
+            }
         }
     }
 }
