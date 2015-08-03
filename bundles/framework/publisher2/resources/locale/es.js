@@ -60,6 +60,7 @@ Oskari.registerLocalization(
                 "GetInfoPlugin": "Herramienta de consulta para los datos de sitios",
                 "PublisherToolbarPlugin": "Herramientas de mapa",
                 "selectDrawLayer": "Selecciona la capa para nuevos objetos geográficos",
+                "LayerSelectionPlugin":"NOT TRANSLATED",
                 "toolbarToolNames": {
                     "history_back": "Mover atrás",
                     "history_forward": "Mover adelante",

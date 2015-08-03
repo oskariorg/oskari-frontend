@@ -60,6 +60,7 @@ Oskari.registerLocalization(
                 "GetInfoPlugin": "Outil de requête pour données d'entité",
                 "PublisherToolbarPlugin": "Outils de carte",
                 "selectDrawLayer": "Sélectionnez la couche pour les nouvelles entités",
+                "LayerSelectionPlugin":"NOT TRANSLATED",
                 "toolbarToolNames": {
                     "history_back": "Reculer",
                     "history_forward": "Avancer",

@@ -60,6 +60,7 @@ Oskari.registerLocalization(
                 "GetInfoPlugin": "Query tool for feature data",
                 "PublisherToolbarPlugin": "Map tools",
                 "selectDrawLayer": "Select layer for new features",
+                "LayerSelectionPlugin":"Map layers menu",
                 "toolbarToolNames": {
                     "history_back": "Move backwards",
                     "history_forward": "Move forward",

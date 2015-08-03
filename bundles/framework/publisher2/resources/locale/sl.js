@@ -60,6 +60,7 @@ Oskari.registerLocalization(
                 "GetInfoPlugin": "Orodje za poizvedovanje podatkov o objektu",
                 "PublisherToolbarPlugin": "Orodja za karto",
                 "selectDrawLayer": "Izberi sloj za nove objekte",
+                "LayerSelectionPlugin":"NOT TRANSLATED",
                 "toolbarToolNames": {
                     "history_back": "Nazaj",
                     "history_forward": "Naprej",

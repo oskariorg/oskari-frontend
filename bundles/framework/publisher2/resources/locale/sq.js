@@ -58,6 +58,7 @@ Oskari.registerLocalization(
                 "GetInfoPlugin": "Vegla pyetësor (query) për të dhënat për vendet",
                 "PublisherToolbarPlugin": "NOT TRANSLATED",
                 "selectDrawLayer": "NOT TRANSLATED",
+                "LayerSelectionPlugin":"NOT TRANSLATED",
                 "toolbarToolNames": {
                     "history_back": "Move backwards",
                     "history_forward": "Move forward",

@@ -31,16 +31,34 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             '</div>'
         );
 
-        // Not sure where this should be...
-        me.layerSelectionClasses = {
-            lefthanded: 'top right',
-            righthanded: 'top left',
-            classes: 'top right'
-        };
-
         me.toolLayouts = ['lefthanded', 'righthanded', 'userlayout'];
         me.activeToolLayout = 'lefthanded';
     }, {
+        eventHandlers: {
+            'Publisher2.ToolEnabledChangedEvent': function (event) {
+                var me = this;
+                //we're in layout edit mode and a new tool was added -> recreate the draggables / droppables
+                if (me.toolLayoutEditMode && event.getTool().state.enabled === true) {
+                    me._editToolLayoutOff();
+                    me._editToolLayoutOn();
+                } 
+            }
+        },
+        getName: function() {
+            return "Oskari.mapframework.bundle.publisher2.view.PanelToolLayout";
+        },
+        /**
+         * @method onEvent
+         * @param {Oskari.mapframework.event.Event} event a Oskari event object
+         * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
+         */
+        onEvent: function (event) {
+            var handler = this.eventHandlers[event.getName()];
+            if (!handler) {
+                return;
+            }
+            return handler.apply(this, [event]);
+        },
         /**
          * @method init
          * Creates the Oskari.userinterface.component.AccordionPanel where the UI is rendered and
@@ -192,10 +210,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 // Set logoplugin and layerselection as well
                 //TODO: make this stuff work later.
                 /*
-                me.logoPluginClasses.classes = me.logoPluginClasses[layout];
-                if (me.logoPlugin) {
-                    me.logoPlugin.setLocation(me.logoPluginClasses.classes);
-                }
                 me.layerSelectionClasses.classes = me.layerSelectionClasses[layout];
                 me.maplayerPanel.plugin.setLocation(me.layerSelectionClasses.classes);
 				*/
@@ -219,11 +233,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
         },
         /**
          * @private @method _editToolLayoutOn
-         * TODO: Should this function reside somewhere else, like in the publisher where the editToolLayoutOff is situated as well...?
-         *
          *
          */
-         
         _editToolLayoutOn: function () {
             var me = this,
                 sandbox = Oskari.getSandbox('sandbox');
@@ -265,23 +276,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
 
             var event = sandbox.getEventBuilder('LayerToolsEditModeEvent')(true);
             sandbox.notifyAll(event);
-
-            // remove map controls when editing tool layout
-            var controlsPluginTool = me.getToolById(
-                'Oskari.mapframework.mapmodule.ControlsPlugin'
-            );
-            if (controlsPluginTool) {
-                me.isMapControlActive = controlsPluginTool && controlsPluginTool.selected;
-                me.activatePreviewPlugin(controlsPluginTool, false);
-            }
         },
         
         /**
          * @private @method _editToolLayoutOff
-         TODO: ALmost the same function is already present in the publisher. Except for the fact that this one doesn't stop the panels (which in any case screws things up)
+         * TODO: ALmost the same function is already present in the publisher. Except for the fact that this one doesn't stop the panels (which in any case screws things up)
          * Should we refactor that to make this work, or have two funcs...?
-         *
-         *
          */
          
         _editToolLayoutOff: function () {
@@ -303,38 +303,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
 
             var event = sandbox.getEventBuilder('LayerToolsEditModeEvent')(false);
             sandbox.notifyAll(event);
-
-            // Set logoplugin and layerselection as well
-            // FIXME get this from logoPlugin's config, no need to traverse the DOM
-            //TODO: meh
-            /*
-            if (me.logoPlugin) {
-                me.logoPluginClasses.classes = me.logoPlugin.getElement().parents('.mapplugins').attr('data-location');
-                me.logoPlugin.getElement().css('position', '');
-                //me.logoPlugin.setLocation(me.logoPluginClasses.classes);
-            }
-            if (me.maplayerPanel.plugin && me.maplayerPanel.plugin.getElement()) {
-                me.layerSelectionClasses.classes = me.maplayerPanel.plugin.getElement().parents('.mapplugins').attr('data-location');
-                //me.maplayerPanel.plugin.setLocation(me.layerSelectionClasses.classes);
-                me.maplayerPanel.plugin.getElement().css('position', '');
-            }
-
-            // set map controls back to original settings after editing tool layout
-            var controlsPluginTool = me.toolsPanel.getToolById('Oskari.mapframework.mapmodule.ControlsPlugin');
-            if (controlsPluginTool) {
-                me.toolsPanel.activatePreviewPlugin(controlsPluginTool, me.isMapControlActive);
-                delete me.isMapControlActive;
-            }
-
-            // Hide unneeded containers
-            var container;
-            jQuery('.mapplugins').each(function () {
-                container = jQuery(this);
-                if (container.find('.mappluginsContent').children().length === 0) {
-                    container.css('display', 'none');
-                }
-            });
-            */
         },
         
         /**
@@ -452,249 +420,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
         **/
         stop: function(){
             var me = this;
-
-            _.each(me.tools, function(tool){
-                console.log("1 "+tool.getTool().id + " "+tool.__plugin);
-            });
             _.each(me.tools, function(tool){
                 tool.stop();
                 tool.setEnabled(false);
             });
-            _.each(me.tools, function(tool){
-                console.log("2 "+tool.getTool().id + " "+tool.__plugin);
-            });
         },
 
-        /**
-         * Section WTF
-         */
-        /**
-         * @method activatePreviewPlugin
-         * @private
-         * Enables or disables a plugin on map
-         * @param {Object} tool tool definition as in #tools property
-         * @param {Boolean} enabled, true to enable plugin, false to disable
-         * @param {Boolean} localeChange, true to not reset config when disabling plugin, false to reset config
-         */
-        activatePreviewPlugin: function(tool, enabled, localeChange) {
-            var me = this,
-                sandbox = me.sandbox,
-                plugin = (tool && tool.getPlugin()) ? tool.getPlugin() : null,
-                //the actual tool's "wrapper" instance
-                toolInstance = (tool && tool.getTool()) ? tool.getTool() : null;
-            if (tool && !plugin) {
-                var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-                plugin = Oskari.clazz.create(toolInstance.id, toolInstance.config);
-                mapModule.registerPlugin(plugin);
-            }
-            if (!tool || !plugin) {
-                // no tool or plugin not created -> nothing to do
-                return;
-            }
-            if (toolInstance.config && toolInstance.config.location) {
-                plugin.setLocation(this.instance.publisher._getPreferredPluginLocation(plugin, tool.config.location.classes));
-            }
-
-            var _toggleToolOption = function(toolName, groupName, toolOption, configName, cbox) {
-                return function() {
-                    var checkbox = cbox ? cbox : jQuery(this),
-                        isChecked = checkbox.is(':checked'),
-                        reqBuilder;
-
-                    if (tool.id.indexOf('PublisherToolbarPlugin') >= 0) {
-                        // toolbarplugin is selected when active tools or has selected draw tools
-                        if (me._hasActiveTools() || me._hasSelectedDrawTool()) {
-                            tool.selected = true;
-                        } else {
-                            tool.selected = false;
-                        }
-                    } else {
-                        // tool refers to the plugin in the me.tools array
-                        tool.selected = isChecked;
-                    }
-
-                    var requester = tool.plugin;
-                    if (isChecked) {
-                        reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
-                        sandbox.request(requester, reqBuilder(toolName, groupName, toolOption));
-                        if (!me[configName][groupName]) {
-                            me[configName][groupName] = {};
-                        }
-                        me[configName][groupName][toolName] = true;
-
-                        if (me.toolbarConfig[groupName] === null || me.toolbarConfig[groupName] === undefined) {
-                            me.toolbarConfig[groupName] = {};
-                        }
-                        me.toolbarConfig[groupName][toolName] = true;
-                    } else {
-                        reqBuilder = sandbox.getRequestBuilder('Toolbar.RemoveToolButtonRequest');
-                        sandbox.request(requester, reqBuilder(toolName, groupName, toolOption.toolbarid));
-                        if (me[configName][groupName]) {
-                            me[configName][groupName][toolName] = false;
-                        }
-                        if (me.toolbarConfig[groupName] === null || me.toolbarConfig[groupName] === undefined) {
-                            me.toolbarConfig[groupName] = {};
-                        }
-                        me.toolbarConfig[groupName][toolName] = false;
-                    }
-                };
-            };
-
-            var options,
-                i,
-                ilen,
-                j,
-                configName,
-                buttonGroup,
-                toolName,
-                toolButton,
-                reqBuilder,
-                isChecked;
-
-            if (enabled) {
-                plugin.startPlugin(sandbox);
-                if (me._publisher.toolLayoutEditMode && plugin.element) {
-                    me._publisher._makeDraggable(plugin.element);
-                }
-                tool._isPluginStarted = true;
-
-                // toolbar (bundle) needs to be notified
-                if (toolInstance.id.indexOf('PublisherToolbarPlugin') >= 0) {
-                    if (_.isEmpty(me.toolbarConfig)) {
-                        me._presetDataConfig('toolbarConfig');
-                    }
-                    plugin.setToolbarContainer();
-                    me.toolbarConfig.classes = plugin.getToolConfs();
-
-                    var _addToolGroup = function(groupName, options, toolOption, toggleToolHandler) {
-                        var i,
-                            ilen,
-                            buttonGroup,
-                            toolName,
-                            toolButton,
-                            toolElement;
-
-                        // retrieve groupName button configs
-                        for (i = 0, ilen = me.buttonGroups.length; i < ilen; i++) {
-                            if (groupName === me.buttonGroups[i].name) {
-                                buttonGroup = me.buttonGroups[i];
-                                break;
-                            }
-                        }
-
-                        for (toolName in buttonGroup.buttons) {
-                            if (buttonGroup.buttons.hasOwnProperty(toolName)) {
-                                toolButton = buttonGroup.buttons[toolName];
-                                toolButton.toolbarid = toolOption.toolbarId;
-
-                                // create checkbox
-                                toolButton.selectTool = jQuery(me.templates.toolOption).clone();
-                                toolButton.selectTool.find('label')
-                                    .attr('for', 'tool-opt-' + toolName).append(me.loc.toolbarToolNames[toolName]);
-
-                                if (me.toolbarConfig[buttonGroup.name] && me.toolbarConfig[buttonGroup.name][toolName]) {
-                                    toolButton.selectTool.find('input').attr('checked', 'checked');
-                                }
-                                //toggle toolbar tool. i.e. send requests
-                                toolElement = toolButton.selectTool.find('input')
-                                    .attr('id', 'tool-opt-' + toolName)
-                                    .change(_toggleToolOption(toolName, buttonGroup.name, toolButton, 'toolbarConfig'));
-                                options.append(toolButton.selectTool);
-                                // trigger click & change to send events
-                                if (me.toolbarConfig[buttonGroup.name] && me.toolbarConfig[buttonGroup.name][toolName]) {
-                                    // FIXME use _toggleToolOption.apply or .call instead of passing the checkbox as an extra arg...
-                                    _toggleToolOption(toolName, buttonGroup.name, toolButton, 'toolbarConfig', toolButton.selectTool.find('input'))();
-                                }
-                            }
-                        }
-
-                        return options;
-                    };
-
-                    // append after all buttons have been added
-                    options = jQuery(me.templates.toolOptions).clone();
-                    options = _addToolGroup('history', options, me.toolbarConfig, _toggleToolOption);
-                    options = _addToolGroup('basictools', options, me.toolbarConfig, _toggleToolOption);
-                    tool.publisherPluginContainer.append(options);
-
-                    // show for admin users
-                    if (me._sandbox.getUser().hasRole(me.instance.conf.drawRoleIds)) {
-                        // create option for adding drawing tools
-                        options = jQuery(me.templates.toolOptions).clone();
-                        tool.publisherPluginContainer.append(options);
-
-                        isChecked = me._hasSelectedDrawTool();
-
-                        var selectTool = jQuery(me.templates.toolOption).clone(),
-                            toolElement;
-                        selectTool.find('label').attr('for', 'tool-opt-drawing').append(this.loc.toolbarToolNames.drawTools);
-                        //toggle toolbar tool. i.e. send requests
-                        toolElement = selectTool.find('input')
-                            .attr('id', 'tool-opt-drawing')
-                            .attr('checked', isChecked)
-                            .change(function() {
-                                // update local config according to ui config change
-                                if (this.checked) {
-                                    me._presetDataConfig('publishedmyplaces2Config');
-                                } else {
-                                    me._resetDataConfig('publishedmyplaces2Config');
-                                }
-                                // Note! "this" refers to the checkbox element that has been changed
-                                me._toggleDrawTools(this, 'drawTools', 'myplaces', me.publishedmyplaces2Config, _toggleToolOption);
-                            });
-
-                        // execute toolElement change function when checked
-                        if (isChecked) {
-                            me._toggleDrawTools(toolElement, 'drawTools', 'myplaces', me.publishedmyplaces2Config, _toggleToolOption);
-                        }
-                        options.append(selectTool);
-                    }
-//                } else if(tool.id.indexOf('SearchPlugin') >= 0 || tool.id.indexOf('MyLocationPlugin') >= 0 ) {
-                } else if(toolInstance.id.indexOf('SearchPlugin') >= 0 || toolInstance.id.indexOf('MyLocationPlugin') >= 0 ) {
-
-                }
-            } else {
-                // toolbar (bundle) needs to be notified
-
-                // MyLocationPlugin
-//                if (tool.id.indexOf('PublisherToolbarPlugin') >= 0) {
-                if (toolInstance.id.indexOf('PublisherToolbarPlugin') >= 0) {
-                    if (!localeChange) {
-                       me.toolbarConfig = {};
-                    }
-
-                    // remove buttons, handlers and toolbar toolbar tools
-                    for (i = 0, ilen = me.buttonGroups.length; i < ilen; i++) {
-                        buttonGroup = me.buttonGroups[i];
-                        for (toolName in buttonGroup.buttons) {
-                            configName = (buttonGroup.name === 'myplaces' ? 'publishedmyplaces2Config' : 'toolbarConfig');
-                            if (me[configName] && me[configName][buttonGroup.name] && me[configName][buttonGroup.name][toolName] === true) {
-                                // toolbar tool exists and needs to be removed
-                                toolButton = buttonGroup.buttons[toolName];
-                                reqBuilder = sandbox.getRequestBuilder('Toolbar.RemoveToolButtonRequest');
-                                sandbox.request(me.instance, reqBuilder(toolName, buttonGroup.name, toolButton.toolbarid));
-                            }
-                        }
-                    }
-                }
-                if (tool._isPluginStarted) {
-                    //remove eventlisteners
-                    var _removeOptions = function (className, handler) {
-                        var optionContainer = tool.publisherPluginContainer.find(className),
-                            toolOptionCheckboxes = optionContainer.find('input').off('change', handler);
-                        //remove dom elements
-                        toolOptionCheckboxes.remove();
-                        optionContainer.remove();
-                    };
-                    _removeOptions('.tool-options', me._toggleToolOption);
-                    _removeOptions('.tool-option-setting', me._toggleToolOption);
-
-                    tool._isPluginStarted = false;
-//                    tool.plugin.stopPlugin(sandbox);
-                    plugin.stopPlugin(sandbox);
-                }
-            }
-        },
         /**
          * @private @method _siblingsAllowed
          * Checks if plugins in dropzone are allowed siblings for given plugin
@@ -726,11 +457,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             for (i = 0; i < siblings.length; i += 1) {
                 if (!excludedSibling || siblings[i] !== excludedSibling) {
                     // sibling is not ignored, see if it's an allowed sibling
-//                    if (jQuery.inArray(siblings[i], me.toolDropRules[pluginClazz].allowedSiblings) < 0 && pluginClazz !== siblings[i]) {
                     if (jQuery.inArray(siblings[i], tool.allowedSiblings) < 0 && pluginClazz !== siblings[i]) {
                         // not an allowed sibling, see if we can move it out of the way (don't pass a source, it'd cause an infinite loop)
                         // only accept 2/yes as a result, moving source plugins out of the way would get too weird
-//                        if (source && me._locationAllowed(this.toolDropRules[siblings[i]].allowedLocations, source) && me._siblingsAllowed(siblings[i], null, source, pluginClazz) === 2) {
                         if (source && me._locationAllowed(tool.allowedLocations, source) && me._siblingsAllowed(siblings[i], null, source, pluginClazz) === 2) {
                             // sibling can be moved to source
                             ret = 1;
@@ -786,10 +515,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 tool = me.getToolById(pluginClazz);
 
             for (i = 0; i < siblings.length; i += 1) {
-//                if (jQuery.inArray(siblings[i], me.toolDropRules[pluginClazz].allowedSiblings) < 0) {
                 if (jQuery.inArray(siblings[i], tool.allowedSiblings) < 0) {
                     // Unallowed sibling, move to source
-//                    sibling = me._getPluginByClazz(siblings[i]);
                     sibling = me.getToolById(siblings[i]).getPlugin();
                     if (sibling) {
                         sibling.setLocation(source.attr('data-location'));
@@ -801,18 +528,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                     }
                 }
             }
-        },
-
-
-
-
-
-
-
-
-         /**
-          * Section WTF ends
-          */
-
+        }
     }
 );

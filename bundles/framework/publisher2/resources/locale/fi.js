@@ -60,6 +60,7 @@ Oskari.registerLocalization(
                 "GetInfoPlugin": "Kohdetietojen kyselytyökalu",
                 "PublisherToolbarPlugin": "Karttatyökalut",
                 "selectDrawLayer": "Valitse tallennustaso",
+                "LayerSelectionPlugin":"Karttatasovalikko",
                 "toolbarToolNames": {
                     "history_back": "Siirtyminen edelliseen näkymään",
                     "history_forward": "Siirtyminen seuraavaan näkymään",

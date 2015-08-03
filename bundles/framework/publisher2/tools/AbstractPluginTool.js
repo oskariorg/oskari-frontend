@@ -61,7 +61,8 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     */
     setEnabled : function(enabled) {
         var me = this,
-            tool = me.getTool();
+            tool = me.getTool(),
+            sandbox = me.__sandbox;
 
         me.state.enabled = enabled;
         if(!me.__plugin && enabled) {
@@ -81,6 +82,8 @@ function(sandbox, mapmodule, localization, instance, handlers) {
         if(enabled === true && me.state.mode !== null && me.__plugin && typeof me.__plugin.setMode === 'function'){
             me.__plugin.setMode(me.state.mode);
         }
+        var event = sandbox.getEventBuilder('Publisher2.ToolEnabledChangedEvent')(me);
+        sandbox.notifyAll(event);
     },
     /**
     * Get extra options.

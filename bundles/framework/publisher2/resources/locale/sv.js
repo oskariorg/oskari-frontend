@@ -60,6 +60,7 @@ Oskari.registerLocalization(
                 "GetInfoPlugin": "Verktyg för förfrågan som gäller uppgifter om objektet",
                 "PublisherToolbarPlugin": "Kartverktyg",
                 "selectDrawLayer": "Välj lager för nya funktioner",
+                "LayerSelectionPlugin":"Kartlagren meny",
                 "toolbarToolNames": {
                     "history_back": "Gå bakåt",
                     "history_forward": "Gå framåt",
