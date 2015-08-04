@@ -99,23 +99,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         me.maplayerPanel = null;
         me.mainPanel = null;
 
-        //dig up the config from the instance used by the full map if it is present
-        /*
-        var logoPluginConfig = {};
-        var mainMapLogoPlugin = me.instance.getSandbox().findRegisteredModuleInstance("MainMapModuleLogoPlugin");
-        if(mainMapLogoPlugin) {
-            logoPluginConfig = _.cloneDeep(mainMapLogoPlugin.getConfig());
-        }
-
-        // override location
-        logoPluginConfig.location = {
-            classes: me.logoPluginClasses.classes
-        };
-        me.logoPlugin = Oskari.clazz.create(
-            'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
-            logoPluginConfig
-        );
-        */
         me.latestGFI = null;
     }, {
         /**
@@ -175,6 +158,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             var toolLayoutPanel = me._createToolLayoutPanel(panelObject.tools);
             me.panels.push(toolLayoutPanel);
             accordion.addPanel(toolLayoutPanel.getPanel());
+
+            var layoutPanel = me._createLayoutPanel();
+            me.panels.push(layoutPanel);
+            accordion.addPanel(layoutPanel.getPanel());
 
             // -- render to UI and setup buttons --
             accordion.insertTo(contentDiv);
@@ -293,6 +280,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 mapModule = sandbox.findRegisteredModuleInstance("MainMapModule"),
                 form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout',
                     tools, sandbox, mapModule, me.loc, me.instance
+                );
+
+
+            // initialize form (restore data when editing)
+            form.init(me.data, function(value) {
+                me.setMode(value);
+            });
+
+            return form;
+        },
+        /**
+         * @private @method _createToolLayoutPanel
+         * Creates the tool layout panel of publisher
+         * @param {Oskari.mapframework.publisher.tool.Tool[]} tools
+         */
+        _createLayoutPanel: function () {
+            var me = this,
+                sandbox = this.instance.getSandbox(),
+                mapModule = sandbox.findRegisteredModuleInstance("MainMapModule"),
+                form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
+                    sandbox, mapModule, me.loc, me.instance
                 );
 
 
