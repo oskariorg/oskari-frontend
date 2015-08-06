@@ -43,6 +43,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher2.PublisherBundle", fun
         },
         {
             "type": "text/javascript",
+            "src": "../../../../bundles/framework/publisher2/event/ToolEnabledChangedEvent.js"
+        },
+        {
+            "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher2/event/ColourSchemeChangedEvent.js"
         },
         {
@@ -73,8 +77,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher2.PublisherBundle", fun
             "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher2/view/PanelMapTools.js"
         },
-
-
         {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher2/tools/AbstractPluginTool.js"
@@ -86,6 +88,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher2.PublisherBundle", fun
         {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher2/view/PanelMapLayers.js"
+        },
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/publisher2/view/PanelToolLayout.js"
+        },
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/publisher2/view/PanelLayout.js"
         },
         {
             "type": "text/javascript",
@@ -131,7 +141,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher2.PublisherBundle", fun
             "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher2/tools/GetInfoTool.js"
         },
-
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/publisher2/tools/LogoTool.js"
+        },
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/publisher2/tools/LayerSelectionTool.js"
+        },
         {
             "type": "text/css",
             "src": "../../../../bundles/framework/publisher2/resources/css/style.css"

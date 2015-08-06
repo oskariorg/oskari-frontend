@@ -3,6 +3,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
     }, {
         index: 3,
         allowedLocations: ['top left', 'top right', 'bottom left', 'bottom right'],
+        lefthanded: 'top right',
+        righthanded: 'top left',
         allowedSiblings: ['Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin'
         ],
 

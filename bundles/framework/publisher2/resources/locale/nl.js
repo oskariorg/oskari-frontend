@@ -60,6 +60,7 @@ Oskari.registerLocalization(
                 "GetInfoPlugin": "Querytool voor plaatsgegevens",
                 "PublisherToolbarPlugin": "kaart hulpmiddelen",
                 "selectDrawLayer": "Kies laag voor nieuwe features",
+                "LayerSelectionPlugin":"NOT TRANSLATED",
                 "toolbarToolNames": {
                     "history_back": "Ga terug",
                     "history_forward": "Ga vooruit",

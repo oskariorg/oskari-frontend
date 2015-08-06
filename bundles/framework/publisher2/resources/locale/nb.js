@@ -60,6 +60,7 @@ Oskari.registerLocalization(
                 "GetInfoPlugin": "Spørreverktøy for forekomster",
                 "PublisherToolbarPlugin": "Kartverktøy",
                 "selectDrawLayer": "Velg lag for nye forekomster",
+                "LayerSelectionPlugin":"NOT TRANSLATED",
                 "toolbarToolNames": {
                     "history_back": "Flytt tilbake",
                     "history_forward": "Flytt fremover",

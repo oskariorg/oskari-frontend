@@ -59,6 +59,7 @@ Oskari.registerLocalization(
                 "GetInfoPlugin": "Инструмент за запитване относно даннните на мястото",
                 "PublisherToolbarPlugin": "NOT TRANSLATED",
                 "selectDrawLayer": "NOT TRANSLATED",
+                "LayerSelectionPlugin":"NOT TRANSLATED",
                 "toolbarToolNames": {
                     "history_back": "NOT TRANSLATED",
                     "history_forward": "NOT TRANSLATED",

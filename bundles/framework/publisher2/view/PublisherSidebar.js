@@ -36,13 +36,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
 
         me.templateButtonsDiv = jQuery('<div class="buttons"></div>');
         me.templateHelp = jQuery('<div class="help icon-info"></div>');
-        me.templateLayout = jQuery(
-            '<div class="tool ">' +
-            '  <label>' +
-            '    <input type="radio" name="toolLayout" /><span></span>' +
-            '  </label>' +
-            '</div>'
-        );
         me.templateData = jQuery(
             '<div class="data ">' +
             '  <input class="show-grid" type="checkbox"/>' +
@@ -52,15 +45,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             '</div>');
 
         me.normalMapPlugins = [];
-
-
-        // TODO see if this and layerselection could be moved to tools...
-        // just ignore them on ui creation or smthn
-        me.logoPluginClasses = {
-            lefthanded: 'bottom left',
-            righthanded: 'bottom right',
-            classes: 'bottom left'
-        };
 
         me.grid = {};
         me.grid.selected = true;
@@ -115,21 +99,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         me.maplayerPanel = null;
         me.mainPanel = null;
 
-        //dig up the config from the instance used by the full map if it is present
-        var logoPluginConfig = {};
-        var mainMapLogoPlugin = me.instance.getSandbox().findRegisteredModuleInstance("MainMapModuleLogoPlugin");
-        if(mainMapLogoPlugin) {
-            logoPluginConfig = _.cloneDeep(mainMapLogoPlugin.getConfig());
-        }
-
-        // override location
-        logoPluginConfig.location = {
-            classes: me.logoPluginClasses.classes
-        };
-        me.logoPlugin = Oskari.clazz.create(
-            'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
-            logoPluginConfig
-        );
         me.latestGFI = null;
     }, {
         /**
@@ -179,11 +148,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             me.panels.push(mapLayersPanel);
             accordion.addPanel(mapLayersPanel.getPanel());
 
-            var toolPanels = me._createToolPanels(accordion);
+            var panelObject = me._createToolPanels(accordion);
+            var toolPanels = panelObject.panels;
             _.each(toolPanels, function(panel) {
                 me.panels.push(panel);
                 accordion.addPanel(panel.getPanel());
             });
+
+            var toolLayoutPanel = me._createToolLayoutPanel(panelObject.tools);
+            me.panels.push(toolLayoutPanel);
+            accordion.addPanel(toolLayoutPanel.getPanel());
+
+            var layoutPanel = me._createLayoutPanel();
+            me.panels.push(layoutPanel);
+            accordion.addPanel(layoutPanel.getPanel());
 
             // -- render to UI and setup buttons --
             accordion.insertTo(contentDiv);
@@ -204,7 +182,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
 
 
         },
-
         /**
         * Initialize panels.
         * @method @public initPanels
@@ -292,6 +269,48 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
 
             return form;
         },
+        /**
+         * @private @method _createToolLayoutPanel
+         * Creates the tool layout panel of publisher
+         * @param {Oskari.mapframework.publisher.tool.Tool[]} tools
+         */
+        _createToolLayoutPanel: function (tools) {
+            var me = this,
+                sandbox = this.instance.getSandbox(),
+                mapModule = sandbox.findRegisteredModuleInstance("MainMapModule"),
+                form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout',
+                    tools, sandbox, mapModule, me.loc, me.instance
+                );
+
+
+            // initialize form (restore data when editing)
+            form.init(me.data, function(value) {
+                me.setMode(value);
+            });
+
+            return form;
+        },
+        /**
+         * @private @method _createToolLayoutPanel
+         * Creates the tool layout panel of publisher
+         * @param {Oskari.mapframework.publisher.tool.Tool[]} tools
+         */
+        _createLayoutPanel: function () {
+            var me = this,
+                sandbox = this.instance.getSandbox(),
+                mapModule = sandbox.findRegisteredModuleInstance("MainMapModule"),
+                form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
+                    sandbox, mapModule, me.loc, me.instance
+                );
+
+
+            // initialize form (restore data when editing)
+            form.init(me.data, function(value) {
+                me.setMode(value);
+            });
+
+            return form;
+        },
 
         /**
          * @method setMode
@@ -328,9 +347,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         /**
          * @private @method _createToolPanels
          * Finds classes annotated as 'Oskari.mapframework.publisher.Tool'.
-         * Determines tool groups from tools and creates tool panels for each group.
+         * Determines tool groups from tools and creates tool panels for each group. Returns an object containing a list of panels and their tools as well as a list of 
+         * all tools, even those that aren't displayed in the tools' panels.
          *
-         * @return {Oskari.mapframework.bundle.publisher2.view.PanelMapTools[]} list of panels
+         * @return {Object} Containing {Oskari.mapframework.bundle.publisher2.view.PanelMapTools[]} list of panels 
+         * and {Oskari.mapframework.publisher.tool.Tool[]} tools not displayed in panel
          */
         _createToolPanels: function () {
             var me = this;
@@ -338,16 +359,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             var mapmodule = sandbox.findRegisteredModuleInstance("MainMapModule");
             var definedTools = Oskari.clazz.protocol('Oskari.mapframework.publisher.Tool');
             var grouping = {};
+            var allTools = [];
             // group tools per tool-group
             _.each(definedTools, function(ignored, toolname) {
                 // TODO: document localization requirements!
                 var tool = Oskari.clazz.create(toolname, sandbox, mapmodule, me.loc, me.instance, me.getHandlers());
-                if(tool.isDisplayed() === true) {
+                if(tool.isDisplayed() === true && tool.isShownInToolsPanel()) {
                     var group = tool.getGroup();
                     if(!grouping[group]) {
                         grouping[group] = [];
                     }
                     grouping[group].push(tool);
+                }
+
+                if (tool.isDisplayed() === true) {
+                    allTools.push(tool);
                 }
             });
             // create panel for each tool group
@@ -360,9 +386,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 panel.init(me.data);
                 panels.push(panel);
             });
-            return panels;
+            return {
+                panels: panels,
+                tools: allTools
+            };
         },
-
         /**
         * Gather selections.
         * @method _gatherSelections
@@ -535,7 +563,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 mapModule = me.instance.sandbox.findRegisteredModuleInstance(
                     'MainMapModule'
                 );
-
             _.each(mapModule.getPluginInstances(), function(plugin) {
                 if (plugin.hasUI && plugin.hasUI()) {
                     plugin.stopPlugin(me.instance.sandbox);
@@ -543,9 +570,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                     me.normalMapPlugins.push(plugin);
                 }
             });
-
-            mapModule.registerPlugin(me.logoPlugin);
-            this.logoPlugin.startPlugin(me.instance.sandbox);
         },
 
         /**
@@ -559,11 +583,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 mapModule = me.instance.sandbox.findRegisteredModuleInstance('MainMapModule'),
                 plugin,
                 i;
-
-
-            // stop our logoplugin
-            mapModule.unregisterPlugin(me.logoPlugin);
-            me.logoPlugin.stopPlugin(me.instance.sandbox);
 
             jQuery('.mapplugin.manageClassificationPlugin').remove();
 

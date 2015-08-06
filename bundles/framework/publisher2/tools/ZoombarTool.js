@@ -3,6 +3,8 @@ function() {
 }, {
     index : 3,
     allowedLocations : ['top left', 'top right', 'bottom left', 'bottom right'],
+    lefthanded: 'top left',
+    righthanded: 'top right',
     allowedSiblings : [
         'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
         'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin',

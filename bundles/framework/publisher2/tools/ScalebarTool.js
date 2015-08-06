@@ -3,6 +3,8 @@ function() {
 }, {
     index : 0,
     allowedLocations : ['bottom left', 'bottom right'],
+    lefthanded: 'bottom left',
+    righthanded: 'bottom right',
     allowedSiblings : [
         'Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin',
         'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
