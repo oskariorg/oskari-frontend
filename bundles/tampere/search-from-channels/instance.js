@@ -21,7 +21,7 @@ Oskari.clazz.define(
         this.localization = null;
         this.optionService = null;
         this.searchService = null;
-        this.tabPriority = 5.0;
+        this.tabPriority = 1.0;
         this.conditions = [];
         this.safeChars = false;
         this.resultHeaders = [
@@ -482,7 +482,7 @@ Oskari.clazz.define(
                     // Wfs search from channels tab OBS. this will be in UI if user has rights into channels
                     var title = me.getLocalization('tabTitle'),
                         content = searchFromChannelsContainer,
-                        priority = this.tabPriority,
+                        priority = me.tabPriority,
                         id = 'oskari_searchfromchannels_tabpanel_header',
                         reqName = 'Search.AddTabRequest',
                         reqBuilder = me.sandbox.getRequestBuilder(reqName),
