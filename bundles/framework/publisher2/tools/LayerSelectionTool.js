@@ -37,24 +37,34 @@ function() {
         var me = this;
 
         if(me.state.enabled) {
+            var pluginConfig = { id: this.getTool().id, config: this.getPlugin().getConfig()};
+            var layerSelection = me._getLayerSelection();
+            if (layerSelection && !jQuery.isEmptyObject(layerSelection)) {
+                pluginConfig.layerSelection = layerSelection;
+            }
             return {
                 mapfull: {
                     conf: {
-                        plugins: [{ id: this.getTool().id }]
+                        plugins: [pluginConfig]
                     }
                 }
             };
         } else {
             return null;
         }
-    }
-
-/*
-    ,
-    isShownInToolsPanel: function() {
-        return false
-    }
-*/    
+    },
+    _getLayerSelection: function () {
+        var me = this,
+            layerSelection = {};
+        var pluginValues = me.getPlugin().getBaseLayers();
+        if (pluginValues.defaultBaseLayer) {
+            layerSelection.baseLayers =
+                pluginValues.baseLayers;
+            layerSelection.defaultBaseLayer =
+                pluginValues.defaultBaseLayer;
+        }
+        return layerSelection;
+    },
 }, {
     'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
     'protocol' : ['Oskari.mapframework.publisher.Tool']

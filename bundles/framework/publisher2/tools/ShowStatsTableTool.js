@@ -132,6 +132,10 @@ function() {
             );
         });
         return statsGridState;
+    },
+    getValues: function() {
+        //TODO
+        return;
     }
 }, {
     'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
