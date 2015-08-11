@@ -382,6 +382,10 @@ Oskari.clazz.define(
             }
             panel.getContainer().append(this.instance.getLocalization('loading'));
 
+            if (this.instance.__loadingStatus[layer.getId()] === 'loading' || this.instance.__loadingStatus[layer.getId()] === 'error') {
+                return;
+            }
+
             // in scale, proceed
             this._prepareData(layer);
             if (selection && selection.length > 0 && typeof selection[0].featureId !== 'undefined') {
