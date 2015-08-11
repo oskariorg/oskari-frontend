@@ -22,6 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
         me.instance = instance;
         me.sandbox = sandbox;
         me.isDataVisible = false;
+        me._plugin = null;
 
         me.templateHelp = jQuery('<div class="help icon-info"></div>');   
         me.templateList = jQuery(
@@ -87,61 +88,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
         me._sliders = {};
     }, {
         /**
-         * @method init
-         * Creates the Oskari.userinterface.component.AccordionPanel where the UI is rendered
-         */
-        init: function () {
-            var me = this;
-            for (var p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
-                    me.sandbox.registerForEventByName(me, p);
-                }
-            }
-
-            if (!me.panel) {
-                me.panel = Oskari.clazz.create(
-                    'Oskari.userinterface.component.AccordionPanel'
-                );
-                me.panel.setTitle(me.loc.layerselection.label);
-            }
-        },
-        /**
-         * @method _initPlugin
-         * Initialises the LayerSelectionPlugin. Has to be called _after_ the publishersidebar is done collecting the "normal map" plugins.
-         *
-         */
-        _initPlugin: function() {
-            var me = this;
-            if (!me.plugin) {
-                //TODO: Get these somewhere else...?
-                me.pluginConfig = {
-                    location: {
-                        classes: "top right"
-                    }
-                };
-                me.plugin = Oskari.clazz.create(
-                    'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin',
-                    me.pluginConfig
-                );
-                var mapModule = me.sandbox.findRegisteredModuleInstance(
-                    'MainMapModule'
-                );
-                mapModule.registerPlugin(me.plugin);
-            }
-        },
-        /**
-         * @method onEvent
-         * @param {Oskari.mapframework.event.Event} event a Oskari event object
-         * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
-         */
-        onEvent: function (event) {
-            var handler = this.eventHandlers[event.getName()];
-            if (!handler) {
-                return;
-            }
-            return handler.apply(this, [event]);
-        },
-        /**
          * @property {Object} eventHandlers
          * @static
          */
@@ -187,16 +133,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
              */
             MapLayerEvent: function (event) {
                 this.handleLayerSelectionChanged();
-                /*
-                this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged();
-                if ((this.publisher) && (event.getOperation() === 'add')) {
-                    // handleLayerSelectionChanged and handleDrawLayerSelectionChanged both rebuild the DOM
-                    this.publisher.maplayerPanel.handleLayerSelectionChanged();
-                    this.publisher.toolsPanel.handleDrawLayerSelectionChanged(
-                        event.getLayerId()
-                    );
-                }
-                */
             },
 
             /**
@@ -208,9 +144,67 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                         event.isInScale(),
                         event.isGeometryMatch()
                 );
+            },
+            'Publisher2.ToolEnabledChangedEvent': function (event) {
+                var me = this;
+                if (event && event.getTool() && event.getTool().getTool() && event.getTool().getTool().id === 'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin') {
+                    if (event.getTool().state.enabled === true) {
+                        me._plugin = event.getTool().getPlugin();
+                        //update the plugin's baselayer info in case some of the layers have that ticked.
+                        var contentPanel = me.getPanel().getContainer();
+                        //find checked baselayerinputs
+                        var checkedBaseLayers = contentPanel.find('input.baselayer:checked');
+
+                        _.each(checkedBaseLayers, function(checkbox) {
+                            var id = checkbox.id.replace('checkbox','');
+                            var layer = me.sandbox.findMapLayerFromSelectedMapLayers(id);
+                            if (layer) {
+                                me.getPlugin().addBaseLayer(layer);
+                            }
+                        });
+
+                    } else {
+                        me._plugin = null;
+                    }
+                } 
             }
         },
+        /**
+         * @method init
+         * Creates the Oskari.userinterface.component.AccordionPanel where the UI is rendered
+         */
+        init: function () {
+            var me = this;
+            for (var p in me.eventHandlers) {
+                if (me.eventHandlers.hasOwnProperty(p)) {
+                    me.sandbox.registerForEventByName(me, p);
+                }
+            }
 
+            if (!me.panel) {
+                me.panel = Oskari.clazz.create(
+                    'Oskari.userinterface.component.AccordionPanel'
+                );
+                me.panel.setTitle(me.loc.layerselection.label);
+
+                me._populateMapLayerPanel();
+            }
+        },
+        /**
+         * @method onEvent
+         * @param {Oskari.mapframework.event.Event} event a Oskari event object
+         * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
+         */
+        onEvent: function (event) {
+            var handler = this.eventHandlers[event.getName()];
+            if (!handler) {
+                return;
+            }
+            return handler.apply(this, [event]);
+        },
+        getPlugin: function() {
+            return this._plugin;
+        },
         getName: function() {
             return "Oskari.mapframework.bundle.publisher2.view.PanelMapLayers";
         },
@@ -220,6 +214,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
          * @method useConfig
          * @param {Object} pConfig data to prepopulate the form and plugin
          */
+         /*
         useConfig: function (pConfig) {
             if (pConfig) {
                 if (Object.prototype.toString.call(pConfig.baseLayers) === '[object Array]' &&
@@ -234,6 +229,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                 this._populateMapLayerPanel();
             }
         },
+        */
         /**
          * Returns the UI panel and populates it with the data that we want to show the user.
          *
@@ -241,7 +237,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
          * @return {Oskari.userinterface.component.AccordionPanel}
          */
         getPanel: function () {
-            this._populateMapLayerPanel();
+            //this._populateMapLayerPanel();
             return this.panel;
         },
         /**
@@ -255,39 +251,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
         },
 
         /**
-         * Returns the selections the user has done with the layer selection as an object.
-         * If the plugin is enabled, the values will contain a property 'layerSelection':
-         * {
-         *     id : 'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin',
-         *     config : {
-         *          baseLayers : [<array of layer ids that the user has selected as base layers>],
-         *          defaultBaseLayer : <id of a base layer that should be selected by default>
-         *     }
-         * }
-         * If the plugin is disabled, will return an empty object. Note that the user can select
-         * any layer as a base layer for published map. It is not restricted to usual base layers.
-         * Also base layer in published maps mean that it is the bottom layer and only one base layer
-         * is visible at any time.
-         *
          * @method getValues
          * @return {Object}
          */
         getValues: function () {
-            var values = {};
-            if (this.showLayerSelection) {
-                values.layerSelection = {
-                    id: 'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin',
-                    config: this.pluginConfig
-                };
-                var pluginValues = this.plugin.getBaseLayers();
-                if (pluginValues.defaultBaseLayer) {
-                    values.layerSelection.config.baseLayers =
-                        pluginValues.baseLayers;
-                    values.layerSelection.config.defaultBaseLayer =
-                        pluginValues.defaultBaseLayer;
-                }
-            }
-            return values;
+            return null;
         },
         /**
          * Returns any errors found in validation (currently doesn't check anything) or an empty
@@ -367,7 +335,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
 
                         layer.selected = isChecked;
                         if (isChecked) {
-                            me.plugin.removeBaseLayer(layer);
+                            me.getPlugin().removeBaseLayer(layer);
                         }
                         sandbox.request(me.instance.getName(), request);
 
@@ -383,8 +351,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                     input.attr('checked', 'checked');
                     layer.selected = true;
                     // Make sure the layer is added before making it a base layer
-                    this.plugin.addLayer(layer);
-                    this.plugin.addBaseLayer(layer);
+//                    this.plugin.addLayer(layer);
+                    this.getPlugin().addLayer(layer);
+//                    this.plugin.addBaseLayer(layer);
+                    this.getPlugin().addBaseLayer(layer);
                 }
 
                 listContainer.prepend(layerContainer);
@@ -441,7 +411,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                                 addRequestBuilder(layer.getId(), true)
                             );
                             // promoted layers go directly to baselayers
-                            me.plugin.addBaseLayer(layer);
+                            me.getPlugin().addBaseLayer(layer);
                         } else {
                             sandbox.request(
                                 me.instance,
@@ -679,14 +649,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                         isChecked = checkbox.is(':checked');
 
                     layer.selected = isChecked;
-                    if (isChecked && me.plugin) {
-                        me.plugin.addBaseLayer(layer);
-                    } else if(me.plugin){
-                        me.plugin.removeBaseLayer(layer);
+                    if (isChecked && me.getPlugin()) {
+                        me.getPlugin().addBaseLayer(layer);
+                    } else if(me.getPlugin()){
+                        me.getPlugin().removeBaseLayer(layer);
                     }
                 };
             };
-
 
             var input = tools.find('input.baselayer');
             input.attr('id', 'checkbox' + layer.getId());

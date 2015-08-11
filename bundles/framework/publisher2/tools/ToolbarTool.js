@@ -144,6 +144,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
          * @returns {Object} tool value object
          */
         getValues: function () {
+            /*
             var me = this,
                 saveState = {
                     tool: me.getTool().id,
@@ -152,6 +153,19 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 };
 
             return saveState;
+            */
+            var me = this;
+            if(me.state.enabled) {
+                return {
+                    mapfull: {
+                        conf: {
+                            plugins: [{ id: this.getTool().id, config: this.getPlugin().getConfig(), toolbarConfig: me.toolbarConfig }]
+                        }
+                    }
+                };
+            } else {
+                return null;
+            }
         },
         /**
          * Get extra options.
@@ -168,12 +182,22 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                     var checkbox = jQuery(this),
                         isChecked = checkbox.is(':checked');
                     tool.selected = isChecked;
-                    me.activatePreviewPlugin(tool, isChecked);
+                    //(un)creates and (un)registers the plugin
+                    //the first time around the plugin has not yet been created and thus this has to be called "manually" for the activatePreviewPlugin to work correctly
+                    if (isChecked) {
+                        tool.setEnabled(isChecked);
+                        me.activatePreviewPlugin(tool, isChecked);
+                    } else {
+                        //toggled off? need to toggle off the previewplugin first, so the toolbar gets notified of removing the buttons
+                        me.activatePreviewPlugin(tool, isChecked);
+                        tool.setEnabled(isChecked);
+                    }
                 };
             };
 
             this._loadDataConfig();
             this.toolContainer = toolContainer;
+
             toolContainer.find('input').change(closureMagic(this));
 
         },
@@ -189,7 +213,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
         activatePreviewPlugin: function (tool, enabled, localeChange) {
             var me = this,
                 sandbox = me.__sandbox;
-
 
             if (!tool || !tool.__plugin) {
                 // no tool or plugin not created -> nothing to do
@@ -265,7 +288,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                         toolName,
                         toolButton,
                         toolElement;
-
                     // retrieve groupName button configs
                     for (i = 0, ilen = me.buttonGroups.length; i < ilen; i++) {
                         if (groupName === me.buttonGroups[i].name) {
@@ -345,9 +367,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             } else {
                 // toolbar (bundle) needs to be notified
 
-                if (!localeChange) {
-                    me.toolbarConfig = {};
-                }
+                //the following block probably has never worked properly if toolbarconfig has been reset here...?
+//                if (!localeChange) {
+//                    me.toolbarConfig = {};
+//                }
 
                 // remove buttons, handlers and toolbar toolbar tools
                 for (i = 0, ilen = me.buttonGroups.length; i < ilen; i++) {
@@ -365,6 +388,12 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                         }
                     }
                 }
+
+
+                if (!localeChange) {
+                    me.toolbarConfig = {};
+                }
+
 
                 if (tool._isPluginStarted) {
                     //remove eventlisteners
@@ -670,7 +699,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             }
             return false;
         },
-
         _hasSelectedDrawTool: function () {
             var me = this,
                 buttons = me.publishedmyplaces2Config.myplaces;

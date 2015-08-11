@@ -41,7 +41,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 if (me.toolLayoutEditMode && event.getTool().state.enabled === true) {
                     me._editToolLayoutOff();
                     me._editToolLayoutOn();
-                } 
+                } else {
+                    //just update the plugins' locationdata 
+                    me._changeToolLayout(me.activeToolLayout, null);
+                }
             },
             'Publisher2.ToolStyleChangedEvent': function(event) {
                 var me = this;
@@ -51,21 +54,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 var me = this;
                 me._changeFont(event.getFont());
             }
-        },
-        getName: function() {
-            return "Oskari.mapframework.bundle.publisher2.view.PanelToolLayout";
-        },
-        /**
-         * @method onEvent
-         * @param {Oskari.mapframework.event.Event} event a Oskari event object
-         * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
-         */
-        onEvent: function (event) {
-            var handler = this.eventHandlers[event.getName()];
-            if (!handler) {
-                return;
-            }
-            return handler.apply(this, [event]);
         },
         /**
          * @method init
@@ -80,10 +68,85 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             }
 
             if (!me.panel) {
-            	me.panel = me._populateToolLayoutPanel();
+                me.panel = me._populateToolLayoutPanel();
             }
 
             me._toggleAdditionalTools();
+            //init the tools' plugins location infos
+            me._changeToolLayout(me.activeToolLayout, null);
+        },
+        getName: function() {
+            return "Oskari.mapframework.bundle.publisher2.view.PanelToolLayout";
+        },
+        
+        /**
+        * Extends object recursive for keeping defaults array.
+        * @method _extendRecursive
+        * @private
+        *
+        * @param {Object} defaults the default extendable object
+        * @param {Object} extend extend object
+        *
+        * @return {Object} extended object
+        */
+        _extendRecursive: function(defaults, extend){
+            var me = this;
+
+            if (extend === null || jQuery.isEmptyObject(extend)) {
+                return defaults;
+            } else if (jQuery.isEmptyObject(defaults)) {
+                return jQuery.extend(true, defaults, extend);
+            } else if (jQuery.isArray(defaults)) {
+                if(jQuery.isArray(extend)){
+                    jQuery.each(extend, function(key, value) {
+                        defaults.push(value);
+                    });
+                }
+                return defaults;
+            } else {
+                jQuery.each(extend, function(key, value){
+                    if(defaults[key] === null) {
+                        defaults[key] = value;
+                    } else {
+                        defaults[key] = me._extendRecursive(defaults[key], value);
+                    }
+
+                });
+                return defaults;
+            }
+        },
+
+        /**
+         * Returns the selections the user has done with the form inputs.
+         * @method getValues
+         * @return {Object}
+         */
+        getValues: function () {
+            var me = this,
+                values = {};
+
+            _.each(me.tools, function(tool){
+
+                if (tool.isDisplayed()) {
+                    var value = tool.getValues();
+                    me._extendRecursive(values, value);
+                }
+            });
+
+            values['toolLayout'] = me.activeToolLayout;
+            return values;
+        },
+        /**
+         * @method onEvent
+         * @param {Oskari.mapframework.event.Event} event a Oskari event object
+         * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
+         */
+        onEvent: function (event) {
+            var handler = this.eventHandlers[event.getName()];
+            if (!handler) {
+                return;
+            }
+            return handler.apply(this, [event]);
         },
         /**
          * @method _toggleAdditionalTools
@@ -112,9 +175,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             return this.panel;
         },
         /**
-         * @private @method _createToolLayoutPanel
-         *
-         *
+         * @private @method _populateToolLayoutPanel
          */
         _populateToolLayoutPanel: function () {
             var me = this,
@@ -214,12 +275,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                         }
                     }
                 }
-                // Set logoplugin and layerselection as well
-                //TODO: make this stuff work later.
-                /*
-                me.layerSelectionClasses.classes = me.layerSelectionClasses[layout];
-                me.maplayerPanel.plugin.setLocation(me.layerSelectionClasses.classes);
-				*/
 
                 if (event) {
                     target = jQuery(event.currentTarget);
@@ -287,10 +342,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
         
         /**
          * @private @method _editToolLayoutOff
-         * TODO: ALmost the same function is already present in the publisher. Except for the fact that this one doesn't stop the panels (which in any case screws things up)
-         * Should we refactor that to make this work, or have two funcs...?
          */
-         
         _editToolLayoutOff: function () {
             var me = this,
                 sandbox = Oskari.getSandbox('sandbox');
@@ -593,8 +645,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 }
             }
 
-            // Change the style of the layer selection plugin
-//            me._setLayerSelectionStyle(style.val);
             // Recreate draggable if need be
             if (me.toolLayoutEditMode) {
                 me._makeDraggable(jQuery('.mapplugin'));
