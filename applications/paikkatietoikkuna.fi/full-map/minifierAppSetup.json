@@ -554,6 +554,26 @@
 					}
 				}
 			}
+		}, {
+			"bundlename" : "routingUI",
+			"bundleinstancename" : "routingUI",
+			"metadata" : {
+				"Import-Bundle" : {
+					"routingUI" : {
+						"bundlePath" : "../../../packages/framework/bundle/"
+					}
+				}
+			}
+		}, {
+			"bundlename" : "routingService",
+			"bundleinstancename" : "routingService",
+			"metadata" : {
+				"Import-Bundle" : {
+					"routingService" : {
+						"bundlePath" : "../../../packages/framework/bundle/"
+					}
+				}
+			}
 		}
 	]
 }
