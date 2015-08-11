@@ -83,7 +83,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 //call set enabled before rendering the panels (avoid duplicate "normal map plugins")
                 me.publisher.setEnabled(true);
                 me.publisher.render(map);
-                me.publisher.initPanels();
+
+
+                //calling this results in calling each of the panels' init-method twice, because init is already called when the forms are created at publisherSideBar's render. 
+                //and that causes trouble.
+//                me.publisher.initPanels();
             } else {
                 me._destroyGrid();
                 Oskari.setLang(me.oskariLang);
