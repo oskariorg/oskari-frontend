@@ -237,7 +237,7 @@ Oskari.clazz.define(
         _addLayerFilterStats: function(){
             var me = this,
                 filterFunction = function(layer){
-                    return (layer.getLayerType() === 'stats');
+                    return (layer.hasFeatureData());
                 };
             jQuery('.filter-stats').attr('title', me._locale.layerFilter.tooltips.remove);
             me._removeLayerFilters('newest');
