@@ -1,0 +1,135 @@
+/* Mixins */
+div.mapplugin.layerselection {
+  height: 37px;
+  overflow: visible;
+  max-width: 200px;
+  z-index: 100000000 !important; }
+  div.mapplugin.layerselection div.content {
+    background-color: white; }
+    div.mapplugin.layerselection div.content div.content-header {
+      /* This is some sort of a theme color... leave it be */
+      background-color: #333438;
+      color: #FFFFFF;
+      text-align: left;
+      height: 25px;
+      padding: 5px; }
+      div.mapplugin.layerselection div.content div.content-header .content-close {
+        display: inline-block;
+        float: right;
+        cursor: pointer; }
+      div.mapplugin.layerselection div.content div.content-header div.content-header-title {
+        display: inline-block;
+        float: left;
+        padding: 5px; }
+    div.mapplugin.layerselection div.content div.baseLayerHeader {
+      background-color: #E6E6E6;
+      padding: 10px;
+      text-align: left; }
+    div.mapplugin.layerselection div.content div.layer {
+      margin: 5px 0;
+      text-align: left;
+      clear: both; }
+      div.mapplugin.layerselection div.content div.layer input {
+        margin-right: 10px;
+        float: left; }
+      div.mapplugin.layerselection div.content div.layer span {
+        display: block;
+        margin-left: 30px;
+        word-break: break-all; }
+    div.mapplugin.layerselection div.content div.styled-header-arrow {
+      width: 0px;
+      height: 0px;
+      margin-left: 170px;
+      margin-top: -20px;
+      border-top: 10px solid transparent;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 10px solid #333438; }
+  div.mapplugin.layerselection div.layers, div.mapplugin.layerselection div.mapplugin.layerselection div.baselayers {
+    padding: 10px; }
+  div.mapplugin.layerselection div.header {
+    background-color: #3c3c3c;
+    color: #FFF;
+    cursor: pointer;
+    padding: 8px;
+    text-align: left; }
+    div.mapplugin.layerselection div.header div.header-icon {
+      display: inline-block;
+      margin-right: 4px;
+      vertical-align: middle; }
+  div.mapplugin.layerselection div.header:hover {
+    color: #ff9100; }
+  div.mapplugin.layerselection div.layerselection-styled-content {
+    width: 200px;
+    border: 1px solid #333438; }
+  div.mapplugin.layerselection .oskari-publisher-layers-rounded-dark, div.mapplugin.layerselection .oskari-publisher-layers-rounded-light {
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    -o-border-radius: 15px;
+    -ms-border-radius: 15px;
+    border-radius: 15px;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box; }
+  div.mapplugin.layerselection .oskari-publisher-layers-sharp-dark, div.mapplugin.layerselection .oskari-publisher-layers-sharp-light {
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    -o-border-radius: 0;
+    -ms-border-radius: 0;
+    border-radius: 0; }
+  div.mapplugin.layerselection .oskari-publisher-layers-3d-dark, div.mapplugin.layerselection .oskari-publisher-layers-3d-light {
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -o-border-radius: 3px;
+    -ms-border-radius: 3px;
+    border-radius: 3px;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box; }
+  div.mapplugin.layerselection .oskari-publisher-layers-header-rounded-dark, div.mapplugin.layerselection .oskari-publisher-layers-header-rounded-light {
+    -webkit-border-radius: 13px 13px 0 0;
+    -moz-border-radius: 13px 13px 0 0;
+    -o-border-radius: 13px 13px 0 0;
+    -ms-border-radius: 13px 13px 0 0;
+    border-radius: 13px 13px 0 0;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box; }
+  div.mapplugin.layerselection .oskari-publisher-layers-header-sharp-dark, div.mapplugin.layerselection .oskari-publisher-layers-header-sharp-light {
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    -o-border-radius: 0;
+    -ms-border-radius: 0;
+    border-radius: 0; }
+  div.mapplugin.layerselection .oskari-publisher-layers-header-3d-dark, div.mapplugin.layerselection .oskari-publisher-layers-header-3d-light {
+    -webkit-border-radius: 1px 1px 0 0;
+    -moz-border-radius: 1px 1px 0 0;
+    -o-border-radius: 1px 1px 0 0;
+    -ms-border-radius: 1px 1px 0 0;
+    border-radius: 1px 1px 0 0;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box; }
+
+.published-styled-layerselector {
+  position: relative !important; }
+
+.published-styled-layerselector-header {
+  width: 38px !important;
+  height: 38px !important;
+  padding: 0px !important;
+  background-color: transparent !important;
+  float: right !important; }
+
+.published-styled-layerselector-content {
+  position: absolute !important;
+  top: 44px !important;
+  right: 0px !important; }
+
+/* Hacketyhack, we need to keep the popup on screen */
+.mapplugins.left div.mapplugin.layerselection div.published-styled-layerselector-content {
+  left: 0px !important;
+  right: auto !important; }
+
+.mapplugins.left div.mapplugin.layerselection div.published-styled-layerselector-content div.styled-header-arrow {
+  margin-left: 12px !important; }
