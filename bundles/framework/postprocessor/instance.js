@@ -87,7 +87,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.postprocessor.PostProcessorBundl
                 }
                 dummyLayer.setId(layerId);
                 dummyLayer.setOpacity(100);
-                var event = builder(featureIdList, dummyLayer);
+                var event = builder(featureIdList, dummyLayer, true);
                 this.sandbox.notifyAll(event);
             }
         },
