@@ -1345,6 +1345,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 var showDataInput = contentPanel.parent().find('#showFeatureDataAfterAnalysis');
                 showDataInput.attr('checked', true);
 
+                //this is commented out until the backend is ready to handle it
+                /*
                 var showValuesCheckbox = me.template.checkboxLabel.clone();
                 showValuesCheckbox.addClass('show_data_in_popup');
                 showValuesCheckbox.find('input').attr('id', 'showFeatureDataWithoutSaving');
@@ -1358,6 +1360,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         showDataInput.attr('disabled', false);
                     }
                 });
+                */
 
                 contentPanel.parent().find('input[name=showFeatureData]').attr('checked', true);
 
