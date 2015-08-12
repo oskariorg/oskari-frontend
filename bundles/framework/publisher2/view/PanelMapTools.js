@@ -166,6 +166,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
         *
         * @return {Object} extended object
         */
+        /*
         _extendRecursive: function(defaults, extend){
             var me = this;
 
@@ -192,12 +193,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                 return defaults;
             }
         },
-
+*/
         /**
          * Returns the selections the user has done with the form inputs.
          * @method getValues
          * @return {Object}
          */
+         /*
         getValues: function () {
             var me = this,
                 values = {};
@@ -206,8 +208,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                 var value = tool.getValues();
                 me._extendRecursive(values, value);
             });
-
             return values;
+        },
+        */
+        getValues: function() {
+            //just return empty -> tools and their plugins' configs get returned by the layout panel, which has all the tools
+            return null;
         },
         /**
          * Get tool by name

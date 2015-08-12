@@ -174,7 +174,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
          */
         init: function (pData) {
             var me = this,
-                iData = pData || {};
+                iData = pData || null;
 
             for (var p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
@@ -184,8 +184,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
 
             // Set the initial values
             me.values = {
-                font: iData.font,
-                toolStyle: iData.toolStyle
+                style: {
+                    font: iData ? iData.font : me.initialValues.fonts[0],
+                    toolStyle: iData ? iData.toolStyle : me.initialValues.toolStyles[0]
+                }
             };
 
             // "Precompile" the templates
@@ -199,8 +201,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
 
             if (pData !== null && pData !== undefined) {
                 me._prepopulateCustomColours(pData.colourScheme);
-                me._sendFontChangedEvent(me.values.font);
-                me._sendToolStyleChangedEvent(me._getItemByCode(me.values.toolStyle, me.initialValues.toolStyles));
+                me._sendFontChangedEvent(me.values.style.font);
+                me._sendToolStyleChangedEvent(me._getItemByCode(me.values.style.toolStyle, me.initialValues.toolStyles));
             }
 
             if (!me.panel) {
@@ -218,6 +220,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
 	            this._populateLayoutPanel();
             }
             return this.panel;
+        },
+        /**
+         * Returns the selections the user has done with the form inputs.
+         * {
+         *     font : <selected font (string)>,
+         *     toolStyle : <selected toolStyle (string)>
+         * }
+         *
+         * @method getValues
+         * @return {Object}
+         */
+        getValues: function () {
+            var me = this;
+            var toolStyleCode = jQuery('select[name=publisher-toolStyles]').val();
+            me.values = {
+                style: {
+                    font: jQuery('select[name=publisher-fonts]').val(),
+                    toolStyle: this._getItemByCode(toolStyleCode, this.initialValues.toolStyles)
+                }
+            };
+
+            return me.values;
         },
         _populateLayoutPanel: function() {
             var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel'),

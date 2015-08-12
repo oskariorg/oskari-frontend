@@ -66,9 +66,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.PopupRouting",
             getRouteBtn.setHandler(function () {
                 me.progressSpinner.start();
                 me.params.srs = me.sandbox.getMap().getSrsName();
-                // Remove selections
-                console.log("parse params from form and return params as an object");
-
                 me.sandbox.postRequestByName('GetRouteRequest', [me.params]);
 
             });
@@ -76,9 +73,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.PopupRouting",
             var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             cancelBtn.setTitle(this.loc.button.cancel);
             cancelBtn.setHandler(function () {
-                //destroy the active sketch, disable the selected control
                 popup.close(true);
                 me.stopTool();
+                me._removeFeaturesFromMap();
             });
             cancelBtn.addClass('primary');
             cancelBtn.blur();
@@ -127,6 +124,21 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.PopupRouting",
         },
 
         /**
+         * @method _removeFeaturesFromMap
+         * @private
+         * Removes features from map.
+         *
+         * @param {String} identifier the identifier
+         * @param {String} value the identifier value
+         * @param {Oskari.mapframework.domain.VectorLayer} layer the layer
+         */
+        _removeFeaturesFromMap: function(identifier, value, layer){
+            var me = this,
+                rn = 'MapModulePlugin.RemoveFeaturesFromMapRequest';
+            me.sandbox.postRequestByName(rn, [identifier, value, layer]);
+        },
+
+        /**
          * @method renderRoutingOptions
          * Renders fields to popup for gicing parameters to route
          */
@@ -145,6 +157,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.PopupRouting",
             finishingPointField.getField().addClass("routing-field");
             finishingPointField.setEnabled(false);
             me.popupContent.append(finishingPointField.getField());
+
+            var routeInstructions = me.template.routeInstructions.clone();
+            me.popupContent.append(routeInstructions);
         },
         /**
          * @method setStartingPoint

@@ -398,14 +398,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         */
         _gatherSelections: function(){
             var me = this,
-                selections = {};
+                sandbox = this.instance.getSandbox(),
+                selections = {},
+                errors = [];
+
+
+            var mapFullState = sandbox.getStatefulComponents().mapfull.getState();
+            selections.mapfull = {
+                state: mapFullState
+            };
+
             jQuery.each(me.panels, function(index, panel){
+                if (panel.validate && typeof panel.validate === 'function') {
+                    errors = errors.concat(panel.validate());
+                }
+                
                 jQuery.extend(true, selections, panel.getValues());
             });
 
-            console.log(selections);
+            if (errors.length > 0) {
+                me._showValidationErrorMessage(errors);
+                return null;
+            }
 
-            throw 'Not implemented yet!';
+            console.log(selections);
+            return selections;
         },
 
         /**
@@ -433,37 +450,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
 
             var event = sandbox.getEventBuilder('LayerToolsEditModeEvent')(false);
             sandbox.notifyAll(event);
-
-/*
-            // Set logoplugin and layerselection as well
-            // FIXME get this from logoPlugin's config, no need to traverse the DOM
-            if (me.logoPlugin) {
-                me.logoPluginClasses.classes = me.logoPlugin.getElement().parents('.mapplugins').attr('data-location');
-                me.logoPlugin.getElement().css('position', '');
-                //me.logoPlugin.setLocation(me.logoPluginClasses.classes);
-            }
-            if (me.maplayerPanel.plugin && me.maplayerPanel.plugin.getElement()) {
-                me.layerSelectionClasses.classes = me.maplayerPanel.plugin.getElement().parents('.mapplugins').attr('data-location');
-                //me.maplayerPanel.plugin.setLocation(me.layerSelectionClasses.classes);
-                me.maplayerPanel.plugin.getElement().css('position', '');
-            }
-
-            // set map controls back to original settings after editing tool layout
-            var controlsPluginTool = me.toolsPanel.getToolById('Oskari.mapframework.mapmodule.ControlsPlugin');
-            if (controlsPluginTool) {
-                me.toolsPanel.activatePreviewPlugin(controlsPluginTool, me.isMapControlActive);
-                delete me.isMapControlActive;
-            }
-
-            // Hide unneeded containers
-            var container;
-            jQuery('.mapplugins').each(function () {
-                container = jQuery(this);
-                if (container.find('.mappluginsContent').children().length === 0) {
-                    container.css('display', 'none');
-                }
-            });
-*/
         },
 
         /**
@@ -492,9 +478,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
 
             if (me.data) {
                 var save = function () {
-                    me._editToolLayoutOff();
                     var selections = me._gatherSelections();
                     if (selections) {
+                        me._editToolLayoutOff();
                         me._publishMap(selections);
                     }
                 };
@@ -519,9 +505,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             } else {
                 saveBtn.setTitle(me.loc.buttons.save);
                 saveBtn.setHandler(function () {
-                    me._editToolLayoutOff();
                     var selections = me._gatherSelections();
                     if (selections) {
+                        me._editToolLayoutOff();
                         me._publishMap(selections);
                     }
                 });
@@ -530,9 +516,63 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
 
             return buttonCont;
         },
-        _publishMap : function(selections) {
-            alert('TODO publish:\n' + JSON.stringify(selections));
+        /**
+         * @private @method _publishMap
+         * Sends the gathered map data to the server to save them/publish the map.
+         *
+         * @param {Object} selections map data as returned by _gatherSelections()
+         *
+         */
+        _publishMap: function (selections) {
+            var me = this,
+                sandbox = me.instance.getSandbox(),
+                url = sandbox.getAjaxUrl(),
+                totalWidth = '100%',
+                totalHeight = '100%',
+                errorHandler = function () {
+                    var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                        okBtn = dialog.createCloseButton(me.loc.buttons.ok);
+                    dialog.show(me.loc.error.title, me.loc.error.saveFailed, [okBtn]);
+                };
+
+            if (selections.size) {
+                totalWidth = selections.size.width + 'px';
+                totalHeight = selections.size.height + 'px';
+            }
+
+            // make the ajax call
+            jQuery.ajax({
+                url: url + '&action_route=REPLACE_WITH_NEW_PUBLISHER_ACTION_ROUTE',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    pubdata: JSON.stringify(selections)
+                },
+                beforeSend: function (x) {
+                    if (x && x.overrideMimeType) {
+                        x.overrideMimeType('application/j-son;charset=UTF-8');
+                    }
+                },
+                success: function (response) {
+                    if (response.id > 0) {
+                        var event = sandbox.getEventBuilder(
+                            'Publisher.MapPublishedEvent'
+                        )(
+                            response.id,
+                            totalWidth,
+                            totalHeight,
+                            response.lang,
+                            sandbox.createURL(response.url)
+                        );
+                        sandbox.notifyAll(event);
+                    } else {
+                        errorHandler();
+                    }
+                },
+                error: errorHandler
+            });
         },
+
 
         /**
          * @method setEnabled
@@ -600,6 +640,30 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             }
             // reset listing
             me.normalMapPlugins = [];
+        },
+        /**
+         * @private @method _showValidationErrorMessage
+         * Takes an error array as defined by Oskari.userinterface.component.FormInput validate() and
+         * shows the errors on a  Oskari.userinterface.component.Popup
+         *
+         * @param {Object[]} errors validation error objects to show
+         *
+         */
+        _showValidationErrorMessage: function (errors) {
+            var dialog = Oskari.clazz.create(
+                    'Oskari.userinterface.component.Popup'
+                ),
+                okBtn = dialog.createCloseButton(this.loc.buttons.ok),
+                content = jQuery('<ul></ul>'),
+                i,
+                row;
+
+            for (i = 0; i < errors.length; i += 1) {
+                row = jQuery('<li></li>');
+                row.append(errors[i].error);
+                content.append(row);
+            }
+            dialog.show(this.loc.error.title, content, [okBtn]);
         },
         /**
          * @method destroy

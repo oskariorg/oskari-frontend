@@ -139,20 +139,97 @@ function () {
         var me = this,
             rn = 'MapModulePlugin.AddFeaturesToMapRequest',
             style = OpenLayers.Util.applyDefaults(style, OpenLayers.Feature.Vector.style['default']);
-        style.strokeColor = '#000000';
-        style.cursor = 'pointer';
-        style.strokeWidth = 2;
+        style.strokeColor = '#9966FF';
+        style.strokeWidth = 5;
+        style.strokeOpacity = 0.7;
         this.sandbox.postRequestByName(rn, [geom, 'GeoJSON', null, null, 'replace', true, style, false]);
         me.popup.progressSpinner.stop();
     },
 
     renderInstructions: function (instructions) {
-        var me = this;
-            loc = me.localization.routeInstructions;
+        var me = this,
+            loc = me.localization,
+            routeLenght = me.formatLenght(instructions.length),
+            routeDuration = me.formatTime(instructions.duration),
+            legList = jQuery('<div><ul></ul></div>').clone(),
+            listElement = '<li></li>',
+            routeDiv = me.popup.popupContent.find('.route-instructions');
+
+        routeDiv.empty();
+        instructionDiv = '<div>' + loc.routeInstructions.length + routeLenght + ', ' + loc.routeInstructions.duration + routeDuration + '</div>';
+
+        _.forEach(instructions.legs, function (leg) {
+            var listEl = jQuery(listElement).clone(),
+                length = me.formatLenght(leg.length),
+                duration = me.formatTime(leg.duration);
 
 
-        instructionDiv = '<div><li>' + loc.length + instructions.length + loc.meters + ', ' + loc.duration + instructions.duration + loc.seconds + '</li></div>';
-        me.popup.popupContent.append(instructionDiv);
+            listEl.html(loc.transportTypeIds[leg.type] + ', ' + length + ', ' + duration);
+            legList.append(listEl);
+        });
+
+        routeDiv.append(instructionDiv);
+        routeDiv.append(legList);
+    },
+
+    formatLenght: function (length) {
+        if (length > 1000) {
+            var kilometers = this.decimalAdjust('round', length/1000, -1);
+            var newLength = kilometers + " km";
+        } else {
+            var meters = this.decimalAdjust('round', length, 1);
+            var newLength = meters + " m";
+        }
+        return newLength;
+    },
+
+    /**
+     * Decimal adjustment of a number.
+     *
+     * @param {String}  type  The type of adjustment.
+     * @param {Number}  value The number.
+     * @param {Integer} exp   The exponent (the 10 logarithm of the adjustment base).
+     * @returns {Number} The adjusted value.
+     */
+    decimalAdjust: function (type, value, exp) {
+        // If the exp is undefined or zero...
+        if (typeof exp === 'undefined' || +exp === 0) {
+          return Math[type](value);
+        }
+        value = +value;
+        exp = +exp;
+        // If the value is not a number or the exp is not an integer...
+        if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
+          return NaN;
+        }
+        // Shift
+        value = value.toString().split('e');
+        value = Math[type](+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
+        // Shift back
+        value = value.toString().split('e');
+        return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
+    },
+
+    formatTime: function (seconds) {
+        var secs = Math.round(seconds);
+        var hours = Math.floor(secs / (60 * 60));
+
+        var divisor_for_minutes = secs % (60 * 60);
+        var minutes = Math.floor(divisor_for_minutes / 60);
+
+        var divisor_for_seconds = divisor_for_minutes % 60;
+        var seconds = Math.ceil(divisor_for_seconds);
+
+        if (hours === 0) {
+            if (minutes === 0) {
+                var duration = seconds + " s";
+            } else {
+                var duration = minutes + " min";
+            }
+        } else {
+            var duration = hours + " h " + minutes + " min";
+        }
+        return duration;
     }
 }, {
     "extend": ["Oskari.userinterface.extension.DefaultExtension"]

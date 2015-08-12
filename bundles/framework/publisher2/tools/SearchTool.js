@@ -40,7 +40,7 @@ function() {
             return {
                 mapfull: {
                     conf: {
-                        plugins: [{ id: this.getTool().id }]
+                        plugins: [{ id: this.getTool().id, config: this.getPlugin().getConfig() }]
                     }
                 }
             };

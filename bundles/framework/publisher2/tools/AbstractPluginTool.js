@@ -64,6 +64,12 @@ function(sandbox, mapmodule, localization, instance, handlers) {
             tool = me.getTool(),
             sandbox = me.__sandbox;
 
+
+        //state actually hasn't changed -> do nothing
+        if (me.state.enabled !== undefined && me.state.enabled !== null && enabled === me.state.enabled) {
+            return;
+        }
+
         me.state.enabled = enabled;
         if(!me.__plugin && enabled) {
             me.__plugin = Oskari.clazz.create(tool.id, tool.config);
