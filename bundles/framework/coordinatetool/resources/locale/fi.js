@@ -7,9 +7,9 @@ Oskari.registerLocalization(
         "desc": "",
         "display": {
             "crs": {
-                "EPSG:3067": "ETRS89-TM35FIN koordinaatit",
-                "EPSG:3575": "North Pole LAEA Europe koordinaatit",
-                "default": "{crs} koordinaatit"
+                "EPSG:3067": "ETRS89-TM35FIN -koordinaatit",
+                "EPSG:3575": "North Pole LAEA Europe -koordinaatit",
+                "default": "{crs} -koordinaatit"
             },
             "popup": {
                 "title": "Koordinaatit",
