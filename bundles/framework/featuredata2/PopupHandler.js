@@ -193,6 +193,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
             cancelBtn.setTitle(this.loc.button.cancel);
             cancelBtn.setHandler(function () {
                 //destroy the active sketch, disable the selected control
+                me.WFSLayerService.setSelectionToolsActive(false);
                 me.selectionPlugin.drawLayer.removeAllFeatures();
                 me.selectionPlugin._toggleControl();
                 dialog.close(true);
