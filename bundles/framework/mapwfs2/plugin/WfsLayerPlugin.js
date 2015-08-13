@@ -540,10 +540,6 @@ Oskari.clazz.define(
 
             me.removeHighlightImages(layer);
 
-            if (!event.isKeepSelection()) {
-                return;
-            }
-
             // if no connection or the layer is not registered, get highlight with URl
             if (connection.isLazy() && (!connection.isConnected() || !sandbox.findMapLayerFromSelectedMapLayers(layerId))) {
                 srs = map.getSrsName();
