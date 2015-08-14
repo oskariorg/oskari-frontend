@@ -1,0 +1,37 @@
+@CHARSET "UTF-8";
+
+/* my places tools icons */
+.myplaces_draw_point {
+	background-image: url( "../images/lisaa_paikka.png" ) !important;
+}
+
+.myplaces_draw_line {
+	background-image: url( "../images/lisaa_reitti.png" ) !important;
+}
+
+.myplaces_draw_area {
+	background-image: url( "../images/lisaa_alue.png" ) !important;
+}
+
+.myplaces_draw_cancel {
+	background-image: url( "../images/my_places_stop.png" ) !important;
+}
+.myplaces_edit_place {
+	background-image: url( "../images/my_places_edit.png" ) !important;
+}
+
+.myplaces_delete_place {
+	background-image: url( "../images/my_places_delete.png" ) !important;
+}
+
+.myplaces_delete_category {
+	background-image: url( "../icons/poisto.png" ) !important;
+}
+
+.myplaces_add_category {
+	background-image: url( "../icons/lisays_vihrea.png" ) !important;
+}
+
+.myplaces_edit_category {
+	background-image: url( "../images/my_places_draw_16x16.png" ) !important;
+}

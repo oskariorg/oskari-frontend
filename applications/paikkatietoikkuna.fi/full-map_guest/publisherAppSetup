@@ -1,0 +1,610 @@
+{
+    "startupSequence": [{
+        "title": "OpenLayers",
+        "fi": "OpenLayers",
+        "sv": "?",
+        "en": "OpenLayers",
+        "bundlename": "openlayers-default-theme",
+        "bundleinstancename": "openlayers-default-theme",
+        "metadata": {
+            "Import-Bundle": {
+                "openlayers-default-theme": {
+                    "bundlePath": "/Oskari/packages/openlayers/bundle/"
+                },
+                "openlayers-full-map": {
+                    "bundlePath": "/Oskari/packages/openlayers/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        },
+        "instanceProps": {}
+    }, {
+        "title": "Map",
+        "fi": "Map",
+        "sv": "?",
+        "en": "Map",
+        "bundlename": "mapfull",
+        "bundleinstancename": "mapfull",
+        "metadata": {
+            "Import-Bundle": {
+                "mapwmts": {
+                    "bundlePath": "/Oskari/packages/framework/bundle/"
+                },
+                "mapwfs": {
+                    "bundlePath": "/Oskari/packages/framework/bundle/"
+                },
+                "mapstats": {
+                    "bundlePath": "/Oskari/packages/framework/bundle/"
+                },
+                "service-base": {
+                    "bundlePath": "/Oskari/packages/framework/bundle/"
+                },
+                "event-map-layer": {
+                    "bundlePath": "/Oskari/packages/framework/bundle/"
+                },
+                "request-map-layer": {
+                    "bundlePath": "/Oskari/packages/framework/bundle/"
+                },
+                "mapmodule-plugin": {
+                    "bundlePath": "/Oskari/packages/framework/bundle/"
+                },
+                "event-base": {
+                    "bundlePath": "/Oskari/packages/framework/bundle/"
+                },
+                "mapfull": {
+                    "bundlePath": "/Oskari/packages/framework/bundle/"
+                },
+                "core-base": {
+                    "bundlePath": "/Oskari/packages/framework/bundle/"
+                },
+                "oskariui": {
+                    "bundlePath": "/Oskari/packages/framework/bundle/"
+                },
+                "request-base": {
+                    "bundlePath": "/Oskari/packages/framework/bundle/"
+                },
+                "domain": {
+                    "bundlePath": "/Oskari/packages/framework/bundle/"
+                },
+                "core-map": {
+                    "bundlePath": "/Oskari/packages/framework/bundle/"
+                },
+                "request-map": {
+                    "bundlePath": "/Oskari/packages/framework/bundle/"
+                },
+                "sandbox-base": {
+                    "bundlePath": "/Oskari/packages/framework/bundle/"
+                },
+                "service-map": {
+                    "bundlePath": "/Oskari/packages/framework/bundle/"
+                },
+                "sandbox-map": {
+                    "bundlePath": "/Oskari/packages/framework/bundle/"
+                },
+                "event-map": {
+                    "bundlePath": "/Oskari/packages/framework/bundle/"
+                },
+                "ui-components": {
+                    "bundlePath": "/Oskari/packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        },
+        "instanceProps": {}
+    }, {
+        "title": "InfoBox",
+        "fi": "infobox",
+        "sv": "?",
+        "en": "?",
+        "bundlename": "infobox",
+        "bundleinstancename": "infobox",
+        "metadata": {
+            "Import-Bundle": {
+                "infobox": {
+                    "bundlePath": "/Oskari/packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        },
+        "instanceProps": {}
+    }, {
+        "title": "PostProcessor",
+        "fi": "PostProcessor",
+        "sv": "PostProcessor",
+        "en": "PostProcessor",
+        "bundlename": "postprocessor",
+        "bundleinstancename": "postprocessor",
+        "metadata": {
+            "Import-Bundle": {
+                "postprocessor": {
+                    "bundlePath": "/Oskari/packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        },
+        "instanceProps": {}
+    }, {
+        "title": "Published Grid",
+        "bundleinstancename": "publishedgrid",
+        "fi": "publishedgrid",
+        "sv": "publishedgrid",
+        "en": "publishedgrid",
+        "bundlename": "publishedgrid",
+        "metadata": {
+            "Import-Bundle": {
+                "publishedgrid": {
+                    "bundlePath": "/Oskari/packages/statistics/bundle/"
+                },
+                "geostats": {
+                    "bundlePath": "/Oskari/packages/libraries/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        },
+        "instanceProps": {}
+    }, {
+        "title": "Toolbar",
+        "bundleinstancename": "toolbar",
+        "fi": "toolbar",
+        "sv": "toolbar",
+        "en": "toolbar",
+        "bundlename": "toolbar",
+        "metadata": {
+            "Import-Bundle": {
+                "toolbar": {
+                    "bundlePath": "/Oskari/packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        },
+        "instanceProps": {}
+    }, {
+        "title": "Published MyPlaces",
+        "bundleinstancename": "publishedmyplaces",
+        "fi": "publishedmyplaces",
+        "sv": "publishedmyplaces",
+        "en": "publishedmyplaces",
+        "bundlename": "publishedmyplaces2",
+        "metadata": {
+            "Import-Bundle": {
+                "publishedmyplaces2": {
+                    "bundlePath": "/Oskari/packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        },
+        "instanceProps": {}
+    }],
+    "configuration": {
+        "toolbar": {
+            "state": {},
+            "conf": {
+                "defaultToolbarContainer": ".mapplugin.tools .publishedToolbarContent",
+                "viewtools": {
+                    "print": false
+                },
+                "mapUrlPrefix": {
+                    "fi": "http://www.paikkatietoikkuna.fi/web/fi/kartta?",
+                    "sv": "http://www.paikkatietoikkuna.fi/web/sv/kartfonstret?",
+                    "en": "http://www.paikkatietoikkuna.fi/web/en/map-window?"
+                }
+            }
+        },
+        "layerselection2": {
+            "state": {},
+            "conf": {}
+        },
+        "layerselector2": {
+            "state": {},
+            "conf": {
+                "showSearchSuggestions": true
+            }
+        },
+        "mapfull": {
+            "state": {
+                "selectedLayers": [{
+                    "id": "base_35"
+                }],
+                "zoom": 1,
+                "north": "6874042",
+                "east": "517620"
+            },
+            "conf": {
+                "globalMapAjaxUrl": "/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=2&",
+                "plugins": [{
+                    "id": "Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin"
+                }, {
+                    "id": "Oskari.mapframework.mapmodule.WmsLayerPlugin"
+                }, {
+                    "id": "Oskari.mapframework.mapmodule.MarkersPlugin"
+                }, {
+                    "id": "Oskari.mapframework.mapmodule.ControlsPlugin"
+                }, {
+                    "id": "Oskari.mapframework.mapmodule.GetInfoPlugin"
+                }, {
+                    "id": "Oskari.mapframework.bundle.mapwfs.plugin.wfslayer.WfsLayerPlugin"
+                }, {
+                    "id": "Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin"
+                }, {
+                    "id": "Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin"
+                }, {
+                    "id": "Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar"
+                }, {
+                    "id": "Oskari.mapframework.bundle.mapmodule.plugin.PanButtons"
+                }, {
+                    "id": "Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin"
+                }, {
+                    "id": "Oskari.mapframework.bundle.mapmodule.plugin.GeoLocationPlugin"
+                }, {
+                    "id": "Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugin"
+                }, {
+                    "id": "Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin",
+                    "config": {
+                        "termsUrl": {
+                            "fi": "//www.paikkatietoikkuna.fi/web/fi/kayttoehdot",
+                            "sv": "//www.paikkatietoikkuna.fi/web/sv/anvandningsvillkor",
+                            "en": "//www.paikkatietoikkuna.fi/web/en/terms-and-conditions"
+                        },
+                        "mapUrlPrefix": {
+                            "fi": "//www.paikkatietoikkuna.fi/web/fi/kartta?",
+                            "sv": "//www.paikkatietoikkuna.fi/web/sv/kartfonstret?",
+                            "en": "//www.paikkatietoikkuna.fi/web/en/map-window?"
+                        }
+                    }
+                }, {
+                    "id": "Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin",
+                    "config": {
+                        "toolbarId_disabled" : "PublisherToolbar",
+                        "containers" : ["publishedToolbarContent", "publishedToolbarPopupContent"]
+                    }
+                }],
+                "layers": [{
+                    "styles": {},
+                    "baseLayerId": 35,
+                    "type": "base",
+                    "orgName": "Taustakartat",
+                    "formats": {},
+                    "isQueryable": false,
+                    "id": "base_35",
+                    "minScale": 1.5E7,
+                    "dataUrl": "/catalogue/ui/metadata.html?uuid=c22da116-5095-4878-bb04-dd7db3a1a341",
+                    "names": {
+                        "fi": "Taustakartat",
+                        "sv": "Bakgrundskartor",
+                        "en": "Background Maps"
+                    },
+                    "name": "Taustakartat",
+                    "permissions": {
+                        "publish": "no_publication_permission"
+                    },
+                    "subLayer": [{
+                        "dataUrl_uuid": "c22da116-5095-4878-bb04-dd7db3a1a341",
+                        "wmsName": "taustakartta_5k",
+                        "descriptionLink": "",
+                        "styles": {},
+                        "geom": "POLYGON ((-327719.5575693818 2250048.996811038, 979121.6313409178 2250048.996811038, 979121.6313409178 7795671.301062765, -327719.5575693818 7795671.301062765, -327719.5575693818 2250048.996811038))",
+                        "baseLayerId": 35,
+                        "orgName": "Taustakartat",
+                        "type": "wmslayer",
+                        "legendImage": "",
+                        "formats": {},
+                        "isQueryable": false,
+                        "id": 184,
+                        "minScale": 5000,
+                        "dataUrl": "/catalogue/ui/metadata.html?uuid=c22da116-5095-4878-bb04-dd7db3a1a341",
+                        "style": "",
+                        "wmsUrl": "http://a.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://b.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://c.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://d.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+                        "updated": "Fri Aug 31 10:21:16 EEST 2012",
+                        "orderNumber": 21,
+                        "name": "Taustakartta 1:5000",
+                        "permissions": {
+                            "publish": "no_publication_permission"
+                        },
+                        "opacity": 100,
+                        "subtitle": "",
+                        "inspire": "Opaskartat",
+                        "maxScale": 1
+                    }, {
+                        "dataUrl_uuid": "c22da116-5095-4878-bb04-dd7db3a1a341",
+                        "wmsName": "taustakartta_10k",
+                        "descriptionLink": "",
+                        "styles": {},
+                        "geom": "POLYGON ((-327719.5575693818 2250048.996811038, 979121.6313409178 2250048.996811038, 979121.6313409178 7795671.301062765, -327719.5575693818 7795671.301062765, -327719.5575693818 2250048.996811038))",
+                        "baseLayerId": 35,
+                        "orgName": "Taustakartat",
+                        "type": "wmslayer",
+                        "legendImage": "",
+                        "formats": {},
+                        "isQueryable": false,
+                        "id": 185,
+                        "minScale": 25001,
+                        "dataUrl": "/catalogue/ui/metadata.html?uuid=c22da116-5095-4878-bb04-dd7db3a1a341",
+                        "style": "",
+                        "wmsUrl": "http://a.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://b.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://c.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://d.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+                        "updated": "Fri Aug 31 10:24:04 EEST 2012",
+                        "orderNumber": 22,
+                        "name": "Taustakartta 1:10k",
+                        "permissions": {
+                            "publish": "no_publication_permission"
+                        },
+                        "opacity": 100,
+                        "subtitle": "",
+                        "inspire": "Opaskartat",
+                        "maxScale": 5001
+                    }, {
+                        "dataUrl_uuid": "c22da116-5095-4878-bb04-dd7db3a1a341",
+                        "wmsName": "taustakartta_20k",
+                        "descriptionLink": "",
+                        "styles": {},
+                        "geom": "POLYGON ((-327719.5575693818 2250048.996811038, 979121.6313409178 2250048.996811038, 979121.6313409178 7795671.301062765, -327719.5575693818 7795671.301062765, -327719.5575693818 2250048.996811038))",
+                        "baseLayerId": 35,
+                        "orgName": "Taustakartat",
+                        "type": "wmslayer",
+                        "legendImage": "",
+                        "formats": {},
+                        "isQueryable": false,
+                        "id": 186,
+                        "minScale": 40001,
+                        "dataUrl": "/catalogue/ui/metadata.html?uuid=c22da116-5095-4878-bb04-dd7db3a1a341",
+                        "style": "",
+                        "wmsUrl": "http://a.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://b.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://c.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://d.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+                        "updated": "Fri Aug 31 10:24:17 EEST 2012",
+                        "orderNumber": 23,
+                        "name": "Taustakartta 1:20k",
+                        "permissions": {
+                            "publish": "no_publication_permission"
+                        },
+                        "opacity": 100,
+                        "subtitle": "",
+                        "inspire": "Opaskartat",
+                        "maxScale": 25001
+                    }, {
+                        "dataUrl_uuid": "c22da116-5095-4878-bb04-dd7db3a1a341",
+                        "wmsName": "taustakartta_40k",
+                        "descriptionLink": "",
+                        "styles": {},
+                        "geom": "POLYGON ((-327719.5575693818 2250048.996811038, 979121.6313409178 2250048.996811038, 979121.6313409178 7795671.301062765, -327719.5575693818 7795671.301062765, -327719.5575693818 2250048.996811038))",
+                        "baseLayerId": 35,
+                        "orgName": "Taustakartat",
+                        "type": "wmslayer",
+                        "legendImage": "",
+                        "formats": {},
+                        "isQueryable": false,
+                        "id": 187,
+                        "minScale": 2,
+                        "dataUrl": "/catalogue/ui/metadata.html?uuid=c22da116-5095-4878-bb04-dd7db3a1a341",
+                        "style": "",
+                        "wmsUrl": "http://a.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://b.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://c.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://d.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+                        "orderNumber": 24,
+                        "name": "Taustakartta 1:40k",
+                        "permissions": {
+                            "publish": "no_publication_permission"
+                        },
+                        "opacity": 100,
+                        "subtitle": "",
+                        "inspire": "Opaskartat",
+                        "maxScale": 1
+                    }, {
+                        "dataUrl_uuid": "c22da116-5095-4878-bb04-dd7db3a1a341",
+                        "wmsName": "taustakartta_80k",
+                        "descriptionLink": "",
+                        "styles": {},
+                        "geom": "POLYGON ((-327719.5575693818 2250048.996811038, 979121.6313409178 2250048.996811038, 979121.6313409178 7795671.301062765, -327719.5575693818 7795671.301062765, -327719.5575693818 2250048.996811038))",
+                        "baseLayerId": 35,
+                        "orgName": "Taustakartat",
+                        "type": "wmslayer",
+                        "legendImage": "",
+                        "formats": {},
+                        "isQueryable": false,
+                        "id": 188,
+                        "minScale": 56702,
+                        "dataUrl": "/catalogue/ui/metadata.html?uuid=c22da116-5095-4878-bb04-dd7db3a1a341",
+                        "style": "",
+                        "wmsUrl": "http://a.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://b.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://c.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://d.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+                        "orderNumber": 25,
+                        "name": "Taustakartta 1:80k",
+                        "permissions": {
+                            "publish": "no_publication_permission"
+                        },
+                        "opacity": 100,
+                        "subtitle": "",
+                        "inspire": "Opaskartat",
+                        "maxScale": 40000
+                    }, {
+                        "dataUrl_uuid": "c22da116-5095-4878-bb04-dd7db3a1a341",
+                        "wmsName": "taustakartta_160k",
+                        "descriptionLink": "",
+                        "styles": {},
+                        "geom": "POLYGON ((-327719.5575693818 2250048.996811038, 979121.6313409178 2250048.996811038, 979121.6313409178 7795671.301062765, -327719.5575693818 7795671.301062765, -327719.5575693818 2250048.996811038))",
+                        "baseLayerId": 35,
+                        "orgName": "Taustakartat",
+                        "type": "wmslayer",
+                        "legendImage": "",
+                        "formats": {},
+                        "isQueryable": false,
+                        "id": 189,
+                        "minScale": 141742,
+                        "dataUrl": "/catalogue/ui/metadata.html?uuid=c22da116-5095-4878-bb04-dd7db3a1a341",
+                        "style": "",
+                        "wmsUrl": "http://a.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://b.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://c.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://d.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+                        "orderNumber": 26,
+                        "name": "Taustakartta 1:160k",
+                        "permissions": {
+                            "publish": "no_publication_permission"
+                        },
+                        "opacity": 100,
+                        "subtitle": "",
+                        "inspire": "Opaskartat",
+                        "maxScale": 56702
+                    }, {
+                        "dataUrl_uuid": "c22da116-5095-4878-bb04-dd7db3a1a341",
+                        "wmsName": "taustakartta_320k",
+                        "descriptionLink": "",
+                        "styles": {},
+                        "geom": "POLYGON ((-327719.5575693818 2250048.996811038, 979121.6313409178 2250048.996811038, 979121.6313409178 7795671.301062765, -327719.5575693818 7795671.301062765, -327719.5575693818 2250048.996811038))",
+                        "baseLayerId": 35,
+                        "orgName": "Taustakartat",
+                        "type": "wmslayer",
+                        "legendImage": "",
+                        "formats": {},
+                        "isQueryable": false,
+                        "id": 190,
+                        "minScale": 283474,
+                        "dataUrl": "/catalogue/ui/metadata.html?uuid=c22da116-5095-4878-bb04-dd7db3a1a341",
+                        "style": "",
+                        "wmsUrl": "http://a.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://b.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://c.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://d.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+                        "orderNumber": 27,
+                        "name": "Taustakartta 1:320k",
+                        "permissions": {
+                            "publish": "no_publication_permission"
+                        },
+                        "opacity": 100,
+                        "subtitle": "",
+                        "inspire": "Opaskartat",
+                        "maxScale": 141742
+                    }, {
+                        "dataUrl_uuid": "c22da116-5095-4878-bb04-dd7db3a1a341",
+                        "wmsName": "taustakartta_800k",
+                        "descriptionLink": "",
+                        "styles": {},
+                        "geom": "POLYGON ((-327719.5575693818 2250048.996811038, 979121.6313409178 2250048.996811038, 979121.6313409178 7795671.301062765, -327719.5575693818 7795671.301062765, -327719.5575693818 2250048.996811038))",
+                        "baseLayerId": 35,
+                        "orgName": "Taustakartat",
+                        "type": "wmslayer",
+                        "legendImage": "",
+                        "formats": {},
+                        "isQueryable": false,
+                        "id": 191,
+                        "minScale": 566939,
+                        "dataUrl": "/catalogue/ui/metadata.html?uuid=c22da116-5095-4878-bb04-dd7db3a1a341",
+                        "style": "",
+                        "wmsUrl": "http://a.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://b.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://c.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://d.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+                        "orderNumber": 28,
+                        "name": "Taustakartta 1:800k",
+                        "permissions": {
+                            "publish": "no_publication_permission"
+                        },
+                        "opacity": 100,
+                        "subtitle": "",
+                        "inspire": "Opaskartat",
+                        "maxScale": 283474
+                    }, {
+                        "dataUrl_uuid": "c22da116-5095-4878-bb04-dd7db3a1a341",
+                        "wmsName": "taustakartta_2m",
+                        "descriptionLink": "",
+                        "styles": {},
+                        "geom": "POLYGON ((-327719.5575693818 2250048.996811038, 979121.6313409178 2250048.996811038, 979121.6313409178 7795671.301062765, -327719.5575693818 7795671.301062765, -327719.5575693818 2250048.996811038))",
+                        "baseLayerId": 35,
+                        "orgName": "Taustakartat",
+                        "type": "wmslayer",
+                        "legendImage": "",
+                        "formats": {},
+                        "isQueryable": false,
+                        "id": 192,
+                        "minScale": 1417333,
+                        "dataUrl": "/catalogue/ui/metadata.html?uuid=c22da116-5095-4878-bb04-dd7db3a1a341",
+                        "style": "",
+                        "wmsUrl": "http://a.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://b.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://c.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://d.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+                        "orderNumber": 29,
+                        "name": "Taustakartta 1:2milj",
+                        "permissions": {
+                            "publish": "no_publication_permission"
+                        },
+                        "opacity": 100,
+                        "subtitle": "",
+                        "inspire": "Opaskartat",
+                        "maxScale": 566939
+                    }, {
+                        "dataUrl_uuid": "c22da116-5095-4878-bb04-dd7db3a1a341",
+                        "wmsName": "taustakartta_4m",
+                        "descriptionLink": "",
+                        "styles": {},
+                        "geom": "POLYGON ((-327719.5575693818 2250048.996811038, 979121.6313409178 2250048.996811038, 979121.6313409178 7795671.301062765, -327719.5575693818 7795671.301062765, -327719.5575693818 2250048.996811038))",
+                        "baseLayerId": 35,
+                        "orgName": "Taustakartat",
+                        "type": "wmslayer",
+                        "legendImage": "",
+                        "formats": {},
+                        "isQueryable": false,
+                        "id": 193,
+                        "minScale": 2834657,
+                        "dataUrl": "/catalogue/ui/metadata.html?uuid=c22da116-5095-4878-bb04-dd7db3a1a341",
+                        "style": "",
+                        "wmsUrl": "http://a.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://b.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://c.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://d.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+                        "orderNumber": 30,
+                        "name": "Taustakartta 1:4milj",
+                        "permissions": {
+                            "publish": "no_publication_permission"
+                        },
+                        "opacity": 100,
+                        "subtitle": "",
+                        "inspire": "Opaskartat",
+                        "maxScale": 1417333
+                    }, {
+                        "dataUrl_uuid": "c22da116-5095-4878-bb04-dd7db3a1a341",
+                        "wmsName": "taustakartta_8m",
+                        "descriptionLink": "",
+                        "styles": {},
+                        "geom": "POLYGON ((-327719.5575693818 2250048.996811038, 979121.6313409178 2250048.996811038, 979121.6313409178 7795671.301062765, -327719.5575693818 7795671.301062765, -327719.5575693818 2250048.996811038))",
+                        "baseLayerId": 35,
+                        "orgName": "Taustakartat",
+                        "type": "wmslayer",
+                        "legendImage": "",
+                        "formats": {},
+                        "isQueryable": false,
+                        "id": 194,
+                        "minScale": 1.5E7,
+                        "dataUrl": "/catalogue/ui/metadata.html?uuid=c22da116-5095-4878-bb04-dd7db3a1a341",
+                        "style": "",
+                        "wmsUrl": "http://a.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://b.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://c.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://d.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+                        "orderNumber": 31,
+                        "name": "Taustakartta 1:8milj",
+                        "permissions": {
+                            "publish": "no_publication_permission"
+                        },
+                        "opacity": 100,
+                        "subtitle": "",
+                        "inspire": "Opaskartat",
+                        "maxScale": 2834657
+                    }],
+                    "inspire": "Taustakartat",
+                    "maxScale": 1
+                }],
+                "imageLocation": "/Oskari/resources",
+                "user": {
+                    "userID": 10110,
+                    "lastName": "",
+                    "nickName": "10110",
+                    "roles": [{
+                        "id": 10114,
+                        "name": "Guest"
+                    }],
+                    "userUUID": "",
+                    "firstName": "",
+                    "loginName": "default@maanmittauslaitos.fi"
+                }
+            }
+        },
+        "openlayers-default-theme": {
+            "state": {},
+            "conf": {}
+        },
+        "infobox": {
+            "state": {},
+            "conf": {
+                "adaptable": true
+            }
+        },
+        "publishedmyplaces": {
+            "state": {},
+            "conf": {
+                "layerDefaults": {
+                    "wmsName": "oskari:my_places_categories"
+                },
+                "queryUrl": "/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=2&action_route=MyPlaces",
+                "wmsUrl": "/karttatiili/myplaces?myCat=",
+                "featureNS": "http://www.oskari.org"
+            }
+        }
+    }
+}

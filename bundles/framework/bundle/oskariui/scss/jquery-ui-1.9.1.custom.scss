@@ -1,0 +1,132 @@
+/*! jQuery UI - v1.9.1 - 2012-11-09
+* http://jqueryui.com
+* Includes: jquery.ui.core.css, jquery.ui.resizable.css, jquery.ui.selectable.css, jquery.ui.slider.css, jquery.ui.tooltip.css
+* To view and modify this theme, visit http://jqueryui.com/themeroller/?ffDefault=Segoe%20UI%2CArial%2Csans-serif&fwDefault=bold&fsDefault=1.1em&cornerRadius=6px&bgColorHeader=333333&bgTextureHeader=12_gloss_wave.png&bgImgOpacityHeader=25&borderColorHeader=333333&fcHeader=ffffff&iconColorHeader=ffffff&bgColorContent=000000&bgTextureContent=05_inset_soft.png&bgImgOpacityContent=25&borderColorContent=666666&fcContent=ffffff&iconColorContent=cccccc&bgColorDefault=555555&bgTextureDefault=02_glass.png&bgImgOpacityDefault=20&borderColorDefault=666666&fcDefault=eeeeee&iconColorDefault=cccccc&bgColorHover=0078a3&bgTextureHover=02_glass.png&bgImgOpacityHover=40&borderColorHover=59b4d4&fcHover=ffffff&iconColorHover=ffffff&bgColorActive=f58400&bgTextureActive=05_inset_soft.png&bgImgOpacityActive=30&borderColorActive=ffaf0f&fcActive=ffffff&iconColorActive=222222&bgColorHighlight=eeeeee&bgTextureHighlight=03_highlight_soft.png&bgImgOpacityHighlight=80&borderColorHighlight=cccccc&fcHighlight=2e7db2&iconColorHighlight=4b8e0b&bgColorError=ffc73d&bgTextureError=02_glass.png&bgImgOpacityError=40&borderColorError=ffb73d&fcError=111111&iconColorError=a83300&bgColorOverlay=5c5c5c&bgTextureOverlay=01_flat.png&bgImgOpacityOverlay=50&opacityOverlay=80&bgColorShadow=cccccc&bgTextureShadow=01_flat.png&bgImgOpacityShadow=30&opacityShadow=60&thicknessShadow=7px&offsetTopShadow=-7px&offsetLeftShadow=-7px&cornerRadiusShadow=8px
+* Copyright (c) 2012 jQuery Foundation and other contributors Licensed MIT */
+
+/* Layout helpers
+----------------------------------*/
+.oskariui .ui-helper-hidden { display: none; }
+.oskariui .ui-helper-hidden-accessible { position: absolute !important; clip: rect(1px,1px,1px,1px); clip: rect(1px,1px,1px,1px); }
+.oskariui .ui-helper-reset { margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none; }
+.oskariui .ui-helper-clearfix:before, .ui-helper-clearfix:after { content: ""; display: table; }
+.oskariui .ui-helper-clearfix:after { clear: both; }
+.oskariui .ui-helper-clearfix { zoom: 1; }
+.oskariui .ui-helper-zfix { width: 100%; height: 100%; top: 0; left: 0; position: absolute; opacity: 0; filter: unquote("alpha(opacity=0);"); }
+
+
+/* Interaction Cues
+----------------------------------*/
+.oskariui .ui-state-disabled { cursor: default !important; }
+
+
+/* Icons
+----------------------------------*/
+
+/* states and images */
+.oskariui .ui-icon { display: block; text-indent: -99999px; overflow: hidden; background-repeat: no-repeat; }
+
+
+/* Misc visuals
+----------------------------------*/
+
+/* Overlays */
+.oskariui .ui-widget-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+.oskariui .ui-resizable { position: relative;}
+.oskariui .ui-resizable-handle { position: absolute;font-size: 0.1px; display: block; }
+.oskariui .ui-resizable-disabled .ui-resizable-handle, .ui-resizable-autohide .ui-resizable-handle { display: none; }
+.oskariui .ui-resizable-n { cursor: n-resize; height: 7px; width: 100%; top: -5px; left: 0; }
+.oskariui .ui-resizable-s { cursor: s-resize; height: 7px; width: 100%; bottom: -5px; left: 0; }
+.oskariui .ui-resizable-e { cursor: e-resize; width: 7px; right: -5px; top: 0; height: 100%; }
+.oskariui .ui-resizable-w { cursor: w-resize; width: 7px; left: -5px; top: 0; height: 100%; }
+.oskariui .ui-resizable-se { cursor: se-resize; width: 12px; height: 12px; right: 1px; bottom: 1px; }
+.oskariui .ui-resizable-sw { cursor: sw-resize; width: 9px; height: 9px; left: -5px; bottom: -5px; }
+.oskariui .ui-resizable-nw { cursor: nw-resize; width: 9px; height: 9px; left: -5px; top: -5px; }
+.oskariui .ui-resizable-ne { cursor: ne-resize; width: 9px; height: 9px; right: -5px; top: -5px;}.ui-selectable-helper { position: absolute; border:1px dotted black; }
+
+.oskariui .ui-slider { position: relative; text-align: left; }
+.oskariui .ui-slider .ui-slider-handle { position: absolute; width: 16px; height: 17px; cursor: default; }
+.oskariui .ui-slider .ui-slider-range { position: absolute; font-size: .7em; display: block; border: 0; background-position: 0 0; }
+
+.oskariui .ui-slider-horizontal { height: 14px; }
+.oskariui .ui-slider-horizontal .ui-slider-handle { background-image: url('/Oskari/resources/framework/bundle/oskariui/images/horizontal_handle.png'); background-repeat: no-repeat;}
+
+.oskariui .ui-slider-horizontal .ui-slider-range { top: 0; height: 100%; }
+.oskariui .ui-slider-horizontal .ui-slider-range-min { left: 0; }
+.oskariui .ui-slider-horizontal .ui-slider-range-max { right: 0; }
+
+.oskariui .ui-slider-vertical { margin-left: 2px; width: 24px; background-image: url('/Oskari/resources/framework/bundle/oskariui/images/zoombar_part.png'); background-repeat: repeat-y; }
+.oskariui .ui-slider-vertical .ui-slider-handle { margin-left: 0; background-image: url('/Oskari/resources/framework/bundle/oskariui/images/zoombar_cursor.png'); background-repeat: no-repeat;}
+.oskariui .ui-slider-vertical .ui-slider-range { left: 0; width: 100%; }
+.oskariui .ui-slider-vertical .ui-slider-range-min { bottom: 0; }
+.oskariui .ui-slider-vertical .ui-slider-range-max { top: 0; }.ui-tooltip {
+	padding: 8px;
+	position: absolute;
+	z-index: 9999;
+	max-width: 300px;
+	-webkit-box-shadow: 0 0 5px #aaa;
+	box-shadow: 0 0 5px #aaa;
+}
+/* Fades and background-images don't work well together in IE6, drop the image */
+* html .ui-tooltip {
+	background-image: none;
+}
+body .oskariui .ui-tooltip { border-width: 2px; }
+
+/* Component containers
+----------------------------------*/
+.oskariui .ui-widget { font-family: Segoe UI,Arial,sans-serif; font-size: 1.1em; }
+.oskariui .ui-widget .ui-widget { font-size: 1em; }
+.oskariui .ui-widget input, .oskariui .ui-widget select, .oskariui .ui-widget textarea, .oskariui .ui-widget button { font-family: Segoe UI,Arial,sans-serif; font-size: 1em; }
+.oskariui .ui-widget-content {  }
+.oskariui .ui-widget-content a {  }
+.oskariui .ui-widget-header {  }
+.oskariui .ui-widget-header a {  }
+
+/* Interaction states
+----------------------------------*/
+.oskariui .ui-state-default, .oskariui .ui-widget-content .ui-state-default, .oskariui .ui-widget-header .ui-state-default {  }
+.oskariui .ui-state-default a, .oskariui .ui-state-default a:link, .oskariui .ui-state-default a:visited {  }
+.oskariui .ui-state-hover, .oskariui .ui-widget-content .ui-state-hover, .oskariui .ui-widget-header .ui-state-hover, .oskariui .ui-state-focus, .oskariui .ui-widget-content .ui-state-focus, .oskariui .ui-widget-header .ui-state-focus {  }
+.oskariui .ui-state-hover a, .oskariui .ui-state-hover a:hover, .oskariui .ui-state-hover a:link, .oskariui .ui-state-hover a:visited { }
+.oskariui .ui-state-active, .oskariui .ui-widget-content .ui-state-active, .oskariui .ui-widget-header .ui-state-active {  }
+.oskariui .ui-state-active a, .oskariui .ui-state-active a:link, .oskariui .ui-state-active a:visited {  }
+
+/* Interaction Cues
+----------------------------------*/
+.oskariui .ui-state-highlight, .oskariui .ui-widget-content .ui-state-highlight, .oskariui .ui-widget-header .ui-state-highlight  { }
+.oskariui .ui-state-highlight a, .oskariui .ui-widget-content .ui-state-highlight a,.oskariui .ui-widget-header .ui-state-highlight a { }
+.oskariui .ui-state-error, .oskariui .ui-widget-content .ui-state-error, .oskariui .ui-widget-header .ui-state-error { }
+.oskariui .ui-state-error a, .oskariui .ui-widget-content .ui-state-error a, .oskariui .ui-widget-header .ui-state-error a { }
+.oskariui .ui-state-error-text, .oskariui .ui-widget-content .ui-state-error-text, .oskariui .ui-widget-header .ui-state-error-text {  }
+.oskariui .ui-priority-primary, .oskariui .ui-widget-content .ui-priority-primary, .oskariui .ui-widget-header .ui-priority-primary {  }
+.oskariui .ui-priority-secondary, .oskariui .ui-widget-content .ui-priority-secondary,  .oskariui .ui-widget-header .ui-priority-secondary { }
+.oskariui .ui-state-disabled, .oskariui .ui-widget-content .ui-state-disabled, .oskariui .ui-widget-header .ui-state-disabled {  }
+.oskariui .ui-state-disabled .ui-icon { filter: unquote("alpha(opacity=35);"); } /* For IE8 - See #6059 */
+
+/* Icons
+----------------------------------*/
+
+/* states and images */
+.oskariui .ui-icon { width: 16px; height: 16px; }
+.oskariui .ui-widget-content .ui-icon { }
+.oskariui .ui-widget-header .ui-icon { }
+.oskariui .ui-state-default .ui-icon {  }
+.oskariui .ui-state-hover .ui-icon, .oskariui .ui-state-focus .ui-icon {}
+.oskariui .ui-state-active .ui-icon { }
+.oskariui .ui-state-highlight .ui-icon { }
+.oskariui .ui-state-error .ui-icon, .oskariui .ui-state-error-text .ui-icon { }
+
+
+/* Misc visuals
+----------------------------------*/
+
+/* Corner radius */
+.oskariui .ui-corner-all, .oskariui .ui-corner-top, .oskariui .ui-corner-left, .oskariui .ui-corner-tl { -moz-border-radius-topleft: 6px; -webkit-border-top-left-radius: 6px; -khtml-border-top-left-radius: 6px; border-top-left-radius: 6px; }
+.oskariui .ui-corner-all, .oskariui .ui-corner-top, .oskariui .ui-corner-right, .oskariui .ui-corner-tr { -moz-border-radius-topright: 6px; -webkit-border-top-right-radius: 6px; -khtml-border-top-right-radius: 6px; border-top-right-radius: 6px; }
+.oskariui .ui-corner-all, .oskariui .ui-corner-bottom, .oskariui .ui-corner-left, .oskariui .ui-corner-bl { -moz-border-radius-bottomleft: 6px; -webkit-border-bottom-left-radius: 6px; -khtml-border-bottom-left-radius: 6px; border-bottom-left-radius: 6px; }
+.oskariui .ui-corner-all, .oskariui .ui-corner-bottom, .oskariui .ui-corner-right, .oskariui .ui-corner-br { -moz-border-radius-bottomright: 6px; -webkit-border-bottom-right-radius: 6px; -khtml-border-bottom-right-radius: 6px; border-bottom-right-radius: 6px; }
+
+/* Overlays */
+.oskariui .ui-widget-overlay { background: #5c5c5c url(images/ui-bg_flat_50_5c5c5c_40x100.png) 50% 50% repeat-x; opacity: .8; filter: unquote("alpha(opacity=80);"); }
+.oskariui .ui-widget-shadow { margin: -7px 0 0 -7px; padding: 7px; background: #cccccc url(images/ui-bg_flat_30_cccccc_40x100.png) 50% 50% repeat-x; opacity: .6; filter: unquote("alpha(opacity=60);"); -moz-border-radius: 8px; -khtml-border-radius: 8px; -webkit-border-radius: 8px; border-radius: 8px; }

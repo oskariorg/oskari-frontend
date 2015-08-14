@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>lupapiste demo</title>
+<!-- ############# css ################# -->
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js">
+</script>
+
+<link rel="stylesheet" type="text/css" href="../css/icons.css" />
+<style type="text/css">
+@media screen {
+  body {
+    margin : 0;
+    padding: 0;
+  }
+  #mapdiv {
+  }
+  #contentMap {
+    float:left;
+  }
+  
+
+  #eventMessages {
+  	float: left;
+  }
+  #formi {
+  	float: left;
+  }
+}
+</style>
+<!-- ############# /css ################# -->
+</head>
+<body>
+
+<div id="contentMap">
+<div id="mapdiv"> </div>
+</div>
+
+
+<div id="eventMessages"> </div>
+<div id="formi">
+<input type="button" id="binfopoint" value="inforequest-point"/>
+<br>
+<input type="button" id="bpoint" value="point"/>
+<input type="button" id="bline" value="line"/>
+<input type="button" id="bbox" value="box"/>
+<input type="button" id="bpolygon" value="polygon"/>
+<input type="button" id="bcircle" value="circle"/>
+<input type="button" id="bellipse" value="ellipse"/>
+<input type="button" id="brectangle" value="rectangle"/>
+<input type="button" id="bmapwindow" value="mapwindow"/>
+<br>
+<input type="button" id="bgetdrawing" value="getdrawing"/>
+<input type="button" id="bstopdrawing" value="stopdrawing"/>
+
+</div>
+
+<!-- ############# Javascript ################# -->
+
+<!--  OSKARI -->
+<script type="text/javascript"
+	src="../../../../bundles/bundle.js">
+</script>
+	
+<!--  OPENLAYERS -->
+<script type="text/javascript" 
+	src="../../../../packages/openlayers/startup.js">
+</script>
+
+<!--  LOG4JS -->
+<script type="text/javascript" 
+	src="../../../../libraries/log4js/log4js.js">
+</script>
+
+<!--  RIGHTJS (flyout)-->
+<script type="text/javascript" 
+	src="../../../../libraries/rightjs/javascripts/right.js">
+</script>
+<script type="text/javascript" 
+	src="../../../../libraries/rightjs/javascripts/right/slider.js">
+</script>
+
+<script type="text/javascript" src="../hub.js">
+</script>
+
+<script type="text/javascript" src="map-drawing-tools.js">
+</script>
+
+<!-- ############# /Javascript ################# -->
+</body>
+</html>

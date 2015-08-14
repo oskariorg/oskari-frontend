@@ -1,0 +1,37 @@
+<div class="admin-add-class">
+    <div class="add-class-wrapper">
+        <div class="add-class-record">
+            <div class="add-class-grouping" title="<%= desc %>"><%= title %></div>
+        </div>
+        <% 
+        var names = data.getNamesAsList();
+        for (var i = 0; i < names.length; i++) {
+               var locale = names[i]; %>
+        <div class="add-class-record">
+            <div class="add-class-label-area">
+                <label for="add-class-<%= locale.lang %>-name" class="add-class-label" title="<%= localeInput ? localeInput.title : locale.lang %>"><%= localeInput[locale.lang] ? localeInput[locale.lang].lang : locale.lang + ':' %></label>
+            </div>
+            <div  class="add-class-input-area">
+                <div class="input-controls">
+                    <input type="text" id="add-class-<%= locale.lang %>-name" class="add-class-input" placeholder="<%= localeInput[locale.lang] ? localeInput[locale.lang].placeholder : localeInput['generic'].placeholder.replace('{0}', locale.lang) %>" <% if(locale != null && locale.name != null) { %>value="<%= locale.name %>"  <% } %> />
+                    <div class="icon-close"></div>
+                </div>
+            </div>
+        </div>
+        <% } %>
+
+        <div class="add-class-send">
+            <div class="add-class-button-area">
+                <div class="input-controls">
+                    <% if(!data.id) { %>
+                        <button class="add-class-btn admin-add-grouping-ok" 
+                            title="<%= btnLoc.add.desc %>"><%= btnLoc.add.title %></button>
+                    <% } else { %>
+                        <button class="add-class-btn admin-add-grouping-ok"><%= btnLoc.save.title %></button>
+                        <button class="add-class-btn admin-remove-grouping" data-id="<%= data.id %>" title="<%= btnLoc.delete.title %>"><%= btnLoc.delete.title %></button> <% } %>
+                    <button class="add-class-btn admin-add-grouping-cancel" title="<%= btnLoc.cancel.title %>"><%= btnLoc.cancel.title %></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

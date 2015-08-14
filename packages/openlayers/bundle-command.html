@@ -1,0 +1,26 @@
+<!-- Do NOT put any DOCTYPE here unless you want problems in IEs. -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- module: Oskari clazz and module support -->
+<script type="text/javascript"
+	src="../../map-application-framework/src/mapframework/bundle/bundle.js"></script>
+<!-- module: extjs4 -->
+<script type="text/javascript"
+	src="../../map-application-framework/lib/OpenLayers-2.11/lib/OpenLayers/SingleFile.js"></script>
+
+<script type="text/javascript" src="bundle-command.js"></script>
+
+</head>
+
+<body>
+<select id="selector" onChange="document.location = document.location.href+this.options[this.selectedIndex].value;">
+<option value=""></option>
+<option value="?openlayers-default">openlayers-default</option>
+<option value="?openlayers-mobile">popenlayers-mobile</option>
+<option value="?openlayers-map">openlayers-map</option>
+<option value="?openlayers-map-full">openlayers-map-full</option>
+<option value="?openlayers-default-theme">openlayers-default-theme</option>
+</select> 
+</body>
+</html>

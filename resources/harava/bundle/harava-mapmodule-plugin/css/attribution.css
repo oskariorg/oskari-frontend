@@ -1,0 +1,10 @@
+#attributiontext{
+    position:absolute;
+    rigth:0;
+    bottom:0;
+    right:0;
+    z-index:1000;
+    margin-right:5px;
+    margin-bottom:5px;
+    color:#888888;
+}

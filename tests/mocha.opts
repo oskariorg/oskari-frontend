@@ -1,0 +1,9 @@
+// The loader is leaking globals, which needs to be fixed asap
+// Temporarily ignore leaks
+mocha.setup({
+	ignoreLeaks: true,
+	timeout: 60000
+});
+
+// Globals can be registered as well, not quite sure how, but it is possible 
+//mocha.setup({globals:src});

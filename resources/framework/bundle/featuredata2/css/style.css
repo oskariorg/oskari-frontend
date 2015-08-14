@@ -1,0 +1,30 @@
+.featuredata {
+  /* Selected row hightlighting */
+  /* Override common table settings */
+  /* Override sort img position */ }
+  .featuredata div.tab-content {
+    max-height: 535px;
+    overflow: auto; }
+  .featuredata .link {
+    padding: 20px 0px 0px 0px;
+    color: #0091FF;
+    text-decoration: underline;
+    display: block; }
+  .featuredata tbody tr.selected {
+    background-color: #FDF8D9; }
+  .featuredata th, .featuredata td {
+    text-align: left;
+    padding-left: 2px;
+    padding-right: 15px; }
+  .featuredata th.asc, .featuredata th.desc {
+    background-position: right center; }
+
+div.flyout-resizer {
+  float: right;
+  cursor: nw-resize; }
+
+div.mapplugins .mappluginsContainer .mappluginsContent div.featuredataplugin.mapplugin {
+  display: block;
+  background: #FFF;
+  border: 1px solid;
+  margin: 10px auto; }

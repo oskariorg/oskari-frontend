@@ -1,0 +1,90 @@
+@mixin box-shadow($shadow...) {
+   -webkit-box-shadow: $shadow;
+   -moz-box-shadow: $shadow;
+   box-shadow: $shadow;
+}
+
+div.oskariTabs {
+    /* tab headers */
+     div.tabsHeader {
+        clear: both;
+        font-weight: bold;
+        margin-right: 21px;
+        margin-bottom: -1px;
+        padding: 0;
+
+        ul {
+            display: block;
+            margin: 0;
+            padding: 0;
+            white-space: nowrap;
+
+            li {
+                display: inline-block;
+                border-style: solid;
+                border-color: #999;
+                border-width: 1px 1px 0 1px;
+                margin: 10px 0 0;
+                padding: 0;
+
+                &:first-of-type {
+                    -webkit-border-top-left-radius: 2px;
+                    -moz-border-radius-topleft: 2px;
+                    border-top-left-radius: 2px;
+                }
+
+                &:last-of-type {
+                    -webkit-border-top-right-radius: 2px;
+                    -moz-border-radius-topright: 2px;
+                    border-top-right-radius: 2px;
+                }
+
+                &.active {
+
+                    a {
+                        background: none repeat scroll 0 0 #FAFAFA;
+                        font-weight: bold;
+                        padding-bottom: 11px;
+                        @include box-shadow(none);
+                    }
+
+                }
+
+                &.fill a {
+                   width: 100%;
+                }
+
+                a {
+                    background: none repeat scroll 0 0 #F3F3F3;
+                    color: inherit;
+                    display: block;
+                    font-weight: normal;
+                    padding: 10px 15px;
+                    position: relative;
+                    text-decoration: none;
+                    @include box-shadow(0 -3px 3px rgba(0, 0, 0, 0.1) inset);
+                }
+
+                select {
+                    margin-right: 10px;
+                }
+
+            }
+
+        }
+
+    }
+
+    /* "tab" content */
+    div.tabsContent {
+        border: 1px solid #999;
+        height: 90%;
+    }
+
+    div.tab-content {
+        padding : 10px;
+        overflow: auto;
+        clear: both;
+    }
+
+}

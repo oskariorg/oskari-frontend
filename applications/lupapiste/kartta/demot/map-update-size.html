@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>lupapiste demo</title>
+<!-- ############# css ################# -->
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js">
+</script>
+
+<link rel="stylesheet" type="text/css" href="../css/icons.css" />
+<style type="text/css">
+@media screen {
+  body {
+    margin : 0;
+    padding: 0;
+  }
+  #mapdiv {
+  }
+  #contentMap {
+    float:left;
+  }
+  
+
+  #eventMessages {
+  	float: left;
+  }
+  #formi {
+  	float: left;
+  }
+}
+</style>
+<!-- ############# /css ################# -->
+</head>
+<body>
+
+<div id="contentMap">
+<div id="mapdiv"> </div>
+</div>
+
+
+<div id="eventMessages"> </div>
+<div id="formi">
+<input type="button" id="300" value="300 x 300"/>
+<input type="button" id="500" value="500 x 500"/>
+<input type="button" id="700" value="700 x 700"/>
+<input type="button" id="900" value="900 x 900"/>
+</div>
+
+<!-- ############# Javascript ################# -->
+
+<!--  OSKARI -->
+<script type="text/javascript"
+	src="../../../../bundles/bundle.js">
+</script>
+	
+<!--  OPENLAYERS -->
+<script type="text/javascript" 
+	src="../../../../packages/openlayers/startup.js">
+</script>
+
+<!--  LOG4JS -->
+<script type="text/javascript" 
+	src="../../../../libraries/log4js/log4js.js">
+</script>
+
+<!--  RIGHTJS (flyout)-->
+<script type="text/javascript" 
+	src="../../../../libraries/rightjs/javascripts/right.js">
+</script>
+<script type="text/javascript" 
+	src="../../../../libraries/rightjs/javascripts/right/slider.js">
+</script>
+
+<script type="text/javascript" src="../hub.js">
+</script>
+
+<script type="text/javascript" src="map-update-size.js">
+</script>
+
+<!-- ############# /Javascript ################# -->
+</body>
+</html>

@@ -1,0 +1,36 @@
+.menuplugin {
+  display: block;
+  z-index: 100000000 !important;
+  text-align: left; }
+  .menuplugin .icon {
+    background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/menu/images/menu-button-rounded-dark.png');
+    display: inline-block;
+    height: 35px;
+    width: 35px;
+    vertical-align: bottom; }
+  .menuplugin .menucontainer {
+    height: auto;
+    background-color: transparent;
+    height: 400px;
+    z-index: 16000; }
+    .menuplugin .menucontainer .menuTopArrow {
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 10px solid #424343;
+      display: inline-block;
+      float: left;
+      margin-left: 7.5px; }
+    .menuplugin .menucontainer .menuContent {
+      background-color: #424343;
+      color: #FFFFFF;
+      border-radius: 6px;
+      display: inline-block;
+      width: 100%; }
+    .menuplugin .menucontainer .toolGroupTitle {
+      font-weight: bold; }
+
+#toolbarcontent div.toolrow div.tool {
+  display: inline-block;
+  cursor: pointer; }

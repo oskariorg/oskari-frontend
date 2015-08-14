@@ -1,0 +1,7 @@
+﻿/* Style class for LaKaPaShowFAQBundle */
+.tool-lakapa-faq-icon{
+    width: 32px;
+    height: 32px;
+    background: url('../images/lakapa-faq-icon.png') no-repeat;
+    background-position: center center;
+}

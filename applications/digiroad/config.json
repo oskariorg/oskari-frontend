@@ -1,0 +1,344 @@
+{
+   "toolbar":{
+      "state":{
+
+      },
+      "conf":{
+
+      }
+   },
+   "layerselection2":{
+      "state":{
+
+      },
+      "conf":{
+
+      }
+   },
+   "userguide":{
+      "state":{
+
+      },
+      "conf":{
+
+      }
+   },
+   "layerselector2":{
+      "state":{
+
+      },
+      "conf":{
+
+      }
+   },
+   "mapfull":{
+      "state":{
+         "selectedLayers":[
+            {
+               "id":"base_35"
+            }
+         ],
+         "zoom":1,
+         "east":"517620",
+         "north":"6874042"
+      },
+      "conf":{
+         "globalMapAjaxUrl": "/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=2",
+         "plugins":[
+            {
+               "id":"Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin"
+            },
+            {
+               "id":"Oskari.mapframework.mapmodule.WmsLayerPlugin"
+            },
+            {
+               "id":"Oskari.mapframework.mapmodule.MarkersPlugin"
+            },
+            {
+               "id":"Oskari.mapframework.mapmodule.ControlsPlugin"
+            },
+            {
+               "id":"Oskari.mapframework.mapmodule.GetInfoPlugin"
+            },
+            {
+               "id": "Oskari.digiroad.bundle.featureselector.plugin.VectorLayerPlugin"
+            },
+            {
+               "id":"Oskari.mapframework.bundle.mapwfs.plugin.wfslayer.WfsLayerPlugin"
+            },
+            {
+               "id":"Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin"
+            },
+            {
+               "id":"Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin"
+            },
+            {
+               "id":"Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin"
+            },
+            {
+               "id":"Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar"
+            },
+            {
+               "id":"Oskari.mapframework.bundle.mapmodule.plugin.PanButtons"
+            }
+         ],
+         "layers":[
+            {
+                "type": "wmslayer",
+                "id": "liikenne_elementti",
+                "wmsName": "LiVi:LIIKENNE_ELEMENTTI",
+                "name": "Liikenne-elementti",
+                "inspire": "Liikenne-elementit",
+                "orgName": "Liikenne-elementit",
+                "minScale": 15000000,
+                "maxScale": 1,
+                "wmsUrl": "http://localhost/wms"
+            },
+            {
+                "type": "wmslayer",
+                "id": "vaylatyyppi",
+                "wmsName": "LiVi:LIIKENNE_ELEMENTTI",
+                "name": "Väylätyyppi",
+                "inspire": "Liikenne-elementit",
+                "orgName": "Liikenne-elementit",
+                "minScale": 25001,
+                "maxScale": 1,
+                "wmsUrl": "http://localhost/wms",
+                "styles": [
+                  {"title": "Väylätyyppi", "name": "vaylatyyppi"}
+                ],
+                "style": "vaylatyyppi",
+                "legendImage": "http://localhost/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=LiVi:LIIKENNE_ELEMENTTI&STYLE=vaylatyyppi"
+            },
+            {
+               "type":"base",
+               "id":"base_35",
+               "name":"Taustakartta",
+               "subLayer":[
+                  {
+                     "wmsName":"taustakartta_5k",
+                     "type":"wmslayer",
+                     "id":184,
+                     "minScale":5000,
+                     "wmsUrl":"http://a.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://b.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://c.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://d.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+                     "maxScale":1
+                  },
+                  {
+                     "wmsName":"taustakartta_10k",
+                     "type":"wmslayer",
+                     "id":185,
+                     "minScale":25001,
+                     "wmsUrl":"http://a.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://b.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://c.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://d.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+                     "maxScale":5001
+                  },
+                  {
+                     "wmsName":"taustakartta_20k",
+                     "type":"wmslayer",
+                     "id":186,
+                     "minScale":40001,
+                     "wmsUrl":"http://a.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://b.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://c.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://d.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+                     "maxScale":25000
+                  },
+                  {
+                     "wmsName":"taustakartta_40k",
+                     "type":"wmslayer",
+                     "id":187,
+                     "minScale":2,
+                     "wmsUrl":"http://a.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://b.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://c.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://d.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+                     "maxScale":1
+                  },
+                  {
+                     "wmsName":"taustakartta_80k",
+                     "type":"wmslayer",
+                     "id":188,
+                     "minScale":56702,
+                     "wmsUrl":"http://a.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://b.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://c.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://d.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+                     "maxScale":40000
+                  },
+                  {
+                     "wmsName":"taustakartta_160k",
+                     "type":"wmslayer",
+                     "id":189,
+                     "minScale":141742,
+                     "wmsUrl":"http://a.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://b.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://c.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://d.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+                     "maxScale":56702
+                  },
+                  {
+                     "wmsName":"taustakartta_320k",
+                     "type":"wmslayer",
+                     "id":190,
+                     "minScale":283474,
+                     "wmsUrl":"http://a.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://b.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://c.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://d.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+                     "maxScale":141742
+                  },
+                  {
+                     "wmsName":"taustakartta_800k",
+                     "type":"wmslayer",
+                     "id":191,
+                     "minScale":566939,
+                     "wmsUrl":"http://a.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://b.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://c.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://d.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+                     "maxScale":283474
+                  },
+                  {
+                     "wmsName":"taustakartta_2m",
+                     "type":"wmslayer",
+                     "id":192,
+                     "minScale":1417333,
+                     "wmsUrl":"http://a.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://b.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://c.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://d.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+                     "maxScale":566939
+                  },
+                  {
+                     "wmsName":"taustakartta_4m",
+                     "type":"wmslayer",
+                     "id":193,
+                     "minScale":2834657,
+                     "wmsUrl":"http://a.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://b.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://c.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://d.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+                     "maxScale":1417333
+                  },
+                  {
+                     "wmsName":"taustakartta_8m",
+                     "type":"wmslayer",
+                     "id":194,
+                     "minScale":15000000,
+                     "wmsUrl":"http://a.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://b.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://c.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://d.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+                     "maxScale":2834657
+                  }
+               ],
+               "orgName":"Taustakartta",
+               "inspire":"Taustakartta"
+             }
+         ],
+         "imageLocation":"/Oskari/resources",
+         "user":{
+            "lastName":"Petke",
+            "nickName":"Janzu",
+            "userUUID":"808",
+            "firstName":"Janis",
+            "loginName":"Janis"
+         }
+      }
+   },
+   "digiroad-personaldata":{
+      "state":{
+
+      },
+      "conf":{
+         "url_changePassword":"http://www.yle.fi",
+         "url_changeInfo":"http://www.paikkatietoikkuna.fi/web/fi/",
+         "url_removeAccount":"http://www.google.fi"
+      }
+   },
+   "publisher":{
+      "state":{
+
+      },
+      "conf":{
+
+      }
+   },
+   "openlayers-default-theme":{
+      "state":{
+
+      },
+      "conf":{
+
+      }
+   },
+   "search":{
+      "state":{
+
+      },
+      "conf":{
+        
+      }
+   },
+   "digiroad-myplaces2": {
+      "state": {
+
+      },
+      "conf": {
+        "queryUrl": "http://localhost/wfs",
+        "wmsUrl": "http://localhost/wms",
+        "snappingLayer": {
+            "protocol": "WFS",
+            "opts": {
+                "srsName": "EPSG:3067",
+                "version": "1.1.0",
+                "featureType": "LIIKENNE_ELEMENTTI",
+                "featureNS": "http://localhost/LiVi",
+                "featurePrefix": "LiVi",
+                "geometryName": "GEOMETRY",
+                "outputFormat": "json"
+            }
+        }
+      }
+    },
+   "digiroad-featureselector": {
+      "state": {
+
+      },
+      "conf": {
+        "queryUrl": "http://localhost/wfs",
+        "targetLayers": {
+            "vaylatyyppi": {
+                "objectId": "OID_TUNNUS",
+                "geometryName": "GEOMETRY",
+                "headers": [
+                    {"id": "vaylatyyppi", "name": "Väylätyyppi", "field": "VAYLATYYPP", "editor": "select"},
+                    {"id": "toiminnallinen_luokka", "name": "Toiminnallinen luokka", "field": "TOIMINNALL", "editor": "select"},
+                    {"id": "nimi1_fi", "name": "Nimi (suomi)", "field": "NIMI1_SU", "editor": "text"},
+                    {"id": "nimi1_sv", "name": "Nimi (ruotsi)", "field": "NIMI1_RU", "editor": "text"}
+                ]
+            }
+        }
+      }
+   },
+   "featuredata":{
+      "state":{
+
+      },
+      "conf":{
+
+      }
+   },
+   "mapwfs":{
+        "state":{},
+        "conf":{}
+   },
+   "divmanazer":{
+      "state":{
+
+      },
+      "conf":{
+
+      }
+   },
+   "statehandler":{
+      "state":{
+
+      },
+      "conf":{
+
+      }
+   },
+   "infobox":{
+      "state":{
+
+      },
+      "conf":{
+
+      }
+   },
+   "coordinatedisplay":{
+      "state":{
+
+      },
+      "conf":{
+
+      }
+   },
+   "maplegend":{
+      "state":{},
+      "conf":{}
+   }
+}

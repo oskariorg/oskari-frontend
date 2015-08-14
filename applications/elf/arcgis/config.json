@@ -1,0 +1,69 @@
+{
+    "mapfull": {
+        "state": {
+            "selectedLayers": [
+                {
+                    "id": "9999"
+                }
+            ],
+            "zoom": 8,
+            "east": 383341,
+            "north": 6673843
+        },
+        "conf": {
+            "globalMapAjaxUrl": "ajax.json?",
+            "plugins": [
+                {
+                    "id": "Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin"
+                }, {
+                    "id": "Oskari.mapframework.mapmodule.WmsLayerPlugin"
+                }, {
+                    "id": "Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin"
+                }, {
+                    "id": "Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin"
+                }, {
+                    "id": "Oskari.mapframework.mapmodule.ControlsPlugin"
+                }, {
+                    "id": "Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin"
+                }, {
+                    "id": "Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar"
+                }
+            ],
+            "mapOptions": {
+                "resolutions": [
+                    156543.033928,
+                    78271.5169639999,
+                    39135.7584820001,
+                    19567.8792409999,
+                    9783.93962049996,
+                    4891.96981024998,
+                    2445.98490512499,
+                    1222.99245256249,
+                    611.49622628138,
+                    305.748113140558,
+                    152.874056570411,
+                    76.4370282850732,
+                    38.2185141425366,
+                    19.1092570712683
+                ],
+                "maxExtent": {
+                    "left": -8237642.318702258,
+                    "bottom": 3123471.499230991,
+                    "right": 5207555.278974371,
+                    "top": 1.9971868880408302E7
+                },
+                "srsName": "EPSG:102100"
+            },
+            "layers": [{
+                    "id":"9999",
+                    "type":"arcgislayer",
+                    "wmsUrl":"http://tiles.arcgis.com/tiles/YIzHghteMOSU5dIR/arcgis/rest/services/egmerm3/MapServer",
+                    "url":"http://tiles.arcgis.com/tiles/YIzHghteMOSU5dIR/arcgis/rest/services/egmerm3/MapServer",
+                    "wmsName":"arcgis",
+                    "name":"ELF Base Map",
+                    "orgName":"ELF consortium",
+                    "inspire":"ELF consortium" 
+            }]
+        }
+    }
+}

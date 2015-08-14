@@ -1,0 +1,48 @@
+@CHARSET "UTF-8";
+
+.harava-add-geometry-tool{
+    cursor: pointer;
+    float: left;
+    height: 32px;
+    margin: 2px;
+    width: 32px;
+}
+
+#harava-add-geometry-tools div{
+	background-color:#A7A7A7;
+	
+}
+
+#harava-add-geometry-tools div.active{
+    background-color: #939393;
+}
+
+#harava-add-geometry-tools div:hover{
+    background-color: #939393;
+}
+
+.harava-add-geometry-tool-point{
+    background: url('/Oskari/resources/harava/bundle/harava-draw/images/point.png') no-repeat;
+    background-position: center center;
+}
+
+.harava-add-geometry-tool-line{
+    background: url('/Oskari/resources/harava/bundle/harava-draw/images/line.png') no-repeat;
+    background-position: center center;
+}
+
+.harava-add-geometry-tool-area{
+    background: url('/Oskari/resources/harava/bundle/harava-draw/images/multipolygon.png') no-repeat;
+    background-position: center center;
+}
+
+.harava-add-geometry-tool-delete{
+    background: url('/Oskari/resources/harava/bundle/harava-draw/images/delete.png') no-repeat;
+    background-position: center center;
+}
+
+.harava-add-geometry-tool-select{
+	background: url('/Oskari/resources/harava/bundle/harava-draw/images/select.png') no-repeat;
+    background-position: center center;
+}
+

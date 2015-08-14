@@ -1,0 +1,22 @@
+div.search .info {
+  padding-left: 5px; }
+div.search div.controls div.oskarifield {
+  display: inline-block; }
+div.search div.searchDescription {
+  margin: 0;
+  margin-bottom: 8px; }
+div.search div.searchContainer {
+  height: 90%; }
+div.search div.resultList {
+  height: 90%;
+  overflow: auto;
+  padding: 0;
+  margin: 5px;
+  border: 1px solid #DDDDDD; }
+  div.search div.resultList h3 {
+    margin: 0 6px;
+    padding-bottom: 0; }
+div.search table.search_result {
+  margin-bottom: 0; }
+  div.search table.search_result th {
+    text-align: left; }
