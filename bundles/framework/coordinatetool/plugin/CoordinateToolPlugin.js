@@ -1,8 +1,8 @@
 /**
- * @class Oskari.mapframework.bundle.coordinatetool.plugin.CoordinatesPlugin
+ * @class Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin
  * Provides a coordinate display for map
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.CoordinatesPlugin',
+Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin',
     /**
      * @method create called automatically on construction
      * @static
@@ -15,10 +15,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         this._sandbox = sandbox;
         this._instance = instance;
         this._clazz =
-            'Oskari.mapframework.bundle.coordinatetool.plugin.CoordinatesPlugin';
+            'Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin';
         this._defaultLocation = 'top right';
         this._index = 6;
-        this._name = 'CoordinatesPlugin';
+        this._name = 'CoordinateToolPlugin';
         this._toolOpen = false;
         this._showMouseCoordinates = false;
         this._popup = null;
