@@ -11,8 +11,9 @@ Oskari.clazz
      * @method create called automatically on construction
      * @static
      *
-     * @param {String}
-     *            id layer identifier so we can select correct tab
+     * @param {Function} filterFunction layer list filter function
+     * @param {String} selectedFilter select wanted filter
+     * @param {Boolean} opeLayerList Open layer list when calling request
      */
         function(filterFunction, selectedFilter, openLayerList) {
             this._filterFunction = filterFunction;
