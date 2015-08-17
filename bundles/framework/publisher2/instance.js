@@ -85,7 +85,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 me.publisher.render(map);
 
 
-                //calling this results in calling each of the panels' init-method twice, because init is already called when the forms are created at publisherSideBar's render. 
+                //calling this results in calling each of the panels' init-method twice, because init is already called when the forms are created at publisherSideBar's render.
                 //and that causes trouble.
 //                me.publisher.initPanels();
             } else {

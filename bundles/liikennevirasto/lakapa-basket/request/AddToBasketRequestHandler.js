@@ -8,7 +8,7 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.AddToBasketRequestHand
     this.tile = tile;
 }, {
 	/**
-	 * @method handleRequest 
+	 * @method handleRequest
 	 * Add to basket
 	 * @param {Oskari.mapframework.core.Core} core
 	 * 		reference to the application core (reference sandbox core.getSandbox())
@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.AddToBasketRequestHand
 	 */
     handleRequest : function(core, request) {
         this.sandbox.printDebug("[Oskari.liikennevirasto.bundle.lakapa.AddToBasketRequest] Add to basket");
-        this.flyout.addToBasket(request.getBbox(), request.getSelectedLayers(),request.getCroppingMode(), 
+        this.flyout.addToBasket(request.getBbox(), request.getSelectedLayers(),request.getCroppingMode(),
         		request.getTransport(), request.getIdentifier(), request.getFeatures());
         this.tile.refresh();
         this.tile.notifyUser();

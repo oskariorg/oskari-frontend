@@ -45,17 +45,17 @@ Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.HelpFlyoutBundleInstan
 
 		/* locale */
 		me._locale = Oskari.getLocalization(this.getName());
-		
+
 		var conf = me.conf;
-		
+
 		/* sandbox */
 		var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
 		var sandbox = Oskari.$(sandboxName);
-        me.sandbox = sandbox;		
-        
+        me.sandbox = sandbox;
+
         // register to sandbox as a module
         sandbox.register(me);
-        
+
         var reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
         if(reqBuilder) {
 
@@ -68,7 +68,7 @@ Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.HelpFlyoutBundleInstan
                 	me.showHelp();
                 }
             }));
-        }		
+        }
 
 		for(p in this.eventHandlers) {
 			sandbox.registerForEventByName(this, p);
@@ -81,7 +81,7 @@ Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.HelpFlyoutBundleInstan
 		sandbox.addRequestHandler('ShowHelpRequest', this._requestHandlers['ShowHelpRequest']);
 		this._requestHandlers['ChangeLanguageRequest'] = Oskari.clazz.create('Oskari.liikennevirasto.bundle.lakapa.help.request.ChangeLanguageRequestHandler', sandbox, this);
 		sandbox.addRequestHandler('ChangeLanguageRequest', this._requestHandlers['ChangeLanguageRequest']);
-		
+
 		var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
 
 		var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
@@ -90,9 +90,9 @@ Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.HelpFlyoutBundleInstan
 
 		/* stateful */
 		sandbox.registerAsStateful(this.mediator.bundleId, this);
-		
-		
-		
+
+
+
 	},
 	"init" : function() {
 		return null;

@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.help.Tile',
  * Always extend this class, never use as is.
  */
 function(instance,locale) {
-	
+
 	this.instance = instance;
 	this.locale = locale;
 	this.container = null;

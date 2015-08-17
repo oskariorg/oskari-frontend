@@ -1,11 +1,11 @@
 /**
  * @class Oskari.liikennevirasto.bundle.transport.selector.ShowFeatureRequest
  * Requests a show feature on the map
- * 
+ *
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
-Oskari.clazz.define('Oskari.liikennevirasto.bundle.transport.selector.ShowFeatureRequest', 
+Oskari.clazz.define('Oskari.liikennevirasto.bundle.transport.selector.ShowFeatureRequest',
 /**
  * @method create called automatically on construction
  * @static

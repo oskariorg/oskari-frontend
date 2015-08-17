@@ -7,7 +7,7 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.help.request.ChangeLan
     this.instance = instance;
 }, {
 	/**
-	 * @method handleRequest 
+	 * @method handleRequest
 	 * Add to basket
 	 * @param {Oskari.mapframework.core.Core} core
 	 * 		reference to the application core (reference sandbox core.getSandbox())

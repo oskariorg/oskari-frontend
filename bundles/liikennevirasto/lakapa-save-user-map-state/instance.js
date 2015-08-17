@@ -24,7 +24,7 @@ function() {
 
 	/**
 	 * @method getName
-	 * @return {String} the name for the component 
+	 * @return {String} the name for the component
 	 */
 	getName : function() {
 		return this.__name;
@@ -75,23 +75,23 @@ function() {
     	if(me.started){
     		return;
     	}
-    	
+
     	me.started = true;
-    	
+
     	var conf = this.conf;
     	var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
     	me.sandbox = Oskari.getSandbox(sandboxName);
-        
+
         me.sandbox.register(me);
-        
+
         if(!me.sandbox.getUser().isLoggedIn()){
         	return;
         }
-        
+
         var mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
         var locale = this.getLocalization('display');
         var mapstateplugin = Oskari.clazz.create('Oskari.liikennevirasto.bundle.mapmodule.plugin.LakapaMapStatePlugin', locale, mapModule);
-       
+
         mapModule.registerPlugin(mapstateplugin);
         mapModule.startPlugin(mapstateplugin);
     },
@@ -118,7 +118,7 @@ function() {
 	 * implements Module protocol init method - initializes request handlers
 	 */
 	init : function() {
-		
+
 	},
     /**
      * @method update
@@ -129,7 +129,7 @@ function() {
 }, {
 	/**
      * @property {String[]} protocol
-     * @static 
+     * @static
      */
     protocol : ['Oskari.bundle.BundleInstance']
 });

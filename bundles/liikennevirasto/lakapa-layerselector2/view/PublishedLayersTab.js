@@ -1,6 +1,6 @@
 /**
  * @class Oskari.liikenenvirasto.bundle.lakapa.layerselector2.view.PublishedLayersTab
- * 
+ *
  */
 Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.layerselector2.view.PublishedLayersTab",
 
@@ -33,7 +33,7 @@ function(instance, title) {
         if(!state) {
             return;
         }
-        
+
         if(!state.filter) {
             this.filterField.setValue(state.filter);
             this.filterLayers(state.filter);
@@ -53,9 +53,9 @@ function(instance, title) {
                 me.tabUnselected();
             }
         });
-        
+
         this.tabPanel.getContainer().append(this.getFilterField().getField());
-        
+
         this.accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
         this.accordion.insertTo(this.tabPanel.getContainer());
     },
@@ -146,11 +146,11 @@ function(instance, title) {
             }
         }
     },
-    
+
     /**
      * @method _getPublishedLayer
      * Populates the category based data to the base maplayer json
-     * @private 
+     * @private
      * @return maplayer json for the category
      */
     _getPublishedLayer : function(jsonResponse, mapLayerService, usersOwnLayer) {
@@ -162,7 +162,7 @@ function(instance, title) {
 
         if(usersOwnLayer) {
             baseJson.permissions = {
-                "publish" : "publication_permission_ok" 
+                "publish" : "publication_permission_ok"
             };
         }
         else {
@@ -170,7 +170,7 @@ function(instance, title) {
                 "publish" : "no_publication_permission"
             };
         }
-        
+
         var layer = mapLayerService.createMapLayer(baseJson);
         if(!usersOwnLayer) {
             // catch exception if the layer is already added to maplayer service
@@ -188,7 +188,7 @@ function(instance, title) {
     /**
      * @method _getMapLayerJsonBase
      * Returns a base model for maplayer json to create my places map layer
-     * @private 
+     * @private
      * @return {Object}
      */
     _getMapLayerJsonBase : function() {
@@ -225,21 +225,21 @@ function(instance, title) {
             var groupPanel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
             groupPanel.setTitle(group.getTitle() + ' (' + layers.length + ')');
             group.layerListPanel = groupPanel;
-            
+
             var groupContainer = groupPanel.getContainer();
             for(var n = 0; n < layers.length; ++n) {
                 var layer = layers[n];
-                var layerWrapper = 
+                var layerWrapper =
                     Oskari.clazz.create('Oskari.liikennevirasto.bundle.lakapa.layerselector2.view.Layer',
                     layer, this.instance.sandbox, this.instance.getLocalization());
                 var layerContainer = layerWrapper.getContainer();
                 groupContainer.append(layerContainer);
-                
+
                 this.layerContainers[layer.getId()] = layerWrapper;
             }
             this.accordion.addPanel(groupPanel);
         }
-        
+
         if(this.layerGroups.length == 0) {
             // empty result
             var loc = this.instance.getLocalization('errors');
@@ -249,7 +249,7 @@ function(instance, title) {
             var selectedLayers = this.instance.sandbox.findAllSelectedMapLayers();
             for(var i = 0; i < selectedLayers.length; ++i) {
                 this.setLayerSelected(selectedLayers[i].getId(), true);
-            }   
+            }
         }
     },
     /**
@@ -260,9 +260,9 @@ function(instance, title) {
      * Shows and hides layers by comparing the given keyword to the text in layer containers layer-keywords div.
      * Also checks if all layers in a group is hidden and hides the group as well.
      */
-   
+
     _search : function(keyword) {
-        
+
         var me = this;
 
         if (!keyword || keyword.length == 0) {
@@ -273,7 +273,7 @@ function(instance, title) {
         // empty previous
         this.showLayerGroups([]);
         this.accordion.showMessage(this.instance.getLocalization('loading'));
-        
+
         // search
         jQuery.ajax({
             type : "GET",

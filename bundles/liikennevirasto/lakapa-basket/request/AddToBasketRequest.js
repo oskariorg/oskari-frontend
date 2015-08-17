@@ -1,11 +1,11 @@
 /**
  * @class Oskari.liikennevirasto.bundle.lakapa.AddToBasketRequest
  * Requests a add selection to basket
- * 
+ *
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
-Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.AddToBasketRequest', 
+Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.AddToBasketRequest',
 /**
  * @method create called automatically on construction
  * @static

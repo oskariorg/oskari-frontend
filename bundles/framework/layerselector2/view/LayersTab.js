@@ -18,7 +18,7 @@ Oskari.clazz.define(
         this.showSearchSuggestions = (instance.conf && instance.conf.showSearchSuggestions === true);
         this.layerGroups = [];
         this.layerContainers = {};
-        
+
         this.templates = {
             spinner: '<span class="spinner-text"></span>',
             shortDescription: '<div class="field-description"></div>',

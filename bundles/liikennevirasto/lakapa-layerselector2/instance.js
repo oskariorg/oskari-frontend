@@ -1,13 +1,13 @@
 /**
  * @class Oskari.liikennevirasto.bundle.lakapa.layerselector2.LayerSelectorBundleInstance
  *
- * Main component and starting point for the "all layers" functionality. 
- * Lists all the layers available in Oskari.mapframework.service.MapLayerService and updates 
+ * Main component and starting point for the "all layers" functionality.
+ * Lists all the layers available in Oskari.mapframework.service.MapLayerService and updates
  * UI if Oskari.mapframework.event.common.MapLayerEvent is received.
- * 
- * See Oskari.liikennevirasto.bundle.lakapa.layerselector2.LayerSelectorBundle for bundle definition. 
+ *
+ * See Oskari.liikennevirasto.bundle.lakapa.layerselector2.LayerSelectorBundle for bundle definition.
  */
-Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.layerselector2.LayerSelectorBundleInstance", 
+Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.layerselector2.LayerSelectorBundleInstance",
 
 /**
  * @method create called automatically on construction
@@ -26,7 +26,7 @@ function() {
 	__name : 'Lakapa-Layer-Selector',
 	/**
 	 * @method getName
-	 * @return {String} the name for the component 
+	 * @return {String} the name for the component
 	 */
 	"getName" : function() {
 		return this.__name;
@@ -46,12 +46,12 @@ function() {
 	getSandbox : function() {
 		return this.sandbox;
 	},
-	
+
     /**
      * @method getLocalization
      * Returns JSON presentation of bundles localization data for current language.
      * If key-parameter is not given, returns the whole localization data.
-     * 
+     *
      * @param {String} key (optional) if given, returns the value for key
      * @return {String/Object} returns single localization string or
      * 		JSON object for complete data depending on localization
@@ -82,7 +82,7 @@ function() {
 		var conf = this.conf;
 		var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
 		me.sandbox = Oskari.getSandbox(sandboxName);
-		
+
 		me.sandbox.register(me);
 		for(p in me.eventHandlers) {
 			me.sandbox.registerForEventByName(me, p);
@@ -94,11 +94,11 @@ function() {
 
 		// draw ui
 		me.createUi();
-		
+
     	var mapLayerService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService');
-    	
+
         me.sandbox.registerAsStateful(this.mediator.bundleId, this);
-        
+
 		var successCB = function() {
 			// massive update so just recreate the whole ui
 			//me.plugins['Oskari.userinterface.Flyout'].populateLayers();
@@ -106,7 +106,7 @@ function() {
 		};
 		var failureCB = function() {
 		};
-		
+
 		// We do not need to load the layers from backend, they're all defined in the config file.
 		//mapLayerService.loadAllLayersAjax(successCB, failureCB);
 	},
@@ -146,7 +146,7 @@ function() {
 		/**
 		 * @method AfterMapLayerRemoveEvent
 		 * @param {Oskari.mapframework.event.common.AfterMapLayerRemoveEvent} event
-		 * 
+		 *
 		 * Calls flyouts handleLayerSelectionChanged() method
 		 */
 		'AfterMapLayerRemoveEvent' : function(event) {
@@ -155,7 +155,7 @@ function() {
 		/**
 		 * @method AfterMapLayerAddEvent
 		 * @param {Oskari.mapframework.event.common.AfterMapLayerAddEvent} event
-		 * 
+		 *
 		 * Calls flyouts handleLayerSelectionChanged() method
 		 */
 		'AfterMapLayerAddEvent' : function(event) {
@@ -166,10 +166,10 @@ function() {
 		 * @param {Oskari.mapframework.event.common.MapLayerEvent} event
 		 */
 		'MapLayerEvent' : function(event) {
-			
+
         	var mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
         	var layerId = event.getLayerId();
-        	
+
         	if(event.getOperation() === 'update') {
         		var layer = mapLayerService.findMapLayer(layerId);
 				this.plugins['Oskari.userinterface.Flyout'].handleLayerModified(layer);
@@ -235,15 +235,15 @@ function() {
 		return this.plugins;
 	},
 	/**
-	 * @method getTitle 
-	 * @return {String} localized text for the title of the component 
+	 * @method getTitle
+	 * @return {String} localized text for the title of the component
 	 */
 	getTitle : function() {
 		return this.getLocalization('title');
 	},
 	/**
-	 * @method getDescription 
-	 * @return {String} localized text for the description of the component 
+	 * @method getDescription
+	 * @return {String} localized text for the description of the component
 	 */
 	getDescription : function() {
 		return this.getLocalization('desc');
@@ -257,7 +257,7 @@ function() {
 		this.plugins['Oskari.userinterface.Flyout'].createUi();
 		this.plugins['Oskari.userinterface.Tile'].refresh();
 	},
-    
+
     /**
      * @method setState
      * @param {Object} state bundle state as JSON
@@ -266,12 +266,12 @@ function() {
         if(jQuery('.liikennevirasto__lakapa__layer__selector2').hasClass('oskari-tile-attached')){
             jQuery('.liikennevirasto__lakapa__layer__selector2').trigger('click');
         }
-        
+
         if(jQuery('.liikennevirasto__lakapa__layer__selector2').next().hasClass('oskari-tile-attached')){
             jQuery('.liikennevirasto__lakapa__layer__selector2').next().trigger('click');
         }
     },
-    
+
     /**
      * @method getState
      * @return {Object} bundle state as JSON
@@ -282,7 +282,7 @@ function() {
 }, {
 	/**
 	 * @property {String[]} protocol
-	 * @static 
+	 * @static
 	 */
 	"protocol" : ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
 });

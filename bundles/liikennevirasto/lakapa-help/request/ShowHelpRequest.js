@@ -1,11 +1,11 @@
 /**
  * @class Oskari.liikennevirasto.bundle.lakapa.help..request.ShowHelpRequest
- * 
- * 
+ *
+ *
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
-Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.help.request.ShowHelpRequest', 
+Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.help.request.ShowHelpRequest',
 /**
  * @method create called automatically on construction
  * @static

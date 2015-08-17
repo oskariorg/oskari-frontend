@@ -14,7 +14,7 @@ function(locale, mapModule) {
     this._map = null;
     this.enabled = true;
     this._locale = locale;
-    
+
     this._pendingAjaxQuery = {
         	busy: false,
         	jqhr: null,
@@ -72,7 +72,7 @@ function(locale, mapModule) {
     init : function(sandbox) {
         var me = this;
         this._sandbox = sandbox;
-        this._sandbox.printDebug("[LakapaMapStatePlugin] init");    	
+        this._sandbox.printDebug("[LakapaMapStatePlugin] init");
     },
     /**
      * @method register
@@ -107,11 +107,11 @@ function(locale, mapModule) {
         for (p in this.eventHandlers ) {
             this._sandbox.registerForEventByName(this, p);
         }
-        
-		
+
+
         for(var p in me.eventHandlers) {
         	me._sandbox.registerForEventByName(this, p);
-        }        
+        }
     },
     /**
      * @method stopPlugin
@@ -125,11 +125,11 @@ function(locale, mapModule) {
         var me = this;
         // hide infobox if open
         me._closeGfiInfo();
-        
+
         if (sandbox && sandbox.register) {
             this._sandbox = sandbox;
         }
-                        
+
         this._sandbox.unregister(this);
         this._map = null;
         this._sandbox = null;
@@ -170,7 +170,7 @@ function(locale, mapModule) {
     /**
      * @method _notifyAjaxFailure
      * @private
-     * Notify ajax failure 
+     * Notify ajax failure
      */
     _notifyAjaxFailure: function() {
     	 var me = this;
@@ -189,7 +189,7 @@ function(locale, mapModule) {
     /**
      * @method _cancelAjaxRequest
      * @private
-     * Cancel ajax request 
+     * Cancel ajax request
      */
     _cancelAjaxRequest: function() {
     	var me = this;
@@ -200,7 +200,7 @@ function(locale, mapModule) {
     	me._pendingAjaxQuery.jqhr = null;
     	if( !jqhr) {
     		return;
-    	}    	
+    	}
     	this._sandbox.printDebug("[LakapaMapStatePlugin] Abort jqhr ajax request");
     	jqhr.abort();
     	jqhr = null;
@@ -209,7 +209,7 @@ function(locale, mapModule) {
     /**
      * @method _starAjaxRequest
      * @private
-     * Start ajax request 
+     * Start ajax request
      */
     _startAjaxRequest: function(dteMs) {
     	var me = this;
@@ -220,7 +220,7 @@ function(locale, mapModule) {
     /**
      * @method _finishAjaxRequest
      * @private
-     * Finish ajax request 
+     * Finish ajax request
      */
     _finishAjaxRequest: function() {
     	var me = this;
@@ -236,29 +236,29 @@ function(locale, mapModule) {
      */
     _saveMapState: function(event){
     	var me = this;
-    	  	
+
     	var omap = me.mapModule.getMap();
     	var zoom = parseInt(omap.getZoom());
     	var lon = parseInt(omap.getCenter().lon);
     	var lat = parseInt(omap.getCenter().lat);
-    	
+
     	var dte = new Date();
         var dteMs = dte.getTime();
-        
-        if( me._pendingAjaxQuery.busy && me._pendingAjaxQuery.timestamp &&  
+
+        if( me._pendingAjaxQuery.busy && me._pendingAjaxQuery.timestamp &&
             	dteMs - me._pendingAjaxQuery.timestamp < 500 ) {
             	me._sandbox.printDebug("[LakapaMapStatePlugin] Map state change NOT SENT (time difference < 500ms)");
-            	return; 
-        } 
-           
+            	return;
+        }
+
         me._cancelAjaxRequest();
         me._startAjaxRequest(dteMs);
-        
-        var ajaxUrl = me._sandbox.getAjaxUrl(); 
-        
+
+        var ajaxUrl = me._sandbox.getAjaxUrl();
+
         jQuery.ajax({
             beforeSend : function(x) {
-            	
+
             	me._pendingAjaxQuery.jqhr = x;
                 if (x && x.overrideMimeType) {
                     x.overrideMimeType("application/j-son;charset=UTF-8");
@@ -287,7 +287,7 @@ function(locale, mapModule) {
             dataType : 'json',
             url : ajaxUrl + 'action_route=SaveMapSate'
         });
-    	
+
     },
     /**
      * @property {Object} eventHandlers

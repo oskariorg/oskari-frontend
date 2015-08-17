@@ -1,7 +1,7 @@
 /**
  * @class Oskari.liikennevirasto.bundle.lakapa.layerselector2.view.LayersTab
- * 
- * 
+ *
+ *
  */
 Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.layerselector2.view.LayersTab",
 
@@ -34,7 +34,7 @@ function(instance, title) {
         if(!state) {
             return;
         }
-        
+
         if(!state.filter) {
             this.filterField.setValue(state.filter);
             this.filterLayers(state.filter);
@@ -43,12 +43,12 @@ function(instance, title) {
         }
     },
     _createUI : function() {
-        
+
         this.tabPanel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
         this.tabPanel.setTitle(this.title);
-        
+
         this.tabPanel.getContainer().append(this.getFilterField().getField());
-        
+
         this.accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
         this.accordion.insertTo(this.tabPanel.getContainer());
     },
@@ -75,30 +75,30 @@ function(instance, title) {
         for(var i = 0; i < groups.length; ++i) {
             var group = groups[i];
             var layers = group.getLayers();
-            
+
             var groupPanel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
             groupPanel.setTitle(group.getTitle() + ' (' + layers.length + ')');
             group.layerListPanel = groupPanel;
-            
+
             var groupContainer = groupPanel.getContainer();
             for(var n = 0; n < layers.length; ++n) {
                 var layer = layers[n];
-                var layerWrapper = 
+                var layerWrapper =
                     Oskari.clazz.create('Oskari.liikennevirasto.bundle.lakapa.layerselector2.view.Layer',
                     layer, this.instance.sandbox, this.instance.getLocalization());
                 var layerContainer = layerWrapper.getContainer();
                 groupContainer.append(layerContainer);
-                
+
                 this.layerContainers[layer.getId()] = layerWrapper;
             }
-            
+
             var serviceMetaDataUrl = null;
             try{
             	serviceMetaDataUrl = me.instance.conf.serviceMetadatas[group.getTitle()];
             } catch(err){}
 
-            
-            
+
+
             if(serviceMetaDataUrl){
 	            groupPanel.html.find('.headerText').after('<a href="#" class="layer-info icon-info livi-layerselector-service-info"></a>');
 	            groupPanel.html.find('.livi-layerselector-service-info').attr('data-uuid', serviceMetaDataUrl);
@@ -111,17 +111,17 @@ function(instance, title) {
 	            		}]);
 	            	}
 	            	evt.stopPropagation();
-	            });   
+	            });
             }
-            
+
             this.accordion.addPanel(groupPanel);
         }
-        
+
         var selectedLayers = this.instance.sandbox.findAllSelectedMapLayers();
         for(var i = 0; i < selectedLayers.length; ++i) {
             this.setLayerSelected(selectedLayers[i].getId(), true);
         }
-                    
+
         this.filterLayers(this.filterField.getValue());
     },
     /**
@@ -133,7 +133,7 @@ function(instance, title) {
      * Also checks if all layers in a group is hidden and hides the group as well.
      */
     filterLayers : function(keyword) {
-        
+
         // show all groups
         this.accordion.showPanels();
         if(!keyword || keyword.length == 0) {
@@ -166,11 +166,11 @@ function(instance, title) {
             }
             group.layerListPanel.setVisible(visibleLayerCount > 0);
             if(group.layerListPanel.isVisible()) {
-                visibleGroupCount++;   
+                visibleGroupCount++;
             }
             group.layerListPanel.setTitle(group.getTitle() + ' (' + visibleLayerCount +  '/' + layers.length + ')');
         }
-        
+
         // check if there are no groups visible -> show 'no matches' notification
         // else clear any previous message
         if(visibleGroupCount == 0) {
@@ -182,12 +182,12 @@ function(instance, title) {
             this.accordion.removeMessage();
         }
     },
-    
+
     _showAllLayers : function() {
         for(var i = 0; i < this.layerGroups.length; ++i) {
             var group = this.layerGroups[i];
             var layers = group.getLayers();
-            
+
             for(var n = 0; n < layers.length; ++n) {
                 var layer = layers[n];
                 var layerId = layer.getId();

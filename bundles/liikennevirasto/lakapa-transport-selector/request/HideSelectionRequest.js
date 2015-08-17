@@ -1,11 +1,11 @@
 /**
  * @class Oskari.liikennevirasto.bundle.transport.selector.HideSelectionRequest
  * Requests a hide selection on map.
- * 
+ *
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
-Oskari.clazz.define('Oskari.liikennevirasto.bundle.transport.selector.HideSelectionRequest', 
+Oskari.clazz.define('Oskari.liikennevirasto.bundle.transport.selector.HideSelectionRequest',
 /**
  * @method create called automatically on construction
  * @static

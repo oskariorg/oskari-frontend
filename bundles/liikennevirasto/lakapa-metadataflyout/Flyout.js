@@ -127,12 +127,12 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
         },
         /**
          * @method setContentState
-         
+
          * restore state from store
          */
         setContentState: function (contentState) {
             var me = this;
-            
+
             var parent = me.container.parents('.oskari-flyout');
             if(parent.hasClass('oskari-detached')){
                 parent.find('.oskari-flyouttool-close').trigger('click');

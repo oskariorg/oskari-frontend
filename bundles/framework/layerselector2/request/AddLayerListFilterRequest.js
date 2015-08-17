@@ -24,7 +24,7 @@ Oskari.clazz
             this._filterFunction = filterFunction;
             this._iconClassActive = iconClassActive;
             this._iconClassDeactive = iconClassDeactive;
-            this._filterName = filterName;            
+            this._filterName = filterName;
     }, {
         /** @static @property __name request name */
         __name : "AddLayerListFilterRequest",
