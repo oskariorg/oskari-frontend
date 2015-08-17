@@ -12,13 +12,15 @@ Oskari.clazz
      * @static
      *
      * @param {String} toolText tool label text
+     * @param {String} tooltip tool tooltip
      * @param {Function} filterFunction layer list filter function
      * @param {String} iconClassActive filter tool icon class when filter is active
      * @param {String} iconClass filter tool icon class when filter is deactive
      * @param {String} filterName filter name, used on {Oskari.mapframework.bundle.layerselector2.request.ShowFilteredLayerListRequest} if wanted acivate selected filter
      */
-        function(toolText, filterFunction, iconClassActive, iconClassDeactive, filterName) {
+        function(toolText, tooltip, filterFunction, iconClassActive, iconClassDeactive, filterName) {
             this._toolText = toolText;
+            this._tooltip = tooltip;
             this._filterFunction = filterFunction;
             this._iconClassActive = iconClassActive;
             this._iconClassDeactive = iconClassDeactive;
@@ -39,6 +41,13 @@ Oskari.clazz
          */
         getToolText : function() {
             return this._toolText;
+        },
+        /**
+         * @method getTooltip
+         * @return {String} a tooltip
+         */
+        getTooltip : function() {
+            return this._tooltip;
         },
         /**
          * @method getFilterFunction

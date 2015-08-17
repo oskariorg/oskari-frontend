@@ -22,6 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
         this.filterTemplate = jQuery('<div class="filter filter-border"><center><div class="filter-icon"></div><div class="filter-text"></div></center></div>');
         this.filters= [];
         this._filterNewestCount = 20;
+        this._newestLayers = null;
     }, {
 
         /**
@@ -120,22 +121,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          */
         addNewestFilter: function(){
             var me = this,
-                loc = me.instance.getLocalization('layerFilter');
+                loc = me.instance.getLocalization('layerFilter'),
+                mapLayerService = this.instance.getSandbox().getService(
+                        'Oskari.mapframework.service.MapLayerService'
+                ),
+                ids = [];
 
             me.addFilterTool(loc.buttons.newest, 
-                loc.tooltips.newest.replace('##', me._filterNewestCount), 
-                
+                loc.tooltips.newest.replace('##', me._filterNewestCount),
                 function(layer){
-                    var mapLayerService = this.instance.getSandbox().getService(
-                        'Oskari.mapframework.service.MapLayerService'
-                        ),
-                        newest = mapLayerService.getNewestLayers(me._filterNewestCount),
-                        ids = [];
+                    if(me._newestLayers === null && ids.length === 0){
+                        me._newestLayers = mapLayerService.getNewestLayers(me._filterNewestCount);
 
-                    jQuery(newest).each(function(index, layer){
-                        ids.push(layer.getId());
-                    });
-
+                        jQuery(me._newestLayers).each(function(index, layer){
+                           ids.push(layer.getId());
+                        });
+                    }
                     return (jQuery.inArray(layer.getId(), ids) !== -1);
                 },
                 'layer-newest', 
@@ -301,6 +302,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
 
             // Create default filters
             me.addDefaultFilters();
+            
 
             me.populateLayers();
         },
