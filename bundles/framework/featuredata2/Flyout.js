@@ -382,6 +382,7 @@ Oskari.clazz.define(
             }
             panel.getContainer().append(this.instance.getLocalization('loading'));
 
+
             if (this.instance.__loadingStatus[layer.getId()] === 'loading' || this.instance.__loadingStatus[layer.getId()] === 'error') {
                 return;
             }
@@ -570,7 +571,8 @@ Oskari.clazz.define(
         _prepareData: function (layer) {
             var me = this,
                 panel = this.layers['' + layer.getId()],
-                isOk = this.tabsContainer.isSelected(panel);
+                isOk = this.tabsContainer.isSelected(panel),
+                conf = me.instance.conf;
 
             if (isOk) {
                 panel.getContainer().empty();
@@ -671,9 +673,13 @@ Oskari.clazz.define(
                     grid.setVisibleFields(visibleFields);
                     grid.setColumnSelector(true);
                     grid.setResizableColumns(true);
-                    grid.setExcelExporter(
-                        layer.getPermission('download') === 'download_permission_ok'
-                    );
+
+
+                    if (conf && !conf.disableExport) {
+                        grid.setExcelExporter(
+                            layer.getPermission('download') === 'download_permission_ok'
+                        );
+                    }
 
                     panel.grid = grid;
                 }
