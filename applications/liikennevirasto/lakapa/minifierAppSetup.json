@@ -1,0 +1,409 @@
+{ 
+  "startupSequence" : [
+   {
+      "instanceProps":{
+
+      },
+      "title":"OpenLayers",
+      "bundleinstancename":"openlayers-default-theme",
+      "fi":"OpenLayers",
+      "sv":"?",
+      "en":"OpenLayers",
+      "bundlename":"openlayers-default-theme",
+      "metadata":{
+         "Import-Bundle":{
+            "openlayers-default-theme":{
+               "bundlePath":"../../../packages/openlayers/bundle/"
+            },
+            "openlayers-single-full":{
+               "bundlePath":"../../../packages/openlayers/bundle/"
+            }
+         },
+         "Require-Bundle-Instance":[
+
+         ]
+      }
+   },
+   {
+      "instanceProps":{
+
+      },
+      "title":"Map",
+      "bundleinstancename":"mapfull",
+      "fi":"Map",
+      "sv":"?",
+      "en":"Map",
+      "bundlename":"mapfull",
+      "metadata":{
+         "Import-Bundle":{
+            "mapwmts": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "service-base": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "event-map-layer": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "request-map-layer": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "mapmodule-plugin": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "ui-components": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "event-base": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "mapfull": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "core-base": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "oskariui": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "mapwfs2": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "request-base": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "mapstats": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "core-map": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "request-map": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "domain": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "sandbox-base": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "service-map": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "sandbox-map": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "event-map": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+         },
+         "Require-Bundle-Instance":[
+
+         ]
+      }
+   },
+   {
+      "instanceProps":{
+
+      },
+      "title":"Oskari DIV Manazer",
+      "bundleinstancename":"divmanazer",
+      "fi":"Oskari DIV Manazer",
+      "sv":"?",
+      "en":"Oskari DIV Manazer",
+      "bundlename":"divmanazer",
+      "metadata":{
+         "Import-Bundle":{
+            "divmanazer":{
+               "bundlePath":"../../../packages/framework/bundle/"
+            }
+         },
+         "Require-Bundle-Instance":[
+
+         ]
+      }
+   },
+   {
+      "instanceProps":{
+
+      },
+      "title":"Toolbar",
+      "bundleinstancename":"toolbar",
+      "fi":"toolbar",
+      "sv":"?",
+      "en":"?",
+      "bundlename":"toolbar",
+      "metadata":{
+         "Import-Bundle":{
+            "toolbar":{
+               "bundlePath":"../../../packages/framework/bundle/"
+            }
+         },
+         "Require-Bundle-Instance":[
+
+         ]
+      }
+   },
+   {
+      "instanceProps":{
+
+      },
+      "title":"StateHandler",
+      "bundleinstancename":"statehandler",
+      "fi":"jquery",
+      "sv":"?",
+      "en":"?",
+      "bundlename":"statehandler",
+      "metadata":{
+         "Import-Bundle":{
+            "statehandler":{
+               "bundlePath":"../../../packages/framework/bundle/"
+            }
+         },
+         "Require-Bundle-Instance":[
+
+         ]
+      }
+   },
+   {
+      "instanceProps":{
+
+      },
+      "title":"Info Box",
+      "bundleinstancename":"infobox",
+      "fi":"infobox",
+      "sv":"?",
+      "en":"?",
+      "bundlename":"infobox",
+      "metadata":{
+         "Import-Bundle":{
+            "infobox":{
+               "bundlePath":"../../../packages/framework/bundle/"
+            }
+         },
+         "Require-Bundle-Instance":[
+
+         ]
+      }
+   },
+   {
+      "instanceProps":{
+
+      },
+      "title":"Karttatasot",
+      "bundleinstancename":"lakapa-layerselector2",
+      "fi":"Karttatasot",
+      "sv":"Kartlager",
+      "en":"Map layers",
+      "bundlename":"lakapa-layerselector2",
+      "metadata":{
+         "Import-Bundle":{
+            "lakapa-layerselector2":{
+               "bundlePath":"../../../packages/liikennevirasto/bundle/"
+            }
+         },
+         "Require-Bundle-Instance":[
+
+         ]
+      }
+   },
+   {
+      "instanceProps":{
+
+      },
+      "title":"Valitut karttatasot",
+      "bundleinstancename":"layerselection2",
+      "fi":"Valitut karttatasot",
+      "sv":"Valda kartlager",
+      "en":"Selected layers",
+      "bundlename":"layerselection2",
+      "metadata":{
+         "Import-Bundle":{
+            "layerselection2":{
+               "bundlePath":"../../../packages/framework/bundle/"
+            }
+         },
+         "Require-Bundle-Instance":[
+
+         ]
+      }
+   },
+   {
+      "instanceProps":{
+
+      },
+      "title":"Koordinaattinäyttö",
+      "bundleinstancename":"coordinatedisplay",
+      "fi":"Koordinaattinäyttö",
+      "sv":"?",
+      "en":"?",
+      "bundlename":"coordinatedisplay",
+      "metadata":{
+         "Import-Bundle":{
+            "coordinatedisplay":{
+               "bundlePath":"../../../packages/framework/bundle/"
+            }
+         },
+         "Require-Bundle-Instance":[
+
+         ]
+      }
+   },
+   {
+      "instanceProps":{
+
+      },
+      "title":"Map legend",
+      "bundleinstancename":"maplegend",
+      "fi":"Karttaselitteet",
+      "sv":"Förklaringar",
+      "en":"Legends",
+      "bundlename":"maplegend",
+      "metadata":{
+         "Import-Bundle":{
+            "maplegend":{
+               "bundlePath":"../../../packages/framework/bundle/"
+            }
+         },
+         "Require-Bundle-Instance":[
+
+         ]
+      }
+   },
+   {
+      "instanceProps":{
+
+      },
+      "title":"Lakapa transport selector",
+      "bundleinstancename":"lakapa-transport-selector",
+      "fi":"Lakapa transport selector",
+      "sv":"Lakapa transport selector",
+      "en":"Lakapa transport selector",
+      "bundlename":"lakapa-transport-selector",
+      "metadata":{
+         "Import-Bundle":{
+            "lakapa-transport-selector":{
+               "bundlePath":"../../../packages/liikennevirasto/bundle/"
+            }
+         },
+         "Require-Bundle-Instance":[
+
+         ]
+      }
+   },
+   {
+        "instanceProps": {
+            
+        },
+        "title": "Lakapa metadata Flyout",
+        "bundleinstancename": "lakapa-metadataflyout",
+        "fi": "lakapa-metadataflyout",
+        "sv": "lakapa-metadataflyout",
+        "en": "lakapa-metadataflyout",
+        "bundlename": "lakapa-metadataflyout",
+        "metadata": {
+            "Import-Bundle": {
+                "lakapa-metadataflyout": {
+                    "bundlePath": "../../../packages/liikennevirasto/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    },
+    {
+        "instanceProps": {
+            
+        },
+        "title": "Lakapa basket",
+        "bundleinstancename": "lakapa-basket",
+        "fi": "lakapa-basket",
+        "sv": "lakapa-basket",
+        "en": "lakapa-basket",
+        "bundlename": "lakapa-basket",
+        "metadata": {
+            "Import-Bundle": {
+                "lakapa-basket": {
+                    "bundlePath": "../../../packages/liikennevirasto/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    },
+    {
+        "instanceProps": {
+            
+        },
+        "title": "Lakapa help",
+        "bundleinstancename": "lakapa-help",
+        "fi": "lakapa-help",
+        "sv": "lakapa-help",
+        "en": "lakapa-help",
+        "bundlename": "lakapa-help",
+        "metadata": {
+            "Import-Bundle": {
+                "lakapa-help": {
+                    "bundlePath": "../../../packages/liikennevirasto/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    },
+	{
+		"instanceProps": {
+			
+		},
+		"title": "LaKaPaSupportedBrowser",
+		"bundleinstancename": "lakapa-supported-browser",
+		"fi": "lakapa-supported-browser",
+		"sv": "lakapa-supported-browser",
+		"en": "lakapa-supported-browser",
+		"bundlename": "lakapa-supported-browser",
+		"metadata": {
+			"Import-Bundle": {
+				"lakapa-supported-browser": {
+					"bundlePath": "../../../packages/liikennevirasto/bundle/"
+				}
+			},
+			"Require-Bundle-Instance": []
+		}
+	},
+    {
+        "instanceProps": {
+            
+        },
+        "title": "LaKaPaShowFAQ",
+        "bundleinstancename": "lakapa-show-faq",
+        "fi": "lakapa-show-faq",
+        "sv": "lakapa-show-faq",
+        "en": "lakapa-show-faq",
+        "bundlename": "lakapa-show-faq",
+        "metadata": {
+            "Import-Bundle": {
+                "lakapa-show-faq": {
+                    "bundlePath": "../../../packages/liikennevirasto/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    },
+    {
+        "instanceProps": {
+            
+        },
+        "title": "StartupInfo",
+        "bundleinstancename": "lakapa-startup-info",
+        "fi": "lakapa-startup-info",
+        "sv": "lakapa-startup-info",
+        "en": "lakapa-startup-info",
+        "bundlename": "lakapa-startup-info",
+        "metadata": {
+            "Import-Bundle": {
+                "lakapa-startup-info": {
+                    "bundlePath": "../../../packages/liikennevirasto/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }
+]
+}

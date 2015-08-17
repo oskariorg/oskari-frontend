@@ -800,6 +800,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                     }
                 }
             }
+
             // Add the layout panel to the accordion.
             me.toolsPanel = Oskari.clazz.create(
                 'Oskari.mapframework.bundle.publisher.view.PublisherToolsForm',
