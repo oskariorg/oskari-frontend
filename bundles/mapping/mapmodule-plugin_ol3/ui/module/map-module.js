@@ -710,15 +710,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
         },
         */
-
-        _addMapControlImpl: function (ctl) {
-            this._map.addControl(ctl);
-        },
-
-        _removeMapControlImpl: function (ctl) {
-            this._map.removeControl(ctl);
-        },
-
+       
         /**
          * @method getMapEl
          * Get jQuery map element

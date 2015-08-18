@@ -209,7 +209,6 @@ Oskari.clazz.define(
 
         //Mouse Position
         var mousePositionControl = new ol.control.MousePosition({
-          className:'ol-full-screen', //default parameter
           coordinateFormat:ol.coordinate.createStringXY(4), //This is the format we want the coordinate in. 
           //The number arguement in createStringXY is the number of decimal places.
           projection:"EPSG:3067", //This is the actual projection of the coordinates. 
