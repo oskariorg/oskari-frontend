@@ -1,5 +1,5 @@
 
-Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.layerselector2.model.LayerGroup', 
+Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.layerselector2.model.LayerGroup',
 	    /**
 	     * @method create called automatically on construction
 	     * @static

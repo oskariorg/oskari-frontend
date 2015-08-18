@@ -1,11 +1,11 @@
-﻿/**
+/**
 * @class Oskari.liikennevirasto.bundle.lakapa.LaKaPaShowFAQBundleInstance
 *
 * Registers and starts the
 * Oskari.liikennevirasto.bundle.lakapa.TransportSelectorBundleInstance plugin for main map.
 */
 Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.LaKaPaShowFAQBundleInstance",
-	
+
 	/**
 	* @method create called automatically on construction
 	* @static
@@ -21,10 +21,10 @@ Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.LaKaPaShowFAQBundleIns
 		* @property __name
 		*/
 		__name : 'LaKaPaShowFAQBundle',
-		
+
 		/**
 		* @method getName
-		* @return {String} the name for the component 
+		* @return {String} the name for the component
 		*/
 		getName : function() {
 			return this.__name;
@@ -76,18 +76,18 @@ Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.LaKaPaShowFAQBundleIns
 				return;
 			}
 			var conf = me.conf;
-			
+
 			me.started = true;
-			
+
 			var conf = this.conf;
 			var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
 			var sandbox = Oskari.getSandbox(sandboxName);
 			me.sandbox = sandbox;
-			
+
 			sandbox.register(me);
 			var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
 			var locale = this.getLocalization('display');
-			
+
 			var reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
 	        if(reqBuilder) {
 	            // got builder -> toolbar is loaded
@@ -120,7 +120,7 @@ Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.LaKaPaShowFAQBundleIns
 			for(p in this.eventHandlers) {
 				sandbox.unregisterFromEventByName(this, p);
 			}
-			
+
 			this.sandbox.unregister(this);
 			this.started = false;
 		},
@@ -129,7 +129,7 @@ Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.LaKaPaShowFAQBundleIns
 		* implements Module protocol init method - initializes request handlers
 		*/
 		init : function() {
-			
+
 		},
 		/**
 		* @method update
@@ -140,7 +140,7 @@ Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.LaKaPaShowFAQBundleIns
 	}, {
 	/**
 	* @property {String[]} protocol
-	* @static 
+	* @static
 	*/
 	protocol : ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
 });

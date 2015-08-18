@@ -24,7 +24,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
         me.isDataVisible = false;
         me._plugin = null;
 
-        me.templateHelp = jQuery('<div class="help icon-info"></div>');   
+        me.templateHelp = jQuery('<div class="help icon-info"></div>');
         me.templateList = jQuery(
             '<ul class="selectedLayersList sortable" ' +
             'data-sortable=\'{' + 'itemCss: "li.layer.selected", ' + 'handleCss: "div.layer-title" ' + '}\'>' +
@@ -166,7 +166,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                     } else {
                         me._plugin = null;
                     }
-                } 
+                }
             }
         },
         /**

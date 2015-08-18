@@ -36,6 +36,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                     'Oskari.mapframework.bundle.publisher2.request.PublishMapEditorRequestHandler',
                     this);
             sandbox.addRequestHandler('Publisher2.PublishMapEditorRequest', reqHandler);
+
+            // Let's add publishable filter to layerlist if enabled in conf
+            if(me.conf.showPublishableFilter && me.conf.showPublishableFilter === true) {
+                request = sandbox.getRequestBuilder('AddLayerListFilterRequest')(
+                    loc.layerFilter.buttons.publishable,
+                    loc.layerFilter.tooltips.publishable,
+                    function(layer){
+                        return (layer.getPermission('publish') === 'publication_permission_ok');
+                    },
+                    'layer-publishable',
+                    'layer-publishable-disabled',
+                    'publishable'
+                );
+            
+                sandbox.request(this, request);
+            }
         },
         /**
          * @return {Oskari.mapframework.bundle.publisher2.PublisherService} service for state holding
@@ -85,7 +101,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 me.publisher.render(map);
 
 
-                //calling this results in calling each of the panels' init-method twice, because init is already called when the forms are created at publisherSideBar's render. 
+                //calling this results in calling each of the panels' init-method twice, because init is already called when the forms are created at publisherSideBar's render.
                 //and that causes trouble.
 //                me.publisher.initPanels();
             } else {

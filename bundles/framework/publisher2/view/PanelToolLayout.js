@@ -42,7 +42,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                     me._editToolLayoutOff();
                     me._editToolLayoutOn();
                 } else {
-                    //just update the plugins' locationdata 
+                    //just update the plugins' locationdata
                     me._changeToolLayout(me.activeToolLayout, null);
                 }
             },
@@ -78,7 +78,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
         getName: function() {
             return "Oskari.mapframework.bundle.publisher2.view.PanelToolLayout";
         },
-        
+
         /**
         * Extends object recursive for keeping defaults array.
         * @method _extendRecursive
@@ -152,7 +152,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
          * @method _toggleAdditionalTools
          *   sets on the tools that are displayed but aren't showing in the tools panel (LogoPlugin etc.)
          */
-        _toggleAdditionalTools: function() {      
+        _toggleAdditionalTools: function() {
             var me = this;
             _.each(me.tools, function(tool) {
                 //don't call for tools that already have been set enabled (=plugin has already been created.)
@@ -339,7 +339,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             var event = sandbox.getEventBuilder('LayerToolsEditModeEvent')(true);
             sandbox.notifyAll(event);
         },
-        
+
         /**
          * @private @method _editToolLayoutOff
          */
@@ -363,7 +363,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             var event = sandbox.getEventBuilder('LayerToolsEditModeEvent')(false);
             sandbox.notifyAll(event);
         },
-        
+
         /**
          * @private @method _makeDraggable
          *

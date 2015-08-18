@@ -35,17 +35,17 @@ function() {
         return this.__name;
     },
     /**
-     * @method getTitle 
+     * @method getTitle
      * Extension protocol method
-     * @return {String} localized text for the title of the component 
+     * @return {String} localized text for the title of the component
      */
     getTitle : function() {
         return this.getLocalization('title');
     },
     /**
-     * @method getDescription 
+     * @method getDescription
      * Extension protocol method
-     * @return {String} localized text for the description of the component 
+     * @return {String} localized text for the description of the component
      */
     getDescription : function() {
         return this.getLocalization('desc');
@@ -60,7 +60,7 @@ function() {
     	var me = this;
         return me.sandbox;
     },
-        
+
     /**
      * @method update
      * BundleInstance protocol method
@@ -72,7 +72,7 @@ function() {
      * Convenience method to call from Tile and Flyout
      * Returns JSON presentation of bundles localization data for current language.
      * If key-parameter is not given, returns the whole localization data.
-     * 
+     *
      * @param {String} key (optional) if given, returns the value for key
      * @return {String/Object} returns single localization string or
      *      JSON object for complete data depending on localization
@@ -87,7 +87,7 @@ function() {
         }
         return this._localization;
     },
-        
+
     /**
      * @method startExtension
      * Extension protocol method
@@ -97,7 +97,7 @@ function() {
         this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.liikennevirasto.bundle.lakapa.BasketBundle.Flyout', this);
         this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.liikennevirasto.bundle.lakapa.BasketBundle.Tile', this);
     },
-    
+
     /**
      * @method stopExtension
      * Extension protocol method
@@ -110,7 +110,7 @@ function() {
             }
         }
     },
-        
+
     /**
      * @method getPlugins
      * Extension protocol method
@@ -118,8 +118,8 @@ function() {
     getPlugins : function() {
         return this.plugins;
     },
-    
-    
+
+
     /**
      * @method start
      * BundleInstance protocol method
@@ -131,11 +131,11 @@ function() {
         me.sandbox = Oskari.getSandbox(sandboxName);
 
         this.localization = Oskari.getLocalization(this.getName());
-        
+
         // register to sandbox as a module
         me.sandbox.register(me);
-        
-       
+
+
         // register to listening events
         for (var p in me.eventHandlers) {
             if (p) {
@@ -145,24 +145,24 @@ function() {
         //Let's extend UI with Flyout and Tile
         var request = me.sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
         me.sandbox.request(this, request);
-        
+
         // draw ui
         me._createUI();
-        
-        // request    	
+
+        // request
     	this.requestHandlers = {
     		AddToBasketRequest : Oskari.clazz.create('Oskari.liikennevirasto.bundle.lakapa.AddToBasketRequestHandler', me.sandbox, me.plugins['Oskari.userinterface.Flyout'], me.plugins['Oskari.userinterface.Tile']),
     		ClearBasketRequest : Oskari.clazz.create('Oskari.liikennevirasto.bundle.lakapa.ClearBasketRequestHandler', me.sandbox, me.plugins['Oskari.userinterface.Flyout'], me.plugins['Oskari.userinterface.Tile']),
     		RefreshBasketRequest : Oskari.clazz.create('Oskari.liikennevirasto.bundle.lakapa.RefreshBasketRequestHandler', me.sandbox, me.plugins['Oskari.userinterface.Flyout'], me.plugins['Oskari.userinterface.Tile'])
     	};
-    	
+
     	me.sandbox.addRequestHandler('AddToBasketRequest', this.requestHandlers.AddToBasketRequest);
     	me.sandbox.addRequestHandler('ClearBasketRequest', this.requestHandlers.ClearBasketRequest);
     	me.sandbox.addRequestHandler('RefreshBasketRequest', this.requestHandlers.RefreshBasketRequest);
-    	
+
     	me.sandbox.registerAsStateful(me.mediator.bundleId, me);
     },
-    
+
     /**
      * @method init
      * Module protocol method
@@ -171,7 +171,7 @@ function() {
         // headless module so nothing to return
         return null;
     },
-    
+
     /**
      * @method onEvent
      * Module protocol method/Event dispatch
@@ -185,11 +185,11 @@ function() {
 
         return handler.apply(this, [event]);
     },
-    
+
     /**
      * @static
      * @property eventHandlers
-     * Best practices: defining which 
+     * Best practices: defining which
      * events bundle is listening and how bundle reacts to them
      */
     eventHandlers : {
@@ -209,7 +209,7 @@ function() {
                 sandbox.unregisterFromEventByName(me, p);
             }
         }
-        var request = 
+        var request =
             sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(me);
         sandbox.request(me, request);
         // unregister module from sandbox
@@ -242,9 +242,9 @@ function() {
             }
         }
     }
-    
+
 }, {
-    protocol : [ 'Oskari.bundle.BundleInstance', 
-                 'Oskari.mapframework.module.Module', 
+    protocol : [ 'Oskari.bundle.BundleInstance',
+                 'Oskari.mapframework.module.Module',
                  'Oskari.userinterface.Extension' ]
 });

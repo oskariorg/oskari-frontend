@@ -25,7 +25,7 @@ function() {
 
 	/**
 	 * @method getName
-	 * @return {String} the name for the component 
+	 * @return {String} the name for the component
 	 */
 	getName : function() {
 		return this.__name;
@@ -77,24 +77,24 @@ function() {
     		return;
     	}
     	var conf = me.conf;
-    	
+
     	me.started = true;
-    	
+
     	var conf = this.conf;
     	var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
     	var sandbox = Oskari.getSandbox(sandboxName);
         me.sandbox = sandbox;
-       
+
         sandbox.register(me);
 
         var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
         var locale = this.getLocalization('display');
         me.plugin = Oskari.clazz.create('Oskari.liikennevirasto.bundle.mapmodule.plugin.LakapaTransportSelectorPlugin', locale, conf);
-       
+
         mapModule.registerPlugin(me.plugin);
         mapModule.startPlugin(me.plugin);
-        
-        // request    	
+
+        // request
     	this.requestHandlers = {
     			ShowBoundingBoxRequest : Oskari.clazz.create('Oskari.liikennevirasto.bundle.transport.selector.ShowBoundingBoxRequestHandler', sandbox, me.plugin),
     			ShowMessageRequest : Oskari.clazz.create('Oskari.liikennevirasto.bundle.transport.selector.ShowMessageRequestHandler', sandbox, me.plugin),
@@ -102,13 +102,13 @@ function() {
     			ShowFeatureRequest : Oskari.clazz.create('Oskari.liikennevirasto.bundle.transport.selector.ShowFeatureRequestHandler', sandbox, me.plugin),
     			HideSelectionRequest : Oskari.clazz.create('Oskari.liikennevirasto.bundle.transport.selector.HideSelectionRequestHandler', sandbox, me.plugin)
     	};
-    	
+
     	sandbox.addRequestHandler('ShowBoundingBoxRequest', this.requestHandlers.ShowBoundingBoxRequest);
     	sandbox.addRequestHandler('ShowMessageRequest', this.requestHandlers.ShowMessageRequest);
     	sandbox.addRequestHandler('ToggleTransportSelectorRequest', this.requestHandlers.ToggleTransportSelectorRequest);
     	sandbox.addRequestHandler('ShowFeatureRequest', this.requestHandlers.ShowFeatureRequest);
     	sandbox.addRequestHandler('HideSelectionRequest', this.requestHandlers.HideSelectionRequest);
-    	
+
     	sandbox.registerAsStateful(me.mediator.bundleId, me);
     },
 
@@ -134,7 +134,7 @@ function() {
 	 * implements Module protocol init method - initializes request handlers
 	 */
 	init : function() {
-		
+
 	},
     /**
      * @method update
@@ -153,7 +153,7 @@ function() {
 }, {
 	/**
      * @property {String[]} protocol
-     * @static 
+     * @static
      */
     protocol : ['Oskari.bundle.BundleInstance']
 });

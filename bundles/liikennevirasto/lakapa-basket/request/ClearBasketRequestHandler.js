@@ -8,7 +8,7 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.ClearBasketRequestHand
     this.tile = tile;
 }, {
 	/**
-	 * @method handleRequest 
+	 * @method handleRequest
 	 * Add to basket
 	 * @param {Oskari.mapframework.core.Core} core
 	 * 		reference to the application core (reference sandbox core.getSandbox())

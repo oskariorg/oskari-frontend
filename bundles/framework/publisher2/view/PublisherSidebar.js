@@ -347,10 +347,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         /**
          * @private @method _createToolPanels
          * Finds classes annotated as 'Oskari.mapframework.publisher.Tool'.
-         * Determines tool groups from tools and creates tool panels for each group. Returns an object containing a list of panels and their tools as well as a list of 
+         * Determines tool groups from tools and creates tool panels for each group. Returns an object containing a list of panels and their tools as well as a list of
          * all tools, even those that aren't displayed in the tools' panels.
          *
-         * @return {Object} Containing {Oskari.mapframework.bundle.publisher2.view.PanelMapTools[]} list of panels 
+         * @return {Object} Containing {Oskari.mapframework.bundle.publisher2.view.PanelMapTools[]} list of panels
          * and {Oskari.mapframework.publisher.tool.Tool[]} tools not displayed in panel
          */
         _createToolPanels: function () {
@@ -412,7 +412,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 if (panel.validate && typeof panel.validate === 'function') {
                     errors = errors.concat(panel.validate());
                 }
-                
+
                 jQuery.extend(true, selections, panel.getValues());
             });
 

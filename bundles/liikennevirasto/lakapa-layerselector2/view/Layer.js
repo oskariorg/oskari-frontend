@@ -1,7 +1,7 @@
 /**
  * @class Oskari.liikennevirasto.bundle.lakapa.layerselector2.view.Layer
- * 
- * 
+ *
+ *
  */
 Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.layerselector2.view.Layer",
 
@@ -18,9 +18,9 @@ function(layer, sandbox, localization) {
 }, {
 	__template : '<div class="layer"><input type="checkbox" /> ' +
                 '<div class="layer-tools"><div class="layer-backendstatus-icon"></div>' +
-                '<div class="layer-icon"></div><div class="layer-info"></div></div>' + 
-                '<div class="layer-title"></div>' + 
-                //'<div class="layer-keywords"></div>' + 
+                '<div class="layer-icon"></div><div class="layer-info"></div></div>' +
+                '<div class="layer-title"></div>' +
+                //'<div class="layer-keywords"></div>' +
             '</div>',
     /**
      * @method getId
@@ -42,18 +42,18 @@ function(layer, sandbox, localization) {
         // checking since we dont assume param is boolean
         this.ui.find('input').attr('checked', (isSelected == true));
     },
-    
+
     /**
      * @method updateLayerContent
      */
     updateLayerContent : function(layer) {
-    	
+
     	/* set title */
     	var newName = layer.getName();
         this.ui.find('.layer-title').html(newName);
-        
+
         /* set/clear alert if required */
-        var prevBackendStatus = this.backendStatus; 
+        var prevBackendStatus = this.backendStatus;
        	var currBackendStatus = layer.getBackendStatus();
        	var loc = this.localization['backendStatus'] ;
        	var locForPrevBackendStatus = prevBackendStatus ? loc[prevBackendStatus] : null;
@@ -66,24 +66,24 @@ function(layer, sandbox, localization) {
 		if( clsForPrevBackendStatus ) {
 			/* update or clear */
 			if( clsForPrevBackendStatus != clsForCurrBackendStatus  ) {
-				elBackendStatus.removeClass(clsForPrevBackendStatus);	
+				elBackendStatus.removeClass(clsForPrevBackendStatus);
 			}
 		}
 		if( clsForCurrBackendStatus ) {
 			/* update or set */
 			if( clsForPrevBackendStatus != clsForCurrBackendStatus  ) {
-				elBackendStatus.addClass(clsForCurrBackendStatus);	
+				elBackendStatus.addClass(clsForCurrBackendStatus);
 			}
 		}
 		if( tipForCurrBackendStatus ) {
 			if( tipForPrevBackendStatus != tipForCurrBackendStatus  ) {
-				elBackendStatus.attr('title',tipForCurrBackendStatus);	
-			}	
+				elBackendStatus.attr('title',tipForCurrBackendStatus);
+			}
 		} else if( tipForPrevBackendStatus ) {
 			elBackendStatus.attr('title','');
 		}
 		this.backendStatus = currBackendStatus;
-       
+
     },
     getContainer : function() {
         return this.ui;
@@ -97,14 +97,14 @@ function(layer, sandbox, localization) {
     _createLayerContainer : function(layer) {
         var me = this;
         var sandbox = this.sandbox;
-        
-        // create from layer template 
-        // (was clone-from-template but template was only used once so there was some overhead)  
+
+        // create from layer template
+        // (was clone-from-template but template was only used once so there was some overhead)
         var layerDiv = jQuery(this.__template);
-        
+
         var tooltips = this.localization['tooltip'];
         var tools = jQuery(layerDiv).find('div.layer-tools');
-        var icon = tools.find('div.layer-icon'); 
+        var icon = tools.find('div.layer-icon');
         if(layer.isBaseLayer()) {
             icon.addClass('layer-base');
             icon.attr('title', tooltips['type-base']);
@@ -132,18 +132,18 @@ function(layer, sandbox, localization) {
             icon.addClass('layer-vector');
             icon.attr('title', tooltips['type-wms']);
         }
-        
+
         if(layer.getMetadataIdentifier()) {
             tools.find('div.layer-info').addClass('icon-info');
             tools.find('div.layer-info').click(function() {
                   var rn = 'catalogue.ShowMetadataRequest';
-                  var uuid = layer.getMetadataIdentifier();              
+                  var uuid = layer.getMetadataIdentifier();
                   sandbox.postRequestByName(rn, [
                       { uuid : uuid }
                   ]);
             });
         }
-        
+
         // setup id
         jQuery(layerDiv).attr('layer_id', layer.getId());
         jQuery(layerDiv).find('.layer-title').append(layer.getName());
@@ -157,24 +157,24 @@ function(layer, sandbox, localization) {
                 sandbox.postRequestByName('RemoveMapLayerRequest', [layer.getId()]);
             }
         });
-        
+
         /*
          * backend status
          */
         var elBackendStatus = tools.find('.layer-backendstatus-icon');
         elBackendStatus.click(function() {
-            var mapLayerId = layer.getId();              
+            var mapLayerId = layer.getId();
             sandbox.postRequestByName('ShowMapLayerInfoRequest', [
                       mapLayerId
             ]);
         });
-        
+
         return layerDiv;
     }
 }, {
     /**
      * @property {String[]} protocol
-     * @static 
+     * @static
      */
     protocol : ['Oskari.mapframework.module.Module']
 });

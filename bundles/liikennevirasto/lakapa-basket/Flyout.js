@@ -36,16 +36,16 @@ function(instance) {
 			'</div></div>');
 	this.templateBasketTools = jQuery('<div id="lakapa-basket-tools"><div class="normal-conditions-wrapper"><span class="normal-conditions-span"></span>  <a class="normal-conditions-link" target="_blank" href="http://sundayissue.fi"></a><label class="normal-conditions-label"></label></div> '+
 			'<a href="#" id="lakapa-basket-next" class="lakapa-basket-button lakapa-basket-next"></a><a class="lakapa-basket-button" id="lakapa-basket-empty-all" href="#"></a></div>');
-	
+
 	this.templateBasketTools2 = jQuery('<div id="lakapa-basket-tools2"><a class="lakapa-basket-button" id="lakapa-basket-previous" href="#"></a><a href="#" id="lakapa-basket-load-all" class="lakapa-basket-button lakapa-basket-load-all"></a></div>');
-	
+
 	this.templateBasketItem = jQuery('<div class="lakapa-basket-data">'
 			+'<div class="lakapa-basket-title"><div class="lakapa-basket-title-layer-name"></div><div class="icon-close lakapa-basket-title-close"></div><div class="lakapa-basket-title-clear"></div></div>'
 			+'<div class="lakapa-basket-content">'
 			+'<div class="lakapa-basket-content-transport-title"></div>'
 			+'<div class="lakapa-basket-content-transport-content"></div>'
 			+'<div class="lakapa-basket-content-cropping"></div>'
-			+'<div class="lakapa-basket-content-cropping-content"></div>'						
+			+'<div class="lakapa-basket-content-cropping-content"></div>'
 			+'<div class="lakapa-basket-content-bbox"></div>'
 			+'<div class="lakapa-basket-content-bbox-content"></div>'
 			+'<div class="lakapa-basket-content-special-conditions"></div>'
@@ -61,20 +61,20 @@ function(instance) {
 }, {
 	/**
 	 * @method getName
-	 * @return {String} the name for the component 
+	 * @return {String} the name for the component
 	 */
     getName : function() {
         return 'Oskari.liikennevirasto.bundle.lakapa.BasketBundle.Flyout';
     },
 	/**
 	 * @method setEl
-	 * @param {Object} el 
+	 * @param {Object} el
 	 * 		reference to the container in browser
-	 * @param {Number} width 
+	 * @param {Number} width
 	 * 		container size(?) - not used
-	 * @param {Number} height 
-	 * 		container size(?) - not used 
-	 * 
+	 * @param {Number} height
+	 * 		container size(?) - not used
+	 *
 	 * Interface method implementation
 	 */
     setEl : function(el, width, height) {
@@ -84,18 +84,18 @@ function(instance) {
 		}
     },
 	/**
-	 * @method startPlugin 
-	 * 
-	 * Interface method implementation, assigns the HTML templates that will be used to create the UI 
+	 * @method startPlugin
+	 *
+	 * Interface method implementation, assigns the HTML templates that will be used to create the UI
 	 */
     startPlugin : function() {
 		var me = this;
 		this.template = jQuery('<div></div>');
     },
 	/**
-	 * @method stopPlugin 
-	 * 
-	 * Interface method implementation, does nothing atm 
+	 * @method stopPlugin
+	 *
+	 * Interface method implementation, does nothing atm
 	 */
 	stopPlugin : function() {
 
@@ -114,44 +114,44 @@ function(instance) {
 		me.showBasketContent();
 	},
 	/**
-	 * @method getTitle 
-	 * @return {String} localized text for the title of the flyout 
+	 * @method getTitle
+	 * @return {String} localized text for the title of the flyout
 	 */
 	getTitle : function() {
 		return this.instance.getLocalization('flyouttitle');
 	},
 	/**
-	 * @method getDescription 
-	 * @return {String} localized text for the description of the flyout 
+	 * @method getDescription
+	 * @return {String} localized text for the description of the flyout
 	 */
 	getDescription : function() {
 		return this.instance.getLocalization('desc');
 	},
 	/**
-	 * @method getOptions 
-	 * Interface method implementation, does nothing atm 
+	 * @method getOptions
+	 * Interface method implementation, does nothing atm
 	 */
 	getOptions : function() {
 
 	},
 	/**
-	 * @method setState 
+	 * @method setState
 	 * @param {Object} state
 	 * 		state that this component should use
-	 * Interface method implementation, does nothing atm 
+	 * Interface method implementation, does nothing atm
 	 */
 	setState : function(state) {
         var me = this;
         this.state = state;
         me.showBasketUserContent();
-        me.emptyUserDetails();        
+        me.emptyUserDetails();
 		me.showBasketContent();
 		me.clear();
         var parent = me.container.parents('.oskari-flyout');
         if(parent.hasClass('oskari-detached') || parent.hasClass('oskari-attached')){
             parent.find('.oskari-flyouttool-close').trigger('click');
         }
-		
+
 	},
 	/**
 	 * Empty user details.
@@ -172,7 +172,7 @@ function(instance) {
 	showBasketContent: function(){
 		jQuery('#lakapa-basket-inputs').hide();
 		jQuery('#lakapa-basket-tools2').hide();
-		jQuery('#lakapa-basket-tools').show();        		
+		jQuery('#lakapa-basket-tools').show();
 		jQuery('#lakapa-basket-datas').show();
 	},
 	/**
@@ -181,7 +181,7 @@ function(instance) {
 	showBasketUserContent: function(){
 		jQuery('#lakapa-basket-inputs').show();
 		jQuery('#lakapa-basket-tools2').show();
-		jQuery('#lakapa-basket-tools').hide();        		
+		jQuery('#lakapa-basket-tools').hide();
 		jQuery('#lakapa-basket-datas').hide();
 	},
 	/**
@@ -190,26 +190,26 @@ function(instance) {
 	 */
 	checkUserDetails: function(){
 		var allOk = true;
-		
+
 		var name = jQuery('#lakapa-basket-name').val();
 		var organization = jQuery('#lakapa-basket-organization').val();
 		var email = jQuery('#lakapa-basket-email').val();
 		var email2 = jQuery('#lakapa-basket-email2').val();
 		var privateUser = jQuery('#lakapa-basket-private-user').is(':checked');
-		
+
 		if(name.length==0 || (organization.length == 0 && privateUser == false) || email.length == 0 || email2.length == 0 || email != email2){
 			allOk = false;
 		} else {
 			var nameValid = name.match(/^[a-zåäö\- |A-ZÅÄÖ\- ]{1,}$/);
 			var organizationValid = true;
 			var emailValid = email.match(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
-			
+
 			if(!nameValid || !organizationValid || !emailValid){
 				allOk = false;
 			}
 		}
-		
-		
+
+
 		return allOk;
 	},
 	/**
@@ -221,13 +221,13 @@ function(instance) {
         var sandbox = me.instance.getSandbox();
         me._sandbox = sandbox;
         me._locale = me.instance.getLocalization('flyout');
-        
+
 		// clear container
 		var cel = jQuery(me.container);
 		cel.empty();
         var content = me.template.clone();
         cel.append(content);
-        
+
         var basketDatas = me.templateBasketDatas.clone();
         var basketTools = me.templateBasketTools.clone();
         var basketTools2 = me.templateBasketTools2.clone();
@@ -241,20 +241,20 @@ function(instance) {
         basketInputs.find('#lakapa-basket-input-required_fields').html(me._locale.input_info);
         basketInputs.find('.lakapa-basket-info-saving-data').html(me._locale.userdata_save_info);
         if(me.instance.conf.userdataSaveInfoUrl !== null && me.instance.conf.userdataSaveInfoUrl != ''){
-            basketInputs.find('.lakapa-basket-info-saving-data-url').html(                
+            basketInputs.find('.lakapa-basket-info-saving-data-url').html(
                     '<a href="'+me.instance.conf.userdataSaveInfoUrl+'" target="_blank">' + me._locale.userdata_save_info_url_title + '</a>'
             );
         } else {
-            basketInputs.find('.lakapa-basket-info-saving-data-url').html(                
+            basketInputs.find('.lakapa-basket-info-saving-data-url').html(
                     '<a href="#">' + me._locale.userdata_save_info_url_title + '</a>'
             );
         }
-        
+
         /*basketTools.find('.normal-conditions-span').text(me._locale.normal_conditions);
         basketTools.find('.normal-conditions-link').text(me._locale.normal_conditions_link);
         basketTools.find('.normal-conditions-link').attr("href",me.instance.conf.normalConditions);
         basketTools.find('.normal-conditions-label').html('<input type="checkbox" class="normal-conditions-chk">'+me._locale.accept_normal_conditions);*/
-        
+
         basketTools.find('#lakapa-basket-empty-all').html(me._locale.buttonEmpty);
         basketTools.find('#lakapa-basket-empty-all').unbind('click');
         basketTools.find('#lakapa-basket-empty-all').bind('click', function(){
@@ -263,8 +263,8 @@ function(instance) {
         	//jQuery(".normal-conditions-chk").attr("checked",false);
         	me.checkButtonsStates();
         });
-        
-        basketTools.find('#lakapa-basket-next').html(me._locale.buttonNext);        
+
+        basketTools.find('#lakapa-basket-next').html(me._locale.buttonNext);
         basketTools.find('#lakapa-basket-next').unbind('click');
         basketTools.find('#lakapa-basket-next').bind('click', function(){
         	if(!jQuery(this).hasClass('disabled')){
@@ -277,17 +277,17 @@ function(instance) {
         			me.showBasketUserContent();
         		}
         	}
-        	
+
         });
-        
+
         // Basket tools2
-        basketTools2.find('#lakapa-basket-previous').html(me._locale.buttonPrevious);        
+        basketTools2.find('#lakapa-basket-previous').html(me._locale.buttonPrevious);
         basketTools2.find('#lakapa-basket-previous').unbind('click');
         basketTools2.find('#lakapa-basket-previous').bind('click', function(){
         	me.showBasketContent();
         });
-        
-        basketTools2.find('#lakapa-basket-load-all').html(me._locale.buttonLoadAll);        
+
+        basketTools2.find('#lakapa-basket-load-all').html(me._locale.buttonLoadAll);
         basketTools2.find('#lakapa-basket-load-all').unbind('click');
         basketTools2.find('#lakapa-basket-load-all').bind('click', function(){
         	var userDetails = me.checkUserDetails();
@@ -297,24 +297,24 @@ function(instance) {
         		} else {
         			me._sandbox.postRequestByName('ShowMessageRequest', [me._locale.check_user_details_title, me._locale.check_user_details_message]);
         		}
-        	}        	
+        	}
         });
-        
+
         content.addClass('lakapa-basket-main-div');
         content.append(basketDatas);
         content.append(basketInputs);
     	content.append(basketTools);
     	content.append(basketTools2);
-    	
+
     	jQuery('#lakapa-basket-private-user').unbind('change');
         jQuery('#lakapa-basket-private-user').bind('change',function() {
             if(jQuery(this).is(':checked')) {
-                jQuery('#lakapa-basket-organization').attr('disabled','disabled');        
+                jQuery('#lakapa-basket-organization').attr('disabled','disabled');
             } else {
                 jQuery('#lakapa-basket-organization').removeAttr('disabled');
             }
         });
-    	
+
     	me.checkButtonsStates();
     	me.showBasketContent();
 
@@ -337,7 +337,7 @@ function(instance) {
      */
     needCheckSpecialConditions: function(){
     	var checkSpecialConditions = false;
-    	
+
     	jQuery('.lakapa-basket-data').each(function(){
 	    	var parent = jQuery(this);
 			var details = {
@@ -363,13 +363,13 @@ function(instance) {
 			} else {
 				details.specialConditionsLink = '';
 			}
-			
+
 			if(details.isSpecialConditions==true){
 				details.isAcceptSpecialConditions = parent.find('.special-conditions-chk').is(':checked');
 				if(details.isAcceptSpecialConditions==false){
 					checkSpecialConditions = true;
 				}
-			}		
+			}
     	});
     	return checkSpecialConditions;
     },
@@ -381,7 +381,7 @@ function(instance) {
     	var me = this;
     	var downloadDetails = [];
     	var checkSpecialConditions = false;
-    	
+
     	jQuery('.lakapa-basket-data').each(function(){
 	    	var parent = jQuery(this);
 			var details = {
@@ -407,7 +407,7 @@ function(instance) {
 			} else {
 				details.specialConditionsLink = '';
 			}
-			
+
 			if(details.isSpecialConditions==true){
 				details.isAcceptSpecialConditions = parent.find('.special-conditions-chk').is(':checked');
 				if(details.isAcceptSpecialConditions==false){
@@ -415,43 +415,43 @@ function(instance) {
 				}
 			}
 			downloadDetails.push(details);
-		
+
     	});
     	var strDownloadDetails = JSON.stringify(downloadDetails);
-    	
-    	var userDetails = {    	
+
+    	var userDetails = {
         		name: jQuery('#lakapa-basket-name').val(),
         		organization: jQuery('#lakapa-basket-organization').val(),
-        		email: jQuery('#lakapa-basket-email').val(),	
+        		email: jQuery('#lakapa-basket-email').val(),
         		privateUser: jQuery('#lakapa-basket-private-user').is(':checked')
         };
     	var strUserDetails = JSON.stringify(userDetails);
-    	
+
     	var name = jQuery('#lakapa-basket-name').val();
 		var organization = jQuery('#lakapa-basket-organization').val();
-		var email = jQuery('#lakapa-basket-email').val();	
+		var email = jQuery('#lakapa-basket-email').val();
 		var privateUser = jQuery('#lakapa-basket-private-user').is(':checked');
-    	
-    	
+
+
 		var loadingText = me.templateBasketLoading.clone();
 		loadingText.find('.lakapa-basket-loading-text').html(me._locale.loadingText);
     	el.after(loadingText);
-    	
+
 		var dte = new Date();
         var dteMs = dte.getTime();
-        
-        if( me._pendingAjaxQuery.busy && me._pendingAjaxQuery.timestamp &&  
+
+        if( me._pendingAjaxQuery.busy && me._pendingAjaxQuery.timestamp &&
             	dteMs - me._pendingAjaxQuery.timestamp < 500 ) {
             	me._sandbox.printDebug("[LakapaBasket] Save last selected region NOT SENT (time difference < 500ms)");
-            	return; 
+            	return;
         }
 		me._cancelAjaxRequest();
         me._startAjaxRequest(dteMs);
-        
-        var ajaxUrl = me._sandbox.getAjaxUrl(); 
-        
+
+        var ajaxUrl = me._sandbox.getAjaxUrl();
+
         jQuery.ajax({
-            beforeSend : function(x) {            	
+            beforeSend : function(x) {
             	me._pendingAjaxQuery.jqhr = x;
                 if (x && x.overrideMimeType) {
                     x.overrideMimeType("application/json;charset=UTF-8");
@@ -486,8 +486,8 @@ function(instance) {
             dataType : 'json',
             url : ajaxUrl + 'action_route=DownloadAll'
         });
-        
-        
+
+
     },
     /**
      * @method checkButtonsStates
@@ -496,7 +496,7 @@ function(instance) {
     checkButtonsStates: function(){
     	var me = this;
     	var basketItems = jQuery('.lakapa-basket-data').length;
-    	
+
     	if(basketItems>0){
     		jQuery('#lakapa-basket-empty-all').removeClass('disabled');
     		jQuery('#lakapa-basket-next').removeClass('disabled');
@@ -525,7 +525,7 @@ function(instance) {
     			specialConditionsLink = curLang[identifier];
     		}
     	} catch(err){
-    	}    	
+    	}
     	return specialConditionsLink;
     },
     /**
@@ -570,27 +570,27 @@ function(instance) {
 		var bottom = 0;
 		var right = 0;
 		var top = 0;
-    	if(identifier==null && bbox!=null){    	
+    	if(identifier==null && bbox!=null){
     		left = Math.floor(bbox.left);
     		bottom = Math.floor(bbox.bottom);
     		right = Math.floor(bbox.right);
     		top = Math.floor(bbox.top);
     	}
-    	
+
     	var boundings = {
     		left: left,
     		bottom:bottom,
     		right:right,
     		top:top
-    	};    	
-    	
+    	};
+
     	for(var i=0;i<layers.length;i++){
     		var layer = layers[i];
     		var layerName = '';
     		try{
     			layerName = layer.getName();
     		} catch(err){}
-    		
+
     		var specialConditionsLink = me._getSpecialConditions(layer,'road',identifier);
     		var specialConditions = false;
     		if(specialConditionsLink){
@@ -598,9 +598,9 @@ function(instance) {
     				specialConditions = true;
     			}
     		}
-    		
+
     		var basketItem = me.templateBasketItem.clone();
-    		
+
     		basketItem.attr('data-transport', transport);
     		if(identifier=='digiroad'){
     			if(layer.feature.attributes.livimaakunta=='full-finland'){
@@ -614,13 +614,13 @@ function(instance) {
     			var wmsUrl = layer.getWmsUrls();
         		basketItem.attr('data-layer-wmsurl', wmsUrl[0]);
     		}
-    		
+
     		basketItem.attr('data-bbox-left', left);
     		basketItem.attr('data-bbox-bottom', bottom);
     		basketItem.attr('data-bbox-right', right);
-    		basketItem.attr('data-bbox-top', top);    		
+    		basketItem.attr('data-bbox-top', top);
     		basketItem.attr('data-special-conditions-link', specialConditionsLink);
-    		
+
     		var croppingText = me._locale['cropping_selection_'+croppingMode];
     		if(identifier==null){
 	    		if(croppingMode!='newreqular' && croppingMode!='lastreqular' && croppingMode!='mapextent'){
@@ -630,7 +630,7 @@ function(instance) {
 	    			basketItem.attr('data-cropping-layer', layer.getWmsName());
 	    			var wmsUrls = layer.getWmsUrls();
 	    			basketItem.attr('data-cropping-url', wmsUrls[0]);
-	    			
+
 	    		} else {
 	    			basketItem.attr('data-cropping-mode', 'regtangle');
 	    			basketItem.attr('data-cropping-url', '');
@@ -645,14 +645,14 @@ function(instance) {
     			basketItem.attr('data-file-size', layer.feature.attributes.livitiedostokoko);
     			basketItem.attr('data-identifier', identifier);
     		}
-    		
+
     		if(specialConditions){
     			basketItem.find('.lakapa-basket-title-close').after('<div class="special-conditions-info"></div>');
     			basketItem.find('.special-conditions-info').attr('title', me._locale.special_conditions_tooltip);
     		}
     		if(identifier==null){
     			basketItem.find('.lakapa-basket-title-layer-name').html(layerName);
-    		} else if(identifier == 'digiroad') {    		    
+    		} else if(identifier == 'digiroad') {
     			basketItem.find('.lakapa-basket-title-layer-name').html(layer.name + ' - ' + identifier + ' ' + me.instance.conf.digiroadPublished);
     		}
     		else {
@@ -660,10 +660,10 @@ function(instance) {
             }
     		basketItem.find('.lakapa-basket-content-cropping').html('<span class="lakapa-basket-data-title">' +me._locale.croppingTitle + '</span>:');
     		basketItem.find('.lakapa-basket-content-cropping-content').html(croppingText);
-    		
+
     		basketItem.find('.lakapa-basket-content-transport-title').html('<span class="lakapa-basket-data-title">' +me._locale.transport_title + '</span>:');
     		basketItem.find('.lakapa-basket-content-transport-content').html(me._locale['transport_'+transport]);
-    		
+
     		basketItem.find('.lakapa-basket-content-bbox').html('<span class="lakapa-basket-data-title">'+ me._locale.croppingBBOXTitle + '</span>:');
     		if(identifier==null){
     			if(features==null){
@@ -680,10 +680,10 @@ function(instance) {
 				}
     		}
     		basketItem.find('.lakapa-basket-next').html(me._locale.buttonNext);
-    		
+
     		if(identifier==null){
     			if(features==null){
-    				basketItem.find('.lakapa-basket-show-on-map').bind('click',function(){    					
+    				basketItem.find('.lakapa-basket-show-on-map').bind('click',function(){
     					if(jQuery(this).hasClass('hide')){
     						jQuery(this).removeClass('hide');
     						jQuery(this).text(me._locale.showOnMapTitle);
@@ -693,15 +693,15 @@ function(instance) {
         	    				jQuery(this).removeClass('hide');
         	    				jQuery(this).text(me._locale.showOnMapTitle);
         	    			});
-    						
+
     						jQuery(this).addClass('hide');
     						jQuery(this).text(me._locale.hideOnMapTitle);
-    						me._sandbox.postRequestByName('ShowBoundingBoxRequest', [boundings]);	
+    						me._sandbox.postRequestByName('ShowBoundingBoxRequest', [boundings]);
     					}
     				});
     				basketItem.attr('data-session-keys', '');
     			} else {
-    				basketItem.find('.lakapa-basket-show-on-map').bind('click',function(){    					
+    				basketItem.find('.lakapa-basket-show-on-map').bind('click',function(){
     					if(jQuery(this).hasClass('hide')){
     						jQuery(this).removeClass('hide');
     						jQuery(this).text(me._locale.showOnMapTitle);
@@ -711,13 +711,13 @@ function(instance) {
         	    				jQuery(this).removeClass('hide');
         	    				jQuery(this).text(me._locale.showOnMapTitle);
         	    			});
-        					
+
     						jQuery(this).addClass('hide');
     						jQuery(this).text(me._locale.hideOnMapTitle);
     						me._sandbox.postRequestByName('ShowFeatureRequest', [features]);
     					}
     				});
-    				
+
     				var sessions = [];
     				for(var s=0;s<features.length;s++){
     					var f = features[s];
@@ -728,7 +728,7 @@ function(instance) {
     				basketItem.attr('data-session-keys', stringSessions);
     			}
     		} else {
-    		    basketItem.find('.lakapa-basket-show-on-map').bind('click',function(){                        
+    		    basketItem.find('.lakapa-basket-show-on-map').bind('click',function(){
                     if(jQuery(this).hasClass('hide')){
                         jQuery(this).removeClass('hide');
                         jQuery(this).text(me._locale.showOnMapTitle);
@@ -745,30 +745,30 @@ function(instance) {
                         me._sandbox.postRequestByName('ShowFeatureRequest', [features]);
                     }
                 });
-    		    
+
     		    basketItem.attr('data-session-keys', '');
-    		    
+
     		}
-    		
+
     		if(!specialConditions){
-    			basketItem.find('.lakapa-basket-content-special-conditions').html('<span class="lakapa-basket-data-title">' + 
-    					me._locale.specialConditionsTitle + '</span>: <span class="lakapa-basket-special-conditions-no">' + 
+    			basketItem.find('.lakapa-basket-content-special-conditions').html('<span class="lakapa-basket-data-title">' +
+    					me._locale.specialConditionsTitle + '</span>: <span class="lakapa-basket-special-conditions-no">' +
     					'<a target="_blank" rel="license" href="http://creativecommons.org/licenses/by/4.0/">' +
     					'<img alt="Creative Commons" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/80x15.png" />' +
     					'</a><br />' +
     					me._locale.specialConditionsNo +
     					'<a target="_blank" rel="license" href="http://creativecommons.org/licenses/by/4.0/">'+me._locale.specialConditionsNo2+'</a>.' +
     					'</span>');
-    			
+
     			//
     		} else {
-    			basketItem.find('.lakapa-basket-content-special-conditions').html('<span class="lakapa-basket-data-title">' + 
+    			basketItem.find('.lakapa-basket-content-special-conditions').html('<span class="lakapa-basket-data-title">' +
     					me._locale.specialConditionsTitle + '</span>: <a href="'+specialConditionsLink+'" target="_blank">'+me._locale.specialConditionsYes+'</a>' +
     					'<label class="special-conditions-label"><input class="special-conditions-chk" type="checkbox">'+me._locale.accept_special_conditions+'</label>'
-    			
+
     			);
     		}
-    		
+
     		basketItem.find('.lakapa-basket-title-close').bind('click',function(){
     			jQuery(this).parent().parent().remove();
     			me._sandbox.postRequestByName('RefreshBasketRequest', []);
@@ -781,7 +781,7 @@ function(instance) {
     /**
      * @method _notifyAjaxFailure
      * @private
-     * Notify ajax failure 
+     * Notify ajax failure
      */
     _notifyAjaxFailure: function() {
     	 var me = this;
@@ -814,7 +814,7 @@ function(instance) {
     /**
      * @method _cancelAjaxRequest
      * @private
-     * Cancel ajax request 
+     * Cancel ajax request
      */
     _cancelAjaxRequest: function() {
     	var me = this;
@@ -825,7 +825,7 @@ function(instance) {
     	me._pendingAjaxQuery.jqhr = null;
     	if( !jqhr) {
     		return;
-    	}    	
+    	}
     	this._sandbox.printDebug("[LakapaBasket] Abort jqhr ajax request");
     	jqhr.abort();
     	jqhr = null;
@@ -834,7 +834,7 @@ function(instance) {
     /**
      * @method _starAjaxRequest
      * @private
-     * Start ajax request 
+     * Start ajax request
      */
     _startAjaxRequest: function(dteMs) {
     	var me = this;
@@ -849,7 +849,7 @@ function(instance) {
     /**
      * @method _finishAjaxRequest
      * @private
-     * Finish ajax request 
+     * Finish ajax request
      */
     _finishAjaxRequest: function() {
     	var me = this;
@@ -859,11 +859,11 @@ function(instance) {
         jQuery('#lakapa-basket-loading-container').remove();
         me._sandbox.postRequestByName('ToggleTransportSelectorRequest', [true]);
         this._sandbox.printDebug("[LakapaBasket] finished jqhr ajax request");
-    },
+    }
 }, {
 	/**
 	 * @property {String[]} protocol
-	 * @static 
+	 * @static
 	 */
     'protocol' : ['Oskari.userinterface.Flyout']
 });

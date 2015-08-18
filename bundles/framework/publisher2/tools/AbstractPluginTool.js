@@ -26,7 +26,7 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     group : 'maptools',
     // 'bottom left', 'bottom right' etc
     allowedLocations : [],
-    //default location in lefthanded / righthanded layouts. Override.  
+    //default location in lefthanded / righthanded layouts. Override.
     lefthanded: '',
     righthanded: '',
     // List of plugin classes that can reside in same container(?) like 'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin'

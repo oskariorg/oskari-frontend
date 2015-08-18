@@ -88,7 +88,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
     startPlugin : function(sandbox) {
         debugger;
         this._sandbox = sandbox;
-        
+
         sandbox.register(this);
         for(p in this.eventHandlers) {
             sandbox.registerForEventByName(this, p);
@@ -102,10 +102,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
     /**
      * @method _parseGeometryForLayer
      * @private
-     * 
+     *
      * If layer.getGeometry() is empty, tries to parse layer.getGeometryWKT()
      * and set parsed geometry to the layer
-     * 
+     *
      * @param
      * {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer}
      *            layer layer for which to parse geometry
@@ -290,7 +290,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
             this.mapModule.setLayerIndex(changeLayer[0], opLayersLength);
             opLayersLength--;
         }
-        /* 
+        /*
         // TODO: could this be used here also?
         // get openlayers layer objects from map
         var layers = this.getMapModule().getOLMapLayers(layer.getId());

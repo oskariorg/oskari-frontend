@@ -251,7 +251,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
 
             //jQuery('.metadataflyout_content_tab').removeClass('active');
             //jQuery(this).addClass('active');
-            
+
             for (v in views) {
                 if (v !== viewId) {
                     tabs[v].hide();
@@ -294,9 +294,9 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
 
             var viewId = this.contentState.view,
                 metadata = this.contentState.metadata;
-          
+
             views[viewId].empty();
-            
+
 
             function handler(request) {
 
@@ -304,7 +304,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                 /* We cannot modify the source */
 
                 var newContent = jQuery('<div />');
-                
+
                 newContent.html(request.responseText);
                 /* HACK BEGIN */
 

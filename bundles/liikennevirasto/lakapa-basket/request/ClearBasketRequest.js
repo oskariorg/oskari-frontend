@@ -1,11 +1,11 @@
 /**
  * @class Oskari.liikennevirasto.bundle.lakapa.ClearBasketRequest
  * Requests a clears all from basket
- * 
+ *
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
-Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.ClearBasketRequest', 
+Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.ClearBasketRequest',
 /**
  * @method create called automatically on construction
  * @static

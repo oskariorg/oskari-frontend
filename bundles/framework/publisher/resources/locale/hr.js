@@ -220,6 +220,14 @@ Oskari.registerLocalization({
                     "tooltip": "Sloj karte moguće je objaviti u prozoru s ugrađenom kartom i moguće je ograničiti tjedni broj korisnika."
                 }
             }
+        },
+        "layerFilter": {
+            "buttons": {
+                "publishable": "Publishable"
+            },
+            "tooltips": {
+                "publishable": "Show only publishable map layers"
+            }
         }
     }
 });

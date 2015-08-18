@@ -19,6 +19,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
         this.localization = null;
         this.popupHandler = null;
         this.selectionPlugin = null;
+        this.conf = {};
+        this.__loadingStatus = {};
     }, {
         /**
          * @static

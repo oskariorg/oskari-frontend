@@ -12,7 +12,7 @@ Oskari.registerLocalization({
         "abstract": "Ohje"
     },
     "tile": {
-      
+
     }
   }
 });

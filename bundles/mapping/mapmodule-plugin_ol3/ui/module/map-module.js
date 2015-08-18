@@ -282,7 +282,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             return true;
         },
 
-        
+
         _addRequestHandlersImpl: function (sandbox) {
             this.requestHandlers = {
                 mapLayerUpdateHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapLayerUpdateRequestHandler', sandbox, this),
@@ -399,7 +399,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 resolutions: resolutions
             }));
 
-            
+
             map.on('moveend', function(evt) {
                 debugger;
                 var map = evt.map;

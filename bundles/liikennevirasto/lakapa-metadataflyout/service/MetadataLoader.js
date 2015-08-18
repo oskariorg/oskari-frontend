@@ -43,11 +43,11 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.service.MetadataLoad
      * loads metadata from backend
      *
      */
-    loadMetadata: function (subsetId, uuid, RS_Identifier_Code, RS_Identifier_CodeSpace, cb, dataType) {        
+    loadMetadata: function (subsetId, uuid, RS_Identifier_Code, RS_Identifier_CodeSpace, cb, dataType) {
         var me = this;
         var uri = this.getURLForView(subsetId, uuid, RS_Identifier_Code, RS_Identifier_CodeSpace);
-        
-        var ajaxUrl = me.sandbox.getAjaxUrl() +'action_route=GetMetadata'; 
+
+        var ajaxUrl = me.sandbox.getAjaxUrl() +'action_route=GetMetadata';
 
         me.sandbox.printDebug("loadMetadata " + uri);
 
@@ -89,16 +89,16 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.service.MetadataLoad
      */
     loadGeonetworkAjaxHTML: function (handler, viewId, metadata_uuid, metadata_RS_Identifier_Code, metadata_RS_Identifier_CodeSpace) {
         var me = this;
-        
+
         var uri = this.getURLForView(viewId, metadata_uuid, metadata_RS_Identifier_Code, metadata_RS_Identifier_CodeSpace);
 
-        var ajaxUrl = me.sandbox.getAjaxUrl() +'action_route=GetMetadata'; 
+        var ajaxUrl = me.sandbox.getAjaxUrl() +'action_route=GetMetadata';
 
         if (uri === null || uri === undefined) {
             return;
         }
-        
-        
+
+
         var dataType = 'json';
         clearTimeout(me.timer);
         me.timer = setTimeout(
