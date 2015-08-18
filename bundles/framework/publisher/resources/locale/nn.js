@@ -224,6 +224,14 @@ Oskari.registerLocalization(
                     "tooltip": "Kartlaget kan publiserast i eit 'embedded' kart. Talet på brukarar per uke kan vere avgrensa"
                 }
             }
+        },
+        "layerFilter": {
+            "buttons": {
+                "publishable": "Publishable"
+            },
+            "tooltips": {
+                "publishable": "Show only publishable map layers"
+            }
         }
     }
 }

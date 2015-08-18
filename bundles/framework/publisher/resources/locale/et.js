@@ -224,6 +224,14 @@ Oskari.registerLocalization(
                     "tooltip": "Kaardikihti võib avaldada põimitud kaardiaknas ja kasutajate arvu nädalas võib piirata."
                 }
             }
+        },
+        "layerFilter": {
+            "buttons": {
+                "publishable": "Publishable"
+            },
+            "tooltips": {
+                "publishable": "Show only publishable map layers"
+            }
         }
     }
 }
