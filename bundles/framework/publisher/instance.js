@@ -106,7 +106,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                     'layer-publishable-disabled',
                     'publishable'
                 );
-            
+
                 sandbox.request(this, request);
             }
 

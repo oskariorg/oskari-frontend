@@ -209,7 +209,7 @@ Oskari.clazz.define(
 
         //Mouse Position
         var mousePositionControl = new ol.control.MousePosition({
-          coordinateFormat:ol.coordinate.createStringXY(4), //This is the format we want the coordinate in. 
+          coordinateFormat:ol.coordinate.createStringXY(4), //This is the format we want the coordinate in.
           //The number arguement in createStringXY is the number of decimal places.
           projection:"EPSG:3067", //This is the actual projection of the coordinates.
           //Luckily, if our map is not native to the projection here, the coordinates will be transformed to the appropriate projection.

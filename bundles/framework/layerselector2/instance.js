@@ -114,7 +114,7 @@ Oskari.clazz.define(
 
 
             var reqHandlerAddLayerListFilter = Oskari.clazz.create('Oskari.mapframework.bundle.layerselector2.request.AddLayerListFilterRequestHandler', sandbox, this);
-            sandbox.addRequestHandler('AddLayerListFilterRequest', reqHandlerAddLayerListFilter);            
+            sandbox.addRequestHandler('AddLayerListFilterRequest', reqHandlerAddLayerListFilter);
 
             // draw ui
             me.createUi();

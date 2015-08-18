@@ -50,7 +50,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                     'layer-publishable-disabled',
                     'publishable'
                 );
-            
+
                 sandbox.request(this, request);
             }
         },
