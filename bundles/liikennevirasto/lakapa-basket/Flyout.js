@@ -859,7 +859,7 @@ function(instance) {
         jQuery('#lakapa-basket-loading-container').remove();
         me._sandbox.postRequestByName('ToggleTransportSelectorRequest', [true]);
         this._sandbox.printDebug("[LakapaBasket] finished jqhr ajax request");
-    },
+    }
 }, {
 	/**
 	 * @property {String[]} protocol

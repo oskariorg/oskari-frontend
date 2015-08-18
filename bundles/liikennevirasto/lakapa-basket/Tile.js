@@ -132,7 +132,7 @@ function(instance) {
                 }
             });
         });
-    },
+    }
 }, {
 	/**
 	 * @property {String[]} protocol
