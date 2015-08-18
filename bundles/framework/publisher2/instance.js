@@ -29,6 +29,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
          */
         afterStart: function () {
             var sandbox = this.getSandbox();
+            var loc = this.getLocalization();
 
             this.__service = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.PublisherService', sandbox);
             // create and register request handler
@@ -37,8 +38,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                     this);
             sandbox.addRequestHandler('Publisher2.PublishMapEditorRequest', reqHandler);
 
-            // Let's add publishable filter to layerlist if enabled in conf
-            if(me.conf.showPublishableFilter && me.conf.showPublishableFilter === true) {
+            // Let's add publishable filter to layerlist if user is logged in
+            if(sandbox.getUser().isLoggedIn()) {
                 request = sandbox.getRequestBuilder('AddLayerListFilterRequest')(
                     loc.layerFilter.buttons.publishable,
                     loc.layerFilter.tooltips.publishable,
