@@ -40,6 +40,10 @@ Now not show group if group has not any layers.
 
 Renamed AddLayerListFilterRequest to ShowFilteredLayerListRequest.
 
+### layerselector2/AddLayerListFilterRequest
+
+*New request!* Adds new filter buttons and functionalities to layerlist.
+
 ### publisher2
 
 Added GetInfoTool. GetInfoTool has now colous schema selection on extra options.
