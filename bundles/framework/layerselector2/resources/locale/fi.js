@@ -64,13 +64,11 @@ Oskari.registerLocalization(
         "layerFilter": {
             "buttons": {
                 "newest": "Uusimmat",
-                "stats": "Analysoitavissa",
-                "publishable": "Julkaistavissa"
+                "stats": "Vektoritasot"
             },
             "tooltips": {
                 "newest": "Näytä ## uusinta karttatasoa",
-                "stats": "Näytä vain analyysissa käytettävissä olevat karttatasot",
-                "publishable": "Näytä vain julkaistavissa olevat karttatasot",
+                "stats": "Näytä vain vektoritasot",
                 "remove": "Poista suodatus"
             }
         }

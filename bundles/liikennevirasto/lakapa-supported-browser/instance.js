@@ -1,11 +1,11 @@
-﻿/**
+/**
 * @class Oskari.liikennevirasto.bundle.lakapa.LaKaPaSupportedBrowserBundleInstance
 *
 * Registers and starts the
 * Oskari.liikennevirasto.bundle.lakapa.LaKaPaSupportedBrowserBundleInstance plugin for main map.
 */
 Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.LaKaPaSupportedBrowserBundleInstance",
-	
+
 	/**
 	* @method create called automatically on construction
 	* @static
@@ -21,10 +21,10 @@ Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.LaKaPaSupportedBrowser
 		* @property __name
 		*/
 		__name : 'LaKaPaSupportedBrowserBundle',
-		
+
 		/**
 		* @method getName
-		* @return {String} the name for the component 
+		* @return {String} the name for the component
 		*/
 		getName : function() {
 			return this.__name;
@@ -76,14 +76,14 @@ Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.LaKaPaSupportedBrowser
 				return;
 			}
 			var conf = me.conf;
-			
+
 			me.started = true;
-			
+
 			var conf = this.conf;
 			var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
 			var sandbox = Oskari.getSandbox(sandboxName);
 			me.sandbox = sandbox;
-			
+
 			sandbox.register(me);
 			var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
 			var locale = this.getLocalization('display');
@@ -135,7 +135,7 @@ Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.LaKaPaSupportedBrowser
 			for(p in this.eventHandlers) {
 				sandbox.unregisterFromEventByName(this, p);
 			}
-			
+
 			this.sandbox.unregister(this);
 			this.started = false;
 		},
@@ -144,7 +144,7 @@ Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.LaKaPaSupportedBrowser
 		* implements Module protocol init method - initializes request handlers
 		*/
 		init : function() {
-			
+
 		},
 		/**
 		* @method update
@@ -161,12 +161,12 @@ Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.LaKaPaSupportedBrowser
 			var nVer = navigator.appVersion;
 			var nAgt = navigator.userAgent;
 			var browserName  = navigator.appName;
-			var fullVersion  = ''+parseFloat(navigator.appVersion); 
+			var fullVersion  = ''+parseFloat(navigator.appVersion);
 			var majorVersion = parseInt(navigator.appVersion,10);
 			var nameOffset,verOffset,ix;
 			// Parse userAgent for more spesific IE testing. Actual version is defined by trident.
 			var testIE = nAgt.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
-			// In Opera 15+, the true version is after "OPR/" 
+			// In Opera 15+, the true version is after "OPR/"
 			if ((verOffset=nAgt.indexOf("OPR/"))!=-1) {
 				browserName = "Opera";
 				fullVersion = nAgt.substring(verOffset+4);
@@ -175,7 +175,7 @@ Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.LaKaPaSupportedBrowser
 			else if ((verOffset=nAgt.indexOf("Opera"))!=-1) {
 				browserName = "Opera";
 				fullVersion = nAgt.substring(verOffset+6);
-				if ((verOffset=nAgt.indexOf("Version"))!=-1) { 
+				if ((verOffset=nAgt.indexOf("Version"))!=-1) {
 					fullVersion = nAgt.substring(verOffset+8);
 				}
 			}
@@ -184,12 +184,12 @@ Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.LaKaPaSupportedBrowser
 				browserName = "IE";
 				fullVersion = nAgt.substring(verOffset+5);
 			}
-			// In Chrome, the true version is after "Chrome" 
+			// In Chrome, the true version is after "Chrome"
 			else if ((verOffset=nAgt.indexOf("Chrome"))!=-1) {
 				browserName = "Chrome";
 				fullVersion = nAgt.substring(verOffset+7);
 			}
-			// In Safari, the true version is after "Safari" or after "Version" 
+			// In Safari, the true version is after "Safari" or after "Version"
 			else if ((verOffset=nAgt.indexOf("Safari"))!=-1) {
 				browserName = "Safari";
 				fullVersion = nAgt.substring(verOffset+7);
@@ -197,12 +197,12 @@ Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.LaKaPaSupportedBrowser
 					fullVersion = nAgt.substring(verOffset+8);
 				}
 			}
-			// In Firefox, the true version is after "Firefox" 
+			// In Firefox, the true version is after "Firefox"
 			else if ((verOffset=nAgt.indexOf("Firefox"))!=-1) {
 				browserName = "Firefox";
 				fullVersion = nAgt.substring(verOffset+8);
 			}
-			// In most other browsers, "name/version" is at the end of userAgent 
+			// In most other browsers, "name/version" is at the end of userAgent
 			else if ( (nameOffset=nAgt.lastIndexOf(' ')+1) < (verOffset=nAgt.lastIndexOf('/')) ) {
 				browserName = nAgt.substring(nameOffset,verOffset);
 				fullVersion = nAgt.substring(verOffset+1);
@@ -225,7 +225,7 @@ Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.LaKaPaSupportedBrowser
 			}
 			majorVersion = parseInt(''+fullVersion,10);
 			if (isNaN(majorVersion)) {
-				fullVersion  = ''+parseFloat(navigator.appVersion); 
+				fullVersion  = ''+parseFloat(navigator.appVersion);
 				majorVersion = parseInt(navigator.appVersion,10);
 			}
 			browser = {
@@ -240,7 +240,7 @@ Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.LaKaPaSupportedBrowser
 	}, {
 	/**
 	* @property {String[]} protocol
-	* @static 
+	* @static
 	*/
 	protocol : ['Oskari.bundle.BundleInstance']
 });

@@ -1,15 +1,13 @@
 div.layerselector2 div.layer-filter {
-  border: 1px solid #a4a4a4;
   margin: 10px;
   color: #949494; }
 div.layerselector2 div.filter {
-  width: 33%;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  border: 1px solid #a4a4a4;
+  padding: 10px;
   float: left;
-  cursor: pointer; }
-div.layerselector2 div.filter-border {
-  border-left: 1px solid #a4a4a4; }
+  cursor: pointer;
+  margin-bottom: 5px;
+  margin-left: -1px; }
 div.layerselector2 div.accordion div.accordion_panel div.content {
   padding: 0; }
 div.layerselector2 div.layer {
@@ -128,3 +126,5 @@ div.layerselector2 div.tab-content {
       div.layerselector2 div.tab-content div.oskarifield .related-keywords .focus {
         background-color: #333438;
         color: white; }
+
+/*# sourceMappingURL=style.css.map */

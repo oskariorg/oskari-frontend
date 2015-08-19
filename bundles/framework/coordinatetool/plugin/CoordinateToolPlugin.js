@@ -107,7 +107,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             } else {
                 el.addClass('active');
                 me._toolOpen = true;
-                me._showPopup()
+                me._showPopup();
             }
         },
 
@@ -385,7 +385,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 }
             }
             el.addClass(styleClass);
-        },
+        }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
         /**

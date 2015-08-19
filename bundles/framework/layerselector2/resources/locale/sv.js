@@ -64,13 +64,11 @@ Oskari.registerLocalization(
         "layerFilter": {
             "buttons": {
                 "newest": "Nyaste",
-                "stats": "Analyserbar",
-                "publishable": "Publicerbar"
+                "stats": "Vektorlager"
             },
             "tooltips": {
                 "newest": "Visa de ## nyaste kartlager",
-                "stats": "Visa endast kartlager som kan användas i den analys funktion",
-                "publishable": "Visa endast kartlager som kan publiceras med kart publicering funktion",
+                "stats": "Visa endast vektorlager",
                 "remove": "Ta bort filter"
             }
         }

@@ -74,10 +74,10 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.StartupInfoBundleInsta
                 this._localization = Oskari.getLocalization(this.getName());
             }
 
-            // Check cookie 'lakapa_info_seen'. Value '1' means that info 
+            // Check cookie 'lakapa_info_seen'. Value '1' means that info
             // is not to be started
-            // jQuery cookie plugin: 
-            //   resources/framework/bundle/startupinfo/js/jquery.cookie.js 
+            // jQuery cookie plugin:
+            //   resources/framework/bundle/startupinfo/js/jquery.cookie.js
             //   github.com/carhartl/jquery-cookie/
             if (jQuery.cookie('lakapa_info_seen') !== '1') {
                 var me = this,

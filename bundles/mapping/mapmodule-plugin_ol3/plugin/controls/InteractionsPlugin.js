@@ -145,7 +145,7 @@ Oskari.clazz.define(
         for(var reqName in this.requestHandlers ) {
             sandbox.removeRequestHandler(reqName, this.requestHandlers[reqName]);
         }
-        
+
         for(p in this.eventHandlers ) {
             sandbox.unregisterFromEventByName(this, p);
         }
@@ -188,7 +188,7 @@ Oskari.clazz.define(
        'Toolbar.ToolSelectedEvent' : function(event) {
             // changed tool -> cancel any current tool
             if(this.conf.zoomBox !== false) {
-                this._zoomBoxTool.deactivate(); 
+                this._zoomBoxTool.deactivate();
             }
             if(this.conf.measureControls !== false) {
                 this._measureControls.line.deactivate();
@@ -221,10 +221,10 @@ Oskari.clazz.define(
      * @private
      */
     _removeMapControls : function() {
-        
+
 
     },
-    
+
     /**
      * @private @method _createMapControls
      * Constructs/initializes necessary controls for the map. After this they can be added to the map
@@ -241,9 +241,9 @@ Oskari.clazz.define(
         //Mouse Position
         var mousePositionControl = new ol.control.MousePosition({
           className:'ol-full-screen', //default parameter
-          coordinateFormat:ol.coordinate.createStringXY(4), //This is the format we want the coordinate in. 
+          coordinateFormat:ol.coordinate.createStringXY(4), //This is the format we want the coordinate in.
           //The number arguement in createStringXY is the number of decimal places.
-          projection:"EPSG:3067", //This is the actual projection of the coordinates. 
+          projection:"EPSG:3067", //This is the actual projection of the coordinates.
           //Luckily, if our map is not native to the projection here, the coordinates will be transformed to the appropriate projection.
           className:"custom-mouse-position",
           target:undefined, //define a target if you have a div you want to insert into already,

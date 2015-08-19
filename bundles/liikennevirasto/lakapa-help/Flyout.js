@@ -24,7 +24,7 @@ function(instance, locale, conf) {
 
 	/* @property locale locale for this */
 	this.locale = locale;
-	
+
 	/* @property conf conf for this */
 	this.conf = conf;
 
@@ -47,7 +47,7 @@ function(instance, locale, conf) {
 	 * what is shown and how
 	 */
 	this.contentState = {};
-	
+
 	/**
 	 * @property showQueue
 	 * request queue to enable postponing ajax loads (TBD)
@@ -81,7 +81,7 @@ function(instance, locale, conf) {
 		var me = this;
 		var locale = this.locale;
 		var content = jQuery(me.templates.content);
-		
+
 		me.container.addClass('lakapa-help-flyout');
 		me.createUI('road');
 	},
@@ -114,31 +114,31 @@ function(instance, locale, conf) {
 			if(jQuery.inArray(step.menulink, me.menuSelectors) == -1){
 				me.menuSelectors.push(step.menulink);
 			}
-			var title = me.templateStepTitle.clone();			
+			var title = me.templateStepTitle.clone();
 			title.attr('data-linktomenu', step.menulink);
 			title.html('<div class="lakapa-help-step-title-div"><span class="lakapa-help-step-title-span">' + stepNumber + '.</span><p class="lakapa-help-step-title-p"> ' + step.title + '</p><span class="lakapa-help-step-title-clear"></span></div>');
-			
+
 			if(stepNumber>1){
 				title.addClass('upmargin');
 			}
-			
+
 			var html = me.templateStephtml.clone();
-			
+
 			html.html(step.html);
-						
+
 			var selected = jQuery.grep(step.visible, function(item,index){ return item==transport;});
 			if(selected.length>0){
 				me.container.find('.lakapa-help-list').append(title);
 				title.append(html);
-				
+
 				title.append('<div class="lakapa-help-step-title-clear"></div>');
 				stepNumber++;
 			}
 		});
-		
+
 		jQuery('.lakapa-help-hide-'+transport).hide();
 		me.container.append('</ul>');
-		
+
 		jQuery('.lakapa-help-flyout').first().ScrollTo();
 		me._addJQueryListeners();
 	},
@@ -154,29 +154,29 @@ function(instance, locale, conf) {
 			var selector = jQuery(this).attr('data-linktomenu');
 			jQuery(selector).addClass('lakapa-help-menu-highlight');
 			var attrSelector = jQuery(this).attr('data-linktomenu');
-			
+
 			var elements = jQuery('.lakapa-help-list li[data-linktomenu="'+attrSelector+'"]');
 			elements.find('.lakapa-help-step-title-div').addClass('lakapa-help-menu-highlight');
 			elements.find('.lakapa-help-step-content').addClass('lakapa-help-menu-highlight');
 		});
-		
+
 		jQuery('.lakapa-help-list').mouseout(function(){
 			me._clearHighlighs();
 		});
-		
+
 		jQuery.each(me.menuSelectors,function(index,selector){
 			jQuery(selector).mouseover(function(){
 				if(me._isVisible()){
 					jQuery(this).addClass('lakapa-help-menu-highlight');
 					me._scrollToAndHighLight(selector);
-				}	
+				}
 			});
 			jQuery(selector).mouseout(function(){
 				clearTimeout(me.scrollToTimer);
 				me._clearHighlighs();
 			});
 		});
-		
+
 	},
 	/**
 	 * @method _scrollToAndHighLight
@@ -213,7 +213,7 @@ function(instance, locale, conf) {
 		var flyout = me.container.parent().parent();
 		var isVisible = flyout.hasClass('oskari-detached');
 		return isVisible;
-		
+
 	},
 	stopPlugin : function() {
 		this.container.empty();
@@ -222,7 +222,7 @@ function(instance, locale, conf) {
 		return this.locale.title;
 	},
 	getDescription : function() {
-		
+
 	},
 	getOptions : function() {
 

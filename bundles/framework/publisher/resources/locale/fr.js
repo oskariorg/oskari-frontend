@@ -224,6 +224,14 @@ Oskari.registerLocalization(
                     "tooltip": "La couche cartographique ne peut pas être publiée dans une carte intégrée. Le nombre d’utilisateurs hebdomadaire peut être limité."
                 }
             }
+        },
+        "layerFilter": {
+            "buttons": {
+                "publishable": "Publishable"
+            },
+            "tooltips": {
+                "publishable": "Show only publishable map layers"
+            }
         }
     }
 }

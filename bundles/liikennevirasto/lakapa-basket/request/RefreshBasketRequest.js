@@ -1,11 +1,11 @@
 /**
  * @class Oskari.liikennevirasto.bundle.lakapa.RefreshBasketRequest
  * Requests a refresh all from basket
- * 
+ *
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
-Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.RefreshBasketRequest', 
+Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.RefreshBasketRequest',
 /**
  * @method create called automatically on construction
  * @static

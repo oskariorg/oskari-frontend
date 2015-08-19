@@ -19,6 +19,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
         this.template = null;
         this.state = null;
         this.layerTabs = [];
+        this.filterTemplate = jQuery('<div class="filter filter-border"><center><div class="filter-icon"></div><div class="filter-text"></div></center></div>');
+        this.filters= [];
+        this._filterNewestCount = 20;
+        this._newestLayers = null;
     }, {
 
         /**
@@ -97,6 +101,67 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
         },
 
         /**
+         * Adds default filter buttons.
+         * @method  @private addDefaultFilters
+         */
+        addDefaultFilters: function(){
+            var me = this;
+
+            // Add newest filter
+            me.addNewestFilter();
+
+            // Add featuredata filter // stats name
+            me.addStatsFilter();
+        },
+
+        /**
+         * Add newest filter.
+         * @method  @public addNewestFilter
+         */
+        addNewestFilter: function(){
+            var me = this,
+                loc = me.instance.getLocalization('layerFilter'),
+                mapLayerService = this.instance.getSandbox().getService(
+                        'Oskari.mapframework.service.MapLayerService'
+                ),
+                ids = [];
+
+            me.addFilterTool(loc.buttons.newest,
+                loc.tooltips.newest.replace('##', me._filterNewestCount),
+                function(layer){
+                    if(me._newestLayers === null && ids.length === 0){
+                        me._newestLayers = mapLayerService.getNewestLayers(me._filterNewestCount);
+
+                        jQuery(me._newestLayers).each(function(index, layer){
+                           ids.push(layer.getId());
+                        });
+                    }
+                    return (jQuery.inArray(layer.getId(), ids) !== -1);
+                },
+                'layer-newest',
+                'layer-newest-disabled',
+            'newest');
+        },
+
+        /**
+         * Add stats filter.
+         * @method  @public addStatsFilter
+         */
+        addStatsFilter: function(){
+            var me = this,
+                loc = me.instance.getLocalization('layerFilter');
+
+            me.addFilterTool(loc.buttons.stats,
+                loc.tooltips.stats,
+                function(layer){
+                    return (layer.hasFeatureData());
+                },
+                'layer-stats',
+                'layer-stats-disabled',
+            'stats');
+        },
+
+        /**
          * @method stopPlugin
          *
          * Interface method implementation, does nothing atm
@@ -142,6 +207,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             this.state = state;
         },
 
+        /**
+         * Set content state
+         * @method  @public setContentState
+         * @param {Object} state a content state
+         */
         setContentState: function (state) {
             //"use strict";
             var i,
@@ -174,8 +244,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                 if(!filterIcon.hasClass('active')) {
                     filterButton.trigger('click');
                 }
-            } else if(active.length>0 && me.layerTabs.length > 0) {
-                me.layerTabs[0]._removeLayerFilters();
+            } else if(active.length>0) {
+                me.deactivateAllFilters();
             }
         },
 
@@ -228,6 +298,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                     }
                 }
             );
+
+            // Create default filters
+            me.addDefaultFilters();
+
+
             me.populateLayers();
         },
 
@@ -243,6 +318,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             }
         },
 
+        /**
+         * Populate layer lists.
+         * @method  @public populateLayers
+         */
         populateLayers: function () {
             //"use strict";
             var sandbox = this.instance.getSandbox(),
@@ -406,8 +485,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             me.populateLayers();
             // we could just add the layer to correct group and update the layer count for the group
             // but saving time to do other finishing touches
-            //var layerListContainer = jQuery(this.container).find('div.layerList');
-            //this._populateLayerList(layerListContainer);
         },
 
         /**
@@ -422,16 +499,100 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             me.populateLayers();
             // we could  just remove the layer and update the layer count for the group
             // but saving time to do other finishing touches
-            //var layerListContainer = jQuery(this.container).find('div.layerList');
-            //this._populateLayerList(layerListContainer);
         },
 
-
-
-
-
+        /**
+         * @method  @public setLayerListFilteringFunction set layer list function
+         * @param {Function} layerListFilteringFunction layer list filter function
+         */
         setLayerListFilteringFunction: function(layerListFilteringFunction) {
             this.layerListFilteringFunction = layerListFilteringFunction;
+        },
+
+        /**
+         * Add filter tool to layer list.
+         * @method  @public addFilterTool
+         * @param {String} toolText             tool button text
+         * @param {String} tooltip              tool tooltip text
+         * @param {Function} filterFunction     filter function
+         * @param {String} iconClassActive      tool icon active class
+         * @param {String} iconClassDeactive    tool icon deactive class
+         * @param {String} filterName           filter name
+         */
+        addFilterTool: function(toolText, tooltip, filterFunction, iconClassActive, iconClassDeactive, filterName) {
+            var me = this,
+                filterButton = me.filterTemplate.clone(),
+                filter = {
+                    toolText: toolText,
+                    tooltip: tooltip,
+                    filterFunction: filterFunction,
+                    iconClassActive: iconClassActive,
+                    iconClassDeactive: iconClassDeactive,
+                    filterName: filterName
+                },
+                filterContainer = jQuery('.layerselector2-layer-filter'),
+                loc = me.instance.getLocalization('layerFilter');
+
+            filterButton.find('.filter-text').html(toolText);
+            filterButton.attr('title', tooltip);
+            filterButton.find('.filter-icon').addClass('filter-'+filterName);
+            filterButton.find('.filter-icon').addClass(iconClassDeactive);
+
+            filterButton.unbind('click');
+            filterButton.bind('click', function(){
+                var filterIcon = jQuery('.filter-icon.' + 'filter-'+filterName);
+
+                me.deactivateAllFilters(filterName);
+
+                if(filterIcon.hasClass(iconClassDeactive)){
+                    // Activate this filter
+                    filterIcon.removeClass(iconClassDeactive);
+                    filterIcon.addClass(iconClassActive);
+                    filterIcon.addClass('active');
+                    me.activateFilter(filterFunction);
+                    filterIcon.parents('.filter').attr('title',loc.tooltips.remove);
+                } else {
+                    // Deactivate all filters
+                    me.deactivateAllFilters();
+                }
+
+            });
+
+            me.filters.push(filter);
+            filterContainer.append(filterButton);
+        },
+        /**
+         * Activate selected filter.
+         * @method @public activateFilter
+         * @param  {Function} filterFunction activate filter
+         */
+        activateFilter: function(filterFunction){
+            var me = this;
+            me.setLayerListFilteringFunction(filterFunction);
+            me.populateLayers();
+        },
+        /**
+         * Deactivate all filters
+         * @method  @public deactivateAllFilters
+         *
+         * @param {String} notDeactivateThisFilter not deactivate this filter
+         */
+        deactivateAllFilters: function(notDeactivateThisFilter){
+            var me = this;
+
+            jQuery.each(me.filters, function(index, filter) {
+                if(!notDeactivateThisFilter || filter.filterName !== notDeactivateThisFilter) {
+                    var filterIcon = jQuery('.filter-icon.' + 'filter-'+filter.filterName);
+                    filterIcon.removeClass(filter.iconClassActive);
+                    filterIcon.removeClass('active');
+                    filterIcon.addClass(filter.iconClassDeactive);
+                    filterIcon.parents('.filter').attr('title',filter.tooltip);
+                }
+            });
+
+            me.activateFilter(function(){
+                return true;
+            });
         }
     }, {
 

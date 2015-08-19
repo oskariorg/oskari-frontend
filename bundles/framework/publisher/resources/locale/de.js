@@ -161,6 +161,14 @@ Oskari.registerLocalization({
                     "tooltip": "Die Kartenebene darf mit einer eventuellen Begrenzung der Nutzeranzahl pro Woche in einem eingebundenen Kartenfenster veröffentlicht werden."
                 }
             }
+        },
+        "layerFilter": {
+            "buttons": {
+                "publishable": "Publishable"
+            },
+            "tooltips": {
+                "publishable": "Show only publishable map layers"
+            }
         }
 
     }
