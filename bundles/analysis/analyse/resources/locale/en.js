@@ -403,6 +403,10 @@ Oskari.registerLocalization(
                 "title": "Too many attributes",
                 "layer": "Features on the layer",
                 "over10": "have over ten attributes. Please select at most ten attributes into the analysis result. The attributes you can select in the parameters."
+            },
+            "aggregatePopup": {
+                "title": "Analyse results",
+                "property": "Property"
             }
         },
         "StartView": {

@@ -285,3 +285,6 @@ div.divmanazerpopup.drawfilterdialog {
   max-width: 400px; }
 div.divmanazerpopup.analyse-draw-dialog {
   max-width: 280px; }
+
+div.analyse-result-popup-content {
+  overflow: auto; }
