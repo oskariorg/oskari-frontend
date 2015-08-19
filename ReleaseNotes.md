@@ -44,6 +44,10 @@ Renamed AddLayerListFilterRequest to ShowFilteredLayerListRequest.
 
 Added currently selected style name as a sub header for legend flyout.
 
+### layerselector2/AddLayerListFilterRequest
+
+*New request!* Adds new filter buttons and functionalities to layerlist.
+
 ### publisher2
 
 Added GetInfoTool. GetInfoTool has now colous schema selection on extra options.

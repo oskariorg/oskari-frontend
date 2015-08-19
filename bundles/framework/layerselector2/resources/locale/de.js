@@ -63,11 +63,11 @@ Oskari.registerLocalization({
         "layerFilter": {
             "buttons": {
                 "newest": "Newest",
-                "stats": "Analysable"
+                "stats": "Vector layers"
             },
             "tooltips": {
                 "newest": "Show ## newest map layers",
-                "stats": "Show only analysable map layers",
+                "stats": "Show only vector layers",
                 "remove": "Remove filter"
             }
         }

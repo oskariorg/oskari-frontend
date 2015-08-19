@@ -710,7 +710,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
         },
         */
-       
+
         /**
          * @method getMapEl
          * Get jQuery map element

@@ -64,11 +64,11 @@ Oskari.registerLocalization(
         "layerFilter": {
             "buttons": {
                 "newest": "Nyaste",
-                "stats": "Analyserbar"
+                "stats": "Vektorlager"
             },
             "tooltips": {
                 "newest": "Visa de ## nyaste kartlager",
-                "stats": "Visa endast kartlager som kan användas i den analys funktion",
+                "stats": "Visa endast vektorlager",
                 "remove": "Ta bort filter"
             }
         }
