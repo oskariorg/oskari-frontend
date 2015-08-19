@@ -40,6 +40,10 @@ Now not show group if group has not any layers.
 
 Renamed AddLayerListFilterRequest to ShowFilteredLayerListRequest.
 
+### maplegend
+
+Added currently selected style name as a sub header for legend flyout.
+
 ### layerselector2/AddLayerListFilterRequest
 
 *New request!* Adds new filter buttons and functionalities to layerlist.
