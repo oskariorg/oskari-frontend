@@ -26,6 +26,9 @@ Oskari.clazz.define(
         me.zoomLevel = null;
         me._isWFSOpen = 0;
 
+        // Manual refresh ui location
+        me._defaultLocation = 'top right';
+
         // printing
         me._printTiles = {};
 
@@ -145,7 +148,92 @@ Oskari.clazz.define(
             me._visualizationForm = Oskari.clazz.create(
                 'Oskari.userinterface.component.VisualizationForm'
             );
+
+
+
         },
+        /**
+         * @method _createControlElement
+         * @private
+         * Creates UI div for manual refresh/load of wfs layer,
+         * where this plugin registered.
+         */
+        _createControlElement: function () {
+            var me = this,
+                sandbox = me.getSandbox(),
+                el = jQuery('<div class="mapplugin mapwfs2plugin">' +
+                '<a href="JavaScript: void(0);"></a>' +
+                '</div>');
+            var link = el.find('a');
+            me._loc = Oskari.getLocalization('MapWfs2', Oskari.getLang() || Oskari.getDefaultLanguage());
+            link.html(me._loc.refresh);
+            el.attr('title', me._loc.refresh_title);
+            me._bindLinkClick(link);
+            el.mousedown(function (event) {
+                event.stopPropagation();
+            });
+            return el;
+        },
+
+        _bindLinkClick: function (link) {
+            var me = this,
+                linkElement = link || me.getElement().find('a'),
+                sandbox = me.getSandbox();
+            linkElement.bind('click', function () {
+                var event = sandbox.getEventBuilder('WFSRefreshManualLoadLayersEvent')();
+                sandbox.notifyAll(event);
+                return false;
+            });
+        },
+        /**
+         * @method refresh
+         * Updates the plugins interface (hides if no manual load wfs layers selected)
+         */
+        refresh: function () {
+            var me = this,
+                sandbox = me.getMapModule().getSandbox(),
+                layers = sandbox.findAllSelectedMapLayers(),
+                i,
+                isVisible = false;
+            if(this.getElement()) {
+                this.getElement().hide();
+            }
+            // see if there's any wfs layers, show element if so
+            for (i = 0; i < layers.length; i++) {
+                if (layers[i].hasFeatureData() &&  layers[i].isManualRefresh() ) {
+                    isVisible = true;
+                }
+            }
+            if(isVisible && this.getElement()){
+                this.getElement().show();
+            }
+            me.setVisible(isVisible);
+
+        },
+        /**
+         * @method inform
+         * Inform the user how to manage manual refresh layers (only when 1st manual refresh layer in selection)
+         */
+        inform: function () {
+            var me = this,
+                sandbox = me.getMapModule().getSandbox(),
+                layers = sandbox.findAllSelectedMapLayers(),
+                i,
+                count = 0;
+
+            // see if there's any wfs layers, show  if so
+            for (i = 0; i < layers.length; i++) {
+                if (layers[i].hasFeatureData() &&  layers[i].isManualRefresh() ) {
+                   count++;
+                }
+            }
+            if(count === 1){
+               me.showMessage(me.getLocalization().information.title, me.getLocalization().information.info, me.getLocalization().button.close);
+            }
+
+
+        },
+
 
         /**
          * @method register
@@ -188,6 +276,11 @@ Oskari.clazz.define(
                  */
                 AfterMapLayerAddEvent: function (event) {
                     me.mapLayerAddHandler(event);
+                    // Refresh UI refresh button visible/invisible
+                    me.refresh();
+                    // Inform user, if manual refresh-load wfs layers in selected map layers
+                    // (only for 1st manual refresh layer)
+                    me.inform();
                 },
 
                 /**
@@ -196,6 +289,8 @@ Oskari.clazz.define(
                  */
                 AfterMapLayerRemoveEvent: function (event) {
                     me.mapLayerRemoveHandler(event);
+                    // Refresh UI refresh button visible/invisible
+                    me.refresh();
                 },
 
                 /**
@@ -641,7 +736,7 @@ Oskari.clazz.define(
             var bbox,
                 grid,
                 layerId,
-                layers,
+                layers = [],
                 me = this,
                 map = me.getSandbox().getMap(),
                 srs,
@@ -658,8 +753,13 @@ Oskari.clazz.define(
 
             // update cache
             me.refreshCaches();
+            if(event.getLayerId()){
 
-            layers = me.getSandbox().findAllSelectedMapLayers();
+                layers.push(me.getSandbox().findMapLayerFromSelectedMapLayers(event.getLayerId()));
+            }
+            else {
+                layers = me.getSandbox().findAllSelectedMapLayers();
+            }
 
             layers.forEach(function (layer) {
                 if (layer.hasFeatureData() && layer.isManualRefresh()) {
@@ -1494,6 +1594,31 @@ Oskari.clazz.define(
             dialog.show(popupLoc, content, [okBtn]);
             dialog.fadeout(5000);
         },
+        /**
+         * @public @method showMessage
+         * Shows user a message with ok button
+         *
+         * @param {String} title popup title
+         * @param {String} message popup message
+         *
+         */
+        showMessage: function (title, message) {
+            var dialog = Oskari.clazz.create(
+                'Oskari.userinterface.component.Popup'
+            );
+            dialog.show(title, message);
+            dialog.fadeout(5000);
+        },
+        showMessage: function (title, message, ok) {
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            okBtn.setTitle(ok);
+            okBtn.addClass('primary');
+            okBtn.setHandler(function () {
+                dialog.close(true);
+            });
+            dialog.show(title, message, [okBtn]);
+        },
 
         /**
          * @method getAllFeatureIds
@@ -1592,7 +1717,7 @@ Oskari.clazz.define(
             return stripbox.join(',');
         }
     }, {
-        extend: ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
+        extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
         /**
          * @static @property {string[]} protocol array of superclasses
          */

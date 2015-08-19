@@ -48,6 +48,9 @@ Oskari.registerLocalization(
                 "type-wms": "Karttataso",
                 "type-wfs": "Tietotuote"
             },
+            "refresh_load": {
+                "tooltip": "Päivitä tason tiedot. Taso ei päivity automaattisesti kartalla"
+            },
             "filter": {
                 "title": "Suodatus",
                 "description": "Valitse kohteet tasolta:",

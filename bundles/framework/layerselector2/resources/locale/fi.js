@@ -31,7 +31,8 @@ Oskari.registerLocalization(
         "tooltip": {
             "type-base": "Taustakartta",
             "type-wms": "Karttataso",
-            "type-wfs": "Tietotuote"
+            "type-wfs": "Tietotuote",
+            "type-wfs-manual": "Tietotuote - WFS taso päivittyy kartalla Kohdetiedot- tai Päivitä-painikkeesta"
         },
         "backendStatus": {
             "OK": {
