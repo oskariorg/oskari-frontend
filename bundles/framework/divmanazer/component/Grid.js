@@ -1088,6 +1088,32 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         getTable: function () {
             return this.table;
         },
+
+        /**
+         * @method setNumericField
+         * @param {String} field Name of the column
+         * Adds column renderers for numeric columns, each renderer rendering
+         * the numbers with the highest decimal count found in the column.
+         */
+        setNumericField: function (field) {
+            var me = this,
+                decimalCount = -1;
+            this.setColumnValueRenderer(
+                field,
+                function (value) {
+                    var parsed = parseFloat(value);
+                    if (!isNaN(parsed)) {
+                        if (decimalCount === -1) {
+                            var fieldValues = _.pluck(me.getDataModel().data, field);
+                            decimalCount = Oskari.util.decimals(fieldValues);
+                        }
+                        return parsed.toFixed(decimalCount);
+                    } else {
+                        return value;
+                    }
+                }
+            );
+        },
         /**
          * @private @method _getTableData
          *
@@ -1157,6 +1183,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 return me._sortComparator(a, b, pAttribute, pDescending);
             });
         },
+
         /**
          * @private @method _getAttributeValue
          *

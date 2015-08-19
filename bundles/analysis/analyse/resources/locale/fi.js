@@ -402,6 +402,10 @@ Oskari.registerLocalization(
                 "title": "Tiedoksi",
                 "layer": "Tason",
                 "over10": "kohteilla on yli 10 ominaisuustietoa. Valitse analyysiin mukaan  korkeintaan 10 ominaisuustietoa. Lista ominaisuustiedoista löytyy Parametrit-valikosta valittuasi analyysimenetelmän."
+            },
+            "aggregatePopup": {
+                "title": "Analyysin tulokset",
+                "property": "Ominaisuus"
             }
         },
         "StartView": {

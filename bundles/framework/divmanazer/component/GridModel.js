@@ -53,21 +53,46 @@ Oskari.clazz.define('Oskari.userinterface.component.GridModel',
             return this.idField;
         },
         /**
+         * @method setFirstField
+         * Sets the given field name to the first column
+         * @param {String} firstField name of the first field
+         */
+        setFirstField: function (firstField) {
+            if (_.indexOf(this.fields, firstField) === 0 || _.indexOf(this.fields, firstField) === -1) {
+                return;
+            } else {
+                _.pull(this.fields, firstField);
+                this.fields.unshift(firstField);
+            }
+        },
+        /**
          * @method addData
          * Used to accumulate the data array for the model
          * @param {Object} pData
+         * @param {Boolean} addMissingFields true if user wants to add new feaute keys to the fields
          */
-        addData: function (pData) {
-            var key;
+        addData: function (pData, addMissingFields) {
+            var me = this,
+                key;
             // populate fields array if first data
-            if (this.fields.length === 0) {
+            if (me.fields.length === 0) {
                 for (key in pData) {
                     if (pData.hasOwnProperty(key)) {
-                        this._addField(key);
+                        me._addField(key);
                     }
                 }
             }
+            //if key is not in fields, add it there
+            if (addMissingFields) {
+                _.forEach(pData, function (n, key) {
+                    var index = _.indexOf(me.fields, key);
+                    if (index === -1) {
+                        me._addField(key);
+                    }
+                });
+            }
             this.data.push(pData);
+
         },
         /**
          * @method getData
