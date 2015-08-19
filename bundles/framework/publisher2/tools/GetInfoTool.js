@@ -146,7 +146,7 @@ function() {
                         plugins: [{
                             id: this.getTool().id,
                             config: {
-                                colourScheme: me.values.colourScheme || {},
+                                colourScheme: me.values.colourScheme || {}
                             }
                         }]
                     }
