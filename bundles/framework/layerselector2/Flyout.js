@@ -105,8 +105,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          * @method  @private addDefaultFilters
          */
         addDefaultFilters: function(){
-            var me = this,
-                loc = me.instance.getLocalization('layerFilter');
+            var me = this;
 
             // Add newest filter
             me.addNewestFilter();
@@ -580,6 +579,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          */
         deactivateAllFilters: function(notDeactivateThisFilter){
             var me = this;
+
             jQuery.each(me.filters, function(index, filter) {
                 if(!notDeactivateThisFilter || filter.filterName !== notDeactivateThisFilter) {
                     var filterIcon = jQuery('.filter-icon.' + 'filter-'+filter.filterName);
@@ -590,7 +590,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                 }
             });
 
-            me.activateFilter(function(){return true;});
+            me.activateFilter(function(){
+                return true;
+            });
         }
     }, {
 
