@@ -2650,7 +2650,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var showWithoutSavingOption = me.mainPanel.find('#showFeatureDataWithoutSaving');
             if (showWithoutSavingOption[0]) {
                 me._showFeatureDataWithoutSaving = me.mainPanel.find('#showFeatureDataWithoutSaving')[0].checked;
-                data.saveAnalyse = false;
             }
             // Check that parameters are a-okay
             if (me._checkSelections(selections)) {
@@ -2673,6 +2672,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
                 // if we don't wan't to save data, let's give some data to the grid
                 if (me._showFeatureDataWithoutSaving) {
+                    data.saveAnalyse = false;
                     var fields = functions,
                         locales = selections.methodParams.locales,
                         k;
@@ -2827,6 +2827,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 }
             }
         },
+
 
         _showAggregateResultPopup: function (resultJson) {
             var me = this,
