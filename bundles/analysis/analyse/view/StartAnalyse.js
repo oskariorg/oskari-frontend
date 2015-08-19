@@ -2676,7 +2676,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     var fields = functions,
                         locales = selections.methodParams.locales,
                         k;
-                    
+
                     fields.unshift('Property');
                     locales.unshift(me.loc.aggregatePopup.property);
                     me.grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');

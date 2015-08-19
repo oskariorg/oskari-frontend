@@ -2,7 +2,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
 function() {
 }, {
     index : 1,
-    allowedLocations : ['bottom left', 'bottom right'],
     lefthanded: 'top right',
     righthanded: 'top left',
     allowedLocations: ['top left', 'top center', 'top right'],
