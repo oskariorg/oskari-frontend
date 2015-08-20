@@ -165,6 +165,35 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
 
 
     }, {
+        eventHandlers: {
+            'Publisher2.ToolEnabledChangedEvent': function (event) {
+                var me = this,
+                         selectedToolStyleCode = jQuery('select[name=publisher-toolStyles]').val(),
+                         selectedToolStyle = me._getItemByCode(selectedToolStyleCode, me.initialValues.toolStyles),
+                         font = jQuery('select[name=publisher-fonts]').val();
+                me._sendFontChangedEvent(font);
+                me._sendToolStyleChangedEvent(selectedToolStyle);
+            }
+        },
+        /**
+         * @method getName
+         * @return {String} the name of the component
+         */
+        getName: function() {
+            return "Oskari.mapframework.bundle.publisher2.view.PanelLayout";
+        },
+        /**
+         * @method onEvent
+         * @param {Oskari.mapframework.event.Event} event a Oskari event object
+         * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
+         */
+        onEvent: function (event) {
+            var handler = this.eventHandlers[event.getName()];
+            if (!handler) {
+                return;
+            }
+            return handler.apply(this, [event]);
+        },
         /**
          * Creates the DOM elements for layout change components and
          * prepopulates the fields if pData parameter is given.
