@@ -2,6 +2,10 @@
 
 ## 1.31
 
+### tools
+
+Locked karma version to 0.12.31 since it works while not specifying a version doesn't.
+
 ### analyse
 
 Added possibility to show aggregate analyse results in popup without saving the analyse layer.
