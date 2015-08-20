@@ -48,6 +48,9 @@ Oskari.registerLocalization(
                 "type-wms": "Map layer",
                 "type-wfs": "Data product"
             },
+            "refresh_load": {
+                "tooltip": "Refresh layer data. Layer is not drawn automatically "
+            },
             "filter": {
                 "title": "Filter",
                 "description": "Select the features from the map layer:",

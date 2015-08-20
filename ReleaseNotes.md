@@ -2,6 +2,12 @@
 
 ## 1.31
 
+### analyse
+
+Added possibility to show aggregate analyse results in popup without saving the analyse layer.
+
+Added possibility to use aggregate method with spatial join.
+
 ### coordinatestool
 
 *New  bundle!* Add new tool to show or set coordinates. Tool can present mouse move coordinates or map click coordinates to lon and lat inputs. You can also write your coordinates and then center map here.

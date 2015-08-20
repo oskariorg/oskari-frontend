@@ -139,7 +139,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
                 // I'll just leave this like it was on old implementation
                 icon.attr('title', tooltips['type-wms']);
             } else if (layer.isLayerOfType('WFS')) {
-                icon.attr('title', tooltips['type-wfs']);
+                if(layer.isManualRefresh()) {
+                    icon.attr('title', tooltips['type-wfs-manual']);
+                }
+                else {
+                    icon.attr('title', tooltips['type-wfs']);
+                }
             } else if (layer.isLayerOfType('VECTOR')) {
                 icon.attr('title', tooltips['type-wms']);
             }

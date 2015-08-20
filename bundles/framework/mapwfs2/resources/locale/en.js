@@ -7,6 +7,8 @@ Oskari.registerLocalization(
         "desc": "",
         "default-style": "Default style",
         "own-style": "Own style",
+        "refresh": "Refresh",
+        "refresh_title": "Refresh WFS-layers, which are not rendered automatically on a map",
         "tile": {
             "title": "MapWfs2"
         },
@@ -22,6 +24,10 @@ Oskari.registerLocalization(
             "wfs_configuring_layer_failed": "Configuring WFS layer {layer} failed.",
             "wfs_request_failed": "Request to WFS layer {layer} failed.",
             "features_parsing_failed": "The feature parsing of WFS layer {layer}) failed."
+        },
+        "information": {
+            "title": "WFS-data rendering",
+            "info": "There are WFS-layers on a map, which are not rendered automatically.<br/> Locate and zoom first an area, where features are located.<br/> Feature data and features are retreaved via Feature data-button <br/> Features are rendered via Refresh-button"
         },
         "button": {
             "cancel": "Cancel",

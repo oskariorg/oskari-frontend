@@ -20,6 +20,8 @@ div.layerselection2 .layer.selected {
       div.layerselection2 .layer.selected div.layer-info div.layer-title h4 {
         font: 14pt Arial, sans-serif;
         padding: 0; }
+    div.layerselection2 .layer.selected div.layer-info div.layer-tool-refresh {
+      float: right; }
     div.layerselection2 .layer.selected div.layer-info div.layer-tool-remove {
       float: right; }
   div.layerselection2 .layer.selected div.layer-tools {

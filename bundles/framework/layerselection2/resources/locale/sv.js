@@ -48,6 +48,9 @@ Oskari.registerLocalization(
                 "type-wms": "Kartlager",
                 "type-wfs": "Dataprodukt"
             },
+            "refresh_load": {
+                "tooltip": "Refresh layer data. Layer is not drawn automatically"
+            },
             "filter": {
                 "title": "Filter",
                 "description": "Välj funktionerna från kartlagret:",
