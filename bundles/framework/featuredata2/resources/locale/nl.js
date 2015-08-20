@@ -12,9 +12,12 @@ Oskari.registerLocalization(
         "errorscale": "Gegevens kunnen niet op dit schaalniveau worden getoond. Wijzig het schaalniveau.",
         "errordata": "Gegevens van de server bevatten fouten. Verschuif de kaart om te actualiseren.",
         "columnSelectorTooltip": "Toon kolommen",
+        "featureDataPopup": "NOT TRANSLATED",
         "selectionTools": {
             "title": "Selecteer kenmerken op de kaart",
             "instructions": "NOT TRANSLATED",
+            "selectFromTop": "NOT TRANSLATED",
+            "selectAll": "Selecteer van alle lagen",
             "link": {
                 "title": "Meer selecteren"
             },
