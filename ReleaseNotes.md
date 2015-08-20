@@ -62,6 +62,10 @@ Added getMaxExtent function. This return max map extent.
 
 Added new getNewestLayers(count) method to find newest layers corresponding to given count.
 
+### WMSLayerPlugin/WMTSLayerPlugin
+
+Real time layers are now shown with current time parameter.
+
 ## 1.30.4
 
 Userguide styles and analysis localizations fixed.
