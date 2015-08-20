@@ -34,7 +34,19 @@ New checkbox "manual refresh" for WFS layer, when inserting new layers to Oskari
 
 ### WFSLayerPlugin
 
-Manual refresh event for manual refresh wfs layers. Event is trigged when pushing "Feature Data" button
+Manual refresh event for manual refresh of wfs layers.
+
+Event is trigged when pushing "Feature Data" button or when pushing "Refresh" button.
+
+"Refresh" button is invisible, if there are no manual-refresh layers in selected map layers.
+
+Manual refresh layers are not rendered automatically on a map
+
+### layerselecton2
+
+New "refresh" icon besibe "close" icon, if layer is manual-refresh layer.
+
+Manual-refresh layer is rendered when clicking the icon.
 
 ### layerselector2
 
