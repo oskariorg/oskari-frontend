@@ -84,11 +84,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
 
             if (pData) {
                 // set initial values
-                me.fields.domain.field.setValue(pData.domain);
-                me.fields.name.field.setValue(pData.name);
+                me.fields.domain.field.setValue(pData.metadata.domain);
+                me.fields.name.field.setValue(pData.metadata.name);
                 if (pData.lang) {
                     // if we get data as param -> use lang from it, otherwise use Oskari.getLang()
-                    selectedLang = pData.lang;
+                    selectedLang = pData.metadata.language;
                 }
             }
 
@@ -146,7 +146,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
          */
         getValues: function () {
             var values = {
-                    generalInfo: {}
+                    metadata: {}
                 },
                 fkey,
                 data;
@@ -154,10 +154,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
             for (fkey in this.fields) {
                 if (this.fields.hasOwnProperty(fkey)) {
                     data = this.fields[fkey];
-                    values.generalInfo[fkey] = data.field.getValue();
+                    values.metadata[fkey] = data.field.getValue();
                 }
             }
-            values.generalInfo.language = this.langField.field.getValue();
+            values.metadata.language = this.langField.field.getValue();
             return values;
         },
 

@@ -32,7 +32,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
         );
 
         me.toolLayouts = ['lefthanded', 'righthanded', 'userlayout'];
-        me.activeToolLayout = 'lefthanded';
+        me.data = me.instance.publisher.data;
+        me.activeToolLayout = me.instance.publisher.data && me.instance.publisher.data.metadata && me.instance.publisher.data.metadata.toolLayout ?
+                                me.instance.publisher.data.metadata.toolLayout : 'lefthanded';
     }, {
         eventHandlers: {
             'Publisher2.ToolEnabledChangedEvent': function (event) {
@@ -73,7 +75,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
 
             me._toggleAdditionalTools();
             //init the tools' plugins location infos
-            me._changeToolLayout(me.activeToolLayout, null);
+            if (me.data && me.activeToolLayout === 'userlayout' ) {
+                me._initUserLayout();
+            } else {
+                me._changeToolLayout(me.activeToolLayout, null);
+            }
         },
         getName: function() {
             return "Oskari.mapframework.bundle.publisher2.view.PanelToolLayout";
@@ -133,7 +139,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 }
             });
 
-            values['toolLayout'] = me.activeToolLayout;
+            var toolLayout = {
+                metadata: {
+                    toolLayout: me.activeToolLayout
+                }
+            };
+            me._extendRecursive(values, toolLayout);
             return values;
         },
         /**
@@ -170,7 +181,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
          */
         getPanel: function () {
             if (!this.panel) {
-	            this._populateToolLayoutPanel();
+                this._populateToolLayoutPanel();
             }
             return this.panel;
         },
@@ -259,6 +270,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                     me._editToolLayoutOff();
                 }
                 // set location for all tools
+
                 for (i = tools.length - 1; i > -1; i -= 1) {
                     tool = tools[i].getTool();
                     if (tools[i][layout]) {
@@ -276,6 +288,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                     }
                 }
 
+
                 if (event) {
                     target = jQuery(event.currentTarget);
                     button = target.parents('.content').find('input#editModeBtn');
@@ -289,8 +302,36 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                     button = target.parents('.tool').find('input#editModeBtn');
                     button.prop('disabled', false);
                     button.removeClass('disabled-button');
+
                     me._editToolLayoutOn();
                 }
+            }
+        },
+
+        /**
+         * Initialises the plugins' location info when restoring a published map that has a user defined layout
+         * @method _initToolLayout
+         */
+        _initUserLayout: function() {
+            var me = this,
+                tools = this.tools;
+            if (me.data && me.data.view && me.data.view.mapfull && me.data.view.mapfull.conf && me.data.view.mapfull.conf.plugins) {
+
+                var pluginConfigs = this.data.view.mapfull.conf.plugins;
+                var pluginConfig = null;
+                _.each(tools, function(tool) {
+                    for (var i = 0; i < pluginConfigs.length; i++) {
+                        pluginConfig = pluginConfigs[i];
+                        if (tool.getTool().id === pluginConfig.id) {
+                            if (pluginConfig.config && pluginConfig.config.location && pluginConfig.config.location.classes) {
+                                tool.getTool().config.location = pluginConfig.config.location;
+                                if (tool.getPlugin() && tool.getPlugin().setLocation) {
+                                    tool.getPlugin().setLocation(pluginConfig.config.location.classes);
+                                }
+                            }
+                        }
+                    }
+                });
             }
         },
         /**
@@ -480,8 +521,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
         stop: function(){
             var me = this;
             _.each(me.tools, function(tool){
-                tool.stop();
-                tool.setEnabled(false);
+                //just call stop for the tools that haven't already been shut down by the tool panel
+                if (tool.isStarted() && tool.getPlugin() && tool.getPlugin().getSandbox()) {
+                    tool.stop();
+                    tool.setEnabled(false);
+                }
             });
         },
 
@@ -599,7 +643,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             if (!style) {
                 return;
             }
-
             var me = this,
                 styleConfig,
                 i,
@@ -616,6 +659,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             for (i = 0; i < tools.length; i += 1) {
                 toolInstance = tools[i];
                 tool = toolInstance.getTool();
+
                 // special object for zoombar
                 if (tool.id.indexOf('Portti2Zoombar') >= 0) {
                     styleConfig = style.zoombar || {};
@@ -632,8 +676,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 if (tool.config) {
                     tool.config.toolStyle = styleConfig;
                 }
-                if (toolInstance.__started === true && toolInstance.getPlugin() && toolInstance.getPlugin().changeToolStyle) {
-                    toolInstance.getPlugin().changeToolStyle(styleConfig);
+                if (styleConfig &&
+                    toolInstance.isStarted() === true &&
+                    toolInstance.getPlugin() &&
+                    toolInstance.getPlugin().changeToolStyle) {
+                        toolInstance.getPlugin().changeToolStyle(styleConfig);
                     // tools in toolbar plugin needs to be configured
                     /* TODO: to do
                     if (tool.id.indexOf('PublisherToolbarPlugin') >= 0) {
@@ -677,30 +724,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 if (tool.config) {
                     tool.config.font = font;
                 }
-                if (toolInstance.__started && toolInstance.getPlugin().changeFont) {
+                if (toolInstance.isStarted() && toolInstance.getPlugin().changeFont) {
                     toolInstance.getPlugin().changeFont(font);
-                }
-            }
-        },
-        /**
-         * @method changeColourScheme
-         * Changes the colour scheme of the getinfo plugin and layer selection plugin.
-         *
-         * @param {Object} colourScheme
-         *
-         */
-        _changeColourScheme: function (colourScheme) {
-            var infoPlugin = this._getGetInfoPlugin();
-            if (infoPlugin) {
-                var conf = infoPlugin.config;
-                conf.colourScheme = colourScheme;
-                infoPlugin.config = conf;
-            }
-        },
-        _getGetInfoPlugin: function() {
-            for (tool in me.tools) {
-                if (tool.getTool().id === 'Oskari.mapframework.mapmodule.GetInfoPlugin') {
-                    return tool.getPlugin();
                 }
             }
         }

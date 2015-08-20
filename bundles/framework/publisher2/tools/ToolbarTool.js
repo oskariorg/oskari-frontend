@@ -122,6 +122,23 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             'layerSelectOption': '<option></option>'
         },
 
+        /**
+         * Initialise tool
+         * @method init
+         */
+        init: function() {
+            var me = this;
+            me._storedData = {};//me.__instance.publisher.data || null;
+            if (me.__instance.publisher.data) {
+                var data = me.__instance.publisher.data;
+                if (data && data.view && data.view.toolbar) {
+                    me._storedData.toolbarConfig = _.cloneDeep(data.view.toolbar);
+                }
+                if (data && data.view && data.view.publishedmyplaces2) {
+                    me._storedData.publishedmyplaces2Config = _.cloneDeep(data.view.publishedmyplaces2);
+                }
+            }
+        },
 
         /**
          * Get tool object.
@@ -144,25 +161,26 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
          * @returns {Object} tool value object
          */
         getValues: function () {
-            /*
-            var me = this,
-                saveState = {
-                    tool: me.getTool().id,
-                    show: me.state.enabled,
-                    subTools: []
-                };
-
-            return saveState;
-            */
             var me = this;
             if(me.state.enabled) {
-                return {
-                    mapfull: {
-                        conf: {
-                            plugins: [{ id: this.getTool().id, config: this.getPlugin().getConfig(), toolbarConfig: me.toolbarConfig }]
+
+                var retValue = {
+                    view: {
+                        mapfull: {
+                            conf: {
+                                plugins: [{ id: this.getTool().id, config: this.getPlugin().getConfig() }]
+                            }
                         }
                     }
                 };
+                if (me.toolbarConfig && !_.isEmpty(me.toolbarConfig)) {
+                    retValue.view.toolbar = me.toolbarConfig;
+                }
+                if (me.publishedmyplaces2Config && !_.isEmpty(me.publishedmyplaces2Config)) {
+                    retValue.view.publishedmyplaces2 = me.publishedmyplaces2Config;
+                }
+
+                return retValue;
             } else {
                 return null;
             }
@@ -200,6 +218,11 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
 
             toolContainer.find('input').change(closureMagic(this));
 
+            //modifying an existing and this was already checked?
+            var checkbox = toolContainer.find('input:checked');
+            if (checkbox) {
+                checkbox.change();
+            }
         },
 
         /**
@@ -224,7 +247,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                     var checkbox = cbox ? cbox : jQuery(this),
                         isChecked = checkbox.is(':checked'),
                         reqBuilder;
-
 
                     if (me._hasActiveTools() || me._hasSelectedDrawTool()) {
                         tool.selected = true;
@@ -267,17 +289,13 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 toolName,
                 toolButton,
                 isChecked;
-
             if (enabled) {
-
                 tool._isPluginStarted = true;
 
                 // toolbar (bundle) needs to be notified
-
                 if (_.isEmpty(me.toolbarConfig)) {
                     me._presetDataConfig('toolbarConfig');
                 }
-
                 tool.__plugin.setToolbarContainer();
                 me.toolbarConfig.classes = tool.__plugin.getToolConfs();
 
@@ -288,6 +306,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                         toolName,
                         toolButton,
                         toolElement;
+
                     // retrieve groupName button configs
                     for (i = 0, ilen = me.buttonGroups.length; i < ilen; i++) {
                         if (groupName === me.buttonGroups[i].name) {
@@ -383,7 +402,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                                 toolButton = buttonGroup.buttons[toolName];
                                 sandbox.postRequestByName(
                                     'Toolbar.RemoveToolButtonRequest', [toolName, buttonGroup.name, toolButton.toolbarid]);
-
                             }
                         }
                     }
@@ -392,6 +410,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
 
                 if (!localeChange) {
                     me.toolbarConfig = {};
+                    me.publishedmyplaces2Config = {};
                 }
 
 
@@ -665,20 +684,17 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
 
             me._resetDataConfig();
             // if editing a published view, then use the stored settings
-            if (me._storedData && me._storedData.state) {
-
+            if (me._storedData) {
                 configName = 'toolbarConfig';
-                if (me._storedData.state.toolbar &&
-                    me._storedData.state.toolbar.config &&
+                if (me._storedData.toolbarConfig &&
                     (!configToLoad || (configToLoad === configName))) {
-                    me.toolbarConfig = _.cloneDeep(me._storedData.state.toolbar.config);
+                    me.toolbarConfig = _.cloneDeep(me._storedData.toolbarConfig);
                 }
 
                 configName = 'publishedmyplaces2Config';
-                if (me._storedData.state.publishedmyplaces2 &&
-                    me._storedData.state.publishedmyplaces2.config &&
+                if (me._storedData.publishedmyplaces2Config &&
                     (!configToLoad || (configToLoad === configName))) {
-                    me.publishedmyplaces2Config = _.cloneDeep(me._storedData.state.publishedmyplaces2.config);
+                    me.publishedmyplaces2Config = _.cloneDeep(me._storedData.publishedmyplaces2Config);
                 }
             }
         },
