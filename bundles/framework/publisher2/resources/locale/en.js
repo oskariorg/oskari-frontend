@@ -172,7 +172,6 @@ Oskari.registerLocalization(
             "layerselection": {
                 "label": "Map layers menu",
                 "fieldLabel": "Show map layers at the menu.",
-                "label": "Show map layers at the menu.",
                 "info": "Select the background map layer. You can select the default background map layer in the map preview.",
                 "tooltip": "The background map layer is shown at the bottom layer of the map. Only one background map layer can be shown at a time. The user can change the background map if there is more map layers selected to background maps. The default backgound map layer can be selected in the map preview.",
                 "promote": "Do you wish to show also aerial images?"

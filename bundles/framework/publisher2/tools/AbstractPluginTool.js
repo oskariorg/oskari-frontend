@@ -26,7 +26,7 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     group : 'maptools',
     // 'bottom left', 'bottom right' etc
     allowedLocations : [],
-    //default location in lefthanded / righthanded layouts. Override.  
+    //default location in lefthanded / righthanded layouts. Override.
     lefthanded: '',
     righthanded: '',
     // List of plugin classes that can reside in same container(?) like 'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin'
@@ -133,6 +133,16 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     isDisplayed: function() {
         return true;
     },
+    /**
+    * Is started.
+    * @method isStarted
+    * @public
+    *
+    * @returns {Boolean} is the tool started.
+    */
+    isStarted: function() {
+        return this.__started;
+    },
 
     /**
     * Whether or not to create a panel and checkbox for the tool in the tools' panel.
@@ -153,7 +163,7 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     * @param {String} mode the mode
     */
     setMode: function(mode){
-    	var me = this;
+        var me = this;
         me.state.mode = mode;
 
         if(me.__plugin && typeof me.__plugin.setMode === 'function'){

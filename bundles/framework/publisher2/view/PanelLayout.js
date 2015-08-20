@@ -173,8 +173,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
          * @param {Object} pData initial data (optional)
          */
         init: function (pData) {
-            var me = this,
-                iData = pData || null;
+            var me = this;
+            me.data = pData || null;
 
             for (var p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
@@ -184,14 +184,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
 
             // Set the initial values
             me.values = {
-                style: {
-                    font: iData ? iData.font : me.initialValues.fonts[0],
-                    toolStyle: iData ? iData.toolStyle : me.initialValues.toolStyles[0]
+                metadata: {
+                    style: {
+                        font: me.data && me.data.metadata && me.data.metadata.style && me.data.metadata.style.font ? me.data.metadata.style.font : me.initialValues.fonts[0],
+                        toolStyle: me.data && me.data.metadata && me.data.metadata.style ? me.data.metadata.style.toolStyle : me.initialValues.toolStyles[0]
+                    }
                 }
             };
 
             // "Precompile" the templates
-            for (f in me.fields) {
+            for (var f in me.fields) {
                 if (me.fields.hasOwnProperty(f)) {
                     field = me.fields[f];
                     template = field.getContent.apply(me, arguments);
@@ -199,14 +201,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
                 }
             }
 
-            if (pData !== null && pData !== undefined) {
-                me._prepopulateCustomColours(pData.colourScheme);
-                me._sendFontChangedEvent(me.values.style.font);
-                me._sendToolStyleChangedEvent(me._getItemByCode(me.values.style.toolStyle, me.initialValues.toolStyles));
+            if (me.data !== null && me.data !== undefined) {
+                me._sendFontChangedEvent(me.values.metadata.style.font);
+                me._sendToolStyleChangedEvent(me._getItemByCode(me.values.metadata.style.toolStyle, me.initialValues.toolStyles));
             }
 
             if (!me.panel) {
-            	me.panel = me._populateLayoutPanel();
+                me.panel = me._populateLayoutPanel();
             }
         },
         /**
@@ -217,7 +218,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
          */
         getPanel: function () {
             if (!this.panel) {
-	            this._populateLayoutPanel();
+                this._populateLayoutPanel();
             }
             return this.panel;
         },
@@ -235,9 +236,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
             var me = this;
             var toolStyleCode = jQuery('select[name=publisher-toolStyles]').val();
             me.values = {
-                style: {
-                    font: jQuery('select[name=publisher-fonts]').val(),
-                    toolStyle: this._getItemByCode(toolStyleCode, this.initialValues.toolStyles)
+                metadata: {
+                    style: {
+                        font: jQuery('select[name=publisher-fonts]').val(),
+                        toolStyle: toolStyleCode//this._getItemByCode(toolStyleCode, this.initialValues.toolStyles)
+                    }
                 }
             };
 
@@ -264,7 +267,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
          * @return {jQuery} the fonts template
          */
         _getFontsTemplate: function () {
-            var self = this,
+            var me = this,
                 template = this.template.fonts.clone(),
                 fontLabel = this.loc.layout.fields.fonts.label,
                 fonts = this.initialValues.fonts,
@@ -287,12 +290,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
             template.find('select').on('change', function (e) {
                 // Send an event notifying the plugins that the font has changed.
                 selectedFont = jQuery(this).val();
-                self._sendFontChangedEvent(selectedFont);
+                me._sendFontChangedEvent(selectedFont);
             });
 
             // Prepopulate data
             jQuery(template.find('select option')).filter(function () {
-                return (jQuery(this).val() === self.values.font);
+                return (jQuery(this).val() === me.values.metadata.style.font);
             }).prop('selected', 'selected');
 
             return template;
@@ -303,7 +306,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
          * @return {jQuery} the tool styles template
          */
         _getToolStylesTemplate: function () {
-            var self = this,
+            var me = this,
                 template = this.template.toolStyles.clone(),
                 toolStylesLabel = this.loc.layout.fields.toolStyles.label,
                 toolStyles = this.initialValues.toolStyles,
@@ -330,13 +333,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
             template.find('select').on('change', function (e) {
                 // Send an event notifying the plugins that the style has changed.
                 selectedToolStyleCode = jQuery(this).val();
-                selectedToolStyle = self._getItemByCode(selectedToolStyleCode, self.initialValues.toolStyles);
-                self._sendToolStyleChangedEvent(selectedToolStyle);
+                selectedToolStyle = me._getItemByCode(selectedToolStyleCode, me.initialValues.toolStyles);
+                me._sendToolStyleChangedEvent(selectedToolStyle);
             });
 
             // Prepopulate data
             jQuery(template.find('select option')).filter(function () {
-                return (self.values.toolStyle && jQuery(this).val() === self.values.toolStyle);
+                return (me.values.metadata.style.toolStyle && jQuery(this).val() === me.values.metadata.style.toolStyle);
             }).prop('selected', 'selected');
 
             return template;
@@ -369,7 +372,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
          */
         _sendEvent: function (eventName, eventData) {
             var me = this,
-            	eventBuilder = me.sandbox.getEventBuilder(eventName),
+                eventBuilder = me.sandbox.getEventBuilder(eventName),
                 evt;
 
             if (eventBuilder) {
@@ -390,7 +393,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
         _getItemByCode: function (code, list) {
             var listLen = list.length,
                 i;
-
             for (i = 0; i < listLen; ++i) {
                 if (list[i].val === code) {
                     return list[i];

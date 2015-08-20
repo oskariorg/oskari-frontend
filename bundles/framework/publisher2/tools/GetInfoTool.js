@@ -141,14 +141,16 @@ function() {
 
         if(me.state.enabled) {
             return {
-                mapfull: {
-                    conf: {
-                        plugins: [{
-                            id: this.getTool().id,
-                            config: {
-                                colourScheme: me.values.colourScheme || {},
-                            }
-                        }]
+                view: {
+                    mapfull: {
+                        conf: {
+                            plugins: [{
+                                id: this.getTool().id,
+                                config: {
+                                    colourScheme: me.values.colourScheme || {}
+                                }
+                            }]
+                        }
                     }
                 }
             };
