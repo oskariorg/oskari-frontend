@@ -16,7 +16,7 @@ Oskari.registerLocalization(
             "abstract": "Basis informatie",
             "inspire": "Inspire metadata",
             "jhs": "ISO 19115 metadata",
-            "quality": "NOT TRANSLATED",
+            "quality": "Data kwaliteit",
             "xml": "ISO 19139 XML file",
             "map": "Geographic extent",
             "pdf": "Printout",
@@ -381,8 +381,8 @@ Oskari.registerLocalization(
                 }
             },
             "qualityContent": {
-                "qualityPassTrue": "NOT TRANSLATED",
-                "qualityPassFalse": "NOT TRANSLATED"
+                "qualityPassTrue": "Dataset is conform aan de specificaties.",
+                "qualityPassFalse": "Dataset is niet conform aan de specificaties."
             },
             "heading": {
                 "abstractTextData": "Abstracte tekst (data)",
@@ -415,21 +415,21 @@ Oskari.registerLocalization(
                 "temporalExtent": "Temporal extents",
                 "topicCategory": "topic categorieën",
                 "useLimitation": "Beperkingen voor gebruik",
-                "absoluteExternalPositionalAccuracy": "NOT TRANSLATED",
-                "accuracyOfTimeMeasurement": "NOT TRANSLATED",
-                "completenessCommission": "NOT TRANSLATED",
-                "completenessOmission": "NOT TRANSLATED",
-                "conceptualConsistency": "NOT TRANSLATED",
-                "domainConsistency": "NOT TRANSLATED",
-                "formatConsistency": "NOT TRANSLATED",
-                "griddedDataPositionalAccuracy": "NOT TRANSLATED",
-                "nonQuantitativeAttributeAccuracy": "NOT TRANSLATED",
-                "quantitativeAttributeAccuracy": "NOT TRANSLATED",
-                "relativeInternalPositionalAccuracy": "NOT TRANSLATED",
-                "temporalConsistency": "NOT TRANSLATED",
-                "temporalValidity": "NOT TRANSLATED",
-                "thematicClassificationCorrectness": "NOT TRANSLATED",
-                "topologicalConsistency": "NOT TRANSLATED"
+                "absoluteExternalPositionalAccuracy": "Absolute externe positionele nauwkeurigheid",
+                "accuracyOfTimeMeasurement": "Nauwkeurigheid van de tijdmeting",
+                "completenessCommission": "Volledigheid commissie",
+                "completenessOmission": "volledigheid omissie",
+                "conceptualConsistency": "conceptuele consistentie",
+                "domainConsistency": "domein consistentie",
+                "formatConsistency": "Formaat consistentie",
+                "griddedDataPositionalAccuracy": "Gridded data positionele nauwkeurigheid",
+                "nonQuantitativeAttributeAccuracy": "Niet kwantitatieve nauwkeurigheid attribuut",
+                "quantitativeAttributeAccuracy": "kwantitatieve nauwkeurigheid attribuut",
+                "relativeInternalPositionalAccuracy": "Relatieve interne positionele nauwkeurigheid",
+                "temporalConsistency": "Tijdelijke consistentie",
+                "temporalValidity": "Tijdelijke geldigheid",
+                "thematicClassificationCorrectness": "Juistheid Thematische indeling",
+                "topologicalConsistency": "Topologische consistentie"
             }
         },
         "tile": {

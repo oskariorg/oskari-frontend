@@ -6,7 +6,7 @@ Oskari.registerLocalization(
         "title": "I Miei dati",
         "desc": "I Miei dati",
         "notLoggedIn": "All'interno de \"I miei dati\" sono disponibili: il profilo utente, i dati salvati, le viste mappa, i link a mappe esterne, gli indicatori, le analisi ed i set di dati.  <a href='/web/en/login'>Accedi per controllare i tuoi dati</a>.",
-        "notLoggedInText": "NOT TRANSLATED",
+        "notLoggedInText": "Accedi per controllare i tuoi dati.",
         "tabs": {
             "myviews": {
                 "title": "Viste",
