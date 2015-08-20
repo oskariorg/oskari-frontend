@@ -281,80 +281,6 @@ Oskari.clazz.define(
             }
         },
 
-        showFeatureDataInPopup: function (mapLayer) {
-            var me = this,
-                layer = mapLayer,
-                popup =  Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                model = Oskari.clazz.create('Oskari.userinterface.component.GridModel'),
-                grid = Oskari.clazz.create('Oskari.userinterface.component.Grid', me.instance.getLocalization('columnSelectorTooltip')),
-                content = me.template.wrapper.clone(),
-                k;
-
-            model.setIdField('__fid');
-
-            // hidden fields (hide all - remove if not empty)
-            var hiddenFields = layer.getFields().slice(0);
-
-            // get data
-            var fields = layer.getFields().slice(0),
-                locales = layer.getLocales().slice(0),
-                features = layer.getActiveFeatures().slice(0),
-                selectedFeatures = layer.getSelectedFeatures().slice(0); // filter
-
-            me._addFeatureValues(model, fields, hiddenFields, features, selectedFeatures);
-            me._addFeatureValues(model, fields, hiddenFields, selectedFeatures, null);
-
-            fields = model.getFields();
-            hiddenFields.push('__fid');
-            hiddenFields.push('__centerX');
-            hiddenFields.push('__centerY');
-            hiddenFields.push('geometry');
-
-            popup.fields = fields;
-            popup.locales = locales;
-
-            // localizations
-            if (locales) {
-                for (k = 0; k < locales.length; k += 1) {
-                    grid.setColumnUIName(fields[k], locales[k]);
-                }
-            }
-
-            // helper function for visibleFields
-            var contains = function (a, obj) {
-                for (var i = 0; i < a.length; i += 1) {
-                    if (a[i] === obj) {
-                        return true;
-                    }
-                }
-                return false;
-            };
-
-            // filter out certain fields
-            var visibleFields = [],
-                i;
-
-            for (i = 0; i < fields.length; i += 1) {
-                if (!contains(hiddenFields, fields[i])) {
-                    visibleFields.push(fields[i]);
-                }
-            }
-
-            grid.setVisibleFields(visibleFields);
-            grid.setColumnSelector(true);
-            grid.setResizableColumns(true);
-
-            popup.grid = grid;
-
-            popup.grid.setDataModel(model);
-            me._addNumericColumnRenderers(popup.grid);
-
-            popup.grid.renderTo(content);
-
-            var okBtn = popup.createCloseButton();
-            popup.show(me.instance.getLocalization('featureDataPopup'), content, [okBtn]);
-        },
-
         /**
          * @method updateData
          * @param {Oskari.mapframework.domain.WfsLayer} layer
@@ -381,6 +307,7 @@ Oskari.clazz.define(
                 return;
             }
             panel.getContainer().append(this.instance.getLocalization('loading'));
+
 
             if (this.instance.__loadingStatus[layer.getId()] === 'loading' || this.instance.__loadingStatus[layer.getId()] === 'error') {
                 return;
@@ -504,47 +431,6 @@ Oskari.clazz.define(
             }
         },
 
-        /**
-         * @method _addNumericColumnRenderers
-         * @private
-         * @param {Grid} Grid instance
-         * Adds column renderers for numeric columns, each renderer rendering
-         * the numbers with the highest decimal count found in the column.
-         */
-        _addNumericColumnRenderers: function (grid) {
-            var dataArray = grid.getDataModel().data,
-                visibleFields = grid.getVisibleFields(),
-                decimals = {};
-
-            var closureMagic = function (decimalCount) {
-                return function (value) {
-                    var parsed = parseFloat(value);
-                    if (!isNaN(parsed)) {
-                        return parsed.toFixed(decimalCount);
-                    } else {
-                        return value;
-                    }
-                };
-            };
-
-            jQuery.each(visibleFields, function(index, field) {
-                var fieldValues = jQuery.grep(dataArray || [], function(value, index) {
-                    return index === field;
-                });
-
-                var isNumber = Oskari.util.isNumber(fieldValues, true);
-                if(isNumber) {
-                    decimals[field] = Oskari.util.decimals(fieldValues);
-                    if (decimals[field]) {
-                        grid.setColumnValueRenderer(
-                            field,
-                            closureMagic(decimals[field])
-                        );
-                    }
-                }
-            });
-        },
-
         // helper for removing item (indexOf is not in IE8)
         remove_item: function (a, val) {
             var key;
@@ -570,7 +456,8 @@ Oskari.clazz.define(
         _prepareData: function (layer) {
             var me = this,
                 panel = this.layers['' + layer.getId()],
-                isOk = this.tabsContainer.isSelected(panel);
+                isOk = this.tabsContainer.isSelected(panel),
+                conf = me.instance.conf;
 
             if (isOk) {
                 panel.getContainer().empty();
@@ -671,14 +558,20 @@ Oskari.clazz.define(
                     grid.setVisibleFields(visibleFields);
                     grid.setColumnSelector(true);
                     grid.setResizableColumns(true);
-                    grid.setExcelExporter(
-                        layer.getPermission('download') === 'download_permission_ok'
-                    );
+
+
+                    if (conf && !conf.disableExport) {
+                        grid.setExcelExporter(
+                            layer.getPermission('download') === 'download_permission_ok'
+                        );
+                    }
 
                     panel.grid = grid;
                 }
                 panel.grid.setDataModel(model);
-                me._addNumericColumnRenderers(panel.grid);
+                _.forEach(visibleFields, function (field) {
+                    grid.setNumericField(field);
+                });
                 panel.grid.renderTo(panel.getContainer());
                 // define flyout size to adjust correctly to arbitrary tables
                 var mapdiv = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule').getMapEl(),

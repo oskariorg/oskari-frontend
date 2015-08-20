@@ -31,7 +31,8 @@ Oskari.registerLocalization(
         "tooltip": {
             "type-base": "Background map",
             "type-wms": "Map layer (WMS, WMTS)",
-            "type-wfs": "Data product (WFS)"
+            "type-wfs": "Data product (WFS)",
+            "type-wfs-manual": "Data product (WFS) - Layer is drawn on a map via Feature Data or via Refresh button action"
         },
         "backendStatus": {
             "OK": {
@@ -64,13 +65,11 @@ Oskari.registerLocalization(
         "layerFilter": {
             "buttons": {
                 "newest": "Newest",
-                "stats": "Analysable",
-                "publishable": "Publishable"
+                "stats": "Vector layers"
             },
             "tooltips": {
                 "newest": "Show ## newest map layers",
-                "stats": "Show only analysable map layers",
-                "publishable": "Show only publishable map layers",
+                "stats": "Show only vector layers",
                 "remove": "Remove filter"
             }
         }

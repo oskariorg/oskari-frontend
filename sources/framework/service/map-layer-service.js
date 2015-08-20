@@ -490,16 +490,36 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @return {{Mixed[]/Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Object[]}
          */
         getNewestLayers: function (count) {
-            var list = [],
+            var me = this,
+                list = [],
                 i,
-                layer;
-            for (i = this._loadedLayersList.length-1; i >= 0; --i) {
-                layer = this._loadedLayersList[i];
-                list.push(layer);                
+                layer,
+                layersWhereCreatedDate,
+                newestToOldestLayers;
+
+            
+            layersWhereCreatedDate = jQuery.grep(this._loadedLayersList, function(layer, indeksi) {
+                return  layer._created !== null && !isNaN(layer._created.getTime());
+            });
+            
+            newestToOldestLayers = layersWhereCreatedDate.sort(function(a,b){
+                if(a.getCreated()>b.getCreated()) {
+                    return -1;
+                } else if(a.getCreated()<b.getCreated()) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+
+            });
+            
+            for (i = 0; i<newestToOldestLayers.length; i++) {
+                list.push(this._loadedLayersList[i]);                
                 if(list.length === count) {
                     break;
                 }
             }
+
             return list;
         },
         /**
@@ -882,6 +902,12 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 builder.parseLayerData(layer, mapLayerJson, this);
             }
 
+            if(mapLayerJson.created && isNaN(Date.parse(mapLayerJson.created)) === false){
+                var created = new Date(mapLayerJson.created);
+                if(created) {
+                    layer.setCreated(created)
+                }
+            }
 
             return layer;
         },

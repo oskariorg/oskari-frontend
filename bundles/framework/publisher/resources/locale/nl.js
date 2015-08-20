@@ -224,6 +224,14 @@ Oskari.registerLocalization(
                     "tooltip": "De kaartlaag kan in een geïntegreerd kaartvenster worden weergegeven en het aantal gebruikers per week kan worden beperkt."
                 }
             }
+        },
+        "layerFilter": {
+            "buttons": {
+                "publishable": "Publishable"
+            },
+            "tooltips": {
+                "publishable": "Show only publishable map layers"
+            }
         }
     }
 }

@@ -31,7 +31,8 @@ Oskari.registerLocalization(
         "tooltip": {
             "type-base": "Bakgrundskarta",
             "type-wms": "Kartlager (WMS, WMTS)",
-            "type-wfs": "Dataprodukt (WFS)"
+            "type-wfs": "Dataprodukt (WFS)",
+            "type-wfs-manual": "Data product (WFS) - Layer is drawn on a map via Feature Data or via Refresh button action"
         },
         "backendStatus": {
             "OK": {
@@ -64,13 +65,11 @@ Oskari.registerLocalization(
         "layerFilter": {
             "buttons": {
                 "newest": "Nyaste",
-                "stats": "Analyserbar",
-                "publishable": "Publicerbar"
+                "stats": "Vektorlager"
             },
             "tooltips": {
                 "newest": "Visa de ## nyaste kartlager",
-                "stats": "Visa endast kartlager som kan användas i den analys funktion",
-                "publishable": "Visa endast kartlager som kan publiceras med kart publicering funktion",
+                "stats": "Visa endast vektorlager",
                 "remove": "Ta bort filter"
             }
         }

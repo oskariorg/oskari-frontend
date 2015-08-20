@@ -71,7 +71,7 @@ div.mapplugins {
       margin-left: 0; }
     div.mapplugins.top.right .mapplugin.search {
       text-align: right; }
-    div.mapplugins.top.right .mapplugin.featuredataplugin, div.mapplugins.top.right .mapplugin.layerselection, div.mapplugins.top.right .mapplugin.search, div.mapplugins.top.right .mapplugin.tools {
+    div.mapplugins.top.right .mapplugin.featuredataplugin,  div.mapplugins.top.right .mapplugin.mapwfs2plugin, div.mapplugins.top.right .mapplugin.layerselection, div.mapplugins.top.right .mapplugin.search, div.mapplugins.top.right .mapplugin.tools {
       display: block;
       float: right;
       margin: 0 0 0 10px; }
@@ -79,7 +79,7 @@ div.mapplugins {
       margin-right: 0; }
     div.mapplugins.top.left .mapplugin.search {
       text-align: left; }
-    div.mapplugins.top.left .mapplugin.featuredataplugin, div.mapplugins.top.left .mapplugin.layerselection, div.mapplugins.top.left .mapplugin.search, div.mapplugins.top.left .mapplugin.tools {
+    div.mapplugins.top.left .mapplugin.featuredataplugin, div.mapplugins.top.left .mapplugin.mapwfs2plugin, div.mapplugins.top.left .mapplugin.layerselection, div.mapplugins.top.left .mapplugin.search, div.mapplugins.top.left .mapplugin.tools {
       display: block;
       float: left;
       margin: 0 10px 0 0; }

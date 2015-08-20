@@ -224,6 +224,14 @@ Oskari.registerLocalization(
                     "tooltip": "Kartlagret kan publiceras i en inbäddad karta. Antalet användare per vecka kan vara begränsat."
                 }
             }
+        },
+        "layerFilter": {
+            "buttons": {
+                "publishable": "Publicerbar"
+            },
+            "tooltips": {
+                "publishable": "Visa endast kartlager som kan publiceras med kart publicering funktion"
+            }
         }
     }
 }

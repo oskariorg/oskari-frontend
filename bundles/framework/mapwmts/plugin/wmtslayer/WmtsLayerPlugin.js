@@ -171,6 +171,11 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                 layerDef: layer.getWmtsLayerDef()
             };
 
+            if (layer.isRealtime()) {
+                var date = new Date();
+                layerConfig.time = date.toISOString();
+            }
+
             // override default params and options from layer
             var key,
                 layerParams = layer.getParams(),

@@ -2,6 +2,12 @@
 
 ## 1.31
 
+### analyse
+
+Added possibility to show aggregate analyse results in popup without saving the analyse layer.
+
+Added possibility to use aggregate method with spatial join.
+
 ### coordinatestool
 
 *New  bundle!* Add new tool to show or set coordinates. Tool can present mouse move coordinates or map click coordinates to lon and lat inputs. You can also write your coordinates and then center map here.
@@ -40,6 +46,14 @@ Now not show group if group has not any layers.
 
 Renamed AddLayerListFilterRequest to ShowFilteredLayerListRequest.
 
+### maplegend
+
+Added currently selected style name as a sub header for legend flyout.
+
+### layerselector2/AddLayerListFilterRequest
+
+*New request!* Adds new filter buttons and functionalities to layerlist.
+
 ### publisher2
 
 Added GetInfoTool. GetInfoTool has now colous schema selection on extra options.
@@ -53,6 +67,10 @@ Added getMaxExtent function. This return max map extent.
 ### Sandbox/map layer service
 
 Added new getNewestLayers(count) method to find newest layers corresponding to given count.
+
+### WMSLayerPlugin/WMTSLayerPlugin
+
+Real time layers are now shown with current time parameter.
 
 ## 1.30.4
 

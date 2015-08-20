@@ -234,7 +234,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 '</div>',
             difference: '<div class="analyse_difference_cont"></div>',
             footer: '<div class="analyse_param_footer"></div>',
-            wrapper: '<div></div>',
+            wrapper: '<div class="analyse-result-popup-content"></div>',
         },
 
         /**
@@ -1345,8 +1345,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 var showDataInput = contentPanel.parent().find('#showFeatureDataAfterAnalysis');
                 showDataInput.attr('checked', true);
 
-                //this is commented out until the backend is ready to handle it
-                /*
                 var showValuesCheckbox = me.template.checkboxLabel.clone();
                 showValuesCheckbox.addClass('show_data_in_popup');
                 showValuesCheckbox.find('input').attr('id', 'showFeatureDataWithoutSaving');
@@ -1360,7 +1358,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         showDataInput.attr('disabled', false);
                     }
                 });
-                */
 
                 contentPanel.parent().find('input[name=showFeatureData]').attr('checked', true);
 
@@ -2635,7 +2632,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          *
          */
         _analyseMap: function () {
-            var data,
+            var data= {},
                 me = this,
                 sandbox = me.instance.getSandbox(),
                 selections = me._gatherSelections(),
@@ -2653,7 +2650,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var showWithoutSavingOption = me.mainPanel.find('#showFeatureDataWithoutSaving');
             if (showWithoutSavingOption[0]) {
                 me._showFeatureDataWithoutSaving = me.mainPanel.find('#showFeatureDataWithoutSaving')[0].checked;
-                //TODO: if true, add parameter to data which will be send to backend
             }
             // Check that parameters are a-okay
             if (me._checkSelections(selections)) {
@@ -2674,9 +2670,23 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     });
                 }
 
-                data = {
-                    analyse: JSON.stringify(selections)
-                };
+                // if we don't wan't to save data, let's give some data to the grid
+                if (me._showFeatureDataWithoutSaving) {
+                    data.saveAnalyse = false;
+                    var fields = functions,
+                        locales = selections.methodParams.locales,
+                        k;
+
+                    fields.unshift('Property');
+                    locales.unshift(me.loc.aggregatePopup.property);
+                    me.grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
+
+                    for (k = 0; k < locales.length; k += 1) {
+                        me.grid.setColumnUIName(fields[k], locales[k]);
+                    }
+                }
+
+                data.analyse = JSON.stringify(selections);
 
                 var layerId = selections.layerId,
                     layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
@@ -2700,6 +2710,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     }
                     data.filter1 = JSON.stringify(filterJson);
                 }
+
                 // Applies to clip as well, but we changed its method to
                 // intersect above
                 if (selections.method === 'intersect') {
@@ -2765,9 +2776,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 request;
 
             if (me._showFeatureDataWithoutSaving) {
-                //TODO: handle data to show it in popup
-                me.instance.sandbox.postRequestByName('ShowFeatureDataPopupRequest', [mapLayer]);
-                me.instance.personalDataTab._deleteAnalysis(mapLayer, false);
+                me._showAggregateResultPopup(analyseJson);
             } else {
                 mapLayerService = me.instance.mapLayerService;
                 // Create the layer model
@@ -2818,6 +2827,36 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 }
             }
         },
+
+
+        _showAggregateResultPopup: function (resultJson) {
+            var me = this,
+                popup =  Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                gridModel = Oskari.clazz.create('Oskari.userinterface.component.GridModel'),
+                content = this.template.wrapper.clone(),
+                fields;
+
+            _.forEach(resultJson, function(feature, key) {
+                feature.Property = key;
+                gridModel.addData(feature, true);
+            });
+
+            gridModel.setIdField('Property');
+            gridModel.setFirstField('Property');
+            me.grid.setDataModel(gridModel);
+
+            fields = gridModel.getFields();
+            _.forEach(fields, function (field) {
+                me.grid.setNumericField(field);
+            });
+
+            me.grid.renderTo(content);
+
+            var okBtn = popup.createCloseButton();
+            popup.makeDraggable();
+            popup.show(me.loc.aggregatePopup.title, content, [okBtn]);
+        },
+
         /**
          * @private @method _saveAnalyse
          * Save analyse data.

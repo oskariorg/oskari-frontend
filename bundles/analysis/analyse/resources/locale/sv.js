@@ -403,6 +403,10 @@ Oskari.registerLocalization(
                 "title": "Info",
                 "layer": "Analyslager",
                 "over10": "har över 10 attribut. Välj högst 10 attribut för analys. Du hittar en lista av attribut i menu \"Parameter\" när du har valt en analysmetod."
+            },
+            "aggregatePopup": {
+                "title": "Analys resultat",
+                "property": "Attribut"
             }
         },
         "StartView": {

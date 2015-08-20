@@ -31,7 +31,8 @@ Oskari.registerLocalization(
         "tooltip": {
             "type-base": "Taustakartta",
             "type-wms": "Karttataso",
-            "type-wfs": "Tietotuote"
+            "type-wfs": "Tietotuote",
+            "type-wfs-manual": "Tietotuote - WFS taso päivittyy kartalla Kohdetiedot- tai Päivitä-painikkeesta"
         },
         "backendStatus": {
             "OK": {
@@ -64,13 +65,11 @@ Oskari.registerLocalization(
         "layerFilter": {
             "buttons": {
                 "newest": "Uusimmat",
-                "stats": "Analysoitavissa",
-                "publishable": "Julkaistavissa"
+                "stats": "Vektoritasot"
             },
             "tooltips": {
                 "newest": "Näytä ## uusinta karttatasoa",
-                "stats": "Näytä vain analyysissa käytettävissä olevat karttatasot",
-                "publishable": "Näytä vain julkaistavissa olevat karttatasot",
+                "stats": "Näytä vain vektoritasot",
                 "remove": "Poista suodatus"
             }
         }

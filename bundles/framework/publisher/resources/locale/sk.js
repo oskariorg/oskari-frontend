@@ -224,6 +224,14 @@ Oskari.registerLocalization(
                     "tooltip": "The map layer can be published in a embedded map. The weekly number of users can be limited."
                 }
             }
+        },
+        "layerFilter": {
+            "buttons": {
+                "publishable": "Publishable"
+            },
+            "tooltips": {
+                "publishable": "Show only publishable map layers"
+            }
         }
     }
 }

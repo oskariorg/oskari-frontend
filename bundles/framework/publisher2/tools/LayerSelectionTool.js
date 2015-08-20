@@ -65,7 +65,7 @@ function() {
                 pluginValues.defaultBaseLayer;
         }
         return layerSelection;
-    },
+    }
 }, {
     'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
     'protocol' : ['Oskari.mapframework.publisher.Tool']

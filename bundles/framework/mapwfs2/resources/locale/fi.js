@@ -7,6 +7,8 @@ Oskari.registerLocalization(
         "desc": "",
         "default-style": "Oletustyyli",
         "own-style": "Oma tyyli",
+        "refresh": "Päivitä",
+        "refresh_title": "Päivittää WFS-tasot, jotka eivät päivity kartalla automaattisesti",
         "tile": {
             "title": "MapWfs2"
         },
@@ -22,6 +24,10 @@ Oskari.registerLocalization(
             "wfs_configuring_layer_failed": "WFS-tason {layer} konfigurointi epäonnistui.",
             "wfs_request_failed": "WFS-tasolle {layer} kohdistunut kysely epäonnistui.",
             "features_parsing_failed": "WFS-tason {layer} kohdetietojen käsittely epäonnistui."
+        },
+        "information": {
+            "title": "WFS-kohdetietojen esittäminen",
+            "info": "Kartalla on valittuna WFS-tasoja, jotka eivät piirry/päivity automaattisesti.<br/> Valitse ensin kartalta alue, jolta haluat ko tasojen kohdetiedot ja kohteet näkyviin kartalle.<br/> Kohdetiedot ja kohteet saa näkyviin painamalla Kohdetiedot-painikketta <br/> Kohteet saa näkyviin painamalla Päivitä-painikketta"
         },
         "button": {
             "cancel": "Peruuta",

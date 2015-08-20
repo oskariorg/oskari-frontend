@@ -232,6 +232,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                 imgDiv = legendDiv.find('img'),
                 img = new Image();
 
+            legendDiv.prepend(layer.getCurrentStyle().getTitle() + '<br />');
 
             imagesAdded[legendUrl] = true;
 

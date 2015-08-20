@@ -130,6 +130,8 @@ Oskari.clazz.define(
 
         this._gfiContent = null;
 
+        me._created = null;
+
     }, {
         /**
          * Populates name, description, inspire and organization fields with a localization JSON object
@@ -1154,6 +1156,22 @@ Oskari.clazz.define(
          */
         getAdmin: function () {
             return this._admin;
+        },
+
+        /**
+         * Sets an created block
+         * @param {Date} created
+         */
+        setCreated: function(created){
+            this._created = created;
+        },
+
+        /**
+         * Returns an created block
+         * @return {Date} created
+         */
+        getCreated: function(){
+            return this._created;
         }
 
     }

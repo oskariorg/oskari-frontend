@@ -224,6 +224,14 @@ Oskari.registerLocalization(
                     "tooltip": "Karttatason voi julkaista upotetussa kartassa. Viikoittainen käyttömäärä voi olla rajoitettu."
                 }
             }
+        },
+        "layerFilter": {
+            "buttons": {
+                "publishable": "Julkaistavissa"
+            },
+            "tooltips": {
+                "publishable": "Näytä vain julkaistavissa olevat karttatasot"
+            }
         }
     }
 }

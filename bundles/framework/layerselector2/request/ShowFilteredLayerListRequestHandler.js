@@ -18,12 +18,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.request.ShowFilte
          * Shows WFS feature data with requested properties
          * @param {Oskari.mapframework.core.Core} core
          *      reference to the application core (reference sandbox core.getSandbox())
-         * @param {Oskari.mapframework.bundle.featuredata2.request.ShowFeatureDataRequest} request
+         * @param {Oskari.mapframework.bundle.layerselector2.request.ShowFilteredLayerListRequest} request
          *      request to handle
          */
         handleRequest : function(core, request) {
-            var layerSelector = this.sandbox.findRegisteredModuleInstance('LayerSelector'),
-                layerSelectorFlyout = layerSelector.plugins['Oskari.userinterface.Flyout'];
+            var layerSelectorFlyout = this.instance.plugins['Oskari.userinterface.Flyout'];
 
             if(request.getFilterFunction()) {
                 layerSelectorFlyout.setLayerListFilteringFunction(request.getFilterFunction());

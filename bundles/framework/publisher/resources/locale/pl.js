@@ -220,6 +220,14 @@ Oskari.registerLocalization({
                     "tooltip": "Warstwa mapy może zostać opublikowana jako wbudowane okno a ilość użytkowników na tydzień może być ograniczona."
                 }
             }
+        },
+        "layerFilter": {
+            "buttons": {
+                "publishable": "Publishable"
+            },
+            "tooltips": {
+                "publishable": "Show only publishable map layers"
+            }
         }
     }
 });

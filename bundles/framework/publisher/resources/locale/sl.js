@@ -224,6 +224,14 @@ Oskari.registerLocalization(
                     "tooltip": "Sloj je lahko objavljen v vstavljeni karti. Tedensko število uporabnikov je lahko omejeno."
                 }
             }
+        },
+        "layerFilter": {
+            "buttons": {
+                "publishable": "Publishable"
+            },
+            "tooltips": {
+                "publishable": "Show only publishable map layers"
+            }
         }
     }
 }

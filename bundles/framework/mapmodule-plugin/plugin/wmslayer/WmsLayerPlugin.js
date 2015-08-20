@@ -131,6 +131,12 @@ Oskari.clazz.define(
                     },
                     layerParams = _layer.getParams(),
                     layerOptions = _layer.getOptions();
+
+                if (_layer.isRealtime()) {
+                    var date = new Date();
+                    defaultParams.time = date.toISOString();
+                }
+
                 if (_layer.getMaxScale() || _layer.getMinScale()) {
                     // use resolutions instead of scales to minimize chance of transformation errors
                     var layerResolutions = this.getMapModule().calculateLayerResolutions(_layer.getMaxScale(), _layer.getMinScale());

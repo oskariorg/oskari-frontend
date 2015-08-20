@@ -224,6 +224,14 @@ Oskari.registerLocalization(
                     "tooltip": "La capa puede publicarse en un visualizador incorporado y el número de usuarios semanales puede limitarse."
                 }
             }
+        },
+        "layerFilter": {
+            "buttons": {
+                "publishable": "Publishable"
+            },
+            "tooltips": {
+                "publishable": "Show only publishable map layers"
+            }
         }
     }
 }
