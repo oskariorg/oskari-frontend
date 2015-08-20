@@ -1594,21 +1594,6 @@ Oskari.clazz.define(
             dialog.show(popupLoc, content, [okBtn]);
             dialog.fadeout(5000);
         },
-        /**
-         * @public @method showMessage
-         * Shows user a message with ok button
-         *
-         * @param {String} title popup title
-         * @param {String} message popup message
-         *
-         */
-        showMessage: function (title, message) {
-            var dialog = Oskari.clazz.create(
-                'Oskari.userinterface.component.Popup'
-            );
-            dialog.show(title, message);
-            dialog.fadeout(5000);
-        },
         showMessage: function (title, message, ok) {
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
