@@ -1715,6 +1715,9 @@ Oskari.clazz.define(
                 stripbox[i] = bbox[i].toPrecision(13);
             }
             return stripbox.join(',');
+        },
+        hasUI: function() {
+            return false;
         }
     }, {
         extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
