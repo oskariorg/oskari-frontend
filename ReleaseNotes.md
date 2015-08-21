@@ -6,6 +6,10 @@
 
 The generic admin bundle now has a request to add functionality in tabs. This is done by sending a request with name 'Admin.AddTabRequest'.
 
+### metrics
+
+Initial version for a metrics display for admins. Adds a tab for the admin bundle to show metrics gathered by the serverside functionality.
+
 ### tools
 
 Locked karma version to 0.12.31 since it works while not specifying a version doesn't.

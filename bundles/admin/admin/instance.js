@@ -2,7 +2,6 @@
  * @class Oskari.admin.bundle.admin.GenericAdminBundleInstance
  *
  * Generic bundle for admins
- * TODO: add request handling that other admin bundles can show UI in this flyout
  */
 Oskari.clazz.define("Oskari.admin.bundle.admin.GenericAdminBundleInstance",
 
