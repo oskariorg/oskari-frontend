@@ -44,7 +44,8 @@ define([
                 'click .admin-add-group-cancel': 'hideLayerSettings',
                 'click .admin-remove-group': 'removeLayerCollection',
                 'click .add-layer-record.capabilities li': 'handleCapabilitiesSelection',
-                'change .admin-interface-version': 'handleInterfaceVersionChange'
+                'change .admin-interface-version': 'handleInterfaceVersionChange',
+                'change .admin-layer-style': 'handleLayerStyleChange'
             },
 
             /**
@@ -340,6 +341,22 @@ define([
                     form.find("input[type='radio'][name='jobtype'][id='layer-jobtype-default']").prop('checked', true);
                 }
 
+            },
+            /**
+             * Handle layer style change
+             *
+             * @method handleLayerStyleChange
+             */
+            handleLayerStyleChange: function (e) {
+                e.stopPropagation();
+                var
+                    me = this,
+                    element = jQuery(e.currentTarget),
+                    form = element.parents('.admin-add-layer'),
+                    cur_style_name = form.find('#add-layer-style').val();
+
+                me.model.selectStyle(cur_style_name);
+                form.find('#add-layer-legendImage').val(me.model.getLegendUrl());
             },
 
             /**

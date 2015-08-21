@@ -162,7 +162,7 @@
         </div>
         <div class="add-layer-input-area">
             <% if(model.getStyles().length > 1) { %>
-            <select id="add-layer-style">
+            <select id="add-layer-style" class="admin-layer-style">
                  <% for(var i = 0; i < model.getStyles().length; i++) { %>
                 <option value="<%= model.getStyles()[i].getName() %>"
                     <% if(model.getCurrentStyle().getName() === model.getStyles()[i].getName() ) {
