@@ -574,6 +574,17 @@
 					}
 				}
 			}
+		},
+		{
+		    "bundlename" : "metrics",
+		    "bundleinstancename" : "metrics",
+		    "metadata" : {
+		        "Import-Bundle" : {
+		            "metrics" : {
+		                "bundlePath" : "../../../packages/admin/bundle/"
+		            }
+		        }
+		    }
 		}
 	]
 }
