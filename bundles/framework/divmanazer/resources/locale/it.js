@@ -1,6 +1,6 @@
 Oskari.registerLocalization(
 {
-    "lang": "cs",
+    "lang": "it",
     "key": "DivManazer",
     "value": {
         "buttons": {
@@ -201,7 +201,7 @@ Oskari.registerLocalization(
                     "label": "Tratteggio bordo"
                 },
                 "linecap": {
-                    "label": "NOT TRANSLATED"
+                    "label": "Fine bordo"
                 },
                 "linecorner": {
                     "label": "Spigoli"
@@ -242,7 +242,8 @@ Oskari.registerLocalization(
                 "additional": {
                     "title": "Altre impostazioni",
                     "dataSource": "Fonte del dato",
-                    "metadata": "Collegamento al metadato"
+                    "metadata": "Collegamento al metadato",
+                    "export_selection": "Esporta solo gli elementi selezionati"
                 },
                 "columns": {
                     "title": "Colonne",
