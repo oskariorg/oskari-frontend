@@ -1,9 +1,9 @@
 /**
- * @class Oskari.admin.bundle.admin.GenericAdminBundle
+ * @class Oskari.admin.bundle.metrics.MetricsAdminBundle
  *
  * Definition for bundle. See source for details.
  */
-Oskari.clazz.define("Oskari.admin.bundle.admin.GenericAdminBundle",
+Oskari.clazz.define("Oskari.admin.bundle.metrics.MetricsAdminBundle",
 /**
  * @method create called automatically on construction
  * @static
@@ -15,10 +15,7 @@ function() {
         var me = this;
         
         /* or this if you want to tailor instance also */
-        var inst = Oskari.clazz.create("Oskari.admin.bundle.admin.GenericAdminBundleInstance",
-            'GenericAdmin',
-            "Oskari.admin.bundle.admin.GenericAdminFlyout"
-            );
+        var inst = Oskari.clazz.create("Oskari.admin.bundle.metrics.MetricsAdminBundleInstance");
 
         return inst;
 
@@ -30,39 +27,21 @@ function() {
 
     "protocol" : ["Oskari.bundle.Bundle", "Oskari.mapframework.bundle.extension.ExtensionBundle"],
     "source" : {
-
         "scripts" : [{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/admin/admin/instance.js"
-        },{
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/admin/admin/DefaultViews.js"
-        },{
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/admin/admin/request/AddTabRequest.js"
-        },{
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/admin/admin/Flyout.js"
-        }],
-
-        "locales" : [{
-            "lang" : "fi",
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/admin/admin/resources/locale/fi.js"
+            "src" : "../../../../bundles/admin/metrics/instance.js"
         }, {
-            "lang" : "sv",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/admin/admin/resources/locale/sv.js"
+            "src" : "../../../../libraries/jquery/plugins/jqtree/jqtree-1.2.1.js"
         }, {
-            "lang" : "en",
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/admin/admin/resources/locale/en.js"
+            "type" : "text/css",
+            "src" : "../../../../libraries/jquery/plugins/jqtree/jqtree.css"
         }]
     },
     "bundle" : {
         "manifest" : {
-            "Bundle-Identifier" : "admin",
-            "Bundle-Name" : "admin",
+            "Bundle-Identifier" : "metrics",
+            "Bundle-Name" : "metrics",
             "Bundle-Author" : [{
                 "Name" : "ev",
                 "Organisation" : "nls.fi",
@@ -92,4 +71,4 @@ function() {
 
 });
 
-Oskari.bundle_manager.installBundleClass("admin", "Oskari.admin.bundle.admin.GenericAdminBundle");
+Oskari.bundle_manager.installBundleClass("metrics", "Oskari.admin.bundle.metrics.MetricsAdminBundle");

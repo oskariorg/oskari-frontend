@@ -2,7 +2,6 @@
  * @class Oskari.admin.bundle.admin.GenericAdminBundleInstance
  *
  * Generic bundle for admins
- * TODO: add request handling that other admin bundles can show UI in this flyout
  */
 Oskari.clazz.define("Oskari.admin.bundle.admin.GenericAdminBundleInstance",
 
@@ -28,6 +27,11 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.GenericAdminBundleInstance",
             if(location) {
                 this._dialog.moveTo(location.target, location.align);
             }
+        },
+        afterStart : function() {
+
+            // register request handler
+            this.getSandbox().addRequestHandler('Admin.AddTabRequest', this.getFlyout());
         },
         /**
          * Closes the message dialog if one is open

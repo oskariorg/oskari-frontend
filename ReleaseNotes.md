@@ -2,6 +2,18 @@
 
 ## 1.31
 
+### admin
+
+The generic admin bundle now has a request to add functionality in tabs. This is done by sending a request with name 'Admin.AddTabRequest'.
+
+### metrics
+
+Initial version for a metrics display for admins. Adds a tab for the admin bundle to show metrics gathered by the serverside functionality.
+
+### tools
+
+Locked karma version to 0.12.31 since it works while not specifying a version doesn't.
+
 ### analyse
 
 Added possibility to show aggregate analyse results in popup without saving the analyse layer.
@@ -34,7 +46,19 @@ New checkbox "manual refresh" for WFS layer, when inserting new layers to Oskari
 
 ### WFSLayerPlugin
 
-Manual refresh event for manual refresh wfs layers. Event is trigged when pushing "Feature Data" button
+Manual refresh event for manual refresh of wfs layers.
+
+Event is trigged when pushing "Feature Data" button or when pushing "Refresh" button.
+
+"Refresh" button is invisible, if there are no manual-refresh layers in selected map layers.
+
+Manual refresh layers are not rendered automatically on a map
+
+### layerselecton2
+
+New "refresh" icon besibe "close" icon, if layer is manual-refresh layer.
+
+Manual-refresh layer is rendered when clicking the icon.
 
 ### layerselector2
 
