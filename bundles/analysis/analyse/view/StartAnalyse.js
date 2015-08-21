@@ -234,7 +234,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 '</div>',
             difference: '<div class="analyse_difference_cont"></div>',
             footer: '<div class="analyse_param_footer"></div>',
-            wrapper: '<div class="analyse-result-popup-content"></div>',
+            wrapper: '<div class="analyse-result-popup-content"></div>'
         },
 
         /**
