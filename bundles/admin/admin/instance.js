@@ -29,6 +29,11 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.GenericAdminBundleInstance",
                 this._dialog.moveTo(location.target, location.align);
             }
         },
+        afterStart : function() {
+
+            // register request handler
+            this.getSandbox().addRequestHandler('Admin.AddTabRequest', this.getFlyout());
+        },
         /**
          * Closes the message dialog if one is open
          */

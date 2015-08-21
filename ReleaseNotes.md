@@ -2,6 +2,10 @@
 
 ## 1.31
 
+### admin
+
+The generic admin bundle now has a request to add functionality in tabs. This is done by sending a request with name 'Admin.AddTabRequest'.
+
 ### tools
 
 Locked karma version to 0.12.31 since it works while not specifying a version doesn't.

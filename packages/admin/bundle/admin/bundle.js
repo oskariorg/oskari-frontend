@@ -39,6 +39,9 @@ function() {
             "src" : "../../../../bundles/admin/admin/DefaultViews.js"
         },{
             "type" : "text/javascript",
+            "src" : "../../../../bundles/admin/admin/request/AddTabRequest.js"
+        },{
+            "type" : "text/javascript",
             "src" : "../../../../bundles/admin/admin/Flyout.js"
         }],
 
