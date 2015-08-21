@@ -35,6 +35,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
         me.data = me.instance.publisher.data;
         me.activeToolLayout = me.instance.publisher.data && me.instance.publisher.data.metadata && me.instance.publisher.data.metadata.toolLayout ?
                                 me.instance.publisher.data.metadata.toolLayout : 'lefthanded';
+        me.toolLayoutEditMode = false;
     }, {
         eventHandlers: {
             'Publisher2.ToolEnabledChangedEvent': function (event) {
@@ -63,12 +64,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
          */
         init: function () {
             var me = this;
+            me.toolLayoutEditMode = false;
             for (var p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
                     me.sandbox.registerForEventByName(me, p);
                 }
             }
-
             if (!me.panel) {
                 me.panel = me._populateToolLayoutPanel();
             }
@@ -341,11 +342,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
         _editToolLayoutOn: function () {
             var me = this,
                 sandbox = Oskari.getSandbox('sandbox');
-
             if (me.toolLayoutEditMode) {
                 return;
             }
-
             me.toolLayoutEditMode = true;
             jQuery('#editModeBtn').val(me.loc.toollayout.usereditmodeoff);
             jQuery('.mapplugins').show();
@@ -527,6 +526,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                     tool.setEnabled(false);
                 }
             });
+
+            for (var p in me.eventHandlers) {
+                if (me.eventHandlers.hasOwnProperty(p)) {
+                    me.sandbox.unregisterFromEventByName(me, p);
+                }
+            }
         },
 
         /**
