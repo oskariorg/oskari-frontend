@@ -68,7 +68,7 @@ function() {
             }
         }
         return wfs;
-    },
+    }
 }, {
     'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
     'protocol' : ['Oskari.mapframework.publisher.Tool']
