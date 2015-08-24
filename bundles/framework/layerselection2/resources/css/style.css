@@ -22,7 +22,8 @@ div.layerselection2 .layer.selected {
         padding: 0;
         float: left}
       div.layerselection2 .layer.selected div.layer-info div.layer-tool-refresh {
-        float: left; }
+        float: left;
+        cursor: default;}
     div.layerselection2 .layer.selected div.layer-info div.layer-tool-remove {
       float: right; }
   div.layerselection2 .layer.selected div.layer-tools {

@@ -288,7 +288,7 @@ Oskari.clazz.define(
          * Updates data for layer
          */
         updateData: function (layer) {
-            if (!this.active) {
+            if (!this.active || !layer) {
                 return;
             }
 
