@@ -21,7 +21,6 @@ div.layerselection2 {
 			div.layer-title {
 				cursor: move;
 				display: inline;
-			    float: left;
 
 				h4 {
 					font: 14pt Arial,sans-serif;
@@ -32,6 +31,7 @@ div.layerselection2 {
 			div.layer-tool-refresh {
 				float: right;
 			    cursor: default;
+			    margin-right: 10px;
 			}
 
 		  div.layer-tool-remove {
