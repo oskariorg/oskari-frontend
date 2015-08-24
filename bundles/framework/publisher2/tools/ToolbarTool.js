@@ -176,7 +176,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 if (me.toolbarConfig && !_.isEmpty(me.toolbarConfig)) {
                     retValue.view.toolbar = me.toolbarConfig;
                 }
-                if (me.publishedmyplaces2Config && !_.isEmpty(me.publishedmyplaces2Config)) {
+                if (me.publishedmyplaces2Config && me.publishedmyplaces2Config.layer) {
                     retValue.view.publishedmyplaces2 = me.publishedmyplaces2Config;
                 }
 
