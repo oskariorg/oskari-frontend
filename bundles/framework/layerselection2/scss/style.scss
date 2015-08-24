@@ -21,16 +21,16 @@ div.layerselection2 {
 			div.layer-title {
 				cursor: move;
 				display: inline;
+			    float: left;
 
 				h4 {
 					font: 14pt Arial,sans-serif;
 					padding: 0;
-				    float: left;
 				}
 			}
 
 			div.layer-tool-refresh {
-				float: left;
+				float: right;
 			    cursor: default;
 			}
 

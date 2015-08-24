@@ -16,13 +16,13 @@ div.layerselection2 .layer.selected {
       background-repeat: no-repeat; }
     div.layerselection2 .layer.selected div.layer-info div.layer-title {
       cursor: move;
-      display: inline; }
+      display: inline;
+      float: left;}
       div.layerselection2 .layer.selected div.layer-info div.layer-title h4 {
         font: 14pt Arial, sans-serif;
-        padding: 0;
-        float: left}
+        padding: 0;}
       div.layerselection2 .layer.selected div.layer-info div.layer-tool-refresh {
-        float: left;
+        float: right;
         cursor: default;}
     div.layerselection2 .layer.selected div.layer-info div.layer-tool-remove {
       float: right; }
