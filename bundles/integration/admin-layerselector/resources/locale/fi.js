@@ -113,6 +113,8 @@ Oskari.registerLocalization({
             "username": "Käyttäjätunnus",
             "password": "Salasana",
             "attributes": "Attribuutit",
+            "selectedTime": "Valittu aika",
+            "time": "Tuettu aika",
             "addInspireName": "Aiheen nimi",
             "addInspireNameTitle": "Aiheen nimi",
             "addOrganizationName": "Tiedontuottajan nimi",

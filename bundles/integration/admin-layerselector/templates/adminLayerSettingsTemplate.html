@@ -67,6 +67,36 @@
                 </div>
             </div>
         </div>
+
+        <div class="add-layer-record">
+            <div class="add-layer-label-area">
+                <label for="add-layer-selectedtime" class="add-layer-label"
+                       title="<%= instance.getLocalization('admin').selectedTime %>"><%=instance.getLocalization('admin').selectedTime %></label>
+            </div>
+            <div class="add-layer-input-area">
+                <div class="input-controls">
+                    <%
+                        var times = _.isEmpty(model.getAttributes()) ? "" : JSON.stringify(model.getAttributes());
+                    %>
+                    <textarea rows="1" cols="50" id="add-layer-selectedtime" class="add-layer-input long"><%=times%></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="add-layer-record">
+            <div class="add-layer-label-area">
+                <label for="add-layer-time" class="add-layer-label"
+                       title="<%= instance.getLocalization('admin').time %>"><%=instance.getLocalization('admin').time %></label>
+            </div>
+            <div class="add-layer-input-area">
+                <div class="input-controls">
+                    <%
+                        var options = _.isEmpty(model.getOptions()) ? "" : JSON.stringify(model.getOptions());
+                    %>
+                    <textarea rows="1" cols="50" id="add-layer-time" class="add-layer-input long"><%=options%></textarea>
+                </div>
+            </div>
+        </div>
     <% } %>
 
     <%
