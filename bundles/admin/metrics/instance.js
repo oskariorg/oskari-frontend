@@ -42,23 +42,19 @@ Oskari.clazz.define("Oskari.admin.bundle.metrics.MetricsAdminBundleInstance",
             }
         },
         formatData : function(metricsData) {
-            var f = function(data) {
-               return  _.map(data, function(value, key) {
+            var me = this;
+            return _.map(metricsData, function(value, key) {
                     var res = {
                         label : key
                     };
                     if(typeof value === 'object') {
-                        res.children = f(value);
+                        res.children = me.formatData(value);
                     }
                     else {
                         res.label = res.label + ' : ' + value;
                     }
                     return res;
                 });
-
-            }
-            var result = f(metricsData);
-            return result;
         },
         // module boilerplate methods
         init: function() {
