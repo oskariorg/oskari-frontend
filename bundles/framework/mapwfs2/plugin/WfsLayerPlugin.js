@@ -214,9 +214,10 @@ Oskari.clazz.define(
          * @method inform
          * Inform the user how to manage manual refresh layers (only when 1st manual refresh layer in selection)
          */
-        inform: function () {
+        inform: function (event) {
             var me = this,
                 sandbox = me.getMapModule().getSandbox(),
+                layer = event.getMapLayer(),
                 layers = sandbox.findAllSelectedMapLayers(),
                 i,
                 count = 0;
@@ -227,7 +228,7 @@ Oskari.clazz.define(
                    count++;
                 }
             }
-            if(count === 1){
+            if(count === 1 && layer.isManualRefresh()){
                me.showMessage(me.getLocalization().information.title, me.getLocalization().information.info, me.getLocalization().button.close);
             }
 
@@ -280,7 +281,7 @@ Oskari.clazz.define(
                     me.refresh();
                     // Inform user, if manual refresh-load wfs layers in selected map layers
                     // (only for 1st manual refresh layer)
-                    me.inform();
+                    me.inform(event);
                 },
 
                 /**
