@@ -234,7 +234,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 '</div>',
             difference: '<div class="analyse_difference_cont"></div>',
             footer: '<div class="analyse_param_footer"></div>',
-            wrapper: '<div class="analyse-result-popup-content"></div>'
+            wrapper: '<div class="analyse-result-popup-content"></div>',
         },
 
         /**
@@ -2714,15 +2714,17 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     }
 
                 }
-
-                // if we don't wan't to save data, let's add information to the data
-                // locales are also given to the grid
+                // if we don't wan't to save data, let's give some data to the grid
                 if (me._showFeatureDataWithoutSaving) {
                     data.saveAnalyse = false;
                     var fields = functions,
                         locales = selections.methodParams.locales,
+                        noDataCnt = false,
                         k;
 
+                    if (_.indexOf(fields, "NoDataCnt") !== -1) {
+                        var noDataCnt = true;
+                    }
                     fields.unshift('Property');
                     locales.unshift(me.loc.aggregatePopup.property);
                     me.grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
@@ -2730,6 +2732,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     for (k = 0; k < locales.length; k += 1) {
                         me.grid.setColumnUIName(fields[k], locales[k]);
                     }
+
                 }
 
                 // Send the data for analysis to the backend
@@ -2743,7 +2746,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                             if (response.error) {
                                 showError(response.error);
                             } else {
-                                me._handleAnalyseMapResponse(response);
+                                me._handleAnalyseMapResponse(response, noDataCnt);
                             }
                         }
                     },
@@ -2763,9 +2766,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          * and adds it to the map and subsequently to be used in further analysis.
          *
          * @param {JSON} analyseJson Layer JSON returned by server.
+         * @param {Boolean} noDataCnt True if the amount of authorised features is included in analysis
          *
          */
-        _handleAnalyseMapResponse: function (analyseJson) {
+        _handleAnalyseMapResponse: function (analyseJson, noDataCnt) {
             // TODO: some error checking perhaps?
             var i,
                 mapLayerService,
@@ -2777,7 +2781,15 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 request;
 
             if (me._showFeatureDataWithoutSaving) {
-                me._showAggregateResultPopup(analyseJson);
+                var aggregateValues = analyseJson.aggregate,
+                    geojson = analyseJson.geojson.features[0];
+
+                var rn = 'MapModulePlugin.AddFeaturesToMapRequest',
+                    style = OpenLayers.Util.applyDefaults(style, OpenLayers.Feature.Vector.style['default']);
+
+                me.instance.sandbox.postRequestByName(rn, [geojson, 'GeoJSON', null, null, 'replace', true, style, false]);
+
+                me._showAggregateResultPopup(aggregateValues, noDataCnt);
             } else {
                 mapLayerService = me.instance.mapLayerService;
                 // Create the layer model
@@ -2829,8 +2841,15 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             }
         },
 
-
-        _showAggregateResultPopup: function (resultJson) {
+        /**
+         * @private @method _showAggregateResultPopup
+         * Shows aggregate analysis results in popup
+         *
+         * @param {JSON} resultJson Analysis results
+         * @param {Boolean} noDataCnt True if the amount of authorised features is included in analysis
+         *
+         */
+        _showAggregateResultPopup: function (resultJson, noDataCnt) {
             var me = this,
                 popup =  Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 gridModel = Oskari.clazz.create('Oskari.userinterface.component.GridModel'),
@@ -2853,9 +2872,19 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
             me.grid.renderTo(content);
 
-            var okBtn = popup.createCloseButton();
+            if (noDataCnt) {
+                content.prepend('<div>' + me.loc.aggregate.footer + '</div>');
+            }
+
+            var closeBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            closeBtn.setTitle(me.loc.aggregatePopup.close);
+            closeBtn.setHandler(function () {
+                popup.close(true);
+                var rq = 'MapModulePlugin.RemoveFeaturesFromMapRequest';
+                me.instance.sandbox.postRequestByName(rq);
+            });
             popup.makeDraggable();
-            popup.show(me.loc.aggregatePopup.title, content, [okBtn]);
+            popup.show(me.loc.aggregatePopup.title, content, [closeBtn]);
         },
 
         /**
