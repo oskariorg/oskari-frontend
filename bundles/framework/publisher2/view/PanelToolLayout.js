@@ -733,6 +733,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                     toolInstance.getPlugin().changeFont(font);
                 }
             }
+        },
+        /**
+         * Restarts all active plugins in case of i.e. changing the language.
+         * @method _restartActivePlugins
+         *
+         */
+        _restartActivePlugins: function () {
+            var me = this,
+                tools = me.tools;
+
+            _.each(me.tools, function(tool) {
+                if (tool.isDisplayed() && tool.isStarted()) {
+                    //reset
+                    tool.setEnabled(false);
+                    tool.setEnabled(true);
+                }
+            });
         }
     }
 );

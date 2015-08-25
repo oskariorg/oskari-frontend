@@ -281,11 +281,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 }
             });
         },
-
-        setPluginLanguage : function() {
-            alert('TODO');
+        setPluginLanguage : function(lang) {
+            var me = this;
+            if (lang === null || lang === undefined) {
+                throw new TypeError(
+                    'Oskari.mapframework.bundle.publisher.view.BasicPublisher' +
+                    '.setPluginLanguage: missing language'
+                );
+            }
+            Oskari.setLang(lang);
+            _.each(me.panels, function(panel) {
+                if (panel._restartActivePlugins && typeof panel._restartActivePlugins === 'function') {
+                    panel._restartActivePlugins();
+                }
+            });
         },
-
         /**
         * Get panel/tool handlers
         * @method getHandlers
@@ -392,7 +402,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         _editToolLayoutOff: function () {
             var me = this,
                 sandbox = Oskari.getSandbox('sandbox');
-
+            
             _.each(me.panels, function(panel) {
                if(typeof panel.stop === 'function') {
                     panel.stop();
@@ -439,7 +449,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 var save = function () {
                     var selections = me._gatherSelections();
                     if (selections) {
-                        me._editToolLayoutOff();
+//                        me._editToolLayoutOff();
                         me._publishMap(selections);
                     }
                 };
@@ -466,7 +476,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 saveBtn.setHandler(function () {
                     var selections = me._gatherSelections();
                     if (selections) {
-                        me._editToolLayoutOff();
+//                        me._editToolLayoutOff();
                         me._publishMap(selections);
                     }
                 });
@@ -515,7 +525,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 success: function (response) {
                     if (response.id > 0) {
                         var event = sandbox.getEventBuilder(
-                            'Publisher.MapPublishedEvent'
+                            'Publisher2.MapPublishedEvent'
                         )(
                             response.id,
                             totalWidth,
@@ -523,7 +533,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                             response.lang,
                             sandbox.createURL(response.url)
                         );
+                        me._editToolLayoutOff();
                         sandbox.notifyAll(event);
+//                        me._editToolLayoutOff();
+
                     } else {
                         errorHandler();
                     }
