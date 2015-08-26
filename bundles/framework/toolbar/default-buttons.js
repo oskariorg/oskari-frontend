@@ -88,10 +88,12 @@ Oskari.clazz.category(
                             sticky: true,
                             callback: function () {
                                 var toolname = 'map_control_zoom_tool';
-                                me.getSandbox().request(
-                                    me,
-                                    gfiReqBuilder(false)
-                                );
+                                if(gfiReqBuilder) {
+                                    me.getSandbox().request(
+                                        me,
+                                        gfiReqBuilder(false)
+                                    );
+                                }
                                 me.getSandbox().request(me, reqBuilder(toolname));
                             }
                         },
@@ -102,10 +104,12 @@ Oskari.clazz.category(
                             sticky: true,
                             callback: function () {
                                 var toolname = 'map_control_navigate_tool';
-                                me.getSandbox().request(
-                                    me,
-                                    gfiReqBuilder(true)
-                                );
+                                if(gfiReqBuilder) {
+                                    me.getSandbox().request(
+                                        me,
+                                        gfiReqBuilder(true)
+                                    );
+                                }
                                 me.getSandbox().request(me, reqBuilder(toolname));
                             }
                         },
@@ -115,10 +119,12 @@ Oskari.clazz.category(
                             sticky: true,
                             callback: function () {
                                 var toolname = 'map_control_measure_tool';
-                                me.getSandbox().request(
-                                    me,
-                                    gfiReqBuilder(false)
-                                );
+                                if(gfiReqBuilder) {
+                                    me.getSandbox().request(
+                                        me,
+                                        gfiReqBuilder(false)
+                                    );
+                                }
                                 me.getSandbox().request(me, reqBuilder(toolname));
                             }
                         },
@@ -128,10 +134,12 @@ Oskari.clazz.category(
                             sticky: true,
                             callback: function () {
                                 var toolname = 'map_control_measure_area_tool';
-                                me.getSandbox().request(
-                                    me,
-                                    gfiReqBuilder(false)
-                                );
+                                if(gfiReqBuilder) {
+                                    me.getSandbox().request(
+                                        me,
+                                        gfiReqBuilder(false)
+                                    );
+                                }
                                 me.getSandbox().request(me, reqBuilder(toolname));
                             }
                         }
