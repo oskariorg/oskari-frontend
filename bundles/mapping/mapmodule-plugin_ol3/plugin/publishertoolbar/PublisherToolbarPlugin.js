@@ -135,7 +135,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 'Toolbar.ToolContainerRequest': Oskari.clazz.create(
                     'Oskari.mapframework.bundle.toolbar.request.ToolContainerRequestHandler',
                     this
-                )
+                ),
+                'ToolSelectionRequest' : Oskari.clazz.create('Oskari.mapframework.mapmodule.ToolSelectionHandler', sandbox, me)
             };
         },
 
@@ -152,7 +153,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
         },
 
         show: function (isShown) {
-            debugger;
             var showHide = isShown ? 'show' : 'hide';
             this.getSandbox().requestByName(
                 this,
@@ -191,7 +191,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
          * @private @method _createControlElement
          */
         _createControlElement: function () {
-            debugger;
             var me = this,
                 el,
                 toolscontainer,
@@ -219,7 +218,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
         },
 
         refresh: function () {
-            debugger;
             var me = this,
                 conf = me.getConfig();
 
@@ -243,13 +241,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
 
             icon.unbind('click');
             icon.bind('click', function () {
-                debugger;
                 toolscontainer.toggle();
             });
         },
 
         setToolbarContainer: function () {
-            debugger;
             var me = this,
                 sandbox = me.getSandbox(),
                 builder = sandbox.getRequestBuilder('Toolbar.ToolbarRequest');
@@ -279,7 +275,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
          * Currently, this needs more work to make it more general solution
          */
         getToolOptions: function () {
-            debugger;
             var me = this;
             return me.buttonGroups;
         },
@@ -292,7 +287,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
          * @param {jQuery} div
          */
         changeToolStyle: function (style, div) {
-            debugger;
             var me = this;
             div = div || me.getElement();
 
@@ -474,7 +468,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
         },
 
         getToolConfs: function () {
-            debugger;
             var me = this,
                 confs = {},
                 i,

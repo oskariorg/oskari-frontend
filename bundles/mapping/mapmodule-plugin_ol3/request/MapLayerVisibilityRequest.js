@@ -16,7 +16,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibi
  *            visible boolean if map layer should be visible or not
  */
 function(mapLayerId, visible) {
-    debugger;
     this._creator = null;
     this._mapLayerId = mapLayerId;
     this._visible = visible;

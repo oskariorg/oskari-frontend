@@ -29,7 +29,6 @@ Oskari.clazz.define(
          *
          */
         _initImpl: function() {
-            debugger;
             var me = this,
                 ajaxUrl = null;
 
@@ -461,7 +460,6 @@ Oskari.clazz.define(
          * @param {Object} result
          */
         _resultClicked: function(result) {
-            debugger;
             this.getSandbox().request(
                 this.getName(),
                 this.getSandbox().getRequestBuilder(

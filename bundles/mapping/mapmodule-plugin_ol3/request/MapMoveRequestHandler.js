@@ -29,7 +29,6 @@ Oskari.clazz.define(
          *      request to handle
          */
         handleRequest: function(core, request) {
-            debugger;
             var longitude = request.getCenterX(),
                 latitude = request.getCenterY(),
                 zoom = request.getZoom(),
