@@ -13,7 +13,6 @@ Oskari.clazz.define(
      *
      */
     function (config, plugin) {
-        debugger;
         this.config = config;
         this.plugin = plugin;
         this.connection = this.plugin.getConnection();
