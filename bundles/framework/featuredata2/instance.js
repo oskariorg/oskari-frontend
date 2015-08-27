@@ -258,7 +258,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                     delete this.__loadingStatus['' + event.getLayerId()];
                     this.plugins['Oskari.userinterface.Flyout'].showLoadingIndicator(event.getLayerId(), false);
                     this.plugins['Oskari.userinterface.Flyout'].showErrorIndicator(event.getLayerId(), false);
-                    this.plugins['Oskari.userinterface.Flyout'].updateData(layer);
+                    if (layer) {
+                        this.plugins['Oskari.userinterface.Flyout'].updateData(layer);
+                    }
 
                 }
                 if(event.getStatus() === event.status.error)  {

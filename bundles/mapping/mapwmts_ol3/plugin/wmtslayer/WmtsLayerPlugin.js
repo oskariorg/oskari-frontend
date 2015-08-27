@@ -89,26 +89,15 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
          * @param {Boolean} isBaseMap
          */
         addMapLayerToMap: function(layer, keepLayerOnTop, isBaseMap) {
-            debugger;
             if (!layer.isLayerOfType('WMTS')) {
                 return;
             }
 
-            var me = this;
-            var map = me.getMap();
-            var mapModule = me.getMapModule();
 
-            var projection = map.getView().getProjection();
-            var projectionExtent = projection.getExtent();
-            var size = ol.extent.getWidth(projectionExtent) / 512;
-            var resolutions = new Array(16);
-            for (var z = 0; z < 16; ++z) {
-              // generate resolutions and matrixIds arrays for this WMTS
-              resolutions[z] = size / Math.pow(2, z);
-            }
-
-            var matrixIds = layer.getWmtsMatrixSet().matrixIds;
-            var layerDef = layer.getWmtsLayerDef();
+            var me = this,
+                map = me.getMap(),
+                parser = new ol.format.WMTSCapabilities(),
+                WMTSservice = me.instance.service;
 
             var layerName = null,
                 layerIdPrefix = 'layer_';
@@ -119,73 +108,41 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                 layerName = 'layer_' + layer.getId();
             }
 
-            var sandbox = this._sandbox;
-
-            layerDef.resourceUrl ? (layerDef.resourceUrl.tile ? layerDef.resourceUrl.tile.template : undefined) : undefined;
-
-            var wmtsUrl = layer.getWmtsUrls()[0];
             var matrixSet = layer.getWmtsMatrixSet();
-            var wmtsCaps = layer.getWmtsCaps();
-            //var wmtsOpts = ol.source.WMTS.optionsFromCapabilities(wmtsCaps, {layer : wmtsCaps.contents.layers[0].identifier, matrixSet: matrixSet});
 
-            var wmtsOptions = {
-                url : wmtsUrl,
-                matrixSet: matrixSet,
-                layer : layer.getLayerName(),
-                format : layerDef.formats[0],
-                projection : projection,
-                tileGrid: new ol.tilegrid.WMTS({
-                  origin: ol.extent.getTopLeft(projectionExtent),
-                  resolutions: resolutions,
-                  matrixIds: matrixIds
-                }),
-                style : layer._data.style,
-                requestEncoding : layer.getRequestEncoding()
+            var params = {layer: layer.getId()};
 
-            }
+            WMTSservice.getCapabilitiesForLayer(
+                params,
+                // Success callback
+                function (response) {
+                    var capabilitiesXML = response;
+                    var WMTSCaps = parser.read(capabilitiesXML);
+                    var options = ol.source.WMTS.optionsFromCapabilities(WMTSCaps, {layer: layerName, matrixSet: matrixSet});
 
-            //wmtsOpts.url = wmtsUrl;
+                    var wmtsLayer = new ol.layer.Tile({
+                        opacity: layer.getOpacity() / 100.0,
+                        source : new ol.source.WMTS(options)
+                    });
+                    sandbox.printDebug("[WmtsLayerPlugin] created WMTS layer " + wmtsLayer);
 
-            sandbox.printDebug("[WmtsLayerPlugin] creating WMTS Layer " + matrixSet.identifier + " / " + layer.getWmtsName() + "/" + wmtsUrl);
+                    map.addLayer(wmtsLayer);
 
-            var wmtsLayer = new ol.layer.Tile({
-                opacity: layer.getOpacity() / 100.0,
-                source : new ol.source.WMTS(wmtsOptions)
-            });
+                    if (keepLayerOnTop) {
+                        mapModule.setLayerIndex(wmtsLayer, mapModule.getLayers().length);
+                    } else {
+                        mapModule.setLayerIndex(wmtsLayer, 0);
+                    }
+                },
+                // Error callback
+                function (jqXHR, textStatus, errorThrown) {
+                    //TODO: add better error handling
+                    console.log(jqXHR, textStatus, errorThrown);
+                }
+            );
 
-            debugger;
-            sandbox.printDebug("[WmtsLayerPlugin] created WMTS layer " + wmtsLayer);
-
-            map.addLayer(wmtsLayer);
-
-            if (keepLayerOnTop) {
-                mapModule.setLayerIndex(wmtsLayer, mapModule.getLayers().length);
-            } else {
-                mapModule.setLayerIndex(wmtsLayer, 0);
-            }
         },
-        __calculateMatrix : function(matrixSet) {
-            var matrixIds = [],
-                resolutions = [],
-                scaleDenom,
-                serverResolutions = [],
-                n = 0,
-                res;
 
-            for (; n < matrixSet.matrixIds.length; ++n) {
-                matrixIds.push(matrixSet.matrixIds[n]);
-                //.identifier);
-                scaleDenom = matrixSet.matrixIds[n].scaleDenominator;
-                res = scaleDenom / 90.71446714322 * OpenLayers.METERS_PER_INCH;
-                resolutions.push(res);
-                serverResolutions.push(res);
-            }
-            return {
-                matrixIds : matrixIds,
-                resolutions : resolutions,
-                serverResolutions : serverResolutions
-            };
-        },
         __getLayerName : function(layer) {
             var name = 'layer_' + layer.getId();
             if (layer.isBaseLayer() || layer.isGroupLayer()) {
@@ -257,7 +214,6 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
          *            event
          */
         afterChangeMapLayerOpacityEvent: function(event) {
-            debugger;
             var layer = event.getMapLayer();
 
             if (layer.isBaseLayer() || layer.isGroupLayer()) {

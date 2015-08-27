@@ -29,7 +29,7 @@ Oskari.clazz.define("Oskari.admin.bundle.metrics.MetricsAdminBundleInstance",
                     action_route : 'Metrics'
                 },
                 error : function() {
-                    alert('Error getting metrics');
+                    content.append('Error loading metrics');
                 },
                 success : function(response) {
                     content.tree({ 'data' : me.formatData(response)});
