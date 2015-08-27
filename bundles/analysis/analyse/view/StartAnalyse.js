@@ -234,7 +234,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 '</div>',
             difference: '<div class="analyse_difference_cont"></div>',
             footer: '<div class="analyse_param_footer"></div>',
-            wrapper: '<div class="analyse-result-popup-content"></div>',
+            wrapper: '<div class="analyse-result-popup-content"></div>'
         },
 
         /**
@@ -2670,22 +2670,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     });
                 }
 
-                // if we don't wan't to save data, let's give some data to the grid
-                if (me._showFeatureDataWithoutSaving) {
-                    data.saveAnalyse = false;
-                    var fields = functions,
-                        locales = selections.methodParams.locales,
-                        k;
-
-                    fields.unshift('Property');
-                    locales.unshift(me.loc.aggregatePopup.property);
-                    me.grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
-
-                    for (k = 0; k < locales.length; k += 1) {
-                        me.grid.setColumnUIName(fields[k], locales[k]);
-                    }
-                }
-
                 data.analyse = JSON.stringify(selections);
 
                 var layerId = selections.layerId,
@@ -2729,6 +2713,23 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         data.filter2 = JSON.stringify(ifilterJson);
                     }
 
+                }
+
+                // if we don't wan't to save data, let's add information to the data
+                // locales are also given to the grid
+                if (me._showFeatureDataWithoutSaving) {
+                    data.saveAnalyse = false;
+                    var fields = functions,
+                        locales = selections.methodParams.locales,
+                        k;
+
+                    fields.unshift('Property');
+                    locales.unshift(me.loc.aggregatePopup.property);
+                    me.grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
+
+                    for (k = 0; k < locales.length; k += 1) {
+                        me.grid.setColumnUIName(fields[k], locales[k]);
+                    }
                 }
 
                 // Send the data for analysis to the backend

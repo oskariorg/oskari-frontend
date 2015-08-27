@@ -25,6 +25,73 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
         this.publisher = null;
     }, {
         /**
+         * @static
+         * @property __name
+         */
+        __name: 'Publisher2',
+        /**
+         * @method getName
+         * @return {String} the name for the component
+         */
+        getName: function () {
+            return this.__name;
+        },
+        /**
+         * @method onEvent
+         * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
+         * @param {Oskari.mapframework.event.Event} event a Oskari event object
+         */
+        onEvent: function (event) {
+            var handler = this.eventHandlers[event.getName()];
+            if (!handler) {
+                return;
+            }
+            return handler.apply(this, [event]);
+        },
+
+        /**
+         * @property {Object} eventHandlers
+         * @static
+         */
+        eventHandlers: {
+            /**
+             * @method Publisher.MapPublishedEvent
+             * @param {Oskari.mapframework.bundle.publisher.event.MapPublishedEvent} event
+             */
+            'Publisher2.MapPublishedEvent': function (event) {
+                var loc = this.getLocalization(),
+                    dialog = Oskari.clazz.create(
+                        'Oskari.userinterface.component.Popup'
+                    ),
+                    okBtn = dialog.createCloseButton(loc.BasicView.buttons.ok),
+                    url,
+                    iframeCode,
+                    textarea,
+                    content,
+                    width = event.getWidth(),
+                    height = event.getHeight();
+
+                okBtn.addClass('primary');
+                url = event.getUrl();
+                //url = this.sandbox.getLocalizedProperty(this.conf.publishedMapUrl) + event.getId();
+                iframeCode = '<div class="codesnippet"><code>&lt;iframe src="' + url + '" style="border: none;';
+                if (width !== null && width !== undefined) {
+                    iframeCode += ' width: ' + width + ';';
+                }
+
+                if (height !== null && height !== undefined) {
+                    iframeCode += ' height: ' + height + ';';
+                }
+
+                iframeCode += '"&gt;&lt;/iframe&gt;</code></div>';
+
+                content = loc.published.desc + '<br/><br/>' + iframeCode;
+
+                dialog.show(loc.published.title, content, [okBtn]);
+                this.setPublishMode(false);
+            }
+        },        
+        /**
          * @method afterStart
          */
         afterStart: function () {

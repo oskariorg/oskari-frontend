@@ -757,6 +757,21 @@
     background-repeat: no-repeat !important;
     background-position: -1945px 0px !important;
 }
+.refresh {
+    width: 16px;
+    height: 16px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1238px 0px !important;
+}
+
+.refresh:hover {
+    width: 16px;
+    height: 16px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1238px -16px !important;
+}
 
 .selection-area {
     width: 32px;
