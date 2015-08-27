@@ -207,7 +207,7 @@ Oskari.clazz.define(
                     ),
                     layerId = event.getLayerId(),
                     layer;
-                
+
                 flyout.clearNewestFilter();
 
                 if (event.getOperation() === 'update') {

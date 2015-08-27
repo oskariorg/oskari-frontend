@@ -23,7 +23,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.request.ShowFilte
          */
         handleRequest : function(core, request) {
             var layerSelectorFlyout = this.instance.plugins['Oskari.userinterface.Flyout'];
-            
+
             this.instance.filteredLayerListOpenedByRequest = true;
 
             if(request.getFilterFunction()) {

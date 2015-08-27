@@ -419,7 +419,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             return me._map;
         },
 
-        
+
         _calculateScalesImpl: function(resolutions) {
             return;
 
@@ -434,7 +434,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
             */
         },
-        
+
 
         getZoomLevel: function() {
             return this._map.getView().getZoom();
