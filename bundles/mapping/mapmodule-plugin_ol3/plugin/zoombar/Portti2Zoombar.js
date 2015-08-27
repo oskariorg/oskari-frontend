@@ -40,7 +40,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
          * Plugin jQuery element
          */
         _createControlElement: function () {
-            debugger;
             var me = this,
                 el = jQuery(
                     '<div class="oskariui mapplugin pzbDiv zoombar">' +
@@ -71,7 +70,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 max: me.getMapModule().getMaxZoomLevel(),
                 value: me.getMapModule()._getMapZoom(),
                 slide: function (event, ui) {
-                    debugger;
                     me.getMapModule().zoomTo(ui.value);
                 }
 
@@ -145,7 +143,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             var me = this;
             return {
                 AfterMapMoveEvent: function (event) {
-                    debugger;
                     me._setZoombarValue(event.getZoom());
                 }
             };

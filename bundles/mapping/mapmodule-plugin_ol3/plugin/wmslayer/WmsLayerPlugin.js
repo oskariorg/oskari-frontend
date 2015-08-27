@@ -26,7 +26,6 @@ Oskari.clazz.define(
          * Registers self as a layerPlugin to mapmodule with mapmodule.setLayerPlugin()
          */
         register: function () {
-            debugger;
             this.getMapModule().setLayerPlugin('wmslayer', this);
         },
         /**
@@ -109,7 +108,6 @@ Oskari.clazz.define(
 
             // loop all layers and add these on the map
             for (var i = 0, ilen = layers.length; i < ilen; i++) {
-                debugger;
                 var _layer = layers[i];
                 var layerScales = this.getMapModule().calculateLayerScales(_layer.getMaxScale(), _layer.getMinScale());
 

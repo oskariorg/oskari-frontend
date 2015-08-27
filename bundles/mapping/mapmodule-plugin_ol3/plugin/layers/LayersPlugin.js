@@ -59,7 +59,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
     },
 
     _createRequestHandlers: function () {
-        debugger;
         var me = this,
             sandbox = me.getSandbox();
 
@@ -86,7 +85,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
      *          reference to application sandbox
 
     startPlugin : function(sandbox) {
-        debugger;
         this._sandbox = sandbox;
 
         sandbox.register(this);
@@ -237,7 +235,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
      *            layer layer to check against
      */
     notifyLayerVisibilityChanged : function(layer) {
-        debugger;
         var scaleOk = layer.isVisible();
         var geometryMatch = layer.isVisible();
         // if layer is visible check actual values

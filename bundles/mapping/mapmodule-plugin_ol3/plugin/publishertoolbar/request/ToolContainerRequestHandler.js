@@ -23,7 +23,6 @@ function(toolbarPlugin) {
      *      request to handle
      */
     handleRequest : function(core, request) {
-        debugger;
         var sandbox = core.getSandbox();
         if(request.getOp() == 'set') {
             this._toolbar.setToolContent(request.getData());
