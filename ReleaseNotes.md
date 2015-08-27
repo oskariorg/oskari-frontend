@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.31.1
+
+Removed console.log() calls.
+
 ## 1.31
 
 ### admin

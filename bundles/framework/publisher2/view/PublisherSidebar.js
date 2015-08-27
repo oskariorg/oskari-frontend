@@ -389,8 +389,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 me._showValidationErrorMessage(errors);
                 return null;
             }
-            console.log(JSON.stringify(selections));
-            console.log(selections);
             return selections;
         },
 

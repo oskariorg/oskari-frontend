@@ -109,6 +109,6 @@ function () {
     },
 
     routeError: function (response) {
-        console.log("Error when getting route: " + response);
+        // TODO: send an event about failure (for RPC etc)
     }
 });
