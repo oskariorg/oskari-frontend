@@ -1,0 +1,108 @@
+{
+    "startupSequence": [{
+        "title": "Map",
+        "fi": "Map",
+        "sv": "?",
+        "en": "Map",
+        "bundlename": "mapfull",
+        "bundleinstancename": "mapfull",
+        "metadata": {
+            "Import-Bundle" : {
+            "core-base" : {
+                "bundlePath" : "/Oskari/packages/framework/bundle/"
+            },
+            "core-map" : {
+                "bundlePath" : "/Oskari/packages/framework/bundle/"
+            },
+            "sandbox-base" : {
+                "bundlePath" : "/Oskari/packages/framework/bundle/"
+            },
+            "sandbox-map" : {
+                "bundlePath" : "/Oskari/packages/framework/bundle/"
+            },
+            "event-base" : {
+                "bundlePath" : "/Oskari/packages/framework/bundle/"
+            },
+            "event-map" : {
+                "bundlePath" : "/Oskari/packages/framework/bundle/"
+            },
+            "event-map-layer" : {
+                "bundlePath" : "/Oskari/packages/framework/bundle/"
+            },
+            "request-base" : {
+                "bundlePath" : "/Oskari/packages/framework/bundle/"
+            },
+            "request-map" : {
+                "bundlePath" : "/Oskari/packages/framework/bundle/"
+            },
+            "request-map-layer" : {
+                "bundlePath" : "/Oskari/packages/framework/bundle/"
+            },
+            "service-base" : {
+                "bundlePath" : "/Oskari/packages/framework/bundle/"
+            },
+            "service-map" : {
+                "bundlePath" : "/Oskari/packages/framework/bundle/"
+            },
+            "domain" : {
+                "bundlePath" : "/Oskari/packages/framework/bundle/"
+            },
+            "mapmodule-plugin_ol3" : {
+                "bundlePath" : "/Oskari/packages/mapping/"
+            },
+            "mapwmts_ol3" : {
+                "bundlePath" : "/Oskari/packages/mapping/"
+            },
+            "mapwfs2" : {
+                "bundlePath" : "/Oskari/packages/framework/bundle/"
+            },
+            "mapuserlayers" : {
+                "bundlePath" : "/Oskari/packages/framework/bundle/"
+            },
+            "oskariui" : {
+                "bundlePath" : "/Oskari/packages/framework/bundle/"
+            },
+            "mapfull" : {
+                "bundlePath" : "/Oskari/packages/framework/bundle/"
+            },
+            "ui-components": {
+                "bundlePath": "/Oskari/packages/framework/bundle/"
+            }
+        },
+            "Require-Bundle-Instance": []
+        },
+        "instanceProps": {}
+    }, {
+        "title": "Toolbar",
+        "bundleinstancename": "toolbar",
+        "fi": "toolbar",
+        "sv": "?",
+        "en": "?",
+        "bundlename": "toolbar",
+        "metadata": {
+            "Import-Bundle": {
+                "toolbar": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        },
+        "instanceProps": {}
+    }, {
+        "title" : "publishedstatehandler",
+        "fi" : "publishedstatehandler",
+        "sv" : "publishedstatehandler",
+        "en" : "publishedstatehandler",
+        "bundlename" : "publishedstatehandler",
+        "bundleinstancename" : "publishedstatehandler",
+        "metadata" : {
+            "Import-Bundle" : {
+                "publishedstatehandler" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance" : []
+        },
+        "instanceProps" : {}
+    }]
+}
