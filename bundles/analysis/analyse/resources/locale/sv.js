@@ -256,7 +256,7 @@ Oskari.registerLocalization(
                 "targetTooltip": "Analyysitaso, jolta valitaan kohteita leikkaavan tason kohteiden perusteella.",
                 "intersectingLayer": "Leikkaava taso",
                 "intersectingLayerTooltip": "Analyysitaso, jonka kohteiden perusteella leikattavalta tasolta valitaan kohteita.",
-                "labelTooltipIntersect": "Analyysiin mukaan otettavat leikattavan tason kohteet. Leikkaavat kohteet ovat ainakin osittain leikkaavan tason kohteiden alueilla, sisältyvät kohteet ovat kokonaan.",
+                "labelTooltipIntersect": 'Analyysiin mukaan otettavat leikattavan tason kohteet. Leikkaavat kohteet ovat ainakin osittain leikkaavan tason kohteiden alueilla, sisältyvät kohteet ovat kokonaan. Den här metoden har designats speciellt för punkt objekt. För område objekt resultaten kan vara felaktig. Använd operator "Ingående" för område objekt.',
                 "options": [
                     {
                         "id": "oskari_analyse_intersect",
@@ -406,7 +406,8 @@ Oskari.registerLocalization(
             },
             "aggregatePopup": {
                 "title": "Analys resultat",
-                "property": "Attribut"
+                "property": "Attribut",
+                "close": "Stäng"
             }
         },
         "StartView": {

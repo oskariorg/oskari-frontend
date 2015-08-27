@@ -61,7 +61,6 @@ Oskari.clazz.define(
          * Initiliazes the connection to the CometD servlet and registers the domain model
          */
         _initImpl: function () {
-            debugger;
             var me = this,
                 config = me.getConfig(),
                 layerModelBuilder,

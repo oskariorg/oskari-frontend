@@ -255,7 +255,7 @@ Oskari.registerLocalization(
                 "targetTooltip": "Select a original layer. The features will be selected from this layer.",
                 "intersectingLayer": "Intersecting layer",
                 "intersectingLayerTooltip": "Select an intersecting layer. The features will be selected based on the features on this layer.",
-                "labelTooltipIntersect": "Select which features are included into the result. Intersecting features are at least partially inside the features on the intersecting layer, containing features totally inside.",
+                "labelTooltipIntersect": 'Select which features are included into the result. Intersecting features are at least partially inside the features on the intersecting layer, containing features totally inside. This method is designed for point features. Please use the operator "Containing features" for areas. Otherwise the result may have errors.',
                 "options": [
                     {
                         "id": "oskari_analyse_intersect",
@@ -406,7 +406,8 @@ Oskari.registerLocalization(
             },
             "aggregatePopup": {
                 "title": "Analyse results",
-                "property": "Property"
+                "property": "Property",
+                "close": "Close"
             }
         },
         "StartView": {
