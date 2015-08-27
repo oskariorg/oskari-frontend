@@ -56,7 +56,6 @@ Oskari.clazz.define(
          *
          */
         _createControlAdapter: function (el) {
-            debugger;
             // FIXME this seems to be completely FI-specific?
             /*
              * create an overview map control with non-default
@@ -110,7 +109,6 @@ Oskari.clazz.define(
         },
 
         refresh: function () {
-            debugger;
             var me = this,
                 toggleButton = me.getElement().find('.indexmapToggle');
 
@@ -127,7 +125,6 @@ Oskari.clazz.define(
             var me = this;
             icon.unbind('click');
             icon.bind('click', function (event) {
-                debugger;
                 event.preventDefault();
                 var miniMap = me.getElement().find(
                     '.olControlOverviewMapElement'

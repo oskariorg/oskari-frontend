@@ -56,7 +56,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin'
         _createEventHandlers: function () {
             return {
                 'AfterMapMoveEvent': function (event) {
-                    debugger;
                     if (this._scalebar) {
                         this._scalebar.render(event);
                     }

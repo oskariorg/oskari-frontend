@@ -110,7 +110,6 @@ Oskari.clazz.define(
         _setupLocation: function () {
             var me = this,
                 callback = function (lon, lat) {
-                    debugger;
                     // transform coordinates from browser projection to current
                     var mapModule = me.getMapModule(),
                         lonlat = new ol.proj.fromLonLat([lon,lat], mapModule._options.srsName),

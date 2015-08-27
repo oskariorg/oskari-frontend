@@ -265,7 +265,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {OpenLayers.Map}
          */
         _initImpl: function (sandbox, options, map) {
-            debugger;
             //var scales = this._calculateScalesFromResolutions(options.resolutions, map.units);
             //this._mapScales = scales;
 
@@ -344,7 +343,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {OpenLayers.Map}
          */
         _createMap: function () {
-            debugger;
             this.getSandbox().printWarn('_createMap is deprecated. Use _createMapImpl instead.');
             this._createMapImpl();
         },
@@ -357,7 +355,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {OpenLayers.Map}
          */
         _createMapImpl: function() {
-            debugger;
 
             var me = this;
             var sandbox = me._sandbox;
@@ -401,7 +398,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
 
             map.on('moveend', function(evt) {
-                debugger;
                 var map = evt.map;
                 var extent = map.getView().calculateExtent(map.getSize());
                 var center = map.getView().getCenter();
@@ -423,8 +419,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             return me._map;
         },
 
-        /*
+        
         _calculateScalesImpl: function(resolutions) {
+            return;
+
+            // FIX this to work with ol3
+            /*
             for (var i = 0; i < resolutions.length; ++i) {
                 var calculatedScale = OpenLayers.Util.getScaleFromResolution(resolutions[i], 'm');
                 calculatedScale = calculatedScale * 10000;
@@ -432,8 +432,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 calculatedScale = calculatedScale / 10000;
                 this._mapScales.push(calculatedScale);
             }
+            */
         },
-        */
+        
 
         getZoomLevel: function() {
             return this._map.getView().getZoom();
@@ -791,7 +792,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             /*
             this._updateDomainImpl();
             if (suppressEvent !== true) {
-                debugger;
                 //send note about map change
                 this.notifyMoveEnd();
             }
@@ -813,7 +813,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @param {Boolean} isDrag true if the user is dragging the map to a new location currently (optional)
          */
         panMapByPixels: function (pX, pY, suppressStart, suppressEnd, isDrag) {
-            debugger;
             var view = this._map.getView(),
                 centerCoords = view.getCenter();
                 centerPixels = this._map.getPixelFromCoordinate(centerCoords),
@@ -895,7 +894,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {Number} sanitized absolute zoom level
          */
         _getNewZoomLevel: function(adjustment) {
-            debugger;
             // TODO: check isNaN?
             var requestedZoomLevel = this._map.getView().getZoom() + adjustment;
 
@@ -917,7 +915,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          *        class identifier of object that sends event
          */
         notifyMoveEnd: function (creator) {
-            debugger;
             if (this.getStealth()) {
                 // ignore if in "stealth mode"
                 return;
