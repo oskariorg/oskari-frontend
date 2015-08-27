@@ -111,7 +111,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
             var matrixSet = layer.getWmtsMatrixSet();
 
             var params = {layer: layer.getId()};
-            
+
             WMTSservice.getCapabilitiesForLayer(
                 params,
                 // Success callback
