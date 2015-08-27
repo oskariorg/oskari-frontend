@@ -3,6 +3,8 @@ function() {
 }, {
     index : 1,
     allowedLocations : ['bottom left', 'bottom right'],
+    lefthanded: 'bottom right',
+    righthanded: 'bottom left',
     allowedSiblings : [
         'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
         'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin',
@@ -32,14 +34,19 @@ function() {
     * @returns {Object} tool value object
     */
     getValues: function () {
-        var me = this,
-            saveState = {
-                tool: me.getTool().id,
-                show: me.state.enabled,
-                subTools : []
-            };
+        var me = this;
 
-        return saveState;
+        if(me.state.enabled) {
+            return {
+                mapfull: {
+                    conf: {
+                        plugins: [{ id: this.getTool().id, config: this.getPlugin().getConfig() }]
+                    }
+                }
+            };
+        } else {
+            return null;
+        }
     }
 }, {
     'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],

@@ -42,8 +42,8 @@ Oskari.registerLocalization({
                 "tooltip": "Wybierz język interfejsu i danych mapy."
             },
             "size": {
-                "label": "Rozmiar",
-                "tooltip": "Wybierz i zdefiniuj rozmiar mapy, która będzie wbudowana na twojej stronie internetowej. Podgląd mapy jest wyświetlany w wybranym rozmiarze."
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Narzędzia",
@@ -56,16 +56,28 @@ Oskari.registerLocalization({
                 "SearchPlugin": "Adres i wyszukiwanie nazwy miejsca",
                 "GetInfoPlugin": "Zapytanie o dane miejsca",
                 "PublisherToolbarPlugin": "NOT TRANSLATED",
-                "selectDrawLayer": "NOT TRANSLATED"
-            },
-            "toolbarToolNames": {
-                "history_back": "NOT TRANSLATED",
-                "history_forward": "NOT TRANSLATED",
-                "measureline": "NOT TRANSLATED",
-                "measurearea": "NOT TRANSLATED",
-                "point": "NOT TRANSLATED",
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "selectDrawLayer": "NOT TRANSLATED",
+                "LayerSelectionPlugin":"NOT TRANSLATED",
+                "toolbarToolNames": {
+                    "history_back": "Move backwards",
+                    "history_forward": "Move forward",
+                    "measureline": "Measure distance",
+                    "measurearea": "Measure area",
+                    "drawTools": "Drawing tools",
+                    "point": "Allow users to add point features.",
+                    "line": "Allow users to add line features.",
+                    "area": "Allow users to add area features."
+                },
+                "layers": {
+                    "add": "Create new layer for new features.",
+                    "addselect": "Add a drawing layer to the map",
+                    "label": "Warstwy mapy",
+                    "defaultLayer": "(Domyślna warstwa)",
+                    "useAsDefaultLayer": "Zastosuj jako domyślną warstwę"
+                },
+                "myplaces": {
+                    "label": "My map layers"
+                }
             },
             "toollayout": {
                 "label": "NOT TRANSLATED",
@@ -129,16 +141,6 @@ Oskari.registerLocalization({
                     }
                 }
             },
-            "layers": {
-                "add": "NOT TRANSLATED",
-                "addselect": "NOT TRANSLATED",
-                "label": "Warstwy mapy",
-                "defaultLayer": "(Domyślna warstwa)",
-                "useAsDefaultLayer": "Zastosuj jako domyślną warstwę"
-            },
-            "myplaces": {
-                "label": "NOT TRANSLATED"
-            },
             "sizes": {
                 "small": "Mały",
                 "medium": "Średni",
@@ -164,7 +166,8 @@ Oskari.registerLocalization({
                 }
             },
             "layerselection": {
-                "label": "Pokaż warstwy mapy w menu",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Wybierz mapy źródłowe. Możesz ustawić domyślną źródłową mapę w oknie podglądu mapy.",
                 "tooltip": "Źródłowa mapa jest pokazana jako dolna warstwa mapy. Kiedy wybierzesz warstwy mapy, któe mają być używane jako dolne tylko jedna warstwa jest widoczna i możesz przełączać pomiędzy nimi. Możesz ustawić domyślną źródłową mapę w podglądzie mapy.",
                 "promote": "Pokaż zdjęcia lotnicze?"

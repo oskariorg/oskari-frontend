@@ -153,7 +153,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
 
             //renders selections tools to the content
             me.renderSelectionToolButtons(content);
-            
+
             var instructions = me.template.instructions.clone();
             instructions.append(this.loc.instructions);
             content.append(instructions);
@@ -164,7 +164,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
             selectFromTop.find('span').html(this.loc.selectFromTop);
             selectFromTop.find('input').attr('checked', true);
             selectFromAll.find('span').html(this.loc.selectAll);
-            
+
             selectFromTop.bind('click', function () {
                 me.WFSLayerService.setSelectFromAllLayers(false);
             });
@@ -193,6 +193,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
             cancelBtn.setTitle(this.loc.button.cancel);
             cancelBtn.setHandler(function () {
                 //destroy the active sketch, disable the selected control
+                me.WFSLayerService.setSelectionToolsActive(false);
                 me.selectionPlugin.drawLayer.removeAllFeatures();
                 me.selectionPlugin._toggleControl();
                 dialog.close(true);

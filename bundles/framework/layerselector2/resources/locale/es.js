@@ -36,19 +36,19 @@ Oskari.registerLocalization(
         "backendStatus": {
             "OK": {
                 "tooltip": "La capa está actualmente disponible",
-                "iconClass": "Estado del bakend ok"
+                "iconClass": "backendstatus-ok"
             },
             "DOWN": {
                 "tooltip": "La capa no está actualmente disponible",
-                "iconClass": "Estado del bakend caído"
+                "iconClass": "backendstatus-down"
             },
             "MAINTENANCE": {
                 "tooltip": "La capa puede no estar disponible de manera periódica durante los próximos días",
-                "iconClass": "Estado del bakend en mantenimiento"
+                "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
                 "tooltip": "",
-                "iconClass": "Estado del bakend ok"
+                "iconClass": "backendstatus-ok"
             }
         },
         "buttons": {
@@ -60,6 +60,17 @@ Oskari.registerLocalization(
             "vk": "Concepto coordinado",
             "ak": "Concepto subordinado",
             "yk": "Concepto de orden superior"
+        },
+        "layerFilter": {
+            "buttons": {
+                "newest": "Newest",
+                "stats": "Vector layers"
+            },
+            "tooltips": {
+                "newest": "Show ## newest map layers",
+                "stats": "Show only vector layers",
+                "remove": "Remove filter"
+            }
         }
     }
 }

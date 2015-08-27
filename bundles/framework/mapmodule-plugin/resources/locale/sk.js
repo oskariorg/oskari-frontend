@@ -22,9 +22,9 @@ Oskari.registerLocalization(
         "plugin": {
             "LogoPlugin": {
                 "terms": "Podmienky používania",
-                "dataSources": "NOT TRANSLATED",
-                "layersHeader": "NOT TRANSLATED",
-                "indicatorsHeader": "NOT TRANSLATED"
+                "dataSources": "Data Sources",
+                "layersHeader": "Map Layers",
+                "indicatorsHeader": "Indicators"
             },
             "DataSourcePlugin": {
                 "link": "Zdroj údajov",
@@ -53,26 +53,58 @@ Oskari.registerLocalization(
             },
             "GetInfoPlugin": {
                 "title": "Mapové vrstvy",
-                "layer": "NOT TRANSLATED",
-                "places": "NOT TRANSLATED",
-                "description": "NOT TRANSLATED",
-                "link": "NOT TRANSLATED",
-                "name": "NOT TRANSLATED"
+                "layer": "Map layer",
+                "places": "Features",
+                "description": "Description",
+                "link": "Web address",
+                "name": "Name"
             },
             "PublisherToolbarPlugin": {
-                "test": "NOT TRANSLATED",
+                "test": "test",
                 "history": {
-                    "reset": "NOT TRANSLATED",
-                    "back": "NOT TRANSLATED",
-                    "next": "NOT TRANSLATED"
+                    "reset": "Return to the default view",
+                    "back": "Return to the previous view",
+                    "next": "Move to the next view"
                 },
                 "measure": {
-                    "line": "NOT TRANSLATED",
-                    "area": "NOT TRANSLATED"
+                    "line": "Measure a distance",
+                    "area": "Measure an area"
+                }
+            },
+            "MarkersPlugin": {
+                "buttons": {
+                    "add": "Map marker",
+                    "clear": "Delete all markers"
+                },
+                "form": {
+                    "title": "Point feature style",
+                    "tooltip": "",
+                    "symbol": {
+                        "label": "Icon"
+                    },
+                    "size": {
+                        "label": "Size"
+                    },
+                    "color": {
+                        "label": "Colour",
+                        "labelOr": "or",
+                        "labelCustom": "Custom colour (RGB 0-255)"
+                    },
+                    "preview": {
+                        "label": "Preview"
+                    },
+                    "message": {
+                        "label": "The text on the map",
+                        "hint": "Write a message"
+                    }
+                },
+                "dialog": {
+                    "title": "Map marker",
+                    "message": "Select a new location for the marker by clicking the map."
                 }
             },
             "MyLocationPlugin": {
-                "tooltip": "NOT TRANSLATED"
+                "tooltip": "Center map to your location"
             }
         }
     }

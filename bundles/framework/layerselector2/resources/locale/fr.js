@@ -36,19 +36,19 @@ Oskari.registerLocalization(
         "backendStatus": {
             "OK": {
                 "tooltip": "La couche cartographique est actuellement disponible.",
-                "iconClass": "etatdonnéessauvegardées-OK"
+                "iconClass": "backendstatus-ok"
             },
             "DOWN": {
                 "tooltip": "La couche cartographique n’est pas disponible actuellement.",
-                "iconClass": "etatdonnéessauvegardées-en panne"
+                "iconClass": "backendstatus-down"
             },
             "MAINTENANCE": {
                 "tooltip": "Il est possible que la couche cartographique soit momentanément indisponible les jours prochains.",
-                "iconClass": "etatdonnéessauvegardées-maintenance"
+                "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
                 "tooltip": "",
-                "iconClass": "etatdonnéessauvegardées-OK"
+                "iconClass": "backendstatus-ok"
             }
         },
         "buttons": {
@@ -60,6 +60,17 @@ Oskari.registerLocalization(
             "vk": "Concept coordonné",
             "ak": "Concept secondaire",
             "yk": "Concept principal"
+        },
+        "layerFilter": {
+            "buttons": {
+                "newest": "Newest",
+                "stats": "Vector layers"
+            },
+            "tooltips": {
+                "newest": "Show ## newest map layers",
+                "stats": "Show only vector layers",
+                "remove": "Remove filter"
+            }
         }
     }
 }

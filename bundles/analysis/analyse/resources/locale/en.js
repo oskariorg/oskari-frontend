@@ -211,6 +211,8 @@ Oskari.registerLocalization(
                 "label": "Parameters",
                 "tooltip": "Give parameters for the analysis. The parameters depend on the selected filter and method."
             },
+            "showFeatureData" : "Open feature data when analysis is finished",
+            "showValuesCheckbox" : "Show calculated values without saving result",
             "intersect": {
                 "target": "Layer to be intersected",
                 "targetLabelTooltip": "Select a map layer to be intersected with features on the intersecting layer.",
@@ -233,7 +235,7 @@ Oskari.registerLocalization(
                 "area_count_tooltip": "Count between 0-12",
                 "area_size": "Buffer size",
                 "area_size_tooltip": "Size",
-                "sector_count": "Sector amount", 
+                "sector_count": "Sector amount",
                 "sector_count_tooltip": "Count between 0-12"
             },
             "difference": {
@@ -253,7 +255,7 @@ Oskari.registerLocalization(
                 "targetTooltip": "Select a original layer. The features will be selected from this layer.",
                 "intersectingLayer": "Intersecting layer",
                 "intersectingLayerTooltip": "Select an intersecting layer. The features will be selected based on the features on this layer.",
-                "labelTooltipIntersect": "Select which features are included into the result. Intersecting features are at least partially inside the features on the intersecting layer, containing features totally inside.",
+                "labelTooltipIntersect": 'Select which features are included into the result. Intersecting features are at least partially inside the features on the intersecting layer, containing features totally inside. This method is designed for point features. Please use the operator "Containing features" for areas. Otherwise the result may have errors.',
                 "options": [
                     {
                         "id": "oskari_analyse_intersect",
@@ -272,7 +274,11 @@ Oskari.registerLocalization(
                 "firstLayerFieldTooltip": "Result attributes from feature layer",
                 "secondLayer": "Source Layer",
                 "secondLayerTooltip": "Select a source map layer. Its attribute data will be retrieved into the feature level.",
-                "secondLayerFieldTooltip": "Result attributes from source layer"
+                "secondLayerFieldTooltip": "Result attributes from source layer",
+                "mode": "Spatial join mode",
+                "modeTooltip": "Choose if you want to use aggregate in spatial join",
+                "normalMode": "Normal spatial join",
+                "aggregateMode": "Aggregate"
             },
             "params": {
                 "label": "Result attributes",
@@ -397,6 +403,11 @@ Oskari.registerLocalization(
                 "title": "Too many attributes",
                 "layer": "Features on the layer",
                 "over10": "have over ten attributes. Please select at most ten attributes into the analysis result. The attributes you can select in the parameters."
+            },
+            "aggregatePopup": {
+                "title": "Analyse results",
+                "property": "Property",
+                "close": "Close"
             }
         },
         "StartView": {

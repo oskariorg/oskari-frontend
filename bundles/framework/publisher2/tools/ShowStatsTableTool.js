@@ -78,7 +78,7 @@ function() {
                 request = me.__sandbox.getRequestBuilder('StatsGrid.StatsGridRequest')(false, statsLayer);
                 me.__sandbox.request(me.__instance, request);
             }
-            me.__sandbox.registerService(me.statsService);            
+            me.__sandbox.registerService(me.statsService);
             me.__plugin = Oskari.clazz.create(tool.id, tool.config, Oskari.getLocalization('StatsGrid'));
             me.__mapmodule.registerPlugin(me.__plugin);
             me.statsContainer = jQuery(me.templates.publishedGridTemplate);
@@ -132,6 +132,10 @@ function() {
             );
         });
         return statsGridState;
+    },
+    getValues: function() {
+        //TODO
+        return;
     }
 }, {
     'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],

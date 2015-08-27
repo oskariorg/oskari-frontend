@@ -544,6 +544,47 @@
 					}
 				}
 			}
+		}, {
+			"bundlename" : "coordinatetool",
+			"bundleinstancename" : "coordinatetool",
+			"metadata" : {
+				"Import-Bundle" : {
+					"coordinatetool" : {
+						"bundlePath" : "../../../packages/framework/bundle/"
+					}
+				}
+			}
+		}, {
+			"bundlename" : "routingUI",
+			"bundleinstancename" : "routingUI",
+			"metadata" : {
+				"Import-Bundle" : {
+					"routingUI" : {
+						"bundlePath" : "../../../packages/framework/bundle/"
+					}
+				}
+			}
+		}, {
+			"bundlename" : "routingService",
+			"bundleinstancename" : "routingService",
+			"metadata" : {
+				"Import-Bundle" : {
+					"routingService" : {
+						"bundlePath" : "../../../packages/framework/bundle/"
+					}
+				}
+			}
+		},
+		{
+		    "bundlename" : "metrics",
+		    "bundleinstancename" : "metrics",
+		    "metadata" : {
+		        "Import-Bundle" : {
+		            "metrics" : {
+		                "bundlePath" : "../../../packages/admin/bundle/"
+		            }
+		        }
+		    }
 		}
 	]
 }

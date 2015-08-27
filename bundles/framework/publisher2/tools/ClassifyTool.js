@@ -26,7 +26,7 @@ function() {
             me.__mapmodule.registerPlugin(me.__plugin);
             me.__plugin.startPlugin(me.__sandbox);
         }
-        
+
         me.setEnabled(false);
     },
     /**
@@ -39,12 +39,11 @@ function() {
     setEnabled : function(enabled) {
         var me = this;
 
-        me.state.enabled = enabled;        
+        me.state.enabled = enabled;
 
-        if(enabled === true) {            
+        if(enabled === true) {
             me.__plugin.showClassificationOptions(true);
         } else {
-            //me.__plugin.stopPlugin(me.__sandbox);
             me.__plugin.showClassificationOptions(false);
         }
 

@@ -31,7 +31,8 @@ Oskari.registerLocalization(
         "tooltip": {
             "type-base": "Bakgrundskarta",
             "type-wms": "Kartlager (WMS, WMTS)",
-            "type-wfs": "Dataprodukt (WFS)"
+            "type-wfs": "Dataprodukt (WFS)",
+            "type-wfs-manual": "Data product (WFS) - Layer is drawn on a map via Feature Data or via Refresh button action"
         },
         "backendStatus": {
             "OK": {
@@ -44,7 +45,7 @@ Oskari.registerLocalization(
             },
             "MAINTENANCE": {
                 "tooltip": "Avbrott i kartlagrets tillgänglighet är att vänta inom de närmaste dagarna.",
-                "iconClass": "backendstatus-underhåll"
+                "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
                 "tooltip": "",
@@ -60,6 +61,17 @@ Oskari.registerLocalization(
             "vk": "Koordinatbegrepp",
             "ak": "Underordnat begrepp",
             "yk": "Överordnat begrepp"
+        },
+        "layerFilter": {
+            "buttons": {
+                "newest": "Nyaste",
+                "stats": "Vektorlager"
+            },
+            "tooltips": {
+                "newest": "Visa de ## nyaste kartlager",
+                "stats": "Visa endast vektorlager",
+                "remove": "Ta bort filter"
+            }
         }
     }
 }

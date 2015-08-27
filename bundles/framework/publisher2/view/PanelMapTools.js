@@ -32,9 +32,55 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
         init: function (pData) {
             var me = this;
             me.data = pData;
-            _.each(me.tools, function(tool) {
+            _.each(me.tools, function (tool) {
                 tool.init();
             });
+
+
+            for (var p in me.eventHandlers) {
+                if (me.eventHandlers.hasOwnProperty(p)) {
+                    me.sandbox.registerForEventByName(me, p);
+                }
+            }
+
+
+        },
+        /**
+         * @method onEvent
+         * @param {Oskari.mapframework.event.Event} event a Oskari event object
+         * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
+         */
+        onEvent: function (event) {
+            var handler = this.eventHandlers[event.getName()];
+            if (!handler) {
+                return;
+            }
+            return handler.apply(this, [event]);
+        },
+        /**
+         * @property {Object} eventHandlers
+         * @static
+         */
+        eventHandlers: {
+            /**
+             * @method MapLayerEvent
+             * @param {Oskari.mapframework.event.common.MapLayerEvent} event
+             *
+             * Calls  handleDrawLayerSelectionChanged() functions
+             */
+            MapLayerEvent: function (event) {
+                var me = this,
+                    toolbarTool = me._getToolbarTool('PublisherToolbarPlugin');
+                if (toolbarTool && (event.getOperation() === 'add')) {
+                    // handleDrawLayerSelectionChanged
+                    toolbarTool.handleDrawLayerSelectionChanged(
+                        event.getLayerId()
+                    );
+                }
+            }
+        },
+        getName: function() {
+            return "Oskari.mapframework.bundle.publisher2.view.PanelMapTools";
         },
         /**
         * Sort tools
@@ -80,39 +126,109 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             _.each(tools, function(tool) {
                 var ui = jQuery(me.templates.tool({name : tool.getName() }));
                 // TODO: setup values when editing an existing map
+
+                var extraOptions = tool.getExtraOptions(ui);
+                if(extraOptions) {
+                    ui.find('.extraOptions').append(extraOptions);
+                }
+
                 ui.find('input').change(function() {
-                    tool.setEnabled(jQuery(this).is(':checked'));
+                    var enabled = jQuery(this).is(':checked');
+                    tool.setEnabled(enabled);
+                    if(enabled) {
+                        ui.find('.extraOptions').show();
+                    } else {
+                        ui.find('.extraOptions').hide();
+                    }
                 });
 
-                var extraOptions = tool.getExtraOptions();
-                if(extraOptions) {
-                    ui.find(".extraOptions").append(extraOptions);
+                var initStateEnabled = ui.find('input').is(':checked');
+                tool.setEnabled(initStateEnabled);
+                if(initStateEnabled) {
+                    ui.find('.extraOptions').show();
+                } else {
+                    ui.find('.extraOptions').hide();
                 }
-                contentPanel.append(ui);
 
+                contentPanel.append(ui);
             });
             me.panel = panel;
             return panel;
         },
 
         /**
+        * Extends object recursive for keeping defaults array.
+        * @method _extendRecursive
+        * @private
+        *
+        * @param {Object} defaults the default extendable object
+        * @param {Object} extend extend object
+        *
+        * @return {Object} extended object
+        */
+        /*
+        _extendRecursive: function(defaults, extend){
+            var me = this;
+
+            if (extend === null || jQuery.isEmptyObject(extend)) {
+                return defaults;
+            } else if (jQuery.isEmptyObject(defaults)) {
+                return jQuery.extend(true, defaults, extend);
+            } else if (jQuery.isArray(defaults)) {
+                if(jQuery.isArray(extend)){
+                    jQuery.each(extend, function(key, value) {
+                        defaults.push(value);
+                    });
+                }
+                return defaults;
+            } else {
+                jQuery.each(extend, function(key, value){
+                    if(defaults[key] === null) {
+                        defaults[key] = value;
+                    } else {
+                        defaults[key] = me._extendRecursive(defaults[key], value);
+                    }
+
+                });
+                return defaults;
+            }
+        },
+*/
+        /**
          * Returns the selections the user has done with the form inputs.
          * @method getValues
          * @return {Object}
          */
+         /*
         getValues: function () {
-            // TODO: maybe merge the tool.getValues()
-            // under-construction and all that
             var me = this,
-                values = {
-                    maptools: []
-                };
+                values = {};
 
             _.each(me.tools, function(tool){
-                values.maptools.push(tool.getValues());
+                var value = tool.getValues();
+                me._extendRecursive(values, value);
             });
-
             return values;
+        },
+        */
+        getValues: function() {
+            //just return empty -> tools and their plugins' configs get returned by the layout panel, which has all the tools
+            return null;
+        },
+        /**
+         * Get tool by name
+         * @returns {Object} tool object
+         */
+        _getToolbarTool: function (name) {
+            var me = this,
+                bartool = null;
+            _.each(me.tools, function (tool) {
+                if( tool.getTool().name === name){
+                  bartool = tool;
+                }
+
+            });
+            return bartool;
         },
 
         /**
@@ -151,6 +267,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                 if(typeof tool.setMode === 'function'){
                     tool.setMode(mode);
                 }
+            });
+        },
+        getTools: function() {
+            return this.tools;
+        },
+        /**
+        * Stop panel.
+        * @method stop
+        * @public
+        **/
+        stop: function(){
+            var me = this;
+            _.each(me.tools, function(tool){
+                tool.stop();
             });
         }
     });

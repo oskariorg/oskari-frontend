@@ -3,10 +3,10 @@ Oskari.registerLocalization(
     "lang": "lv",
     "key": "Publisher2",
     "value": {
-        "tile" : {
+        "tile": {
             "title": "Izveidot karti"
         },
-        "flyout" : {
+        "flyout": {
             "title": "Izveidot karti"
         },
         "published": {
@@ -30,7 +30,7 @@ Oskari.registerLocalization(
             },
             "name": {
                 "label": "Kartes nosaukums",
-                "placeholder": "NOT TRANSLATED",
+                "placeholder": "required",
                 "tooltip": "Piešķiriet savai kartei aprakstošu nosaukumu. Lūdzu ņemiet vērā lietotāja saskarnes valodu"
             },
             "language": {
@@ -43,8 +43,8 @@ Oskari.registerLocalization(
                 "tooltip": "Izvēlēties kartes saskarnes un kartes datu valodu"
             },
             "size": {
-                "label": "Izmērs",
-                "tooltip": "Izvēlaties vai iestatiet izmēru kartei, kas tiks iegulta jūsu tīmekļa vietnē. Kartes priekšskatījums tiks attēlots izvēlētajā lielumā"
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Rīki",
@@ -53,98 +53,102 @@ Oskari.registerLocalization(
                 "IndexMapPlugin": "Karšu lapu shēma",
                 "PanButtons": "Panoramēšanas rīks",
                 "Portti2Zoombar": "Mēroga ritjosla",
+                "MyLocationPlugin": "Center to user's location",
                 "ControlsPlugin": "Panoramēt",
                 "SearchPlugin": "Adreses un vietvārda meklēšana",
+                "FeaturedataPlugin": "Feature data",
                 "GetInfoPlugin": "Atrašanās vietas vaicāšanas rīks",
-                "PublisherToolbarPlugin": "NOT TRANSLATED",
-                "selectDrawLayer": "NOT TRANSLATED"
-            },
-            "toolbarToolNames": {
-                "history_back": "NOT TRANSLATED",
-                "history_forward": "NOT TRANSLATED",
-                "measureline": "NOT TRANSLATED",
-                "measurearea": "NOT TRANSLATED",
-                "point": "NOT TRANSLATED",
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "PublisherToolbarPlugin": "Map tools",
+                "selectDrawLayer": "Select layer for new features",
+                "LayerSelectionPlugin":"NOT TRANSLATED",
+                "toolbarToolNames": {
+                    "history_back": "Move backwards",
+                    "history_forward": "Move forward",
+                    "measureline": "Measure distance",
+                    "measurearea": "Measure area",
+                    "drawTools": "Drawing tools",
+                    "point": "Allow users to add point features.",
+                    "line": "Allow users to add line features.",
+                    "area": "Allow users to add area features."
+                },
+                "layers": {
+                    "add": "Create new layer for new features.",
+                    "label": "Kartes slāņi",
+                    "addselect": "Add a drawing layer to the map",
+                    "defaultLayer": "(Noklusējuma slānis)",
+                    "useAsDefaultLayer": "Izmantot kā noklusējuma slāni"
+                },
+                "myplaces": {
+                    "label": "My map layers"
+                }
             },
             "toollayout": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
-                "lefthanded": "NOT TRANSLATED",
-                "righthanded": "NOT TRANSLATED",
-                "userlayout": "NOT TRANSLATED",
-                "usereditmode": "NOT TRANSLATED",
-                "usereditmodeoff": "NOT TRANSLATED"
+                "label": "Tool Placement",
+                "tooltip": "Select the placement for the tool to be shown on the map.",
+                "lefthanded": "Lefthanded",
+                "righthanded": "Righthanded",
+                "userlayout": "Custom layout",
+                "usereditmode": "Start editing",
+                "usereditmodeoff": "Finish editing"
             },
             "data": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
-                "grid": "NOT TRANSLATED",
-                "allowClassification": "NOT TRANSLATED"
+                "label": "Statistics",
+                "tooltip": "Show map statistics",
+                "grid": "Show statistics",
+                "allowClassification": "Allow classification"
             },
             "layout": {
-                "label": "NOT TRANSLATED",
+                "label": "Graphic Layout",
                 "fields": {
                     "colours": {
-                        "label": "NOT TRANSLATED",
-                        "placeholder": "NOT TRANSLATED",
-                        "buttonLabel": "NOT TRANSLATED",
-                        "light_grey": "NOT TRANSLATED",
-                        "dark_grey": "NOT TRANSLATED",
-                        "blue": "NOT TRANSLATED",
-                        "red": "NOT TRANSLATED",
-                        "green": "NOT TRANSLATED",
-                        "yellow": "NOT TRANSLATED",
-                        "custom": "NOT TRANSLATED",
+                        "label": "Color scheme",
+                        "placeholder": "Select the color scheme.",
+                        "buttonLabel": "Select",
+                        "light_grey": "Light gray",
+                        "dark_grey": "Dark gray",
+                        "blue": "Blue",
+                        "red": "Red",
+                        "green": "Green",
+                        "yellow": "Yellow",
+                        "custom": "Own color scheme",
                         "customLabels": {
-                            "bgLabel": "NOT TRANSLATED",
-                            "titleLabel": "NOT TRANSLATED",
-                            "headerLabel": "NOT TRANSLATED",
-                            "iconLabel": "NOT TRANSLATED",
-                            "iconCloseLabel": "NOT TRANSLATED",
-                            "iconCloseWhiteLabel": "NOT TRANSLATED"
+                            "bgLabel": "Identifier background",
+                            "titleLabel": "Identifier text",
+                            "headerLabel": "Header text",
+                            "iconLabel": "Icon",
+                            "iconCloseLabel": "Dark",
+                            "iconCloseWhiteLabel": "Light"
                         }
                     },
                     "fonts": {
-                        "label": "NOT TRANSLATED"
+                        "label": "Font style"
                     },
                     "toolStyles": {
-                        "label": "NOT TRANSLATED",
-                        "default": "NOT TRANSLATED",
-                        "rounded-dark": "NOT TRANSLATED",
-                        "rounded-light": "NOT TRANSLATED",
-                        "sharp-dark": "NOT TRANSLATED",
-                        "sharp-light": "NOT TRANSLATED",
-                        "3d-dark": "NOT TRANSLATED",
-                        "3d-light": "NOT TRANSLATED"
+                        "label": "Tool style",
+                        "default": "Default style",
+                        "rounded-dark": "Rounded (dark)",
+                        "rounded-light": "Rounded (light)",
+                        "sharp-dark": "Angular (dark)",
+                        "sharp-light": "Angular (light)",
+                        "3d-dark": "Three-dimensional (dark)",
+                        "3d-light": "Three-dimensional (light)"
                     }
                 },
                 "popup": {
-                    "title": "NOT TRANSLATED",
-                    "close": "NOT TRANSLATED",
+                    "title": "Select Color Scheme",
+                    "close": "Close",
                     "gfiDialog": {
-                        "title": "NOT TRANSLATED",
-                        "featureName": "NOT TRANSLATED",
-                        "featureDesc": "NOT TRANSLATED"
+                        "title": "Feature info",
+                        "featureName": "Preview",
+                        "featureDesc": "The color scheme only defines the color of the popup windows for the feature info and map layer selection."
                     }
                 }
-            },
-            "layers": {
-                "add": "NOT TRANSLATED",
-                "addselect": "NOT TRANSLATED",
-                "label": "Kartes slāņi",
-                "defaultLayer": "(Noklusējuma slānis)",
-                "useAsDefaultLayer": "Izmantot kā noklusējuma slāni"
-            },
-            "myplaces": {
-                "label": "NOT TRANSLATED"
             },
             "sizes": {
                 "small": "Mazs",
                 "medium": "Vidējs",
                 "large": "Liels",
-                "fill": "NOT TRANSLATED",
+                "fill": "Fill space",
                 "custom": "Pielāgots izmērs",
                 "width": "Platums",
                 "height": "Augstums",
@@ -156,7 +160,7 @@ Oskari.registerLocalization(
                 "ok": "Labi",
                 "replace": "Aizstāt",
                 "cancel": "Atcelt",
-                "add": "NOT TRANSLATED"
+                "add": "Add a map layer"
             },
             "confirm": {
                 "replace": {
@@ -165,7 +169,8 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Rādīt izvēlnē kartes slāņus",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Izvēlēties fona kartes. Iestatīt noklusējuma fona karti kartes priekšskatījuma logā",
                 "tooltip": "Fona karte ir redzama kā kartes apakšējais slānis. Izvēloties kartes līmeņus izmantot kā apakšējo kārtu, vienlaikus ir redzams tikai viens slānis, un jūs varat pārslēgties starp tām. Var iestatīt noklusējuma fona karti kartes priekšskatījums",
                 "promote": "Vai rādīt aerofoto ainas?"
@@ -182,7 +187,7 @@ Oskari.registerLocalization(
                 "name": "Vārds ir obligāta informācija",
                 "nohelp": "Palīdzība nav pieejama",
                 "saveFailed": "Kartes publicēšana neizdevās. Mēģiniet vēlreiz",
-                "nameIllegalCharacters": "NOT TRANSLATED",
+                "nameIllegalCharacters": "The name of the map contains illegal characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces and hyphens.",
                 "domainIllegalCharacters": "Tīmekļa vietnes nosaukumā ir neatļautas rakstzīmes. Atļautās rakstzīmes ir burti no \"a\" līdz \"z\", kā arī \"ā\", \"č\", \"ķ\"..., cipari, atstarpes un domuzīmes"
             }
         },
@@ -200,7 +205,7 @@ Oskari.registerLocalization(
             "layerlist_empty": "Nav iespējams iegult izvēlētos kartes slāņus. Izvēlne \"Izvēlētie kartes slāņi\" ir parādīts vai kartes slāni var iegult",
             "layerlist_denied": "Iegult nav iespējams",
             "denied_tooltip": "Šīs kartes datu sniedzējs nav piešķīris atļauju publicēt šos materiālus citās tīmekļa vietnēs. Pārbaudiet publicēšanas tiesības izvēlnē \"Izvēlētie kartes slāņi pirms iegulšanas\"",
-            "myPlacesDisclaimer": "NOT TRANSLATED",
+            "myPlacesDisclaimer": "NB. You are publishing your own map layer.",
             "buttons": {
                 "continue": "Turpināt",
                 "continueAndAccept": "Piekrist Lietošanas noteikumiem un turpināt",
@@ -214,14 +219,14 @@ Oskari.registerLocalization(
             }
         },
         "layer": {
-            "show": "NOT TRANSLATED",
-            "hide": "NOT TRANSLATED",
-            "hidden": "NOT TRANSLATED",
+            "show": "Show",
+            "hide": "Hide",
+            "hidden": "The map layer is temporarily hidden.",
             "selectAsBaselayer": "NOT TRANSLATED",
             "rights": {
                 "can_be_published_map_user": {
-                    "label": "NOT TRANSLATED",
-                    "tooltip": "NOT TRANSLATED"
+                    "label": "The map layer can be published in a embedded map.",
+                    "tooltip": "The map layer can be published in a embedded map. The weekly number of users can be limited."
                 }
             }
         }

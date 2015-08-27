@@ -43,8 +43,8 @@ Oskari.registerLocalization(
                 "tooltip": "Оберіть мову інтерфейсу карти та картографічних даних"
             },
             "size": {
-                "label": "Розмір",
-                "tooltip": "Оберіть розмір вбудованої карти. Попередній перегляд карти буде відображено у цьому розмірі."
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Інструменти",
@@ -57,16 +57,28 @@ Oskari.registerLocalization(
                 "SearchPlugin": "Пошук адрес та назв",
                 "GetInfoPlugin": "Інструмент створення запитів",
                 "PublisherToolbarPlugin": "NOT TRANSLATED",
-                "selectDrawLayer": "NOT TRANSLATED"
-            },
-            "toolbarToolNames": {
-                "history_back": "NOT TRANSLATED",
-                "history_forward": "NOT TRANSLATED",
-                "measureline": "NOT TRANSLATED",
-                "measurearea": "NOT TRANSLATED",
-                "point": "NOT TRANSLATED",
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "selectDrawLayer": "NOT TRANSLATED",
+                "LayerSelectionPlugin":"NOT TRANSLATED",
+                "toolbarToolNames": {
+                    "history_back": "Move backwards",
+                    "history_forward": "Move forward",
+                    "measureline": "Measure distance",
+                    "measurearea": "Measure area",
+                    "drawTools": "Drawing tools",
+                    "point": "Allow users to add point features.",
+                    "line": "Allow users to add line features.",
+                    "area": "Allow users to add area features."
+                },
+                "layers": {
+                    "add": "Create new layer for new features.",
+                    "addselect": "Add a drawing layer to the map",
+                    "label": "Шари карти",
+                    "defaultLayer": "(Типовий шар)",
+                    "useAsDefaultLayer": "Використовувати як типовий"
+                },
+                "myplaces": {
+                    "label": "My map layers"
+                }
             },
             "toollayout": {
                 "label": "NOT TRANSLATED",
@@ -130,16 +142,6 @@ Oskari.registerLocalization(
                     }
                 }
             },
-            "layers": {
-                "add": "NOT TRANSLATED",
-                "addselect": "NOT TRANSLATED",
-                "label": "Шари карти",
-                "defaultLayer": "(Типовий шар)",
-                "useAsDefaultLayer": "Використовувати як типовий"
-            },
-            "myplaces": {
-                "label": "NOT TRANSLATED"
-            },
             "sizes": {
                 "small": "Малий",
                 "medium": "Середній",
@@ -165,7 +167,8 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Показувати шари в меню карти",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Оберіть фонову карту. Ви можете обрати типову фонову карту у вікні попереднього перегляду карти",
                 "tooltip": "Фонова карта показується як найнижчий шар карти. Якщо виберете декілька шарів як фонові, то лише один з них буде видимий і ви зможете переключатись між ними. Типовий фоновий шар ви можете встановити у вікні попереднього перегляду карти.",
                 "promote": "Показувати аерофотознімки?"

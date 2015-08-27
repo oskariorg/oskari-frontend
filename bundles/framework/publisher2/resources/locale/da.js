@@ -43,8 +43,8 @@ Oskari.registerLocalization(
                 "tooltip": "Vælg sprog for kortgrænseflade og kortdata"
             },
             "size": {
-                "label": "Størrelse",
-                "tooltip": "Vælg eller definér størrelsen på det kort, der skal integreres på din hjemmeside. Forhåndsvisning af kort udstilles i den valgte størrelse."
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Værktøjer",
@@ -57,16 +57,28 @@ Oskari.registerLocalization(
                 "SearchPlugin": "Søgning efter adresse og stednavn",
                 "GetInfoPlugin": "Forespørgselsværktøj for steddata",
                 "PublisherToolbarPlugin": "NOT TRANSLATED",
-                "selectDrawLayer": "NOT TRANSLATED"
-            },
-            "toolbarToolNames": {
-                "history_back": "NOT TRANSLATED",
-                "history_forward": "NOT TRANSLATED",
-                "measureline": "NOT TRANSLATED",
-                "measurearea": "NOT TRANSLATED",
-                "point": "NOT TRANSLATED",
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "selectDrawLayer": "NOT TRANSLATED",
+                "LayerSelectionPlugin":"NOT TRANSLATED",
+                "toolbarToolNames": {
+                    "history_back": "Move backwards",
+                    "history_forward": "Move forward",
+                    "measureline": "Measure distance",
+                    "measurearea": "Measure area",
+                    "drawTools": "Drawing tools",
+                    "point": "Allow users to add point features.",
+                    "line": "Allow users to add line features.",
+                    "area": "Allow users to add area features."
+                },
+                "layers": {
+                    "add": "Create new layer for new features.",
+                    "label": "Map Layers",
+                    "addselect": "Add a drawing layer to the map",
+                    "defaultLayer": "(Default map layer)",
+                    "useAsDefaultLayer": "Use as the default layer."
+                },
+                "myplaces": {
+                    "label": "My map layers"
+                }
             },
             "toollayout": {
                 "label": "NOT TRANSLATED",
@@ -130,16 +142,6 @@ Oskari.registerLocalization(
                     }
                 }
             },
-            "layers": {
-                "add": "NOT TRANSLATED",
-                "addselect": "NOT TRANSLATED",
-                "label": "Kortlag",
-                "defaultLayer": "(Standardlag)",
-                "useAsDefaultLayer": "Brug som standardlag"
-            },
-            "myplaces": {
-                "label": "NOT TRANSLATED"
-            },
             "sizes": {
                 "small": "Small",
                 "medium": "Medium",
@@ -165,7 +167,8 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Vis kortlag i menu",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Vælg baggrundskort. Du kan indstille standardbaggrundskort i kortvisningsvinduet.",
                 "tooltip": "Baggrundskortet vises som det nederste lag på kortet. Når du vælger kortlag, der skal bruges som nederste lag, bliver der kun vist ét lag ad gangen, og du kan vælge mellem dem. Du kan indstille standardbaggrundskort i forhåndsvisningen af kortet.",
                 "promote": "Vis antenne billeder?"

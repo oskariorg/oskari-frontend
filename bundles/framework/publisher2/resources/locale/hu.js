@@ -43,8 +43,8 @@ Oskari.registerLocalization(
                 "tooltip": "Válassza ki a térkép kezelőfelületének és adatainak nyelvét."
             },
             "size": {
-                "label": "Méret",
-                "tooltip": "Válassza ki vagy határozza meg az Ön weboldalán beágyazandó térkép méretét. Az előnézet ebben a méretben jelenik meg."
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Eszközök",
@@ -58,16 +58,28 @@ Oskari.registerLocalization(
                 "FeaturedataPlugin": "NOT TRANSLATED",
                 "GetInfoPlugin": "Helyadatok lekérdezési eszköze",
                 "PublisherToolbarPlugin": "NOT TRANSLATED",
-                "selectDrawLayer": "NOT TRANSLATED"
-            },
-            "toolbarToolNames": {
-                "history_back": "NOT TRANSLATED",
-                "history_forward": "NOT TRANSLATED",
-                "measureline": "NOT TRANSLATED",
-                "measurearea": "NOT TRANSLATED",
-                "point": "NOT TRANSLATED",
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "selectDrawLayer": "NOT TRANSLATED",
+                "LayerSelectionPlugin":"NOT TRANSLATED",
+                "toolbarToolNames": {
+                    "history_back": "Move backwards",
+                    "history_forward": "Move forward",
+                    "measureline": "Measure distance",
+                    "measurearea": "Measure area",
+                    "drawTools": "Drawing tools",
+                    "point": "Allow users to add point features.",
+                    "line": "Allow users to add line features.",
+                    "area": "Allow users to add area features."
+                },
+                "layers": {
+                    "add": "Create new layer for new features.",
+                    "addselect": "Add a drawing layer to the map",
+                    "label": "Térkép-tétegek",
+                    "defaultLayer": "Alapértelmezett réteg",
+                    "useAsDefaultLayer": "Legyen alapértelmezett réteg"
+                },
+                "myplaces": {
+                    "label": "My map layers"
+                }
             },
             "toollayout": {
                 "label": "NOT TRANSLATED",
@@ -131,16 +143,6 @@ Oskari.registerLocalization(
                     }
                 }
             },
-            "layers": {
-                "add": "NOT TRANSLATED",
-                "addselect": "NOT TRANSLATED",
-                "label": "Térkép-tétegek",
-                "defaultLayer": "Alapértelmezett réteg",
-                "useAsDefaultLayer": "Legyen alapértelmezett réteg"
-            },
-            "myplaces": {
-                "label": "NOT TRANSLATED"
-            },
             "sizes": {
                 "small": "Kis",
                 "medium": "Közepes",
@@ -166,7 +168,8 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Térképrétegek megjelenítése a menüben.",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Háttértérképek kiválasztása. Kiválaszthatja az alapértelmezett háttértérképet a térkép előnézet ablakban.",
                 "tooltip": "A háttértérkép az alsó rétegben jelenik meg. Ha kiválasztott térképréteg az alsó szinten van, akkor csak egy szint látható egy időben, a rétegek nézete változtatható. A térkép előnézetben megadhatja az alapértelmezett háttértérképet.",
                 "promote": "Mutassuk a légi felvételeket?"

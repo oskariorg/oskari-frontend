@@ -43,8 +43,8 @@ Oskari.registerLocalization(
                 "tooltip": "Vali kaardiliidese ja kaardiandmete keel."
             },
             "size": {
-                "label": "Suurus",
-                "tooltip": "Vali või määra veebikohas põimitava kaardi suurus. Kaardi eelvaade kuvatakse valitud suuruses."
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Tööriistad",
@@ -59,17 +59,28 @@ Oskari.registerLocalization(
                 "FeaturedataPlugin": "NOT TRANSLATED",
                 "GetInfoPlugin": "Koha andmete päring",
                 "PublisherToolbarPlugin": "NOT TRANSLATED",
-                "selectDrawLayer": "NOT TRANSLATED"
-            },
-            "toolbarToolNames": {
-                "history_back": "NOT TRANSLATED",
-                "history_forward": "NOT TRANSLATED",
-                "measureline": "NOT TRANSLATED",
-                "measurearea": "NOT TRANSLATED",
-                "drawTools": "NOT TRANSLATED",
-                "point": "NOT TRANSLATED",
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "selectDrawLayer": "NOT TRANSLATED",
+                "LayerSelectionPlugin":"NOT TRANSLATED",
+                "toolbarToolNames": {
+                    "history_back": "Move backwards",
+                    "history_forward": "Move forward",
+                    "measureline": "Measure distance",
+                    "measurearea": "Measure area",
+                    "drawTools": "Drawing tools",
+                    "point": "Allow users to add point features.",
+                    "line": "Allow users to add line features.",
+                    "area": "Allow users to add area features."
+                },
+                "layers": {
+                    "add": "Create new layer for new features.",
+                    "addselect": "Add a drawing layer to the map",
+                    "label": "Kaardikihid",
+                    "defaultLayer": "(Vaikimisi kiht)",
+                    "useAsDefaultLayer": "Kasuta kui vaikimisi kihti"
+                },
+                "myplaces": {
+                    "label": "My map layers"
+                }
             },
             "toollayout": {
                 "label": "NOT TRANSLATED",
@@ -133,16 +144,6 @@ Oskari.registerLocalization(
                     }
                 }
             },
-            "layers": {
-                "add": "NOT TRANSLATED",
-                "label": "Kaardikihid",
-                "addselect": "NOT TRANSLATED",
-                "defaultLayer": "(Vaikimisi kiht)",
-                "useAsDefaultLayer": "Kasuta kui vaikimisi kihti"
-            },
-            "myplaces": {
-                "label": "NOT TRANSLATED"
-            },
             "sizes": {
                 "small": "Väike",
                 "medium": "Keskmine",
@@ -168,7 +169,8 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Näita kaardikihte menüüs",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Vali taustakaardid. Võid määrata vaikimisi taustakaardi kaardi eelvaate aknas.",
                 "tooltip": "Taustakaarti kuvatakse kaardil kõige alumise kihina. Kui valid kõige alumiseks kihiks kaardikihte, on ainult üks kiht korraga nähtav ja võid nende vahel valida. Eelvaatele on võimalik valida vaikimisi taustakaardi.",
                 "promote": "Kas näidata aeropilte?"

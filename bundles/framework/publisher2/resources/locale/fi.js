@@ -43,8 +43,8 @@ Oskari.registerLocalization(
                 "tooltip": "Valitse kieli, jota upotetussa kartassa käytetään. Valinta vaikuttaa sekä käyttöliittymään että kartta-aineistoon."
             },
             "size": {
-                "label": "Kartan koko",
-                "tooltip": "Valitse koko, jossa upotettu kartta esitetään verkkosivulla. Leveyden on oltava vähintään 30 pikseliä ja korkeuden vähintään 20 pikseliä. Desimaalierottimena on piste. Valinnan tulokset esitetään esikatselukartassa."
+                "label": "Kartan esikatselu",
+                "tooltip": "Valitse tila, jossa haluat esikatsella karttaa. Valinnan tulokset esitetään esikatselukartassa."
             },
             "maptools": {
                 "label": "Kartalla näytettävät työkalut",
@@ -59,17 +59,27 @@ Oskari.registerLocalization(
                 "FeaturedataPlugin": "Kohdetietotaulukko",
                 "GetInfoPlugin": "Kohdetietojen kyselytyökalu",
                 "PublisherToolbarPlugin": "Karttatyökalut",
-                "selectDrawLayer": "Valitse tallennustaso"
-            },
-            "toolbarToolNames": {
-                "history_back": "Siirtyminen edelliseen näkymään",
-                "history_forward": "Siirtyminen seuraavaan näkymään",
-                "measureline": "Matkan mittaus",
-                "measurearea": "Pinta-alan mittaus",
-                "drawTools": "Omien kohteiden tallennus",
-                "point": "Salli pisteiden tallennus.",
-                "line": "Salli viivojen tallennus.",
-                "area": "Salli alueiden tallennus."
+                "selectDrawLayer": "Valitse tallennustaso",
+                "LayerSelectionPlugin":"Karttatasovalikko",
+                "toolbarToolNames": {
+                    "history_back": "Siirtyminen edelliseen näkymään",
+                    "history_forward": "Siirtyminen seuraavaan näkymään",
+                    "measureline": "Matkan mittaus",
+                    "measurearea": "Pinta-alan mittaus",
+                    "drawTools": "Omien kohteiden tallennus",
+                    "point": "Salli pisteiden tallennus.",
+                    "line": "Salli viivojen tallennus.",
+                    "area": "Salli alueiden tallennus."
+                }, "layers": {
+                    "add": "Luo uusi tallennustaso",
+                    "label": "Näytettävät karttatasot",
+                    "addselect": "Lisää tallennustaso karttatasoihin",
+                    "defaultLayer": "(Oletusvalinta)",
+                    "useAsDefaultLayer": "Käytä oletuksena"
+                },
+                "myplaces": {
+                    "label": "Omat karttatasot"
+                }
             },
             "toollayout": {
                 "label": "Työkalujen asettelu kartalla",
@@ -133,25 +143,9 @@ Oskari.registerLocalization(
                     }
                 }
             },
-            "layers": {
-                "add": "Luo uusi tallennustaso",
-                "label": "Näytettävät karttatasot",
-                "addselect": "Lisää tallennustaso karttatasoihin",
-                "defaultLayer": "(Oletusvalinta)",
-                "useAsDefaultLayer": "Käytä oletuksena"
-            },
-            "myplaces": {
-                "label": "Omat karttatasot"
-            },
             "sizes": {
-                "small": "Pieni",
-                "medium": "Keskikokoinen",
-                "large": "Suuri",
-                "fill": "Tilan täyttävä",
-                "custom": "Määritä oma koko",
-                "width": "leveys",
-                "height": "korkeus",
-                "separator": "x"
+                "mobile": "Mobiili",
+                "desktop": "Työpöytä"
             },
             "buttons": {
                 "save": "Tallenna",
@@ -168,7 +162,8 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Näytä karttatasovalikko upotetussa kartassa.",
+                "label": "Karttatasovalikko",
+                "fieldLabel": "Näytä karttatasovalikko upotetussa kartassa.",
                 "info": "Valitse taustakarttoina näytettävät karttatasot. Oletusvalinnan voit tehdä esikatselukartassa.",
                 "tooltip": "Taustakarttataso näkyy karttanäkymässä alimmaisena. Jos valitset useampia karttatasoja taustakarttatasoksi, kartalla näkyy kerralla vain yksi taustakarttataso. Käyttäjä voi halutessaan vaihtaa taustakarttatasoa. Oletusvalinnan voit tehdä esikatselukartassa.",
                 "promote": "Haluatko näyttää kartalla myös ilmakuvia?"
@@ -226,6 +221,14 @@ Oskari.registerLocalization(
                     "label": "Julkaistavissa",
                     "tooltip": "Karttatason voi julkaista upotetussa kartassa. Viikoittainen käyttömäärä voi olla rajoitettu."
                 }
+            }
+        },
+        "layerFilter": {
+            "buttons": {
+                "publishable": "Julkaistavissa"
+            },
+            "tooltips": {
+                "publishable": "Näytä vain julkaistavissa olevat karttatasot"
             }
         }
     }

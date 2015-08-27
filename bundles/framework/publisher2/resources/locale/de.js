@@ -45,8 +45,8 @@ Oskari.registerLocalization({
                 "tooltip": "Wählen Sie die Sprache der Benutzeroberfläche und Kartendaten."
             },
             "size": {
-                "label": "Größe",
-                "tooltip": "Wählen oder definieren Sie die Größe der Karte, die auf Ihrer Webseite eingebunden werden soll. Die Kartenvorschau wird in der gewählten Größe angezeigt."
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Werkzeuge",
@@ -60,7 +60,28 @@ Oskari.registerLocalization({
                 "FeaturedataPlugin": "",
                 "GetInfoPlugin": "Ortsdaten-Abfrage",
                 "PublisherToolbarPlugin": "NOT TRANSLATED",
-                "selectDrawLayer": "NOT TRANSLATED"
+                "selectDrawLayer": "NOT TRANSLATED",
+                "LayerSelectionPlugin":"NOT TRANSLATED",
+                "toolbarToolNames": {
+                    "history_back": "Move backwards",
+                    "history_forward": "Move forward",
+                    "measureline": "Measure distance",
+                    "measurearea": "Measure area",
+                    "drawTools": "Drawing tools",
+                    "point": "Allow users to add point features.",
+                    "line": "Allow users to add line features.",
+                    "area": "Allow users to add area features."
+                },
+                "layers": {
+                    "add": "Create new layer for new features.",
+                    "label": "Kartenebenen",
+                    "addselect": "Add a drawing layer to the map",
+                    "defaultLayer": "(Standardebene)",
+                    "useAsDefaultLayer": "Als Standardebene verwenden"
+                },
+                "myplaces": {
+                    "label": "My map layers"
+                }
             },
             "toollayout": {
                 "label": "Tool layout",
@@ -75,13 +96,6 @@ Oskari.registerLocalization({
                 "label": "Statistics",
                 "tooltip": "Show the data related to map.",
                 "grid": "Show statistic grid"
-            },
-            "layers": {
-                "add": "NOT TRANSLATED",
-                "addselect": "NOT TRANSLATED",
-                "label": "Kartenebenen",
-                "defaultLayer": "(Standardebene)",
-                "useAsDefaultLayer": "Als Standardebene verwenden"
             },
             "sizes": {
                 "small": "Klein",
@@ -108,7 +122,8 @@ Oskari.registerLocalization({
                 }
             },
             "layerselection": {
-                "label": "Zeige die Kartenebenen im Menü",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Wählen Sie Ihre Hintergrundkarten. Im Vorschaufenster können Sie eine Hintergrundkarte als Standard festlegen.",
                 "tooltip": "Die Hintergrundkarte wird als unterste Ebene der Karte angezeigt. Wenn Sie mehrere Hintergrundkarten ausgewählt haben, ist nur eine Hintergrundkarte sichtbar, Sie können zwischen diesen wechseln.  Im Vorschaufenster können Sie eine Hintergrundkarte als Standard festlegen.",
                 "promote": "Luftbilder anzeigen?"

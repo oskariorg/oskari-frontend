@@ -43,8 +43,8 @@ Oskari.registerLocalization(
                 "tooltip": "Izaberi jezik i podatke na mapi"
             },
             "size": {
-                "label": "Veličina",
-                "tooltip": "Izaberi ili definiši veličinu mape koja će biti ugrađena u vašu web prezentaciju. Mapa se prikazuje u izabranoj veličini."
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Alati",
@@ -58,16 +58,28 @@ Oskari.registerLocalization(
                 "FeaturedataPlugin": "NOT TRANSLATED",
                 "GetInfoPlugin": "Upit za lokaciju",
                 "PublisherToolbarPlugin": "NOT TRANSLATED",
-                "selectDrawLayer": "NOT TRANSLATED"
-            },
-            "toolbarToolNames": {
-                "history_back": "NOT TRANSLATED",
-                "history_forward": "NOT TRANSLATED",
-                "measureline": "NOT TRANSLATED",
-                "measurearea": "NOT TRANSLATED",
-                "point": "NOT TRANSLATED",
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "selectDrawLayer": "NOT TRANSLATED",
+                "LayerSelectionPlugin":"NOT TRANSLATED",
+                "toolbarToolNames": {
+                    "history_back": "Move backwards",
+                    "history_forward": "Move forward",
+                    "measureline": "Measure distance",
+                    "measurearea": "Measure area",
+                    "drawTools": "Drawing tools",
+                    "point": "Allow users to add point features.",
+                    "line": "Allow users to add line features.",
+                    "area": "Allow users to add area features."
+                },
+                "layers": {
+                    "add": "Create new layer for new features.",
+                    "addselect": "Add a drawing layer to the map",
+                    "label": "Slojevi",
+                    "defaultLayer": "Početni sloj",
+                    "useAsDefaultLayer": "Upotrebi kao početni sloj"
+                },
+                "myplaces": {
+                    "label": "My map layers"
+                }
             },
             "toollayout": {
                 "label": "NOT TRANSLATED",
@@ -131,16 +143,6 @@ Oskari.registerLocalization(
                     }
                 }
             },
-            "layers": {
-                "add": "NOT TRANSLATED",
-                "addselect": "NOT TRANSLATED",
-                "label": "Slojevi",
-                "defaultLayer": "Početni sloj",
-                "useAsDefaultLayer": "Upotrebi kao početni sloj"
-            },
-            "myplaces": {
-                "label": "NOT TRANSLATED"
-            },
             "sizes": {
                 "small": "Malo",
                 "medium": "Srednje",
@@ -166,7 +168,8 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Prikaz slojeva u meniju",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Izaberi osnovnu mapu. Možete da podesite početnu osnovnu mapu.",
                 "tooltip": "Osnovna mapa je prikazana kao sloj u pozadini. Samo jedan odabrani sloj može biti u pozadini. Možete podesiti početnu osnovnu mapu.",
                 "promote": "Prikaži avio slike?"

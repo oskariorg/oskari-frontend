@@ -68,6 +68,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
             '<label for="countries"></label>' +
             '<input id="countries">' +
             '</div>',
+            emptyDiv: '<div><br/></div>',
             result: '<div class="result"></div>'
         },
         /**
@@ -127,7 +128,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
             regionInput.getField().addClass('search-field');
             regionInput.setLabel(this.loc.regionTitle);
             regionInput.setPlaceholder(this.loc.regionPlaceholder);
-            regionInput.setEnabled(false);
+            regionInput.setEnabled(true);
 
             countryInput.find('label')
                 .text(this.loc.countryFilter);
@@ -153,7 +154,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
             container.find('div.search-fields')
                 .append(searchInput.getField())
                 .append(countryInput)
-                .append(regionInput.getField());
+                .append(this.templates.emptyDiv.clone()); // use later when data is available   .append(regionInput.getField());
 
             // Populate autocomplete countries
             me.__getCountries();

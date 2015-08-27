@@ -43,8 +43,8 @@ Oskari.registerLocalization(
                 "tooltip": "Select the laguage for the map user interface and data shown on the map."
             },
             "size": {
-                "label": "Size",
-                "tooltip": "Select or define the size of the map to be embedded on your website. You can see changes in the map preview."
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Tools",
@@ -59,18 +59,30 @@ Oskari.registerLocalization(
                 "FeaturedataPlugin": "Feature data",
                 "GetInfoPlugin": "Query tool for feature data",
                 "PublisherToolbarPlugin": "Map tools",
-                "selectDrawLayer": "Select layer for new features"
+                "selectDrawLayer": "Select layer for new features",
+                "LayerSelectionPlugin":"Map layers menu",
+                "toolbarToolNames": {
+                    "history_back": "Move backwards",
+                    "history_forward": "Move forward",
+                    "measureline": "Measure distance",
+                    "measurearea": "Measure area",
+                    "drawTools": "Drawing tools",
+                    "point": "Allow users to add point features.",
+                    "line": "Allow users to add line features.",
+                    "area": "Allow users to add area features."
+                },
+                "layers": {
+                    "add": "Create new layer for new features.",
+                    "label": "Map Layers",
+                    "addselect": "Add a drawing layer to the map",
+                    "defaultLayer": "(Default map layer)",
+                    "useAsDefaultLayer": "Use as the default layer."
+                },
+                "myplaces": {
+                    "label": "My map layers"
+                }
             },
-            "toolbarToolNames": {
-                "history_back": "Move backwards",
-                "history_forward": "Move forward",
-                "measureline": "Measure distance",
-                "measurearea": "Measure area",
-                "drawTools": "Drawing tools",
-                "point": "Allow users to add point features.",
-                "line": "Allow users to add line features.",
-                "area": "Allow users to add area features."
-            },
+
             "toollayout": {
                 "label": "Tool Placement",
                 "tooltip": "Select the placement for the tool to be shown on the map.",
@@ -133,16 +145,6 @@ Oskari.registerLocalization(
                     }
                 }
             },
-            "layers": {
-                "add": "Create new layer for new features.",
-                "label": "Map Layers",
-                "addselect": "Add a drawing layer to the map",
-                "defaultLayer": "(Default map layer)",
-                "useAsDefaultLayer": "Use as the default layer."
-            },
-            "myplaces": {
-                "label": "My map layers"
-            },
             "sizes": {
                 "small": "Small",
                 "medium": "Medium",
@@ -168,7 +170,8 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Show map layers at the menu.",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Select the background map layer. You can select the default background map layer in the map preview.",
                 "tooltip": "The background map layer is shown at the bottom layer of the map. Only one background map layer can be shown at a time. The user can change the background map if there is more map layers selected to background maps. The default backgound map layer can be selected in the map preview.",
                 "promote": "Do you wish to show also aerial images?"
@@ -226,6 +229,14 @@ Oskari.registerLocalization(
                     "label": "The map layer can be published in a embedded map.",
                     "tooltip": "The map layer can be published in a embedded map. The weekly number of users can be limited."
                 }
+            }
+        },
+        "layerFilter": {
+            "buttons": {
+                "publishable": "Publishable"
+            },
+            "tooltips": {
+                "publishable": "Show only publishable map layers"
             }
         }
     }

@@ -49,6 +49,10 @@ Oskari.clazz.define("Oskari.elf.languageselector.Bundle", function() {
             "type" : "text/javascript",
             "src" : "../../../../bundles/elf/elf-language-selector/resources/locale/fi.js"
         }, {
+            "lang" : "fr",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/elf/elf-language-selector/resources/locale/fr.js"
+        }, {
             "lang" : "it",
             "type" : "text/javascript",
             "src" : "../../../../bundles/elf/elf-language-selector/resources/locale/it.js"
@@ -72,6 +76,10 @@ Oskari.clazz.define("Oskari.elf.languageselector.Bundle", function() {
             "lang" : "nn",
             "type" : "text/javascript",
             "src" : "../../../../bundles/elf/elf-language-selector/resources/locale/nn.js"
+        }, {
+            "lang" : "sk",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/elf/elf-language-selector/resources/locale/sk.js"
         }, {
             "lang" : "sl",
             "type" : "text/javascript",

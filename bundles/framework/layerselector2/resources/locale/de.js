@@ -59,6 +59,17 @@ Oskari.registerLocalization({
             "vk": "Koordinieren Konzept",
             "ak": "Untergeordnete Konzept",
             "yk": "Ûbergeordnete Konzept"
+        },
+        "layerFilter": {
+            "buttons": {
+                "newest": "Newest",
+                "stats": "Vector layers"
+            },
+            "tooltips": {
+                "newest": "Show ## newest map layers",
+                "stats": "Show only vector layers",
+                "remove": "Remove filter"
+            }
         }
     }
 });

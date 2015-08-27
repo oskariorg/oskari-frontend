@@ -212,6 +212,8 @@ Oskari.registerLocalization(
                 "label": "Parameter",
                 "tooltip": "Ge analys parameter. Parameter beror på utvald filter och metod."
             },
+            "showFeatureData" : "Open feature data when analysis is finished",
+            "showValuesCheckbox" : "Show calculated values without saving result",
             "intersect": {
                 "target": "Klippandes analyslager",
                 "targetLabelTooltip": "Analyysitaso, jonka kohteita leikataan leikkaavan tason kohteilla.",
@@ -254,7 +256,7 @@ Oskari.registerLocalization(
                 "targetTooltip": "Analyysitaso, jolta valitaan kohteita leikkaavan tason kohteiden perusteella.",
                 "intersectingLayer": "Leikkaava taso",
                 "intersectingLayerTooltip": "Analyysitaso, jonka kohteiden perusteella leikattavalta tasolta valitaan kohteita.",
-                "labelTooltipIntersect": "Analyysiin mukaan otettavat leikattavan tason kohteet. Leikkaavat kohteet ovat ainakin osittain leikkaavan tason kohteiden alueilla, sisältyvät kohteet ovat kokonaan.",
+                "labelTooltipIntersect": 'Analyysiin mukaan otettavat leikattavan tason kohteet. Leikkaavat kohteet ovat ainakin osittain leikkaavan tason kohteiden alueilla, sisältyvät kohteet ovat kokonaan. Den här metoden har designats speciellt för punkt objekt. För område objekt resultaten kan vara felaktig. Använd operator "Ingående" för område objekt.',
                 "options": [
                     {
                         "id": "oskari_analyse_intersect",
@@ -273,7 +275,11 @@ Oskari.registerLocalization(
                 "firstLayerFieldTooltip": "Ensimmäisen tason ominaisuustiedot, jotka otetaan analyysiin mukaan. Valitse enintään 10 ominaisuustietoa.",
                 "secondLayer": "Toinen taso",
                 "secondLayerTooltip": "Toinen yhdistettävä taso, jolta ominaisuustiedot haetaan.",
-                "secondLayerFieldTooltip": "Toisen tason ominaisuustiedot, jotka otetaan lopputulokseen mukaan. Valitse enintään 10 ominaisuustietoa."
+                "secondLayerFieldTooltip": "Toisen tason ominaisuustiedot, jotka otetaan lopputulokseen mukaan. Valitse enintään 10 ominaisuustietoa.",
+                "mode": "Spatial join mode",
+                "modeTooltip": "Choose if you want to use aggregate in spatial join",
+                "normalMode": "Normal spatial join",
+                "aggregateMode": "Aggregate"
             },
             "params": {
                 "label": "Attribut data för analys resultat",
@@ -397,6 +403,11 @@ Oskari.registerLocalization(
                 "title": "Info",
                 "layer": "Analyslager",
                 "over10": "har över 10 attribut. Välj högst 10 attribut för analys. Du hittar en lista av attribut i menu \"Parameter\" när du har valt en analysmetod."
+            },
+            "aggregatePopup": {
+                "title": "Analys resultat",
+                "property": "Attribut",
+                "close": "Stäng"
             }
         },
         "StartView": {

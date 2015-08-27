@@ -224,6 +224,14 @@ Oskari.registerLocalization(
                     "tooltip": "Il layer può essere pubblicato in una mappa esterna. Il numero settimanale di utenti potrebbe essere limitato."
                 }
             }
+        },
+        "layerFilter": {
+            "buttons": {
+                "publishable": "Publishable"
+            },
+            "tooltips": {
+                "publishable": "Show only publishable map layers"
+            }
         }
     }
 }

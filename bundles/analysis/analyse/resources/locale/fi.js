@@ -210,6 +210,8 @@ Oskari.registerLocalization(
                 "label": "Parametrit",
                 "tooltip": "Anna parametrit analyysia varten. Parametrit riippuvat valitusta suodattimesta ja menetelmästä."
             },
+            "showFeatureData" : "Avaa kohdetietotaulukko analyysin valmistuttua",
+            "showValuesCheckbox" : "Näytä lasketut arvot tallentamatta tulosta",
             "intersect": {
                 "target": "Leikattava taso",
                 "targetLabelTooltip": "Analyysitaso, jonka kohteita leikataan leikkaavan tason kohteilla.",
@@ -252,7 +254,7 @@ Oskari.registerLocalization(
                 "targetTooltip": "Analyysitaso, jolta valitaan kohteita leikkaavan tason kohteiden perusteella.",
                 "intersectingLayer": "Leikkaava taso",
                 "intersectingLayerTooltip": "Analyysitaso, jonka kohteiden perusteella leikattavalta tasolta valitaan kohteita.",
-                "labelTooltipIntersect": "Analyysiin mukaan otettavat leikattavan tason kohteet. Leikkaavat kohteet ovat ainakin osittain leikkaavan tason kohteiden alueilla, sisältyvät kohteet ovat kokonaan.",
+                "labelTooltipIntersect": "Analyysiin mukaan otettavat leikattavan tason kohteet. Leikkaavat kohteet ovat ainakin osittain leikkaavan tason kohteiden alueilla, sisältyvät kohteet ovat kokonaan. Työkalu on suunniteltu erityisesti pisteaineistoille. Alueilla rajatapaukset ovat hankalammin käsiteltävissä, jolloin lopputulos saattaa määräytyä väärin. Voit jättää rajatapaukset pois käyttämällä Sisältää-operaattoria.",
                 "options": [
                     {
                         "id": "oskari_analyse_intersect",
@@ -271,7 +273,11 @@ Oskari.registerLocalization(
                 "firstLayerFieldTooltip": "Ensimmäisen tason ominaisuustiedot, jotka otetaan analyysiin mukaan. Valitse enintään 10 ominaisuustietoa.",
                 "secondLayer": "Toinen taso",
                 "secondLayerTooltip": "Toinen yhdistettävä taso, jolta ominaisuustiedot haetaan.",
-                "secondLayerFieldTooltip": "Toisen tason ominaisuustiedot, jotka otetaan lopputulokseen mukaan. Valitse enintään 10 ominaisuustietoa."
+                "secondLayerFieldTooltip": "Toisen tason ominaisuustiedot, jotka otetaan lopputulokseen mukaan. Valitse enintään 10 ominaisuustietoa.",
+                "mode": "Analyysimenetelmän tyyppi",
+                "modeTooltip": "Valitse haluatko käyttää analyysissä tunnuslukujen laskentaa",
+                "normalMode": "Tavallinen menetelmä",
+                "aggregateMode": "Tunnuslukujen laskenta"
             },
             "params": {
                 "label": "Lopputulokseen mukaan otettavat ominaisuustiedot",
@@ -396,6 +402,11 @@ Oskari.registerLocalization(
                 "title": "Tiedoksi",
                 "layer": "Tason",
                 "over10": "kohteilla on yli 10 ominaisuustietoa. Valitse analyysiin mukaan  korkeintaan 10 ominaisuustietoa. Lista ominaisuustiedoista löytyy Parametrit-valikosta valittuasi analyysimenetelmän."
+            },
+            "aggregatePopup": {
+                "title": "Analyysin tulokset",
+                "property": "Ominaisuus",
+                "close": "Sulje"
             }
         },
         "StartView": {

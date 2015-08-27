@@ -1,4 +1,20 @@
+$filter-border-color: #a4a4a4;
+
 div.layerselector2 {
+    
+    div.layer-filter {
+        margin: 10px;
+        color: #949494;
+    }
+
+    div.filter {
+        border: 1px solid $filter-border-color;
+        padding: 10px;
+        float: left;
+        cursor:pointer;
+        margin-bottom: 5px;
+        margin-left: -1px;
+    }
 
     div.accordion {
 
@@ -35,7 +51,7 @@ div.layerselector2 {
 
         }
 
-        div.layer-title {
+        label.layer-title {
             /* Let's just imagine this is tabular data... */
             font-size : 12px;
         }

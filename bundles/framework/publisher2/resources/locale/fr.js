@@ -1,12 +1,12 @@
 Oskari.registerLocalization(
 {
-    "lang": "en",
+    "lang": "fr",
     "key": "Publisher2",
     "value": {
-        "tile" : {
+        "tile": {
             "title": "Publication de carte"
         },
-        "flyout" : {
+        "flyout": {
             "title": "Créer une carte intégrée"
         },
         "published": {
@@ -43,8 +43,8 @@ Oskari.registerLocalization(
                 "tooltip": "Sélectionnez la langue pour l'interface de l’utilisateur de la carte et les données apparaissant sur la carte."
             },
             "size": {
-                "label": "Taille",
-                "tooltip": "Sélectionnez ou définissez la taille de la carte à intégrer sur votre site internet. Vous pouvez voir les changements dans l’aperçu de la carte."
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Outils",
@@ -59,17 +59,28 @@ Oskari.registerLocalization(
                 "FeaturedataPlugin": "Données d'entité",
                 "GetInfoPlugin": "Outil de requête pour données d'entité",
                 "PublisherToolbarPlugin": "Outils de carte",
-                "selectDrawLayer": "Sélectionnez la couche pour les nouvelles entités"
-            },
-            "toolbarToolNames": {
-                "history_back": "Reculer",
-                "history_forward": "Avancer",
-                "measureline": "Mesurer la distance",
-                "measurearea": "Mesurer la zone",
-                "drawTools": "Outils de dessin",
-                "point": "Permet aux utilisateurs d’ajouter des caractéristiques de point.",
-                "line": "Permet aux utilisateurs d’ajouter des caractéristiques de ligne.",
-                "area": "Permet aux utilisateurs d’ajouter des caractéristiques de zone."
+                "selectDrawLayer": "Sélectionnez la couche pour les nouvelles entités",
+                "LayerSelectionPlugin":"NOT TRANSLATED",
+                "toolbarToolNames": {
+                    "history_back": "Reculer",
+                    "history_forward": "Avancer",
+                    "measureline": "Mesurer la distance",
+                    "measurearea": "Mesurer la zone",
+                    "drawTools": "Outils de dessin",
+                    "point": "Permet aux utilisateurs d’ajouter des caractéristiques de point.",
+                    "line": "Permet aux utilisateurs d’ajouter des caractéristiques de ligne.",
+                    "area": "Permet aux utilisateurs d’ajouter des caractéristiques de zone."
+                },
+                "layers": {
+                    "add": "Créez une nouvelle couche pour les nouvelles entités",
+                    "label": "Couches cartographiques",
+                    "addselect": "Ajouter une couche « dessin » à la carte",
+                    "defaultLayer": "(couche cartographique par défaut)",
+                    "useAsDefaultLayer": "Utiliser en tant que couche par défaut"
+                },
+                "myplaces": {
+                    "label": "Mes couches cartographiques"
+                }
             },
             "toollayout": {
                 "label": "Position de l'outil",
@@ -133,16 +144,6 @@ Oskari.registerLocalization(
                     }
                 }
             },
-            "layers": {
-                "add": "Créez une nouvelle couche pour les nouvelles entités",
-                "label": "Couches cartographiques",
-                "addselect": "Ajouter une couche « dessin » à la carte",
-                "defaultLayer": "(couche cartographique par défaut)",
-                "useAsDefaultLayer": "Utiliser en tant que couche par défaut"
-            },
-            "myplaces": {
-                "label": "Mes couches cartographiques"
-            },
             "sizes": {
                 "small": "Petit",
                 "medium": "Moyen",
@@ -168,7 +169,8 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Afficher les couches cartographiques dans le menu.",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Sélectionnez la couche cartographique d’arrière-plan. Vous pouvez sélectionner la couche cartographique d’arrière-plan dans l’aperçu de carte.",
                 "tooltip": "La couche cartographique d’arrière-plan apparaît sur la couche de fond de la carte. Une seule couche cartographique d’arrière-plan peut apparaître à la fois. L’utilisateur peut changer la carte d'arrière-plan s'il y a plus d’une couche cartographique sélectionnée en carte d’arrière-plan. La couche cartographique d’arrière-plan par défaut peut être sélectionnée dans l’aperçu de carte.",
                 "promote": "Souhaitez-vous faire aussi apparaître les images aériennes ?"

@@ -42,8 +42,8 @@ Oskari.registerLocalization({
                 "tooltip": "Odaberi jezik sučelja karte i podataka o karti."
             },
             "size": {
-                "label": "Veličina",
-                "tooltip": "Odaberi ili odredi veličinu karte koja će biti umetnuta u internet stranicu. Prethodni pregled karte prikazuje se u odabranoj veličini."
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Alati",
@@ -56,16 +56,28 @@ Oskari.registerLocalization({
                 "SearchPlugin": "Pretraživanje adresa i naziva mjesta",
                 "GetInfoPlugin": "Alat za upite o podacima mjesta",
                 "PublisherToolbarPlugin": "NOT TRANSLATED",
-                "selectDrawLayer" : "NOT TRANSLATED"
-            },
-            "toolbarToolNames": {
-                "history_back": "NOT TRANSLATED",
-                "history_forward": "NOT TRANSLATED",
-                "measureline": "NOT TRANSLATED",
-                "measurearea": "NOT TRANSLATED",
-                "point" : "NOT TRANSLATED",
-                "line" : "NOT TRANSLATED",
-                "area" : "NOT TRANSLATED"
+                "selectDrawLayer" : "NOT TRANSLATED",
+                "LayerSelectionPlugin":"NOT TRANSLATED",
+                "toolbarToolNames": {
+                    "history_back": "Move backwards",
+                    "history_forward": "Move forward",
+                    "measureline": "Measure distance",
+                    "measurearea": "Measure area",
+                    "drawTools": "Drawing tools",
+                    "point": "Allow users to add point features.",
+                    "line": "Allow users to add line features.",
+                    "area": "Allow users to add area features."
+                },
+                "layers": {
+                    "add": "Create new layer for new features.",
+                    "addselect": "Add a drawing layer to the map",
+                    "label": "Slojevi karte",
+                    "defaultLayer": "(Zadani sloj)",
+                    "useAsDefaultLayer": "Koristi kao zadani sloj"
+                },
+                "myplaces": {
+                    "label": "My map layers"
+                }
             },
             "toollayout": {
                 "label": "NOT TRANSLATED",
@@ -129,16 +141,6 @@ Oskari.registerLocalization({
                     }
                 }
             },
-            "layers": {
-                "add": "NOT TRANSLATED",
-                "addselect": "NOT TRANSLATED",
-                "label": "Slojevi karte",
-                "defaultLayer": "(Zadani sloj)",
-                "useAsDefaultLayer": "Koristi kao zadani sloj"
-            },
-            "myplaces": {
-                "label": "NOT TRANSLATED"
-            },
             "sizes": {
                 "small": "Malo",
                 "medium": "Srednje",
@@ -164,7 +166,8 @@ Oskari.registerLocalization({
                 }
             },
             "layerselection": {
-                "label": "Prikaži slojeve karte u izborniku",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Odaberi karte pozadine. Možete postaviti zadanu pozadinsku kartu u preglednom prozoru karte.",
                 "tooltip": "Karta pozadine prikazuje se kao donji sloj karte. Kod odabira slojeva karte koji će se koristiti kao donji sloj u jednom trenutku vidljiv je samo jedan sloj i moguće se prebacivati iz sloja u sloj.U  prozoru pregleda moguće je postaviti zadanu pozadinsku kartu.",
                 "promote": "Prikaz zračnih snimki?"

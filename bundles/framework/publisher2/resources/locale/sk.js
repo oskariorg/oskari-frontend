@@ -3,10 +3,10 @@ Oskari.registerLocalization(
     "lang": "sk",
     "key": "Publisher2",
     "value": {
-        "tile" : {
+        "tile": {
             "title": "Vytvoriť mapu"
         },
-        "flyout" : {
+        "flyout": {
             "title": "Vytvoriť mapu"
         },
         "published": {
@@ -30,7 +30,7 @@ Oskari.registerLocalization(
             },
             "name": {
                 "label": "Názov mapy",
-                "placeholder": "NOT TRANSLATED",
+                "placeholder": "required",
                 "tooltip": "Zadajte popisný názov Vašej mape . Prosím, všimnite si jazyk používateľského rozhrania"
             },
             "language": {
@@ -43,8 +43,8 @@ Oskari.registerLocalization(
                 "tooltip": "Vybrať jazyk mapového rozhrania a mapových údajov"
             },
             "size": {
-                "label": "Veľkosť",
-                "tooltip": "Vyberte alebo zadefinujte veľkosť mapy, ktorá má byť vložená na Vašu webovú stránku. Náhľad mapy je zobrazený vo vybratej veľkosti"
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Nástroje",
@@ -53,98 +53,102 @@ Oskari.registerLocalization(
                 "IndexMapPlugin": "Indexová mapa",
                 "PanButtons": "Náradie posúvania",
                 "Portti2Zoombar": "Posuvník mierky",
+                "MyLocationPlugin": "Center to user's location",
                 "ControlsPlugin": "Posúvanie zapnuté",
                 "SearchPlugin": "Vyhľadať adresu a názov miesta",
+                "FeaturedataPlugin": "Feature data",
                 "GetInfoPlugin": "Dotazovací nástroj na údaje o mieste",
-                "PublisherToolbarPlugin": "NOT TRANSLATED",
-                "selectDrawLayer": "NOT TRANSLATED"
-            },
-            "toolbarToolNames": {
-                "history_back": "NOT TRANSLATED",
-                "history_forward": "NOT TRANSLATED",
-                "measureline": "NOT TRANSLATED",
-                "measurearea": "NOT TRANSLATED",
-                "point": "NOT TRANSLATED",
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "PublisherToolbarPlugin": "Map tools",
+                "selectDrawLayer": "Select layer for new features",
+                "LayerSelectionPlugin":"NOT TRANSLATED",
+                "toolbarToolNames": {
+                    "history_back": "Move backwards",
+                    "history_forward": "Move forward",
+                    "measureline": "Measure distance",
+                    "measurearea": "Measure area",
+                    "drawTools": "Drawing tools",
+                    "point": "Allow users to add point features.",
+                    "line": "Allow users to add line features.",
+                    "area": "Allow users to add area features."
+                },
+                "layers": {
+                    "add": "Create new layer for new features.",
+                    "addselect": "Add a drawing layer to the map",
+                    "label": "Mapové vrstvy",
+                    "defaultLayer": "(Predvolená vrstva)",
+                    "useAsDefaultLayer": "Použiť ako predvolenú vrstvu"
+                },
+                "myplaces": {
+                    "label": "My map layers"
+                }
             },
             "toollayout": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
-                "lefthanded": "NOT TRANSLATED",
-                "righthanded": "NOT TRANSLATED",
-                "userlayout": "NOT TRANSLATED",
-                "usereditmode": "NOT TRANSLATED",
-                "usereditmodeoff": "NOT TRANSLATED"
+                "label": "Tool Placement",
+                "tooltip": "Select the placement for the tool to be shown on the map.",
+                "lefthanded": "Lefthanded",
+                "righthanded": "Righthanded",
+                "userlayout": "Custom layout",
+                "usereditmode": "Start editing",
+                "usereditmodeoff": "Finish editing"
             },
             "data": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
-                "grid": "NOT TRANSLATED",
-                "allowClassification": "NOT TRANSLATED"
+                "label": "Statistics",
+                "tooltip": "Show map statistics",
+                "grid": "Show statistics",
+                "allowClassification": "Allow classification"
             },
             "layout": {
-                "label": "NOT TRANSLATED",
+                "label": "Graphic Layout",
                 "fields": {
                     "colours": {
-                        "label": "NOT TRANSLATED",
-                        "placeholder": "NOT TRANSLATED",
-                        "buttonLabel": "NOT TRANSLATED",
-                        "light_grey": "NOT TRANSLATED",
-                        "dark_grey": "NOT TRANSLATED",
-                        "blue": "NOT TRANSLATED",
-                        "red": "NOT TRANSLATED",
-                        "green": "NOT TRANSLATED",
-                        "yellow": "NOT TRANSLATED",
-                        "custom": "NOT TRANSLATED",
+                        "label": "Color scheme",
+                        "placeholder": "Select the color scheme.",
+                        "buttonLabel": "Select",
+                        "light_grey": "Light gray",
+                        "dark_grey": "Dark gray",
+                        "blue": "Blue",
+                        "red": "Red",
+                        "green": "Green",
+                        "yellow": "Yellow",
+                        "custom": "Own color scheme",
                         "customLabels": {
-                            "bgLabel": "NOT TRANSLATED",
-                            "titleLabel": "NOT TRANSLATED",
-                            "headerLabel": "NOT TRANSLATED",
-                            "iconLabel": "NOT TRANSLATED",
-                            "iconCloseLabel": "NOT TRANSLATED",
-                            "iconCloseWhiteLabel": "NOT TRANSLATED"
+                            "bgLabel": "Identifier background",
+                            "titleLabel": "Identifier text",
+                            "headerLabel": "Header text",
+                            "iconLabel": "Icon",
+                            "iconCloseLabel": "Dark",
+                            "iconCloseWhiteLabel": "Light"
                         }
                     },
                     "fonts": {
-                        "label": "NOT TRANSLATED"
+                        "label": "Font style"
                     },
                     "toolStyles": {
-                        "label": "NOT TRANSLATED",
-                        "default": "NOT TRANSLATED",
-                        "rounded-dark": "NOT TRANSLATED",
-                        "rounded-light": "NOT TRANSLATED",
-                        "sharp-dark": "NOT TRANSLATED",
-                        "sharp-light": "NOT TRANSLATED",
-                        "3d-dark": "NOT TRANSLATED",
-                        "3d-light": "NOT TRANSLATED"
+                        "label": "Tool style",
+                        "default": "Default style",
+                        "rounded-dark": "Rounded (dark)",
+                        "rounded-light": "Rounded (light)",
+                        "sharp-dark": "Angular (dark)",
+                        "sharp-light": "Angular (light)",
+                        "3d-dark": "Three-dimensional (dark)",
+                        "3d-light": "Three-dimensional (light)"
                     }
                 },
                 "popup": {
-                    "title": "NOT TRANSLATED",
-                    "close": "NOT TRANSLATED",
+                    "title": "Select Color Scheme",
+                    "close": "Close",
                     "gfiDialog": {
-                        "title": "NOT TRANSLATED",
-                        "featureName": "NOT TRANSLATED",
-                        "featureDesc": "NOT TRANSLATED"
+                        "title": "Feature info",
+                        "featureName": "Preview",
+                        "featureDesc": "The color scheme only defines the color of the popup windows for the feature info and map layer selection."
                     }
                 }
-            },
-            "layers": {
-                "add": "NOT TRANSLATED",
-                "addselect": "NOT TRANSLATED",
-                "label": "Mapové vrstvy",
-                "defaultLayer": "(Predvolená vrstva)",
-                "useAsDefaultLayer": "Použiť ako predvolenú vrstvu"
-            },
-            "myplaces": {
-                "label": "NOT TRANSLATED"
             },
             "sizes": {
                 "small": "Malé",
                 "medium": "Stredné",
                 "large": "Veľké",
-                "fill": "NOT TRANSLATED",
+                "fill": "Fill space",
                 "custom": "Veľkosť zadaná užívateľom",
                 "width": "šírka",
                 "height": "výška",
@@ -156,7 +160,7 @@ Oskari.registerLocalization(
                 "ok": "OK",
                 "replace": "Nahradiť",
                 "cancel": "Zrušiť",
-                "add": "NOT TRANSLATED"
+                "add": "Add a map layer"
             },
             "confirm": {
                 "replace": {
@@ -165,7 +169,8 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Zobraziť mapové vrstvy v menu",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Vyberte podkladové mapy. Môžete si zvoliť predvolenú podkladovú mapu v okne pre náhľad mapy",
                 "tooltip": "Podkladová mapa je zobrazená ako spodná vrstva na mape. Keď si zvolíte aby sa mapové vrstvy použili ako spodná vrstva, iba jedna vrstva bude viditeľná a Vy môžete medzi nimi prepínať. Predvolenú podkladovú mapu si môžete nastaviť v zobrazení mapy",
                 "promote": "Zobraziť letecké snímky?"
@@ -182,7 +187,7 @@ Oskari.registerLocalization(
                 "name": "Názov je vyžiadaná informácia",
                 "nohelp": "Pomoc nie je k dispozícii",
                 "saveFailed": "Zverejnenie mapy zlyhalo. Skúste neskôr, prosím",
-                "nameIllegalCharacters": "NOT TRANSLATED",
+                "nameIllegalCharacters": "The name of the map contains illegal characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces and hyphens.",
                 "domainIllegalCharacters": "Názov webovej stránky obsahuje nepovolené znaky. Povolené znaky sú písmená a-z, rovnako aj å, ä, ö, čísla, medzery a spojovníky."
             }
         },
@@ -200,7 +205,7 @@ Oskari.registerLocalization(
             "layerlist_empty": "Vybrané mapové vrstvy sa nedajú vkladať. Menu Vybraté mapové vrstvy zobrazuje, či mapová vrstva môže alebo nemôže byť vložená",
             "layerlist_denied": "Nemôže byť vložené",
             "denied_tooltip": "Poskytovatelia údajov tejto mapy nepovolili zverejnenie týchto materiálov na iných webových stránkach. Skontrolujte práva na zobrazenie v menu Vybraté mapové vrstvy pred vložením",
-            "myPlacesDisclaimer": "NOT TRANSLATED",
+            "myPlacesDisclaimer": "NB. You are publishing your own map layer.",
             "buttons": {
                 "continue": "Pokračovať",
                 "continueAndAccept": "Prijať podmienky používania a pokračovať",
@@ -214,14 +219,14 @@ Oskari.registerLocalization(
             }
         },
         "layer": {
-            "show": "NOT TRANSLATED",
-            "hide": "NOT TRANSLATED",
-            "hidden": "NOT TRANSLATED",
+            "show": "Show",
+            "hide": "Hide",
+            "hidden": "The map layer is temporarily hidden.",
             "selectAsBaselayer": "NOT TRANSLATED",
             "rights": {
                 "can_be_published_map_user": {
-                    "label": "NOT TRANSLATED",
-                    "tooltip": "NOT TRANSLATED"
+                    "label": "The map layer can be published in a embedded map.",
+                    "tooltip": "The map layer can be published in a embedded map. The weekly number of users can be limited."
                 }
             }
         }

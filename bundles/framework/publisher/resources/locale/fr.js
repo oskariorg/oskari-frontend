@@ -1,6 +1,6 @@
 Oskari.registerLocalization(
 {
-    "lang": "en",
+    "lang": "fr",
     "key": "Publisher",
     "value": {
         "title": "Publication de carte",
@@ -223,6 +223,14 @@ Oskari.registerLocalization(
                     "label": "La couche cartographique ne peut pas être publiée dans une carte intégrée.",
                     "tooltip": "La couche cartographique ne peut pas être publiée dans une carte intégrée. Le nombre d’utilisateurs hebdomadaire peut être limité."
                 }
+            }
+        },
+        "layerFilter": {
+            "buttons": {
+                "publishable": "Publishable"
+            },
+            "tooltips": {
+                "publishable": "Show only publishable map layers"
             }
         }
     }

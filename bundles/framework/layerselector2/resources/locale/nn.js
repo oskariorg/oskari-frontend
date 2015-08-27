@@ -36,15 +36,15 @@ Oskari.registerLocalization(
         "backendStatus": {
             "OK": {
                 "tooltip": "Kartlaget er tilgjengeleg",
-                "iconClass": "backendstatus OK"
+                "iconClass": "backendstatus-ok"
             },
             "DOWN": {
                 "tooltip": "Kartlaget er for tida utilgjengeleg",
-                "iconClass": "backendstatus nede"
+                "iconClass": "backendstatus-down"
             },
             "MAINTENANCE": {
                 "tooltip": "Kartlaget kan vere midlertidig utilgjengeleg dei nærmaste dagane",
-                "iconClass": "backend-status-vedlikehald"
+                "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
                 "tooltip": "",
@@ -60,6 +60,17 @@ Oskari.registerLocalization(
             "vk": "Coordinate concept",
             "ak": "Subordinate concept",
             "yk": "Superordinate concept"
+        },
+        "layerFilter": {
+            "buttons": {
+                "newest": "Newest",
+                "stats": "Vector layers"
+            },
+            "tooltips": {
+                "newest": "Show ## newest map layers",
+                "stats": "Show only vector layers",
+                "remove": "Remove filter"
+            }
         }
     }
 }

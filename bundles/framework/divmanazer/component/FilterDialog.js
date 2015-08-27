@@ -31,7 +31,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                                                     '<input id="analyse-clicked-features" type="radio" name="analysis-filter-radio" class="filter-radio"/>' +
                                                     '<label id="filter-clicked-features" for="analyse-clicked-features"></label>' +
                                                 '</div>' +
-                                            '</div>',                                        
+                                            '</div>',
             filterContentBBOX:  '<div id="bbox-selection-container">'+
                                     '<div class="bbox-on">' +
                                         '<input id="analyse-filter-bbox-on" type="radio" name="analysis-filter-radio"  class="filter-radio" value="true" />' +
@@ -58,9 +58,9 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                                                     '</div>' +
                                                 '</div>' +
                                             '</div>',
-            filterContentValues: '<div class="analyse-filter analyse-filter-popup-values">' + 
+            filterContentValues: '<div class="analyse-filter analyse-filter-popup-values">' +
                                     '<div class="values-title"></div>' +
-                                    '<div class="values-additional-info"></div>'+ 
+                                    '<div class="values-additional-info"></div>'+
                                  '</div>',
             filterContentOption: '<div class="filter-by-values-container">' +
                                     '<div class="case-sensitive-filtering">' +
@@ -147,7 +147,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                 var filtersJson = me.getFilterValues();   // Get the filter values from the dialog
                 // Validate the values for errors
                 filterErrors = me._validateFilterValues(filtersJson);
-                
+
                 //"additional" errors, other than "missing value" etc.. ie. bbox selected but no property filters
                 if (filtersJson.filterErrors) {
 

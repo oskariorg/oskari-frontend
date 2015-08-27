@@ -592,14 +592,15 @@ Oskari.clazz.category(
          *
          * sends message to /service/wfs/setLocation
          */
-        setLocation: function (layerId, srs, bbox, zoom, grid, tiles) {
+        setLocation: function (layerId, srs, bbox, zoom, grid, tiles, manualRefesh) {
             this.sendMessage('/service/wfs/setLocation', {
                 'layerId': layerId,
                 'srs': srs,
                 'bbox': bbox,
                 'zoom': zoom,
                 'grid': grid,
-                'tiles': tiles
+                'tiles': tiles,
+                'manualRefresh': manualRefesh
             });
         },
 

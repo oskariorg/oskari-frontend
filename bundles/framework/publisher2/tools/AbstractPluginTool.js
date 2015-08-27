@@ -16,6 +16,7 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     this.__instance = instance;
     this.__plugin = null;
     this.__handlers = handlers;
+    this.__started = false;
     this.state= {
         enabled: false,
         mode:null
@@ -25,6 +26,9 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     group : 'maptools',
     // 'bottom left', 'bottom right' etc
     allowedLocations : [],
+    //default location in lefthanded / righthanded layouts. Override.
+    lefthanded: '',
+    righthanded: '',
     // List of plugin classes that can reside in same container(?) like 'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin'
     allowedSiblings : [],
     // ??
@@ -57,10 +61,16 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     */
     setEnabled : function(enabled) {
         var me = this,
-            tool = me.getTool();
+            tool = me.getTool(),
+            sandbox = me.__sandbox;
+
+
+        //state actually hasn't changed -> do nothing
+        if (me.state.enabled !== undefined && me.state.enabled !== null && enabled === me.state.enabled) {
+            return;
+        }
 
         me.state.enabled = enabled;
-
         if(!me.__plugin && enabled) {
             me.__plugin = Oskari.clazz.create(tool.id, tool.config);
             me.__mapmodule.registerPlugin(me.__plugin);
@@ -68,13 +78,18 @@ function(sandbox, mapmodule, localization, instance, handlers) {
 
         if(enabled === true) {
             me.__plugin.startPlugin(me.__sandbox);
+            me.__started = true;
         } else {
-            me.__plugin.stopPlugin(me.__sandbox);
+            if(me.__started === true) {
+                me.__plugin.stopPlugin(me.__sandbox);
+            }
         }
 
         if(enabled === true && me.state.mode !== null && me.__plugin && typeof me.__plugin.setMode === 'function'){
             me.__plugin.setMode(me.state.mode);
         }
+        var event = sandbox.getEventBuilder('Publisher2.ToolEnabledChangedEvent')(me);
+        sandbox.notifyAll(event);
     },
     /**
     * Get extra options.
@@ -118,6 +133,18 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     isDisplayed: function() {
         return true;
     },
+
+    /**
+    * Whether or not to create a panel and checkbox for the tool in the tools' panel.
+    * @method isShownInToolsPanel
+    * @public
+    *
+    * @returns {Boolean} is the tool displayed in the tools' panel
+    */
+    isShownInToolsPanel: function() {
+        return true;
+    },
+
     /**
     * Set mode to.
     * @method setMode
@@ -171,15 +198,17 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     * @returns {Object} tool value object
     */
     getValues: function () {
-        // TODO: this needs more thinking
-        // tool should propably know where its config affects
-        // maybe return that kind of object
-        // mapfull.conf.plugins.push({id : this.getTool().id}) ???
-        return {
-            tool: this.getTool().id,
-            show: this.state.enabled,
-            subTools : []
-        };
+        // override
+    },
+    /**
+    * Get plugin.
+    * @method getPlugin
+    * @public
+    *
+    * @returns {Object} the tool's plugin
+    */
+    getPlugin: function () {
+        return this.__plugin;
     },
     /**
     * Validate tool.
@@ -197,11 +226,11 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     */
     stop: function(){
         var me = this;
-
-        if(!me.__plugin) {
+        if(me.__plugin) {
+            if(me.__sandbox){
+                me.__plugin.stopPlugin(me.__sandbox);
+            }
             me.__mapmodule.unregisterPlugin(me.__plugin);
-            me.__plugin.stopPlugin(me.__sandbox);
         }
     }
-
 });

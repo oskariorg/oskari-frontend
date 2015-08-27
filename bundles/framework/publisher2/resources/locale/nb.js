@@ -43,8 +43,8 @@ Oskari.registerLocalization(
                 "tooltip": "Velg språk for grensesnitt og data på kartet"
             },
             "size": {
-                "label": "Størrelse",
-                "tooltip": "Velg eller angi størrelsen på kartet som skal bygges inne på ditt nettsted. Du kan se endringer i vinduet for forhåndsvisning."
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Verktøy",
@@ -59,18 +59,30 @@ Oskari.registerLocalization(
                 "FeaturedataPlugin": "Forekomstdata",
                 "GetInfoPlugin": "Spørreverktøy for forekomster",
                 "PublisherToolbarPlugin": "Kartverktøy",
-                "selectDrawLayer": "Velg lag for nye forekomster"
+                "selectDrawLayer": "Velg lag for nye forekomster",
+                "LayerSelectionPlugin":"NOT TRANSLATED",
+                "toolbarToolNames": {
+                    "history_back": "Flytt tilbake",
+                    "history_forward": "Flytt fremover",
+                    "measureline": "Mål avstand",
+                    "measurearea": "Mål areal",
+                    "drawTools": "Tegneverktøy",
+                    "point": "Tillat brukere å legge til punktforekomster",
+                    "line": "Tillat brukere å legge til linjeforekomster",
+                    "area": "Tillat brukere å legge til arealforekomster"
+                },
+                "layers": {
+                    "add": "Lag nytt lag for nye forekomster",
+                    "label": "Kartlag",
+                    "addselect": "Legg til tegning til kartet",
+                    "defaultLayer": "(Standard kartlag)",
+                    "useAsDefaultLayer": "Bruk som standard lag"
+                },
+                "myplaces": {
+                    "label": "Mitt kartlag"
+                }
             },
-            "toolbarToolNames": {
-                "history_back": "Flytt tilbake",
-                "history_forward": "Flytt fremover",
-                "measureline": "Mål avstand",
-                "measurearea": "Mål areal",
-                "drawTools": "Tegneverktøy",
-                "point": "Tillat brukere å legge til punktforekomster",
-                "line": "Tillat brukere å legge til linjeforekomster",
-                "area": "Tillat brukere å legge til arealforekomster"
-            },
+
             "toollayout": {
                 "label": "Verktøyplassering",
                 "tooltip": "Velg plassering av verktøyet på kartet",
@@ -133,16 +145,6 @@ Oskari.registerLocalization(
                     }
                 }
             },
-            "layers": {
-                "add": "Lag nytt lag for nye forekomster",
-                "label": "Kartlag",
-                "addselect": "Legg til tegning til kartet",
-                "defaultLayer": "(Standard kartlag)",
-                "useAsDefaultLayer": "Bruk som standard lag"
-            },
-            "myplaces": {
-                "label": "Mitt kartlag"
-            },
             "sizes": {
                 "small": "Liten",
                 "medium": "Medium",
@@ -168,7 +170,8 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Vis kartlag i menyen",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Velg kartlag som bakgrunn.Du kan velge standard bakgrunnslag i vinduet for forhåndsvisning",
                 "tooltip": "Bakgrunnen er vist i det nederste kartlaget. Kun ett kartlag kan bli vises om gangen.  Brukeren kan skifte bakgrunn dersom det er valgt flere lag. Standard kartlag kan velges i forhåndsvisningen.",
                 "promote": "Vil du også vise satellitt/flyfoto?"

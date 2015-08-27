@@ -43,8 +43,8 @@ Oskari.registerLocalization(
                 "tooltip": "Izberi jezik za uporabniški vmesnik karte in kartografske podatke."
             },
             "size": {
-                "label": "Velikost",
-                "tooltip": "Izberi ali določi velikost karte, ki bo vstavljena v spletno stran. Predogled karte je v tej izbrani velikosti."
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Orodja",
@@ -59,18 +59,30 @@ Oskari.registerLocalization(
                 "FeaturedataPlugin": "Podatki o objektu",
                 "GetInfoPlugin": "Orodje za poizvedovanje podatkov o objektu",
                 "PublisherToolbarPlugin": "Orodja za karto",
-                "selectDrawLayer": "Izberi sloj za nove objekte"
+                "selectDrawLayer": "Izberi sloj za nove objekte",
+                "LayerSelectionPlugin":"NOT TRANSLATED",
+                "toolbarToolNames": {
+                    "history_back": "Nazaj",
+                    "history_forward": "Naprej",
+                    "measureline": "Izmeri razdaljo",
+                    "measurearea": "Izmeri območje",
+                    "drawTools": "Risalna orodja",
+                    "point": "Dovoli uporabnikom dodajanje točkovnih objektov",
+                    "line": "Dovoli uporabnikom dodajanje linijskih objektov",
+                    "area": "Dovoli uporabnikom dodajanje ploskovnih objektov"
+                },
+                "layers": {
+                    "add": "Ustvari nov sloj za nove objekte.",
+                    "label": "Sloji karte",
+                    "addselect": "Dodaj risalni sloj karti.",
+                    "defaultLayer": "(Privzet sloj)",
+                    "useAsDefaultLayer": "Uporabi kot privzet sloj"
+                },
+                "myplaces": {
+                    "label": "Moji sloji karte"
+                }
             },
-            "toolbarToolNames": {
-                "history_back": "Nazaj",
-                "history_forward": "Naprej",
-                "measureline": "Izmeri razdaljo",
-                "measurearea": "Izmeri območje",
-                "drawTools": "Risalna orodja",
-                "point": "Dovoli uporabnikom dodajanje točkovnih objektov",
-                "line": "Dovoli uporabnikom dodajanje linijskih objektov",
-                "area": "Dovoli uporabnikom dodajanje ploskovnih objektov"
-            },
+
             "toollayout": {
                 "label": "Pozicija orodja",
                 "tooltip": "Izberi položaj orodja na karti",
@@ -133,16 +145,6 @@ Oskari.registerLocalization(
                     }
                 }
             },
-            "layers": {
-                "add": "Ustvari nov sloj za nove objekte.",
-                "label": "Sloji karte",
-                "addselect": "Dodaj risalni sloj karti.",
-                "defaultLayer": "(Privzet sloj)",
-                "useAsDefaultLayer": "Uporabi kot privzet sloj"
-            },
-            "myplaces": {
-                "label": "Moji sloji karte"
-            },
             "sizes": {
                 "small": "Majhen",
                 "medium": "Srednji",
@@ -168,7 +170,8 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Pokaži sloje karte v meniju",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Izberi slog karte za ozadje. V oknu Predogled lahko določiš privzet sloj karte za ozadje.",
                 "tooltip": "Karta za ozadje je prikazana kot spodnji sloj karte. Ko izbiraš sloje karte, ki bodo uporabljeni kot spodnji sloj, bo od teh viden samo en sloj naenkrat in lahko preklapljaš med njimi. Privzeto karto za ozadje lahko nastaviš v predogledu karte.",
                 "promote": "Prikaži aeroposnetke?"

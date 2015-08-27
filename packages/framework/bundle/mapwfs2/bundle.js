@@ -66,6 +66,9 @@ function() {
             "src" : "../../../../bundles/framework/mapwfs2/event/WFSFeatureGeometriesEvent.js"
         },{
             "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/mapwfs2/event/WFSRefreshManualLoadLayersEvent.js"
+        },{
+            "type" : "text/javascript",
             "src" : "../../../../bundles/framework/mapwfs2/event/WFSImageEvent.js"
         }, {
             "type" : "text/javascript",
@@ -106,6 +109,9 @@ function() {
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/divmanazer/component/visualization-form/AreaForm.js"
+        },{
+            "type": "text/css",
+            "src": "../../../../bundles/framework/mapwfs2/resources/css/style.css"
         }],
         "locales" : [{
             "lang" : "en",

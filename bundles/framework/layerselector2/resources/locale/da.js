@@ -36,19 +36,19 @@ Oskari.registerLocalization(
         "backendStatus": {
             "OK": {
                 "tooltip": "Kortlaget er tilgængeligt",
-                "iconClass": "NOT TRANSLATED"
+                "iconClass": "backendstatus-ok"
             },
             "DOWN": {
                 "tooltip": "Kortlaget er ikke tilgængeligt",
-                "iconClass": "NOT TRANSLATED"
+                "iconClass": "backendstatus-down"
             },
             "MAINTENANCE": {
                 "tooltip": "Kortlaget vil være lejlighedsvis utilgængeligt i de kommende dage",
-                "iconClass": "NOT TRANSLATED"
+                "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
                 "tooltip": "",
-                "iconClass": "NOT TRANSLATED"
+                "iconClass": "backendstatus-ok"
             }
         },
         "buttons": {
@@ -60,6 +60,17 @@ Oskari.registerLocalization(
             "vk": "NOT TRANSLATED",
             "ak": "NOT TRANSLATED",
             "yk": "NOT TRANSLATED"
+        },
+        "layerFilter": {
+            "buttons": {
+                "newest": "Newest",
+                "stats": "Vector layers"
+            },
+            "tooltips": {
+                "newest": "Show ## newest map layers",
+                "stats": "Show only vector layers",
+                "remove": "Remove filter"
+            }
         }
     }
 }

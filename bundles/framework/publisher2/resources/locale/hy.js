@@ -43,8 +43,8 @@ Oskari.registerLocalization(
                 "tooltip": "Ընտրել քարտեզի ինտերֆեյսի և քարտեզի տվյալների լեզուն"
             },
             "size": {
-                "label": "Չափ",
-                "tooltip": "Ընտրել կամ սահմանել ինտերնետային կայք ներմուծվող  քարտեզի չափսերը :Քարտեզը ներկայացվում է ընտրված չափով"
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Գործիքներ",
@@ -58,16 +58,28 @@ Oskari.registerLocalization(
                 "FeaturedataPlugin": "NOT TRANSLATED",
                 "GetInfoPlugin": "Տեղանքի տվյալների հարցման գործիք",
                 "PublisherToolbarPlugin": "NOT TRANSLATED",
-                "selectDrawLayer": "NOT TRANSLATED"
-            },
-            "toolbarToolNames": {
-                "history_back": "NOT TRANSLATED",
-                "history_forward": "NOT TRANSLATED",
-                "measureline": "NOT TRANSLATED",
-                "measurearea": "NOT TRANSLATED",
-                "point": "NOT TRANSLATED",
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "selectDrawLayer": "NOT TRANSLATED",
+                "LayerSelectionPlugin":"NOT TRANSLATED",
+                "toolbarToolNames": {
+                    "history_back": "Move backwards",
+                    "history_forward": "Move forward",
+                    "measureline": "Measure distance",
+                    "measurearea": "Measure area",
+                    "drawTools": "Drawing tools",
+                    "point": "Allow users to add point features.",
+                    "line": "Allow users to add line features.",
+                    "area": "Allow users to add area features."
+                },
+                "layers": {
+                    "add": "Create new layer for new features.",
+                    "addselect": "Add a drawing layer to the map",
+                    "label": "Քարտեզի շերտեր",
+                    "defaultLayer": "(Սկզբնական շերտ)",
+                    "useAsDefaultLayer": "Օգտագործել որպես հիմքային շերտ"
+                },
+                "myplaces": {
+                    "label": "My map layers"
+                }
             },
             "toollayout": {
                 "label": "NOT TRANSLATED",
@@ -131,16 +143,6 @@ Oskari.registerLocalization(
                     }
                 }
             },
-            "layers": {
-                "add": "NOT TRANSLATED",
-                "addselect": "NOT TRANSLATED",
-                "label": "Քարտեզի շերտեր",
-                "defaultLayer": "(Սկզբնական շերտ)",
-                "useAsDefaultLayer": "Օգտագործել որպես հիմքային շերտ"
-            },
-            "myplaces": {
-                "label": "NOT TRANSLATED"
-            },
             "sizes": {
                 "small": "Փոքր",
                 "medium": "Միջին",
@@ -166,7 +168,8 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "մենյուում ցուցադրել քարտեզի շերտերը",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Ընտրել ֆոնային քատեզները:Հնարավոր է տեղադրել բազային ֆոնային քարտեզ քարտեզի նախադիտման պատուհանում",
                 "tooltip": "Բազային քարտեզը ցուցաադրվում է որպես քարտեզի ստորին շերտ:Որպես ստորին շերտ օգտագործվելիք քարտեզի շերտերի ընտրության դեպքում միայն մեկ համաժամանակյա շերտն է տեսանելի և հնարավոր է մեկից անցնել մյուսը: Հնարավոր է քարտեզի նախադիտում պատուհանում տեղադրել  բազային ֆոնային քարտեզ",
                 "promote": "Ցուցադրել աերո պատկերները"

@@ -43,8 +43,8 @@ Oskari.registerLocalization(
                 "tooltip": "Veldu tungumál fyrir notendaviðmótið og gögnin."
             },
             "size": {
-                "label": "Stærð",
-                "tooltip": "NOT TRANSLATED"
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Verkfæri",
@@ -59,17 +59,28 @@ Oskari.registerLocalization(
                 "FeaturedataPlugin": "NOT TRANSLATED",
                 "GetInfoPlugin": "NOT TRANSLATED",
                 "PublisherToolbarPlugin": "NOT TRANSLATED",
-                "selectDrawLayer": "NOT TRANSLATED"
-            },
-            "toolbarToolNames": {
-                "history_back": "NOT TRANSLATED",
-                "history_forward": "NOT TRANSLATED",
-                "measureline": "NOT TRANSLATED",
-                "measurearea": "NOT TRANSLATED",
-                "drawTools": "NOT TRANSLATED",
-                "point": "NOT TRANSLATED",
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "selectDrawLayer": "NOT TRANSLATED",
+                "LayerSelectionPlugin":"NOT TRANSLATED",
+                "toolbarToolNames": {
+                    "history_back": "Move backwards",
+                    "history_forward": "Move forward",
+                    "measureline": "Measure distance",
+                    "measurearea": "Measure area",
+                    "drawTools": "Drawing tools",
+                    "point": "Allow users to add point features.",
+                    "line": "Allow users to add line features.",
+                    "area": "Allow users to add area features."
+                },
+                "layers": {
+                    "add": "Create new layer for new features.",
+                    "addselect": "Add a drawing layer to the map",
+                    "label": "Kortalög",
+                    "defaultLayer": "(Sjálfgefið lag)",
+                    "useAsDefaultLayer": "Nota sem sjálfgefið lag"
+                },
+                "myplaces": {
+                    "label": "My map layers"
+                }
             },
             "toollayout": {
                 "label": "NOT TRANSLATED",
@@ -133,16 +144,6 @@ Oskari.registerLocalization(
                     }
                 }
             },
-            "layers": {
-                "add": "NOT TRANSLATED",
-                "label": "Kortalög",
-                "addselect": "NOT TRANSLATED",
-                "defaultLayer": "(Sjálfgefið lag)",
-                "useAsDefaultLayer": "Nota sem sjálfgefið lag"
-            },
-            "myplaces": {
-                "label": "NOT TRANSLATED"
-            },
             "sizes": {
                 "small": "Lítið",
                 "medium": "Miðlungs",
@@ -168,7 +169,8 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Sýna kortalög í valmynd.",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Veldu bakgrunnskort. Hægt er að stilla sjálfgefin bakgrunnskort í forskoðunarglugganum.",
                 "tooltip": "NOT TRANSLATED",
                 "promote": "Sýna loftmyndir?"

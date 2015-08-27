@@ -43,8 +43,8 @@ Oskari.registerLocalization(
                 "tooltip": "Seleccione el idioma de la interfaz y de los datos del mapa"
             },
             "size": {
-                "label": "Tamaño",
-                "tooltip": "Seleccione o defina el tamaño del mapa que se incorporará en su portal web. La previsualización del mapa se mostrará en el tamaño seleccionado"
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Herramientas",
@@ -59,18 +59,30 @@ Oskari.registerLocalization(
                 "FeaturedataPlugin": "Datos de objetos geográficos",
                 "GetInfoPlugin": "Herramienta de consulta para los datos de sitios",
                 "PublisherToolbarPlugin": "Herramientas de mapa",
-                "selectDrawLayer": "Selecciona la capa para nuevos objetos geográficos"
+                "selectDrawLayer": "Selecciona la capa para nuevos objetos geográficos",
+                "LayerSelectionPlugin":"NOT TRANSLATED",
+                "toolbarToolNames": {
+                    "history_back": "Mover atrás",
+                    "history_forward": "Mover adelante",
+                    "measureline": "Medir distancia",
+                    "measurearea": "Medir área",
+                    "drawTools": "Herramientas de dibujo",
+                    "point": "Permitir usuarios añadir objetos geográficos puntuales",
+                    "line": "Permitir usuarios añadir objetos geográficos lineales",
+                    "area": "Permitir usuarios añadir objetos geográficos superficiales"
+                },
+                "layers": {
+                    "add": "Crear nueva capa para nuevos objetos geográficos",
+                    "label": "Capas",
+                    "addselect": "Añadir una nueva capa de dibujo en el mapa.",
+                    "defaultLayer": "(Capa por defecto)",
+                    "useAsDefaultLayer": "Usar como capa por defecto"
+                },
+                "myplaces": {
+                    "label": "Mis capas del mapa."
+                }
             },
-            "toolbarToolNames": {
-                "history_back": "Mover atrás",
-                "history_forward": "Mover adelante",
-                "measureline": "Medir distancia",
-                "measurearea": "Medir área",
-                "drawTools": "Herramientas de dibujo",
-                "point": "Permitir usuarios añadir objetos geográficos puntuales",
-                "line": "Permitir usuarios añadir objetos geográficos lineales",
-                "area": "Permitir usuarios añadir objetos geográficos superficiales"
-            },
+
             "toollayout": {
                 "label": "Tool layout",
                 "tooltip": "Choose a layout for the tools shown on the map",
@@ -133,16 +145,6 @@ Oskari.registerLocalization(
                     }
                 }
             },
-            "layers": {
-                "add": "Crear nueva capa para nuevos objetos geográficos",
-                "label": "Capas",
-                "addselect": "Añadir una nueva capa de dibujo en el mapa.",
-                "defaultLayer": "(Capa por defecto)",
-                "useAsDefaultLayer": "Usar como capa por defecto"
-            },
-            "myplaces": {
-                "label": "Mis capas del mapa."
-            },
             "sizes": {
                 "small": "Pequeño",
                 "medium": "Mediano",
@@ -168,7 +170,8 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Mostrar las capas en el menú",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Seleccione los mapas de fondo. Puede configurar el mapa de fondo en la ventana de previsualización del mapa",
                 "tooltip": "El mapa de fondo se muestra como la capa de fondo del mapa. Cuando seleccione las capas que va a utilizar como fondo, sólo una es visible cada vez, pudiendo intercambiarlas. Puede configurar el mapa de fondo por defecto en la previsualización del mapa",
                 "promote": "¿Mostrar imágenes por defecto?"

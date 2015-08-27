@@ -144,6 +144,7 @@ Oskari.registerLocalization({
             "gfiResponseTypeDesc": "Kohdetietokyselyn (GFI=Get Feature Info) vastauksen tyyppi.",
             "gfiStyle": "GFI-tyyli (XSLT)",
             "gfiStyleDesc": "Kohdetietokyselyn (GFI=Get Feature Info) vastauksen tyyli XSLT-muodossa.",
+            "manualRefresh": "Manuaalilataus",
             "matrixSetId": "WMTS-tiilimatrisin tunniste",
             "matrixSetIdDesc": "WMTS-tiilimatriisin tunniste (TileMatrixSet id)",
             "matrixSet": "WMTS-tason JSON",

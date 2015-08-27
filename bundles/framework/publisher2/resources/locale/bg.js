@@ -43,8 +43,8 @@ Oskari.registerLocalization(
                 "tooltip": "Избиране езика на интерфейса и даннните на картата"
             },
             "size": {
-                "label": "Размер",
-                "tooltip": "Избор или дефиниране размера на картата, за да бъде прикачена на уебсайта Ви. Прегледа на картата се показва в избрания размер"
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Инструменти",
@@ -58,17 +58,29 @@ Oskari.registerLocalization(
                 "FeaturedataPlugin": "NOT TRANSLATED",
                 "GetInfoPlugin": "Инструмент за запитване относно даннните на мястото",
                 "PublisherToolbarPlugin": "NOT TRANSLATED",
-                "selectDrawLayer": "NOT TRANSLATED"
+                "selectDrawLayer": "NOT TRANSLATED",
+                "LayerSelectionPlugin":"NOT TRANSLATED",
+                "toolbarToolNames": {
+                    "history_back": "NOT TRANSLATED",
+                    "history_forward": "NOT TRANSLATED",
+                    "measureline": "NOT TRANSLATED",
+                    "measurearea": "NOT TRANSLATED",
+                    "point": "NOT TRANSLATED",
+                    "line": "NOT TRANSLATED",
+                    "area": "NOT TRANSLATED"
+                },
+                "layers": {
+                    "add": "NOT TRANSLATED",
+                    "addselect": "NOT TRANSLATED",
+                    "label": "Картни слоеве",
+                    "defaultLayer": "( Слой по подразбиране )",
+                    "useAsDefaultLayer": "Използване като слой по подразбиране"
+                },
+                "myplaces": {
+                    "label": "NOT TRANSLATED"
+                }
             },
-            "toolbarToolNames": {
-                "history_back": "NOT TRANSLATED",
-                "history_forward": "NOT TRANSLATED",
-                "measureline": "NOT TRANSLATED",
-                "measurearea": "NOT TRANSLATED",
-                "point": "NOT TRANSLATED",
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
-            },
+
             "toollayout": {
                 "label": "NOT TRANSLATED",
                 "tooltip": "NOT TRANSLATED",
@@ -131,16 +143,6 @@ Oskari.registerLocalization(
                     }
                 }
             },
-            "layers": {
-                "add": "NOT TRANSLATED",
-                "addselect": "NOT TRANSLATED",
-                "label": "Картни слоеве",
-                "defaultLayer": "( Слой по подразбиране )",
-                "useAsDefaultLayer": "Използване като слой по подразбиране"
-            },
-            "myplaces": {
-                "label": "NOT TRANSLATED"
-            },
             "sizes": {
                 "small": "Малък",
                 "medium": "Среден",
@@ -166,7 +168,8 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Показване на картните слоеве в менюто",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Избор на карта - фон. Може да изберете карта - фон по подразбиране от прегледа на картата в прозореца",
                 "tooltip": "Картата - фон е показана, като долния слой на картата. Когато избирате картни слоеве да бъдат използвани като долен слой, само един слой е видим и може да превлючвате между тях. Може да зададете по подразбиране карта - фон в прегледа на картата.",
                 "promote": "Показване на въздушни снимки?"

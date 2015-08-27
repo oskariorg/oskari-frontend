@@ -1,5 +1,97 @@
 # Release Notes
 
+## 1.31
+
+### admin
+
+The generic admin bundle now has a request to add functionality in tabs. This is done by sending a request with name 'Admin.AddTabRequest'.
+
+### metrics
+
+Initial version for a metrics display for admins. Adds a tab for the admin bundle to show metrics gathered by the serverside functionality.
+
+### tools
+
+Locked karma version to 0.12.31 since it works while not specifying a version doesn't.
+
+### analyse
+
+Added possibility to show aggregate analyse results in popup without saving the analyse layer.
+
+Added possibility to use aggregate method with spatial join.
+
+### coordinatestool
+
+*New  bundle!* Add new tool to show or set coordinates. Tool can present mouse move coordinates or map click coordinates to lon and lat inputs. You can also write your coordinates and then center map here.
+
+### routingUI
+
+*New bundle(POC)!* Adds new tool for giving parameters to route and requests route with parameters. Listens RouteSuccessEvent to render route and instructions.
+
+### routingService
+
+*New bundle (POC)!* Gets route from the service with parameters got from UI. Sends RouteSuccessEvent with geoJson and route instructions.
+
+### VectorLayerPlugin
+
+Vector layer plugin fixed so that more than one feature can be added at once to the layer.
+
+### divmanazer/visualization-form
+
+Improved checkbox selection, now custom color selection can be done with clicking label.
+
+### Admin layerselector
+
+New checkbox "manual refresh" for WFS layer, when inserting new layers to Oskari environment
+
+### WFSLayerPlugin
+
+Manual refresh event for manual refresh of wfs layers.
+
+Event is trigged when pushing "Feature Data" button or when pushing "Refresh" button.
+
+"Refresh" button is invisible, if there are no manual-refresh layers in selected map layers.
+
+Manual refresh layers are not rendered automatically on a map
+
+### layerselecton2
+
+New "refresh" icon besibe "close" icon, if layer is manual-refresh layer.
+
+Manual-refresh layer is rendered when clicking the icon.
+
+### layerselector2
+
+Improved checkbox selection, now layers can be selected/unselected by clicking layer name.
+
+Added filter buttons on each tabs. User can now filter layers.
+
+Now not show group if group has not any layers.
+
+Renamed AddLayerListFilterRequest to ShowFilteredLayerListRequest.
+
+### maplegend
+
+Added currently selected style name as a sub header for legend flyout.
+
+### layerselector2/AddLayerListFilterRequest
+
+*New request!* Adds new filter buttons and functionalities to layerlist.
+
+### publisher2
+
+Added GetInfoTool. GetInfoTool has now colous schema selection on extra options.
+
+PanelMapSize renamed to PanelMapPreview. PanelMapPreview allow select map preview mode in two different modes (mobile/desktop).
+
+### mapmodule-plugin/MapModule
+
+Added getMaxExtent function. This return max map extent.
+
+### Sandbox/map layer service
+
+Added new getNewestLayers(count) method to find newest layers corresponding to given count.
+
 ## 1.30.4
 
 Userguide styles and analysis localizations fixed.

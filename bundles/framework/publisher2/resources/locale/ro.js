@@ -43,8 +43,8 @@ Oskari.registerLocalization(
                 "tooltip": "Selectare limba pentru  interfaţă hărţii şi a datelor de hartă"
             },
             "size": {
-                "label": "Dimensiune",
-                "tooltip": "Selectare sau definire dimensiune hartă ce va fi înglobată în web site-ul dvs. Previzualizarea hărţii este afişată în dimensiunea selectată"
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Instrumente",
@@ -58,16 +58,28 @@ Oskari.registerLocalization(
                 "FeaturedataPlugin": "NOT TRANSLATED",
                 "GetInfoPlugin": "Instrument de căutare pentru datele locaţiei",
                 "PublisherToolbarPlugin": "NOT TRANSLATED",
-                "selectDrawLayer": "NOT TRANSLATED"
-            },
-            "toolbarToolNames": {
-                "history_back": "NOT TRANSLATED",
-                "history_forward": "NOT TRANSLATED",
-                "measureline": "NOT TRANSLATED",
-                "measurearea": "NOT TRANSLATED",
-                "point": "NOT TRANSLATED",
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "selectDrawLayer": "NOT TRANSLATED",
+                "LayerSelectionPlugin":"NOT TRANSLATED",
+                "toolbarToolNames": {
+                    "history_back": "Move backwards",
+                    "history_forward": "Move forward",
+                    "measureline": "Measure distance",
+                    "measurearea": "Measure area",
+                    "drawTools": "Drawing tools",
+                    "point": "Allow users to add point features.",
+                    "line": "Allow users to add line features.",
+                    "area": "Allow users to add area features."
+                },
+                "layers": {
+                    "add": "Create new layer for new features.",
+                    "addselect": "Add a drawing layer to the map",
+                    "label": "Straturi hartă",
+                    "defaultLayer": "(Strat implicit)",
+                    "useAsDefaultLayer": "Folosire ca strat implicit"
+                },
+                "myplaces": {
+                    "label": "My map layers"
+                }
             },
             "toollayout": {
                 "label": "NOT TRANSLATED",
@@ -131,16 +143,6 @@ Oskari.registerLocalization(
                     }
                 }
             },
-            "layers": {
-                "add": "NOT TRANSLATED",
-                "addselect": "NOT TRANSLATED",
-                "label": "Straturi hartă",
-                "defaultLayer": "(Strat implicit)",
-                "useAsDefaultLayer": "Folosire ca strat implicit"
-            },
-            "myplaces": {
-                "label": "NOT TRANSLATED"
-            },
             "sizes": {
                 "small": "Mic",
                 "medium": "Mediu",
@@ -166,7 +168,8 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Afişare straturi de hartă în meniu",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Selectare hartă suport. Puteţi seta harta suport implicită în fereastra de previzualizare a hărţii",
                 "tooltip": "Harta suport este afişată ca ultimul strat al hărţii. Când selectaţi straturiel de hartă ce vor fi folosite ca ultim strat al hărţii, numai un strat va fi vizibil la un moment dat şi le puteţi inversa. Puteţi seta stratul suport implicit în previzualizarea hărţii",
                 "promote": "Afişaţi imaginile aeriene?"

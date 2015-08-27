@@ -45,8 +45,8 @@ Oskari.registerLocalization({
                 "tooltip": "Vyberte jazyk prostředí a dat mapy."
             },
             "size": {
-                "label": "Velikost",
-                "tooltip": "Vyberte nebo definujte velikost mapy pro vložení do vaší webové stránky. Náhled mapy je zobrazen ve vybrané velikosti."
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Nástroje",
@@ -60,7 +60,28 @@ Oskari.registerLocalization({
                 "FeaturedataPlugin": "",
                 "GetInfoPlugin": "Dotazovací nástroj pro zeměpisná jména",
                 "PublisherToolbarPlugin": "NOT TRANSLATED",
-                "selectDrawLayer": "NOT TRANSLATED"
+                "selectDrawLayer": "NOT TRANSLATED",
+                "LayerSelectionPlugin":"NOT TRANSLATED",
+                "toolbarToolNames": {
+                    "history_back": "Move backwards",
+                    "history_forward": "Move forward",
+                    "measureline": "Measure distance",
+                    "measurearea": "Measure area",
+                    "drawTools": "Drawing tools",
+                    "point": "Allow users to add point features.",
+                    "line": "Allow users to add line features.",
+                    "area": "Allow users to add area features."
+                },
+                "layers": {
+                    "add": "Create new layer for new features.",
+                    "label": "Map Layers",
+                    "addselect": "Add a drawing layer to the map",
+                    "defaultLayer": "(Default map layer)",
+                    "useAsDefaultLayer": "Use as the default layer."
+                },
+                "myplaces": {
+                    "label": "My map layers"
+                }
             },
             "toollayout": {
                 "label": "NOT TRANSLATED",
@@ -75,13 +96,6 @@ Oskari.registerLocalization({
                 "label": "NOT TRANSLATED",
                 "tooltip": "NOT TRANSLATED",
                 "grid": "NOT TRANSLATED"
-            },
-            "layers": {
-                "add": "NOT TRANSLATED",
-                "addselect": "NOT TRANSLATED",
-                "label": "Mapové vrstvy",
-                "defaultLayer": "(Defaultní vrstva)",
-                "useAsDefaultLayer": "Použij jako defalutní vrstvu"
             },
             "sizes": {
                 "small": "Malá",
@@ -108,7 +122,8 @@ Oskari.registerLocalization({
                 }
             },
             "layerselection": {
-                "label": "Zobraz mapové vrstvy v menu",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Vyberte mapy pozadí. Defaultní mapu pozadí můžete nastavit v okně náhledu mapy.",
                 "tooltip": "Mapa pozadí je zobrazena jako spodní vrstva mapy. Když vyberete mapové vrstvy jako spodní vrstvu, bude vždy viditelná jen jedna vrstva. Mezi mapami pozadí lze přepínat. Defaultní mapu pozadí můžete nastavit v okně náhledu mapy.",
                 "promote": "Zobrazit letecké snímky?"

@@ -145,6 +145,7 @@ Oskari.registerLocalization(
             "gfiResponseTypeDesc": "Svarets typ dvs Get Feature Info (GFI)",
             "gfiStyle": "GFI stil",
             "gfiStyleDesc": "GFI stil (XSLT)",
+            "manualRefresh": "Manual refresh",
             "matrixSetId": "WMTS MatrixSetId",
             "matrixSetIdDesc": "WMTS-tjänstens MatrixSetId",
             "matrixSet": "Teknisk beskrivning av WMTS-tjänsten",

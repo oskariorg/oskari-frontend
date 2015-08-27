@@ -43,8 +43,8 @@ Oskari.registerLocalization(
                 "tooltip": "Välj språk för kartmaterial och användargränssnitt."
             },
             "size": {
-                "label": "Storlek",
-                "tooltip": "Välj eller definiera storleken på kartan för att bäddas in på din webbplats.  Kartan förhandsvisas i den valda storleken."
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Verktyg",
@@ -59,17 +59,28 @@ Oskari.registerLocalization(
                 "FeaturedataPlugin": "Objektuppgifter",
                 "GetInfoPlugin": "Verktyg för förfrågan som gäller uppgifter om objektet",
                 "PublisherToolbarPlugin": "Kartverktyg",
-                "selectDrawLayer": "Välj lager för nya funktioner"
-            },
-            "toolbarToolNames": {
-                "history_back": "Gå bakåt",
-                "history_forward": "Gå framåt",
-                "measureline": "Mät avstånd",
-                "measurearea": "Mät område",
-                "drawTools": "Ritningsverktyg",
-                "point": "Tillåt användare att lägga till punkter.",
-                "line": "Tillåt användare att lägga till linjer.",
-                "area": "Tillåt användare att lägga till områden."
+                "selectDrawLayer": "Välj lager för nya funktioner",
+                "LayerSelectionPlugin":"Kartlagren meny",
+                "toolbarToolNames": {
+                    "history_back": "Gå bakåt",
+                    "history_forward": "Gå framåt",
+                    "measureline": "Mät avstånd",
+                    "measurearea": "Mät område",
+                    "drawTools": "Ritningsverktyg",
+                    "point": "Tillåt användare att lägga till punkter.",
+                    "line": "Tillåt användare att lägga till linjer.",
+                    "area": "Tillåt användare att lägga till områden."
+                },
+                "layers": {
+                    "add": "Lägg till nytt lager för nya funktioner.",
+                    "label": "Kartlager",
+                    "addselect": "Lägg till ritningslager till kartan",
+                    "defaultLayer": "(Förvalt kartlager)",
+                    "useAsDefaultLayer": "Använd som förvalt kartlager."
+                },
+                "myplaces": {
+                    "label": "Mina kartlager"
+                }
             },
             "toollayout": {
                 "label": "Verktygs placering",
@@ -133,16 +144,6 @@ Oskari.registerLocalization(
                     }
                 }
             },
-            "layers": {
-                "add": "Lägg till nytt lager för nya funktioner.",
-                "label": "Kartlager",
-                "addselect": "Lägg till ritningslager till kartan",
-                "defaultLayer": "(Förvalt kartlager)",
-                "useAsDefaultLayer": "Använd som förvalt kartlager."
-            },
-            "myplaces": {
-                "label": "Mina kartlager"
-            },
             "sizes": {
                 "small": "Liten",
                 "medium": "Medelstor",
@@ -168,7 +169,8 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Visa kartlagren i menyn",
+                "label": "Kartlagren meny",
+                "fieldLabel": "Visa kartlagren i menyn",
                 "info": "Välj bakgrundskartlager. Du kan göra förval i förhandsgranskningsvyn.",
                 "tooltip": "Bakgrundskartlagret syns som kartans nedersta lager. När du väljer kartan som används som bakgrundskarta syns endast ett lager i taget och du kan växla mellan dem. Du kan göra förval i förhandsgranskningsvyn.",
                 "promote": "Vill du också visa flygbilder?"
@@ -226,6 +228,14 @@ Oskari.registerLocalization(
                     "label": "Kartlagret kan publiceras i en inbäddad karta.",
                     "tooltip": "Kartlagret kan publiceras i en inbäddad karta. Antalet användare per vecka kan vara begränsat."
                 }
+            }
+        },
+        "layerFilter": {
+            "buttons": {
+                "publishable": "Publicerbar"
+            },
+            "tooltips": {
+                "publishable": "Visa endast kartlager som kan publiceras med kart publicering funktion"
             }
         }
     }

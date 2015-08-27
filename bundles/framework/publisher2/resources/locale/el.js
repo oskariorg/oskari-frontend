@@ -42,8 +42,8 @@ Oskari.registerLocalization({
                 "tooltip": "Επιλέξτε την γλώσσα του interface του χάρτη και των δεδομένων."
             },
             "size": {
-                "label": "Μέγεθος",
-                "tooltip": "Επιλέξτε ή ορίστε το μέγεθος του χάρτη προς ενσωμάτωση στην ιστοσελίδα σας. Η προεπισκόπηση χάρτη φαίνεται στο επιλεγμένο μέγεθος."
+                "label": "Map preview",
+                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
             },
             "maptools": {
                 "label": "Εγαλεία",
@@ -56,16 +56,28 @@ Oskari.registerLocalization({
                 "SearchPlugin": "Αναζήτηση διεύθυνσης και ονόματος τοποθεσίας",
                 "GetInfoPlugin": "Εργαλείο δημιουργίας ερωτημάτων για τοποθεσίες",
                 "PublisherToolbarPlugin": "NOT TRANSLATED",
-                "selectDrawLayer": "NOT TRANSLATED"
-            },
-            "toolbarToolNames": {
-                "history_back": "NOT TRANSLATED",
-                "history_forward": "NOT TRANSLATED",
-                "measureline": "NOT TRANSLATED",
-                "measurearea": "NOT TRANSLATED",
-                "point": "NOT TRANSLATED",
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "selectDrawLayer": "NOT TRANSLATED",
+                "LayerSelectionPlugin":"NOT TRANSLATED",
+                "toolbarToolNames": {
+                    "history_back": "Move backwards",
+                    "history_forward": "Move forward",
+                    "measureline": "Measure distance",
+                    "measurearea": "Measure area",
+                    "drawTools": "Drawing tools",
+                    "point": "Allow users to add point features.",
+                    "line": "Allow users to add line features.",
+                    "area": "Allow users to add area features."
+                },
+                "layers": {
+                    "add": "Create new layer for new features.",
+                    "label": "Επίπεδα χάρτη",
+                    "defaultLayer": "(Προεπιλεγμένο επίπεδο)",
+                    "useAsDefaultLayer": "Χρήση ως προεπιλεγμένο επίπεδο",
+                    "addselect": "Add a drawing layer to the map"
+                },
+                "myplaces": {
+                    "label": "My map layers"
+                }
             },
             "toollayout": {
                 "label": "NOT TRANSLATED",
@@ -129,16 +141,6 @@ Oskari.registerLocalization({
                     }
                 }
             },
-            "layers": {
-                "add": "NOT TRANSLATED",
-                "addselect": "NOT TRANSLATED",
-                "label": "Επίπεδα χάρτη",
-                "defaultLayer": "(Προεπιλεγμένο επίπεδο)",
-                "useAsDefaultLayer": "Χρήση ως προεπιλεγμένο επίπεδο"
-            },
-            "myplaces": {
-                "label": "NOT TRANSLATED"
-            },
             "sizes": {
                 "small": "Μικρό",
                 "medium": "Μεσσαίο",
@@ -164,7 +166,8 @@ Oskari.registerLocalization({
                 }
             },
             "layerselection": {
-                "label": "Εμφάνιση επιπέδων χάρτη στο μενού",
+                "label": "Map layers menu",
+                "fieldLabel": "Show map layers at the menu.",
                 "info": "Επιλέξτε υπόβαθρα. Μπορείτε να θέσετε το προεπιλεγμένο υπόβαθρο στο παράθυρο προεπισκόπησης.",
                 "tooltip": "Το υπόβαθρο εμφανίζεται ως το κατώτερο επίπεδο του χάρτη. Όταν επιλέγετε επίπεδα χάρτη ως τα κατώτερα επίπεδα του χάρτη, μόνο ένα είναι ορατό κάθε φορά, και μπορείτε να τα εναλλάσετε μεταξύ τους. Μπορείτε να θέσετε το υπόβαθρο του χάρτη από την προεπισκόπηση χάρτη.",
                 "promote": "Εμφάνιση αεροφωτογραφιών;"
