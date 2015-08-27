@@ -706,7 +706,7 @@ Oskari.clazz.define(
                     if (indicatorsdata) {
                         me.addDataSource(
                             'sotkanet',
-                            'SOTKAnet',
+                            'Sotkanet',
                             indicatorsdata,
                             true
                         );

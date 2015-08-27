@@ -64,7 +64,6 @@ function(sandbox, mapmodule, localization, instance, handlers) {
             tool = me.getTool(),
             sandbox = me.__sandbox;
 
-
         //state actually hasn't changed -> do nothing
         if (me.state.enabled !== undefined && me.state.enabled !== null && enabled === me.state.enabled) {
             return;
@@ -142,6 +141,16 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     */
     isStarted: function() {
         return this.__started;
+    },
+    /**
+    * Is default.
+    * @method isDefaultTool
+    * @public
+    *
+    * @returns {Boolean} is the tool toggled on by default. Default value false, override where necessary.
+    */
+    isDefaultTool: function() {
+        return false;
     },
 
     /**

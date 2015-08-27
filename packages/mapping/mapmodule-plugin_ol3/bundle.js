@@ -30,7 +30,7 @@ Oskari.clazz.define(
                  */
                 {
                     "type": "text/javascript",
-                    "src": "../../../libraries/ol3/ol-v3.7.0-debug.js"
+                    "src": "../../../libraries/ol3/ol-v3.7.0.js"
                 },
                 /*
                  * Proj4js
@@ -155,7 +155,7 @@ Oskari.clazz.define(
                 /**
                  * Data Source plugin
                  */
-                 /*
+
                 {
                     "type": "text/javascript",
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/datasource/DataSourcePlugin.js"
@@ -164,7 +164,6 @@ Oskari.clazz.define(
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/resources/css/datasource.css"
                 },
                 // IndexMap
-                */
                 {
                     "type": "text/javascript",
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/indexmap/IndexMapPlugin.js"
@@ -193,7 +192,6 @@ Oskari.clazz.define(
                 /**
                  * MapLayer selection plugin
                  */
-                /*
                 {
                     "type": "text/javascript",
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/layers/LayerSelectionPlugin.js"
@@ -205,7 +203,6 @@ Oskari.clazz.define(
                 /**
                  * Background MapLayer selection plugin
                  */
-                /*
                 {
                     "type": "text/javascript",
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/layers/BackgroundLayerSelectionPlugin.js"

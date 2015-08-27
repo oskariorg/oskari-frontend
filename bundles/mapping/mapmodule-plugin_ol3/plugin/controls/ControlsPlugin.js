@@ -119,7 +119,6 @@ Oskari.clazz.define(
      *          reference to application sandbox
      */
     startPlugin : function(sandbox) {
-        debugger;
         this._sandbox = sandbox;
         this._map = this.getMapModule().getMap();
 
@@ -199,7 +198,6 @@ Oskari.clazz.define(
      *
      */
     _createMapControls: function () {
-        debugger;
         var me = this,
             //conf = me.getConfig(),
             map = me.getMapModule().getMap(),
