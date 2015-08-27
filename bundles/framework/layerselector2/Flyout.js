@@ -123,24 +123,33 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                 loc = me.instance.getLocalization('layerFilter'),
                 mapLayerService = this.instance.getSandbox().getService(
                         'Oskari.mapframework.service.MapLayerService'
-                ),
-                ids = [];
+                );
 
             me.addFilterTool(loc.buttons.newest,
                 loc.tooltips.newest.replace('##', me._filterNewestCount),
                 function(layer){
-                    if(me._newestLayers === null && ids.length === 0){
+                    if(me._newestLayers === null) {
                         me._newestLayers = mapLayerService.getNewestLayers(me._filterNewestCount);
-
-                        jQuery(me._newestLayers).each(function(index, layer){
-                           ids.push(layer.getId());
-                        });
                     }
+                    var ids = [];
+                    jQuery(me._newestLayers).each(function(index, layer){
+                       ids.push(layer.getId());
+                    });
+                    console.log(ids);
                     return (jQuery.inArray(layer.getId(), ids) !== -1);
                 },
                 'layer-newest',
                 'layer-newest-disabled',
             'newest');
+        },
+
+        /**
+         * Clear newest filter cache.
+         * @method  @public clearNewestFilter
+         */
+        clearNewestFilter: function(){
+            var me = this;
+            me._newestLayers = null;
         },
 
         /**

@@ -21,6 +21,7 @@ Oskari.clazz.define(
         this.started = false;
         this.plugins = {};
         this.localization = null;
+        this.filteredLayerListOpenedByRequest = false;
     }, {
         /**
          * @static
@@ -206,6 +207,8 @@ Oskari.clazz.define(
                     ),
                     layerId = event.getLayerId(),
                     layer;
+                
+                flyout.clearNewestFilter();
 
                 if (event.getOperation() === 'update') {
                     layer = mapLayerService.findMapLayer(layerId);
@@ -225,6 +228,8 @@ Oskari.clazz.define(
                     // refresh layer count
                     tile.refresh();
                 }
+
+
             },
 
             'BackendStatus.BackendStatusChangedEvent': function (event) {
@@ -249,7 +254,8 @@ Oskari.clazz.define(
              * @method ExtensionUpdatedEvent
              */
             'userinterface.ExtensionUpdatedEvent': function (event) {
-                var plugin = this.plugins['Oskari.userinterface.Flyout'];
+                var me = this,
+                    plugin = me.plugins['Oskari.userinterface.Flyout'];
 
                 // ExtensionUpdateEvents are fired a lot, only let layerselector2 extension event to be handled when enabled
                 if (event.getExtension().getName() !== this.getName()) {
@@ -259,9 +265,11 @@ Oskari.clazz.define(
                 if (event.getViewState() !== 'close') {
                     plugin.focus();
                 }
-                ///remove the filtering, if any.
-                else {
+                // Remove the filtering, if opened by ShowFilteredLayerListRequest.
+                else if(me.filteredLayerListOpenedByRequest) {
+                    plugin.deactivateAllFilters();
                     plugin.setLayerListFilteringFunction(null);
+                    me.filteredLayerListOpenedByRequest = false;
                 }
             }
         },
