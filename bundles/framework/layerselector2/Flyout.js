@@ -135,7 +135,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                     jQuery(me._newestLayers).each(function(index, layer){
                        ids.push(layer.getId());
                     });
-                    console.log(ids);
                     return (jQuery.inArray(layer.getId(), ids) !== -1);
                 },
                 'layer-newest',

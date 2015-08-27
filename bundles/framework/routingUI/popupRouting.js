@@ -173,7 +173,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.PopupRouting",
             this.popupContent.find('#startingPointInput').val(lonlat.lon + " , " + lonlat.lat);
             this.popupContent.find('#finishingPointInput').attr("disabled", false);
             this.popupContent.find('#finishingPointInput').focus();
-            console.log("startingPoint:", this.params);
         },
 
         /**
@@ -186,6 +185,5 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.PopupRouting",
             this.params.tolat = lonlat.lat;
 
             this.popupContent.find('#finishingPointInput').val(lonlat.lon + " , " + lonlat.lat);
-            console.log("finishingPoint:", this.params);
         }
     });
