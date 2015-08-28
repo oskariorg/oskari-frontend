@@ -27,19 +27,16 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                     'Oskari.mapframework.service.MapLayerService'
                 );
 
-            if (mapLayerService) {
-                mapLayerService.registerLayerModel(
-                    'wmtslayer',
-                    'Oskari.mapframework.wmts.domain.WmtsLayer'
-                );
-                layerModelBuilder = Oskari.clazz.create(
-                    'Oskari.mapframework.wmts.service.WmtsLayerModelBuilder'
-                );
-                mapLayerService.registerLayerModelBuilder(
-                    'wmtslayer',
-                    layerModelBuilder
-                );
+            if (!mapLayerService) {
+                // no map layer service - TODO: signal failure
+                return;
             }
+             
+            mapLayerService.registerLayerModel('wmtslayer', 'Oskari.mapframework.wmts.domain.WmtsLayer');
+            layerModelBuilder = Oskari.clazz.create('Oskari.mapframework.wmts.service.WmtsLayerModelBuilder');
+            mapLayerService.registerLayerModelBuilder('wmtslayer', layerModelBuilder);
+
+            this.service = Oskari.clazz.create('Oskari.mapframework.wmts.service.WMTSLayerService', mapLayerService, this.getSandbox());
         },
 
         _createEventHandlers: function () {
@@ -127,47 +124,22 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                 return;
             }
 
-            var me = this,
-                map = me.getMap(),
-                parser = new OpenLayers.Format.WMTSCapabilities(),
-                WMTSservice = me.instance.service;
-
-            var layerName = me.__getLayerName(layer);
-
-            var matrixSet = layer.getWmtsMatrixSet().identifier;
-
-            var params = {layer: layer.getId()};
-            
-            WMTSservice.getCapabilitiesForLayer(
-                params,
-                // Success callback
-                function (response) {
-                    var capabilitiesXML = response;
-                    var WMTSCaps = parser.read(capabilitiesXML);
-                    var config = {
-                            layer: layerName,
-                            matrixSet: matrixSet
-                        };
-
-                    var wmtsLayer = parser.createLayer(WMTSCaps, config);
-
-                    sandbox.printDebug("[WmtsLayerPlugin] created WMTS layer " + wmtsLayer);
-
+            var me = this;
+            var map = me.getMap()
+            var mapModule = me.getMapModule();
+            var parser = new OpenLayers.Format.WMTSCapabilities();
+            this.service.getCapabilitiesForLayer(layer, function(wmtsLayer) {
+                    me.getSandbox().printDebug("[WmtsLayerPlugin] created WMTS layer " + wmtsLayer);
                     map.addLayer(wmtsLayer);
-
                     if (keepLayerOnTop) {
-                        mapModule.setLayerIndex(wmtsLayer, mapModule.getLayers().length);
+                        mapModule.bringToTop(wmtsLayer);
                     } else {
-                        mapModule.setLayerIndex(wmtsLayer, 0);
+                        map.setLayerIndex(wmtsLayer, 0);
                     }
-                },
-                // Error callback
-                function (jqXHR, textStatus, errorThrown) {
-                    //TODO: add better error handling
-                    console.log(jqXHR, textStatus, errorThrown);
-                }
-            );
 
+            }, function() {
+                console.log("Error loading capabilitiesXML");
+            });
         },
 
         __calculateMatrix : function(matrixSet) {
