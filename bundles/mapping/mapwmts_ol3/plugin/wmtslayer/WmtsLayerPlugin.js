@@ -27,19 +27,16 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                     'Oskari.mapframework.service.MapLayerService'
                 );
 
-            if (mapLayerService) {
-                mapLayerService.registerLayerModel(
-                    'wmtslayer',
-                    'Oskari.mapframework.wmts.domain.WmtsLayer'
-                );
-                layerModelBuilder = Oskari.clazz.create(
-                    'Oskari.mapframework.wmts.service.WmtsLayerModelBuilder'
-                );
-                mapLayerService.registerLayerModelBuilder(
-                    'wmtslayer',
-                    layerModelBuilder
-                );
+            if (!mapLayerService) {
+                // no map layer service - TODO: signal failure
+                return;
             }
+             
+            mapLayerService.registerLayerModel('wmtslayer', 'Oskari.mapframework.wmts.domain.WmtsLayer');
+            layerModelBuilder = Oskari.clazz.create('Oskari.mapframework.wmts.service.WmtsLayerModelBuilder');
+            mapLayerService.registerLayerModelBuilder('wmtslayer', layerModelBuilder);
+
+            this.service = Oskari.clazz.create('Oskari.mapframework.wmts.service.WMTSLayerService', mapLayerService, this.getSandbox());
         },
 
         _createEventHandlers: function () {
@@ -98,7 +95,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
             var me = this,
                 map = me.getMap(),
                 parser = new ol.format.WMTSCapabilities(),
-                WMTSservice = me.instance.service;
+                WMTSservice = this.service;
 
             var layerName = null,
                 layerIdPrefix = 'layer_';
