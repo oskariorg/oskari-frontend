@@ -89,6 +89,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
          * @param {Boolean} isBaseMap
          */
         addMapLayerToMap: function(layer, keepLayerOnTop, isBaseMap) {
+            return;
             if (!layer.isLayerOfType('WMTS')) {
                 return;
             }
