@@ -86,7 +86,6 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
          * @param {Boolean} isBaseMap
          */
         addMapLayerToMap: function(layer, keepLayerOnTop, isBaseMap) {
-            return;
             if (!layer.isLayerOfType('WMTS')) {
                 return;
             }
@@ -94,50 +93,20 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
 
             var me = this,
                 map = me.getMap(),
-                parser = new ol.format.WMTSCapabilities(),
-                WMTSservice = this.service;
+                parser = new ol.format.WMTSCapabilities();
 
-            var layerName = null,
-                layerIdPrefix = 'layer_';
-            if (layer.isBaseLayer() || layer.isGroupLayer()) {
-                layerName = 'basemap_' + layer.getId();
-                layerIdPrefix = 'basemap_';
-            } else {
-                layerName = 'layer_' + layer.getId();
-            }
-
-            var matrixSet = layer.getWmtsMatrixSet();
-
-            var params = {layer: layer.getId()};
-
-            WMTSservice.getCapabilitiesForLayer(
-                params,
-                // Success callback
-                function (response) {
-                    var capabilitiesXML = response;
-                    var WMTSCaps = parser.read(capabilitiesXML);
-                    var options = ol.source.WMTS.optionsFromCapabilities(WMTSCaps, {layer: layerName, matrixSet: matrixSet});
-
-                    var wmtsLayer = new ol.layer.Tile({
-                        opacity: layer.getOpacity() / 100.0,
-                        source : new ol.source.WMTS(options)
-                    });
-                    sandbox.printDebug("[WmtsLayerPlugin] created WMTS layer " + wmtsLayer);
-
+            this.service.getCapabilitiesForLayer(layer, function(wmtsLayer) {
+                    me.getSandbox().printDebug("[WmtsLayerPlugin] created WMTS layer " + wmtsLayer);
                     map.addLayer(wmtsLayer);
-
                     if (keepLayerOnTop) {
-                        mapModule.setLayerIndex(wmtsLayer, mapModule.getLayers().length);
+                        mapModule.bringToTop(wmtsLayer);
                     } else {
-                        mapModule.setLayerIndex(wmtsLayer, 0);
+                        map.setLayerIndex(wmtsLayer, 0);
                     }
-                },
-                // Error callback
-                function (jqXHR, textStatus, errorThrown) {
-                    //TODO: add better error handling
-                    console.log(jqXHR, textStatus, errorThrown);
-                }
-            );
+
+            }, function() {
+                console.log("Error loading capabilitiesXML");
+            });
 
         },
 

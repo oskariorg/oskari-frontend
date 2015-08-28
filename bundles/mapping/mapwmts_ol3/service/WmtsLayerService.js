@@ -7,8 +7,9 @@
  *
  */
 
-Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', function (mapLayerService) {
+Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', function (mapLayerService, sandbox) {
     this.mapLayerService = mapLayerService;
+    this.sandbox = sandbox;
     this.capabilities = {};
     //this.capabilitiesClazz = Oskari.clazz.create("Oskari.openlayers.Patch.WMTSCapabilities_v1_0_0");
 }, {
@@ -31,29 +32,78 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
      * @public @method getCapabilitiesForLayer
      * Sends layerId to backend for getting WMTS capabilies for layer.
      *
-     * @param {Object} layerId id of the layer
+     * @param {Object} parameters for the get
      * @param {Function} success the success callback
      * @param {Function} failure the failure callback
      *
      */
-    getCapabilitiesForLayer: function (layerId, success, failure) {
-        var getCapsUrl = this.sandbox.getAjaxUrl() + 'action_route=GetCapabilities';
+    getCapabilitiesForLayer: function (layer, success, failure) {
+        var getCapsUrl = this.sandbox.getAjaxUrl() + 'action_route=GetLayerCapabilities';
+        var me = this;
 
         jQuery.ajax({
-            data: layerId,
-            dataType : "json",
+            data: {
+                id : layer.getId()
+            },
+            dataType : "xml",
             type : "GET",
-            beforeSend: function(x) {
-              if(x && x.overrideMimeType) {
-               x.overrideMimeType("application/json");
-              }
-             },
             url : getCapsUrl,
-            success : success,
+            success : function(response) {
+                var format = new ol.format.WMTSCapabilities();
+                var caps = format.read(response);
+                var options = ol.source.WMTS.optionsFromCapabilities(caps, {layer: layer.getLayerName(), matrixSet: layer.getWmtsMatrixSetId()});
+                //me.setCapabilities(layer.getLayerUrl(), caps);
+                //var wmtsLayer = format.createLayer(caps, me.__getLayerConfig(caps, layer));
+                
+                var wmtsLayer = new ol.layer.Tile({
+                    opacity: layer.getOpacity() / 100.0,
+                    source : new ol.source.WMTS(options)
+                });
+                success(wmtsLayer);
+            },
             error: failure
         });
     },
+    __getLayerConfig : function(caps, layer) {
 
+            // default params and options
+            var config = {
+                name : 'layer_' + layer.getId(),
+                style: layer.getCurrentStyle().getName(),
+                layer: layer.getLayerName(),
+                matrixSet: layer.getWmtsMatrixSetId(),
+                params : {},
+                visibility: layer.isInScale(this.sandbox.getMap().getScale()),
+                
+                displayInLayerSwitcher: false,
+                isBaseLayer: false,
+                buffer: 0
+            };
+
+            var capsLayer = _.find(caps.contents.layers, function(capsLayer) {
+              return capsLayer.identifier === config.layer;
+            });
+            if(capsLayer && capsLayer.resourceUrl && capsLayer.resourceUrl.tile) {
+                config.requestEncoding = 'REST';
+                config.format = capsLayer.resourceUrl.tile.format;
+                config.url = capsLayer.resourceUrl.tile.template;
+            }
+
+            // override default params and options from layer
+            var key,
+                layerParams = layer.getParams(),
+                layerOptions = layer.getOptions();
+
+            _.each(layer.getOptions(), function(value, key) {
+                config[key] = value;
+            });
+
+            _.each(layer.getParams(), function(value, key) {
+                config.params[key] = value;
+            });
+
+            return config;
+    },
     /**
      * This is a temporary solution actual capabilities to be
      * read in backend
