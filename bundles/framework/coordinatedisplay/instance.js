@@ -85,7 +85,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatedisplay.CoordinateDisp
             me.setSandbox(sandbox);
 
             var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-            conf = {};
             var locale = this.getLocalization('display');
             var plugin = Oskari.clazz.create('Oskari.mapframework.bundle.coordinatedisplay.plugin.CoordinatesPlugin', conf, locale);
             mapModule.registerPlugin(plugin);

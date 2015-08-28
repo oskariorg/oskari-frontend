@@ -1,5 +1,16 @@
 # Release Notes
 
+## 1.32
+
+### coordinatedisplay
+
+Added possibility to configure how many decimals coordinates are rounded. If not configured then using zero decimals.
+
+### coordinatetool
+
+Added possibility to configure how many decimals coordinates are rounded. If not configured then using zero decimals.
+
+
 ## 1.31.1
 
 Removed console.log() calls.
