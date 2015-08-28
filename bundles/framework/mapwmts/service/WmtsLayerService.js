@@ -28,6 +28,32 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
     },
 
     /**
+     * @public @method getCapabilitiesForLayer
+     * Sends layerId to backend for getting WMTS capabilies for layer.
+     *
+     * @param {Object} layerId id of the layer
+     * @param {Function} success the success callback
+     * @param {Function} failure the failure callback
+     *
+     */
+    getCapabilitiesForLayer: function (layerId, success, failure) {
+        var getCapsUrl = this.sandbox.getAjaxUrl() + 'action_route=GetCapabilities';
+
+        jQuery.ajax({
+            data: layerId,
+            dataType : "json",
+            type : "GET",
+            beforeSend: function(x) {
+              if(x && x.overrideMimeType) {
+               x.overrideMimeType("application/json");
+              }
+             },
+            url : getCapsUrl,
+            success : success,
+            error: failure
+        });
+    },
+    /**
      * This is a temporary solution actual capabilities to be
      * read in backend
      *

@@ -129,71 +129,47 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
 
             var me = this,
                 map = me.getMap(),
-                matrixData = this.__calculateMatrix(layer.getWmtsMatrixSet()),
-                sandbox = me.getSandbox(),
-                layerConfig = me._getLayerConfig(layer, matrixData, sandbox);
+                parser = new OpenLayers.Format.WMTSCapabilities(),
+                WMTSservice = me.instance.service;
 
-            sandbox.printDebug(
-                '[WmtsLayerPlugin] creating WMTS Layer ' +
-                layerConfig.name + ' / ' + layerConfig.matrixSet + '/' +
-                layerConfig.layer + '/' + layerConfig.url
+            var layerName = me.__getLayerName(layer);
+
+            var matrixSet = layer.getWmtsMatrixSet().identifier;
+
+            var params = {layer: layer.getId()};
+            
+            WMTSservice.getCapabilitiesForLayer(
+                params,
+                // Success callback
+                function (response) {
+                    var capabilitiesXML = response;
+                    var WMTSCaps = parser.read(capabilitiesXML);
+                    var config = {
+                            layer: layerName,
+                            matrixSet: matrixSet
+                        };
+
+                    var wmtsLayer = parser.createLayer(WMTSCaps, config);
+
+                    sandbox.printDebug("[WmtsLayerPlugin] created WMTS layer " + wmtsLayer);
+
+                    map.addLayer(wmtsLayer);
+
+                    if (keepLayerOnTop) {
+                        mapModule.setLayerIndex(wmtsLayer, mapModule.getLayers().length);
+                    } else {
+                        mapModule.setLayerIndex(wmtsLayer, 0);
+                    }
+                },
+                // Error callback
+                function (jqXHR, textStatus, errorThrown) {
+                    //TODO: add better error handling
+                    console.log(jqXHR, textStatus, errorThrown);
+                }
             );
 
-            var wmtsLayer = new OpenLayers.Layer.WMTS(layerConfig);
-            wmtsLayer.opacity = layer.getOpacity() / 100;
-
-            sandbox.printDebug(
-                '[WmtsLayerPlugin] created WMTS layer ' + wmtsLayer
-            );
-
-            map.addLayers([wmtsLayer]);
         },
-        _getLayerConfig: function(layer, matrixData, sandbox) {
-            // default params and options
-            var layerConfig = {
-                name: this.__getLayerName(layer),
-                url : layer.getUrl(),
-                layer: layer.getLayerName(),
-                style: layer.getCurrentStyle().getName(),
-                matrixSet : layer.getWmtsMatrixSet().identifier,
 
-                matrixIds: matrixData.matrixIds,
-                serverResolutions: matrixData.serverResolutions,
-                visibility: layer.isInScale(sandbox.getMap().getScale()),
-                requestEncoding : layer.getRequestEncoding(),
-
-                format: 'image/png',
-                displayInLayerSwitcher: false,
-                isBaseLayer: false,
-                buffer: 0,
-                params : {},
-                // additional debugging props, not needed by OL
-                layerDef: layer.getWmtsLayerDef()
-            };
-
-            if (layer.isRealtime()) {
-                var date = new Date();
-                layerConfig.time = date.toISOString();
-            }
-
-            // override default params and options from layer
-            var key,
-                layerParams = layer.getParams(),
-                layerOptions = layer.getOptions();
-            for (key in layerOptions) {
-                if (layerOptions.hasOwnProperty(key)) {
-                    layerConfig[key] = layerOptions[key];
-                }
-            }
-            for (key in layerParams) {
-                if (layerParams.hasOwnProperty(key)) {
-                    layerConfig.params[key] = layerParams[key];
-                }
-            }
-
-            return layerConfig;
-
-        },
         __calculateMatrix : function(matrixSet) {
             var matrixIds = [],
                 resolutions = [],
