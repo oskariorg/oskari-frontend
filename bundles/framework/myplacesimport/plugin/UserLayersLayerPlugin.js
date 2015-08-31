@@ -16,6 +16,7 @@ Oskari.clazz.define(
             'Oskari.mapframework.bundle.myplacesimport.plugin.UserLayersLayerPlugin';
         me._name = 'UserLayersLayerPlugin';
         me._supportedFormats = {};
+        this._layers = {};
     }, {
         /** @static @property _layerType type of layers this plugin handles */
         _layerType: 'USERLAYER',
@@ -153,11 +154,10 @@ Oskari.clazz.define(
                 layer.getId()
             );
 
+            me._layers[layer.getId()] = openLayer;
+
             if (keepLayerOnTop) {
-                this.getMap().setLayerIndex(
-                    openLayer,
-                    this.getMap().layers.length
-                );
+                mapModule.bringToTop(openLayer);
             } else {
                 this.getMap().setLayerIndex(openLayer, 0);
             }
@@ -305,7 +305,8 @@ Oskari.clazz.define(
          * @return {OpenLayers.Layer[]}
          */
         getOLMapLayers: function (layer) {
-            return this.getMap().getLayersByName('layer_' + layer.getId());
+            // only single layer/id, wrap it in an array
+            return [this._layers[layer.getId()]];
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
