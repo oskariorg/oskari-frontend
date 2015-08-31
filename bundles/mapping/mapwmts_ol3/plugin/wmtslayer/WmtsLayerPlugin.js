@@ -114,6 +114,9 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
             if (!layer.isLayerOfType('WMTS')) {
                 return null;
             }
+            if(!this._layers[layer.getId()]) {
+                return null;
+            }
             // only single layer/id, wrap it in an array
             return [this._layers[layer.getId()]];
         },

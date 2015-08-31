@@ -306,6 +306,9 @@ Oskari.clazz.define(
          */
         getOLMapLayers: function (layer) {
             // only single layer/id, wrap it in an array
+            if(!this._layers[layer.getId()]) {
+                return null;
+            }
             return [this._layers[layer.getId()]];
         }
     }, {

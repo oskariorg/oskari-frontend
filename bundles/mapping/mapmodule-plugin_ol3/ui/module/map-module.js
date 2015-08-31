@@ -34,7 +34,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             srsName: 'EPSG:3067',
             units: 'm'
         };
-        this._mapDivId = mapDivId;
+        this._mapDivId = mapDivId || 'mapdiv';
         // override defaults
         var key;
         if (options) {
@@ -382,7 +382,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 ]),
                 isBaseLayer: true,
                 maxExtent: maxExtent,
-                target: 'mapdiv'
+                target: this._mapDivId
 
             });
 
