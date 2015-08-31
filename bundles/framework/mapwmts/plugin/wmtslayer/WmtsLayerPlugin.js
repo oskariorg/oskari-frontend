@@ -127,12 +127,11 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
             var me = this;
             var map = me.getMap()
             var mapModule = me.getMapModule();
-            var parser = new OpenLayers.Format.WMTSCapabilities();
             this.service.getCapabilitiesForLayer(layer, function(wmtsLayer) {
                     me.getSandbox().printDebug("[WmtsLayerPlugin] created WMTS layer " + wmtsLayer);
                     map.addLayer(wmtsLayer);
                     if (keepLayerOnTop) {
-                        mapModule.bringToTop(wmtsLayer);
+                        mapModule.bringToTop(wmtsLayer, 5);
                     } else {
                         map.setLayerIndex(wmtsLayer, 0);
                     }

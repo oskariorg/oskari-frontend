@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
     this.mapLayerService = mapLayerService;
     this.sandbox = sandbox;
     this.capabilities = {};
-    //this.capabilitiesClazz = Oskari.clazz.create("Oskari.openlayers.Patch.WMTSCapabilities_v1_0_0");
+    this.requestsMap = {};
 }, {
     /**
      * TEmp
@@ -38,24 +38,64 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
      *
      */
     getCapabilitiesForLayer: function (layer, success, failure) {
-        var getCapsUrl = this.sandbox.getAjaxUrl() + 'action_route=GetLayerCapabilities';
         var me = this;
+        var url = layer.getLayerUrl();
+        var format = new OpenLayers.Format.WMTSCapabilities();
+        var getCapsUrl = this.sandbox.getAjaxUrl() + 'action_route=GetLayerCapabilities';
+        var caps = this.getCapabilities(url);
+        if(caps) {
+            // return with cached capabilities
+            var wmtsLayer = format.createLayer(caps, me.__getLayerConfig(caps, layer));
+            success(wmtsLayer);
+            return;
+        }
 
-        jQuery.ajax({
-            data: {
-                id : layer.getId()
-            },
-            dataType : "xml",
-            type : "GET",
-            url : getCapsUrl,
-            success : function(response) {
-                var format = new OpenLayers.Format.WMTSCapabilities();
-                var caps = format.read(response);
-                me.setCapabilities(layer.getLayerUrl(), caps);
-                var wmtsLayer = format.createLayer(caps, me.__getLayerConfig(caps, layer));
-                success(wmtsLayer);
-            },
-            error: failure
+        // gather capabilities requests
+        // make ajax call just once and invoke all callbacks once finished
+        var triggerAjaxBln = false;
+        if(!this.requestsMap[url]) {
+            this.requestsMap[url] = [];
+            triggerAjaxBln = true;
+        }
+        this.requestsMap[url].push(arguments);
+
+        if(triggerAjaxBln) {
+            jQuery.ajax({
+                data: {
+                    id : layer.getId()
+                },
+                dataType : "xml",
+                type : "GET",
+                url : getCapsUrl,
+                success : function(response) {
+                    var caps = format.read(response);
+                    me.setCapabilities(url, caps);
+                    me.__handleCallbacksForLayerUrl(url);
+                },
+                error: function() {
+                    me.__handleCallbacksForLayerUrl(url, true);
+                }
+            });
+        }
+    },
+    /**
+     * Invokes capabilities request callbacks once we have the data fetched.
+     * @private
+     * @param  {String}  url           layerUrl
+     * @param  {Boolean} invokeFailure true to call the error callback (optional)
+     */
+    __handleCallbacksForLayerUrl : function(url, invokeFailure) {
+        var me = this;
+        var format = new OpenLayers.Format.WMTSCapabilities();
+        var caps = this.getCapabilities(url);
+        _.each(this.requestsMap[url], function(args) {
+            if(!invokeFailure) {
+                var wmtsLayer = format.createLayer(caps, me.__getLayerConfig(caps, args[0]));
+                args[1](wmtsLayer);
+            }
+            else if (args.length > 2 && typeof args[2] === 'function') {
+                args[2]();
+            }
         });
     },
     __getLayerConfig : function(caps, layer) {
