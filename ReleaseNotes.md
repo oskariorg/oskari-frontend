@@ -4,7 +4,9 @@
 
 ### mapwmts
 
-WMTS support has been refactored to enable better Openlayers 3 support.
+WMTS support has been refactored to enable better Openlayers 3 support. 
+Requires backend functionality with action route 'GetLayerCapabilities' that takes the layer id as parameter('id')
+ and returns the layer capabilities in XML format.
 
 #### Changes to classes:
 
