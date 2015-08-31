@@ -91,19 +91,25 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                 return;
             }
 
+            // need to keep track of the index we should place the WMTS once capabilities have loaded
+            var selectedLayers = this.getSandbox().findAllSelectedMapLayers(layer);
+            var index = _.findIndex(selectedLayers, function(selected) {
+              return selected.getId() === layer.getId();
+            });
+
             var me = this;
             var map = me.getMap()
             var mapModule = me.getMapModule();
             this.service.getCapabilitiesForLayer(layer, function(wmtsLayer) {
                     me.getSandbox().printDebug("[WmtsLayerPlugin] created WMTS layer " + wmtsLayer);
-                    map.addLayer(wmtsLayer);
                     if (keepLayerOnTop) {
-                        mapModule.bringToTop(wmtsLayer);
+                        // use the index as it was when addMapLayer was called
+                        // bringing layer on top causes timing errors, because of async capabilities load
+                        map.getLayers().insertAt(index, wmtsLayer);
                     } else {
-                        map.setLayerIndex(wmtsLayer, 0);
+                        map.getLayers().insertAt(0, wmtsLayer);
                     }
                     me._layers[layer.getId()] = wmtsLayer;
-
             }, function() {
                 console.log("Error loading capabilitiesXML");
             });
