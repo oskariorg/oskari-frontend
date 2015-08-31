@@ -25,6 +25,7 @@ jQuery(document).ready(function() {
 
     // TODO: this code doesn't belong here, move it to some inherited bundle or something
     function startELFSettingsCallback(appConfigElf) {
+        return;
         var sandbox = Oskari.getSandbox();
 
         /* temporary fix to ELF WMTS services not working properly zoomed out - forcing minScale on layers */
@@ -77,7 +78,7 @@ jQuery(document).ready(function() {
                     layer.setAsNormalLayer();
                     layer.setId(mapLayerSysId);
                     layer.setName(mapLayerJson.title);
-                    layer.setWmtsName(mapLayerJson.wmtsName);
+                    layer.setLayerName(mapLayerJson.wmtsName);
                     layer.setOpacity(mapLayerJson.opacity);
                     layer.setMaxScale(mapLayerJson.maxScale);
                     layer.setMinScale(mapLayerJson.minScale);
@@ -90,7 +91,7 @@ jQuery(document).ready(function() {
                     layer.setVisible(true);
                     layer.setMetadataIdentifier(metadataid);
 
-                    layer.addWmtsUrl(getTileUrl);
+                    layer.addLayerUrl(getTileUrl);
 
                     var styleBuilder = Oskari.clazz.builder('Oskari.mapframework.domain.Style');
 

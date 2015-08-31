@@ -162,27 +162,10 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
          */
         afterChangeMapLayerOpacityEvent: function(event) {
             var layer = event.getMapLayer();
-
-            if (layer.isBaseLayer() || layer.isGroupLayer()) {
-                if (layer.getSubLayers().length > 0) {
-                    for (var bl = 0; bl < layer.getSubLayers().length; bl++) {
-                        var mapLayer = this.mapModule.getLayersByName('basemap_' + layer
-                            .getSubLayers()[bl].getId());
-                        mapLayer[0].setOpacity(layer.getOpacity() / 100);
-                    }
-                } else {
-                    var mapLayer = this.mapModule.getLayersByName('layer_' + layer.getId());
-                    if (mapLayer[0] != null) {
-                        mapLayer[0].setOpacity(layer.getOpacity() / 100);
-                    }
-                }
-            } else {
-                this._sandbox.printDebug("Setting Layer Opacity for " + layer.getId() + " to " + layer.getOpacity());
-                var mapLayer = this._mapModule.getLayersByName('layer_' + layer.getId());
-                if (mapLayer[0] != null) {
-                    mapLayer[0].setOpacity(layer.getOpacity() / 100);
-                }
-            }
+            var olLayers = this.getOLMapLayers(layer);
+            _.each(olLayers, function(ol) {
+                ol.setOpacity(layer.getOpacity() / 100);
+            });
         },
 
         /**
@@ -192,18 +175,15 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
          *            event
          */
         afterChangeMapLayerStyleEvent: function(event) {
-            return;
             var layer = event.getMapLayer();
 
             // Change selected layer style to defined style
-            if (!layer.isBaseLayer()) {
-                var styledLayer = this.mapModule.getLayersByName('layer_' + layer.getId());
+            var styledLayer = this.getOLMapLayers(layer);
                 /*if (styledLayer != null) {
              styledLayer[0].mergeNewParams({
              styles : layer.getCurrentStyle().getName()
              });
              }*/
-            }
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],

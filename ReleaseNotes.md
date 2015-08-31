@@ -2,6 +2,26 @@
 
 ## 1.32
 
+### mapwmts
+
+WMTS support has been refactored to enable better Openlayers 3 support.
+
+#### Changes to classes:
+
+*Oskari.mapframework.wmts.domain.WmtsLayer*
+setWmtsName -> setLayerName
+getWmtsName -> getLayerName
+addWmtsUrl -> addLayerUrl
+getWmtsUrls -> getLayerUrls
+getUrl -> getLayerUrl
+getRequestEncoding/setWmtsCaps/getWmtsCaps -> *removed*
+
+*Oskari.mapframework.wmts.service.WmtsLayerModelBuilder*
+Heavily refactored since capabilities are no longer parsed here
+
+*Oskari.mapframework.wmts.service.WMTSLayerService*
+Currently responsible for loading capabilities and creating the WMTS layer object for the map engine.
+
 ### coordinatedisplay
 
 Added possibility to configure how many decimals coordinates are rounded. If not configured then using zero decimals.
