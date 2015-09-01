@@ -96,7 +96,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
                 var options = ol.source.WMTS.optionsFromCapabilities(caps, {layer: layer.getLayerName(), matrixSet: layer.getWmtsMatrixSetId()});
                 //me.setCapabilities(layer.getLayerUrl(), caps);
                 //var wmtsLayer = format.createLayer(caps, me.__getLayerConfig(caps, layer));
-                
+
                 var wmtsLayer = new ol.layer.Tile({
                     opacity: layer.getOpacity() / 100.0,
                     source : new ol.source.WMTS(options)
@@ -118,7 +118,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
                 matrixSet: layer.getWmtsMatrixSetId(),
                 params : {},
                 visibility: layer.isInScale(this.sandbox.getMap().getScale()),
-                
+
                 displayInLayerSwitcher: false,
                 isBaseLayer: false,
                 buffer: 0

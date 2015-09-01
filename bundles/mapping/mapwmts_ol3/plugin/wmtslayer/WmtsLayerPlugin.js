@@ -32,7 +32,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                 // no map layer service - TODO: signal failure
                 return;
             }
-             
+
             mapLayerService.registerLayerModel('wmtslayer', 'Oskari.mapframework.wmts.domain.WmtsLayer');
             layerModelBuilder = Oskari.clazz.create('Oskari.mapframework.wmts.service.WmtsLayerModelBuilder');
             mapLayerService.registerLayerModelBuilder('wmtslayer', layerModelBuilder);

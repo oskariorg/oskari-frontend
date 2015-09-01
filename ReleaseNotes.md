@@ -2,6 +2,10 @@
 
 ## 1.32
 
+### sample/servlet
+
+Modified minifierAppSetup.json to also include coordinatetool -bundle.
+
 ### mapwmts
 
 WMTS support has been refactored to enable better Openlayers 3 support. 

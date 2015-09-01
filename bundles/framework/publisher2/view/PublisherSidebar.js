@@ -400,7 +400,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         _editToolLayoutOff: function () {
             var me = this,
                 sandbox = Oskari.getSandbox('sandbox');
-            
+
             _.each(me.panels, function(panel) {
                if(typeof panel.stop === 'function') {
                     panel.stop();

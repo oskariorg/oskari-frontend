@@ -590,7 +590,7 @@ function() {
     */
     stop: function(){
         var me = this;
-        if(me.__plugin) { 
+        if(me.__plugin) {
             if (me.__sandbox && me.__plugin.getSandbox()) {
                 me.__plugin.stopPlugin(me.__sandbox);
             }

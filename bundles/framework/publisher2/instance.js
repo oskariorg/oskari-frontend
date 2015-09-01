@@ -90,7 +90,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 dialog.show(loc.published.title, content, [okBtn]);
                 this.setPublishMode(false);
             }
-        },        
+        },
         /**
          * @method afterStart
          */
