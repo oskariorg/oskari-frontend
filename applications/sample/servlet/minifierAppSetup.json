@@ -282,6 +282,22 @@
             }
         }, {
             "instanceProps": {},
+            "title": "Koordinaattityökalu",
+            "bundleinstancename": "coordinatetool",
+            "fi": "coordinatetool",
+            "sv": "?",
+            "en": "?",
+            "bundlename": "coordinatetool",
+            "metadata": {
+                "Import-Bundle": {
+                    "coordinatetool": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        },{
+            "instanceProps": {},
             "title": "maplegend",
             "fi": "maplegend",
             "bundleinstancename": "maplegend",

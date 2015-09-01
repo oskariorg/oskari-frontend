@@ -188,7 +188,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             var me = this,
                 loc = me._locale,
                 crs = me.getMapModule().getProjection(),
-                crsText = loc.crs[crs] || crs,
                 el = me._templates.coordinatetool.clone(),
                 popup = me._templates.popup.clone(),
                 popupContent = me._templates.popupContent.clone(),
