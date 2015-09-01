@@ -108,7 +108,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
                 matrixSet: layer.getWmtsMatrixSetId(),
                 params : {},
                 visibility: layer.isInScale(this.sandbox.getMap().getScale()),
-                
+
                 displayInLayerSwitcher: false,
                 isBaseLayer: false,
                 buffer: 0
@@ -124,10 +124,6 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
             }
 
             // override default params and options from layer
-            var key,
-                layerParams = layer.getParams(),
-                layerOptions = layer.getOptions();
-
             _.each(layer.getOptions(), function(value, key) {
                 config[key] = value;
             });
