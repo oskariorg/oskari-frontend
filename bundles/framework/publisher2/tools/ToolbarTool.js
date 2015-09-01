@@ -131,11 +131,11 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             me._storedData = {};//me.__instance.publisher.data || null;
             if (me.__instance.publisher.data) {
                 var data = me.__instance.publisher.data;
-                if (data && data.view && data.view.toolbar) {
-                    me._storedData.toolbarConfig = _.cloneDeep(data.view.toolbar);
+                if (data && data.configuration && data.configuration.toolbar) {
+                    me._storedData.toolbarConfig = _.cloneDeep(data.configuration.toolbar.conf);
                 }
-                if (data && data.view && data.view.publishedmyplaces2) {
-                    me._storedData.publishedmyplaces2Config = _.cloneDeep(data.view.publishedmyplaces2);
+                if (data && data.configuration && data.configuration.publishedmyplaces2) {
+                    me._storedData.publishedmyplaces2Config = _.cloneDeep(data.configuration.publishedmyplaces2.conf);
                 }
             }
         },
@@ -165,7 +165,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             if(me.state.enabled) {
 
                 var retValue = {
-                    view: {
+                    configuration: {
                         mapfull: {
                             conf: {
                                 plugins: [{ id: this.getTool().id, config: this.getPlugin().getConfig() }]
@@ -174,10 +174,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                     }
                 };
                 if (me.toolbarConfig && !_.isEmpty(me.toolbarConfig)) {
-                    retValue.view.toolbar = me.toolbarConfig;
+                    retValue.configuration.toolbar = { conf : me.toolbarConfig };
                 }
                 if (me.publishedmyplaces2Config && me.publishedmyplaces2Config.layer) {
-                    retValue.view.publishedmyplaces2 = me.publishedmyplaces2Config;
+                    retValue.configuration.publishedmyplaces2 = { conf : me.publishedmyplaces2Config };
                 }
 
                 return retValue;

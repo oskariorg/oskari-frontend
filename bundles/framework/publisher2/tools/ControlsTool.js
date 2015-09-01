@@ -28,7 +28,7 @@ function() {
 
         if(me.state.enabled) {
             return {
-                view: {
+                configuration: {
                     mapfull: {
                         conf: {
                             plugins: [{ id: this.getTool().id, config: this.getPlugin().getConfig() }]

@@ -367,13 +367,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             var me = this,
                 sandbox = this.instance.getSandbox(),
                 selections = {
-                    view: {
+                    configuration: {
 
                     }
                 },
                 errors = [];
             var mapFullState = sandbox.getStatefulComponents().mapfull.getState();
-            selections.view.mapfull = {
+            selections.configuration.mapfull = {
                 state: mapFullState
             };
 
