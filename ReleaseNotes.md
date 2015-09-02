@@ -40,6 +40,10 @@ Added possibility to configure how many decimals coordinates are rounded. If not
 
 Added possibility to configure how many decimals coordinates are rounded. If not configured then using zero decimals.
 
+### mapwfs2
+
+Wfs layer rendering is improved. Improvements also made in the backend Transport service for this item
+
 
 ## 1.31.1
 
