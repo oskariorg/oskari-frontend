@@ -12,6 +12,7 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'key-listener-metho
      * @return {Boolean} true if CTRL key is down
      */
     isCtrlKeyDown: function () {
+    	this._core.printDebug("isCtrlKeyDown is deprecated");
         return this._core.isCtrlKeyDown();
     }
 });
