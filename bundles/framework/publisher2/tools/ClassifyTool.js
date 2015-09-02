@@ -120,7 +120,7 @@ function() {
             statsGridState = me._filterIndicators(_.clone(statsGrid.state, true));
         if(me.state.enabled && statsGridState) {
             return {
-                view: {
+                configuration: {
                     mapfull: {
                         conf: {
                             plugins: [{ id: this.getTool().id, config: this.getPlugin().getConfig() }]

@@ -24,7 +24,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
      *          right : 10000000,
      *          top : 0
      *      },
-     *      srsName : "EPSG:3067"
+     *      srsName : "EPSG:3067",
+     *      openLayers : {
+     *           imageReloadAttemps: 5,
+     *           onImageLoadErrorColor: 'transparent'
+     *      }
      *  }
      */
 
@@ -32,7 +36,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         this._options = {
             resolutions: [2000, 1000, 500, 200, 100, 50, 20, 10, 4, 2, 1, 0.5, 0.25],
             srsName: 'EPSG:3067',
-            units: 'm'
+            units: 'm',
+            openLayers : {
+                imageReloadAttemps: 5,
+                onImageLoadErrorColor: 'transparent'
+            }
         };
         this._mapDivId = mapDivId;
         // override defaults
@@ -220,6 +228,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {OpenLayers.Map}
          */
         _initImpl: function (sandbox, options, map) {
+            /*Added to handle pink tiles */
+            OpenLayers.IMAGE_RELOAD_ATTEMPTS = options.openLayers.imageReloadAttemps;
+            OpenLayers.Util.onImageLoadErrorColor = options.openLayers.onImageLoadErrorColor;
+
             var scales = this._calculateScalesFromResolutions(options.resolutions, map.units);
             this._mapScales = scales;
 

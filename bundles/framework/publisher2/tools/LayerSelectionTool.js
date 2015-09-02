@@ -42,7 +42,7 @@ function() {
                 pluginConfig.layerSelection = layerSelection;
             }
             return {
-                view: {
+                configuration: {
                     mapfull: {
                         conf: {
                             plugins: [pluginConfig]
