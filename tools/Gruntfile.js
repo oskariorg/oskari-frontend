@@ -178,6 +178,11 @@ module.exports = function (grunt) {
                 failIfTrimmed: false
               }
             }
+        },
+        localizationJSCleanup: {
+            target: {
+                src: ['../bundles/**/locale/*.js']
+            }
         }
     });
 

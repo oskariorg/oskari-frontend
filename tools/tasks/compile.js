@@ -33,7 +33,6 @@ module.exports = function(grunt) {
         this.templateLanguage = "en";
 
         // Hackhack, easy way to read/load the localization files
-        //Also takes into account the extra bool param used in some loc files (elf-lang-overrides)
         var Oskari = {
             localizations: {
             },
@@ -89,9 +88,16 @@ module.exports = function(grunt) {
             }
             eval(result.code);
 
+            /*don't compare the template to itself*/
+            if (languageId === this.templateLanguage) {
+                return;
+            }
+
+
             var templateJSON = Oskari.localizations[this.templateLanguage];
             var JSONToCompare = Oskari.localizations[languageId];
-            this.replaceMissingAndEmptyKeys(templateJSON, JSONToCompare);
+            console.log("Processing localization "+languageId+" using "+this.templateLanguage+" as template.");
+            this.replaceMissingAndEmptyKeys(templateJSON, JSONToCompare, null, 0);
         };
 
         /*"special" handling for the language_all.js (might contain keys in several languages)*/
@@ -127,7 +133,8 @@ module.exports = function(grunt) {
                     continue;
                 }
                 var JSONToCompare = languageAllTempHash[id];
-                this.replaceMissingAndEmptyKeys(templateJSON, JSONToCompare);
+                console.log("Processing localization all, language "+id+" using "+this.templateLanguage+" as template.");
+                this.replaceMissingAndEmptyKeys(templateJSON, JSONToCompare, null, 0);
             }
 
             var outputFile = path + 'oskari_lang_all.js'
@@ -245,25 +252,46 @@ module.exports = function(grunt) {
             return result;
         };
 
+
+        /*dig in to the right level in json */
+        this.replaceMissingAndEmptyKeys = function(templateJSON, JSONToCompare, path, level) {
+            if (level === 0) {
+                for (var key in templateJSON) {
+                    if (!JSONToCompare[key]) {
+                        grunt.log.warn("Localization for bundle "+key+" missing.");
+                        JSONToCompare[key] = this.clone(templateJSON[key])
+                    } else {
+                        this.replaceMissingAndEmptyKeysRecursive(templateJSON[key].localization.value, JSONToCompare[key].localization.value, path, key, level);
+                    }
+                }
+            }
+        };
+
         /*compares a locale to the corresponding template language locale, and fills in the missing/empty properties*/
-        this.replaceMissingAndEmptyKeys = function(templateJSON, JSONToCompare) {
+        this.replaceMissingAndEmptyKeysRecursive = function(templateJSON, JSONToCompare, path, bundle, level) {
+            var logkey = "";
+            if (level === 0) {
+                path = "";
+            }
             for (var key in templateJSON) {
+                logkey = path && path.length ? path+"."+key : key;
                 if (typeof templateJSON[key] === 'string' || templateJSON[key] instanceof String) {
                     if (!JSONToCompare[key] || JSONToCompare[key].length === 0) {
+                        grunt.log.warn("Key/Value missing "+bundle+": "+logkey);
                         JSONToCompare[key] = templateJSON[key];
                     }
                 } else if (templateJSON[key].constructor === Object) {
                     if (!JSONToCompare[key]) {
-//                        console.log("Key does not exist "+key);
+                        grunt.log.warn("Key/Value missing "+bundle+": "+logkey);
                         JSONToCompare[key] = this.clone(templateJSON[key]);
                     } else {
-                        this.replaceMissingAndEmptyKeys(templateJSON[key], JSONToCompare[key]);
+                        this.replaceMissingAndEmptyKeysRecursive(templateJSON[key], JSONToCompare[key], logkey, bundle, level + 1);
                     }
                 }
             }
             return;
         };
-        /*a poor man's deep clone method*/
+
         this.clone = function(objectToClone) {
             return JSON.parse(JSON.stringify(objectToClone));
         };
