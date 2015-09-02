@@ -44,7 +44,7 @@ function() {
             var pluginConfig = this.getPlugin().getConfig();
             pluginConfig.instance = null;
             return {
-                view: {
+                configuration: {
                     mapfull: {
                         conf: {
                             plugins: [{ id: this.getTool().id, config:  pluginConfig }]

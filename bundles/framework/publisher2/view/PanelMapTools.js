@@ -174,8 +174,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                 enabledTools = null;
             if (me.data) {
                 enabledTools = {};
-                if (me.data.view && me.data.view.mapfull && me.data.view.mapfull.conf && me.data.view.mapfull.conf.plugins) {
-                    _.each(me.data.view.mapfull.conf.plugins, function(plugin) {
+                if (me.data.configuration && me.data.configuration.mapfull && me.data.configuration.mapfull.conf && me.data.configuration.mapfull.conf.plugins) {
+                    _.each(me.data.configuration.mapfull.conf.plugins, function(plugin) {
                         enabledTools[plugin.id] = true;
                     });
                 }

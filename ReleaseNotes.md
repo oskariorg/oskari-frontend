@@ -2,6 +2,32 @@
 
 ## 1.32
 
+### sample/servlet
+
+Modified minifierAppSetup.json to also include coordinatetool -bundle.
+
+### mapwmts
+
+WMTS support has been refactored to enable better Openlayers 3 support. 
+Requires backend functionality with action route 'GetLayerCapabilities' that takes the layer id as parameter('id')
+ and returns the layer capabilities in XML format.
+
+#### Changes to classes:
+
+*Oskari.mapframework.wmts.domain.WmtsLayer*
+setWmtsName -> setLayerName
+getWmtsName -> getLayerName
+addWmtsUrl -> addLayerUrl
+getWmtsUrls -> getLayerUrls
+getUrl -> getLayerUrl
+getRequestEncoding/setWmtsCaps/getWmtsCaps -> *removed*
+
+*Oskari.mapframework.wmts.service.WmtsLayerModelBuilder*
+Heavily refactored since capabilities are no longer parsed here
+
+*Oskari.mapframework.wmts.service.WMTSLayerService*
+Currently responsible for loading capabilities and creating the WMTS layer object for the map engine.
+
 ### coordinatedisplay
 
 Added possibility to configure how many decimals coordinates are rounded. If not configured then using zero decimals.
