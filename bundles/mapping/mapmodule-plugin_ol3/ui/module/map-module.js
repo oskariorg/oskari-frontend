@@ -91,6 +91,14 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             return this._options.resolutions.length - 1;
         },
 
+        getInteractionInstance: function (interactionName) {
+            var interactions = this.getMap().getInteractions().getArray();
+            var interactionInstance = interactions.filter(function(interaction) {
+              return interaction instanceof interactionName;
+            })[0];
+            return interactionInstance;
+        },
+
         _getContainerWithClasses: function (containerClasses) {
             var mapDiv = this.getMapEl(),
                 containerDiv = jQuery(
@@ -375,13 +383,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
             var map = new ol.Map({
                 extent: projectionExtent,
-                controls: ol.control.defaults({}, [
-                    /*new ol.control.ScaleLine({
-             units : ol.control.ScaleLineUnits.METRIC
-             })*/
-                ]),
                 isBaseLayer: true,
                 maxExtent: maxExtent,
+                keyboardEventTarget: document,
                 target: this._mapDivId
 
             });
@@ -413,6 +417,18 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
             });
 
+            map.on('singleclick', function(evt) {
+                var sandbox = me._sandbox;
+                var CtrlPressed = evt.browserEvent.ctrlKey;
+                var mapClickedEvent = sandbox.getEventBuilder('MapClickedEvent')(evt.coordinate, evt.pixel[0], evt.pixel[1], CtrlPressed);
+                sandbox.notifyAll(mapClickedEvent);
+            });
+
+            map.on('pointermove', function(evt) {
+                var sandbox = me._sandbox;
+                var hoverEvent = sandbox.getEventBuilder('MouseHoverEvent')(evt.coordinate[0], evt.coordinate[1], false);
+                sandbox.notifyAll(hoverEvent);
+            });
 
             me._map = map;
 
