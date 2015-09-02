@@ -34,7 +34,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             srsName: 'EPSG:3067',
             units: 'm'
         };
-        this._mapDivId = mapDivId;
+        this._mapDivId = mapDivId || 'mapdiv';
         // override defaults
         var key;
         if (options) {
@@ -382,7 +382,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 ]),
                 isBaseLayer: true,
                 maxExtent: maxExtent,
-                target: 'mapdiv'
+                target: this._mapDivId
 
             });
 
@@ -735,25 +735,13 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @method bringToTop
          *
          * @param {OpenLayers.Layer} layer The new topmost layer
-         * @param {Integer} buffer Add this buffer to z index. If it's undefined, using 1.
          */
-        bringToTop: function(layer, buffer) {
-            var zIndex,
-                layerZIndex = 0;
-            if (layer !== null) {
-                if(layer.getZIndex) {
-                    layerZIndex = layer.getZIndex();
-                }
+        bringToTop: function(layer) {
 
-                zIndex = Math.max(this._map.Z_INDEX_BASE.Feature,layerZIndex);
-                if(buffer && buffer>0) {
-                    layer.setZIndex(zIndex+buffer);
-                }
-                else {
-                    layer.setZIndex(zIndex+1);
-                }
-            }
-            this.orderLayersByZIndex();
+            var map = this._map;
+            var list = map.getLayers();
+            list.remove(layer);
+            list.insertAt(0, layer);
         },
 
         /**

@@ -1,5 +1,50 @@
 # Release Notes
 
+## 1.32
+
+### map-module
+
+Modified styles not display error pink tiles (where is CSS olImageLoadError-class). Also added configurable OpenLayers IMAGE_RELOAD_ATTEMPTS and onImageLoadErrorColor.
+
+### sample/servlet
+
+Modified minifierAppSetup.json to also include coordinatetool -bundle.
+
+### admin-layerselector
+
+Added support for time values for WMS layers. The available time values are stored in layer attributes and the selected time value can be passed to GetMap requests through layer parameters. Added a field to the admin UI for selecting the desired time value.
+
+### mapwmts
+
+WMTS support has been refactored to enable better Openlayers 3 support. 
+Requires backend functionality with action route 'GetLayerCapabilities' that takes the layer id as parameter('id')
+ and returns the layer capabilities in XML format.
+
+#### Changes to classes:
+
+*Oskari.mapframework.wmts.domain.WmtsLayer*
+setWmtsName -> setLayerName
+getWmtsName -> getLayerName
+addWmtsUrl -> addLayerUrl
+getWmtsUrls -> getLayerUrls
+getUrl -> getLayerUrl
+getRequestEncoding/setWmtsCaps/getWmtsCaps -> *removed*
+
+*Oskari.mapframework.wmts.service.WmtsLayerModelBuilder*
+Heavily refactored since capabilities are no longer parsed here
+
+*Oskari.mapframework.wmts.service.WMTSLayerService*
+Currently responsible for loading capabilities and creating the WMTS layer object for the map engine.
+
+### coordinatedisplay
+
+Added possibility to configure how many decimals coordinates are rounded. If not configured then using zero decimals.
+
+### coordinatetool
+
+Added possibility to configure how many decimals coordinates are rounded. If not configured then using zero decimals.
+
+
 ## 1.31.1
 
 Removed console.log() calls.
