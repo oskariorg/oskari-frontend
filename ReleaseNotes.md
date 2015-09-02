@@ -2,6 +2,10 @@
 
 ## 1.32
 
+### map-module
+
+Modified styles not display error pink tiles (where is CSS olImageLoadError-class). Also added configurable OpenLayers IMAGE_RELOAD_ATTEMPTS and onImageLoadErrorColor.
+
 ### sample/servlet
 
 Modified minifierAppSetup.json to also include coordinatetool -bundle.
