@@ -216,11 +216,17 @@ Oskari.clazz.define(
          */
         inform: function (event) {
             var me = this,
+                config = me.getConfig(),
                 sandbox = me.getMapModule().getSandbox(),
                 layer = event.getMapLayer(),
                 layers = sandbox.findAllSelectedMapLayers(),
                 i,
-                count = 0;
+                count = 0,
+                render = false;
+
+            if(config){
+                render = config.isPublished;
+            }
 
             // see if there's any wfs layers, show  if so
             for (i = 0; i < layers.length; i++) {
@@ -229,7 +235,7 @@ Oskari.clazz.define(
                 }
             }
             if(count === 1 && layer.isManualRefresh()){
-               me.showMessage(me.getLocalization().information.title, me.getLocalization().information.info, me.getLocalization().button.close);
+               me.showMessage(me.getLocalization().information.title, me.getLocalization().information.info, me.getLocalization().button.close, render);
             }
 
 
@@ -1595,12 +1601,26 @@ Oskari.clazz.define(
             dialog.show(popupLoc, content, [okBtn]);
             dialog.fadeout(5000);
         },
-        showMessage: function (title, message, ok) {
+        /*
+         * @method showMessage
+         *
+         * @param {String} message dialog title
+         * @param {String} message  message to show to the user
+         * @param {String} locale string for OK-button
+         * @param {boolean} render manual refresh wfs layers in OK call back, if true
+         */
+        showMessage: function (title, message, ok, render) {
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+                me = this,
+                sandbox = me.getSandbox();
             okBtn.setTitle(ok);
             okBtn.addClass('primary');
             okBtn.setHandler(function () {
+                if(render){
+                    var event = sandbox.getEventBuilder('WFSRefreshManualLoadLayersEvent')();
+                    sandbox.notifyAll(event);
+                }
                 dialog.close(true);
             });
             dialog.show(title, message, [okBtn]);
