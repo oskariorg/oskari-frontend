@@ -157,7 +157,7 @@ Oskari.clazz.define(
             this._layers[layer.getId()] = openLayer;
 
             if (keepLayerOnTop) {
-                mapModule.bringToTop(openLayer);
+                this.getMapModule().bringToTop(openLayer);
             } else {
                 this.getMap().setLayerIndex(openLayer, 0);
             }
