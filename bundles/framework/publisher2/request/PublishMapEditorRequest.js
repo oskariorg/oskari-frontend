@@ -5,7 +5,7 @@
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.request.PublishMapEditorRequest',
+Oskari.clazz.define('Oskari.mapframework.bundle.publisher.request.PublishMapEditorRequest',
     /**
      * @method create called automatically on construction
      * @static
@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.request.PublishMapEdi
         this._viewData = viewData;
     }, {
         /** @static @property __name request name */
-        __name: 'Publisher2.PublishMapEditorRequest',
+        __name: 'Publisher.PublishMapEditorRequest',
         /**
          * @method getName
          * @return {String} request name

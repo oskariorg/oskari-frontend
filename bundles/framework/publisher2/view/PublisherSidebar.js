@@ -372,6 +372,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                     }
                 },
                 errors = [];
+
             var mapFullState = sandbox.getStatefulComponents().mapfull.getState();
             selections.configuration.mapfull = {
                 state: mapFullState
@@ -453,8 +454,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 };
                 saveBtn.setTitle(me.loc.buttons.saveNew);
                 saveBtn.setHandler(function () {
-                    me.data.id = null;
-                    delete me.data.id;
+                    me.data.uuid = null;
+                    delete me.data.uuid;
                     save();
                 });
                 saveBtn.insertTo(buttonCont);
@@ -501,18 +502,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                         okBtn = dialog.createCloseButton(me.loc.buttons.ok);
                     dialog.show(me.loc.error.title, me.loc.error.saveFailed, [okBtn]);
                 };
-
             if (selections.size) {
                 totalWidth = selections.size.width + 'px';
                 totalHeight = selections.size.height + 'px';
             }
-
             // make the ajax call
             jQuery.ajax({
                 url: url + '&action_route=AppSetup',
                 type: 'POST',
                 dataType: 'json',
                 data: {
+                    uuid: (me.data && me.data.uuid) ? me.data.uuid : undefined,
                     pubdata: JSON.stringify(selections)
                 },
                 beforeSend: function (x) {
@@ -523,7 +523,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 success: function (response) {
                     if (response.id > 0) {
                         var event = sandbox.getEventBuilder(
-                            'Publisher2.MapPublishedEvent'
+                            'Publisher.MapPublishedEvent'
                         )(
                             response.id,
                             totalWidth,
@@ -531,10 +531,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                             response.lang,
                             sandbox.createURL(response.url)
                         );
+
                         me._editToolLayoutOff();
                         sandbox.notifyAll(event);
-//                        me._editToolLayoutOff();
-
                     } else {
                         errorHandler();
                     }
@@ -634,6 +633,33 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 content.append(row);
             }
             dialog.show(this.loc.error.title, content, [okBtn]);
+        },
+        /**
+         * @private @method _showReplaceConfirm
+         * Shows a confirm dialog for replacing published map
+         *
+         * @param {Function} continueCallback function to call if the user confirms
+         *
+         */
+        _showReplaceConfirm: function (continueCallback) {
+            var dialog = Oskari.clazz.create(
+                    'Oskari.userinterface.component.Popup'
+                ),
+                okBtn = Oskari.clazz.create(
+                    'Oskari.userinterface.component.Button'
+                );
+            okBtn.setTitle(this.loc.buttons.replace);
+            okBtn.addClass('primary');
+            okBtn.setHandler(function () {
+                dialog.close();
+                continueCallback();
+            });
+            var cancelBtn = dialog.createCloseButton(this.loc.buttons.cancel);
+            dialog.show(
+                this.loc.confirm.replace.title,
+                this.loc.confirm.replace.msg,
+                [cancelBtn, okBtn]
+            );
         },
         /**
          * @method destroy

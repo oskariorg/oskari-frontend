@@ -58,7 +58,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
              * @method Publisher.MapPublishedEvent
              * @param {Oskari.mapframework.bundle.publisher.event.MapPublishedEvent} event
              */
-            'Publisher2.MapPublishedEvent': function (event) {
+            'Publisher.MapPublishedEvent': function (event) {
                 var loc = this.getLocalization(),
                     dialog = Oskari.clazz.create(
                         'Oskari.userinterface.component.Popup'
@@ -101,9 +101,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             this.__service = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.PublisherService', sandbox);
             // create and register request handler
             var reqHandler = Oskari.clazz.create(
-                    'Oskari.mapframework.bundle.publisher2.request.PublishMapEditorRequestHandler',
+                    'Oskari.mapframework.bundle.publisher.request.PublishMapEditorRequestHandler',
                     this);
-            sandbox.addRequestHandler('Publisher2.PublishMapEditorRequest', reqHandler);
+            sandbox.addRequestHandler('Publisher.PublishMapEditorRequest', reqHandler);
 
             // Let's add publishable filter to layerlist if user is logged in
             if(sandbox.getUser().isLoggedIn()) {
@@ -228,6 +228,43 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             sandbox.request(me.getName(), request);
 
             return layer;
+        },
+        /**
+         * @method hasPublishRight
+         * Checks if the layer can be published.
+         * @param
+         * {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer}
+         * layer
+         *      layer to check
+         * @return {Boolean} true if the layer can be published
+         */
+        hasPublishRight: function (layer) {
+            // permission might be "no_publication_permission"
+            // or nothing at all
+            return (layer.getPermission('publish') === 'publication_permission_ok');
+        },
+
+        /**
+         * @method getLayersWithoutPublishRights
+         * Checks currently selected layers and returns a subset of the list
+         * that has the layers that can't be published. If all selected
+         * layers can be published, returns an empty list.
+         * @return
+         * {Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Mixed}
+         * list of layers that can't be published.
+         */
+        getLayersWithoutPublishRights: function () {
+            var deniedLayers = [],
+                selectedLayers = this.sandbox.findAllSelectedMapLayers(),
+                i,
+                layer;
+            for (i = 0; i < selectedLayers.length; i += 1) {
+                layer = selectedLayers[i];
+                if (!this.hasPublishRight(layer)) {
+                    deniedLayers.push(layer);
+                }
+            }
+            return deniedLayers;
         },
 
         /**
