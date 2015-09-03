@@ -491,6 +491,7 @@ Oskari.clazz.define(
                             tiles
                         );
                         me._tilesLayer.redraw();
+
                     }
                 }
             }
@@ -1100,7 +1101,7 @@ Oskari.clazz.define(
                 // temp cached and redrawn if gotten better
                 else {
                     dataForTileTemp = me._tileDataTemp.mget(layerId,style,bboxKey);
-                    if (dataForTileTemp) return;
+                    if (dataForTileTemp) {}
                     me._tileDataTemp.mput(layerId,style,bboxKey,imageUrl);
                 }
                 // QUEUES updates!

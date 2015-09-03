@@ -12,6 +12,7 @@ Oskari.clazz.category('Oskari.mapframework.core.Core', 'feature-key-listener-met
      * @private
      */
     _handleCtrlKeyDownRequest: function () {
+        this.printDebug("isCtrlKeyDown is deprecated");
         this._ctrlKeyDown = true;
     },
     /**
@@ -20,6 +21,7 @@ Oskari.clazz.category('Oskari.mapframework.core.Core', 'feature-key-listener-met
      * @private
      */
     _handleCtrlKeyUpRequest: function () {
+        this.printDebug("isCtrlKeyDown is deprecated");
         this._ctrlKeyDown = false;
     },
     /**

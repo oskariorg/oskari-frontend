@@ -937,8 +937,9 @@ Oskari.clazz.define(
                 }
                 // temp cached and redrawn if gotten better
                 else {
-                    dataForTileTemp = me._tileDataTemp.mget(layerId,style,bboxKey);
-                    if (dataForTileTemp) return;
+                    //Old temp tile (border tile) cant be used, because it is not valid after map move
+                    //dataForTileTemp = me._tileDataTemp.mget(layerId,style,bboxKey);
+                    //if (dataForTileTemp) return;
                     me._tileDataTemp.mput(layerId,style,bboxKey,imageUrl);
                 }
                 // QUEUES updates!
