@@ -98,8 +98,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
         */
         _extendRecursive: function(defaults, extend){
             var me = this;
-
-            if (extend === null || jQuery.isEmptyObject(extend)) {
+            if (extend === null || extend === undefined || jQuery.isEmptyObject(extend)) {
                 return defaults;
             } else if (jQuery.isEmptyObject(defaults)) {
                 return jQuery.extend(true, defaults, extend);
@@ -110,9 +109,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                     });
                 }
                 return defaults;
-            } else {
+            } else if (extend.constructor && extend.constructor === Object) {
                 jQuery.each(extend, function(key, value){
-                    if(defaults[key] === null) {
+                    //not an array or an object -> just use the plain value
+                    if( defaults[key] === null || defaults[key] === undefined || !(defaults[key] instanceof Array || defaults[key] instanceof Object)) {
                         defaults[key] = value;
                     } else {
                         defaults[key] = me._extendRecursive(defaults[key], value);
@@ -122,7 +122,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 return defaults;
             }
         },
-
         /**
          * Returns the selections the user has done with the form inputs.
          * @method getValues
@@ -136,7 +135,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
 
                 if (tool.isDisplayed()) {
                     var value = tool.getValues();
-                    me._extendRecursive(values, value);
+                    if (value !== undefined && value !== null) {
+                        me._extendRecursive(values, value);
+                    }
                 }
             });
 
@@ -315,10 +316,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
          */
         _initUserLayout: function() {
             var me = this,
-                tools = this.tools;
-            if (me.data && me.data.view && me.data.view.mapfull && me.data.view.mapfull.conf && me.data.view.mapfull.conf.plugins) {
-
-                var pluginConfigs = this.data.view.mapfull.conf.plugins;
+                tools = this.tools,
+                pluginConfigs;
+            //gotta figure out some nicer way to check the existence of (deep) nested properties in an object...
+            try {
+                pluginConfigs = me.data.configuration.mapfull.conf.plugins;
+            } catch(e) {
+                pluginConfigs = null;
+            }
+            if (pluginConfigs && pluginConfigs.length) { 
                 var pluginConfig = null;
                 _.each(tools, function(tool) {
                     for (var i = 0; i < pluginConfigs.length; i++) {

@@ -3,7 +3,7 @@
  *
  * Used to notify components that a new published map is available.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.event.MapPublishedEvent',
+Oskari.clazz.define('Oskari.mapframework.bundle.publisher.event.MapPublishedEvent',
 
     /**
      * @method create called automatically on construction
@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.event.MapPublishedEve
 
     }, {
         /** @static @property __name event name */
-        __name: 'Publisher2.MapPublishedEvent',
+        __name: 'Publisher.MapPublishedEvent',
         /**
          * @method getName
          * Returns event name
