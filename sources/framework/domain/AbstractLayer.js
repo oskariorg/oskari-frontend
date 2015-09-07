@@ -953,6 +953,13 @@ Oskari.clazz.define(
             return this._params;
         },
         /**
+         * @method setParams
+         * @param {Object} optional layer parameters for OpenLayers
+         */
+        setParams: function (param) {
+            this._params = param;
+        },
+        /**
          * @method getOptions
          * @return {Object} optional layer options for OpenLayers, empty object if no options were passed in construction
          */

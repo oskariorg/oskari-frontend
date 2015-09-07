@@ -331,6 +331,7 @@ Oskari.clazz.define(
                 //url might've changed (case forceProxy). Update that.
                 oLayers[i].setUrl(_.clone(layer.getLayerUrls()));
 
+                oLayers[i].mergeNewParams(layer.getParams());
                 // Make sure the sub exists before mucking about with it
                 if (newRes && isInScale && oLayers && oLayers[i]) {
                     oLayers[i].addOptions({

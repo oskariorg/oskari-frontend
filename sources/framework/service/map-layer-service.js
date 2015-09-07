@@ -287,6 +287,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             if (newLayerConf.attributes) {
                 layer.setAttributes(newLayerConf.attributes);
             }
+
+            if (newLayerConf.params) {
+                layer.setParams(newLayerConf.params);
+            }
             
             // wms specific
             // TODO: we need to figure this out some other way
