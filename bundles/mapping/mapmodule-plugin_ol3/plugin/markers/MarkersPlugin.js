@@ -203,7 +203,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @private
          */
         _createMapMarkerLayer: function () {
-            var markerLayer = new OpenLayers.Layer.Vector('Markers');
+            var markerLayer = new ol.layer.Vector(title: 'Markers');
             this.getMap().addLayer(markerLayer);
             this.raiseMarkerLayer(markerLayer);
         },
@@ -382,8 +382,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             }
 
             var markerLayers = this.getMap().getLayersByName('Markers'),
-                point = new OpenLayers.Geometry.Point(data.x, data.y),
-                newMarker = new OpenLayers.Feature.Vector(point, null, {
+                point = new ol.geom.Point(data.x, data.y),
+                newMarker = new ol.Feature(point, null, {
                     externalGraphic: iconSrc,
                     graphicWidth: size,
                     graphicHeight: size,
@@ -399,7 +399,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     labelYOffset: 8,
                     labelOutlineColor: 'white',
                     labelOutlineWidth: 1
-                });
+                }).getGeometry();
 
             if (events) {
                 for (i in events) {
