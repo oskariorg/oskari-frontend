@@ -16,8 +16,11 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     this.__instance = instance;
     this.__plugin = null;
     this.__handlers = handlers;
+    // This is used to watch tool plugin start/stop changes. If plugin is started then change this value to true, if stopped then change to false.
+    // If tool plugin is started then we can call stop plugin if unchecking this tools (otherwise we get error when sopping plugin).
     this.__started = false;
     this.state= {
+        // This variable is used to save tool state (is checked) and if it's true then we get tool json when saving published map.
         enabled: false,
         mode:null
     };
@@ -123,7 +126,10 @@ function(sandbox, mapmodule, localization, instance, handlers) {
         return true;
     },
     /**
-    * Is displayed.
+    * Is displayed. We can use this to tell when tool is displayed. 
+    * For example if stats layers are added to map when opening publisher we can tell at then this tool need to be shown (ShowStatsTableTool). 
+    * Is there is no stats layer then not show the tool.
+    * 
     * @method isDisplayed
     * @public
     *

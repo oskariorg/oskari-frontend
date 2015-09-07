@@ -90,8 +90,9 @@ function() {
             elLeft.html(me.statsContainer);
             me.__plugin.startPlugin(me.__sandbox);
             me.__plugin.createStatsOut(me.statsContainer);
+            me.__started = true;
         } else {
-            if (me.__plugin) {
+            if (me.__started === true) {
                 me.__plugin.stopPlugin(me.__sandbox);
             }
             jQuery('.publishedgrid').remove();
