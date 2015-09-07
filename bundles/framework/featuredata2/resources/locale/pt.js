@@ -11,7 +11,7 @@ Oskari.registerLocalization({
         "errorscale": "Dados não podem ser apresentados para esta escala. Por favor, mude de escala.",
         "errordata": "Os dados do servidor têm erros. Por favor desloque ligeiramente a carta para atualizar.",
         "columnSelectorTooltip": "Mostrar colunas",
-        "popup": {
+        "selectionTools": {
             "title": "Selecionar elementos na carta",
             "instructions": " ",
             "link": {

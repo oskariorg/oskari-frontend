@@ -35,6 +35,9 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.AnalyseBundle", function() {
             "src" : "../../../../bundles/analysis/analyse/view/StartView.js"
         }, {
             "type" : "text/javascript",
+            "src" : "../../../../bundles/analysis/analyse/view/NotLoggedIn.js"
+        }, {
+            "type" : "text/javascript",
             "src" : "../../../../bundles/analysis/analyse/view/StartAnalyse.js"
         }, {
             "type" : "text/javascript",
@@ -67,6 +70,10 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.AnalyseBundle", function() {
             "lang" : "sv",
             "type" : "text/javascript",
             "src" : "../../../../bundles/analysis/analyse/resources/locale/sv.js"
+        }, {
+            "lang" : "it",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/analysis/analyse/resources/locale/it.js"
         }, {
             "lang" : "en",
             "type" : "text/javascript",

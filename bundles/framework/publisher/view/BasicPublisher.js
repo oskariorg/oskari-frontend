@@ -357,7 +357,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             }
 
             // 3rd panel: size panel
-            accordion.addPanel(me._createSizePanel());
+            accordion.addPanel(me._createSizePanel())
 
             // 4th panel: tools panel
             accordion.addPanel(me._createToolsPanel());
@@ -577,6 +577,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 totalHeight = size.height;
 
             if (totalWidth === null || totalWidth === undefined || totalWidth === '') {
+                if(!container.length) {
+                    // check if we actually have .row-fluid structure, fallback to mapmodule as container
+                    container = me.mapModule.getMapEl();
+                }
                 // Ugly hack, container has a nasty habit of overflowing the viewport...
                 totalWidth = jQuery(window).width() - container.offset().left;
             }
@@ -700,21 +704,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 };
             }));
             radioButtonGroup.setHandler(selectionHandler);
+
+            // --> NÄMÄ?
             radioButtonGroup.insertTo(contentPanel);
+            // <--
+
 
             customSizes.className = 'customsize';
-
             widthInput.setName('width');
             widthInput.setPlaceholder(me.loc.sizes.width);
             widthInput.setValue(selectedOption.width);
             widthInput.setHandler(function () {
                 me._updateMapSize();
             });
-            widthInput.insertTo(customSizes);
 
+            // --> NÄMÄ?
+            widthInput.insertTo(customSizes);
             customSizes.appendChild(
                 document.createTextNode(me.loc.sizes.separator)
             );
+            // <--
 
             heightInput.setName('height');
             heightInput.setPlaceholder(me.loc.sizes.height);
@@ -791,6 +800,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                     }
                 }
             }
+
             // Add the layout panel to the accordion.
             me.toolsPanel = Oskari.clazz.create(
                 'Oskari.mapframework.bundle.publisher.view.PublisherToolsForm',

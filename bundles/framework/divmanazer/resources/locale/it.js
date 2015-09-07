@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "cs",
     "key": "DivManazer",
     "value": {
@@ -8,14 +9,14 @@ Oskari.registerLocalization({
             "close": "Chiudi",
             "delete": "Cancella",
             "edit": "Modifica",
-            "exit": "Uscire",
+            "exit": "Esci",
             "ok": "OK",
-            "save": "Salve",
+            "save": "Salva",
             "search": "Cerca"
         },
         "LanguageSelect": {
             "title": "Lingua",
-            "tooltip": "NOT TRANSLATED",
+            "tooltip": "Seleziona lingua",
             "languages": {
                 "af": "afrikaans",
                 "ak": "akan",
@@ -139,96 +140,128 @@ Oskari.registerLocalization({
         },
         "VisualizationForm": {
             "tooltips": {
-                "dot": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED",
-                "line": "NOT TRANSLATED"
+                "dot": "Modifica stile dell'elemento puntuale",
+                "area": "Modifica stile dell'elemento areale",
+                "line": "Modifica stile dell'elemento lineare"
             },
             "dot": {
-                "title": "NOT TRANSLATED",
+                "title": "Stile dell'elemento puntuale",
                 "tooltip": "",
                 "symbol": {
-                    "label": "NOT TRANSLATED"
+                    "label": "Icona"
                 },
                 "size": {
-                    "label": "NOT TRANSLATED"
+                    "label": "Dimensione"
                 },
                 "color": {
-                    "label": "NOT TRANSLATED",
-                    "labelOr": "NOT TRANSLATED",
-                    "labelCustom": "NOT TRANSLATED"
+                    "label": "Colore",
+                    "labelOr": "o",
+                    "labelCustom": "Colore personalizzato (RGB 0-255)"
                 },
                 "preview": {
-                    "label": "NOT TRANSLATED"
+                    "label": "Anteprima"
                 },
                 "buttons": {
-                    "save": "NOT TRANSLATED",
-                    "cancel": "NOT TRANSLATED"
+                    "save": "Salva",
+                    "cancel": "Cancella"
                 }
             },
             "line": {
-                "title": "NOT TRANSLATED",
+                "title": "Stile dell'elemento lineare",
                 "tooltip": "",
                 "style": {
-                    "label": "NOT TRANSLATED"
+                    "label": "Tratteggio"
                 },
                 "cap": {
-                    "label": "NOT TRANSLATED"
+                    "label": "Estremità linea"
                 },
                 "corner": {
-                    "label": "NOT TRANSLATED"
+                    "label": "Spigoli"
                 },
                 "width": {
-                    "label": "NOT TRANSLATED"
+                    "label": "Spessore"
                 },
                 "color": {
-                    "label": "NOT TRANSLATED",
-                    "labelOr": "NOT TRANSLATED",
-                    "labelCustom": "NOT TRANSLATED"
+                    "label": "Colore",
+                    "labelOr": "o",
+                    "labelCustom": "Colore personalizzato (RGB 0-255)"
                 },
                 "preview": {
-                    "label": "NOT TRANSLATED"
+                    "label": "Anteprima"
                 },
                 "buttons": {
-                    "save": "NOT TRANSLATED",
-                    "cancel": "NOT TRANSLATED"
+                    "save": "Salva",
+                    "cancel": "Cancella"
                 }
             },
             "area": {
-                "title": "NOT TRANSLATED",
+                "title": "Stile dell'elemento areale",
                 "tooltip": "",
                 "linestyle": {
-                    "label": "NOT TRANSLATED"
+                    "label": "Tratteggio bordo"
                 },
                 "linecap": {
                     "label": "NOT TRANSLATED"
                 },
                 "linecorner": {
-                    "label": "NOT TRANSLATED"
+                    "label": "Spigoli"
                 },
                 "linewidth": {
-                    "label": "NOT TRANSLATED"
+                    "label": "Spessore bordo"
                 },
                 "linecolor": {
-                    "label": "NOT TRANSLATED",
-                    "labelOr": "NOT TRANSLATED",
-                    "labelCustom": "NOT TRANSLATED"
+                    "label": "Colore bordo",
+                    "labelOr": "o",
+                    "labelCustom": "Colore personalizzato (RGB 0-255)"
                 },
                 "color": {
-                    "label": "NOT TRANSLATED",
-                    "labelOr": "NOT TRANSLATED",
-                    "labelCustom": "NOT TRANSLATED"
+                    "label": "Colore di riempimento",
+                    "labelOr": "o",
+                    "labelCustom": "Colore personalizzato (RGB 0-255)"
                 },
                 "fill": {
-                    "label": "NOT TRANSLATED"
+                    "label": "Stile del riempimento"
                 },
                 "preview": {
-                    "label": "NOT TRANSLATED"
+                    "label": "Anteprima"
                 },
                 "buttons": {
-                    "save": "NOT TRANSLATED",
-                    "cancel": "NOT TRANSLATED"
+                    "save": "Salva",
+                    "cancel": "Cancella"
+                }
+            }
+        },
+        "Grid": {
+            "columnSelector": {
+                "title": "Proprietà",
+                "tooltip": "Mostra colonne"
+            },
+            "export": {
+                "title": "Esporta i dati",
+                "export": "Esporta",
+                "additional": {
+                    "title": "Altre impostazioni",
+                    "dataSource": "Fonte del dato",
+                    "metadata": "Collegamento al metadato"
+                },
+                "columns": {
+                    "title": "Colonne",
+                    "all": "Tutto",
+                    "visible": "Aperto"
+                },
+                "format": {
+                    "title": "Formato",
+                    "xlsx": "Excel",
+                    "csv": "CSV"
+                },
+                "delimiter": {
+                    "title": "Separatore dei campi",
+                    "comma": "Virgola",
+                    "semicolon": "Punto e virgola",
+                    "tabulator": "Tabulatore"
                 }
             }
         }
     }
-});
+}
+);

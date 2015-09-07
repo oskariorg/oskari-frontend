@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "nl",
     "key": "Publisher",
     "value": {
@@ -26,7 +27,7 @@ Oskari.registerLocalization({
             },
             "name": {
                 "label": "De naam van de kaart",
-                "placeholder": "NOT TRANSLATED",
+                "placeholder": "Verplicht",
                 "tooltip": "Geef uw kaart een beschrijvende naam. Let op de taal van de gebruikersinterface."
             },
             "language": {
@@ -49,98 +50,101 @@ Oskari.registerLocalization({
                 "IndexMapPlugin": "Indexkaart",
                 "PanButtons": "Verschuiffunctie",
                 "Portti2Zoombar": "Schaal schuifbalk",
+                "MyLocationPlugin": "Centrum naar locatie gebruiker",
                 "ControlsPlugin": "Verschuiffunctie aan",
                 "SearchPlugin": "Zoeken op adres en plaatsnaam",
+                "FeaturedataPlugin": "Feature data",
                 "GetInfoPlugin": "Querytool voor plaatsgegevens",
-                "PublisherToolbarPlugin": "NOT TRANSLATED",
-                "selectDrawLayer": "NOT TRANSLATED"
+                "PublisherToolbarPlugin": "kaart hulpmiddelen",
+                "selectDrawLayer": "Kies laag voor nieuwe features"
             },
             "toolbarToolNames": {
-                "history_back": "NOT TRANSLATED",
-                "history_forward": "NOT TRANSLATED",
-                "measureline": "NOT TRANSLATED",
-                "measurearea": "NOT TRANSLATED",
-                "point": "NOT TRANSLATED",
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "history_back": "Ga terug",
+                "history_forward": "Ga vooruit",
+                "measureline": "Meet afstand",
+                "measurearea": "Meet gebied",
+                "drawTools": "Tekentools",
+                "point": "Sta gebruikers toe om punt features toe te voegen.",
+                "line": "Sta gebruikers toe om lijn features toe te voegen.",
+                "area": "Sta gebruikers toe om gebied features toe te voegen."
             },
             "toollayout": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
-                "lefthanded": "NOT TRANSLATED",
-                "righthanded": "NOT TRANSLATED",
-                "userlayout": "NOT TRANSLATED",
-                "usereditmode": "NOT TRANSLATED",
-                "usereditmodeoff": "NOT TRANSLATED"
+                "label": "hulpmiddel Placement",
+                "tooltip": "Selecteer de plaats voor de tool waar die op de kaart moet worden getoond.",
+                "lefthanded": "Linkshandig",
+                "righthanded": "Rechtshandig",
+                "userlayout": "Lay-out aanpassen",
+                "usereditmode": "Start bewerken",
+                "usereditmodeoff": "Bewerken voltooien"
             },
             "data": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
-                "grid": "NOT TRANSLATED",
-                "allowClassification": "NOT TRANSLATED"
+                "label": "Statistieken",
+                "tooltip": "Toon kaart statistieken",
+                "grid": "Toon statistieken",
+                "allowClassification": "Sta classificatie toe"
             },
             "layout": {
-                "label": "NOT TRANSLATED",
+                "label": "Grafische Layout",
                 "fields": {
                     "colours": {
-                        "label": "NOT TRANSLATED",
-                        "placeholder": "NOT TRANSLATED",
-                        "buttonLabel": "NOT TRANSLATED",
-                        "light_grey": "NOT TRANSLATED",
-                        "dark_grey": "NOT TRANSLATED",
-                        "blue": "NOT TRANSLATED",
-                        "red": "NOT TRANSLATED",
-                        "green": "NOT TRANSLATED",
-                        "yellow": "NOT TRANSLATED",
-                        "custom": "NOT TRANSLATED",
+                        "label": "Kleur schema",
+                        "placeholder": "Selecteer het kleurschema",
+                        "buttonLabel": "Selecteer",
+                        "light_grey": "Licht grijs",
+                        "dark_grey": "Donker grijs",
+                        "blue": "Blauw",
+                        "red": "Rood",
+                        "green": "Groen",
+                        "yellow": "Geel",
+                        "custom": "Eigen kleurschema",
                         "customLabels": {
-                            "bgLabel": "NOT TRANSLATED",
-                            "titleLabel": "NOT TRANSLATED",
-                            "headerLabel": "NOT TRANSLATED",
-                            "iconLabel": "NOT TRANSLATED",
-                            "iconCloseLabel": "NOT TRANSLATED",
-                            "iconCloseWhiteLabel": "NOT TRANSLATED"
+                            "bgLabel": "Identifier achtergrond",
+                            "titleLabel": "Identifier tekst",
+                            "headerLabel": "Koptekst",
+                            "iconLabel": "Icoon",
+                            "iconCloseLabel": "Donker",
+                            "iconCloseWhiteLabel": "Licht"
                         }
                     },
                     "fonts": {
-                        "label": "NOT TRANSLATED"
+                        "label": "Letterstijl"
                     },
                     "toolStyles": {
-                        "label": "NOT TRANSLATED",
-                        "default": "NOT TRANSLATED",
-                        "rounded-dark": "NOT TRANSLATED",
-                        "rounded-light": "NOT TRANSLATED",
-                        "sharp-dark": "NOT TRANSLATED",
-                        "sharp-light": "NOT TRANSLATED",
-                        "3d-dark": "NOT TRANSLATED",
-                        "3d-light": "NOT TRANSLATED"
+                        "label": "Hulpmiddel stijl",
+                        "default": "Standaard stijl",
+                        "rounded-dark": "Afgeronde (donker)",
+                        "rounded-light": "Afgeronde (licht)",
+                        "sharp-dark": "Hoekig (donker)",
+                        "sharp-light": "Hoekig (licht)",
+                        "3d-dark": "Driedimensionale (donker)",
+                        "3d-light": "Driedimensionale (licht)"
                     }
                 },
                 "popup": {
-                    "title": "NOT TRANSLATED",
+                    "title": "Selecteer Kleurenschema",
                     "close": "Sluiten",
                     "gfiDialog": {
                         "title": "Voorbeeld",
                         "featureName": "Voorbeeld",
-                        "featureDesc": "NOT TRANSLATED"
+                        "featureDesc": "Het kleurenschema definieert alleen de kleur van de pop-up vensters voor de feature info en kaartlaag selectie."
                     }
                 }
             },
             "layers": {
-                "add": "NOT TRANSLATED",
-                "addselect": "NOT TRANSLATED",
+                "add": "Maak een nieuwe laag voor nieuwe features.",
                 "label": "Kaartlagen",
+                "addselect": "Voeg een teken laag om de kaart",
                 "defaultLayer": "(standaard laag)",
                 "useAsDefaultLayer": "Gebruik als standaardlaag"
             },
             "myplaces": {
-                "label": "NOT TRANSLATED"
+                "label": "Mijn kaartlagen"
             },
             "sizes": {
                 "small": "Klein",
                 "medium": "Middel",
                 "large": "Groot",
-                "fill": "NOT TRANSLATED",
+                "fill": "Vul de ruimte",
                 "custom": "Aangepast formaat",
                 "width": "Breedte",
                 "height": "Hoogte",
@@ -152,7 +156,7 @@ Oskari.registerLocalization({
                 "ok": "OK",
                 "replace": "Vervangen",
                 "cancel": "Annuleren",
-                "add": "NOT TRANSLATED"
+                "add": "Voeg kaartlaag toe"
             },
             "confirm": {
                 "replace": {
@@ -178,7 +182,7 @@ Oskari.registerLocalization({
                 "name": "Naam is vereiste informatie",
                 "nohelp": "Hulp is niet beschikbaar",
                 "saveFailed": "Kaartpublicatie mislukt. Probeer het later opnieuw.",
-                "nameIllegalCharacters": "NOT TRANSLATED",
+                "nameIllegalCharacters": "De kaart naam bevat niet toegestane tekens. Toegestane tekens zijn de letters a t/m z, evenals å, ä en ö, getallen, backspace en koppeltekens.",
                 "domainIllegalCharacters": "De website naam bevat niet toegestane tekens. Toegestane tekens zijn de letters a t/m z, evenals å, ä en ö, getallen, backspace en koppeltekens."
             }
         },
@@ -196,7 +200,7 @@ Oskari.registerLocalization({
             "layerlist_empty": "De geselecteerde kaartlagen kunnen niet worden geïntegreerd. Het menu Geselecteerde kaartlagen geeft aan of een kaartlaag al dan niet kan worden geïntegreerd.",
             "layerlist_denied": "Kan niet geïntegreerd worden",
             "denied_tooltip": "De aanbieders van deze kaartdata hebben geen toestemming verleend om deze materialen op andere websites te publiceren. Controleer publicatierechten in het menu Geselecteerde kaartlagen vóór integratie.",
-            "myPlacesDisclaimer": "NOT TRANSLATED",
+            "myPlacesDisclaimer": "NB. U publiceert uw eigen kaart laag.",
             "buttons": {
                 "continue": "Doorgaan",
                 "continueAndAccept": "Accepteer Gebruiksvoorwaarden en ga door",
@@ -220,6 +224,15 @@ Oskari.registerLocalization({
                     "tooltip": "De kaartlaag kan in een geïntegreerd kaartvenster worden weergegeven en het aantal gebruikers per week kan worden beperkt."
                 }
             }
+        },
+        "layerFilter": {
+            "buttons": {
+                "publishable": "Publishable"
+            },
+            "tooltips": {
+                "publishable": "Show only publishable map layers"
+            }
         }
     }
-});
+}
+);

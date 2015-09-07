@@ -1,14 +1,49 @@
-<% var admin = model.getAdmin();
-if ((admin)&&(admin.passthrough)) {
-    _.forEach(admin.passthrough, function(value, key) {
-        var name = "passthrough-" + key;
-        var text;
-        if (typeof value === "string") {
-            text = value;
-        } else {
-            text = JSON.stringify(value);
-        }
-%>
-<input type="hidden" id="add-layer-<%= name %>" class="add-layer-input long"
-       value="<%= text %>" />
-<% })} %>
+<div class="add-layer-record">
+    <div class="add-layer-label-area">
+        <label for="add-layer-jobtype" class="add-class-label"
+               title="<%= instance.getLocalization('admin').jobTypeDesc %>"><%=
+            instance.getLocalization('admin').jobTypeDesc %></label>
+    </div>
+    <div class="add-layer-input-area adjacent">
+        <div class="input-controls">
+            <label><%= instance.getLocalization('admin').jobTypes["default"] %> <input type="radio" name="jobtype"
+                                                                                       id="layer-jobtype-default" <%
+                if(model.getVersion() == '1.1.0' ) { %>checked<% } %>
+                class="add-class-input" placeholder="placeholder" value="default" /></label>
+        </div>
+        <div class="input-controls">
+            <label><%= instance.getLocalization('admin').jobTypes["fe"] %> <input type="radio" name="jobtype"
+                                                                                  id="layer-jobtype-fe" <%
+                if(model.getVersion() == '2.0.0' ) { %>checked<% } %> class="add-class-input" placeholder="placeholder"
+                value="oskari-feature-engine" /></label>
+        </div>
+
+    </div>
+</div>
+<div class="add-layer-record">
+    <div class="add-layer-label-area">
+        <label for="add-layer-manualRefresh" class="add-class-label"
+        title="<%= instance.getLocalization('admin').manualRefresh %>"><%=
+        instance.getLocalization('admin').manualRefresh %></label>
+    </div>
+    <div class="add-layer-input-area adjacent">
+        <div class="input-controls">
+
+            <input
+                    type="checkbox"
+                    id="add-layer-manual-refresh"
+                    class="add-class-input"
+                    name="manualRefresh"
+                    placeholder="placeholder"
+            <% if (model.isManualRefresh()) { %>checked<% } %>
+            />
+        </div>
+
+    </div>
+</div>
+
+
+<!-- button id="add-layer-wfs-button" class="edit-wfs-button"><%= instance.getLocalization('admin').editWfs %></button -->
+
+
+

@@ -5,7 +5,7 @@
  */
 Oskari.clazz.define(
     'Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin',
-    function () {
+    function (config, sandbox) {
         var me = this;
 
         me._clazz =
@@ -18,6 +18,8 @@ Oskari.clazz.define(
         me.listeners = [];
         me.currentDrawMode = null;
         me.prefix = 'Default.';
+        me.sandbox = sandbox;
+        me.WFSLayerService = me.sandbox.getService('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
 
         if (me._config && me._config.id) {
             me.prefix = me._config.id + '.';
@@ -45,6 +47,8 @@ Oskari.clazz.define(
          * @params {String} includes drawMode, geometry and style
          */
         startDrawing: function (params) {
+            //Set the flag for the mediator to know that no gfi-popups are allowed until the popup is closed...
+            this.WFSLayerService.setSelectionToolsActive(true);
             if (params.isModify) {
                 // preselect it for modification
                 this.modifyControls.select.select(this.drawLayer.features[0]);
@@ -69,9 +73,13 @@ Oskari.clazz.define(
          * clears the layer of any drawn features
          */
         stopDrawing: function () {
+            this.WFSLayerService.setSelectionToolsActive(false);
+            this.drawLayer.removeAllFeatures();
             // disable all draw controls
             this._toggleControl();
-            // clear drawing
+        },
+
+        removeFeatures: function () {
             this.drawLayer.removeAllFeatures();
         },
 
@@ -101,10 +109,6 @@ Oskari.clazz.define(
          * @private
          */
         _finishedDrawing: function (isForced) {
-            if (!this.multipart || isForced) {
-                // not a multipart, stop editing
-                this._toggleControl();
-            }
             if (!this.editMode) {
                 // programmatically select the drawn feature ("not really supported by openlayers")
                 // http://lists.osgeo.org/pipermail/openlayers-users/2009-February/010601.html

@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "sv",
     "key": "catalogue.bundle.metadataflyout",
     "value": {
@@ -12,16 +13,16 @@ Oskari.registerLocalization({
         },
         "flyout": {
             "title": "Metadata",
-            "abstract": "Abstrakt",
-            "inspire": "INSPIRE",
-            "jhs": "ISO 19115",
-            "quality":"Data kvalität",
-            "xml": "XML",
-            "map": "Omfattning",
+            "abstract": "Grundläggande information",
+            "inspire": "Inspire metadata",
+            "jhs": "ISO 19115 metadata",
+            "quality": "Data kvalität",
+            "xml": "ISO 19139 XML fil",
+            "map": "Geografisk omfattning",
             "pdf": "Utskrift",
-            "select_metadata_prompt": "Välj metadata genom att klicka på ikonerna",
+            "select_metadata_prompt": "Välj metadata genom att klicka på ikonerna.",
             "metadata_printout_title": "METADATA UTSKRIFT",
-            "linkto": "Metadatalänk",
+            "linkto": "Länka till denna metadata",
             "notFound": "Metadata hittades inte",
             "codeLists": {
                 "gmd:MD_CharacterSetCode": {
@@ -37,7 +38,6 @@ Oskari.registerLocalization({
                         "label": "UTF7",
                         "description": "7-bit variable size UCS Transfer Format, based on ISO/IEC 10646"
                     },
-
                     "utf8": {
                         "label": "UTF8",
                         "description": "8-bit variable size UCS Transfer Format, based on ISO/IEC 10646"
@@ -108,231 +108,231 @@ Oskari.registerLocalization({
                     },
                     "jis": {
                         "label": "JIS",
-                        "description": "Japanese code set used for electronic transmission"
+                        "description": "Japansk kod uppsättning som används för elektronisk överföring"
                     },
                     "shiftJIS": {
                         "label": "Shift JIS",
-                        "description": "Japanese code set used on MS-DOS machines"
+                        "description": "Japansk kod uppsättning som används på MS-DOS-maskiner"
                     },
                     "eucJP": {
                         "label": "EUC JP",
-                        "description": "Japanese code set used on UNIX based machines"
+                        "description": "Japansk kod uppsättning som används på UNIX-baserade maskiner"
                     },
                     "usAscii": {
                         "label": "US ASCII",
-                        "description": "United States ASCII code set (ISO 646 US)"
+                        "description": "USA ASCII-kod set (ISO 646 US)"
                     },
                     "ebcdic": {
                         "label": "EBCDIC",
-                        "description": "IBM mainframe code set"
+                        "description": "IBM stordator koduppsättning"
                     },
                     "eucKR": {
                         "label": "EUC KR",
-                        "description": "Korean code set"
+                        "description": "Koreansk koduppsättning"
                     },
                     "big5": {
                         "label": "Big 5",
-                        "description": "Traditional Chinese code set used in Taiwan, Hong Kong of China and other areas"
+                        "description": "Traditionell kinesisk kod uppsättning som används i Taiwan, Hongkong Kina och andra områden"
                     },
                     "GB2312": {
                         "label": "GB2312",
-                        "description": "Simplified Chinese code set"
+                        "description": "Förenklad kinesisk koduppsättning"
                     }
                 },
                 "gmd:MD_ClassificationCode": {
                     "unclassified": {
-                        "label": "Inget skyddsbehov",
-                        "description": "tillgänglig för allmän åtkomst ANM. Ingen eller obetydlig skada uppstår vid obehörig tillgång till resursen."
+                        "label": "Oklassificerad",
+                        "description": "Tillgänglig för allmän spridning"
                     },
                     "restricted": {
-                        "label": "Begränsat skyddsbehov",
-                        "description": "tillgänglig för behörig ANM. Ingen eller obetydlig skada uppstår vid obehörig tillgång till resursen. Ex. En vidare krets betrodda, inom en organisation eller samarbetspartners, har tillgång till resursen."
+                        "label": "Begränsad",
+                        "description": "Inte för allmän spridning"
                     },
                     "confidential": {
-                        "label": "Måttligt skyddsbehov",
-                        "description": "tillgänglig för behörig ANM. Icke obetydlig skada uppstår vid obehörig tillgång till resursen. Ex. Begränsad krets av betrodda användare har tillgång till resurs som är företagshemlig."
+                        "label": "Konfidentiell",
+                        "description": "Tillgänglig för någon som kan anförtros information"
                     },
                     "secret": {
-                        "label": "Högt skyddsbehov",
-                        "description": "tillgänglig för behörig ANM. Betydande skada uppstår vid obehörig tillgång till resursen. Ex. Begränsad krets av betrodda användare har tillgång till resurs som omfattas av sekretesslagen men ej rör rikets säkerhet."
+                        "label": "Hemlig",
+                        "description": "Hålls eller tänkt att hållas privat, okänt eller dold från alla utom en utvald grupp människor"
                     },
                     "topSecret": {
                         "label": "Mycket högt skyddsbehov",
-                        "description": "tillgänglig för behörig ANM. Synnerlig skada uppstår vid obehörig tillgång till resursen. Ex. Begränsad krets av betrodda användare har tillgång till resurs som rör rikets säkerhet."
+                        "description": "Av högsta sekretess"
                     }
                 },
                 "gmd:CI_DateTypeCode": {
                     "creation": {
                         "label": "Skapande",
-                        "description": "datum som anger när resursen ursprungligen skapades"
+                        "description": "Datum som anger när resursen ursprungligen skapades."
                     },
                     "publication": {
                         "label": "Publicering",
-                        "description": "datum som anger när resursen blev utgiven"
+                        "description": "Datum som anger när resursen blev utgiven."
                     },
                     "revision": {
                         "label": "Revision",
-                        "description": "datum som anger när resursen blev granskad eller omgranskad och förbättrad eller rättad"
+                        "description": "Datum som anger när resursen blev granskad eller omgranskad och förbättrad eller rättad."
                     }
                 },
                 "gmd:MD_RestrictionCode": {
                     "copyright": {
                         "label": "Upphovsrätt",
-                        "description": "rätt att framställa exemplar av ett verk och i vilken omfattning verket får göras tillgänglig för allmänheten ANM. Regleras i Sverige enligt lagen 1960:779 om upphovsrätt till litterära och konstnärliga verk."
+                        "description": "Ensamrätt att framställa exemplar av ett verk och i vilken omfattning verket får göras tillgänglig för allmänheten ANM. Regleras i Sverige enligt lagen 1960:779 om upphovsrätt till litterära och konstnärliga verk."
                     },
                     "patent": {
                         "label": "Patent",
-                        "description": "ensamrätt att efter ansökan yrkesmässigt utnyttja uppfinningen (under 20 år) ANM. Regleras i Sverige enligt patentlagen (1967:837)."
+                        "description": "Ensamrätt att efter ansökan yrkesmässigt utnyttja uppfinningen (under 20 år) ANM. Regleras i Sverige enligt patentlagen (1967:837)."
                     },
                     "patentPending": {
                         "label": "Avvaktar patent",
-                        "description": "information som är under ansökan av patent"
+                        "description": "Information som är under ansökan av patent"
                     },
                     "trademark": {
                         "label": "Varumärke",
-                        "description": "allt som kan individualisera något t ex ord, figurer, förpackningsformer, slogan eller ljud i syfte att särskilja ett företag och dess produkter från andra företag eller produkter ANM. Genom registrering eller inarbetning kan ensamrätt erhållas enligt varumärkeslagen (1960:644)."
+                        "description": "Allt som kan individualisera något t ex ord, figurer, förpackningsformer, slogan eller ljud i syfte att särskilja ett företag och dess produkter från andra företag eller produkter ANM. Genom registrering eller inarbetning kan ensamrätt erhållas enligt varumärkeslagen (1960:644)."
                     },
                     "license": {
                         "label": "Licens",
-                        "description": "formaliserat tillstånd att använda en resurs"
+                        "description": "Formaliserat tillstånd att använda en resurs"
                     },
                     "intellectualPropertyRights": {
-                        "label": "Immaterialrätt",
-                        "description": "rättighet till finansiell nytta av och kontroll av distribution av immateriell egendom som är resultat av en skapande process ANM. Skyddet om fattar patent, varumärke, mönster, upphovsrätt, m.fl."
+                        "label": "Immateriella rättigheter",
+                        "description": "Rättighet till finansiell nytta av och kontroll av distribution av immateriell egendom som är resultat av en skapande process ANM. Skyddet om fattar patent, varumärke, mönster, upphovsrätt, m.fl."
                     },
                     "restricted": {
                         "label": "Begränsad",
-                        "description": "begränsade spridningsrättigheter"
+                        "description": "Begränsade spridningsrättigheter"
                     },
                     "otherRestrictions": {
                         "label": "Andra begränsningar",
-                        "description": "ospecificerade begränsningar"
+                        "description": "Ospecificerade begränsningar"
                     }
                 },
                 "gmd:MD_ScopeCode": {
                     "attribute": {
-                        "label": "Attributvärde",
-                        "description": "information om attributvärde"
+                        "label": "Attribut",
+                        "description": "Information avser attributsklassen"
                     },
                     "attributeType": {
                         "label": "Attributtyp",
-                        "description": "information om attributtyp"
+                        "description": "Information gäller för kännetecken för en funktion"
                     },
                     "collectionHardware": {
-                        "label": "Utrustning",
+                        "label": "Insamling hårdvara",
                         "description": "information om använd insamlingsutrustning"
                     },
                     "collectionSession": {
-                        "label": "Insamling",
+                        "label": "Informationsinsamling",
                         "description": "information om informationsinsamlingen"
                     },
                     "dataset": {
-                        "label": "Datamängd",
-                        "description": "information om datamängd"
+                        "label": "Dataset",
+                        "description": "information gäller för dataset"
                     },
                     "series": {
-                        "label": "Datamängdsserie",
-                        "description": "information om en datamängdsserie eller ett aggregat"
+                        "label": "Serier",
+                        "description": "Information gäller för serien"
                     },
                     "nonGeographicDataset": {
-                        "label": "Ej lägesbunden data",
-                        "description": "information om icke-geografiska data"
+                        "label": "Icke geografiskt dataset",
+                        "description": "Information gäller för icke-geografiska data"
                     },
                     "dimensionGroup": {
                         "label": "Grupp av dimensioner",
-                        "description": "information om en grupperad nivå av dimensioner"
+                        "description": "information gäller för en grupperad nivå av dimensioner"
                     },
                     "feature": {
-                        "label": "Objekt",
-                        "description": "information om ett objekt"
+                        "label": "Funktion",
+                        "description": "Informationen avser en funktion"
                     },
                     "featureType": {
-                        "label": "Objekttyp",
-                        "description": "information om en objekttyp"
+                        "label": "Funktionstyp",
+                        "description": "Informationen avser en typfunktion"
                     },
                     "propertyType": {
-                        "label": "Egenskapstyp",
-                        "description": "information om en egenskapstyp"
+                        "label": "Fastighetstyp",
+                        "description": "information gäller för en fastighetstyp"
                     },
                     "fieldSession": {
-                        "label": "Fältarbete",
-                        "description": "information om fältarbete"
+                        "label": "Fält session",
+                        "description": "Information gäller för en fält session"
                     },
                     "software": {
                         "label": "Programvara",
-                        "description": "information om en programvara eller enskild funktion"
+                        "description": "Information gäller för ett dataprogram eller rutin"
                     },
                     "service": {
                         "label": "Tjänst",
-                        "description": "information om tjänst"
+                        "description": "Informationen avser en förmåga som en tjänsteleverantör skall lämna till en tjänsteanvändare genom en uppsättning gränssnitt som definierar ett beteende, såsom ett användningsfall"
                     },
                     "model": {
                         "label": "Modell",
-                        "description": "information om en modell"
+                        "description": "Informationen gäller för en kopia eller imitation av en befintlig eller ett hypotetisk objekt"
                     },
                     "tile": {
                         "label": "Partition",
-                        "description": "del av datamängd som motsvarar ett begränsat område på marken"
+                        "description": "Informationen avser en ruta, en rumslig delmängd av geografiska uppgifter"
                     }
                 },
                 "gmd:MD_SpatialRepresentationTypeCode": {
                     "vector": {
                         "label": "Vektor",
-                        "description": "vektordata används för att representera rumslig information"
+                        "description": "Vektordata används för att representera geografiska uppgifter"
                     },
                     "grid": {
-                        "label": "Raster",
-                        "description": "rasterdata används för att representera rumslig Information"
+                        "label": "Rutnät",
+                        "description": "Rutnätsdata används för att representera geografiska uppgifter"
                     },
                     "textTable": {
-                        "label": "Text eller tabell",
-                        "description": "data i form av text eller uppställda i tabell används för att representera rumslig information"
+                        "label": "Text, tabell",
+                        "description": "Text- eller tabelldata används för att representera geografiska uppgifter"
                     },
                     "tin": {
                         "label": "TIN",
-                        "description": "logisk datastruktur utformad som ett nät av sammanhängande oregelbundna trianglar där storheterna endast existerar i trianglarnas hörn"
+                        "description": "Triangulärt oregelbundet nätverk"
                     },
                     "stereoModel": {
                         "label": "Stereomodell",
-                        "description": "tredimensionell vy som skapas genom ett par överlappande bilder, t.ex. flyg- eller satellitbi"
+                        "description": "Tredimensionell vy som skapas genom ett par överlappande bilder, t.ex. flyg- eller satellitbi"
                     },
                     "video": {
                         "label": "Video",
-                        "description": "scen från en videoinspelning"
+                        "description": "Scen från en videoinspelning"
                     }
                 },
                 "gmd:MD_TopicCategoryCode": {
                     "farming": {
-                        "label": "Areella näringar",
-                        "description": "skötsel av djur eller odling av grödor Ex. jordbruk, konstbevattning, akvakultur, planteringar, skadedjur eller sjukdomar som påverkar skörd eller boskap."
+                        "label": "Jordbruk",
+                        "description": "Uppfödning av djur och / eller odling av växter. Exempel: jordbruk, bevattning, vattenbruk, planteringar, vallning, skadedjur och sjukdomar som drabbar grödor och boskap"
                     },
                     "biota": {
-                        "label": "Biologi och ekologi",
-                        "description": "flora och fauna i naturlig miljö Ex. vilda djur, vegetation, biologiska vetenskaper, ekologi, vildmark, havsdjur, våtmark och habitat"
+                        "label": "Flora och fauna",
+                        "description": "Flora och fauna i naturlig miljö Ex. vilda djur, vegetation, biologiska vetenskaper, ekologi, vildmark, havsdjur, våtmark och habitat"
                     },
                     "boundaries": {
-                        "label": "Administrativa gränser",
-                        "description": "offentligt bestämda avgränsningar av ett område Ex. politiska och administrativa gränser som riksgränser eller fastighetsgränser"
+                        "label": "Gränser",
+                        "description": "Rättsliga landbeskrivningar. Exempel: politiska och administrativa gränser"
                     },
                     "climatologyMeteorologyAtmosphere": {
-                        "label": "Klimatologi och meteorolog",
-                        "description": "processer och fenomen i atmosfären Ex. molntäcke, väder, klimat, atmosfäriska förhållanden, klimatförändringar, nederbörd."
+                        "label": "Klimatologi, meteorologi, atmosfär",
+                        "description": "Processer och fenomen i atmosfären. Exempel: molntäcke, väder, klimat, atmosfäriska förhållanden, klimatförändringar, nederbörd"
                     },
                     "economy": {
                         "label": "Ekonomi",
-                        "description": "ekonomiska aktiviteter, förhållanden och sysselsättning Ex. produktion, arbete, omsättning, handel, industri, turism och ekoturism, skogsbruk, fiske, prospektering och utvinning av naturresurser"
+                        "description": "Ekonomiska aktiviteter, förhållanden och sysselsättning Ex. produktion, arbete, omsättning, handel, industri, turism och ekoturism, skogsbruk, fiske, prospektering och utvinning av naturresurser"
                     },
                     "elevation": {
-                        "label": "Höjddata",
-                        "description": "höjd över eller under havsytan Ex. terränginformation som höjdvärden, batymetri, digtala terrängmodeller, lutning och härledda produkter"
+                        "label": "Höjd",
+                        "description": "Höjd över eller under havsytan Ex. terränginformation som höjdvärden, batymetri, digtala terrängmodeller, lutning och härledda produkter"
                     },
                     "environment": {
                         "label": "Miljö",
-                        "description": "miljöresurser, miljöskydd och bevarande Ex. miljöförorening, avfallshantering, miljökonsekvensbeskrivningar, miljörisker, naturreservat, landskap"
+                        "description": "Miljöresurser, miljöskydd och bevarande Ex. miljöförorening, avfallshantering, miljökonsekvensbeskrivningar, miljörisker, naturreservat, landskap"
                     },
                     "geoscientificInformation": {
-                        "label": "Geovetenskap",
-                        "description": "geovetenskap Ex. geofysiska företeelser och processer, geologi, mineral, berggrund, jordbävningar, skred, jordarter, grundvatten, erosion, vattenkvalitet, hydrologi"
+                        "label": "Geovetenskaplig information",
+                        "description": "Information avseende geovetenskap. Ex. geofysiska företeelser och processer, geologi, mineral, berggrund, jordbävningar, skred, jordarter, grundvatten, erosion, vattenkvalitet, hydrologi"
                     },
                     "health": {
                         "label": "Hälsa",
@@ -340,43 +340,43 @@ Oskari.registerLocalization({
                     },
                     "imageryBaseMapsEarthCover": {
                         "label": "Arealtäckande bilder och bakgrundskartor",
-                        "description": "arealtäckande bilder och bakgrundskartor Ex. marktäcke, ortofoton, oklassificerade bilder, topografiska kartor, karttext"
+                        "description": "Arealtäckande bilder och bakgrundskartor Ex. marktäcke, ortofoton, oklassificerade bilder, topografiska kartor, karttext"
                     },
                     "intelligenceMilitary": {
-                        "label": "Försvar",
-                        "description": "militär infrastruktur och aktiviteter Ex. militärbaser, skjutfält, underrättelseverksamhet, militära transporter"
+                        "label": "Militär underrättelsetjänst",
+                        "description": "Militärbaser, strukturer, aktiviteter. Exempel: baracker, träningsfält, militära transporter, underrättelseverksamhet"
                     },
                     "inlandWaters": {
                         "label": "Sjöar och vattendrag",
                         "description": "insjövatten, dräneringssystem och deras egenskaper Ex. vattendrag och glaciärer, dammar, översvämmning, avrinningsområden, vattenkvalitet"
                     },
                     "location": {
-                        "label": "Positionering",
-                        "description": "positionsbestämmande information och tjänster Ex. adresser, geodetiska nät, stomnät, postnummerområden, ortnamn"
+                        "label": "Läge",
+                        "description": "Positionsinformation och tjänster. Exempel: adresser, geodetiska nät, kontrollpunkter, postnummer områden, ortnamn"
                     },
                     "oceans": {
-                        "label": "Kust och hav",
-                        "description": "havs- och kustområden och dess egenskaper Ex. tidvatten, isförhållanden, temperatur, kustzoner"
+                        "label": "Oceaner",
+                        "description": "Funktioner och egenskaper hos saltvattenförekomster (exklusive inlandsvatten). Exempel: tidvatten, tidvattenvågor, kust information, rev"
                     },
                     "planningCadastre": {
                         "label": "Fastigheter och fysisk planering",
-                        "description": "fastighetsinformation och planinformation för framtida markanvändning Ex. markanvändning, detaljplaner, områdesbestämmelser,fastighetskartor"
+                        "description": "Information som används för lämpliga åtgärder för framtida användning av marken. Exempel: markanvändning, detaljplaner,  fastighetsundersökningar,  markägande, områdesbestämmelser,fastighetskartor"
                     },
                     "society": {
-                        "label": "Samhälle och kultur",
-                        "description": "samhällsförhållanden och kultur Ex. bosättningar, antropologi, arkeologi, utbildning, demografi, kriminalitet och rättsväsen, folkräkning"
+                        "label": "Samhälle",
+                        "description": "Kännetecken för samhället och kulturer. Exempel: bosättningar, antropologi, arkeologi, utbildning, traditionella övertygelser, seder och bruk, demografiska data, rekreationsområden och aktiviteter, sociala konsekvensanalyser, brottslighet och rättvisa, folkräkning"
                     },
                     "structure": {
-                        "label": "Byggnader och byggnadsanläggningar",
-                        "description": "konstruktioner skapade av människohand Ex. byggnader, monument"
+                        "label": "Struktur",
+                        "description": "Konstruktioner skapade av människohand. Exempel: byggnader, museer, kyrkor, fabriker, bostäder, monument, affärer, torn"
                     },
                     "transportation": {
-                        "label": "Transporter",
-                        "description": "infrastruktur och hjälpmedel för att transportera människor och gods Ex. vägar, järnvägar, flygplatser, farleder, tunnlar, sjökort, fordonspositioner"
+                        "label": "Transport",
+                        "description": "Medel och hjälpmedel för att transportera personer och / eller gods. Exempel: vägar, flygplatser / landningsbanor, sjövägar, tunnlar, sjökort, fordon eller fartyg plats, flygkartor, järnvägar"
                     },
                     "utilitiesCommunication": {
                         "label": "Tekniska försörjningssystem",
-                        "description": "energi-, vatten- och avloppsssystem, och infrastruktur och tjänster för kommunikation Ex. kraftverk, reningsverk, vattenledningar, avloppssystem, elnät, datakommunikation, radio- och telekommunikation."
+                        "description": "Energi, vatten och avfallssystem och kommunikationsinfrastruktur och tjänster. Exempel: vattenkraft, geotermisk energi, sol- och nukleära energikällor, vattenrening och distribution, avloppsinsamling och omhändertagande, el och gasdistribution, datakommunikation, telekommunikation, radio, kommunikationsnät"
                     }
                 }
             },
@@ -385,58 +385,57 @@ Oskari.registerLocalization({
                 "qualityPassFalse": "Datamängden uppfyller inte specifikationen."
             },
             "heading": {
-                "abstractTextData": "Sammanfattning (data)",
-                "abstractTextService": "Sammanfattning (tjänst)",
+                "abstractTextData": "Sammanfattning text (data)",
+                "abstractTextService": "Sammanfattning text (tjänst)",
                 "accessConstraint": "Åtkomstrestriktioner",
-                "citationDate": "Date",
-                "classification": "Skyddsklass",
-                "descriptiveKeyword": "Beskrivande nyckelord",
+                "citationDate": "Datum",
+                "classification": "Klassificeringar",
+                "descriptiveKeyword": "Nyckelord",
                 "distributionFormat": "Distributionsformat",
-                "fileIdentifier": "Identifierare för metadatamängd",
+                "fileIdentifier": "Fil-identifikation",
                 "legalConstraint": "Rättsliga restriktioner",
-                "lineageStatement": "Tillkomsthistorik",
+                "lineageStatement": "Härkomst uttalande",
                 "metadataCharacterSet": "Teckenuppsättning i metadata",
                 "metadataDateStamp": "Datum för metadata",
-                "metadataLanguage": "Språk i metadata",
-                "metadataOrganisation": "Organisation",
-                "metadataStandardName": "Metadatastandard",
-                "metadataStandardVersion": "Version av metadatastandard",
-                "onlineResource": "Namn på webbplats",
-                "operatesOn": "Operates on",
+                "metadataLanguage": "Metadata språk",
+                "metadataOrganisation": "Organisationsnamn",
+                "metadataStandardName": "Metadata standard namn",
+                "metadataStandardVersion": "Metadata standard version",
+                "onlineResource": "Online resurser",
+                "operatesOn": "Drivs med",
                 "otherConstraint": "Övriga restriktioner",
                 "reportConformance": "Specifikationsuppfyllelse",
                 "responsibleParty": "Ansvarig part",
-                "resourceIdentifier": "Identifierare för ett referenssystem",
-                "resourceLanguage": "Språk i resurs",
-                "scopeCode": "Hierarkisk nivå",
-                "serviceType": "Tjänst typ",
-                "spatialRepresentationType": "Metod för rumslig representation",
+                "resourceIdentifier": "Resurs identifierare",
+                "resourceLanguage": "Resurs språk",
+                "scopeCode": "Resurs typ",
+                "serviceType": "Service type",
+                "spatialRepresentationType": "Rumslig presentationstyp",
                 "spatialResolution": "Rumslig upplösning",
-                "temporalExtent": "Temporal utsträckning",
-                "topicCategory": "Ämneskategori",
-                "useLimitation": "Avrådd användning",
-
-                "absoluteExternalPositionalAccuracy":"Absolut lägesnoggrannhet",
-                "accuracyOfTimeMeasurement":"Tidsnoggrannhet",
-                "completenessCommission":"Övertalighet",
-                "completenessOmission":"Brist",
-                "conceptualConsistency":"Konceptuell konsistens",
-                "domainConsistency":"Domänkonsistens",
-                "formatConsistency":"Formatkonsistens",
-                "griddedDataPositionalAccuracy":"Lägesnoggrannhet hos rasterdata",
-                "nonQuantitativeAttributeAccuracy":"Tematisk noggrannhet kvalitativa attribut",
-                "quantitativeAttributeAccuracy":"Tematisk noggrannhet kvantitativa attribut",
-                "relativeInternalPositionalAccuracy":"Relativ lägesnoggrannhet",
-                "temporalConsistency":"Temporal konsistens",
-                "temporalValidity":"Temporal validitet",
-                "thematicClassificationCorrectness":"Klassificeringsnoggrannhet",
-                "topologicalConsistency":"Topologisk konsistens"
-
+                "temporalExtent": "Temporära utsträckningar",
+                "topicCategory": "Ämneskategorier",
+                "useLimitation": "Använd begränsningar",
+                "absoluteExternalPositionalAccuracy": "Absolut lägesnoggrannhet",
+                "accuracyOfTimeMeasurement": "Tidsnoggrannhet",
+                "completenessCommission": "Övertalighet",
+                "completenessOmission": "Brist",
+                "conceptualConsistency": "Konceptuell konsistens",
+                "domainConsistency": "Domänkonsistens",
+                "formatConsistency": "Formatkonsistens",
+                "griddedDataPositionalAccuracy": "Lägesnoggrannhet hos rasterdata",
+                "nonQuantitativeAttributeAccuracy": "Tematisk noggrannhet kvalitativa attribut",
+                "quantitativeAttributeAccuracy": "Tematisk noggrannhet kvantitativa attribut",
+                "relativeInternalPositionalAccuracy": "Relativ lägesnoggrannhet",
+                "temporalConsistency": "Temporal konsistens",
+                "temporalValidity": "Temporal validitet",
+                "thematicClassificationCorrectness": "Klassificeringsnoggrannhet",
+                "topologicalConsistency": "Topologisk konsistens"
             }
         },
         "tile": {
             "title": "Metadata",
-            "tooltip": "Metadata innehåller uppgifter om användningsvillkor och tillgång till datamaterial."
+            "tooltip": "Villkoren för användning och tillgängligheten av dataset är dokumenterade i metadatabeskrivningen."
         }
     }
-});
+}
+);

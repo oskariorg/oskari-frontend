@@ -79,6 +79,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @throws error if layer with the same id already exists
          */
         addLayer: function (layerModel, suppressEvent) {
+            if(!layerModel) {
+                this._sandbox.printWarn('Called addLayer without a layer!');
+                return;
+            }
             // if parent id is present, forward to addSubLayer()
             if(layerModel.getParentId() != -1) {
                 this.addSubLayer(layerModel.getParentId(), layerModel, suppressEvent);
@@ -221,6 +225,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 return;
             }
 
+            if (newLayerConf.url) {
+                layer.setLayerUrls(this.parseUrls(newLayerConf.url));
+            }
+
             if (newLayerConf.dataUrl) {
                 layer.setDataUrl(newLayerConf.dataUrl);
             }
@@ -235,6 +243,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             if (newLayerConf.maxScale) {
                 layer.setMaxScale(newLayerConf.maxScale);
+            }
+            if (newLayerConf.opacity) {
+                layer.setOpacity(newLayerConf.opacity);
             }
 
             if (newLayerConf.name) {
@@ -470,6 +481,45 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                     list.push(layer);
                 }
             }
+            return list;
+        },
+        /**
+         * Get newest layers
+         * @method  @public getNewestLayers
+         * @param  {Integer} count how many newest layer wanted to get
+         * @return {{Mixed[]/Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Object[]}
+         */
+        getNewestLayers: function (count) {
+            var me = this,
+                list = [],
+                i,
+                layer,
+                layersWhereCreatedDate,
+                newestToOldestLayers;
+
+            
+            layersWhereCreatedDate = jQuery.grep(this._loadedLayersList, function(layer, indeksi) {
+                return  layer._created !== null && !isNaN(layer._created.getTime());
+            });
+            
+            newestToOldestLayers = layersWhereCreatedDate.sort(function(a,b){
+                if(a.getCreated()>b.getCreated()) {
+                    return -1;
+                } else if(a.getCreated()<b.getCreated()) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+
+            });
+            
+            for (i = 0; i<newestToOldestLayers.length; i++) {
+                list.push(this._loadedLayersList[i]);                
+                if(list.length === count) {
+                    break;
+                }
+            }
+
             return list;
         },
         /**
@@ -743,7 +793,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             var layer = this.createLayerTypeInstance(mapLayerJson.type, mapLayerJson.params, mapLayerJson.options);
             if (!layer) {
-                this._sandbox.printDebug("[MapLayerService] Unknown layer type: " + mapLayerJson.type);
+                this._sandbox.printWarn("[MapLayerService] Unknown layer type: " + mapLayerJson.type);
                 return null;
             }
             //these may be implemented as jsonHandler
@@ -852,6 +902,12 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 builder.parseLayerData(layer, mapLayerJson, this);
             }
 
+            if(mapLayerJson.created && isNaN(Date.parse(mapLayerJson.created)) === false){
+                var created = new Date(mapLayerJson.created);
+                if(created) {
+                    layer.setCreated(created)
+                }
+            }
 
             return layer;
         },
@@ -878,7 +934,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
             layer.setGfiContent(jsonLayer.gfiContent);
 
-            if(jsonLayer.wmsUrl) {
+            /*prefer url - param, fall back to wmsUrl if not available*/
+            if (jsonLayer.url) {
+                layer.setLayerUrls(this.parseUrls(jsonLayer.url));
+            } else if (jsonLayer.wmsUrl) {
                 layer.setLayerUrls(this.parseUrls(jsonLayer.wmsUrl));
             }
 

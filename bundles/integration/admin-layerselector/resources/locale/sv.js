@@ -113,6 +113,7 @@ Oskari.registerLocalization(
             "wmsNameDesc": "Unik eller teknisk namn för kartlager",
             "username": "Användarsnamn",
             "password": "Lösenord",
+            "attributes": "Attribut",
             "addInspireName": "Ämnets namn",
             "addInspireNameTitle": "Ämnets namn",
             "addOrganizationName": "Data&shy;producentens namn",
@@ -144,12 +145,19 @@ Oskari.registerLocalization(
             "gfiResponseTypeDesc": "Svarets typ dvs Get Feature Info (GFI)",
             "gfiStyle": "GFI stil",
             "gfiStyleDesc": "GFI stil (XSLT)",
+            "manualRefresh": "Manual refresh",
             "matrixSetId": "WMTS MatrixSetId",
             "matrixSetIdDesc": "WMTS-tjänstens MatrixSetId",
             "matrixSet": "Teknisk beskrivning av WMTS-tjänsten",
             "matrixSetDesc": "Teknisk beskrivning av WMTS-tjänsten i JSON-format",
             "realtime": "Reaaliaikataso",
             "refreshRate": "Virkistystaajuus (sekunneissa)",
+            "jobTypeDesc":"Service job typ",
+            "jobTypeDefault":"default",
+            "jobTypes": {
+                "default": "Default",
+                "fe": "Feature engine"
+            },
             "generic": {
                 "placeholder": "Name in {0}",
                 "descplaceholder": "Description in {0}"

@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "nl",
     "key": "MyPlaces2",
     "value": {
@@ -14,12 +15,13 @@ Oskari.registerLocalization({
         },
         "tab": {
             "title": "Plaatsen",
-            "nocategories": "NOT TRANSLATED",
+            "nocategories": "Je hebt nog geen opgeslagen plaatsen.",
+            "maxFeaturesExceeded": "U heeft het maximale hoeveelheid eigen plaatsen overschreden. Alle plaatsen niet zijn geladen.",
             "publishCategory": {
-                "privateTooltip": "NOT TRANSLATED",
-                "publicTooltip": "NOT TRANSLATED"
+                "privateTooltip": "Deze kaartlaag is privé. Klik hier om het te publiceren.",
+                "publicTooltip": "Deze kaartlaag is openbaar. Klik hier om de publicatie ongedaan te maken."
             },
-            "addCategory": "NOT TRANSLATED",
+            "addCategory": "Voeg kaartlaag toe",
             "editCategory": "Bewerk kaartlaag",
             "deleteCategory": "Verwijder kaartlaag",
             "edit": "Bewerken",
@@ -27,39 +29,39 @@ Oskari.registerLocalization({
             "grid": {
                 "name": "Naam",
                 "desc": "Beschrijving",
-                "createDate": "NOT TRANSLATED",
-                "updateDate": "NOT TRANSLATED",
-                "measurement": "NOT TRANSLATED",
-                "edit": " ",
-                "delete": " "
+                "createDate": "Aangemaakt",
+                "updateDate": "Bijgewerkt",
+                "measurement": "Maat",
+                "edit": "Bewerken",
+                "delete": "Verwijderen"
             },
             "notification": {
                 "delete": {
-                    "title": "NOT TRANSLATED",
-                    "confirm": "NOT TRANSLATED",
+                    "title": "Verwijder plaats",
+                    "confirm": "Wilt u deze plaats verwijderen?",
                     "btnDelete": "Verwijderen",
                     "btnCancel": "Annuleren",
-                    "success": "NOT TRANSLATED",
-                    "error": "NOT TRANSLATED",
-                    "cancel": "NOT TRANSLATED"
+                    "success": "Deze plaats is verwijderd",
+                    "error": "Deze plaats kon niet verwijderd worden. Probeert u het later nog eens.",
+                    "cancel": "Deze plaats is niet verwijderd"
                 }
             }
         },
         "tools": {
             "measureline": {
-                "title": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
+                "title": "Afstand meten",
+                "tooltip": "Afstand meten",
                 "add": "",
                 "next": "",
-                "edit": "NOT TRANSLATED",
+                "edit": "U kunt de lijn wijzigen door te klikken en de breekpunten te slepen.",
                 "noResult": "0 m"
             },
             "measurearea": {
-                "title": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
+                "title": "Gebied Meten",
+                "tooltip": "Gebied Meten",
                 "add": "",
                 "next": "",
-                "edit": "NOT TRANSLATED",
+                "edit": "U kunt het gebied bewerken door te klikken en de breekpunten te slepen op de kant lijn.",
                 "noResult": "0 m²"
             },
             "point": {
@@ -93,9 +95,9 @@ Oskari.registerLocalization({
             "ok": "OK",
             "cancel": "Annuleren",
             "close": "Annuleren",
-            "finish": "NOT TRANSLATED",
+            "finish": "Opslaan als mijn plaats",
             "save": "Opslaan",
-            "saveAsMyPlace": "NOT TRANSLATED",
+            "saveAsMyPlace": "Opslaan als mijn plaats",
             "movePlaces": "Plaatsen verplaatsen en verwijderen",
             "deleteCategory": "Verwijderen",
             "deleteCategoryAndPlaces": "Verwijder categorie en plaatsen",
@@ -115,24 +117,24 @@ Oskari.registerLocalization({
                 "placeholder": "Beschrijf de plaats"
             },
             "placeAttention": {
-                "placeholder": "NOT TRANSLATED"
+                "placeholder": "Plaats tekst op de kaart"
             },
             "measurement": {
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "line": "Lengte lijn:",
+                "area": "Grootte gebied:"
             },
             "category": {
                 "label": "Kaartlaag",
-                "newLayer": "NOT TRANSLATED",
-                "choose": "NOT TRANSLATED"
+                "newLayer": "Maak een nieuwe kaartlaag",
+                "choose": "of kies een van uw bestaande kaart lagen:"
             },
             "imagelink": {
-                "placeholder": "NOT TRANSLATED",
-                "previewLabel": "NOT TRANSLATED",
+                "placeholder": "Link naar de afbeelding",
+                "previewLabel": "Preview afbeelding",
                 "add": "Nieuwe laag..."
             },
             "rendering": {
-                "label": "NOT TRANSLATED",
+                "label": "Plaats stijl",
                 "point": {
                     "tooltip": "Punt"
                 }
@@ -163,10 +165,10 @@ Oskari.registerLocalization({
                 }
             },
             "visibleFields": {
-                "label": "NOT TRANSLATED",
+                "label": "Zichtbare plaats gegevens",
                 "placename": "Naam",
                 "placedesc": "Beschrijving",
-                "image": "NOT TRANSLATED"
+                "image": "Afbeelding"
             },
             "edit": {
                 "title": "Bewerk kaartlaag",
@@ -174,31 +176,31 @@ Oskari.registerLocalization({
                 "cancel": "Terug"
             },
             "rendering": {
-                "label": "NOT TRANSLATED",
+                "label": "Plaats stijl",
                 "point": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": "Bewerk de punt stijl"
                 },
                 "area": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": "Bewerk de gebieds stijl"
                 },
                 "line": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": "Bewerk de lijn stijl"
                 }
             }
         },
         "pointform": {
-            "title": "NOT TRANSLATED",
+            "title": "Punt stijl",
             "tooltip": "",
             "symbol": {
-                "label": "NOT TRANSLATED"
+                "label": "Icoon"
             },
             "size": {
                 "label": "Grootte"
             },
             "color": {
                 "label": "Kleur",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "labelOr": "of",
+                "labelCustom": "Aangepaste RGB-kleuren (0-255)"
             },
             "preview": {
                 "label": "Voorbeeld"
@@ -209,24 +211,24 @@ Oskari.registerLocalization({
             }
         },
         "lineform": {
-            "title": "NOT TRANSLATED",
+            "title": "Lijn stijl",
             "tooltip": "",
             "style": {
-                "label": "NOT TRANSLATED"
+                "label": "Stijl"
             },
             "cap": {
-                "label": "NOT TRANSLATED"
+                "label": "Endings"
             },
             "corner": {
-                "label": "NOT TRANSLATED"
+                "label": "Hoeken"
             },
             "width": {
-                "label": "NOT TRANSLATED"
+                "label": "Dikte"
             },
             "color": {
                 "label": "Kleur",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "labelOr": "of",
+                "labelCustom": "Aangepaste RGB-kleuren (0-255)"
             },
             "preview": {
                 "label": "Voorbeeld"
@@ -237,32 +239,32 @@ Oskari.registerLocalization({
             }
         },
         "areaform": {
-            "title": "NOT TRANSLATED",
+            "title": "Gebied stijl",
             "tooltip": "",
             "linestyle": {
-                "label": "NOT TRANSLATED"
+                "label": "Edge lijnstijl"
             },
             "linecap": {
-                "label": "NOT TRANSLATED"
+                "label": "Edge lijneinden"
             },
             "linecorner": {
-                "label": "NOT TRANSLATED"
+                "label": "Edge lijnhoeken"
             },
             "linewidth": {
-                "label": "NOT TRANSLATED"
+                "label": "Edge lijndikte"
             },
             "linecolor": {
-                "label": "Lijnkleur",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "Edge Lijnkleur",
+                "labelOr": "of",
+                "labelCustom": "Aangepaste RGB-kleuren (0-255)"
             },
             "color": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "Vul kleur",
+                "labelOr": "of",
+                "labelCustom": "Aangepaste RGB-kleuren (0-255)"
             },
             "fill": {
-                "label": "NOT TRANSLATED"
+                "label": "Vul patroon"
             },
             "preview": {
                 "label": "Voorbeeld"
@@ -314,7 +316,7 @@ Oskari.registerLocalization({
             "categoryNameIllegal": "De beschrijving van de kaartlaag bevat niet-toegestane tekens. Toegestane tekens zijn de letters a t/m z, evenals å, ä en ö, aantallen, backspaces en koppeltekens.",
             "dotSize": "De dikte van de stip past niet binnen de maximale afmetingen (1-5).",
             "dotColor": "Verkeerde stip kleur.",
-            "dotShape": "NOT TRANSLATED",
+            "dotShape": "De point shape is ongeldig.",
             "lineSize": "De lijndikte past niet binnen de maximale afmetingen (1-50).",
             "lineColor": "De lijn heeft de verkeerde kleur.",
             "areaLineSize": "De dikte van de gebiedsgrens past niet binnen de afmetingen (0-50).",
@@ -322,4 +324,5 @@ Oskari.registerLocalization({
             "areaFillColor": "Verkeerde invulkleur."
         }
     }
-});
+}
+);

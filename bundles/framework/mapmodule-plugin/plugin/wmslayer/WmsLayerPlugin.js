@@ -321,6 +321,10 @@ Oskari.clazz.define(
             for (i = 0; i < llen; i += 1) {
                 newRes = this._calculateResolutions(layerList[i]);
                 isInScale = layerList[i].isInScale(scale);
+
+                //url might've changed (case forceProxy). Update that.
+                oLayers[i].setUrl(_.clone(layer.getLayerUrls()));
+
                 // Make sure the sub exists before mucking about with it
                 if (newRes && isInScale && oLayers && oLayers[i]) {
                     oLayers[i].addOptions({

@@ -9,7 +9,7 @@ Oskari.registerLocalization(
                 "title": "Temakartor"
             },
             "diagram_icon": {
-                "tooltip": "Öppna diagram",
+                "tooltip": "Visa diagram",
                 "title": "Diagram"
             },
             "statistics": {

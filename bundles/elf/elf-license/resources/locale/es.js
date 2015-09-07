@@ -45,7 +45,7 @@ Oskari.registerLocalization({
             "priceUnitEuro": "€",
             "help": {
                 "info": "Select a license model by clicking on it.",
-                "details": " Fill license details and then press 'Next' to see license summary and price. If you want select different license model then press 'Previous'. You can also stop your order by pressing 'Close' button.",
+                "details": "Fill license details, all required fields are marked with asterisk (*). Press 'Next' to see license summary and price. If you want select different license model then press 'Previous'. You can also stop your order by pressing 'Close' button.",
                 "summary": "Read license and accept filled license pressing 'Conclude'. If you want edit some filled information, go back to by pressing 'Back' button. You can also stop your order by pressing 'Close' button.",
                 "orderDetails": "Above you will see your license order information. Close dialog by pressing 'Close' button. If you want deactivate your order then press 'Deactivate license' button."
             },
@@ -60,7 +60,12 @@ Oskari.registerLocalization({
                 "title": "License deactivate",
                 "message": "Do you want deactivate your license?"
             },
-            "validTo": "Subscription valid for {day}"
+            "validTo": "Subscription valid for {day}",
+            "licenseId": "License id: {licenseid}",
+            "licenseServiceUrl": "License service URL: {serviceurl}",
+            "licenceConcluded" : {
+                "message": "License concluded, see below for the license details."
+            }
         },
         "buttons": {
             "close": "Close",

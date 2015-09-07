@@ -26,6 +26,9 @@ Oskari.clazz.define(
         me.zoomLevel = null;
         me._isWFSOpen = 0;
 
+        // Manual refresh ui location
+        me._defaultLocation = 'top right';
+
         // printing
         me._printTiles = {};
 
@@ -99,11 +102,17 @@ Oskari.clazz.define(
                 me
             );
 
+             me.WFSLayerService = Oskari.clazz.create(
+            'Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService', sandbox);
+
+            sandbox.registerService(me.WFSLayerService);
+
             me._io = Oskari.clazz.create(
                 'Oskari.mapframework.bundle.mapwfs2.service.Mediator',
                 me._config,
                 me
             );
+
 
             // register domain model
             mapLayerService = sandbox.getService(
@@ -139,7 +148,93 @@ Oskari.clazz.define(
             me._visualizationForm = Oskari.clazz.create(
                 'Oskari.userinterface.component.VisualizationForm'
             );
+
+
+
         },
+        /**
+         * @method _createControlElement
+         * @private
+         * Creates UI div for manual refresh/load of wfs layer,
+         * where this plugin registered.
+         */
+        _createControlElement: function () {
+            var me = this,
+                sandbox = me.getSandbox(),
+                el = jQuery('<div class="mapplugin mapwfs2plugin">' +
+                '<a href="JavaScript: void(0);"></a>' +
+                '</div>');
+            var link = el.find('a');
+            me._loc = Oskari.getLocalization('MapWfs2', Oskari.getLang() || Oskari.getDefaultLanguage());
+            link.html(me._loc.refresh);
+            el.attr('title', me._loc.refresh_title);
+            me._bindLinkClick(link);
+            el.mousedown(function (event) {
+                event.stopPropagation();
+            });
+            return el;
+        },
+
+        _bindLinkClick: function (link) {
+            var me = this,
+                linkElement = link || me.getElement().find('a'),
+                sandbox = me.getSandbox();
+            linkElement.bind('click', function () {
+                var event = sandbox.getEventBuilder('WFSRefreshManualLoadLayersEvent')();
+                sandbox.notifyAll(event);
+                return false;
+            });
+        },
+        /**
+         * @method refresh
+         * Updates the plugins interface (hides if no manual load wfs layers selected)
+         */
+        refresh: function () {
+            var me = this,
+                sandbox = me.getMapModule().getSandbox(),
+                layers = sandbox.findAllSelectedMapLayers(),
+                i,
+                isVisible = false;
+            if(this.getElement()) {
+                this.getElement().hide();
+            }
+            // see if there's any wfs layers, show element if so
+            for (i = 0; i < layers.length; i++) {
+                if (layers[i].hasFeatureData() &&  layers[i].isManualRefresh() ) {
+                    isVisible = true;
+                }
+            }
+            if(isVisible && this.getElement()){
+                this.getElement().show();
+            }
+            me.setVisible(isVisible);
+
+        },
+        /**
+         * @method inform
+         * Inform the user how to manage manual refresh layers (only when 1st manual refresh layer in selection)
+         */
+        inform: function (event) {
+            var me = this,
+                sandbox = me.getMapModule().getSandbox(),
+                layer = event.getMapLayer(),
+                layers = sandbox.findAllSelectedMapLayers(),
+                i,
+                count = 0;
+
+            // see if there's any wfs layers, show  if so
+            for (i = 0; i < layers.length; i++) {
+                if (layers[i].hasFeatureData() &&  layers[i].isManualRefresh() ) {
+                   count++;
+                }
+            }
+            if(count === 1 && layer.isManualRefresh()){
+               me.showMessage(me.getLocalization().information.title, me.getLocalization().information.info, me.getLocalization().button.close);
+            }
+
+
+        },
+
 
         /**
          * @method register
@@ -182,6 +277,11 @@ Oskari.clazz.define(
                  */
                 AfterMapLayerAddEvent: function (event) {
                     me.mapLayerAddHandler(event);
+                    // Refresh UI refresh button visible/invisible
+                    me.refresh();
+                    // Inform user, if manual refresh-load wfs layers in selected map layers
+                    // (only for 1st manual refresh layer)
+                    me.inform(event);
                 },
 
                 /**
@@ -190,6 +290,8 @@ Oskari.clazz.define(
                  */
                 AfterMapLayerRemoveEvent: function (event) {
                     me.mapLayerRemoveHandler(event);
+                    // Refresh UI refresh button visible/invisible
+                    me.refresh();
                 },
 
                 /**
@@ -215,7 +317,14 @@ Oskari.clazz.define(
                 AfterChangeMapLayerStyleEvent: function (event) {
                     me.changeMapLayerStyleHandler(event);
                 },
-
+                /**
+                 * Refresh manual-refresh-flagged wfs layers
+                 * @param event
+                 * @constructor
+                 */
+                WFSRefreshManualLoadLayersEvent: function (event) {
+                    me.refreshManualLoadLayersHandler(event);
+                },
                 /**
                  * @method MapLayerVisibilityChangedEvent
                  * @param {Object} event
@@ -394,7 +503,7 @@ Oskari.clazz.define(
                     (!me.getConnection().isConnected() ||
                         !sandbox.findMapLayerFromSelectedMapLayers(me.activeHighlightLayers[x].getId()))) {
 
-                    fids = me.activeHighlightLayers[x].getClickedFeatureListIds();
+                    fids = me.activeHighlightLayers[x].getClickedFeatureIds();
                     me.removeHighlightImages(
                         me.activeHighlightLayers[x]
                     );
@@ -414,7 +523,7 @@ Oskari.clazz.define(
 
             layers.forEach(function (layer) {
                 if (layer.hasFeatureData()) {
-                    fids = me.getAllFeatureIds(layer);
+                    fids = me.WFSLayerService.getSelectedFeatureIds(layer.getId());
                     me.removeHighlightImages(layer);
                     if (me._highlighted) {
                         me.getIO().highlightMapLayerFeatures(
@@ -520,42 +629,19 @@ Oskari.clazz.define(
                 map = sandbox.getMap(),
                 layer = event.getMapLayer(),
                 layerId = layer.getId(),
-                ids = layer.getClickedFeatureListIds(),
                 srs,
-                tmpIds = event.getWfsFeatureIds(),
                 geomRequest = true,
                 wfsFeatureIds = event.getWfsFeatureIds(),
                 zoom;
 
-            if (!event.isKeepSelection()) {
-                layer.setClickedFeatureListIds(wfsFeatureIds);
-                if (wfsFeatureIds.length === 0) {
-                    layer.setClickedFeatureIds(wfsFeatureIds);
-                    layer.setClickedGeometries(wfsFeatureIds);
-                }
-            } else {
-                // Merge tmpIds to ids
-                tmpIds.forEach(function (id) {
-                    if (ids.indexOf(id) === -1) {
-                        ids.push(id);
-                    }
-                });
-            }
-
-            // remove highlight image
-            if (!event.isKeepSelection()) {
-                me.removeHighlightImages();
-            }
+            me.removeHighlightImages(layer);
 
             // if no connection or the layer is not registered, get highlight with URl
-            if (connection.isLazy() && (!connection.isConnected() ||
-                    !sandbox.findMapLayerFromSelectedMapLayers(layerId))) {
-
+            if (connection.isLazy() && (!connection.isConnected() || !sandbox.findMapLayerFromSelectedMapLayers(layerId))) {
                 srs = map.getSrsName();
                 bbox = map.getExtent();
                 zoom = map.getZoom();
 
-                layer.setClickedFeatureListIds(wfsFeatureIds);
                 this.getHighlightImage(
                     layer,
                     srs, [
@@ -568,14 +654,13 @@ Oskari.clazz.define(
                     wfsFeatureIds
                 );
             }
-            if (me._highlighted) {
-                me.getIO().highlightMapLayerFeatures(
-                    layerId,
-                    wfsFeatureIds,
-                    event.isKeepSelection(),
-                    geomRequest
-                );
-            }
+
+            me.getIO().highlightMapLayerFeatures(
+                layerId,
+                wfsFeatureIds,
+                false,
+                geomRequest
+            );
         },
 
         /**
@@ -644,7 +729,64 @@ Oskari.clazz.define(
                 layer.setOpacity(opacity);
             });
         },
+        /**
+         * @method  refreshManualLoadLayersHandler
+         * @param {Object} event
+         */
+        refreshManualLoadLayersHandler: function (event) {
+            var bbox,
+                grid,
+                layerId,
+                layers = [],
+                me = this,
+                map = me.getSandbox().getMap(),
+                srs,
+                tiles,
+                zoom;
 
+            //me.getIO().setMapSize(event.getWidth(), event.getHeight());
+
+            // update tiles
+            srs = map.getSrsName();
+            bbox = map.getExtent();
+            zoom = map.getZoom();
+            grid = me.getGrid();
+
+            // update cache
+            me.refreshCaches();
+            if(event.getLayerId()){
+
+                layers.push(me.getSandbox().findMapLayerFromSelectedMapLayers(event.getLayerId()));
+            }
+            else {
+                layers = me.getSandbox().findAllSelectedMapLayers();
+            }
+
+            layers.forEach(function (layer) {
+                if (layer.hasFeatureData() && layer.isManualRefresh()) {
+                    // clean features lists
+                    layer.setActiveFeatures([]);
+                    if (grid !== null && grid !== undefined) {
+                        layerId = layer.getId();
+                        tiles = me.getNonCachedGrid(layerId, grid);
+                        me.getIO().setLocation(
+                            layerId,
+                            srs, [
+                                bbox.left,
+                                bbox.bottom,
+                                bbox.right,
+                                bbox.top
+                            ],
+                            zoom,
+                            grid,
+                            tiles,
+                            true
+                        );
+                        me._tilesLayer.redraw();
+                    }
+                }
+            });
+        },
         /**
          * @method mapSizeChangedHandler
          * @param {Object} event
@@ -703,16 +845,14 @@ Oskari.clazz.define(
          * @param {Object} event
          */
         setFilterHandler: function (event) {
-            /// clean selected features lists
-            var layers = this.getSandbox().findAllSelectedMapLayers();
+            var WFSLayerService = this.WFSLayerService,
+                layers = this.getSandbox().findAllSelectedMapLayers(),
+                keepPrevious = this.getSandbox().isCtrlKeyDown(),
+                geoJson = event.getGeoJson();
 
-            layers.forEach(function (layer) {
-                if (layer.hasFeatureData()) {
-                    layer.setSelectedFeatures([]);
-                }
-            });
+            this.getIO().setFilter(geoJson, keepPrevious);
 
-            this.getIO().setFilter(event.getGeoJson());
+
         },
 
         /**
@@ -721,16 +861,17 @@ Oskari.clazz.define(
          */
         setPropertyFilterHandler: function (event) {
             /// clean selected features lists
-            var layers = this.getSandbox().findAllSelectedMapLayers();
+            var me = this,
+                layers = this.getSandbox().findAllSelectedMapLayers();
 
             layers.forEach(function (layer) {
                 if (layer.hasFeatureData() &&
                     layer.getId() === event.getLayerId()) {
-                    layer.setSelectedFeatures([]);
+                    me.WFSLayerService.emptyWFSFeatureSelections(layer);
                 }
             });
 
-            this.getIO().setPropertyFilter(
+            me.getIO().setPropertyFilter(
                 event.getFilters(),
                 event.getLayerId()
             );
@@ -941,7 +1082,7 @@ Oskari.clazz.define(
                 }
             } else { // "normal"
                 BBOX = boundsObj.toArray(false);
-                bboxKey = BBOX.join(',');
+                bboxKey = this.bboxkeyStrip(BBOX);
                 style = layer.getCurrentStyle().getName();
                 tileToUpdate = me._tilesToUpdate.mget(layerId,'',bboxKey);
 
@@ -999,7 +1140,7 @@ Oskari.clazz.define(
                         bounds = this.adjustBounds(bounds);
 
                         var BBOX = bounds.toArray(false),
-                            bboxKey = BBOX.join(','),
+                            bboxKey = this._plugin.bboxkeyStrip(BBOX);
                             layer = this._plugin.getSandbox().findMapLayerFromSelectedMapLayers(
                                 this.layerId
                             ),
@@ -1098,7 +1239,8 @@ Oskari.clazz.define(
                         this._plugin._tiles[tile.id] = tile;
 
                         var BBOX = bounds.toArray(false),
-                            bboxKey = BBOX.join(',');
+                            me = this,
+                            bboxKey = this._plugin.bboxkeyStrip(BBOX);
 
                         this._plugin._tilesToUpdate.mput(
                             this.layerId,
@@ -1326,11 +1468,12 @@ Oskari.clazz.define(
                 style = layer.getCurrentStyle().getName(),
                 result = [],
                 i,
+                me = this,
                 bboxKey,
                 dataForTile;
 
             for (i = 0; i < grid.bounds.length; i += 1) {
-                bboxKey = grid.bounds[i].join(',');
+                bboxKey = me.bboxkeyStrip(grid.bounds[i]);
                 dataForTile = this._tileData.mget(layerId, style, bboxKey);
                 if (!dataForTile) {
                     result.push(grid.bounds[i]);
@@ -1452,6 +1595,31 @@ Oskari.clazz.define(
             dialog.show(popupLoc, content, [okBtn]);
             dialog.fadeout(5000);
         },
+        /**
+         * @public @method showMessage
+         * Shows user a message with ok button
+         *
+         * @param {String} title popup title
+         * @param {String} message popup message
+         *
+         */
+        showMessage: function (title, message) {
+            var dialog = Oskari.clazz.create(
+                'Oskari.userinterface.component.Popup'
+            );
+            dialog.show(title, message);
+            dialog.fadeout(5000);
+        },
+        showMessage: function (title, message, ok) {
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            okBtn.setTitle(ok);
+            okBtn.addClass('primary');
+            okBtn.setHandler(function () {
+                dialog.close(true);
+            });
+            dialog.show(title, message, [okBtn]);
+        },
 
         /**
          * @method getAllFeatureIds
@@ -1534,9 +1702,26 @@ Oskari.clazz.define(
          */
         setHighlighted: function (highlighted) {
             this._highlighted = highlighted;
+        },
+        /**
+         * Strip bbox for unique key because of some inaccucate cases
+         * OL computation (init grid in tilesizes)  is inaccurate in last decimal
+         * @param bbox
+         * @returns {string}
+         */
+        bboxkeyStrip: function (bbox) {
+            var stripbox = [];
+            if (!bbox) return;
+            for (var i = bbox.length; i--;) {
+                stripbox[i] = bbox[i].toPrecision(13);
+            }
+            return stripbox.join(',');
+        },
+        hasUI: function() {
+            return false;
         }
     }, {
-        extend: ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
+        extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
         /**
          * @static @property {string[]} protocol array of superclasses
          */

@@ -34,10 +34,13 @@ Oskari.clazz.define('Oskari.elf.license.validator.NumberValidator',
          */
         init: function () {
             var me = this;
-            if(me._allowDecimal === null)
+            if(me._allowDecimal === null) {
                 me._allowDecimal = true;
-            if(me._allowNegative === null)
+            }
+
+            if(me._allowNegative === null) {
                 me._allowNegative = true;
+            }
         },
         /**
          * Key listener
@@ -52,10 +55,11 @@ Oskari.clazz.define('Oskari.elf.license.validator.NumberValidator',
                 prev_val = target.val();
 
             setTimeout(function(){
-                var chars = target.val().split("");
-                var decimal_exist = !me._allowDecimal;
-                var negative_exist = !me._allowNegative;
-                var remove_char = false;
+                var chars = target.val().split(""),
+                    decimal_exist = !me._allowDecimal,
+                    negative_exist = !me._allowNegative,
+                    remove_char = false;
+
                 jQuery.each(chars, function(key, value){
                     switch(value){
                         case '0':
@@ -74,17 +78,16 @@ Oskari.clazz.define('Oskari.elf.license.validator.NumberValidator',
                             if (value === '.' || value === ','){
                                 if(decimal_exist === false){
                                     decimal_exist = true;
-                                }
-                                else{
+                                } else{
                                     remove_char = true;
                                     chars[''+key+''] = '';
                                 }
                             }
+
                             if(value === '-'){
                                 if(negative_exist === false){
                                     negative_exist = true;
-                                }
-                                else{
+                                } else{
                                     remove_char = true;
                                     chars[''+key+''] = '';
                                 }
@@ -97,8 +100,8 @@ Oskari.clazz.define('Oskari.elf.license.validator.NumberValidator',
                     }
                 });
 
-                if(prev_val != target.val() && remove_char === true){
-                    target.val(chars.join(''))
+                if(prev_val !== target.val() && remove_char === true) {
+                    target.val(chars.join(''));
                 }
             }, 0);
         }

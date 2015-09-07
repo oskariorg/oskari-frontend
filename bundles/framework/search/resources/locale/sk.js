@@ -1,12 +1,15 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "sk",
     "key": "Search",
     "value": {
         "title": "Vyhľadať umiestnenie",
         "desc": "",
-        "invalid_characters": "NOT TRANSLATED",
+        "tabTitle": "Location Search",
+        "invalid_characters": "Search term contains illegal characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces, question marks (?), stars (*) and hyphens (-).",
         "searchDescription": "Vyhľadať podľa názvu miesta, adresy alebo identifikátora jednotiek nehnuteľností",
         "searchButton": "Vyhľadať",
+        "searchAssistance": "Write the search term.",
         "searchResultCount": "Vyhľadávanie vrátilo",
         "searchResultCount2": "výsledky",
         "searchResultDescriptionMoreResults": "Zadefinovať vyhľadávanie na zníženie počtu výsledkov",
@@ -18,6 +21,7 @@ Oskari.registerLocalization({
         "too_short": "Hľadaný výraz je príliš krátky",
         "cannot_be_empty": "Hľadaný výraz nesmie byť prázdny",
         "too_many_stars": "Príliš veľa hviezdičiek (*)",
+        "generic_error": "Search failed. Please try again later.",
         "grid": {
             "name": "Názov",
             "village": "Obec",
@@ -28,4 +32,5 @@ Oskari.registerLocalization({
             "title": "Vyhľadať Výsledky"
         }
     }
-});
+}
+);

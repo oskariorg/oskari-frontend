@@ -3,12 +3,12 @@ Oskari.registerLocalization(
     "lang": "sl",
     "key": "Publisher",
     "value": {
-        "title": "Izdelaj karto",
+        "title": "Objava karte",
         "flyouttitle": "Izdelaj karto",
         "desc": "",
         "published": {
-            "title": "Karta je bila izdelana",
-            "desc": "Vstavi karto v svojo spletno stran z dodajanjem spodnje HTML kode"
+            "title": "Karta je izdelana",
+            "desc": "Dodaj izdelano karto na svojo spletno stran z dodajanjem spodnje kode HTML:"
         },
         "edit": {
             "popup": {
@@ -20,24 +20,24 @@ Oskari.registerLocalization(
             "title": "Vstavljena karta",
             "titleEdit": "Uredi vstavljeno karto",
             "domain": {
-                "title": "Spletna stran, v katero bo vstavljena karta",
-                "label": "Spletno mesto, v katero bo vstavljena karta",
-                "placeholder": "Brez predpone http ali www",
+                "title": "Spletna stran",
+                "label": "Spletna stran kamor bo vstavljena karta",
+                "placeholder": "Naslov spletne strani brez predpone http ali www",
                 "tooltip": "Vpiši ime spletnega mesta, npr. njegovo domeno brez predpon http ali www, ali vpiši naslov za njegovo podstran. Primer: myhomepage.com"
             },
             "name": {
                 "label": "Ime karte",
-                "placeholder": "NOT TRANSLATED",
+                "placeholder": "zahtevan",
                 "tooltip": "Daj karti opisno ime. Prosim upoštevaj jezik uporabniškega vmesnika."
             },
             "language": {
                 "label": "Jezik",
                 "options": {
-                    "fi": "Finski",
-                    "sv": "Švedski",
-                    "en": "Angleški"
+                    "fi": "Finščina",
+                    "sv": "Švedščina",
+                    "en": "Angleščina"
                 },
-                "tooltip": "Izberi jezik za kartni vmesnik in kartografske podatke"
+                "tooltip": "Izberi jezik za uporabniški vmesnik karte in kartografske podatke."
             },
             "size": {
                 "label": "Velikost",
@@ -47,101 +47,104 @@ Oskari.registerLocalization(
                 "label": "Orodja",
                 "tooltip": "Izberi orodja, ki bodo prikazana na karti. Njihova postavitev je prikazana v predogledu karte.",
                 "ScaleBarPlugin": "Linijska lestvica",
-                "IndexMapPlugin": "Index map",
+                "IndexMapPlugin": "Index karte",
                 "PanButtons": "Orodje za premikanje",
                 "Portti2Zoombar": "Drsnik merila",
-                "ControlsPlugin": "Premikanje omogočeno",
-                "SearchPlugin": "Iskanje naslova in imena kraja",
-                "GetInfoPlugin": "Orodje za poizvedovanje podatkov o kraju",
-                "PublisherToolbarPlugin": "NOT TRANSLATED",
-                "selectDrawLayer": "NOT TRANSLATED"
+                "MyLocationPlugin": "Postavi v center uporabnikov lokacije",
+                "ControlsPlugin": "Premakni karto",
+                "SearchPlugin": "Iskanje naslova in imena lokacije",
+                "FeaturedataPlugin": "Podatki o objektu",
+                "GetInfoPlugin": "Orodje za poizvedovanje podatkov o objektu",
+                "PublisherToolbarPlugin": "Orodja za karto",
+                "selectDrawLayer": "Izberi sloj za nove objekte"
             },
             "toolbarToolNames": {
-                "history_back": "NOT TRANSLATED",
-                "history_forward": "NOT TRANSLATED",
-                "measureline": "NOT TRANSLATED",
-                "measurearea": "NOT TRANSLATED",
-                "point": "NOT TRANSLATED",
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "history_back": "Nazaj",
+                "history_forward": "Naprej",
+                "measureline": "Izmeri razdaljo",
+                "measurearea": "Izmeri območje",
+                "drawTools": "Risalna orodja",
+                "point": "Dovoli uporabnikom dodajanje točkovnih objektov",
+                "line": "Dovoli uporabnikom dodajanje linijskih objektov",
+                "area": "Dovoli uporabnikom dodajanje ploskovnih objektov"
             },
             "toollayout": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
-                "lefthanded": "NOT TRANSLATED",
-                "righthanded": "NOT TRANSLATED",
-                "userlayout": "NOT TRANSLATED",
-                "usereditmode": "NOT TRANSLATED",
-                "usereditmodeoff": "NOT TRANSLATED"
+                "label": "Pozicija orodja",
+                "tooltip": "Izberi položaj orodja na karti",
+                "lefthanded": "Levoročno",
+                "righthanded": "Desnoročno",
+                "userlayout": "Splošna postavitev",
+                "usereditmode": "Začni urejati",
+                "usereditmodeoff": "Končaj z urejanjem"
             },
             "data": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
-                "grid": "NOT TRANSLATED",
-                "allowClassification": "NOT TRANSLATED"
+                "label": "Statistika",
+                "tooltip": "Pokaži statistiko karte",
+                "grid": "Pokaži statistiko",
+                "allowClassification": "Dovoli razvrščanje"
             },
             "layout": {
-                "label": "NOT TRANSLATED",
+                "label": "Grafična postavitev",
                 "fields": {
                     "colours": {
-                        "label": "NOT TRANSLATED",
-                        "placeholder": "NOT TRANSLATED",
-                        "buttonLabel": "NOT TRANSLATED",
-                        "light_grey": "NOT TRANSLATED",
-                        "dark_grey": "NOT TRANSLATED",
-                        "blue": "NOT TRANSLATED",
-                        "red": "NOT TRANSLATED",
-                        "green": "NOT TRANSLATED",
-                        "yellow": "NOT TRANSLATED",
-                        "custom": "NOT TRANSLATED",
+                        "label": "Barvna shema",
+                        "placeholder": "Izberi barvno shemo",
+                        "buttonLabel": "Izberi",
+                        "light_grey": "Svetlo siva",
+                        "dark_grey": "Temno siva",
+                        "blue": "Modra",
+                        "red": "Rdeča",
+                        "green": "Zelena",
+                        "yellow": "Rumena",
+                        "custom": "Lastna barvna shema",
                         "customLabels": {
-                            "bgLabel": "NOT TRANSLATED",
-                            "titleLabel": "NOT TRANSLATED",
-                            "headerLabel": "NOT TRANSLATED",
-                            "iconLabel": "NOT TRANSLATED",
-                            "iconCloseLabel": "NOT TRANSLATED",
-                            "iconCloseWhiteLabel": "NOT TRANSLATED"
+                            "bgLabel": "Identifikator ozadja",
+                            "titleLabel": "Identifikator besedila",
+                            "headerLabel": "Besedilo glave",
+                            "iconLabel": "Ikona",
+                            "iconCloseLabel": "Temen",
+                            "iconCloseWhiteLabel": "Svetel"
                         }
                     },
                     "fonts": {
-                        "label": "NOT TRANSLATED"
+                        "label": "Slog pisave"
                     },
                     "toolStyles": {
-                        "label": "NOT TRANSLATED",
-                        "default": "NOT TRANSLATED",
-                        "rounded-dark": "NOT TRANSLATED",
-                        "rounded-light": "NOT TRANSLATED",
-                        "sharp-dark": "NOT TRANSLATED",
-                        "sharp-light": "NOT TRANSLATED",
-                        "3d-dark": "NOT TRANSLATED",
-                        "3d-light": "NOT TRANSLATED"
+                        "label": "Slog orodja",
+                        "default": "Privzet slog",
+                        "rounded-dark": "Okrogel (temen)",
+                        "rounded-light": "Okrogel (svetel)",
+                        "sharp-dark": "Oglat (temen)",
+                        "sharp-light": "Oglat (svetel)",
+                        "3d-dark": "3-razsežnostni (temen)",
+                        "3d-light": "3-razsežnostni (svetel)"
                     }
                 },
                 "popup": {
-                    "title": "NOT TRANSLATED",
-                    "close": "NOT TRANSLATED",
+                    "title": "Izberi barvno shemo",
+                    "close": "Zapri",
                     "gfiDialog": {
-                        "title": "NOT TRANSLATED",
-                        "featureName": "NOT TRANSLATED",
-                        "featureDesc": "NOT TRANSLATED"
+                        "title": "Informacija o objektu",
+                        "featureName": "Predogled",
+                        "featureDesc": "Barvna shema določa barvo popup oken za informacije o objektu in izbiro sloja karte."
                     }
                 }
             },
             "layers": {
-                "add": "NOT TRANSLATED",
-                "addselect": "NOT TRANSLATED",
+                "add": "Ustvari nov sloj za nove objekte.",
                 "label": "Sloji karte",
+                "addselect": "Dodaj risalni sloj karti.",
                 "defaultLayer": "(Privzet sloj)",
                 "useAsDefaultLayer": "Uporabi kot privzet sloj"
             },
             "myplaces": {
-                "label": "NOT TRANSLATED"
+                "label": "Moji sloji karte"
             },
             "sizes": {
                 "small": "Majhen",
                 "medium": "Srednji",
                 "large": "Velik",
-                "fill": "NOT TRANSLATED",
+                "fill": "Širok",
                 "custom": "Velikost po meri",
                 "width": "širina",
                 "height": "višina",
@@ -153,18 +156,18 @@ Oskari.registerLocalization(
                 "ok": "V redu",
                 "replace": "Zamenjaj",
                 "cancel": "Prekliči",
-                "add": "NOT TRANSLATED"
+                "add": "Dodaj sloj"
             },
             "confirm": {
                 "replace": {
                     "title": "Želiš zamenjati vstavljeno karto?",
-                    "msg": "Uporabi ukaz Zamenjaj za prikaz sprememb na vstavljeni karti. HTML kodo za spletno stran ni potrebno ponovno vnašati."
+                    "msg": "Uporabi ukaz Zamenjaj za prikaz sprememb na vstavljeni karti. Kode HTML za spletno stran ni potrebno ponovno vnašati."
                 }
             },
             "layerselection": {
                 "label": "Pokaži sloje karte v meniju",
-                "info": "Izberi karte za ozadje. V kartnem oknu Predogled lahko določiš privzeto karto za ozadje.",
-                "tooltip": "Karta za ozadje je prikazna kot spodnji sloj karte. Ko izbiraš sloje karte, ki bodo uporabljeni kot spodnji sloj, bo od teh viden samo en sloj naenkrat in lahko preklapljaš med njimi, Privzeto karto za ozadje lahko nastaviš v predogledu karte.",
+                "info": "Izberi slog karte za ozadje. V oknu Predogled lahko določiš privzet sloj karte za ozadje.",
+                "tooltip": "Karta za ozadje je prikazana kot spodnji sloj karte. Ko izbiraš sloje karte, ki bodo uporabljeni kot spodnji sloj, bo od teh viden samo en sloj naenkrat in lahko preklapljaš med njimi. Privzeto karto za ozadje lahko nastaviš v predogledu karte.",
                 "promote": "Prikaži aeroposnetke?"
             },
             "preview": "Predogled vstavljene karte",
@@ -174,30 +177,30 @@ Oskari.registerLocalization(
             "error": {
                 "title": "Napaka!",
                 "size": "Napaka pri določitvi velikosti",
-                "domain": "Spletno mesto je obvezen podatek",
-                "domainStart": "Izpusti predpone http ali www iz imena za spletno mesto",
+                "domain": "Spletno mesto je obvezen podatek.",
+                "domainStart": "Določi ime spletne strani brez predpon http ali www.",
                 "name": "Ime je obvezen podatek",
                 "nohelp": "Pomoč ni na voljo",
-                "saveFailed": "Objava karte ni uspela. Poskusi še enkrat kasneje",
-                "nameIllegalCharacters": "NOT TRANSLATED",
-                "domainIllegalCharacters": "Ime spletnega mesta vsebuje nedovoljene znake. Dovoljeni znaki so črke a-z, kot tudi å, ä and ö, številke, leve poševnice in vezaji."
+                "saveFailed": "Objava karte ni uspela. Prosim poskusi kasneje.",
+                "nameIllegalCharacters": "Ime karte vsebuje nedovoljene znake. Dovoljeni so velike in male črke a-z kot tudi å, ä in ö, številke, vračalke in pomišljaji.",
+                "domainIllegalCharacters": "Ime spletne strani vsebuje nedovoljene znake. Dovoljeni so velike in male črke a-z kot tudi å, ä in ö, številke, vračalke in pomišljaji."
             }
         },
         "NotLoggedView": {
-            "text": "Za uporabo funkcij za vstavljanje se moraš naprej prijaviti",
+            "text": "Za izdelavo vstavljene karte se moraš naprej prijaviti.",
             "signup": "Prijavi se",
-            "signupUrl": "/web/si/login",
-            "register": "Register",
+            "signupUrl": "/web/sl/prijava",
+            "register": "Registriraj se",
             "registerUrl": "/web/si/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
         },
         "StartView": {
-            "text": "Izdelan kartni pogled lahko vstaviš na svoje ali spletno mesto delodajalca",
+            "text": "Izdelano karto lahko vstaviš na svoje spletno mesto.",
             "touLink": "Pokaži Pogoje uporabe za Vstavljene karte",
             "layerlist_title": "Vstavljeni sloji karte",
-            "layerlist_empty": "Izbrane sloje karte ni mogoče vstaviti. V meniju Izberi sloje karte lahko preveriš, kateri sloji karte so lahko vstavljeni",
-            "layerlist_denied": "Ni mogoče vstaviti",
+            "layerlist_empty": "Izbranih slojev karte ni mogoče vstaviti. V meniju Izberi sloje karte lahko preveriš, kateri sloji karte so lahko vstavljeni.",
+            "layerlist_denied": "Sloja karte ni mogoče vstaviti.",
             "denied_tooltip": "Ponudnik teh kartografskih podatkov ne dovoli objavo teh podatkov na drugih spletnih straneh. Pred vstavljanjem karte preveri pravice v meniju Izberi sloje karte.",
-            "myPlacesDisclaimer": "NOT TRANSLATED",
+            "myPlacesDisclaimer": "NB. Objavljaš lasten sloj karte.",
             "buttons": {
                 "continue": "Nadaljuj",
                 "continueAndAccept": "Sprejmi Pogoje uporabe in nadaljuj",
@@ -205,21 +208,29 @@ Oskari.registerLocalization(
                 "close": "Zapri"
             },
             "tou": {
-                "notfound": "Ne najdem Pogoje uporabe",
+                "notfound": "Ne najdem Pogojev uporabe",
                 "reject": "Zavrni",
                 "accept": "Sprejmi"
             }
         },
         "layer": {
-            "show": "NOT TRANSLATED",
-            "hide": "NOT TRANSLATED",
-            "hidden": "NOT TRANSLATED",
+            "show": "Pokaži",
+            "hide": "Skrij",
+            "hidden": "Sloj je trenutno neviden.",
             "selectAsBaselayer": "NOT TRANSLATED",
             "rights": {
                 "can_be_published_map_user": {
-                    "label": "NOT TRANSLATED",
-                    "tooltip": "NOT TRANSLATED"
+                    "label": "Sloj je lahko objavljen v vstavljeni karti.",
+                    "tooltip": "Sloj je lahko objavljen v vstavljeni karti. Tedensko število uporabnikov je lahko omejeno."
                 }
+            }
+        },
+        "layerFilter": {
+            "buttons": {
+                "publishable": "Publishable"
+            },
+            "tooltips": {
+                "publishable": "Show only publishable map layers"
             }
         }
     }

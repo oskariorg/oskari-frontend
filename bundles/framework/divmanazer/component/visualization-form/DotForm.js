@@ -129,7 +129,7 @@ Oskari.clazz.define(
             '<label>' + this.loc.color.labelOr + '</label>' +
             '</div>' +
             '<div class="color-source-selector">' +
-            '<label>' + this.loc.color.labelCustom + '</label>' +
+            '<label id="color-point-custom-rgb-label" for="color-point-custom-rgb">' + this.loc.color.labelCustom + '</label>' +
             '</div>' +
             '<div class="custom-colors"></div>' +
             '</div>' +
@@ -150,7 +150,7 @@ Oskari.clazz.define(
             '<div class="colorcolumn22"></div>' +
             '</div>' +
             '</div>');
-        this.templateColorSource = jQuery('<input type="checkbox" name="colorInput" value = "custom" class="color-source">');
+        this.templateColorSource = jQuery('<input type="checkbox" name="colorInput" value = "custom" class="color-source" id="color-point-custom-rgb">');
         this.templateColorValue = jQuery('<label class="color-label"></label><br><input type="text" name="color-input" value="0" disabled="disabled" class="custom-color">');
         this.templateSizerValue = jQuery('<div class="sizer-value"></div>');
         this.templateMessage = jQuery('<div class = "message"><label class="message-label"></label><div class="field"><input type="text" name="message-text" class="message-text"/></div></div>');
@@ -291,7 +291,7 @@ Oskari.clazz.define(
                         }
                         jQuery('#' + activeCell + 'ColorCell').css('border', '1px solid #000000');
                     }
-                    me.values.color = me.creator.rgbToHex(this.style.backgroundColor);
+                    me.values.color = Oskari.util.rgbToHex(this.style.backgroundColor);
                     me.activeColorCell = cellIndex;
                     if (cellIndex < 10) {
                         cellIndex = '0' + cellIndex.toString();
@@ -354,7 +354,7 @@ Oskari.clazz.define(
             // if the color is not picked from selection, it must be users own color
             // add color values to the input fields
             if (!statedChosenColor) {
-                var rgb = me.creator.hexToRgb(me.values.color);
+                var rgb = Oskari.util.hexToRgb(me.values.color);
 
                 dialogContent.find('input.custom-color.custom-red-value').val(rgb.r);
                 dialogContent.find('input.custom-color.custom-green-value').val(rgb.g);

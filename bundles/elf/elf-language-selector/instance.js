@@ -68,7 +68,7 @@ Oskari.clazz.define("Oskari.elf.languageselector.BundleInstance", function() {
             langList = container.find('select'),
             langOption = jQuery(this.templates.option),
             link = container.find('a'),
-            loc, opt, firstLang;
+            firstLang;
 
         _.each(this.languageList, function(item) {
             var opt = langOption.clone();

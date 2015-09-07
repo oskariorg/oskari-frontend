@@ -5,13 +5,13 @@ Oskari.registerLocalization(
     "value": {
         "title": "Omien aineistojen tuonti",
         "desc": "Voit tuoda omia aineistoja shp-, gpx- tai mif/mid-tiedostomuodossa zip-pakattuna tai kmz-tiedostomuodossa (pakattu kml).",
-        "help": "Valitse aineiston sisältävä tiedosto tai anna linkki vastaavaan tiedostoon. Tiedosto voi olla joko shp-, zip- tai kml/kmx-tiedostomuodossa. Voit luoda shapefile (shp) -siirtoformaatissa olevasta aineistosta zip-tiedoston pakkaamalla ko. aineistoon liittyvät shp-, shx-, dbf- ja prj-päätteiset tiedostot yhteen zip-tiedostoon. Myös Googlen karttapalvelusta saatavat kml/kmz-tiedostot on mahdollista pakata zip-tiedostoon.",
         "tool": {
             "tooltip": "Omien aineistojen tuonti"
         },
         "flyout": {
             "title": "Omien aineistojen tuonti",
             "description": "Voit tuoda omia aineistoja shp-, gpx- tai mif/mid-tiedostomuodossa zip-pakattuna tai kmz-tiedostomuodossa (pakattu kml).",
+            "help": "Valitse aineiston sisältävä tiedosto tai anna linkki vastaavaan tiedostoon. Tiedosto voi olla joko shp-, zip- tai kml/kmx-tiedostomuodossa. Voit luoda shapefile (shp) -siirtoformaatissa olevasta aineistosta zip-tiedoston pakkaamalla ko. aineistoon liittyvät shp-, shx-, dbf- ja prj-päätteiset tiedostot yhteen zip-tiedostoon. \nMyös Googlen karttapalvelusta saatavat kml/kmz-tiedostot on mahdollista pakata zip-tiedostoon. \nMif/mid tiedostojen koordinaatisto on oltava kartan mukainen - katso koordinaatisto zoombarin alta",
             "actions": {
                 "cancel": "Peruuta",
                 "next": "Seuraava"

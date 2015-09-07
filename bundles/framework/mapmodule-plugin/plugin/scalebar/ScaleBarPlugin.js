@@ -17,6 +17,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin'
         me._index = 3;
         me._name = 'ScaleBarPlugin';
         me._scalebar = null;
+        me._prevMode = null;
     }, {
 
         /**
@@ -61,6 +62,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin'
                     }
                 }
             };
+        },
+
+        /**
+        * @method setMode
+        * Set tool mode.
+        *
+        * @param {String} mode tool mode name
+        */
+        setMode: function(mode){
+            var me = this,
+                el = jQuery('.mapplugin.scalebar');
+
+            if(me._prevMode !== null){
+                el.removeClass(me._prevMode);
+            }
+
+            el.addClass(mode);
+            me._prevMode = mode;
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

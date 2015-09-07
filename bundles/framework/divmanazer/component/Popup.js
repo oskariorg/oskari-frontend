@@ -42,7 +42,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             if (buttons && buttons.length > 0) {
                 for (i = 0; i < buttons.length; i += 1) {
                     buttons[i].insertTo(actionDiv);
-                    if (buttons[i].focus) {
+                    if (buttons[i].isFocus()) {
                         focusedButton = i;
                     }
                 }

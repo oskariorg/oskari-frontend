@@ -1,10 +1,22 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "fr",
     "key": "DivManazer",
     "value": {
+        "buttons": {
+            "add": "Ajouter",
+            "cancel": "Annuler",
+            "close": "Fermer",
+            "delete": "Supprimer",
+            "edit": "Modifier",
+            "exit": "Sortir",
+            "ok": "OK",
+            "save": "Enregistrer",
+            "search": "Rechercher"
+        },
         "LanguageSelect": {
-            "title": "langue",
-            "tooltip": "NOT TRANSLATED",
+            "title": "Langue",
+            "tooltip": "Sélectionner la langue",
             "languages": {
                 "af": "afrikaans",
                 "ak": "akan",
@@ -27,7 +39,7 @@ Oskari.registerLocalization({
                 "ee": "éwé",
                 "el": "grec",
                 "en": "anglais",
-                "eo": "espéranto",
+                "eo": "espéranta",
                 "es": "espagnol",
                 "et": "estonien",
                 "eu": "basque",
@@ -112,7 +124,7 @@ Oskari.registerLocalization({
                 "th": "thaï",
                 "ti": "tigrigna",
                 "tn": "tswana",
-                "to": "tonguien",
+                "to": "tongien",
                 "tr": "turc",
                 "ts": "tsonga",
                 "ug": "ouïghour",
@@ -125,6 +137,132 @@ Oskari.registerLocalization({
                 "zh": "chinois",
                 "zu": "zoulou"
             }
+        },
+        "VisualizationForm": {
+            "tooltips": {
+                "dot": "Modifier le style d'entité point",
+                "area": "Modifier le style d'entité surfacique",
+                "line": "Modifier le style d'entité linéaire"
+            },
+            "dot": {
+                "title": "Style d'entité point",
+                "tooltip": "",
+                "symbol": {
+                    "label": "Icône"
+                },
+                "size": {
+                    "label": "Taille"
+                },
+                "color": {
+                    "label": "Couleur",
+                    "labelOr": "ou",
+                    "labelCustom": "Couleur personnalisée (RGB 0-255)"
+                },
+                "preview": {
+                    "label": "Aperçu"
+                },
+                "buttons": {
+                    "save": "Enregistrer",
+                    "cancel": "Annuler"
+                }
+            },
+            "line": {
+                "title": "Style d'entité linéaire",
+                "tooltip": "",
+                "style": {
+                    "label": "tiret"
+                },
+                "cap": {
+                    "label": "Extrêmités de ligne"
+                },
+                "corner": {
+                    "label": "Coins"
+                },
+                "width": {
+                    "label": "Largeur"
+                },
+                "color": {
+                    "label": "Couleur",
+                    "labelOr": "ou",
+                    "labelCustom": "Couleur personnalisée (RGB 0-255)"
+                },
+                "preview": {
+                    "label": "Aperçu"
+                },
+                "buttons": {
+                    "save": "Enregistrer",
+                    "cancel": "Annuler"
+                }
+            },
+            "area": {
+                "title": "Style d'entité surfacique",
+                "tooltip": "",
+                "linestyle": {
+                    "label": "trait pointillé"
+                },
+                "linecap": {
+                    "label": "Extrêmités de ligne"
+                },
+                "linecorner": {
+                    "label": "Coins de ligne"
+                },
+                "linewidth": {
+                    "label": "Largeur de ligne"
+                },
+                "linecolor": {
+                    "label": "Couleur de ligne",
+                    "labelOr": "ou",
+                    "labelCustom": "Couleur personnalisée (RGB 0-255)"
+                },
+                "color": {
+                    "label": "Couleur de remplissage",
+                    "labelOr": "ou",
+                    "labelCustom": "Couleur personnalisée (RGB 0-255)"
+                },
+                "fill": {
+                    "label": "Motif de remplissage"
+                },
+                "preview": {
+                    "label": "Aperçu"
+                },
+                "buttons": {
+                    "save": "Enregistrer",
+                    "cancel": "Annuler"
+                }
+            }
+        },
+        "Grid": {
+            "columnSelector": {
+                "title": "Propriétés",
+                "tooltip": "Afficher les colonnes"
+            },
+            "export": {
+                "title": "Exporter les données",
+                "export": "Exporter",
+                "additional": {
+                    "title": "Paramètres supplémentaires",
+                    "dataSource": "Source des données",
+                    "metadata": "Lien des métadonnées",
+                    "export_selection": "Export only selected features"
+                },
+                "columns": {
+                    "title": "Colonnes",
+                    "all": "Tous",
+                    "visible": "Ouvert"
+                },
+                "format": {
+                    "title": "Format de fichier",
+                    "xlsx": "Excel",
+                    "csv": "CSV"
+                },
+                "delimiter": {
+                    "title": "Séparateur de fichier CSV",
+                    "comma": "Virgule",
+                    "semicolon": "Point-virgule",
+                    "tabulator": "Touche de tabulation"
+                }
+            }
         }
     }
-});
+}
+);

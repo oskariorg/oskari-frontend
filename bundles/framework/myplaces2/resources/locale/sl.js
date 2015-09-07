@@ -3,324 +3,325 @@ Oskari.registerLocalization(
     "lang": "sl",
     "key": "MyPlaces2",
     "value": {
-        "title": "Kraji",
+        "title": "Lokacije",
         "desc": "",
         "category": {
             "defaultName": "Moj sloj karte",
-            "organization": "Moji kraji",
-            "inspire": "Kraji"
+            "organization": "Moje lokacije",
+            "inspire": "Moje lokacije"
         },
         "guest": {
             "loginShort": "Za uporabo se prijavi"
         },
         "tab": {
-            "title": "NOT TRANSLATED",
-            "nocategories": "NOT TRANSLATED",
+            "title": "Lokacije",
+            "nocategories": "Nimaš še shranjenih lokacij.",
+            "maxFeaturesExceeded": "presegel si dovoljeno število svojih lokacij. Vse lokacije niso bile prenesene.",
             "publishCategory": {
-                "privateTooltip": "NOT TRANSLATED",
-                "publicTooltip": "NOT TRANSLATED"
+                "privateTooltip": "Sloj karte je zaseben. Klikni za objavo.",
+                "publicTooltip": "Sloj karte je javen. Klikni za preklic objave."
             },
-            "addCategory": "NOT TRANSLATED",
-            "editCategory": "NOT TRANSLATED",
-            "deleteCategory": "NOT TRANSLATED",
-            "edit": "NOT TRANSLATED",
-            "delete": "NOT TRANSLATED",
+            "addCategory": "Dodaj sloj karte",
+            "editCategory": "Uredi sloj karte",
+            "deleteCategory": "Izbriši sloj karte",
+            "edit": "Uredi",
+            "delete": "Izbriši",
             "grid": {
-                "name": "NOT TRANSLATED",
-                "desc": "NOT TRANSLATED",
-                "createDate": "NOT TRANSLATED",
-                "updateDate": "NOT TRANSLATED",
-                "measurement": "NOT TRANSLATED",
-                "edit": "NOT TRANSLATED",
-                "delete": "NOT TRANSLATED"
+                "name": "Ime lokacije",
+                "desc": "Opis lokacije",
+                "createDate": "Izdelan",
+                "updateDate": "Osvežen",
+                "measurement": "Velikost",
+                "edit": "Uredi",
+                "delete": "Izbriši"
             },
             "notification": {
                 "delete": {
-                    "title": "NOT TRANSLATED",
-                    "confirm": "NOT TRANSLATED",
-                    "btnDelete": "NOT TRANSLATED",
-                    "btnCancel": "NOT TRANSLATED",
-                    "success": "NOT TRANSLATED",
-                    "error": "NOT TRANSLATED",
-                    "cancel": "NOT TRANSLATED"
+                    "title": "Izbriši lokacijo",
+                    "confirm": "Ali želiš izbrisati to lokacijo?",
+                    "btnDelete": "Izbriši",
+                    "btnCancel": "Prekliči",
+                    "success": "Lokacija je izbrisana.",
+                    "error": "Lokacije ni mogoče izbrisati. Prosim poskusi kasneje.",
+                    "cancel": "Lokacija ni izbrisana."
                 }
             }
         },
         "tools": {
             "measureline": {
-                "title": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
+                "title": "Meri razdaljo",
+                "tooltip": "Meri razdaljo",
                 "add": "",
                 "next": "",
-                "edit": "NOT TRANSLATED",
-                "noResult": "NOT TRANSLATED"
+                "edit": "Črto lahko urejaš s klikom in vlečenjem lomnih točk.",
+                "noResult": "0 m"
             },
             "measurearea": {
-                "title": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
+                "title": "Meri območje",
+                "tooltip": "Meri območje",
                 "add": "",
                 "next": "",
-                "edit": "NOT TRANSLATED",
-                "noResult": "NOT TRANSLATED"
+                "edit": "Območje lahko urejaš s klikom in vlečenjem lomnih točk na robni črti.",
+                "noResult": "0 m2"
             },
             "point": {
-                "title": "NOT TRANSLATED",
-                "tooltip": "Dodaj točko",
-                "add": "NOT TRANSLATED",
-                "next": "V isto sliko lahko shraniš ali narišeš več točk",
-                "edit": "Točko prestaviš s klikom in premikom",
-                "save": "Shrani lokacijo"
+                "title": "Dodaj točko",
+                "tooltip": "Dodaj točko k \"Mojim lokacijam\".",
+                "add": "Nariši točko s klikom na karto.",
+                "next": "Ista lokacija lahko vsebuje eno ali več točk.",
+                "edit": "Točko prestaviš s klikom in premikom.",
+                "save": "Shrani kot \"moja lokacija\""
             },
             "line": {
-                "title": "NOT TRANSLATED",
-                "tooltip": "Dodaj linijo",
-                "add": "NOT TRANSLATED",
-                "next": "V isto sliko lahko shraniš ali narišeš več linij",
-                "edit": "Linijo lahko popraviš s klikom in premikom lomnih točk",
-                "save": "Shrani shape",
-                "noResult": "NOT TRANSLATED"
+                "title": "Dodaj črto",
+                "tooltip": "Dodaj vrstico k \"Mojim lokacijam\"",
+                "add": "Nariši črto z dodajanjem lomnih točk na karti. Lomne točke lahko dodaš s klikom na karto. Za konec risanja uporabi dvoklik ali ukaz \"Shrani kot \"moja lokacija \" \"",
+                "next": "Ena lokacija lahko vsebuje eno ali več črt.",
+                "edit": "Linijo lahko urejaš s klikom in premikom lomnih točk.",
+                "save": "Shrani kot \"moja lokacija\"",
+                "noResult": "0 m"
             },
             "area": {
-                "title": "NOT TRANSLATED",
-                "tooltip": "Dodaj območje.",
-                "add": "NOT TRANSLATED",
-                "next": "V isto sliko lahko shraniš ali narišeš več poligonov.",
-                "edit": "Obliko območja lahko popraviš s klikom in premikom lomnih točk na robni liniji.",
-                "save": "Shani shape",
-                "noResult": "NOT TRANSLATED"
+                "title": "Dodaj območje",
+                "tooltip": "Dodaj območje k \"Moje lokacije\"",
+                "add": "Nariši območje z dodajanjem lomnih točk robne črte na karti. Lomne točke lahko dodaš s klikom na karto. Za konec risanja uporabi dvoklik ali ukaz \"Shrani kot \"moja lokacija \" \"",
+                "next": "Ena lokacija lahko vsebuje eno ali več območij.",
+                "edit": "Obliko območja lahko urejaš s klikom in premikom lomnih točk na robni črti.",
+                "save": "Shrani kot \"moja lokacija\"",
+                "noResult": "0 m2"
             }
         },
         "buttons": {
             "ok": "V redu",
             "cancel": "Prekliči",
-            "close": "NOT TRANSLATED",
-            "finish": "Končaj risanje",
+            "close": "Prekliči",
+            "finish": "Shrani kot \"moja lokacija\"",
             "save": "Shrani",
-            "saveAsMyPlace": "NOT TRANSLATED",
-            "movePlaces": "Premaki kraje in izbriši",
+            "saveAsMyPlace": "Shrani kot \"moja lokacija\"",
+            "movePlaces": "Premakni lokacije in izbriši sloj",
             "deleteCategory": "Izbriši",
-            "deleteCategoryAndPlaces": "Izbriši kategorijo in kraje",
-            "changeToPublic": "Naredi javno",
-            "changeToPrivate": "Naredi zasebno"
+            "deleteCategoryAndPlaces": "Izbriši sloj in njegove lokacije",
+            "changeToPublic": "Objavi",
+            "changeToPrivate": "Skrij"
         },
         "placeform": {
-            "title": "Podatki kraja",
-            "tooltip": "Kraj dodan na karto bo shranjen v Moji kraji. Kraju dodaj ime in opis. Kraj lahko shraniš na izbranem sloju karte ali izbereš nov sloj karte z ukazom 'Nov sloj' v padajočem meniju sloja karte.",
+            "title": "Podatki o lokaciji",
+            "tooltip": "Lokacija je shranjena v \"Moje lokacije\", ki so vidne v meniju \"Moji podatki\". Določi podatki za lokacijo. Ime in opis lokacije sta obvezna. Lahko dodaš besedilo, ki bo prikazano na karti poleg lokacije, povezavo na spletno stran za več informacij in povezavo na sliko lokacije. Lokacijo dodaš novoizdelanemu sloju ali izbereš že obstoječega.",
             "placename": {
-                "placeholder": "Kraju dodaj ime."
+                "placeholder": "Ime lokacije"
             },
             "placelink": {
-                "placeholder": "Dodaj URL"
+                "placeholder": "Povezava do informacij o lokaciji"
             },
             "placedesc": {
-                "placeholder": "Opiši kraj"
+                "placeholder": "Opis lokacije"
             },
             "placeAttention": {
-                "placeholder": "NOT TRANSLATED"
+                "placeholder": "Dodaj besedilo na karto"
             },
             "measurement": {
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "line": "Dolžina črte:",
+                "area": "Velikost območja:"
             },
             "category": {
                 "label": "Sloj karte",
-                "newLayer": "NOT TRANSLATED",
-                "choose": "NOT TRANSLATED"
+                "newLayer": "Ustvari nov sloj karte",
+                "choose": "ali izberi enega od svojih obstoječih slojev karte:"
             },
             "imagelink": {
-                "placeholder": "NOT TRANSLATED",
-                "previewLabel": "NOT TRANSLATED",
-                "add": "NOT TRANSLATED"
+                "placeholder": "Povezava do slike",
+                "previewLabel": "Predogled slike",
+                "add": "Nov sloj karte"
             },
             "rendering": {
-                "label": "NOT TRANSLATED",
+                "label": "Slog za lokacijo",
                 "point": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": "Točka"
                 }
             }
         },
         "categoryform": {
             "name": {
                 "label": "Ime",
-                "placeholder": "Dodaj ime sloja karte"
+                "placeholder": "Ime sloja karte"
             },
             "drawing": {
-                "label": "Stil",
+                "label": "Slog",
                 "point": {
                     "label": "Točka",
                     "color": "Barva",
                     "size": "Velikost"
                 },
                 "line": {
-                    "label": "Linija",
+                    "label": "Črta",
                     "color": "Barva",
                     "size": "Debelina"
                 },
                 "area": {
                     "label": "Območje",
                     "fillcolor": "Polnilo",
-                    "linecolor": "Barva linije",
-                    "size": "Debelina linije"
+                    "linecolor": "Barva robne črte",
+                    "size": "Debelina robne črte"
                 }
             },
             "visibleFields": {
-                "label": "NOT TRANSLATED",
-                "placename": "NOT TRANSLATED",
-                "placedesc": "NOT TRANSLATED",
-                "image": "NOT TRANSLATED"
+                "label": "Vidni podatki o lokaciji",
+                "placename": "Ime",
+                "placedesc": "Opis",
+                "image": "Slika"
             },
             "edit": {
                 "title": "Uredi sloj karte",
                 "save": "Shrani",
-                "cancel": "Nazaj"
+                "cancel": "Prekliči"
             },
             "rendering": {
-                "label": "NOT TRANSLATED",
+                "label": "Slog lokacije",
                 "point": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": "Uredi slog točke"
                 },
                 "area": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": "Uredi slog območja"
                 },
                 "line": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": "Uredi slog črte"
                 }
             }
         },
         "pointform": {
-            "title": "NOT TRANSLATED",
+            "title": "Slog točke",
             "tooltip": "",
             "symbol": {
-                "label": "NOT TRANSLATED"
+                "label": "Ikona"
             },
             "size": {
-                "label": "NOT TRANSLATED"
+                "label": "Velikost"
             },
             "color": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "Barva",
+                "labelOr": "ali",
+                "labelCustom": "Splošna barva RGB (0-255)"
             },
             "preview": {
-                "label": "NOT TRANSLATED"
+                "label": "Predogled"
             },
             "buttons": {
-                "save": "NOT TRANSLATED",
-                "cancel": "NOT TRANSLATED"
+                "save": "Shrani",
+                "cancel": "Prekliči"
             }
         },
         "lineform": {
-            "title": "NOT TRANSLATED",
+            "title": "Slog črte",
             "tooltip": "",
             "style": {
-                "label": "NOT TRANSLATED"
+                "label": "Slog"
             },
             "cap": {
-                "label": "NOT TRANSLATED"
+                "label": "Zaključki"
             },
             "corner": {
-                "label": "NOT TRANSLATED"
+                "label": "Koti"
             },
             "width": {
-                "label": "NOT TRANSLATED"
+                "label": "Širina"
             },
             "color": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "Barva",
+                "labelOr": "ali",
+                "labelCustom": "Splošna barva RGB (0-255)"
             },
             "preview": {
-                "label": "NOT TRANSLATED"
+                "label": "Predogled"
             },
             "buttons": {
-                "save": "NOT TRANSLATED",
-                "cancel": "NOT TRANSLATED"
+                "save": "Shrani",
+                "cancel": "Prekliči"
             }
         },
         "areaform": {
-            "title": "NOT TRANSLATED",
+            "title": "Slog območja",
             "tooltip": "",
             "linestyle": {
-                "label": "NOT TRANSLATED"
+                "label": "Slog robne črte"
             },
             "linecap": {
-                "label": "NOT TRANSLATED"
+                "label": "Končne točke robne črte"
             },
             "linecorner": {
-                "label": "NOT TRANSLATED"
+                "label": "Koti robne črte"
             },
             "linewidth": {
-                "label": "NOT TRANSLATED"
+                "label": "Debelina robne črte"
             },
             "linecolor": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "barva robne črte",
+                "labelOr": "ali",
+                "labelCustom": "Splošna barva RGB (0-255)"
             },
             "color": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "Barva polnila",
+                "labelOr": "ali",
+                "labelCustom": "Splošna barva RGB (0-255)"
             },
             "fill": {
-                "label": "NOT TRANSLATED"
+                "label": "Vzorec polnila"
             },
             "preview": {
-                "label": "NOT TRANSLATED"
+                "label": "Predogled"
             },
             "buttons": {
-                "save": "NOT TRANSLATED",
-                "cancel": "NOT TRANSLATED"
+                "save": "Shrani",
+                "cancel": "Prekliči"
             }
         },
         "notification": {
             "placeAdded": {
-                "title": "Kraj je bil shranjen",
-                "message": "Uredi sloj karte"
+                "title": "Lokacija je bila shranjena.",
+                "message": "lokacija se nahaja v meniju \"Moji podatki\"."
             },
             "categorySaved": {
-                "title": "Sloj karte je shranjen",
-                "message": "Shranjeno urejanje sloja karte"
+                "title": "Sloj karte je shranjen.",
+                "message": "Shranjeno urejanje sloja karte."
             },
             "categoryDelete": {
                 "title": "Izbriši sloj karte",
-                "deleteConfirmMove": "Sloj karte {0} vsebuje {1} objekte. Ali želiš izbrisati sloj karte in kraje na njem premakniti na privzet sloj karte {2}?",
-                "deleteConfirm": "Izbriši sloj karte?",
+                "deleteConfirmMove": "Sloj karte {0} vsebuje {1} objekte. Ali želiš izbrisati sloj karte in lokacije na njem premakniti na privzet sloj karte {2} ali želiš izbrisati sloj in njegove lokacije?",
+                "deleteConfirm": "Ali želiš izbrisati sloj karte {0}?",
                 "deleted": "Sloj karte je izbrisan."
             },
             "categoryToPublic": {
-                "title": "Naredi sloj karte javen.",
-                "message": "Naredili boste {0} javen sloj karte. Ta sloj ne bo več mogoče deliti z drugimi uporabniki ali ga vstaviti v drugo spletno mesto. Vpogled sloja karte za druge uporabnike ne bo več mogoč."
+                "title": "Objavi sloj karte.",
+                "message": "Objavili boste sloj karte  {0}. Sloj bo na voljo vsem uporabnikom interneta in se bo lahko kot sloj uporabil v drugih spletnih storitvah. Tudi drugi uporabniki v okolju Oskari bodo lahko videli ta sloj."
             },
             "categoryToPrivate": {
-                "title": "Naredi sloj karte zaseben.",
-                "message": "Naredili boste {0} zaseben sloj karte. Ta sloj ne bo več mogoče deliti z drugimi uporabniki ali ga vstaviti v drugo spletno mesto. Vpogled sloja karte za druge uporabnike ne bo več mogoč."
+                "title": "Sloj karte ne bo več javen",
+                "message": "Sloj karte {0} bo zaseben. Sloj ne bo več na voljo uporabnikom interneta in ga ne bo moč uporabiti v drugih spletnih storitvah. Tudi drugi uporabniki v okolju Oskari tega sloja ne bodo videli."
             },
             "error": {
-                "addCategory": "Sloj karte ni mogoče shraniti. Kraj ni bil shranjen.",
-                "editCategory": "Sloj karte ni mogoče shraniti.",
-                "savePlace": "Kraj ni mogoče shraniti.",
+                "addCategory": "Sloja karte ni mogoče shraniti. Lokacija ni bila shranjena. Prosimo poskusi kasneje.",
+                "editCategory": "Sloja karte ni mogoče shraniti. Prosimo poskusi kasneje.",
+                "savePlace": "Lokacije ni mogoče shraniti. Prosimo poskusi kasneje.",
                 "title": "Napaka!",
                 "generic": "Sistemska napaka. Prosimo poskusi kasneje.",
-                "deleteCategory": "Med brisanjem je prišlo do napake.",
-                "deleteDefault": "Privzet sloj karte ni mogoče izbrisati."
+                "deleteCategory": "Med brisanjem je prišlo do napake. Prosimo poskusi kasneje.",
+                "deleteDefault": "Privzetega sloja karte ni mogoče izbrisati."
             }
         },
         "validation": {
             "title": "Podatek vsebuje napake:",
-            "placeName": "Manjka ime kraja.",
+            "placeName": "Manjka ime lokacije",
             "categoryName": "Manjka ime sloja karte.",
-            "placeNameIllegal": "Ime objekta vsebuje nedovoljene znake. Dovoljeni znaki so črke a-z, kot tudi å, ä and ö, številke, leve poševnice in vezaji.",
-            "descIllegal": "Opis objekta vsebuje nedovoljene znake. Dovoljeni znaki so črke a-z, kot tudi å, ä and ö, številke, leve poševnice in vezaji.",
-            "categoryNameIllegal": "Opis sloja vsebuje nedovoljene znake. Dovoljeni znaki so črke a-z, kot tudi å, ä and ö, številke, leve poševnice in vezaji.",
-            "dotSize": "Velikost pike ne ustreza mejnim vrednostim (1-5).",
-            "dotColor": "Napačna barva pike.",
-            "dotShape": "NOT TRANSLATED",
-            "lineSize": "Velikost linije ne ustreza mejnim vrednostim (1-50).",
-            "lineColor": "Napačna barva linije.",
-            "areaLineSize": "Velikost robne linije območja ne ustreza mejnim vrednostim (0-50).",
-            "areaLineColor": "Napačna barva robne linije območja.",
-            "areaFillColor": "Napačna barva polnila za območje."
+            "placeNameIllegal": "Ime lokacije vsebuje nedovoljene znake.  Dovoljeni znaki so velike in male črke a-z, kot tudi å, ä in ö, številke, vračalke in vezaji.",
+            "descIllegal": "Opis lokacije vsebuje nedovoljene znake. Dovoljeni znaki so velike in male črke a-z, kot tudi å, ä in ö, številke, vračalke in vezaji.",
+            "categoryNameIllegal": "Opis sloja vsebuje nedovoljene znake.  Dovoljeni znaki so velike in male črke a-z, kot tudi å, ä in ö, številke, vračalke in vezaji.",
+            "dotSize": "Velikost pike ne ustreza dovoljenim vrednostim med 1 in 5.",
+            "dotColor": "Barva točke ne ustreza dovoljenim vrednostim med 0 in 255.",
+            "dotShape": "Oblika točke je napačna.",
+            "lineSize": "Velikost linije ne ustreza dovoljenim vrednostim med 1 in 50.",
+            "lineColor": "Barva črte ne ustreza dovoljenim vrednostim med 0 in 255.",
+            "areaLineSize": "Velikost robne črte ne ustreza dovoljenim vrednostim med 0 in 50.",
+            "areaLineColor": "Barva robne črte ne ustreza dovoljenim vrednostim med 0 in 255.",
+            "areaFillColor": "Barva polnila ne ustreza dovoljenim vrednostim med 0 in 255."
         }
     }
 }

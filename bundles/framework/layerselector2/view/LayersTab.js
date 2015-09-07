@@ -12,14 +12,13 @@ Oskari.clazz.define(
      */
 
     function (instance, title, id) {
-        //"use strict";
         this.instance = instance;
         this.title = title;
         this.id = id;
-        // TODO: maybe pass as param instead of digging through instance.conf?
         this.showSearchSuggestions = (instance.conf && instance.conf.showSearchSuggestions === true);
         this.layerGroups = [];
         this.layerContainers = {};
+
         this.templates = {
             spinner: '<span class="spinner-text"></span>',
             shortDescription: '<div class="field-description"></div>',
@@ -32,7 +31,9 @@ Oskari.clazz.define(
             keywordContainer: '<a href="#"class="keyword-cont">' +
                 '  <span class="keyword"></span>' +
                 '</a>',
-            keywordType: '<div class="type"></div>'
+            keywordType: '<div class="type"></div>',
+            layerFilter: '<div class="layer-filter layerselector2-layer-filter">'+
+                '</div><div style="clear:both;"></div>'
         };
         this._createUI(id);
     }, {
@@ -54,13 +55,6 @@ Oskari.clazz.define(
                 filter: this.filterField.getValue(),
                 groups: []
             };
-            // TODO: groups listing
-            /*
-        var layerGroups = jQuery(this.container).find('div.layerList div.layerGroup.open');
-        for(var i=0; i < layerGroups.length; ++i) {
-            var group = layerGroups[i];
-            state.groups.push(jQuery(group).find('.groupName').text());
-        }*/
             return state;
         },
 
@@ -74,9 +68,6 @@ Oskari.clazz.define(
                 this.filterField.setValue(state.filter);
                 this.filterLayers(state.filter);
             }
-            /* TODO: should open panels in this.accordion where groups[i] == panel.title
-            if (state.groups && state.groups.length > 0) {}
-            */
         },
 
         /**
@@ -125,10 +116,17 @@ Oskari.clazz.define(
             });
         },
 
+        /**
+         * Create UI
+         * @method  @private _createUI
+         *
+         * @param  {String} oskarifieldId oskari field id
+         */
         _createUI: function (oskarifieldId) {
             //"use strict";
             var me = this,
-                oskarifield;
+                oskarifield,
+                layerFilter;
 
             me._locale = me.instance._localization;
             me.tabPanel = Oskari.clazz.create(
@@ -155,8 +153,14 @@ Oskari.clazz.define(
 
             me._createInfoIcon(oskarifield);
 
+            if(!(this.instance.conf && this.instance.conf.hideLayerFilters && this.instance.conf.hideLayerFilters === true)) {
+                layerFilter = jQuery(me.templates.layerFilter);
+                me.tabPanel.getContainer().append(layerFilter);
+            }
+
             me.tabPanel.getContainer().append(oskarifield);
             oskarifield.find('.spinner-text').hide();
+
             // add id to search input
             oskarifield.find('input').attr(
                 'id',
@@ -169,7 +173,12 @@ Oskari.clazz.define(
             );
             me.accordion.insertTo(me.tabPanel.getContainer());
         },
-
+        /**
+         * Get filter field
+         * @method  @public getFilterField
+         *
+         * @return {Oskari.userinterface.component.FormInput} field
+         */
         getFilterField: function () {
             //"use strict";
             var me = this,
@@ -225,7 +234,12 @@ Oskari.clazz.define(
                 me._relatedKeywordsPopup(keyword, event, me);
             }
         },
-
+        /**
+         * Show layer groups
+         * @method  @public showLayerGroups
+         *
+         * @param  {Array} groups
+         */
         showLayerGroups: function (groups) {
             //"use strict";
             var me = this,
@@ -597,14 +611,6 @@ Oskari.clazz.define(
                         keyword.keyword.toLowerCase() + ' (' +
                         keyword.layers.length + ')'
                     );
-
-                /* Disabled for now as the design document doesn't show these
-                if (keyword.type) {
-                    keywordType = jQuery(me.templates.keywordType);
-                    keywordType.attr('title', me._locale.types[keyword.type]);
-                    keywordTmpl.append(keywordType.text(keyword.type.toUpperCase()));
-                }
-                */
 
                 relatedKeywordsCont.append(keywordTmpl);
             }

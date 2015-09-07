@@ -591,7 +591,13 @@ function (params, options) {
 	 * @return {String} URL to a legend image
 	 */
 	getLegendImage: function () {
-		return this._legendImage;
+		if (this._legendImage) {
+			return this._legendImage;
+		} else {
+			if (this._currentStyle) {
+				return this._currentStyle.getLegend();
+			}
+		}
 	},
 	/**
 	 * @method getLegendImage

@@ -161,6 +161,14 @@ Oskari.registerLocalization({
                     "tooltip": "Mapová vrstva může být publikována ve vloženém mapovém okně a počet uživatelů za týden může být omezen."
                 }
             }
+        },
+        "layerFilter": {
+            "buttons": {
+                "publishable": "Publishable"
+            },
+            "tooltips": {
+                "publishable": "Show only publishable map layers"
+            }
         }
     }
 });

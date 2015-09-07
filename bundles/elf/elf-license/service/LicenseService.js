@@ -209,7 +209,7 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
                     }
                 },
                 url : me._licenseServiceUrl,
-                error : function(jqXHR,textStatus, errorThrown) {
+                error : function(jqXHR) {
                     me._finishAjaxRequest('getPrice');
                     errorCb(jqXHR);
                 },
@@ -261,7 +261,7 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
                     }
                 },
                 url : me._licenseServiceUrl,
-                error : function(jqXHR,textStatus, errorThrown) {
+                error : function(jqXHR) {
                     me._finishAjaxRequest('concludeLicense');
                     errorCb(jqXHR);
                 },
@@ -312,7 +312,7 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
                     }
                 },
                 url : me._licenseServiceUrl + '&' + jQuery.param(data),
-                error : function(jqXHR,textStatus, errorThrown) {
+                error : function(jqXHR) {
                     me._finishAjaxRequest('deactivateLicense');
                     errorCb(jqXHR);
                 },

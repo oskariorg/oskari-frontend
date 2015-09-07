@@ -1,7 +1,9 @@
-Oskari.registerLocalization({
-    "lang" : "sv",
-    "key" : "Generic",
-    "value" : {
-        "default-style": "Förvald utseende"
+Oskari.registerLocalization(
+{
+    "lang": "sv",
+    "key": "Generic",
+    "value": {
+        "default-style": "Förvalt utseende"
     }
-});
+}
+);

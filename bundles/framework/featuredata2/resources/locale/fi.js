@@ -11,14 +11,17 @@ Oskari.registerLocalization({
         "errorscale": "Kohdetietoja ei voida näyttää tällä mittakaavatasolla. Siirry sopivalle mittakaavatasolle mittakaavasäätimen avulla.",
         "errordata": "Palvelimelta saatu tieto oli virheellistä. Siirrä hieman karttaa päivittääksesi tiedot.",
         "columnSelectorTooltip": "Näytä sarakkeet",
-        "popup": {
+        "featureDataPopup" : "Lasketut tunnusluvut",
+        "selectionTools": {
             "title": "Valitse kohteita kartalta",
-            "instructions": " ",
+            "instructions": "",
+            "selectFromTop": "päällimmäiseltä karttatasolta",
+            "selectAll": "kaikilta karttatasoilta",
             "link": {
                 "title": "Lisää valinta"
             },
             "button": {
-                "cancel": "Peruuta",
+                "cancel": "Sulje",
                 "empty": "Poista valinnat",
                 "show": "Näytä kohteet",
                 "close": "Sulje",

@@ -262,12 +262,52 @@
     background-position: -625px -16px !important;
 }
 
-.icon-funnel {
-    width: 16px;
-    height: 16px;
+.icon-find-nearest-address-dark {
+    width: 28px;
+    height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
     background-position: -641px 0px !important;
+}
+
+.icon-find-nearest-address {
+    width: 28px;
+    height: 28px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -669px 0px !important;
+}
+
+.icon-find-nearest-place-dark {
+    width: 28px;
+    height: 28px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -697px 0px !important;
+}
+
+.icon-find-nearest-place {
+    width: 28px;
+    height: 28px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -725px 0px !important;
+}
+
+.icon-funnel-active {
+    width: 18px;
+    height: 18px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -753px 0px !important;
+}
+
+.icon-funnel {
+    width: 18px;
+    height: 18px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -771px 0px !important;
 }
 
 .icon-geolocator {
@@ -275,15 +315,23 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -657px 0px !important;
+    background-position: -789px 0px !important;
 }
 
-.icon-geolocator.png {
-    width: 28px;
-    height: 28px;
+.icon-info-area-active {
+    width: 16px;
+    height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -685px 0px !important;
+    background-position: -817px 0px !important;
+}
+
+.icon-info-area {
+    width: 16px;
+    height: 16px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -833px 0px !important;
 }
 
 .icon-info {
@@ -291,7 +339,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -713px 0px !important;
+    background-position: -849px 0px !important;
 }
 
 .icon-info:hover {
@@ -299,7 +347,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -713px -16px !important;
+    background-position: -849px -16px !important;
 }
 
 .icon-line-basic {
@@ -307,7 +355,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -729px 0px !important;
+    background-position: -865px 0px !important;
 }
 
 .icon-line-dashed {
@@ -315,7 +363,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -757px 0px !important;
+    background-position: -893px 0px !important;
 }
 
 .icon-line-flat_cap {
@@ -323,7 +371,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -785px 0px !important;
+    background-position: -921px 0px !important;
 }
 
 .icon-line-round_cap {
@@ -331,7 +379,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -813px 0px !important;
+    background-position: -949px 0px !important;
 }
 
 .icon-line-thin-diagonal {
@@ -339,7 +387,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -841px 0px !important;
+    background-position: -977px 0px !important;
 }
 
 .icon-line-thin-horizontal {
@@ -347,7 +395,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -869px 0px !important;
+    background-position: -1005px 0px !important;
 }
 
 .icon-line-wide-diagonal {
@@ -355,7 +403,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -897px 0px !important;
+    background-position: -1033px 0px !important;
 }
 
 .icon-line-wide-horizontal {
@@ -363,7 +411,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -925px 0px !important;
+    background-position: -1061px 0px !important;
 }
 
 .icon-line {
@@ -371,7 +419,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -953px 0px !important;
+    background-position: -1089px 0px !important;
 }
 
 .icon-maximize {
@@ -379,7 +427,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -981px 0px !important;
+    background-position: -1117px 0px !important;
 }
 
 .icon-maximize:hover {
@@ -387,7 +435,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -981px -16px !important;
+    background-position: -1117px -16px !important;
 }
 
 .icon-menu {
@@ -395,7 +443,7 @@
     height: 7px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -997px 0px !important;
+    background-position: -1133px 0px !important;
 }
 
 .icon-minimize {
@@ -403,7 +451,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1022px 0px !important;
+    background-position: -1158px 0px !important;
 }
 
 .icon-minimize:hover {
@@ -411,7 +459,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1022px -16px !important;
+    background-position: -1158px -16px !important;
 }
 
 .icon-point {
@@ -419,7 +467,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1038px 0px !important;
+    background-position: -1174px 0px !important;
 }
 
 .icon-private {
@@ -427,7 +475,7 @@
     height: 18px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1066px 0px !important;
+    background-position: -1202px 0px !important;
 }
 
 .icon-public {
@@ -435,7 +483,7 @@
     height: 18px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1084px 0px !important;
+    background-position: -1220px 0px !important;
 }
 
 .icon-restore {
@@ -443,7 +491,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1102px 0px !important;
+    background-position: -1238px 0px !important;
 }
 
 .icon-restore:hover {
@@ -451,7 +499,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1102px -16px !important;
+    background-position: -1238px -16px !important;
 }
 
 .icon-select-geometry {
@@ -459,7 +507,7 @@
     height: 23px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1118px 0px !important;
+    background-position: -1254px 0px !important;
 }
 
 .icon-table {
@@ -467,7 +515,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1141px 0px !important;
+    background-position: -1277px 0px !important;
 }
 
 .layer-analysis {
@@ -475,7 +523,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1157px 0px !important;
+    background-position: -1293px 0px !important;
 }
 
 .layer-base {
@@ -483,7 +531,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1173px 0px !important;
+    background-position: -1309px 0px !important;
 }
 
 .layer-gfi-1 {
@@ -491,7 +539,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1189px 0px !important;
+    background-position: -1325px 0px !important;
 }
 
 .layer-gfi-2 {
@@ -499,7 +547,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1205px 0px !important;
+    background-position: -1341px 0px !important;
 }
 
 .layer-group {
@@ -507,7 +555,47 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1221px 0px !important;
+    background-position: -1357px 0px !important;
+}
+
+.layer-newest-disabled {
+    width: 16px;
+    height: 16px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1373px 0px !important;
+}
+
+.layer-newest {
+    width: 16px;
+    height: 16px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1389px 0px !important;
+}
+
+.layer-publishable-disabled {
+    width: 16px;
+    height: 16px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1405px 0px !important;
+}
+
+.layer-publishable {
+    width: 16px;
+    height: 16px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1421px 0px !important;
+}
+
+.layer-stats-disabled {
+    width: 16px;
+    height: 16px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1437px 0px !important;
 }
 
 .layer-stats {
@@ -515,7 +603,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1237px 0px !important;
+    background-position: -1453px 0px !important;
 }
 
 .layer-vector {
@@ -523,7 +611,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1253px 0px !important;
+    background-position: -1469px 0px !important;
 }
 
 .layer-wfs {
@@ -531,7 +619,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1269px 0px !important;
+    background-position: -1485px 0px !important;
 }
 
 .layer-wms {
@@ -539,7 +627,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1285px 0px !important;
+    background-position: -1501px 0px !important;
 }
 
 .layer-wmts {
@@ -547,7 +635,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1301px 0px !important;
+    background-position: -1517px 0px !important;
 }
 
 .marker-arrow {
@@ -555,7 +643,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1317px 0px !important;
+    background-position: -1533px 0px !important;
 }
 
 .marker-dot {
@@ -563,7 +651,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1345px 0px !important;
+    background-position: -1561px 0px !important;
 }
 
 .marker-flag {
@@ -571,7 +659,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1373px 0px !important;
+    background-position: -1589px 0px !important;
 }
 
 .marker-pin {
@@ -579,7 +667,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1401px 0px !important;
+    background-position: -1617px 0px !important;
 }
 
 .marker-pin2 {
@@ -587,7 +675,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1429px 0px !important;
+    background-position: -1645px 0px !important;
 }
 
 .marker-share {
@@ -595,7 +683,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1457px 0px !important;
+    background-position: -1673px 0px !important;
 }
 
 .marker-square {
@@ -603,7 +691,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1489px 0px !important;
+    background-position: -1705px 0px !important;
 }
 
 .marker-stud {
@@ -611,7 +699,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1517px 0px !important;
+    background-position: -1733px 0px !important;
 }
 
 .marker {
@@ -619,55 +707,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1545px 0px !important;
-}
-
-.mylocation-3d-dark {
-    width: 35px;
-    height: 35px;
-    background-image: url('../icons/icons.png') !important;
-    background-repeat: no-repeat !important;
-    background-position: -1577px 0px !important;
-}
-
-.mylocation-3d-light {
-    width: 35px;
-    height: 35px;
-    background-image: url('../icons/icons.png') !important;
-    background-repeat: no-repeat !important;
-    background-position: -1612px 0px !important;
-}
-
-.mylocation-rounded-dark {
-    width: 35px;
-    height: 35px;
-    background-image: url('../icons/icons.png') !important;
-    background-repeat: no-repeat !important;
-    background-position: -1647px 0px !important;
-}
-
-.mylocation-rounded-light {
-    width: 35px;
-    height: 35px;
-    background-image: url('../icons/icons.png') !important;
-    background-repeat: no-repeat !important;
-    background-position: -1682px 0px !important;
-}
-
-.mylocation-sharp-dark {
-    width: 35px;
-    height: 35px;
-    background-image: url('../icons/icons.png') !important;
-    background-repeat: no-repeat !important;
-    background-position: -1717px 0px !important;
-}
-
-.mylocation-sharp-light {
-    width: 35px;
-    height: 35px;
-    background-image: url('../icons/icons.png') !important;
-    background-repeat: no-repeat !important;
-    background-position: -1752px 0px !important;
+    background-position: -1761px 0px !important;
 }
 
 .myplaces-area {
@@ -675,7 +715,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1787px 0px !important;
+    background-position: -1793px 0px !important;
 }
 
 .myplaces-draw-area {
@@ -683,7 +723,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1815px 0px !important;
+    background-position: -1821px 0px !important;
 }
 
 .myplaces-draw-line {
@@ -691,7 +731,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1847px 0px !important;
+    background-position: -1853px 0px !important;
 }
 
 .myplaces-draw-point {
@@ -699,7 +739,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1879px 0px !important;
+    background-position: -1885px 0px !important;
 }
 
 .myplaces-line {
@@ -707,7 +747,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1911px 0px !important;
+    background-position: -1917px 0px !important;
 }
 
 .myplaces-point {
@@ -715,7 +755,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1939px 0px !important;
+    background-position: -1945px 0px !important;
 }
 
 .selection-area {
@@ -723,7 +763,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1967px 0px !important;
+    background-position: -1973px 0px !important;
 }
 
 .selection-area:hover {
@@ -731,7 +771,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1967px -32px !important;
+    background-position: -1973px -32px !important;
 }
 
 .selection-circle {
@@ -739,7 +779,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1999px 0px !important;
+    background-position: -2005px 0px !important;
 }
 
 .selection-circle:hover {
@@ -747,7 +787,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1999px -32px !important;
+    background-position: -2005px -32px !important;
 }
 
 .selection-edit {
@@ -755,7 +795,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2031px 0px !important;
+    background-position: -2037px 0px !important;
 }
 
 .selection-edit:hover {
@@ -763,7 +803,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2031px -32px !important;
+    background-position: -2037px -32px !important;
 }
 
 .selection-line {
@@ -771,7 +811,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2063px 0px !important;
+    background-position: -2069px 0px !important;
 }
 
 .selection-line:hover {
@@ -779,7 +819,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2063px -32px !important;
+    background-position: -2069px -32px !important;
 }
 
 .selection-point {
@@ -787,7 +827,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2095px 0px !important;
+    background-position: -2101px 0px !important;
 }
 
 .selection-point:hover {
@@ -795,7 +835,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2095px -32px !important;
+    background-position: -2101px -32px !important;
 }
 
 .selection-remove {
@@ -803,7 +843,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2127px 0px !important;
+    background-position: -2133px 0px !important;
 }
 
 .selection-remove:hover {
@@ -811,7 +851,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2127px -32px !important;
+    background-position: -2133px -32px !important;
 }
 
 .selection-square {
@@ -819,7 +859,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2159px 0px !important;
+    background-position: -2165px 0px !important;
 }
 
 .selection-square:hover {
@@ -827,7 +867,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2159px -32px !important;
+    background-position: -2165px -32px !important;
 }
 
 .tool-draw-cut {
@@ -835,7 +875,7 @@
     height: 36px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2191px 0px !important;
+    background-position: -2197px 0px !important;
 }
 
 .tool-feature-selection {
@@ -843,15 +883,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2226px 0px !important;
-}
-
-.tool-feature-selection:hover {
-    width: 32px;
-    height: 32px;
-    background-image: url('../icons/icons.png') !important;
-    background-repeat: no-repeat !important;
-    background-position: -2226px -32px !important;
+    background-position: -2232px 0px !important;
 }
 
 .tool-history-back {
@@ -859,7 +891,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2258px 0px !important;
+    background-position: -2264px 0px !important;
 }
 
 .tool-history-forward {
@@ -867,7 +899,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2290px 0px !important;
+    background-position: -2296px 0px !important;
 }
 
 .tool-link {
@@ -875,7 +907,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2322px 0px !important;
+    background-position: -2328px 0px !important;
 }
 
 .tool-measure-area {
@@ -883,7 +915,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2354px 0px !important;
+    background-position: -2360px 0px !important;
 }
 
 .tool-measure-line {
@@ -891,7 +923,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2386px 0px !important;
+    background-position: -2392px 0px !important;
 }
 
 .tool-pan {
@@ -899,7 +931,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2418px 0px !important;
+    background-position: -2424px 0px !important;
 }
 
 .tool-print {
@@ -907,7 +939,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2450px 0px !important;
+    background-position: -2456px 0px !important;
 }
 
 .tool-reset {
@@ -915,7 +947,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2482px 0px !important;
+    background-position: -2488px 0px !important;
 }
 
 .tool-save-view {
@@ -923,7 +955,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2514px 0px !important;
+    background-position: -2520px 0px !important;
 }
 
 .tool-zoombox {
@@ -931,7 +963,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2546px 0px !important;
+    background-position: -2552px 0px !important;
 }
 
 .upload-material {
@@ -939,7 +971,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2578px 0px !important;
+    background-position: -2584px 0px !important;
 }
 
 .menu-3d-dark {
@@ -947,7 +979,7 @@
     height: 35px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2606px 0px !important;
+    background-position: -2612px 0px !important;
 }
 
 .menu-3d-light {
@@ -955,7 +987,7 @@
     height: 35px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2641px 0px !important;
+    background-position: -2647px 0px !important;
 }
 
 .menu-rounded-dark {
@@ -963,7 +995,7 @@
     height: 36px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2676px 0px !important;
+    background-position: -2682px 0px !important;
 }
 
 .menu-rounded-light {
@@ -971,7 +1003,7 @@
     height: 36px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2712px 0px !important;
+    background-position: -2718px 0px !important;
 }
 
 .menu-sharp-dark {
@@ -979,7 +1011,7 @@
     height: 35px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2748px 0px !important;
+    background-position: -2754px 0px !important;
 }
 
 .menu-sharp-light {
@@ -987,7 +1019,55 @@
     height: 35px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2783px 0px !important;
+    background-position: -2789px 0px !important;
+}
+
+.mylocation-3d-dark {
+    width: 35px;
+    height: 35px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2824px 0px !important;
+}
+
+.mylocation-3d-light {
+    width: 35px;
+    height: 35px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2859px 0px !important;
+}
+
+.mylocation-rounded-dark {
+    width: 35px;
+    height: 35px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2894px 0px !important;
+}
+
+.mylocation-rounded-light {
+    width: 35px;
+    height: 35px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2929px 0px !important;
+}
+
+.mylocation-sharp-dark {
+    width: 35px;
+    height: 35px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2964px 0px !important;
+}
+
+.mylocation-sharp-light {
+    width: 35px;
+    height: 35px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2999px 0px !important;
 }
 
 .myplaces-draw-area-dark {
@@ -995,7 +1075,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2818px 0px !important;
+    background-position: -3034px 0px !important;
 }
 
 .myplaces-draw-area-light {
@@ -1003,7 +1083,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2850px 0px !important;
+    background-position: -3066px 0px !important;
 }
 
 .myplaces-draw-line-dark {
@@ -1011,7 +1091,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2882px 0px !important;
+    background-position: -3098px 0px !important;
 }
 
 .myplaces-draw-line-light {
@@ -1019,7 +1099,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2914px 0px !important;
+    background-position: -3130px 0px !important;
 }
 
 .myplaces-draw-point-dark {
@@ -1027,7 +1107,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2946px 0px !important;
+    background-position: -3162px 0px !important;
 }
 
 .myplaces-draw-point-light {
@@ -1035,7 +1115,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2978px 0px !important;
+    background-position: -3194px 0px !important;
 }
 
 .tool-history-back-dark {
@@ -1043,7 +1123,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3010px 0px !important;
+    background-position: -3226px 0px !important;
 }
 
 .tool-history-back-light {
@@ -1051,7 +1131,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3042px 0px !important;
+    background-position: -3258px 0px !important;
 }
 
 .tool-history-forward-dark {
@@ -1059,7 +1139,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3074px 0px !important;
+    background-position: -3290px 0px !important;
 }
 
 .tool-history-forward-light {
@@ -1067,7 +1147,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3106px 0px !important;
+    background-position: -3322px 0px !important;
 }
 
 .tool-measure-area-dark {
@@ -1075,7 +1155,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3138px 0px !important;
+    background-position: -3354px 0px !important;
 }
 
 .tool-measure-area-light {
@@ -1083,7 +1163,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3170px 0px !important;
+    background-position: -3386px 0px !important;
 }
 
 .tool-measure-line-dark {
@@ -1091,7 +1171,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3202px 0px !important;
+    background-position: -3418px 0px !important;
 }
 
 .tool-measure-line-light {
@@ -1099,7 +1179,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3234px 0px !important;
+    background-position: -3450px 0px !important;
 }
 
 .tool-zoombox-dark {
@@ -1107,7 +1187,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3266px 0px !important;
+    background-position: -3482px 0px !important;
 }
 
 .tool-zoombox-light {
@@ -1115,6 +1195,6 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3298px 0px !important;
+    background-position: -3514px 0px !important;
 }
 

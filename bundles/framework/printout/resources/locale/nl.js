@@ -1,17 +1,18 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "nl",
     "key": "Printout",
     "value": {
-        "title": "Print kaartbeeld",
-        "flyouttitle": "Print kaartbeeld",
+        "title": "Kaartbeeld afdrukken",
+        "flyouttitle": "Kaartbeeld afdrukken",
         "desc": "",
-        "btnTooltip": "Print",
+        "btnTooltip": "Afdrukken",
         "BasicView": {
-            "title": "Print kaartbeeld",
+            "title": "Kaartbeeld afdrukken",
             "name": {
                 "label": "Kaartnaam",
-                "placeholder": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED"
+                "placeholder": "vereist",
+                "tooltip": "Geef je kaart een beschrijvende naam. Let op de taal van de gebruikersinterface."
             },
             "language": {
                 "label": "Taal",
@@ -24,25 +25,30 @@ Oskari.registerLocalization({
             },
             "size": {
                 "label": "Grootte",
-                "tooltip": "Kies afdrukindeling| Voorbeeldkaart wordt dienovereenkomstig aangepast.",
-                "options": [{
-                    "id": "A4",
-                    "label": "A4 staand",
-                    "classForPreview": "preview-portrait",
-                    "selected": true
-                }, {
-                    "id": "A4_Landscape",
-                    "label": "A4 liggend",
-                    "classForPreview": "preview-landscape"
-                }, {
-                    "id": "A3",
-                    "label": "A3 staand",
-                    "classForPreview": "preview-portrait"
-                }, {
-                    "id": "A3_Landscape",
-                    "label": "A3 liggend",
-                    "classForPreview": "preview-landscape"
-                }]
+                "tooltip": "Kies afdrukindeling. Voorbeeldkaart wordt dienovereenkomstig aangepast.",
+                "options": [
+                    {
+                        "id": "A4",
+                        "label": "A4 staand",
+                        "classForPreview": "preview-portrait",
+                        "selected": true
+                    },
+                    {
+                        "id": "A4_Landscape",
+                        "label": "A4 liggend",
+                        "classForPreview": "preview-landscape"
+                    },
+                    {
+                        "id": "A3",
+                        "label": "A3 staand",
+                        "classForPreview": "preview-portrait"
+                    },
+                    {
+                        "id": "A3_Landscape",
+                        "label": "A3 liggend",
+                        "classForPreview": "preview-landscape"
+                    }
+                ]
             },
             "preview": {
                 "label": "Voorbeeld",
@@ -52,13 +58,11 @@ Oskari.registerLocalization({
                     "extent": "Voorbeeld kan worden gebruikt om er achter te komen wat de kaartomvang is voor de afdruk",
                     "restriction": "Niet alle kaartlagen worden getoond in het voorbeeld"
                 }
-
             },
-
             "buttons": {
                 "save": "Krijg afdruk",
                 "ok": "OK",
-                "back" : "NOT TRANSLATED",
+                "back": "Vorige",
                 "cancel": "Annuleren"
             },
             "location": {
@@ -73,89 +77,97 @@ Oskari.registerLocalization({
             "format": {
                 "label": "Formaat",
                 "tooltip": "Selecteer bestandsformaat",
-                "options": [{
-                    "id": "png",
-                    "format": "image/png",
-                    "label": "PNG afbeelding"
-                }, {
-                    "id": "pdf",
-                    "format": "application/pdf",
-                    "selected": true,
-                    "label": "PDF document"
-                }]
+                "options": [
+                    {
+                        "id": "png",
+                        "format": "image/png",
+                        "label": "PNG afbeelding"
+                    },
+                    {
+                        "id": "pdf",
+                        "format": "application/pdf",
+                        "selected": true,
+                        "label": "PDF document"
+                    }
+                ]
             },
             "mapTitle": {
                 "label": "Voeg titel toe",
                 "tooltip": "Voeg een titel toe aan de kaart"
             },
             "content": {
-                "options": [{
-                    "id": "pageLogo",
-                    "label": "Voeg het Oskari logo toe",
-                    "tooltip": "U kunt het logo indien nodig verbergen",
-                    "checked": "checked"
-                }, {
-                    "id": "pageScale",
-                    "label": "Voeg schaal toe aan de kaart",
-                    "tooltip": "Voeg schaal toe aan de kaart",
-                    "checked": "checked"
-                }, {
-                    "id": "pageDate",
-                    "label": "Voeg datum toe",
-                    "tooltip": "U kunt de datum toevoegen aan de afdruk",
-                    "checked": "checked"
-                }]
+                "options": [
+                    {
+                        "id": "pageLogo",
+                        "label": "Voeg het Oskari logo toe",
+                        "tooltip": "U kunt het logo indien nodig verbergen",
+                        "checked": "checked"
+                    },
+                    {
+                        "id": "pageScale",
+                        "label": "Voeg schaal toe aan de kaart",
+                        "tooltip": "Voeg schaal toe aan de kaart",
+                        "checked": "checked"
+                    },
+                    {
+                        "id": "pageDate",
+                        "label": "Voeg datum toe",
+                        "tooltip": "U kunt de datum toevoegen aan de afdruk",
+                        "checked": "checked"
+                    }
+                ]
             },
             "legend": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
-                "options": [{
-                    "id": "oskari_legend_NO",
-                    "loca": "NO",
-                    "label": "NOT TRANSLATED",
-                    "tooltip": "NOT TRANSLATED",
-                    "selected": true
-
-                }, {
-                    "id": "oskari_legend_LL",
-                    "loca": "LL",
-                    "label": "NOT TRANSLATED",
-                    "tooltip": "NOT TRANSLATED"
-
-                }, {
-                    "id": "oskari_legend_LU",
-                    "loca": "LU",
-                    "label": "NOT TRANSLATED",
-                    "tooltip": "NOT TRANSLATED"
-
-                }, {
-                    "id": "oskari_legend_RU",
-                    "loca": "RU",
-                    "label": "NOT TRANSLATED",
-                    "tooltip": "NOT TRANSLATED"
-
-                }, {
-                    "id": "oskari_legend_RL",
-                    "loca": "RL",
-                    "label": "NOT TRANSLATED",
-                    "tooltip": "NOT TRANSLATED"
-
-                }]
+                "label": "Kaart legenda",
+                "tooltip": "Kies een positie voor de kaart legenda. Als er geen positie is geselecteerd, wordt er geen kaartlegenda getoond in de kaart afdruk.",
+                "options": [
+                    {
+                        "id": "oskari_legend_NO",
+                        "loca": "NO",
+                        "label": "Geen kaart legenda",
+                        "tooltip": "De kaart legenda wordt niet getoond op de kaart afdruk",
+                        "selected": true
+                    },
+                    {
+                        "id": "oskari_legend_LL",
+                        "loca": "LL",
+                        "label": "Linksonder",
+                        "tooltip": "De kaart legenda wordt getoond linksonder op de afdruk"
+                    },
+                    {
+                        "id": "oskari_legend_LU",
+                        "loca": "LU",
+                        "label": "Linksboven",
+                        "tooltip": "De kaart legenda wordt getoond linksboven op de afdruk"
+                    },
+                    {
+                        "id": "oskari_legend_RU",
+                        "loca": "RU",
+                        "label": "Rechtsboven",
+                        "tooltip": "De kaart legenda wordt getoond rechtsboven op de afdruk"
+                    },
+                    {
+                        "id": "oskari_legend_RL",
+                        "loca": "RL",
+                        "label": "Rechtsonder",
+                        "tooltip": "De kaart legenda wordt getoond rechtsonder op de afdruk"
+                    }
+                ]
             },
             "help": "Help",
             "error": {
                 "title": "Fout",
-                "size": "NOT TRANSLATED",
-                "name": "NOT TRANSLATED",
+                "size": "Fout in grootte definities",
+                "name": "Naam is vereiste informatie",
                 "nohelp": "Er is geen hulp beschikbaar",
-                "saveFailed": "Kaart uitpinten mislukt. Probeer het later opnieuw.",
-                "nameIllegalCharacters": "NOT TRANSLATED"
+                "saveFailed": "Kaart afdrukken mislukt. Probeer het later opnieuw.",
+                "nameIllegalCharacters": "De naam bevat niet-toegestane tekens. Toegestane tekens zijn de letters a-z, evenals å, ä and ö, nummers, backspace en koppeltekens."
             }
         },
         "StartView": {
-            "text": "U kunt de kaartweergave die u zojuist gemaakt heeft gemaakt printen.",
+            "text": "U kunt de kaartweergave die u zojuist gemaakt heeft gemaakt afdrukken.",
             "info": {
-                "maxLayers": "U kunt maximaal 8 lagen in één keer uitprinten",
+                "maxLayers": "U kunt maximaal 8 lagen in één keer afdrukken",
                 "printoutProcessingTime": "Verwerking van de afdruk zal enige tijd duren wanneer meerdere lagen geselecteerd zijn."
             },
             "buttons": {
@@ -164,4 +176,5 @@ Oskari.registerLocalization({
             }
         }
     }
-});
+}
+);

@@ -36,19 +36,19 @@ Oskari.registerLocalization(
         "backendStatus": {
             "OK": {
                 "tooltip": "Shtresa e hartës aktualisht është në dispozicion",
-                "iconClass": "NOT TRANSLATED"
+                "iconClass": "backendstatus-ok"
             },
             "DOWN": {
                 "tooltip": "Shtresa e hartës aktualisht nuk është në dispozicion",
-                "iconClass": "NOT TRANSLATED"
+                "iconClass": "backendstatus-down"
             },
             "MAINTENANCE": {
                 "tooltip": "Shtresa e hartës gjatë disa ditëve të ardhshme herë pas here mund të mos jetë në dispozicion",
-                "iconClass": "NOT TRANSLATED"
+                "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
                 "tooltip": "",
-                "iconClass": "NOT TRANSLATED"
+                "iconClass": "backendstatus-ok"
             }
         },
         "buttons": {
@@ -60,6 +60,17 @@ Oskari.registerLocalization(
             "vk": "NOT TRANSLATED",
             "ak": "NOT TRANSLATED",
             "yk": "NOT TRANSLATED"
+        },
+        "layerFilter": {
+            "buttons": {
+                "newest": "Newest",
+                "stats": "Vector layers"
+            },
+            "tooltips": {
+                "newest": "Show ## newest map layers",
+                "stats": "Show only vector layers",
+                "remove": "Remove filter"
+            }
         }
     }
 }

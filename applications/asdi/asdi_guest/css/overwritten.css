@@ -32,7 +32,6 @@ table {
     }
     #contentMap {
         height: 100%;
-        margin-left: 153px;
     }
 
     img.panbuttonDivImg {
@@ -75,7 +74,8 @@ table {
     .oskari-flyouttoolbar {    
     	background-color: white !important; 
 		background-image: url('ASDI_web_header.jpg');
-		background-position: -150px -24px !important;
+		background-position: -170px -23px !important;
+        background-repeat: no-repeat;
     }
     
     .oskari-flyoutheading {
@@ -92,7 +92,6 @@ table {
   
     #logobar {
         height: 153px;
-        width: 153px;
         overflow: hidden;
         background-color: white;
         background-image: url('ASDI_web_header.jpg');
@@ -113,13 +112,6 @@ table {
         margin: 0px !important;
     }
     
-	div.oskari-flyout.oskari-attached {
-		max-width: 600px;
-	}
-	div.oskari-flyout.oskari-detached {
-		max-width: 600px;
-	}
-
 	div.layerselection2 .layer.selected div.layer-tools {
 		background-color: white !important;
 		padding: 7px !important;

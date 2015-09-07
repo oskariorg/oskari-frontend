@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "nl",
     "key": "MapModule",
     "value": {
@@ -23,13 +24,13 @@ Oskari.registerLocalization({
                 "terms": "Gebruiksvoorwaarden",
                 "dataSources": "Gegevensbronnen",
                 "layersHeader": "Kaartlagen",
-                "indicatorsHeader": "NOT TRANSLATED"
+                "indicatorsHeader": "Indicatoren"
             },
             "DataSourcePlugin": {
                 "link": "Gegevensbron",
                 "popup": {
                     "title": "Gegevensbronnen",
-                    "content": " "
+                    "content": "NIET VERTAALD"
                 },
                 "button": {
                     "close": "Sluiten"
@@ -51,11 +52,11 @@ Oskari.registerLocalization({
                 "column_type": "Type"
             },
             "GetInfoPlugin": {
-                "title": "Kaartlagen",
-                "layer": "NOT TRANSLATED",
-                "places": "NOT TRANSLATED",
+                "title": "Feature Data",
+                "layer": "Kaartlaag",
+                "places": "Features",
                 "description": "Beschrijving",
-                "link": "NOT TRANSLATED",
+                "link": "Webadres",
                 "name": "Naam"
             },
             "PublisherToolbarPlugin": {
@@ -70,9 +71,42 @@ Oskari.registerLocalization({
                     "area": "Meet gebied"
                 }
             },
+            "MarkersPlugin": {
+                "buttons": {
+                    "add": "Map marker",
+                    "clear": "Verwijder alle markers"
+                },
+                "form": {
+                    "title": "Point feature style",
+                    "tooltip": "",
+                    "symbol": {
+                        "label": "Icoon"
+                    },
+                    "size": {
+                        "label": "Grootte"
+                    },
+                    "color": {
+                        "label": "Kleur",
+                        "labelOr": "of",
+                        "labelCustom": "Aanpassen kleur (RGB 0-255)"
+                    },
+                    "preview": {
+                        "label": "Voorbeeld"
+                    },
+                    "message": {
+                        "label": "Tekst op de kaart",
+                        "hint": "Schrijf een bericht"
+                    }
+                },
+                "dialog": {
+                    "title": "Map marker",
+                    "message": "Selecteer een nieuwe lokatie for de marker door te klikken op de kaart"
+                }
+            },
             "MyLocationPlugin": {
-                "tooltip": "NOT TRANSLATED"
+                "tooltip": "Centreer kaart om de lokatie"
             }
         }
     }
-});
+}
+);

@@ -1,9 +1,6 @@
 {
     "startupSequence": [{
         "title": "OpenLayers",
-        "fi": "OpenLayers",
-        "sv": "?",
-        "en": "OpenLayers",
         "bundlename": "openlayers-default-theme",
         "bundleinstancename": "openlayers-default-theme",
         "metadata": {
@@ -14,15 +11,10 @@
                 "openlayers-full-map": {
                     "bundlePath": "../../../packages/openlayers/bundle/"
                 }
-            },
-            "Require-Bundle-Instance": []
-        },
-        "instanceProps": {}
+            }
+        }
     }, {
         "title": "Map",
-        "fi": "Map",
-        "sv": "?",
-        "en": "Map",
         "bundlename": "mapfull",
         "bundleinstancename": "mapfull",
         "metadata": {
@@ -30,14 +22,8 @@
                 "mapwmts": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 },
-                "mapwfs2": {
-                    "bundlePath": "../../../packages/framework/bundle/"
-                },
-                "mapstats": {
-                    "bundlePath": "../../../packages/framework/bundle/"
-                },
-                "mapanalysis": {
-                    "bundlePath": "../../../packages/framework/bundle/"
+                "maparcgis": {
+                    "bundlePath": "../../../packages/arcgis/bundle/"
                 },
                 "service-base": {
                     "bundlePath": "../../../packages/framework/bundle/"
@@ -89,19 +75,11 @@
                 },
                 "ui-components": {
                     "bundlePath": "../../../packages/framework/bundle/"
-                },
-                "mapmyplaces": {
-                    "bundlePath": "../../../packages/framework/bundle/"
                 }
-            },
-            "Require-Bundle-Instance": []
-        },
-        "instanceProps": {}
+            }
+        }
     }, {
         "title": "Oskari DIV Manazer",
-        "fi": "Oskari DIV Manazer",
-        "sv": "Oskari DIV Manazer",
-        "en": "Oskari DIV Manazer",
         "bundlename": "divmanazer",
         "bundleinstancename": "divmanazer",
         "metadata": {
@@ -109,15 +87,10 @@
                 "divmanazer": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 }
-            },
-            "Require-Bundle-Instance": []
-        },
-        "instanceProps": {}
+            }
+        }
     }, {
         "title": "InfoBox",
-        "fi": "infobox",
-        "sv": "?",
-        "en": "?",
         "bundlename": "infobox",
         "bundleinstancename": "infobox",
         "metadata": {
@@ -125,15 +98,10 @@
                 "infobox": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 }
-            },
-            "Require-Bundle-Instance": []
-        },
-        "instanceProps": {}
+            }
+        }
     }, {
         "title": "PostProcessor",
-        "fi": "PostProcessor",
-        "sv": "PostProcessor",
-        "en": "PostProcessor",
         "bundlename": "postprocessor",
         "bundleinstancename": "postprocessor",
         "metadata": {
@@ -141,50 +109,21 @@
                 "postprocessor": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 }
-            },
-            "Require-Bundle-Instance": []
-        },
-        "instanceProps": {}
-    }, {
-        "title": "Published Grid",
-        "bundleinstancename": "publishedgrid",
-        "fi": "publishedgrid",
-        "sv": "publishedgrid",
-        "en": "publishedgrid",
-        "bundlename": "publishedgrid",
-        "metadata": {
-            "Import-Bundle": {
-                "publishedgrid": {
-                    "bundlePath": "../../../packages/statistics/bundle/"
-                },
-                "geostats": {
-                    "bundlePath": "../../../packages/libraries/bundle/"
-                }
-            },
-            "Require-Bundle-Instance": []
-        },
-        "instanceProps": {}
+            }
+        }
     }, {
         "title": "Toolbar",
         "bundleinstancename": "toolbar",
-        "fi": "toolbar",
-        "sv": "?",
-        "en": "?",
         "bundlename": "toolbar",
         "metadata": {
             "Import-Bundle": {
                 "toolbar": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 }
-            },
-            "Require-Bundle-Instance": []
-        },
-        "instanceProps": {}
+            }
+        }
     }, {
         "title" : "publishedstatehandler",
-        "fi" : "publishedstatehandler",
-        "sv" : "publishedstatehandler",
-        "en" : "publishedstatehandler",
         "bundlename" : "publishedstatehandler",
         "bundleinstancename" : "publishedstatehandler",
         "metadata" : {
@@ -192,42 +131,7 @@
                 "publishedstatehandler" : {
                     "bundlePath" : "../../../packages/framework/bundle/"
                 }
-            },
-            "Require-Bundle-Instance" : []
-        },
-        "instanceProps" : {}
-    },
-    {
-        "title" : "Publishedmyplaces2",
-        "fi" : "publishedmyplaces2",
-        "sv" : "publishedmyplaces2",
-        "en" : "publishedmyplaces2",
-        "bundlename" : "publishedmyplaces2",
-        "bundleinstancename" : "publishedmyplaces2",
-        "metadata" : {
-            "Import-Bundle" : {
-                "publishedmyplaces2" : {
-                    "bundlePath" : "../../../packages/framework/bundle/"
-                }
-            },
-            "Require-Bundle-Instance" : []
-        },
-        "instanceProps" : {}
-    }, {
-        "title": "Featuredata",
-        "fi": "Kohdetiedot",
-        "sv": "?",
-        "en": "?",
-        "bundlename": "featuredata2",
-        "bundleinstancename": "featuredata2",
-        "metadata": {
-            "Import-Bundle": {
-                "featuredata2": {
-                    "bundlePath": "../../../packages/framework/bundle/"
-                }
-            },
-            "Require-Bundle-Instance": []
-        },
-        "instanceProps": {}
+            }
+        }
     }]
 }

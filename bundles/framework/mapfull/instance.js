@@ -505,7 +505,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 );
             }
 
-            me.getSandbox().syncMapState(true);
+            // mapmodule needed to set also param, because without it max zoomlevel check not working
+            me.getSandbox().syncMapState(true, mapmodule);
 
             // setting state
             if (state.selectedLayers) {

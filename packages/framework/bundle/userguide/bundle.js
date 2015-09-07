@@ -85,6 +85,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.userguide.UserGuideBundle", func
             "type": "text/javascript",
             "src": "../../../../bundles/framework/userguide/resources/locale/fi.js"
         }, {
+            "lang": "fr",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/userguide/resources/locale/fr.js"
+        }, {
             "lang": "el",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/userguide/resources/locale/el.js"
@@ -97,13 +101,29 @@ Oskari.clazz.define("Oskari.mapframework.bundle.userguide.UserGuideBundle", func
             "type": "text/javascript",
             "src": "../../../../bundles/framework/userguide/resources/locale/hu.js"
         }, {
+            "lang": "is",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/userguide/resources/locale/is.js"
+        }, {
+            "lang": "it",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/userguide/resources/locale/it.js"
+        }, {
             "lang": "lv",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/userguide/resources/locale/lv.js"
         }, {
+            "lang": "nb",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/userguide/resources/locale/nb.js"
+        }, {
             "lang": "nl",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/userguide/resources/locale/nl.js"
+        }, {
+            "lang": "nn",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/userguide/resources/locale/nn.js"
         }, {
             "lang": "pl",
             "type": "text/javascript",

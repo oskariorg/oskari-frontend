@@ -519,6 +519,45 @@
                 },
                 "Require-Bundle-Instance": []
             }
-        }
+		}, {
+			"bundlename" : "findbycoordinates",
+			"bundleinstancename" : "findbycoordinates",
+			"metadata" : {
+				"Import-Bundle" : {
+					"findbycoordinates" : {
+						"bundlePath" : "../../../packages/framework/bundle/"
+					}
+				}
+			}
+        }, {
+            "instanceProps": {},
+            "title": "ELF metadatafeedback",
+            "bundleinstancename": "elf-metadatafeedback",
+            "bundlename": "elf-metadatafeedback",
+            "metadata": {
+                "Import-Bundle": {
+                    "elf-metadatafeedback": {
+                        "bundlePath": "../../../packages/elf/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        }, {
+		    "title" : "myplacesimport",
+		    "fi" : "myplacesimport",
+		    "sv" : "myplacesimport",
+		    "en" : "myplacesimport",
+		    "bundlename" : "myplacesimport",
+		    "bundleinstancename" : "myplacesimport",
+		    "metadata" : {
+		        "Import-Bundle" : {
+		            "myplacesimport" : {
+		                "bundlePath" : "../../../packages/framework/bundle/"
+		            }
+		        },
+		        "Require-Bundle-Instance" : []
+		    },
+		    "instanceProps" : {}
+		}
     ]
 }

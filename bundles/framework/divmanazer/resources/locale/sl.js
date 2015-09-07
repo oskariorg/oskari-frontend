@@ -1,10 +1,22 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "sl",
     "key": "DivManazer",
     "value": {
+        "buttons": {
+            "add": "Dodaj",
+            "cancel": "Prekliči",
+            "close": "Zapri",
+            "delete": "Izbriši",
+            "edit": "Urejaj",
+            "exit": "Izhod",
+            "ok": "V redu",
+            "save": "Shrani",
+            "search": "Išči"
+        },
         "LanguageSelect": {
             "title": "Jezik",
-            "tooltip": "NOT TRANSLATED",
+            "tooltip": "Izberi jezik",
             "languages": {
                 "af": "afrikanščina",
                 "ak": "akanščina",
@@ -125,6 +137,132 @@ Oskari.registerLocalization({
                 "zh": "kitajščina",
                 "zu": "zulujščina"
             }
+        },
+        "VisualizationForm": {
+            "tooltips": {
+                "dot": "Urejaj slog točkovnega pojava",
+                "area": "Urejaj slog območja  pojava",
+                "line": "Urejaj slog linijskega pojava"
+            },
+            "dot": {
+                "title": "Slog točkovnega pojava",
+                "tooltip": "",
+                "symbol": {
+                    "label": "Ikona"
+                },
+                "size": {
+                    "label": "Velikost"
+                },
+                "color": {
+                    "label": "Barva",
+                    "labelOr": "ali",
+                    "labelCustom": "Uporabnikova barva (RGB 0-255)"
+                },
+                "preview": {
+                    "label": "Predogled"
+                },
+                "buttons": {
+                    "save": "Shrani",
+                    "cancel": "Prekliči"
+                }
+            },
+            "line": {
+                "title": "Slog linijskega pojava",
+                "tooltip": "",
+                "style": {
+                    "label": "Pomišljaj"
+                },
+                "cap": {
+                    "label": "Zaključki"
+                },
+                "corner": {
+                    "label": "Vogali"
+                },
+                "width": {
+                    "label": "Širina"
+                },
+                "color": {
+                    "label": "Barva",
+                    "labelOr": "ali",
+                    "labelCustom": "Uporabnikova barva (RGB 0-255)"
+                },
+                "preview": {
+                    "label": "Predogled"
+                },
+                "buttons": {
+                    "save": "Shrani",
+                    "cancel": "Prekliči"
+                }
+            },
+            "area": {
+                "title": "Slog območja",
+                "tooltip": "",
+                "linestyle": {
+                    "label": "Oblika linije"
+                },
+                "linecap": {
+                    "label": "Zaključek linije"
+                },
+                "linecorner": {
+                    "label": "Vogal linije"
+                },
+                "linewidth": {
+                    "label": "Širina linije"
+                },
+                "linecolor": {
+                    "label": "Barva linije",
+                    "labelOr": "ali",
+                    "labelCustom": "Uporabnikova barva (RGB 0-255)"
+                },
+                "color": {
+                    "label": "Barva polnila",
+                    "labelOr": "ali",
+                    "labelCustom": "Uporabnikova barva (RGB 0-255)"
+                },
+                "fill": {
+                    "label": "Struktura polnila"
+                },
+                "preview": {
+                    "label": "Predogled"
+                },
+                "buttons": {
+                    "save": "Shrani",
+                    "cancel": "Prekliči"
+                }
+            }
+        },
+        "Grid": {
+            "columnSelector": {
+                "title": "Lastnosti",
+                "tooltip": "Prikaži stolpce"
+            },
+            "export": {
+                "title": "Izvoz podatkov",
+                "export": "Izvoz",
+                "additional": {
+                    "title": "Dodatne možnosti",
+                    "dataSource": "Vir podatkov",
+                    "metadata": "Metapodatkovna povezava",
+                    "export_selection": "NOT TRANSLATED"
+                },
+                "columns": {
+                    "title": "Stolpci",
+                    "all": "Vsi",
+                    "visible": "Odprto"
+                },
+                "format": {
+                    "title": "Format datoteke",
+                    "xlsx": "Excel",
+                    "csv": "CSV"
+                },
+                "delimiter": {
+                    "title": "CSV-ločilo v datotekah",
+                    "comma": "Vejica",
+                    "semicolon": "Podpičje",
+                    "tabulator": "Tipka Tab"
+                }
+            }
         }
     }
-});
+}
+);

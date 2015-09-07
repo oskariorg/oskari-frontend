@@ -83,6 +83,10 @@ div.elf_license_dialog {
 	}
 }
 
+.elf_license_dialog_license_details.large {
+	height: 410px;
+}
+
 .elf_license_dialog_license_details {
 	display: none;
 	overflow: none;
@@ -111,15 +115,29 @@ div.elf_license_dialog {
 		}
 	}
 
-	.validto_summary{
+	.validto_summary {
 		font-weight: bold;
-		margin-top: 10px;
+		margin-top: 4px;
 		padding-top: 4px;
 		width: 100%;
 		.validto {
 			margin-left: 4px;
 			float: none;
 		}
+	}
+
+	.license_id {
+		font-weight: bold;
+		margin-top: 4px;
+		padding-top: 4px;
+		width: 100%;
+	}
+
+	.service_url {
+		font-weight: bold;
+		margin-top: 4px;
+		padding-top: 4px;
+		width: 100%;
 	}
 }
 
@@ -148,6 +166,14 @@ div.elf_license_dialog {
 
 			.elf_license_user_data {
 				padding: 4px;
+
+				.elf_license_input {
+					.license_enum_list {
+						list-style-type: none;
+						margin-left: 0;
+						padding-lefT: 0;
+					}
+				}
 			}
 		}
 	}
@@ -200,4 +226,12 @@ div.elf_license_dialog {
 	table tr td:first-child {
 		width:20%;
 	}
+}
+
+.elf_license_required {
+  color: #ff0000;
+}
+
+.elf_license_missing_valuelist {
+  padding-left: 10px;
 }

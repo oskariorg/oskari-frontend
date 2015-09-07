@@ -222,6 +222,14 @@ Oskari.registerLocalization(
                     "tooltip": "NOT TRANSLATED"
                 }
             }
+        },
+        "layerFilter": {
+            "buttons": {
+                "publishable": "Publishable"
+            },
+            "tooltips": {
+                "publishable": "Show only publishable map layers"
+            }
         }
     }
 }

@@ -30,14 +30,10 @@ function(instance) {
      * @method setEl
      * @param {Object} el
      *      reference to the container in browser
-     * @param {Number} width
-     *      container size(?) - not used
-     * @param {Number} height
-     *      container size(?) - not used
      *
      * Interface method implementation
      */
-    setEl : function(el, width, height) {
+    setEl : function(el) {
         this.container = jQuery(el);
     },
     /**
@@ -77,11 +73,9 @@ function(instance) {
     },
     /**
      * @method setState
-     * @param {Object} state
-     *      state that this component should use
      * Interface method implementation, does nothing atm
      */
-    setState : function(state) {
+    setState : function() {
     },
     /**
      * @method refresh

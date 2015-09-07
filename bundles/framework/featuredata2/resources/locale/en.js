@@ -11,14 +11,17 @@ Oskari.registerLocalization({
         "errorscale": "The feature data on this map layer cannot be shown on this scale level. Please change the scale level at scale bar.",
         "errordata": "The feature data at the server contains errors. Please update the map by moving it slightly.",
         "columnSelectorTooltip": "Select visible columns.",
-        "popup": {
+        "featureDataPopup" : "Aggregate values",
+        "selectionTools": {
             "title": "Select features on the map.",
             "instructions": " ",
+            "selectFromTop": "Select from the top layer",
+            "selectAll": "Select from all layers",
             "link": {
                 "title": "Select more features"
             },
             "button": {
-                "cancel": "Cancel",
+                "cancel": "Close",
                 "empty": "Remove selection",
                 "show": "Show features",
                 "close": "Close",

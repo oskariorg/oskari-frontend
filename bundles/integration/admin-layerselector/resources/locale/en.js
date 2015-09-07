@@ -112,6 +112,7 @@ Oskari.registerLocalization({
             "wmsNameDesc": "The unique name that identifies the map layer.",
             "username": "User name",
             "password": "Password",
+            "attributes": "Attributes",
             "addInspireName": "Theme name",
             "addInspireNameTitle": "The name of the Inspire theme.",
             "addOrganizationName": "Organization",
@@ -143,12 +144,19 @@ Oskari.registerLocalization({
             "gfiResponseTypeDesc": "Response type for Get Feature Info (GFI)",
             "gfiStyle": "GFI style (XSLT)",
             "gfiStyleDesc": "GFI style (XSLT)",
+            "manualRefresh": "Manual refresh",
             "matrixSetId": "WMTS TileMatrixSet ID",
             "matrixSetIdDesc": "The identifier for WMTS TileMatrixSet",
             "matrixSet": "JSON for WMTS layer",
             "matrixSetDesc": "JSON content for WMTS layer",
             "realtime": "Real time layer",
             "refreshRate": "Refresh rate (in seconds)",
+            "jobTypeDesc":"Job type",
+            "jobTypeDefault":"default",
+            "jobTypes": {
+                "default": "Default",
+                "fe": "Feature engine"
+            },
             "generic": {
                 "placeholder": "Name in {0}",
                 "descplaceholder": "Description in {0}"

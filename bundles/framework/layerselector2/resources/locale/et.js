@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "et",
     "key": "LayerSelector",
     "value": {
@@ -59,6 +60,18 @@ Oskari.registerLocalization({
             "vk": "NOT TRANSLATED",
             "ak": "NOT TRANSLATED",
             "yk": "NOT TRANSLATED"
+        },
+        "layerFilter": {
+            "buttons": {
+                "newest": "Newest",
+                "stats": "Vector layers"
+            },
+            "tooltips": {
+                "newest": "Show ## newest map layers",
+                "stats": "Show only vector layers",
+                "remove": "Remove filter"
+            }
         }
     }
-});
+}
+);

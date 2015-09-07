@@ -54,7 +54,7 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamTextElement',
                 readOnlyElement = jQuery('<div></div>'),
                 showInput = true;
 
-            if(readOnly && readOnly === true) {
+            if(readOnly) {
                 showInput = false;
             }
 
@@ -62,13 +62,14 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamTextElement',
                 title = param.name;
             }
 
-            if(showInput === true) {
+            if(showInput) {
                 data.append('<input type="text"></input>');
                 input = data.find('input');
                 if(param.values[0] && param.values[0] !== null) {
                     value = param.values[0];
                 }
                 input.val(value);
+                title += ' <span class="elf_license_required">*</span>';
             } else {
                 jQuery.each(param.values, function(index, value){
                     var valueEl = readOnlyElement.clone();
@@ -80,7 +81,7 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamTextElement',
 
             // Add data to element
             data.attr('data-name', param.name);
-            data.attr('data-title', title);
+            data.attr('data-title', param.title || param.name);
             data.attr('data-element-type', 'text');
             data.attr('data-read-only', readOnly);
 

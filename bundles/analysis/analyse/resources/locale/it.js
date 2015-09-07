@@ -6,7 +6,13 @@ Oskari.registerLocalization({
         "flyouttitle": "Analisi <font color=red>(BETA)</font>",
         "desc": "",
         "btnTooltip": "Analisi",
-        "notLoggedIn": "Solo gli utenti registrati possono fare analisi. <a href='/web/en/login'>Log in</a>.",
+        "NotLoggedView": {
+            "text": "Solo gli utenti registrati possono fare analisi.",
+            "signup": "Accedi",
+            "signupUrl": "/web/en/login",
+            "register": "Registrati",
+            "registerUrl": "/web/en/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+        },
         "AnalyseView": {
             "title": "Analisi",
             "content": {
@@ -72,6 +78,13 @@ Oskari.registerLocalization({
                                 "message": "NOT TRANSLATED"
                             }
                         }
+                    }
+                },
+                "selectionTools": {
+                    "title": "NOT TRANSLATED",
+                    "description": "NOT TRANSLATED",
+                    "button": {
+                        "empty": "Rimuovi selezione"
                     }
                 },
                 "search": {
@@ -154,7 +167,8 @@ Oskari.registerLocalization({
                     "id": "oskari_analyse_NoDataCnt",
                     "label": "Unauthorized features"
                 }],
-                "attribute": "Scegli un attributo"
+                "attribute": "Scegli un attributo",
+                "footer" : "Authorised features are not counted"
             },
             "buffer_size": {
                 "label": "Dimensione Buffer",
@@ -238,14 +252,18 @@ Oskari.registerLocalization({
                 "refreshButton": "Aggiorna filtri",
                 "addFilter": "Aggiungi un nuovo filtro",
                 "removeFilter": "Rimuovi filtri",
+                "content": {
+                    "title": "NOT TRANSLATED"
+                },
                 "bbox": {
-                    "title": "Mappa dei filtri",
                     "on": "In uso",
                     "off": "Non in uso"
                 },
                 "clickedFeatures": {
-                    "title": "Filtri sulle feature",
-                    "label": "Includi solo le feature selezionate"
+                    "clickedFeaturesLabel": "Includi solo le feature selezionate",
+                    "filterByGeometryLabel": "NOT TRANSLATED",
+                    "filterByGeometryIntersect": "NOT TRANSLATED",
+                    "filterByGeometryContains": "NOT TRANSLATED"
                 },
                 "values": {
                     "title": "Filter",
@@ -255,6 +273,10 @@ Oskari.registerLocalization({
                         "boolean": "Operatore logico",
                         "operator": "Operatore",
                         "attribute-value": "Valore"
+                    },
+                    "info": {
+                        "bboxOff":"NOT TRANSLATED",
+                        "filterByGeometrySelected":"NOT TRANSLATED"
                     },
                     "equals": "=",
                     "like": "~=",
@@ -270,7 +292,8 @@ Oskari.registerLocalization({
                     "attribute_missing": "Manca l'attributo",
                     "operator_missing": "Manca l'operatore",
                     "value_missing": "Manca il valore",
-                    "boolean_operator_missing": "Manca l'operatore logico"
+                    "boolean_operator_missing": "Manca l'operatore logico",
+                    "bbox_selected_with_no_properties":"NOT TRANSLATED"
                 }
             },
             "help": "Help",

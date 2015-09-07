@@ -1,0 +1,70 @@
+div.mapplugin.coordinatetool {
+  position: relative;
+  margin: 0 auto;
+  z-index: 15000;
+  cursor: pointer;
+  width: 35px;
+  height: 35px;
+  margin-bottom: 10px !important;
+  background-repeat: no-repeat !important; }
+
+div.coordinatetool__popup {
+  width: 280px;
+  height: 340px;
+  display: none;
+  z-index: 15000;
+  background-color: #ffffff; }
+  div.coordinatetool__popup div.coordinatetool__close {
+    position: absolute;
+    top: 8px;
+    right: 5px; }
+  div.coordinatetool__popup div.content {
+    height: 215px; }
+  div.coordinatetool__popup div.actions {
+    float: right; }
+  div.coordinatetool__popup div.clear {
+    clear: both; }
+  div.coordinatetool__popup div.coordinatetool__popup__content {
+    font-style: italic; }
+    div.coordinatetool__popup div.coordinatetool__popup__content .floatleft {
+      float: left; }
+    div.coordinatetool__popup div.coordinatetool__popup__content .clear {
+      clear: both; }
+  div.coordinatetool__popup div.content .srs {
+    color: #b3b3b3;
+    font-size: 12px; }
+  div.coordinatetool__popup div.content .margintop {
+    margin-top: 10px; }
+
+.coordinate-label {
+  width: 56px;
+  padding-top: 7px; }
+
+div.mapplugin.coordinatetool.toolstyle-default {
+  background-image: url('../images/coordinates-style1-dark.png') !important; }
+  div.mapplugin.coordinatetool.toolstyle-default .active {
+    background-image: url('../images/coordinates-style1-dark-active.png') !important; }
+div.mapplugin.coordinatetool.toolstyle-rounded-dark {
+  background-image: url('../images/coordinates-style1-dark.png') !important; }
+  div.mapplugin.coordinatetool.toolstyle-rounded-dark .active {
+    background-image: url('../images/coordinates-style1-dark-active.png') !important; }
+div.mapplugin.coordinatetool.toolstyle-rounded-light {
+  background-image: url('../images/coordinates-style1-light.png') !important; }
+  div.mapplugin.coordinatetool.toolstyle-rounded-light .active {
+    background-image: url('../images/coordinates-style1-light-active.png') !important; }
+div.mapplugin.coordinatetool.toolstyle-sharp-dark {
+  background-image: url('../images/coordinates-style2-dark.png') !important; }
+  div.mapplugin.coordinatetool.toolstyle-sharp-dark .active {
+    background-image: url('../images/coordinates-style2-dark-active.png') !important; }
+div.mapplugin.coordinatetool.toolstyle-sharp-light {
+  background-image: url('../images/coordinates-style2-light.png') !important; }
+  div.mapplugin.coordinatetool.toolstyle-sharp-light .active {
+    background-image: url('../images/coordinates-style2-light-active.png') !important; }
+div.mapplugin.coordinatetool.toolstyle-3d-dark {
+  background-image: url('../images/coordinates-style3-dark.png') !important; }
+  div.mapplugin.coordinatetool.toolstyle-3d-dark .active {
+    background-image: url('../images/coordinates-style3-dark-active.png') !important; }
+div.mapplugin.coordinatetool.toolstyle-3d-light {
+  background-image: url('../images/coordinates-style3-light.png') !important; }
+  div.mapplugin.coordinatetool.toolstyle-3d-light .active {
+    background-image: url('../images/coordinates-style3-light-active.png') !important; }

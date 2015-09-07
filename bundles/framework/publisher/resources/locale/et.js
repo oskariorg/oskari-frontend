@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "et",
     "key": "Publisher",
     "value": {
@@ -49,8 +50,10 @@ Oskari.registerLocalization({
                 "IndexMapPlugin": "Indekskaart",
                 "PanButtons": "Liikumise tööriist",
                 "Portti2Zoombar": "Mõõtkava kerimisriba",
+                "MyLocationPlugin": "NOT TRANSLATED",
                 "ControlsPlugin": "Liikumine sisselülitatud",
                 "SearchPlugin": "Aadressi ja kohanime otsing",
+                "FeaturedataPlugin": "NOT TRANSLATED",
                 "GetInfoPlugin": "Koha andmete päring",
                 "PublisherToolbarPlugin": "NOT TRANSLATED",
                 "selectDrawLayer": "NOT TRANSLATED"
@@ -60,6 +63,7 @@ Oskari.registerLocalization({
                 "history_forward": "NOT TRANSLATED",
                 "measureline": "NOT TRANSLATED",
                 "measurearea": "NOT TRANSLATED",
+                "drawTools": "NOT TRANSLATED",
                 "point": "NOT TRANSLATED",
                 "line": "NOT TRANSLATED",
                 "area": "NOT TRANSLATED"
@@ -128,8 +132,8 @@ Oskari.registerLocalization({
             },
             "layers": {
                 "add": "NOT TRANSLATED",
-                "addselect": "NOT TRANSLATED",
                 "label": "Kaardikihid",
+                "addselect": "NOT TRANSLATED",
                 "defaultLayer": "(Vaikimisi kiht)",
                 "useAsDefaultLayer": "Kasuta kui vaikimisi kihti"
             },
@@ -220,6 +224,15 @@ Oskari.registerLocalization({
                     "tooltip": "Kaardikihti võib avaldada põimitud kaardiaknas ja kasutajate arvu nädalas võib piirata."
                 }
             }
+        },
+        "layerFilter": {
+            "buttons": {
+                "publishable": "Publishable"
+            },
+            "tooltips": {
+                "publishable": "Show only publishable map layers"
+            }
         }
     }
-});
+}
+);

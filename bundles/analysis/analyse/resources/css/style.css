@@ -21,6 +21,15 @@ div.analyse div.startview div.error ul li {
 div.analyse div.startview div.icon-info {
   float: right; }
 
+div.analyse-featurelist ul {
+  margin-top: 10px;
+  margin-bottom: 15px; }
+div.analyse-featurelist li {
+  list-style-type: none; }
+
+div.analyse-startview-label {
+  margin-top: 20px; }
+
 div.basic_analyse > div.content {
   overflow: auto;
   height: 89%;
@@ -138,11 +147,29 @@ div.basic_analyse select.settings_buffer_units, div.basic_analyse select.setting
   font-weight: bold;
   margin: 5px 0; }
 
+.extra_title_label {
+  display: inline; }
+
+.analyse_output_cont .columns_title_label {
+  display: inline-block;
+  width: 80%; }
+
+.analyse_title_columns {
+  display: inline-block; }
+
 .analyse_settings_cont {
   margin: 10px 5px; }
 
 .analyse_title_colcont {
   margin: 10px 5px; }
+
+.params-icon-info {
+  margin-right: 5px;
+  margin-top: 5px; }
+
+.columns-icon-info {
+  margin-right: 5px;
+  margin-top: 10px; }
 
 /* Buttons */
 div.basic_analyse div.buttons, div.analyse div.startview div.buttons {
@@ -188,32 +215,19 @@ div.analyse-filter-popup-content {
     div.analyse-filter-popup-content div.analyse-filter:last-child {
       border-bottom: none;
       padding-bottom: 0; }
-  div.analyse-filter-popup-content div.analyse-filter-clicked-features div.clicked-features-title, div.analyse-filter-popup-content div.analyse-filter-clicked-features div.clicked-features-checkboxes {
+  div.analyse-filter-popup-content div.filter-selections-title, div.analyse-filter-popup-content div.filter-selection-radios {
     display: inline-block; }
-  div.analyse-filter-popup-content div.analyse-filter-clicked-features div.clicked-features-title {
+  div.analyse-filter-popup-content div.filter-selections-title {
     float: left; }
-  div.analyse-filter-popup-content div.analyse-filter-clicked-features div.filter-by-geometry-checkbox, div.analyse-filter-popup-content div.analyse-filter-clicked-features div.clicked-features-checkbox {
-    margin-left: 25px;
-    margin-top: 5px; }
-  div.analyse-filter-popup-content div.analyse-filter-clicked-features div.filter-by-geometry-checkbox {
-    margin-bottom: 5px; }
-  div.analyse-filter-popup-content div.analyse-filter-clicked-features div.filter-by-geometry-radio {
-    display: inline-block;
-    margin-left: 50px !important; }
-  div.analyse-filter-popup-content div.analyse-filter-clicked-features label {
-    margin-left: 8px; }
-  div.analyse-filter-popup-content div.analyse-filter-clicked-features input:disabled + label {
-    opacity: 0.5; }
-  div.analyse-filter-popup-content div.bbox-title, div.analyse-filter-popup-content div.bbox-radio {
-    display: inline-block; }
-  div.analyse-filter-popup-content div.bbox-title {
-    float: left; }
-  div.analyse-filter-popup-content div.bbox-radio {
+  div.analyse-filter-popup-content div.filter-selection-radios {
     margin-left: 25px; }
-    div.analyse-filter-popup-content div.bbox-radio div.bbox-on, div.analyse-filter-popup-content div.bbox-radio div.bbox-off {
+    div.analyse-filter-popup-content div.filter-selection-radios div.bbox-on, div.analyse-filter-popup-content div.filter-selection-radios div.bbox-off {
       margin-top: 5px; }
-    div.analyse-filter-popup-content div.bbox-radio input:disabled + label {
+    div.analyse-filter-popup-content div.filter-selection-radios input:disabled + label {
       opacity: 0.5; }
+  div.analyse-filter-popup-content div.filter-by-geometry-methods {
+    display: inline-block;
+    margin-left: 25px !important; }
 
 div.analyse-filter-popup-content div.filter-option {
   padding-bottom: 10px;
@@ -271,3 +285,6 @@ div.divmanazerpopup.drawfilterdialog {
   max-width: 400px; }
 div.divmanazerpopup.analyse-draw-dialog {
   max-width: 280px; }
+
+div.analyse-result-popup-content {
+  overflow: auto; }

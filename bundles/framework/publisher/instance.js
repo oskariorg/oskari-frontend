@@ -71,7 +71,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
                 sandbox = Oskari.getSandbox(sandboxName),
                 request,
-                p;
+                p,
+                loc = this.getLocalization();
 
             if (me.started) {
                 return;
@@ -92,6 +93,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
             //Let's extend UI
             request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
             sandbox.request(this, request);
+
+            // Let's add publishable filter to layerlist if enabled in conf
+            if(me.conf.showPublishableFilter && me.conf.showPublishableFilter === true) {
+                request = sandbox.getRequestBuilder('AddLayerListFilterRequest')(
+                    loc.layerFilter.buttons.publishable,
+                    loc.layerFilter.tooltips.publishable,
+                    function(layer){
+                        return (layer.getPermission('publish') === 'publication_permission_ok');
+                    },
+                    'layer-publishable',
+                    'layer-publishable-disabled',
+                    'publishable'
+                );
+
+                sandbox.request(this, request);
+            }
 
             //sandbox.registerAsStateful(this.mediator.bundleId, this);
             // draw ui

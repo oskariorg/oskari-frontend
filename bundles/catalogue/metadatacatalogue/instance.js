@@ -27,9 +27,8 @@ Oskari.clazz.define(
             title: this.getLocalization('grid').name,
             prop: 'name'
         }, {
-            title: '', // this.getLocalization('grid').rating,
+            title: '',
             tooltip: ''
-//            prop: 'rating'
         }, {
             title: '',
             tooltip: this.getLocalization('grid').showBBOX,
@@ -136,7 +135,7 @@ Oskari.clazz.define(
                 '  <td></td>' +
                 '  <td></td>' +
                 '  <td><div class="actionPlaceholder"></div></td>' +
-                '  <td><div class="showBbox icon-zoomto"></div></td>' +
+                '  <td><div class="showBbox icon-info-area"></div></td>' +
                 '  <td><div class="layerInfo icon-info"></div></td>' +
                 '  <td><div class="resultRemove icon-close"></div></td>' +
                 '</tr>'
@@ -358,6 +357,7 @@ Oskari.clazz.define(
         _removeFeaturesFromMap: function(identifier, value, layer){
             var me = this,
                 rn = 'MapModulePlugin.RemoveFeaturesFromMapRequest';
+            me._unactiveShowInfoAreaIcons();
             me.sandbox.postRequestByName(rn, [identifier, value, layer]);
         },
         /**
@@ -707,7 +707,7 @@ Oskari.clazz.define(
                 enableTransform: true
             };
 
-            this.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin', config);
+            this.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin', config, me.sandbox);
             mapModule.registerPlugin(this.selectionPlugin);
             mapModule.startPlugin(this.selectionPlugin);
             this.selectionPlugin.startDrawing({drawMode: 'square'});
@@ -1032,8 +1032,19 @@ Oskari.clazz.define(
                             jQuery(cells[3]).addClass(me.resultHeaders[2].prop);
                             jQuery(cells[3]).attr('title', me.resultHeaders[2].tooltip);
                             jQuery(cells[3]).find('div.showBbox').click(function () {
-                                var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
-                                me.sandbox.postRequestByName(rn, [row.geom, 'WKT', {id:row.id}, null, 'replace', true, style, true]);
+                                // If show info area is active, remove geom from map
+                                if(jQuery(this).hasClass('icon-info-area-active')){
+                                    me._removeFeaturesFromMap();
+                                    jQuery(this).parent().attr('title', me.getLocalization('grid').showBBOX);
+                                }
+                                // Else show info area is not active, add geom to map
+                                else {
+                                    var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
+                                    me.sandbox.postRequestByName(rn, [row.geom, 'WKT', {id:row.id}, null, 'replace', true, style, true]);
+                                    me._unactiveShowInfoAreaIcons();
+                                    jQuery(this).removeClass('icon-info-area').addClass('icon-info-area-active');
+                                    jQuery(this).parent().attr('title', me.getLocalization('grid').removeBBOX);
+                                }
                             });
                         } else {
                             jQuery(cells[3]).find('div.showBbox').hide();
@@ -1061,6 +1072,17 @@ Oskari.clazz.define(
                     resultsTableBody.append(resultContainer);
                 })(i);
             }
+        },
+        /**
+        * Unactive show info area icons.
+        * @method _unactiveShowInfoAreaIcons
+        * @private
+        */
+        _unactiveShowInfoAreaIcons: function(){
+            jQuery('table.metadataSearchResult tr.resultRow td.showBbox div.showBbox')
+                .removeClass('icon-info-area-active')
+                .removeClass('icon-info-area')
+                .addClass('icon-info-area');
         },
         _addLayerLinks: function (layer, layerList) {
             var me = this,

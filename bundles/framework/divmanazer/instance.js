@@ -689,6 +689,10 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
             }
             extensionsByName = this.extensionsByName;
             extensionInfo = extensionsByName[extension.getName()];
+            if(!extensionInfo) {
+                // tried to control non-existing extension
+                return;
+            }
             extensionState = extensionInfo.state;
 
             state = request.getState();
@@ -1071,6 +1075,10 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
 
                 viewState = me.getFlyoutViewState(flyout, 'attach');
                 extensionInfo.viewState = viewState;
+
+                if (flyoutPlugin.onOpen) {
+                    flyoutPlugin.onOpen();
+                }
             },
 
             /** @method minimize */
@@ -1099,6 +1107,10 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
                     viewState: 'close'
                 };
                 me.applyTransition(flyout, 'close', me.flyoutTransitions);
+
+                if(flyoutPlugin.onClose) {
+                    flyoutPlugin.onClose();
+                }
             }
         },
 

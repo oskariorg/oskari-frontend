@@ -3,13 +3,13 @@ Oskari.registerLocalization(
     "lang": "sv",
     "key": "MapModule",
     "value": {
-        "status_update_map": "Uppdaterar kartan",
+        "status_update_map": "Laddar kartan…",
         "zoombar_tooltip": {
             "zoomLvl-0": "Bakgrundskarta",
-            "zoomLvl-1": "Hela landet",
-            "zoomLvl-2": "Landskap",
+            "zoomLvl-1": "Land",
+            "zoomLvl-2": "provins",
             "zoomLvl-3": "",
-            "zoomLvl-4": "Kommun",
+            "zoomLvl-4": "Stad",
             "zoomLvl-5": "",
             "zoomLvl-6": "",
             "zoomLvl-7": "Stadsdel",
@@ -21,16 +21,16 @@ Oskari.registerLocalization(
         },
         "plugin": {
             "LogoPlugin": {
-                "terms": "Användningsvillkor",
+                "terms": "Användarvillkor",
                 "dataSources": "Datakällor",
                 "layersHeader": "Kartlager",
-                "indicatorsHeader": "Indikator"
+                "indicatorsHeader": "Indikatorer"
             },
             "DataSourcePlugin": {
                 "link": "Datakälla",
                 "popup": {
                     "title": "Datakällor",
-                    "content": "NOT TRANSLATED"
+                    "content": "INTE ÖVERSATT"
                 },
                 "button": {
                     "close": "Stäng"
@@ -38,23 +38,23 @@ Oskari.registerLocalization(
             },
             "LayerSelectionPlugin": {
                 "title": "Kartlager",
-                "chooseDefaultBaseLayer": "Välj bottenkarta"
+                "chooseDefaultBaseLayer": "Välj bakgrundskarta"
             },
             "SearchPlugin": {
                 "placeholder": "Sök plats/adress",
                 "search": "Sök",
                 "title": "Sökresultat",
-                "close": "Stäng sökresultat",
-                "noresults": "Inga träffar",
-                "toomanyresults": "Över 100 träffar, avgränsa sökningen.",
+                "close": "Stäng sökresultat.",
+                "noresults": "Inga resultat hittades. Vänligen avgränsa din sökning.",
+                "toomanyresults": "Över 100 träffar hittades. Vänligen avgränsa din sökning.",
                 "column_name": "Namn",
                 "column_village": "Kommun",
                 "column_type": "Typ"
             },
             "GetInfoPlugin": {
                 "title": "Objektuppgifter",
-                "layer": "Lagret",
-                "places": "Object",
+                "layer": "Kartlager",
+                "places": "Egenskaper",
                 "description": "Beskrivning",
                 "link": "URL-address",
                 "name": "Namn"
@@ -63,8 +63,8 @@ Oskari.registerLocalization(
                 "test": "test",
                 "history": {
                     "reset": "Tillbaka till standardvyn",
-                    "back": "Föregående",
-                    "next": "Nästa"
+                    "back": "Tillbaka till föregående vy",
+                    "next": "Flytta till nästa vy"
                 },
                 "measure": {
                     "line": "Mät avstånd",
@@ -73,11 +73,11 @@ Oskari.registerLocalization(
             },
             "MarkersPlugin": {
                 "buttons": {
-                    "add": "Kartanteckning",
-                    "clear": "Ta bort alla anteckningar"
+                    "add": "Kartmarkör",
+                    "clear": "Ta bort alla markörer"
                 },
                 "form": {
-                    "title": "Stil för punkt objekt",
+                    "title": "Punktens stil",
                     "tooltip": "",
                     "symbol": {
                         "label": "Ikon"
@@ -94,17 +94,17 @@ Oskari.registerLocalization(
                         "label": "Förhandsgranskning"
                     },
                     "message": {
-                        "label": "Text på kartan",
-                        "hint": "Skriv en text för att visa den på kartan."
+                        "label": "Texten på kartan",
+                        "hint": "Skriv ett meddelande"
                     }
                 },
                 "dialog": {
-                    "title": "Kartanteckning",
-                    "message": "Välj en ny position till kartanteckning genom att klicka kartan."
+                    "title": "Kartmarkör",
+                    "message": "Välj en ny plats för markören genom att klicka på kartan."
                 }
             },
             "MyLocationPlugin": {
-                "tooltip": "Centrera kartan på din position"
+                "tooltip": "Centrera kartan till din plats"
             }
         }
     }

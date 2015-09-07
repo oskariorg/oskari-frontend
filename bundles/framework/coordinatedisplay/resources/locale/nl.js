@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "nl",
     "key": "coordinatedisplay",
     "value": {
@@ -6,13 +7,14 @@ Oskari.registerLocalization({
         "desc": "",
         "display": {
             "crs": {
-                "EPSG:3067": "ETRS89-TM35FIN"
+                "EPSG:3067": "ETRS89-TM35FIN",
+                "EPSG:3575": "Noord Pool LAEA Europa"
             },
             "compass": {
-                "N": "N: ",
-                "E": "O: "
+                "N": "N:",
+                "E": "O:"
             }
         }
-
     }
-});
+}
+);

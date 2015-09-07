@@ -36,9 +36,45 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
             "type": "text/javascript",
             "src": "../../../../bundles/framework/findbycoordinates/resources/locale/en.js"
         }, {
+            "lang": "es",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/findbycoordinates/resources/locale/es.js"
+        }, {
+            "lang": "et",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/findbycoordinates/resources/locale/et.js"
+        }, {
             "lang": "fi",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/findbycoordinates/resources/locale/fi.js"
+        }, {
+            "lang": "fr",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/findbycoordinates/resources/locale/fr.js"
+        }, {
+            "lang": "is",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/findbycoordinates/resources/locale/is.js"
+        }, {
+            "lang": "it",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/findbycoordinates/resources/locale/it.js"
+        }, {
+            "lang": "nb",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/findbycoordinates/resources/locale/nb.js"
+        }, {
+            "lang": "nl",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/findbycoordinates/resources/locale/nl.js"
+        }, {
+            "lang": "nn",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/findbycoordinates/resources/locale/nn.js"
+        }, {
+            "lang": "sk",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/findbycoordinates/resources/locale/sk.js"
         }, {
             "lang": "sv",
             "type": "text/javascript",

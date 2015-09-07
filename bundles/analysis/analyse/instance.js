@@ -141,6 +141,10 @@ Oskari.clazz.define(
             if (conf && conf.stateful === true) {
                 sandbox.registerAsStateful(me.mediator.bundleId, me);
             }
+
+            me.WFSLayerService = me.sandbox.getService('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
+
+            this.__addTab();
         },
 
         /**
@@ -179,30 +183,42 @@ Oskari.clazz.define(
         },
 
         /**
+         * Adds a tab for analysis layers in PersonalData
+         */
+        __addTab : function() {
+            if(this.personalDataTab) {
+                // already added
+                return;
+            }
+            var reqBuilder = this.sandbox.getRequestBuilder(
+                'PersonalData.AddTabRequest'
+            );
+
+            if (!reqBuilder) {
+                // request not ready
+                return;
+            }
+            // Request tab to be added to personal data
+            var tab = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.analyse.view.PersonalDataTab',
+                this,
+                this.localization.personalDataTab
+            );
+            this.personalDataTab = tab;
+            this.sandbox.request(
+                this,
+                reqBuilder(
+                    this.localization.personalDataTab.title,
+                    tab.getContent()
+                )
+            );
+        },
+        /**
          * @static @property {Object} eventHandlers
          */
         eventHandlers: {
             'Personaldata.PersonaldataLoadedEvent': function (event) {
-                // Request tab to be added to personal data
-                var tab = Oskari.clazz.create(
-                    'Oskari.mapframework.bundle.analyse.view.PersonalDataTab',
-                    this,
-                    this.localization.personalDataTab
-                );
-                var reqBuilder = this.sandbox.getRequestBuilder(
-                    'PersonalData.AddTabRequest'
-                );
-
-                if (reqBuilder) {
-                    this.sandbox.request(
-                        this,
-                        reqBuilder(
-                            this.localization.personalDataTab.title,
-                            tab.getContent()
-                        )
-                    );
-                }
-                this.personalDataTab = tab;
+                this.__addTab();
             },
             MapLayerVisibilityChangedEvent: function (event) {
                 if (this.analyse && this.analyse.isEnabled && this.isMapStateChanged) {
@@ -384,6 +400,7 @@ Oskari.clazz.define(
                 ),
                 tools = jQuery('#maptools');
 
+
             if (blnEnabled) {
                 map.addClass('mapAnalyseMode');
                 me.sandbox.mapMode = 'mapAnalyseMode';
@@ -413,7 +430,7 @@ Oskari.clazz.define(
                 }
                 this.analyse.show();
                 this.analyse.setEnabled(true);
-
+                me.WFSLayerService.setSelectFromAllLayers(false);
             } else {
                 map.removeClass('mapAnalyseMode');
                 if (me.sandbox._mapMode === 'mapAnalyseMode') {
@@ -425,8 +442,10 @@ Oskari.clazz.define(
                     me.sandbox.request(me.getName(), request);
                     this.analyse.setEnabled(false);
                     this.analyse.contentPanel._deactivateSelectControls();
+                    this.analyse.contentPanel._deactivateSelectTools();
                     this.analyse.hide();
                 }
+                me.WFSLayerService.setAnalysisWFSLayerId(null);
             }
             var reqBuilder = me.sandbox.getRequestBuilder(
                 'MapFull.MapSizeUpdateRequest'

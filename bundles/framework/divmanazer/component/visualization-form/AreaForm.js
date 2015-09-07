@@ -98,7 +98,7 @@ Oskari.clazz.define(
             '<label>' + this.loc.linecolor.labelOr + '</label>' +
             '</div>' +
             '<div class="color-source-selector-line">' +
-            '<label>' + this.loc.linecolor.labelCustom + '</label>' +
+            '<label for="color-checkbox-0">' + this.loc.linecolor.labelCustom + '</label>' +
             '</div>' +
             '<div class="custom-colors-line"></div>' +
             '</div>' +
@@ -112,7 +112,7 @@ Oskari.clazz.define(
             '<label>' + this.loc.color.labelOr + '</label>' +
             '</div>' +
             '<div class="color-source-selector-fill">' +
-            '<label>' + this.loc.color.labelCustom + '</label>' +
+            '<label for="color-checkbox-1">' + this.loc.color.labelCustom + '</label>' +
             '</div>' +
             '<div class="custom-colors-fill"></div>' +
             '<label>' + this.loc.fill.label + '</label>' +
@@ -314,7 +314,7 @@ Oskari.clazz.define(
                             }
                             jQuery('#' + activeCell + colorType + 'ColorCell').css('border', '1px solid #000000');
                         }
-                        me.values[colorType === 0 ? 'lineColor' : 'fillColor'] = me.creator.rgbToHex(this.style.backgroundColor);
+                        me.values[colorType === 0 ? 'lineColor' : 'fillColor'] = Oskari.util.rgbToHex(this.style.backgroundColor);
                         me.activeColorCell[colorType] = cellIndex;
                         if (cellIndex < 10) {
                             cellIndex = '0' + cellIndex.toString();
@@ -335,13 +335,13 @@ Oskari.clazz.define(
                 // Custom color
                 content = dialogContent.find('.color-source-selector-' + me.colorTypes[c]);
                 colorCheckbox = me.templateColorSource.clone();
-                colorCheckbox.attr('id', c + 'color-checkbox');
+                colorCheckbox.attr('id', 'color-checkbox-' + c);
                 // If the default value is not included in the color cells
                 if (me.activeColorCell[c] === -1) {
                     colorCheckbox.attr('checked', true);
                 }
                 colorCheckbox.change(function () {
-                    var colorTypeId = this.id.substring(0, 1);
+                    var colorTypeId = this.id.substring(this.id.length-1, this.id.length);
                     var colorType = (colorTypeId === '0') ? 'lineColor' : 'fillColor';
                     jQuery('input.custom-color.' + me.colorTypes[colorTypeId]).prop('disabled', !this.checked);
                     var cell = me.activeColorCell[colorTypeId].toString();
@@ -410,7 +410,7 @@ Oskari.clazz.define(
                 // if the color is not picked from selection, it must be users own color
                 // add color values to the input fields
                 if (!statedChosenColor) {
-                    rgb = me.creator.hexToRgb(me.values[cType]);
+                    rgb = Oskari.util.hexToRgb(me.values[cType]);
                     content.find('input.custom-color.custom-red-value').val(rgb.r);
                     content.find('input.custom-color.custom-green-value').val(rgb.g);
                     content.find('input.custom-color.custom-blue-value').val(rgb.b);

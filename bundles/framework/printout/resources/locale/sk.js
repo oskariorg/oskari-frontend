@@ -6,22 +6,22 @@ Oskari.registerLocalization(
         "title": "Vytlačiť zobrazenie mapy",
         "flyouttitle": "Vytlačiť zobrazenie mapy",
         "desc": "",
-        "btnTooltip": "NOT TRANSLATED",
+        "btnTooltip": "Print",
         "BasicView": {
             "title": "Vytlačiť zobrazenie mapy",
             "name": {
-                "label": "NOT TRANSLATED",
-                "placeholder": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED"
+                "label": "The name of the map",
+                "placeholder": "required",
+                "tooltip": "Give your map a descriptive name. Please note the language of the user interface."
             },
             "language": {
-                "label": "NOT TRANSLATED",
+                "label": "Language",
                 "options": {
-                    "fi": "NOT TRANSLATED",
-                    "sv": "NOT TRANSLATED",
-                    "en": "NOT TRANSLATED"
+                    "fi": "Finnish",
+                    "sv": "Swedish",
+                    "en": "English"
                 },
-                "tooltip": "NOT TRANSLATED"
+                "tooltip": "Select the language to be used in the print. Please note the language of the the user interface and the data set."
             },
             "size": {
                 "label": "Veľkosť",
@@ -31,7 +31,7 @@ Oskari.registerLocalization(
                         "id": "A4",
                         "label": "A4 na výšku",
                         "classForPreview": "náhľad-na výšku",
-                        "selected": "dobre"
+                        "selected": true
                     },
                     {
                         "id": "A4_Landscape",
@@ -62,7 +62,7 @@ Oskari.registerLocalization(
             "buttons": {
                 "save": "Vytlačte to",
                 "ok": "OK",
-                "back" : "NOT TRANSLATED",
+                "back": "Previous",
                 "cancel": "Zrušiť"
             },
             "location": {
@@ -86,7 +86,7 @@ Oskari.registerLocalization(
                     {
                         "id": "pdf",
                         "format": "aplikácia/pdf",
-                        "selected": "správnosť",
+                        "selected": true,
                         "label": "PDF dokument"
                     }
                 ]
@@ -118,50 +118,50 @@ Oskari.registerLocalization(
                 ]
             },
             "legend": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
+                "label": "Map legend",
+                "tooltip": "Select a position for the map legend. If any position is not selected, a map legend is not shown in the map printout.",
                 "options": [
                     {
-                        "id": "NOT TRANSLATED",
-                        "loca": "NOT TRANSLATED",
-                        "label": "NOT TRANSLATED",
-                        "tooltip": "NOT TRANSLATED",
+                        "id": "oskari_legend_NO",
+                        "loca": "NO",
+                        "label": "No map legend",
+                        "tooltip": "The map legend is not shown in the map printout.",
                         "selected": true
                     },
                     {
-                        "id": "NOT TRANSLATED",
-                        "loca": "NOT TRANSLATED",
-                        "label": "NOT TRANSLATED",
-                        "tooltip": "NOT TRANSLATED"
+                        "id": "oskari_legend_LL",
+                        "loca": "LL",
+                        "label": "Left lower corner",
+                        "tooltip": "The map legend is shown in the left lower corner of the printout."
                     },
                     {
-                        "id": "NOT TRANSLATED",
-                        "loca": "NOT TRANSLATED",
-                        "label": "NOT TRANSLATED",
-                        "tooltip": "NOT TRANSLATED"
+                        "id": "oskari_legend_LU",
+                        "loca": "LU",
+                        "label": "Left upper corner",
+                        "tooltip": "The map legend is shown in the left upper corner of the printout."
                     },
                     {
-                        "id": "NOT TRANSLATED",
-                        "loca": "NOT TRANSLATED",
-                        "label": "NOT TRANSLATED",
-                        "tooltip": "NOT TRANSLATED"
+                        "id": "oskari_legend_RU",
+                        "loca": "RU",
+                        "label": "Right upper corner",
+                        "tooltip": "The map legend is shown in the right upper corner of the printout."
                     },
                     {
-                        "id": "NOT TRANSLATED",
-                        "loca": "NOT TRANSLATED",
-                        "label": "NOT TRANSLATED",
-                        "tooltip": "NOT TRANSLATED"
+                        "id": "oskari_legend_RL",
+                        "loca": "RL",
+                        "label": "Right lower corner",
+                        "tooltip": "The map legend is shown in the right upper corner of the printout."
                     }
                 ]
             },
             "help": "Pomoc",
             "error": {
                 "title": "Chyba",
-                "size": "NOT TRANSLATED",
-                "name": "NOT TRANSLATED",
+                "size": "Error in size definitions",
+                "name": "Name is required information",
                 "nohelp": "Pomoc nie je k dispozícii",
                 "saveFailed": "Tlačenie mapy zlyhalo| Skúste neskôr",
-                "nameIllegalCharacters": "NOT TRANSLATED"
+                "nameIllegalCharacters": "The name contains disallowed characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces and hyphens."
             }
         },
         "StartView": {

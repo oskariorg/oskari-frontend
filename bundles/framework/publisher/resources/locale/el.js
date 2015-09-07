@@ -220,6 +220,14 @@ Oskari.registerLocalization({
                     "tooltip": "Το επίπεδο χάρτη μπορεί να δημοσιευτεί σε ενσωματωμένο παράθυρο χάρτη με περιορισμένο αριθμό χρηστών ανά βδομάδα."
                 }
             }
+        },
+        "layerFilter": {
+            "buttons": {
+                "publishable": "Publishable"
+            },
+            "tooltips": {
+                "publishable": "Show only publishable map layers"
+            }
         }
     }
 });

@@ -190,6 +190,7 @@ Oskari.clazz.define(
             }
 
             if (geometry) {
+
                 var feature = format.read(geometry);
 
                 if (attributes && attributes !== null) {
@@ -215,10 +216,14 @@ Oskari.clazz.define(
                 }
 
                 if (style && style !== null) {
-                    feature.style = style;
+                    for (i=0; i < feature.length; i++) {
+                        featureInstance = feature[i];
+                        featureInstance.style = style;
+                    }
                 }
 
-                olLayer.addFeatures([feature]);
+                olLayer.addFeatures(feature);
+
 
                 if(isOlLayerAdded === false) me._map.addLayer(olLayer);
 
@@ -230,6 +235,7 @@ Oskari.clazz.define(
                 } else {
                     me._map.setLayerIndex(openLayer, 0);
                 }
+
 
                 if (layer && layer !== null) {
                     var mapLayerService = me._sandbox.getService('Oskari.mapframework.service.MapLayerService');

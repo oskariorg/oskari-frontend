@@ -408,7 +408,7 @@
 		    "metadata" : {
 		        "Import-Bundle" : {
 		            "routesearch" : {
-		                "bundlePath" : "../../../packages/framework/bundle/"
+		                "bundlePath" : "../../../packages/paikkatietoikkuna/bundle/"
 		            }
 		        }
 		    }
@@ -428,6 +428,36 @@
 			"metadata" : {
 				"Import-Bundle" : {
 					"heatmap" : {
+						"bundlePath" : "../../../packages/framework/bundle/"
+					}
+				}
+			}
+		}, {
+			"bundlename" : "coordinatetool",
+			"bundleinstancename" : "coordinatetool",
+			"metadata" : {
+				"Import-Bundle" : {
+					"coordinatetool" : {
+						"bundlePath" : "../../../packages/framework/bundle/"
+					}
+				}
+			}
+		}, {
+			"bundlename" : "routingUI",
+			"bundleinstancename" : "routingUI",
+			"metadata" : {
+				"Import-Bundle" : {
+					"routingUI" : {
+						"bundlePath" : "../../../packages/framework/bundle/"
+					}
+				}
+			}
+		}, {
+			"bundlename" : "routingService",
+			"bundleinstancename" : "routingService",
+			"metadata" : {
+				"Import-Bundle" : {
+					"routingService" : {
 						"bundlePath" : "../../../packages/framework/bundle/"
 					}
 				}

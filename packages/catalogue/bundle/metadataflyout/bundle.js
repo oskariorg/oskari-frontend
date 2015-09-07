@@ -58,17 +58,57 @@ Oskari.clazz.define(
                 "type": "text/javascript",
                 "src": "../../../../bundles/catalogue/metadataflyout/resources/locale/fi.js"
             }, {
+                "lang": "fr",
+                "type": "text/javascript",
+                "src": "../../../../bundles/catalogue/metadataflyout/resources/locale/fr.js"
+            }, {
                 "lang": "en",
                 "type": "text/javascript",
                 "src": "../../../../bundles/catalogue/metadataflyout/resources/locale/en.js"
             }, {
-                "lang": "sv",
-                "type": "text/javascript",
-                "src": "../../../../bundles/catalogue/metadataflyout/resources/locale/sv.js"
-            }, {
                 "lang": "es",
                 "type": "text/javascript",
                 "src": "../../../../bundles/catalogue/metadataflyout/resources/locale/es.js"
+            }, {
+                "lang": "et",
+                "type": "text/javascript",
+                "src": "../../../../bundles/catalogue/metadataflyout/resources/locale/et.js"
+            }, {
+                "lang": "is",
+                "type": "text/javascript",
+                "src": "../../../../bundles/catalogue/metadataflyout/resources/locale/is.js"
+            }, {
+                "lang": "it",
+                "type": "text/javascript",
+                "src": "../../../../bundles/catalogue/metadataflyout/resources/locale/it.js"
+            }, {
+                "lang": "sl",
+                "type": "text/javascript",
+                "src": "../../../../bundles/catalogue/metadataflyout/resources/locale/sl.js"
+            }, {
+                "lang": "nb",
+                "type": "text/javascript",
+                "src": "../../../../bundles/catalogue/metadataflyout/resources/locale/nb.js"
+            }, {
+                "lang": "nn",
+                "type": "text/javascript",
+                "src": "../../../../bundles/catalogue/metadataflyout/resources/locale/nn.js"
+            }, {
+                "lang": "nl",
+                "type": "text/javascript",
+                "src": "../../../../bundles/catalogue/metadataflyout/resources/locale/nl.js"
+            }, {
+                "lang": "nn",
+                "type": "text/javascript",
+                "src": "../../../../bundles/catalogue/metadataflyout/resources/locale/nn.js"
+            }, {
+                "lang": "sk",
+                "type": "text/javascript",
+                "src": "../../../../bundles/catalogue/metadataflyout/resources/locale/sk.js"
+            }, {
+                "lang": "sv",
+                "type": "text/javascript",
+                "src": "../../../../bundles/catalogue/metadataflyout/resources/locale/sv.js"
             }],
             "resources": []
         },

@@ -5,38 +5,38 @@ Oskari.registerLocalization(
     "value": {
         "title": "Moji podatki",
         "desc": "Moji podatki",
-        "notLoggedIn": "V Moji podatki lahko shranite kartne poglede  in brskate po vstavljenih kartah na spletnem mestu.",
+        "notLoggedIn": "Meni Moji podatki vsebuje osebne nastavitve, vse shranjene pojave, izseke in poglede kart, kazalnike, analize in zbirke podatkov. <a href='/web/en/login'>Prijavi se za preveritev svojih podatkov</a>",
         "notLoggedInText": "NOT TRANSLATED.",
         "tabs": {
             "myviews": {
-                "title": "Moji kartni pogledi",
+                "title": "Moji izseki karte",
                 "edit": "Uredi",
-                "publish": "Objavljen",
-                "unpublish": "Neobjavljen",
+                "publish": "Objavi",
+                "unpublish": "Umakni objavo",
                 "delete": "Izbriši",
                 "grid": {
                     "name": "Ime",
                     "description": "Opis",
                     "publish": "Objavljeno",
-                    "edit": "NOT TRANSLATED",
-                    "delete": "NOT TRANSLATED"
+                    "edit": "Uredi",
+                    "delete": "Izbriši"
                 },
                 "popup": {
                     "edit": "Uredi podatke o pogledu",
-                    "title": "Shrani kartni pogled",
-                    "label": "Ime kartnega pogleda:",
-                    "name_placeholder": "Dodaj ime kartnemu pogledu",
-                    "description_placeholder": "Dodaj opis kartnemu pogledu",
+                    "title": "Shrani pogled karte",
+                    "label": "Ime pogleda karte",
+                    "name_placeholder": "Imenuj pogled karte",
+                    "description_placeholder": "Opiši pogled karte",
                     "save": "Shrani",
-                    "cancel": "Prekini",
+                    "cancel": "Prekliči",
                     "error_noname": "Vnesi ime",
-                    "deletetitle": "Potrdi brisanje",
+                    "deletetitle": "Izbriši pogled karte",
                     "deletemsg": "Ali želiš izbrisati kartni pogled?"
                 },
                 "save": {
                     "success": "Kartni pogled je shranjen.",
-                    "error_noname": "Polje imena ne more biti prazno.",
-                    "error_illegalchars": "Ime vsebuje nedovoljene znake. Dovoljeni znaki so črke a-z, kot tudi å, ä and ö, številke, leve poševnice in vezaji.",
+                    "error_noname": "Polje za ime ne more biti prazno.",
+                    "error_illegalchars": "Ime vsebuje nedovoljene znake. Dovoljeni znaki so velike in male črke a-z, kot tudi å, ä in ö, številke, vračalke in vezaji.",
                     "msg": {
                         "view_name": "Ime kartnega pogleda"
                     }
@@ -44,57 +44,57 @@ Oskari.registerLocalization(
                 "button": {
                     "ok": "V redu",
                     "save": "Shrani",
-                    "cancel": "Prekini",
+                    "cancel": "Prekliči",
                     "toolbarsave": "Shrani kartni pogled"
                 },
                 "error": {
                     "title": "Napaka!",
-                    "generic": "Sistemska napaka| Prosimo poskusi kasneje.",
-                    "notsaved": "Kartnega pogleda ni mogoče shraniti.",
-                    "notdeleted": "Kartnega pogleda ni mogoe izbrisati.",
-                    "makePublic": "Kartnega pogleda ni mogoče objaviti. Prosimo poskusite kasneje.",
-                    "makePrivate": "Kartnega pogleda ni mogoče neobjaviti. Prosimo poskusite kasneje.",
-                    "loadfailed": "Kartne poglede ni mogoče prenesti"
+                    "generic": "Sistemska napaka. Prosim poskusi kasneje.",
+                    "notsaved": "Kartnega pogleda ni mogoče shraniti. Prosim poskusi kasneje.",
+                    "notdeleted": "Kartnega pogleda ni mogoče izbrisati. Prosim poskusi kasneje.",
+                    "makePublic": "Kartnega pogleda ni mogoče objaviti. Prosim poskusi kasneje.",
+                    "makePrivate": "Objave kartnega pogleda ni mogoče preklicati. Prosim poskusi kasneje.",
+                    "loadfailed": "Kartnega pogleda ni mogoče prenesti. Prosim poskusi kasneje."
                 }
             },
             "publishedmaps": {
                 "title": "Vstavljene karte",
                 "show": "Prikaži na karti",
-                "getHTML": "NOT TRANSLATED",
+                "getHTML": "Koda HTML",
                 "edit": "Uredi",
-                "publish": "Objavljena karta",
-                "unpublish": "Neobjavljena karta",
+                "publish": "Objavi karto",
+                "unpublish": "Umakni objavo karte",
                 "delete": "Izbriši",
                 "grid": {
-                    "name": "Ime",
-                    "domain": "Nastavitve karte",
+                    "name": "Imenuj",
+                    "domain": "Spletna stran",
                     "publish": "Status",
-                    "show": "NOT TRANSLATED",
-                    "html": "NOT TRANSLATED",
-                    "edit": "NOT TRANSLATED",
-                    "delete": "NOT TRANSLATED"
+                    "show": "Dejavnosti",
+                    "html": "Koda HTML",
+                    "edit": "Uredi",
+                    "delete": "Izbriši"
                 },
                 "published": {
-                    "desc": "NOT TRANSLATED"
+                    "desc": "Vstavi karto z dodajanjem kode HTML na svojo spletno stran:"
                 },
                 "popup": {
                     "edit": "Spremeni ime karte",
                     "title": "Shrani karto.",
                     "label": "Ime karte",
-                    "placeholder": "Dodaj ime karte.",
+                    "placeholder": "Imenuj karto.",
                     "save": "Shrani",
-                    "cancel": "Prekini",
-                    "error_noname": "Dodaj ime karte.",
-                    "deletetitle": "Izbriši karto?",
+                    "cancel": "Prekliči",
+                    "error_noname": "Imenuj karto",
+                    "deletetitle": "Izbriši karto",
                     "deletemsg": "Ali želiš izbrisati vstavljeno karto? Na spletnem mestu ne bo več vidna.",
-                    "showErrorTitle": "Nepopolen pogled",
-                    "showConfirmMissing": "Nekateri shranjeni sloji karte niso na voljo. Ali še vedno želiš odpreti ta pogled?",
-                    "showConfirmNotLoaded": "Nekateri sloji karte še niso naloženi. Poskusi kasneje."
+                    "showErrorTitle": "Nepopoln pogled",
+                    "showConfirmMissing": "Pogled karte je nepopoln. Nekateri shranjeni sloji karte niso na voljo. Ali še vedno želiš odpreti ta pogled karte?",
+                    "showConfirmNotLoaded": "Nekateri sloji karte še niso naloženi. Prosim poskusi kasneje."
                 },
                 "save": {
                     "success": "Karta je shranjena.",
-                    "error_noname": "Polje imena ne more biti prazno.",
-                    "error_illegalchars": "Ime vsebuje nedovoljene znake. Dovoljeni znaki so črke a-z, kot tudi å, ä and ö, številke, leve poševnice in vezaji.",
+                    "error_noname": "Polje za ime ne sme biti prazno.",
+                    "error_illegalchars": "Ime vsebuje nedovoljene znake. Dovoljeni znaki so male in velike črke a-z, kot tudi å, ä in ö, številke, vračalke in vezaji.",
                     "msg": {
                         "view_name": "Ime karte"
                     }
@@ -102,16 +102,16 @@ Oskari.registerLocalization(
                 "button": {
                     "ok": "V redu",
                     "save": "Shrani",
-                    "cancel": "Prekini",
+                    "cancel": "Prekliči",
                     "toolbarsave": "Shrani karto."
                 },
                 "error": {
                     "title": "Napaka!",
-                    "generic": "Sistemska napaka| Prosimo poskusi kasneje.",
-                    "notsaved": "Karte ni mogoče shraniti.",
-                    "notdeleted": "Karte ni mogoe izbrisati.",
-                    "makePublic": "Karte ni mogoče objaviti. Prosimo poskusi kasneje.",
-                    "makePrivate": "Karte ni mogoče neobjaviti. Prosimo poskusi kasneje."
+                    "generic": "Sistemska napaka. Prosim poskusi kasneje.",
+                    "notsaved": "Karte ni mogoče shraniti. Prosim poskusi kasneje.",
+                    "notdeleted": "Karte ni mogoče izbrisati. Prosim poskusi kasneje.",
+                    "makePublic": "Karte ni mogoče objaviti. Prosim poskusi kasneje.",
+                    "makePrivate": "Objave karte ni mogoče preklicati. Prosim poskusi kasneje."
                 }
             },
             "account": {
@@ -122,8 +122,8 @@ Oskari.registerLocalization(
                 "email": "e-pošta",
                 "changeInfo": "Spremeni podatke o računu",
                 "changePassword": "Spremeni geslo",
-                "removeAccount": "Izbriši svoj račun?",
-                "changeInfoUrl": "/web/si/profile"
+                "removeAccount": "Izbriši svoj račun",
+                "changeInfoUrl": "/web/sl/profil"
             }
         },
         "button": {

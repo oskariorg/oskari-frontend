@@ -60,6 +60,21 @@ div.analyse {
 
 }
 
+div.analyse-featurelist {
+    ul {
+        margin-top: 10px;
+        margin-bottom: 15px;
+    }
+
+    li {
+        list-style-type: none;
+    }
+}
+
+div.analyse-startview-label {
+    margin-top: 20px;
+}
+
 div.basic_analyse {
 
     > div.content {
@@ -272,12 +287,39 @@ div.basic_analyse {
     font-weight: bold;
     margin: 5px 0;
 }
+
+.extra_title_label {
+    display: inline;    
+}
+
+.analyse_output_cont {
+
+    .columns_title_label {
+        display: inline-block;
+        width: 80%;
+    }
+}
+
+.analyse_title_columns {
+    display: inline-block;
+}
+
 .analyse_settings_cont {
     margin: 10px 5px;
 }
 
 .analyse_title_colcont {
     margin: 10px 5px;
+}
+
+.params-icon-info {
+    margin-right: 5px;
+    margin-top: 5px;
+}
+
+.columns-icon-info {
+    margin-right: 5px;
+    margin-top: 10px;
 }
 
 /* Buttons */
@@ -354,49 +396,15 @@ div.analyse-filter-popup-content {
       
     }
 
-    div.analyse-filter-clicked-features {
-
-        div.clicked-features-title, div.clicked-features-checkboxes {
-            display: inline-block;
-        }
-
-        div.clicked-features-title {
-            float: left;
-        }
-
-        div.filter-by-geometry-checkbox, div.clicked-features-checkbox {
-            margin-left: 25px;
-            margin-top: 5px;
-        }
-
-        div.filter-by-geometry-checkbox {
-            margin-bottom: 5px;
-        }
-
-        div.filter-by-geometry-radio {
-            display: inline-block;
-            margin-left: 50px!important;
-        }
-
-        label {
-            margin-left: 8px;
-        }
-
-        input:disabled + label {
-            opacity: 0.5;
-        }
-
-    }
-
-    div.bbox-title, div.bbox-radio {
+    div.filter-selections-title, div.filter-selection-radios {
         display: inline-block;
     }
 
-    div.bbox-title {
+    div.filter-selections-title {
         float: left;
     }
 
-    div.bbox-radio {
+    div.filter-selection-radios {
         margin-left: 25px;
 
         div.bbox-on, div.bbox-off {
@@ -406,7 +414,10 @@ div.analyse-filter-popup-content {
         input:disabled + label {
             opacity: 0.5;
         }
-
+    }
+    div.filter-by-geometry-methods {
+        display: inline-block;
+        margin-left: 25px!important;     
     }
 
 }
@@ -509,4 +520,8 @@ div.divmanazerpopup {
         max-width: 280px;
     }
 
+}
+
+div.analyse-result-popup-content {
+    overflow: auto;
 }

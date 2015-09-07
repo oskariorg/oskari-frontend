@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "et",
     "key": "MyPlaces2",
     "value": {
@@ -15,6 +16,7 @@ Oskari.registerLocalization({
         "tab": {
             "title": "Kohad",
             "nocategories": "NOT TRANSLATED",
+            "maxFeaturesExceeded": "NOT TRANSLATED",
             "publishCategory": {
                 "privateTooltip": "NOT TRANSLATED",
                 "publicTooltip": "NOT TRANSLATED"
@@ -30,8 +32,8 @@ Oskari.registerLocalization({
                 "createDate": "NOT TRANSLATED",
                 "updateDate": "NOT TRANSLATED",
                 "measurement": "NOT TRANSLATED",
-                "edit": " ",
-                "delete": " "
+                "edit": "NOT TRANSLATED",
+                "delete": "NOT TRANSLATED"
             },
             "notification": {
                 "delete": {
@@ -322,4 +324,5 @@ Oskari.registerLocalization({
             "areaFillColor": "Vale täitevärvus."
         }
     }
-});
+}
+);

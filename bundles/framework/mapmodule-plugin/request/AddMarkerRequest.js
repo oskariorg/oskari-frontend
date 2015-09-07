@@ -1,9 +1,13 @@
-Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddMarkerRequest', function (data, id, events, iconUrl) {
-    this._creator = null;
+/**
+ * @class Oskari.mapframework.bundle.mapmodule.request.AddMarkerRequest
+ * @param  {Object} data, the object should have atleast x and y keys with coordinates and can have
+ *                        color, msg, shape, size and iconUrl.
+ * @param  {String} id optional id for marker to add, one will be generated if not given. If a marker with same id
+ *                     exists, it will be replaced with this.
+ */
+Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddMarkerRequest', function (data, id) {
     this._data = data;
     this._id = id;
-    this._events = events;
-    this._iconUrl = iconUrl;
 }, {
     __name: 'MapModulePlugin.AddMarkerRequest',
     getName: function () {
@@ -23,9 +27,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddMarkerReque
     },
     getID: function () {
         return this._id;
-    },
-    getEvents: function () {
-        return this._events;
     }
 }, {
     'protocol': ['Oskari.mapframework.request.Request']

@@ -80,9 +80,21 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatedisplay.CoordinateDisp
             "type": "text/javascript",
             "src": "../../../../bundles/framework/coordinatedisplay/resources/locale/fi.js"
         }, {
+            "lang": "fr",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/coordinatedisplay/resources/locale/fr.js"
+        }, {
             "lang": "el",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/coordinatedisplay/resources/locale/el.js"
+        }, {
+            "lang": "is",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/coordinatedisplay/resources/locale/is.js"
+        }, {
+            "lang": "it",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/coordinatedisplay/resources/locale/it.js"
         }, {
             "lang": "hr",
             "type": "text/javascript",
@@ -96,6 +108,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatedisplay.CoordinateDisp
             "type": "text/javascript",
             "src": "../../../../bundles/framework/coordinatedisplay/resources/locale/nl.js"
         }, {
+            "lang": "nb",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/coordinatedisplay/resources/locale/nb.js"
+        }, {
+            "lang": "nn",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/coordinatedisplay/resources/locale/nn.js"
+        }, {
             "lang": "pl",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/coordinatedisplay/resources/locale/pl.js"
@@ -107,6 +127,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatedisplay.CoordinateDisp
             "lang": "ro",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/coordinatedisplay/resources/locale/ro.js"
+        }, {
+            "lang": "sk",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/coordinatedisplay/resources/locale/sk.js"
         }, {
             "lang": "sl",
             "type": "text/javascript",

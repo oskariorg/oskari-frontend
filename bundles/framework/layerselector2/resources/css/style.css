@@ -1,3 +1,13 @@
+div.layerselector2 div.layer-filter {
+  margin: 10px;
+  color: #949494; }
+div.layerselector2 div.filter {
+  border: 1px solid #a4a4a4;
+  padding: 10px;
+  float: left;
+  cursor: pointer;
+  margin-bottom: 5px;
+  margin-left: -1px; }
 div.layerselector2 div.accordion div.accordion_panel div.content {
   padding: 0; }
 div.layerselector2 div.layer {
@@ -14,7 +24,7 @@ div.layerselector2 div.layer {
     margin-right: 5px; }
     div.layerselector2 div.layer input[type=checkbox] {
       margin-top: -2px; }
-  div.layerselector2 div.layer div.layer-title {
+  div.layerselector2 div.layer label.layer-title {
     /* Let's just imagine this is tabular data... */
     font-size: 12px; }
   div.layerselector2 div.layer div.layer-tools {
@@ -116,3 +126,5 @@ div.layerselector2 div.tab-content {
       div.layerselector2 div.tab-content div.oskarifield .related-keywords .focus {
         background-color: #333438;
         color: white; }
+
+/*# sourceMappingURL=style.css.map */

@@ -30,13 +30,12 @@ if (!Function.prototype.bind) {
                 // exted given object (layer) with this one
                 if (model) {
                     for (var key in model) {
-                        var prop = model[key];
-                        if (typeof prop === 'function') {
+                        if(model[key] && typeof model[key] === 'function') {
+                            var prop = model[key];
                             this[key] = prop.bind(this.attributes);
                         }
                     }
                 }
-                //jQuery.extend(this, model);
                 this.supportedLanguages = Oskari.getSupportedLanguages();
                 // setup backbone id so collections work
                 this.id = model.getId();
@@ -158,18 +157,17 @@ if (!Function.prototype.bind) {
                     capabilities = this.get('capabilities');
                 }
                 // layer node
-                if (capabilities.layerName == layerName) {
+                if (capabilities.layerName === layerName) {
                     if(!additionalId) {
                         me._setupFromCapabilitiesValues(capabilities);
                         return true;
-
-                    } else if(capabilities.additionalId == additionalId) {
+                    } else if(capabilities.additionalId === additionalId) {
                         me._setupFromCapabilitiesValues(capabilities);
                         return true;
                     }
                 }
                 // group node
-                if (capabilities.self && capabilities.self.layerName == layerName) {
+                if (capabilities.self && capabilities.self.layerName === layerName) {
                     me._setupFromCapabilitiesValues(capabilities.self);
                     return true;
                 }
@@ -228,7 +226,39 @@ if (!Function.prototype.bind) {
                 }
                 return null;
             },
-
+            /**
+             * Returns service version if defined or null if not
+             * @return {String} version
+             */
+            getVersion: function () {
+                var adminBlock = this.getAdmin();
+                if (adminBlock) {
+                    return adminBlock.version;
+                }
+                return null;
+            },
+            /**
+             * Returns service  jobtype if defined or null if not
+             * @return {String} jobtype
+             */
+            getJobType: function () {
+                var adminBlock = this.getAdmin();
+                if (adminBlock) {
+                    return adminBlock.jobtype;
+                }
+                return null;
+            },
+            /**
+             * Returns wfs service manual refresh mode
+             * @return {Boolean} true/false
+             */
+            isManualRefresh: function () {
+                var adminBlock = this.getAdmin();
+                if (adminBlock) {
+                    return adminBlock.manualRefresh;
+                }
+                return false;
+            },
             /**
              * Returns interface url
              * @return {String} url
@@ -291,27 +321,19 @@ if (!Function.prototype.bind) {
                 // add languages from possible object value
                 if (attr && typeof attr === 'object') {
                     for (var key in attr) {
-                        langList.push(key);
+                        if(attr.hasOwnProperty(key)) {
+                            langList.push(key);
+                        }
                     }
                 }
 
                 // add any missing languages
                 _.each(this.supportedLanguages, function (lang) {
-                    if (jQuery.inArray(lang, langList) == -1) {
+                    if (jQuery.inArray(lang, langList) === -1) {
                         langList.push(lang);
                     }
                 });
-                /*
-                // TODO: do we need to sort by language?
-                langList.sort(function (a, b) {
-                    if (a < b) {
-                        return -1;
-                    }
-                    if (a > b) {
-                        return 1;
-                    }
-                    return 0;
-                });*/
+
                 return langList;
             }
         });

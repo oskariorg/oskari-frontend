@@ -49,11 +49,10 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamEnumElement',
                 element = me._templates.licenseUserData.clone(),
                 title = param.title,
                 data = me._templates.licenseInput.clone(),
-                readOnlyElement = jQuery('<li></li>'),
+                readOnlyElement = jQuery('<span></span>'),
                 showInput = true;
 
-
-            if(readOnly && readOnly === true) {
+            if(readOnly) {
                 showInput = false;
             }
 
@@ -61,14 +60,15 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamEnumElement',
                 title = param.name;
             }
 
-            if(showInput === true) {
+            if(showInput) {
                 // Radio button list
-                if(param.multi === false) {
+                if(!param.multi) {
                     jQuery.each(param.options, function(index, value){
                         data.append('<input type="radio" name="'+param.name+'" value="'+value+'">' + value + '<br>');
                     });
 
                     data.find('input').first().prop("checked", true);
+                    title += ' <span class="elf_license_required">*</span>';
                 }
                 // Checkbox list
                 else {
@@ -78,23 +78,28 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamEnumElement',
                 }
             } else {
                 if(param.selections.length>0) {
-                    var list = jQuery('<ul></ul>');
-                    data.append(list);
+                    var list = jQuery('<div class="license_enum_list"></div>');
 
                     jQuery.each(param.selections, function(index, value){
                         var valueEl = readOnlyElement.clone();
                         valueEl.attr('data-value', value);
                         valueEl.html(value);
-                        data.append(valueEl);
+                        list.append(valueEl);
+                        if(param.multi && index < param.selections.length-1) {
+                            list.append(', ');
+                        }
                     });
+
+                    data.append(list);
                 }
             }
 
             // Add data to element
             data.attr('data-name', param.name);
-            data.attr('data-title', title);
+            data.attr('data-title', param.title || param.name);
             data.attr('data-element-type', 'enum');
             data.attr('data-read-only', readOnly);
+            data.attr('data-multi', param.multi);
 
             element.find('.elf_license_user_data_label').html(title);
             element.find('.elf_license_user_data').html(data);

@@ -19,20 +19,27 @@ Oskari.clazz.define(
         this.__lastRequestId = 0;
         this.cometd = this.connection.get();
         this.layerProperties = {};
+        this.__connectionTries = 0;
+        this.__latestTry = 0;
+        this.__initInProgress = false;
+        this.__bufferedMessages = [];
 
         this.rootURL = location.protocol + '//' +
             this.config.hostname + this.config.port +
             this.config.contextPath;
 
         this.session = {
-            session: jQuery.cookie('JSESSIONID') || '',
+            session: this.__getApikey(),
             route: jQuery.cookie('ROUTEID') || ''
         };
 
         this._previousTimer = null;
         this._featureUpdateFrequence = 200;
         this.statusHandler = Oskari.clazz.create(
-            'Oskari.mapframework.bundle.mapwfs2.service.StatusHandler', plugin.getSandbox());
+        'Oskari.mapframework.bundle.mapwfs2.service.StatusHandler', plugin.getSandbox());
+
+        this.WFSLayerService = plugin.getSandbox().getService('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
+
     }, {
 
         /**
@@ -106,16 +113,36 @@ Oskari.clazz.define(
                 }
             }
         },
+        __handleInitStarted : function() {
+            var me = this;
+            this.__initInProgress = false;
+            // send out any buffered messages
+            _.each(this.__bufferedMessages, function(item) {
+                me.sendMessage(item.channel, item.message);
+            });
+            // clear the buffer
+            this.__bufferedMessages = [];
+
+            // reset connection backdown counters when receiving init success
+            this.__connectionTries = 0;
+            this.__latestTry = 0;
+        },
         handleError : function(params) {
             this.statusHandler.handleError(params.data);
         },
         statusChange : function(params) {
-            this.statusHandler.handleChannelStatus(params.data);
+            // handle init started
+            if(params.data.reqId === -1 && params.data.message === 'started') {
+                this.__handleInitStarted();
+            }
+            else {
+                this.statusHandler.handleChannelStatus(params.data);
+            }
         },
         sendMessage : function(channel, message) {
             var isInit = (channel === '/service/wfs/init');
             // connected flag is not setup when init is called so ignore it.
-            if (this.connection.isConnected() || isInit) {
+            if (isInit || (this.connection.isConnected() && !this.__initInProgress)) {
                 if(!isInit) {
                     // skip reqId in init message
                     message.reqId = this.getNextRequestId();
@@ -129,6 +156,20 @@ Oskari.clazz.define(
                 }
                 this.cometd.publish(channel, message);
             }
+            else {
+                this.__bufferedMessages.push({
+                    channel : channel,
+                    message : message
+                });
+            }
+        },
+        __getApikey : function() {
+            // prefer API key
+            if(this.plugin.getSandbox().getUser() && this.plugin.getSandbox().getUser().getAPIkey()) {
+                return this.plugin.getSandbox().getUser().getAPIkey();
+            }
+            // default to cookie...
+            return jQuery.cookie('JSESSIONID') || '';
         },
 
         /**
@@ -144,7 +185,13 @@ Oskari.clazz.define(
             }
 
             // update session and route
-            this.session.session = jQuery.cookie('JSESSIONID') || '';
+            this.session.session = this.__getApikey();
+            if(!this.session.session) {
+                // will not work correctly, try again in a bit
+                this.resetWFS();
+                return;
+            }
+            // TODO: get rid of ROUTEID by improving the apikey functionality in server side
             this.session.route = jQuery.cookie('ROUTEID') || '';
 
             var srs = this.plugin.getSandbox().getMap().getSrsName(),
@@ -184,6 +231,7 @@ Oskari.clazz.define(
                     styleName: layer.getCurrentStyle().getName()
                 };
             });
+            this.__initInProgress = true;
             this.sendMessage('/service/wfs/init', message);
         }
     });
@@ -262,33 +310,42 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
         var sandbox = this.plugin.getSandbox(),
             me = this,
             layer = sandbox.findMapLayerFromSelectedMapLayers(data.data.layerId),
-            keepPrevious = data.data.keepPrevious,
+            topWFSLayerId = me.WFSLayerService.getTopWFSLayer(),
+            analysisWFSLayerId = me.WFSLayerService.getAnalysisWFSLayerId(),
+            selectionMode = data.data.keepPrevious,
             featureIds = [],
-            i;
+            selectFeatures;
 
         if (data.data.features !== 'empty') {
-            layer.setSelectedFeatures([]);
-            // empty selected
             for (i = 0; i < data.data.features.length; i += 1) {
                 featureIds.push(data.data.features[i][0]);
             }
         }
 
-        if (keepPrevious) {
-            // No duplicates
-            featureIds = me.filterDuplicates(layer.getClickedFeatureIds(), featureIds);
-            if(featureIds.length < 1) return;
-            layer.setClickedFeatureIds(layer.getClickedFeatureIds().concat(featureIds));
-        } else {
-            layer.setClickedFeatureIds(featureIds);
+        /*Ugly -> instead try to figure out _why_ the first click in the selection tool ends up in here*/
+        if (this.WFSLayerService && this.WFSLayerService.isSelectionToolsActive()) {
+            return;
         }
 
-        var event = sandbox.getEventBuilder('WFSFeaturesSelectedEvent')(featureIds, layer, keepPrevious);
-        sandbox.notifyAll(event);
+        // handle CTRL click (selection) and normal click (getInfo) differently
+        if (selectionMode) {
+            selectFeatures = true;
 
-        data.data.lonlat = this.lonlat;
-        var infoEvent = sandbox.getEventBuilder('GetInfoResultEvent')(data.data);
-        sandbox.notifyAll(infoEvent);
+            if (analysisWFSLayerId && layer._id !== analysisWFSLayerId) {
+                return;
+            } else if (topWFSLayerId && layer._id !== topWFSLayerId) {
+                return;
+            }
+
+            me.WFSLayerService.setWFSFeaturesSelections(layer._id, featureIds);
+            var event = sandbox.getEventBuilder('WFSFeaturesSelectedEvent')(me.WFSLayerService.getSelectedFeatureIds(layer._id), layer, selectFeatures);
+            sandbox.notifyAll(event);
+        } else {
+            data.data.lonlat = this.lonlat;
+            me.WFSLayerService.emptyWFSFeatureSelections(layer);
+            var infoEvent = sandbox.getEventBuilder('GetInfoResultEvent')(data.data);
+            sandbox.notifyAll(infoEvent);
+        }
     },
     /**
      * @method getWFSFeatureGeometries
@@ -320,29 +377,55 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
     /**
      * @method getWFSFilter
      * @param {Object} data
+     * @param {Boolean} makeNewSelection; true if user makes selections with selection tool without Ctrl
      *
      * Handles one layer's features per response
      * Creates WFSFeaturesSelectedEvent
      */
     getWFSFilter: function (data) {
-        var layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId),
+        var me = this,
+            layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId),
             featureIds = [],
-            i;
+            selectFeatures = true,
+            topWFSLayer = this.WFSLayerService.getTopWFSLayer(),
+            analysisWFSLayer = this.WFSLayerService.getAnalysisWFSLayerId(),
+            i,
+            makeNewSelection = false;
+
+        //if user has not used Ctrl during selection, make totally new selection
+        if (!data.data.keepPrevious) {
+            makeNewSelection = true;
+        }
+
+        if (!me.WFSLayerService.isSelectFromAllLayers()) {
+            if (analysisWFSLayer && layer._id !== analysisWFSLayer) {
+                return;
+            } else if (!analysisWFSLayer && layer._id !== topWFSLayer) {
+                if (me.WFSLayerService.getSelectedFeatureIds(layer._id) !== 'empty') {
+                    me.WFSLayerService.emptyWFSFeatureSelections(layer);
+                }
+                return;
+            }
+
+        } else {
+            if (data.data.features === 'empty') {
+                me.WFSLayerService.emptyAllWFSFeatureSelections();
+            }
+        }
 
         if (data.data.features !== 'empty') {
-            layer.setClickedFeatureIds([]);
             for (i = 0; i < data.data.features.length; i += 1) {
                 featureIds.push(data.data.features[i][0]);
             }
         }
 
         if (data.data.features !== 'empty') {
-            layer.setSelectedFeatures(data.data.features);
-        } else {
-            layer.setSelectedFeatures([]);
+            me.WFSLayerService.setWFSFeaturesSelections(layer._id, featureIds, makeNewSelection);
+        } else if (makeNewSelection = true) {
+            me.WFSLayerService.emptyWFSFeatureSelections(layer);
         }
 
-        var event = this.plugin.getSandbox().getEventBuilder('WFSFeaturesSelectedEvent')(featureIds, layer, false);
+        var event = this.plugin.getSandbox().getEventBuilder('WFSFeaturesSelectedEvent')(me.WFSLayerService.getSelectedFeatureIds(layer._id), layer, selectFeatures);
         this.plugin.getSandbox().notifyAll(event);
     },
 
@@ -420,7 +503,30 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
      * @param {Object} data
      */
     resetWFS: function (data) {
-        this.startup(null);
+        // reset any previous timer
+        clearTimeout(this.__resetTimeout);
+        var me = this;
+        var now = new Date().getTime();
+        var backdownBuffer = 1000 * Math.pow(2, this.__connectionTries);
+        var timeUntilNextTry = now - (this.__latestTry + backdownBuffer);
+        if(this.__connectionTries > 6) {
+            // notify failure to connect. We could timeout with big number and reset connectionTries?
+            me.plugin.showErrorPopup(
+                'connection_broken',
+                null,
+                true
+            );
+            return;
+        }
+        if(this.__connectionTries === 0 || timeUntilNextTry < 0) {
+            this.__latestTry = now;
+            this.__connectionTries++;
+            this.startup(null);
+            return;
+        }
+        this.__resetTimeout = setTimeout(function() {
+            me.resetWFS(data);
+        }, timeUntilNextTry + 10);
     }
 });
 
@@ -486,14 +592,15 @@ Oskari.clazz.category(
          *
          * sends message to /service/wfs/setLocation
          */
-        setLocation: function (layerId, srs, bbox, zoom, grid, tiles) {
+        setLocation: function (layerId, srs, bbox, zoom, grid, tiles, manualRefesh) {
             this.sendMessage('/service/wfs/setLocation', {
                 'layerId': layerId,
                 'srs': srs,
                 'bbox': bbox,
                 'zoom': zoom,
                 'grid': grid,
-                'tiles': tiles
+                'tiles': tiles,
+                'manualRefresh': manualRefesh
             });
         },
 
@@ -561,6 +668,11 @@ Oskari.clazz.category(
          * sends message to /service/wfs/setMapClick
          */
         setMapClick: function (lonlat, keepPrevious, geomRequest) {
+            var me = this,
+                sandbox = this.plugin.getSandbox(),
+                map = sandbox.getMap(),
+                srs = map.getSrsName();
+
             this.lonlat = lonlat;
             this.sendMessage('/service/wfs/setMapClick', {
                 'longitude': lonlat.lon,
@@ -568,6 +680,25 @@ Oskari.clazz.category(
                 'keepPrevious': keepPrevious,
                 'geomRequest': geomRequest
             });
+
+            /**
+            if(keepPrevious !== null && keepPrevious === false) {
+                me.setFilter({
+                    "type":"FeatureCollection",
+                    "features":[
+                    {
+                        "type":"Feature",
+                        "properties":{},
+                        "geometry":{
+                            "type":
+                            "Point",
+                            "coordinates":[lonlat.lon,lonlat.lat]
+                        }
+                    }],
+                    "crs":{"type":"name","properties":{"name":srs}}}
+                );
+            }
+            */
         },
 
         /**
@@ -577,12 +708,13 @@ Oskari.clazz.category(
          *
          * sends message to /service/wfs/setFilter
          */
-        setFilter: function (geojson) {
+        setFilter: function (geojson, keepPrevious) {
             var filter = {
                 geojson: geojson
             };
             this.sendMessage('/service/wfs/setFilter', {
-                'filter': filter
+                'filter': filter,
+                'keepPrevious': keepPrevious
             });
         },
         /**
@@ -614,6 +746,7 @@ Oskari.clazz.category(
                 'visible': visible
             });
         },
+
         /**
          * @method filterDuplicates
          * @param {String []} a1    current array
@@ -621,19 +754,26 @@ Oskari.clazz.category(
          *
          * drop duplicates in concat array
          */
-        filterDuplicates: function (a1, a2) {
-            var a3 = [];
-            if (a1 && a2) {
-                a2.forEach(function (item2) {
-                    if (a1.indexOf(item2) < 0) {
-                        a3.push(item2);
+        filterDuplicates: function (previouslySelectedIds, selectedIds) {
+            var featureIds = [],
+                unselectedMode = false;
+            if (previouslySelectedIds && selectedIds) {
+                selectedIds.forEach(function (id) {
+                    if (previouslySelectedIds.indexOf(id) < 0) {
+                        featureIds.push(id);
+                    } else {
+                        previouslySelectedIds.splice(previouslySelectedIds.indexOf(id), 1);
+                        unselectedMode = true;
+
                     }
                 });
 
             }
-            return a3;
+            if (unselectedMode) {
+                return ['unselectMode', previouslySelectedIds.concat(featureIds)];
+            } else {
+                return ['selectMode', featureIds];
+            }
         }
-
-
     }
 );

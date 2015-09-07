@@ -4,7 +4,7 @@ define([
         "text!_bundle/templates/group/subLayerTemplate.html",
         'text!_bundle/templates/adminGroupSettingsTemplate.html'
     ],
-    function (ViewTemplate, AdminLayerSettingsView, SubLayerTemplate, AdminGroupSettingsTemplate) {
+    function (ViewTemplate, AdminLayerSettingsView, SubLayerTemplate) {
         return Backbone.View.extend({
             tagName: 'div',
             className: 'layer',
@@ -83,12 +83,6 @@ define([
                 } else if (layer.isLayerOfType('WMS')) {
                     icon.attr('title', tooltips['type-wms']);
                 } else if (layer.isLayerOfType('WMTS')) {
-                    // FIXME: WMTS is an addition done by an outside bundle
-                    // so this shouldn't
-                    // be here
-                    // but since it would require some refactoring to make
-                    // this general
-                    // I'll just leave this like it was on old implementation
                     icon.attr('title', tooltips['type-wms']);
                 } else if (layer.isLayerOfType('WFS')) {
                     icon.attr('title', tooltips['type-wfs']);
@@ -147,11 +141,6 @@ define([
                         layerTabModel: me.options.layerTabModel
                     });
                     element.append(settings.$el);
-
-                    // TODO when backend works and we have new jQuery UI
-                    //this.$el.find("#add-layer-inspire-theme").tagit({availableTags: ["Hallinnolliset yksiköt", "Hydrografia", "Kiinteistöt", "Kohteet", "Koordinaattijärjestelmät", "Korkeus", "Liikenneverkot", "Maankäyttö", "Maanpeite","Maaperä","Merialueet", "Metatieto"]});
-
-
                     element.find('.admin-add-layer').addClass('show-edit-layer');
                 } else {
                     //hide layer settings
@@ -234,7 +223,6 @@ define([
                             });
                             exitPopup();
                         });
-                        //exitPopup();
                     });
                     buttons.push(deleteButton);
                 }

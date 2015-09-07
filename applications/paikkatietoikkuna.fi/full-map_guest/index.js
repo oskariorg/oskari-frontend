@@ -69,7 +69,6 @@ jQuery(document).ready(function() {
 
     function start(appSetup, appConfig, cb) {
         var app = Oskari.app;
-
         app.setApplicationSetup(appSetup);
         app.setConfiguration(appConfig);
         app.startApplication(function(startupInfos) {

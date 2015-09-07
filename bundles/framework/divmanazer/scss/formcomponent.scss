@@ -11,6 +11,7 @@ input[type=reset],
 input[type=submit] {
     &.oskari-formcomponent {
         margin-top: $unitMargin;
+        margin-right: $unitMargin;
     }
 }
 

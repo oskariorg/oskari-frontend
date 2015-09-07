@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "nl",
     "key": "LayerSelector",
     "value": {
@@ -9,19 +10,19 @@ Oskari.registerLocalization({
             "generic": "Systeem fout. Probeer het later opnieuw.",
             "loadFailed": "Fout bij het ​​laden van kaartlagen. Vernieuw de pagina in uw browser en selecteer kaartlagen.",
             "noResults": "De zoekopdracht heeft geen resultaten opgeleverd.",
-            "noResultsForKeyword": "NOT TRANSLATED",
-            "minChars": "NOT TRANSLATED"
+            "noResultsForKeyword": "Geen kaart lagen gevonden door dit trefwoord.",
+            "minChars": "Schrijf minimaal vier karakters. Toegestane tekens zijn de letters a-z, evenals  å, ä and ö, nummers, backspace en koppeltekens."
         },
-        "loading": "NOT TRANSLATED",
+        "loading": "Zoeken...",
         "filter": {
             "text": "Zoek kaartlagen",
-            "keywordsTitle": "NOT TRANSLATED",
-            "shortDescription": "NOT TRANSLATED",
-            "description": "NOT TRANSLATED",
+            "keywordsTitle": "trefwoorden",
+            "shortDescription": "Zoek kaart lagen met de naam van de kaartlaag, de naam van de data producent of het trefwoord dat de kaart laag beschrijft.",
+            "description": "Schrijf een deel van de naam van de kaart laag, de naam van de data producent of het trefwoord dat de kaart laag omschrijft. Toegestane tekens zijn de letters a-z, evenals  å, ä and ö, nummers, backspace en koppeltekens.",
             "inspire": "Op thema",
             "organization": "Op dataleverancier",
             "published": "Gebruikers",
-            "didYouMean": "NOT TRANSLATED"
+            "didYouMean": "Bedoel je:"
         },
         "published": {
             "organization": "Gepubliceerde kaartlaag",
@@ -29,8 +30,8 @@ Oskari.registerLocalization({
         },
         "tooltip": {
             "type-base": "Achergrondkaart",
-            "type-wms": "Kaartlaag",
-            "type-wfs": "Productgegevens"
+            "type-wms": "Kaartlaag (WMS, WMTS)",
+            "type-wfs": "Productgegevens (WFS)"
         },
         "backendStatus": {
             "OK": {
@@ -46,7 +47,7 @@ Oskari.registerLocalization({
                 "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
-                "tooltip": "De statusinformatie van de kaartlaag is niet beschikbaar",
+                "tooltip": "NOT TRANSLATED",
                 "iconClass": "backendstatus-ok"
             }
         },
@@ -54,11 +55,23 @@ Oskari.registerLocalization({
             "ok": "OK"
         },
         "types": {
-            "syn": "NOT TRANSLATED",
-            "lk": "NOT TRANSLATED",
-            "vk": "NOT TRANSLATED",
-            "ak": "NOT TRANSLATED",
-            "yk": "NOT TRANSLATED"
+            "syn": "Synoniem",
+            "lk": "Verwante begrip",
+            "vk": "coördineren concept",
+            "ak": "ondergeschikte concept",
+            "yk": "Overkoepelend concept"
+        },
+        "layerFilter": {
+            "buttons": {
+                "newest": "Newest",
+                "stats": "Vector layers"
+            },
+            "tooltips": {
+                "newest": "Show ## newest map layers",
+                "stats": "Show only vector layers",
+                "remove": "Remove filter"
+            }
         }
     }
-});
+}
+);

@@ -74,7 +74,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
             // sortable component
             this.template = jQuery('<ul class="selectedLayersList sortable" ' + 'data-sortable=\'{' + 'itemCss: "li.layer.selected", ' + 'handleCss: "div.layer-title" ' + '}\'></ul>');
 
-            this.templateLayer = jQuery('<li class="layerselection2 layer selected">' + '<div class="layer-info">' + '<div class="layer-icon"></div>' + '<div class="layer-tool-remove"></div>' + '<div class="layer-title"><h4></h4></div>' + '</div>' + '<div class="stylesel">' + '<label for="style">' + loc.style + '</label>' + '<select name="style"></select></div>' + '<div class="layer-tools volatile">' + '</div>' + '</li>');
+            this.templateLayer = jQuery('<li class="layerselection2 layer selected">' + '<div class="layer-info">' + '<div class="layer-icon"></div>' + '<div class="layer-tool-remove"></div>'+ '<div class="layer-tool-refresh"></div>'  + '<div class="layer-title"><h4></h4>' + '</div>' + '</div>' + '<div class="stylesel">' + '<label for="style">' + loc.style + '</label>' + '<select name="style"></select></div>' + '<div class="layer-tools volatile">' + '</div>' + '</li>');
 
             // footers are changed based on layer state
             this.templateLayerFooterTools = jQuery('<div class="right-tools">' + '<div class="layer-rights"></div>' + '<div class="object-data"></div>' + '<div class="layer-description">' + '<div class="icon-info"></div></div>' + '<div class="layer-filter"></div>' + '</div>' + '<div class="left-tools">' + '<div class="layer-visibility">' + '<a href="JavaScript:void(0);">' + loc.hide + '</a>' + '&nbsp;' + '<span class="temphidden" ' + 'style="display: none;">' + loc.hidden + '</span>' + '</div>' + '<div class="oskariui layer-opacity">' + '<div class="layout-slider" id="layout-slider">' + '</div> ' + '<div class="opacity-slider" style="display:inline-block">' + '<input type="text" name="opacity-slider" class="opacity-slider opacity" id="opacity-slider" />%</div>' + '</div>' + '</div>');
@@ -379,7 +379,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 value = layer.getOpacity(),
                 layerDiv = this.templateLayer.clone(),
                 tooltips = this.instance.getLocalization('layer').tooltip,
-                icon = layerDiv.find('div.layer-icon');
+                icon = layerDiv.find('div.layer-icon'),
+                loc = me.instance.getLocalization('layer');
 
             // setup id
             layerDiv.attr('layer_id', layerId);
@@ -432,6 +433,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                             request = builder(layer.getId());
 
                         sandbox.request(me.instance.getName(), request);
+                    }
+                );
+            }
+            // manual refresh/reload for wfs layer
+            if (layer.hasFeatureData() && layer.isManualRefresh()) {
+                layerDiv.find('div.layer-tool-refresh').addClass('refresh');
+                layerDiv.find('.layer-tool-refresh').attr(
+                    'id',
+                    'oskari_layerselection_layercontainer_icon_refresh_layerId' + layerId
+                );
+                layerDiv.find('.layer-tool-refresh').attr('title',loc.refresh_load.tooltip);
+                layerDiv.find('div.layer-tool-refresh').bind(
+                    'click',
+                    function () {
+                        sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'detach']);
+                        var event = sandbox.getEventBuilder('WFSRefreshManualLoadLayersEvent')(layerId);
+                        sandbox.notifyAll(event);
+                        return false;
                     }
                 );
             }

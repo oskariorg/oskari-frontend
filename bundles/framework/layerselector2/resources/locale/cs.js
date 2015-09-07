@@ -59,6 +59,17 @@ Oskari.registerLocalization({
             "vk": "Koordinovat koncept",
             "ak": "Podřízený pojem",
             "yk": "Nadřazené koncepce"
+        },
+        "layerFilter": {
+            "buttons": {
+                "newest": "Newest",
+                "stats": "Vector layers"
+            },
+            "tooltips": {
+                "newest": "Show ## newest map layers",
+                "stats": "Show only vector layers",
+                "remove": "Remove filter"
+            }
         }
     }
 });

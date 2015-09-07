@@ -425,19 +425,6 @@
             },
             "instanceProps": {}
         }, {
-            "bundleinstancename": "statsgrid",
-            "bundlename": "statsgrid",
-            "metadata": {
-                "Import-Bundle": {
-                    "statsgrid": {
-                        "bundlePath": "../../../packages/statistics/bundle/"
-                    },
-                    "geostats": {
-                        "bundlePath": "../../../packages/libraries/bundle/"
-                    }
-                }
-            }
-        }, {
             "instanceProps": {},
             "title": "Karttatasot",
             "bundleinstancename": "admin-layerselector",
@@ -490,9 +477,6 @@
             }
         }, {
             "title" : "Admin - Users",
-            "fi" : "admin-users",
-            "sv" : "admin-users",
-            "en" : "admin-users",
             "bundlename" : "admin-users",
             "bundleinstancename" : "admin-users",
             "metadata" : {
@@ -500,10 +484,19 @@
                     "admin-users" : {
                         "bundlePath" : "../../../packages/framework/bundle/"
                      }
-                },
-                "Require-Bundle-Instance" : []
-            },
-            "instanceProps" : {}
+                }
+            }
+        }, {
+            "title" : "Admin Generic",
+            "bundlename" : "admin",
+            "bundleinstancename" : "admin",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "admin" : {
+                        "bundlePath" : "../../../packages/admin/bundle/"
+                     }
+                }
+            }
         }, {
             "title" : "myplacesimport",
             "fi" : "myplacesimport",
@@ -520,6 +513,38 @@
                 "Require-Bundle-Instance" : []
             },
             "instanceProps" : {}
+        }, {
+            "bundlename" : "heatmap",
+            "bundleinstancename" : "heatmap",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "heatmap" : {
+                        "bundlePath" : "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
+            "title": "publishedstatehandler",
+            "bundleinstancename": "publishedstatehandler",
+            "bundlename": "publishedstatehandler",
+            "metadata": {
+                "Import-Bundle": {
+                    "publishedstatehandler": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        }, {
+            "title": "Remote procedure call",
+            "bundlename": "rpc",
+            "metadata": {
+                "Import-Bundle": {
+                    "rpc": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                }
+            }
         }
     ]
 }

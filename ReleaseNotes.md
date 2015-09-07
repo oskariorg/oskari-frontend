@@ -1,5 +1,314 @@
 # Release Notes
 
+## 1.31.1
+
+Removed console.log() calls.
+
+## 1.31
+
+### admin
+
+The generic admin bundle now has a request to add functionality in tabs. This is done by sending a request with name 'Admin.AddTabRequest'.
+
+### metrics
+
+Initial version for a metrics display for admins. Adds a tab for the admin bundle to show metrics gathered by the serverside functionality.
+
+### tools
+
+Locked karma version to 0.12.31 since it works while not specifying a version doesn't.
+
+### analyse
+
+Added possibility to show aggregate analyse results in popup without saving the analyse layer.
+
+Added possibility to use aggregate method with spatial join.
+
+### coordinatestool
+
+*New  bundle!* Add new tool to show or set coordinates. Tool can present mouse move coordinates or map click coordinates to lon and lat inputs. You can also write your coordinates and then center map here.
+
+### routingUI
+
+*New bundle(POC)!* Adds new tool for giving parameters to route and requests route with parameters. Listens RouteSuccessEvent to render route and instructions.
+
+### routingService
+
+*New bundle (POC)!* Gets route from the service with parameters got from UI. Sends RouteSuccessEvent with geoJson and route instructions.
+
+### VectorLayerPlugin
+
+Vector layer plugin fixed so that more than one feature can be added at once to the layer.
+
+### divmanazer/visualization-form
+
+Improved checkbox selection, now custom color selection can be done with clicking label.
+
+### Admin layerselector
+
+New checkbox "manual refresh" for WFS layer, when inserting new layers to Oskari environment
+
+### WFSLayerPlugin
+
+Manual refresh event for manual refresh of wfs layers.
+
+Event is trigged when pushing "Feature Data" button or when pushing "Refresh" button.
+
+"Refresh" button is invisible, if there are no manual-refresh layers in selected map layers.
+
+Manual refresh layers are not rendered automatically on a map
+
+### layerselecton2
+
+New "refresh" icon besibe "close" icon, if layer is manual-refresh layer.
+
+Manual-refresh layer is rendered when clicking the icon.
+
+### layerselector2
+
+Improved checkbox selection, now layers can be selected/unselected by clicking layer name.
+
+Added filter buttons on each tabs. User can now filter layers.
+
+Now not show group if group has not any layers.
+
+Renamed AddLayerListFilterRequest to ShowFilteredLayerListRequest.
+
+### maplegend
+
+Added currently selected style name as a sub header for legend flyout.
+
+### layerselector2/AddLayerListFilterRequest
+
+*New request!* Adds new filter buttons and functionalities to layerlist.
+
+### publisher2
+
+Added GetInfoTool. GetInfoTool has now colous schema selection on extra options.
+
+PanelMapSize renamed to PanelMapPreview. PanelMapPreview allow select map preview mode in two different modes (mobile/desktop).
+
+### mapmodule-plugin/MapModule
+
+Added getMaxExtent function. This return max map extent.
+
+### Sandbox/map layer service
+
+Added new getNewestLayers(count) method to find newest layers corresponding to given count.
+
+## 1.30.4
+
+Userguide styles and analysis localizations fixed.
+
+## 1.30.3
+
+ReleaseNotes updated
+
+## 1.30.2
+
+Gfi responses of type text/html now allows br-tags
+
+## 1.30.1
+
+Couple of debuggers deleted.
+
+## 1.30
+
+### highlight and feature selection renewed
+
+On the normal map mode feature is highlighted only when Ctrl is down, otherwise feature info is shown.
+When feature selection is made with selection tool, Ctrl will add features to selection. Feature info is never shown at the same time with selection.
+
+#### mapwfs2/service
+
+Mapwfs2 has now new service called WFSLayerService, which handles WFS layers' states, for example selected features, top WFS layer, selected WFS layers etc. Service should be used always when setting selected features, selection mode etc.
+
+Mediator uses now WFSLayerService for setting highlighted features.
+
+#### featuredata2/PopupHandler
+
+Selection tool stays selected unless user clicks the tool again to unselect it or selects another tool.
+
+renderSelectionToolButtons -function can be used to add selection tools to any container.
+
+#### analyse
+
+Selection tools are now available in analyse panel and they use the same functions as toolbars selection tools.
+
+Selection can be made only from the selected layer, and only one layer can have selections at a time.
+
+### divmanazer
+
+DefaultFlyout now has a close() function which closes the flyout.
+DefaultFlyout now onOpen() and onClose() functions that are called when flyout is opened/closed.
+
+### applications
+
+oskari.org application has been removed as the sample/servlet application is the same thing.
+
+### tools
+
+Gruntfile reconfigured to use applications/sample/servlet as default application (instead of paikkatietoikkuna.fi).
+Added shortcut to build script: 'npm run build' and examples for build-paikkis, build-asdi and build-elf.
+Release assumed path with Oskari/bundles with capital O when copying resources, now it works with oskari/bundles as well.
+
+Known issue with frontend build and Grunt: The used grunt-sass doesn't work on node.js 0.12.x. It works with (atleast) 0.10.x versions.
+
+### core/sandbox
+
+Fixed sandbox.createURL(url). If the param url didn't include the domain part the port was included twice.
+Sandbox.createURL(url, true) now takes a second parameter that can be used to prepare the querystring part of the URL.
+Sandbox.findRegisteredModuleInstance() now returns all registered modules if name parameter is not given (for debugging purposes).
+
+Fixed sandbox.syncMapState(blnInitialMove, mapModule). If mapModule param is defined then calculate max zoom level there. If not then used default 13 max zoom level.
+
+### admin-layerselector
+
+Fixed theme or organization locale inputs when adding new group.
+
+### toolbar
+
+Fixed the link tool to get path from browser if not provided in configuration.
+
+Removed default print tool as it requires backend support that hasn't been available in preconstructed views. One should use
+the printout bundle with corresponding backend implementation instead to get proper print functionality.
+
+### mapmodule-plugin/MapModule
+
+Added getMaxZoomLevel function. This return max OL zoom level.
+
+### mapmodule-plugin/LogoPlugin
+
+The logo is now a link to the map service even if configuration is not provided. Uses browser location by default.
+
+### mapmodule-plugin/VectorLayerPlugin/AddFeaturesToMapRequest
+
+Fixed centerTo parameter handling.
+
+### myplacesimport
+
+If GDAL cannot determine CRS from the data, the import now assumes the current maps CRS (previously assumed EPSG:2393).
+
+### mapfull
+
+Fixed setState syncMapState function call to add mapmodule param.
+
+## 1.29
+
+### rpc
+
+New events are enabled by default: 
+
+ - 'AfterAddMarkerEvent' notifies a marker was added and includes an id for the marker
+ - 'MarkerClickEvent' notifies a marker being clickd and includes the id of the clicked marker
+
+Now always allows messages from origin starting with 'http://localhost' to help with developing features. 
+Prints warnings if RPC messages come from other than allowed origins.
+GetLayers-call now returns the layers UI-name in addition to id, opacity and visibility.
+
+### publisher2
+
+*New bundle!* This is the first step of the refactoring of publisher. It is not yet ready for use!
+
+### analyse
+
+Analyse parameters panel has now info buttons for parameter labels.
+
+### core
+
+User now has an getAPIkey() function. Parsed from user data returned by GetAppSetup.
+
+Oskari.util has been added to /Oskari/bundles/bundle.js. It holds generic helper-functions that are used 
+throughout Oskari code:
+
+    - isNumber()
+    - isDecimal()
+    - decimals()
+    - hexToRgb()
+    - rgbToHex()
+
+### analysis
+
+Now adds the PersonalData tab correctly if started after PersonalData bundle. Previously expected to be started before PersonalData.
+
+### admin-layerselector
+
+Fixed theme or organization locale labels when adding new group.
+
+### admin-users
+
+Fixed admin-users bundle user search.
+
+### catalogue/metadatagatalogue
+
+Improvements in show metadata coverage. Icons changes and now active metadata coverage is showed different icon.
+
+### coordinatedisplay/CoordinatesPlugin
+
+Moved plugin location to bottom of MyLocationPlugin.
+
+### divmanazer/Button
+
+Added blur and isFocus functions.
+
+### divmanazer/Grid
+
+Sort improved for non numeric values.
+
+Improvements in Excel/csv export
+("only selected features" option, metadata request url, expanding object column values, type conversion in values)
+
+### divmanazer/Popup
+
+Now checks correctly buttons focuses.
+
+### elf/elf-license
+
+In successfully license conclude now shows same information popup as concluded license.
+
+
+### featuredata2/Flyout
+
+Sort improved for non numeric values.
+
+### featuredata2/PopupHandler
+
+Unfocusing popup buttons.
+
+### mapmodule-plugin/BackgroundLayerSelectionPlugin
+
+Fixed to show selected background layer.
+
+### mapmodule-plugin/SearchPlugin
+
+Now handles zoomScale in search results correctly.
+
+### mapmodule-plugin/MarkersPlugin
+
+Removing single marker is now possible with 'MapModulePlugin.RemoveMarkersRequest'.
+
+Modifying a marker is now possible by sending 'MapModulePlugin.AddMarkerRequest' with the same id and different values:
+
+    Oskari.getSandbox().postRequestByName('MapModulePlugin.AddMarkerRequest',[{x : 385868, y : 6671782, color: "ffde00" }, 'Marker1']);
+    Oskari.getSandbox().postRequestByName('MapModulePlugin.AddMarkerRequest',[{x : 385868, y : 6671782, color: "ff0000" }, 'Marker1']);
+
+Removed possibility to attach eventlisteners to markers since it didn't work correctly. Planning to generate a MarkerClickedEvent on clicks that can be used for interaction.
+
+MarkerClickEvent is now sent when a marker is clicked. Id of the clicked marker is sent with the event.
+
+### mapmodule-plugin/MyLocationPlugin
+
+Moved plugin location to top of CoordinatesPlugin.
+
+### mapwfs2
+
+Fixed highlight error when user has highligted and unhighlighted feature and then moved map (the feature appears again highlighed).
+
+Now prefers using APIkey from sandbox.getUser().getAPIkey() instead of JSESSIONID cookie as session info. Fails fast on init if session info
+is not available and backs down on tries to reconnect to prevent spamming messages.
+
+Now buffers messages until init is completed. After init success, sends out the buffered messages.
+
 ## 1.28.1
 
 ### heatmap
