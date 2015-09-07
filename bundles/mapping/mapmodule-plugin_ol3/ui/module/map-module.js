@@ -34,7 +34,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             srsName: 'EPSG:3067',
             units: 'm'
         };
-        this._mapDivId = mapDivId;
+        this._mapDivId = mapDivId || 'mapdiv';
         // override defaults
         var key;
         if (options) {
@@ -89,6 +89,14 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         getMaxZoomLevel: function(){
             // getNumZoomLevels returns OL map resolutions length, so need decreased by one (this return max OL zoom)
             return this._options.resolutions.length - 1;
+        },
+
+        getInteractionInstance: function (interactionName) {
+            var interactions = this.getMap().getInteractions().getArray();
+            var interactionInstance = interactions.filter(function(interaction) {
+              return interaction instanceof interactionName;
+            })[0];
+            return interactionInstance;
         },
 
         _getContainerWithClasses: function (containerClasses) {
@@ -375,14 +383,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
             var map = new ol.Map({
                 extent: projectionExtent,
-                controls: ol.control.defaults({}, [
-                    /*new ol.control.ScaleLine({
-             units : ol.control.ScaleLineUnits.METRIC
-             })*/
-                ]),
                 isBaseLayer: true,
                 maxExtent: maxExtent,
-                target: 'mapdiv'
+                keyboardEventTarget: document,
+                target: this._mapDivId
 
             });
 
@@ -413,12 +417,23 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
             });
 
+            map.on('singleclick', function(evt) {
+                var sandbox = me._sandbox;
+                var CtrlPressed = evt.browserEvent.ctrlKey;
+                var mapClickedEvent = sandbox.getEventBuilder('MapClickedEvent')(evt.coordinate, evt.pixel[0], evt.pixel[1], CtrlPressed);
+                sandbox.notifyAll(mapClickedEvent);
+            });
+
+            map.on('pointermove', function(evt) {
+                var sandbox = me._sandbox;
+                var hoverEvent = sandbox.getEventBuilder('MouseHoverEvent')(evt.coordinate[0], evt.coordinate[1], false);
+                sandbox.notifyAll(hoverEvent);
+            });
 
             me._map = map;
 
             return me._map;
         },
-
 
         _calculateScalesImpl: function(resolutions) {
             return;
@@ -434,7 +449,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
             */
         },
-
 
         getZoomLevel: function() {
             return this._map.getView().getZoom();
@@ -737,25 +751,13 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @method bringToTop
          *
          * @param {OpenLayers.Layer} layer The new topmost layer
-         * @param {Integer} buffer Add this buffer to z index. If it's undefined, using 1.
          */
-        bringToTop: function(layer, buffer) {
-            var zIndex,
-                layerZIndex = 0;
-            if (layer !== null) {
-                if(layer.getZIndex) {
-                    layerZIndex = layer.getZIndex();
-                }
+        bringToTop: function(layer) {
 
-                zIndex = Math.max(this._map.Z_INDEX_BASE.Feature,layerZIndex);
-                if(buffer && buffer>0) {
-                    layer.setZIndex(zIndex+buffer);
-                }
-                else {
-                    layer.setZIndex(zIndex+1);
-                }
-            }
-            this.orderLayersByZIndex();
+            var map = this._map;
+            var list = map.getLayers();
+            list.remove(layer);
+            list.insertAt(0, layer);
         },
 
         /**

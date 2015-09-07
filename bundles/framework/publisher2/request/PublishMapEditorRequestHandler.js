@@ -2,7 +2,7 @@
  * @class Oskari.mapframework.bundle.publisher2.request.PublishMapEditorRequestHandler
  * Requesthandler for editing a map view in publish mode
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.request.PublishMapEditorRequestHandler',
+Oskari.clazz.define('Oskari.mapframework.bundle.publisher.request.PublishMapEditorRequestHandler',
     /**
      * @method create called automatically on construction
      * @static
@@ -22,9 +22,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.request.PublishMapEdi
          *      request to handle
          */
         handleRequest: function (core, request) {
-            this.instance.publishId = request.getEditMap().id;
-            this.instance.setPublishMode(true, this.instance.getLayersWithoutPublishRights(), request.getEditMap());
-            this._showEditNotification();
+            var me = this,
+                sandbox = me.instance.getSandbox(),
+                url = sandbox.getAjaxUrl();
+
+            //get the uuid from the request
+            var uuid = request._viewData.uuid && request._viewData.uuid ? request._viewData.uuid : null;
+            // make the ajax call
+            jQuery.ajax({
+                url: url + '&action_route=AppSetup&uuid='+uuid,
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    data.uuid = uuid;
+                    me.instance.setPublishMode(true, me.instance.getLayersWithoutPublishRights(), data);
+                    me._showEditNotification();
+                },
+                error: function(response) {
+                }
+            });
         },
         /**
          * @method _showEditNotification

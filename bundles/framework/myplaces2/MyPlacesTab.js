@@ -48,7 +48,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
             var me = this;
             me.addLayerButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
             // TODO I18N
-            me.addLayerButton.setTitle(me.loc.addCategory);
+            me.addLayerButton.setTitle(me.loc.addCategoryFormButton);
             me.addLayerButton.setHandler(function () {
                 me.instance.openAddLayerDialog('div.personaldata ul li select', 'right');
             });

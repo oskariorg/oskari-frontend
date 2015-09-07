@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "nl",
     "key": "userinterface.UserGuide",
     "value": {
@@ -6,7 +7,7 @@ Oskari.registerLocalization({
         "desc": "",
         "flyout": {
             "title": "Oskari gebruikershandleiding",
-            "loadingtxt": "NOT TRANSLATED"
+            "loadingtxt": "<p> Het laden van de gids ... </ p>"
         },
         "tile": {
             "title": "Kaart gebruikershandleiding"
@@ -15,9 +16,40 @@ Oskari.registerLocalization({
             "title": "Fout!",
             "generic": "Laden gebruikershandleiding is mislukt. Probeer het later opnieuw."
         },
+        "tabs": [
+            {
+                "title": "Kaart venster",
+                "tags": "kaart venster, gebruikershandleiding"
+            },
+            {
+                "title": "NOT TRANSLATED",
+                "tags": "NOT TRANSLATED"
+            },
+            {
+                "title": "NOT TRANSLATED",
+                "tags": "NOT TRANSLATED"
+            },
+            {
+                "title": "NOT TRANSLATED",
+                "tags": "NOT TRANSLATED"
+            },
+            {
+                "title": "NOT TRANSLATED",
+                "tags": "NOT TRANSLATED"
+            },
+            {
+                "title": "NOT TRANSLATED",
+                "tags": "NOT TRANSLATED"
+            },
+            {
+                "title": "NOT TRANSLATED",
+                "tags": "NOT TRANSLATED"
+            }
+        ],
         "help": {
-            "tags": "map window,user guide",
+            "tags": "kaart venster, gebruikershandleiding",
             "contentPart": "body"
         }
     }
-});
+}
+);

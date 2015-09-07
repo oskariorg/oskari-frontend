@@ -5,13 +5,13 @@ Oskari.registerLocalization(
     "value": {
         "title": "Dataset Import",
         "desc": "U kunt uw eigen gegevens importeren in een shp-, gpx- of mif/mid-bestandsformaat in een zip-bestand of KMZ-bestand formaat (gezipt kml).",
-        "help": "Selecteer een bestand van uw computer of geef een link naar het bestand dat je dataset bevat. Het bestand kan zijn een shp, zip of kml/ kmz formaat. U kunt zip-bestanden van shapefiles creëren door het zippen van de bestanden met de extensie shp, shx, dbf en prj naar hetzelfde zip-bestand. Ook kml / kmz bestanden van Google maps kunnen worden gezipped op dezelfde manier.",
         "tool": {
             "tooltip": "Importeer uw eigen dataset"
         },
         "flyout": {
             "title": "Import Dataset",
             "description": "U kunt uw eigen datasets importeren in shp-, gpx- of mif/mid-bestandsformaat in een zip-bestand of in een KMZ-bestand formaat (gezipte kml). U kunt bestanden importeren die hoogstens 5000 kenmerken bevatten",
+            "help": "Selecteer een bestand van uw computer of geef een link naar het bestand dat uw dataset bevat. Het bestand kan in shp, zip of kml / kmz formaat. U kunt zip-bestanden uit shapefiles maken door de bestanden te zippen met suffix shp, SHX, dbf en PRJ naar hetzelfde zip-bestand.\r\n Ook kml / kmz bestanden van Google maps kunnen worden gezipped op dezelfde manier.\r\n Mif / mid gegevens moeten in de huidige CRS kaart - bekijk huidige CRS onder zoombar",
             "actions": {
                 "cancel": "Annuleren",
                 "next": "Volgende"
@@ -19,9 +19,9 @@ Oskari.registerLocalization(
             "file": {
                 "submit": "Versturen",
                 "fileOverSizeError": {
-                    "title": "NOT TRANSLATED",
-                    "message": "NOT TRANSLATED",
-                    "close": "NOT TRANSLATED"
+                    "title": "Fout",
+                    "message": "Uw dataset is te groot. Maximun grootte van de ingevoerde dataset is <xx> mb.",
+                    "close": "Sluiten"
                 }
             },
             "layer": {

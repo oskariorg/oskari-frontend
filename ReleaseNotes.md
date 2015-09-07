@@ -1,5 +1,50 @@
 # Release Notes
 
+## 1.32
+
+### map-module
+
+Modified styles not display error pink tiles (where is CSS olImageLoadError-class). Also added configurable OpenLayers IMAGE_RELOAD_ATTEMPTS and onImageLoadErrorColor.
+
+### sample/servlet
+
+Modified minifierAppSetup.json to also include coordinatetool -bundle.
+
+### mapwmts
+
+WMTS support has been refactored to enable better Openlayers 3 support. 
+Requires backend functionality with action route 'GetLayerCapabilities' that takes the layer id as parameter('id')
+ and returns the layer capabilities in XML format.
+
+#### Changes to classes:
+
+*Oskari.mapframework.wmts.domain.WmtsLayer*
+setWmtsName -> setLayerName
+getWmtsName -> getLayerName
+addWmtsUrl -> addLayerUrl
+getWmtsUrls -> getLayerUrls
+getUrl -> getLayerUrl
+getRequestEncoding/setWmtsCaps/getWmtsCaps -> *removed*
+
+*Oskari.mapframework.wmts.service.WmtsLayerModelBuilder*
+Heavily refactored since capabilities are no longer parsed here
+
+*Oskari.mapframework.wmts.service.WMTSLayerService*
+Currently responsible for loading capabilities and creating the WMTS layer object for the map engine.
+
+### coordinatedisplay
+
+Added possibility to configure how many decimals coordinates are rounded. If not configured then using zero decimals.
+
+### coordinatetool
+
+Added possibility to configure how many decimals coordinates are rounded. If not configured then using zero decimals.
+
+### mapwfs2
+
+Wfs layer rendering is improved. Improvements also made in the backend Transport service for this item
+
+
 ## 1.31.1
 
 Removed console.log() calls.
@@ -95,6 +140,10 @@ Added getMaxExtent function. This return max map extent.
 ### Sandbox/map layer service
 
 Added new getNewestLayers(count) method to find newest layers corresponding to given count.
+
+### WMSLayerPlugin/WMTSLayerPlugin
+
+Real time layers are now shown with current time parameter.
 
 ## 1.30.4
 

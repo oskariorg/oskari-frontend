@@ -1,0 +1,108 @@
+{
+    "startupSequence": [{
+        "title": "Map",
+        "fi": "Map",
+        "sv": "?",
+        "en": "Map",
+        "bundlename": "mapfull",
+        "bundleinstancename": "mapfull",
+        "metadata": {
+            "Import-Bundle" : {
+            "core-base" : {
+                "bundlePath" : "../../../packages/framework/bundle/"
+            },
+            "core-map" : {
+                "bundlePath" : "../../../packages/framework/bundle/"
+            },
+            "sandbox-base" : {
+                "bundlePath" : "../../../packages/framework/bundle/"
+            },
+            "sandbox-map" : {
+                "bundlePath" : "../../../packages/framework/bundle/"
+            },
+            "event-base" : {
+                "bundlePath" : "../../../packages/framework/bundle/"
+            },
+            "event-map" : {
+                "bundlePath" : "../../../packages/framework/bundle/"
+            },
+            "event-map-layer" : {
+                "bundlePath" : "../../../packages/framework/bundle/"
+            },
+            "request-base" : {
+                "bundlePath" : "../../../packages/framework/bundle/"
+            },
+            "request-map" : {
+                "bundlePath" : "../../../packages/framework/bundle/"
+            },
+            "request-map-layer" : {
+                "bundlePath" : "../../../packages/framework/bundle/"
+            },
+            "service-base" : {
+                "bundlePath" : "../../../packages/framework/bundle/"
+            },
+            "service-map" : {
+                "bundlePath" : "../../../packages/framework/bundle/"
+            },
+            "domain" : {
+                "bundlePath" : "../../../packages/framework/bundle/"
+            },
+            "mapmodule-plugin_ol3" : {
+                "bundlePath" : "../../../packages/mapping/"
+            },
+            "mapwmts_ol3" : {
+                "bundlePath" : "../../../packages/mapping/"
+            },
+            "mapwfs2" : {
+                "bundlePath" : "../../../packages/framework/bundle/"
+            },
+            "mapuserlayers" : {
+                "bundlePath" : "../../../packages/framework/bundle/"
+            },
+            "oskariui" : {
+                "bundlePath" : "../../../packages/framework/bundle/"
+            },
+            "mapfull" : {
+                "bundlePath" : "../../../packages/framework/bundle/"
+            },
+            "ui-components": {
+                "bundlePath": "../../../packages/framework/bundle/"
+            }
+        },
+            "Require-Bundle-Instance": []
+        },
+        "instanceProps": {}
+    }, {
+        "title": "Toolbar",
+        "bundleinstancename": "toolbar",
+        "fi": "toolbar",
+        "sv": "?",
+        "en": "?",
+        "bundlename": "toolbar",
+        "metadata": {
+            "Import-Bundle": {
+                "toolbar": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        },
+        "instanceProps": {}
+    }, {
+        "title" : "publishedstatehandler",
+        "fi" : "publishedstatehandler",
+        "sv" : "publishedstatehandler",
+        "en" : "publishedstatehandler",
+        "bundlename" : "publishedstatehandler",
+        "bundleinstancename" : "publishedstatehandler",
+        "metadata" : {
+            "Import-Bundle" : {
+                "publishedstatehandler" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance" : []
+        },
+        "instanceProps" : {}
+    }]
+}

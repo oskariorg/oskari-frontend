@@ -38,28 +38,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
 
         me.panel = null;
         me.modeChangedCB = null;
-
-        me.fields = {
-            size: {
-                clazz: 'Oskari.userinterface.component.RadioButtonGroup',
-                handler: function(value){
-                    me.sizeOptions.forEach(function (option) {
-                        option.selected = option.id === value;
-                    });
-                    me.updateMapSize();
-                },
-                options: me.sizeOptions.map(function (option) {
-                    var title = me.loc.sizes[option.id];
-
-                    return {
-                        title: title,
-                        value: option.id
-                    };
-                }),
-                value: me.selected.id
-            }
-        };
-
         this.templates = {
             help: jQuery('<div class="help icon-info"></div>')
         };
@@ -302,7 +280,39 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
                 tooltipCont = me.templates.help.clone(),
                 customSizes = document.createElement('fieldset'),
                 firstCustomSizeAdded = false;
+
             me.modeChangedCB = modeChangedCB;
+
+            //initial mode selection if modify.
+            if (pData && pData.metadata && pData.metadata.preview) {
+                me.selected =  me.sizeOptions.filter(function (option) {
+                    return (option.id === pData.metadata.preview);
+                })[0];
+            }
+
+            //initialise fields only after it's certain which option is selected (new / modify)
+            me.fields = {
+                size: {
+                    clazz: 'Oskari.userinterface.component.RadioButtonGroup',
+                    handler: function(value){
+                        me.sizeOptions.forEach(function (option) {
+                            option.selected = option.id === value;
+                        });
+                        me.updateMapSize();
+                    },
+                    options: me.sizeOptions.map(function (option) {
+                        var title = me.loc.sizes[option.id];
+
+                        return {
+                            title: title,
+                            value: option.id
+                        };
+                    }),
+                    value: me.selected.id
+                }
+            };
+
+
 
             for (fkey in me.fields) {
                 if (me.fields.hasOwnProperty(fkey)) {
@@ -378,10 +388,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
                 values = {},
                 selected = me._getSelectedMapSize();
 
-            values.size = {
-                id: selected.option.id,
-                width: selected.width,
-                height: selected.height
+            values = {
+                metadata: {
+                    preview: selected.option.id
+                }
             };
 
             return values;
