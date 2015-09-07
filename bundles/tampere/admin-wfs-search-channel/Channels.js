@@ -103,6 +103,12 @@ Oskari.clazz.define(
                 me.templates.form.find('.details--wrapper').append(me.templates.form.detailinputs);
             });
 
+            me.templates.form.find('input[name=details-isaddress]').change(function() {
+                if(jQuery(this).is(":checked")) {
+                    jQuery(this).parents("form").find(".remove--param").not(".hidden").parent("label").remove();
+                }
+            });
+
             me.templates.form.find(".remove--param").click(function(event){
                 jQuery(this).parent().remove();
                 event.preventDefault;
@@ -113,7 +119,6 @@ Oskari.clazz.define(
                  event.preventDefault;
              });
 
-            //me.templates.form.attr('action', me.sandbox.getAjaxUrl() + me.instance.conf.restUrl);
             me.templates.form.find('input,select').each(function (index) {
                 var el = jQuery(this);
                 el.prev('span').html(me._getLocalization(el.attr('name')));
@@ -134,6 +139,14 @@ Oskari.clazz.define(
             btn.addClass('btn--center new-params-btn');
             jQuery(btn.getElement()).click(
                 function (event) {
+                    if(jQuery(this).parents('form').find("input[name=details-isaddress]").is(":checked") && jQuery(this).parents('form').find("select[name=choose-param-for-search]").length == 2){
+                        me._openPopup(
+                            me._getLocalization('is_address_topic'),
+                            me._getLocalization('is_address_info')
+                        );
+                        return false;
+                    }
+     
                     var newParams = jQuery(this).prev("label").clone(true);
                     newParams.find(".remove--param").removeClass("hidden");
                     jQuery(this).before(newParams);

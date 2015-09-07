@@ -21,7 +21,7 @@ Oskari.clazz.define(
         this.localization = null;
         this.optionService = null;
         this.searchService = null;
-        this.tabPriority = 5.0;
+        this.tabPriority = 1.0;
         this.conditions = [];
         this.safeChars = false;
         this.resultHeaders = [
@@ -482,7 +482,7 @@ Oskari.clazz.define(
                     // Wfs search from channels tab OBS. this will be in UI if user has rights into channels
                     var title = me.getLocalization('tabTitle'),
                         content = searchFromChannelsContainer,
-                        priority = this.tabPriority,
+                        priority = me.tabPriority,
                         id = 'oskari_searchfromchannels_tabpanel_header',
                         reqName = 'Search.AddTabRequest',
                         reqBuilder = me.sandbox.getRequestBuilder(reqName),
@@ -621,7 +621,7 @@ Oskari.clazz.define(
 
              if (result.totalCount === 1) {
                     // move map etc
-                    me._resultClicked(result.locations[0]);               
+                    me._resultClicked(result.locations[0], true);               
                 }
             }
 
@@ -635,9 +635,10 @@ Oskari.clazz.define(
                     return r.type === type;
                 });
                 if(results.length>0) {
+
                     panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
                     panel.setTitle(type);
-
+                    
                     // render results
                     var table = me.templates.templateResultTable.clone(),
                         tableHeaderRow = table.find('thead tr'),
@@ -687,6 +688,11 @@ Oskari.clazz.define(
 
                     panel.setContent(table);
                     panel.setVisible(true);
+
+                    if(types.length == 1){
+                        panel.open();     
+                    }
+                   
                     accordion.addPanel(panel);
                 }
             });
@@ -701,8 +707,10 @@ Oskari.clazz.define(
                 'Oskari.userinterface.component.Button'
             );
             btn.setTitle(me.getLocalization("show-all-on-map"));
+            btn.addClass('show-on-map');
             jQuery(btn.getElement()).click(
                 function (event) {
+                    jQuery(this).addClass('active');
                     me._zoomMapToResults(result, true, resultList.find('table.search_result'));
                 }
             );
@@ -713,8 +721,10 @@ Oskari.clazz.define(
                 'Oskari.userinterface.component.Button'
             );
             btn.setTitle(me.getLocalization("show-selected-on-map"));
+            btn.addClass('show-on-map');
             jQuery(btn.getElement()).click(
                 function (event) {
+                    jQuery(this).addClass('active');
                     me._zoomMapToResults(result, false, resultList.find('table.search_result'));
                 }
             );
@@ -873,6 +883,7 @@ Oskari.clazz.define(
                 var title = me.getLocalization('no_selected_rows_alert_title');
                 var msg = me.getLocalization('no_selected_rows_have_to_select');
                 dialog.show(title, msg, [okBtn]);
+                tableBody.parents('.searchFromChannels_window_search_results').find('.show-on-map').removeClass('active');
             }
 
         },
@@ -886,7 +897,12 @@ Oskari.clazz.define(
             // row reference needs some closure magic to work here
             var closureMagic = function (scopedValue) {
                 return function () {
-                    me._resultClicked(scopedValue);
+                    if(resultsTableBody.parents('.searchFromChannels_window_search_results').find('.show-on-map').hasClass('active')){
+                        me._resultClicked(scopedValue, false);
+                    }else{
+                        me._resultClicked(scopedValue, true);
+                    }
+                   
                     return false;
                 };
             };
@@ -916,7 +932,7 @@ Oskari.clazz.define(
          * @param  {[type]} result [description]
          * @return {[type]}        [description]
          */
-        _resultClicked: function (result) {
+        _resultClicked: function (result, drawVector) {
             var me = this,
                 popupId = 'searchResultPopup',
                 sandbox = me.sandbox;
@@ -928,8 +944,15 @@ Oskari.clazz.define(
                 var zoom = {scale : result.zoomScale};
             }
 
-            var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
-            sandbox.postRequestByName(rn, [result.GEOMETRY, 'WKT', {id:result.id}, null, 'replace', true, me._getVectorLayerStyle(), true]);
+           sandbox.request(
+                me.getName(),
+                moveReqBuilder(result.lon, result.lat, zoom, false)
+            );
+
+            if(drawVector){
+                var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
+                sandbox.postRequestByName(rn, [result.GEOMETRY, 'WKT', {id:result.id}, null, 'replace', true, me._getVectorLayerStyle(), false]);
+            }
 
             var loc = me.getLocalization('resultBox'),
                 resultActions = {},
