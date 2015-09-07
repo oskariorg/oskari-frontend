@@ -44,6 +44,14 @@ Added possibility to configure how many decimals coordinates are rounded. If not
 
 Wfs layer rendering is improved. Improvements also made in the backend Transport service for this item
 
+### tampere/admin-wfs-search-channel
+
+*New  bundle!* Adds new WFS search admin tool. Admin can define new WFS search channels.
+
+### tampere/search-from-channels
+
+*New  bundle!* Adds new WFS search.
+
 
 ## 1.31.1
 
