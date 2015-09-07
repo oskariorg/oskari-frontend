@@ -417,22 +417,70 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
             });
 
-            map.on('singleclick', function(evt) {
+            map.on('singleclick', function (evt) {
                 var sandbox = me._sandbox;
                 var CtrlPressed = evt.browserEvent.ctrlKey;
                 var mapClickedEvent = sandbox.getEventBuilder('MapClickedEvent')(evt.coordinate, evt.pixel[0], evt.pixel[1], CtrlPressed);
                 sandbox.notifyAll(mapClickedEvent);
             });
 
-            map.on('pointermove', function(evt) {
+            map.on('pointermove', function (evt) {
                 var sandbox = me._sandbox;
                 var hoverEvent = sandbox.getEventBuilder('MouseHoverEvent')(evt.coordinate[0], evt.coordinate[1], false);
                 sandbox.notifyAll(hoverEvent);
             });
 
+            //NOTE! The next is only for demos, delete when going to release ol3!
+            map.on('dblclick', function (evt) {
+                if (this.emptyFeatures === undefined) {
+                    this.emptyFeatures = false;
+                }
+                if (!this.emptyFeatures) {
+                    me._testVectorPlugin(evt.coordinate[0], evt.coordinate[1]);
+                    this.emptyFeatures = true;
+                } else {
+                    var rn = 'MapModulePlugin.RemoveFeaturesFromMapRequest';
+                    me._sandbox.postRequestByName(rn, []);
+                    this.emptyFeatures = false;
+                }
+            });
+
             me._map = map;
 
             return me._map;
+        },
+
+        //NOTE! The next is only for demos, delete when going to release ol3!
+        _testVectorPlugin: function (x,y) {
+            var geojsonObject = {
+                  'type': 'FeatureCollection',
+                  'crs': {
+                    'type': 'name',
+                    'properties': {
+                      'name': 'EPSG:3067'
+                    }
+                  },
+                  'features': [
+                    {
+                      'type': 'Feature',
+                      'geometry': {
+                        'type': 'LineString',
+                        'coordinates': [[x, y], [x+1000, y+1000]]
+                      }
+                    },
+                    {
+                      'type': 'Feature',
+                      'geometry': {
+                        'type': 'Point',
+                        'coordinates': [x, y]
+                      }
+                    }
+                    
+                  ]
+                };
+
+            var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
+            this._sandbox.postRequestByName(rn, [geojsonObject, 'GeoJSON', null, 'replace', true, null, null, true]);
         },
 
         _calculateScalesImpl: function(resolutions) {
@@ -753,7 +801,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @param {OpenLayers.Layer} layer The new topmost layer
          */
         bringToTop: function(layer) {
-
             var map = this._map;
             var list = map.getLayers();
             list.remove(layer);
@@ -795,6 +842,31 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             this._updateDomainImpl();
             if (suppressEvent !== true) {
                 //send note about map change
+                this.notifyMoveEnd();
+            }
+            */
+        },
+
+        /**
+         * @method zoomToExtent
+         * Zooms the map to fit given bounds on the viewport
+         * @param {OpenLayers.Bounds} bounds BoundingBox that should be visible on the viewport
+         * @param {Boolean} suppressStart true to NOT send an event about the map starting to move
+         *  (other components wont know that the map has started moving, only use when chaining moves and
+         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+         * @param {Boolean} suppressEnd true to NOT send an event about the map move
+         *  (other components wont know that the map has moved, only use when chaining moves and
+         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+         */
+        zoomToExtent: function (bounds, suppressStart, suppressEnd) {
+            this._map.getView().fit(bounds, this._map.getSize());
+            this._updateDomainImpl();
+            // send note about map change
+            /*
+            if (suppressStart !== true) {
+                this.notifyStartMove();
+            }
+            if (suppressEnd !== true) {
                 this.notifyMoveEnd();
             }
             */
