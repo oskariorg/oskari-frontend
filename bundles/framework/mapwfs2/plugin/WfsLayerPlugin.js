@@ -682,7 +682,28 @@ Oskari.clazz.define(
             var lonlat = event.getLonLat(),
                 keepPrevious = this.getSandbox().isCtrlKeyDown();
 
-            this.getIO().setMapClick(lonlat, keepPrevious);
+            var geojson_format = new OpenLayers.Format.GeoJSON();
+            var point = new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat);
+
+            var pixelTolerance = 15;
+            var selection = geojson_format.write(point);
+            var json = {
+                    type: 'FeatureCollection',
+                    crs: this.getMap().getProjection(),
+                    features: [{
+                        type: 'Feature',
+                        geometry: JSON.parse(selection),
+                        properties : {
+                            // add buffer based on resolution
+                            buffer_radius : this.getMap().getResolution() * pixelTolerance
+                        }
+                    }]
+                };
+            this.getIO().setMapClick({
+                lon : lonlat.lon,
+                lat : lonlat.lat,
+                json : json
+            }, keepPrevious);
         },
 
         /**
