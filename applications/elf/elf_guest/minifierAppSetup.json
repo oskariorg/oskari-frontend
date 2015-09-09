@@ -58,12 +58,6 @@
                     "mapmyplaces": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     },
-	                "mapstats": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "mapanalysis": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
 	                "mapuserlayers": {
 	                    "bundlePath": "../../../packages/framework/bundle/"
 	                },
