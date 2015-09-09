@@ -386,13 +386,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
             layerDiv.find('div.layer-title').append(layer.getDescription());
             layerDiv.find('div.layer-title h4').append(layer.getName());
             
-            var contentEditorButton = $("<input type='button'>").addClass('content-editor-button').val(loc['content-editor']);
-            contentEditorButton.on('click', function() {
-            	var request = sandbox.getRequestBuilder('ContentEditor.ShowContentEditorRequest')(layerId);
-                sandbox.request("ContentEditor", request);
-            });
-            layerDiv.find('div.layer-title').append(contentEditorButton);
-
+            if (layer.getPermission("edit")) {
+	            var contentEditorButton = $("<input type='button'>").addClass('content-editor-button').val(loc['content-editor']);
+	            contentEditorButton.on('click', function() {
+	            	var request = sandbox.getRequestBuilder('ContentEditor.ShowContentEditorRequest')(layerId);
+	                sandbox.request("ContentEditor", request);
+	            });
+	            layerDiv.find('div.layer-title').append(contentEditorButton);
+            }
             this._updateStyles(layer, layerDiv);
 
             // setup icon
