@@ -24,10 +24,10 @@ function() {
 
         "scripts" : [{
             "type" : "text/javascript",
-            "src" : "../../../../libraries/cometd/comp.js"
+            "src" : "../../../libraries/cometd/comp.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../libraries/jquery/plugins/jquery.cookie.js"
+            "src" : "../../../libraries/jquery/plugins/jquery.cookie.js"
         },{
             "type" : "text/javascript",
             "src" : "../../../bundles/mapping/mapwfs2_ol3/service/Connection.js"
@@ -94,7 +94,19 @@ function() {
         }, {
             "type" : "text/javascript",
             "src" : "../../../bundles/mapping/mapwfs2_ol3/domain/WfsLayerModelBuilder.js"
+        },{
+            "type" : "text/javascript",
+            "src" : "../../../bundles/framework/divmanazer/component/VisualizationForm.js"
         }, {
+            "type" : "text/javascript",
+            "src" : "../../../bundles/framework/divmanazer/component/visualization-form/DotForm.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../bundles/framework/divmanazer/component/visualization-form/LineForm.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../bundles/framework/divmanazer/component/visualization-form/AreaForm.js"
+        }, /* {
             "type" : "text/javascript",
             "src" : "../../../bundles/mapping/divmanazer/component/VisualizationForm.js"
         }, {
@@ -106,7 +118,7 @@ function() {
         }, {
             "type" : "text/javascript",
             "src" : "../../../bundles/mapping/divmanazer/component/visualization-form/AreaForm.js"
-        }],
+        } */],
         "locales" : [{
             "lang" : "en",
             "type" : "text/javascript",
@@ -198,4 +210,4 @@ function() {
 
 });
 
-Oskari.bundle_manager.installBundleClass("mapwfs2", "Oskari.mapframework.bundle.mapwfs2.MapWfsBundle");
+Oskari.bundle_manager.installBundleClass("mapwfs2_ol3", "Oskari.mapframework.bundle.mapwfs2.MapWfsBundle");
