@@ -131,8 +131,7 @@ Oskari.registerLocalization(
             },
             "imagelink": {
                 "placeholder": "Link to the image",
-                "previewLabel": "Image preview",
-                "add": "New map layer"
+                "previewLabel": "Image preview"
             },
             "rendering": {
                 "label": "Place style",

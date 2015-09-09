@@ -10,6 +10,10 @@ Modified styles not display error pink tiles (where is CSS olImageLoadError-clas
 
 Modified minifierAppSetup.json to also include coordinatetool -bundle.
 
+### admin-layerselector
+
+Added support for time values for WMS layers. The available time values are stored in layer attributes and the selected time value can be passed to GetMap requests through layer parameters. Added a field to the admin UI for selecting the desired time value.
+
 ### mapwmts
 
 WMTS support has been refactored to enable better Openlayers 3 support. 
