@@ -217,16 +217,6 @@ Oskari.clazz.define(
                 }
             }
 
-            this.addSearchResultActionRequestHandler = Oskari.clazz.create(
-                'Oskari.tampere.bundle.searchfromchannels.request.AddSearchResultActionRequestHandler',
-                sandbox,
-                me
-            );
-            sandbox.addRequestHandler(
-                'AddSearchResultActionRequest',
-                this.addSearchResultActionRequestHandler
-            );
-
             // draw ui
             me.createUi();
         },

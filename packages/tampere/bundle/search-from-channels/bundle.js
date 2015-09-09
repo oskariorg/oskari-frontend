@@ -46,15 +46,7 @@ Oskari.clazz.define("Oskari.tampere.bundle.searchfromchannels.SearchFromChannels
 	        {
 				"type" : "text/javascript",
 				"src" : "../../../../bundles/tampere/search-from-channels/instance.js"
-			}, 
-			/* request */
-	        {
-	            "type": "text/javascript",
-	            "src": "../../../../bundles/tampere/search-from-channels/request/AddSearchResultActionRequest.js"
-	        }, {
-	            "type": "text/javascript",
-	            "src": "../../../../bundles/tampere/search-from-channels/request/AddSearchResultActionRequestHandler.js"
-	        },
+			},
 	        /* css */
 			{
 				"type" : "text/css",
