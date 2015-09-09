@@ -606,6 +606,7 @@ define([
                 if(data.layerType === 'wmslayer') {
                     data.xslt = form.find('#add-layer-xslt').val();
                     data.gfiType = form.find('#add-layer-responsetype').val();
+                    data.params = form.find('#add-layer-selectedtime').val();
                 }
                 else if(data.layerType === 'wmtslayer') {
                     data.matrixSetId = form.find('#add-layer-matrixSetId').val();
