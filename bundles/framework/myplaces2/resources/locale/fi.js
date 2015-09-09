@@ -131,8 +131,7 @@ Oskari.registerLocalization(
             },
             "imagelink": {
                 "placeholder": "Linkki kuvaan kohteesta",
-                "previewLabel": "Kuvan esikatselu",
-                "add": "Uusi karttataso"
+                "previewLabel": "Kuvan esikatselu"
             },
             "rendering": {
                 "label": "Karttatasolla olevien kohteiden esitystavat",
