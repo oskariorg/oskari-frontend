@@ -103,7 +103,8 @@ Oskari.registerLocalization(
                     "value_missing": "The value is missing.",
                     "boolean_operator_missing": "The logical operator is missing."
                 }
-            }
+            },
+            "content-editor": "Content editor"
         }
     }
 }

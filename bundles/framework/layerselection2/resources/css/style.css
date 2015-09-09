@@ -69,6 +69,15 @@ div.layerselection2 ul.selectedLayersList {
   div.layerselection2 ul.selectedLayersList span {
     position: absolute;
     margin-left: -1.3em; }
+  div.layerselection2 div.layer-info h4 {
+  	display: inline;
+  }
+  
+  div.layerselection2 div.layer-info .content-editor-button {
+  	float:right;
+  	line-height: 7px;
+  	margin-right: 20px;
+  }
 
 div.analyse-filter-popup-content div.filter-option {
   padding-bottom: 10px; }
@@ -104,3 +113,4 @@ div.analyse-filter-popup-content div.filter-option {
     width: 65px; }
   div.analyse-filter-popup-content div.filter-option select.operator {
     width: 210px; }
+  

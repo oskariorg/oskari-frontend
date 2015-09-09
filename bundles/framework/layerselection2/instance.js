@@ -307,6 +307,18 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselection2.LayerSelectionBu
             var me = this;
             this.plugins['Oskari.userinterface.Flyout'].createUi();
             this.plugins['Oskari.userinterface.Tile'].refresh();
+        },
+        _getFakeExtension: function (name) {
+            return {
+                getName: function () {
+                    return name;
+                }
+            };
+        },
+        _openExtension: function (name) {
+            var extension = this._getFakeExtension(name);
+            var rn = 'userinterface.UpdateExtensionRequest';
+            this.sandbox.postRequestByName(rn, [extension, 'attach']);
         }
     }, {
         /**
