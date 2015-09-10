@@ -475,7 +475,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                         'coordinates': [x, y]
                       }
                     }
-                    
+
                   ]
                 };
 

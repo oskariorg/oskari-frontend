@@ -126,10 +126,10 @@ function(sandbox, mapmodule, localization, instance, handlers) {
         return true;
     },
     /**
-    * Is displayed. We can use this to tell when tool is displayed. 
-    * For example if stats layers are added to map when opening publisher we can tell at then this tool need to be shown (ShowStatsTableTool). 
+    * Is displayed. We can use this to tell when tool is displayed.
+    * For example if stats layers are added to map when opening publisher we can tell at then this tool need to be shown (ShowStatsTableTool).
     * Is there is no stats layer then not show the tool.
-    * 
+    *
     * @method isDisplayed
     * @public
     *

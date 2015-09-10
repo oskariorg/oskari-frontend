@@ -324,7 +324,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             } catch(e) {
                 pluginConfigs = null;
             }
-            if (pluginConfigs && pluginConfigs.length) { 
+            if (pluginConfigs && pluginConfigs.length) {
                 var pluginConfig = null;
                 _.each(tools, function(tool) {
                     for (var i = 0; i < pluginConfigs.length; i++) {

@@ -189,7 +189,7 @@ Oskari.clazz.define(
 
                 if (centerTo === true) {
                     var extent = vectorsource.getExtent();
-                    me.getMapModule().zoomToExtent(extent);    
+                    me.getMapModule().zoomToExtent(extent);
                 }
             }
         },
