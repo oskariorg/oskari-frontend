@@ -2,6 +2,15 @@
 
 ## 1.32
 
+### catalogue/metadataflyout
+
+Added configurable ISO 1913139 XML or Print -links hiding. Defaults showing links. Configuration is done by adding the following information to a bundle config:
+
+    {
+        hideMetadataXMLLink: true,
+        hideMetaDataPrintLink: true
+    }
+
 ### map-module
 
 Modified styles not display error pink tiles (where is CSS olImageLoadError-class). Also added configurable OpenLayers IMAGE_RELOAD_ATTEMPTS and onImageLoadErrorColor.
