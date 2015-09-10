@@ -490,29 +490,31 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
 
             var markerLayer = this.getMarkersLayer(),
                 markerStyle = new ol.style.Style({
-                    image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+                    image: new ol.style.Icon({
                         src: iconSrc,
                         size: [size,size]
-                    })),
+                    }),
                     text: new ol.style.Text({
                         text: decodeURIComponent(data.msg),
-                        textAlign: 'lm',
+                        textAlign: 'left',
+                        textBaseline: 'middle',
                         offsetX: 8 + 2 * data.size,
-                        offsetY: 8,
+                        offsetY: -8,
                         fill: new ol.style.Fill({
-                            color: '$000000'
+                            color: '#000000'
                         }),
                         stroke: new ol.style.Stroke({
-                            color: '$FFFFFF',
+                            color: '#ffffff',
                             width: 1
                         }),
                         font: 'bold 16px Arial'
                     })
                 }),
-                newMarker = new ol.Feature({id: data.id, geometry: new ol.geom.Point(data.x, data.y), style: markerStyle});
+                newMarker = new ol.Feature({id: data.id, geometry: new ol.geom.Point([data.x, data.y])});
 
             this._markerFeatures[data.id] = newMarker;
             this._markers[data.id] = data;
+            newMarker.setStyle(markerStyle);
 
             markerLayer.getSource().addFeature(newMarker);
             this.raiseMarkerLayer(markerLayer);
