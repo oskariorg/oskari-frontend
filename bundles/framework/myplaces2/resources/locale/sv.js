@@ -131,8 +131,7 @@ Oskari.registerLocalization(
             },
             "imagelink": {
                 "placeholder": "Länk till bilden",
-                "previewLabel": "Förhandsvisning av bilden",
-                "add": "Nytt kartlager"
+                "previewLabel": "Förhandsvisning av bilden"
             },
             "rendering": {
                 "label": "Placera stil",
