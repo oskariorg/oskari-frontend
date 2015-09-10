@@ -144,6 +144,10 @@ Oskari.registerLocalization({
                     "boolean_operator_missing": "The logical operator is missing."
                 }
             }
+        },
+        "analysisNoData": {
+            "noDataKeyField": "The_number_of_unauthorised_features",
+            "noDataMessage": "Count = Number of features without unauthorized features."
         }
     }
 });

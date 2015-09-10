@@ -187,7 +187,7 @@ Oskari.registerLocalization(
                     },
                     {
                         "id": "oskari_analyse_NoDataCnt",
-                        "label": "The number of authorised features"
+                        "label": "The number of unauthorised features"
                     }
                 ],
                 "attribute": "Select the attribute",

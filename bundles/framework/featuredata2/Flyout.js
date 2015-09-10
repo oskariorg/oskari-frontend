@@ -586,6 +586,10 @@ Oskari.clazz.define(
                 if (me.resizable) {
                     this._enableResize();
                 }
+
+                // Extra footer message under grid
+                this._appendFooter(flyout, visibleFields);
+
             }
         },
 
@@ -850,7 +854,34 @@ Oskari.clazz.define(
             else {
                 link.removeClass(strClass);
             }
+        },
+        /**
+         * Add footer text under tab data grid, if special fields in dataset
+         * - Not the best solution, but ..
+         * @private
+         * @param  {jQuery} flyout
+         * @param  {Array} visible field names
+         */
+        _appendFooter : function(flyout, visibleFields) {
+           var footer = this.template.wrapper.clone(),
+               loc = this.instance.getLocalization('analysisNoData'),
+               message;
+
+            if(!loc) {
+                return;
+            }
+
+            _.forEach(visibleFields, function (field) {
+                if (field === loc.noDataKeyField){
+                    message = loc.noDataMessage;
+                }
+            });
+            if(message){
+                flyout.find('div.tab-content').append(footer.html(message));
+            }
+
         }
+
     }, {
         /**
          * @static @property {String[]} protocol

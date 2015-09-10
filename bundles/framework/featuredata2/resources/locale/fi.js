@@ -144,6 +144,10 @@ Oskari.registerLocalization({
                     "boolean_operator_missing": "Looginen operaattori puuttuu."
                 }
             }
+        },
+        "analysisNoData": {
+            "noDataKeyField": "Tietosuojattujen_kohteiden_lukumäärä",
+            "noDataMessage": "Kohteiden_lkm = Laskennassa käytettävien tilastointiyksiköiden tai -alueiden lukumäärä, tietosuojatut kohteet eivät sisälly laskentaan."
         }
     }
 });

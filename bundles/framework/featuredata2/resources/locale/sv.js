@@ -145,6 +145,10 @@ Oskari.registerLocalization(
                     "boolean_operator_missing": "Den logiska operatören saknas."
                 }
             }
+        },
+        "analysisNoData": {
+            "noDataKeyField": "Skyddad_objekt",
+            "noDataMessage": "Antal = Antal utan skyddad objekt."
         }
     }
 }
