@@ -168,6 +168,29 @@ Oskari.clazz.define(
                     "type": "text/css",
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/resources/css/scalebar.css"
                 },
+                // Markers plugin
+                {
+                    "type": "text/javascript",
+                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/markers/MarkersPlugin.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/request/AddMarkerRequest.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/request/AddMarkerRequestHandler.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/request/RemoveMarkersRequest.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/request/RemoveMarkersRequestHandler.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/event/AfterAddMarkerEvent.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/event/AfterRemoveMarkersEvent.js"
+                },
                 /*
                 // FullScreen
                 {
