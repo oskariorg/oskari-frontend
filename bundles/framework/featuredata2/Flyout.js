@@ -588,7 +588,7 @@ Oskari.clazz.define(
                 }
 
                 // Extra footer message under grid
-                this._appendFooter(flyout, visibleFields);
+                this._appendFooter(flyout, locales);
 
             }
         },
@@ -860,18 +860,18 @@ Oskari.clazz.define(
          * - Not the best solution, but ..
          * @private
          * @param  {jQuery} flyout
-         * @param  {Array} visible field names
+         * @param  {Array} localized field names
          */
-        _appendFooter : function(flyout, visibleFields) {
+        _appendFooter : function(flyout, locales) {
            var footer = this.template.wrapper.clone(),
                loc = this.instance.getLocalization('analysisNoData'),
                message;
 
-            if(!loc) {
+            if(!loc || !locales) {
                 return;
             }
 
-            _.forEach(visibleFields, function (field) {
+            _.forEach(locales, function (field) {
                 if (field === loc.noDataKeyField){
                     message = loc.noDataMessage;
                 }

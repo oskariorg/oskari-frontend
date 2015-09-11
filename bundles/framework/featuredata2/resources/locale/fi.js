@@ -147,7 +147,7 @@ Oskari.registerLocalization({
         },
         "analysisNoData": {
             "noDataKeyField": "Tietosuojattujen_kohteiden_lukumäärä",
-            "noDataMessage": "Kohteiden_lkm = Laskennassa käytettävien tilastointiyksiköiden tai -alueiden lukumäärä, tietosuojatut kohteet eivät sisälly laskentaan."
+            "noDataMessage": "Kohteiden_lukumäärä = Laskennassa käytettävien tilastointiyksiköiden tai -alueiden lukumäärä, tietosuojatut kohteet eivät sisälly laskentaan."
         }
     }
 });
