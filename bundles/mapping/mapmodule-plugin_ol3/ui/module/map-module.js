@@ -804,7 +804,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var map = this._map;
             var list = map.getLayers();
             list.remove(layer);
-            list.insertAt(0, layer);
+            list.push(layer);
         },
 
         /**
