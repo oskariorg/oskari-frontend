@@ -237,18 +237,30 @@ Oskari.clazz.define(
                 return;
         },
         /**
+         * @method afterMapLayerRemoveEvent
+         * Handle AfterMapLayerRemoveEvent
+         *
+         * @param {Object} event
+         */
+        afterMapLayerRemoveEvent: function (event) {
+            var layer = event.getMapLayer();
+
+            this.removeMapLayerFromMap(layer);
+        },
+        /**
          * @method removeMapLayerFromMap
          * Remove map layer from map.
          *
          * @param {Oskari.mapframework.domain.VectorLayer} layer the layer
          */
         removeMapLayerFromMap: function (layer) {
-            if (!this._layers[layer.get('id')]) {
+            if (!this._layers[layer.getId()]) {
                 return;
             }
-            var vectorLayer = this._layers[layer.get('id')];
+            var vectorLayer = this._layers[layer.getId()];
             this._map.removeLayer(vectorLayer);
-            delete this._layers[layer.get('id')];
+            delete this._layers[layer.getId()];
+
         },
         /**
          * @method getOLMapLayers

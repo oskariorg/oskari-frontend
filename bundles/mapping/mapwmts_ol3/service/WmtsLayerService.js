@@ -46,7 +46,10 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
         var caps = this.getCapabilities(url);
         if(caps) {
             // return with cached capabilities
-            var wmtsLayer = format.createLayer(caps, me.__getLayerConfig(caps, layer));
+            var wmtsOptions = ol.source.WMTS.optionsFromCapabilities(caps, me.__getLayerConfig(caps, layer));
+            var wmtsLayer = new ol.layer.Tile({
+                source: new ol.source.WMTS(wmtsOptions)
+            });
             success(wmtsLayer);
             return;
         }
@@ -121,13 +124,17 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
                 buffer: 0
             };
 
-            var capsLayer = _.find(caps.contents.layers, function(capsLayer) {
-              return capsLayer.identifier === config.layer;
+            var capsLayer = _.find(caps.Contents.Layer, function(capsLayer) {
+              return capsLayer.Identifier === config.layer;
             });
-            if(capsLayer && capsLayer.resourceUrl && capsLayer.resourceUrl.tile) {
+
+            if(capsLayer && capsLayer.ResourceURL && capsLayer.ResourceURL.length) {
+                var index = _.findIndex(capsLayer.ResourceURL, function(resource) {
+                    return resource.resourceType === 'tile';
+                });
                 config.requestEncoding = 'REST';
-                config.format = capsLayer.resourceUrl.tile.format;
-                config.url = capsLayer.resourceUrl.tile.template;
+                config.format = capsLayer.ResourceURL[index].format;
+                config.url = capsLayer.ResourceURL[index].template;
             }
 
             // override default params and options from layer

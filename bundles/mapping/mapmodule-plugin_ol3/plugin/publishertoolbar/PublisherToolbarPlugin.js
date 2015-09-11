@@ -135,6 +135,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 'Toolbar.ToolContainerRequest': Oskari.clazz.create(
                     'Oskari.mapframework.bundle.toolbar.request.ToolContainerRequestHandler',
                     this
+                ),
+                'ToolSelectionRequest': Oskari.clazz.create(
+                    'Oskari.mapframework.mapmodule.ToolSelectionHandler',
+                    this.getSandbox(),
+                    this
                 )
             };
         },
