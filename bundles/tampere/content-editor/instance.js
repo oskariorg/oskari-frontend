@@ -61,7 +61,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
          * Implements BundleInstance protocol start method
          */
         start: function () {
-        	debugger;
             var me = this,
                 conf = me.conf,
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
@@ -142,6 +141,11 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
          * @static
          */
         eventHandlers: {
+        	GetInfoResultEvent: function (evt) {
+        		if (this.sideContentEditor != null) {
+        			this.sideContentEditor._handleInfoResult(evt.getData());
+        		}
+            }
         },
 
         /**
@@ -260,7 +264,10 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
                 //postRequestByName brakes mode change functionality! me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close']);
                 request = me.sandbox.getRequestBuilder('userinterface.UpdateExtensionRequest')(me, 'close', me.getName());
                 me.sandbox.request(me.getName(), request);
+                
             }
+            
+            me.sandbox.postRequestByName('MapFull.MapSizeUpdateRequest', []);
         },
         _getFakeExtension: function (name) {
             return {
