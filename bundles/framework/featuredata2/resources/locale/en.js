@@ -145,9 +145,10 @@ Oskari.registerLocalization({
                 }
             }
         },
-        "analysisNoData": {
-            "noDataKeyField": "The_number_of_unauthorised_features",
-            "noDataMessage": "Count = Number of features without unauthorized features."
+        "gridFooter": {
+                "aggregateColumnField": "Count",
+                "noDataMessage": "Count = Number of features without unauthorized features",
+                "noDataCommonMessage": "There are unauthorized feature values in the data"
         }
     }
 });
