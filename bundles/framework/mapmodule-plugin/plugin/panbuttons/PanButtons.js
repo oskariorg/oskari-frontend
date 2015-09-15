@@ -148,6 +148,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             // Change the style if in the conf
             if (conf && conf.toolStyle) {
                 me.changeToolStyle(conf.toolStyle, me.getElement());
+            } else {
+                //not found -> use the style config obtained from the mapmodule.
+                var mapModuleConf = {};
+                mapModuleConf.toolStyle = me.getToolStyleFromMapModule();
+                me.changeToolStyle(conf.toolStyle, me.getElement());
             }
         },
 
@@ -166,7 +171,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             if (!div) {
                 return;
             }
-
             var panButtons = div.find('img.panbuttonDivImg');
             if (styleName === null) {
                 panButtons.removeAttr('style');

@@ -225,9 +225,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             if (conf) {
                 if (conf.toolStyle) {
                     me.changeToolStyle(conf.toolStyle, me.getElement());
+                } else {
+                    //not found -> use the style config obtained from the mapmodule.
+                    var mapModuleConf = {};
+                    mapModuleConf.toolStyle = me.getToolStyleFromMapModule();
+                    me.changeToolStyle(mapModuleConf.toolStyle.val, me.getElement());
                 }
+
+
                 if (conf.font) {
                     me.changeFont(conf.font, me.getElement());
+                } else {
+                    conf.font = me.getToolFontFromMapModule();
+                    me.changeFont(conf.font, me.getElement());
+
                 }
             }
         },

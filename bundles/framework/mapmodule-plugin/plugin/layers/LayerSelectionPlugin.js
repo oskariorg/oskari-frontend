@@ -580,9 +580,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             if (conf) {
                 if (conf.toolStyle) {
                     me.changeToolStyle(conf.toolStyle, element);
+                } else {
+                    //conf.toolStyle = me.getToolStyleFromMapModule();
+                    //me.changeToolStyle(conf.toolStyle.val, element);
                 }
 
                 if (conf.font) {
+                    me.changeFont(conf.font, element);
+                } else {
+                    conf.font = me.getToolFontFromMapModule();
                     me.changeFont(conf.font, element);
                 }
 
@@ -601,11 +607,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          */
         changeToolStyle: function (styleName, div) {
             div = div || this.getElement();
-
             if (!div) {
                 return;
             }
 
+            //??? TODO: what's this for????
             if (styleName === null) {
                 // reset plugin if active
                 if (this.getElement()) {
@@ -615,6 +621,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 }
                 return;
             }
+            
 
             var self = this,
                 header = div.find('div.header'),

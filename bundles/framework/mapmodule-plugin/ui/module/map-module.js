@@ -43,6 +43,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
         };
         this._mapDivId = mapDivId;
+        //debugger;
         // override defaults
         var key;
         if (options) {
@@ -990,6 +991,51 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
                 // Add the new font as a CSS class.
                 el.addClass(classToAdd);
+            }
+        },
+
+        setToolStyle: function(style) {
+            var me = this;
+            me.style = _.cloneDeep(style);
+            
+            //notify plugins in some nice way
+            _.each(me._pluginInstances, function(plugin) {
+                if (plugin && plugin.hasUI()) {
+                    //this is quite ugly, all plugins really should work the same way...
+                    var styleConfig;
+                    if (plugin.getName().indexOf('Portti2Zoombar') >= 0 || plugin.getName().indexOf('SearchPlugin') >= 0) {
+                        styleConfig = {
+                            val:  me.style.toolStyle.val
+                        };
+                    } else {
+                        // otherwise just use the style's id
+                        styleConfig = me.style.toolStyle.val !== "default" ? me.style.toolStyle.val : null;
+                    }
+
+                    if (plugin.changeFont && typeof plugin.changeFont === 'function') {
+                        plugin.changeFont(me.style.font);
+                    }
+                    if (plugin.changeToolStyle && typeof plugin.changeToolStyle === 'function') {
+                        plugin.changeToolStyle(styleConfig);
+                    }
+                }
+            });
+        },
+        getToolStyle: function() {
+            //TODO: get this from mapOptions once the style info is delivered with it. Return null when not available.
+            var me = this;
+            if (me.style) {
+                return me.style.toolStyle.val;
+            } else {
+                return "sharp-dark";
+            }
+        },
+        getToolFont: function() {
+            var me = this;
+            if (me.style) {
+                return me.style.font;
+            } else {
+                return "Arial";
             }
         },
 

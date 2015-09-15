@@ -76,6 +76,8 @@ Oskari.clazz.define(
             // Change the style if in the conf
             if (conf && conf.toolStyle) {
                 me.changeToolStyle(conf.toolStyle, me.getElement());
+            } else {
+                me.changeToolStyle(conf.toolStyle.val, me.getElement());
             }
         },
 

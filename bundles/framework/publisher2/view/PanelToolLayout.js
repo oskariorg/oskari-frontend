@@ -48,15 +48,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                     //just update the plugins' locationdata
                     me._changeToolLayout(me.activeToolLayout, null);
                 }
-            },
+            }
+
+/*
+            ,
             'Publisher2.ToolStyleChangedEvent': function(event) {
+                console.log("TODO: remove me");
                 var me = this;
                 me._changeToolStyles(event.getStyle());
             },
             'Publisher2.FontChangedEvent': function(event) {
+                console.log("TODO: remove me");
                 var me = this;
                 me._changeFont(event.getFont());
             }
+*/            
         },
         /**
          * @method init
@@ -661,9 +667,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 toolInstance,
                 tools = me.tools;
 
-            if (style.val === 'default') {
-                style.val = null;
-            }
+//            if (style.val === 'default') {
+//                style.val = null;
+//            }
 
             // Set the toolStyle to the config of each tool
             // and change the style immedately.
@@ -720,6 +726,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             if (!font) {
                 return;
             }
+
+
+            //TODO: set the font only for the mapmodule.
+            //TODO in mapmodule: loop through plugins and let em know the font changed.
+            //TODO in each plugin: ability to fråga font from mapmodule, in case font not given in own config. 
+            this.mapModule.setFont(font);
+
+
+
+
+
 
             var me = this,
                 i,

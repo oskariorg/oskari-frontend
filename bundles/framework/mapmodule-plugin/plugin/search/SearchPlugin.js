@@ -89,6 +89,42 @@ Oskari.clazz.define(
                 '  <td></td>' +
                 '</tr>'
             );
+            me.toolStyles = {
+                'default': {
+                    val: null
+                },
+                'rounded-dark': {
+                    val: 'rounded-dark',
+                    widthLeft: 17,
+                    widthRight: 32
+                },
+                'rounded-light': {
+                    val: 'rounded-light',
+                    widthLeft: 17,
+                    widthRight: 32
+                },
+                'sharp-dark': {
+                    val: 'sharp-dark',
+                    widthLeft: 5,
+                    widthRight: 30
+                },
+                'sharp-light': {
+                    val: 'sharp-light',
+                    widthLeft: 5,
+                    widthRight: 30
+                },
+                '3d-dark': {
+                    val: '3d-dark',
+                    widthLeft: 5,
+                    widthRight: 44
+                },
+                '3d-light': {
+                    val: '3d-light',
+                    widthLeft: 5,
+                    widthRight: 44
+                }
+            }
+
             var conf = me.getConfig();
             if (conf && conf.url) {
                 ajaxUrl = conf.url;
@@ -139,6 +175,11 @@ Oskari.clazz.define(
             var me = this,
                 conf = me.getConfig(),
                 el;
+
+
+            if (conf && !conf.toolStyle) {
+                conf.toolStyle = me.getToolStyleFromMapModule();
+            }
 
             if (conf && conf.toolStyle) {
                 el = me.styledTemplate.clone();
@@ -498,7 +539,6 @@ Oskari.clazz.define(
                 this.getSandbox().getRequestBuilder('HideMapMarkerRequest')()
             );
         },
-
         /**
          * Changes the tool style of the plugin
          *
@@ -511,11 +551,15 @@ Oskari.clazz.define(
                 removedClass,
                 addedClass,
                 template;
-
             div = div || me.getElement();
 
             if (!style || !div) {
                 return;
+            }
+
+            //publisher2 vs. other modules that call this function....hackyish.
+            if (!style.hasOwnProperty("widthLeft")) {
+                style = this.toolStyles[style.val] ? this.toolStyles[style.val] : this.toolStyles["default"]; 
             }
 
             // Set the correct template for the style... ugly.

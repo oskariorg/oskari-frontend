@@ -30,6 +30,78 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
         this._name = 'Portti2Zoombar';
         this._slider = null;
         this._suppressEvents = false;
+
+        this.toolStyles = {
+            'default': {
+                val: null
+            },
+            'rounded-dark': {
+                val: 'rounded-dark',
+                widthPlus: '22px',
+                widthMinus: '22px',
+                widthCenter: '22px',
+                heightPlus: '38px',
+                heightMinus: '39px',
+                heightCenter: 12,
+                heightCursor: '18px',
+                widthCursor: '17px'
+            },
+            'rounded-light': {
+                val: 'rounded-light',
+                widthPlus: '22px',
+                widthMinus: '22px',
+                widthCenter: '22px',
+                heightPlus: '38px',
+                heightMinus: '39px',
+                heightCenter: 12,
+                heightCursor: '18px',
+                widthCursor: '17px'
+            },
+            'sharp-dark': {
+                val: 'sharp-dark',
+                widthPlus: '23px',
+                widthMinus: '23px',
+                widthCenter: '23px',
+                heightPlus: '17px',
+                heightMinus: '18px',
+                heightCenter: 16,
+                heightCursor: '16px',
+                widthCursor: '23px'
+            },
+            'sharp-light': {
+                val: 'sharp-light',
+                widthPlus: '23px',
+                widthMinus: '23px',
+                widthCenter: '23px',
+                heightPlus: '17px',
+                heightMinus: '18px',
+                heightCenter: 16,
+                heightCursor: '16px',
+                widthCursor: '23px'
+            },
+            '3d-dark': {
+                val: '3d-dark',
+                widthPlus: '23px',
+                widthMinus: '23px',
+                widthCenter: '23px',
+                heightPlus: '35px',
+                heightMinus: '36px',
+                heightCenter: 13,
+                heightCursor: '13px',
+                widthCursor: '23px'
+            },
+            '3d-light': {
+                val: '3d-light',
+                widthPlus: '23px',
+                widthMinus: '23px',
+                widthCenter: '23px',
+                heightPlus: '35px',
+                heightMinus: '36px',
+                heightCenter: 13,
+                heightCursor: '13px',
+                widthCursor: '23px'
+            }
+        };
     }, {
         /**
          * @private @method _createControlElement
@@ -107,7 +179,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             var me = this,
                 conf = me.getConfig();
             // Change the style if in the conf
+            //plugin has an individual style conf? -> use that
             if (conf && conf.toolStyle) {
+                me.changeToolStyle(conf.toolStyle, me.getElement());
+            } else {
+                var mapModuleConf = {};
+                mapModuleConf.toolStyle = me.getToolStyleFromMapModule();
                 me.changeToolStyle(conf.toolStyle, me.getElement());
             }
             me._setZoombarValue(me.getMap().getZoom());
@@ -161,7 +238,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
          * @public @method changeToolStyle
          * Changes the tool style of the plugin
          *
-         * @param {Object} style
+         * @param {Object} styleId
          * @param {jQuery} div
          *
          */
@@ -171,6 +248,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
 
             if (!style || !div) {
                 return;
+            }
+            //publisher2 vs. other modules that call this function....hackyish.
+            if (!style.hasOwnProperty("widthCenter")) {
+                style = this.toolStyles[style.val] ? this.toolStyles[style.val] : this.toolStyles["default"]; 
             }
 
             var resourcesPath = this.getMapModule().getImageUrl(),

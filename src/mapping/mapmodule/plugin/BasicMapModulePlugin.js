@@ -290,6 +290,17 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
          */
         isVisible: function () {
             return this._visible;
+        },
+        /**
+         * @public @method getToolStyleConfigFromMapModule
+         *
+         */
+        getToolStyleFromMapModule: function() {
+            //not found -> use the style config obtained from the mapmodule.
+            return { val: this.getMapModule().getToolStyle() };
+        },
+        getToolFontFromMapModule: function() {
+            return this.getMapModule().getToolFont();
         }
     }, {
         /**
