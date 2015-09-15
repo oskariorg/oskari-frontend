@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "de",
     "key": "MapModule",
     "value": {
@@ -20,44 +21,92 @@ Oskari.registerLocalization({
         },
         "plugin": {
             "LogoPlugin": {
-                "terms": "Nutzungsbedingungen"
+                "terms": "Nutzungsbedingungen",
+                "dataSources": "Datenquellen",
+                "layersHeader": "Kartenebenen",
+                "indicatorsHeader": "Indikatoren"
             },
             "DataSourcePlugin": {
                 "link": "Datenquelle",
                 "popup": {
                     "title": "Datenquellen",
-                    "content": " "
+                    "content": "NICHT ÜBERSETZT"
                 },
                 "button": {
                     "close": "Schließen"
                 }
             },
             "LayerSelectionPlugin": {
-                "title": "Objektdaten",
+                "title": "Kartenebenen",
                 "chooseDefaultBaseLayer": "Hintergrundkarte wählen"
             },
             "SearchPlugin": {
                 "placeholder": "Finde Orte",
-                "search": "Finde",
+                "search": "Suche",
                 "title": "Suchergebnisse",
                 "close": "Liste der Suchergebnisse schließen",
-                "noresults": "Keine Ergebnisse gefunden",
+                "noresults": "Keine Ergebnisse gefunden. Bitte verändern Sie Ihre Suche.",
                 "toomanyresults": "Über 100 Ergebnisse gefunden. Bitte verfeinern Sie Ihre Suche.",
                 "column_name": "Name",
                 "column_village": "Gemeinde",
                 "column_type": "Typ"
             },
             "GetInfoPlugin": {
-                "title": "Kartenebenen",
-                "layer": "NOT TRANSLATED",
-                "places": "Orte",
+                "title": "Objektdaten",
+                "layer": "Kartenebene",
+                "places": "Objekte",
                 "description": "Beschreibung",
                 "link": "URL-addresse",
                 "name": "Name"
             },
+            "PublisherToolbarPlugin": {
+                "test": "test",
+                "history": {
+                    "reset": "Zurück zur Ausgangsansicht",
+                    "back": "Zurück zur vorherigen Ansicht",
+                    "next": "Nächste Ansicht"
+                },
+                "measure": {
+                    "line": "Distanz messen",
+                    "area": "Fläche messen"
+                }
+            },
+            "MarkersPlugin": {
+                "buttons": {
+                    "add": "Karte markieren",
+                    "clear": "Entferne alle Markierungen"
+                },
+                "form": {
+                    "title": "Punktdarstellung",
+                    "tooltip": "",
+                    "symbol": {
+                        "label": "Symbol"
+                    },
+                    "size": {
+                        "label": "Größe"
+                    },
+                    "color": {
+                        "label": "Farbe",
+                        "labelOr": "oder",
+                        "labelCustom": "Farbwert anpassen (RGB 0-255)"
+                    },
+                    "preview": {
+                        "label": "Vorschau"
+                    },
+                    "message": {
+                        "label": "Text in der Karte",
+                        "hint": "Nachricht verfassen"
+                    }
+                },
+                "dialog": {
+                    "title": "Karte markieren",
+                    "message": "Karte anklicken, um neue Position für Markierung auszuwählen."
+                }
+            },
             "MyLocationPlugin": {
-                "tooltip": "NOT TRANSLATED"
+                "tooltip": "Karte zentrieren"
             }
         }
     }
-});
+}
+);

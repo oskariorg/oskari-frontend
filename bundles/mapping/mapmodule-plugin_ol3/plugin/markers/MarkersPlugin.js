@@ -209,19 +209,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         _createMapMarkerLayer: function() {
             var me = this,
                 markerLayer = new ol.layer.Vector({title: 'Markers', source: new ol.source.Vector()});
-            // markerLayer.events.fallThrough = true;
-            // featureclick/nofeatureclick doesn't seem to be emitted, so working around that
-            //markerLayer.events.register('click', this, function(e) {
-              //  if(me._waitingUserClickToAddMarker) {
-                    // adding a marker, handled in __mapClick()
-                //    return true;
-                //}
-                // clicking on map, check if marker is hit
-                //if (e.target && e.target._featureId) {
-                  //  me.__markerClicked(e.target._featureId);
-                //}
-                //return true;
-            //});
 
             this.getMap().addLayer(markerLayer);
             this.raiseMarkerLayer(markerLayer);
@@ -296,7 +283,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             // remove all
             if (!optionalMarkerId) {
                 // Openlayers
-                //markerLayer.removeAllFeatures();
+                markerLayer.getSource().clear();
                 // internal data structure
                 delete me._markers;
                 me._markers = {};
