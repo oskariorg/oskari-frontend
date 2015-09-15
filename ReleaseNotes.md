@@ -57,6 +57,12 @@ Added possibility to configure how many decimals coordinates are rounded. If not
 
 Wfs layer rendering is improved. Improvements also made in the backend Transport service for this item
 
+### Analysis  / aggregate method
+
+Resultset content format is changed in backend. There is now one record for each property with aggregate function values.
+
+Resultset was earlier one record with json attributes.
+
 
 ## 1.31.1
 
