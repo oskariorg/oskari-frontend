@@ -57,6 +57,9 @@ Added possibility to configure how many decimals coordinates are rounded. If not
 
 Wfs layer rendering is improved. Improvements also made in the backend Transport service for this item
 
+## 1.31.2
+
+Fixed a bug when saving a view with statsgrid on
 
 ## 1.31.1
 
