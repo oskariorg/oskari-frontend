@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.31.2
+
+Fixed a bug when saving a view with statsgrid on
+
 ## 1.31.1
 
 Removed console.log() calls.
