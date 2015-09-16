@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "de",
     "key": "LayerSelector",
     "value": {
@@ -9,15 +10,15 @@ Oskari.registerLocalization({
             "generic": "Systemfehler. Bitte versuchen Sie es später noch einmal.",
             "loadFailed": "Fehler beim Laden der Kartenebenen. Laden Sie die Webseite Ihres Browsers erneut und wählen Sie die Kartenebenen.",
             "noResults": "Die Suche ergab keine Treffer.",
-            "noResultsForKeyword": "Die Suche ergab keine Stichworte.",
-            "minChars": "Minimum 4 Zeichen lang sein."
+            "noResultsForKeyword": "Die Suche ergab keine Kartenebenen für dieses Stichwort.",
+            "minChars": "Minimum 4 Zeichen. Erlaubte Zeichen sind die Buchstaben a-z, å, ä, ö sowie Zahlen, Bindestriche und die Backspace-Taste."
         },
         "loading": "Lade...",
         "filter": {
             "text": "Suche Kartenebenen",
             "keywordsTitle": "Stichworte:",
             "shortDescription": "Suche Kartenebenen nach Name, Hersteller oder Stichworten.",
-            "description": "You can search map layers by writing a part of the name or producer of the layer. By writing at 4 least characters and pushing enter key you can also search for keywords that are related to the layers. The number after the keyword in the list tells you how many map layers are related to it.",
+            "description": "Geben Sie die ersten Buchstaben der Bezeichnung der Kartenebene, des Herstellers oder eines Stichwortes ein. Die Suche startet ab der Eingabe von mindestens 4 Zeichen. Erlaubte Zeichen sind die Buchstaben a-z, å, ä, ö sowie Zahlen, Bindestriche und die Backspace-Taste.",
             "inspire": "Nach Thema",
             "organization": "Nach Datenanbieter",
             "published": "Benutzer",
@@ -29,20 +30,21 @@ Oskari.registerLocalization({
         },
         "tooltip": {
             "type-base": "Hintergrundkarte",
-            "type-wms": "Kartenebene",
-            "type-wfs": "Datenprodukt"
+            "type-wms": "Kartenebene (WMS, WMTS)",
+            "type-wfs": "Datenprodukt (WFS)",
+            "type-wfs-manual": "NOT TRANSLATED"
         },
         "backendStatus": {
             "OK": {
-                "tooltip": "Die Kartenebene ist derzeitig verfügbar.",
+                "tooltip": "Die Kartenebene ist derzeit verfügbar.",
                 "iconClass": "backendstatus-ok"
             },
             "DOWN": {
-                "tooltip": "Die Kartenebene ist derzeitig nicht verfügbar.",
+                "tooltip": "Die Kartenebene ist derzeit nicht verfügbar.",
                 "iconClass": "backendstatus-down"
             },
             "MAINTENANCE": {
-                "tooltip": "Die Kartenebene könnte in den nächsten Tagen teilweise nicht verfügbar sein..",
+                "tooltip": "Die Kartenebene könnte in den nächsten Tagen teilweise nicht verfügbar sein.",
                 "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
@@ -55,10 +57,10 @@ Oskari.registerLocalization({
         },
         "types": {
             "syn": "Synonym",
-            "lk": "Verwandte Konzept",
-            "vk": "Koordinieren Konzept",
-            "ak": "Untergeordnete Konzept",
-            "yk": "Ûbergeordnete Konzept"
+            "lk": "Verwandtes Konzept",
+            "vk": "Koordinierendes Konzept",
+            "ak": "Untergeordnetes Konzept",
+            "yk": "Übergeordnetes Konzept"
         },
         "layerFilter": {
             "buttons": {
@@ -72,4 +74,5 @@ Oskari.registerLocalization({
             }
         }
     }
-});
+}
+);
