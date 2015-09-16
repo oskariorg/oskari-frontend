@@ -367,7 +367,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         _addClickControl: function(){
             var me = this;
             //Set up a click handler
-            OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {                
+            OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
                 defaultHandlerOptions: {
                     'double': true,
                     'stopDouble': true
@@ -379,7 +379,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                     );
                     OpenLayers.Control.prototype.initialize.apply(
                         this, arguments
-                    ); 
+                    );
                     this.handler = new OpenLayers.Handler.Click(
                         this, {
                             'click': function(evt){
