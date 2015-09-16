@@ -15,6 +15,12 @@ Added configurable ISO 1913139 XML or Print -links hiding. Defaults showing link
 
 Modified styles not display error pink tiles (where is CSS olImageLoadError-class). Also added configurable OpenLayers IMAGE_RELOAD_ATTEMPTS and onImageLoadErrorColor.
 
+Added mapclick handling.
+
+### mapmodule-plugin/plugin/controls/OskariNavigation.js
+
+Removed mapclick handling because this breaks publisher featuredata functionality.
+
 ### sample/servlet
 
 Modified minifierAppSetup.json to also include coordinatetool -bundle.
@@ -53,9 +59,17 @@ Added possibility to configure how many decimals coordinates are rounded. If not
 
 Added possibility to configure how many decimals coordinates are rounded. If not configured then using zero decimals.
 
+Fixed map double click handling, now when double clicked map the coordinate textboxes are updated map centeer values (if show mouse coordinate is not checked).
+
 ### mapwfs2
 
 Wfs layer rendering is improved. Improvements also made in the backend Transport service for this item
+
+### Analysis  / aggregate method
+
+Resultset content format is changed in backend. There is now one record for each property with aggregate function values.
+
+Resultset was earlier one record with json attributes.
 
 ## 1.31.2
 
