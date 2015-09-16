@@ -331,7 +331,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                  * Shows map center coordinates after map move
                  */
                 AfterMapMoveEvent: function (event) {
-                    if(this._showMouseCoordinates) {
+                    if(!this._showMouseCoordinates) {
                         this.refresh();
                     }
                 },
