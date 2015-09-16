@@ -403,7 +403,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * Send map click event.
          * @method  @private __sendMapClickEvent
          * @param  {Object} evt event object
-         */ 
+         */
         __sendMapClickEvent : function(evt) {
             var sandbox = this._sandbox;
             /* may be this should dispatch to mapmodule */
