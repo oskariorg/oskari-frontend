@@ -364,6 +364,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             return this._map;
         },
 
+        /**
+         * Add map click handler
+         * @method @private _addClickControl
+         */
         _addClickControl: function(){
             var me = this;
             //Set up a click handler
@@ -395,6 +399,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             click.activate();
         },
 
+        /**
+         * Send map click event.
+         * @method  @private __sendMapClickEvent
+         * @param  {Object} evt event object
+         */ 
         __sendMapClickEvent : function(evt) {
             var sandbox = this._sandbox;
             /* may be this should dispatch to mapmodule */
@@ -403,6 +412,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             sandbox.notifyAll(event);
         },
 
+        /**
+         * Enure at object exists.
+         * @private @method _ensureExists
+         * @param  {Object} obj check if object exists
+         * @return {Boolean}  exists?
+         */
         _ensureExists: function (obj) {
             return obj !== null && obj !== undefined;
         },
