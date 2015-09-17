@@ -24,7 +24,7 @@ function() {
             layer = me._getStatsLayer();
         return {
             id: 'Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin',
-            name: 'grid',
+            title: 'grid',
             config: {
                 'published': true,
                 'layer': layer,

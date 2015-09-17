@@ -70,7 +70,8 @@ Oskari.registerLocalization(
                     "point": "Salli pisteiden tallennus.",
                     "line": "Salli viivojen tallennus.",
                     "area": "Salli alueiden tallennus."
-                }, "layers": {
+                }, 
+                "layers": {
                     "add": "Luo uusi tallennustaso",
                     "label": "Näytettävät karttatasot",
                     "addselect": "Lisää tallennustaso karttatasoihin",
@@ -79,7 +80,11 @@ Oskari.registerLocalization(
                 },
                 "myplaces": {
                     "label": "Omat karttatasot"
-                }
+                },
+                "layerselection": {
+                    "info": "Valitse taustakarttoina näytettävät karttatasot. Oletusvalinnan voit tehdä esikatselukartassa.",
+                    "selectAsBaselayer": "Taustakarttataso"
+                },
             },
             "toollayout": {
                 "label": "Työkalujen asettelu kartalla",
@@ -162,8 +167,7 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Karttatasovalikko",
-                "fieldLabel": "Näytä karttatasovalikko upotetussa kartassa.",
+                "label": "Karttatasot",
                 "info": "Valitse taustakarttoina näytettävät karttatasot. Oletusvalinnan voit tehdä esikatselukartassa.",
                 "tooltip": "Taustakarttataso näkyy karttanäkymässä alimmaisena. Jos valitset useampia karttatasoja taustakarttatasoksi, kartalla näkyy kerralla vain yksi taustakarttataso. Käyttäjä voi halutessaan vaihtaa taustakarttatasoa. Oletusvalinnan voit tehdä esikatselukartassa.",
                 "promote": "Haluatko näyttää kartalla myös ilmakuvia?"
@@ -215,7 +219,6 @@ Oskari.registerLocalization(
             "show": "Näytä",
             "hide": "Piilota",
             "hidden": "Karttataso on tilapäisesti piilotettu.",
-            "selectAsBaselayer": "Taustakarttataso",
             "rights": {
                 "can_be_published_map_user": {
                     "label": "Julkaistavissa",

@@ -87,7 +87,7 @@ function() {
     getTool: function(){
         return {
             id: 'Oskari.mapframework.mapmodule.GetInfoPlugin',
-            name: 'GetInfoPlugin',
+            title: 'GetInfoPlugin',
             config: {
                 ignoredLayerTypes: ['WFS'],
                 infoBox: false

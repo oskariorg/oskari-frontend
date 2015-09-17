@@ -57,9 +57,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                 '    </div>' +
                 '  </div>' +
                 '  <br/>' +
-                '  <label>' +
-                '    <input class="baselayer" type="checkbox"/>' + layerLoc.selectAsBaselayer +
-                '  </label>' +
                 '  </div>' +
                 '  <div class="right-tools">' +
                 '    <div class="layer-rights"></div>' +
@@ -298,8 +295,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
             var tooltipCont = this.templateHelp.clone();
             tooltipCont.attr('title', this.loc.layerselection.tooltip);
             contentPanel.append(tooltipCont);
-
-            contentPanel.append(this.loc.layerselection.info);
 
             var layers = this._getLayersList(),
                 i,

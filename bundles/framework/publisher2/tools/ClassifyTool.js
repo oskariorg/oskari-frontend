@@ -99,7 +99,7 @@ function() {
         statsGridState.allowClassification  = false;
         return {
             id: 'Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin',
-            name: 'allowClassification',
+            title: 'allowClassification',
             config: {
                 'published': true,
                 'layer': layer,
