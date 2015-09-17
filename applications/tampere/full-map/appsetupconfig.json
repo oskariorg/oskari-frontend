@@ -1,0 +1,3485 @@
+{
+	"configuration": {
+		"toolbar": {
+			"state": {
+				"selected": {
+					"id": "select",
+					"group": "default-basictools"
+				}
+			},
+			"conf": {
+				"viewtools": {
+					"link": true,
+					"print": false
+				},
+				"mapUrlPrefix": "https://kartat.tampere.fi/oskari?"
+			}
+		},
+		"featuredata2": {
+			"state": {
+				
+			},
+			"conf": {
+				"selectionTools": true
+			}
+		},
+		"layerselection2": {
+			"state": {
+				
+			},
+			"conf": {
+				
+			}
+		},
+		"metadatacatalogue": {
+			"state": {
+				
+			},
+			"conf": {
+				
+			}
+		},
+		"search-from-channels": {
+			"state": {
+				
+			},
+			"conf": {
+				
+			}
+		},
+		"layerselector2": {
+			"state": {
+				"tab": "Aiheittain",
+				"filter": "",
+				"groups": []
+			},
+			"conf": {
+				
+			}
+		},
+		"metadataflyout": {
+			"state": {
+				
+			},
+			"conf": {
+				
+			}
+		},
+		"personaldata": {
+			"state": {
+				
+			},
+			"conf": {
+				"publishedMapUrl": {
+					"fi": "/published/fi/",
+					"sv": "/published/sv/",
+					"en": "/published/en/"
+				},
+				"changeInfoUrl": {
+					"fi": "https://www.paikkatietoikkuna.fi/web/fi/profiili",
+					"sv": "https://www.paikkatietoikkuna.fi/web/sv/profil",
+					"en": "https://www.paikkatietoikkuna.fi/web/en/profile"
+				}
+			}
+		},
+		"publisher": {
+			"state": {
+				
+			},
+			"conf": {
+				"drawRoleIds": [],
+				"config": [{
+					"id": "Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin",
+					"selected": false,
+					"righthanded": "bottom right",
+					"config": {
+						"location": {
+							"classes": "bottom left",
+							"bottom": "",
+							"left": "",
+							"right": "",
+							"top": ""
+						}
+					},
+					"lefthanded": "bottom left"
+				},
+				{
+					"id": "Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin",
+					"selected": false,
+					"righthanded": "bottom left",
+					"config": {
+						"location": {
+							"classes": "bottom right",
+							"bottom": "",
+							"left": "",
+							"right": "",
+							"top": ""
+						}
+					},
+					"lefthanded": "bottom right"
+				},
+				{
+					"id": "Oskari.mapframework.bundle.mapmodule.plugin.PanButtons",
+					"selected": false,
+					"righthanded": "top right",
+					"config": {
+						"location": {
+							"classes": "top left",
+							"bottom": "",
+							"left": "",
+							"right": "",
+							"top": ""
+						}
+					},
+					"lefthanded": "top left"
+				},
+				{
+					"id": "Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar",
+					"selected": true,
+					"righthanded": "top right",
+					"config": {
+						"location": {
+							"classes": "top left",
+							"bottom": "",
+							"left": "",
+							"right": "",
+							"top": ""
+						}
+					},
+					"lefthanded": "top left"
+				},
+				{
+					"id": "Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin",
+					"selected": false,
+					"righthanded": "top right",
+					"config": {
+						"location": {
+							"classes": "top left",
+							"bottom": "",
+							"left": "",
+							"right": "",
+							"top": ""
+						}
+					},
+					"lefthanded": "top left"
+				},
+				{
+					"id": "Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin",
+					"selected": false,
+					"righthanded": "top left",
+					"config": {
+						"location": {
+							"classes": "top right",
+							"bottom": "",
+							"left": "",
+							"right": "",
+							"top": ""
+						},
+						"url": "/action?action_route=GetWfsSearchResult"
+					},
+					"lefthanded": "top right"
+				},
+				{
+					"id": "Oskari.mapframework.mapmodule.ControlsPlugin",
+					"selected": true
+				},
+				{
+					"id": "Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin",
+					"selected": false,
+					"righthanded": "top left",
+					"config": {
+						"toolbarId": "PublisherToolbar",
+						"location": {
+							"classes": "top right",
+							"bottom": "",
+							"left": "",
+							"right": "",
+							"top": ""
+						}
+					},
+					"lefthanded": "top right"
+				},
+				{
+					"id": "Oskari.mapframework.mapmodule.GetInfoPlugin",
+					"selected": true,
+					"config": {
+						"infoBox": false,
+						"ignoredLayerTypes": ["WFS"]
+					}
+				}]
+			}
+		},
+		"mapfull": {
+			"state": {
+				"selectedLayers": [{
+					"id": 4,
+					"style": "raster",
+					"opacity": 100
+				}],
+				"plugins": {
+					"MainMapModuleMarkersPlugin": {
+						"markers": []
+					}
+				},
+				"zoom": 8,
+				"srs": "EPSG:3067",
+				"north": 6822494.74555,
+				"east": 327304.66825
+			},
+			"conf": {
+				"mapOptions": {
+					"srsName": "EPSG:3067",
+					"maxExtent": {
+						"bottom": 6291456,
+						"left": -548576,
+						"right": 1548576,
+						"top": 8388608
+					},
+					"resolutions": [2048,
+					1024,
+					512,
+					256,
+					128,
+					64,
+					32,
+					16,
+					8,
+					4,
+					2,
+					1,
+					0.5,
+					0.25,
+					0.125,
+					0.0625]
+				},
+				"globalMapAjaxUrl": "/action?",
+				"plugins": [{
+					"id": "Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin"
+				},
+				{
+					"id": "Oskari.mapframework.mapmodule.WmsLayerPlugin"
+				},
+				{
+					"id": "Oskari.mapframework.mapmodule.MarkersPlugin"
+				},
+				{
+					"id": "Oskari.mapframework.mapmodule.ControlsPlugin"
+				},
+				{
+					"id": "Oskari.mapframework.mapmodule.GetInfoPlugin",
+					"config": {
+						"infoBox": false,
+						"ignoredLayerTypes": ["WFS",
+						"MYPLACES",
+						"USERLAYER"]
+					}
+				},
+				{
+					"id": "Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
+					"config": {
+						"port": "9901",
+						"hostname": "localhost",
+						"contextPath": "/transport"
+					}
+				},
+				{
+					"id": "Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin"
+				},
+				{
+					"id": "Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin"
+				},
+				{
+					"id": "Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar"
+				},
+				{
+					"id": "Oskari.mapframework.bundle.mapmodule.plugin.PanButtons"
+				},
+				{
+					"id": "Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayerPlugin"
+				},
+				{
+					"id": "Oskari.mapframework.bundle.mapmodule.plugin.RealtimePlugin"
+				},
+				{
+					"id": "Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugin"
+				},
+				{
+					"id": "Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayerSelectionPlugin",
+					"config": {
+						"baseLayers": ["4",
+						"5",
+						"6",
+						"18",
+						"153",
+						"154",
+						"156"],
+						"showAsDropdown": false
+					}
+				},
+				{
+					"id": "Oskari.mapframework.bundle.myplacesimport.plugin.UserLayersLayerPlugin"
+				},
+				{
+					"id": "Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin"
+				},
+				{
+					"id": "Oskari.mapframework.mapmodule.VectorLayerPlugin"
+				}],
+				"layers": [{
+					"wmsName": "tampere:tampere_okartta_tm35",
+					"tileMatrixSetId": "JHS",
+					"layerName": "tampere:tampere_okartta_tm35",
+					"type": "wmtslayer",
+					"baseLayerId": -1,
+					"legendImage": "",
+					"refreshRate": 0,
+					"version": "1.0.0",
+					"id": 4,
+					"style": "raster",
+					"created": "2015-01-12T15:08Z",
+					"updated": "2015-03-18T10:41Z",
+					"name": "Opaskartta",
+					"permissions": {
+						"publish": "no_publication_permission"
+					},
+					"opacity": 100,
+					"tileMatrixSetData": {
+						"serviceIdentification": {
+							"title": "Web Map Tile Service - GeoWebCache",
+							"serviceTypeVersion": "1.0.0",
+							"serviceType": {
+								"codeSpace": null,
+								"value": "OGC WMTS"
+							}
+						},
+						"contents": {
+							"tileMatrixSets": {
+								"EPSG:4326": {
+									"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+									"matrixIds": [{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 2,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:4326:0",
+										"matrixHeight": 1,
+										"scaleDenominator": 2.795411320143589E8
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 4,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:4326:1",
+										"matrixHeight": 2,
+										"scaleDenominator": 1.3977056600717944E8
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 8,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:4326:2",
+										"matrixHeight": 4,
+										"scaleDenominator": 6.988528300358972E7
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 16,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:4326:3",
+										"matrixHeight": 8,
+										"scaleDenominator": 3.494264150179486E7
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 32,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:4326:4",
+										"matrixHeight": 16,
+										"scaleDenominator": 1.747132075089743E7
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 64,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:4326:5",
+										"matrixHeight": 32,
+										"scaleDenominator": 8735660.375448715
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 128,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:4326:6",
+										"matrixHeight": 64,
+										"scaleDenominator": 4367830.1877243575
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 256,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:4326:7",
+										"matrixHeight": 128,
+										"scaleDenominator": 2183915.0938621787
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 512,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:4326:8",
+										"matrixHeight": 256,
+										"scaleDenominator": 1091957.5469310894
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 1024,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:4326:9",
+										"matrixHeight": 512,
+										"scaleDenominator": 545978.7734655447
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 2048,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:4326:10",
+										"matrixHeight": 1024,
+										"scaleDenominator": 272989.38673277234
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 4096,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:4326:11",
+										"matrixHeight": 2048,
+										"scaleDenominator": 136494.69336638617
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 8192,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:4326:12",
+										"matrixHeight": 4096,
+										"scaleDenominator": 68247.34668319309
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 16384,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:4326:13",
+										"matrixHeight": 8192,
+										"scaleDenominator": 34123.67334159654
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 32768,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:4326:14",
+										"matrixHeight": 16384,
+										"scaleDenominator": 17061.83667079827
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 65536,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:4326:15",
+										"matrixHeight": 32768,
+										"scaleDenominator": 8530.918335399136
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 131072,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:4326:16",
+										"matrixHeight": 65536,
+										"scaleDenominator": 4265.459167699568
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 262144,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:4326:17",
+										"matrixHeight": 131072,
+										"scaleDenominator": 2132.729583849784
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 524288,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:4326:18",
+										"matrixHeight": 262144,
+										"scaleDenominator": 1066.364791924892
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 1048576,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:4326:19",
+										"matrixHeight": 524288,
+										"scaleDenominator": 533.182395962446
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 2097152,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:4326:20",
+										"matrixHeight": 1048576,
+										"scaleDenominator": 266.591197981223
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 4194304,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:4326:21",
+										"matrixHeight": 2097152,
+										"scaleDenominator": 133.2955989906115
+									}],
+									"identifier": "EPSG:4326"
+								},
+								"GlobalCRS84Scale": {
+									"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+									"matrixIds": [{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 2,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Scale:0",
+										"matrixHeight": 1,
+										"scaleDenominator": 500000000
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 3,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Scale:1",
+										"matrixHeight": 2,
+										"scaleDenominator": 250000000
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 6,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Scale:2",
+										"matrixHeight": 3,
+										"scaleDenominator": 100000000
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 12,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Scale:3",
+										"matrixHeight": 6,
+										"scaleDenominator": 50000000
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 23,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Scale:4",
+										"matrixHeight": 12,
+										"scaleDenominator": 25000000
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 56,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Scale:5",
+										"matrixHeight": 28,
+										"scaleDenominator": 10000000
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 112,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Scale:6",
+										"matrixHeight": 56,
+										"scaleDenominator": 5000000
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 224,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Scale:7",
+										"matrixHeight": 112,
+										"scaleDenominator": 2500000
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 560,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Scale:8",
+										"matrixHeight": 280,
+										"scaleDenominator": 1000000
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 1119,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Scale:9",
+										"matrixHeight": 560,
+										"scaleDenominator": 500000
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 2237,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Scale:10",
+										"matrixHeight": 1119,
+										"scaleDenominator": 250000
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 5591,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Scale:11",
+										"matrixHeight": 2796,
+										"scaleDenominator": 100000
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 11182,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Scale:12",
+										"matrixHeight": 5591,
+										"scaleDenominator": 50000
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 22364,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Scale:13",
+										"matrixHeight": 11182,
+										"scaleDenominator": 25000
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 55909,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Scale:14",
+										"matrixHeight": 27955,
+										"scaleDenominator": 10000
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 111817,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Scale:15",
+										"matrixHeight": 55909,
+										"scaleDenominator": 5000
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 223633,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Scale:16",
+										"matrixHeight": 111817,
+										"scaleDenominator": 2500
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 559083,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Scale:17",
+										"matrixHeight": 279542,
+										"scaleDenominator": 1000
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 1118165,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Scale:18",
+										"matrixHeight": 559083,
+										"scaleDenominator": 500
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 2236330,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Scale:19",
+										"matrixHeight": 1118165,
+										"scaleDenominator": 250
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 5590823,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Scale:20",
+										"matrixHeight": 2795412,
+										"scaleDenominator": 100
+									}],
+									"identifier": "GlobalCRS84Scale"
+								},
+								"GoogleCRS84Quad": {
+									"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+									"matrixIds": [{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 1,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GoogleCRS84Quad:0",
+										"matrixHeight": 1,
+										"scaleDenominator": 5.590822640287178E8
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 2,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GoogleCRS84Quad:1",
+										"matrixHeight": 1,
+										"scaleDenominator": 2.795411320143589E8
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 4,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GoogleCRS84Quad:2",
+										"matrixHeight": 2,
+										"scaleDenominator": 1.397705660071794E8
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 8,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GoogleCRS84Quad:3",
+										"matrixHeight": 4,
+										"scaleDenominator": 6.988528300358972E7
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 16,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GoogleCRS84Quad:4",
+										"matrixHeight": 8,
+										"scaleDenominator": 3.494264150179486E7
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 32,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GoogleCRS84Quad:5",
+										"matrixHeight": 16,
+										"scaleDenominator": 1.747132075089743E7
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 64,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GoogleCRS84Quad:6",
+										"matrixHeight": 32,
+										"scaleDenominator": 8735660.375448715
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 128,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GoogleCRS84Quad:7",
+										"matrixHeight": 64,
+										"scaleDenominator": 4367830.187724357
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 256,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GoogleCRS84Quad:8",
+										"matrixHeight": 128,
+										"scaleDenominator": 2183915.093862179
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 512,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GoogleCRS84Quad:9",
+										"matrixHeight": 256,
+										"scaleDenominator": 1091957.546931089
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 1024,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GoogleCRS84Quad:10",
+										"matrixHeight": 512,
+										"scaleDenominator": 545978.7734655447
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 2048,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GoogleCRS84Quad:11",
+										"matrixHeight": 1024,
+										"scaleDenominator": 272989.3867327723
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 4096,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GoogleCRS84Quad:12",
+										"matrixHeight": 2048,
+										"scaleDenominator": 136494.6933663862
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 8192,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GoogleCRS84Quad:13",
+										"matrixHeight": 4096,
+										"scaleDenominator": 68247.34668319309
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 16384,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GoogleCRS84Quad:14",
+										"matrixHeight": 8192,
+										"scaleDenominator": 34123.67334159654
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 32768,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GoogleCRS84Quad:15",
+										"matrixHeight": 16384,
+										"scaleDenominator": 17061.83667079827
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 65536,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GoogleCRS84Quad:16",
+										"matrixHeight": 32768,
+										"scaleDenominator": 8530.918335399136
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 131072,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GoogleCRS84Quad:17",
+										"matrixHeight": 65536,
+										"scaleDenominator": 4265.459167699568
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 262144,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GoogleCRS84Quad:18",
+										"matrixHeight": 131072,
+										"scaleDenominator": 2132.729583849784
+									}],
+									"identifier": "GoogleCRS84Quad"
+								},
+								"JHS": {
+									"supportedCRS": "urn:ogc:def:crs:EPSG::3067",
+									"matrixIds": [{
+										"topLeftCorner": {
+											"lon": 50199.481382522,
+											"lat": 7795411.8706228
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3067",
+										"matrixWidth": 1,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "JHS:0",
+										"matrixHeight": 1,
+										"scaleDenominator": 2.925714285714286E7
+									},
+									{
+										"topLeftCorner": {
+											"lon": 50199.481382522,
+											"lat": 7795411.8706228
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3067",
+										"matrixWidth": 1,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "JHS:1",
+										"matrixHeight": 2,
+										"scaleDenominator": 1.462857142857143E7
+									},
+									{
+										"topLeftCorner": {
+											"lon": 50199.481382522,
+											"lat": 7795411.8706228
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3067",
+										"matrixWidth": 2,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "JHS:2",
+										"matrixHeight": 3,
+										"scaleDenominator": 7314285.714285715
+									},
+									{
+										"topLeftCorner": {
+											"lon": 50199.481382522,
+											"lat": 7795411.8706228
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3067",
+										"matrixWidth": 3,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "JHS:3",
+										"matrixHeight": 5,
+										"scaleDenominator": 3657142.8571428573
+									},
+									{
+										"topLeftCorner": {
+											"lon": 50199.481382522,
+											"lat": 7795411.8706228
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3067",
+										"matrixWidth": 6,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "JHS:4",
+										"matrixHeight": 10,
+										"scaleDenominator": 1828571.4285714286
+									},
+									{
+										"topLeftCorner": {
+											"lon": 50199.481382522,
+											"lat": 7795411.8706228
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3067",
+										"matrixWidth": 11,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "JHS:5",
+										"matrixHeight": 19,
+										"scaleDenominator": 914285.7142857143
+									},
+									{
+										"topLeftCorner": {
+											"lon": 50199.481382522,
+											"lat": 7795411.8706228
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3067",
+										"matrixWidth": 22,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "JHS:6",
+										"matrixHeight": 38,
+										"scaleDenominator": 457142.85714285716
+									},
+									{
+										"topLeftCorner": {
+											"lon": 50199.481382522,
+											"lat": 7795411.8706228
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3067",
+										"matrixWidth": 44,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "JHS:7",
+										"matrixHeight": 75,
+										"scaleDenominator": 228571.42857142858
+									},
+									{
+										"topLeftCorner": {
+											"lon": 50199.481382522,
+											"lat": 7795411.8706228
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3067",
+										"matrixWidth": 87,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "JHS:8",
+										"matrixHeight": 150,
+										"scaleDenominator": 114285.71428571429
+									},
+									{
+										"topLeftCorner": {
+											"lon": 50199.481382522,
+											"lat": 7795411.8706228
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3067",
+										"matrixWidth": 174,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "JHS:9",
+										"matrixHeight": 299,
+										"scaleDenominator": 57142.857142857145
+									},
+									{
+										"topLeftCorner": {
+											"lon": 50199.481382522,
+											"lat": 7795411.8706228
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3067",
+										"matrixWidth": 348,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "JHS:10",
+										"matrixHeight": 597,
+										"scaleDenominator": 28571.428571428572
+									},
+									{
+										"topLeftCorner": {
+											"lon": 50199.481382522,
+											"lat": 7795411.8706228
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3067",
+										"matrixWidth": 695,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "JHS:11",
+										"matrixHeight": 1193,
+										"scaleDenominator": 14285.714285714286
+									},
+									{
+										"topLeftCorner": {
+											"lon": 50199.481382522,
+											"lat": 7795411.8706228
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3067",
+										"matrixWidth": 1389,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "JHS:12",
+										"matrixHeight": 2385,
+										"scaleDenominator": 7142.857142857143
+									},
+									{
+										"topLeftCorner": {
+											"lon": 50199.481382522,
+											"lat": 7795411.8706228
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3067",
+										"matrixWidth": 2778,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "JHS:13",
+										"matrixHeight": 4770,
+										"scaleDenominator": 3571.4285714285716
+									},
+									{
+										"topLeftCorner": {
+											"lon": 50199.481382522,
+											"lat": 7795411.8706228
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3067",
+										"matrixWidth": 5556,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "JHS:14",
+										"matrixHeight": 9540,
+										"scaleDenominator": 1785.7142857142858
+									},
+									{
+										"topLeftCorner": {
+											"lon": 50199.481382522,
+											"lat": 7795411.8706228
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3067",
+										"matrixWidth": 11111,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "JHS:15",
+										"matrixHeight": 19079,
+										"scaleDenominator": 892.8571428571429
+									},
+									{
+										"topLeftCorner": {
+											"lon": 50199.481382522,
+											"lat": 7795411.8706228
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3067",
+										"matrixWidth": 22222,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "JHS:16",
+										"matrixHeight": 38158,
+										"scaleDenominator": 446.42857142857144
+									}],
+									"identifier": "JHS"
+								},
+								"JHS_GK24": {
+									"supportedCRS": "urn:ogc:def:crs:EPSG::3878",
+									"matrixIds": [{
+										"topLeftCorner": {
+											"lon": 2.4471931948019E7,
+											"lat": 8728943
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3878",
+										"matrixWidth": 1,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "JHS_GK24:0",
+										"matrixHeight": 1,
+										"scaleDenominator": 2.925714285714286E7
+									},
+									{
+										"topLeftCorner": {
+											"lon": 2.4471931948019E7,
+											"lat": 7680367
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3878",
+										"matrixWidth": 1,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "JHS_GK24:1",
+										"matrixHeight": 1,
+										"scaleDenominator": 1.462857142857143E7
+									},
+									{
+										"topLeftCorner": {
+											"lon": 2.4471931948019E7,
+											"lat": 7680367
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3878",
+										"matrixWidth": 1,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "JHS_GK24:2",
+										"matrixHeight": 2,
+										"scaleDenominator": 7314285.714285715
+									},
+									{
+										"topLeftCorner": {
+											"lon": 2.4471931948019E7,
+											"lat": 7680367
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3878",
+										"matrixWidth": 1,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "JHS_GK24:3",
+										"matrixHeight": 4,
+										"scaleDenominator": 3657142.8571428573
+									},
+									{
+										"topLeftCorner": {
+											"lon": 2.4471931948019E7,
+											"lat": 7680367
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3878",
+										"matrixWidth": 1,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "JHS_GK24:4",
+										"matrixHeight": 8,
+										"scaleDenominator": 1828571.4285714286
+									},
+									{
+										"topLeftCorner": {
+											"lon": 2.4471931948019E7,
+											"lat": 7680367
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3878",
+										"matrixWidth": 1,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "JHS_GK24:5",
+										"matrixHeight": 16,
+										"scaleDenominator": 914285.7142857143
+									},
+									{
+										"topLeftCorner": {
+											"lon": 2.4471931948019E7,
+											"lat": 7647599
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3878",
+										"matrixWidth": 2,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "JHS_GK24:6",
+										"matrixHeight": 31,
+										"scaleDenominator": 457142.85714285716
+									},
+									{
+										"topLeftCorner": {
+											"lon": 2.4471931948019E7,
+											"lat": 7647599
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3878",
+										"matrixWidth": 4,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "JHS_GK24:7",
+										"matrixHeight": 62,
+										"scaleDenominator": 228571.42857142858
+									},
+									{
+										"topLeftCorner": {
+											"lon": 2.4471931948019E7,
+											"lat": 7647599
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3878",
+										"matrixWidth": 7,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "JHS_GK24:8",
+										"matrixHeight": 124,
+										"scaleDenominator": 114285.71428571429
+									},
+									{
+										"topLeftCorner": {
+											"lon": 2.4471931948019E7,
+											"lat": 7643503
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3878",
+										"matrixWidth": 14,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "JHS_GK24:9",
+										"matrixHeight": 247,
+										"scaleDenominator": 57142.857142857145
+									},
+									{
+										"topLeftCorner": {
+											"lon": 2.4471931948019E7,
+											"lat": 7641455
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3878",
+										"matrixWidth": 28,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "JHS_GK24:10",
+										"matrixHeight": 493,
+										"scaleDenominator": 28571.428571428572
+									},
+									{
+										"topLeftCorner": {
+											"lon": 2.4471931948019E7,
+											"lat": 7641455
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3878",
+										"matrixWidth": 55,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "JHS_GK24:11",
+										"matrixHeight": 986,
+										"scaleDenominator": 14285.714285714286
+									},
+									{
+										"topLeftCorner": {
+											"lon": 2.4471931948019E7,
+											"lat": 7640943
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3878",
+										"matrixWidth": 110,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "JHS_GK24:12",
+										"matrixHeight": 1971,
+										"scaleDenominator": 7142.857142857143
+									},
+									{
+										"topLeftCorner": {
+											"lon": 2.4471931948019E7,
+											"lat": 7640943
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3878",
+										"matrixWidth": 220,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "JHS_GK24:13",
+										"matrixHeight": 3942,
+										"scaleDenominator": 3571.4285714285716
+									},
+									{
+										"topLeftCorner": {
+											"lon": 2.4471931948019E7,
+											"lat": 7640815
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3878",
+										"matrixWidth": 439,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "JHS_GK24:14",
+										"matrixHeight": 7883,
+										"scaleDenominator": 1785.7142857142858
+									},
+									{
+										"topLeftCorner": {
+											"lon": 2.4471931948019E7,
+											"lat": 7640815
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3878",
+										"matrixWidth": 878,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "JSH_GK24:15",
+										"matrixHeight": 15766,
+										"scaleDenominator": 892.8571428571429
+									}],
+									"identifier": "JHS_GK24"
+								},
+								"EPSG:900913": {
+									"supportedCRS": "urn:ogc:def:crs:EPSG::900913",
+									"matrixIds": [{
+										"topLeftCorner": {
+											"lon": -2.003750834E7,
+											"lat": 20037508
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::900913",
+										"matrixWidth": 1,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:900913:0",
+										"matrixHeight": 1,
+										"scaleDenominator": 5.590822639508929E8
+									},
+									{
+										"topLeftCorner": {
+											"lon": -2.003750834E7,
+											"lat": 20037508
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::900913",
+										"matrixWidth": 2,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:900913:1",
+										"matrixHeight": 2,
+										"scaleDenominator": 2.7954113197544646E8
+									},
+									{
+										"topLeftCorner": {
+											"lon": -2.003750834E7,
+											"lat": 20037508
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::900913",
+										"matrixWidth": 4,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:900913:2",
+										"matrixHeight": 4,
+										"scaleDenominator": 1.3977056598772323E8
+									},
+									{
+										"topLeftCorner": {
+											"lon": -2.003750834E7,
+											"lat": 20037508
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::900913",
+										"matrixWidth": 8,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:900913:3",
+										"matrixHeight": 8,
+										"scaleDenominator": 6.988528299386162E7
+									},
+									{
+										"topLeftCorner": {
+											"lon": -2.003750834E7,
+											"lat": 20037508
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::900913",
+										"matrixWidth": 16,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:900913:4",
+										"matrixHeight": 16,
+										"scaleDenominator": 3.494264149693081E7
+									},
+									{
+										"topLeftCorner": {
+											"lon": -2.003750834E7,
+											"lat": 20037508
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::900913",
+										"matrixWidth": 32,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:900913:5",
+										"matrixHeight": 32,
+										"scaleDenominator": 1.7471320748465404E7
+									},
+									{
+										"topLeftCorner": {
+											"lon": -2.003750834E7,
+											"lat": 20037508
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::900913",
+										"matrixWidth": 64,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:900913:6",
+										"matrixHeight": 64,
+										"scaleDenominator": 8735660.374232702
+									},
+									{
+										"topLeftCorner": {
+											"lon": -2.003750834E7,
+											"lat": 20037508
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::900913",
+										"matrixWidth": 128,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:900913:7",
+										"matrixHeight": 128,
+										"scaleDenominator": 4367830.187116351
+									},
+									{
+										"topLeftCorner": {
+											"lon": -2.003750834E7,
+											"lat": 20037508
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::900913",
+										"matrixWidth": 256,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:900913:8",
+										"matrixHeight": 256,
+										"scaleDenominator": 2183915.0935581755
+									},
+									{
+										"topLeftCorner": {
+											"lon": -2.003750834E7,
+											"lat": 20037508
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::900913",
+										"matrixWidth": 512,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:900913:9",
+										"matrixHeight": 512,
+										"scaleDenominator": 1091957.5467790877
+									},
+									{
+										"topLeftCorner": {
+											"lon": -2.003750834E7,
+											"lat": 20037508
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::900913",
+										"matrixWidth": 1024,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:900913:10",
+										"matrixHeight": 1024,
+										"scaleDenominator": 545978.7733895439
+									},
+									{
+										"topLeftCorner": {
+											"lon": -2.003750834E7,
+											"lat": 20037508
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::900913",
+										"matrixWidth": 2048,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:900913:11",
+										"matrixHeight": 2048,
+										"scaleDenominator": 272989.38669477194
+									},
+									{
+										"topLeftCorner": {
+											"lon": -2.003750834E7,
+											"lat": 20037508
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::900913",
+										"matrixWidth": 4096,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:900913:12",
+										"matrixHeight": 4096,
+										"scaleDenominator": 136494.69334738597
+									},
+									{
+										"topLeftCorner": {
+											"lon": -2.003750834E7,
+											"lat": 20037508
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::900913",
+										"matrixWidth": 8192,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:900913:13",
+										"matrixHeight": 8192,
+										"scaleDenominator": 68247.34667369298
+									},
+									{
+										"topLeftCorner": {
+											"lon": -2.003750834E7,
+											"lat": 20037508
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::900913",
+										"matrixWidth": 16384,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:900913:14",
+										"matrixHeight": 16384,
+										"scaleDenominator": 34123.67333684649
+									},
+									{
+										"topLeftCorner": {
+											"lon": -2.003750834E7,
+											"lat": 20037508
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::900913",
+										"matrixWidth": 32768,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:900913:15",
+										"matrixHeight": 32768,
+										"scaleDenominator": 17061.836668423246
+									},
+									{
+										"topLeftCorner": {
+											"lon": -2.003750834E7,
+											"lat": 20037508
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::900913",
+										"matrixWidth": 65536,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:900913:16",
+										"matrixHeight": 65536,
+										"scaleDenominator": 8530.918334211623
+									},
+									{
+										"topLeftCorner": {
+											"lon": -2.003750834E7,
+											"lat": 20037508
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::900913",
+										"matrixWidth": 131072,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:900913:17",
+										"matrixHeight": 131072,
+										"scaleDenominator": 4265.4591671058115
+									},
+									{
+										"topLeftCorner": {
+											"lon": -2.003750834E7,
+											"lat": 20037508
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::900913",
+										"matrixWidth": 262144,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:900913:18",
+										"matrixHeight": 262144,
+										"scaleDenominator": 2132.7295835529058
+									},
+									{
+										"topLeftCorner": {
+											"lon": -2.003750834E7,
+											"lat": 20037508
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::900913",
+										"matrixWidth": 524288,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:900913:19",
+										"matrixHeight": 524288,
+										"scaleDenominator": 1066.3647917764529
+									},
+									{
+										"topLeftCorner": {
+											"lon": -2.003750834E7,
+											"lat": 20037508
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::900913",
+										"matrixWidth": 1048576,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:900913:20",
+										"matrixHeight": 1048576,
+										"scaleDenominator": 533.1823958882264
+									},
+									{
+										"topLeftCorner": {
+											"lon": -2.003750834E7,
+											"lat": 20037508
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::900913",
+										"matrixWidth": 2097152,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:900913:21",
+										"matrixHeight": 2097152,
+										"scaleDenominator": 266.5911979441132
+									},
+									{
+										"topLeftCorner": {
+											"lon": -2.003750834E7,
+											"lat": 20037508
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::900913",
+										"matrixWidth": 4194304,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:900913:22",
+										"matrixHeight": 4194304,
+										"scaleDenominator": 133.2955989720566
+									},
+									{
+										"topLeftCorner": {
+											"lon": -2.003750834E7,
+											"lat": 20037508
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::900913",
+										"matrixWidth": 8388608,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:900913:23",
+										"matrixHeight": 8388608,
+										"scaleDenominator": 66.6477994860283
+									},
+									{
+										"topLeftCorner": {
+											"lon": -2.003750834E7,
+											"lat": 20037508
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::900913",
+										"matrixWidth": 16777216,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:900913:24",
+										"matrixHeight": 16777216,
+										"scaleDenominator": 33.32389974301415
+									},
+									{
+										"topLeftCorner": {
+											"lon": -2.003750834E7,
+											"lat": 20037508
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::900913",
+										"matrixWidth": 33554432,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:900913:25",
+										"matrixHeight": 33554432,
+										"scaleDenominator": 16.661949871507076
+									},
+									{
+										"topLeftCorner": {
+											"lon": -2.003750834E7,
+											"lat": 20037508
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::900913",
+										"matrixWidth": 67108864,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:900913:26",
+										"matrixHeight": 67108864,
+										"scaleDenominator": 8.330974935753538
+									},
+									{
+										"topLeftCorner": {
+											"lon": -2.003750834E7,
+											"lat": 20037508
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::900913",
+										"matrixWidth": 134217728,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:900913:27",
+										"matrixHeight": 134217728,
+										"scaleDenominator": 4.165487467876769
+									},
+									{
+										"topLeftCorner": {
+											"lon": -2.003750834E7,
+											"lat": 20037508
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::900913",
+										"matrixWidth": 268435456,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:900913:28",
+										"matrixHeight": 268435456,
+										"scaleDenominator": 2.0827437339383845
+									},
+									{
+										"topLeftCorner": {
+											"lon": -2.003750834E7,
+											"lat": 20037508
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::900913",
+										"matrixWidth": 536870912,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:900913:29",
+										"matrixHeight": 536870912,
+										"scaleDenominator": 1.0413718669691923
+									},
+									{
+										"topLeftCorner": {
+											"lon": -2.003750834E7,
+											"lat": 20037508
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::900913",
+										"matrixWidth": 1073741824,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "EPSG:900913:30",
+										"matrixHeight": 1073741824,
+										"scaleDenominator": 0.5206859334845961
+									}],
+									"identifier": "EPSG:900913"
+								},
+								"Custom_JHS": {
+									"supportedCRS": "urn:ogc:def:crs:EPSG::3067",
+									"matrixIds": [{
+										"topLeftCorner": {
+											"lon": 50199.481382522,
+											"lat": 8147500
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3067",
+										"matrixWidth": 2,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "Custom_JHS:0",
+										"matrixHeight": 3,
+										"scaleDenominator": 7314285.714285715
+									},
+									{
+										"topLeftCorner": {
+											"lon": 50199.481382522,
+											"lat": 7885356
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3067",
+										"matrixWidth": 3,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "Custom_JHS:1",
+										"matrixHeight": 5,
+										"scaleDenominator": 3657142.8571428573
+									},
+									{
+										"topLeftCorner": {
+											"lon": 50199.481382522,
+											"lat": 7885356
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3067",
+										"matrixWidth": 6,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "Custom_JHS:2",
+										"matrixHeight": 10,
+										"scaleDenominator": 1828571.4285714286
+									},
+									{
+										"topLeftCorner": {
+											"lon": 50199.481382522,
+											"lat": 7819820
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3067",
+										"matrixWidth": 11,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "Custom_JHS:3",
+										"matrixHeight": 19,
+										"scaleDenominator": 914285.7142857143
+									},
+									{
+										"topLeftCorner": {
+											"lon": 50199.481382522,
+											"lat": 7819820
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3067",
+										"matrixWidth": 22,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "Custom_JHS:4",
+										"matrixHeight": 38,
+										"scaleDenominator": 457142.85714285716
+									},
+									{
+										"topLeftCorner": {
+											"lon": 50199.481382522,
+											"lat": 7803436
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3067",
+										"matrixWidth": 44,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "Custom_JHS:5",
+										"matrixHeight": 75,
+										"scaleDenominator": 228571.42857142858
+									},
+									{
+										"topLeftCorner": {
+											"lon": 50199.481382522,
+											"lat": 7803436
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3067",
+										"matrixWidth": 87,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "Custom_JHS:6",
+										"matrixHeight": 150,
+										"scaleDenominator": 114285.71428571429
+									},
+									{
+										"topLeftCorner": {
+											"lon": 50199.481382522,
+											"lat": 7799340
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3067",
+										"matrixWidth": 174,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "Custom_JHS:7",
+										"matrixHeight": 299,
+										"scaleDenominator": 57142.857142857145
+									},
+									{
+										"topLeftCorner": {
+											"lon": 50199.481382522,
+											"lat": 7797292
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3067",
+										"matrixWidth": 348,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "Custom_JHS:8",
+										"matrixHeight": 597,
+										"scaleDenominator": 28571.428571428572
+									},
+									{
+										"topLeftCorner": {
+											"lon": 50199.481382522,
+											"lat": 7796268
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3067",
+										"matrixWidth": 695,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "Custom_JHS:9",
+										"matrixHeight": 1193,
+										"scaleDenominator": 14285.714285714286
+									},
+									{
+										"topLeftCorner": {
+											"lon": 50199.481382522,
+											"lat": 7795756
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3067",
+										"matrixWidth": 1389,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "Custom_JHS:10",
+										"matrixHeight": 2385,
+										"scaleDenominator": 7142.857142857143
+									},
+									{
+										"topLeftCorner": {
+											"lon": 50199.481382522,
+											"lat": 7795500
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3067",
+										"matrixWidth": 2778,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "Custom_JHS:11",
+										"matrixHeight": 4769,
+										"scaleDenominator": 3571.4285714285716
+									},
+									{
+										"topLeftCorner": {
+											"lon": 50199.481382522,
+											"lat": 7795500
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3067",
+										"matrixWidth": 5556,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "Custom_JHS:12",
+										"matrixHeight": 9538,
+										"scaleDenominator": 1785.7142857142858
+									},
+									{
+										"topLeftCorner": {
+											"lon": 50199.481382522,
+											"lat": 7795436
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::3067",
+										"matrixWidth": 11111,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "Custom_JHS:13",
+										"matrixHeight": 19075,
+										"scaleDenominator": 892.8571428571429
+									}],
+									"identifier": "Custom_JHS"
+								},
+								"GlobalCRS84Pixel": {
+									"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+									"matrixIds": [{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 1,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Pixel:0",
+										"matrixHeight": 1,
+										"scaleDenominator": 7.951392199519542E8
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 2,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Pixel:1",
+										"matrixHeight": 1,
+										"scaleDenominator": 3.975696099759771E8
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 3,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Pixel:2",
+										"matrixHeight": 2,
+										"scaleDenominator": 1.9878480498798856E8
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 5,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Pixel:3",
+										"matrixHeight": 3,
+										"scaleDenominator": 1.325232033253257E8
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 9,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Pixel:4",
+										"matrixHeight": 5,
+										"scaleDenominator": 6.626160166266285E7
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 17,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Pixel:5",
+										"matrixHeight": 9,
+										"scaleDenominator": 3.3130800831331424E7
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 43,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Pixel:6",
+										"matrixHeight": 22,
+										"scaleDenominator": 1.325232033253257E7
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 85,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Pixel:7",
+										"matrixHeight": 43,
+										"scaleDenominator": 6626160.166266285
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 169,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Pixel:8",
+										"matrixHeight": 85,
+										"scaleDenominator": 3313080.0831331424
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 338,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Pixel:9",
+										"matrixHeight": 169,
+										"scaleDenominator": 1656540.0415665712
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 1013,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Pixel:10",
+										"matrixHeight": 507,
+										"scaleDenominator": 552180.0138555238
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 1688,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Pixel:11",
+										"matrixHeight": 844,
+										"scaleDenominator": 331308.00831331423
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 5063,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Pixel:12",
+										"matrixHeight": 2532,
+										"scaleDenominator": 110436.00277110476
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 10125,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Pixel:13",
+										"matrixHeight": 5063,
+										"scaleDenominator": 55218.00138555238
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 16875,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Pixel:14",
+										"matrixHeight": 8438,
+										"scaleDenominator": 33130.80083133143
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 50625,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Pixel:15",
+										"matrixHeight": 25313,
+										"scaleDenominator": 11043.600277110474
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 168750,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Pixel:16",
+										"matrixHeight": 84375,
+										"scaleDenominator": 3313.080083133142
+									},
+									{
+										"topLeftCorner": {
+											"lon": -180,
+											"lat": 90
+										},
+										"supportedCRS": "urn:ogc:def:crs:EPSG::4326",
+										"matrixWidth": 506250,
+										"tileHeight": 256,
+										"tileWidth": 256,
+										"identifier": "GlobalCRS84Pixel:17",
+										"matrixHeight": 253125,
+										"scaleDenominator": 1104.3600277110472
+									}],
+									"identifier": "GlobalCRS84Pixel"
+								}
+							},
+							"layers": [{
+								"tileMatrixSetLinks": [{
+									"tileMatrixSet": "JHS"
+								}],
+								"title": "Tampere infrapunakuva (2011) TM35",
+								"layers": [],
+								"dimensions": [],
+								"styles": [{
+									"isDefault": true,
+									"identifier": "raster"
+								}],
+								"identifier": "tampere:tampere_ik2011_metsa_tm35",
+								"formats": ["image/png",
+								"image/jpeg"]
+							},
+							{
+								"tileMatrixSetLinks": [{
+									"tileMatrixSet": "JHS"
+								}],
+								"title": "Tampere ilmakuva (2012) GK24",
+								"layers": [],
+								"dimensions": [],
+								"styles": [{
+									"isDefault": true,
+									"identifier": "raster"
+								}],
+								"identifier": "tampere:tampere_ik2012_gk24",
+								"formats": ["image/png",
+								"image/jpeg"]
+							},
+							{
+								"tileMatrixSetLinks": [{
+									"tileMatrixSet": "JHS"
+								}],
+								"title": "Tampere ilmakuva (2011) TM35",
+								"layers": [],
+								"dimensions": [],
+								"styles": [{
+									"isDefault": true,
+									"identifier": "raster"
+								}],
+								"identifier": "tampere:tampere_ik2011_tm35",
+								"formats": ["image/png",
+								"image/jpeg"]
+							},
+							{
+								"tileMatrixSetLinks": [{
+									"tileMatrixSet": "JHS"
+								}],
+								"title": "Tampere ilmakuva (1995) GK24",
+								"layers": [],
+								"dimensions": [],
+								"styles": [{
+									"isDefault": true,
+									"identifier": "raster"
+								}],
+								"identifier": "tampere:tampere_ik95_gk24",
+								"formats": ["image/png",
+								"image/jpeg"]
+							},
+							{
+								"tileMatrixSetLinks": [{
+									"tileMatrixSet": "JHS"
+								}],
+								"title": "Tampere opaskartta TM35",
+								"layers": [],
+								"dimensions": [],
+								"styles": [{
+									"isDefault": true,
+									"identifier": "raster"
+								}],
+								"identifier": "tampere:tampere_okartta_tm35",
+								"formats": ["image/png",
+								"image/jpeg"]
+							},
+							{
+								"tileMatrixSetLinks": [{
+									"tileMatrixSet": "JHS"
+								}],
+								"title": "Tampere ilmakuva (1966) GK24",
+								"layers": [],
+								"dimensions": [],
+								"styles": [{
+									"isDefault": true,
+									"identifier": "raster"
+								}],
+								"identifier": "tampere:tampere_ik66_gk24",
+								"formats": ["image/png",
+								"image/jpeg"]
+							},
+							{
+								"tileMatrixSetLinks": [{
+									"tileMatrixSet": "JHS"
+								}],
+								"title": "Tampere ilmakuva (1946) GK24",
+								"layers": [],
+								"dimensions": [],
+								"styles": [{
+									"isDefault": true,
+									"identifier": "raster"
+								}],
+								"identifier": "tampere:tampere_ik46_gk24",
+								"formats": ["image/png",
+								"image/jpeg"]
+							},
+							{
+								"tileMatrixSetLinks": [{
+									"tileMatrixSet": "JHS"
+								}],
+								"title": "Tampere opaskartta GK24",
+								"layers": [],
+								"dimensions": [],
+								"styles": [{
+									"isDefault": true,
+									"identifier": "raster"
+								}],
+								"identifier": "tampere:tampere_okartta_gk24",
+								"formats": ["image/png",
+								"image/jpeg"]
+							},
+							{
+								"tileMatrixSetLinks": [{
+									"tileMatrixSet": "JHS"
+								}],
+								"title": "Tampere maanlainen asemakaava TM35",
+								"layers": [],
+								"dimensions": [],
+								"styles": [{
+									"isDefault": true,
+									"identifier": "raster"
+								}],
+								"identifier": "tampere:tampere_akaava_maanal_tm35",
+								"formats": ["image/png",
+								"image/jpeg"]
+							},
+							{
+								"tileMatrixSetLinks": [{
+									"tileMatrixSet": "JHS"
+								}],
+								"title": "Tampere virastokartta TM35",
+								"layers": [],
+								"dimensions": [],
+								"styles": [{
+									"isDefault": true,
+									"identifier": "raster"
+								}],
+								"identifier": "tampere:tampere_vkartta_tm35",
+								"formats": ["image/png",
+								"image/jpeg"]
+							},
+							{
+								"tileMatrixSetLinks": [{
+									"tileMatrixSet": "JHS"
+								}],
+								"title": "Tampere kantakartta TM35",
+								"layers": [],
+								"dimensions": [],
+								"styles": [{
+									"isDefault": true,
+									"identifier": "raster"
+								}],
+								"identifier": "tampere:tampere_meta_tm35",
+								"formats": ["image/png",
+								"image/jpeg"]
+							},
+							{
+								"tileMatrixSetLinks": [{
+									"tileMatrixSet": "JHS"
+								}],
+								"title": "Tampere ilmakuva kanta (1995) TM35",
+								"layers": [],
+								"dimensions": [],
+								"styles": [{
+									"isDefault": true,
+									"identifier": "raster"
+								}],
+								"identifier": "tampere:tampere_ik95_kanta_tm35",
+								"formats": ["image/png",
+								"image/jpeg"]
+							},
+							{
+								"tileMatrixSetLinks": [{
+									"tileMatrixSet": "JHS"
+								}],
+								"title": "Tampere ilmakuva kanta (1974) TM35",
+								"layers": [],
+								"dimensions": [],
+								"styles": [{
+									"isDefault": true,
+									"identifier": "raster"
+								}],
+								"identifier": "tampere:tampere_ik74_kanta_tm35",
+								"formats": ["image/png",
+								"image/jpeg"]
+							},
+							{
+								"tileMatrixSetLinks": [{
+									"tileMatrixSet": "JHS"
+								}],
+								"title": "Tampere ilmakuva kanta (1956) TM35",
+								"layers": [],
+								"dimensions": [],
+								"styles": [{
+									"isDefault": true,
+									"identifier": "raster"
+								}],
+								"identifier": "tampere:tampere_ik56_kanta_tm35",
+								"formats": ["image/png",
+								"image/jpeg"]
+							},
+							{
+								"tileMatrixSetLinks": [{
+									"tileMatrixSet": "JHS"
+								}],
+								"title": "Tampere ilmakuva kanta (1966) TM35",
+								"layers": [],
+								"dimensions": [],
+								"styles": [{
+									"isDefault": true,
+									"identifier": "raster"
+								}],
+								"identifier": "tampere:tampere_ik66_kanta_tm35",
+								"formats": ["image/png",
+								"image/jpeg"]
+							},
+							{
+								"tileMatrixSetLinks": [{
+									"tileMatrixSet": "JHS"
+								}],
+								"title": "Tampere kaavat TM35",
+								"layers": [],
+								"dimensions": [],
+								"styles": [{
+									"isDefault": true,
+									"identifier": "raster"
+								}],
+								"identifier": "tampere:tampere_kaavat_tm35",
+								"formats": ["image/png",
+								"image/jpeg"]
+							},
+							{
+								"tileMatrixSetLinks": [{
+									"tileMatrixSet": "JHS"
+								}],
+								"title": "Tampere virastokartta GK24",
+								"layers": [],
+								"dimensions": [],
+								"styles": [{
+									"isDefault": true,
+									"identifier": "raster"
+								}],
+								"identifier": "tampere:tampere_vkartta_gk24",
+								"formats": ["image/png",
+								"image/jpeg"]
+							},
+							{
+								"tileMatrixSetLinks": [{
+									"tileMatrixSet": "JHS"
+								}],
+								"title": "Tampere ilmakuva (2011) GK24",
+								"layers": [],
+								"dimensions": [],
+								"styles": [{
+									"isDefault": true,
+									"identifier": "raster"
+								}],
+								"identifier": "tampere:tampere_ik2011_gk24",
+								"formats": ["image/png",
+								"image/jpeg"]
+							},
+							{
+								"tileMatrixSetLinks": [{
+									"tileMatrixSet": "JHS"
+								}],
+								"title": "Tampere ilmakuva keskusta (1999) TM35",
+								"layers": [],
+								"dimensions": [],
+								"styles": [{
+									"isDefault": true,
+									"identifier": "raster"
+								}],
+								"identifier": "tampere:tampere_ik99_keskusta_tm35",
+								"formats": ["image/png",
+								"image/jpeg"]
+							},
+							{
+								"tileMatrixSetLinks": [{
+									"tileMatrixSet": "JHS"
+								}],
+								"title": "Tampere kantakartta GK24",
+								"layers": [],
+								"dimensions": [],
+								"styles": [{
+									"isDefault": true,
+									"identifier": "raster"
+								}],
+								"identifier": "tampere:tampere_meta_gk24",
+								"formats": ["image/png",
+								"image/jpeg"]
+							},
+							{
+								"tileMatrixSetLinks": [{
+									"tileMatrixSet": "JHS"
+								}],
+								"title": "Tampere ilmakuva (2012) GK24",
+								"layers": [],
+								"dimensions": [],
+								"styles": [{
+									"isDefault": true,
+									"identifier": "raster"
+								}],
+								"identifier": "tampere:tampere_ik2012_kanta_gk24",
+								"formats": ["image/png",
+								"image/jpeg"]
+							},
+							{
+								"tileMatrixSetLinks": [{
+									"tileMatrixSet": "JHS"
+								}],
+								"title": "Tampere ilmakuva itä (2013) TM35",
+								"layers": [],
+								"dimensions": [],
+								"styles": [{
+									"isDefault": true,
+									"identifier": "raster"
+								}],
+								"identifier": "tampere:tampere_ik2013_ita_tm35",
+								"formats": ["image/png",
+								"image/jpeg"]
+							},
+							{
+								"tileMatrixSetLinks": [{
+									"tileMatrixSet": "JHS"
+								}],
+								"title": "Tampere yleiskartta TM35",
+								"layers": [],
+								"dimensions": [],
+								"styles": [{
+									"isDefault": true,
+									"identifier": "raster"
+								}],
+								"identifier": "tampere:tampere_ykartta_tm35",
+								"formats": ["image/png",
+								"image/jpeg"]
+							},
+							{
+								"tileMatrixSetLinks": [{
+									"tileMatrixSet": "JHS"
+								}],
+								"title": "Tampere ilmakuva (1956) GK24",
+								"layers": [],
+								"dimensions": [],
+								"styles": [{
+									"isDefault": true,
+									"identifier": "raster"
+								}],
+								"identifier": "tampere:tampere_ik56_gk24",
+								"formats": ["image/png",
+								"image/jpeg"]
+							},
+							{
+								"tileMatrixSetLinks": [{
+									"tileMatrixSet": "JHS"
+								}],
+								"title": "Tampere ilmakuva kanta (1987) TM35",
+								"layers": [],
+								"dimensions": [],
+								"styles": [{
+									"isDefault": true,
+									"identifier": "raster"
+								}],
+								"identifier": "tampere:tampere_ik87_kanta_tm35",
+								"formats": ["image/png",
+								"image/jpeg"]
+							},
+							{
+								"tileMatrixSetLinks": [{
+									"tileMatrixSet": "JHS"
+								}],
+								"title": "Tampere maanlainen asemakaava GK24",
+								"layers": [],
+								"dimensions": [],
+								"styles": [{
+									"isDefault": true,
+									"identifier": "raster"
+								}],
+								"identifier": "tampere:tampere_akaava_maanal_gk24",
+								"formats": ["image/png",
+								"image/jpeg"]
+							},
+							{
+								"tileMatrixSetLinks": [{
+									"tileMatrixSet": "JHS"
+								}],
+								"title": "Tampere kantakartta TM35 JHS",
+								"layers": [],
+								"dimensions": [],
+								"styles": [{
+									"isDefault": true,
+									"identifier": "raster"
+								}],
+								"identifier": "tampere:tampere_meta_tm35_jhs",
+								"formats": ["image/png",
+								"image/jpeg"]
+							},
+							{
+								"tileMatrixSetLinks": [{
+									"tileMatrixSet": "JHS"
+								}],
+								"title": "Tampere tonttijaot GK24",
+								"layers": [],
+								"dimensions": [],
+								"styles": [{
+									"isDefault": true,
+									"identifier": "raster"
+								}],
+								"identifier": "tampere:tampere_tonttijaot_gk24",
+								"formats": ["image/png",
+								"image/jpeg"]
+							},
+							{
+								"tileMatrixSetLinks": [{
+									"tileMatrixSet": "JHS"
+								}],
+								"title": "Tampere ilmakuva (2006) GK24",
+								"layers": [],
+								"dimensions": [],
+								"styles": [{
+									"isDefault": true,
+									"identifier": "raster"
+								}],
+								"identifier": "tampere:tampere_ik06_gk24",
+								"formats": ["image/png",
+								"image/jpeg"]
+							},
+							{
+								"tileMatrixSetLinks": [{
+									"tileMatrixSet": "JHS"
+								}],
+								"title": "Tampere kaavat GK24",
+								"layers": [],
+								"dimensions": [],
+								"styles": [{
+									"isDefault": true,
+									"identifier": "raster"
+								}],
+								"identifier": "tampere:tampere_kaavat_gk24",
+								"formats": ["image/png",
+								"image/jpeg"]
+							},
+							{
+								"tileMatrixSetLinks": [{
+									"tileMatrixSet": "JHS"
+								}],
+								"title": "Tampere ilmakuva länsi (2012) TM35",
+								"layers": [],
+								"dimensions": [],
+								"styles": [{
+									"isDefault": true,
+									"identifier": "raster"
+								}],
+								"identifier": "tampere:tampere_ik2012_lansi_tm35",
+								"formats": ["image/png",
+								"image/jpeg"]
+							}]
+						},
+						"serviceMetadataUrl": {
+							"href": "http://wms1.navici.com/wmts/2172f22ba9e8c687a7521c20238e7e82?REQUEST=getcapabilities&VERSION=1.0.0"
+						},
+						"operationsMetadata": {
+							"GetTile": {
+								"dcp": {
+									"http": {
+										"get": [{
+											"constraints": {
+												"GetEncoding": {
+													"allowedValues": {
+														"KVP": true
+													}
+												}
+											},
+											"url": "http://wms1.navici.com/wmts/2172f22ba9e8c687a7521c20238e7e82?"
+										}]
+									}
+								}
+							},
+							"GetCapabilities": {
+								"dcp": {
+									"http": {
+										"get": [{
+											"constraints": {
+												"GetEncoding": {
+													"allowedValues": {
+														"KVP": true
+													}
+												}
+											},
+											"url": "http://wms1.navici.com/wmts/2172f22ba9e8c687a7521c20238e7e82?"
+										}]
+									}
+								}
+							},
+							"GetFeatureInfo": {
+								"dcp": {
+									"http": {
+										"get": [{
+											"constraints": {
+												"GetEncoding": {
+													"allowedValues": {
+														"KVP": true
+													}
+												}
+											},
+											"url": "http://wms1.navici.com/wmts/2172f22ba9e8c687a7521c20238e7e82?"
+										}]
+									}
+								}
+							}
+						},
+						"serviceProvider": {
+							"providerSite": "http://wms1.navici.com/wmts/2172f22ba9e8c687a7521c20238e7e82",
+							"providerName": "http://wms1.navici.com/wmts/2172f22ba9e8c687a7521c20238e7e82",
+							"serviceContact": {
+								"individualName": "GeoWebCache User"
+							}
+						},
+						"version": "1.0.0"
+					},
+					"inspire": "Opaskartat",
+					"options": {
+						
+					},
+					"dataUrl_uuid": "08f343de-d1e6-4418-af09-9e74249f36d7",
+					"styles": [{
+						"title": "raster",
+						"name": "raster"
+					}],
+					"params": {
+						
+					},
+					"orgName": "Tampereen kaupunki",
+					"url": "http://wms1.navici.com/wmts/2172f22ba9e8c687a7521c20238e7e82",
+					"realtime": false,
+					"wmsUrl": "http://wms1.navici.com/wmts/2172f22ba9e8c687a7521c20238e7e82",
+					"subtitle": "",
+					"attributes": {
+						
+					}
+				}],
+				"imageLocation": "/Oskari/resources",
+				"user": {
+					"userID": -1,
+					"lastName": "guest",
+					"nickName": "guest",
+					"email": "",
+					"roles": [{
+						"id": 1,
+						"name": "Guest"
+					}],
+					"userUUID": "",
+					"firstName": "guest",
+					"apikey": "deeegyqe2jnlc8jgzsfe7og1"
+				}
+			}
+		},
+		"openlayers-default-theme": {
+			"state": {
+				
+			},
+			"conf": {
+				
+			}
+		},
+		"search": {
+			"state": {
+				
+			},
+			"conf": {
+				"disableDefault": true
+			}
+		},
+		"maplegend": {
+			"state": {
+				
+			},
+			"conf": {
+				
+			}
+		},
+		"divmanazer": {
+			"state": {
+				
+			},
+			"conf": {
+				
+			}
+		},
+		"statehandler": {
+			"state": {
+				
+			},
+			"conf": {
+				
+			}
+		},
+		"myplaces2": {
+			"state": {
+				
+			},
+			"conf": {
+				
+			}
+		},
+		"infobox": {
+			"state": {
+				
+			},
+			"conf": {
+				"adaptable": true
+			}
+		},
+		"coordinatedisplay": {
+			"state": {
+				
+			},
+			"conf": {
+				
+			}
+		}
+	},
+	"startupSequence": [{
+		"instanceProps": {
+			
+		},
+		"title": "OpenLayers",
+		"bundleinstancename": "openlayers-default-theme",
+		"fi": "OpenLayers",
+		"sv": "OpenLayers",
+		"en": "OpenLayers",
+		"bundlename": "openlayers-default-theme",
+		"metadata": {
+			"Import-Bundle": {
+				"openlayers-default-theme": {
+					"bundlePath": "/Oskari/packages/openlayers/bundle/"
+				},
+				"openlayers-full-map": {
+					"bundlePath": "/Oskari/packages/openlayers/bundle/"
+				}
+			},
+			"Require-Bundle-Instance": []
+		}
+	},
+	{
+		"instanceProps": {
+			
+		},
+		"title": "Map",
+		"bundleinstancename": "mapfull",
+		"fi": "mapfull",
+		"sv": "mapfull",
+		"en": "mapfull",
+		"bundlename": "mapfull",
+		"metadata": {
+			"Import-Bundle": {
+				"mapwmts": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				},
+				"service-base": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				},
+				"event-map-layer": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				},
+				"request-map-layer": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				},
+				"mapmodule-plugin": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				},
+				"ui-components": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				},
+				"event-base": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				},
+				"mapfull": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				},
+				"core-base": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				},
+				"oskariui": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				},
+				"mapwfs2": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				},
+				"mapuserlayers": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				},
+				"request-base": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				},
+				"mapstats": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				},
+				"domain": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				},
+				"core-map": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				},
+				"request-map": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				},
+				"sandbox-base": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				},
+				"mapmyplaces": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				},
+				"mapanalysis": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				},
+				"service-map": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				},
+				"sandbox-map": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				},
+				"event-map": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				}
+			},
+			"Require-Bundle-Instance": []
+		}
+	},
+	{
+		"instanceProps": {
+			
+		},
+		"title": "Oskari DIV Manazer",
+		"fi": "divmanazer",
+		"bundleinstancename": "divmanazer",
+		"sv": "divmanazer",
+		"en": "divmanazer",
+		"bundlename": "divmanazer",
+		"metadata": {
+			"Import-Bundle": {
+				"divmanazer": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				}
+			},
+			"Require-Bundle-Instance": []
+		}
+	},
+	{
+		"instanceProps": {
+			
+		},
+		"title": "Toolbar",
+		"bundleinstancename": "toolbar",
+		"fi": "toolbar",
+		"sv": "toolbar",
+		"en": "toolbar",
+		"bundlename": "toolbar",
+		"metadata": {
+			"Import-Bundle": {
+				"toolbar": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				}
+			},
+			"Require-Bundle-Instance": []
+		}
+	},
+	{
+		"instanceProps": {
+			
+		},
+		"title": "Infobox",
+		"fi": "infobox",
+		"bundleinstancename": "infobox",
+		"sv": "infobox",
+		"en": "infobox",
+		"bundlename": "infobox",
+		"metadata": {
+			"Import-Bundle": {
+				"infobox": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				}
+			},
+			"Require-Bundle-Instance": []
+		}
+	},
+	{
+		"instanceProps": {
+			
+		},
+		"title": "Statehandler",
+		"bundleinstancename": "statehandler",
+		"fi": "statehandler",
+		"sv": "statehandler",
+		"en": "statehandler",
+		"bundlename": "statehandler",
+		"metadata": {
+			"Import-Bundle": {
+				"statehandler": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				}
+			},
+			"Require-Bundle-Instance": []
+		}
+	},
+	{
+		"instanceProps": {
+			
+		},
+		"title": "Search",
+		"bundleinstancename": "search",
+		"fi": "search",
+		"sv": "?",
+		"en": "?",
+		"bundlename": "search",
+		"metadata": {
+			"Import-Bundle": {
+				"search": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				}
+			},
+			"Require-Bundle-Instance": []
+		}
+	},
+	{
+		"instanceProps": {
+			
+		},
+		"title": "Maplayer selection",
+		"bundleinstancename": "layerselector2",
+		"fi": "layerselector2",
+		"sv": "layerselector2",
+		"en": "layerselector2",
+		"bundlename": "layerselector2",
+		"metadata": {
+			"Import-Bundle": {
+				"layerselector2": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				}
+			},
+			"Require-Bundle-Instance": []
+		}
+	},
+	{
+		"instanceProps": {
+			
+		},
+		"title": "Chosen maplayers",
+		"bundleinstancename": "layerselection2",
+		"fi": "layerselection2",
+		"sv": "layerselection2",
+		"en": "layerselection2",
+		"bundlename": "layerselection2",
+		"metadata": {
+			"Import-Bundle": {
+				"layerselection2": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				}
+			},
+			"Require-Bundle-Instance": []
+		}
+	},
+	{
+		"instanceProps": {
+			
+		},
+		"title": "Coordinate display",
+		"bundleinstancename": "coordinatedisplay",
+		"fi": "coordinatedisplay",
+		"sv": "coordinatedisplay",
+		"en": "coordinatedisplay",
+		"bundlename": "coordinatedisplay",
+		"metadata": {
+			"Import-Bundle": {
+				"coordinatedisplay": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				}
+			},
+			"Require-Bundle-Instance": []
+		}
+	},
+	{
+		"instanceProps": {
+			
+		},
+		"title": "Metadata Flyout",
+		"bundleinstancename": "metadataflyout",
+		"fi": "metadataflyout",
+		"sv": "metadataflyout",
+		"en": "metadataflyout",
+		"bundlename": "metadataflyout",
+		"metadata": {
+			"Import-Bundle": {
+				"metadataflyout": {
+					"bundlePath": "/Oskari/packages/catalogue/bundle/"
+				}
+			},
+			"Require-Bundle-Instance": []
+		}
+	},
+	{
+		"instanceProps": {
+			
+		},
+		"title": "Feature data",
+		"bundleinstancename": "featuredata2",
+		"fi": "featuredata2",
+		"sv": "featuredata2",
+		"en": "featuredata2",
+		"bundlename": "featuredata2",
+		"metadata": {
+			"Import-Bundle": {
+				"featuredata2": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				}
+			},
+			"Require-Bundle-Instance": []
+		}
+	},
+	{
+		"instanceProps": {
+			
+		},
+		"title": "Map publisher",
+		"bundleinstancename": "publisher",
+		"fi": "publisher",
+		"sv": "publisher",
+		"en": "publisher",
+		"bundlename": "publisher",
+		"metadata": {
+			"Import-Bundle": {
+				"publisher": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				}
+			},
+			"Require-Bundle-Instance": []
+		}
+	},
+	{
+		"instanceProps": {
+			
+		},
+		"title": "Personal data",
+		"bundleinstancename": "personaldata",
+		"fi": "personaldata",
+		"sv": "personaldata",
+		"en": "personaldata",
+		"bundlename": "personaldata",
+		"metadata": {
+			"Import-Bundle": {
+				"personaldata": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				}
+			},
+			"Require-Bundle-Instance": []
+		}
+	},
+	{
+		"instanceProps": {
+			
+		},
+		"title": "metadatacatalogue",
+		"bundleinstancename": "metadatacatalogue",
+		"fi": "metadatacatalogue",
+		"sv": "metadatacatalogue",
+		"en": "metadatacatalogue",
+		"bundlename": "metadatacatalogue",
+		"metadata": {
+			"Import-Bundle": {
+				"metadatacatalogue": {
+					"bundlePath": "/Oskari/packages/catalogue/bundle/"
+				}
+			},
+			"Require-Bundle-Instance": []
+		}
+	},
+	{
+		"instanceProps": {
+			
+		},
+		"title": "My places",
+		"bundleinstancename": "myplaces2",
+		"fi": "Kohteet",
+		"sv": "Platsar",
+		"en": "Places",
+		"bundlename": "myplaces2",
+		"metadata": {
+			"Import-Bundle": {
+				"myplaces2": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				}
+			},
+			"Require-Bundle-Instance": []
+		}
+	},
+	{
+		"instanceProps": {
+			
+		},
+		"title": "Map legend",
+		"bundleinstancename": "maplegend",
+		"fi": "maplegend",
+		"sv": "maplegend",
+		"en": "maplegend",
+		"bundlename": "maplegend",
+		"metadata": {
+			"Import-Bundle": {
+				"maplegend": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				}
+			},
+			"Require-Bundle-Instance": []
+		}
+	},
+	{
+		"instanceProps": {
+			
+		},
+		"title": "SearchFromChannelsBundle",
+		"fi": "search-from-channels",
+		"bundleinstancename": "search-from-channels",
+		"sv": "search-from-channels",
+		"en": "search-from-channels",
+		"bundlename": "search-from-channels",
+		"metadata": {
+			"Import-Bundle": {
+				"search-from-channels": {
+					"bundlePath": "/Oskari/packages/tampere/bundle/"
+				}
+			},
+			"Require-Bundle-Instance": []
+		}
+	}]
+}
