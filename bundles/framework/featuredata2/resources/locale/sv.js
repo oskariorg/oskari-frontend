@@ -146,9 +146,10 @@ Oskari.registerLocalization(
                 }
             }
         },
-        "analysisNoData": {
-            "noDataKeyField": "Skyddad_objekt",
-            "noDataMessage": "Antal = Antal utan skyddad objekt."
+        "gridFooter": {
+                 "aggregateColumnField": "Antal",
+                 "noDataMessage": "Antal = Antal utan skyddad objekt",
+                 "noDataCommonMessage": "Antal = Antal utan skyddad objekt"
         }
     }
 }

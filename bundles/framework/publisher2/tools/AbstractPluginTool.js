@@ -104,14 +104,14 @@ function(sandbox, mapmodule, localization, instance, handlers) {
         return null;
     },
     /**
-    * Get name.
-    * @method getName
+    * Get title.
+    * @method getTitle
     * @public
     *
-    * @returns {String} tool name
+    * @returns {String} tool title
     */
-    getName: function() {
-        return this.__loc[this.getTool().name];
+    getTitle: function() {
+        return this.__loc[this.getTool().title];
     },
     /**
     * Is displayed in mode.

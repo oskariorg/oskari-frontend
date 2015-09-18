@@ -12,7 +12,7 @@ function() {
     getTool: function() {
         return {
             id: 'Oskari.mapframework.mapmodule.ControlsPlugin',
-            name: 'ControlsPlugin',
+            title: 'ControlsPlugin',
             config: {}
         };
     },

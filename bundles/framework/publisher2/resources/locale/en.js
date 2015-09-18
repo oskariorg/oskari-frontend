@@ -80,6 +80,10 @@ Oskari.registerLocalization(
                 },
                 "myplaces": {
                     "label": "My map layers"
+                },
+                "layerselection": {
+                    "info": "Select the background map layer. You can select the default background map layer in the map preview.",
+                    "selectAsBaselayer": "Select as baselayer"
                 }
             },
 
@@ -164,8 +168,7 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Map layers menu",
-                "fieldLabel": "Show map layers at the menu.",
+                "label": "Map layers",
                 "info": "Select the background map layer. You can select the default background map layer in the map preview.",
                 "tooltip": "The background map layer is shown at the bottom layer of the map. Only one background map layer can be shown at a time. The user can change the background map if there is more map layers selected to background maps. The default backgound map layer can be selected in the map preview.",
                 "promote": "Do you wish to show also aerial images?"
@@ -217,7 +220,6 @@ Oskari.registerLocalization(
             "show": "Show",
             "hide": "Hide",
             "hidden": "The map layer is temporarily hidden.",
-            "selectAsBaselayer": "",
             "rights": {
                 "can_be_published_map_user": {
                     "label": "The map layer can be published in a embedded map.",

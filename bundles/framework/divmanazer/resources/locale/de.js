@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "de",
     "key": "DivManazer",
     "value": {
@@ -11,11 +12,11 @@ Oskari.registerLocalization({
             "exit": "Beenden",
             "ok": "OK",
             "save": "Speichern",
-            "search": "Suchen"
+            "search": "Suche"
         },
         "LanguageSelect": {
             "title": "Sprache",
-            "tooltip": "NOT TRANSLATED",
+            "tooltip": "Sprache auswählen",
             "languages": {
                 "af": "Afrikaans",
                 "ak": "Akan",
@@ -139,96 +140,129 @@ Oskari.registerLocalization({
         },
         "VisualizationForm": {
             "tooltips": {
-                "dot": "Edit point style",
-                "area": "Edit area style",
-                "line": "Edit line style"
+                "dot": "Punktdarstellung bearbeiten",
+                "area": "Polygondarstellung bearbeiten",
+                "line": "Liniendarstellung bearbeiten"
             },
             "dot": {
-                "title": "Point feature portrayal",
+                "title": "Punktdarstellung",
                 "tooltip": "",
                 "symbol": {
-                    "label": "Point feature icon"
+                    "label": "Symbol"
                 },
                 "size": {
-                    "label": "Size"
+                    "label": "Größe"
                 },
                 "color": {
-                    "label": "Colour",
-                    "labelOr": "or",
-                    "labelCustom": "Custom RGB color (0-255)"
+                    "label": "Farbe",
+                    "labelOr": "oder",
+                    "labelCustom": "Farbwert anpassen (RGB 0-255)"
                 },
                 "preview": {
-                    "label": "Preview"
+                    "label": "Vorschau"
                 },
                 "buttons": {
-                    "save": "Save",
-                    "cancel": "Cancel"
+                    "save": "Speichern",
+                    "cancel": "Abbrechen"
                 }
             },
             "line": {
-                "title": "Line portrayal",
+                "title": "Liniendarstellung",
                 "tooltip": "",
                 "style": {
-                    "label": "Line style"
+                    "label": "Strich"
                 },
                 "cap": {
-                    "label": "Line endigs"
+                    "label": "Linienabschluss"
                 },
                 "corner": {
-                    "label": "Corners"
+                    "label": "Ecken"
                 },
                 "width": {
-                    "label": "Width"
+                    "label": "Breite"
                 },
                 "color": {
-                    "label": "Colour",
-                    "labelOr": "or",
-                    "labelCustom": "Custom RGB colour (0-255)"
+                    "label": "Farbe",
+                    "labelOr": "oder",
+                    "labelCustom": "Farbwert anpassen (RGB 0-255)"
                 },
                 "preview": {
-                    "label": "Preview"
+                    "label": "Vorschau"
                 },
                 "buttons": {
-                    "save": "Save",
-                    "cancel": "Cancel"
+                    "save": "Speichern",
+                    "cancel": "Abbrechen"
                 }
             },
             "area": {
-                "title": "Area portrayal",
+                "title": "Polygondarstellung",
                 "tooltip": "",
                 "linestyle": {
-                    "label": "Area line style"
+                    "label": "Polygonlinie"
                 },
                 "linecap": {
-                    "label": "Area line endings"
+                    "label": "Linienabschluss"
                 },
                 "linecorner": {
-                    "label": "Corners"
+                    "label": "Linienecken"
                 },
                 "linewidth": {
-                    "label": "Width"
+                    "label": "Linienbreite"
                 },
                 "linecolor": {
-                    "label": "Line colour",
-                    "labelOr": "or",
-                    "labelCustom": "Custom RGB colour (0-255)"
+                    "label": "Linienfarbe",
+                    "labelOr": "oder",
+                    "labelCustom": "Farbwert anpassen (RGB 0-255)"
                 },
                 "color": {
-                    "label": "Area fill colour",
-                    "labelOr": "or",
-                    "labelCustom": "Own RGB colour (0-255)"
+                    "label": "Füllfarbe",
+                    "labelOr": "oder",
+                    "labelCustom": "Farbwert anpassen (RGB 0-255)"
                 },
                 "fill": {
-                    "label": "Area fill pattern"
+                    "label": "Füllmuster"
                 },
                 "preview": {
-                    "label": "Preview"
+                    "label": "Vorschau"
                 },
                 "buttons": {
-                    "save": "Save",
-                    "cancel": "Cancel"
+                    "save": "Speichern",
+                    "cancel": "Abbrechen"
+                }
+            }
+        },
+        "Grid": {
+            "columnSelector": {
+                "title": "Eigenschaften",
+                "tooltip": "Spalten anzeigen"
+            },
+            "export": {
+                "title": "Daten exportieren",
+                "export": "Exportieren",
+                "additional": {
+                    "title": "Weitere Einstellungen",
+                    "dataSource": "Datenquelle",
+                    "metadata": "Link zu Metadaten",
+                    "export_selection": "NOT TRANSLATED"
+                },
+                "columns": {
+                    "title": "Spalten",
+                    "all": "Alle",
+                    "visible": "Geöffnet"
+                },
+                "format": {
+                    "title": "Dateiformat",
+                    "xlsx": "Excel",
+                    "csv": "CSV"
+                },
+                "delimiter": {
+                    "title": "Trennzeichen für CSV-Datei",
+                    "comma": "Komma",
+                    "semicolon": "Semikolon",
+                    "tabulator": "Tabulator"
                 }
             }
         }
     }
-});
+}
+);

@@ -25,7 +25,7 @@ function() {
         var featureData = this.__sandbox.findRegisteredModuleInstance('FeatureData2') || null;
         return {
             id: 'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
-            name: 'FeaturedataPlugin',
+            title: 'FeaturedataPlugin',
             config: {
                 instance: featureData
             }

@@ -149,7 +149,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
         getTool: function () {
             return {
                 id: 'Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin',
-                name: 'PublisherToolbarPlugin',
+                title: 'PublisherToolbarPlugin',
                 config: {'toolbarId': 'PublisherToolbar'}
             };
         },

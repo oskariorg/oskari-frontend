@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
         this.sandbox = sandbox;
         this.instance = instance;
         this.templates = {
-            tool: _.template('<div class="tool"><label><input type="checkbox"/>${name}</label><div class="extraOptions"></div></div>'),
+            tool: _.template('<div class="tool"><label><input type="checkbox"/>${title}</label><div class="extraOptions"></div></div>'),
             help: jQuery('<div class="help icon-info"></div>')
         };
         this.data = null;
@@ -126,7 +126,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             me._sortTools();
             // Add tools to panel
             _.each(tools, function(tool) {
-                var ui = jQuery(me.templates.tool({name : tool.getName() }));
+                var ui = jQuery(me.templates.tool({title : tool.getTitle() }));
                 //setup values when editing an existing map
                 if (enabledTools && enabledTools[tool.getTool().id]) {
                     ui.find('input').prop('checked','checked');

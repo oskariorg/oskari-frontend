@@ -43,6 +43,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
         };
         this._mapDivId = mapDivId;
+        this._mapClickedBuilder;
+
         // override defaults
         var key;
         if (options) {
@@ -239,6 +241,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
             // TODO remove this whenever we're ready to add the containers when needed
             this._addMapControlPluginContainers();
+            this._mapClickedBuilder = sandbox.getEventBuilder('MapClickedEvent');
             return map;
         },
 
@@ -318,6 +321,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {OpenLayers.Map}
          */
         _createMapImpl: function () {
+            var me = this;
             var sandbox = this._sandbox;
             // this is done BEFORE enhancement writes the values to map domain
             // object... so we will move the map to correct location
@@ -355,9 +359,65 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 zoomMethod: null
             });
 
+            me._addClickControl();
+
             return this._map;
         },
 
+        /**
+         * Add map click handler
+         * @method @private _addClickControl
+         */
+        _addClickControl: function(){
+            var me = this;
+            //Set up a click handler
+            OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
+                defaultHandlerOptions: {
+                    'double': true,
+                    'stopDouble': true
+                },
+
+                initialize: function(options) {
+                    this.handlerOptions = OpenLayers.Util.extend(
+                        {}, this.defaultHandlerOptions
+                    );
+                    OpenLayers.Control.prototype.initialize.apply(
+                        this, arguments
+                    );
+                    this.handler = new OpenLayers.Handler.Click(
+                        this, {
+                            'click': function(evt){
+                                me.__sendMapClickEvent(evt);
+                            }
+                        }, this.handlerOptions
+                    );
+                }
+            });
+
+            var click = new OpenLayers.Control.Click();
+            me._map.addControl(click);
+            click.activate();
+        },
+
+        /**
+         * Send map click event.
+         * @method  @private __sendMapClickEvent
+         * @param  {Object} evt event object
+         */
+        __sendMapClickEvent : function(evt) {
+            var sandbox = this._sandbox;
+            /* may be this should dispatch to mapmodule */
+            var lonlat = this._map.getLonLatFromViewPortPx(evt.xy),
+                event = this._mapClickedBuilder(lonlat, evt.xy.x, evt.xy.y);
+            sandbox.notifyAll(event);
+        },
+
+        /**
+         * Enure at object exists.
+         * @private @method _ensureExists
+         * @param  {Object} obj check if object exists
+         * @return {Boolean}  exists?
+         */
         _ensureExists: function (obj) {
             return obj !== null && obj !== undefined;
         },

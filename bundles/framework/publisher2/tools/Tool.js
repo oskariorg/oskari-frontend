@@ -44,7 +44,7 @@ function(sandbox, mapmodule, localization) {
     getTool: function(){
         return {
             id: '<plugin id>',
-            name: '<plugin name>',
+            title: '<plugin name>',
             config: {}
         };
     },

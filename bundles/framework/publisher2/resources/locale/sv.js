@@ -80,6 +80,10 @@ Oskari.registerLocalization(
                 },
                 "myplaces": {
                     "label": "Mina kartlager"
+                },
+                "layerselection": {
+                    "info": "Välj bakgrundskartlager. Du kan göra förval i förhandsgranskningsvyn.",
+                    "selectAsBaselayer": "Välj bakgrundskartlager"
                 }
             },
             "toollayout": {
@@ -169,8 +173,7 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Kartlagren meny",
-                "fieldLabel": "Visa kartlagren i menyn",
+                "label": "Kartlagren",
                 "info": "Välj bakgrundskartlager. Du kan göra förval i förhandsgranskningsvyn.",
                 "tooltip": "Bakgrundskartlagret syns som kartans nedersta lager. När du väljer kartan som används som bakgrundskarta syns endast ett lager i taget och du kan växla mellan dem. Du kan göra förval i förhandsgranskningsvyn.",
                 "promote": "Vill du också visa flygbilder?"
@@ -222,7 +225,6 @@ Oskari.registerLocalization(
             "show": "Visa",
             "hide": "Göm",
             "hidden": "Kartlagret är tillfälligt gömt.",
-            "selectAsBaselayer": "NOT TRANSLATED",
             "rights": {
                 "can_be_published_map_user": {
                     "label": "Kartlagret kan publiceras i en inbäddad karta.",

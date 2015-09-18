@@ -145,9 +145,10 @@ Oskari.registerLocalization({
                 }
             }
         },
-        "analysisNoData": {
-            "noDataKeyField": "Tietosuojattujen_kohteiden_lukumäärä",
-            "noDataMessage": "Kohteiden_lukumäärä = Laskennassa käytettävien tilastointiyksiköiden tai -alueiden lukumäärä, tietosuojatut kohteet eivät sisälly laskentaan."
+        "gridFooter": {
+            "aggregateColumnField": "Kohteiden_lukumäärä",
+            "noDataMessage": "Kohteiden_lukumäärä = Laskennassa käytettävien tilastointiyksiköiden tai -alueiden lukumäärä, tietosuojatut kohteet eivät sisälly laskentaan arvolla",
+            "noDataCommonMessage": "Aineisto sisältää tietosuojattuja ominaisuustietoja, jotka eivät sisälly tunnuslukujen laskentaan"
         }
     }
 });
