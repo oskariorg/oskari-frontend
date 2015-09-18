@@ -475,7 +475,7 @@ Oskari.clazz.define(
             var classToAdd = 'oskari-publisher-font-' + fontId,
                 testRegex = /oskari-publisher-font-/;
 
-            this.getMapModule().changeCssClasses(classToAdd, testRegex, [div]);
+            this.changeCssClasses(classToAdd, testRegex, [div]);
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
