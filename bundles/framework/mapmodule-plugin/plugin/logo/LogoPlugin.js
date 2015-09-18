@@ -118,6 +118,11 @@ Oskari.clazz.define(
 
                 if (conf.font) {
                     me.changeFont(conf.font);
+                } else {
+                    var font = me.getToolFontFromMapModule();
+                    if (font !== null && font !== undefined) {
+                        me.changeFont(font, me.getElement());
+                    }
                 }
             }
 
@@ -211,7 +216,7 @@ Oskari.clazz.define(
             var classToAdd,
                 testRegex;
 
-            div = div || this.element;
+            div = div || this.getElement();
 
             if (!div || !fontId) {
                 return;
@@ -220,7 +225,7 @@ Oskari.clazz.define(
             classToAdd = 'oskari-publisher-font-' + fontId;
             testRegex = /oskari-publisher-font-/;
 
-            this.getMapModule().changeCssClasses(classToAdd, testRegex, [div]);
+            this.changeCssClasses(classToAdd, testRegex, [div]);
         },
 
         /**
