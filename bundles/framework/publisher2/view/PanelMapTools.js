@@ -33,7 +33,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             var me = this;
             me.data = pData;
             _.each(me.tools, function (tool) {
-                tool.init();
+                tool.init(me.data);
             });
 
 
@@ -266,5 +266,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             _.each(me.tools, function(tool){
                 tool.stop();
             });
+            for (var p in me.eventHandlers) {
+                if (me.eventHandlers.hasOwnProperty(p)) {
+                    me.sandbox.unregisterFromEventByName(me, p);
+                }
+            }
         }
     });

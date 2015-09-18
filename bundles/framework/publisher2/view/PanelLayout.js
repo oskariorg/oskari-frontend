@@ -35,9 +35,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
                 search: {}
             }, {
 
-
-
-                //TODO: move these to the plugins themselves!
                 val: 'rounded-dark',
                 zoombar: {
                     widthPlus: '22px',
@@ -173,24 +170,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
         eventHandlers: {
             'Publisher2.ToolEnabledChangedEvent': function (event) {
                 if (event.getTool().state.enabled) {
-                    this._setMapModuleToolstyle();
+                    this._changeMapModuleToolstyle();
                 }
             }
-
-/*
-
-            ,
-
-
-            'Publisher2.ToolStyleChangedEvent': function(event) {
-                var me = this;
-                me._changeToolStyles(event.getStyle());
-            },
-            'Publisher2.FontChangedEvent': function(event) {
-                var me = this;
-                me._changeFont(event.getFont());
-            }
-  */          
         },
         /**
          * @method getName
@@ -229,14 +211,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
             }
 
             // Set the initial values
+            
             me.values = {
                 metadata: {
                     style: {
                         font: me.data && me.data.metadata && me.data.metadata.style && me.data.metadata.style.font ? me.data.metadata.style.font : me.initialValues.fonts[0],
-                        toolStyle: me.data && me.data.metadata && me.data.metadata.style ? me.data.metadata.style.toolStyle : me.initialValues.toolStyles[0]
+                        toolStyle: me.data && me.data.metadata && me.data.metadata.style ? me.data.metadata.style.toolStyle : me.initialValues.toolStyles[0],
+                        colourScheme: me.data && me.data.metadata && me.data.metadata.style ? me.data.metadata.style.colourScheme : undefined
                     }
                 }
             };
+            
             // "Precompile" the templates
             for (var f in me.fields) {
                 if (me.fields.hasOwnProperty(f)) {
@@ -247,11 +232,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
             }
 
             if (me.data !== null && me.data !== undefined) {
-/*                
-                me._sendFontChangedEvent(me.values.metadata.style.font);
-                me._sendToolStyleChangedEvent(me._getItemByCode(me.values.metadata.style.toolStyle, me.initialValues.toolStyles));
-*/                
-                me._setMapModuleToolstyle(me.data.metadata.style);
+                me._changeMapModuleToolstyle(me.data.metadata.style);
             }
 
             if (!me.panel) {
@@ -288,21 +269,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
             me.values = {
                 metadata: {
                     style: {
-                        font: jQuery('select[name=publisher-fonts]').val(),
-                        toolStyle: jQuery('select[name=publisher-toolStyles]').val()
+                        font: jQuery('select[name=publisher-fonts]').val() ? jQuery('select[name=publisher-fonts]').val() : null,
+                        toolStyle: jQuery('select[name=publisher-toolStyles]').val() ? jQuery('select[name=publisher-toolStyles]').val() : null
                     }
                 }
             };
             return me.values;
         },
-        _setMapModuleToolstyle: function(style) {
+        _changeMapModuleToolstyle: function(style) {
             var me = this;
             
             if (!style) {
                 style = me.getValues().metadata.style;
             }
-            style.toolStyle = me._getItemByCode(style.toolStyle, me.initialValues.toolStyles);
-            me.mapModule.setToolStyle(style);
+            me.mapModule.changeToolStyle(style);
 
         },
         _populateLayoutPanel: function() {
@@ -347,12 +327,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
 
             // Set the select change handler.
             template.find('select').on('change', function (e) {
-                /*
-                // Send an event notifying the plugins that the font has changed.
-                selectedFont = jQuery(this).val();
-                me._sendFontChangedEvent(selectedFont);
-                */
-                me._setMapModuleToolstyle();
+                me._changeMapModuleToolstyle();
             });
 
             // Prepopulate data
@@ -393,14 +368,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
 
             // Set the select change handler.
             template.find('select').on('change', function (e) {
-                // Send an event notifying the plugins that the style has changed.
-                
-                /*
-                selectedToolStyleCode = jQuery(this).val();
-                selectedToolStyle = me._getItemByCode(selectedToolStyleCode, me.initialValues.toolStyles);
-                me._sendToolStyleChangedEvent(selectedToolStyle);
-                */
-                me._setMapModuleToolstyle();
+                me._changeMapModuleToolstyle();
             });
 
             // Prepopulate data
@@ -410,47 +378,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
 
             return template;
         },
-        /**
-         * Sends an event to notify interested parties that the font has changed.
-         *
-         * @method _sendFontChangedEvent
-         * @param {String} font the changed font value
-         */
-         /*
-        _sendFontChangedEvent: function (font) {
-            this._sendEvent('Publisher2.FontChangedEvent', font);
-        },
-        */
-
-        /**
-         * Sends an event to notify interested parties that the tool style has changed.
-         *
-         * @method _sendToolStyleChangedEvent
-         * @param {Object} the changed tool style
-         */
-         
-        _sendToolStyleChangedEvent: function (selectedToolStyle) {
-            this._sendEvent('Publisher2.ToolStyleChangedEvent', selectedToolStyle || {val: 'default', zoombar: {}, search: {}});
-        },
-        
-        /**
-         * "Sends" an event, that is, notifies other components of something.
-         *
-         * @method _sendEvent
-         * @param {String} eventName the name of the event
-         * @param {Whatever} eventData the data we want to send with the event
-         */
-        _sendEvent: function (eventName, eventData) {
-            var me = this,
-                eventBuilder = me.sandbox.getEventBuilder(eventName),
-                evt;
-
-            if (eventBuilder) {
-                evt = eventBuilder(eventData);
-                me.sandbox.notifyAll(evt);
-            }
-        },
-
         /**
          * Retrieves the item from the list which value matches the code given
          * or null if not found on the list.

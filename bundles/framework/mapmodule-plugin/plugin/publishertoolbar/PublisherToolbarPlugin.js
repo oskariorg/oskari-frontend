@@ -221,24 +221,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 conf = me.getConfig();
 
             me._bindIcon();
-
             if (conf) {
                 if (conf.toolStyle) {
                     me.changeToolStyle(conf.toolStyle, me.getElement());
                 } else {
-                    //not found -> use the style config obtained from the mapmodule.
-                    var mapModuleConf = {};
-                    mapModuleConf.toolStyle = me.getToolStyleFromMapModule();
-                    me.changeToolStyle(mapModuleConf.toolStyle.val, me.getElement());
+                    var toolStyle = me.getToolStyleFromMapModule();
+                    if (toolStyle !== null && toolStyle !== undefined) {
+                        me.changeToolStyle(toolStyle, me.getElement());
+                    }
                 }
-
 
                 if (conf.font) {
                     me.changeFont(conf.font, me.getElement());
                 } else {
-                    conf.font = me.getToolFontFromMapModule();
-                    me.changeFont(conf.font, me.getElement());
-
+                    var font = me.getToolFontFromMapModule();
+                    if (font !== null && font !== undefined) {
+                        me.changeFont(font, me.getElement());
+                    }
                 }
             }
         },
@@ -307,8 +306,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             if (!div) {
                 return;
             }
+            //no default exists for the menu icon, using rounded-dark instead...
+            if (!style) {
+                style = "rounded-dark";
+            }
 
-            //
             var resourcesPath = me.getMapModule().getImageUrl(),
                 imgPath = resourcesPath + '/framework/mapmodule-plugin/resources/images/',
                 styledImg = imgPath + 'menu-' + style + '.png',
@@ -395,11 +397,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
 
             var classToAdd = 'oskari-publisher-font-' + fontId,
                 testRegex = /oskari-publisher-font-/;
-            this.getMapModule().changeCssClasses(
-                classToAdd,
-                testRegex,
-                elements
-            );
+
+            this.changeCssClasses(classToAdd, testRegex, elements);
         },
 
         /**
@@ -429,7 +428,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 i,
                 contentHeight,
                 reasonableHeight;
-
             if (contentDiv.length === 0) {
                 // no container found, clone a new one
                 contentDiv = me.templates.publishedToolbarPopupContent.clone();

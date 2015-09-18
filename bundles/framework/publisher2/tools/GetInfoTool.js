@@ -76,8 +76,12 @@ function() {
     },
 
     maxColourValue: 255,
-    minColourValue: 0,
-
+    minColourValue: 0, 
+    init: function(data) {
+        if (data && data.metadata && data.metadata.style && data.metadata.style.colourScheme) {
+            this.values.colourScheme = data.metadata.style.colourScheme;
+        }
+    },
     /**
     * Get tool object.
     * @method getTool
@@ -161,6 +165,11 @@ function() {
                                 }
                             }]
                         }
+                    }
+                },
+                metadata: {
+                    style: {
+                        colourScheme: me.values.colourScheme || {} 
                     }
                 }
             };

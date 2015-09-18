@@ -274,10 +274,26 @@ Oskari.clazz.define(
         refresh: function () {
             var me = this,
                 conf = me.getConfig(),
-                el = me.getElement();
+                element = me.getElement();
 
-            if (conf && conf.font) {
-                me.changeFont(conf.font, el);
+            if (conf) {
+                if (conf.toolStyle) {
+                    me.changeToolStyle(conf.toolStyle, element);
+                } else {
+                    var toolStyle = me.getToolStyleFromMapModule();
+                    if (toolStyle !== null && toolStyle !== undefined) {
+                        me.changeToolStyle(me.toolStyles[toolStyle], element);
+                    }
+                }
+
+                if (conf.font) {
+                    me.changeFont(conf.font, element);
+                } else {
+                    var font = me.getToolFontFromMapModule();
+                    if (font !== null && font !== undefined) {
+                        me.changeFont(font, element);
+                    }
+                }
             }
         },
 
@@ -553,13 +569,14 @@ Oskari.clazz.define(
                 template;
             div = div || me.getElement();
 
-            if (!style || !div) {
+            if (!div) {
                 return;
             }
 
-            //publisher2 vs. other modules that call this function....hackyish.
-            if (!style.hasOwnProperty("widthLeft")) {
-                style = this.toolStyles[style.val] ? this.toolStyles[style.val] : this.toolStyles["default"]; 
+            if (!style) {
+                style = this.toolStyles["default"];
+            } if (!style.hasOwnProperty("widthLeft")) {
+                style = this.toolStyles[style] ? this.toolStyles[style] : this.toolStyles["default"]; 
             }
 
             // Set the correct template for the style... ugly.
@@ -675,12 +692,7 @@ Oskari.clazz.define(
 
             var classToAdd = 'oskari-publisher-font-' + fontId,
                 testRegex = /oskari-publisher-font-/;
-
-            this.getMapModule().changeCssClasses(
-                classToAdd,
-                testRegex,
-                elements
-            );
+            this.changeCssClasses(classToAdd, testRegex, elements);
         },
 
         /**
@@ -696,7 +708,7 @@ Oskari.clazz.define(
             var cssClass = 'oskari-publisher-search-results-' + toolStyle.val,
                 testRegex = /oskari-publisher-search-results-/;
 
-            this.getMapModule().changeCssClasses(cssClass, testRegex, [div]);
+            this.changeCssClasses(cssClass, testRegex, [div]);
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

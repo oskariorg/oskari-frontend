@@ -43,7 +43,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
         };
         this._mapDivId = mapDivId;
-        //debugger;
         // override defaults
         var key;
         if (options) {
@@ -967,6 +966,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @param {Array[jQuery]} elements The elements where the classes should be changed.
          */
         changeCssClasses: function (classToAdd, removeClassRegex, elements) {
+
+            //TODO: deprecate this, make some error message appear or smthng
+
             var i,
                 j,
                 el;
@@ -993,49 +995,79 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 el.addClass(classToAdd);
             }
         },
-
-        setToolStyle: function(style) {
+        /**
+         * Sets the style to be used on plugins and asks all the active plugins that support changing style to change their style accordingly.
+         *
+         * @method changeToolStyle
+         * @param {Object} style The style object to be applied on all plugins that support changing style.
+         */
+        changeToolStyle: function(style) {
             var me = this;
-            me.style = _.cloneDeep(style);
-            
-            //notify plugins in some nice way
-            _.each(me._pluginInstances, function(plugin) {
-                if (plugin && plugin.hasUI()) {
-                    //this is quite ugly, all plugins really should work the same way...
-                    var styleConfig;
-                    if (plugin.getName().indexOf('Portti2Zoombar') >= 0 || plugin.getName().indexOf('SearchPlugin') >= 0) {
-                        styleConfig = {
-                            val:  me.style.toolStyle.val
-                        };
-                    } else {
-                        // otherwise just use the style's id
-                        styleConfig = me.style.toolStyle.val !== "default" ? me.style.toolStyle.val : null;
-                    }
 
-                    if (plugin.changeFont && typeof plugin.changeFont === 'function') {
-                        plugin.changeFont(me.style.font);
+            if (me._options) {
+                me._options.style = _.cloneDeep(style);
+            }
+
+            //notify plugins of the style change.
+            if (style) {
+                _.each(me._pluginInstances, function(plugin) {
+                    if (plugin && plugin.hasUI()) {
+                        var styleConfig = undefined;
+                        var styleConfig = me._options.style.toolStyle !== "default" ? me._options.style.toolStyle : null;
+                        if (plugin.changeToolStyle && typeof plugin.changeToolStyle === 'function') {
+                            plugin.changeToolStyle(styleConfig);
+                        }
+                        if (plugin.changeFont && typeof plugin.changeFont === 'function') {
+                            plugin.changeFont(me._options.style.font);
+                        }
                     }
-                    if (plugin.changeToolStyle && typeof plugin.changeToolStyle === 'function') {
-                        plugin.changeToolStyle(styleConfig);
-                    }
+                });
+
+                if (me._options.style && me._options.style.colourScheme) {
+                    var evt = me.getSandbox().getEventBuilder('Publisher2.ColourSchemeChangedEvent')(me._options.style.colourScheme);
+                    me.getSandbox().notifyAll(evt);
                 }
-            });
-        },
-        getToolStyle: function() {
-            //TODO: get this from mapOptions once the style info is delivered with it. Return null when not available.
-            var me = this;
-            if (me.style) {
-                return me.style.toolStyle.val;
-            } else {
-                return "sharp-dark";
             }
         },
+        /**
+         * Gets the style to be used on plugins
+         *
+         * @method getToolStyle
+         * @return {String} style The mapmodule's style configuration.
+         */
+        getToolStyle: function() {
+            //TODO: get this from me._options once the style info is delivered with it or null if style not set.
+            var me = this;
+            if (me._options && me._options.style && me._options.style.toolStyle) {
+                return me._options.style.toolStyle && me._options.style.toolStyle !== "default" ? me._options.style.toolStyle : null;
+            } else {
+                return null;
+            }
+        },
+        /**
+         * Gets the font to be used on plugins
+         * @method getToolFont
+         * @return {String} font The mapmodule's font configuration or null if not set.
+         */
         getToolFont: function() {
             var me = this;
-            if (me.style) {
-                return me.style.font;
+            if (me._options && me._options.style && me._options.style.font) {
+                return me._options.style.font;
             } else {
-                return "Arial";
+                return null;
+            }
+        },
+        /**
+         * Gets the colourscheme to be used on plugins
+         * @method getToolColourScheme
+         * @return {String} font The mapmodule's font configuration or null if not set.
+         */
+        getToolColourScheme: function() {
+            var me = this;
+            if (me._options && me._options.style && me._options.style.colourScheme) {
+                return me._options.style.colourScheme;
+            } else {
+                return null;
             }
         },
 

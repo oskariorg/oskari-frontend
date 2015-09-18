@@ -292,15 +292,58 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             return this._visible;
         },
         /**
-         * @public @method getToolStyleConfigFromMapModule
+         * @public @method getToolStyleFromMapModule
          *
+         * @return {Object} style object used by mapmodule or null if not available.
          */
         getToolStyleFromMapModule: function() {
-            //not found -> use the style config obtained from the mapmodule.
-            return { val: this.getMapModule().getToolStyle() };
+            var value = this.getMapModule().getToolStyle();
+            return value ? value : null;
         },
+        /**
+         * @public @method getToolStyleFromMapModule
+         *
+         * @return {String} the font used by mapmodule or null if not available.
+         */
         getToolFontFromMapModule: function() {
             return this.getMapModule().getToolFont();
+        },
+
+        /**
+         * Removes all the css classes which respond to given regex from all elements
+         * and adds the given class to them.
+         *
+         * @method changeCssClasses
+         * @param {String} classToAdd the css class to add to all elements.
+         * @param {RegExp} removeClassRegex the regex to test against to determine which classes should be removec
+         * @param {Array[jQuery]} elements The elements where the classes should be changed.
+         */
+        changeCssClasses: function (classToAdd, removeClassRegex, elements) {
+            var i,
+                j,
+                el;
+
+            for (i = 0; i < elements.length; i += 1) {
+                el = elements[i];
+                // FIXME build the function outside the loop
+                el.removeClass(function (index, classes) {
+                    var removeThese = '',
+                        classNames = classes.split(' ');
+
+                    // Check if there are any old font classes.
+                    for (j = 0; j < classNames.length; j += 1) {
+                        if (removeClassRegex.test(classNames[j])) {
+                            removeThese += classNames[j] + ' ';
+                        }
+                    }
+
+                    // Return the class names to be removed.
+                    return removeThese;
+                });
+
+                // Add the new font as a CSS class.
+                el.addClass(classToAdd);
+            }
         }
     }, {
         /**

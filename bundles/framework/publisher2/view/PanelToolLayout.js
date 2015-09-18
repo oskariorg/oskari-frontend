@@ -49,20 +49,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                     me._changeToolLayout(me.activeToolLayout, null);
                 }
             }
-
-/*
-            ,
-            'Publisher2.ToolStyleChangedEvent': function(event) {
-                console.log("TODO: remove me");
-                var me = this;
-                me._changeToolStyles(event.getStyle());
-            },
-            'Publisher2.FontChangedEvent': function(event) {
-                console.log("TODO: remove me");
-                var me = this;
-                me._changeFont(event.getFont());
-            }
-*/            
         },
         /**
          * @method init
@@ -646,114 +632,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                             siblings[i]
                         );
                     }
-                }
-            }
-        },
-        /**
-         * @method changeToolStyles
-         * Changes the style of each tool, if the tool's plugin supports it.
-         *
-         * @param {Object} style
-         *
-         */
-        _changeToolStyles: function (style) {
-            if (!style) {
-                return;
-            }
-            var me = this,
-                styleConfig,
-                i,
-                tool,
-                toolInstance,
-                tools = me.tools;
-
-//            if (style.val === 'default') {
-//                style.val = null;
-//            }
-
-            // Set the toolStyle to the config of each tool
-            // and change the style immedately.
-            for (i = 0; i < tools.length; i += 1) {
-                toolInstance = tools[i];
-                tool = toolInstance.getTool();
-
-                // special object for zoombar
-                if (tool.id.indexOf('Portti2Zoombar') >= 0) {
-                    styleConfig = style.zoombar || {};
-                    styleConfig.val = style.val;
-                } else if (tool.id.indexOf('SearchPlugin') >= 0) {
-                    // same for search plugin
-                    styleConfig = style.search || {};
-                    styleConfig.val = style.val;
-                } else {
-                    // otherwise just use the style's id
-                    styleConfig = style.val;
-                }
-
-                if (tool.config) {
-                    tool.config.toolStyle = styleConfig;
-                }
-                if (styleConfig &&
-                    toolInstance.isStarted() === true &&
-                    toolInstance.getPlugin() &&
-                    toolInstance.getPlugin().changeToolStyle) {
-                        toolInstance.getPlugin().changeToolStyle(styleConfig);
-                    // tools in toolbar plugin needs to be configured
-                    /* TODO: to do
-                    if (tool.id.indexOf('PublisherToolbarPlugin') >= 0) {
-                        if (me.toolsPanel.toolbarConfig && me.toolsPanel.toolbarConfig.classes) {
-                            me.toolsPanel.toolbarConfig.classes = tool.plugin.getToolConfs();
-                        }
-                    }
-                    */
-                }
-            }
-
-            // Recreate draggable if need be
-            if (me.toolLayoutEditMode) {
-                me._makeDraggable(jQuery('.mapplugin'));
-            }
-        },
-        /**
-         * @method changeFont
-         * Changes the font of each tool (has to be done separately for each one)
-         * if the plugin supports it.
-         *
-         * @param {string} font the id of the font
-         *
-         */
-        _changeFont: function (font) {
-            if (!font) {
-                return;
-            }
-
-
-            //TODO: set the font only for the mapmodule.
-            //TODO in mapmodule: loop through plugins and let em know the font changed.
-            //TODO in each plugin: ability to fråga font from mapmodule, in case font not given in own config. 
-            this.mapModule.setFont(font);
-
-
-
-
-
-
-            var me = this,
-                i,
-                tool,
-                toolInstance,
-                tools = me.tools;
-
-            // Set the font to the config of each tool
-            // and change the font immedately.
-            for (i = 0; i < tools.length; i += 1) {
-                toolInstance = tools[i];
-                tool = toolInstance.getTool();
-                if (tool.config) {
-                    tool.config.font = font;
-                }
-                if (toolInstance.isStarted() && toolInstance.getPlugin().changeFont) {
-                    toolInstance.getPlugin().changeFont(font);
                 }
             }
         },

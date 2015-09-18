@@ -77,7 +77,10 @@ Oskari.clazz.define(
             if (conf && conf.toolStyle) {
                 me.changeToolStyle(conf.toolStyle, me.getElement());
             } else {
-                me.changeToolStyle(conf.toolStyle.val, me.getElement());
+                var toolStyle = me.getToolStyleFromMapModule();
+                if (toolStyle !== null && toolStyle !== undefined) {
+                    me.changeToolStyle(toolStyle, me.getElement());
+                }
             }
         },
 
@@ -99,7 +102,7 @@ Oskari.clazz.define(
 
             var styleClass = 'mylocation-' + (style ? style : 'rounded-dark');
 
-            me.getMapModule().changeCssClasses(styleClass, /^mylocation-/, [el]);
+            me.changeCssClasses(styleClass, /^mylocation-/, [el]);
         },
 
         /**

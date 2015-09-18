@@ -179,13 +179,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             var me = this,
                 conf = me.getConfig();
             // Change the style if in the conf
-            //plugin has an individual style conf? -> use that
             if (conf && conf.toolStyle) {
                 me.changeToolStyle(conf.toolStyle, me.getElement());
             } else {
-                var mapModuleConf = {};
-                mapModuleConf.toolStyle = me.getToolStyleFromMapModule();
-                me.changeToolStyle(conf.toolStyle, me.getElement());
+                var toolStyle = me.getToolStyleFromMapModule();
+                if (!toolStyle) {
+                    toolStyle = "default";
+                }
+                if (toolStyle !== null && toolStyle !== undefined) {
+                    me.changeToolStyle(me.toolStyles[toolStyle], me.getElement());
+                }
             }
             me._setZoombarValue(me.getMap().getZoom());
         },
@@ -246,12 +249,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             // FIXME move under _setStyle or smthn...
             div = div || this.getElement();
 
-            if (!style || !div) {
+            if (!div) {
                 return;
             }
-            //publisher2 vs. other modules that call this function....hackyish.
-            if (!style.hasOwnProperty("widthCenter")) {
-                style = this.toolStyles[style.val] ? this.toolStyles[style.val] : this.toolStyles["default"]; 
+            if (!style) {
+                style = this.toolStyles["default"];
+            } else if (!style.hasOwnProperty("widthCenter")) {
+                style = this.toolStyles[style] ? this.toolStyles[style] : this.toolStyles["default"]; 
             }
 
             var resourcesPath = this.getMapModule().getImageUrl(),
