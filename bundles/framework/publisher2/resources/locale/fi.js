@@ -70,7 +70,7 @@ Oskari.registerLocalization(
                     "point": "Salli pisteiden tallennus.",
                     "line": "Salli viivojen tallennus.",
                     "area": "Salli alueiden tallennus."
-                }, 
+                },
                 "layers": {
                     "add": "Luo uusi tallennustaso",
                     "label": "Näytettävät karttatasot",
