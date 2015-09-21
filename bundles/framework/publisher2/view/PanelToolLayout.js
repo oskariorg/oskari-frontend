@@ -54,7 +54,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
          * @method init
          * Creates the Oskari.userinterface.component.AccordionPanel where the UI is rendered
          */
-        init: function () {
+        init: function (data) {
             var me = this;
             me.toolLayoutEditMode = false;
             for (var p in me.eventHandlers) {
@@ -63,7 +63,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 }
             }
             if (!me.panel) {
-                me.panel = me._populateToolLayoutPanel();
+                me.panel = me._populateToolLayoutPanel(data);
             }
 
             me._toggleAdditionalTools();

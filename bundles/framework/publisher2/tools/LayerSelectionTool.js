@@ -235,8 +235,7 @@ function() {
             };
         };
 
-        var me = this,
-            layerDiv = me._templates.backgroundCheckbox.clone(),
+        var layerDiv = me._templates.backgroundCheckbox.clone(),
             foundedLayerDiv = me._backgroundLayerSelector.find('.layers').find('[data-id=' + layer.getId() + ']');
 
         if(foundedLayerDiv.length>0) {
@@ -251,9 +250,6 @@ function() {
         if (me.shouldPreselectLayer(layer.getId())) {
             input.attr('checked', 'checked');
             layer.selected = true;
-            // Make sure the layer is added before making it a base layer
-            me.getPlugin().addLayer(layer);
-            me.getPlugin().addBaseLayer(layer);
         }
         input.change(closureMagic(layer));
 
@@ -268,7 +264,31 @@ function() {
      */
     shouldPreselectLayer: function(id){
         // TODO: Edit publisher selection
-        return false;
+        var me = this;
+        var isPlugins = (me.data && me.data.configuration && me.data.configuration.mapfull
+            && me.data.configuration.mapfull.conf && me.data.configuration.mapfull.conf.plugins) ? true : false;
+        if(isPlugins) {
+            var plugins = me.data.configuration.mapfull.conf.plugins;
+            var toolPlugin = null;
+            for(var i=0; i<plugins.length;i++) {
+                var plugin = plugins[i];
+                if(plugin.id == me.getTool().id) {
+                    toolPlugin = plugin;
+                    break;
+                }
+            }
+            var isConfig = (toolPlugin && toolPlugin.config
+                && toolPlugin.config.baseLayers) ? true : false;
+
+            if(isConfig) {
+                var isFound = jQuery.inArray('' + id, toolPlugin.config.baseLayers);
+                return isFound !== -1;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     },
     /**
      * Handle add map layer event
@@ -294,16 +314,14 @@ function() {
      * @method init
      * Creates the Oskari.userinterface.component.AccordionPanel where the UI is rendered
      */
-    init: function () {
+    init: function (data) {
         var me = this;
+        me.data  =data;
         for (var p in me.eventHandlers) {
             if (me.eventHandlers.hasOwnProperty(p)) {
                 me.__sandbox.registerForEventByName(me, p);
             }
         }
-
-        var layers = me._getLayersList();
-
     },
     getName: function() {
         return "Oskari.mapframework.publisher.tool.LayerSelectionTool";
@@ -336,7 +354,18 @@ function() {
                 me.__sandbox.unregisterFromEventByName(me, p);
             }
         }
-    }
+    },
+    /**
+    * Set mode to.
+    * @method setMode
+    * @public
+    *
+    * @param {String} mode the mode
+    */
+    setMode: function(mode){
+        var me = this;
+        me.state.mode = mode;
+    },
 }, {
     'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
     'protocol' : ['Oskari.mapframework.publisher.Tool']

@@ -240,7 +240,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                     tools, sandbox, mapModule, me.loc, me.instance
                 );
 
-
             // initialize form (restore data when editing)
             form.init(me.data, function(value) {
                 me.setMode(value);

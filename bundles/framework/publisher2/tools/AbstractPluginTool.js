@@ -45,6 +45,7 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     init: function(){
         // override
     },
+
     /**
     * Get tool object.
     * @method getTool

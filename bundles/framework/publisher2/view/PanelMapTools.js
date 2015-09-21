@@ -32,6 +32,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
         init: function (pData) {
             var me = this;
             me.data = pData;
+
             _.each(me.tools, function (tool) {
                 tool.init(me.data);
             });
@@ -117,7 +118,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             if (me.data) {
                 enabledTools = me._getEnabledTools();
             }
-
             panel.setTitle(me.loc[me.group].label);
             tooltipCont.attr('title', me.loc[me.group].tooltip);
             contentPanel.append(tooltipCont);
