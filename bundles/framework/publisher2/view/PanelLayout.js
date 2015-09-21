@@ -312,8 +312,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
                 fonts = this.initialValues.fonts,
                 fLen = fonts.length,
                 fontOption,
-                i,
-                selectedFont;
+                i;
             // Set the localization.
             template.find('label').html(fontLabel).after('<br />');
 
@@ -350,9 +349,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
                 tsLen = toolStyles.length,
                 toolStyleOption,
                 toolStyleName,
-                i,
-                selectedToolStyleCode,
-                selectedToolStyle;
+                i;
 
             // Set the localizations.
             template.find('label').html(toolStylesLabel).after('<br />');
@@ -409,6 +406,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
                     me.sandbox.unregisterFromEventByName(me, p);
                 }
             }
-        },
+        }
 	}
 );

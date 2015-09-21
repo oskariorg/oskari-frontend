@@ -1072,7 +1072,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             if (style) {
                 _.each(me._pluginInstances, function(plugin) {
                     if (plugin && plugin.hasUI()) {
-                        var styleConfig = undefined;
                         var styleConfig = me._options.style.toolStyle !== "default" ? me._options.style.toolStyle : null;
                         if (plugin.changeToolStyle && typeof plugin.changeToolStyle === 'function') {
                             plugin.changeToolStyle(styleConfig);
@@ -1096,7 +1095,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {String} style The mapmodule's style configuration.
          */
         getToolStyle: function() {
-            //TODO: get this from me._options once the style info is delivered with it or null if style not set.
             var me = this;
             if (me._options && me._options.style && me._options.style.toolStyle) {
                 return me._options.style.toolStyle && me._options.style.toolStyle !== "default" ? me._options.style.toolStyle : null;

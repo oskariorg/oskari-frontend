@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.drawtools.request.StopDrawingRequest
+ * @class Oskari.mapping.drawtools.request.StopDrawingRequest
  *
  * Requests drawtools to complete current drawing and/or clear the current drawing.
  *
@@ -7,7 +7,7 @@
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
 Oskari.clazz
-    .define('Oskari.mapframework.bundle.drawtools.request.StopDrawingRequest',
+    .define('Oskari.mapping.drawtools.request.StopDrawingRequest',
         /**
          * @method create called automatically on construction
          * @static

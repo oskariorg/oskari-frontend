@@ -1,17 +1,17 @@
 /**
- * @class Oskari.mapframework.bundle.drawtools.plugin.DrawPlugin
+ * @class Oskari.mapping.drawtools.plugin.DrawPlugin
  *
  *  Map engine specific implementation for draw tools
  */
 Oskari.clazz.define(
-    'Oskari.mapframework.bundle.drawtools.plugin.DrawPlugin',
+    'Oskari.mapping.drawtools.plugin.DrawPlugin',
 
     /**
      * @method create called automatically on construction
      * @static
      */
     function () {
-        this._clazz = 'Oskari.mapframework.bundle.infobox.plugin.DrawPlugin';
+        this._clazz = 'Oskari.mapping.drawtools.plugin.DrawPlugin';
         this._name = 'GenericDrawPlugin';
     }, {
         setDefaultStyle : function(style) {

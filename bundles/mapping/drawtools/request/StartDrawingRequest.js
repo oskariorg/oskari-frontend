@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.drawtools.request.StartDrawingRequest
+ * @class Oskari.mapping.drawtools.request.StartDrawingRequest
  *
  * Start drawing a given shape for given functionality (id).
  *
@@ -9,7 +9,7 @@
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.drawtools.request.StartDrawingRequest',
+Oskari.clazz.define('Oskari.mapping.drawtools.request.StartDrawingRequest',
     /**
      * @method create called automatically on construction
      * @static
@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.drawtools.request.StartDrawingRe
      * @param {String} id drawing id as given in StartDrawingRequest
      * @param {String|Object} shape [dot|line|circle|box|polygon] or geojson object to set for editing
      * @param {Object} options options like
-     *                         - buffer
+     *                         - buffer [0 to disable dragging a buffer or 1-n for fixed buffer]
      *                         - styles
      *                         - clear drawing after finished
      *                         - show area/line length on map for drawing
