@@ -148,7 +148,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             var me = this;
             _.each(me.panels, function(panel) {
                if(panel.init) {
-                    panel.init();
+                    panel.init(me.data);
                 }
             });
         },

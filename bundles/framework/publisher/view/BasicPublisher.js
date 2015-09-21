@@ -1389,7 +1389,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 // get state of statsgrid
                 // TODO? for some reason original state has been cloned
                 // real / live state can be found from plugins...
-                var statsGridState = me.gridPlugin.getState(); //me.sandbox.getStatefulComponents().statsgrid,
+                var statsGridState =  me.sandbox.getStatefulComponents().statsgrid.state,
                 statsGridState = me._filterIndicators(_.clone(statsGridState, true));
                 statsGridState.gridShown = me.isDataVisible;
                 selections.gridState = statsGridState;
