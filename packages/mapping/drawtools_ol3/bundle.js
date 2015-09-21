@@ -3,7 +3,7 @@
  *
  * Definition for bundle. See source for details.
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.drawtools.DrawToolsBundle",
+Oskari.clazz.define("Oskari.mapping.drawtools.DrawToolsBundle",
 
     function () {
 
@@ -11,7 +11,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.drawtools.DrawToolsBundle",
         "create": function () {
             var me = this;
             var inst =
-                Oskari.clazz.create("Oskari.mapframework.bundle.drawtools.DrawToolsBundleInstance");
+                Oskari.clazz.create("Oskari.mapping.drawtools.DrawToolsBundleInstance");
             return inst;
 
         },
@@ -27,19 +27,19 @@ Oskari.clazz.define("Oskari.mapframework.bundle.drawtools.DrawToolsBundle",
 
             "scripts": [{
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/drawtools/instance.js"
+                "src": "../../../../bundles/mapping/drawtools/instance.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/drawtools/plugin/DrawPlugin.js"
+                "src": "../../../../bundles/mapping/drawtools/plugin/DrawPlugin.ol3.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/drawtools/request/StartDrawingRequest.js"
+                "src": "../../../../bundles/mapping/drawtools/request/StartDrawingRequest.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/drawtools/request/StopDrawingRequest.js"
+                "src": "../../../../bundles/mapping/drawtools/request/StopDrawingRequest.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/drawtools/event/DrawingEvent.js"
+                "src": "../../../../bundles/mapping/drawtools/event/DrawingEvent.js"
             }]
         },
         "bundle": {
@@ -83,4 +83,4 @@ Oskari.clazz.define("Oskari.mapframework.bundle.drawtools.DrawToolsBundle",
     });
 
 Oskari.bundle_manager.installBundleClass("drawtools",
-    "Oskari.mapframework.bundle.drawtools.DrawToolsBundle");
+    "Oskari.mapping.drawtools.DrawToolsBundle");

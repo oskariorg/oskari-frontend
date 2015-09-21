@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.drawtools.request.StartDrawingRequest
+ * @class Oskari.mapping.drawtools.request.StartDrawingRequest
  *
  * Start drawing a given shape for given functionality (id).
  *
@@ -9,7 +9,7 @@
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.drawtools.request.StartDrawingRequest',
+Oskari.clazz.define('Oskari.mapping.drawtools.request.StartDrawingRequest',
     /**
      * @method create called automatically on construction
      * @static

@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.drawtools.DrawToolsBundleInstance
+ * @class Oskari.mapping.drawtools.DrawToolsBundleInstance
  *
  * Main component and starting point for the "drawtools" functionality.
  * Provides functionality for other bundles (my places/analysis/measuretools)
@@ -22,7 +22,7 @@
  *
  * See Oskari.mapframework.bundle.infobox.InfoBoxBundle for bundle definition.
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.drawtools.DrawToolsBundleInstance",
+Oskari.clazz.define("Oskari.mapping.drawtools.DrawToolsBundleInstance",
 
 /**
  * @method create called automatically on construction
@@ -98,7 +98,7 @@ function() {
         var me = this;
 
         // initialize drawPlugin
-        this.drawPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.drawtools.plugin.DrawPlugin');
+        this.drawPlugin = Oskari.clazz.create('Oskari.mapping.drawtools.plugin.DrawPlugin');
         return null;
     },
     /**

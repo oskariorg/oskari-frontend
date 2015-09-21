@@ -1,9 +1,9 @@
 /**
- * @class Oskari.mapframework.bundle.drawtools.event.DrawingEvent
+ * @class Oskari.mapping.drawtools.event.DrawingEvent
  *
  *  Used to notify drawing is completed
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.drawtools.event.DrawingEvent',
+Oskari.clazz.define('Oskari.mapping.drawtools.event.DrawingEvent',
 /**
  * @method create called automatically on construction
  * @static
