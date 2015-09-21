@@ -45,8 +45,10 @@ function() {
         if(me.state.enabled) {
             var pluginConfig = { id: this.getTool().id, config: this.getPlugin().getConfig()};
             var layerSelection = me._getLayerSelection();
+
             if (layerSelection && !jQuery.isEmptyObject(layerSelection)) {
-                pluginConfig.layerSelection = layerSelection;
+                pluginConfig.config.baseLayers = layerSelection.baseLayers;
+                pluginConfig.config.defaultBaseLayer = layerSelection.defaultBaseLayer;
             }
             return {
                 configuration: {
@@ -60,6 +62,66 @@ function() {
         } else {
             return null;
         }
+    },
+    /**
+    * Set enabled.
+    * @method setEnabled
+    * @public
+    *
+    * @param {Boolean} enabled is tool enabled or not
+    */
+    setEnabled : function(enabled) {
+        var me = this,
+            tool = me.getTool(),
+            sandbox = me.__sandbox;
+
+        //state actually hasn't changed -> do nothing
+        if (me.state.enabled !== undefined && me.state.enabled !== null && enabled === me.state.enabled) {
+            return;
+        }
+
+        me.state.enabled = enabled;
+        if(!me.__plugin && enabled) {
+            me.__plugin = Oskari.clazz.create(tool.id, tool.config);
+            me.__mapmodule.registerPlugin(me.__plugin);
+        }
+
+        if(enabled === true) {
+            me.__plugin.startPlugin(me.__sandbox);
+            me.__started = true;
+            setTimeout(function(){
+                me._checkLayerSelections();
+            }, 300);
+        } else {
+            if(me.__started === true) {
+                me.__plugin.stopPlugin(me.__sandbox);
+            }
+        }
+
+        if(enabled === true && me.state.mode !== null && me.__plugin && typeof me.__plugin.setMode === 'function'){
+            me.__plugin.setMode(me.state.mode);
+        }
+        var event = sandbox.getEventBuilder('Publisher2.ToolEnabledChangedEvent')(me);
+        sandbox.notifyAll(event);
+    },
+    /**
+     * Check layer selections
+     * @method  @private _checkLayerSelections
+     */
+    _checkLayerSelections: function(){
+        var me = this,
+            checkedLayers = jQuery('.background-layer-selector .layers input:checked'),
+            layers = me._getLayersList();
+
+        for(var i=0;i<layers.length;i++){
+            var layer = layers[i];
+            var selected = jQuery('.background-layers[data-id='+layer.getId()+'] input:checked');
+            if(selected.length>0){
+                me.__plugin.addBaseLayer(layer);
+            }
+        }
+        jQuery('.background-layers[data-id='+layer.getId()+'] input:checked').trigger('change');
+
     },
     _getLayerSelection: function () {
         var me = this,
@@ -146,9 +208,32 @@ function() {
      * @param {Object} layer added layer
      */
     _addLayer: function(layer) {
+        var me = this;
         if (!this.hasPublishRight(layer)) {
             return;
         }
+
+       var addRequestBuilder = me.__sandbox.getRequestBuilder(
+            'AddMapLayerRequest'
+        );
+        var removeRequestBuilder = me.__sandbox.getRequestBuilder(
+            'RemoveMapLayerRequest'
+        );
+
+        // if layer selection = ON -> show content
+        var closureMagic = function (layer) {
+            return function () {
+                var checkbox = jQuery(this),
+                    isChecked = checkbox.is(':checked');
+
+                layer.selected = isChecked;
+                if (isChecked) {
+                    me.__plugin.addBaseLayer(layer);
+                } else {
+                    me.__plugin.removeBaseLayer(layer);
+                }
+            };
+        };
 
         var me = this,
             layerDiv = me._templates.backgroundCheckbox.clone(),
@@ -160,8 +245,30 @@ function() {
 
         layerDiv.find('label').append(layer.getName());
         layerDiv.attr('data-id', layer.getId());
+        var input = layerDiv.find('input');
+        input.attr('id', 'checkbox' + layer.getId());
+
+        if (me.shouldPreselectLayer(layer.getId())) {
+            input.attr('checked', 'checked');
+            layer.selected = true;
+            // Make sure the layer is added before making it a base layer
+            me.getPlugin().addLayer(layer);
+            me.getPlugin().addBaseLayer(layer);
+        }
+        input.change(closureMagic(layer));
+
         // TODO checked handling
         me._backgroundLayerSelector.find('.layers').append(layerDiv);
+    },
+    /**
+     * Should preselt layer.
+     * @method @private shouldPreselectLayer
+     * @param  {Integer} id layer id
+     * @return {Boolean} true if layer must be preselect, other false
+     */
+    shouldPreselectLayer: function(id){
+        // TODO: Edit publisher selection
+        return false;
     },
     /**
      * Handle add map layer event
@@ -220,6 +327,9 @@ function() {
     **/
     stop: function(){
         var me = this;
+
+        jQuery('.background-layers input:checked').prop('checked', false);
+        jQuery('.publisher2.background-layer-selector').parents('.extraOptions').hide();
 
         for (var p in me.eventHandlers) {
             if (me.eventHandlers.hasOwnProperty(p)) {

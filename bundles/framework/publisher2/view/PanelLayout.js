@@ -211,7 +211,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
             }
 
             // Set the initial values
-            
+
             me.values = {
                 metadata: {
                     style: {
@@ -221,7 +221,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
                     }
                 }
             };
-            
+
             // "Precompile" the templates
             for (var f in me.fields) {
                 if (me.fields.hasOwnProperty(f)) {
@@ -265,7 +265,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
             var me = this;
 
             //metadata currently saved to two places. The publisher uses the values from metadata to restore a published map's state whereas a published map itself uses
-            //the values stored under mapfull's conf. 
+            //the values stored under mapfull's conf.
             me.values = {
                 metadata: {
                     style: {
@@ -278,7 +278,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
         },
         _changeMapModuleToolstyle: function(style) {
             var me = this;
-            
+
             if (!style) {
                 style = me.getValues().metadata.style;
             }
@@ -312,8 +312,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
                 fonts = this.initialValues.fonts,
                 fLen = fonts.length,
                 fontOption,
-                i,
-                selectedFont;
+                i;
             // Set the localization.
             template.find('label').html(fontLabel).after('<br />');
 
@@ -350,9 +349,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
                 tsLen = toolStyles.length,
                 toolStyleOption,
                 toolStyleName,
-                i,
-                selectedToolStyleCode,
-                selectedToolStyle;
+                i;
 
             // Set the localizations.
             template.find('label').html(toolStylesLabel).after('<br />');
@@ -409,6 +406,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
                     me.sandbox.unregisterFromEventByName(me, p);
                 }
             }
-        },
+        }
 	}
 );

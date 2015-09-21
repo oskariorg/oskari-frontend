@@ -576,7 +576,7 @@ Oskari.clazz.define(
             if (!style) {
                 style = this.toolStyles["default"];
             } if (!style.hasOwnProperty("widthLeft")) {
-                style = this.toolStyles[style] ? this.toolStyles[style] : this.toolStyles["default"]; 
+                style = this.toolStyles[style] ? this.toolStyles[style] : this.toolStyles["default"];
             }
 
             // Set the correct template for the style... ugly.

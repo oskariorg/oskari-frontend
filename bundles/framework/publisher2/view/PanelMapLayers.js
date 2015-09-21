@@ -206,28 +206,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
             return "Oskari.mapframework.bundle.publisher2.view.PanelMapLayers";
         },
         /**
-         * Prepopulates the form/plugin with given data
-         *
-         * @method useConfig
-         * @param {Object} pConfig data to prepopulate the form and plugin
-         */
-         /*
-        useConfig: function (pConfig) {
-            if (pConfig) {
-                if (Object.prototype.toString.call(pConfig.baseLayers) === '[object Array]' &&
-                        pConfig.baseLayers.length > 0) {
-
-                    this.config.layers.preselect = pConfig.baseLayers;
-                } else {
-                    this.config.layers.preselect = [];
-                }
-                this.showLayerSelection = true;
-                this.enablePlugin(true);
-                this._populateMapLayerPanel();
-            }
-        },
-        */
-        /**
          * Returns the UI panel and populates it with the data that we want to show the user.
          *
          * @method getPanel
@@ -341,16 +319,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                 me._appendLayerFooter(layerContainer, layer, layer.selected);
                 input = layerContainer.find('input.baselayer');
                 input.attr('id', 'checkbox' + layer.getId());
-
-                if (shouldPreselectLayer(layer.getId()) && me.showLayerSelection) {
-                    input.attr('checked', 'checked');
-                    layer.selected = true;
-                    // Make sure the layer is added before making it a base layer
-//                    this.plugin.addLayer(layer);
-                    this.getPlugin().addLayer(layer);
-//                    this.plugin.addBaseLayer(layer);
-                    this.getPlugin().addBaseLayer(layer);
-                }
 
                 listContainer.prepend(layerContainer);
             }
@@ -746,9 +714,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                     min: 0,
                     max: 100,
                     value: opa,
-                    /*change: function(event,ui) {
-                     me._layerOpacityChanged(layer, ui.value);
-                     },*/
                     slide: function (event, ui) {
                         me._layerOpacityChanged(layer, ui.value);
                     },

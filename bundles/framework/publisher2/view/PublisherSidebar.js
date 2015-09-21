@@ -148,7 +148,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             var me = this;
             _.each(me.panels, function(panel) {
                if(panel.init) {
-                    panel.init();
+                    panel.init(me.data);
                 }
             });
         },
@@ -448,7 +448,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 var save = function () {
                     var selections = me._gatherSelections();
                     if (selections) {
-//                        me._editToolLayoutOff();
+                        me._editToolLayoutOff();
                         me._publishMap(selections);
                     }
                 };
@@ -475,7 +475,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 saveBtn.setHandler(function () {
                     var selections = me._gatherSelections();
                     if (selections) {
-//                        me._editToolLayoutOff();
+                        me._editToolLayoutOff();
                         me._publishMap(selections);
                     }
                 });

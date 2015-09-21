@@ -255,7 +255,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             if (!style) {
                 style = this.toolStyles["default"];
             } else if (!style.hasOwnProperty("widthCenter")) {
-                style = this.toolStyles[style] ? this.toolStyles[style] : this.toolStyles["default"]; 
+                style = this.toolStyles[style] ? this.toolStyles[style] : this.toolStyles["default"];
             }
 
             var resourcesPath = this.getMapModule().getImageUrl(),
