@@ -151,7 +151,9 @@ function() {
                             plugins: [{ id: this.getTool().id, config: this.getPlugin().getConfig() }]
                         }
                     },
-                    publishedgrid: statsGridState
+                    publishedgrid: {
+                        state: statsGridState
+                    }
                 }
             };
         } else {
