@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.33
+
+### publisher2
+
+Added LayerSelectionTool. This tool user can add map layer tool on the map. User can also select visible baselayers.
+
 ## 1.32
 
 ### catalogue/metadataflyout
@@ -159,7 +165,7 @@ Added currently selected style name as a sub header for legend flyout.
 
 ### publisher2
 
-Added GetInfoTool. GetInfoTool has now colous schema selection on extra options.
+Added GetInfoTool. GetInfoTool has now colour schema selection on extra options.
 
 PanelMapSize renamed to PanelMapPreview. PanelMapPreview allow select map preview mode in two different modes (mobile/desktop).
 
