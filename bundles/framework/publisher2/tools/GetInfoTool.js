@@ -76,7 +76,7 @@ function() {
     },
 
     maxColourValue: 255,
-    minColourValue: 0, 
+    minColourValue: 0,
     init: function(data) {
         if (data && data.metadata && data.metadata.style && data.metadata.style.colourScheme) {
             this.values.colourScheme = data.metadata.style.colourScheme;
@@ -169,7 +169,7 @@ function() {
                 },
                 metadata: {
                     style: {
-                        colourScheme: me.values.colourScheme || {} 
+                        colourScheme: me.values.colourScheme || {}
                     }
                 }
             };
