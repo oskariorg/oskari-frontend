@@ -84,7 +84,7 @@ Oskari.registerLocalization(
                 "layerselection": {
                     "info": "Valitse taustakarttoina näytettävät karttatasot. Oletusvalinnan voit tehdä esikatselukartassa.",
                     "selectAsBaselayer": "Taustakarttataso"
-                },
+                }
             },
             "toollayout": {
                 "label": "Työkalujen asettelu kartalla",

@@ -630,7 +630,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 }
                 return;
             }
-            
+
 
             var self = this,
                 header = div.find('div.header'),
@@ -667,7 +667,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 content.removeClass('published-styled-layerselector-content');
                 content.removeClass('layerselection-styled-content');
                 header.removeClass('published-styled-layerselector-header');
-                
+
                 // Set the styling to the content div based on the tool style.
                 this.changeCssClasses(
                     '',
