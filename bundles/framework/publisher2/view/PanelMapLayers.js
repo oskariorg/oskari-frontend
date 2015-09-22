@@ -278,11 +278,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                 i,
                 listContainer = this.templateList.clone(),
                 layer,
-                input,
-                shouldPreselectLayer = function (layerId) {
-                    var isFound = jQuery.inArray('' + layerId, me.config.layers.preselect);
-                    return isFound !== -1;
-                };
+                input;
+                
 
             for (i = 0; i < layers.length; i += 1) {
 
