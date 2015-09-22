@@ -3090,7 +3090,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
             layers.forEach(function (layer) {
                 if (layer.hasFeatureData()) {
-                    if (jQuery.isEmptyObject(layer.getWpsLayerParams())) {
+                    if (jQuery.isEmptyObject(layer.getPropertyTypes())) {
                         analyseService.loadWFSLayerPropertiesAndTypes(
                             layer.getId()
                         );
