@@ -92,15 +92,14 @@ function() {
             setTimeout(function(){
                 me._checkLayerSelections();
             }, 300);
-        } else {
-            if(me.__started === true) {
-                me.__plugin.stopPlugin(me.__sandbox);
+            if(me.state.mode && me.__plugin && typeof me.__plugin.setMode === 'function'){
+                me.__plugin.setMode(me.state.mode);
             }
+        } else if(me.__started === true) {
+            me.__plugin.stopPlugin(me.__sandbox);
         }
 
-        if(enabled === true && me.state.mode !== null && me.__plugin && typeof me.__plugin.setMode === 'function'){
-            me.__plugin.setMode(me.state.mode);
-        }
+        
         var event = sandbox.getEventBuilder('Publisher2.ToolEnabledChangedEvent')(me);
         sandbox.notifyAll(event);
     },
@@ -110,7 +109,6 @@ function() {
      */
     _checkLayerSelections: function(){
         var me = this,
-            checkedLayers = jQuery('.background-layer-selector .layers input:checked'),
             layers = me._getLayersList();
 
         for(var i=0;i<layers.length;i++){
@@ -213,13 +211,6 @@ function() {
             return;
         }
 
-       var addRequestBuilder = me.__sandbox.getRequestBuilder(
-            'AddMapLayerRequest'
-        );
-        var removeRequestBuilder = me.__sandbox.getRequestBuilder(
-            'RemoveMapLayerRequest'
-        );
-
         // if layer selection = ON -> show content
         var closureMagic = function (layer) {
             return function () {
@@ -253,7 +244,6 @@ function() {
         }
         input.change(closureMagic(layer));
 
-        // TODO checked handling
         me._backgroundLayerSelector.find('.layers').append(layerDiv);
     },
     /**
@@ -263,7 +253,7 @@ function() {
      * @return {Boolean} true if layer must be preselect, other false
      */
     shouldPreselectLayer: function(id){
-        // TODO: Edit publisher selection
+        
         var me = this;
         var isPlugins = (me.data && me.data.configuration && me.data.configuration.mapfull
             && me.data.configuration.mapfull.conf && me.data.configuration.mapfull.conf.plugins) ? true : false;
