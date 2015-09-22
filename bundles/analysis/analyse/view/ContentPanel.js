@@ -127,7 +127,7 @@ Oskari.clazz.define(
                 gcn = feature.geometry.CLASS_NAME;
 
             if (gcn === 'OpenLayers.Geometry.LineString') {
-                return OpenLayers.Feature.Vector(
+                return new OpenLayers.Feature.Vector(
                     feature.geometry
                 );
             } else if (gcn === 'OpenLayers.Geometry.MultiPolygon') {
@@ -135,7 +135,7 @@ Oskari.clazz.define(
                     feature.geometry
                 );
             } else if (gcn === 'OpenLayers.Geometry.Polygon') {
-                return OpenLayers.Feature.Vector(
+                return new OpenLayers.Feature.Vector(
                     new OpenLayers.Geometry.MultiPolygon(
                         [feature.geometry]
                     )
