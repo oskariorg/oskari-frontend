@@ -189,6 +189,8 @@ function() {
             var me = this,
                 statsGrid = me.__sandbox.getStatefulComponents().statsgrid,
                 statsGridState = statsGrid.state;
+
+            statsGridState.gridShown = me.state.enabled;
             // Grid state is not in sandbox, if no touch to grid in view edit mode
             // TODO improve state management in statsgrid
             if(!('currentColumn' in statsGrid.state) && me.__tool) {
