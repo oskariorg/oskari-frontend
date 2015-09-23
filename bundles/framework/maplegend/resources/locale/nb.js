@@ -3,9 +3,9 @@ Oskari.registerLocalization(
     "lang": "nb",
     "key": "maplegend",
     "value": {
-        "title": "Teiknforklaringar",
+        "title": "Tegnforklaringer",
         "desc": "",
-        "noLegendsText": "NOT TRANSLATED"
+        "noLegendsText": "Ingen tegnforklaringer er tilgjengelige"
     }
 }
 );
