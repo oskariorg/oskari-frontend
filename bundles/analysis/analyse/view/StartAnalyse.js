@@ -329,30 +329,24 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             me.showInfos();
         },
 
+        /**
+         * @method setFilterGeometry
+         * Sets the filter geometry
+         *
+         * @param {Array} geometry, geometry to be used in filtering
+         *
+         */
+        setFilterGeometry: function (geometry) {
+            this.filterGeometry = geometry;
+        },
 
-        _getClickedFeaturesGeometries: function () {
-            var me = this,
-                sandbox = me.instance.getSandbox(),
-                geometries = [],
-                selectedFeatureGeom = this.contentPanel.selectedGeometry,
-                layers = sandbox.findAllSelectedMapLayers();
-
-
-            if (_.isString(selectedFeatureGeom)) {
-                geometries.push(selectedFeatureGeom);
-
-            } else {
-                _.forEach(layers, function (layer) {
-                    if (layer._clickedGeometries && layer._clickedGeometries.length > 0) {
-                        _.forEach(layer._clickedGeometries, function (clickedFeature) {
-                            geometries.push(clickedFeature[1]);
-                        });
-                    }
-                });
-
-            }
-
-            return geometries;
+        /**
+         * @method getFilterGeometry
+         * Returns the geometry that should be used for filtering
+         *
+         */
+        getFilterGeometry: function () {
+            return this.filterGeometry;
         },
         /**
          * @method setFilterJson
@@ -1040,14 +1034,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         //set the selected layer to be used by selection tools
                         if (selectedlayer && selectedlayer.hasFeatureData()) {
                             me.WFSLayerService.setAnalysisWFSLayerId(selectedlayer.getId());
-                            //clear all previous selections
-                            me.WFSLayerService.emptyAllWFSFeatureSelections();
                         } else {
                             //templayer or sumpin -> just set analysis layer null. Also, disable selection tools.
                             me.WFSLayerService.setAnalysisWFSLayerId(null);
-                            //TODO: maybe reconsider when to clear all selections. Might be useful to preserve the selections made on a wfs layer and use them
-                            //if the user ticks on that layer again?
-                            me.WFSLayerService.emptyAllWFSFeatureSelections();
+
                         }
 
                         me.contentPanel._toggleSelectionTools();
@@ -1114,7 +1104,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          *
          */
         _determineAnalysisWFSLayer: function(contentOptions) {
-
             var me = this,
                      option;
 
@@ -1155,6 +1144,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             if (analysisWFSLayerId) {
                 analysisWFSLayer = me.instance.getSandbox().findMapLayerFromSelectedMapLayers(me.WFSLayerService.getAnalysisWFSLayerId());
                 if (analysisWFSLayer && analysisWFSLayer.getClickedGeometries && analysisWFSLayer.getClickedGeometries().length > 0) {
+                    //set filter geometry for filter json
+                    var geometries = [];
+                    _.forEach(analysisWFSLayer.getClickedGeometries(), function (feature) {
+                        geometries.push(feature[1]);
+                        me.setFilterGeometry(geometries);
+                    });
                     selectedGeometry = analysisWFSLayer.getClickedGeometries()[0];
                 }
             }
@@ -2689,7 +2684,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     // If the user wanted to filter with other layers geometry,
                     // get the geometry
                     if (filterJson.filterByGeometryMethod) {
-                        filterJson.geometries = me._getClickedFeaturesGeometries();
+                        filterJson.geometries = me.getFilterGeometry();
                         delete filterJson.bbox;
                     }
                     data.filter1 = JSON.stringify(filterJson);
@@ -2974,12 +2969,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 layer = this.instance.mapLayerService.findMapLayer(layerId);
             filterIcon.unbind('click');
             filterIcon.bind('click', function () {
-                var clickedGeometries = me._getClickedFeaturesGeometries(),
-                    selectedFeatures = me.WFSLayerService.getSelectedFeatureIds(layer.getId()),
+                var selectedFeatures = me.WFSLayerService.getSelectedFeatureIds(layer.getId()),
                     boolSelectedFeatures = (selectedFeatures !== undefined && selectedFeatures.length > 0),
-                    boolSelectedTemporaryFeatures = (me.contentPanel.featureLayer !== undefined &&
-                                                me.contentPanel.featureLayer.selectedFeatures !== undefined &&
-                                                me.contentPanel.featureLayer.selectedFeatures.length > 0);
+                    boolSelectedGeometry = (me.contentPanel.selectedGeometry !== null);
 
                 if (!me._filterPopups[layer.getId()]) {
                     prevJson = me.getFilterJson(layer.getId());
@@ -2991,7 +2983,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         layer["_isLayerSelected"] = false;
                     }
 
-                    editDialog.createFilterDialog(layer, prevJson, null, boolSelectedFeatures, boolSelectedTemporaryFeatures);
+                    editDialog.createFilterDialog(layer, prevJson, null, boolSelectedFeatures, boolSelectedGeometry);
                     me._filterPopups[layer.getId()] = true;
                     me._userSetFilter[layer.getId()] = true;
                     // If there's already filter values for current layer, populate the dialog with them.
