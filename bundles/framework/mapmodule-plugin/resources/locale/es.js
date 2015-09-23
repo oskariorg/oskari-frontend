@@ -22,15 +22,15 @@ Oskari.registerLocalization(
         "plugin": {
             "LogoPlugin": {
                 "terms": "Términos de uso",
-                "dataSources": "NOT TRANSLATED",
-                "layersHeader": "NOT TRANSLATED",
-                "indicatorsHeader": "NOT TRANSLATED"
+                "dataSources": "Fuente de datos",
+                "layersHeader": "Capas de mapa",
+                "indicatorsHeader": "Indicadores"
             },
             "DataSourcePlugin": {
                 "link": "Fuente de datos",
                 "popup": {
                     "title": "Fuentes de datos",
-                    "content": "NOT TRANSLATED"
+                    "content": "NO TRADUCIDO"
                 },
                 "button": {
                     "close": "Cerrar"
