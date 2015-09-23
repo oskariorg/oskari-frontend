@@ -1113,7 +1113,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             option = _.find(contentOptions, {checked: 'checked'}, 'layerId');
             if (option && option.layerId) {
                 var layer = me.instance.sandbox.findMapLayerFromSelectedMapLayers(option.layerId);
-                if (layer && layer.isLayerOfType("WFS")) {
+                if (layer && layer.isLayerOfType("WFS") || layer.isLayerOfType("analysis")) {
                     me.WFSLayerService.setAnalysisWFSLayerId(layer.getId());
                 }
             }
