@@ -217,30 +217,53 @@ Oskari.clazz.define(
             },
 
             'WFSFeatureGeometriesEvent': function (event) {
-                if (!this.instance.analyse.isEnabled) {
+                var me = this,
+                    layerId = event.getMapLayer().getId();
+
+                if (!me.instance.analyse.isEnabled) {
                     return;
                 }
-                if (this.drawFilterMode) {
+                if (me.drawFilterMode) {
                     return;
                 }
-                var clickedGeometries = event.getGeometries();
-                if (clickedGeometries.length > 0) {
-                    var clickedGeometry = clickedGeometries[0];
-                    this.selectedGeometry = this.parseFeatureFromClickedFeature(clickedGeometry);
-                    this._operateDrawFilters();
+                // if selection is made from different layer than previous selection, empty selections from previous layer
+                _.forEach(me.sandbox.findAllSelectedMapLayers(), function (layer) {
+                    if (layer.hasFeatureData() && layerId !== layer.getId()) {
+                        me.WFSLayerService.emptyWFSFeatureSelections(layer);
+                    }
+                });
+                // if there are selected features, unselect them
+                me.selectControl.unselectAll();
+
+                //set selected geometry for filter json
+                var geometries = [];
+                _.forEach(event.getGeometries(), function (geometry) {
+                    geometries.push(geometry[1]);
+                });
+                me.view.setFilterGeometry(geometries);
+
+                // set selected geometries for drawFilter function
+                var selectedGeometries = event.getGeometries();
+                if (selectedGeometries.length > 0) {
+                    var selectedGeometry = selectedGeometries[0];
+                    me.selectedGeometry = me.parseFeatureFromClickedFeature(selectedGeometry);
+                    me._operateDrawFilters();
                 }
+                me._toggleEmptySelectionBtn(true);
             },
 
             'WFSFeaturesSelectedEvent': function (event) {
-                if (this.drawFilterMode) {
+                var me = this,
+                    layerId = event.getMapLayer().getId();
+
+                if (me.drawFilterMode) {
                     return;
                 }
-                if (event.getWfsFeatureIds().length === 0) {
-                    this.selectedGeometry = null;
-                    this._disableAllDrawFilterButtons();
-                }
-
-                this._toggleEmptySelectionBtn(event.getWfsFeatureIds().length > 0);
+                if (event.getWfsFeatureIds().length === 0 && layerId === me.WFSLayerService.getAnalysisWFSLayerId()) {
+                    me.selectedGeometry = null;
+                    me._disableAllDrawFilterButtons();
+                    me._toggleEmptySelectionBtn(false);
+                } 
             },
 
             'AfterMapMoveEvent': function (event) {
@@ -490,7 +513,13 @@ Oskari.clazz.define(
                             sandbox = me.mapModule.getSandbox(),
                             layers = sandbox.findAllSelectedMapLayers();
 
+                        //set geometry for drawFilter
                         me.selectedGeometry = featureWKT;
+                        //set geometry for filter Json
+                        var geometries = [];
+                        geometries.push(featureWKT);
+                        me.view.setFilterGeometry(geometries);
+                        me.WFSLayerService.emptyAllWFSFeatureSelections();
                     },
                     'featureunselected': function(feature) {
                         me.selectedGeometry = undefined;
@@ -774,6 +803,8 @@ Oskari.clazz.define(
             emptyBtn.setHandler(function () {
                 if (me.WFSLayerService.getAnalysisWFSLayerId()) {
                     me.WFSLayerService.emptyWFSFeatureSelections(me.sandbox.findMapLayerFromSelectedMapLayers(me.WFSLayerService.getAnalysisWFSLayerId()));
+                } else {
+                    me.selectControl.unselectAll();
                 }
             });
             emptyBtn.setTitle(loc.content.selectionTools.button.empty);
@@ -818,7 +849,13 @@ Oskari.clazz.define(
 
             if (analysisWFSLayerSelected) {
                 selectionToolsToolContainer.find('div[class*=selection-]').removeClass('disabled');
+                if (!_.isEmpty(me.WFSLayerService.getSelectedFeatureIds(me.WFSLayerService.getAnalysisWFSLayerId()))) {
+                    me._toggleEmptySelectionBtn(true);
+                } else {
+                    me._toggleEmptySelectionBtn(false);
+                }
             } else {
+                me._deactivateSelectTools();
                 selectionToolsToolContainer.find('div[class*=selection-]').addClass('disabled');
             }
             me.WFSLayerService.setSelectionToolsActive(analysisWFSLayerSelected);

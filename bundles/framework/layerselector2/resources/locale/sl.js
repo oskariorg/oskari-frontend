@@ -15,10 +15,10 @@ Oskari.registerLocalization(
         },
         "loading": "Nalaganje...",
         "filter": {
-            "text": "Išči sloje karte",
+            "text": "Poišči sloje karte",
             "keywordsTitle": "Ključne besede:",
-            "shortDescription": "Iskanje slojev karte s pomočjo imen slojev karte, imena ponudnika podatkov, ali ključne besede, ki opisuje sloj karte.",
-            "description": "Vpišite del imena sloja karte, ime ponudnika podatkov ali ključno besedo, ki opisuje sloj na karti. Iskanje po ključnih besedah se prične, ko so vpisani najmanj štirje znaki. Dovoljeni znaki so črke a-z, kot tudi  å, ä in ö, številke, vračalke in vezaji.",
+            "shortDescription": "Iskanje slojev s pomočjo imena sloja, ponudnika podatkov, ali ključne besede, ki opisuje sloj.",
+            "description": "Vpiši del imena sloja, ime ponudnika podatkov ali ključno besedo, ki opisuje sloj. Iskanje po ključnih besedah se prične, ko so vpisani najmanj štirje znaki. Dovoljeni znaki so črke a - z, kot tudi črke  å, ä in ö, številke, ter znaka za vezaj in vračalko.",
             "inspire": "Po temi",
             "organization": "Po ponudniku podatkov",
             "published": "Uporabniki",
@@ -31,7 +31,8 @@ Oskari.registerLocalization(
         "tooltip": {
             "type-base": "Karta za ozadje",
             "type-wms": "Sloj karte (WMS, WMTS)",
-            "type-wfs": "Podatkovni proizvod (WFS)"
+            "type-wfs": "Podatkovni proizvod (WFS)",
+            "type-wfs-manual": "NOT TRANSLATED"
         },
         "backendStatus": {
             "OK": {
@@ -56,7 +57,7 @@ Oskari.registerLocalization(
         },
         "types": {
             "syn": "Sinonim",
-            "lk": "Povezan koncept",
+            "lk": "Relacijski koncept",
             "vk": "Koordinatni koncept",
             "ak": "Podrejen koncept",
             "yk": "Nadrejen koncept"

@@ -3,15 +3,15 @@ Oskari.registerLocalization(
     "lang": "es",
     "key": "findbycoordinates",
     "value": {
-        "title": "FindByCoordinates",
-        "desc": "FindByCoordinates",
+        "title": "Encontrar por coordenadas",
+        "desc": "Encontrar por coordenadas",
         "tool": {
-            "tooltip": "Find nearest address by clicking the map"
+            "tooltip": "Encontrar la dirección mas cercana cliqueando en el mapa"
         },
-        "resultsTitle": "Search results",
+        "resultsTitle": "Buscar resultados",
         "grid": {
-            "address": "Address",
-            "coordinates": "Coordinates"
+            "address": "Dirección",
+            "coordinates": "Coordenadas"
         }
     }
 }
