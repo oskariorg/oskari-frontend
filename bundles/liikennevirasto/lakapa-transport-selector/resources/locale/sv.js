@@ -41,7 +41,6 @@ Oskari.registerLocalization({
 			"message_no_selected_layers_title" : "Inget kartlager markerat",
 			"message_no_selected_layers_message" : "Inget kartlager är markerat, markera minst ett lager.",
 			"selection_data_title": "Välj datamaterial",
-			"transport_title" : "Datauppsättningstyp",
 			"message_digiroad_not_found_title" : "Det finns inga Digiroad material för",
 			"message_digiroad_not_found_message1" : "Det finns inga Digiroad material för",
 			"message_digiroad_not_found_message2" : "-landskapet",
