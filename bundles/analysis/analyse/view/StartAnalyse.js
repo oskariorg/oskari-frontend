@@ -80,9 +80,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         me.accordion = null;
         me.mainPanel = null;
 
-        me.progressSpinner = Oskari.clazz.create(
-            'Oskari.userinterface.component.ProgressSpinner'
-        );
         me.alert = Oskari.clazz.create('Oskari.userinterface.component.Alert');
 
         me.previewContent = null;
@@ -320,9 +317,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 me.loc.error.title,
                 me.loc.error.nohelp
             );
-
-            /* progress */
-            me.progressSpinner.insertTo(container);
 
             me._addAnalyseData(contentPanel);
             // Show the possible warning of exceeding the feature property count.
@@ -2731,12 +2725,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 }
 
                 // Send the data for analysis to the backend
-                me.progressSpinner.start();
+                me.instance.sandbox.postRequestByName('ShowProgressSpinnerRequest',[true]);
                 me.instance.analyseService.sendAnalyseData(
                     data,
                     // Success callback
                     function (response) {
-                        me.progressSpinner.stop();
+                        me.instance.sandbox.postRequestByName('ShowProgressSpinnerRequest',[false]);
                         if (response) {
                             if (response.error) {
                                 showError(response.error);
@@ -2747,7 +2741,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     },
                     // Error callback
                     function (jqXHR, textStatus, errorThrown) {
-                        me.progressSpinner.stop();
+                        me.instance.sandbox.postRequestByName('ShowProgressSpinnerRequest',[false]);
                         showError(textStatus);
                     }
                 );
