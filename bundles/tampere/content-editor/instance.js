@@ -233,7 +233,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
                 me.sideContentEditor = Oskari.clazz.create(
                     'Oskari.tampere.bundle.content-editor.view.SideContentEditor',
                     me,
-                    me.getLocalization('BasicView'),
+                    me.getLocalization('ContentEditorView'),
                     layerId
                 );
                 me.sideContentEditor.render(map);

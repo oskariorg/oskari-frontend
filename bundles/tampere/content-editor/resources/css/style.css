@@ -135,3 +135,13 @@ div.content-editor div.buttons, div.publisher div.startview div.buttons {
   margin-top: 10px; }
   div.content-editor div.buttons input, div.publisher div.startview div.buttons input {
     margin: 5px 2px; }
+
+.content-editor-buttons
+{
+	text-align: right;
+}
+
+.content-editor-buttons.hide
+{
+	display: none;
+}

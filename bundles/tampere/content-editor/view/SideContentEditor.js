@@ -22,6 +22,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 getinfoResultTable: '<table class="getinforesult_table"></table>',
                 tableRow: '<tr></tr>',
                 tableCell: '<td></td>',
+                tableInput: '<input />',
                 header: '<div class="getinforesult_header"><div class="icon-bubble-left"></div>',
                 headerTitle: '<div class="getinforesult_header_title"></div>',
                 linkOutside: '<a target="_blank"></a>'
@@ -43,13 +44,27 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         me.isLayerVisible = true;
         me.mapLayerService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService');
     }, {
+    	showMessage: function(title, content, buttons, location) {
+            this.closeDialog();
+            this._dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            this._dialog.show(title, content, buttons);
+        },
+        /**
+         * Closes the message dialog if one is open
+         */
+        closeDialog : function() {
+            if(this._dialog) {
+                this._dialog.close(true);
+                this._dialog = null;
+            }
+        },
         /**
          * @method render
          * Renders view to given DOM element
          * @param {jQuery} container reference to DOM element this component will be
          * rendered to
          */
-        render: function (container) {
+        render: function (container) {     	
             var me = this,
                 content = me.template.clone();
             
@@ -79,7 +94,54 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             toolContainer.append(lineButton);
             toolContainer.append(areaButton);
             
+            var saveButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            saveButton.setPrimary(true);
+            saveButton.setTitle(me.loc.buttons.save);
+            saveButton.setHandler(function() {
+                var featureData = me._getFeatureData();
+                var requestData = {};
+                requestData.featureId = featureData[0].value;
+                featureData.splice(0, 1);
+                requestData.featureFields = featureData;
+                requestData.layerName = $("div.getinforesult_header_title").prop("title");
+                
+                var okButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                okButton.setTitle(me.loc.buttons.ok);
+                okButton.setHandler(function () {
+                    me.closeDialog();
+                });
+
+                jQuery.ajax({
+                    type : 'POST',
+                    dataType : 'json',
+                    beforeSend : function(x) {
+                        if(x && x.overrideMimeType) {
+                            x.overrideMimeType("application/j-son;charset=UTF-8");
+                        }
+                    },
+                    data : {'featureData':JSON.stringify(requestData)},
+                    url : ajaxUrl + 'action_route=SaveFeature',
+                    success : function(app) {
+                        me.showMessage(me.loc.featureUpdate.header, me.loc.featureUpdate.success, [okButton]);
+                    },
+                    error: function (error) {
+                        me.showMessage(me.loc.featureUpdate.header, me.loc.featureUpdate.error, [okButton]);
+                    }
+                });
+
+            });
+            
+            var cancelButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            cancelButton.setTitle(me.loc.buttons.cancel);
+            cancelButton.setHandler(function() {
+            	me._handleInfoResult(me.currentData);
+            });
+            
             content.find('.content').append(toolContainer);
+            var buttonsContainer = $("<div/>").addClass("content-editor-buttons hide");
+            saveButton.insertTo(buttonsContainer);
+            cancelButton.insertTo(buttonsContainer);
+            content.find('.content').append(buttonsContainer);
             content.find('.content').append($("<div />").addClass("properties-container"));
             
             me.allLayers = me.sandbox.findAllSelectedMapLayers();
@@ -175,18 +237,21 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         	}
         },
         _handleInfoResult: function (data) {
+        	this.currentData = data;
             var content = [],
                 contentData = {},
                 fragments = [],
                 colourScheme,
                 font;
 
+            $('.content-editor-buttons').removeClass('hide');
             fragments = this._formatWFSFeaturesForInfoBox(data);
 
             if (fragments.length) {
-                contentData.actions = {};
                 contentData.html = this._renderFragments(fragments);
                 contentData.layerId = fragments[0].layerId;
+                contentData.layerName = fragments[0].layerName;
+                contentData.featureId = data.features[0][0];
                 content.push(contentData);
                 $(".properties-container").empty().append(contentData.html);
             }
@@ -197,9 +262,8 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         _formatWFSFeaturesForInfoBox: function (data) {
             var me = this,
                 layer = this.sandbox.findMapLayerFromSelectedMapLayers(data.layerId),
-                isMyPlace = layer.isLayerOfType('myplaces'),
                 fields = layer.getFields().slice(),
-                hiddenFields = ['__fid', '__centerX', '__centerY'],
+                hiddenFields = ['__centerX', '__centerY'],
                 type = 'wfslayer',
                 result,
                 markup;
@@ -207,22 +271,24 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             if (data.features === 'empty' || layer === null || layer === undefined) {
                 return;
             }
-            
-            if (!isMyPlace) {
-                // replace fields with locales
-                fields = _.chain(fields)
-                    .zip(layer.getLocales().slice())
-                    .map(function (pair) {
-                        // pair is an array [field, locale]
-                        if (_.contains(hiddenFields, _.first(pair))) {
-                            // just return the field name for now if it's hidden
-                            return _.first(pair);
-                        }
-                        // return the localized name or field if former is undefined
-                        return _.last(pair) || _.first(pair);
-                    })
-                    .value();
+            if (data.features.length > 1)
+            {
+                data.features = data.features.splice(0, 1);
             }
+            
+            // replace fields with locales
+            fields = _.chain(fields)
+                .zip(layer.getLocales().slice())
+                .map(function (pair) {
+                    // pair is an array [field, locale]
+                    if (_.contains(hiddenFields, _.first(pair))) {
+                        // just return the field name for now if it's hidden
+                        return _.first(pair);
+                    }
+                    // return the localized name or field if former is undefined
+                    return _.last(pair) || _.first(pair);
+                })
+                .value();
 
             result = _.map(data.features, function (feature) {
                 var feat = _.chain(fields)
@@ -236,17 +302,13 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     }, {})
                     .value();
                 
-                if (isMyPlace) {
-                    markup = me._formatMyPlacesGfi(feat);
-                } else {
-                    markup = me._json2html(feat);
-                }
+                markup = me._json2html(feat);
+                var tmp = layer.getName();
                 return {
                     markup: markup,
                     layerId: data.layerId,
-                    layerName: layer.getName(),
-                    type: type,
-                    isMyPlace: isMyPlace
+                    layerName: layer.getLayerName(),
+                    type: type
                 };
             });
 
@@ -259,7 +321,11 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
          * @param {Object} node response data to format
          * @return {String} formatted HMTL
          */
-        _json2html: function (node) {
+        _json2html: function (node, readonly) {
+            if (typeof readonly === 'undefined')
+            {
+                readonly = false;
+            }
             // FIXME this function is too complicated, chop it to pieces
             if (node === null || node === undefined) {
                 return '';
@@ -336,11 +402,16 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     keyColumn = $(this.templates.tableCell);
                     keyColumn.append(key);
                     row.append(keyColumn);
-
+                    
                     valColumn = $(this.templates.tableCell);
-                    valColumn.append(valpres);
-                    row.append(valColumn);
-
+					if (key == "__fid" || readonly) {
+						valColumn.append(value);
+					} else {
+                        valInput = $(this.templates.tableInput);
+                        valInput.val(value);
+                        valColumn.append(valInput);
+					}
+					row.append(valColumn);
                     html.append(row);
                 }
             }
@@ -385,6 +456,22 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
 
                 return wrapper;
             }, $(me.templates.wrapper));
+        },
+        _getFeatureData: function () {
+            var result = [];
+            $('.getinforesult_table').first().find('tr').each(function () {
+                var key = $(this).find('td').eq(0).html();
+                var val = null;
+                if ($(this).find('td').eq(1).find("input").length > 0) {
+                    val = $(this).find('td').eq(1).find("input").val();
+                } else {
+                    val = $(this).find('td').eq(1).html();
+                }
+                
+                result.push({ "key": key, "value": val });
+            });
+            debugger;
+            return result;
         }
     }, {
         /**
