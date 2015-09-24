@@ -2,9 +2,9 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
 function() {
 }, {
     index : 1,
+    allowedLocations: ['top left', 'top center', 'top right'],
     lefthanded: 'top right',
     righthanded: 'top left',
-    allowedLocations: ['top left', 'top center', 'top right'],
     allowedSiblings: [
         'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
         'Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin',
@@ -42,9 +42,11 @@ function() {
                 pluginConfig.layerSelection = layerSelection;
             }
             return {
-                mapfull: {
-                    conf: {
-                        plugins: [pluginConfig]
+                configuration: {
+                    mapfull: {
+                        conf: {
+                            plugins: [pluginConfig]
+                        }
                     }
                 }
             };

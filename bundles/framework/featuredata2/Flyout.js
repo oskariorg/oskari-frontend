@@ -586,6 +586,10 @@ Oskari.clazz.define(
                 if (me.resizable) {
                     this._enableResize();
                 }
+
+                // Extra footer message under grid
+                this._appendFooter(flyout, locales, layer);
+
             }
         },
 
@@ -850,7 +854,52 @@ Oskari.clazz.define(
             else {
                 link.removeClass(strClass);
             }
+        },
+        /**
+         * Add footer text under tab data grid, if analysislayer
+         * - Not the best solution, but ..
+         * @private
+         * @param  {jQuery} flyout
+         * @param  {Array} locales localized field names
+         * @param  {String} layer  Oskari layer
+         */
+        _appendFooter: function (flyout, locales, layer) {
+            var footer = this.template.wrapper.clone(),
+                sandbox = this.instance.getSandbox(),
+                inputid,
+                inputlayer,
+                loc = this.instance.getLocalization('gridFooter'),
+                message;
+
+            if (!loc || !layer || layer.getLayerType().toUpperCase() !== 'ANALYSIS') {
+                return;
+            }
+            // Extract analysis input layer id
+            inputid = layer.getId().split("_")[1];
+            inputlayer = sandbox.findMapLayerFromAllAvailable(inputid);
+            if (inputlayer &&  inputlayer.getLayerType().toUpperCase() === 'WFS') {
+                if (inputlayer.getWpsLayerParams()) {
+                    if (inputlayer.getWpsLayerParams().no_data) {
+                        message = loc.noDataCommonMessage + ' (' + inputlayer.getWpsLayerParams().no_data + ').';
+                        if(locales){
+                            _.forEach(locales, function (field) {
+                                if (field === loc.aggregateColumnField){
+                                    message = loc.noDataMessage + ' (' + inputlayer.getWpsLayerParams().no_data + ').';
+                                }
+                            });
+                        }
+
+                    }
+                }
+            }
+
+
+            if (message) {
+                flyout.find('div.tab-content').append(footer.html(message));
+            }
+
         }
+
     }, {
         /**
          * @static @property {String[]} protocol

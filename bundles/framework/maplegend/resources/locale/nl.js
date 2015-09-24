@@ -5,7 +5,7 @@ Oskari.registerLocalization(
     "value": {
         "title": "Legenda's",
         "desc": "",
-        "noLegendsText": "No map legends available"
+        "noLegendsText": "Geen kaart legenda beschikbaar"
     }
 }
 );

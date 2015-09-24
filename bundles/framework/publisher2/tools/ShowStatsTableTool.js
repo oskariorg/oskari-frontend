@@ -59,6 +59,7 @@ function() {
     *
     * @param {Boolean} enabled is tool enabled or not
     */
+
     setEnabled : function(enabled) {
         var me = this,
             tool = me.getTool(),
@@ -89,17 +90,22 @@ function() {
             elLeft.html(me.statsContainer);
             me.__plugin.startPlugin(me.__sandbox);
             me.__plugin.createStatsOut(me.statsContainer);
+            me.__started = true;
         } else {
-            me.__plugin.stopPlugin(me.__sandbox);
+            if (me.__started === true) {
+                me.__plugin.stopPlugin(me.__sandbox);
+            }
             jQuery('.publishedgrid').remove();
-        }
-
-        if(me.__handlers['MapSizeChanged']) {
-            me.__handlers.MapSizeChanged();
         }
 
         if(enabled === true && me.state.mode !== null && me.__plugin && typeof me.__plugin.setMode === 'function'){
             me.__plugin.setMode(me.state.mode);
+        }
+
+        if (enabled) {
+            if(me.__handlers['MapSizeChanged']) {
+                me.__handlers.MapSizeChanged();
+            }
         }
     },
     /**
@@ -134,8 +140,23 @@ function() {
         return statsGridState;
     },
     getValues: function() {
-        //TODO
-        return;
+        var me = this,
+            statsGrid = me.__sandbox.getStatefulComponents().statsgrid,
+            statsGridState = me._filterIndicators(_.clone(statsGrid.state, true));
+        if(me.state.enabled && statsGridState) {
+            return {
+                configuration: {
+                    mapfull: {
+                        conf: {
+                            plugins: [{ id: this.getTool().id, config: this.getPlugin().getConfig() }]
+                        }
+                    },
+                    publishedgrid: statsGridState
+                }
+            };
+        } else {
+            return null;
+        }
     }
 }, {
     'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],

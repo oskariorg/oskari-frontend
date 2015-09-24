@@ -123,21 +123,12 @@ if (!Function.prototype.bind) {
                 }
             },
             /**
-             * Extra handling per layertype. If data is not given assume getter, otherwise setup data.
+             * Extra handling per layertype in format key=layertype, value is a function that takes params data and reference to the map layer.
+             * Like "wmts" : function(data, mapLayer) {}
+             * If data is not given assume getter, otherwise setup data.
              * @type {Object}
              */
             _typeHandlers : {
-                "wmts" : function(data, mapLayer) {
-                    if(!data) {
-                        return {
-                            tileMatrix : this.getOriginalMatrixSetData()
-                        };
-                    }
-                    else {
-                        mapLayer.setOriginalMatrixSetData(data.tileMatrix);
-                    }
-                }
-
             },
             /**
              * Recursive function to search capabilities by layerName.
