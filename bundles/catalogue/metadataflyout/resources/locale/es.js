@@ -16,7 +16,7 @@ Oskari.registerLocalization(
             "abstract": "Información básica",
             "inspire": "metadatos Inspire",
             "jhs": "ISO 19115 metadatos",
-            "quality":"NOT TRANSLATED",
+            "quality": "Calidad de los Datos",
             "xml": "ISO 19139 XML archivo",
             "map": "Extensión geográfica",
             "pdf": "Imprimir",
@@ -381,8 +381,8 @@ Oskari.registerLocalization(
                 }
             },
             "qualityContent": {
-                "qualityPassTrue": "NOT TRANSLATED",
-                "qualityPassFalse": "NOT TRANSLATED"
+                "qualityPassTrue": "El conjunto de datos es conforme a la especificación",
+                "qualityPassFalse": "El conjunto de datos no es conforme a la especificación"
             },
             "heading": {
                 "abstractTextData": "Texto resumen (datos)",
@@ -415,23 +415,21 @@ Oskari.registerLocalization(
                 "temporalExtent": "Extensiones temporales",
                 "topicCategory": "Categorías del tema",
                 "useLimitation": "Limitaciones de uso",
-
-                "absoluteExternalPositionalAccuracy":"NOT TRANSLATED",
-                "accuracyOfTimeMeasurement":"NOT TRANSLATED",
-                "completenessCommission":"NOT TRANSLATED",
-                "completenessOmission":"NOT TRANSLATED",
-                "conceptualConsistency":"NOT TRANSLATED",
-                "domainConsistency":"NOT TRANSLATED",
-                "formatConsistency":"NOT TRANSLATED",
-                "griddedDataPositionalAccuracy":"NOT TRANSLATED",
-                "nonQuantitativeAttributeAccuracy":"NOT TRANSLATED",
-                "quantitativeAttributeAccuracy":"NOT TRANSLATED",
-                "relativeInternalPositionalAccuracy":"NOT TRANSLATED",
-                "temporalConsistency":"NOT TRANSLATED",
-                "temporalValidity":"NOT TRANSLATED",
-                "thematicClassificationCorrectness":"NOT TRANSLATED",
-                "topologicalConsistency":"NOT TRANSLATED"
-
+                "absoluteExternalPositionalAccuracy": "Exactitud posicional externa absoluta",
+                "accuracyOfTimeMeasurement": "Exactitud de la medida del tiempo",
+                "completenessCommission": "Completitud (Comisión de integridad)",
+                "completenessOmission": "Omisión de integridad",
+                "conceptualConsistency": "Consistencia conceptual",
+                "domainConsistency": "Consistencia de Dominio",
+                "formatConsistency": "Consistencia de Formato",
+                "griddedDataPositionalAccuracy": "Exactitud posicional de datos de la cuadriculada",
+                "nonQuantitativeAttributeAccuracy": "Exactitud de los atributos no cuantitativos",
+                "quantitativeAttributeAccuracy": "Exactitud de los atributos  cuantitativos",
+                "relativeInternalPositionalAccuracy": "Exactitud posicional interna relativa",
+                "temporalConsistency": "Consistencia temporal",
+                "temporalValidity": "Validez temporal",
+                "thematicClassificationCorrectness": "Corrección de la clasificación temática",
+                "topologicalConsistency": "Consistencia topológica."
             }
         },
         "tile": {
