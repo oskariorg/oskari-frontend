@@ -43,6 +43,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         me.mainPanel = null;
         me.isLayerVisible = true;
         me.mapLayerService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+        me.selectedLayerId = null;
     }, {
     	showMessage: function(title, content, buttons, location) {
             this.closeDialog();
@@ -81,10 +82,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             content.find('.content').append($("<div>" + me.loc.toolInfo + "</div>"));
             content.find('.content').append($("<div>" + me.loc.geometryModifyInfo + "</div>"));
 
-            //var pointButton = $("<div />").addClass('myplaces-draw-point tool');
-            //var lineButton = $("<div />").addClass('myplaces-draw-line tool');
-            //var areaButton = $("<div />").addClass('myplaces-draw-area tool');
-            
             var pointButton = $("<div />").addClass('add-point tool');
             var lineButton = $("<div />").addClass('add-line tool');
             var areaButton = $("<div />").addClass('add-area tool');
@@ -103,6 +100,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 requestData.featureId = featureData[0].value;
                 featureData.splice(0, 1);
                 requestData.featureFields = featureData;
+                requestData.layerId = me.selectedLayerId;
                 requestData.layerName = $("div.getinforesult_header_title").prop("title");
                 
                 var okButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
@@ -237,6 +235,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         	}
         },
         _handleInfoResult: function (data) {
+            this.selectedLayerId = data.layerId;
         	this.currentData = data;
             var content = [],
                 contentData = {},
