@@ -99,7 +99,7 @@ function() {
             me.__plugin.stopPlugin(me.__sandbox);
         }
 
-        
+
         var event = sandbox.getEventBuilder('Publisher2.ToolEnabledChangedEvent')(me);
         sandbox.notifyAll(event);
     },
@@ -253,7 +253,7 @@ function() {
      * @return {Boolean} true if layer must be preselect, other false
      */
     shouldPreselectLayer: function(id){
-        
+
         var me = this;
         var isPlugins = (me.data && me.data.configuration && me.data.configuration.mapfull
             && me.data.configuration.mapfull.conf && me.data.configuration.mapfull.conf.plugins) ? true : false;
@@ -262,7 +262,7 @@ function() {
             var toolPlugin = null;
             for(var i=0; i<plugins.length;i++) {
                 var plugin = plugins[i];
-                if(plugin.id == me.getTool().id) {
+                if(plugin.id === me.getTool().id) {
                     toolPlugin = plugin;
                     break;
                 }
@@ -355,7 +355,7 @@ function() {
     setMode: function(mode){
         var me = this;
         me.state.mode = mode;
-    },
+    }
 }, {
     'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
     'protocol' : ['Oskari.mapframework.publisher.Tool']

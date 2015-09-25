@@ -263,7 +263,7 @@ Oskari.clazz.define(
                     me.selectedGeometry = null;
                     me._disableAllDrawFilterButtons();
                     me._toggleEmptySelectionBtn(false);
-                } 
+                }
             },
 
             'AfterMapMoveEvent': function (event) {

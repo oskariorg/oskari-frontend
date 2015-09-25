@@ -2,6 +2,10 @@
 
 ## 1.33
 
+### map-module
+
+Added a new request 'ShowProgressSpinnerRequest' that shows / hides a progress indicator on the map. The request is by default enabled in rpc.
+
 ### publisher2
 
 Added LayerSelectionTool. This tool user can add map layer tool on the map. User can also select visible baselayers.

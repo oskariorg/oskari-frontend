@@ -43,7 +43,6 @@ function() {
         me.state.enabled = enabled;
 
         if(enabled === true) {
-           // me._refreshConfig();
             me.__plugin.showClassificationOptions(true);
         } else {
             me.__plugin.showClassificationOptions(false);
