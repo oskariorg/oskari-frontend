@@ -1,5 +1,80 @@
 # Release Notes
 
+## 1.32
+
+### catalogue/metadataflyout
+
+Added configurable ISO 1913139 XML or Print -links hiding. Defaults showing links. Configuration is done by adding the following information to a bundle config:
+
+    {
+        hideMetadataXMLLink: true,
+        hideMetaDataPrintLink: true
+    }
+
+### map-module
+
+Modified styles not display error pink tiles (where is CSS olImageLoadError-class). Also added configurable OpenLayers IMAGE_RELOAD_ATTEMPTS and onImageLoadErrorColor.
+
+Added mapclick handling.
+
+### mapmodule-plugin/plugin/controls/OskariNavigation.js
+
+Removed mapclick handling because this breaks publisher featuredata functionality.
+
+### sample/servlet
+
+Modified minifierAppSetup.json to also include coordinatetool -bundle.
+
+### admin-layerselector
+
+Added support for time values for WMS layers. The available time values are stored in layer attributes and the selected time value can be passed to GetMap requests through layer parameters. Added a field to the admin UI for selecting the desired time value.
+
+### mapwmts
+
+WMTS support has been refactored to enable better Openlayers 3 support. 
+Requires backend functionality with action route 'GetLayerCapabilities' that takes the layer id as parameter('id')
+ and returns the layer capabilities in XML format.
+
+#### Changes to classes:
+
+*Oskari.mapframework.wmts.domain.WmtsLayer*
+setWmtsName -> setLayerName
+getWmtsName -> getLayerName
+addWmtsUrl -> addLayerUrl
+getWmtsUrls -> getLayerUrls
+getUrl -> getLayerUrl
+getRequestEncoding/setWmtsCaps/getWmtsCaps -> *removed*
+
+*Oskari.mapframework.wmts.service.WmtsLayerModelBuilder*
+Heavily refactored since capabilities are no longer parsed here
+
+*Oskari.mapframework.wmts.service.WMTSLayerService*
+Currently responsible for loading capabilities and creating the WMTS layer object for the map engine.
+
+### coordinatedisplay
+
+Added possibility to configure how many decimals coordinates are rounded. If not configured then using zero decimals.
+
+### coordinatetool
+
+Added possibility to configure how many decimals coordinates are rounded. If not configured then using zero decimals.
+
+Fixed map double click handling, now when double clicked map the coordinate textboxes are updated map centeer values (if show mouse coordinate is not checked).
+
+### mapwfs2
+
+Wfs layer rendering is improved. Improvements also made in the backend Transport service for this item
+
+### Analysis  / aggregate method
+
+Resultset content format is changed in backend. There is now one record for each property with aggregate function values.
+
+Resultset was earlier one record with json attributes.
+
+## 1.31.2
+
+Fixed a bug when saving a view with statsgrid on
+
 ## 1.31.1
 
 Removed console.log() calls.
@@ -95,6 +170,10 @@ Added getMaxExtent function. This return max map extent.
 ### Sandbox/map layer service
 
 Added new getNewestLayers(count) method to find newest layers corresponding to given count.
+
+### WMSLayerPlugin/WMTSLayerPlugin
+
+Real time layers are now shown with current time parameter.
 
 ## 1.30.4
 

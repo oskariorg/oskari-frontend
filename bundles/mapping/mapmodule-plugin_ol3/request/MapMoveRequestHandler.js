@@ -32,6 +32,7 @@ Oskari.clazz.define(
             var longitude = request.getCenterX(),
                 latitude = request.getCenterY(),
                 zoom = request.getZoom(),
+                zoomAdjustment = 0,
                 srsName = request.getSrsName(),
                 lonlat = [longitude, latitude];
 
@@ -44,7 +45,15 @@ Oskari.clazz.define(
                 lonlat = new ol.proj.fromLonLat([longitude, latitude], srsName);
             }
 
-            this.mapModule.moveMapToLonLat(lonlat, zoom, false);
+            //FIXME: in case it's possible that zoom is something other than an integer (e.g. extent or scale) like in the ol2 implementation,
+            //we need to make a separate handling for that.
+            var currentZoom = this.mapModule.getZoomLevel() ? this.mapModule.getZoomLevel() : 0;
+            zoom = parseInt(zoom);
+            if (isNaN(zoom)) {
+                zoom = currentZoom;
+            }
+            zoomAdjustment = zoom - currentZoom;
+            this.mapModule.moveMapToLonLat(lonlat, zoomAdjustment, false);
         }
     }, {
         /**

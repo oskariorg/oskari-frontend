@@ -131,6 +131,12 @@ Oskari.clazz.define(
                     },
                     layerParams = _layer.getParams(),
                     layerOptions = _layer.getOptions();
+
+                if (_layer.isRealtime()) {
+                    var date = new Date();
+                    defaultParams.time = date.toISOString();
+                }
+
                 if (_layer.getMaxScale() || _layer.getMinScale()) {
                     // use resolutions instead of scales to minimize chance of transformation errors
                     var layerResolutions = this.getMapModule().calculateLayerResolutions(_layer.getMaxScale(), _layer.getMinScale());
@@ -325,6 +331,7 @@ Oskari.clazz.define(
                 //url might've changed (case forceProxy). Update that.
                 oLayers[i].setUrl(_.clone(layer.getLayerUrls()));
 
+                oLayers[i].mergeNewParams(layer.getParams());
                 // Make sure the sub exists before mucking about with it
                 if (newRes && isInScale && oLayers && oLayers[i]) {
                     oLayers[i].addOptions({

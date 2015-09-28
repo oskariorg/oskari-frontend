@@ -12,9 +12,12 @@ Oskari.registerLocalization(
         "errorscale": "I dati non possono essere visualizzati a questa scala. Cambiare scala di visualizzazione.",
         "errordata": "I dati forniti dal server contengono errori. Sposta di poco l'area della mappa per aggiornarli.",
         "columnSelectorTooltip": "Seleziona colonne visibili.",
+        "featureDataPopup": "NOT TRANSLATED",
         "selectionTools": {
             "title": "Seleziona elementi sulla mappa",
             "instructions": "NOT TRANSLATED",
+            "selectFromTop": "NOT TRANSLATED",
+            "selectAll": "Seleziona da tutti i layers",
             "link": {
                 "title": "Seleziona più elementi"
             },

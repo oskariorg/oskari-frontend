@@ -134,9 +134,9 @@ Oskari.clazz.define(
 
                 if (keepLayerOnTop) {
                     // This might not be completly correct. We assume keepLayerOnTop means put this layer at the bottom as a faked baselayer.
-                    this.mapModule.setLayerIndex(layerImpl, 0);
-                } else {
                     this.mapModule.setLayerIndex(layerImpl, this.mapModule.getLayers().length);
+                } else {
+                    this.mapModule.setLayerIndex(layerImpl, 0);
                 }
             }
 

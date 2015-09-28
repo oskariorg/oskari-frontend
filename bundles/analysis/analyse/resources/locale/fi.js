@@ -161,16 +161,12 @@ Oskari.registerLocalization(
                         "selected": true
                     },
                     {
+                        "id": "oskari_analyse_NoDataCnt",
+                        "label": "Tietosuojattujen kohteiden lukumäärä"
+                    },
+                    {
                         "id": "oskari_analyse_Sum",
                         "label": "Summa"
-                    },
-                    {
-                        "id": "oskari_analyse_Min",
-                        "label": "Pienin arvo"
-                    },
-                    {
-                        "id": "oskari_analyse_Max",
-                        "label": "Suurin arvo"
                     },
                     {
                         "id": "oskari_analyse_Average",
@@ -185,8 +181,12 @@ Oskari.registerLocalization(
                         "label": "Mediaani"
                     },
                     {
-                        "id": "oskari_analyse_NoDataCnt",
-                        "label": "Tietosuojattujen kohteiden lukumäärä"
+                        "id": "oskari_analyse_Min",
+                        "label": "Pienin arvo"
+                    },
+                    {
+                        "id": "oskari_analyse_Max",
+                        "label": "Suurin arvo"
                     }
                 ],
                 "attribute": "Valitse ominaisuustieto",

@@ -47,13 +47,13 @@ Oskari.registerLocalization(
         "searching": "Ricerca in corso…",
         "grid": {
             "name": "Nome",
-            "removeBBOX": "Hide data coverage",
-            "showBBOX": "NOT TRANSLATED",
-            "info": "NOT TRANSLATED",
-            "remove": "NOT TRANSLATED",
-            "rating": "NOT TRANSLATED"
+            "removeBBOX": "Nascondi copertura dei dati",
+            "showBBOX": "Mostra copertura dei dati",
+            "info": "Mostra Metadati",
+            "remove": "Rimuovi dai risulati di ricerca",
+            "rating": "Valutazione"
         },
-        "licenseText": "Get licenza"
+        "licenseText": "Ottieni licenza"
     }
 }
 );

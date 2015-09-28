@@ -107,6 +107,47 @@ function OskariParser() {
         return bundleDef;
     }
 
+
+    this.getBundles = function(appSetupFile,grunt) {
+        
+        var appSetupData = fs.readFileSync(appSetupFile,'utf8');
+        var data = JSON.parse(appSetupData);
+        data = data.startupSequence;
+        var basePath = path.dirname(appSetupFile);
+
+        var bundles = [];
+
+        var bundleSequence = [];
+        for (var i = 0; i < data.length; ++i) {
+            var bundle = data[i];
+            var component = {
+                name : bundle.bundlename,
+                dependencies : []
+            };
+            bundleSequence.push(component);
+            var bundleDeps = bundle.metadata['Import-Bundle'];
+            for(var key in bundleDeps){
+                bundles.push(key);
+            }
+
+            for (var id in bundleDeps) {
+                var bundleBasePath = basePath;
+                // "openlayers-default-theme" : { "bundlePath" : "../../../packages/openlayers/bundle/" },
+                var bundlePath = bundleDeps[id].bundlePath;
+
+                //console.log('bundleBasePath: ', bundleBasePath);
+                if(bundlePath.indexOf('/') === 0) {
+                    bundlePath = '.' + bundlePath;
+                    bundleBasePath = '.';
+                }
+                var normalizedPath = path.resolve(bundleBasePath, bundlePath);
+                component.dependencies.push(this.handleBundle(id, normalizedPath));
+            }
+        }
+        bundleSequence[0].originalData = data;
+        return bundles;
+    }
+
     this.findArray = function(content, arrayName, pathForLogging) {
 
         var stripped = this.removeBlockComments(content);

@@ -21,6 +21,7 @@ Oskari.registerLocalization(
                 "privateTooltip": "This map layer is private. Click here to publish it.",
                 "publicTooltip": "This map layer is public. Click here to unpublish it."
             },
+            "addCategoryFormButton": "New map layer",
             "addCategory": "Add the map layer",
             "editCategory": "Edit the map layer",
             "deleteCategory": "Delete the map layer",
@@ -130,8 +131,7 @@ Oskari.registerLocalization(
             },
             "imagelink": {
                 "placeholder": "Link to the image",
-                "previewLabel": "Image preview",
-                "add": "New map layer"
+                "previewLabel": "Image preview"
             },
             "rendering": {
                 "label": "Place style",

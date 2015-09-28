@@ -648,23 +648,31 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 images[i].src = identification.browseGraphics[i].fileName;
             }
 
-            entry = jQuery('<a />');
-            entry.html(locale.xml);
-            entry.attr('href', model.metadataURL);
-            entry.attr('target', '_blank');
-            links = entry;
+            if(!me.instance.conf.hideMetadataXMLLink || me.instance.conf.hideMetadataXMLLink !== true) {
+                entry = jQuery('<a />');
+                entry.html(locale.xml);
+                entry.attr('href', model.metadataURL);
+                entry.attr('target', '_blank');
+                links = entry;
+            }
 
-            entry = jQuery('<a />');
-            entry.html(locale.pdf);
-            entry.attr(
-                'href',
-                '/catalogue/portti-metadata-printout-service/' +
-                'MetadataPrintoutServlet?lang=' + Oskari.getLang() +
-                '&title=' + me.locale.metadata_printout_title +
-                '&metadataresourceuuid=' + me._model.fileIdentifier
-            );
-            entry.attr('target', '_blank');
-            links = links.add(entry);
+            if(!me.instance.conf.hideMetaDataPrintLink || me.instance.conf.hideMetaDataPrintLink !== true) {
+                entry = jQuery('<a />');
+                entry.html(locale.pdf);
+                entry.attr(
+                    'href',
+                    '/catalogue/portti-metadata-printout-service/' +
+                    'MetadataPrintoutServlet?lang=' + Oskari.getLang() +
+                    '&title=' + me.locale.metadata_printout_title +
+                    '&metadataresourceuuid=' + me._model.fileIdentifier
+                );
+                entry.attr('target', '_blank');
+                if(links){
+                    links = links.add(entry);
+                } else {
+                    links = entry;
+                }
+            }
 
             me._tabContainer.setExtra(links);
             me.setTitle(me._model.identification.citation.title);
