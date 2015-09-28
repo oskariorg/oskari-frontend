@@ -31,7 +31,8 @@ Oskari.registerLocalization(
                     "cancel": "Cancel",
                     "error_noname": "Type the name of the map view",
                     "deletetitle": "Delete the map view",
-                    "deletemsg": "Do you want to delete this map view?"
+                    "deletemsg": "Do you want to delete this map view?",
+                    "default": "Default view"
                 },
                 "save": {
                     "success": "The map view has been saved.",
