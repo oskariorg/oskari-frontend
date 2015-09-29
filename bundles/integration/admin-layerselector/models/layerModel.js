@@ -298,8 +298,18 @@ if (!Function.prototype.bind) {
              */
             getLegendUrl: function() {                
                 var adminBlock = this.getAdmin();
-                if (adminBlock && typeof adminBlock.getCurrentStyle == 'function'){
-                    return adminBlock.getCurrentStyle().getLegend();
+                var currentStyleName = this.getCurrentStyle().getName();
+
+                if (adminBlock && currentStyleName && adminBlock.styles){
+                    var selectedStyle = jQuery.grep(adminBlock.styles ||[], function(style, index){
+                        return style.name === currentStyleName;
+                    });
+
+                    if(selectedStyle.length>0) {
+                        return selectedStyle[0].legend;
+                    } else {
+                        return adminBlock.getCurrentStyle().getLegend();
+                    }
                 }
                 
                 return this.getCurrentStyle().getLegend();
