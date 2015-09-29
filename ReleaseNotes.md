@@ -1,5 +1,12 @@
 # Release Notes
 
+## 1.32.1
+
+### integration/admin-layerselector
+
+Fixed legend url when username and password is typed.
+
+
 ## 1.32
 
 ### catalogue/metadataflyout

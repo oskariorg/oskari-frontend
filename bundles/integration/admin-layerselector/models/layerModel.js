@@ -296,7 +296,12 @@ if (!Function.prototype.bind) {
              * Returns legend url
              * @returns {String} legend url
              */
-            getLegendUrl: function() {
+            getLegendUrl: function() {                
+                var adminBlock = this.getAdmin();
+                if (adminBlock && typeof adminBlock.getCurrentStyle == 'function'){
+                    return adminBlock.getCurrentStyle().getLegend();
+                }
+                
                 return this.getCurrentStyle().getLegend();
             },
 
