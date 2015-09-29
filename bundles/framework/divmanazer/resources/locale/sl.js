@@ -243,7 +243,7 @@ Oskari.registerLocalization(
                     "title": "Dodatne možnosti",
                     "dataSource": "Vir podatkov",
                     "metadata": "Metapodatkovna povezava",
-                    "export_selection": "NOT TRANSLATED"
+                    "export_selection": "Izvoz le izbranih podatkov pojava"
                 },
                 "columns": {
                     "title": "Stolpci",

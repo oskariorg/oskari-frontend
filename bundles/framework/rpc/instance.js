@@ -50,7 +50,8 @@ Oskari.clazz.define(
                 'MapModulePlugin.GetFeatureInfoRequest': true,
                 'MapModulePlugin.MapLayerVisibilityRequest': true,
                 'MapModulePlugin.RemoveMarkersRequest': true,
-                MapMoveRequest: true
+                MapMoveRequest: true,
+                ShowProgressSpinnerRequest: true
             };
         }
 

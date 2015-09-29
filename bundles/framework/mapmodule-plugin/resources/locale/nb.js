@@ -87,7 +87,7 @@ Oskari.registerLocalization(
                     },
                     "color": {
                         "label": "Farge",
-                        "labelOr": "NOT TRANSLATED",
+                        "labelOr": "eller",
                         "labelCustom": "Spesialfarge (RGB 0-255)"
                     },
                     "preview": {

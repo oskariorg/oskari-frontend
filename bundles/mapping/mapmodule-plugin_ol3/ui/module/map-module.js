@@ -419,7 +419,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
             map.on('singleclick', function (evt) {
                 var sandbox = me._sandbox;
-                var CtrlPressed = evt.browserEvent.ctrlKey;
+                var CtrlPressed = evt.originalEvent.ctrlKey;
                 var mapClickedEvent = sandbox.getEventBuilder('MapClickedEvent')(evt.coordinate, evt.pixel[0], evt.pixel[1], CtrlPressed);
                 sandbox.notifyAll(mapClickedEvent);
             });

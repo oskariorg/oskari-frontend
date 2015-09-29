@@ -189,9 +189,9 @@ Oskari.registerLocalization(
         "NotLoggedView": {
             "text": "Du kan opprette 'embeddede' kart etter at du har logget inn",
             "signup": "Logg inn",
-            "signupUrl": "NOT TRANSLATED",
+            "signupUrl": "/web/en/login",
             "register": "Registrer",
-            "registerUrl": "NOT TRANSLATED"
+            "registerUrl": "/web/en/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
         },
         "StartView": {
             "text": "Du kan lage kartet og 'embedde' det inn i ditt eget nettsted",

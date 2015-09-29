@@ -41,7 +41,6 @@ Oskari.registerLocalization({
 			"message_no_selected_layers_title" : "No selected layer",
 			"message_no_selected_layers_message" : "No map layer is selected, select at least one map layer.",
 			"selection_data_title": "Select data set",
-			"transport_title" : "Type of data set",
 			"message_digiroad_not_found_title" : "No Digiroad data set found for the",
 			"message_digiroad_not_found_message1" : "No Digiroad data set found for the",
 			"message_digiroad_not_found_message2" : "Region",

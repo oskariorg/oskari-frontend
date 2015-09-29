@@ -1,23 +1,55 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "nb",
     "key": "userinterface.UserGuide",
     "value": {
-        "title": "Help",
+        "title": "Hjelp",
         "desc": "",
         "flyout": {
-            "title": "Oskari gebruikershandleiding",
-            "loadingtxt": "NOT TRANSLATED"
+            "title": "Brukerveiledning",
+            "loadingtxt": "<p>Laster brukerveiledning...</p>"
         },
         "tile": {
-            "title": "Kaart gebruikershandleiding"
+            "title": "Brukerveiledning"
         },
         "error": {
-            "title": "Fout!",
-            "generic": "Laden gebruikershandleiding is mislukt. Probeer het later opnieuw."
+            "title": "Feil!",
+            "generic": "Lasting av brukerveiledning feilet. Vennligst prøv igjen seinere."
         },
+        "tabs": [
+            {
+                "title": "Kartvindu",
+                "tags": "kartvindu, brukerveiledning"
+            },
+            {
+                "title": "NOT TRANSLATED",
+                "tags": "NOT TRANSLATED"
+            },
+            {
+                "title": "NOT TRANSLATED",
+                "tags": "NOT TRANSLATED"
+            },
+            {
+                "title": "NOT TRANSLATED",
+                "tags": "NOT TRANSLATED"
+            },
+            {
+                "title": "NOT TRANSLATED",
+                "tags": "NOT TRANSLATED"
+            },
+            {
+                "title": "NOT TRANSLATED",
+                "tags": "NOT TRANSLATED"
+            },
+            {
+                "title": "NOT TRANSLATED",
+                "tags": "NOT TRANSLATED"
+            }
+        ],
         "help": {
-            "tags": "map window,user guide",
+            "tags": "kartvindu, brukerveiledning",
             "contentPart": "body"
         }
     }
-});
+}
+);

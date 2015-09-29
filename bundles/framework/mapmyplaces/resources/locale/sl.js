@@ -3,11 +3,11 @@ Oskari.registerLocalization(
     "lang": "sl",
     "key": "MapMyPlaces",
     "value": {
-        "title": "SlojiMojeKarte",
+        "title": "PrikažiMojeKrajeNaKarti",
         "desc": "",
         "object-data": "Objektni podatki",
         "layer": {
-            "organization": "Moje lokacije",
+            "organization": "Moji kraji",
             "inspire": "Sloji moje karte"
         }
     }

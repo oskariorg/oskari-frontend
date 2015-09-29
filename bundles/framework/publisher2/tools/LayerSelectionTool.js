@@ -262,7 +262,7 @@ function() {
             var toolPlugin = null;
             for(var i=0; i<plugins.length;i++) {
                 var plugin = plugins[i];
-                if(plugin.id == me.getTool().id) {
+                if(plugin.id === me.getTool().id) {
                     toolPlugin = plugin;
                     break;
                 }
@@ -355,7 +355,7 @@ function() {
     setMode: function(mode){
         var me = this;
         me.state.mode = mode;
-    },
+    }
 }, {
     'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
     'protocol' : ['Oskari.mapframework.publisher.Tool']
