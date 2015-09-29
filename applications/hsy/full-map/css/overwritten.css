@@ -82,6 +82,10 @@ input[type="submit"]:hover:enabled, input[type="button"]:hover:enabled, input[ty
     text-shadow: none !important;
 }
 
+input[type="submit"]:hover:enabled, input[type="submit"]:focus, input[type="button"]:hover:enabled, input[type="button"]:focus, input[type="reset"]:hover:enabled, input[type="reset"]:focus, button:hover:enabled, button:focus{
+    color: #FFFFFF !important;
+}
+
 table td {
   text-align: left;
   vertical-align: top; }
