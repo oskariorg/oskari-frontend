@@ -99,7 +99,7 @@ function() {
             me.__plugin.stopPlugin(me.__sandbox);
         }
 
-        
+
         var event = sandbox.getEventBuilder('Publisher2.ToolEnabledChangedEvent')(me);
         sandbox.notifyAll(event);
     },
@@ -253,7 +253,7 @@ function() {
      * @return {Boolean} true if layer must be preselect, other false
      */
     shouldPreselectLayer: function(id){
-        
+
         var me = this;
         var isPlugins = (me.data && me.data.configuration && me.data.configuration.mapfull
             && me.data.configuration.mapfull.conf && me.data.configuration.mapfull.conf.plugins) ? true : false;

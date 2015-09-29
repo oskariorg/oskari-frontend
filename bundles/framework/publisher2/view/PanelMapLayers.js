@@ -279,7 +279,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                 listContainer = this.templateList.clone(),
                 layer,
                 input;
-                
+
 
             for (i = 0; i < layers.length; i += 1) {
 
