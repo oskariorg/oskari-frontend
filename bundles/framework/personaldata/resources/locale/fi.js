@@ -31,7 +31,8 @@ Oskari.registerLocalization(
                     "cancel": "Peruuta",
                     "error_noname": "Anna näkymälle nimi",
                     "deletetitle": "Karttanäkymän poisto",
-                    "deletemsg": "Haluatko poistaa valitun näkymän?"
+                    "deletemsg": "Haluatko poistaa valitun näkymän?",
+                    "default": "Oletusnäkymä"
                 },
                 "save": {
                     "success": "Karttanäkymän tallennus onnistui.",

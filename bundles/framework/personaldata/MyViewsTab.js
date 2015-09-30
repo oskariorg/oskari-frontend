@@ -17,8 +17,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
         this.loc = localization;
         this.template = jQuery('<div class="viewsList volatile"></div>');
         this.templateLink = jQuery('<a href="JavaScript:void(0);"></a>');
+        this.templateDefaultViewIcon = jQuery('<div class="default-view-icon" title="'+this.loc.popup.default+'"/>');
         this.templateDesc = jQuery('<div class="oskarifield"><label for="description"></label>' +
             '<textarea id="view_description" name="description" placeholder="' + this.loc.popup.description_placeholder + '"></textarea></div>');
+        this.templateDefaultView = jQuery('<div class="oskarifield"><input type="checkbox" id="defaultview"/><label for="defaultview"></label></div>');
         this.container = null;
 
         var sandbox = instance.sandbox,
@@ -135,20 +137,30 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             var sandbox = this.instance.getSandbox();
             var service = me.instance.getViewService();
 
-            var successCallback = function (newName, newDescription) {
-                service.updateView(view.id, newName, newDescription, function (isSuccess) {
-                    if (isSuccess) {
-                        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                        dialog.show(me.loc.popup.title, me.loc.save.success);
-                        dialog.fadeout();
-                        me._refreshViewsList();
-                    } else {
-                        me._showErrorMessage(me.loc.error.notsaved);
-                    }
+            var successCallback = function (newName, newDescription, newDefault) {
+                service.updateView(view.id, newName, newDescription, newDefault, function (isSuccess) {
+                    me._editViewSuccessNotify(isSuccess);
                 });
             };
 
-            this._promptForView(successCallback, view.name, view.description);
+            this._promptForView(successCallback, view.name, view.description, view.isDefault);
+        },
+        /**
+         * Called after receiving a response from backend after editing the view. Notifies user of success or failure.
+         *
+         * @method _editViewSuccessNotify
+         * @private
+         */
+        _editViewSuccessNotify: function(isSuccess) {
+            var me = this;
+            if (isSuccess) {
+                var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                dialog.show(me.loc.popup.title, me.loc.save.success);
+                dialog.fadeout();
+                me._refreshViewsList();
+            } else {
+                me._showErrorMessage(me.loc.error.notsaved);
+            }
         },
 
         /**
@@ -158,9 +170,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
          * @param {Function} successCallback function to call when user has given valid name/description and clicks ok button
          * @param {String} viewName to prepopulate form (optional)
          * @param {String} viewDescription to prepopulate form (optional)
+         * @param {bool} isDefault to prepopulate form (optional)
          * @private
          */
-        _promptForView: function (successCallback, viewName, viewDescription) {
+        _promptForView: function (successCallback, viewName, viewDescription, isDefault) {
             var me = this;
 
             if (me.dialog) {
@@ -186,6 +199,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
                 template.find('textarea').val(viewDescription);
             }
 
+            var defaultViewTemplate = me.templateDefaultView.clone();
+            defaultViewTemplate.find('label').html(me.loc.popup['default']);
+            isDefault = isDefault ? isDefault : false;
+            defaultViewTemplate.find("#defaultview").prop('checked', isDefault);
+            template.append(defaultViewTemplate);
+
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             okBtn.setTitle(this.loc.button.save);
@@ -195,7 +214,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             okBtn.setHandler(function () {
                 var errors = form.validate();
                 if (errors.length === 0) {
-                    successCallback(nameInput.getValue(), template.find('textarea').val());
+                    successCallback(nameInput.getValue(), template.find('textarea').val(), template.find("#defaultview").prop('checked'));
                     dialog.close();
                     me.dialog = null;
                 } else {
@@ -238,12 +257,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             for (i = 0; i < views.length; ++i) {
                 view = views[i];
                 isPublic = (view.isPublic === true);
+                isDefault = (view.isDefault === true);
                 data = {
                     'id': view.id,
                     'state': view.state,
                     'name': view.name,
                     'description': view.description,
                     'isPublic': isPublic,
+                    'isDefault': isDefault,
                     'edit': this.loc.edit,
                     'publish': isPublic ? this.loc.unpublish : this.loc.publish,
                     'delete': this.loc['delete']
@@ -271,6 +292,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             // set up the link from name field
             var nameRenderer = function (name, data) {
                 var link = me.templateLink.clone();
+
+                if (data.isDefault) {
+                    link.append(me.templateDefaultViewIcon.clone())
+                }
+
                 link.append(name);
                 link.bind('click', function () {
                     var rb = sandbox.getRequestBuilder('StateHandler.SetStateRequest');
