@@ -354,7 +354,6 @@ define([
                     element = jQuery(e.currentTarget),
                     form = element.parents('.admin-add-layer'),
                     cur_style_name = form.find('#add-layer-style').val();
-
                 me.model.selectStyle(cur_style_name);
                 form.find('#add-layer-legendImage').val(me.model.getLegendUrl());
             },
