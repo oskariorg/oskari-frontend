@@ -97,7 +97,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
 
                 if(contentMap.hasClass('oskari-map-window-fullscreen')){
                     maxWidth += mapTools.width();
-                    maxWidth += sidebar.width()+sidebar.position().left;
+                    maxWidth += sidebar.width();
+                    var position = sidebar.position();
+                    if(position && position.left){
+                        maxWidth += position;
+                    }
                 }
 
                 if(mapWidth>maxWidth){
