@@ -2,6 +2,10 @@
 
 ## 1.33
 
+### Default view functionality
+
+Added functionality to mar a saved view as a default view.
+
 ### mapfull
 
 Fixed map content width. Now navigation, zoombar, XY etc. tools are visible also smaller screens.
