@@ -316,7 +316,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
             if (bboxOFF) {
                 valuesSelection.find("div.values-additional-info").html(this.loc.filter.values.info.bboxOff);
                 valuesSelection.find("div.filter-by-values-container").css({"display": "block"});
-            } else if (filterByGeometryChecked || clickedFeatureSelectionChecked) {
+            } else if (filterByGeometryChecked) {
                 valuesSelection.find("div.values-additional-info").html(this.loc.filter.values.info.filterByGeometrySelected);
                 valuesSelection.find("div.filter-by-values-container").css({"display": "none"})
             } else {
@@ -755,7 +755,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
             domFilters = jQuery(popupContent).find('div.filter-option');
 
             //skip the property filters, if filtering by geometry or selected features is selected.
-            if (!(filterValues.featureIds || filterValues.filterByGeometryMethod)) {
+            if (!(filterValues.filterByGeometryMethod)) {
                 if (domFilters && domFilters.length) {
                     filterValues.filters = [];
 
