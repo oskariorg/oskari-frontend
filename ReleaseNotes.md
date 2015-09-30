@@ -10,6 +10,17 @@ Added a new request 'ShowProgressSpinnerRequest' that shows / hides a progress i
 
 Added LayerSelectionTool. This tool user can add map layer tool on the map. User can also select visible baselayers.
 
+## 1.32.1
+
+### integration/admin-layerselector
+
+Fixed legend url handling for layers that need credentials.
+
+### WMTS-layers
+
+Since adding WMTS-layer to map is now an async operation, workaround for visibility/opacity setting has been implemented.
+This needs further development for mapmodule to handle async layers properly, but for now it works.
+
 ## 1.32
 
 ### catalogue/metadataflyout
