@@ -2,6 +2,10 @@
 
 ## 1.33
 
+### mapfull
+
+Fixed map content width. Now navigation, zoombar, XY etc. tools are visible also smaller screens.
+
 ### map-module
 
 Added a new request 'ShowProgressSpinnerRequest' that shows / hides a progress indicator on the map. The request is by default enabled in rpc.

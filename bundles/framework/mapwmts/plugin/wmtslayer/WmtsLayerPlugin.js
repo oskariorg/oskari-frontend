@@ -177,7 +177,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
         },
 
 
-        //in case of wmts layer timing issues the request is tried a couple of times. Use the counter to prevent trying again til the end of time. 
+        //in case of wmts layer timing issues the request is tried a couple of times. Use the counter to prevent trying again til the end of time.
         afterChangeOpacityRetryCounter: {},
         afterChangeMapLayerOpacityEvent: function (event) {
             var me = this;

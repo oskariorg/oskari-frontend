@@ -15,7 +15,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibi
     function (sandbox, layersPlugin) {
         this.sandbox = sandbox;
         this.layersPlugin = layersPlugin;
-        //in case of wmts layer timing issues the request is tried a couple of times. Use the counter to prevent trying again til the end of time. 
+        //in case of wmts layer timing issues the request is tried a couple of times. Use the counter to prevent trying again til the end of time.
         this.wmtsRetryCounter = {
 
         };
@@ -49,7 +49,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibi
             //No OLMapLayers found and a WMTS layer? There might be a WMTS timing issue. Run again after a while with a timer...
             //TODO: come up with a real solution to handle this so, that the request won't be sent in the first place, unless the ol map layer has actually been added...
             if (!layers || layers.length === 0 && layer.isLayerOfType('WMTS')) {
-                
+
                 if (!me.wmtsRetryCounter[layer.getId()]) {
                     me.wmtsRetryCounter[layer.getId()] = 0;
                 }
