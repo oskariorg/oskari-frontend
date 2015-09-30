@@ -4,8 +4,12 @@
 
 ### integration/admin-layerselector
 
-Fixed legend url when username and password is typed.
+Fixed legend url handling for layers that need credentials.
 
+### WMTS-layers
+
+Since adding WMTS-layer to map is now an async operation, workaround for visibility/opacity setting has been implemented.
+This needs further development for mapmodule to handle async layers properly, but for now it works.
 
 ## 1.32
 
