@@ -382,10 +382,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             if (!ret) {
                 // There's no user set values for the filter
                 ret = {};
+                // This set ret.featureIds
                 this._getSelectedFeatureIds(layer, ret);
-                // Set selected features only to true if there's a selection
-                ret.featureIds = ret.featureIds && ret.featureIds.length;
-                if (!ret.featureIds) {
+                // Set selected features only to true if there's a selection  ??
+                if (!(ret.featureIds && ret.featureIds.length)) {
                     // Set bbox if there's no selection
                     ret.bbox = this.instance.getSandbox().getMap().getBbox();
                 }
