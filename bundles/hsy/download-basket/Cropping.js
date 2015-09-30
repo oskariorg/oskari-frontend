@@ -15,6 +15,7 @@ Oskari.clazz.define(
         this.mapModule = this._sandbox.findRegisteredModuleInstance('MainMapModule');
         this.state = {};
         this._map = null;
+        this.croppingVectorLayer = null;
         this._templates = {
             main: jQuery('<div class="oskari__download-basket-cropping"></div>'),
             buttons: jQuery('<div class="oskari__download-basket-cropping__buttons"></div>')
@@ -29,10 +30,7 @@ Oskari.clazz.define(
          */
         _initTemplates: function () {
             var me = this;
-            var map = this.mapModule.getMap();
-            
-            console.dir(map);
-            console.dir(me.getCroppingLayers());
+            _map = me.mapModule.getMap();
 
             //Loop cropping layers and create cropping btns
             jQuery.each( me.getCroppingLayers(), function( key, value ) {
@@ -42,17 +40,32 @@ Oskari.clazz.define(
                 croppingBtn.setTitle(value.getName());
                 jQuery(croppingBtn.getElement()).click(
                 function (event) {
-                    me.createCroppingWMSLayer(value.getLayerName(),value.getLayerUrl(),map);
+                    me.createCroppingWMSLayer(value.getLayerName(),value.getLayerUrl(),_map);
                     event.preventDefault();
                 }
             );
 
                 croppingBtn.insertTo(me._templates.buttons);
             });
-            me.croppingLayersHighlight(map);
+            
             me._templates.main.append(me._templates.buttons);
+            
+            //TODO
+            if(_map.getLayersByName("cropping-areas").length === 0){
+                me.createCroppingVectorLayer();
+            }
+            
         },
+        createCroppingVectorLayer: function(){
+            var me = this,
+            _map = me.mapModule.getMap();
 
+            me.croppingVectorLayer = new OpenLayers.Layer.Vector("cropping-areas", {styleMap:
+                new OpenLayers.Style(OpenLayers.Feature.Vector.style["select"])
+            });
+
+            _map.addLayers([me.croppingVectorLayer]);
+        },
         /**
          * [getCroppingLayers: Gets layers that has attribute rajaus: true]
          * @return {[array]} [Layers that has attribute rajaus: true]
@@ -72,25 +85,54 @@ Oskari.clazz.define(
             return croppingLayers;
         },
 
-        croppingLayersHighlight: function(map, layerUrl){
+        /**
+         * [croppingLayersHighlight Highlights clicked cropping area/areas]
+         * @param  {[string]} x      [Clicked on map X]
+         * @param  {[string]} y      [Clicked on map Y]
+         * @return {[none]}
+         */
+        croppingLayersHighlight: function(x, y){
+            var me = this,
+            mapVO = me._sandbox.getMap(),
+            ajaxUrl = me._sandbox.getAjaxUrl(),
+            map = me.mapModule.getMap();
 
-            var info = new OpenLayers.Control.WMSGetFeatureInfo({
-                url: 'http://10.20.0.4:9902/geoserver/taustakartat_ja_aluejaot/wms',
-                output: 'features',
-                infoFormat: 'application/json',
-                format: new OpenLayers.Format.GML,
+            jQuery.ajax({
+                type: "POST",
+                dataType: 'json',
+                url: ajaxUrl + 'action_route=GetFeatureForCropping',
+                data : {
+                    layers: "seutukartta_pienalueet",
+                    x : x,
+                    y : y,
+                    bbox : mapVO.getBbox().toBBOX(),
+                    width : mapVO.getWidth(),
+                    height : mapVO.getHeight(),
+                    srs : mapVO.getSrsName()
+                },
+                success: function (data) {
+                    var geojson_format = new OpenLayers.Format.GeoJSON();
+                    var features = geojson_format.read(data.features[0]);
+                    var founded = me.croppingVectorLayer.getFeaturesByAttribute("cropid",data.features[0].id);
 
-                eventListeners: {
-                    getfeatureinfo: function(event){
-                        console.log(event);
-                        console.log(event.features);
-                        console.log(event.text);
-                    }
+                        if(founded !== null && founded.length>0){
+                            me.croppingVectorLayer.removeFeatures(founded);
+                        }else{
+                            features[0].attributes['cropid'] = data.features[0].id;
+                            me.croppingVectorLayer.addFeatures(features);
+                            map.setLayerIndex(me.croppingVectorLayer, 1000000);
+                        }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    var error = me._getErrorText(jqXHR, textStatus, errorThrown);
+
+                    me._openPopup(
+                        me._getLocalization('TODO'),
+                        error
+                    );
                 }
             });
 
-            map.addControl(info);
-            info.activate();
         },
 
         /**

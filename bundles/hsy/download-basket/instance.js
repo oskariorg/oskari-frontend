@@ -14,6 +14,7 @@ Oskari.clazz.define("Oskari.hsy.bundle.downloadBasket.BundleInstance",
         this.started = false;
         this.plugins = {};
         this._localization = null;
+        this.cropping = null;
     }, {
         /**
          * @static
@@ -88,6 +89,8 @@ Oskari.clazz.define("Oskari.hsy.bundle.downloadBasket.BundleInstance",
                 }
             }
 
+            me.cropping = Oskari.clazz.create('Oskari.hsy.bundle.downloadBasket.Cropping',this._localization, Oskari);
+
             var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(me);
                 sandbox.request(me, request);
 
@@ -149,6 +152,13 @@ Oskari.clazz.define("Oskari.hsy.bundle.downloadBasket.BundleInstance",
                     }
 
                 }
+            },
+            'MapClickedEvent' : function(evt) {
+                var me = this,
+                x = evt.getMouseX(),
+                y = evt.getMouseY();
+                //TODO
+                me.cropping.croppingLayersHighlight(x, y);
             }
         },
 
