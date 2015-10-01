@@ -2835,7 +2835,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          * Shows aggregate analysis results in popup
          *
          * @param {JSON} resultJson Analysis results
-         * [{"vaesto": [{"Kohteiden lukumäärä": "324"}, {"Tietosuojattujen kohteiden lukumäärä": "0"},..
+         *[{"vaesto": [{"Kohteiden lukumäärä": "324"}, {"Tietosuojattujen kohteiden lukumäärä": "0"},..}]},{"miehet":[..
          * @param {Boolean} noDataCnt True if the amount of authorised features is included in analysis
          *
          */
