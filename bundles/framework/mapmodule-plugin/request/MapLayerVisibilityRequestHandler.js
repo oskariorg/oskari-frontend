@@ -32,10 +32,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibi
             var me = this;
             var layerId = request.getMapLayerId();
             var layer = this.sandbox.findMapLayerFromSelectedMapLayers(layerId);
-//            if (!layer || layer.isVisible() === request.getVisible()) {
-//                return;
-//            }
-            //TODO: uncomment the above once we've gotten rid of the wmts timing issues below.
+            //should check that the visibility actually has changed.
             if (!layer) {
                 return;
             }
@@ -47,7 +44,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibi
                 i;
 
             //No OLMapLayers found and a WMTS layer? There might be a WMTS timing issue. Run again after a while with a timer...
-            //TODO: come up with a real solution to handle this so, that the request won't be sent in the first place, unless the ol map layer has actually been added...
             if (!layers || layers.length === 0 && layer.isLayerOfType('WMTS')) {
 
                 if (!me.wmtsRetryCounter[layer.getId()]) {

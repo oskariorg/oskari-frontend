@@ -311,7 +311,6 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
          */
         _toggleFilterByValuesSelection: function(filterContentClickedFeatures, filterContentFilterByGeometry, filterContentBBOX, valuesSelection) {
             var filterByGeometryChecked = filterContentFilterByGeometry.find("input[name=analysis-filter-radio]").is(':checked'),
-                clickedFeatureSelectionChecked = filterContentClickedFeatures.find("input[name=analysis-filter-radio]").is(':checked'),
                 bboxOFF = filterContentBBOX.find('div.bbox-off').find("input[name=analysis-filter-radio]").is(':checked');
             if (bboxOFF) {
                 valuesSelection.find("div.values-additional-info").html(this.loc.filter.values.info.bboxOff);

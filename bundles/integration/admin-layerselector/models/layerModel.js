@@ -301,7 +301,7 @@ if (!Function.prototype.bind) {
                 var currentStyleName = this.getCurrentStyle().getName();
 
                 if (adminBlock && currentStyleName && adminBlock.styles){
-                    var selectedStyle = jQuery.grep(adminBlock.styles ||[], function(style, index){
+                    var selectedStyle = jQuery.grep(adminBlock.styles ||[], function(style){
                         return style.name === currentStyleName;
                     });
 
