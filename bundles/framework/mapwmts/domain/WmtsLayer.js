@@ -12,10 +12,28 @@ function() {
 
     //Internal id for this map layer
     this._WmtsMatrixSetId = null;
+    this._tileURL = null;
     this._availableQueryFormats = [];
     /* Layer Type */
     this._layerType = "WMTS";
 }, {
+    /**
+     * @method setTileUrl
+     * @param {String} url
+     */
+    setTileUrl : function(url) {
+        this._tileURL = url;
+    },
+    /**
+     * @method getTileUrl
+     * @return {String} url 
+     */
+    getTileUrl : function() {
+        if(!this._tileURL) {
+            return this.getLayerUrl();
+        }
+        return this._tileURL;
+    },
     /**
      * @method setWmtsMatrixSetId
      * @return {String} matrixSetId
@@ -29,14 +47,6 @@ function() {
      */
     getWmtsMatrixSetId : function() {
         return this._WmtsMatrixSetId;
-    },
-    /**
-     * Determines the URL that should be used for this layer
-     * @return {String} URL for layer plugin
-     */
-    getUrl : function() {
-        this.__determineUrlFunctions();
-        return this._wmtsurl;
     },
     /**
      * Possible options for #setQueryFormat()
