@@ -45,7 +45,8 @@ function(instance) {
      * Interface method implementation, calls #refresh()
      */
     startPlugin : function() {
-        this.refresh();
+        //this.refresh();
+        this.createUI();
     },
     /**
      * @method stopPlugin
@@ -53,6 +54,18 @@ function(instance) {
      */
     stopPlugin : function() {
         this.container.empty();
+    },
+    /**
+     * @method _createUI
+     * Creates the UI for a fresh start
+     */
+    createUI : function() {
+        this.container.addClass('download-basket-tile');
+        this.container.find('.oskari-tile-status').addClass('icon-bubble-right').html(0);
+        //TODO
+/*        if(jQuery('.download-basket-tile').length>0){
+            jQuery('.download-basket-tile').append(this.container);
+        }*/
     },
     /**
      * @method getTitle
@@ -87,8 +100,48 @@ function(instance) {
      * @method refresh
      * Creates the UI for a fresh start
      */
-    refresh : function() {
-
+    refresh: function(){
+        var me = this;
+        var basketItems = jQuery('.download-basket-data').length;     
+        jQuery('.download-basket-tile .oskari-tile-status').html(basketItems);
+        me.notifyUser();
+    },
+    clear: function(){
+        var me = this;
+        me.refresh();
+    },
+    notifyUser : function() {
+        var me = this;
+        var status = this.container.children('.oskari-tile-status');
+        
+        // stop current animation
+        status.stop();
+        // blink 2 times
+        this._blink(status, 2);
+    },
+    _blink : function(element, count) {
+        var me = this;
+        if(!element) {
+            return;
+        }
+        if(!count) {
+            count = 1;
+        }
+        // animate to low opacity
+        element.animate({
+            opacity: 0.25
+        }, 500, function() {
+            // on complete, animate back to fully visible
+             element.animate({
+                opacity: 1
+            }, 500,function() {
+                // on complete, check and adjust the count parameter
+                // recurse if count has not been reached yet
+                if(count > 1) {
+                    me._blink(element, --count);
+                }
+            });
+        });  
     }
 }, {
     /**

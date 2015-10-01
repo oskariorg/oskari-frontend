@@ -32,6 +32,9 @@ Oskari.clazz.define("Oskari.hsy.bundle.downloadBasket.Bundle", function () {
             "src": "../../../../bundles/hsy/download-basket/Cropping.js"
         }, {
             "type": "text/javascript",
+            "src": "../../../../bundles/hsy/download-basket/Basket.js"
+        }, {
+            "type": "text/javascript",
             "src": "../../../../bundles/hsy/download-basket/Tile.js"
         }, {
             "type": "text/css",

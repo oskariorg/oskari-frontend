@@ -28,6 +28,9 @@ Oskari.clazz.define('Oskari.hsy.bundle.downloadBasket.Flyout',
          tabs: [{
             'id': 'download-basket-cropping-tab',
             'clazz': 'Oskari.hsy.bundle.downloadBasket.Cropping'
+        },{
+            'id': 'download-basket-tab',
+            'clazz': 'Oskari.hsy.bundle.downloadBasket.Basket'
         }],
         /**
          * @method getName

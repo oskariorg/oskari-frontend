@@ -89,6 +89,7 @@ Oskari.clazz.define("Oskari.hsy.bundle.downloadBasket.BundleInstance",
                 }
             }
 
+            //TODO
             me.cropping = Oskari.clazz.create('Oskari.hsy.bundle.downloadBasket.Cropping',this._localization, Oskari);
 
             var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(me);
@@ -158,7 +159,9 @@ Oskari.clazz.define("Oskari.hsy.bundle.downloadBasket.BundleInstance",
                 x = evt.getMouseX(),
                 y = evt.getMouseY();
                 //TODO
-                me.cropping.croppingLayersHighlight(x, y);
+                if(me.cropping.isCroppingToolActive()){
+                    me.cropping.croppingLayersHighlight(x, y);
+                }
             }
         },
 

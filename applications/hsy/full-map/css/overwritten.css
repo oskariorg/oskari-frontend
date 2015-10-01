@@ -75,6 +75,13 @@ button.primary, input.primary{
     text-shadow: none !important;
 }
 
+button.primary.selected, input.primary.selected{
+    background: #00858C !important;
+    border-color: #00A2AA !important;
+    color: #FFFFFF !important;
+    text-shadow: none !important;
+}
+
 input[type="submit"]:hover:enabled, input[type="button"]:hover:enabled, input[type="reset"]:hover:enabled, button:hover:enabled, .lfr-actions:hover, .lfr-actions:hover ul{
     background: #00858C !important;
     border-color: #00A2AA !important;
