@@ -93,6 +93,21 @@ input[type="submit"]:hover:enabled, input[type="submit"]:focus, input[type="butt
     color: #FFFFFF !important;
 }
 
+button.approve, input.approve{
+    background-color: #008302 !important;
+    background-image: none !important;
+    border-color: #008302 #008302 #008302 #008302 !important;
+    text-shadow: none !important;
+    color: #FFFFFF;
+}
+
+button.approve:hover:enabled, input.approve:hover:enabled{
+    background-color: #009033 !important;
+    background-image: none !important;
+    border-color: #009033 #009033 #009033 #009033 !important;
+    text-shadow: none !important;
+}
+
 table td {
   text-align: left;
   vertical-align: top; }

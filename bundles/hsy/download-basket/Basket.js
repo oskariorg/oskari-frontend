@@ -15,7 +15,9 @@ Oskari.clazz.define(
         this.state = {};
         this._templates = {
             main: jQuery('<div class="oskari__download-basket"></div>'),
-            basketWrapper : jQuery('<div class="oskari__download-basket-wrapper"></div>')
+            basketWrapper : jQuery('<div class="oskari__download-basket-wrapper"></div>'),
+            basketButtons : jQuery('<div class="oskari__download-basket-buttons"></div>'),
+            basketUserInfo : jQuery('<div class="oskari__download-basket-user-info"></div>')
         };
         this.setContent(this.createUi());
     },{
@@ -28,7 +30,45 @@ Oskari.clazz.define(
         _initTemplates: function () {
             var me = this;
             
-            me._templates.main.append('<h4>Tyhjä kori</h4>');
+            //Wrapper
+            me._templates.main.append(me._templates.basketWrapper);
+
+            //Basket user info
+           /*  me.templates.form.find('input,select').each(function (index) {
+                var el = jQuery(this);
+                el.prev('span').html(me._getLocalization(el.attr('name')));
+                if(el.attr("language") != null){
+                   el.attr("placeholder", me._getLocalization(el.attr("language")));
+                }
+            });*/
+            me._templates.main.append(me._templates.basketUserInfo);
+
+            //Basket wizard buttons
+            var prev = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            prev.addClass('primary prev');
+            prev.setTitle(me._getLocalization('basket-prev'));
+            prev.setHandler(function() {
+                alert('Alert');
+            });
+            prev.insertTo(me._templates.basketButtons);
+
+            var next = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            next.addClass('primary next');
+            next.setTitle(me._getLocalization('basket-next'));
+            next.setHandler(function() {
+                alert('Alert');
+            });
+            next.insertTo(me._templates.basketButtons);
+
+            var send = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            send.addClass('approve send');
+            send.setTitle(me._getLocalization('basket-send'));
+            send.setHandler(function() {
+                alert('Alert');
+            });
+            send.insertTo(me._templates.basketButtons);
+
+            me._templates.main.append(me._templates.basketButtons);
 
         },
 

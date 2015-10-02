@@ -1,0 +1,34 @@
+.download-basket__component{
+	margin-top: 10px;
+}
+
+.download-basket__component-title{
+    border: 1px solid #00A2AA;
+    background:  #00A2AA;
+    color: #FFF;
+}
+
+.download-basket__component-layer-name{
+    float: left;
+    padding: 5px;
+}
+
+.download-basket__component-title-close{
+    float: right;
+    margin-top: 5px;
+    margin-right: 4px;
+}
+
+.download-basket__component-title-clear{
+	clear: both;
+}
+
+.download-basket__component-content{
+	border: 1px solid #00A2AA;
+    padding: 10px;
+}
+
+.oskari__download-basket-buttons{
+    float: right;
+    padding-top: 13px;
+}
