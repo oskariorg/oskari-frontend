@@ -2835,6 +2835,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          * Shows aggregate analysis results in popup
          *
          * @param {JSON} resultJson Analysis results
+         *[{"vaesto": [{"Kohteiden lukumäärä": "324"}, {"Tietosuojattujen kohteiden lukumäärä": "0"},..}]},{"miehet":[..
          * @param {Boolean} noDataCnt True if the amount of authorised features is included in analysis
          *
          */
@@ -2843,11 +2844,20 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 popup =  Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 gridModel = Oskari.clazz.create('Oskari.userinterface.component.GridModel'),
                 content = this.template.wrapper.clone(),
+                tmpfea = {},
                 fields;
-
-            _.forEach(resultJson, function(feature, key) {
-                feature.Property = key;
-                gridModel.addData(feature, true);
+            // Array Array is used for to keep order of rows and cols
+                    _.forEach(resultJson, function(feature, key) {
+                tmpfea = {};
+                _.forEach(feature, function(sfeature, skey) {
+                    _.forEach(sfeature, function(ssfeature, sskey) {
+                        _.forEach(ssfeature, function(value, ssskey) {
+                            tmpfea[ssskey] = value;
+                        });
+                    });
+                    tmpfea.Property = skey;
+                    gridModel.addData(tmpfea, true);
+                });
             });
 
             gridModel.setIdField('Property');
