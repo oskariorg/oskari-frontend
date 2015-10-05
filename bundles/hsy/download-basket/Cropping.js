@@ -17,6 +17,8 @@ Oskari.clazz.define(
         this.state = {};
         this._map = null;
         this.croppingVectorLayer = null;
+        this.croppingPolygonLayer = null;
+        this.reqularControl = null;
         this._templates = {
             main: jQuery('<div class="oskari__download-basket-cropping"></div>'),
             buttons: jQuery('<div class="oskari__download-basket-cropping-buttons"><p></p></div>'),
@@ -36,7 +38,7 @@ Oskari.clazz.define(
             _map = me.mapModule.getMap();
 
             //Loop cropping layers and create cropping btns
-            jQuery.each( me.getCroppingLayers(), function( key, value ) {
+            jQuery.each(me.getCroppingLayers(), function( key, value ) {
 
                 var croppingBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
                 croppingBtn.addClass('primary cropping-btn');
@@ -147,11 +149,21 @@ Oskari.clazz.define(
             var me = this,
             _map = me.mapModule.getMap();
 
-            me.croppingVectorLayer = new OpenLayers.Layer.Vector("cropping-areas", {styleMap:
-                new OpenLayers.Style(OpenLayers.Feature.Vector.style["select"])
-            });
+            me.croppingVectorLayer = new OpenLayers.Layer.Vector("cropping-areas");
 
-            _map.addLayers([me.croppingVectorLayer]);
+            me.croppingPolygonLayer = new OpenLayers.Layer.Vector("cropping-areas-polygons");
+            _map.addLayers([me.croppingVectorLayer, me.croppingPolygonLayer]);
+
+            me.reqularControl = new OpenLayers.Control.DrawFeature(me.croppingVectorLayer,
+                OpenLayers.Handler.RegularPolygon, {
+                            handlerOptions: {
+                                sides: 4,
+                                irregular: true
+                            }
+            });
+            
+            _map.addControl(me.reqularControl);
+            //me.reqularControl.activate();
         },
 
         /**
@@ -474,6 +486,10 @@ Oskari.clazz.define(
 
                 componentClone.find('.icon-close').click(function(event){
                     jQuery(this).parents('.download-basket__component').remove();
+                    if(jQuery('.download-basket__component').length === 0){
+                        jQuery('.oskari__download-basket-wrapper').find('.empty-basket').show();
+                        jQuery('.oskari__download-basket-buttons').find('input.next').hide();
+                    }
                     event.preventDefault();
                 });
 
@@ -488,6 +504,9 @@ Oskari.clazz.define(
                 jQuery('.oskari__download-basket').parents('.oskariTabs').find('li').not('.active').animate({opacity: 1}, 700 );
 
                 jQuery('.oskari__download-basket-help').show();
+
+                jQuery('.oskari__download-basket-wrapper').find('.empty-basket').hide();
+                jQuery('.oskari__download-basket-buttons').find('input.next').show();
         },
 
         /**

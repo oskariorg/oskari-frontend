@@ -30,9 +30,14 @@ Oskari.registerLocalization({
             },
             "download-basket-tab" : {
                 "title" : "Latauskori",
+                "basket-is-empty" : "Latauskorisi on tyhjä",
                 "basket-prev" : "Edellinen",
                 "basket-next" : "Seuraava",
-                "basket-send" : "Lataa aineistot"
+                "basket-send" : "Lataa aineistot",
+                "insert-email-for-download" : "Syötä sähköpostiosoitteesi latausta varten",
+                "basket-user-email" : "Sähköpostiosoite",
+                "basket-user-email-sure" : "Varmista sähköpostiosoite",
+                "check-form-error" : "Tarkista"
             }
         }
     }

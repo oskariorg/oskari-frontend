@@ -32,3 +32,32 @@
     float: right;
     padding-top: 13px;
 }
+
+.oskari__download-basket-user-info form{
+	margin-top: 10px;
+}
+
+.oskari__download-basket-user-info form label{
+    clear: both;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.oskari__download-basket-user-info form span{
+    display: block;
+    float: left;
+    width: 12em;
+    line-height: 34px;
+}
+
+.oskari__download-basket-user-info form input{
+    display: block;
+    float: left;
+    width: 15em;
+}
+
+.oskari__download-basket-user-info form label:after {
+    content: "";
+    display: table;
+    clear: both;
+}

@@ -15,6 +15,7 @@ Oskari.clazz.define("Oskari.hsy.bundle.downloadBasket.BundleInstance",
         this.plugins = {};
         this._localization = null;
         this.cropping = null;
+        this.mapModule = null;
     }, {
         /**
          * @static
@@ -95,6 +96,8 @@ Oskari.clazz.define("Oskari.hsy.bundle.downloadBasket.BundleInstance",
             var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(me);
                 sandbox.request(me, request);
 
+            this.mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+
         },
         /**
          * @method init
@@ -162,6 +165,11 @@ Oskari.clazz.define("Oskari.hsy.bundle.downloadBasket.BundleInstance",
                 if(me.cropping.isCroppingToolActive()){
                     me.cropping.croppingLayersHighlight(x, y);
                 }
+            },
+            'AfterMapLayerAddEvent' : function(event) {
+                var me = this;
+                var map = me.mapModule.getMap();
+                map.setLayerIndex(me.cropping.croppingVectorLayer, 1000000);
             }
         },
 
