@@ -1323,9 +1323,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     toolContainer.find('input').attr('name', 'aggre');
                     me._createLabel(option, toolContainer, 'params_radiolabel');
 
-                    if (i !== options.length - 1) {
-                        toolContainer.find('input').attr('checked', 'checked');
-                    }
+                    toolContainer.find('input').attr('checked', 'checked');
 
                     contentPanel.append(toolContainer);
                     toolContainer.find('input').attr({
@@ -1335,8 +1333,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     });
                     toolContainer.find('input').change(closureMagic(option));
 
-                    // Disable last one, if no no data
-                    if (i === options.length - 1) {
+                    // Disable no data, if no no data
+                    if (option.id === 'oskari_analyse_NoDataCnt') {
                         if (me._getNoDataValue()) {
                             toolContainer.find('input').prop('disabled', false);
                             toolContainer.find('input').attr('checked', 'checked');
@@ -2419,7 +2417,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 fields = [];
             }
 
-            var title = container.find('.settings_name_field').val(),
+            var title = container.find('.settings_name_field').val() ? container.find('.settings_name_field').val() : '_',
                 defaults = {
                     name: title,
                     method: methodName,
@@ -2902,8 +2900,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 var rq = 'MapModulePlugin.RemoveFeaturesFromMapRequest';
                 me.instance.sandbox.postRequestByName(rq);
                 //Store temp geometry layer
-                var title = me.mainPanel.find('.settings_name_field').val();
+                var title = me.mainPanel.find('.settings_name_field').val() ? me.mainPanel.find('.settings_name_field').val() : '_';
                 contentPanel.addGeometry(me._getOLGeometry(geojson), title );
+                me._showFeatureDataWithoutSaving = false;
                 popup.close(true);
 
             });
@@ -2912,6 +2911,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             closeBtn.setTitle(me.loc.aggregatePopup.close);
             closeBtn.setHandler(function () {
                 popup.close(true);
+                me._showFeatureDataWithoutSaving = false;
                 var rq = 'MapModulePlugin.RemoveFeaturesFromMapRequest';
                 me.instance.sandbox.postRequestByName(rq);
             });
