@@ -145,9 +145,23 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
         		if (this.sideContentEditor != null) {
         			this.sideContentEditor._handleInfoResult(evt.getData());
         		}
+            },
+            'DrawPlugin.FinishedDrawingEvent': function (evt) {
+                var layer = this.sandbox.findMapLayerFromSelectedMapLayers(15);
+                this.sideContentEditor.sendRequest(evt.getDrawing());
+            },
+            WFSFeatureGeometriesEvent: function (evt) 
+            {
+                if (this.sideContentEditor != null) {
+                    var clickedGeometries = evt.getGeometries();
+                    if (clickedGeometries.length > 0) {
+                        for (var i = 0; i < clickedGeometries.length; i++) {
+                            this.sideContentEditor.parseFeatureFromClickedFeature(clickedGeometries[i]);
+                        }
+                    }
+                }
             }
         },
-
         /**
          * @method stop
          * Implements BundleInstance protocol stop method

@@ -675,7 +675,7 @@ Oskari.clazz.define(
             var lonlat = event.getLonLat(),
                 keepPrevious = this.getSandbox().isCtrlKeyDown();
 
-            this.getIO().setMapClick(lonlat, keepPrevious);
+            this.getIO().setMapClick(lonlat, keepPrevious, true);
         },
 
         /**

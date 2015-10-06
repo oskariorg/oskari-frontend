@@ -141,7 +141,7 @@ div.content-editor div.buttons, div.publisher div.startview div.buttons {
 	text-align: right;
 }
 
-.content-editor-buttons.hide
+.content-editor-buttons.hide, .content-draw-tools.hide
 {
 	display: none;
 }
