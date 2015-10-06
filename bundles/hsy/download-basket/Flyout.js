@@ -25,13 +25,13 @@ Oskari.clazz.define('Oskari.hsy.bundle.downloadBasket.Flyout',
         this.tabsContainer = null;
         this._localization = this.instance.getLocalization('flyout');
     }, {
-         tabs: [{
+  /*      tabs: [{
             'id': 'download-basket-cropping-tab',
             'clazz': 'Oskari.hsy.bundle.downloadBasket.Cropping'
         },{
             'id': 'download-basket-tab',
             'clazz': 'Oskari.hsy.bundle.downloadBasket.Basket'
-        }],
+        }],*/
         /**
          * @method getName
          * @return {String} the name for the component
@@ -77,16 +77,18 @@ Oskari.clazz.define('Oskari.hsy.bundle.downloadBasket.Flyout',
                 tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer');
             this.tabsContainer = tabsContainer;
 
-            _.each(this.tabs, function (tabDef) {
+           /* _.each(this.tabs, function (tabDef) {
                 var tab = Oskari.clazz.create(tabDef.clazz, me._getLocalization(tabDef.id), me.instance);
                 tab.setId(tabDef.id);
                 tabsContainer.addPanel(tab);
                 tabDef.instance = tab;
-            });
+            });*/
+            tabsContainer.addPanel(me.instance.cropping);
+            tabsContainer.addPanel(me.instance.basket);
             tabsContainer.insertTo(this.container);
         },
         getEventHandlers: function () {
-            var list = {};
+           /* var list = {};
             _.each(this.tabs, function (tabDef) {
                 var p;
                 if (tabDef.instance.eventHandlers) {
@@ -97,10 +99,10 @@ Oskari.clazz.define('Oskari.hsy.bundle.downloadBasket.Flyout',
                     }
                 }
             });
-            return list;
+            return list;*/
         },
         onEvent: function (event) {
-            _.each(this.tabs, function (tabDef) {
+           /* _.each(this.tabs, function (tabDef) {
                 if (tabDef.instance.eventHandlers) {
                     var handler = tabDef.instance.eventHandlers[event.getName()];
                     if (!handler) {
@@ -109,7 +111,7 @@ Oskari.clazz.define('Oskari.hsy.bundle.downloadBasket.Flyout',
                     handler.apply(tabDef.instance, [event]);
 
                 }
-            });
+            });*/
         },
         /**
          * @method _getLocalization

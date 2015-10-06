@@ -15,6 +15,7 @@ Oskari.registerLocalization({
                 "choose-wanted-areas-from-map" : "Valitse kartalta klikkaamalla alueet jotka haluat ladata",
                 "users-temp-basket" : "Alueita valittuna: <strong></strong>/kpl, haluatko siirtää kohteet latauskoriin",
                 "move-to-basket" : "Siirrä latauskoriin",
+                "rect-cropping" : "Suorakaide",
                 "error-in-getfeatureforcropping" : "Alueen valitseminen epäonnistui",
                 "want-to-move-basket" : "Haluatko lisätä valitut alueet latauskoriin?",
                 "notify-move-to-basket" : "Olet vaihtamassa rajaus aineistoa, haluatko siirtää valitut alueet latauskoriin",
@@ -31,6 +32,7 @@ Oskari.registerLocalization({
             "download-basket-tab" : {
                 "title" : "Latauskori",
                 "basket-is-empty" : "Latauskorisi on tyhjä",
+                "basket-empty" : "Tyhjennä",
                 "basket-prev" : "Edellinen",
                 "basket-next" : "Seuraava",
                 "basket-send" : "Lataa aineistot",

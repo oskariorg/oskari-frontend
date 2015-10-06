@@ -15,6 +15,7 @@ Oskari.clazz.define("Oskari.hsy.bundle.downloadBasket.BundleInstance",
         this.plugins = {};
         this._localization = null;
         this.cropping = null;
+        this.basket = null;
         this.mapModule = null;
     }, {
         /**
@@ -91,7 +92,10 @@ Oskari.clazz.define("Oskari.hsy.bundle.downloadBasket.BundleInstance",
             }
 
             //TODO
-            me.cropping = Oskari.clazz.create('Oskari.hsy.bundle.downloadBasket.Cropping',this._localization, Oskari);
+            me.cropping = Oskari.clazz.create('Oskari.hsy.bundle.downloadBasket.Cropping',this._localization.flyout['download-basket-cropping-tab'], me);
+            me.cropping.setId('download-basket-cropping-tab');
+            me.basket = Oskari.clazz.create('Oskari.hsy.bundle.downloadBasket.Basket',this._localization.flyout['download-basket-tab'], me);
+            me.basket.setId('download-basket-tab');
 
             var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(me);
                 sandbox.request(me, request);
@@ -161,7 +165,6 @@ Oskari.clazz.define("Oskari.hsy.bundle.downloadBasket.BundleInstance",
                 var me = this,
                 x = evt.getMouseX(),
                 y = evt.getMouseY();
-                //TODO
                 if(me.cropping.isCroppingToolActive()){
                     me.cropping.croppingLayersHighlight(x, y);
                 }

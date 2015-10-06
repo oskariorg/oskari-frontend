@@ -61,10 +61,22 @@ Oskari.clazz.define(
             });
 
             //Basket wizard buttons
+            var empty = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            empty.addClass('primary empty');
+            empty.setTitle(me._getLocalization('basket-empty'));
+            jQuery(empty.getElement()).click(function (event) {
+                jQuery('.download-basket__component').remove();
+                jQuery('.oskari__download-basket-wrapper').find('.empty-basket').show();
+                jQuery('.oskari__download-basket-buttons').find('input.empty').hide();
+                jQuery('.oskari__download-basket-buttons').find('input.next').hide();
+            });
+            empty.insertTo(me._templates.basketButtons);
+            
             var prev = Oskari.clazz.create('Oskari.userinterface.component.Button');
             prev.addClass('primary prev');
             prev.setTitle(me._getLocalization('basket-prev'));
             jQuery(prev.getElement()).click(function (event) {
+                jQuery('.oskari__download-basket-buttons').find('input.empty').show();
                 jQuery('.oskari__download-basket-buttons').find('input.next').show();
                 jQuery('.oskari__download-basket-wrapper').show();
                 jQuery('.oskari__download-basket-buttons').find('input.prev').hide();
@@ -77,6 +89,7 @@ Oskari.clazz.define(
             next.addClass('primary next');
             next.setTitle(me._getLocalization('basket-next'));
             jQuery(next.getElement()).click(function (event) {
+                jQuery('.oskari__download-basket-buttons').find('input.empty').hide();
                 jQuery('.oskari__download-basket-buttons').find('input.next').hide();
                 jQuery('.oskari__download-basket-wrapper').hide();
                 jQuery('.oskari__download-basket-buttons').find('input.prev').show();
@@ -89,7 +102,9 @@ Oskari.clazz.define(
             send.addClass('approve send');
             send.setTitle(me._getLocalization('basket-send'));
             jQuery(send.getElement()).click(function (event) {
-                me.validateUserInputs(jQuery('.oskari__download-basket-user-info').find('form'));
+                if(!me.validateUserInputs(jQuery('.oskari__download-basket-user-info').find('form'))){
+                    me.loadBasketItem();
+                }
             });
             send.insertTo(me._templates.basketButtons);
 
@@ -98,7 +113,11 @@ Oskari.clazz.define(
 
         },
 
-        loadBasketItem: function(el){
+        /**
+         * [loadBasketItem sends Ajax to download user selections]
+         * @return {[none]}
+         */
+        loadBasketItem: function(){
             var me = this;
             var downloadDetails = [];
             
@@ -106,7 +125,6 @@ Oskari.clazz.define(
                 var parent = jQuery(this);
                 var details = {
                     croppingMode: parent.attr('data-cropping-mode'),
-                    transport: parent.attr('data-transport'),
                     layer: parent.attr('data-layer-name'),
                     bbox: {
                         left: parent.attr('data-bbox-left'),
@@ -126,10 +144,9 @@ Oskari.clazz.define(
             var strDownloadDetails = JSON.stringify(downloadDetails);
             
             var userDetails = {     
-                    email: jQuery('#lakapa-basket-email').val() 
+                    email: jQuery('.oskari__download-basket-user-info').find('input.email').val() 
             };
             var strUserDetails = JSON.stringify(userDetails);
-            
             
 /*            var loadingText = me.templateBasketLoading.clone();
             loadingText.find('.lakapa-basket-loading-text').html(me._locale.loadingText);
@@ -150,7 +167,7 @@ Oskari.clazz.define(
             
             jQuery.ajax({
                 beforeSend : function(x) {              
-                    me._pendingAjaxQuery.jqhr = x;
+                    //me._pendingAjaxQuery.jqhr = x;
                     if (x && x.overrideMimeType) {
                         x.overrideMimeType("application/json;charset=UTF-8");
                     }
@@ -159,14 +176,14 @@ Oskari.clazz.define(
                     console.dir(resp);
                 },
                 error : function() {
-/*                    me._finishAjaxRequest();
+                   /* me._finishAjaxRequest();
                     me._notifyAjaxFailure();*/
                 },
                 always: function() {
-                   /* me._finishAjaxRequest();*/
+                   /*me._finishAjaxRequest();*/
                 },
                 complete: function() {
-                   /* me._finishAjaxRequest();*/
+                  /* me._finishAjaxRequest();*/
                 },
                 data : {
                     downloadDetails : strDownloadDetails,
@@ -177,7 +194,6 @@ Oskari.clazz.define(
                 dataType : 'json',
                 url : ajaxUrl + 'action_route=DownloadAll'
             });
-            
             
         },
 
