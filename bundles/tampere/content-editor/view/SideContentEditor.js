@@ -84,7 +84,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             }
         },
          startNewDrawing: function (config) {
-            debugger;
             // notify components to reset any saved "selected place" data
             //var evt = this.instance.sandbox.getEventBuilder('DrawPlugin.SelectedDrawingEvent')();
             //this.instance.sandbox.notifyAll(evt);
@@ -149,7 +148,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         render: function (container) {     	
             var me = this,
                 content = me.template.clone();
-            debugger;
             me.getLayerGeometryType();
             me.mainPanel = content;
             var mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
@@ -313,7 +311,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     }
                 }
             }
-            debugger;
+
             requestData.layerName = $("div.getinforesult_header_title").prop("title");
 
             var okButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
@@ -674,7 +672,7 @@ debugger;
                 
                 result.push({ "key": key, "value": val });
             });
-            debugger;
+            
             return result;
         },
         _parseLayerGeometryResponse: function (response) {
@@ -692,7 +690,7 @@ debugger;
             }
         },
         _addDrawTools: function () {
-            debugger;
+            
             var me = this;
             var pointButton = $("<div />").addClass('add-point tool');
             if (me.layerGeometryType == "MultiPoint") {
@@ -731,7 +729,6 @@ debugger;
             //if (me.layerGeometryType == "MultiPolygon") {
                 geomEditButton.on('click', function() {
                     //alert("geomEdit");
-                    debugger;
                     me.startNewDrawing({
                         geometry: me.layerGeometries.components[0]
                     });
