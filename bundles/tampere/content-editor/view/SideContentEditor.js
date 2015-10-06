@@ -180,6 +180,8 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             var addFeatureButtonContainer = $("<div />");
             addFeatureButton.insertTo(addFeatureButtonContainer);
             content.find('.content').append(addFeatureButtonContainer);
+            var drawToolsContainer = $("<div/>").addClass("content-draw-tools hide");
+            content.find('.content').append(drawToolsContainer);
             me._addDrawTools(content);
             
             var saveButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
@@ -200,8 +202,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 me.sendStopDrawRequest(true);
             	me._handleInfoResult(me.currentData, (me.operationMode == "create" ? true : false));
             });
-            var drawToolsContainer = $("<div/>").addClass("content-draw-tools hide");
-            content.find('.content').append(drawToolsContainer);
             //content.find('.content').append(toolContainer);
             var buttonsContainer = $("<div/>").addClass("content-editor-buttons hide");
             saveButton.insertTo(buttonsContainer);
@@ -376,7 +376,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 removeRequestBuilder = sandbox.getRequestBuilder('RemoveMapLayerRequest'),
                 i,
                 layer;
-            debugger;
+            
             for (i = 0; i < me.allLayers.length; i++) {
             	if (me.allLayers[i].isVisible()) {
             		me.allVisibleLayers.push(me.allLayers[i]);
@@ -428,7 +428,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         	}
         },
         _handleInfoResult: function (data, create) {
-            debugger;
             if (create == true) {
                 this.operationMode = "create";
             } else {
@@ -467,7 +466,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 type = 'wfslayer',
                 result,
                 markup;
-debugger;
+
             if (data.features === 'empty' || layer === null || layer === undefined) {
                 return;
             }
@@ -523,7 +522,6 @@ debugger;
          * @return {String} formatted HMTL
          */
         _json2html: function (node, readonly) {
-            debugger;
             if (typeof readonly === 'undefined')
             {
                 readonly = false;
