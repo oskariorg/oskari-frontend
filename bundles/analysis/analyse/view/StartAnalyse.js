@@ -820,6 +820,22 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         _selectedLayers: function () {
             return this._getLayerOptions(true, false, true);
         },
+        /**
+         * @private @method _getOLGeometry
+         * parse JSON geometry to OL geometry
+         *
+         *@param {JSON} geojson
+         * @return {OL geometry} Returns OL geometry - only the 1st one
+         */
+        _getOLGeometry: function (geojson) {
+            var formatter = new OpenLayers.Format.GeoJSON();
+            if (geojson) {
+
+                var feature = formatter.read(geojson);
+                return feature[0].geometry;
+            }
+            return null;
+        },
 
         /**
          * @private @method _columnSelector
@@ -1307,9 +1323,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     toolContainer.find('input').attr('name', 'aggre');
                     me._createLabel(option, toolContainer, 'params_radiolabel');
 
-                    if (i !== options.length - 1) {
-                        toolContainer.find('input').attr('checked', 'checked');
-                    }
+                    toolContainer.find('input').attr('checked', 'checked');
 
                     contentPanel.append(toolContainer);
                     toolContainer.find('input').attr({
@@ -1319,8 +1333,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     });
                     toolContainer.find('input').change(closureMagic(option));
 
-                    // Disable last one, if no no data
-                    if (i === options.length - 1) {
+                    // Disable no data, if no no data
+                    if (option.id === 'oskari_analyse_NoDataCnt') {
                         if (me._getNoDataValue()) {
                             toolContainer.find('input').prop('disabled', false);
                             toolContainer.find('input').attr('checked', 'checked');
@@ -2403,7 +2417,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 fields = [];
             }
 
-            var title = container.find('.settings_name_field').val(),
+            var title = container.find('.settings_name_field').val() ? container.find('.settings_name_field').val() : '_',
                 defaults = {
                     name: title,
                     method: methodName,
@@ -2778,7 +2792,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
                 me.instance.sandbox.postRequestByName(rn, [geojson, 'GeoJSON', null, null, 'replace', true, style, false]);
 
-                me._showAggregateResultPopup(aggregateValues, noDataCnt);
+                me._showAggregateResultPopup(aggregateValues, geojson, noDataCnt);
             } else {
                 mapLayerService = me.instance.mapLayerService;
                 // Create the layer model
@@ -2835,19 +2849,32 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          * Shows aggregate analysis results in popup
          *
          * @param {JSON} resultJson Analysis results
+         *
+         *[{"vaesto": [{"Kohteiden lukumäärä": "324"}, {"Tietosuojattujen kohteiden lukumäärä": "0"},..}]},{"miehet":[..
+         * @param {JSON}  geojson geometry of aggregate features union
          * @param {Boolean} noDataCnt True if the amount of authorised features is included in analysis
          *
          */
-        _showAggregateResultPopup: function (resultJson, noDataCnt) {
+        _showAggregateResultPopup: function (resultJson, geojson, noDataCnt) {
             var me = this,
                 popup =  Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 gridModel = Oskari.clazz.create('Oskari.userinterface.component.GridModel'),
                 content = this.template.wrapper.clone(),
+                contentPanel = me.contentPanel,
+                tmpfea = {},
                 fields;
-
-            _.forEach(resultJson, function(feature, key) {
-                feature.Property = key;
-                gridModel.addData(feature, true);
+            // Array Array is used for to keep order of rows and cols
+                    _.forEach(resultJson, function(feature, key) {
+                tmpfea = {};
+                _.forEach(feature, function(sfeature, skey) {
+                    _.forEach(sfeature, function(ssfeature, sskey) {
+                        _.forEach(ssfeature, function(value, ssskey) {
+                            tmpfea[ssskey] = value;
+                        });
+                    });
+                    tmpfea.Property = skey;
+                    gridModel.addData(tmpfea, true);
+                });
             });
 
             gridModel.setIdField('Property');
@@ -2865,15 +2892,31 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 content.prepend('<div>' + me.loc.aggregate.footer + '</div>');
             }
 
+
+            var storeBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            storeBtn.setTitle(me.loc.aggregatePopup.store);
+            storeBtn.setTooltip(me.loc.aggregatePopup.store_tooltip);
+            storeBtn.setHandler(function () {
+                var rq = 'MapModulePlugin.RemoveFeaturesFromMapRequest';
+                me.instance.sandbox.postRequestByName(rq);
+                //Store temp geometry layer
+                var title = me.mainPanel.find('.settings_name_field').val() ? me.mainPanel.find('.settings_name_field').val() : '_';
+                contentPanel.addGeometry(me._getOLGeometry(geojson), title );
+                me._showFeatureDataWithoutSaving = false;
+                popup.close(true);
+
+            });
+
             var closeBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             closeBtn.setTitle(me.loc.aggregatePopup.close);
             closeBtn.setHandler(function () {
                 popup.close(true);
+                me._showFeatureDataWithoutSaving = false;
                 var rq = 'MapModulePlugin.RemoveFeaturesFromMapRequest';
                 me.instance.sandbox.postRequestByName(rq);
             });
             popup.makeDraggable();
-            popup.show(me.loc.aggregatePopup.title, content, [closeBtn]);
+            popup.show(me.loc.aggregatePopup.title, content, [storeBtn,closeBtn]);
         },
 
         /**

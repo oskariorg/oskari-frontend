@@ -407,6 +407,8 @@ Oskari.registerLocalization(
             "aggregatePopup": {
                 "title": "Analys resultat",
                 "property": "Attribut",
+                "store": "Lagra",
+                "store_tooltip": "Lagra geometri som tillfällig lager",
                 "close": "Stäng"
             }
         },

@@ -407,6 +407,8 @@ Oskari.registerLocalization(
             "aggregatePopup": {
                 "title": "Analyse results",
                 "property": "Property",
+                "store": "Save",
+                "store_tooltip": "Save result geometry as temporary layer",
                 "close": "Close"
             }
         },

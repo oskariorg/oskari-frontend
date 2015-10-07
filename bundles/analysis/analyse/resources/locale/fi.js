@@ -406,6 +406,8 @@ Oskari.registerLocalization(
             "aggregatePopup": {
                 "title": "Analyysin tulokset",
                 "property": "Ominaisuus",
+                "store": "Tallenna",
+                "store_tooltip": "Säilytä analyysin tulosgeometria väliaikaisena kohteena",
                 "close": "Sulje"
             }
         },

@@ -18,6 +18,11 @@ Added a new request 'ShowProgressSpinnerRequest' that shows / hides a progress i
 
 Added LayerSelectionTool. This tool user can add map layer tool on the map. User can also select visible baselayers.
 
+### framework/mapwmts and mapping/mapwmts_ol3
+
+WmtsLayerService no longer parses rest url template from capabilities, but relies on server providing it. 
+This enables proxying for WMTS-layers that use resourceURL and require credentials.
+
 ## 1.32.1
 
 ### integration/admin-layerselector
