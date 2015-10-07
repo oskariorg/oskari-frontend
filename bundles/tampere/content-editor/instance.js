@@ -147,7 +147,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
         		}
             },
             'DrawPlugin.FinishedDrawingEvent': function (evt) {
-                var layer = this.sandbox.findMapLayerFromSelectedMapLayers(15);
                 this.sideContentEditor.sendRequest(evt.getDrawing());
             },
             WFSFeatureGeometriesEvent: function (evt) 
