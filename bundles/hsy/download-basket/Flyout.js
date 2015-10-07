@@ -77,41 +77,15 @@ Oskari.clazz.define('Oskari.hsy.bundle.downloadBasket.Flyout',
                 tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer');
             this.tabsContainer = tabsContainer;
 
-           /* _.each(this.tabs, function (tabDef) {
-                var tab = Oskari.clazz.create(tabDef.clazz, me._getLocalization(tabDef.id), me.instance);
-                tab.setId(tabDef.id);
-                tabsContainer.addPanel(tab);
-                tabDef.instance = tab;
-            });*/
             tabsContainer.addPanel(me.instance.cropping);
             tabsContainer.addPanel(me.instance.basket);
             tabsContainer.insertTo(this.container);
         },
         getEventHandlers: function () {
-           /* var list = {};
-            _.each(this.tabs, function (tabDef) {
-                var p;
-                if (tabDef.instance.eventHandlers) {
-                    for (p in tabDef.instance.eventHandlers) {
-                        if (tabDef.instance.eventHandlers.hasOwnProperty(p)) {
-                            list[p] = true;
-                        }
-                    }
-                }
-            });
-            return list;*/
+
         },
         onEvent: function (event) {
-           /* _.each(this.tabs, function (tabDef) {
-                if (tabDef.instance.eventHandlers) {
-                    var handler = tabDef.instance.eventHandlers[event.getName()];
-                    if (!handler) {
-                        return;
-                    }
-                    handler.apply(tabDef.instance, [event]);
 
-                }
-            });*/
         },
         /**
          * @method _getLocalization

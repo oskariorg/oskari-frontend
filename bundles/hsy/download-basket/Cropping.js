@@ -34,7 +34,7 @@ Oskari.clazz.define(
         _initTemplates: function () {
             var me = this;
             _map = me.mapModule.getMap();
-            console.dir(me.instance.basket);
+
             //Loop cropping layers and create cropping btns
             jQuery.each(me.getCroppingLayers(), function( key, value ) {
                 //Initialize cropping btns
@@ -46,6 +46,8 @@ Oskari.clazz.define(
                 var layerAttributes = value.getAttributes();
                 if(layerAttributes.unique !== null){
                     jQuery(croppingBtn.getElement()).data("uniqueKey",layerAttributes.unique);
+                    jQuery(croppingBtn.getElement()).data("geometryColumn",layerAttributes.geometryColumn);
+                    jQuery(croppingBtn.getElement()).data("geometry",layerAttributes.geometry);
                 }
 
                 if(value.rect){
@@ -87,6 +89,7 @@ Oskari.clazz.define(
                             if(value.rect){
                                 me.reqularControl.activate();
                                 me.removeAllFeaturesFromCroppingLayer(_map);
+                                me.disableAllCroppingLayers(_map);
                             }else{
                                 me.reqularControl.deactivate();
                                 me.createCroppingWMSLayer(value.getLayerName(),value.getLayerUrl(),_map);
@@ -167,7 +170,8 @@ Oskari.clazz.define(
             eventListeners : {
                 "featuresadded" : function(layer) {
                     var layerCroppingMode = jQuery('.cropping-btn.selected').data('croppingMode');
-                    me.croppingVectorLayer.features[0].attributes['croppingMode'] = layerCroppingMode;
+                    var index = me.croppingVectorLayer.features.length-1;
+                    me.croppingVectorLayer.features[index].attributes['croppingMode'] = layerCroppingMode;
                     me.addToTempBasket(me.croppingVectorLayer.features.length);
                     }
                 }
@@ -238,6 +242,8 @@ Oskari.clazz.define(
             ajaxUrl = me._sandbox.getAjaxUrl(),
             map = me.mapModule.getMap(),
             layerUniqueKey = jQuery('.cropping-btn.selected').data('uniqueKey'),
+            layerGeometryColumn = jQuery('.cropping-btn.selected').data('geometryColumn'),
+            layerGeometry = jQuery('.cropping-btn.selected').data('geometry'),
             layerName = jQuery('.cropping-btn.selected').data('layerName'),
             layerUrl = jQuery('.cropping-btn.selected').data('layerUrl'),
             layerCroppingMode = jQuery('.cropping-btn.selected').data('croppingMode'),
@@ -269,6 +275,8 @@ Oskari.clazz.define(
                             features[0].attributes['layerName'] = layerName;
                             features[0].attributes['layerUrl'] = layerUrl;
                             features[0].attributes['uniqueKey'] = layerUniqueKey;
+                            features[0].attributes['geometryColumn'] = layerGeometryColumn;
+                            features[0].attributes['geometryName'] = layerGeometry;
                             features[0].attributes['croppingMode'] = layerCroppingMode;
                             features[0].attributes['layerNameLang'] = layerNameLang;
 
@@ -475,6 +483,8 @@ Oskari.clazz.define(
                     basketObject.cropLayerNameLang = feature_value.attributes.layerNameLang;
                     basketObject.cropLayerUrl = feature_value.attributes.layerUrl;
                     basketObject.cropUniqueKey = feature_value.attributes.uniqueKey;
+                    basketObject.cropGeometryColumn = feature_value.attributes.geometryColumn;
+                    basketObject.cropGeometryName = feature_value.attributes.geometryName;
                     basketObject.cropUniqueKeyValue = feature_value.attributes[feature_value.attributes.uniqueKey];
                     basketObject.bbox = {
                         bottom: feature_value.geometry.bounds.bottom,
@@ -523,9 +533,12 @@ Oskari.clazz.define(
                 var identifier = {
                     layerName: basketObject.cropLayerName,
                     uniqueColumn: basketObject.cropUniqueKey,
+                    geometryColumn : basketObject.cropGeometryColumn,
+                    geometryName : basketObject.cropGeometryName,
                     uniqueValue: basketObject.cropUniqueKeyValue
                 };
                 identifiers.push(identifier);
+
                 componentClone.attr("data-identifiers", JSON.stringify(identifiers));
 
                 componentClone.find('.download-basket__component-layer-name').text(basketObject.layerNameLang); 
@@ -576,30 +589,38 @@ Oskari.clazz.define(
                 var layer = selected[i];
                 var attributes = layer.getAttributes();
 
-                if( !layer.isInScale(mapScale) ) {
+                if(!layer.isInScale(mapScale)) {
                     continue;
                 }
-                if( !layer.isFeatureInfoEnabled() ) {
+                if(!layer.isFeatureInfoEnabled()) {
                     continue;
                 }           
-                if( !layer.isVisible() ) {
+                if(!layer.isVisible()) {
                     continue;
                 }
-                if( layer._type=='BASE_LAYER'){
+                if(layer._type=='BASE_LAYER'){
                     continue;
                 }
                 
-                if( layer._layerType=='WMTS'){
+                if(layer._layerType=='WMTS'){
                     continue;
                 }
-                if( attributes.rajaus){
+                if(attributes.rajaus){
                     continue;
                 }
-                if( attributes.basemap){
+                if(attributes.basemap){
+                    continue;
+                }
+                if(attributes.raster){
+                    var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                    btn = dialog.createCloseButton('OK');
+                    btn.addClass('primary');
+                    dialog.show(me._getLocalization('basket-raster-problem-title'), layer.getName()+' '+me._getLocalization('basket-raster-problem'), [btn]);
                     continue;
                 }
 
                 layerIds.push(layer);
+
             }
             return layerIds;
         }

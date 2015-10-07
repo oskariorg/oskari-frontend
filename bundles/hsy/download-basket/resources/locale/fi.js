@@ -26,7 +26,9 @@ Oskari.registerLocalization({
                 "basket-cropping-layer-title" : "Rajausaineisto: ",
                 "basket-license-title" : "Käyttöehdot: ",
                 "basket-license-name" : "Creative Commons Nimeä 4.0 Kansainvälinen -lisenssillä",
-                "basket-license-url" : "http://creativecommons.org/licenses/by/4.0/"
+                "basket-license-url" : "http://creativecommons.org/licenses/by/4.0/",
+                "basket-raster-problem-title" : "Huom",
+                "basket-raster-problem" : "karttatasoa ei voida toistaiseksi ladata palavelusta"
 
             },
             "download-basket-tab" : {
@@ -39,7 +41,10 @@ Oskari.registerLocalization({
                 "insert-email-for-download" : "Syötä sähköpostiosoitteesi latausta varten",
                 "basket-user-email" : "Sähköpostiosoite",
                 "basket-user-email-sure" : "Varmista sähköpostiosoite",
-                "check-form-error" : "Tarkista"
+                "check-form-error" : "Tarkista",
+                "error-in-downloading" : "Aineistojen lataus epäonnistui",
+                "basket-thank-you" : "Kiitos latauksesta",
+                "basket-email-will-be" : "Ilmoittamaasi sähköpostiosoitteeseen lähetetään linkki josta voit käydä lataamassa aineistot"
             }
         }
     }

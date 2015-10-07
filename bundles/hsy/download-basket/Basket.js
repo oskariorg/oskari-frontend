@@ -120,7 +120,8 @@ Oskari.clazz.define(
         loadBasketItem: function(){
             var me = this;
             var downloadDetails = [];
-            
+            jQuery('.oskari__download-basket-buttons').find('input.send').attr("disabled",true);
+
             jQuery('.download-basket__component').each(function(){
                 var parent = jQuery(this);
                 var details = {
@@ -148,42 +149,40 @@ Oskari.clazz.define(
             };
             var strUserDetails = JSON.stringify(userDetails);
             
-/*            var loadingText = me.templateBasketLoading.clone();
-            loadingText.find('.lakapa-basket-loading-text').html(me._locale.loadingText);
-            el.after(loadingText);*/
-            
-/*            var dte = new Date();
-            var dteMs = dte.getTime();
-            
-            if( me._pendingAjaxQuery.busy && me._pendingAjaxQuery.timestamp &&  
-                    dteMs - me._pendingAjaxQuery.timestamp < 500 ) {
-                    me._sandbox.printDebug("[LakapaBasket] Save last selected region NOT SENT (time difference < 500ms)");
-                    return; 
-            }
-            me._cancelAjaxRequest();
-            me._startAjaxRequest(dteMs);*/
-            
             var ajaxUrl = me._sandbox.getAjaxUrl(); 
             
             jQuery.ajax({
                 beforeSend : function(x) {              
-                    //me._pendingAjaxQuery.jqhr = x;
                     if (x && x.overrideMimeType) {
                         x.overrideMimeType("application/json;charset=UTF-8");
                     }
                 },
                 success : function(resp) {
-                    console.dir(resp);
+                    if(resp.success){
+                        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                        btn = dialog.createCloseButton('OK');
+                        btn.setHandler(function() {
+                            jQuery('.oskari__download-basket-buttons').find('input.send').attr("disabled",false);
+                            jQuery('.oskari__download-basket-user-info').find('input').val('');
+                            dialog.close();
+                        });
+                        btn.addClass('primary');
+                        dialog.show(me._getLocalization('basket-thank-you'), me._getLocalization('basket-email-will-be'), [btn]);
+                    }else{
+                         me._openPopup(
+                            me._getLocalization('title'),
+                            me._getLocalization('error-in-downloading')
+                        );
+                    }
+                    
                 },
-                error : function() {
-                   /* me._finishAjaxRequest();
-                    me._notifyAjaxFailure();*/
-                },
-                always: function() {
-                   /*me._finishAjaxRequest();*/
-                },
-                complete: function() {
-                  /* me._finishAjaxRequest();*/
+                error : function(jqXHR, textStatus, errorThrown) {
+                    var error = me._getErrorText(jqXHR, textStatus, errorThrown);
+
+                    me._openPopup(
+                        me._getLocalization('error-in-downloading'),
+                        error
+                    );
                 },
                 data : {
                     downloadDetails : strDownloadDetails,
