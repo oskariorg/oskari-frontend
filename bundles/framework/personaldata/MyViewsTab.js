@@ -17,7 +17,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
         this.loc = localization;
         this.template = jQuery('<div class="viewsList volatile"></div>');
         this.templateLink = jQuery('<a href="JavaScript:void(0);"></a>');
-        this.templateDefaultViewIcon = jQuery('<div class="default-view-icon" title="'+this.loc.popup.default+'"/>');
+//        this.templateDefaultViewIcon = jQuery('<div class="default-view-icon" title="'+this.loc.popup.default+'"/>');
+        this.templateDefaultGridView = jQuery('<input type="checkbox" name="isDefault"/>');
         this.templateDesc = jQuery('<div class="oskarifield"><label for="description"></label>' +
             '<textarea id="view_description" name="description" placeholder="' + this.loc.popup.description_placeholder + '"></textarea></div>');
         this.templateDefaultView = jQuery('<div class="oskarifield"><input type="checkbox" id="defaultview"/><label for="defaultview"></label></div>');
@@ -267,7 +268,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
                     'isDefault': isDefault,
                     'edit': this.loc.edit,
                     'publish': isPublic ? this.loc.unpublish : this.loc.publish,
-                    'delete': this.loc['delete']
+                    'delete': this.loc['delete'],
+                    'default': this.loc['default']
                 };
                 gridModel.addData(data);
             }
@@ -285,18 +287,33 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             var me = this;
             var instance = this.instance;
             var sandbox = instance.getSandbox();
-            var visibleFields = ['name', 'description', /*'publish',*/ 'edit', 'delete'];
+            var visibleFields = ['default','name', 'description', /*'publish',*/ 'edit', 'delete'];
             var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
             grid.setDataModel(model);
             grid.setVisibleFields(visibleFields);
+
+            // set up the link from edit field
+            var defaultViewRenderer = function (name, data) {
+                var input = me.templateDefaultGridView.clone();
+                input.prop('checked',data.isDefault);
+                input.bind('click', function () {
+                    var view = me._getViewById(data.id);
+                    var service = me.instance.getViewService();
+                    
+                    service.updateView(view.id, view.name, view.description, this.checked, function (isSuccess) {
+                        me._editViewSuccessNotify(isSuccess);
+                    });
+                    
+                });
+                return input;
+            };
+            grid.setColumnValueRenderer('default', defaultViewRenderer);
+
+
+
             // set up the link from name field
             var nameRenderer = function (name, data) {
                 var link = me.templateLink.clone();
-
-                if (data.isDefault) {
-                    link.append(me.templateDefaultViewIcon.clone())
-                }
-
                 link.append(name);
                 link.bind('click', function () {
                     var rb = sandbox.getRequestBuilder('StateHandler.SetStateRequest');

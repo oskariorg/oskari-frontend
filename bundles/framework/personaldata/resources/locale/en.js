@@ -19,7 +19,8 @@ Oskari.registerLocalization(
                     "description": "Description",
                     "publish": "Published",
                     "edit": "Edit",
-                    "delete": "Delete"
+                    "delete": "Delete",
+                    "default":"Default"
                 },
                 "popup": {
                     "edit": "Edit the map view",
