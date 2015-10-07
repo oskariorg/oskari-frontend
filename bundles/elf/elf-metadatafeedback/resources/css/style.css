@@ -404,9 +404,24 @@ div.ratingStar {
   cursor: pointer;
   background-repeat: no-repeat; }
 
+div.feedback-list-rating {
+  display: inline; }
+  div.feedback-list-rating div.ratingStar {
+    height: 16px;
+    display: inline-block; }
+  div.feedback-list-rating span.feedback-list-rating-subject {
+    font-size: larger;
+    padding-left: 5px;
+    vertical-align: top; }
+
 div.numRatings {
   margin-left: 8px;
   margin-right: 2px; }
+
+div.feedbacklist-feedback {
+  outline: 1pt solid #c0d0e0;
+  margin: 5px;
+  padding: 5px; }
 
 div.icon-star-off {
   background-image: url('../images/star-off.png'); }

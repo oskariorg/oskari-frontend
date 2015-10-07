@@ -109,7 +109,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
                 if (!params) {
                     me._showMessage(me.locale.errorPopup.title, me.locale.errorPopup.formValidationFailed);
                 } else {
-                    me.instance.addFeedbackService.addFeedback(params,
+                    me.instance.feedbackService.addFeedback(params,
                       function(e) {
                         me._showMessage(me.locale.successPopup.title, me.locale.successPopup.savingTheFeedbackSuccesful);
                         me._resetForm();

@@ -257,7 +257,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             for (i = 0; i < views.length; ++i) {
                 view = views[i];
                 isPublic = (view.isPublic === true);
-                isDefault = (view.isDefault === true);
+                isDefault = view.isDefault;
                 data = {
                     'id': view.id,
                     'state': view.state,
@@ -294,7 +294,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
                 var link = me.templateLink.clone();
 
                 if (data.isDefault) {
-                    link.append(me.templateDefaultViewIcon.clone())
+                    link.append(me.templateDefaultViewIcon.clone());
                 }
 
                 link.append(name);

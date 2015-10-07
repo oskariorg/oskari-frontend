@@ -23,6 +23,7 @@ Oskari.registerLocalization({
             "metadata_printout_title": "METADATA PRINTOUT",
             "linkto": "Link to this metadata",
             "notFound": "Metadata was not found",
+            "feedback": "Feedback",
             "codeLists": {
                 "gmd:MD_CharacterSetCode": {
                     "ucs2": {

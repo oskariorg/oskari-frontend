@@ -14,7 +14,7 @@ function () {
     this.plugins = {};
     this.loader = null;
     this._requestHandlers = {};
-    this.addFeedbackService= null;
+    this.feedbackService = null;
 
 }, {
         /**
@@ -24,7 +24,29 @@ function () {
         templates: {
             ratingContainer: jQuery('<div class="ratingInfo"></div>'),
             starItem: jQuery('<div class="ratingStar"></div>'),
-            numRatings: jQuery('<div class="numRatings"></div>')
+            numRatings: jQuery('<div class="numRatings"></div>'),
+            feedbackTabErrorTemplate: _.template('<article>Virhe sattusis, kauheeta.<%=responseText%></article>'),
+            feedbackSuccessTemplate: _.template(
+                '<article>'+
+                '   <div class="feedback-list-rating">'+
+                '       <span class="feedback-list-rating-subject"><%=averageLabel%>:&nbsp;</span>'+
+                '       <%=average%>'+
+                '   </div>'+
+                '   <br/><br/>'+
+                '   <%_.forEach(feedbacks, function(feedback) { %>'+
+                '       <div class="feedbacklist-feedback">'+
+                '       <div class="feedback-list-rating">'+
+                '           <%=feedback.rating%>'+
+                '           <span class="feedback-list-rating-subject">&nbsp;<%=feedback.subject%></span>'+
+                '       </div>'+
+                '       <br/>'+
+                '       <div><%=feedback.user%> - <%=feedback.date%></div>'+
+                '       <br/>'+
+                '       <div><%=feedback.feedback%></div>'+
+                '       <br/>'+
+                '       </div>'+
+                '   <%})%>'+
+                '</article>')
         },
         /**
          * @static
@@ -61,9 +83,10 @@ function () {
             sandbox.register(this);
 
             var addFeedbackAjaxUrl = this.sandbox.getAjaxUrl()+'action_route=GiveMetadataFeedback';
-            var addFeedbackServiceName =
-                'Oskari.catalogue.bundle.metadatafeedback.service.AddFeedbackService';
-            this.addFeedbackService = Oskari.clazz.create(addFeedbackServiceName, addFeedbackAjaxUrl);
+            var fetchFeedbackAjaxUrl = this.sandbox.getAjaxUrl()+'action_route=XXX_XXX_XXX';
+            var feedbackServiceName =
+                'Oskari.catalogue.bundle.metadatafeedback.service.FeedbackService';
+            this.feedbackService = Oskari.clazz.create(feedbackServiceName, addFeedbackAjaxUrl, fetchFeedbackAjaxUrl);
 
 
 
@@ -74,6 +97,7 @@ function () {
             }
 
             /* request handler */
+            /*
             this._requestHandlers['catalogue.ShowFeedbackRequest'] =
                 Oskari.clazz.create(
                     'Oskari.catalogue.bundle.metadatafeedback.request.' +
@@ -86,6 +110,21 @@ function () {
                 'catalogue.ShowFeedbackRequest',
                 this._requestHandlers['catalogue.ShowFeedbackRequest']
             );
+*/
+
+            this._requestHandlers = {
+                'catalogue.ShowFeedbackRequest': Oskari.clazz.create(
+                    'Oskari.catalogue.bundle.metadatafeedback.request.' +
+                    'ShowFeedbackRequestHandler',
+                    sandbox,
+                    this
+                )
+            };
+
+
+            for (var key in this._requestHandlers) {
+                sandbox.addRequestHandler(key, this._requestHandlers[key])
+            }
 
             var request = sandbox.getRequestBuilder(
                 'userinterface.AddExtensionRequest'
@@ -94,6 +133,8 @@ function () {
 
 
             this._activateMetadataSearchResultsShowRating();
+
+            this._addMetadataFeedbackTabToMetadataFlyout();
 
 
         },
@@ -130,6 +171,93 @@ function () {
             var container = idSpan.parent();
             container.html(idSpan.html()+this._getMetadataRating(metadata));
         },
+        _addMetadataFeedbackTabToMetadataFlyout: function() {
+            var me = this,
+                reqBuilder = me.sandbox.getRequestBuilder('catalogue.AddTabRequest');
+
+            var data = {
+                'feedback': {
+                    template: null,
+                    tabActivatedCallback: function(uuid, panel) {
+                        me.feedbackService.fetchFeedback({'uuid': uuid},
+                            function(response) {
+                                panel.setContent(_.template('<article>'+uuid+" "+panel.getId()+'</article>'));
+                            },
+                            function(error) {
+                                var content = me.templates.feedbackTabErrorTemplate(error);
+                                content += "Mutta tältä se muutoin näyttäs: <br/><br/>";
+                                var json = {
+                                    'averageLabel':me._locale.feedbackList.average,
+                                    'average':me._getMetadataRating({rating: 3.5}),
+                                    feedbacks: [
+                                        {
+                                            'subject':'Otsake',
+                                            'rating': me._getMetadataRating({rating: 2.5}),
+                                            'feedback':
+                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum'+
+                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum'+
+                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum'+
+                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum',
+                                            'user':'Käyttäjä 1',
+                                            'date':'21.4.2015'
+                                        },
+                                        {
+                                            'subject':'Otsake 2',
+                                            'rating':me._getMetadataRating({rating: 4.5}),
+                                            'feedback':
+                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum'+
+                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum'+
+                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum'+
+                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum',
+                                            'user':'Käyttäjä 2',
+                                            'date':'22.4.2015'
+                                        },
+                                        {
+                                            'subject':'Otsake 2',
+                                            'rating':me._getMetadataRating({rating: 4.5}),
+                                            'feedback':
+                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum'+
+                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum'+
+                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum'+
+                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum',
+                                            'user':'Käyttäjä 2',
+                                            'date':'22.4.2015'
+                                        },
+                                        {
+                                            'subject':'Otsake 2',
+                                            'rating':me._getMetadataRating({rating: 4.5}),
+                                            'feedback':
+                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum'+
+                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum'+
+                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum'+
+                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum',
+                                            'user':'Käyttäjä 2',
+                                            'date':'22.4.2015'
+                                        },
+                                        {
+                                            'subject':'Otsake 2',
+                                            'rating':me._getMetadataRating({rating: 4.5}),
+                                            'feedback':
+                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum'+
+                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum'+
+                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum'+
+                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum',
+                                            'user':'Käyttäjä 2',
+                                            'date':'22.4.2015'
+                                        }
+                                    ]
+                                };
+                                content += me.templates.feedbackSuccessTemplate(json);
+                                panel.setContent(content);
+                            }
+                        );
+                    }
+                }
+            };
+            var request = reqBuilder(data); 
+            me.sandbox.request(me, request);
+        },
+
         init: function () {
             return null;
         },
@@ -224,10 +352,12 @@ function () {
                     ratingContainer.append(starContainer);
                 }
 
-                numRatingsContainer = me.templates.numRatings.clone();
-                var numRatingsText = metadata.numRatings !== undefined ? "("+metadata.numRatings +")" : "&nbsp;";
-                numRatingsContainer.append(numRatingsText);
-                ratingContainer.append(numRatingsContainer);
+                if (metadata.numRatings !== undefined) {
+                    var numRatingsContainer = me.templates.numRatings.clone();
+                    var numRatingsText = metadata.numRatings !== undefined ? "("+metadata.numRatings +")" : "&nbsp;";
+                    numRatingsContainer.append(numRatingsText);
+                    ratingContainer.append(numRatingsContainer);
+                }
 
             }
             return ratingContainer.html();

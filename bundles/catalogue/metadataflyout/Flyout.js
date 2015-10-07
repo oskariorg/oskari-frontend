@@ -30,6 +30,8 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
 
         this.pages = {};
 
+        this.additionalTabs = {};
+
     }, {
 
         getName: function () {
@@ -79,13 +81,13 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
          * this 'schedules' asyncronous loading
          */
         scheduleShowMetadata: function (allMetadata) {
-            var container = this.container,
+            var me = this,
+                container = this.container,
                 p,
                 pageInfo,
                 n,
                 data,
                 page;
-
             for (p in this.pages) {
                 if (this.pages.hasOwnProperty(p)) {
                     pageInfo = this.pages[p];
@@ -113,8 +115,10 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
                     panel: page,
                     data: data
                 };
+                if (me.additionalTabs) {
+                    page.additionalTabs = me.additionalTabs;
+                }
             }
-
             for (p in this.pages) {
                 if (this.pages.hasOwnProperty(p)) {
                     pageInfo = this.pages[p];
@@ -147,6 +151,15 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
 
         resetContentState: function () {
             this.contentState = {};
+        },
+        /**
+         *
+         * Basically a tab template to add to each metadatapanel created.
+         * 
+         * @param {Object} data Json object containing the tabs (title, content?, callback for getting content...?)
+         */
+        addTabs: function (data) {
+            this.additionalTabs = data;
         }
     }, {
         'protocol': ['Oskari.userinterface.Flyout']
