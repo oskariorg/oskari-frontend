@@ -57,7 +57,7 @@ function(addFeedbackAjaxUrl, fetchFeedbackAjaxUrl) {
     fetchFeedback: function(params, onSuccess, onError) {
         jQuery.ajax({
             dataType : "json",
-            type : "POST",
+            type : "GET",
             beforeSend: function(x) {
               if(x && x.overrideMimeType) {
                x.overrideMimeType("application/json");

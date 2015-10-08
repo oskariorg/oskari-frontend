@@ -81,8 +81,11 @@ function () {
             this.sandbox = sandbox;
 
             sandbox.register(this);
-
+/*
             var addFeedbackAjaxUrl = this.sandbox.getAjaxUrl()+'action_route=GiveMetadataFeedback';
+            var fetchFeedbackAjaxUrl = this.sandbox.getAjaxUrl()+'action_route=XXX_XXX_XXX';
+*/            
+            var addFeedbackAjaxUrl = this.sandbox.getAjaxUrl()+'action_route=UserFeedback';
             var fetchFeedbackAjaxUrl = this.sandbox.getAjaxUrl()+'action_route=XXX_XXX_XXX';
             var feedbackServiceName =
                 'Oskari.catalogue.bundle.metadatafeedback.service.FeedbackService';
@@ -158,7 +161,7 @@ function () {
                     actionText: null,
                     showAction: function(metadata) {
                         //add the span with metadata's id to be able to identify and update rating later
-                        this.actionText = '<span id="metadataRatingSpan_'+metadata.id+'" style="display:none;"/>'+me._getMetadataRating(metadata);
+                        this.actionText = '<span id="metadataRatingSpan_'+metadata.id+'" style="display:none;"/>x'+me._getMetadataRating(metadata);
                         return true;
                     }
                 };

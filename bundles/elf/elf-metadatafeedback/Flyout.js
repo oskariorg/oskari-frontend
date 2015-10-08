@@ -23,6 +23,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
         this.selectedTab = null;
         this.active = false;
         this.template = jQuery('<div class="userfeedback-values">' +
+            /*
             '<div id="step-1">'+
                 '<h2 class="StepTitle">'+this.locale.userFeedback.userFeedback+'</h2>'+
                 '<p><label>'+this.locale.userFeedback.subject+':</label><input id="subject" name="subject" type="text" placeholder="'+this.locale.userFeedback.subjectPlaceholder+'" required readonly="true"/>'+
@@ -33,7 +34,26 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
                 '<div id="raty-star">'+
                 '</div>'+
                 '<p><label>'+this.locale.userFeedback.ratingJustification+': </label><textarea id="justification" name="justification" maxlength="1000" class="span5" rows=4 required></textarea></p>'+
+                //uuid
+                '<input type="hidden" id="primaryTargetCode" name="primaryTargetCode" readonly="true"/>'+
               '</div>'+
+              */
+            '<div id="step-1">'+
+                '<h2 class="StepTitle">'+this.locale.userFeedback.userFeedback+'</h2>'+
+                '<p><label>'+this.locale.userFeedback.subject+':</label><input id="subject" name="subject" type="text" placeholder="'+this.locale.userFeedback.subjectPlaceholder+'" required readonly="true"/>'+
+                '</p>'+
+                '<p>'+
+                  '<label>'+this.locale.userFeedback.ratingScore+': </label>'+
+                '</p>'+
+                '<div id="raty-star">'+
+                '</div>'+
+                '<p><label>'+this.locale.userFeedback.ratingJustification+': </label><textarea id="userComment" name="userComment" maxlength="1000" class="span5" rows=4 required></textarea></p>'+
+                //uuid
+                '<input type="hidden" id="categoryItem" name="categoryItem" readonly="true"/>'+
+                //"feedback type. ELF_METADATA or something similar in this case..."
+                '<input type="hidden" id="category" name="category" readonly="true" value="ELF_METADATA"/>'+
+              '</div>'+
+              /*
               '<div id="step-2">'+
                 '<h2 class="StepTitle">'+this.locale.targetSpecification.targetSpecification+'</h2>'+
                 '<fieldset>'+
@@ -42,13 +62,31 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
                   '<p><label>'+this.locale.targetSpecification.natureOfTarget+'</label><input id="natureOfTarget" name="subject" type="text" required readonly="true"/></p>'+
                 '</fieldset>'+
               '</div>'+
+              */
               '<div id="step-3">'+
               '<h2 class="StepTitle">'+this.locale.userInformation.userInformation+'</h2>'+
                 '<fieldset>'+
                   '<legend><small>'+this.locale.userInformation.userDetails+'</small></legend>'+
                   '<p><label>'+this.locale.userInformation.userName+'</label><input id="username" name="username" type="text" readonly="true" required/></p>'+
                   '<label>'+this.locale.userInformation.contactRole+'</label>'+
+                  /*
                   '<select  id="ciRole">'+
+                    '<option value="user">'+this.locale.userInformation.ciRoleUser+'</option>'+
+                    '<option value="resourceProvider">'+this.locale.userInformation.ciRoleResourceProvider+'</option>'+
+                    '<option value="custodian">'+this.locale.userInformation.ciRoleCustodian+'</option>'+
+                    '<option value="owner">'+this.locale.userInformation.ciRoleOwner+'</option>'+
+                    '<option value="sponsor">'+this.locale.userInformation.ciRoleSponsor+'</option>'+
+                    '<option value="distributor">'+this.locale.userInformation.ciRoleDistributor+'</option>'+
+                    '<option value="originator">'+this.locale.userInformation.ciRoleOriginator+'</option>'+
+                    '<option value="pointofContact">'+this.locale.userInformation.ciRolePointOfContact+'</option>'+
+                    '<option value="principalInvestigator">'+this.locale.userInformation.ciRolePrincipalInvestigator+'</option>'+
+                    '<option value="processor">'+this.locale.userInformation.ciRoleProcessor+'</option>'+
+                    '<option value="publisher">'+this.locale.userInformation.ciRolePublisher+'</option>'+
+                    '<option value="author">'+this.locale.userInformation.ciRoleAuthor+'</option>'+
+                    '<option value="collaborator">'+this.locale.userInformation.ciRoleCollaborator+'</option>'+
+                  '</select>'+
+                  */
+                  '<select  id="userRole">'+
                     '<option value="user">'+this.locale.userInformation.ciRoleUser+'</option>'+
                     '<option value="resourceProvider">'+this.locale.userInformation.ciRoleResourceProvider+'</option>'+
                     '<option value="custodian">'+this.locale.userInformation.ciRoleCustodian+'</option>'+
@@ -106,6 +144,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
             saveBtn.addClass('primary');
             saveBtn.click(function() {
                 var params = me._getFieldValues();
+                debugger;
                 if (!params) {
                     me._showMessage(me.locale.errorPopup.title, me.locale.errorPopup.formValidationFailed);
                 } else {
@@ -114,7 +153,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
                         me._showMessage(me.locale.successPopup.title, me.locale.successPopup.savingTheFeedbackSuccesful);
                         me._resetForm();
                         //update the ratinginfo in the search result list.
-                        me._metadata.rating = e[0].rating;
+                        me._metadata.rating = e.rating !== null && e.rating !== undefined ? e.rating : 0;
                         me.instance.updateMetadataRating(me._metadata);
 
                         me.instance.sandbox.postRequestByName(
@@ -228,13 +267,14 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
             el.find('div#raty-star').raty('score',me._metadata.rating);
 
             // Set metadata id
-            el.find('input#primaryTargetCode').val(me._metadata.id);
+//            el.find('input#primaryTargetCode').val(me._metadata.id);
+            el.find('input#categoryItem').val(me._metadata.id);
 
             // Set user name
             el.find('input#username').val(user.getNickName());
 
             // Set nature of target
-            el.find('input#natureOfTarget').val(metadata.natureofthetarget);
+//            el.find('input#natureOfTarget').val(metadata.natureofthetarget);
         },
 
         /**
@@ -299,6 +339,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
          */
          _resetForm: function() {
              jQuery('.userfeedback-values').find(':input').val('');
+             jQuery('.userfeedback-values').find('input#category').val('ELF_METADATA');
          },
 
         /**
