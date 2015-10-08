@@ -159,6 +159,9 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
                         }
                     }
                 }
+            },
+            'MapClickedEvent': function (event) {
+                this.sideContentEditor.setClickCoords({x: event.getLonLat().lon, y: event.getLonLat().lat});
             }
         },
         /**
