@@ -108,6 +108,10 @@ button.approve:hover:enabled, input.approve:hover:enabled{
     text-shadow: none !important;
 }
 
+.layerselector2-layer-filter{
+    display: none;
+}
+
 table td {
   text-align: left;
   vertical-align: top; }

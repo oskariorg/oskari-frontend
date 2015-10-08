@@ -1,0 +1,26 @@
+.linkpanel_bg{
+	height: 50px;
+    width: 100%;
+    background-color: black;
+    opacity: .3;
+}
+
+.linkpanel_wrapper{
+	height: 50px;
+    width: 100%;
+    background: none;
+    bottom: 0;
+    position: relative;
+    z-index: 15000;
+    pointer-events: auto;
+}
+
+.linkpanel_link{
+	padding-top: 15px;
+}
+
+.linkpanel_link a{
+	color: #fafafa !important;
+	margin: 10px;
+    text-shadow: 1px 0 3px rgba(0,0,0,0.5),-1px 0 3px rgba(0,0,0,0.5),1px 0 1px #000,-1px 0 1px #000;
+}
