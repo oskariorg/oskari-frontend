@@ -732,10 +732,21 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 me.drawToolType = "edit";
                 me.clickedGeometryNumber = 0;
                 for (var i = 0; i < me.layerGeometries.components.length; i++) {
-                    if (me.layerGeometries.components[i].containsPoint(me.clickCoords))
+                    if (me.layerGeometries.components[i].id.indexOf("Polygon") > -1)
                     {
-                        me.clickedGeometryNumber = i;
-                        break;
+                        if (me.layerGeometries.components[i].containsPoint(me.clickCoords))
+                        {
+                            me.clickedGeometryNumber = i;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        if (me.layerGeometries.components[i].atPoint({lon:me.clickCoords.x,lat:me.clickCoords.y}))
+                        {
+                            me.clickedGeometryNumber = i;
+                            break;   
+                        }
                     }
                 }
 
