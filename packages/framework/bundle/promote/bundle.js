@@ -24,27 +24,63 @@ Oskari.clazz.define("Oskari.mapframework.bundle.promote.PromoteBundle", function
 		"scripts" : [
 		{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/promote/instance.js"
+			"src" : "../../../../bundles/framework/promote/instance.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/promote/Flyout.js"
+			"src" : "../../../../bundles/framework/promote/Flyout.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/promote/Tile.js"
+			"src" : "../../../../bundles/framework/promote/Tile.js"
 		}],
 
 		"locales" : [{
+			"lang" : "en",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/promote/resources/locale/en.js"
+		}, {
+			"lang" : "es",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/promote/resources/locale/es.js"
+		}, {
+			"lang" : "et",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/promote/resources/locale/et.js"
+		}, {
 			"lang" : "fi",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/promote/locale/fi.js"
+			"src" : "../../../../bundles/framework/promote/resources/locale/fi.js"
+		}, {
+			"lang" : "fr",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/promote/resources/locale/fr.js"
+		}, {
+			"lang" : "is",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/promote/resources/locale/is.js"
+		}, {
+			"lang" : "it",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/promote/resources/locale/it.js"
+		}, {
+			"lang" : "nb",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/promote/resources/locale/nb.js"
+		}, {
+			"lang" : "nl",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/promote/resources/locale/nl.js"
+		}, {
+			"lang" : "nn",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/promote/resources/locale/nn.js"
+		}, {
+			"lang" : "sl",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/promote/resources/locale/sl.js"
 		}, {
 			"lang" : "sv",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/promote/locale/sv.js"
-		}, {
-			"lang" : "en",
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/promote/locale/en.js"
+			"src" : "../../../../bundles/framework/promote/resources/locale/sv.js"
 		}]
 	},
 	"bundle" : {

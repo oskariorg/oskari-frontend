@@ -4,13 +4,16 @@
  * Superclass for layer objects copy pasted from wmslayer. Need to check
  * if something should be moved back to wmslayer. Nothing else currently uses this.
  */
-Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
+Oskari.clazz.define(
+    'Oskari.mapframework.domain.AbstractLayer',
 
     /**
-     * @method create called automatically on construction
-     * @static
+     * @static @method create called automatically on construction
+     *
+     * @param {Object} params
+     * @param {Object} options
+     *
      */
-
     function (params, options) {
         var me = this;
         /* Internal id for this map layer.
@@ -36,6 +39,9 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
 
         /* optional options */
         me._options = options || {};
+
+        /* optional attributes */
+        me._attributes = {};
 
         /* modules can "tag" the layers with this for easier reference */
         me._metaType = null;
@@ -113,8 +119,18 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
         // Realtime
         me._realtime = false;
         me._refreshRate = null;
-        
+
+        // WMS, WMTS or WFS version
+        me._version = null;
+        // Spatial reference system
+        me._srs_name = null;
+
+        // Admin params, applicable only for admin users
+        me._admin = null;
+
         this._gfiContent = null;
+
+        me._created = null;
 
     }, {
         /**
@@ -178,11 +194,17 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
         /**
          * @method setId
          * @param {String} id
-         *          unique identifier for map layer used to reference the layer internally
+         * Unique identifier for map layer used to reference the layer
+         * internally. Non-string values will be coecred to a string.
          * (e.g. MapLayerService)
          */
         setId: function (id) {
+            //if (typeof id !== 'string') {
+            //    //console.warn('ID not passed as string:', id);
+            //    this._id = String(id);
+            //} else {
             this._id = id;
+            //}
         },
         /**
          * @method getId
@@ -249,10 +271,14 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
          */
         getName: function (lang) {
             if (this._name && typeof this._name === 'object') {
-                if (lang) {
-                    return this._name[lang];
+                if (!lang) {
+                    lang = Oskari.getLang();
                 }
-                return this._name[Oskari.getLang()];
+                var value = this._name[lang];
+                if(!value) {
+                    value = this._name[Oskari.getDefaultLanguage()];
+                }
+                return value;
             }
             return this._name;
         },
@@ -308,10 +334,14 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
          */
         getOrganizationName: function (lang) {
             if (this._organizationName && typeof this._organizationName === 'object') {
-                if (lang) {
-                    return this._organizationName[lang];
+                if (!lang) {
+                    lang = Oskari.getLang();
                 }
-                return this._organizationName[Oskari.getLang()];
+                var value = this._organizationName[lang];
+                if(!value) {
+                    value = this._organizationName[Oskari.getDefaultLanguage()];
+                }
+                return value;
             }
             return this._organizationName;
         },
@@ -334,10 +364,14 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
          */
         getInspireName: function (lang) {
             if (this._inspireName && typeof this._inspireName === 'object') {
-                if (lang) {
-                    return this._inspireName[lang];
+                if (!lang) {
+                    lang = Oskari.getLang();
                 }
-                return this._inspireName[Oskari.getLang()];
+                var value = this._inspireName[lang];
+                if(!value) {
+                    value = this._inspireName[Oskari.getDefaultLanguage()];
+                }
+                return value;
             }
             return this._inspireName;
         },
@@ -377,10 +411,14 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
          */
         getDescription: function (lang) {
             if (this._description && typeof this._description === 'object') {
-                if (lang) {
-                    return this._description[lang];
+                if (!lang) {
+                    lang = Oskari.getLang();
                 }
-                return this._description[Oskari.getLang()];
+                var value = this._description[lang];
+                if(!value) {
+                    value = this._description[Oskari.getDefaultLanguage()];
+                }
+                return value;
             }
             return this._description;
         },
@@ -397,7 +435,8 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
             var sublayers = this.getSubLayers(),
                 i,
                 len;
-            for (i = 0, len = sublayers.length; i < len; ++i) {
+
+            for (i = 0, len = sublayers.length; i < len; i += 1) {
                 if (sublayers[i].getId() === layer.getId()) {
                     // already added, don't add again
                     return false;
@@ -621,7 +660,8 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
             var foundExisting = false,
                 i,
                 curStyle;
-            for (i = 0; i < this.getStyles().length; ++i) {
+
+            for (i = 0; i < this.getStyles().length; i += 1) {
                 curStyle = this.getStyles()[i];
                 if (curStyle.getName() === style.getName()) {
                     foundExisting = true;
@@ -651,13 +691,15 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
          * If style is not found, assigns an empty #Oskari.mapframework.domain.Style to #getCurrentStyle
          */
         selectStyle: function (styleName, preventRecursion) {
-            var me = this;
+            var me = this,
+                i,
+                style;
 
-            for (var i = 0; i < me.getStyles().length; i++) {
-                var style = me.getStyles()[i];
+            for (i = 0; i < me.getStyles().length; i += 1) {
+                style = me.getStyles()[i];
                 if (style.getName() === styleName) {
                     me._currentStyle = style;
-                    if (style.getLegend() !== '') {
+                    if (style.getLegend()) {
                         me._legendImage = style.getLegend();
                     }
                     return;
@@ -677,6 +719,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
          */
         _createEmptyStyle: function () {
             var style = Oskari.clazz.create('Oskari.mapframework.domain.Style');
+
             style.setName('');
             style.setTitle('');
             style.setLegend('');
@@ -715,6 +758,10 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
          * adds layer tool to tools
          */
         addTool: function (tool) {
+            if(!tool || this.getTool(tool.getName())) {
+                // check for duplicates and invalid param
+                return;
+            }
             this._tools.push(tool);
         },
 
@@ -724,14 +771,14 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
          * adds layer tool to tools
          */
         getTool: function (toolName) {
-
             var tool = null,
                 i;
+
             // Layer have tools
             if (this._tools.length > 0) {
                 // 
                 if (toolName !== '') {
-                    for (i = 0; i < this._tools.length; i++) {
+                    for (i = 0; i < this._tools.length; i += 1) {
                         tool = this._tools[i];
                         if (tool.getName() === toolName) {
                             return tool;
@@ -739,7 +786,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
                     }
                 }
             }
-            return tool;
+            return null;
         },
         /**
          * @method setLegendImage
@@ -762,10 +809,11 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
         hasLegendImage: function () {
             var i,
                 ret = false;
+
             if (this._legendImage) {
                 ret = true;
             } else {
-                for (i = 0; i < this.getStyles().length; ++i) {
+                for (i = 0; i < this.getStyles().length; i += 1) {
                     if (this.getStyles()[i].getLegend()) {
                         ret = true;
                         break;
@@ -887,6 +935,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
          */
         getIconClassname: function () {
             var ret;
+
             if (this.isBaseLayer()) {
                 ret = 'layer-base';
             } else if (this.isGroupLayer()) {
@@ -904,6 +953,13 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
             return this._params;
         },
         /**
+         * @method setParams
+         * @param {Object} optional layer parameters for OpenLayers
+         */
+        setParams: function (param) {
+            this._params = param;
+        },
+        /**
          * @method getOptions
          * @return {Object} optional layer options for OpenLayers, empty object if no options were passed in construction
          */
@@ -911,11 +967,37 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
             return this._options;
         },
         /**
+         * @method getAttributes
+         * @return {Object} optional layer attributes like heatmap-parameters
+         */
+        getAttributes: function () {
+            return this._attributes || {};
+        },
+        /**
+         * @method setAttributes
+         * @param {Object} optional layer attributes like heatmap-parameters
+         */
+        setAttributes: function (param) {
+            this._attributes = param;
+        },
+
+        /**
          * @method hasFeatureData
          * @return {Boolean} true if the layer has feature data
          */
         hasFeatureData: function () {
             return this._featureData;
+        },
+        /**
+         * @method isManualRefresh
+         * @return {Boolean} true/false
+         */
+        isManualRefresh: function () {
+            if (this.getAttributes().manualRefresh){
+                return this.getAttributes().manualRefresh
+            } else {
+                return false;
+            }
         },
         /**
          * @method getLayerName
@@ -942,7 +1024,8 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
                 foundExisting = false,
                 i,
                 url;
-            for (i = 0; i < listLen; ++i) {
+
+            for (i = 0; i < listLen; i += 1) {
                 url = list[i];
                 if (url === layerUrl) {
                     foundExisting = true;
@@ -960,7 +1043,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
          * Returns array of layer image urls
          */
         setLayerUrls: function (urlList) {
-            if(Object.prototype.toString.call( urlList ) === '[object Array]') {
+            if (Object.prototype.toString.call(urlList) === '[object Array]') {
                 this._layerUrls = urlList;
             }
             // if url is single url, wrap it as list
@@ -974,7 +1057,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
          * Returns array of layer image urls
          */
         getLayerUrls: function () {
-            if(!this._layerUrls) {
+            if (!this._layerUrls) {
                 this._layerUrls = [];
             }
             return this._layerUrls;
@@ -986,7 +1069,8 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
          */
         getLayerUrl: function () {
             var list = this.getLayerUrls();
-            if(list && list.length > 0) {
+
+            if (list && list.length > 0) {
                 return list[0];
             }
         },
@@ -994,21 +1078,21 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
          * @method setRealtime
          * @param {Boolean} realtime
          */
-        setRealtime: function(realtime) {
+        setRealtime: function (realtime) {
             this._realtime = (realtime === true);
         },
         /**
          * @method isRealtime
          * @return {Boolean}
          */
-        isRealtime: function() {
+        isRealtime: function () {
             return this._realtime;
         },
         /**
          * @method setRefreshRate
          * @param {Number} refreshRate
          */
-        setRefreshRate: function(refreshRate) {
+        setRefreshRate: function (refreshRate) {
             if (refreshRate < 0) {
                 this._refreshRate = 0;
             } else {
@@ -1019,8 +1103,36 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
          * @method getRefreshRate
          * @return {Number}
          */
-        getRefreshRate: function() {
+        getRefreshRate: function () {
             return this._refreshRate;
+        },
+        /**
+         * @method setVersion
+         * @param {String} WMS, WMTS or WFS version
+         */
+        setVersion: function (version) {
+            this._version = version;
+        },
+        /**
+         * @method getVersion
+         * @return {String}
+         */
+        getVersion: function () {
+            return this._version;
+        },
+        /**
+         * @method setSrs_name
+         * @param {String} Spatial reference system
+         */
+        setSrs_name: function (srs_name) {
+            this._srs_name = srs_name;
+        },
+        /**
+         * @method getSrs_name
+         * @return {String}
+         */
+        getSrs_name: function () {
+            return this._srs_name;
         },
         /**
          * @method setGfiContent
@@ -1035,5 +1147,39 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
          */
         getGfiContent: function () {
             return this._gfiContent;
+        },
+
+        /**
+         * Sets an admin block
+         * @param {Object} admin
+         */
+        setAdmin: function (admin) {
+            this._admin = admin;
+        },
+
+        /**
+         * Returns an admin block
+         * @return {Object} admin
+         */
+        getAdmin: function () {
+            return this._admin;
+        },
+
+        /**
+         * Sets an created block
+         * @param {Date} created
+         */
+        setCreated: function(created){
+            this._created = created;
+        },
+
+        /**
+         * Returns an created block
+         * @return {Date} created
+         */
+        getCreated: function(){
+            return this._created;
         }
-    });
+
+    }
+);

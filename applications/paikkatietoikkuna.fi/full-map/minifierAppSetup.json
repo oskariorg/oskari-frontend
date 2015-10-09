@@ -47,6 +47,9 @@
 	                "mapuserlayers": {
 	                    "bundlePath": "../../../packages/framework/bundle/"
 	                },
+	                "maparcgis": {
+	                    "bundlePath": "../../../packages/arcgis/bundle/"
+	                },
 	                "service-base": {
 	                    "bundlePath": "../../../packages/framework/bundle/"
 	                },
@@ -507,7 +510,7 @@
 		    "metadata" : {
 		        "Import-Bundle" : {
 		            "routesearch" : {
-		                "bundlePath" : "../../../packages/framework/bundle/"
+		                "bundlePath" : "../../../packages/paikkatietoikkuna/bundle/"
 		            }
 		        }
 		    }
@@ -517,6 +520,67 @@
 		    "metadata" : {
 		        "Import-Bundle" : {
 		            "admin" : {
+		                "bundlePath" : "../../../packages/admin/bundle/"
+		            }
+		        }
+		    }
+		}, {
+			"bundlename" : "findbycoordinates",
+			"bundleinstancename" : "findbycoordinates",
+			"metadata" : {
+				"Import-Bundle" : {
+					"findbycoordinates" : {
+						"bundlePath" : "../../../packages/framework/bundle/"
+					}
+				}
+			}
+		}, {
+			"bundlename" : "heatmap",
+			"bundleinstancename" : "heatmap",
+			"metadata" : {
+				"Import-Bundle" : {
+					"heatmap" : {
+						"bundlePath" : "../../../packages/framework/bundle/"
+					}
+				}
+			}
+		}, {
+			"bundlename" : "coordinatetool",
+			"bundleinstancename" : "coordinatetool",
+			"metadata" : {
+				"Import-Bundle" : {
+					"coordinatetool" : {
+						"bundlePath" : "../../../packages/framework/bundle/"
+					}
+				}
+			}
+		}, {
+			"bundlename" : "routingUI",
+			"bundleinstancename" : "routingUI",
+			"metadata" : {
+				"Import-Bundle" : {
+					"routingUI" : {
+						"bundlePath" : "../../../packages/framework/bundle/"
+					}
+				}
+			}
+		}, {
+			"bundlename" : "routingService",
+			"bundleinstancename" : "routingService",
+			"metadata" : {
+				"Import-Bundle" : {
+					"routingService" : {
+						"bundlePath" : "../../../packages/framework/bundle/"
+					}
+				}
+			}
+		},
+		{
+		    "bundlename" : "metrics",
+		    "bundleinstancename" : "metrics",
+		    "metadata" : {
+		        "Import-Bundle" : {
+		            "metrics" : {
 		                "bundlePath" : "../../../packages/admin/bundle/"
 		            }
 		        }

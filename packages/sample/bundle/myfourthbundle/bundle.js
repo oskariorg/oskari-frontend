@@ -27,24 +27,24 @@ function() {
 
         "scripts" : [{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/sample/bundle/myfourthbundle/instance.js"
+            "src" : "../../../../bundles/sample/myfourthbundle/instance.js"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/sample/bundle/myfourthbundle/css/style.css"
+            "src" : "../../../../bundles/sample/myfourthbundle/resources/css/style.css"
         }],
 
         "locales" : [{
             "lang" : "fi",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/sample/bundle/myfourthbundle/locale/fi.js"
+            "src" : "../../../../bundles/sample/myfourthbundle/resources/locale/fi.js"
         }, {
             "lang" : "sv",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/sample/bundle/myfourthbundle/locale/sv.js"
+            "src" : "../../../../bundles/sample/myfourthbundle/resources/locale/sv.js"
         }, {
             "lang" : "en",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/sample/bundle/myfourthbundle/locale/en.js"
+            "src" : "../../../../bundles/sample/myfourthbundle/resources/locale/en.js"
         }]
     },
     "bundle" : {

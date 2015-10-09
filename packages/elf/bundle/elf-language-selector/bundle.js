@@ -21,14 +21,78 @@ Oskari.clazz.define("Oskari.elf.languageselector.Bundle", function() {
     "protocol" : ["Oskari.bundle.Bundle", "Oskari.mapframework.bundle.extension.ExtensionBundle"],
     "source" : {
 
-        "scripts" : [{
+        "scripts" : [
+        {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/elf/bundle/elf-language-selector/elf-extension.js"
+            "src" : "../../../../bundles/elf/elf-language-selector/elf-extension.js"
+        },
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/elf/elf-language-selector/instance.js"
         }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/elf/bundle/elf-language-selector/instance.js"
+            "type" : "text/css",
+            "src" : "../../../../bundles/elf/elf-language-selector/resources/css/style.css"
         }],
-        "locales" : []
+        "locales" : [{
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/elf/elf-language-selector/resources/locale/all.js"
+        }, {
+            "lang" : "en",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/elf/elf-language-selector/resources/locale/en.js"
+        }, {
+            "lang" : "et",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/elf/elf-language-selector/resources/locale/et.js"
+        }, {
+            "lang" : "fi",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/elf/elf-language-selector/resources/locale/fi.js"
+        }, {
+            "lang" : "fr",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/elf/elf-language-selector/resources/locale/fr.js"
+        }, {
+            "lang" : "it",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/elf/elf-language-selector/resources/locale/it.js"
+        }, {
+            "lang" : "is",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/elf/elf-language-selector/resources/locale/is.js"
+        }, {
+            "lang" : "is",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/elf/elf-language-selector/resources/locale/is.js"
+        }, {
+            "lang" : "nb",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/elf/elf-language-selector/resources/locale/nb.js"
+        }, {
+            "lang" : "nl",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/elf/elf-language-selector/resources/locale/nl.js"
+        }, {
+            "lang" : "nn",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/elf/elf-language-selector/resources/locale/nn.js"
+        }, {
+            "lang" : "sk",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/elf/elf-language-selector/resources/locale/sk.js"
+        }, {
+            "lang" : "sl",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/elf/elf-language-selector/resources/locale/sl.js"
+        }, {
+            "lang" : "sv",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/elf/elf-language-selector/resources/locale/sv.js"
+        }, {
+            "lang" : "es",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/elf/elf-language-selector/resources/locale/es.js"
+        }]
     },
     "bundle" : {
         "manifest" : {

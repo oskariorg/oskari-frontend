@@ -28,10 +28,20 @@
     margin-left: 153px !important;
   }
 
+/* divman */
+#menubar .oskari-tile-closed, .oskari-tile-closed:hover, #menubar .oskari-tile-minimized:hover {
+  background-color: #ffffff !important;
+  background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#ffffff)); !important;
+  background: -moz-linear-gradient(top, #ffffff, #ffffff); !important;
+  background: -ms-linear-gradient(top, #ffffff, #ffffff); !important;
+}
 
 /* divman */
-.oskari-tile-closed {
-  background-color: #ffffff !important;
+#menubar .oskari-tile-closed:hover, #menubar .oskari-tile-minimized:hover {
+  background-color: #cccccc !important;
+  background: -webkit-gradient(linear, left top, left bottom, from(#cccccc), to(#cccccc)); !important;
+  background: -moz-linear-gradient(top, #cccccc, #cccccc); !important;
+  background: -ms-linear-gradient(top, #cccccc, #cccccc); !important;
 }
 
 /* divman */

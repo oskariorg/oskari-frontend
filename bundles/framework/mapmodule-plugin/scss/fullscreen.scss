@@ -1,0 +1,16 @@
+.fullscreenDiv {
+    pointer-events: auto;
+    position : absolute;
+    top : 10px;
+    left : 10px;
+    display : block;
+    color : black;
+    background : transparent;    
+    z-index : 15000;
+
+    .fullscreenDivImg {
+        cursor: pointer;
+        pointer-events: auto;
+    }
+
+}

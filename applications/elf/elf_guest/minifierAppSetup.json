@@ -1,5 +1,20 @@
 {
-    "startupSequence": [{      
+    "startupSequence": [
+    	{
+            "instanceProps": {},
+            "title": "ELF language overrides",
+            "bundleinstancename": "elf-lang-overrides",
+            "bundlename": "elf-lang-overrides",
+            "metadata": {
+                "Import-Bundle": {
+                    "elf-lang-overrides": {
+                        "bundlePath": "../../../packages/elf/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        },
+    	{      
             "bundleinstancename": "oskariui",
             "bundlename": "oskariui",
             "instanceProps": {},
@@ -43,15 +58,12 @@
                     "mapmyplaces": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     },
-	                "mapstats": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "mapanalysis": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
 	                "mapuserlayers": {
 	                    "bundlePath": "../../../packages/framework/bundle/"
 	                },
+				    "maparcgis": {
+					"bundlePath": "../../../packages/arcgis/bundle/"
+				    },
 	                "service-base": {
 	                    "bundlePath": "../../../packages/framework/bundle/"
 	                },
@@ -465,6 +477,81 @@
                 },
                 "Require-Bundle-Instance": []
             }
-        }
+        }, {
+            "bundleinstancename": "admin-layerselector",
+            "bundlename": "admin-layerselector",
+            "metadata": {
+                "Import-Bundle": {
+                    "admin-layerselector": {
+                        "bundlePath": "../../../packages/integration/bundle/"
+                    },
+                    "bb": {
+                        "bundlePath": "../../../packages/integration/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename": "admin-layerrights",
+            "bundleinstancename": "admin-layerrights",
+            "metadata": {
+                "Import-Bundle": {
+                    "admin-layerrights": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
+            "instanceProps": {},
+            "title": "ELF license",
+            "bundleinstancename": "elf-license",
+            "bundlename": "elf-license",
+            "metadata": {
+                "Import-Bundle": {
+                    "elf-license": {
+                        "bundlePath": "../../../packages/elf/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+		}, {
+			"bundlename" : "findbycoordinates",
+			"bundleinstancename" : "findbycoordinates",
+			"metadata" : {
+				"Import-Bundle" : {
+					"findbycoordinates" : {
+						"bundlePath" : "../../../packages/framework/bundle/"
+					}
+				}
+			}
+        }, {
+            "instanceProps": {},
+            "title": "ELF metadatafeedback",
+            "bundleinstancename": "elf-metadatafeedback",
+            "bundlename": "elf-metadatafeedback",
+            "metadata": {
+                "Import-Bundle": {
+                    "elf-metadatafeedback": {
+                        "bundlePath": "../../../packages/elf/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        }, {
+		    "title" : "myplacesimport",
+		    "fi" : "myplacesimport",
+		    "sv" : "myplacesimport",
+		    "en" : "myplacesimport",
+		    "bundlename" : "myplacesimport",
+		    "bundleinstancename" : "myplacesimport",
+		    "metadata" : {
+		        "Import-Bundle" : {
+		            "myplacesimport" : {
+		                "bundlePath" : "../../../packages/framework/bundle/"
+		            }
+		        },
+		        "Require-Bundle-Instance" : []
+		    },
+		    "instanceProps" : {}
+		}
     ]
 }

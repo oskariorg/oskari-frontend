@@ -58,13 +58,13 @@ function() {
 
 		"scripts" : [{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/common/enhancement/disable-development-mode-enhancement.js"
+			"src" : "../../../../bundles/framework/common/enhancement/disable-development-mode-enhancement.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/common/enhancement/set-default-map-control-active-enhancement.js"
+			"src" : "../../../../bundles/framework/common/enhancement/set-default-map-control-active-enhancement.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/common/enhancement/openlayers-image-path-enhancement.js"
+			"src" : "../../../../bundles/framework/common/enhancement/openlayers-image-path-enhancement.js"
 		}],
 		"resources" : []
 	},

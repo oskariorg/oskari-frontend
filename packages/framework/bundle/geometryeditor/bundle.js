@@ -23,22 +23,22 @@ Oskari.clazz.define("Oskari.mapframework.bundle.geometryeditor.GeometryEditorBun
 
             "scripts": [{
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/geometryeditor/plugin/DrawFilterPlugin.js"
+                "src": "../../../../bundles/framework/geometryeditor/plugin/DrawFilterPlugin.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/geometryeditor/request/StartDrawFilteringRequest.js"
+                "src": "../../../../bundles/framework/geometryeditor/request/StartDrawFilteringRequest.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/geometryeditor/request/StartDrawFilteringRequestHandler.js"
+                "src": "../../../../bundles/framework/geometryeditor/request/StartDrawFilteringRequestHandler.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/geometryeditor/request/StopDrawFilteringRequest.js"
+                "src": "../../../../bundles/framework/geometryeditor/request/StopDrawFilteringRequest.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/geometryeditor/request/StopDrawFilteringRequestHandler.js"
+                "src": "../../../../bundles/framework/geometryeditor/request/StopDrawFilteringRequestHandler.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/geometryeditor/event/FinishedDrawFilteringEvent.js"
+                "src": "../../../../bundles/framework/geometryeditor/event/FinishedDrawFilteringEvent.js"
             }, {
                 "type" : "text/javascript",
                 "src" : "../../../../libraries/clipper/clipper.js"
@@ -49,15 +49,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.geometryeditor.GeometryEditorBun
             "locales": [{
                 "lang": "fi",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/geometryeditor/locale/fi.js"
+                "src": "../../../../bundles/framework/geometryeditor/resources/locale/fi.js"
             }, {
                 "lang": "sv",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/geometryeditor/locale/sv.js"
+                "src": "../../../../bundles/framework/geometryeditor/resources/locale/sv.js"
             }, {
                 "lang": "en",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/geometryeditor/locale/en.js"
+                "src": "../../../../bundles/framework/geometryeditor/resources/locale/en.js"
             }]
         },
         "bundle": {

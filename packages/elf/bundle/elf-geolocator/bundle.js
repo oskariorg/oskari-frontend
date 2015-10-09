@@ -22,29 +22,69 @@ Oskari.clazz.define("Oskari.elf.geolocator.Bundle", function() {
 
         "scripts" : [{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/elf/bundle/elf-geolocator/instance.js"
+            "src" : "../../../../bundles/elf/elf-geolocator/instance.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/elf/bundle/elf-geolocator/GeoLocatorSearchTab.js"
+            "src" : "../../../../bundles/elf/elf-geolocator/GeoLocatorSearchTab.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/elf/bundle/elf-geolocator/service/GeoLocatorSearchService.js"
+            "src" : "../../../../bundles/elf/elf-geolocator/service/GeoLocatorSearchService.js"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/elf/bundle/elf-geolocator/css/style.css"
+            "src" : "../../../../bundles/elf/elf-geolocator/resources/css/style.css"
         }],
         "locales" : [{
+            "lang": "en",
+            "type": "text/javascript",
+            "src": "../../../../bundles/elf/elf-geolocator/resources/locale/en.js"
+        }, {
+            "lang": "es",
+            "type": "text/javascript",
+            "src": "../../../../bundles/elf/elf-geolocator/resources/locale/es.js"
+        }, {
+            "lang": "et",
+            "type": "text/javascript",
+            "src": "../../../../bundles/elf/elf-geolocator/resources/locale/et.js"
+        }, {
             "lang": "fi",
             "type": "text/javascript",
-            "src": "../../../../bundles/elf/bundle/elf-geolocator/locale/fi.js"
+            "src": "../../../../bundles/elf/elf-geolocator/resources/locale/fi.js"
+        }, {
+            "lang": "fr",
+            "type": "text/javascript",
+            "src": "../../../../bundles/elf/elf-geolocator/resources/locale/fr.js"
+        }, {
+            "lang": "is",
+            "type": "text/javascript",
+            "src": "../../../../bundles/elf/elf-geolocator/resources/locale/is.js"
+        }, {
+            "lang": "it",
+            "type": "text/javascript",
+            "src": "../../../../bundles/elf/elf-geolocator/resources/locale/it.js"
+        }, {
+            "lang": "nb",
+            "type": "text/javascript",
+            "src": "../../../../bundles/elf/elf-geolocator/resources/locale/nb.js"
+        }, {
+            "lang": "nl",
+            "type": "text/javascript",
+            "src": "../../../../bundles/elf/elf-geolocator/resources/locale/nl.js"
+        }, {
+            "lang": "nn",
+            "type": "text/javascript",
+            "src": "../../../../bundles/elf/elf-geolocator/resources/locale/nn.js"
+        }, {
+            "lang": "sk",
+            "type": "text/javascript",
+            "src": "../../../../bundles/elf/elf-geolocator/resources/locale/sk.js"
+        }, {
+            "lang": "sl",
+            "type": "text/javascript",
+            "src": "../../../../bundles/elf/elf-geolocator/resources/locale/sl.js"
         }, {
             "lang": "sv",
             "type": "text/javascript",
-            "src": "../../../../bundles/elf/bundle/elf-geolocator/locale/sv.js"
-        }, {
-            "lang": "en",
-            "type": "text/javascript",
-            "src": "../../../../bundles/elf/bundle/elf-geolocator/locale/en.js"
+            "src": "../../../../bundles/elf/elf-geolocator/resources/locale/sv.js"
         }]
     },
     "bundle" : {

@@ -41,24 +41,24 @@ function() {
 
         "scripts" : [{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/sample/bundle/helloworld/instance.js"
+            "src" : "../../../../bundles/sample/helloworld/instance.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/sample/bundle/helloworld/Flyout.js"
+            "src" : "../../../../bundles/sample/helloworld/Flyout.js"
         }],
 
         "locales" : [{
             "lang" : "fi",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/sample/bundle/helloworld/locale/fi.js"
+            "src" : "../../../../bundles/sample/helloworld/resources/locale/fi.js"
         }, {
             "lang" : "sv",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/sample/bundle/helloworld/locale/sv.js"
+            "src" : "../../../../bundles/sample/helloworld/resources/locale/sv.js"
         }, {
             "lang" : "en",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/sample/bundle/helloworld/locale/en.js"
+            "src" : "../../../../bundles/sample/helloworld/resources/locale/en.js"
         }]
     },
     "bundle" : {

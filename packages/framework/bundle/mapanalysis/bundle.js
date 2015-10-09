@@ -26,26 +26,26 @@ Oskari.clazz.define(
 
             "scripts": [{
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/mapanalysis/plugin/AnalysisLayerPlugin.js"
+                "src": "../../../../bundles/framework/mapanalysis/plugin/AnalysisLayerPlugin.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/mapanalysis/domain/AnalysisLayer.js"
+                "src": "../../../../bundles/framework/mapanalysis/domain/AnalysisLayer.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/mapanalysis/domain/AnalysisLayerModelBuilder.js"
+                "src": "../../../../bundles/framework/mapanalysis/domain/AnalysisLayerModelBuilder.js"
             }],
             "locales": [{
                 "lang": "fi",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/mapanalysis/locale/fi.js"
+                "src": "../../../../bundles/framework/mapanalysis/resources/locale/fi.js"
             }, {
                 "lang": "sv",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/mapanalysis/locale/sv.js"
+                "src": "../../../../bundles/framework/mapanalysis/resources/locale/sv.js"
             }, {
                 "lang": "en",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/mapanalysis/locale/en.js"
+                "src": "../../../../bundles/framework/mapanalysis/resources/locale/en.js"
             }]
         },
         "bundle": {

@@ -8,6 +8,8 @@ $headerBackgroundColor: #F3F3F3;
 $borderColor: #E6E6E6;
 $baseTextColor: #3C3C3C;
 $lightTextColor: #FFF;
+$normalFontSize: 14px;
+$normalFontLineHeightMultiplier: 1.5;
 
 /* Mixins */
 @mixin border-radius($radius) {
@@ -42,7 +44,7 @@ $lightTextColor: #FFF;
    
 @mixin normal-font($size) {
     font-size: $size;
-    line-height: $size * 1.5;
+    line-height: $size * $normalFontLineHeightMultiplier;
 }
 
 /* Resets */
@@ -77,10 +79,13 @@ html {
 }
 	
 body {
-	@include normal-font(14px);
 	color: $baseTextColor;
     font-family: 'Open Sans', Arial, sans-serif;
 	background: $backgroundColor;
+}
+
+body, button, input, select, textarea {
+	@include normal-font($normalFontLineHeightMultiplier);
 }
 
 em {
@@ -122,7 +127,7 @@ img::-moz-selection { background: transparent; }
 
 	p {
 		/* FIXME change p to h3 to get rid of font-size and color */
-		font-size: 142%;
+		font-size: 17px;
 		color: $baseTextColor;
 		text-shadow: 0 1px 0 rgba(255,255,255,.5);
 		padding: 10px 0 0 10px;
@@ -130,6 +135,8 @@ img::-moz-selection { background: transparent; }
 }
 /* Sidebar is only in the portal version afaik so this could be moved there? */
 #sidebar {
+	font-family: Arial,​ sans-serif;
+	line-height: 12.6px;
 	width: 200px;
 }
 /* Content is only in the portal version afaik so this could be moved there? */
@@ -514,6 +521,10 @@ ul#lang {
 	@include border-radius(8px);
 	border: solid 1px #b9dffc;
 	background: #cce9ff;
+}
+
+.oskariui-left {
+  float: left;
 }
 
 .maincontainer {
@@ -1122,17 +1133,10 @@ footer {
 
 }
 
-input[type="text"], input[type="password"], input[type="search"] {
-	padding: 8px 35px 8px 10px;
+input[type=email], input[type=number], input[type=tel], input[type=text], input[type=password], input[type=search], input[type=url], textarea {
 	@include border-radius(4px);
 	border: solid 1px #b7b7b7;
-	@include box-shadow(inset 0 1px 2px rgba(0,0,0,.1));
-}
-
-textarea {
-	@include border-radius(4px);
-	border: solid 1px #b7b7b7;
-	@include box-shadow(inset 0 1px 2px rgba(0,0,0,.1));
+	@include box-shadow(inset 3px 2px 4px rgba(0,0,0,.15));
 }
 
 .clearbutton {
@@ -1144,7 +1148,6 @@ textarea {
 }
 
 select {
-	padding: 6px;
 	width: 206px;
 	color: $baseTextColor;
 	@include border-radius(4px);
@@ -1225,7 +1228,7 @@ select {
 }	
 /* Portal menu 'toggle' (i.e. the yellow bar on the left of the oskari menu) */
 .sidebar-toggle {
-    background-color: $highlightColor;
+    background-color: #FFDE00;
     height: 100%;
     left: -160px;
     position: absolute;

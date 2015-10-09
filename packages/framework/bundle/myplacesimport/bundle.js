@@ -14,32 +14,40 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
     "source": {
         "scripts": [{
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/myplacesimport/instance.js"
+            "src": "../../../../bundles/framework/myplacesimport/instance.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/myplacesimport/Flyout.js"
+            "src": "../../../../bundles/framework/myplacesimport/Flyout.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/myplacesimport/service/MyPlacesImportService.js"
+            "src": "../../../../bundles/framework/myplacesimport/service/MyPlacesImportService.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/myplacesimport/UserLayersTab.js"
+            "src": "../../../../bundles/framework/myplacesimport/UserLayersTab.js"
         }, {
             "type": "text/css",
-            "src": "../../../../resources/framework/bundle/myplacesimport/css/style.css"
+            "src": "../../../../bundles/framework/myplacesimport/resources/css/style.css"
         }],
         "locales": [{
             "lang": "fi",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/myplacesimport/locale/fi.js"
+            "src": "../../../../bundles/framework/myplacesimport/resources/locale/fi.js"
         }, {
             "lang": "sv",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/myplacesimport/locale/sv.js"
+            "src": "../../../../bundles/framework/myplacesimport/resources/locale/sv.js"
         }, {
             "lang": "en",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/myplacesimport/locale/en.js"
+            "src": "../../../../bundles/framework/myplacesimport/resources/locale/en.js"
+        }, {
+            "lang": "is",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/myplacesimport/resources/locale/is.js"
+        }, {
+            "lang": "es",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/myplacesimport/resources/locale/es.js"
         }]
     },
     "bundle": {

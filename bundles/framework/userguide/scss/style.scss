@@ -1,0 +1,19 @@
+
+.oskari-userguide {
+	width: 480px;
+	min-width: 320px;
+	min-height: 320px;
+}
+
+.userguide {
+	.tab-content {
+		ul, ol {
+			padding-left: 20px;
+			padding-bottom: 15px;
+		}
+
+		p {
+			padding-bottom: 15px;
+		}
+	}
+}

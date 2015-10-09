@@ -68,6 +68,20 @@ require.config({
   shim: {
     "oskari": {
       exports: "Oskari"
+    },
+    "jquery-ui": {
+      exports: "$",
+      deps: ['jquery']
+    },
+    "dragevent": {
+      exports: "$",
+      deps: ['jquery']
+    },
+    "oskari": {
+      exports: "Oskari"
+    },
+    "lodash": {
+      exports: "_"
     }
   },
   config: {

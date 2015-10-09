@@ -1,0 +1,65 @@
+.admin-layerrights-layers {
+  .layer-rights-table {
+    margin-top: 20px;
+    th, td {
+      text-align: center;
+    }
+    th {
+      padding: 2px 5px; 
+    }
+  }
+}
+
+table.layer-rights-table {
+  thead tr {
+    position: relative;
+    display: block;
+    th:first-child {
+      width: 40%;
+      padding: 2px 5px;
+      text-align: center; 
+      min-width: 380px;
+    }
+    th {
+      width: 15%; 
+    }
+  }
+
+  tbody {
+    @media screen and (max-height: 600px) {    
+      max-height: 86px;  
+    }
+    @media screen and (max-height: 800px) and (min-height: 600px) {
+      max-height: 280px; 
+    }
+    @media screen and (min-height: 800px) {
+      max-height: 480px; 
+    }
+
+    position: relative;
+    display: block;
+    width: 100%;
+    overflow: auto; 
+    tr {
+      td:first-child {
+        width: 40%;
+        text-align: center; 
+        min-width: 380px;
+      }
+      td {
+        width: 15%; 
+      }
+    }
+  }
+
+}
+
+div.admin-layerrights-flyout {
+  div.oskari-flyoutcontentcontainer {
+    overflow: hidden;
+  }
+}
+
+div.layer-rights-table-grid-headers {
+  padding-top: 16px;
+}

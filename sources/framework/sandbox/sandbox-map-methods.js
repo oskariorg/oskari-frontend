@@ -31,17 +31,22 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'map-methods', {
     syncMapState: function (blnInitialMove, mapModule) {
         var mapDomain = this._core.getMap(),
             zoom = mapDomain.getZoom(),
-            marker = mapDomain.isMarkerVisible();
+            marker = mapDomain.isMarkerVisible(),
+            maxZoom = 13;
 
-        if (blnInitialMove === true && zoom == 13) {
+        if(mapModule) {
+            maxZoom = mapModule.getMaxZoomLevel();
+        }
+
+        if (blnInitialMove === true && zoom == maxZoom) {
             // workaround, openlayers needs to be nudged a bit to actually draw
-            // the map images if we enter at zoomlevel 13
-            // so if zoom == 13 -> send a dummy request to get openlayers working
+            // the map images if we enter at max zoomlevel
+            // so if zoom == max zoom level -> send a dummy request to get openlayers working
             // correctly
             // TODO: find out why OL needs this
             this._core.processRequest(this._core.getRequestBuilder('MapMoveRequest')(mapDomain.getX(), mapDomain.getY(), 0, false));
         }
-
+        
         this._core.processRequest(this._core.getRequestBuilder('MapMoveRequest')(mapDomain.getX(), mapDomain.getY(), zoom, marker));
     },
 

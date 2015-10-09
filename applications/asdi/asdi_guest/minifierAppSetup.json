@@ -62,6 +62,9 @@
                     "mapwmts": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     },
+                    "maparcgis": {
+                        "bundlePath": "../../../packages/arcgis/bundle/"
+                    },
                     "request-base": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     },
@@ -81,18 +84,6 @@
                         "bundlePath": "../../../packages/framework/bundle/"
                     },
                     "service-map": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "mapwfs2": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "mapanalysis": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "mapmyplaces": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "mapstats": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     },
                     "ui-components": {
@@ -243,20 +234,14 @@
                 "Require-Bundle-Instance": []
             }
         }, {
-            "instanceProps": {},
-            "title": "Koordinaatit",
-            "bundleinstancename": "coordinatedisplay",
-            "fi": "coordinatedisplay",
-            "sv": "?",
-            "en": "?",
-            "bundlename": "coordinatedisplay",
-            "metadata": {
-                "Import-Bundle": {
-                    "coordinatedisplay": {
-                        "bundlePath": "../../../packages/framework/bundle/"
+            "bundlename" : "coordinatetool",
+            "bundleinstancename" : "coordinatetool",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "coordinatetool" : {
+                        "bundlePath" : "../../../packages/framework/bundle/"
                     }
-                },
-                "Require-Bundle-Instance": []
+                }
             }
         }, {
             "title": "PostProcessor",
@@ -334,6 +319,26 @@
                 "Import-Bundle": {
                     "admin-layerrights": {
                         "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename" : "admin-users",
+            "bundleinstancename" : "admin-users",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "admin-users" : {
+                        "bundlePath" : "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename" : "admin",
+            "bundleinstancename" : "admin",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "admin" : {
+                        "bundlePath" : "../../../packages/admin/bundle/"
                     }
                 }
             }

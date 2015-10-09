@@ -1,0 +1,253 @@
+.transport{
+	width: 24px;
+	height: 24px;
+	float: left;
+	padding:5px;
+	cursor: pointer;
+}
+
+.transport.active {
+    background-color: #0B719E !important;
+}
+
+.transport:hover {
+    background-color: #0B719E !important;
+}
+
+.transport-clear{
+	clear: both;
+}
+
+.transport-road{
+	background: url('../images/car_white.png') no-repeat;
+    background-position: center center;
+}
+
+.transport-railway{
+    background: url('../images/rail_white.png') no-repeat;
+    background-position: center center;
+}
+
+.transport-sea{
+    background: url('../images/ship_white.png') no-repeat;
+    background-position: center center;
+}
+
+
+.transport-digiroad{
+    background: url('../images/digiroad_white.png') no-repeat;
+    background-position: center center;
+}
+
+.transport-selector-select-div{
+	color:#ffffff;
+	font-size:11px;
+	font-weight:bold;
+	text-transform:uppercase;
+}
+
+#transport-selector-select{
+	text-transform:uppercase;
+	padding:3px;
+	width:126px;
+}
+
+#transport-cropping-selector-select{
+    text-transform:uppercase;
+    width:92%;
+}
+
+#transport-cropping-selector-special{
+    text-transform:uppercase;
+    padding:3px;
+    width:100%;
+}
+
+.transport-cropping-selector-select-div{
+    color:#ffffff;
+    font-size:11px;
+    font-weight:bold;
+    text-transform:uppercase;
+    margin-top: 5px;
+}
+
+.cropping-button.enabled {
+  background-color: #0B719E;
+  border: 1px solid #0D95D2;
+  color: #FFFFFF;
+}
+
+#transport-select-cropping-tool{
+	background-color: #0D95D2;
+	cursor: pointer;
+	margin: 10px 0 0;
+	padding: 5px;
+	text-transform: uppercase;
+	width: 135px;
+	text-align: center;
+	border: 1px solid #0B719E;
+    font-size:11px;
+    font-weight:bold;
+    color:#ffffff;
+}
+
+#transport-select-cropping-tool:hover {
+    background-color: #0B719E;
+}
+
+.transport-select-cropping-button {
+  background-color: #0D95D2;
+  border: 1px solid #0B719E;
+  color: #FFFFFF;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: bold;
+  margin: 5px 0 0;
+  padding: 4px;
+  text-transform: uppercase;
+  width: 100%;
+}
+
+#transport-select-cropping-tool.enabled{
+    background-color: #0B719E;
+    border: 1px solid #0D95D2;
+    color:#ffffff;
+}
+
+#transport-confirm-message{
+    background-color: #fff;
+    border-radius: 0 3px 0 0;
+    color: #000;
+    display: none;
+    font-size: 11px;
+    left: 30%;
+    position: absolute;
+    top: 0;
+    width: 41%;
+    z-index: 2000;
+    -webkit-border-radius: 0px 0px 5px 5px;
+    -moz-border-radius: 0px 0px 5px 5px;
+    border-radius: 0px 0px 5px 5px;
+    -webkit-box-shadow: #B3B3B3 5px 5px 5px;
+    -moz-box-shadow: #B3B3B3 5px 5px 5px; 
+    box-shadow: #B3B3B3 5px 5px 5px;
+}
+
+#transport-confirm-message-title{
+    color: #0041ab;
+    font-size: 14px;
+    font-weight: bold;
+    margin-left: 5px;
+    margin-top: 5px;
+}
+
+#transport-confirm-message-message{
+    font-size: 14px;
+ margin-bottom: 5px;
+ margin-left: 5px;
+ margin-top: 5px;
+ max-height: 200px;
+ overflow: auto;
+ width: 96%;
+}
+
+#transport-message-confirm-ok{
+    background-color:#00BB00 !important;
+}
+
+#transport-message-confirm-cancel{
+    background-color:#EE0000 !important;
+}
+
+#transport-confirm-message-buttons{
+	float: right;
+    margin-right: 9px;
+    right: 14px;
+}
+
+.transport-button {
+  background-color: #0B719E;
+  float: left;
+  margin-bottom: 10px;
+  margin-left: 10px;
+  padding: 5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding-right:15px;
+  padding-left:15px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  color:#FFFFFF;
+  font-weight:bold;
+  background-color: #0B719E;
+}
+
+.transport-button:hover {
+    opacity: 0.7;
+    filter: alpha(opacity=70); /* For IE8 and earlier */
+}
+
+#transport-message-confirm-cancel{
+	float:left;
+}
+
+#transport-message-confirm-clear{
+	clear: both;
+}
+
+.transport-selector-div-language {
+	color: #0d95d2;
+	font-size: 16px;
+	font-weight: bold;
+	height: 26px;
+	margin-top: 5px;
+	text-transform: uppercase;
+	margin-left:15px;
+}
+
+.transport-selector-div-language a {
+	color: #0B719E;
+	text-decoration: none;
+  	padding: 3px 5px 3px 5px;
+}
+.transport-selector-div-language a.language-selected {
+	color: white;
+	background: #0B719E;
+}
+.transport-selector-div-title {
+  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: bold;
+  height: 18px;
+  text-transform: uppercase;
+}
+
+.transport-road-selector-select-div{
+	color: #FFFFFF;
+	font-size: 11px;
+	font-weight: bold;
+	height: 18px;
+	margin-top: 5px;
+	text-transform: uppercase;
+}
+
+
+/* ERITTELYT */
+#transport-selector-buttons{
+    padding: 10px 0 10px 15px;
+    border-bottom: 2px solid #0d95d2;
+    background-color: #2d2d2d;
+    border-top: 1px solid;
+    cursor:pointer;
+}
+
+#transport-selector-container{
+    padding-left:16px;
+    border-bottom: 2px solid #0d95d2;
+    border-top:2px solid #0d95d2;
+    padding: 8px;
+    background: #2d2d2d;
+    padding: 5px 10px 10px 16px;
+
+}

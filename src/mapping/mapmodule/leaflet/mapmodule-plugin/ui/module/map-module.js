@@ -7,7 +7,7 @@
  *
  * See http://www.oskari.org/trac/wiki/DocumentationBundleMapmodule
  */
-define(["bundles/framework/bundle/mapmodule-plugin/ui/module/map-module"], function(MapModule) {
+define(["bundles/framework/mapmodule-plugin/ui/module/map-module"], function(MapModule) {
     Oskari.cls('Oskari.mapframework.ui.module.common.MapModule').category({
         /**
          * @method createBaseLayer

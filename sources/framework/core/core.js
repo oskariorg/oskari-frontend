@@ -77,7 +77,7 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
             this._services = services;
             // Register services
             if (services) {
-                for (s = 0; s < services.length; s++) {
+                for (s = 0; s < services.length; s += 1) {
                     this.registerService(services[s]);
                 }
             }
@@ -171,9 +171,9 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
          * @return {Boolean} Returns true, if request was handled, false otherwise
          */
         processRequest: function (request) {
-
             var requestName = request.getName(),
                 handlerFunc = this.__getRequestHandlerFunction(requestName);
+
             if (handlerFunc) {
                 return handlerFunc(this, request);
             } else {
@@ -219,6 +219,12 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
          * @param {Oskari.mapframework.core.RequestHandler} handlerClsInstance request handler
          */
         addRequestHandler: function (requestName, handlerClsInstance) {
+            if (!handlerClsInstance) {
+                this.printWarn('Adding non-existent handler for', requestName);
+            }
+            if (this.externalHandlerCls[requestName]) {
+                this.printWarn('Overriding an existing requesthandler for', requestName);
+            }
             this.externalHandlerCls[requestName] = handlerClsInstance;
         },
 
@@ -269,17 +275,23 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
          * @param {String} name - name of the request
          * @return {Function} builder method for given request name or undefined if not found
          */
-        getRequestBuilder: function (requestName) {
-            var qname = this._getQNameForRequest(requestName);
+        getRequestBuilder: function (requestName) {            
+            var qname = this._getQNameForRequest(requestName),
+                ret;
             if (!qname) {
+                this.printWarn('No qname found for', requestName);
                 return undefined;
             }
             var handlerFunc = this.__getRequestHandlerFunction(requestName);
             if(!handlerFunc) {
-                this.printDebug('#!#!# ! Request defined, but handler not registered. Perhaps timing issue?');
+                this.printWarn('Request ' + requestName + ' defined, but handler not registered. Perhaps timing issue?');
                 return undefined;
             }
-            return Oskari.clazz.builder(qname);
+            ret = Oskari.clazz.builder(qname);
+            if (!ret) {
+                this.printWarn('No request builder found for', requestName);
+            }
+            return ret;
         },
 
         /**
@@ -318,11 +330,17 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
          * @return {Function} builder method for given event name or undefined if not found
          */
         getEventBuilder: function (eventName) {
-            var qname = this._getQNameForEvent(eventName);
+            var qname = this._getQNameForEvent(eventName),
+                ret;
             if (!qname) {
+                this.printWarn('No qname found for', eventName);
                 return undefined;
             }
-            return Oskari.clazz.builder(qname);
+            ret = Oskari.clazz.builder(qname);
+            if (!ret) {
+                this.printWarn('No event builder found for', eventName);
+            }
+            return ret;
         },
 
         /**
@@ -346,12 +364,21 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
          * Prints given text to browser console
          */
         printDebug: function () {
-            if (this._debug && window.console !== null && window.console !== undefined) {
-                if (window.console.debug !== null && window.console.debug !== undefined) {
-                    console.debug.apply(console, arguments);
-                } else if (window.console.log !== null && window.console.log !== undefined) {
-                    console.log.apply(console, arguments);
+            if (this._debug && window.console) {
+                if (window.console.debug && window.console.debug.apply) {
+                    window.console.debug.apply(window.console, arguments);
+                } else if (window.console.log && window.console.log.apply) {
+                    window.console.log.apply(window.console, arguments);
                 }
+            }
+        },
+
+        /**
+         * Prints given error text to browser console
+         */
+        printError: function () {
+            if (window.console && window.console.error && window.console.error.apply) {
+                window.console.error.apply(window.console, arguments);
             }
         },
 
@@ -359,8 +386,8 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
          * Prints given warn text to browser console
          */
         printWarn: function () {
-            if (window.console !== null && window.console !== undefined) {
-                console.warn.apply(console, arguments);
+            if (window.console && window.console.warn && window.console.warn.apply) {
+                window.console.warn.apply(window.console, arguments);
             }
         },
 
@@ -416,8 +443,9 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
          * @return {String} value for the parameter or null if not found
          */
         getRequestParameter: function (name) {
-            name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
-            var regexS = "[\\?&]" + name + "=([^&#]*)",
+            // FIXME explain regex, fix escaping
+            name = name.replace(/[\[]/, '\\\[').replace(/[\]]/, '\\\]');
+            var regexS = '[\\?&]' + name + '=([^&#]*)',
                 regex = new RegExp(regexS),
                 results = regex.exec(window.location.href),
                 ret;

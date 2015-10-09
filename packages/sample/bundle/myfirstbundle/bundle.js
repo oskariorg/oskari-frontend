@@ -29,8 +29,7 @@ function() {
 
 		"scripts" : [{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/sample/bundle/" + 
-			        "myfirstbundle/instance.js"
+			"src" : "../../../../bundles/sample/myfirstbundle/instance.js"
 		}]
 	},
 	"bundle" : {

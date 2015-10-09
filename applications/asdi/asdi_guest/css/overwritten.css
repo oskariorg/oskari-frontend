@@ -1,8 +1,3 @@
-input[type="text"] {
-    padding-right: 5px;
-    padding-left: 5px;
-}
-
 table td {
 	text-align: left;
 	vertical-align: top;
@@ -37,14 +32,13 @@ table {
     }
     #contentMap {
         height: 100%;
-        margin-left: 153px;
     }
 
-    img.panbuttonDivImg {
-        border: 0;
+    img.panbuttonDivImg {        border: 0;
     }
 
    .oskari-tile {
+        background: rgb(147, 187, 218) !important;
 		height: auto !important;
 		min-height: 31px !important;
         line-height: 15px !important;	
@@ -79,7 +73,8 @@ table {
     .oskari-flyouttoolbar {    
     	background-color: white !important; 
 		background-image: url('ASDI_web_header.jpg');
-		background-position: -150px -24px !important;
+		background-position: -170px -23px !important;
+        background-repeat: no-repeat;
     }
     
     .oskari-flyoutheading {
@@ -96,7 +91,6 @@ table {
   
     #logobar {
         height: 153px;
-        width: 153px;
         overflow: hidden;
         background-color: white;
         background-image: url('ASDI_web_header.jpg');
@@ -117,13 +111,6 @@ table {
         margin: 0px !important;
     }
     
-	div.oskari-flyout.oskari-attached {
-		max-width: 600px;
-	}
-	div.oskari-flyout.oskari-detached {
-		max-width: 600px;
-	}
-
 	div.layerselection2 .layer.selected div.layer-tools {
 		background-color: white !important;
 		padding: 7px !important;
@@ -152,9 +139,9 @@ table {
 	.search .resultList div h3 {
 		font-size: 14px;	
 	}
+}
 
-    #login a {
-        color: inherit;
-    }
+.layer-backendstatus-icon{
+    display: none;
 }
 

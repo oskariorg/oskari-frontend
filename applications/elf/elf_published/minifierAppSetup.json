@@ -1,5 +1,20 @@
 {
-    "startupSequence": [{
+    "startupSequence": [
+    {
+        "instanceProps": {},
+        "title": "ELF language overrides",
+        "bundleinstancename": "elf-lang-overrides",
+        "bundlename": "elf-lang-overrides",
+        "metadata": {
+            "Import-Bundle": {
+                "elf-lang-overrides": {
+                    "bundlePath": "../../../packages/elf/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    },
+    {
         "title": "OpenLayers",
         "fi": "OpenLayers",
         "sv": "?",
@@ -60,6 +75,9 @@
                 "core-base": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 },
+                "maparcgis": {
+                    "bundlePath": "../../../packages/arcgis/bundle/"
+                },
                 "oskariui": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 },
@@ -91,6 +109,9 @@
                     "bundlePath": "../../../packages/framework/bundle/"
                 },
                 "mapmyplaces": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "mapuserlayers": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 }
             },
@@ -229,5 +250,18 @@
             "Require-Bundle-Instance": []
         },
         "instanceProps": {}
-    }]
+    }, {
+        "title": "Remote procedure call",
+        "bundlename": "rpc",
+        "bundleinstancename": "rpc",
+        "metadata": {
+            "Import-Bundle": {
+                "rpc": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            }
+        }
+    }
+
+    ]
 }

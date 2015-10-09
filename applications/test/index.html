@@ -1,0 +1,247 @@
+<html>
+    <head>
+        <title>Test RPC</title>
+        <script src="../../libraries/JSChannel/jschannel.js"></script>
+        <script src="../../libraries/OskariRPC/OskariRPC.js"></script>
+        <style>
+            iframe {
+                background-clip: padding-box;
+                border: none;
+                border-radius: 12px;
+                box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.15);
+                clear: both;
+                display: block;
+                margin-bottom: 12px;
+                width: 740px;
+                height: 525px;
+            }
+            #rpcControls {
+                text-align: center;
+                width: 740px;   
+            }
+
+            #rpcControls button, #rpcControls output, #rpcControls input {
+                display: inline-block;
+                margin-top: 6px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <iframe id="Oskari" src="http://demo.paikkatietoikkuna.fi/published/fi/b1ffedf8-44b4-0362-88d8-22f77b4b69ac"></iframe>
+        <div id="rpcControls">
+            <button id="mml">MML</button>
+            <button id="helsinki">Messukeskus</button>
+            <button id="lehka">Lehijärvi</button>
+            <output id="coords"></output>
+        </div>
+        <script>
+            var channel = OskariRPC.connect(
+                    document.getElementById('Oskari'),
+                    'http://demo.paikkatietoikkuna.fi'
+                ),
+                coords = document.getElementById('coords'),
+                setCoords = function(x, y) {
+                    coords.textContent = x + ', ' + y;
+                },
+                moveMap = function(centerX, centerY, zoomLevel) {
+                    channel.postRequest(
+                        'MapMoveRequest',
+                        [
+                            centerX,
+                            centerY,
+                            zoomLevel === undefined ? 9 : zoomLevel
+                        ],
+                        function(data) {
+                            if (console && console.log) {
+                                console.log('MapMoveRequest posted');
+                            }
+                        },
+                        function(error, message) {
+                            if (console && console.log) {
+                                console.log('error', error, message);
+                            }
+                        }
+                    );
+                },
+                showGFI = function (lon, lat) {
+                    channel.postRequest(
+                        'MapModulePlugin.GetFeatureInfoRequest',
+                        [
+                            lon,
+                            lat
+                        ],
+                        function(data) {
+                            if (console && console.log) {
+                                console.log('GetFeatureInfoRequest posted');
+                            }
+                        },
+                        function(error, message) {
+                            if (console && console.log) {
+                                console.log('error', error, message);
+                            }
+                        }
+                    );
+                },
+                zoombar;
+
+            channel.getZoomRange(
+                function(data) {
+                    zoombar = document.createElement('input');
+                    zoombar.type = 'range';
+                    zoombar.min = data.min;
+                    zoombar.max = data.max;
+                    zoombar.value = data.current;
+                    zoombar.onchange = function(event) {
+                        var zoomLevel = this.value;
+                        // There's no setZoomLevel for now, so we use MapMoveRequest with
+                        // getMapPosition's x and y coords
+                        channel.getMapPosition(
+                            function(data) {
+                                if (console && console.log) {
+                                    console.log('getMapPosition', JSON.stringify(data));
+                                }
+                                moveMap(data.centerX, data.centerY, zoomLevel);
+                            },
+                            function(error, message) {
+                                if (console && console.log) {
+                                    console.log('error', error, message);
+                                }
+                            }
+                        );
+                    };
+                    document.getElementById('rpcControls').appendChild(zoombar);
+                },
+                function(error, message) {
+                    if (console && console.log) {
+                        console.log('error', error, message);
+                    }
+                }
+            );
+
+            // Get current map position
+            channel.getMapPosition(
+                function(data) {
+                    if (console && console.log) {
+                        console.log('getMapPosition', JSON.stringify(data));
+                    }
+                    setCoords(data.centerX, data.centerY);
+                },
+                function(error, message) {
+                    if (console && console.log) {
+                        console.log('error', error, message);
+                    }
+                }
+            );
+
+            channel.getAllLayers(
+                function(data) {
+                    if (console && console.log) {
+                        console.log('getAllLayers', JSON.stringify(data));
+                    }
+                    // Layer names aren't available through RPC as it might contain sensitive data
+                    var localization = {
+                        '24': 'Orthophotos',
+                        'base_2': 'Topographic map',
+                        'base_35': 'Background map serie'
+                    };
+                    var gfiLayerId = '343';
+                    data.forEach(function(layer) {
+                        if (layer.id + '' !== gfiLayerId) {
+                            var layerButton = document.createElement('button');
+                            layerButton.id = layer.id;
+                            layerButton.textContent = localization[layer.id];
+                            layerButton.onclick = function() {
+                                var lid = this.id;
+                                if (console && console.log) {
+                                    console.log('Showing layer ' + localization[lid]);
+                                }
+                                data.forEach(function(l) {
+                                    channel.postRequest(
+                                        'MapModulePlugin.MapLayerVisibilityRequest',
+                                        [
+                                            l.id,
+                                            l.id + '' === lid || l.id === gfiLayerId
+                                        ]
+                                    );
+                                });
+                            };
+                            document.getElementById('rpcControls').appendChild(layerButton);
+                        }
+                    });
+                },
+                function(error, message) {
+                    if (console && console.log) {
+                        console.log('error', error, message);
+                    }
+                }
+            );
+
+            channel.handleEvent(
+                'AfterMapMoveEvent',
+                function(data) {
+                    if (console && console.log) {
+                        console.log('AfterMapMoveEvent', JSON.stringify(data));
+                    }
+                    setCoords(data.centerX, data.centerY);
+                    if (zoombar) {
+                        zoombar.value = data.zoom;
+                    }
+                },
+                function(error, message) {
+                    if (console && console.log) {
+                        console.log('error', error, message);
+                    }
+                }
+            );
+
+            channel.handleEvent(
+                'MapClickedEvent',
+                function(data) {
+                    if (console && console.log) {
+                        console.log('MapClickedEvent', JSON.stringify(data));
+                    }
+                    channel.postRequest(
+                        'MapModulePlugin.AddMarkerRequest', [{
+                                x: data.lon,
+                                y: data.lat
+                            },
+                            'RPCMarker'
+                        ],
+                        function(error, message) {
+                            if (console && console.log) {
+                                console.log('error', error, message);
+                            }
+                        }
+                    );
+                },
+                function(error, message) {
+                    if (console && console.log) {
+                        console.log('error', error, message);
+                    }
+                }
+            );
+
+            document.getElementById('lehka').onclick = function() {
+                if (console && console.log) {
+                    console.log('Lehijärvi');
+                }
+                moveMap(354490.70442968, 6770658.0402485);
+            };
+
+            document.getElementById('helsinki').onclick = function() {
+                if (console && console.log) {
+                    console.log('Messukeskus');
+                }
+                moveMap(385597.68323541, 6675813.1806321);
+            };
+
+            document.getElementById('mml').onclick = function () {
+                if (console && console.log) {
+                    console.log('MML GFI');
+                }
+                showGFI(385587.00507322, 6675359.2539665);
+            };
+        </script>
+    </body>
+</html>

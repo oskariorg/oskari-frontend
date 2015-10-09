@@ -27,30 +27,30 @@ function() {
 
         "scripts" : [{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/sample/bundle/mythirdbundle/instance.js"
+            "src" : "../../../../bundles/sample/mythirdbundle/instance.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/sample/bundle/mythirdbundle/Flyout.js"
+            "src" : "../../../../bundles/sample/mythirdbundle/Flyout.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/sample/bundle/mythirdbundle/Tile.js"
+            "src" : "../../../../bundles/sample/mythirdbundle/Tile.js"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/sample/bundle/mythirdbundle/css/style.css"
+            "src" : "../../../../bundles/sample/mythirdbundle/resources/css/style.css"
         }],
 
         "locales" : [{
             "lang" : "fi",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/sample/bundle/mythirdbundle/locale/fi.js"
+            "src" : "../../../../bundles/sample/mythirdbundle/resources/locale/fi.js"
         }, {
             "lang" : "sv",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/sample/bundle/mythirdbundle/locale/sv.js"
+            "src" : "../../../../bundles/sample/mythirdbundle/resources/locale/sv.js"
         }, {
             "lang" : "en",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/sample/bundle/mythirdbundle/locale/en.js"
+            "src" : "../../../../bundles/sample/mythirdbundle/resources/locale/en.js"
         }]
     },
     "bundle" : {

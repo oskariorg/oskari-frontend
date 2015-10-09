@@ -1,0 +1,64 @@
+.metadataflyout {
+
+	/* Content */
+	.tab-content {
+		article {
+			// Images are restricted in size and can be zoomed in
+			.browseGraphic {
+				float: left;
+				margin-bottom: 6px;
+				margin-left: 6px;
+
+				img:hover {
+					cursor: zoom-out;
+				}
+
+				&:not(.fullsize) img {
+					max-height: 200px;
+
+					&:hover {
+						cursor: zoom-in;
+					}
+
+				}
+
+			}
+
+			h1 {
+				margin-bottom: 8px;
+			}
+
+			h1, h2 {
+				clear: both;
+				text-align: left;
+				text-transform: uppercase;
+			}
+			// TODO move all generic stuff to portal.scss or something...
+			ol, ul, p {
+				margin-bottom: 18px;
+			}
+
+			ol, ul {
+				margin-left: 20px;
+			}
+
+		}
+
+	}
+	
+}
+
+/* xml */
+.metadataflyout_content_xml {
+	margin: 0;
+	padding: 0;
+}
+
+.metadataflyout_content_section {
+	/* We have to force font size back to normal as this isn't actual table content */
+	font-size: 14px;
+	line-height: 21px;
+	text-align: left;
+	display: block;
+	margin-bottom: 12px;
+}

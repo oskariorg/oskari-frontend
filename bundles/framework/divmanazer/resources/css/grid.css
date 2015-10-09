@@ -1,0 +1,116 @@
+th.asc {
+  background-image: url('../images/asc_arrow.png');
+  background-repeat: no-repeat;
+  background-position: right center; }
+th.desc {
+  background-image: url('../images/desc_arrow.png');
+  background-repeat: no-repeat;
+  background-position: right center; }
+
+div.column-selector-placeholder {
+  border-style: none;
+  float: left;
+  opacity: 1.0;
+  margin-left: 8px;
+  padding: 0;
+  right: 0;
+  width: 200px;
+  height: 30px;
+  max-width: 200px;
+  max-height: 35px; }
+
+div.column-selector-title {
+  margin-top: 10px;
+  margin-left: 2px;
+  background-image: url('../images/desc_arrow.png');
+  background-repeat: no-repeat;
+  background-position: 120px 3px;
+  cursor: pointer; }
+
+div.icon-menu {
+  position: absolute;
+  opacity: 1.0;
+  margin: 0;
+  cursor: pointer;
+  padding: 0;
+  width: 25px;
+  height: 8px;
+  max-width: 25px;
+  max-height: 7px; }
+
+div.column-selector {
+  max-height: 350px;
+  width: 270px;
+  overflow: auto;
+  position: absolute;
+  visibility: hidden;
+  background-color: white;
+  margin-top: 5px;
+  margin-left: 3px;
+  margin-right: 5px;
+  padding: 0;
+  border: 1px solid;
+  z-index: 10001; }
+  div.column-selector div.close-selector-button {
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: 5px;
+    right: 5px; }
+  div.column-selector ul.column-selector-list {
+    list-style-type: none;
+    padding-right: 30px; }
+  div.column-selector label.column-label {
+    padding-left: 5px; }
+
+div.tab-tools {
+  height: 34px;
+  position: static; }
+
+div.exporter {
+  float: right;
+  text-align: left; }
+
+input.csvExportButton {
+  margin: 3px 5px 2px 10px; }
+
+input.excelExportButton {
+  margin: 3px 10px 2px 5px; }
+
+table.oskari-grid td {
+  padding: 5px; }
+table.oskari-grid td, table.oskari-grid th {
+  min-height: 28px;
+  max-width: 110px;
+  overflow: hidden;
+  border: 1px solid #E6E6E6;
+  text-overflow: ellipsis;
+  padding-left: 10px;
+  padding-right: 10px; }
+  table.oskari-grid td.hidden, table.oskari-grid th.hidden {
+    display: none; }
+table.oskari-grid th {
+  background-color: #F3F3F3; }
+  table.oskari-grid th a {
+    color: inherit;
+    line-height: 28px;
+    padding: 5px; }
+  table.oskari-grid th.closedSubTable {
+    background-image: url('../images/icon-arrow-right.png');
+    background-repeat: no-repeat;
+    background-position: right center; }
+  table.oskari-grid th.openSubTable {
+    background-image: url('../images/icon-arrow-left.png');
+    background-repeat: no-repeat;
+    background-position: right center; }
+table.oskari-grid > tr > th, table.oskari-grid > tbody > tr > th {
+  text-align: left; }
+table.oskari-grid tr:last-child td {
+  border: 1px solid #E6E6E6; }
+
+.oskari-grid-export {
+  width: 340px; }
+  .oskari-grid-export fieldset.oskari-formcomponent {
+    float: left; }
+    .oskari-grid-export fieldset.oskari-formcomponent label {
+      width: 170px; }
