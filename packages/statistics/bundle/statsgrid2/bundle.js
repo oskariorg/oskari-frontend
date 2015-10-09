@@ -27,120 +27,120 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
             "scripts": [{
                 // MODIFIED IN STATSGRID2!!!!!
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/instance.js"
+                "src": "../../../../bundles/statistics/statsgrid2/instance.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/view/MainPanel.js"
+                "src": "../../../../bundles/statistics/statsgrid2/view/MainPanel.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/view/IndicatorSelector.js"
+                "src": "../../../../bundles/statistics/statsgrid2/view/IndicatorSelector.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/view/Grid.js"
+                "src": "../../../../bundles/statistics/statsgrid2/view/Grid.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/view/GridHelper.js"
+                "src": "../../../../bundles/statistics/statsgrid2/view/GridHelper.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/domain/DataSource.js"
+                "src": "../../../../bundles/statistics/statsgrid2/domain/DataSource.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/domain/Indicator.js"
+                "src": "../../../../bundles/statistics/statsgrid2/domain/Indicator.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/domain/RegionCategory.js"
+                "src": "../../../../bundles/statistics/statsgrid2/domain/RegionCategory.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/service/StatisticsService.js"
+                "src": "../../../../bundles/statistics/statsgrid2/service/StatisticsService.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/service/CallbackQueue.js"
+                "src": "../../../../bundles/statistics/statsgrid2/service/CallbackQueue.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/service/UserSelectionsService.js"
+                "src": "../../../../bundles/statistics/statsgrid2/service/UserSelectionsService.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/GridModeView.js"
+                "src": "../../../../bundles/statistics/statsgrid2/GridModeView.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/event/IndicatorSelectedEvent.js"
+                "src": "../../../../bundles/statistics/statsgrid2/event/IndicatorSelectedEvent.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/Tile.js"
+                "src": "../../../../bundles/statistics/statsgrid2/Tile.js"
             }, {
                 "type": "text/css",
-                "src": "../../../../resources/statistics/bundle/statsgrid2/css/indicatorselector.css"
+                "src": "../../../../resources/statistics/statsgrid2/css/indicatorselector.css"
 
                 // /MODIFIED IN STATSGRID2!!!!!
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/StatsView.js"
+                "src": "../../../../bundles/statistics/statsgrid2/StatsView.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/StatsToolbar.js"
+                "src": "../../../../bundles/statistics/statsgrid2/StatsToolbar.js"
             }, {
                 "type" : "text/javascript",
-                "src" : "../../../../bundles/statistics/bundle/statsgrid2/AddOwnIndicatorForm.js"
+                "src" : "../../../../bundles/statistics/statsgrid2/AddOwnIndicatorForm.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/plugin/ManageClassificationPlugin.js"
+                "src": "../../../../bundles/statistics/statsgrid2/plugin/ManageClassificationPlugin.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/plugin/ManageStatsPlugin.js"
+                "src": "../../../../bundles/statistics/statsgrid2/plugin/ManageStatsPlugin.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/event/StatsDataChangedEvent.js"
+                "src": "../../../../bundles/statistics/statsgrid2/event/StatsDataChangedEvent.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/event/ModeChangedEvent.js"
+                "src": "../../../../bundles/statistics/statsgrid2/event/ModeChangedEvent.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/event/ClearHilightsEvent.js"
+                "src": "../../../../bundles/statistics/statsgrid2/event/ClearHilightsEvent.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/event/SelectHilightsModeEvent.js"
+                "src": "../../../../bundles/statistics/statsgrid2/event/SelectHilightsModeEvent.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/event/IndicatorsEvent.js"
+                "src": "../../../../bundles/statistics/statsgrid2/event/IndicatorsEvent.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/event/UserIndicatorEvent.js"
+                "src": "../../../../bundles/statistics/statsgrid2/event/UserIndicatorEvent.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/request/StatsGridRequest.js"
+                "src": "../../../../bundles/statistics/statsgrid2/request/StatsGridRequest.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/request/StatsGridRequestHandler.js"
+                "src": "../../../../bundles/statistics/statsgrid2/request/StatsGridRequestHandler.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/request/TooltipContentRequest.js"
+                "src": "../../../../bundles/statistics/statsgrid2/request/TooltipContentRequest.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/request/TooltipContentRequestHandler.js"
+                "src": "../../../../bundles/statistics/statsgrid2/request/TooltipContentRequestHandler.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/request/IndicatorsRequest.js"
+                "src": "../../../../bundles/statistics/statsgrid2/request/IndicatorsRequest.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/request/IndicatorsRequestHandler.js"
+                "src": "../../../../bundles/statistics/statsgrid2/request/IndicatorsRequestHandler.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/request/AddDataSourceRequest.js"
+                "src": "../../../../bundles/statistics/statsgrid2/request/AddDataSourceRequest.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/request/DataSourceRequestHandler.js"
+                "src": "../../../../bundles/statistics/statsgrid2/request/DataSourceRequestHandler.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/service/UserIndicatorsService.js"
+                "src": "../../../../bundles/statistics/statsgrid2/service/UserIndicatorsService.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/UserIndicatorsTab.js"
+                "src": "../../../../bundles/statistics/statsgrid2/UserIndicatorsTab.js"
             }, {
                 "type": "text/css",
-                "src": "../../../../resources/statistics/bundle/statsgrid2/css/style.css"
+                "src": "../../../../resources/statistics/statsgrid2/css/style.css"
             }, {
                 "type": "text/css",
-                "src": "../../../../resources/statistics/bundle/statsgrid2/css/classifyplugin.css"
+                "src": "../../../../resources/statistics/statsgrid2/css/classifyplugin.css"
             }, {
                 "type": "text/css",
                 "src": "../../../../libraries/slickgrid/css/slick.grid.css"
@@ -214,15 +214,15 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
             "locales": [{
                 "lang": "fi",
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/locale/fi.js"
+                "src": "../../../../bundles/statistics/statsgrid2/locale/fi.js"
             }, {
                 "lang": "sv",
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/locale/sv.js"
+                "src": "../../../../bundles/statistics/statsgrid2/locale/sv.js"
             }, {
                 "lang": "en",
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/locale/en.js"
+                "src": "../../../../bundles/statistics/statsgrid2/locale/en.js"
             }]
         },
         "bundle": {
