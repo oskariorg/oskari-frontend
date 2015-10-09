@@ -12,6 +12,7 @@ Oskari.registerLocalization({
 	        "ratingJustification": "Rating justification"
 		},
 		"feedbackList": {
+			"tabTitle":"Feedback",
 			"average":"Average rating"
 		},
 		"targetSpecification": {

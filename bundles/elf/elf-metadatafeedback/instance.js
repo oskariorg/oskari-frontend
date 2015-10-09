@@ -25,25 +25,28 @@ function () {
             ratingContainer: jQuery('<div class="ratingInfo"></div>'),
             starItem: jQuery('<div class="ratingStar"></div>'),
             numRatings: jQuery('<div class="numRatings"></div>'),
-            feedbackTabErrorTemplate: _.template('<article>Virhe sattusis, kauheeta.<%=responseText%></article>'),
+            feedbackTabErrorTemplate: _.template('<article><%=responseText%></article>'),
             feedbackSuccessTemplate: _.template(
                 '<article>'+
                 '   <div class="feedback-list-rating">'+
-                '       <span class="feedback-list-rating-subject"><%=averageLabel%>:&nbsp;</span>'+
+                '       <span class="feedback-list-rating-subject"><%=locale.feedbackList.average%>: </span>'+
                 '       <%=average%>'+
                 '   </div>'+
-                '   <br/><br/>'+
+                '   <br/>'+
+                '   <br/>'+
                 '   <%_.forEach(feedbacks, function(feedback) { %>'+
                 '       <div class="feedbacklist-feedback">'+
-                '       <div class="feedback-list-rating">'+
-                '           <%=feedback.rating%>'+
-                '           <span class="feedback-list-rating-subject">&nbsp;<%=feedback.subject%></span>'+
-                '       </div>'+
-                '       <br/>'+
-                '       <div><%=feedback.user%> - <%=feedback.date%></div>'+
-                '       <br/>'+
-                '       <div><%=feedback.feedback%></div>'+
-                '       <br/>'+
+                '           <div class="feedback-list-rating">'+
+                '               <%=feedback.score%>'+
+                '               <span class="feedbacklist-userrole">'+
+                '                   <%=locale.userInformation[feedback.userRole]%>'+
+                '               </span>'+
+                '           </div>'+
+                '           <br/>'+
+                '           <br/>'+
+                '           <div>'+
+                '               <%=feedback.comment%>'+
+                '           </div>'+
                 '       </div>'+
                 '   <%})%>'+
                 '</article>')
@@ -81,39 +84,17 @@ function () {
             this.sandbox = sandbox;
 
             sandbox.register(this);
-/*
-            var addFeedbackAjaxUrl = this.sandbox.getAjaxUrl()+'action_route=GiveMetadataFeedback';
-            var fetchFeedbackAjaxUrl = this.sandbox.getAjaxUrl()+'action_route=XXX_XXX_XXX';
-*/            
             var addFeedbackAjaxUrl = this.sandbox.getAjaxUrl()+'action_route=UserFeedback';
-            var fetchFeedbackAjaxUrl = this.sandbox.getAjaxUrl()+'action_route=XXX_XXX_XXX';
+            var fetchFeedbackAjaxUrl = this.sandbox.getAjaxUrl()+'action_route=UserFeedback';
             var feedbackServiceName =
                 'Oskari.catalogue.bundle.metadatafeedback.service.FeedbackService';
             this.feedbackService = Oskari.clazz.create(feedbackServiceName, addFeedbackAjaxUrl, fetchFeedbackAjaxUrl);
-
-
 
             for (p in this.eventHandlers) {
                 if (this.eventHandlers.hasOwnProperty(p)) {
                     sandbox.registerForEventByName(this, p);
                 }
             }
-
-            /* request handler */
-            /*
-            this._requestHandlers['catalogue.ShowFeedbackRequest'] =
-                Oskari.clazz.create(
-                    'Oskari.catalogue.bundle.metadatafeedback.request.' +
-                    'ShowFeedbackRequestHandler',
-                    sandbox,
-                    this
-                );
-
-            sandbox.addRequestHandler(
-                'catalogue.ShowFeedbackRequest',
-                this._requestHandlers['catalogue.ShowFeedbackRequest']
-            );
-*/
 
             this._requestHandlers = {
                 'catalogue.ShowFeedbackRequest': Oskari.clazz.create(
@@ -123,7 +104,6 @@ function () {
                     this
                 )
             };
-
 
             for (var key in this._requestHandlers) {
                 sandbox.addRequestHandler(key, this._requestHandlers[key])
@@ -138,8 +118,6 @@ function () {
             this._activateMetadataSearchResultsShowRating();
 
             this._addMetadataFeedbackTabToMetadataFlyout();
-
-
         },
         /**
          * Activate metadata search results show license link
@@ -161,7 +139,7 @@ function () {
                     actionText: null,
                     showAction: function(metadata) {
                         //add the span with metadata's id to be able to identify and update rating later
-                        this.actionText = '<span id="metadataRatingSpan_'+metadata.id+'" style="display:none;"/>x'+me._getMetadataRating(metadata);
+                        this.actionText = '<span id="metadataRatingSpan_'+metadata.id+'" style="display:none;"/>&nbsp;'+me._getMetadataRating(metadata);
                         return true;
                     }
                 };
@@ -172,86 +150,33 @@ function () {
         updateMetadataRating: function(metadata) {
             var idSpan = $('#metadataRatingSpan_'+metadata.id);
             var container = idSpan.parent();
-            container.html(idSpan.html()+this._getMetadataRating(metadata));
+            container.empty();
+            container.append(idSpan);
+            container.append('&nbsp;'+this._getMetadataRating(metadata));
         },
         _addMetadataFeedbackTabToMetadataFlyout: function() {
             var me = this,
                 reqBuilder = me.sandbox.getRequestBuilder('catalogue.AddTabRequest');
-
             var data = {
                 'feedback': {
                     template: null,
+                    title: me._locale.feedbackList.tabTitle,
                     tabActivatedCallback: function(uuid, panel) {
-                        me.feedbackService.fetchFeedback({'uuid': uuid},
+                        me.feedbackService.fetchFeedback({'category': 'ELF_METADATA' ,'categoryItem': uuid},
                             function(response) {
-                                panel.setContent(_.template('<article>'+uuid+" "+panel.getId()+'</article>'));
+                                _.each(response[1], function(feedbackItem) {
+                                    feedbackItem.score = me._getMetadataRating(feedbackItem);
+                                    feedbackItem.comment = feedbackItem.comment.split("\n").join("<br />");
+                                });
+                                var json = {
+                                    'locale': me._locale,
+                                    'average': me._getMetadataRating(response[0]),
+                                    'feedbacks': response[1]
+                                };
+                                panel.setContent(_.template(me.templates.feedbackSuccessTemplate(json)));
                             },
                             function(error) {
                                 var content = me.templates.feedbackTabErrorTemplate(error);
-                                content += "Mutta tältä se muutoin näyttäs: <br/><br/>";
-                                var json = {
-                                    'averageLabel':me._locale.feedbackList.average,
-                                    'average':me._getMetadataRating({rating: 3.5}),
-                                    feedbacks: [
-                                        {
-                                            'subject':'Otsake',
-                                            'rating': me._getMetadataRating({rating: 2.5}),
-                                            'feedback':
-                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum'+
-                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum'+
-                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum'+
-                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum',
-                                            'user':'Käyttäjä 1',
-                                            'date':'21.4.2015'
-                                        },
-                                        {
-                                            'subject':'Otsake 2',
-                                            'rating':me._getMetadataRating({rating: 4.5}),
-                                            'feedback':
-                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum'+
-                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum'+
-                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum'+
-                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum',
-                                            'user':'Käyttäjä 2',
-                                            'date':'22.4.2015'
-                                        },
-                                        {
-                                            'subject':'Otsake 2',
-                                            'rating':me._getMetadataRating({rating: 4.5}),
-                                            'feedback':
-                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum'+
-                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum'+
-                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum'+
-                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum',
-                                            'user':'Käyttäjä 2',
-                                            'date':'22.4.2015'
-                                        },
-                                        {
-                                            'subject':'Otsake 2',
-                                            'rating':me._getMetadataRating({rating: 4.5}),
-                                            'feedback':
-                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum'+
-                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum'+
-                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum'+
-                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum',
-                                            'user':'Käyttäjä 2',
-                                            'date':'22.4.2015'
-                                        },
-                                        {
-                                            'subject':'Otsake 2',
-                                            'rating':me._getMetadataRating({rating: 4.5}),
-                                            'feedback':
-                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum'+
-                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum'+
-                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum'+
-                                                'Justification Lorem ipsum lorem ipsum lorem ipsum Justification Lorem ipsum lorem ipsum lorem ipsum',
-                                            'user':'Käyttäjä 2',
-                                            'date':'22.4.2015'
-                                        }
-                                    ]
-                                };
-                                content += me.templates.feedbackSuccessTemplate(json);
-                                panel.setContent(content);
                             }
                         );
                     }
@@ -346,8 +271,9 @@ function () {
         _getMetadataRating: function(metadata) {
             var me = this;
             var ratingContainer = me.templates.ratingContainer.clone();
-            if (typeof metadata.rating !== "undefined") {
-                var ratingSymbols = me._generateRatingSymbols(metadata.rating);
+            
+            if (typeof metadata.score !== "undefined") {
+                var ratingSymbols = me._generateRatingSymbols(metadata.score);
                 for (j = 0; j < 5; j++) {
                     starContainer = me.templates.starItem.clone();
                     starContainer.addClass(ratingSymbols[j]);
@@ -355,9 +281,9 @@ function () {
                     ratingContainer.append(starContainer);
                 }
 
-                if (metadata.numRatings !== undefined) {
+                if (metadata.amount !== undefined) {
                     var numRatingsContainer = me.templates.numRatings.clone();
-                    var numRatingsText = metadata.numRatings !== undefined ? "("+metadata.numRatings +")" : "&nbsp;";
+                    var numRatingsText = metadata.amount !== undefined ? "("+metadata.amount +")" : "&nbsp;";
                     numRatingsContainer.append(numRatingsText);
                     ratingContainer.append(numRatingsContainer);
                 }

@@ -416,12 +416,17 @@ div.feedback-list-rating {
 
 div.numRatings {
   margin-left: 8px;
-  margin-right: 2px; }
+  margin-right: 2px;
+  display: inline;
+  vertical-align: top; }
 
 div.feedbacklist-feedback {
   outline: 1pt solid #c0d0e0;
   margin: 5px;
   padding: 5px; }
+
+span.feedbacklist-userrole {
+  float: right; }
 
 div.icon-star-off {
   background-image: url('../images/star-off.png'); }

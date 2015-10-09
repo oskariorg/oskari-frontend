@@ -626,14 +626,17 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                         'Oskari.userinterface.component.TabPanel'
                     );
                     entry.setId(tabId);
-                    entry.setTitle(locale[tabId]);
 
                     //skip async tabs whose content comes from someplace else
                     if (me._templates.tabs[tabId]) {
+                        //the "native" tabs have keys in this bundles locale
+                        entry.setTitle(locale[tabId]);
                         entry.setContent(
                             me._templates.tabs[tabId](model)
                         );
                     } else if (me._additionalTabs && me._additionalTabs[tabId] && me._additionalTabs[tabId].tabActivatedCallback) {
+                        var newTabTitle = me._additionalTabs[tabId].title ? me._additionalTabs[tabId].title : "";
+                        entry.setTitle(newTabTitle);
                         me._tabContainer.addTabChangeListener(function(previousTab, newTab) {
                             if (newTab && newTab.getId() && !newTab.content) {
                                 if (me._additionalTabs[newTab.getId()] && me._additionalTabs[newTab.getId()].tabActivatedCallback) {
