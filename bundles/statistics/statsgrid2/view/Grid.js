@@ -126,7 +126,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.Grid',
                 }
                 else {
                     // add indicator placeholder and get the data
-                    
+
                     this.service.getIndicatorValue(e.getDatasourceId(), e.getIndicatorId(), e.getOptions(), function(data) {
                         me.__indicatorCache[e.getKey()] = {
                             datasrc : e.getDatasourceId(),

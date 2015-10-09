@@ -47,7 +47,7 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultModule",
          */
         start: function () {
             var conf = this.getConfiguration();
-                
+
             var me = this,
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
                 sandbox = Oskari.getSandbox(sandboxName),
@@ -77,9 +77,9 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultModule",
             this.afterStart(sandbox);
         },
         /**
-         * Hook for bundle specific start functionality. 
+         * Hook for bundle specific start functionality.
          * Override this in extending bundle to hook in your own startup functionality.
-         * @param  {Oskari.mapframework.sandbox.Sandbox} sandbox 
+         * @param  {Oskari.mapframework.sandbox.Sandbox} sandbox
          */
         afterStart: function (sandbox) {},
         /**

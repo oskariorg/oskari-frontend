@@ -46,9 +46,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.event.IndicatorSelectedE
         },
         /**
          * Returns unique id for the indicator selections.
-         * The same indicator can be added multiple times with different options so datasource and indicatorId alone can't be used 
+         * The same indicator can be added multiple times with different options so datasource and indicatorId alone can't be used
          * to diffentiate an added indicator.
-         * This should only be used for client side implementation and should not be parsed by user 
+         * This should only be used for client side implementation and should not be parsed by user
          * (use other getters to get actual data about selections)
          * @method getKey
          * @return {String} unique key for the indicator selection
@@ -61,7 +61,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.event.IndicatorSelectedE
                 key = key + separator + JSON.stringify(opts);
             }
             return key;
-        } 
+        }
     }, {
         'protocol': ['Oskari.mapframework.event.Event']
     });

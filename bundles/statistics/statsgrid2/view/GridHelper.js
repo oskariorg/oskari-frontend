@@ -475,7 +475,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.GridHelper',
             // resize grid (content/rows does not show extra rows otherwise. i.e. group headers & footers)
             grid.setColumns(grid.getColumns());
             data.refresh();
-            // maybe needed? 
+            // maybe needed?
             grid.render();
         },
         /**
@@ -741,12 +741,12 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.GridHelper',
                             break;
                         }
                     }
-                    //TODO we need to create grouping for statistical variables 
+                    //TODO we need to create grouping for statistical variables
                     // instead of using subheader!
 
                     //reduce the number of variables
                     grid.getData().refresh();
-                    // setColumns fires slickgrid resizing (cssrules etc.) 
+                    // setColumns fires slickgrid resizing (cssrules etc.)
                     // => variables disappear
                     grid.setColumns(grid.getColumns());
                     // this prints variables again.

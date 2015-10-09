@@ -1,7 +1,7 @@
 /**
  * Model for indicator
  *
- * 
+ *
  *   {
     "id": 4,
     "title": {
@@ -27,7 +27,7 @@
         }
     }
 }
- * 
+ *
  * @class Oskari.statistics.bundle.statsgrid.domain.Indicator
  */
 Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.domain.Indicator',
@@ -41,7 +41,7 @@ function(data) {
     this.__parseClassifications(data);
 }, {
     /**
-     * 
+     *
         {
             "sex": {
                 "values": ["male", "female", "total"]

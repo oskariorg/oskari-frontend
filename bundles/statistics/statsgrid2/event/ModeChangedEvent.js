@@ -1,6 +1,6 @@
 /**
  * Used to notify other components of StatsGrid mode changes.
- * 
+ *
  * @class Oskari.statistics.bundle.statsgrid.event.ModeChangedEvent
  */
 Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.event.ModeChangedEvent',

@@ -182,7 +182,7 @@ function () {
                     }
                 }
             };
-            var request = reqBuilder(data); 
+            var request = reqBuilder(data);
             me.sandbox.request(me, request);
         },
 
@@ -271,7 +271,7 @@ function () {
         _getMetadataRating: function(metadata) {
             var me = this;
             var ratingContainer = me.templates.ratingContainer.clone();
-            
+
             if (typeof metadata.score !== "undefined") {
                 var ratingSymbols = me._generateRatingSymbols(metadata.score);
                 for (j = 0; j < 5; j++) {

@@ -1,14 +1,14 @@
 /**
  * Model for region category
  *
- * 
+ *
  *   {
  *      "id" : 1,
  *      "locale" : {
  *          "fi" : "Kunta"
  *      }
  *  }
- * 
+ *
  * @class Oskari.statistics.bundle.statsgrid.domain.RegionCategory
  */
 Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.domain.RegionCategory',

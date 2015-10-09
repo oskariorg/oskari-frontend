@@ -1,18 +1,18 @@
 /**
  * Model for datasource
  *
- * 
+ *
  *   {
  *      "id" : 1,
  *      "locale" : {
  *          "fi" : "SotkaNet"
  *      },
- *      "indicatorParams" : 
+ *      "indicatorParams" :
  *      [{
  *          "name" : "year"
  *      }]
  *  }
- * 
+ *
  * @class Oskari.statistics.bundle.statsgrid.domain.DataSource
  */
 Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.domain.DataSource',
@@ -55,7 +55,7 @@ function(data) {
      * {
  	 *   "name" : "year"
  	 * }
-     * @return {Object[]} 
+     * @return {Object[]}
      */
     getIndicatorParams : function() {
     	if(!this.data.indicatorParams) {
@@ -66,7 +66,7 @@ function(data) {
     /**
      * @method getIndicatorListUrl
      * Returns url to get indicators for this datasource
-     * @return {String} 
+     * @return {String}
      */
     getIndicatorListUrl : function() {
     	if(!this.data.indicatorURL) {
@@ -77,7 +77,7 @@ function(data) {
     /**
      * @method getIndicatorMetadataUrl
      * Returns url to get metadata for given indicator in this datasource
-     * @return {String} 
+     * @return {String}
      */
     getIndicatorMetadataUrl : function(id) {
     	if(!this.data.indicatorMetadataURL) {
@@ -88,7 +88,7 @@ function(data) {
     /**
      * @method getIndicatorValuesUrl
      * Returns url to get values for given indicator in this datasource
-     * @return {String} 
+     * @return {String}
      */
     getIndicatorValuesUrl : function(id) {
         if(!this.data.indicatorValuesURL) {

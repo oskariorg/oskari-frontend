@@ -1,7 +1,7 @@
 /**
  * @class Oskari.statistics.bundle.statsgrid.event.StatsDataChangedEvent
- * 
- * 
+ *
+ *
  */
 Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.event.StatsDataChangedEvent',
 /**
@@ -33,7 +33,7 @@ function(layer, params) {
     /**
      * @method getParams
      * Returns the data for to create teh stats classifications.
-     * @return {Object} 
+     * @return {Object}
      */
     getParams : function() {
         return this._params;

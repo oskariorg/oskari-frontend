@@ -124,7 +124,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
 
             // we use chosen to create autocomplete version of indicator select element.
             me._initSelectChosen(select);
-            // used when populating later on 
+            // used when populating later on
             me.__indicatorSelect = select;
             // this gives indicators more space to show title on dropdown
             //container.find('.chzn-drop').css('width', '298px');
@@ -140,7 +140,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
         _initSelectChosen: function (select) {
             var chosenOptions = {},
                 noResultsKey = select.attr('data-no_results');
-            
+
             if (noResultsKey) {
                 chosenOptions.no_results_text = this._locale[noResultsKey];
             }
@@ -333,7 +333,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
                 } else {
                     // selection is not active
                     // set button to add
-                    buttonTitle = loc.addColumn;                    
+                    buttonTitle = loc.addColumn;
                 }
                 // set button label
                 me.__addRemoveButton.setTitle(buttonTitle);
@@ -451,7 +451,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
                     label = indicatorSelector.find('> span'),
                     select = indicatorSelector.find('select'),
                     labelText = item.name;
-                // TODO: setup options locales in own structure like ~me.locale.optionLabels[key] 
+                // TODO: setup options locales in own structure like ~me.locale.optionLabels[key]
                 if (me._locale[item.name]) {
                     labelText = me._locale[item.name];
                 }

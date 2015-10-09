@@ -627,7 +627,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
         /**
          * @method  _createUI
          * Creates classification UI (method select, class count, colors)
-         
+
          * @private
          */
         _createUI: function () {
@@ -1066,7 +1066,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
         /**
          * @method  visibilyOn
          * Classify dialog visibility on
-         
+
          * @private
          */
         _visibilityOn: function () {
@@ -1075,7 +1075,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
         /**
          * @method  visibilyOff
          * Classify dialog off
-         
+
          * @private
          */
         _visibilityOff: function () {

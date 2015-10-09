@@ -51,7 +51,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.MainPanel',
          * @method __fixGridHeight
          */
         __fixGridHeight: function (container) {
-            // FIXME: maybe get references for sub-containers instead of find() 
+            // FIXME: maybe get references for sub-containers instead of find()
             var container = this.getContainer(),
                 gridDiv = container.find('#municipalGrid'),
                 selectorsCont = container.find('.selectors-container'),

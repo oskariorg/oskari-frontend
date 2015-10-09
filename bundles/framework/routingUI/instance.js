@@ -19,7 +19,7 @@ function () {
                 '<div class="waiting-time"><div class="itinerary__title"></div><div class="itinerary__content"></div><div class="itinerary__clear"></div></div>'+
                 '<div class="walk-time"><div class="itinerary__title"></div><div class="itinerary__content"></div><div class="itinerary__clear"></div></div>'+
                 '<div class="transit-time"><div class="itinerary__title"></div><div class="itinerary__content"></div><div class="itinerary__clear"></div></div>'+
-                '<div class="walk-distance"><div class="itinerary__title"></div><div class="itinerary__content"></div><div class="itinerary__clear"></div></div>'+                
+                '<div class="walk-distance"><div class="itinerary__title"></div><div class="itinerary__content"></div><div class="itinerary__clear"></div></div>'+
                 '<div class="actions"></div>'+
                 '</div>'
             )
@@ -152,7 +152,7 @@ function () {
 
             if(conf && conf.roundToDecimals) {
                 roundToDecimals = conf.roundToDecimals;
-            }            
+            }
 
             lonlat = event.getLonLat();
             lonlat.lon = lonlat.lon.toFixed(roundToDecimals)
@@ -281,7 +281,7 @@ function () {
         style.strokeColor = color;
         style.strokeWidth = 5;
         style.strokeOpacity = 0.7;
-        this.sandbox.postRequestByName(rn, [geom, 'GeoJSON', null, null, 'replace', true, style, false]);        
+        this.sandbox.postRequestByName(rn, [geom, 'GeoJSON', null, null, 'replace', true, style, false]);
     },
 
 
