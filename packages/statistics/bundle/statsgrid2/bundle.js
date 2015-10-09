@@ -69,7 +69,7 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
                 "src": "../../../../bundles/statistics/statsgrid2/Tile.js"
             }, {
                 "type": "text/css",
-                "src": "../../../../resources/statistics/statsgrid2/css/indicatorselector.css"
+                "src": "../../../../bundles/statistics/statsgrid2/resources/css/indicatorselector.css"
 
                 // /MODIFIED IN STATSGRID2!!!!!
             }, {
@@ -137,10 +137,10 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
                 "src": "../../../../bundles/statistics/statsgrid2/UserIndicatorsTab.js"
             }, {
                 "type": "text/css",
-                "src": "../../../../resources/statistics/statsgrid2/css/style.css"
+                "src": "../../../../bundles/statistics/statsgrid2/resources/css/style.css"
             }, {
                 "type": "text/css",
-                "src": "../../../../resources/statistics/statsgrid2/css/classifyplugin.css"
+                "src": "../../../../bundles/statistics/statsgrid2/resources/css/classifyplugin.css"
             }, {
                 "type": "text/css",
                 "src": "../../../../libraries/slickgrid/css/slick.grid.css"
@@ -215,10 +215,6 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
                 "lang": "fi",
                 "type": "text/javascript",
                 "src": "../../../../bundles/statistics/statsgrid2/locale/fi.js"
-            }, {
-                "lang": "sv",
-                "type": "text/javascript",
-                "src": "../../../../bundles/statistics/statsgrid2/locale/sv.js"
             }, {
                 "lang": "en",
                 "type": "text/javascript",
