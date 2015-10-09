@@ -119,7 +119,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
             var capsLayer = _.find(caps.contents.layers, function(capsLayer) {
               return capsLayer.identifier === config.layer;
             });
-            
+
             // override default params and options from layer
             _.each(layer.getOptions(), function(value, key) {
                 config[key] = value;

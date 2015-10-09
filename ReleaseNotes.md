@@ -2,6 +2,10 @@
 
 ## 1.33
 
+### statsgrid
+
+Now adds the indicator tab UI for user content/personaldata even if started after personaldata bundle.
+
 ### Default view functionality
 
 Added functionality to mar a saved view as a default view.
