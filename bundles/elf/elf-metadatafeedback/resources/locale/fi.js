@@ -11,6 +11,10 @@ Oskari.registerLocalization({
 	        "ratingScore": "Rating score",
 	        "ratingJustification": "Rating justification"
 		},
+		"feedbackList": {
+			"tabTitle":"Palaute",
+			"average":"Keskiarvo"
+		},
 		"targetSpecification": {
 			"targetSpecification": "Target specification",
 			"targetIdentification": "Target identification",

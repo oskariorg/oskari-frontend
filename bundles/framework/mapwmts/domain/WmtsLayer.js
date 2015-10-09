@@ -26,7 +26,7 @@ function() {
     },
     /**
      * @method getTileUrl
-     * @return {String} url 
+     * @return {String} url
      */
     getTileUrl : function() {
         if(!this._tileURL) {

@@ -258,7 +258,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             for (i = 0; i < views.length; ++i) {
                 view = views[i];
                 isPublic = (view.isPublic === true);
-                isDefault = (view.isDefault === true);
+                isDefault = view.isDefault;
                 data = {
                     'id': view.id,
                     'state': view.state,

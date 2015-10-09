@@ -7,12 +7,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingService.event.RouteSucces
 /**
  * @method create called automatically on construction
  * @static
- * @param {JSON} geoJson route geometry as geoJson
- * @param {JSON} routeInstructions parameters of route as JSON
+ * @param {Boolean} success succesfully getted route
+ * @param {JSON} requestParameters request parameters
+ * @param {JSON} plan parameters of route
  */
-function(geoJson, routeInstructions) {
-    this._geoJson = geoJson;
-    this._routeInstructions = routeInstructions;
+function(success, requestParameters, plan) {
+    this._success = success;
+    this._requestParameters = requestParameters;
+    this._plan = plan;
 }, {
     /** @static @property __name event name */
     __name : "RouteSuccessEvent",
@@ -26,20 +28,28 @@ function(geoJson, routeInstructions) {
         return this.__name;
     },
     /**
-     * @method getGeoJson
-     * Returns the geoJson
-     * @return {JSON}
+     * @method getSuccess
+     * Returns the successfully routing info
+     * @return {Boolean}
      */
-    getGeoJson : function() {
-        return this._geoJson;
+    getSuccess : function() {
+        return this._success;
     },
     /**
-     * @method getRouteInstructions
-     * Returns instructions
+     * @method getPlan
+     * Returns the plan JSON
      * @return {JSON}
      */
-    getRouteInstructions : function() {
-        return this._routeInstructions;
+    getPlan : function() {
+        return this._plan;
+    },
+    /**
+     * @method getRequestParameters
+     * Returns request paremeters
+     * @return {JSON}
+     */
+    getRequestParameters : function() {
+        return this._requestParameters;
     }
 }, {
     /**
