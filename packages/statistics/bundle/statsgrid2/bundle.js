@@ -214,11 +214,11 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
             "locales": [{
                 "lang": "fi",
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/statsgrid2/locale/fi.js"
+                "src": "../../../../bundles/statistics/statsgrid2/resources/locale/fi.js"
             }, {
                 "lang": "en",
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/statsgrid2/locale/en.js"
+                "src": "../../../../bundles/statistics/statsgrid2/resources/locale/en.js"
             }]
         },
         "bundle": {
