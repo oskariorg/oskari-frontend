@@ -2,7 +2,7 @@ Oskari.registerLocalization(
 {
     "lang": "sv",
     "key": "routingUI",
-   	"value": {
+    "value": {
         "tool": {
             "tooltip": "Tee reittihaku"
         },
@@ -14,32 +14,26 @@ Oskari.registerLocalization(
                 "getRoute": "Hae reitti"
             },
             "startingPointTooltip":"Lähtöpiste",
-            "finishingPointTooltip":"Saapumispiste"
+            "finishingPointTooltip":"Saapumispiste",
+            "startingPoint": "Lähtöpiste",
+            "finishingPoint": "Saapumispiste"
+        },
+        "error": {
+            "title": "Reitin haku ei onnistunut",
+            "message": "Reitin haku ei onnistunut. Tarkista lähtö- ja saapumispisteet ja kokeile uudelleen."
         },
         "routeInstructions": {
-            "length": "Reitin pituus: ",
-            "duration": "Reitin kesto: ",
-            "seconds": " s",
-            "meters":  " m"
-        },
-        "transportTypeIds": {
-            "walk": "Walk",
-            "1": "Helsinki internal bus lines",
-            "2": "Tram",
-            "3": "Espoo internal bus lines",
-            "4": "Vantaa internal bus lines",
-            "5": "regional bus lines",
-            "6": "Metro",
-            "7": "Ferry",
-            "8": "U-lines",
-            "12": "commuter trains",
-            "21": "Helsinki service lines",
-            "22": "Helsinki night buses",
-            "23": "Espoo service lines",
-            "24": "Vantaa service lines",
-            "25": "region night buses",
-            "36": "Kirkkonummi internal bus lines",
-            "39": "Kerava internal bus lines"
+            "titleOne": "Löytyi yksi reitti",
+            "titleMulti": "Löytyi {count} reittiä",
+            "route": "Reitti",
+            "duration": "Kesto",
+            "startTime": "Lähtöaika",
+            "endTime": "Saapumisaika",
+            "waitingTime": "Odotusaika",
+            "walkingTime": "Kävelyaika",
+            "transitTime": "Ajoaika",
+            "walkDistance": "Kävelymatka",
+            "showRoute": "Näytä reitti"
         }
     }
 }

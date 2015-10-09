@@ -14,32 +14,26 @@ Oskari.registerLocalization(
                 "getRoute": "Hae reitti"
             },
             "startingPointTooltip":"Lähtöpiste",
-            "finishingPointTooltip":"Saapumispiste"
+            "finishingPointTooltip":"Saapumispiste",
+            "startingPoint": "Lähtöpiste",
+            "finishingPoint": "Saapumispiste"
+        },
+        "error": {
+            "title": "Reitin haku ei onnistunut",
+            "message": "Reitin haku ei onnistunut. Tarkista lähtö- ja saapumispisteet ja kokeile uudelleen."
         },
         "routeInstructions": {
-            "length": "Reitin pituus: ",
-            "duration": "Reitin kesto: ",
-            "seconds": " s",
-            "meters":  " m"
-        },
-        "transportTypeIds": {
-            "walk": "Kävely",
-            "1": "Helsingin sisäinen bussilinja",
-            "2": "Raitiovaunu",
-            "3": "Espoon sisäinen bussilinja",
-            "4": "Vantaan sisäinen bussilinja",
-            "5": "Paikallisbussi",
-            "6": "Metro",
-            "7": "Lautta",
-            "8": "U-linja",
-            "12": "Juna",
-            "21": "Helsingin palvelulinja",
-            "22": "Helsingin yöbussi",
-            "23": "Espoon palvelulinja",
-            "24": "Vantaan palvelulinja",
-            "25": "Yöbussi",
-            "36": "Kirkkonummen sisäinen bussilinja",
-            "39": "Keravan sisäinen bussilinja"
+            "titleOne": "Löytyi yksi reitti",
+            "titleMulti": "Löytyi {count} reittiä",
+            "route": "Reitti",
+            "duration": "Kesto",
+            "startTime": "Lähtöaika",
+            "endTime": "Saapumisaika",
+            "waitingTime": "Odotusaika",
+            "walkingTime": "Kävelyaika",
+            "transitTime": "Ajoaika",
+            "walkDistance": "Kävelymatka",
+            "showRoute": "Näytä reitti"
         }
     }
 }
