@@ -13,9 +13,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.PopupRouting",
 
     function (instance) {
         this.instance = instance;
-
         this.sandbox = this.instance.sandbox;
-
         this.loc = this.instance._localization.popup;
 
         this.template = {};
@@ -33,7 +31,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.PopupRouting",
         __templates: {
             "wrapper": '<div></div>',
             "instructions": '<div class="instructions" style="padding: 20px 0px 0px 0px;"></div>',
-            "routeInstructions": '<div class="route-instructions"></div>'
+            "routeInstructions": '<div class="route-instructions"><div class="title"></div><div class="instructions"></div></div>'
         },
         /**
          * @method showSelectionTools
@@ -67,7 +65,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.PopupRouting",
                 me.progressSpinner.start();
                 me.params.srs = me.sandbox.getMap().getSrsName();
                 me.sandbox.postRequestByName('GetRouteRequest', [me.params]);
-
+                me._removeFeaturesFromMap();
             });
             controlButtons.push(getRouteBtn);
             var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
@@ -76,6 +74,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.PopupRouting",
                 popup.close(true);
                 me.stopTool();
                 me._removeFeaturesFromMap();
+                me._removeMarkersFromMap();
             });
             cancelBtn.addClass('primary');
             cancelBtn.blur();
@@ -107,6 +106,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.PopupRouting",
         stopTool: function () {
             this.instance.toolActive = false;
             this.enableGFI(true);
+            this._removeMarkersFromMap();
         },
         /**
          * @method enableGfi
@@ -135,7 +135,17 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.PopupRouting",
         _removeFeaturesFromMap: function(identifier, value, layer){
             var me = this,
                 rn = 'MapModulePlugin.RemoveFeaturesFromMapRequest';
+
             me.sandbox.postRequestByName(rn, [identifier, value, layer]);
+        },
+
+        /**
+         * @method  @private _removeMarkersFromMap remove markers from map
+         */
+        _removeMarkersFromMap: function(){
+            var me=this,
+                rn='MapModulePlugin.RemoveMarkersRequest';
+            me.sandbox.postRequestByName(rn);
         },
 
         /**
@@ -149,6 +159,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.PopupRouting",
             startingPointField.setIds("startingPoint", "startingPointInput");
             startingPointField.setPlaceholder(me.loc.startingPointTooltip);
             startingPointField.getField().addClass("routing-field");
+            startingPointField.setEnabled(false);
             me.popupContent.append(startingPointField.getField());
 
             var finishingPointField = Oskari.clazz.create('Oskari.userinterface.component.FormInput');
@@ -167,12 +178,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.PopupRouting",
          * @param {Object} lonlat
          */
         setStartingPoint: function (lonlat) {
-            this.params.fromlon = lonlat.lon;
-            this.params.fromlat = lonlat.lat;
-
-            this.popupContent.find('#startingPointInput').val(lonlat.lon + " , " + lonlat.lat);
-            this.popupContent.find('#finishingPointInput').attr("disabled", false);
-            this.popupContent.find('#finishingPointInput').focus();
+            var me = this;
+            me.params.fromlon = lonlat.lon;
+            me.params.fromlat = lonlat.lat;
+            me.popupContent.find('#startingPointInput').val(lonlat.lon + " , " + lonlat.lat);
+            me._setMarker(lonlat.lon, lonlat.lat, true, '3DCE00', me.loc.startingPoint);
         },
 
         /**
@@ -181,9 +191,49 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.PopupRouting",
          * @param {Object} lonlat
          */
         setFinishingPoint: function (lonlat) {
-            this.params.tolon = lonlat.lon;
-            this.params.tolat = lonlat.lat;
+            var me = this;
+            me.params.tolon = lonlat.lon;
+            me.params.tolat = lonlat.lat;
+            me.popupContent.find('#finishingPointInput').val(lonlat.lon + " , " + lonlat.lat);
+            me._setMarker(lonlat.lon, lonlat.lat, false, 'CE0000', me.loc.finishingPoint);
+        },
 
-            this.popupContent.find('#finishingPointInput').val(lonlat.lon + " , " + lonlat.lat);
+        /**
+         * [_setMarker description]
+         * @param {Double} lon       lon coordinate
+         * @param {Double} lat       lat coordinate
+         * @param {Boolean} removeOld remove old markers
+         * @param {String} color     hex marker color without starting #
+         * @param {String} msg       marker message
+         */
+        _setMarker: function(lon, lat, removeOld, color, msg) {
+            var me = this,
+                reqBuilder,
+                sandbox = me.sandbox;
+
+            // Remove old markers
+            reqBuilder = sandbox.getRequestBuilder(
+                'MapModulePlugin.RemoveMarkersRequest'
+            );
+            if (reqBuilder && removeOld) {
+                sandbox.request(me.instance.getName(), reqBuilder());
+            }
+            // Add new marker
+            reqBuilder = sandbox.getRequestBuilder(
+                'MapModulePlugin.AddMarkerRequest'
+            );
+            if (reqBuilder) {
+                sandbox.request(
+                    me.instance.getName(),
+                    reqBuilder({
+                        color: color,
+                        msg: msg,
+                        shape: 2,
+                        size: 3,
+                        x: lon,
+                        y: lat
+                    })
+                );
+            }
         }
-    });
+});
