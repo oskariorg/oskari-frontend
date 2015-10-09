@@ -561,6 +561,36 @@
                     }
                 }
             }
+        },
+        {
+            "title": "Download basket",
+            "fi": "Latauskori",
+            "sv": "",
+            "en": "",
+            "bundlename": "download-basket",
+            "bundleinstancename": "download-basket",
+            "metadata": {
+                "Import-Bundle": {
+                    "download-basket": {
+                        "bundlePath": "../../../packages/hsy/bundle/"
+                    }
+                }
+            }
+        },
+        {
+            "title": "Link panel",
+            "fi": "Linkki paneeli",
+            "sv": "",
+            "en": "",
+            "bundlename": "link-panel",
+            "bundleinstancename": "link-panel",
+            "metadata": {
+                "Import-Bundle": {
+                    "link-panel": {
+                        "bundlePath": "../../../packages/hsy/bundle/"
+                    }
+                }
+            }
         }
     ]
 }
