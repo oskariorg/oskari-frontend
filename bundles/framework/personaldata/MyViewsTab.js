@@ -17,7 +17,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
         this.loc = localization;
         this.template = jQuery('<div class="viewsList volatile"></div>');
         this.templateLink = jQuery('<a href="JavaScript:void(0);"></a>');
-//        this.templateDefaultViewIcon = jQuery('<div class="default-view-icon" title="'+this.loc.popup.default+'"/>');
         this.templateDefaultGridView = jQuery('<input type="checkbox" name="isDefault"/>');
         this.templateDesc = jQuery('<div class="oskarifield"><label for="description"></label>' +
             '<textarea id="view_description" name="description" placeholder="' + this.loc.popup.description_placeholder + '"></textarea></div>');
@@ -45,9 +44,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
                 enabled : sandbox.getUser().isLoggedIn(),
                 prepend: true,
                 callback: function () {
-                    me._promptForView(function (name, description) {
+                    debugger;
+                    me._promptForView(function (name, description, isDefault) {
                         var rbState = sandbox.getRequestBuilder('StateHandler.SaveStateRequest');
-                        sandbox.request(instance, rbState(name, description));
+                        sandbox.request(instance, rbState(name, description, isDefault));
                     });
                 }
             }));
@@ -83,6 +83,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             var me = this;
             var content = me.template.clone();
             me.container = container;
+
+            var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            okBtn.setTitle(this.loc.button.saveCurrent);
+            okBtn.addClass('primary');
+
+            var okBtnContainer = jQuery("<div class='myViewsTabButtonContainer'/>");
+
+            var sandbox = this.instance.sandbox;
+            okBtn.setHandler(function () {
+                me._promptForView(function (name, description, isDefault) {
+                    var rbState = sandbox.getRequestBuilder('StateHandler.SaveStateRequest');
+                    sandbox.request(me.instance, rbState(name, description, isDefault));
+                });
+            });
+
+//            okBtn.insertTo(me.container);
+            okBtn.insertTo(okBtnContainer);
+            container.append(okBtnContainer);
+
             container.append(content);
             me._refreshViewsList();
         },
@@ -105,6 +124,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
 
             var model = this._getGridModel(views);
             var grid = this._getGrid(model);
+
             grid.renderTo(listContainer);
         },
 
@@ -215,6 +235,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             okBtn.setHandler(function () {
                 var errors = form.validate();
                 if (errors.length === 0) {
+                    debugger;
                     successCallback(nameInput.getValue(), template.find('textarea').val(), template.find("#defaultview").prop('checked'));
                     dialog.close();
                     me.dialog = null;
@@ -300,10 +321,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
                     var view = me._getViewById(data.id);
                     var service = me.instance.getViewService();
                     
+                    if (!view) {
+                        return;
+                    }
+
+                    var wasChecked = this.checked;
+                    var checkboxes = jQuery(grid.table).find('input[name=isDefault]');
+                    _.each(checkboxes, function(checkbox) {
+                        //uncheck other checkboxes,
+                        //disable all isDefault checkboxes
+                       checkbox.checked = false;
+                       checkbox.disabled = 'disabled'; 
+                    });
+                    this.checked = wasChecked;
+                    //start spinner
+                    me.instance.sandbox.postRequestByName('ShowProgressSpinnerRequest',[true]);
                     service.updateView(view.id, view.name, view.description, this.checked, function (isSuccess) {
+                        me.instance.sandbox.postRequestByName('ShowProgressSpinnerRequest',[false]);
                         me._editViewSuccessNotify(isSuccess);
                     });
-                    
                 });
                 return input;
             };

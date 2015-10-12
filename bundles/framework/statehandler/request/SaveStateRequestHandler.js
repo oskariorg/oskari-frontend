@@ -25,7 +25,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.request.SaveStateRe
         handleRequest: function (core, request) {
             this.statehandler.saveState({
                 "name": request.getViewName(),
-                "description": request.getViewDescription()
+                "description": request.getViewDescription(),
+                "isDefault": request.getIsDefault()
             });
         }
     }, {
