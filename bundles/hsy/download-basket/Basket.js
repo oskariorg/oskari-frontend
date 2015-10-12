@@ -34,8 +34,11 @@ Oskari.clazz.define(
                 '</form>'
             )
         };
-        this.setContent(this.createUi());
-    },{
+        
+    },{ 
+        startBasket: function(){
+            this.setContent(this.createUi());
+        },
 
         /**
          * @private @method _initTemplates, creates ui for cropping items
@@ -69,6 +72,7 @@ Oskari.clazz.define(
                 jQuery('.oskari__download-basket-wrapper').find('.empty-basket').show();
                 jQuery('.oskari__download-basket-buttons').find('input.empty').hide();
                 jQuery('.oskari__download-basket-buttons').find('input.next').hide();
+                me.instance.addBasketNotify();
             });
             empty.insertTo(me._templates.basketButtons);
             

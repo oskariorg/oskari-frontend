@@ -61,7 +61,7 @@ function(instance) {
      */
     createUI : function() {
         this.container.addClass('download-basket-tile');
-        //this.container.find('.oskari-tile-status').addClass('icon-bubble-right').html(0);
+        this.container.find('.oskari-tile-status').addClass('icon-bubble-right').html(0);
         //TODO
 /*        if(jQuery('.download-basket-tile').length>0){
             jQuery('.download-basket-tile').append(this.container);

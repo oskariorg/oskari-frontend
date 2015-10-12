@@ -17,15 +17,18 @@ Oskari.clazz.define(
         this._map = null;
         this.croppingVectorLayer = null;
         this.reqularControl = null;
+        this.basket = null;
         this._templates = {
             main: jQuery('<div class="oskari__download-basket-cropping"></div>'),
             buttons: jQuery('<div class="oskari__download-basket-cropping-buttons"><p></p></div>'),
             helptemplate: jQuery('<div class="oskari__download-basket-help"><p></p></div>'),
             tempbasket: jQuery('<div class="oskari__download-basket-temp-basket"><p></p></div>')
         };
-        this.setContent(this.createUi());
+       
     },{
-
+        startCropping: function(){
+             this.setContent(this.createUi());
+        },
         /**
          * @private @method _initTemplates, creates ui for cropping items
          *
@@ -451,13 +454,16 @@ Oskari.clazz.define(
          */
         createUi: function () {
             var me = this;
-
             me._initTemplates();
             me.container = me._templates.main.clone(true);
 
             return me.container;
         },
 
+        setBasket: function(basket){
+            var me = this;
+            me.basket = basket;
+        },
         /**
          * TODO SIIRRÄ BASKET.js
          */
@@ -497,7 +503,7 @@ Oskari.clazz.define(
                     me.addToBasketUiComponent(basketObject, feature_value);
                 });
             });
-
+            me.instance.addBasketNotify();
         },
 
         /**
@@ -550,6 +556,7 @@ Oskari.clazz.define(
 
                 componentClone.find('.icon-close').click(function(event){
                     jQuery(this).parents('.download-basket__component').remove();
+                    me.instance.addBasketNotify();
                     if(jQuery('.download-basket__component').length === 0){
                         jQuery('.oskari__download-basket-wrapper').find('.empty-basket').show();
                         jQuery('.oskari__download-basket-buttons').find('input.next').hide();

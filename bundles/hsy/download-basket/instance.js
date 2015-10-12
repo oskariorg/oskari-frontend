@@ -17,6 +17,7 @@ Oskari.clazz.define("Oskari.hsy.bundle.downloadBasket.BundleInstance",
         this.cropping = null;
         this.basket = null;
         this.mapModule = null;
+        this.startedTabs = false;
     }, {
         /**
          * @static
@@ -90,12 +91,13 @@ Oskari.clazz.define("Oskari.hsy.bundle.downloadBasket.BundleInstance",
                     sandbox.registerForEventByName(me, p);
                 }
             }
-
-            //TODO
+            
             me.cropping = Oskari.clazz.create('Oskari.hsy.bundle.downloadBasket.Cropping',this._localization.flyout['download-basket-cropping-tab'], me);
             me.cropping.setId('download-basket-cropping-tab');
             me.basket = Oskari.clazz.create('Oskari.hsy.bundle.downloadBasket.Basket',this._localization.flyout['download-basket-tab'], me);
             me.basket.setId('download-basket-tab');
+
+            me.cropping.setBasket(me.basket);
 
             var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(me);
                 sandbox.request(me, request);
@@ -152,6 +154,11 @@ Oskari.clazz.define("Oskari.hsy.bundle.downloadBasket.BundleInstance",
                 }
                 if (doOpen) {
                     this.plugins['Oskari.userinterface.Flyout'].createUI();
+                    if(!me.startedTabs){
+                        me.cropping.startCropping();
+                        me.basket.startBasket();
+                        me.startedTabs = true;
+                    }
                     // flyouts eventHandlers are registered
                     for (p in this.plugins['Oskari.userinterface.Flyout'].getEventHandlers()) {
                         if (!this.eventHandlers[p]) {
@@ -238,6 +245,9 @@ Oskari.clazz.define("Oskari.hsy.bundle.downloadBasket.BundleInstance",
          */
         getDescription: function () {
             return this.getLocalization('desc');
+        },
+        addBasketNotify:function(){
+            this.plugins['Oskari.userinterface.Tile'].refresh();
         }
 
     }, {
