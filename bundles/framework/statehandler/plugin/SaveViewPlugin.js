@@ -84,6 +84,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.plugin.SaveViewPlug
             if (view) {
                 data.viewName = view.name;
                 data.viewDescription = view.description;
+                data.isDefault = view.isDefault ? view.isDefault : false;
             }
 
             var builder = me._sandbox.getEventBuilder('StateSavedEvent');
@@ -99,7 +100,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.plugin.SaveViewPlug
 
             // need to serialize json data so parameters are sent correctly
             data.viewData = JSON.stringify(data.viewData);
-
             // save to ajaxUrl
             jQuery.ajax({
                 //dataType : "json",

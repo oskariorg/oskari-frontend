@@ -19,7 +19,8 @@ Oskari.registerLocalization(
                     "description": "Description",
                     "publish": "Published",
                     "edit": "Edit",
-                    "delete": "Delete"
+                    "delete": "Delete",
+                    "default":"Default"
                 },
                 "popup": {
                     "edit": "Edit the map view",
@@ -46,7 +47,8 @@ Oskari.registerLocalization(
                     "ok": "OK",
                     "save": "Save",
                     "cancel": "Cancel",
-                    "toolbarsave": "Save the map view"
+                    "toolbarsave": "Save the map view",
+                    "saveCurrent": "Save current view"
                 },
                 "error": {
                     "title": "Error!",

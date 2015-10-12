@@ -48,16 +48,15 @@ div.view {
         }
 
     }
+
 }
 
-div.default-view-icon {
-    width: 12px;
-    height: 12px;
-    background-color: #00CD98;
-    float:left; 
-    border-radius: 5px;
-    margin:4px 4px 4px 0px;
+div.tab-content {
+   div.myViewsTabButtonContainer {
+    float: right;
+   }
 }
+
 
 div.personaldata {
 
