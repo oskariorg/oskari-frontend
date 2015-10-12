@@ -44,7 +44,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
                 enabled : sandbox.getUser().isLoggedIn(),
                 prepend: true,
                 callback: function () {
-                    debugger;
                     me._promptForView(function (name, description, isDefault) {
                         var rbState = sandbox.getRequestBuilder('StateHandler.SaveStateRequest');
                         sandbox.request(instance, rbState(name, description, isDefault));
@@ -235,7 +234,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             okBtn.setHandler(function () {
                 var errors = form.validate();
                 if (errors.length === 0) {
-                    debugger;
                     successCallback(nameInput.getValue(), template.find('textarea').val(), template.find("#defaultview").prop('checked'));
                     dialog.close();
                     me.dialog = null;
