@@ -697,20 +697,20 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
         },
         /**
          * @public method addTabs
-         * 
+         *
          * @param {Object} tabsJSON
          * {
-         *   //key is used as the tab's title and must map to a key in localization file   
+         *   //key is used as the tab's title and must map to a key in localization file
          *   'key' : {
          *     //content as an underscore template, optional
          *     template: {_.template}
-         *     //a callback to call when tab gets activated. Will take a reference to the panel and get the content asynchronously 
+         *     //a callback to call when tab gets activated. Will take a reference to the panel and get the content asynchronously
          *     tabActivatedCallback: function(panel)
          *   },
          *   'key2': {
          *     template: {_.template}
          *     tabActivatedCallback: function(panel)
-         *   }  
+         *   }
          * }
          *
          */

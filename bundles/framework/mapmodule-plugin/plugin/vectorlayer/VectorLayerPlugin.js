@@ -282,8 +282,8 @@ Oskari.clazz.define(
 
                         center = new OpenLayers.LonLat((right-((right-left)/2)),(top-((top-bottom)/2)));
                     }
-                    
-                    mapmoveRequest = me._sandbox.getRequestBuilder('MapMoveRequest')(center.x, center.y, bounds, false);                    
+
+                    mapmoveRequest = me._sandbox.getRequestBuilder('MapMoveRequest')(center.x, center.y, bounds, false);
                     me._sandbox.request(me, mapmoveRequest);
                 }
             }

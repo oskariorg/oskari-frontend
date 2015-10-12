@@ -155,7 +155,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
         /**
          *
          * Basically a tab template to add to each metadatapanel created.
-         * 
+         *
          * @param {Object} data Json object containing the tabs (title, content?, callback for getting content...?)
          */
         addTabs: function (data) {
