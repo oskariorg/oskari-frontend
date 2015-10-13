@@ -4,36 +4,36 @@ Oskari.registerLocalization(
     "key": "routingUI",
     "value": {
         "tool": {
-            "tooltip": "Tee reittihaku"
+            "tooltip": "Make route search"
         },
         "popup": {
-            "title": "Hae reitti",
-            "instructions": "Hae reitti kahden pisteen välillä klikkaamalla kartalta lähtö- ja saapumispiste.",
+            "title": "Get route",
+            "instructions": "Get directions by clicking between two points on the map departure and entry point.",
             "button": {
-                "cancel": "Sulje",
-                "getRoute": "Hae reitti"
+                "cancel": "Close",
+                "getRoute": "Get route"
             },
-            "startingPointTooltip":"Lähtöpiste",
-            "finishingPointTooltip":"Saapumispiste",
-            "startingPoint": "Lähtöpiste",
-            "finishingPoint": "Saapumispiste"
+            "startingPointTooltip":"Starting point",
+            "finishingPointTooltip":"Finishing point",
+            "startingPoint": "Starting point",
+            "finishingPoint": "Finishing point"
         },
         "error": {
-            "title": "Reitin haku ei onnistunut",
-            "message": "Reitin haku ei onnistunut. Tarkista lähtö- ja saapumispisteet ja kokeile uudelleen."
+            "title": "Route search was not successful",
+            "message": "Route search was not successful. Check the departure and the entry point and try again."
         },
         "routeInstructions": {
-            "titleOne": "Löytyi yksi reitti",
-            "titleMulti": "Löytyi {count} reittiä",
-            "route": "Reitti",
-            "duration": "Kesto",
-            "startTime": "Lähtöaika",
-            "endTime": "Saapumisaika",
-            "waitingTime": "Odotusaika",
-            "walkingTime": "Kävelyaika",
-            "transitTime": "Ajoaika",
-            "walkDistance": "Kävelymatka",
-            "showRoute": "Näytä reitti"
+            "titleOne": "Found one route",
+            "titleMulti": "Found {count} routes",
+            "route": "Route",
+            "duration": "Duration",
+            "startTime": "Start time",
+            "endTime": "End time",
+            "waitingTime": "Waiting time",
+            "walkingTime": "Walking time",
+            "transitTime": "Transit time",
+            "walkDistance": "Walk distance",
+            "showRoute": "Show route"
         }
     }
 }
