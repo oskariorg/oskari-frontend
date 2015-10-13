@@ -138,7 +138,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.UserIndicatorsService',
             };
 
             return retIndicator;
-        },
+        }
     }, {
         'protocol': ['Oskari.mapframework.service.Service']
     });

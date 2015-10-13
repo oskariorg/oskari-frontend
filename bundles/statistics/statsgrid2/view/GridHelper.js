@@ -445,7 +445,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.GridHelper',
                     //code: indicator.code,
                     title : region.locale[lang],
                     // TODO: handle member of somehow, backend needs to provide it
-                    memberOf: [], //indicator.memberOf
+                    memberOf: [] //indicator.memberOf
                 };
                 //row[me.__columnIdRegion] = region.locale[lang];
                 // default to enabled group

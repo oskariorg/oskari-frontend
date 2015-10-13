@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.MainPanel',
     },
     {
     	"__templates" : {
-            'gridWrapper' : '<div id="municipalGrid" class="municipal-grid"></div>',
+            'gridWrapper' : '<div id="municipalGrid" class="municipal-grid"></div>'
     	},
 	    render : function(container, instance) {
             // FIXME: this is called each time mode is activated?
