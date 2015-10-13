@@ -26,6 +26,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.PopupRouting",
         this.params = {};
         this.progressSpinner = Oskari.clazz.create(
             'Oskari.userinterface.component.ProgressSpinner');
+        this.markerIds = {
+            start: 'routing-marker-start',
+            end: 'routing-marker-end'
+        };
     }, {
 
         __templates: {
@@ -53,7 +57,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.PopupRouting",
             me.progressSpinner.insertTo(me.popupContent);
 
             // Safety check at not show more than one popup
-            if(jQuery('.tools_selection').is(':visible')) {
+            if(jQuery('.tools_routing_selection').is(':visible')) {
                 return;
             }
 
@@ -74,13 +78,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.PopupRouting",
                 popup.close(true);
                 me.stopTool();
                 me._removeFeaturesFromMap();
-                me._removeMarkersFromMap();
+                me.removeMarkersFromMap();
             });
             cancelBtn.addClass('primary');
             cancelBtn.blur();
             controlButtons.push(cancelBtn);
 
-            popup.addClass('tools_selection');
+            popup.addClass('tools_routing_selection');
             popup.show(popupLoc, this.popupContent, controlButtons);
             popup.moveTo('#toolbar div.toolrow[tbgroup=default-viewtools]', 'top');
             this.startTool();
@@ -106,7 +110,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.PopupRouting",
         stopTool: function () {
             this.instance.toolActive = false;
             this.enableGFI(true);
-            this._removeMarkersFromMap();
+            this.removeMarkersFromMap();
         },
         /**
          * @method enableGfi
@@ -140,12 +144,20 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.PopupRouting",
         },
 
         /**
-         * @method  @private _removeMarkersFromMap remove markers from map
+         * @method  @public removeMarkersFromMap remove markers from map
          */
-        _removeMarkersFromMap: function(){
+        removeMarkersFromMap: function(){
             var me=this,
-                rn='MapModulePlugin.RemoveMarkersRequest';
-            me.sandbox.postRequestByName(rn);
+                rn='MapModulePlugin.RemoveMarkersRequest',
+                reqBuilder = me.sandbox.getRequestBuilder(
+                    'MapModulePlugin.RemoveMarkersRequest'
+                );
+
+            if(reqBuilder) {
+                me.sandbox.request(me.instance.getName(), reqBuilder([me.markerIds.start]));
+                me.sandbox.request(me.instance.getName(), reqBuilder([me.markerIds.end]));
+            }
+
         },
 
         /**
@@ -182,7 +194,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.PopupRouting",
             me.params.fromlon = lonlat.lon;
             me.params.fromlat = lonlat.lat;
             me.popupContent.find('#startingPointInput').val(lonlat.lon + " , " + lonlat.lat);
-            me._setMarker(lonlat.lon, lonlat.lat, true, '3DCE00', me.loc.startingPoint);
+            me._setMarker(lonlat.lon, lonlat.lat, true, '3DCE00', me.loc.startingPoint, me.markerIds.start);
         },
 
         /**
@@ -195,7 +207,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.PopupRouting",
             me.params.tolon = lonlat.lon;
             me.params.tolat = lonlat.lat;
             me.popupContent.find('#finishingPointInput').val(lonlat.lon + " , " + lonlat.lat);
-            me._setMarker(lonlat.lon, lonlat.lat, false, 'CE0000', me.loc.finishingPoint);
+            me._setMarker(lonlat.lon, lonlat.lat, false, 'CE0000', me.loc.finishingPoint, me.markerIds.end);
         },
 
         /**
@@ -205,18 +217,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.PopupRouting",
          * @param {Boolean} removeOld remove old markers
          * @param {String} color     hex marker color without starting #
          * @param {String} msg       marker message
+         * @param {String} markerId marker id
          */
-        _setMarker: function(lon, lat, removeOld, color, msg) {
+        _setMarker: function(lon, lat, removeOld, color, msg, markerId) {
             var me = this,
                 reqBuilder,
                 sandbox = me.sandbox;
 
-            // Remove old markers
-            reqBuilder = sandbox.getRequestBuilder(
-                'MapModulePlugin.RemoveMarkersRequest'
-            );
-            if (reqBuilder && removeOld) {
-                sandbox.request(me.instance.getName(), reqBuilder());
+            if (removeOld && removeOld === true) {
+                me.removeMarkersFromMap();
             }
             // Add new marker
             reqBuilder = sandbox.getRequestBuilder(
@@ -231,8 +240,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.PopupRouting",
                         shape: 2,
                         size: 3,
                         x: lon,
-                        y: lat
-                    })
+                        y: lat,
+                        transient: true
+                    }, markerId)
                 );
             }
         }

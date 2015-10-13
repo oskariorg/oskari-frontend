@@ -318,7 +318,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
                 input.bind('click', function () {
                     var view = me._getViewById(data.id);
                     var service = me.instance.getViewService();
-                    
+
                     if (!view) {
                         return;
                     }
@@ -329,7 +329,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
                         //uncheck other checkboxes,
                         //disable all isDefault checkboxes
                        checkbox.checked = false;
-                       checkbox.disabled = 'disabled'; 
+                       checkbox.disabled = 'disabled';
                     });
                     this.checked = wasChecked;
                     //start spinner

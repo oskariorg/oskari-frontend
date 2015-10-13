@@ -50,6 +50,14 @@ function(success, requestParameters, plan) {
      */
     getRequestParameters : function() {
         return this._requestParameters;
+    },
+
+    getParams: function () {
+        return {
+            success: this._success,
+            plan: this._plan,
+            requestParameters: this._requestParameters
+        };
     }
 }, {
     /**
