@@ -179,6 +179,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                         enabledTools[plugin.id] = true;
                     });
                 }
+                //published with the old publisher with featuredata enabled?
+                if (me.data.configuration && me.data.configuration.featuredata2) {
+                  enabledTools['Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin'] = true;
+                }
+                
 
                 return enabledTools;
             }
