@@ -2270,8 +2270,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                     if (jQuery.inArray(siblings[i], me.toolDropRules[pluginClazz].allowedSiblings) < 0 && pluginClazz !== siblings[i]) {
                         // not an allowed sibling, see if we can move it out of the way (don't pass a source, it'd cause an infinite loop)
                         // only accept 2/yes as a result, moving source plugins out of the way would get too weird
-                        if (source && 
-                            (this.toolDropRules[siblings[i]] && me._locationAllowed(this.toolDropRules[siblings[i]].allowedLocations, source)) && 
+                        if (source &&
+                            (this.toolDropRules[siblings[i]] && me._locationAllowed(this.toolDropRules[siblings[i]].allowedLocations, source)) &&
                             me._siblingsAllowed(siblings[i], null, source, pluginClazz) === 2) {
                                 // sibling can be moved to source
                                 ret = 1;
