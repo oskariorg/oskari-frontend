@@ -223,13 +223,13 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             if (this.layerGeometries != null) {
                 var layerGeometries = JSON.parse(new OpenLayers.Format.GeoJSON().write(this.layerGeometries));
                 if (layerGeometries != null) {
-                    if (this.layerGeometries.type == "MultiPoint") {
+                    if (layerGeometries.type == "MultiPoint") {
                         for (var i = 0; i < layerGeometries.coordinates.length; i++) {
                             if (this.drawToolType != "edit" || i != this.clickedGeometryNumber) {
                                 geometries.push({x: layerGeometries.coordinates[i][0], y: layerGeometries.coordinates[i][1]}); 
                             }
                         }
-                    } else if (this.layerGeometries.type == "MultiLineString") {
+                    } else if (layerGeometries.type == "MultiLineString") {
                         for (var i = 0; i < layerGeometries.coordinates.length; i++) {
                             if (this.drawToolType != "edit" || i != this.clickedGeometryNumber) {
                                 var tmpLineString = [];
