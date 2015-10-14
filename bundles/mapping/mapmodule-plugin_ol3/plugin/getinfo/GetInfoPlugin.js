@@ -258,6 +258,7 @@ Oskari.clazz.define(
                 lon = params.lon,
                 lat = params.lat;
 
+
             if (!layerIds) {
                 return;
             }
@@ -277,14 +278,14 @@ Oskari.clazz.define(
 
             var data = {
                     layerIds: layerIds,
-                    projection: olMap.getView().getProjection(),
+                    projection: olMap.getView().getProjection().getCode(),
                     x: Math.round(px),
                     y: Math.round(py),
                     lon: lon,
                     lat: lat,
                     width: mapVO.getWidth(),
                     height: mapVO.getHeight(),
-                    bbox: mapVO.getExtent(),
+                    bbox: mapVO.getExtent().toString(),
                     zoom: mapVO.getZoom(),
                     srs: mapVO.getSrsName()
             };
@@ -301,7 +302,7 @@ Oskari.clazz.define(
                         _.each(resp.data, function (datum) {
                             me._handleInfoResult({
                                 features: [datum],
-                                lonlat: lonlat,
+                                lonlat: lon + ',' + lat,
                                 via: 'ajax'
                             });
                         });
