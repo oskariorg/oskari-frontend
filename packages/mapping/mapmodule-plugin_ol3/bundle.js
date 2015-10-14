@@ -342,7 +342,6 @@ Oskari.clazz.define(
                 /**
                  * Realtime plugin
                  */
-                /*
                 {
                     "type": "text/javascript",
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/realtime/RealtimePlugin.js"
