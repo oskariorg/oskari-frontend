@@ -373,7 +373,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                     hoverClass: 'ui-state-highlight',
                     tolerance: 'pointer' // bit of a compromise, we'd need a combination of pointer and intersect
                 });
-
             var event = sandbox.getEventBuilder('LayerToolsEditModeEvent')(true);
             sandbox.notifyAll(event);
         },
@@ -384,11 +383,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
         _editToolLayoutOff: function () {
             var me = this,
                 sandbox = Oskari.getSandbox('sandbox');
-
             if (!me.toolLayoutEditMode) {
                 return;
             }
-
             me.toolLayoutEditMode = false;
             jQuery('#editModeBtn').val(me.loc.toollayout.usereditmode);
             jQuery('.mapplugin').removeClass('toollayoutedit');
@@ -555,14 +552,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 ret = 2,
                 tool = me.getToolById(pluginClazz);
 
-            if (!pluginClazz || !tool) {
+            //no tool matching the plugin class -> drop probably allowed (case wfslayerplugin)
+            if (!tool) {
+                return 2;
+            } else if (!pluginClazz) {
                 return;
             }
-
-
+            
             for (i = 0; i < siblings.length; i += 1) {
                 if (!excludedSibling || siblings[i] !== excludedSibling) {
                     // sibling is not ignored, see if it's an allowed sibling
+                    // sibling can't be moved to source
                     if (jQuery.inArray(siblings[i], tool.allowedSiblings) < 0 && pluginClazz !== siblings[i]) {
                         // not an allowed sibling, see if we can move it out of the way (don't pass a source, it'd cause an infinite loop)
                         // only accept 2/yes as a result, moving source plugins out of the way would get too weird
@@ -570,7 +570,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                             // sibling can be moved to source
                             ret = 1;
                         } else {
-                            // sibling can't be moved to source
                             ret = 0;
                             break;
                         }
@@ -623,7 +622,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             for (i = 0; i < siblings.length; i += 1) {
                 if (jQuery.inArray(siblings[i], tool.allowedSiblings) < 0) {
                     // Unallowed sibling, move to source
-                    sibling = me.getToolById(siblings[i]).getPlugin();
+                    sibling = me.getToolById(siblings[i]) && me.getToolById(siblings[i]).getPlugin() ? me.getToolById(siblings[i]).getPlugin() : null;
                     if (sibling) {
                         sibling.setLocation(source.attr('data-location'));
                     } else {
