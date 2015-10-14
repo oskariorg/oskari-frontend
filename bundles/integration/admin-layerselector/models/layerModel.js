@@ -297,6 +297,21 @@ if (!Function.prototype.bind) {
              * @returns {String} legend url
              */
             getLegendUrl: function() {
+                var adminBlock = this.getAdmin();
+                var currentStyleName = this.getCurrentStyle().getName();
+
+                if (adminBlock && currentStyleName && adminBlock.styles){
+                    var selectedStyle = jQuery.grep(adminBlock.styles ||[], function(style){
+                        return style.name === currentStyleName;
+                    });
+
+                    if(selectedStyle.length>0) {
+                        return selectedStyle[0].legend;
+                    } else {
+                        return adminBlock.getCurrentStyle().getLegend();
+                    }
+                }
+
                 return this.getCurrentStyle().getLegend();
             },
 

@@ -249,8 +249,41 @@ Oskari.clazz.define(
                 }
 
                 if(centerTo === true){
-                    var center = feature.geometry.getCentroid(),
-                        mapmoveRequest = me._sandbox.getRequestBuilder('MapMoveRequest')(center.x, center.y, feature.geometry.getBounds(), false);
+                    var center, bounds;
+                    if(geometry.type !== 'FeatureCollection') {
+                        center = feature.geometry.getCentroid();
+                        bounds = feature.geometry.getBounds();
+                    } else {
+                        var bottom,
+                            left,
+                            top,
+                            right;
+
+                        for(var f=0;f<feature.length;f++) {
+                            var feat = feature[f];
+                            var featBounds = feat.geometry.getBounds();
+                            if(!bottom || featBounds.bottom<bottom) {
+                                bottom = featBounds.bottom;
+                            }
+                            if(!left || featBounds.left<left) {
+                                left = featBounds.left;
+                            }
+                            if(!top || featBounds.top>top) {
+                                top = featBounds.top;
+                            }
+                            if(!right || featBounds.right>right) {
+                                right = featBounds.right;
+                            }
+                        }
+
+                        bounds = new OpenLayers.Bounds();
+                        bounds.extend(new OpenLayers.LonLat(left,bottom));
+                        bounds.extend(new OpenLayers.LonLat(right,top));
+
+                        center = new OpenLayers.LonLat((right-((right-left)/2)),(top-((top-bottom)/2)));
+                    }
+
+                    mapmoveRequest = me._sandbox.getRequestBuilder('MapMoveRequest')(center.x, center.y, bounds, false);
                     me._sandbox.request(me, mapmoveRequest);
                 }
             }

@@ -1084,11 +1084,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                         }
                     }
                 });
-
-                if (me._options.style && me._options.style.colourScheme) {
-                    var evt = me.getSandbox().getEventBuilder('Publisher2.ColourSchemeChangedEvent')(me._options.style.colourScheme);
-                    me.getSandbox().notifyAll(evt);
-                }
             }
         },
         /**

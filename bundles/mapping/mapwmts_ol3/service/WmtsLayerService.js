@@ -111,7 +111,9 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
     __getLayerConfig : function(caps, layer) {
 
             // default params and options
+            // URL is tuned serverside so we use the correct one
             var config = {
+                url : layer.getTileUrl(),
                 name : 'layer_' + layer.getId(),
                 style: layer.getCurrentStyle().getName(),
                 layer: layer.getLayerName(),
@@ -127,15 +129,6 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
             var capsLayer = _.find(caps.Contents.Layer, function(capsLayer) {
               return capsLayer.Identifier === config.layer;
             });
-
-            if(capsLayer && capsLayer.ResourceURL && capsLayer.ResourceURL.length) {
-                var index = _.findIndex(capsLayer.ResourceURL, function(resource) {
-                    return resource.resourceType === 'tile';
-                });
-                config.requestEncoding = 'REST';
-                config.format = capsLayer.ResourceURL[index].format;
-                config.url = capsLayer.ResourceURL[index].template;
-            }
 
             // override default params and options from layer
             _.each(layer.getOptions(), function(value, key) {

@@ -37,7 +37,8 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
          *
          */
         _createContent: function (data) {
-            var browseGraphics,
+            var me = this,
+                browseGraphics,
                 i,
                 me = this,
                 model,
@@ -50,7 +51,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
 
             template = _.extend({}, data);
             delete template.identifications;
-
             // Create a panel for each identification
             for (i = 0; i < data.identifications.length; i += 1) {
                 model = _.extend({}, template);
@@ -61,6 +61,11 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                     me.locale,
                     model
                 );
+
+                if (me.additionalTabs) {
+                    panel.addTabs(me.additionalTabs);
+                }
+
                 me.addPanel(panel);
                 panel.init(i === 0);
             }
@@ -198,6 +203,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
 
             });
 
+            data.uuid = uuid;
             me._createContent(data);
         },
 

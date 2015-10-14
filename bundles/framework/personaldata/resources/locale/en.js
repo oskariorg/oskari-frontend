@@ -19,7 +19,8 @@ Oskari.registerLocalization(
                     "description": "Description",
                     "publish": "Published",
                     "edit": "Edit",
-                    "delete": "Delete"
+                    "delete": "Delete",
+                    "default":"Default"
                 },
                 "popup": {
                     "edit": "Edit the map view",
@@ -31,7 +32,8 @@ Oskari.registerLocalization(
                     "cancel": "Cancel",
                     "error_noname": "Type the name of the map view",
                     "deletetitle": "Delete the map view",
-                    "deletemsg": "Do you want to delete this map view?"
+                    "deletemsg": "Do you want to delete this map view?",
+                    "default": "Default view"
                 },
                 "save": {
                     "success": "The map view has been saved.",
@@ -45,7 +47,8 @@ Oskari.registerLocalization(
                     "ok": "OK",
                     "save": "Save",
                     "cancel": "Cancel",
-                    "toolbarsave": "Save the map view"
+                    "toolbarsave": "Save the map view",
+                    "saveCurrent": "Save current view"
                 },
                 "error": {
                     "title": "Error!",

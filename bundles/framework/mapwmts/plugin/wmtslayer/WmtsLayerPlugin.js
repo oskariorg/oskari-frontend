@@ -176,10 +176,26 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
             }
         },
 
+
+        //in case of wmts layer timing issues the request is tried a couple of times. Use the counter to prevent trying again til the end of time.
+        afterChangeOpacityRetryCounter: {},
         afterChangeMapLayerOpacityEvent: function (event) {
+            var me = this;
             var layer = event.getMapLayer(),
                 oLayer = this.getOLMapLayers(layer);
 
+            if (layer && layer.isLayerOfType('WMTS') && (!oLayer || oLayer.length === 0)) {
+                if (!me.afterChangeOpacityRetryCounter[layer.getId()]) {
+                    me.afterChangeOpacityRetryCounter[layer.getId()] = 0;
+                }
+                if (me.afterChangeOpacityRetryCounter[layer.getId()]++ < 10) {
+                    window.setTimeout(function() {
+                        me.afterChangeMapLayerOpacityEvent(event);
+                    }, 500);
+                }
+            } else {
+                me.afterChangeOpacityRetryCounter[layer.getId()] = 0;
+            }
             if (oLayer && oLayer[0]) {
                 oLayer[0].setOpacity(layer.getOpacity() / 100);
             }
