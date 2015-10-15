@@ -179,7 +179,10 @@ Oskari.clazz.define("Oskari.hsy.bundle.downloadBasket.BundleInstance",
             'AfterMapLayerAddEvent' : function(event) {
                 var me = this;
                 var map = me.mapModule.getMap();
-                map.setLayerIndex(me.cropping.croppingVectorLayer, 1000000);
+
+                if(me.cropping.croppingVectorLayer != null){
+                    map.setLayerIndex(me.cropping.croppingVectorLayer, 1000000);
+                }
             }
         },
 
