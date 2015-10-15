@@ -887,7 +887,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 newCenterPixels = [centerPixels[0] + pX, centerPixels[1] + pY],
                 newCenterCoords = this._map.getCoordinateFromPixel(newCenterPixels),
                 pan = ol.animation.pan({
-                    duration: 200,
+                    duration: 100,
                     source: (centerCoords)
                 });
 
@@ -933,6 +933,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             this._updateDomainImpl();
         },
 
+        _getMapCenter: function () {
+            return this._map.getView().getCenter();
+        },
+
         /**
          * @method adjustZoomLevel
          * Adjusts the maps zoom level by given relative number
@@ -970,6 +974,24 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
             // if not in valid bounds, return original
             return this._map.getView().getZoom();
+        },
+
+        /**
+         * @method notifyStartMove
+         * Notify other components that the map has started moving. Sends a MapMoveStartEvent.
+         * Not sent always, preferrably track map movements by listening to AfterMapMoveEvent.
+         * Ignores the call if map is in stealth mode
+         */
+        notifyStartMove: function () {
+            if (this.getStealth()) {
+                // ignore if in "stealth mode"
+                return;
+            }
+            this.getSandbox().getMap().setMoving(true);
+            var centerX = this._getMapCenter()[0],
+                centerY = this._getMapCenter()[1],
+                evt = this.getSandbox().getEventBuilder('MapMoveStartEvent')(centerX, centerY);
+            this.getSandbox().notifyAll(evt);
         },
 
         /**
