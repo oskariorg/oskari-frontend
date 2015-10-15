@@ -247,7 +247,7 @@ Oskari.clazz.define(
                     buffer: 0
                 });
 
-            /* The next is highlight control, which we will fix after 
+            /* The next is highlight control, which we will fix after
             / everything else works
             */
 

@@ -42,6 +42,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 '    <div class="baselayers"></div>' +
                 '  </div>' +
                 '</div>');
+            //same as in main, only used when returning from some other layout to default (publisher)
+            me.templates.defaultArrow = jQuery('<div class="header-icon icon-arrow-white-right"></div>');
             me.templates.layer = jQuery(
                 '<div class="layer"><label><span></span></label></div>'
             );
@@ -576,7 +578,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             var me = this,
                 conf = me.getConfig(),
                 element = me.getElement();
-
             if (conf) {
                 if (conf.toolStyle) {
                     me.changeToolStyle(conf.toolStyle, element);
@@ -617,21 +618,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 return;
             }
 
-            if (styleName === null) {
-                // reset plugin if active
-                if (this.getElement()) {
-                    //obtain reference to current sandbox for the stop and start to work
-                    var sandbox = me.getSandbox();
-                    if (sandbox) {
-                        delete this._config.toolStyle;
-                        this.stopPlugin(sandbox);
-                        this.startPlugin(sandbox);
-                    }
-                }
-                return;
-            }
-
-
             var self = this,
                 header = div.find('div.header'),
                 headerArrow = this.templates.headerArrow.clone(),
@@ -662,11 +648,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 header.css({
                     'background-image': 'url("' + bgImg + '")'
                 });
+
+                content.find('div.content-header').remove();
+                content.find('div.styled-header-arrow').remove();
+                contentHeader.find('div.content-header-title').append(
+                    this._loc.title
+                );
+                content.prepend(contentHeader);
+                content.prepend(headerArrow);
             } else {
+                header.append(me.templates.defaultArrow.clone());
+                header.append(me._loc.title);
+
                 div.removeClass('published-styled-layerselector');
                 content.removeClass('published-styled-layerselector-content');
                 content.removeClass('layerselection-styled-content');
                 header.removeClass('published-styled-layerselector-header');
+
+                content.find('div.content-header').remove();
+                content.find('div.styled-header-arrow').remove();
 
                 // Set the styling to the content div based on the tool style.
                 this.changeCssClasses(
@@ -683,25 +683,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     'background-image': ''
                 });
             }
-
-            content.find('div.content-header').remove();
-            content.find('div.styled-header-arrow').remove();
-            contentHeader.find('div.content-header-title').append(
-                this._loc.title
-            );
-            content.prepend(contentHeader);
-            content.prepend(headerArrow);
-
             contentHeader.find('div.content-close').on('click', function () {
                 self.closeSelection();
             });
-
             // Pretty fugly, but needed here since we're modifying the DOM and
             // all the style changes disappear like Clint Eastwood rides into the sunset.
             var conf = this.getConfig();
             if (conf && conf.colourScheme) {
                 this.changeColourScheme(conf.colourScheme, this.getElement());
             }
+
+            me._setLayerToolsEditMode(
+                me.getMapModule().isInLayerToolsEditMode()
+            );
         },
 
         /**

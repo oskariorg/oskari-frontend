@@ -97,7 +97,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
                 });
             });
 
-//            okBtn.insertTo(me.container);
             okBtn.insertTo(okBtnContainer);
             container.append(okBtnContainer);
 
