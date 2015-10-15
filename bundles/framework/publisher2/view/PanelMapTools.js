@@ -183,7 +183,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                 if (me.data.configuration && me.data.configuration.featuredata2) {
                   enabledTools['Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin'] = true;
                 }
-                
+
 
                 return enabledTools;
             }
