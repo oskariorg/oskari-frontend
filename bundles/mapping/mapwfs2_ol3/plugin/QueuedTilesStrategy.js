@@ -47,6 +47,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrate
         setLayer: function (layer) {
             this.layer = layer;
         },
+        setMap: function (map) {
+            this.map = map;
+        },
 
         /** unload job requests and optional tile visualisations */
         flushTileQueue: function () {
@@ -94,16 +97,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrate
 
             this.grid = Oskari.clazz.create(
                 "Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesGrid", {
-                    map: this.layer.map,
+                    map: this.map,
                     layer: this.layer,
-                    maxExtent: this.layer.map.getMaxExtent(),
-                    tileSize: this.layer.map.getTileSize()
+                    maxExtent: this.map.getView().calculateExtent(this.map.getSize()),
+                    tileSize: [256,256] //this.map.getTileSize()
 
                 });
-            this.layer.events.on({
-                "refresh": this.updateRefresh,
-                scope: this
-            });
+            this.layer.on('precompose', this.updateRefresh);
 
             return true;
         },
@@ -144,11 +144,17 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrate
          * new data must be incondtionally read.
          */
         update: function (options) {
-            var mapBounds = this.layer.map.getExtent();
+            if(!this.layer){
+                return;
+            }
+            if(!this.grid){
+                this.activate();
+            }
+            var mapBounds = this.map.getView().calculateExtent(this.map.getSize());
             this.grid.moveTo(mapBounds, true);
             this.flushTileQueue();
 
-            var mapZoom = this.layer.map.getZoom();
+            var mapZoom = this.map.getView().getZoom();
 
             if (mapZoom < this.minZoom) {
                 return;
@@ -167,7 +173,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrate
          */
         invalidBounds: function (mapBounds) {
             if (!mapBounds) {
-                mapBounds = this.layer.map.getExtent();
+                mapBounds = this.map.getView().calculateExtent(this.map.getSize());
             }
             return !this.bounds || !this.bounds.containsBounds(mapBounds);
         },
@@ -189,19 +195,18 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrate
          * object returned by the layer protocol.
          */
         triggerRead: function () {
-
             var gridGrid = this.grid.grid;
             var gridFeatures = [];
             var debugGridFeatures = this.debugGridFeatures;
 
             for (var r = 0; r < gridGrid.length; r++) {
                 for (var c = 0; c < gridGrid[r].length; c++) {
-                    var bs = gridGrid[r][c].bounds.clone();
+                    var bs = gridGrid[r][c].bounds;
                     var tileBounds = {
-                        left: bs.left,
-                        top: bs.top,
-                        right: bs.right,
-                        bottom: bs.bottom
+                        left: bs[0],
+                        top: bs[3],
+                        right: bs[2],
+                        bottom: bs[1]
                     };
 
 
@@ -209,25 +214,18 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrate
                     //  gridcalc bundle supports this as well
                     var boundsFeature = null;
                     if (debugGridFeatures) {
-                        var ptFromA = new
-                        OpenLayers.Geometry.Point(bs.left, bs.bottom);
-                        var
-                        ptToA = new OpenLayers.Geometry.Point(bs.right,
-                            bs.top);
+                        var ptFromA = new ol.geom.Point([bs[0], bs[1]]);
+                        OpenLayers.Geometry.Point(bs[0], bs[1]);
+                        var ptToA =  new ol.geom.Point([bs[2], bs[3]]);
+                        var ptFromB = new ol.geom.Point([bs[0], bs[3]]);
 
-                        var ptFromB = new
-                        OpenLayers.Geometry.Point(bs.left, bs.top);
-                        var ptToB =
-                            new OpenLayers.Geometry.Point(bs.right, bs.bottom);
-                        var boundGeomArea = new
-                        OpenLayers.Geometry.LineString([ptFromA, ptToB,
+                        var ptToB =  new ol.geom.Point([bs[2], bs[1]]);
+
+                        var boundGeomArea = new ol.geom.LineString([ptFromA, ptToB,
                             ptToA, ptFromB, ptFromA
                         ]);
-                        boundsFeature = new
-                        OpenLayers.Feature.Vector(boundGeomArea, {
-                            featureClassName: this.CLASS_NAME,
-                            description: ""
-                        });
+                        boundsFeature =  new ol.Feature({id: r+"_"+c, geometry: boundGeomArea});
+
                         boundsFeature.renderIntent =
                             "tile";
                         gridFeatures.push(boundsFeature);
