@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingService.request.GetRouteR
      * @method create called automatically on construction
      * @static
      *
-     * @params {Object} lang, fromlon, fromlat, tolon, tolat, srs, 
+     * @params {Object} lang, fromlon, fromlat, tolon, tolat, srs,
      *            date, time, arriveby, mode, maxwalkdistance, wheelchair
      */
     function(params) {
