@@ -53,6 +53,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             return this.sandbox;
         },
 
+        /**
+         * @method  @public adjustMapSize adjust map size
+         */
         adjustMapSize: function () {
             var me = this;
 
@@ -62,16 +65,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     dataContent = jQuery('.oskariui-left'),
                     dataContentHasContent = dataContent.length && !dataContent.is(':empty'),
                     dataContentWidth = dataContent.width(),
-                    dataContentInlineWidth = dataContent.length ? dataContent[0].style.width : '',
                     mapContainer = contentMap.find('.oskariui-center'),
                     mapDiv = jQuery('#' + me.mapDivId),
                     mapHeight = jQuery(window).height(),
-                    mapWidth = contentMap.width();
+                    mapWidth = contentMap.width(),
+                    sidebar = jQuery('#sidebar:visible'),
+                    statsgrid = jQuery('.oskari-view.statsgrid:visible'),
+                    maxWidth = jQuery(window).width()-sidebar.width()-statsgrid.width(),
+                    mapTools = jQuery('#maptools:visible');
 
                 contentMap.height(mapHeight);
 
                 var toolbar = contentMap.find(
-                    '.oskariui-menutoolbar:visible'
+                    '#menutoolbar:visible'
                 );
                 if (toolbar.length > 0) {
                     mapHeight -= toolbar.height();
@@ -88,12 +94,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     dataContent.addClass('oskari-closed');
                 }
 
-                // HACKHACK don't set widths if we have percentages there...
-                if (!dataContentInlineWidth ||
-                        dataContentInlineWidth.indexOf('%') === -1) {
-                    mapContainer.width(mapWidth);
-                    //mapDiv.width(mapWidth);
+                if(contentMap.hasClass('oskari-map-window-fullscreen')){
+                    maxWidth += mapTools.width();
+                    maxWidth += sidebar.width();
+                    var position = sidebar.position();
+                    if(position && position.left){
+                        maxWidth += position;
+                    }
                 }
+
+                if(mapWidth>maxWidth){
+                    mapWidth = maxWidth;
+                }
+
+                mapContainer.width(mapWidth);
+
 
                 // notify map module that size has changed
                 me.updateSize();

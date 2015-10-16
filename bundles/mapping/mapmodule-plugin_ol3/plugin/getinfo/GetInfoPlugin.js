@@ -74,10 +74,9 @@ Oskari.clazz.define(
                         // disabled, do nothing
                         return;
                     }
-                    this.clickLocation = {
-                        lonlat: evt.getLonLat()
-                    };
-                    this.handleGetInfo(this.clickLocation.lonlat);
+                    this.params = evt.getParams();
+
+                    this.handleGetInfo(this.params);
                 },
                 AfterMapMoveEvent: function (evt) {
                     this._cancelAjaxRequest();
@@ -247,14 +246,18 @@ Oskari.clazz.define(
          * @param {OpenLayers.LonLat}
          *            lonlat coordinates
          */
-        handleGetInfo: function (lonlat, layers) {
+        handleGetInfo: function (params, layers) {
             var me = this,
                 dteMs = (new Date()).getTime(),
                 layerIds = me._buildLayerIdList(layers || this.getSandbox().findAllSelectedMapLayers()),
                 ajaxUrl = this.getSandbox().getAjaxUrl(),
                 mapVO = me.getSandbox().getMap(),
                 olMap = me.getMapModule().getMap(),
-                px = olMap.getViewPortPxFromLonLat(lonlat);
+                px = params.x,
+                py = params.y,
+                lon = params.lon,
+                lat = params.lat;
+
 
             if (!layerIds) {
                 return;
@@ -273,6 +276,20 @@ Oskari.clazz.define(
             me._cancelAjaxRequest();
             me._startAjaxRequest(dteMs);
 
+            var data = {
+                    layerIds: layerIds,
+                    projection: olMap.getView().getProjection().getCode(),
+                    x: Math.round(px),
+                    y: Math.round(py),
+                    lon: lon,
+                    lat: lat,
+                    width: mapVO.getWidth(),
+                    height: mapVO.getHeight(),
+                    bbox: mapVO.getExtent().toString(),
+                    zoom: mapVO.getZoom(),
+                    srs: mapVO.getSrsName()
+            };
+
             jQuery.ajax({
                 beforeSend: function (x) {
                     me._pendingAjaxQuery.jqhr = x;
@@ -285,7 +302,7 @@ Oskari.clazz.define(
                         _.each(resp.data, function (datum) {
                             me._handleInfoResult({
                                 features: [datum],
-                                lonlat: lonlat,
+                                lonlat: lon + ',' + lat,
                                 via: 'ajax'
                             });
                         });
@@ -303,19 +320,7 @@ Oskari.clazz.define(
                 complete: function () {
                     me._finishAjaxRequest();
                 },
-                data: {
-                    layerIds: layerIds,
-                    projection: me.getMapModule().getProjection(),
-                    x: Math.round(px.x),
-                    y: Math.round(px.y),
-                    lon: lonlat.lon,
-                    lat: lonlat.lat,
-                    width: mapVO.getWidth(),
-                    height: mapVO.getHeight(),
-                    bbox: mapVO.getBbox().toBBOX(),
-                    zoom: mapVO.getZoom(),
-                    srs: mapVO.getSrsName()
-                },
+                data: data,
                 type: 'POST',
                 dataType: 'json',
                 url: ajaxUrl + 'action_route=GetFeatureInfoWMS'

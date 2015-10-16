@@ -59,8 +59,8 @@ Oskari.clazz.define(
 
         getParams: function () {
             return {
-                lon: this._lonlat ? this._lonlat.lon : null,
-                lat: this._lonlat ? this._lonlat.lat : null,
+                lon: this._lonlat ? this._lonlat[0] : null,
+                lat: this._lonlat ? this._lonlat[1] : null,
                 x: this._mouseX,
                 y: this._mouseY,
                 ctrlPressed: this._ctrlPressed

@@ -22,7 +22,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routeService.request.GetRouteReq
          */
         handleRequest : function(core, request) {
             var params = request.getRouteParams();
-
             this.routingService.getRoute(params);
         }
     }, {

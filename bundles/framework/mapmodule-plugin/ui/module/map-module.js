@@ -44,6 +44,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         };
         this._mapDivId = mapDivId;
         this._mapClickedBuilder;
+        this._progressSpinner = null;
 
         // override defaults
         var key;
@@ -254,10 +255,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         _addRequestHandlersImpl: function (sandbox) {
             this.requestHandlers = {
                 mapLayerUpdateHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapLayerUpdateRequestHandler', sandbox, this),
-                mapMoveRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapMoveRequestHandler', sandbox, this)
+                mapMoveRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapMoveRequestHandler', sandbox, this),
+                showSpinnerRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.ShowProgressSpinnerRequestHandler', sandbox, this)
             };
             sandbox.addRequestHandler('MapModulePlugin.MapLayerUpdateRequest', this.requestHandlers.mapLayerUpdateHandler);
             sandbox.addRequestHandler('MapMoveRequest', this.requestHandlers.mapMoveRequestHandler);
+            sandbox.addRequestHandler('ShowProgressSpinnerRequest', this.requestHandlers.showSpinnerRequestHandler);
         },
 
         /**
@@ -1081,11 +1084,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                         }
                     }
                 });
-
-                if (me._options.style && me._options.style.colourScheme) {
-                    var evt = me.getSandbox().getEventBuilder('Publisher2.ColourSchemeChangedEvent')(me._options.style.colourScheme);
-                    me.getSandbox().notifyAll(evt);
-                }
             }
         },
         /**

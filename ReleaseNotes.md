@@ -2,9 +2,65 @@
 
 ## 1.33
 
+### routingUI
+
+Now start and end poins are markered on the map. Also all route plan(s) are showed on search results. Fixed error handling.
+
+### routingService
+
+Support OpenTripPlanner response format. Sends RouteSuccessEvent with route plan, success and request parameters.
+
+### statsgrid
+
+Now adds the indicator tab UI for user content/personaldata even if started after personaldata bundle.
+
+### Default view functionality
+
+Added functionality to mar a saved view as a default view.
+
+### mapfull
+
+Fixed map content width. Now navigation, zoombar, XY etc. tools are visible also smaller screens.
+
+### map-module
+
+Added a new request 'ShowProgressSpinnerRequest' that shows / hides a progress indicator on the map. The request is by default enabled in rpc.
+
+### mapmodule-plugin/MarkersPlugin
+
+Added marker transient property, if this is setted to true then marker is not saved to state.
+
 ### publisher2
 
 Added LayerSelectionTool. This tool user can add map layer tool on the map. User can also select visible baselayers.
+
+### framework/mapwmts and mapping/mapwmts_ol3
+
+WmtsLayerService no longer parses rest url template from capabilities, but relies on server providing it. 
+This enables proxying for WMTS-layers that use resourceURL and require credentials.
+
+### libararies/moment
+
+Added Moment library for date/time presentation formatting.
+
+### rpc
+
+New event is enabled by default:
+- 'RouteSuccessEvent' notifies at a routing has getted response
+
+New request is enabled by default:
+- 'GetRouteRequest' requests to get route plan from routeService
+
+## 1.32.1
+
+### integration/admin-layerselector
+
+Fixed legend url handling for layers that need credentials.
+
+### WMTS-layers
+
+Since adding WMTS-layer to map is now an async operation, workaround for visibility/opacity setting has been implemented.
+This needs further development for mapmodule to handle async layers properly, but for now it works.
 
 ## 1.32
 
@@ -1114,6 +1170,30 @@ getSotkaIndicatorsData has been renamed as getStatsIndicatorsData.
 An injected empty conf no longer overwrites the basic functionality (default tile/flyout setting). getConfiguration() function should be preferred over referencing conf-property directly to ensure there's no issues with the config.
 
 DefaultTile now has methods setEnabled(bln) and isEnabled() for disabling/enabling the tile.
+
+Added DefaultModule to get boilerplate methods through inheritance. Based on DefaultExtension but removed flyout/tile/view methods. Usage example:
+
+```javascript
+Oskari.clazz.define('Oskari.mynamespace.bundle.mybundle.MyClass',
+    function () {
+        this.start();
+    },
+    {
+        "name" : "mybundle.MyClass",
+        afterStart : function(sandbox) {
+
+        },
+        "eventHandlers": {
+            "AfterMapMoveEvent" : function(e) {
+                console.log(e);
+            }
+        }
+    },
+    {
+        "extend" : ['Oskari.userinterface.extension.DefaultModule']
+    }
+);
+```
 
 ### arcgis / ArcGisLayer
 

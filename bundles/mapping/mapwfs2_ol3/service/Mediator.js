@@ -193,12 +193,10 @@ Oskari.clazz.define(
             }
             // TODO: get rid of ROUTEID by improving the apikey functionality in server side
             this.session.route = jQuery.cookie('ROUTEID') || '';
-
             var srs = this.plugin.getSandbox().getMap().getSrsName(),
                 bbox = this.plugin.getSandbox().getMap().getExtent(),
                 zoom = this.plugin.getSandbox().getMap().getZoom(),
                 mapScales = this.plugin.getMapModule().getMapScales();
-
             var message = {
                 session: this.session.session,
                 route: this.session.route,
@@ -207,11 +205,11 @@ Oskari.clazz.define(
                 browserVersion: this.session.browserVersion,
                 location: {
                     srs: srs,
-                    bbox: [bbox.left, bbox.bottom, bbox.right, bbox.top],
+                    bbox: [bbox[0], bbox[1], bbox[2], bbox[3]],
                     zoom: zoom
                 },
                 grid: this.plugin.getGrid() || {},
-                tileSize: this.plugin.getTileSize() || {},
+                tileSize: {"width" : this.plugin.getTileSize()[0],"height":this.plugin.getTileSize()[0]} || {},
                 mapSize: {
                     width: self.plugin.getSandbox().getMap().getWidth(),
                     height: self.plugin.getSandbox().getMap().getHeight()

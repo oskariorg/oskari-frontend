@@ -216,8 +216,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
                 metadata: {
                     style: {
                         font: me.data && me.data.metadata && me.data.metadata.style && me.data.metadata.style.font ? me.data.metadata.style.font : me.initialValues.fonts[0],
-                        toolStyle: me.data && me.data.metadata && me.data.metadata.style ? me.data.metadata.style.toolStyle : me.initialValues.toolStyles[0],
-                        colourScheme: me.data && me.data.metadata && me.data.metadata.style ? me.data.metadata.style.colourScheme : undefined
+                        toolStyle: me.data && me.data.metadata && me.data.metadata.style ? me.data.metadata.style.toolStyle : me.initialValues.toolStyles[0]
                     }
                 }
             };

@@ -19,7 +19,8 @@ Oskari.registerLocalization(
                     "description": "Kuvaus",
                     "publish": "Julkaisu",
                     "edit": "Muokkaa",
-                    "delete": "Poista"
+                    "delete": "Poista",
+                    "default": "Oletus"
                 },
                 "popup": {
                     "edit": "Karttanäkymän muokkaus",
@@ -31,7 +32,8 @@ Oskari.registerLocalization(
                     "cancel": "Peruuta",
                     "error_noname": "Anna näkymälle nimi",
                     "deletetitle": "Karttanäkymän poisto",
-                    "deletemsg": "Haluatko poistaa valitun näkymän?"
+                    "deletemsg": "Haluatko poistaa valitun näkymän?",
+                    "default": "Oletusnäkymä"
                 },
                 "save": {
                     "success": "Karttanäkymän tallennus onnistui.",
@@ -45,7 +47,8 @@ Oskari.registerLocalization(
                     "ok": "OK",
                     "save": "Tallenna",
                     "cancel": "Peruuta",
-                    "toolbarsave": "Tallenna näkymä"
+                    "toolbarsave": "Tallenna näkymä",
+                    "saveCurrent": "Tallenna nykyinen näkymä"
                 },
                 "error": {
                     "title": "Virhe!",

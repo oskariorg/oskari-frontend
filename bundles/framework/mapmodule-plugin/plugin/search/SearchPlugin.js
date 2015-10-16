@@ -142,7 +142,6 @@ Oskari.clazz.define(
             var me = this,
                 el = me.getElement(),
                 overlay;
-
             if (me.inLayerToolsEditMode()) {
                 me._inputField.prop('disabled', true);
                 me._searchButton.prop('disabled', true);
@@ -175,12 +174,9 @@ Oskari.clazz.define(
             var me = this,
                 conf = me.getConfig(),
                 el;
-
-
             if (conf && !conf.toolStyle) {
                 conf.toolStyle = me.getToolStyleFromMapModule();
             }
-
             if (conf && conf.toolStyle) {
                 el = me.styledTemplate.clone();
                 me._inputField = el.find('input[type=text]');
@@ -568,7 +564,6 @@ Oskari.clazz.define(
                 addedClass,
                 template;
             div = div || me.getElement();
-
             if (!div) {
                 return;
             }
@@ -589,11 +584,17 @@ Oskari.clazz.define(
                 div.removeClass('published-search-div').addClass(
                     'default-search-div'
                 );
+
+
                 div.empty();
                 me.template.children().clone().appendTo(div);
                 me._inputField = div.find('input[type=text]');
                 me._searchButton = div.find('input[type=button]');
                 me._bindUIEvents(div);
+                me._setLayerToolsEditMode(
+                    me.getMapModule().isInLayerToolsEditMode()
+                );
+
                 return;
             }
 
@@ -603,6 +604,7 @@ Oskari.clazz.define(
                 div.removeClass('default-search-div').addClass(
                     'published-search-div'
                 );
+
                 div.empty();
                 me.styledTemplate.children().clone().appendTo(div);
                 me._inputField = div.find('input[type=text]');
