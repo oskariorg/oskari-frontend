@@ -32,6 +32,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          */
         _initImpl: function () {
             var me = this;
+            me._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage(), true).plugin.LayerSelectionPlugin;
             me.templates.main = jQuery(
                 '<div class="mapplugin layerselection">' +
                 '  <div class="header">' +

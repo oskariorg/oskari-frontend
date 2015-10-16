@@ -31,6 +31,8 @@ function() {
             }
         };
     },
+    //Key in view config non-map-module-plugin tools (for returning the state when modifying an existing published map).
+    bundleName: 'featuredata2',
     /**
     * Get values.
     * @method getValues
@@ -43,15 +45,14 @@ function() {
         if(me.state.enabled) {
             var pluginConfig = this.getPlugin().getConfig();
             pluginConfig.instance = null;
-            return {
-                configuration: {
-                    mapfull: {
-                        conf: {
-                            plugins: [{ id: this.getTool().id, config:  pluginConfig }]
-                        }
-                    }
-                }
+            var json = {
+                configuration: {}
             };
+            json.configuration[me.bundleName] = {
+                conf: pluginConfig,
+                state: {}
+            }
+            return json;
         } else {
             return null;
         }
