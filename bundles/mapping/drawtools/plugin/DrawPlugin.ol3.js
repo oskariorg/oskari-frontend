@@ -142,10 +142,10 @@ Oskari.clazz.define(
             	var featuresFromJson = jsonFormat.readFeatures(options.geojson);             	
             	me._drawLayers[me._layerId].getSource().addFeatures(featuresFromJson);
          	}
-        	if(options.drawControl != false) {
+        	if(options.drawControl !== false) {
         		me.addDrawInteraction(me._layerId, shape, options.buffer, options.allowMultipleDrawing);
         	}
-        	if(options.modifyControl != false) {
+        	if(options.modifyControl !== false) {
         		me.addModifyInteraction(me._layerId, shape, options.buffer);
         	}
         	
@@ -273,7 +273,7 @@ Oskari.clazz.define(
 	        
 			me._draw.on('drawstart', function() {
 //				me._draw.overlay_.style_ = me._modifyStyle;
-				if(allowMultipleDrawing != true) {
+				if(allowMultipleDrawing !== true) {
 					me.clearDrawing();
 				}
 			});
