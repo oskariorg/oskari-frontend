@@ -147,8 +147,8 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                     visible: true,
                     buffer: 0
                 });
-                
-                layerType = 'ol3 Arcgis REST';                
+
+                layerType = 'ol3 Arcgis REST';
             } else {
                 /**
                  * ArcGIS cached layer.
@@ -156,7 +156,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                  */
                 openlayer = new ol.layer.Tile({
                     source: new ol.source.XYZ({
-                         url: layer.getLayerUrls()[0] 
+                         url: layer.getLayerUrls()[0]
                     }),
                     id: layer.getId(),
                     transparent: true,
@@ -195,8 +195,8 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
          * @param {Boolean} isBaseMap
          */
         _addMapLayer2ToMap: function (layer, keepLayerOnTop, isBaseMap) {
-           
-                        
+
+
 
 
         },
