@@ -53,11 +53,13 @@ div.admin-layerselector {
   div.admin-layerselector div.tab-content div.oskarifield {
     padding: 10px;
     min-height: 35px; }
-  div.admin-layerselector div.layer, div.admin-layerselector div.create-layer {
+  div.admin-layerselector div.layer,
+  div.admin-layerselector div.create-layer {
     padding: 6px 10px 6px 20px;
     background-color: #ffffff;
     clear: both; }
-    div.admin-layerselector div.layer #add-layer-inspire-theme, div.admin-layerselector div.create-layer #add-layer-inspire-theme {
+    div.admin-layerselector div.layer #add-layer-inspire-theme,
+    div.admin-layerselector div.create-layer #add-layer-inspire-theme {
       /*width: 309px;*/
       overflow-y: auto;
       border: solid 1px #b7b7b7;
@@ -72,67 +74,83 @@ div.admin-layerselector {
       -webkit-box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.3);
       -moz-box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.3);
       box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.3); }
-    div.admin-layerselector div.layer .add-layer-input, div.admin-layerselector div.create-layer .add-layer-input {
+    div.admin-layerselector div.layer .add-layer-input,
+    div.admin-layerselector div.create-layer .add-layer-input {
       float: none;
       width: 140px;
       height: 16px;
       margin: 0;
       margin-bottom: 4px; }
-      div.admin-layerselector div.layer .add-layer-input.mid, div.admin-layerselector div.create-layer .add-layer-input.mid {
+      div.admin-layerselector div.layer .add-layer-input.mid,
+      div.admin-layerselector div.create-layer .add-layer-input.mid {
         width: 217px;
         float: left; }
-      div.admin-layerselector div.layer .add-layer-input.long, div.admin-layerselector div.create-layer .add-layer-input.long {
+      div.admin-layerselector div.layer .add-layer-input.long,
+      div.admin-layerselector div.create-layer .add-layer-input.long {
         width: 297px; }
-    div.admin-layerselector div.layer .layer-title, div.admin-layerselector div.create-layer .layer-title {
+    div.admin-layerselector div.layer .layer-title,
+    div.admin-layerselector div.create-layer .layer-title {
       margin-top: 4px; }
-    div.admin-layerselector div.layer div.backendstatus-down, div.admin-layerselector div.create-layer div.backendstatus-down {
+    div.admin-layerselector div.layer div.backendstatus-down,
+    div.admin-layerselector div.create-layer div.backendstatus-down {
       height: 20px !important;
       margin-bottom: 2px;
       cursor: pointer; }
-    div.admin-layerselector div.layer div.backendstatus-maintenance, div.admin-layerselector div.create-layer div.backendstatus-maintenance {
+    div.admin-layerselector div.layer div.backendstatus-maintenance,
+    div.admin-layerselector div.create-layer div.backendstatus-maintenance {
       height: 20px !important;
       margin-bottom: 2px;
       cursor: pointer; }
-    div.admin-layerselector div.layer div.backendstatus-ok, div.admin-layerselector div.create-layer div.backendstatus-ok {
+    div.admin-layerselector div.layer div.backendstatus-ok,
+    div.admin-layerselector div.create-layer div.backendstatus-ok {
       height: 20px !important;
       margin-top: -2px;
       margin-bottom: 2px;
       cursor: pointer; }
-    div.admin-layerselector div.layer div.backendstatus-unknown, div.admin-layerselector div.create-layer div.backendstatus-unknown {
+    div.admin-layerselector div.layer div.backendstatus-unknown,
+    div.admin-layerselector div.create-layer div.backendstatus-unknown {
       height: 20px !important;
       margin-bottom: 2px; }
-    div.admin-layerselector div.layer div.layer-backendstatus-icon, div.admin-layerselector div.create-layer div.layer-backendstatus-icon {
+    div.admin-layerselector div.layer div.layer-backendstatus-icon,
+    div.admin-layerselector div.create-layer div.layer-backendstatus-icon {
       float: left;
       width: 20px;
       height: 16px;
       margin-right: 4px;
       background-repeat: no-repeat; }
-    div.admin-layerselector div.layer div.layer-icon, div.admin-layerselector div.create-layer div.layer-icon {
+    div.admin-layerselector div.layer div.layer-icon,
+    div.admin-layerselector div.create-layer div.layer-icon {
       float: left;
       width: 16px;
       height: 16px;
       background-repeat: no-repeat; }
-    div.admin-layerselector div.layer div.layer-info, div.admin-layerselector div.create-layer div.layer-info {
+    div.admin-layerselector div.layer div.layer-info,
+    div.admin-layerselector div.create-layer div.layer-info {
       width: 16px;
       height: 16px;
       margin-left: 5px;
       float: right; }
-    div.admin-layerselector div.layer div.layer-tools, div.admin-layerselector div.create-layer div.layer-tools {
+    div.admin-layerselector div.layer div.layer-tools,
+    div.admin-layerselector div.create-layer div.layer-tools {
       float: right; }
-    div.admin-layerselector div.layer input, div.admin-layerselector div.create-layer input {
+    div.admin-layerselector div.layer input,
+    div.admin-layerselector div.create-layer input {
       float: left;
       margin-right: 5px;
       margin-top: 3px; }
-      div.admin-layerselector div.layer input[type=checkbox], div.admin-layerselector div.create-layer input[type=checkbox] {
+      div.admin-layerselector div.layer input[type=checkbox],
+      div.admin-layerselector div.create-layer input[type=checkbox] {
         margin-top: 0; }
-    div.admin-layerselector div.layer select, div.admin-layerselector div.create-layer select {
+    div.admin-layerselector div.layer select,
+    div.admin-layerselector div.create-layer select {
       width: 309px;
       padding: 8px 10px 8px 10px;
       -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
       -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
       box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
       display: block; }
-    div.admin-layerselector div.layer textarea.add-layer-input, div.admin-layerselector div.create-layer textarea.add-layer-input {
+    div.admin-layerselector div.layer textarea.add-layer-input,
+    div.admin-layerselector div.create-layer textarea.add-layer-input {
       padding: 10px;
       width: 157px;
       height: 82px;
@@ -147,7 +165,8 @@ div.admin-layerselector {
       -webkit-box-sizing: border-box;
       -moz-box-sizing: border-box;
       box-sizing: border-box; }
-      div.admin-layerselector div.layer textarea.add-layer-input.long, div.admin-layerselector div.create-layer textarea.add-layer-input.long {
+      div.admin-layerselector div.layer textarea.add-layer-input.long,
+      div.admin-layerselector div.create-layer textarea.add-layer-input.long {
         width: 309px; }
   div.admin-layerselector div.create-layer {
     min-height: 35px; }
@@ -167,12 +186,15 @@ div.admin-layerselector {
     width: 315px;
     white-space: nowrap;
     overflow: hidden; }
-  div.admin-layerselector .admin-add-layer-btn, div.admin-layerselector .admin-edit-layer-btn, div.admin-layerselector .admin-add-grouping-btn, div.admin-layerselector .admin-edit-grouping-btn {
+  div.admin-layerselector .admin-add-layer-btn,
+  div.admin-layerselector .admin-edit-layer-btn,
+  div.admin-layerselector .admin-add-grouping-btn,
+  div.admin-layerselector .admin-edit-grouping-btn {
     float: right;
     margin: 5px 10px; }
   div.admin-layerselector button.admin-arrange-layers {
     background-color: #eee;
-    background-image: url('arrange-icon.png');
+    background-image: url("arrange-icon.png");
     background-position: 50% 50%;
     background-repeat: no-repeat;
     float: left;
@@ -190,7 +212,11 @@ div.admin-layerselector {
     opacity: 0; }
   div.admin-layerselector .layer {
     min-height: 20px; }
-  div.admin-layerselector .add-layer-record, div.admin-layerselector .add-layer-send, div.admin-layerselector .add-class-record, div.admin-layerselector .add-class-send, div.admin-layerselector .add-group-record {
+  div.admin-layerselector .add-layer-record,
+  div.admin-layerselector .add-layer-send,
+  div.admin-layerselector .add-class-record,
+  div.admin-layerselector .add-class-send,
+  div.admin-layerselector .add-group-record {
     width: 100%;
     margin-bottom: 8px;
     overflow: hidden;
@@ -213,7 +239,8 @@ div.admin-layerselector {
     -ms-transition-property: height;
     transition-duration: 300ms;
     transition-property: height; }
-  div.admin-layerselector .show-add-layer, div.admin-layerselector .show-edit-layer {
+  div.admin-layerselector .show-add-layer,
+  div.admin-layerselector .show-edit-layer {
     padding: 10px 0px;
     height: auto;
     width: 100%;
@@ -237,34 +264,43 @@ div.admin-layerselector {
     padding: 10px 10px;
     height: 100%;
     width: 100%; }
-  div.admin-layerselector .add-layer-wrapper, div.admin-layerselector .add-class-wrapper {
+  div.admin-layerselector .add-layer-wrapper,
+  div.admin-layerselector .add-class-wrapper {
     display: block; }
   div.admin-layerselector .add-layer-btn {
     float: left; }
-  div.admin-layerselector .add-layer-grouping, div.admin-layerselector .add-class-grouping {
+  div.admin-layerselector .add-layer-grouping,
+  div.admin-layerselector .add-class-grouping {
     font-weight: bold;
     font-size: 130%;
     margin-top: 20px;
     margin-bottom: 10px; }
-  div.admin-layerselector .add-layer-label-area, div.admin-layerselector .add-class-label-area {
+  div.admin-layerselector .add-layer-label-area,
+  div.admin-layerselector .add-class-label-area {
     display: table;
     float: left; }
-  div.admin-layerselector .add-layer-label, div.admin-layerselector .add-class-label {
+  div.admin-layerselector .add-layer-label,
+  div.admin-layerselector .add-class-label {
     font-weight: bold;
     width: 75px;
     display: table-cell;
     vertical-align: middle; }
-  div.admin-layerselector .add-layer-input-area, div.admin-layerselector .add-layer-button-area, div.admin-layerselector .add-class-input-area, div.admin-layerselector .add-class-button-area {
+  div.admin-layerselector .add-layer-input-area,
+  div.admin-layerselector .add-layer-button-area,
+  div.admin-layerselector .add-class-input-area,
+  div.admin-layerselector .add-class-button-area {
     margin-left: 9em;
     min-width: 220px; }
-  div.admin-layerselector .add-layer-button-area .input-controls, div.admin-layerselector .add-class-button-area .input-controls {
+  div.admin-layerselector .add-layer-button-area .input-controls,
+  div.admin-layerselector .add-class-button-area .input-controls {
     width: 100%; }
   div.admin-layerselector .input-controls {
     position: relative;
     margin-right: 5px; }
     div.admin-layerselector .input-controls input.add-class-input.mid {
       width: 297px; }
-    div.admin-layerselector .input-controls .admin-add-grouping-cancel, div.admin-layerselector .input-controls .admin-add-layer-cancel {
+    div.admin-layerselector .input-controls .admin-add-grouping-cancel,
+    div.admin-layerselector .input-controls .admin-add-layer-cancel {
       float: right;
       margin-right: 10px; }
   div.admin-layerselector .adjacent .input-controls {
@@ -279,7 +315,8 @@ div.admin-layerselector {
     cursor: pointer; }
     div.admin-layerselector .icon-close.mid {
       right: 90px; }
-  div.admin-layerselector .input-controls:hover .icon-close, div.admin-layerselector .layer:hover button.admin-arrange-layers {
+  div.admin-layerselector .input-controls:hover .icon-close,
+  div.admin-layerselector .layer:hover button.admin-arrange-layers {
     -webkit-transition-duration: 300ms;
     -webkit-transition-property: opacity;
     -moz-transition-duration: 300ms;
@@ -295,7 +332,7 @@ div.admin-layerselector {
     height: 30px; }
   div.admin-layerselector .left-tools .layer-opacity {
     display: inline-block;
-    background-image: url('../../../admin-layerselector/resources/images/opacity_slider.png');
+    background-image: url("../../../admin-layerselector/resources/images/opacity_slider.png");
     background-repeat: no-repeat;
     background-position-y: 3px; }
   div.admin-layerselector .opacity-slider-tool {

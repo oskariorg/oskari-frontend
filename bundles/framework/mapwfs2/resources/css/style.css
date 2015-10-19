@@ -1,4 +1,4 @@
-
+/* Mixins */
 div.mapplugins .mappluginsContainer .mappluginsContent div.mapwfs2plugin.mapplugin {
   clear: both;
   display: block;
@@ -17,4 +17,3 @@ div.mapplugins .mappluginsContainer .mappluginsContent div.mapwfs2plugin.mapplug
   div.mapplugins .mappluginsContainer .mappluginsContent div.mapwfs2plugin.mapplugin a {
     color: white;
     text-decoration: none; }
-

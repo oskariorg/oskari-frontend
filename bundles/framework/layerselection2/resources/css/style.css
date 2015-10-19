@@ -1,8 +1,12 @@
 div.layerselection2 .layer.selected {
   border: 1pt solid #c0d0e0;
   margin: 0 5px 5px 0;
-  height: 70px9;
-  /*IE9 */ }
+  /*
+                This used to have a defunct CSS hack for IE 9 only:
+                height: 70px\9;
+                It was never functional because SASS compiled it into single character.
+                It was removed.  
+                */ }
   div.layerselection2 .layer.selected div.layer-info {
     background-color: #FFF;
     padding: 5px; }
@@ -16,14 +20,14 @@ div.layerselection2 .layer.selected {
       background-repeat: no-repeat; }
     div.layerselection2 .layer.selected div.layer-info div.layer-title {
       cursor: move;
-      display: inline;}
+      display: inline; }
       div.layerselection2 .layer.selected div.layer-info div.layer-title h4 {
-        font: 14pt Arial, sans-serif;
-        padding: 0;}
-      div.layerselection2 .layer.selected div.layer-info div.layer-tool-refresh {
-        float: right;
-        cursor: default;
-        margin-right: 10px}
+        font: 14pt Arial,sans-serif;
+        padding: 0; }
+    div.layerselection2 .layer.selected div.layer-info div.layer-tool-refresh {
+      float: right;
+      cursor: default;
+      margin-right: 10px; }
     div.layerselection2 .layer.selected div.layer-info div.layer-tool-remove {
       float: right; }
   div.layerselection2 .layer.selected div.layer-tools {
@@ -40,7 +44,7 @@ div.layerselection2 .layer.selected {
         display: inline-block; }
       div.layerselection2 .layer.selected div.layer-tools div.left-tools div.layer-opacity {
         display: inline-block;
-        background-image: url('../images/opacity_slider.png');
+        background-image: url("../images/opacity_slider.png");
         background-repeat: no-repeat; }
         div.layerselection2 .layer.selected div.layer-tools div.left-tools div.layer-opacity input.opacity {
           padding: 1px;
@@ -59,6 +63,7 @@ div.layerselection2 .layer.selected {
     background-color: #f3f3f3; }
     div.layerselection2 .layer.selected div.stylesel label {
       padding: 7px; }
+
 div.layerselection2 ul.selectedLayersList {
   height: 100%;
   width: 100%;

@@ -1,17 +1,22 @@
 /* Mixins */
 div.myplacesform div.help {
   float: right; }
+
 div.myplacesform input[type="text"] {
   width: 83%; }
+
 div.myplacesform textarea {
   width: 80%; }
+
 div.myplacesform select {
   width: 80%; }
+
 div.myplacesform .imagePreview {
   cursor: pointer; }
 
 div.myplacescategoryform table input {
   width: 50px; }
+
 div.myplacescategoryform input.oskaricolor {
   height: 20px;
   width: 50px;
@@ -30,8 +35,10 @@ div.myplacescategoryform input.oskaricolor {
 
 div.myplacesform div.field, div.myplacescategoryform div.field {
   padding-bottom: 10px; }
+
 div.myplacesform div.renderButton, div.myplacescategoryform div.renderButton {
   margin: 5px; }
+
 div.myplacesform input[type="checkbox"], div.myplacescategoryform input[type="checkbox"] {
   margin: 0.5em; }
 
@@ -51,9 +58,9 @@ div.myplaces2 div.buttons div.button {
   -webkit-background-clip: padding-box;
   -moz-background-clip: padding-box;
   background-clip: padding-box;
-  -webkit-box-shadow: 5px 5px 5px #888888;
-  -moz-box-shadow: 5px 5px 5px #888888;
-  box-shadow: 5px 5px 5px #888888; }
+  -webkit-box-shadow: 5px 5px 5px #888;
+  -moz-box-shadow: 5px 5px 5px #888;
+  box-shadow: 5px 5px 5px #888; }
 
 .divmanazerpopup.myplaces2 {
   max-width: 260px; }

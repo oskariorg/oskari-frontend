@@ -1,8 +1,8 @@
-@charset "UTF-8";
 #contentMap.mapPublishMode > #mapdiv,
 #contentMap.mapPublishMode > div.row-fluid {
   position: relative;
   left: 212px; }
+
 #contentMap div.basic_publisher {
   background: #FFF;
   position: absolute;
@@ -28,16 +28,22 @@ div.notLoggedIn {
 
 div.basic_publisher input[type=text] {
   width: 260px; }
+
 div.basic_publisher .disabled-button {
   opacity: 0.8; }
+
 div.basic_publisher div#publisher-layout-colours input[name=publisher-colour] {
   width: 125px; }
+
 div.basic_publisher p#publisher-selected-colour {
   display: inline; }
+
 div.basic_publisher button#publisher-colours {
   float: right; }
+
 div.basic_publisher .customsize:disabled {
   color: #DDD; }
+
 div.basic_publisher .customsize label {
   clear: none;
   display: inline-block;
@@ -50,18 +56,23 @@ div.basic_publisher .customsize label {
     width: 100%; }
     div.basic_publisher .customsize label input.error {
       border: 1px solid red; }
+
 div.basic_publisher div.icon-info {
   float: right; }
+
 div.basic_publisher div.tool {
   margin: 5px; }
+
 div.basic_publisher div.tool-options {
   padding-left: 23px; }
   div.basic_publisher div.tool-options .tool-option-settings {
     padding-left: 27px;
     padding-top: 5px; }
+
 div.basic_publisher div.tool label,
 div.basic_publisher div.data label {
   margin-right: 10px; }
+
 div.basic_publisher div.tool input,
 div.basic_publisher div.data input {
   margin-right: 10px; }
@@ -69,14 +80,17 @@ div.basic_publisher div.data input {
   div.basic_publisher div.data input[type="button"] {
     margin-top: 5px;
     margin-bottom: 5px; }
+
 div.basic_publisher > div.content {
   overflow: auto;
   height: calc(100% - 108px); }
+
 div.basic_publisher > div.header {
   background-color: #FDF8D9;
   padding: 5px 10px; }
   div.basic_publisher > div.header div.icon-close {
     float: right; }
+
 div.basic_publisher .layer.selected {
   border: 1pt solid #c0d0e0;
   margin: 0 5px 5px 0; }
@@ -118,6 +132,7 @@ div.basic_publisher .layer.selected {
         margin-right: 5px; }
         div.basic_publisher .layer.selected div.layer-tools div.right-tools div.layer-rights, div.basic_publisher .layer.selected div.layer-tools div.right-tools div.object-data {
           padding-top: 2px; }
+
 div.basic_publisher ul.selectedLayersList {
   height: 100%;
   width: 100%;
@@ -131,18 +146,23 @@ div.basic_publisher ul.selectedLayersList {
 
 div.publisher div.startview div.content {
   margin-top: 5px; }
+
 div.publisher div.startview div.error ul li {
   color: red; }
+
 div.publisher div.startview div.icon-info {
   float: right; }
+
 div.publisher div.startview div.layerlist {
   border: 1px solid;
   padding: 10px; }
   div.publisher div.startview div.layerlist h4 {
     line-height: 15px;
     padding-bottom: 5px; }
+
 div.publisher div.startview div.tou {
   margin: 15px 0; }
+
 div.publisher div.startview ul {
   list-style: disc inside none;
   padding: 5px; }
@@ -150,8 +170,12 @@ div.publisher div.startview ul {
 div.basic_publisher div.form div.field input,
 div.field select {
   width: 100%;
-  width: 80%�/;
-  /* unquote for libsass bug */
+  /*
+    This used to have a defunct CSS hack for IE 10 only:
+    width: 80%\0;
+    It was never functional because SASS compiled it into single character.
+    It was removed.  
+    */
   background-color: #FFF; }
 
 /* Buttons */
@@ -203,5 +227,3 @@ div#publisher-custom-colours {
 
 #publisher-layout-colours {
   padding-left: 28px; }
-
-/*# sourceMappingURL=style.css.map */

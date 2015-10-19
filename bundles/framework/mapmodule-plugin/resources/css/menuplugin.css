@@ -3,7 +3,7 @@
   z-index: 100000000 !important;
   text-align: left; }
   .menuplugin .icon {
-    background-image: url('../images/menu-button-rounded-dark.png');
+    background-image: url("../images/menu-button-rounded-dark.png");
     display: inline-block;
     height: 35px;
     width: 35px;
