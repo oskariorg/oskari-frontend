@@ -295,7 +295,7 @@ Oskari.clazz.define(
                  * @param {Object} event
                  */
                 AfterMapLayerRemoveEvent: function (event) {
-                    
+
                     me.mapLayerRemoveHandler(event);
                     // Refresh UI refresh button visible/invisible
                     me.refresh();
@@ -306,7 +306,7 @@ Oskari.clazz.define(
                  * @param {Object} event
                  */
                 WFSFeaturesSelectedEvent: function (event) {
-                    
+
                     me.featuresSelectedHandler(event);
                 },
 
@@ -315,7 +315,7 @@ Oskari.clazz.define(
                  * @param {Object} event
                  */
                 MapClickedEvent: function (event) {
-                    
+
                     me.mapClickedHandler(event);
                 },
 
@@ -324,7 +324,7 @@ Oskari.clazz.define(
                  * @param {Object} event
                  */
                 AfterChangeMapLayerStyleEvent: function (event) {
-                    
+
                     me.changeMapLayerStyleHandler(event);
                 },
                 /**
@@ -340,7 +340,7 @@ Oskari.clazz.define(
                  * @param {Object} event
                  */
                 MapLayerVisibilityChangedEvent: function (event) {
-                    
+
                     me.mapLayerVisibilityChangedHandler(event);
                     if (event.getMapLayer().hasFeatureData() && me.getConfig() && me.getConfig().deferSetLocation) {
                         me.getSandbox().printDebug(
@@ -355,7 +355,7 @@ Oskari.clazz.define(
                  * @param {Object} event
                  */
                 AfterChangeMapLayerOpacityEvent: function (event) {
-                    
+
                     me.afterChangeMapLayerOpacityEvent(event);
                 },
 
@@ -364,7 +364,7 @@ Oskari.clazz.define(
                  * @param {Object} event
                  */
                 MapSizeChangedEvent: function (event) {
-                    
+
                     me.mapSizeChangedHandler(event);
                 },
 
@@ -373,7 +373,7 @@ Oskari.clazz.define(
                  * @param {Object} event
                  */
                 WFSSetFilter: function (event) {
-                    
+
                     me.setFilterHandler(event);
                 },
 
@@ -382,7 +382,7 @@ Oskari.clazz.define(
                  * @param {Object} event
                  */
                 WFSSetPropertyFilter: function (event) {
-                    
+
                     me.setPropertyFilterHandler(event);
                 },
 
@@ -391,7 +391,7 @@ Oskari.clazz.define(
                  * @param {Object} event
                  */
                 WFSImageEvent: function (event) {
-                    
+
                     me.drawImageTile(
                         event.getLayer(),
                         event.getImageUrl(),
@@ -561,7 +561,7 @@ Oskari.clazz.define(
                 connection = me.getConnection(),
                 layer = event.getMapLayer(),
                 styleName = null;
-            
+
             if (layer.hasFeatureData()) {
                 if (connection.isLazy() && !connection.isConnected()) {
                     connection.connect();
@@ -586,7 +586,7 @@ Oskari.clazz.define(
 
                 // send together
                 connection.get().batch(function () {
-                    
+
                     me.getIO().addMapLayer(
                         layer.getId(),
                         styleName
@@ -635,7 +635,7 @@ Oskari.clazz.define(
          * @param {Object} event
          */
         featuresSelectedHandler: function (event) {
-            
+
             if (!event.getMapLayer().hasFeatureData()) {
                 // No featuredata available, return
                 return;
@@ -686,7 +686,7 @@ Oskari.clazz.define(
          * @param {Object} event
          */
         mapClickedHandler: function (event) {
-            
+
             // don't process while moving
             if (this.getSandbox().getMap().isMoving()) {
                 return;
@@ -722,7 +722,7 @@ Oskari.clazz.define(
          * @param {Object} event
          */
         changeMapLayerStyleHandler: function (event) {
-            
+
             if (event.getMapLayer().hasFeatureData()) {
                 // render "normal" layer with new style
                 var OLLayer = this.getOLMapLayer(
@@ -743,7 +743,7 @@ Oskari.clazz.define(
          * @param {Object} event
          */
         mapLayerVisibilityChangedHandler: function (event) {
-            
+
             if (event.getMapLayer().hasFeatureData()) {
                 this.getIO().setMapLayerVisibility(
                     event.getMapLayer().getId(),
@@ -757,7 +757,7 @@ Oskari.clazz.define(
          * @param {Object} event
          */
         afterChangeMapLayerOpacityEvent: function (event) {
-            
+
             var layer = event.getMapLayer(),
                 layers,
                 opacity;
@@ -843,7 +843,7 @@ Oskari.clazz.define(
                 srs,
                 tiles,
                 zoom;
-            
+
 
             me.getIO().setMapSize(event.getWidth(), event.getHeight());
 
@@ -888,7 +888,7 @@ Oskari.clazz.define(
          * @param {Object} event
          */
         setFilterHandler: function (event) {
-            
+
 
             var WFSLayerService = this.WFSLayerService,
                 layers = this.getSandbox().findAllSelectedMapLayers(),
@@ -905,7 +905,7 @@ Oskari.clazz.define(
          * @param {Object} event
          */
         setPropertyFilterHandler: function (event) {
-            
+
             /// clean selected features lists
             var me = this,
                 layers = this.getSandbox().findAllSelectedMapLayers();

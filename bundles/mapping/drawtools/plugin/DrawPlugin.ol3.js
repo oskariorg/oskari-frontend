@@ -17,20 +17,20 @@ Oskari.clazz.define(
         this._bufferedFeatureLayerId = 'bufferedFeatureLayer';
     	this._featuresIdToBeRemoved = [];
   	   	this._drawLayers = {};
-        this._id = 0;  	
+        this._id = 0;
     }, {
     	/**
          * @method setDefaultStyle
-         * - set styles for draw, modify and intersect mode      
-         * 
+         * - set styles for draw, modify and intersect mode
+         *
          * @param {ol.style.Style} style. If not given, will set default styles
          */
-        setDefaultStyle : function(style) { 
-        	var me = this;  
+        setDefaultStyle : function(style) {
+        	var me = this;
         	if(style) {
 	    		me._drawStyle = new ol.style.Style({
 	        	    fill: new ol.style.Fill({
-	        	      color: style.draw.fill.color        	    
+	        	      color: style.draw.fill.color
 	        	    }),
 	        	    stroke: new ol.style.Stroke({
 	        	      color: style.draw.stroke.color,
@@ -42,10 +42,10 @@ Oskari.clazz.define(
 	        	        color: style.draw.image.fill.color
 	        	      })
 	        	    })
-	            });  
+	            });
 	    		me._modifyStyle = new ol.style.Style({
 	        	    fill: new ol.style.Fill({
-	        	      color: style.modify.fill.color        	    
+	        	      color: style.modify.fill.color
 	        	    }),
 	        	    stroke: new ol.style.Stroke({
 	        	      color: style.modify.stroke.color,
@@ -57,10 +57,10 @@ Oskari.clazz.define(
 	        	        color: style.modify.image.fill.color
 	        	      })
 	        	    })
-	            });  
+	            });
 	    		me._intersectStyle = new ol.style.Style({
 	        	    fill: new ol.style.Fill({
-	        	      color: style.intersect.fill.color        	    
+	        	      color: style.intersect.fill.color
 	        	    }),
 	        	    stroke: new ol.style.Stroke({
 	        	      color: style.intersect.stroke.color,
@@ -73,11 +73,11 @@ Oskari.clazz.define(
 	        	        color: style.intersect.image.fill.color
 	        	      })
 	        	    })
-	            });  
+	            });
         	} else {
 //        		me._drawStyle = new ol.style.Style({
 //	        	    fill: new ol.style.Fill({
-//	        	      color: 'rgba(255,0,255,0.2)'        	    
+//	        	      color: 'rgba(255,0,255,0.2)'
 //	        	    }),
 //	        	    stroke: new ol.style.Stroke({
 //	        	      color: 'rgba(0,0,0,1)',
@@ -92,7 +92,7 @@ Oskari.clazz.define(
 //        		});
 //        		me._modifyStyle = new ol.style.Style({
 //	        	    fill: new ol.style.Fill({
-//	        	      color: 'rgba(222,111,255,0.2)'        	    
+//	        	      color: 'rgba(222,111,255,0.2)'
 //	        	    }),
 //	        	    stroke: new ol.style.Stroke({
 //	        	      color: 'rgba(0,0,0,1)',
@@ -107,7 +107,7 @@ Oskari.clazz.define(
 //        		});
 //        		me._intersectStyle = new ol.style.Style({
 //	        	    fill: new ol.style.Fill({
-//	        	      color: 'rgba(101,255,102,0.2)'        	    
+//	        	      color: 'rgba(101,255,102,0.2)'
 //	        	    }),
 //	        	    stroke: new ol.style.Stroke({
 //	        	      color: 'rgba(0,0,0,1)',
@@ -125,18 +125,18 @@ Oskari.clazz.define(
         },
         /**
          * @method draw
-         * - activates draw and modify controls      
-         * 
+         * - activates draw and modify controls
+         *
          * @param {String} id
          * @param {String} shape: drawing mode: Point/Circle/Polygon/Box/Square/LineString
-         * @param {Object} options include: 
-         * 							{String} geojson: geojson for editing. If not given, will activate draw/modify control according to given shape 
+         * @param {Object} options include:
+         * 							{String} geojson: geojson for editing. If not given, will activate draw/modify control according to given shape
          * 							{Number} buffer: buffer for drawing buffered line an dot
-         * 							{?} style: styles for draw, modify and intersect mode. If not given, gets default styles from config  
-         * 							{Boolean} allowMiltipleDrawing: false - if selections must be removed before drawing new selection, true - if user can draw many selection 
-         * 							{Boolean} showMeasure: true - if measure result should be displayed on selection  
+         * 							{?} style: styles for draw, modify and intersect mode. If not given, gets default styles from config
+         * 							{Boolean} allowMiltipleDrawing: false - if selections must be removed before drawing new selection, true - if user can draw many selection
+         * 							{Boolean} showMeasure: true - if measure result should be displayed on selection
          * 							{Boolean} drawControl: true - activates draw  control
-         * 							{Boolean} modifyControl: true - activates modify control 
+         * 							{Boolean} modifyControl: true - activates modify control
          */
         draw : function(id, shape, options) {
         	// TODO: implementations
@@ -147,7 +147,7 @@ Oskari.clazz.define(
             // TODO : start draw control
             // use default style if options don't include custom style
         	var me = this;
-        	
+
         	if(options.buffer) me._buffer = options.buffer;
         	if(options.geojson) me._geojson = options.geojson;
         	if(shape) me._shape = shape;
@@ -156,10 +156,10 @@ Oskari.clazz.define(
         	if(options.allowMultipleDrawing != undefined) me._allowMultipleDrawing = options.allowMultipleDrawing;
         	if(options.style) {
         		me.setDefaultStyle(options.style);
-        	}        	
-         	
-        	me._sandbox = me.getSandbox(); 
-        	me._map = me.getMapModule().getMap();        	
+        	}
+
+        	me._sandbox = me.getSandbox();
+        	me._map = me.getMapModule().getMap();
 
         	// creating layer for drawing (if layer not already added)
         	if(!me._drawLayers[me._layerId]) {
@@ -167,46 +167,46 @@ Oskari.clazz.define(
         	}
         	// creating layer for buffered features (if layer not already added)
         	if(!me._drawLayers[me._bufferedFeatureLayerId]) {
-        		me.addVectorLayer(me._bufferedFeatureLayerId); 
+        		me.addVectorLayer(me._bufferedFeatureLayerId);
         	}
-        	
+
         	if(shape) {
         		me.drawShape(me._shape, me._geojson);
         	} else {
                 // if shape == undefined -> update buffer for existing drawing (any other reason for this? text etc?)
-        	}        
+        	}
         },
         /**
          * @method drawShape
          * - activates draw/modify controls. If geojson is given, setup editing it
-         * 
+         *
          * @param {String} shape
          * @param {String} geojson
          */
         drawShape : function(shape, geojson) {
         	var me = this;
-        	
+
          	if(geojson) {
          		var jsonFormat = new ol.format.GeoJSON();
-            	var featuresFromJson = jsonFormat.readFeatures(geojson);             	
+            	var featuresFromJson = jsonFormat.readFeatures(geojson);
             	me._drawLayers[me._layerId].getSource().addFeatures(featuresFromJson);
          	}
-        	
+
         	if(me._drawControl) me.addDrawInteraction(me._layerId, shape);
         	if(me._modifyControl) me.addModifyInteraction(me._layerId, shape);
-        	
-//        	me.reportDrawingEvents();        	
-        },    
+
+//        	me.reportDrawingEvents();
+        },
         /**
          * @method stopDrawing
          * -  sends DrawingEvent and remove draw and modify controls
-         * 
+         *
          * @param {String} id
-         * @param {boolean} clearCurrent: if true, all selection will be removed from the map 
+         * @param {boolean} clearCurrent: if true, all selection will be removed from the map
          */
         stopDrawing : function(id, clearCurrent) {
         	var me = this;
-           
+
             // TODO: get geojson for matching id
             var geojson = me.getFeaturesAsGeoJSON(me._layerId);
             var bufferedGeoJson = me.getFeaturesAsGeoJSON(me._bufferedFeatureLayerId);
@@ -229,7 +229,7 @@ Oskari.clazz.define(
         /**
          * @method addVectorLayer
          * -  adding layer to the map
-         * 
+         *
          * @param {String} layerId
          */
         addVectorLayer : function(layerId) {
@@ -241,7 +241,7 @@ Oskari.clazz.define(
           	});
         	//TODO: pitääkö lisätä käyttäen requestia??
           	me._map.addLayer(vector);
-          	me._drawLayers[layerId] = vector; 
+          	me._drawLayers[layerId] = vector;
 //          	console.log("layer ", id, " added");
 		},
 		 /**
@@ -255,31 +255,31 @@ Oskari.clazz.define(
 		},
 		 /**
          * @method addDrawInteraction
-         * -  activates draw control 
-         * 
+         * -  activates draw control
+         *
          * @param {String} layerId
-         * @param {String} shape         
+         * @param {String} shape
          */
         addDrawInteraction : function(layerId, shape) {
         	var me = this;
         	var geometryFunction, maxPoints, geometryType;
         	geometryType = me._shape;
-        	
+
     	    if (me._shape === 'LineString') {
-    	    	 geometryFunction = function (coordinates, geometry) { 
+    	    	 geometryFunction = function (coordinates, geometry) {
 	    	    	  if (!geometry) {
 	    	    		  geometry = new ol.geom.LineString(null);
-	    	          } 
+	    	          }
 	    	    	  if (goog.isDef(geometry)) {
 	    	    		  geometry.setCoordinates(coordinates);
-	    	    	  } else {		    	    	 
-	    	    		  geometry = new ol.geom.LineString(coordinates);		    	
+	    	    	  } else {
+	    	    		  geometry = new ol.geom.LineString(coordinates);
 	    	    	  }
 	    	    	  if (me._buffer > 0) {
 	    	    		  me.drawBufferedGeometry(geometry, me._buffer);
 	    	    	  }
 	    	    	  return geometry;
-	    	      }    	    
+	    	      }
     	    } else if (me._shape === 'Box') {
     	    	 maxPoints = 2;
     	    	 geometryType = 'LineString';
@@ -305,17 +305,17 @@ Oskari.clazz.define(
     	    			 return geometry;
     	    		 }
     	    	 }
-    	    }          
-    	  
+    	    }
+
 	    	me._draw = new ol.interaction.Draw({
     		  features: me._drawLayers[layerId].getSource().getFeaturesCollection(),
     	      type: geometryType,
     	      style: me._drawStyle,
     	      geometryFunction:  geometryFunction,
     	      maxPoints: maxPoints
-	    	});      	    
+	    	});
 	        me._map.addInteraction(me._draw);
-	        
+
 			me._draw.on('drawend', function() {
 //				me._draw.overlay_.style_ = me._modifyStyle;
 				if(!me._allowMultipleDrawing) {
@@ -326,7 +326,7 @@ Oskari.clazz.define(
 		 /**
          * @method addModifyInteraction
          * -  activates modify control
-         * 
+         *
          * @param {String} layerId
          * @param {String} shape
          */
@@ -337,47 +337,47 @@ Oskari.clazz.define(
      		   style: me._modifyStyle,
      		   deleteCondition: function(event) {
      		        return ol.events.condition.shiftKeyOnly(event) && ol.events.condition.singleClick(event);
-     		   }    		  
+     		   }
      	   });
 	       if (me._buffer > 0 && me._shape=="LineString") {
 	           me._modify.on('modifystart', function(evt) {
 					me._drawLayers[me._layerId].getSource().on('changefeature', function(evt) {
 						me.drawBufferedGeometry(evt.feature.getGeometry(), me._buffer);
-					}); 
+					});
 			   });
 	       }
-     	   me._map.addInteraction(me._modify); 
-     	   
+     	   me._map.addInteraction(me._modify);
+
      	   me._modify.on('modifystart', function() {
-//     		  me._draw.overlay_.style_ = me._modifyStyle;				
+//     		  me._draw.overlay_.style_ = me._modifyStyle;
 		   });
         },
         /**
          * @method drawBufferedGeometry
          * -  adds buffered feature to the map
-         * 
+         *
          * @param {Geometry} geometry
          * @param {Number} buffer
          */
         drawBufferedGeometry : function(geometry, buffer) {
 			 var me = this;
 	    	 var bufferedFeature = me.getBufferedFeature(geometry, buffer, me._style);
-	    	 me._drawLayers[me._bufferedFeatureLayerId].getSource().getFeaturesCollection().clear();	    	  
+	    	 me._drawLayers[me._bufferedFeatureLayerId].getSource().getFeaturesCollection().clear();
 	    	 me._drawLayers[me._bufferedFeatureLayerId].getSource().getFeaturesCollection().push(bufferedFeature);
 //	    	 _.each(me._drawLayers[me._layerId].getSource().getFeaturesCollection(), function (f) {
 //	    		  console.log(f);
-//	    		  var feature = me.getBufferedFeature(f.values_.geometry, buffer, me._style);	
+//	    		  var feature = me.getBufferedFeature(f.values_.geometry, buffer, me._style);
 //		    	  me._drawLayers[me._bufferedFeatureLayerId].getSource().getFeaturesCollection().push(feature);
-//	         });    	  
+//	         });
 		},
 		/**
          * @method getBufferedFeature
          * -  creates buffered feature using given geometry and buffer. If style is given, adds style to feature
-         * 
+         *
          * @param {Geometry} geometry
          * @param {Number} buffer
          * @param {ol.style.Style} style
-         * 
+         *
          * @return {ol.Feature} feature
          */
 		getBufferedFeature: function(geometry, buffer, style) {
@@ -385,18 +385,18 @@ Oskari.clazz.define(
 			var reader = new jsts.io.WKTReader();
 			var wktFormat = new ol.format.WKT();
 			var wktFormatString = wktFormat.writeGeometry(geometry);
-			var input = reader.read(wktFormatString);		    	    	    
+			var input = reader.read(wktFormatString);
 			var bufferGeometry = input.buffer(buffer, 30);
 			var parser = new jsts.io.olParser();
 			bufferGeometry.CLASS_NAME = "jsts.geom.Polygon";
-			bufferGeometry = parser.write(bufferGeometry);	    	    	    
+			bufferGeometry = parser.write(bufferGeometry);
 			var feature = new ol.Feature({
-				geometry: bufferGeometry	    	     
+				geometry: bufferGeometry
 			});
-			
+
 	    	var id = me._bufferedFeatureLayer + me._id++;
 	    	feature.setId(id);
-	    	
+
 			feature.setStyle(style);
 			return feature;
 		},
@@ -404,16 +404,16 @@ Oskari.clazz.define(
          * @method removeInteractions
          * -  removes draw and modify controls, sets _shape and _buffer to null
          */
-		removeInteractions : function() {        	  
-        	var me = this;  
+		removeInteractions : function() {
+        	var me = this;
         	if(me._modify) {
         		me._map.removeInteraction(me._modify);
         	}
         	if(me._draw) {
         		me._map.removeInteraction(me._draw);
-        	} 
+        	}
         	me._shape = null;
-        	me._buffer= null;        		        
+        	me._buffer= null;
 		},
 		/**
          * @method reportDrawingEvents
@@ -421,7 +421,7 @@ Oskari.clazz.define(
          */
 		reportDrawingEvents : function() {
 			var me = this;
-			
+
 			if(me._draw) {
 				me._draw.on('drawstart', function() {
 					console.log("drawstart");
@@ -434,22 +434,22 @@ Oskari.clazz.define(
 				});
 			}
 			if(me._modify) {
-				me._modify.on('modifystart', function(evt) {					
+				me._modify.on('modifystart', function(evt) {
 					console.log("modifystart");
 				});
 				me._modify.on('change', function() {
 					console.log("modifychange");
 				});
-				
+
 				me._modify.on('modifyend', function() {
-					console.log("modifyend");				
+					console.log("modifyend");
 				});
 			}
 		},
 		/**
          * @method getPolygonArea
          * -  calculates area of given geometry
-         * 
+         *
          * @param {ol.geom.Geometry} geometry
          * @return {String} area: measure result icluding 'km2'/'ha' text
          */
@@ -460,7 +460,7 @@ Oskari.clazz.define(
 				if(area < 10000) {
 					area = area.toFixed(0) + " m2";
 				} else if(area > 1000000) {
-					area = (area/1000000).toFixed(2) + " km2"; 
+					area = (area/1000000).toFixed(2) + " km2";
 				} else {
 					area = (area/10000).toFixed(2) + " ha";
 				}
@@ -471,7 +471,7 @@ Oskari.clazz.define(
 		/**
          * @method getLineLength
          * -  calculates length of given geometry
-         * 
+         *
          * @param {ol.geom.Geometry} geometry
          * @return {String} length: measure result icluding 'm'/'km' text
          */
@@ -491,7 +491,7 @@ Oskari.clazz.define(
 		/**
          * @method getLineLength
          * -  gets features from layer
-         * 
+         *
          * @param {String} layerId
          * @return {Collection} features
          */
@@ -502,18 +502,18 @@ Oskari.clazz.define(
 	    },
 	    /**
          * @method getFeaturesAsGeoJSON
-         * - converts features to GeoJson      
-         * 
+         * - converts features to GeoJson
+         *
          * @param {String} layerId
          * @return {String} geojson
          */
 		getFeaturesAsGeoJSON : function(layerId) {
 			var me = this;
-			var geoJsonFormat = new ol.format.GeoJSON();			
+			var geoJsonFormat = new ol.format.GeoJSON();
 			var stringJson = geoJsonFormat.writeFeatures(me.getFeatures(layerId));
-//			console.log(stringJson);			
+//			console.log(stringJson);
 			return stringJson;
-		}		
+		}
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
         /**
