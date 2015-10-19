@@ -4,7 +4,7 @@
 
 ### routingUI
 
-Now start and end poins are markered on the map. Also all route plan(s) are showed on search results. Fixed error handling.
+Now start and end points are markered on the map. Also all route plan(s) are shown on search results. Fixed error handling.
 
 ### routingService
 
@@ -16,11 +16,11 @@ Now adds the indicator tab UI for user content/personaldata even if started afte
 
 ### Default view functionality
 
-Added functionality to mar a saved view as a default view.
+Added functionality to mark a saved view as a default view.
 
 ### mapfull
 
-Fixed map content width. Now navigation, zoombar, XY etc. tools are visible also smaller screens.
+Fixed map content width. Now navigation, zoombar, XY etc. tools are visible also on smaller screens.
 
 ### map-module
 
@@ -29,6 +29,10 @@ Added a new request 'ShowProgressSpinnerRequest' that shows / hides a progress i
 ### mapmodule-plugin/MarkersPlugin
 
 Added marker transient property, if this is setted to true then marker is not saved to state.
+
+### core/maplayer-service
+
+No longer generates an empty default style for WMS-layers.
 
 ### publisher2
 
@@ -39,7 +43,7 @@ Added LayerSelectionTool. This tool user can add map layer tool on the map. User
 WmtsLayerService no longer parses rest url template from capabilities, but relies on server providing it. 
 This enables proxying for WMTS-layers that use resourceURL and require credentials.
 
-### libararies/moment
+### libraries/moment
 
 Added Moment library for date/time presentation formatting.
 
