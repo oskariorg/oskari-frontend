@@ -1185,7 +1185,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             // ajax call
             me.statsService.fetchStatsData(
                 // url
-                me._sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=data&version=1.0&indicator=' + indicatorId + '&years=' + year + '&genders=' + gndrs,
+                me._sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=data&version=1.1&indicator=' + indicatorId + '&years=' + year + '&genders=' + gndrs,
                 // success callback
 
                 function (data) {
@@ -1794,7 +1794,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 // ajax call
                 me.statsService.fetchStatsData(
                     // url
-                    me._sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=data&version=1.0&indicator=' + indicator + '&years=' + year + '&genders=' + gender,
+                    me._sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=data&version=1.1&indicator=' + indicator + '&years=' + year + '&genders=' + gender,
                     // success callback
                     // FIXME create function outside loop
 
