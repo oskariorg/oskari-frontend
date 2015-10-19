@@ -699,13 +699,13 @@ Oskari.clazz.define(
             var pixelTolerance = 15;
             var json = {
                 type: 'FeatureCollection',
-                crs: 'EPSG:3067',
+                crs: this.getMap().getView().getProjection().getCode(),
                 features: [{
                     type: 'Feature',
                     geometry: JSON.parse(geojson.writeGeometry(point)),
                     properties : {
                         // add buffer based on resolution
-                        buffer_radius : 20 //this.getMap().getView().getResolution() * pixelTolerance
+                        buffer_radius : this.getMap().getView().getResolution() * pixelTolerance
                     }
                 }]
             };
