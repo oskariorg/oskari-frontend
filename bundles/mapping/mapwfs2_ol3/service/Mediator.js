@@ -339,6 +339,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             var event = sandbox.getEventBuilder('WFSFeaturesSelectedEvent')(me.WFSLayerService.getSelectedFeatureIds(layer._id), layer, selectFeatures);
             sandbox.notifyAll(event);
         } else {
+            // FIXME: pass coordinates from server in response, but not like this
             data.data.lonlat = this.lonlat;
             me.WFSLayerService.emptyWFSFeatureSelections(layer);
             var infoEvent = sandbox.getEventBuilder('GetInfoResultEvent')(data.data);
@@ -670,32 +671,17 @@ Oskari.clazz.category(
                 map = sandbox.getMap(),
                 srs = map.getSrsName();
 
+            // TODO: save coordinates???
             this.lonlat = lonlat;
             this.sendMessage('/service/wfs/setMapClick', {
                 'longitude': lonlat.lon,
                 'latitude': lonlat.lat,
+                'filter' : {
+                    geojson : lonlat.json
+                },
                 'keepPrevious': keepPrevious,
                 'geomRequest': geomRequest
             });
-
-            /**
-            if(keepPrevious !== null && keepPrevious === false) {
-                me.setFilter({
-                    "type":"FeatureCollection",
-                    "features":[
-                    {
-                        "type":"Feature",
-                        "properties":{},
-                        "geometry":{
-                            "type":
-                            "Point",
-                            "coordinates":[lonlat.lon,lonlat.lat]
-                        }
-                    }],
-                    "crs":{"type":"name","properties":{"name":srs}}}
-                );
-            }
-            */
         },
 
         /**

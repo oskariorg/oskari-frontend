@@ -694,7 +694,27 @@ Oskari.clazz.define(
             var lonlat = event.getLonLat(),
                 keepPrevious = this.getSandbox().isCtrlKeyDown();
 
-            this.getIO().setMapClick(lonlat, keepPrevious);
+            var point =  new ol.geom.Point(lonlat);
+            var geojson = new ol.format.GeoJSON(this.getMap().getView().getProjection());
+            var pixelTolerance = 15;
+            var json = {
+                type: 'FeatureCollection',
+                crs: 'EPSG:3067',
+                features: [{
+                    type: 'Feature',
+                    geometry: JSON.parse(geojson.writeGeometry(point)),
+                    properties : {
+                        // add buffer based on resolution
+                        buffer_radius : 20 //this.getMap().getView().getResolution() * pixelTolerance
+                    }
+                }]
+            };
+
+            this.getIO().setMapClick({
+                lon : lonlat[0],
+                lat : lonlat[1],
+                json : json
+            }, keepPrevious);
         },
 
         /**
@@ -1142,8 +1162,7 @@ Oskari.clazz.define(
                 // How to refresh/reload  tileload of tile layer
                // normalLayer.changed();
                // normalLayer.render();
-               normalLayer.redraw(true);
-               // normalLayer.getSource().updateParams({time_: (new Date()).getTime()});
+               //normalLayer.redraw(true);
 
             }
         },
@@ -1192,15 +1211,16 @@ Oskari.clazz.define(
             var openLayer = new ol.layer.Tile({
                 source: new ol.source.TileImage({   // XYZ and TileImage(  tried
                     tileLoadFunction: function (imageTile, src) {
-
                         //    imageTile.getImage().src = window.URL.createObjectURL(res);
 
                     },
                     layerId: _layer.getId(),
                     tileUrlFunction: function (tileCoord, pixelRatio, projection, theTile) {
+                      //  return tileCoord.join(",");
+                      return;
+                        // this method is not in minified ol js
+                        var bounds = this.getTileGrid().getTileCoordExtent(tileCoord);
 
-
-                        var bounds = this.tileGrid.getTileCoordExtent(tileCoord);
 
 
                         var BBOX = bounds,
