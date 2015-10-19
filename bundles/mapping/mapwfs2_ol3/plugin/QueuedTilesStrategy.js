@@ -215,7 +215,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrate
                     var boundsFeature = null;
                     if (debugGridFeatures) {
                         var ptFromA = new ol.geom.Point([bs[0], bs[1]]);
-                        OpenLayers.Geometry.Point(bs[0], bs[1]);
+
                         var ptToA =  new ol.geom.Point([bs[2], bs[3]]);
                         var ptFromB = new ol.geom.Point([bs[0], bs[3]]);
 
