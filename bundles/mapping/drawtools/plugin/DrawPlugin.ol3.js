@@ -13,114 +13,71 @@ Oskari.clazz.define(
     function () {
         this._clazz = 'Oskari.mapping.drawtools.plugin.DrawPlugin';
         this._name = 'GenericDrawPlugin';
+
         this._layerId = 'DrawLayer';
-        this._bufferedFeatureLayerId = 'bufferedFeatureLayer';
-    	this._featuresIdToBeRemoved = [];
+        this._bufferedFeatureLayerId = 'BufferedFeatureLayer';
+
+        this._defaultStyle = {
+    		fillColor: 'rgba(255,0,255,0.2)',
+    		strokeColor: 'rgba(0,0,0,1)',
+    		width: 2,
+    		radius: 4,
+    		lineDash: [5]
+    	};
+        this._styleTypes = ['draw', 'modify', 'intersect'];
+        this._styles = {};
   	   	this._drawLayers = {};
-        this._id = 0;
-    }, {
+    },
+    {
     	/**
          * @method setDefaultStyle
          * - set styles for draw, modify and intersect mode
          *
-         * @param {ol.style.Style} style. If not given, will set default styles
+         * @param {Object} styles. If not given, will set default styles
          */
-        setDefaultStyle : function(style) {
+        setDefaultStyle : function(styles) {
         	var me = this;
-        	if(style) {
-	    		me._drawStyle = new ol.style.Style({
-	        	    fill: new ol.style.Fill({
-	        	      color: style.draw.fill.color
-	        	    }),
-	        	    stroke: new ol.style.Stroke({
-	        	      color: style.draw.stroke.color,
-	        	      width: style.draw.stroke.width
-	        	    }),
-	        	    image: new ol.style.Circle({
-	        	      radius: style.draw.image.radius,
-	        	      fill: new ol.style.Fill({
-	        	        color: style.draw.image.fill.color
-	        	      })
-	        	    })
-	            });
-	    		me._modifyStyle = new ol.style.Style({
-	        	    fill: new ol.style.Fill({
-	        	      color: style.modify.fill.color
-	        	    }),
-	        	    stroke: new ol.style.Stroke({
-	        	      color: style.modify.stroke.color,
-	        	      width: style.modify.stroke.width
-	        	    }),
-	        	    image: new ol.style.Circle({
-	        	      radius: style.modify.image.radius,
-	        	      fill: new ol.style.Fill({
-	        	        color: style.modify.image.fill.color
-	        	      })
-	        	    })
-	            });
-	    		me._intersectStyle = new ol.style.Style({
-	        	    fill: new ol.style.Fill({
-	        	      color: style.intersect.fill.color
-	        	    }),
-	        	    stroke: new ol.style.Stroke({
-	        	      color: style.intersect.stroke.color,
-	        	      width: style.intersect.stroke.width,
-	        	      lineDash: [style.intersect.stroke.lineDash]
-	        	    }),
-	        	    image: new ol.style.Circle({
-	        	      radius: style.intersect.image.radius,
-	        	      fill: new ol.style.Fill({
-	        	        color: style.intersect.image.fill.color
-	        	      })
-	        	    })
-	            });
-        	} else {
-//        		me._drawStyle = new ol.style.Style({
-//	        	    fill: new ol.style.Fill({
-//	        	      color: 'rgba(255,0,255,0.2)'
-//	        	    }),
-//	        	    stroke: new ol.style.Stroke({
-//	        	      color: 'rgba(0,0,0,1)',
-//	        	      width: 2
-//	        	    }),
-//	        	    image: new ol.style.Circle({
-//	        	      radius: 4,
-//	        	      fill: new ol.style.Fill({
-//	        	        color: 'rgba(0,0,0,1)'
-//	        	      })
-//	        	    })
-//        		});
-//        		me._modifyStyle = new ol.style.Style({
-//	        	    fill: new ol.style.Fill({
-//	        	      color: 'rgba(222,111,255,0.2)'
-//	        	    }),
-//	        	    stroke: new ol.style.Stroke({
-//	        	      color: 'rgba(0,0,0,1)',
-//	        	      width: 2
-//	        	    }),
-//	        	    image: new ol.style.Circle({
-//	        	      radius: 4,
-//	        	      fill: new ol.style.Fill({
-//	        	        color: 'rgba(0,0,0,1)'
-//	        	      })
-//	        	    })
-//        		});
-//        		me._intersectStyle = new ol.style.Style({
-//	        	    fill: new ol.style.Fill({
-//	        	      color: 'rgba(101,255,102,0.2)'
-//	        	    }),
-//	        	    stroke: new ol.style.Stroke({
-//	        	      color: 'rgba(0,0,0,1)',
-//	        	      width: 2,
-//	        	      lineDash: [5]
-//	        	    }),
-//	        	    image: new ol.style.Circle({
-//	        	      radius: 4,
-//	        	      fill: new ol.style.Fill({
-//	        	        color: 'rgba(0,0,0,1)'
-//	        	      })
-//	        	    })
-//        		});
+        	//setting defaultStyles
+        	_.each(me._styleTypes, function (s) {
+      			me._styles[s] = new ol.style.Style({
+	           	    fill: new ol.style.Fill({
+	           	      color: me._defaultStyle.fillColor
+	           	    }),
+	           	    stroke: new ol.style.Stroke({
+	           	      color: me._defaultStyle.strokeColor,
+	           	      width: me._defaultStyle.width
+	           	    }),
+	           	    image: new ol.style.Circle({
+	           	      radius: me._defaultStyle.radius,
+	           	      fill: new ol.style.Fill({
+	           	        color: me._defaultStyle.strokeColor
+	           	      })
+	           	    })
+      			});
+      		});
+        	//overwriting default styles if given
+        	if(styles) {
+        		_.each(styles, function (style, styleType) {
+
+        			if(style.fill.color) {
+            			me._styles[styleType].getFill().setColor(style.fill.color);
+        			}
+		        	if(style.stroke.color) {
+			    		me._styles[styleType].getStroke().setColor(style.stroke.color);
+		        	}
+		        	if(style.stroke.width) {
+			    		me._styles[styleType].getStroke().setWidth(style.stroke.width);
+		        	}
+//		        	if(style.stroke.lineDash) {
+//			    		me._styles[styleType].getStroke().setLineDash(style.stroke.lineDash);
+//		        	}
+		        	if(style.image.radius) {
+			    		me._styles[styleType].getImage().radius = style.image.radius;
+		        	}
+		        	if(style.image.fill.color) {
+			    		me._styles[styleType].getImage().getFill().setColor(style.image.fill.color);
+		        	}
+        		});
         	}
         },
         /**
@@ -132,7 +89,7 @@ Oskari.clazz.define(
          * @param {Object} options include:
          * 							{String} geojson: geojson for editing. If not given, will activate draw/modify control according to given shape
          * 							{Number} buffer: buffer for drawing buffered line an dot
-         * 							{?} style: styles for draw, modify and intersect mode. If not given, gets default styles from config
+         * 							{Object} style: styles for draw, modify and intersect mode. If options don't include custom style, sets default styles
          * 							{Boolean} allowMiltipleDrawing: false - if selections must be removed before drawing new selection, true - if user can draw many selection
          * 							{Boolean} showMeasure: true - if measure result should be displayed on selection
          * 							{Boolean} drawControl: true - activates draw  control
@@ -147,16 +104,10 @@ Oskari.clazz.define(
             // TODO : start draw control
             // use default style if options don't include custom style
         	var me = this;
+        	me._shape = shape;
+        	me._buffer = options.buffer;
 
-        	if(options.buffer) me._buffer = options.buffer;
-        	if(options.geojson) me._geojson = options.geojson;
-        	if(shape) me._shape = shape;
-        	if(options.drawControl != undefined) me._drawControl = options.drawControl;
-        	if(options.modifyControl != undefined) me._modifyControl = options.modifyControl;
-        	if(options.allowMultipleDrawing != undefined) me._allowMultipleDrawing = options.allowMultipleDrawing;
-        	if(options.style) {
-        		me.setDefaultStyle(options.style);
-        	}
+        	me.setDefaultStyle(options.style);
 
         	me._sandbox = me.getSandbox();
         	me._map = me.getMapModule().getMap();
@@ -169,9 +120,9 @@ Oskari.clazz.define(
         	if(!me._drawLayers[me._bufferedFeatureLayerId]) {
         		me.addVectorLayer(me._bufferedFeatureLayerId);
         	}
-
+        	//activate drawcontrols
         	if(shape) {
-        		me.drawShape(me._shape, me._geojson);
+        		me.drawShape(shape, options);
         	} else {
                 // if shape == undefined -> update buffer for existing drawing (any other reason for this? text etc?)
         	}
@@ -183,17 +134,20 @@ Oskari.clazz.define(
          * @param {String} shape
          * @param {String} geojson
          */
-        drawShape : function(shape, geojson) {
+        drawShape : function(shape, options) {
         	var me = this;
 
-         	if(geojson) {
+         	if(options.geojson) {
          		var jsonFormat = new ol.format.GeoJSON();
-            	var featuresFromJson = jsonFormat.readFeatures(geojson);
+            	var featuresFromJson = jsonFormat.readFeatures(options.geojson);
             	me._drawLayers[me._layerId].getSource().addFeatures(featuresFromJson);
          	}
-
-        	if(me._drawControl) me.addDrawInteraction(me._layerId, shape);
-        	if(me._modifyControl) me.addModifyInteraction(me._layerId, shape);
+        	if(options.drawControl !== false) {
+        		me.addDrawInteraction(me._layerId, shape, options.buffer, options.allowMultipleDrawing);
+        	}
+        	if(options.modifyControl !== false) {
+        		me.addModifyInteraction(me._layerId, shape, options.buffer);
+        	}
 
 //        	me.reportDrawingEvents();
         },
@@ -211,8 +165,8 @@ Oskari.clazz.define(
             var geojson = me.getFeaturesAsGeoJSON(me._layerId);
             var bufferedGeoJson = me.getFeaturesAsGeoJSON(me._bufferedFeatureLayerId);
             var data = {
-                lenght : '',//getLineLength(),
-                area : '',//getArea(),
+                lenght : '',
+                area : '',
                 bufferedGeoJson: bufferedGeoJson,
                 buffer: me._buffer,
                 shape: me._shape
@@ -237,7 +191,7 @@ Oskari.clazz.define(
         	var vector = new ol.layer.Vector({
           	  id: layerId,
           	  source: new ol.source.Vector({features: new ol.Collection()}),
-          	  style: me._drawStyle
+          	  style: me._styles['draw']
           	});
         	//TODO: pitääkö lisätä käyttäen requestia??
           	me._map.addLayer(vector);
@@ -260,12 +214,12 @@ Oskari.clazz.define(
          * @param {String} layerId
          * @param {String} shape
          */
-        addDrawInteraction : function(layerId, shape) {
+        addDrawInteraction : function(layerId, shape, buffer, allowMultipleDrawing) {
         	var me = this;
         	var geometryFunction, maxPoints, geometryType;
-        	geometryType = me._shape;
+        	geometryType = shape;
 
-    	    if (me._shape === 'LineString') {
+    	    if (shape === 'LineString') {
     	    	 geometryFunction = function (coordinates, geometry) {
 	    	    	  if (!geometry) {
 	    	    		  geometry = new ol.geom.LineString(null);
@@ -275,12 +229,13 @@ Oskari.clazz.define(
 	    	    	  } else {
 	    	    		  geometry = new ol.geom.LineString(coordinates);
 	    	    	  }
-	    	    	  if (me._buffer > 0) {
-	    	    		  me.drawBufferedGeometry(geometry, me._buffer);
+	    	    	  if (buffer > 0) {
+	    	    		  me.drawBufferedGeometry(geometry, buffer);
 	    	    	  }
 	    	    	  return geometry;
 	    	      }
-    	    } else if (me._shape === 'Box') {
+    	    } else if (shape === 'Box') {
+
     	    	 maxPoints = 2;
     	    	 geometryType = 'LineString';
     	         geometryFunction = function(coordinates, geometry) {
@@ -292,15 +247,15 @@ Oskari.clazz.define(
     	           geometry.setCoordinates([[start, [start[0], end[1]], end, [end[0], start[1]], start]]);
     	           return geometry;
     	         }
-    	    } else if (me._shape === 'Square') {
+    	    } else if (shape === 'Square') {
     	        geometryType = 'Circle';
     	        geometryFunction = ol.interaction.Draw.createRegularPolygon(4);
-    	    } else if (me._shape === 'Circle') {
-    	    	 if (me._buffer > 0) {
+    	    } else if (shape === 'Circle') {
+    	    	 if (buffer > 0) {
    	    	    	geometryType = 'Point';
     	    		geometryFunction = function(coordinates, geometry) {
     	    			 if (!geometry) {
-    	    				 geometry = new ol.geom.Circle(coordinates, me._buffer);
+    	    				 geometry = new ol.geom.Circle(coordinates, buffer);
     	    			 }
     	    			 return geometry;
     	    		 }
@@ -310,15 +265,15 @@ Oskari.clazz.define(
 	    	me._draw = new ol.interaction.Draw({
     		  features: me._drawLayers[layerId].getSource().getFeaturesCollection(),
     	      type: geometryType,
-    	      style: me._drawStyle,
+    	      style: me._styles['draw'],
     	      geometryFunction:  geometryFunction,
     	      maxPoints: maxPoints
 	    	});
 	        me._map.addInteraction(me._draw);
 
-			me._draw.on('drawend', function() {
+			me._draw.on('drawstart', function() {
 //				me._draw.overlay_.style_ = me._modifyStyle;
-				if(!me._allowMultipleDrawing) {
+				if(allowMultipleDrawing !== true) {
 					me.clearDrawing();
 				}
 			});
@@ -330,19 +285,19 @@ Oskari.clazz.define(
          * @param {String} layerId
          * @param {String} shape
          */
-        addModifyInteraction : function(layerId, shape) {
+        addModifyInteraction : function(layerId, shape, buffer) {
         	var me = this;
         	me._modify = new ol.interaction.Modify({
      		   features: me._drawLayers[layerId].getSource().getFeaturesCollection(),
-     		   style: me._modifyStyle,
+     		   style: me._styles['modify'],
      		   deleteCondition: function(event) {
      		        return ol.events.condition.shiftKeyOnly(event) && ol.events.condition.singleClick(event);
      		   }
      	   });
-	       if (me._buffer > 0 && me._shape=="LineString") {
-	           me._modify.on('modifystart', function(evt) {
+	       if (buffer > 0 && shape === "LineString") {
+	           me._modify.on('modifystart', function() {
 					me._drawLayers[me._layerId].getSource().on('changefeature', function(evt) {
-						me.drawBufferedGeometry(evt.feature.getGeometry(), me._buffer);
+						me.drawBufferedGeometry(evt.feature.getGeometry(), buffer);
 					});
 			   });
 	       }
@@ -361,7 +316,7 @@ Oskari.clazz.define(
          */
         drawBufferedGeometry : function(geometry, buffer) {
 			 var me = this;
-	    	 var bufferedFeature = me.getBufferedFeature(geometry, buffer, me._style);
+	    	 var bufferedFeature = me.getBufferedFeature(geometry, buffer, me._styles['draw']);
 	    	 me._drawLayers[me._bufferedFeatureLayerId].getSource().getFeaturesCollection().clear();
 	    	 me._drawLayers[me._bufferedFeatureLayerId].getSource().getFeaturesCollection().push(bufferedFeature);
 //	    	 _.each(me._drawLayers[me._layerId].getSource().getFeaturesCollection(), function (f) {
@@ -393,10 +348,6 @@ Oskari.clazz.define(
 			var feature = new ol.Feature({
 				geometry: bufferGeometry
 			});
-
-	    	var id = me._bufferedFeatureLayer + me._id++;
-	    	feature.setId(id);
-
 			feature.setStyle(style);
 			return feature;
 		},
@@ -434,7 +385,7 @@ Oskari.clazz.define(
 				});
 			}
 			if(me._modify) {
-				me._modify.on('modifystart', function(evt) {
+				me._modify.on('modifystart', function() {
 					console.log("modifystart");
 				});
 				me._modify.on('change', function() {
