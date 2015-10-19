@@ -55,6 +55,10 @@ New event is enabled by default:
 New request is enabled by default:
 - 'GetRouteRequest' requests to get route plan from routeService
 
+### admin-layerselector
+
+Now initializes the legendimage from style correctly when adding layers.
+
 ## 1.32.1
 
 ### integration/admin-layerselector

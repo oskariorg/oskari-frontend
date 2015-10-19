@@ -36,9 +36,20 @@ if (!Function.prototype.bind) {
                         }
                     }
                 }
+                this._selectFirstStyle();
                 this.supportedLanguages = Oskari.getSupportedLanguages();
                 // setup backbone id so collections work
                 this.id = model.getId();
+            },
+            /**
+             * Selects the first style so legendImage will show initial value
+             * @return {[type]} [description]
+             */
+            _selectFirstStyle : function() {
+                var styles = this.getStyles();
+                if(styles.length) {
+                    this.selectStyle(styles[0].getName());
+                }
             },
             /**
              * Sets the internal state for full capabilities response.
@@ -108,6 +119,8 @@ if (!Function.prototype.bind) {
                 this.set(mapLayer, {
                     silent: true
                 });
+
+                this._selectFirstStyle();
 
                 // this will trigger change so the previous can be done silently
                 this.setCapabilitiesResponse(capabilities);

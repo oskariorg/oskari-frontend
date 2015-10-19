@@ -349,12 +349,10 @@ define([
              */
             handleLayerStyleChange: function (e) {
                 e.stopPropagation();
-                var
-                    me = this,
-                    element = jQuery(e.currentTarget),
+                var element = jQuery(e.currentTarget),
                     form = element.parents('.admin-add-layer'),
                     cur_style_name = form.find('#add-layer-style').val();
-                me.model.selectStyle(cur_style_name);
+                this.model.selectStyle(cur_style_name);
                 form.find('#add-layer-legendImage').val(me.model.getLegendUrl());
             },
 
