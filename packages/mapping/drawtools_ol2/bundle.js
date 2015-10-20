@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.infobox.InfoBoxBundle
+ * @class Oskari.mapping.drawtools.DrawToolsBundle
  *
  * Definition for bundle. See source for details.
  */
@@ -27,19 +27,19 @@ Oskari.clazz.define("Oskari.mapping.drawtools.DrawToolsBundle",
 
             "scripts": [{
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/drawtools/instance.js"
+                "src": "../../../bundles/mapping/drawtools/instance.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/drawtools/plugin/DrawPlugin.ol2.js"
+                "src": "../../../bundles/mapping/drawtools/plugin/DrawPlugin.ol2.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/drawtools/request/StartDrawingRequest.js"
+                "src": "../../../bundles/mapping/drawtools/request/StartDrawingRequest.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/drawtools/request/StopDrawingRequest.js"
+                "src": "../../../bundles/mapping/drawtools/request/StopDrawingRequest.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/drawtools/event/DrawingEvent.js"
+                "src": "../../../bundles/mapping/drawtools/event/DrawingEvent.js"
             }]
         },
         "bundle": {
@@ -82,5 +82,5 @@ Oskari.clazz.define("Oskari.mapping.drawtools.DrawToolsBundle",
 
     });
 
-Oskari.bundle_manager.installBundleClass("drawtools",
+Oskari.bundle_manager.installBundleClass("drawtools_ol2",
     "Oskari.mapping.drawtools.DrawToolsBundle");
