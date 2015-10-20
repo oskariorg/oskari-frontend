@@ -32,7 +32,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
         init: function (pData) {
             var me = this;
             me.data = pData;
-
             _.each(me.tools, function (tool) {
                 tool.init(me.data);
             });
@@ -172,19 +171,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
         _getEnabledTools: function() {
             var me = this,
                 enabledTools = null;
-            if (me.data) {
-                enabledTools = {};
-                if (me.data.configuration && me.data.configuration.mapfull && me.data.configuration.mapfull.conf && me.data.configuration.mapfull.conf.plugins) {
-                    _.each(me.data.configuration.mapfull.conf.plugins, function(plugin) {
-                        enabledTools[plugin.id] = true;
-                    });
-                }
 
-                return enabledTools;
-            }
-
+              if (me.data) {
+                  enabledTools = {};
+                  _.each(me.tools, function(tool) {
+                    if (tool.bundleName) {
+                      if (me.data.configuration && me.data.configuration[tool.bundleName]) {
+                        enabledTools[tool.getTool().id] = true;
+                      }
+                    } else {
+                      if (me.data.configuration && me.data.configuration.mapfull && me.data.configuration.mapfull.conf && me.data.configuration.mapfull.conf.plugins) {
+                          _.each(me.data.configuration.mapfull.conf.plugins, function(plugin) {
+                              enabledTools[plugin.id] = true;
+                          });
+                      }
+                    }
+                  });
+                  return enabledTools;
+              }
             return null;
-        },
+      },
         /**
          * Returns the selections the user has done with the form inputs.
          * @method getValues

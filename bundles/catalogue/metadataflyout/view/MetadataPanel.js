@@ -619,17 +619,32 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             );
 
             me._tabContainer.insertTo(me.getContainer());
-
             /* let's create view selector tabs */
             for (tabId in me._templates.tabs) {
                 if (me._templates.tabs.hasOwnProperty(tabId)) {
                     entry = Oskari.clazz.create(
                         'Oskari.userinterface.component.TabPanel'
                     );
-                    entry.setTitle(locale[tabId]);
-                    entry.setContent(
-                        me._templates.tabs[tabId](model)
-                    );
+                    entry.setId(tabId);
+
+                    //skip async tabs whose content comes from someplace else
+                    if (me._templates.tabs[tabId]) {
+                        //the "native" tabs have keys in this bundles locale
+                        entry.setTitle(locale[tabId]);
+                        entry.setContent(
+                            me._templates.tabs[tabId](model)
+                        );
+                    } else if (me._additionalTabs && me._additionalTabs[tabId] && me._additionalTabs[tabId].tabActivatedCallback) {
+                        var newTabTitle = me._additionalTabs[tabId].title ? me._additionalTabs[tabId].title : "";
+                        entry.setTitle(newTabTitle);
+                        me._tabContainer.addTabChangeListener(function(previousTab, newTab) {
+                            if (newTab && newTab.getId() && !newTab.content) {
+                                if (me._additionalTabs[newTab.getId()] && me._additionalTabs[newTab.getId()].tabActivatedCallback) {
+                                    me._additionalTabs[newTab.getId()].tabActivatedCallback(me._model.uuid, newTab);
+                                }
+                            }
+                        });
+                    }
                     me._tabContainer.addPanel(entry);
                     me._tabs[tabId] = entry;
                 }
@@ -678,6 +693,32 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             me.setTitle(me._model.identification.citation.title);
             if (open) {
                 me.open();
+            }
+        },
+        /**
+         * @public method addTabs
+         *
+         * @param {Object} tabsJSON
+         * {
+         *   //key is used as the tab's title and must map to a key in localization file
+         *   'key' : {
+         *     //content as an underscore template, optional
+         *     template: {_.template}
+         *     //a callback to call when tab gets activated. Will take a reference to the panel and get the content asynchronously
+         *     tabActivatedCallback: function(panel)
+         *   },
+         *   'key2': {
+         *     template: {_.template}
+         *     tabActivatedCallback: function(panel)
+         *   }
+         * }
+         *
+         */
+        addTabs: function(tabsJSON) {
+            var me = this;
+            me._additionalTabs = tabsJSON;
+            for (var tabId in tabsJSON) {
+                me._templates.tabs[tabId] = tabsJSON[tabId].template ? tabsJSON[tabId].template : null;
             }
         },
 

@@ -19,7 +19,8 @@ Oskari.registerLocalization(
                     "description": "Kuvaus",
                     "publish": "Julkaisu",
                     "edit": "Muokkaa",
-                    "delete": "Poista"
+                    "delete": "Poista",
+                    "default": "Oletus"
                 },
                 "popup": {
                     "edit": "Karttanäkymän muokkaus",
@@ -46,7 +47,8 @@ Oskari.registerLocalization(
                     "ok": "OK",
                     "save": "Tallenna",
                     "cancel": "Peruuta",
-                    "toolbarsave": "Tallenna näkymä"
+                    "toolbarsave": "Tallenna näkymä",
+                    "saveCurrent": "Tallenna nykyinen näkymä"
                 },
                 "error": {
                     "title": "Virhe!",

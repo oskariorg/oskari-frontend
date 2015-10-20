@@ -280,6 +280,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
         var layers = this._sandbox.findAllSelectedMapLayers();
         var layerIndex = 0;
 
+        return;
         var opLayersLength = this.mapModule.getLayers().length;
 
         var changeLayer = this.mapModule.getLayersByName('Markers');

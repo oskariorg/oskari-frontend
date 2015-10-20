@@ -61,12 +61,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesGrid",
          */
         moveTo: function (bounds, zoomChanged) {
 
-            bounds = bounds || this.map.getExtent();
+            bounds = bounds || this.map.getView().calculateExtent(this.map.getSize());
 
             if (bounds !== null && bounds !== undefined) {
 
                 // if grid is empty or zoom has changed, we *must* re-tile
-                var forceReTile = !this.grid.length || zoomChanged;
+                var forceReTile = !this.grid || !this.grid.length || zoomChanged;
 
                 // total bounds of the tiles
                 var tilesBounds = this.getTilesBounds();
@@ -110,19 +110,18 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesGrid",
          *     onscreen).
          */
         getTilesBounds: function () {
-            var bounds = null;
-
-            if (this.grid.length) {
+            var bounds = [];
+            if (this.grid && this.grid.length) {
                 var bottom = this.grid.length - 1;
                 var bottomLeftTile = this.grid[bottom][0];
 
                 var right = this.grid[0].length - 1;
                 var topRightTile = this.grid[0][right];
 
-                bounds = new OpenLayers.Bounds(bottomLeftTile.bounds.left,
-                    bottomLeftTile.bounds.bottom,
-                    topRightTile.bounds.right,
-                    topRightTile.bounds.top);
+                bounds = [bottomLeftTile.bounds[0],
+                    bottomLeftTile.bounds[1],
+                    topRightTile.bounds[2],
+                    topRightTile.bounds[3]];
 
             }
             return bounds;
@@ -143,20 +142,20 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesGrid",
          * tileoffsetlat, tileoffsetx, tileoffsety
          */
         calculateGridLayout: function (bounds, extent, resolution) {
-            var tilelon = resolution * this.tileSize.w;
-            var tilelat = resolution * this.tileSize.h;
+            var tilelon = resolution * this.tileSize[0];
+            var tilelat = resolution * this.tileSize[1];
 
-            var offsetlon = bounds.left - extent.left;
+            var offsetlon = bounds[0] - extent[0];
             var tilecol = Math.floor(offsetlon / tilelon) - this.buffer;
             var tilecolremain = offsetlon / tilelon - tilecol;
-            var tileoffsetx = -tilecolremain * this.tileSize.w;
-            var tileoffsetlon = extent.left + tilecol * tilelon;
+            var tileoffsetx = -tilecolremain * this.tileSize[0];
+            var tileoffsetlon = extent[0] + tilecol * tilelon;
 
-            var offsetlat = bounds.top - (extent.bottom + tilelat);
+            var offsetlat = bounds[3] - (extent[1] + tilelat);
             var tilerow = Math.ceil(offsetlat / tilelat) + this.buffer;
             var tilerowremain = tilerow - offsetlat / tilelat;
-            var tileoffsety = -tilerowremain * this.tileSize.h;
-            var tileoffsetlat = extent.bottom + tilerow * tilelat;
+            var tileoffsety = -tilerowremain * this.tileSize[1];
+            var tileoffsetlat = extent[1] + tilerow * tilelat;
 
             return {
                 tilelon: tilelon,
@@ -176,17 +175,17 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesGrid",
          * bounds - {<OpenLayers.Bounds>}
          */
         initGriddedTiles: function (bounds) {
-
             // work out mininum number of rows and columns; this is the number of
             // tiles required to cover the viewport plus at least one for panning
-            var viewSize = this.map.getSize();
-            var minRows = Math.ceil(viewSize.h / this.tileSize.h) +
+            if (!this.map) return;
+            var viewSize =  this.map.getSize();
+            var minRows = Math.ceil(viewSize[1] / this.tileSize[1]) +
                 Math.max(1, 2 * this.buffer);
-            var minCols = Math.ceil(viewSize.w / this.tileSize.w) +
+            var minCols = Math.ceil(viewSize[0] / this.tileSize[0]) +
                 Math.max(1, 2 * this.buffer);
 
             var extent = this.maxExtent;
-            var resolution = this.map.getResolution();
+            var resolution =  this.map.getView().getResolution();
 
             var tileLayout = this.calculateGridLayout(bounds, extent, resolution);
 
@@ -199,15 +198,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesGrid",
             var tilelon = tileLayout.tilelon;
             var tilelat = tileLayout.tilelat;
 
-            this.origin = new OpenLayers.Pixel(tileoffsetx, tileoffsety);
+            this.origin = this.map.getPixelFromCoordinate([tileoffsetx, tileoffsety]);
 
             var startX = tileoffsetx;
             var startLon = tileoffsetlon;
 
             var rowidx = 0;
 
-            var layerContainerDivLeft = parseInt(this.map.layerContainerDiv.style.left, 10);
-            var layerContainerDivTop = parseInt(this.map.layerContainerDiv.style.top, 10);
+          // how to do  var layerContainerDivLeft = parseInt(this.map.ol-overlayercontainer.style.left, 10);
+          // how to do  var layerContainerDivTop = parseInt(this.map.ol-overlayercontainer.style.top, 10);
 
 
             do {
@@ -223,33 +222,33 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesGrid",
 
                 do {
                     var tileBounds =
-                        new OpenLayers.Bounds(tileoffsetlon,
+                        [tileoffsetlon,
                             tileoffsetlat,
                             tileoffsetlon + tilelon,
-                            tileoffsetlat + tilelat);
+                            tileoffsetlat + tilelat];
 
                     var x = tileoffsetx;
-                    x -= layerContainerDivLeft;
+                    x -= 10; // how to do layerContainerDivLeft;
 
                     var y = tileoffsety;
-                    y -= layerContainerDivTop;
+                    y -= 10; // how to do layerContainerDivTop;
 
-                    var px = new OpenLayers.Pixel(x, y),
+                    var px = this.map.getPixelFromCoordinate([x, y]),
                         tile = row[colidx++];
                     if (!tile) {
                         tile = this.addTile(tileBounds, px);
                         row.push(tile);
                     } else {
-                        tile.moveTo(tileBounds, px, false);
+                        // ?? tile.moveTo(tileBounds, px, false);
                     }
 
                     tileoffsetlon += tilelon;
-                    tileoffsetx += this.tileSize.w;
-                } while ((tileoffsetlon <= bounds.right + tilelon * this.buffer) || colidx < minCols);
+                    tileoffsetx += this.tileSize[0];
+                } while ((tileoffsetlon <= bounds[2] + tilelon * this.buffer) || colidx < minCols);
 
                 tileoffsetlat -= tilelat;
-                tileoffsety += this.tileSize.h;
-            } while ((tileoffsetlat >= bounds.bottom - tilelat * this.buffer) || rowidx < minRows);
+                tileoffsety += this.tileSize[1];
+            } while ((tileoffsetlat >= bounds[1] - tilelat * this.buffer) || rowidx < minRows);
             // FIXME colidx is out of scope
             //shave off excess rows and colums
             this.removeExcessTiles(rowidx, colidx);
@@ -272,7 +271,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesGrid",
          */
 
         addTile: function (bounds, position) {
-            return new OpenLayers.Tile(this.layer, bounds, position, "", this.tileSize);
+            return {
+                "layer": this.layer,
+                "bounds":bounds,
+                "position": position,
+                "size": this.tileSize,
+                "getTilesBounds" : this.getTilesBounds,
+                "initGriddedTiles" : this.initGriddedTiles,
+                "moveTo" : this.moveTo}; //new OpenLayers.Tile(this.layer, bounds, position, "", this.tileSize);
         },
 
 
@@ -288,13 +294,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesGrid",
                 var tlLayer = this.grid[0][0].position;
                 var tlViewPort =
                     this.map.getViewPortPxFromLayerPx(tlLayer);
-                if (tlViewPort.x > -this.tileSize.w * (buffer - 1)) {
+                if (tlViewPort.x > -this.tileSize[0]* (buffer - 1)) {
                     this.shiftColumn(true);
-                } else if (tlViewPort.x < -this.tileSize.w * buffer) {
+                } else if (tlViewPort.x < -this.tileSize[0] * buffer) {
                     this.shiftColumn(false);
-                } else if (tlViewPort.y > -this.tileSize.h * (buffer - 1)) {
+                } else if (tlViewPort.y > -this.tileSize[1] * (buffer - 1)) {
                     this.shiftRow(true);
-                } else if (tlViewPort.y < -this.tileSize.h * buffer) {
+                } else if (tlViewPort.y < -this.tileSize[1] * buffer) {
                     this.shiftRow(false);
                 } else {
                     break;
@@ -314,8 +320,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesGrid",
             var modelRowIndex = (prepend) ? 0 : (this.grid.length - 1),
                 grid = this.grid,
                 modelRow = grid[modelRowIndex],
-                resolution = this.map.getResolution(),
-                deltaY = (prepend) ? -this.tileSize.h : this.tileSize.h,
+                resolution = this.map.getView().getResolution(),
+                deltaY = (prepend) ? -this.tileSize[1] : this.tileSize[1],
                 deltaLat = resolution * -deltaY,
                 row = (prepend) ? grid.pop() : grid.shift(),
                 i,
@@ -328,8 +334,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesGrid",
                 modelTile = modelRow[i];
                 bounds = modelTile.bounds.clone();
                 position = modelTile.position.clone();
-                bounds.bottom = bounds.bottom + deltaLat;
-                bounds.top = bounds.top + deltaLat;
+                bounds[1] = bounds[1] + deltaLat;
+                bounds[3] = bounds[3] + deltaLat;
                 position.y = position.y + deltaY;
                 row[i].moveTo(bounds, position);
             }
@@ -350,8 +356,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesGrid",
          *                          if false, then append to end
          */
         shiftColumn: function (prepend) {
-            var deltaX = (prepend) ? -this.tileSize.w : this.tileSize.w;
-            var resolution = this.map.getResolution();
+            var deltaX = (prepend) ? -this.tileSize[0] : this.tileSize[0];
+            var resolution = this.map.getView().getResolution();
             var deltaLon = resolution * deltaX;
 
             for (var i = 0, len = this.grid.length; i < len; i++) {
@@ -361,8 +367,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesGrid",
 
                 var bounds = modelTile.bounds.clone();
                 var position = modelTile.position.clone();
-                bounds.left = bounds.left + deltaLon;
-                bounds.right = bounds.right + deltaLon;
+                bounds[0]= bounds[0] + deltaLon;
+                bounds[2] = bounds[2] + deltaLon;
                 position.x = position.x + deltaX;
 
                 var tile = prepend ? this.grid[i].pop() : this.grid[i].shift();

@@ -140,6 +140,7 @@ Oskari.clazz.define(
             }
         },
         sendMessage : function(channel, message) {
+
             var isInit = (channel === '/service/wfs/init');
             // connected flag is not setup when init is called so ignore it.
             if (isInit || (this.connection.isConnected() && !this.__initInProgress)) {

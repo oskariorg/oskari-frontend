@@ -1,10 +1,10 @@
 /**
- * @class Oskari.mapframework.bundle.metadatafeedback.service.AddFeedbackService
+ * @class Oskari.mapframework.bundle.metadatafeedback.service.FeedbackService
  *
  *
  * callbacks
  */
-Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.service.AddFeedbackService',
+Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.service.FeedbackService',
 
 /**
  * @method create called automatically on construction
@@ -13,13 +13,14 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.service.AddFeedbac
  * @param {String}
  *            searchUrl ajax URL to actual metadata catalogue search implementation
  */
-function(url) {
+function(addFeedbackAjaxUrl, fetchFeedbackAjaxUrl) {
 
     /* searchUrl url that will give us results */
-    this._url = url;
+    this._addFeedbackAjaxUrl = addFeedbackAjaxUrl;
+    this._fetchFeedbackAjaxUrl = fetchFeedbackAjaxUrl;
 }, {
     /** @static @property __qname fully qualified name for service */
-    __qname : "Oskari.catalogue.bundle.metadatafeedback.service.AddFeedbackService",
+    __qname : "Oskari.catalogue.bundle.metadatafeedback.service.FeedbackService",
     /**
      * @method getQName
      * @return {String} fully qualified name for service
@@ -45,14 +46,30 @@ function(url) {
                x.overrideMimeType("application/json");
               }
              },
-            url : this._url,
+            url : this._addFeedbackAjaxUrl,
             data : {
                 data: JSON.stringify(params)
             },
             error : onError,
             success : onSuccess
         });
-
+    },
+    fetchFeedback: function(params, onSuccess, onError) {
+        jQuery.ajax({
+            dataType : "json",
+            type : "GET",
+            beforeSend: function(x) {
+              if(x && x.overrideMimeType) {
+               x.overrideMimeType("application/json");
+              }
+             },
+            url : this._fetchFeedbackAjaxUrl,
+            data : {
+                data: JSON.stringify(params)
+            },
+            error : onError,
+            success : onSuccess
+        });
     }
 }, {
     /**

@@ -16,8 +16,8 @@ Oskari.clazz.define(
         me._clazz =
             'Oskari.mapframework.mapmodule.WmsLayerPlugin';
         me._name = 'WmsLayerPlugin';
-
         me._supportedFormats = {};
+        me._layers = {};
     },
     {
         /**
@@ -129,6 +129,7 @@ Oskari.clazz.define(
                 });
 
                 this.mapModule.addLayer(layerImpl, _layer, layerIdPrefix + _layer.getId());
+                this._layers[layerIdPrefix + _layer.getId()] = layerImpl;
 
                 this._sandbox.printDebug("#!#! CREATED ol.layer.TileLayer for " + _layer.getId());
 
@@ -149,29 +150,60 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.domain.WmsLayer} layer
          */
         _removeMapLayerFromMap : function(layer) {
-
             if (layer.isBaseLayer() || layer.isGroupLayer()) {
                 var baseLayerId = "";
                 if (layer.getSubLayers().length > 0) {
                     for (var i = 0; i < layer.getSubLayers().length; i++) {
                         var subtmp = layer.getSubLayers()[i];
                         var name = 'basemap_' + subtmp.getId();
-                        var remLayer = this.mapModule.getLayersByName(name);
-                        if (remLayer && remLayer[0]) {
-                            this.mapModule.removeLayer(remLayer[0], layer, name);
+                        var remLayer = this._layers[name];
+                        if (remLayer) {
+                            this.mapModule.removeLayer(remLayer, layer, name);
+                            delete this._layers[name];
                         }
                     }
                 } else {
                     var name = 'layer_' + layer.getId();
-                    var remLayer = this.mapModule.getLayersByName(name)[0];
+                    var remLayer = this._layers[name];
                     this.mapModule.removeLayer(remLayer, layer, name);
+                    delete this._layers[name];
                 }
             } else {
                 var name = 'layer_' + layer.getId();
-                var remLayer = this.mapModule.getLayersByName(name);
-                /* This should free all memory */
-                this.mapModule.removeLayer(remLayer[0], layer, name);
+                var remLayer = this._layers[name];
+                this.mapModule.removeLayer(remLayer, layer, name);
+                delete this._layers[name];
             }
+        },
+
+        /**
+         * @method getOLMapLayers
+         * Returns references to OpenLayers layer objects for requested layer or null if layer is not added to map.
+         * @param {Oskari.mapframework.domain.WmsLayer} layer
+         * @return {OpenLayers.Layer[]}
+         */
+        getOLMapLayers: function (layer) {
+            if (!layer.isLayerOfType('WMS')) {
+                return null;
+            }
+
+            if (layer.isBaseLayer() || layer.isGroupLayer()) {
+                var baseLayerId = '';
+                if (layer.getSubLayers().length > 0) {
+                    var olLayers = [],
+                        i;
+                    for (i = 0; i < layer.getSubLayers().length; i += 1) {
+                        var tmpLayers = this._layers['basemap_' + layer.getSubLayers()[i].getId()];
+                        olLayers.push(tmpLayers[0]);
+                    }
+                    return olLayers;
+                } else {
+                    return [this._layers['layer_' + layer.getId()]];
+                }
+            } else {
+                return [this._layers['layer_' + layer.getId()]];
+            }
+            return null;
         },
 
         /**
@@ -215,12 +247,12 @@ Oskari.clazz.define(
 
             // Change selected layer style to defined style
             if (!layer.isBaseLayer()) {
-                var styledLayer = this.mapModule.getLayersByName('layer_' + layer.getId());
-                /*if (styledLayer != null) {
-                 styledLayer[0].mergeNewParams({
-                 styles : layer.getCurrentStyle().getName()
-                 });
-                 }*/
+                var styledLayer = this._layers[layer.getId()];
+                if (styledLayer != null) {
+                    styledLayer.getSource().updateParams({
+                        styles : layer.getCurrentStyle().getName()
+                    });
+                }
             }
         },
 

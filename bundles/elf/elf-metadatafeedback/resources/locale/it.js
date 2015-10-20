@@ -12,6 +12,10 @@ Oskari.registerLocalization(
             "ratingScore": "Punteggio",
             "ratingJustification": "Motivazione della valutazione"
         },
+        "feedbackList": {
+            "tabTitle":"Feedback",
+            "average":"Average rating"
+        },
         "targetSpecification": {
             "targetSpecification": "NOT TRANSLATED",
             "targetIdentification": "NOT TRANSLATED",

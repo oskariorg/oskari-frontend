@@ -30,7 +30,7 @@ Oskari.clazz.define(
                  */
                 {
                     "type": "text/javascript",
-                    "src": "../../../libraries/ol3/ol-v3.7.0.js"
+                    "src": "../../../libraries/ol3/ol-v3.9.0.js"
                 },
                 /*
                  * Proj4js
@@ -342,7 +342,6 @@ Oskari.clazz.define(
                 /**
                  * Realtime plugin
                  */
-                /*
                 {
                     "type": "text/javascript",
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/realtime/RealtimePlugin.js"
@@ -383,14 +382,14 @@ Oskari.clazz.define(
                     "type": "text/javascript",
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/event/EscPressedEvent.js"
                 }, 
-                /*{
+                {
                     "type": "text/javascript",
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/event/GetInfoResultEvent.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/event/MapSizeChangedEvent.js"
                 }, 
-                */{
+                {
                     "type": "text/javascript",
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/zoombar/Portti2Zoombar.js"
                 }, {
