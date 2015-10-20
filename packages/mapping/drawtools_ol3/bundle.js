@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapping.drawtools.DrawToolsBundle
+ * @class Oskari.mapframework.bundle.infobox.InfoBoxBundle
  *
  * Definition for bundle. See source for details.
  */
@@ -40,7 +40,17 @@ Oskari.clazz.define("Oskari.mapping.drawtools.DrawToolsBundle",
             }, {
                 "type": "text/javascript",
                 "src": "../../../bundles/mapping/drawtools/event/DrawingEvent.js"
-            }]
+            },
+            /*JSTS*/
+            {
+    			"type" : "text/javascript",
+    			"src" : "../../../libraries/jsts/jsts-0.16.0.min.js"
+    		},
+    		/*JAVASCRIPT.UTIL*/
+    		{
+    			"type" : "text/javascript",
+    			"src" : "../../../libraries/jsts/javascript.util.min.js"
+    		}]
         },
         "bundle": {
             "manifest": {
