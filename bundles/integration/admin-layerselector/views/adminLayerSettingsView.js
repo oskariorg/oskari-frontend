@@ -45,9 +45,22 @@ define([
                 'click .admin-remove-group': 'removeLayerCollection',
                 'click .add-layer-record.capabilities li': 'handleCapabilitiesSelection',
                 'change .admin-interface-version': 'handleInterfaceVersionChange',
-                'change .admin-layer-style': 'handleLayerStyleChange'
+                'change .admin-layer-style': 'handleLayerStyleChange',
+                'click .layer-capabilities.icon-info' : 'showCapabilitiesPopup'
             },
-
+            showCapabilitiesPopup : function() {
+                var caps = this.model.getCapabilities();
+                if(!caps) {
+                    return;
+                }
+                var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                dialog.addClass('admin-layerselector-capabilities-popup');
+                // Show stringified JSON in textarea
+                var content = jQuery('<textarea></textarea>').append(JSON.stringify(caps, null, 2));
+                var title = this.options.instance.getLocalization('admin').capabilitiesLabel;
+                dialog.show(title, content, [dialog.createCloseButton()]);
+                dialog.makeDraggable();
+            },
             /**
              * At initialization we add model for this tabPanelView, add templates
              * and do other initialization steps.
@@ -353,7 +366,7 @@ define([
                     form = element.parents('.admin-add-layer'),
                     cur_style_name = form.find('#add-layer-style').val();
                 this.model.selectStyle(cur_style_name);
-                form.find('#add-layer-legendImage').val(me.model.getLegendUrl());
+                form.find('#add-layer-legendImage').val(this.model.getLegendUrl());
             },
 
             /**

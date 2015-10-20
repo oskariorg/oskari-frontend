@@ -253,6 +253,17 @@ if (!Function.prototype.bind) {
                 return null;
             },
             /**
+             * Returns capabilities for layer JSON
+             * @return {Object} capabilities
+             */
+            getCapabilities: function () {
+                var adminBlock = this.getAdmin();
+                if (adminBlock) {
+                    return adminBlock.capabilities;
+                }
+                return null;
+            },
+            /**
              * Returns wfs service manual refresh mode
              * @return {Boolean} true/false
              */

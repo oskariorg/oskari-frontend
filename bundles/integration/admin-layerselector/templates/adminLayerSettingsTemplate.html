@@ -72,6 +72,9 @@
             <div class="add-layer-label-area">
                 <label for="add-layer-selectedtime" class="add-layer-label"
                        title="<%= instance.getLocalization('admin').selectedTime %>"><%=instance.getLocalization('admin').selectedTime %></label>
+            <% if(!_.isEmpty(model.getCapabilities())) { %>
+               <div class="layer-capabilities icon-info"></div>
+            <% } %>
             </div>
             <div class="add-layer-input-area">
                 <div class="input-controls">
