@@ -14,21 +14,21 @@ Oskari.registerLocalization(
             "popup": {
                 "title": "Coordinates",
                 "searchButton": "Center map",
-                "info": "Click the location on the map to view the coordinates or enter the coordinates and click 'Center map'",
+                "info": "Click a location on the map to view the coordinates or enter coordinates and click 'Center map'.",
                 "showMouseCoordinates": "Show mouse cursor coordinates"
             },
             "compass": {
                 "lon": "E / lon:",
                 "lat": "N / lat:"
             },
-            "tooltip" : {
-                "tool": "Show/Hide coordinates tool",
+            "tooltip": {
+                "tool": "Show coordinates or type coordinates and focus map on them.",
                 "close": "Close"
             },
             "checkValuesDialog": {
                 "button": "OK",
-                "title": "Check values",
-                "message": "Check the coordinate values"
+                "title": "Error",
+                "message": "An error occurred. Please check the coordinate values."
             }
         }
     }

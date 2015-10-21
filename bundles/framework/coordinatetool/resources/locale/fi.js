@@ -14,21 +14,21 @@ Oskari.registerLocalization(
             "popup": {
                 "title": "Koordinaatit",
                 "searchButton": "Keskitä kartta",
-                "info": "Klikkaa sijaintia kartalla nähdäksesi koordinaatit tai syötä koordinaatit ja paina 'Keskitä kartta'",
-                "showMouseCoordinates": "Näytä hiiren kursorin koordinaatit"
+                "info": "Klikkaa sijaintia kartalla nähdäksesi sen koordinaatit tai syötä koordinaatit ja paina \"Keskitä kartta\".",
+                "showMouseCoordinates": "Näytä hiiren kursorin koordinaatit."
             },
             "compass": {
                 "lon": "E / lon:",
                 "lat": "N / lat:"
             },
-            "tooltip" : {
-                "tool": "Näytä/Sulje koordinaatit työkalu",
+            "tooltip": {
+                "tool": "Näytä koordinaatit tai kohdista kartta antamiisi koordinaatteihin.",
                 "close": "Sulje"
             },
             "checkValuesDialog": {
                 "button": "OK",
-                "title": "Tarkista arvot",
-                "message": "Tarkista koordinaattikenttien arvot"
+                "title": "Virhe",
+                "message": "Koordinaatit ovat virheellisiä. Tarkista ne ja yritä uudelleen."
             }
         }
     }

@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "fi",
     "key": "catalogue.bundle.metadataflyout",
     "value": {
@@ -14,15 +15,15 @@ Oskari.registerLocalization({
             "title": "Metatieto",
             "abstract": "Perustiedot",
             "inspire": "Inspire-metatiedot",
-            "jhs": "JHS 158-metatiedot",
-            "quality":"Tiedon laatu",
-            "xml": "ISO 19139 XML-tiedosto",
+            "jhs": "JHS 158 -metatiedot",
+            "quality": "Laatutiedot",
+            "xml": "ISO 19139 XML -tiedosto",
             "map": "Kattavuus",
             "pdf": "Tuloste",
-            "select_metadata_prompt": "Valitse metatieto kuvakkeista painamalla.",
-            "metadata_printout_title": "METATIETOKUVAUS",
-            "linkto": "Metatietolinkki",
-            "notFound": "Metadata was not found",
+            "select_metadata_prompt": "Valitse metatieto klikkaamalla kuvaketta.",
+            "metadata_printout_title": "Metatietotuloste",
+            "linkto": "Linkki metatietoihin",
+            "notFound": "Metatietoja ei löytynyt.",
             "codeLists": {
                 "gmd:MD_CharacterSetCode": {
                     "ucs2": {
@@ -37,7 +38,6 @@ Oskari.registerLocalization({
                         "label": "UTF7",
                         "description": "7-bit variable size UCS Transfer Format, based on ISO/IEC 10646"
                     },
-
                     "utf8": {
                         "label": "UTF8",
                         "description": "8-bit variable size UCS Transfer Format, based on ISO/IEC 10646"
@@ -328,7 +328,7 @@ Oskari.registerLocalization({
                     },
                     "environment": {
                         "label": "Ympäristö",
-                        "description": "Luonnonvarat, ympäristönsuojelu ja luonnonsuojelu. Esim. ympäristön saastuminen, jätteiden varastointi ja jätteenkäsittely, ympäristövaikutusten arviointi, ympäristöriskien valvonta, luonnonsuojelualue, maisema. "
+                        "description": "Luonnonvarat, ympäristönsuojelu ja luonnonsuojelu. Esim. ympäristön saastuminen, jätteiden varastointi ja jätteenkäsittely, ympäristövaikutusten arviointi, ympäristöriskien valvonta, luonnonsuojelualue, maisema."
                     },
                     "geoscientificInformation": {
                         "label": "Geotieteet",
@@ -381,7 +381,7 @@ Oskari.registerLocalization({
                 }
             },
             "qualityContent": {
-                "qualityPassTrue":"Aineisto on sääntöjenmukainen.",
+                "qualityPassTrue": "Aineisto on sääntöjenmukainen.",
                 "qualityPassFalse": "Aineisto ei ole sääntöjenmukainen."
             },
             "heading": {
@@ -415,23 +415,21 @@ Oskari.registerLocalization({
                 "temporalExtent": "Ajallinen kattavuus",
                 "topicCategory": "Aiheluokka",
                 "useLimitation": "Käyttöehdot",
-
-                "absoluteExternalPositionalAccuracy":"Absoluuttinen sijaintitarkkuus",
-                "accuracyOfTimeMeasurement":"Ajallisen mittauksen oikeellisuus",
-                "completenessCommission":"Ylimääräinen tieto",
-                "completenessOmission":"Puuttuva tieto",
-                "conceptualConsistency":"Käsitteellinen eheys",
-                "domainConsistency":"Arvojoukkoeheys",
-                "formatConsistency":"Formaattieheys",
-                "griddedDataPositionalAccuracy":"Rasteritiedon sijaintitarkkuus",
-                "nonQuantitativeAttributeAccuracy":"Kuvailevan ominaisuustiedon oikeellisuus",
-                "quantitativeAttributeAccuracy":"Mitattavan ominaisuustiedon oikeellisuus",
-                "relativeInternalPositionalAccuracy":"Suhteellinen sijaintitarkkuus",
-                "temporalConsistency":"Ajallinen eheys",
-                "temporalValidity":"Ajanmukaisuus",
-                "thematicClassificationCorrectness":"Luokittelun oikeellisuus",
-                "topologicalConsistency":"Topologinen eheys"
-
+                "absoluteExternalPositionalAccuracy": "Absoluuttinen sijaintitarkkuus",
+                "accuracyOfTimeMeasurement": "Ajallisen mittauksen oikeellisuus",
+                "completenessCommission": "Ylimääräinen tieto",
+                "completenessOmission": "Puuttuva tieto",
+                "conceptualConsistency": "Käsitteellinen eheys",
+                "domainConsistency": "Arvojoukkoeheys",
+                "formatConsistency": "Formaattieheys",
+                "griddedDataPositionalAccuracy": "Rasteritiedon sijaintitarkkuus",
+                "nonQuantitativeAttributeAccuracy": "Kuvailevan ominaisuustiedon oikeellisuus",
+                "quantitativeAttributeAccuracy": "Mitattavan ominaisuustiedon oikeellisuus",
+                "relativeInternalPositionalAccuracy": "Suhteellinen sijaintitarkkuus",
+                "temporalConsistency": "Ajallinen eheys",
+                "temporalValidity": "Ajanmukaisuus",
+                "thematicClassificationCorrectness": "Luokittelun oikeellisuus",
+                "topologicalConsistency": "Topologinen eheys"
             }
         },
         "tile": {
@@ -439,4 +437,5 @@ Oskari.registerLocalization({
             "tooltip": "Metatieto on tietoa tiedosta, tässä tapauksessa joko paikkatietoaineistosta, -aineistosarjasta tai -palvelusta. Metatiedoista selviää mm. kyseisen tietoresurssin käyttöehdot ja saatavuus."
         }
     }
-});
+}
+);
