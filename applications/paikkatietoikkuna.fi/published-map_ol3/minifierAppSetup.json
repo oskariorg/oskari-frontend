@@ -51,7 +51,7 @@
                 "bundlePath" : "../../../packages/mapping/"
             },
             "mapstats_ol3" : {
-                "bundlePath" : "/Oskari/packages/mapping/"
+                "bundlePath" : "../../../packages/mapping/"
             },
             "mapwmts_ol3" : {
                 "bundlePath" : "../../../packages/mapping/"
