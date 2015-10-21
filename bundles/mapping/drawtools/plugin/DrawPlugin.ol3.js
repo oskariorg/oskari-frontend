@@ -224,11 +224,7 @@ Oskari.clazz.define(
 	    	    	  if (!geometry) {
 	    	    		  geometry = new ol.geom.LineString(null);
 	    	          }
-	    	    	  if (goog.isDef(geometry)) {
-	    	    		  geometry.setCoordinates(coordinates);
-	    	    	  } else {
-	    	    		  geometry = new ol.geom.LineString(coordinates);
-	    	    	  }
+	    	    	  geometry.setCoordinates(coordinates);	    	    	 
 	    	    	  if (buffer > 0) {
 	    	    		  me.drawBufferedGeometry(geometry, buffer);
 	    	    	  }
@@ -250,16 +246,14 @@ Oskari.clazz.define(
     	    } else if (shape === 'Square') {
     	        geometryType = 'Circle';
     	        geometryFunction = ol.interaction.Draw.createRegularPolygon(4);
-    	    } else if (shape === 'Circle') {
-    	    	 if (buffer > 0) {
-   	    	    	geometryType = 'Point';
-    	    		geometryFunction = function(coordinates, geometry) {
-    	    			 if (!geometry) {
-    	    				 geometry = new ol.geom.Circle(coordinates, buffer);
-    	    			 }
-    	    			 return geometry;
-    	    		 }
-    	    	 }
+    	    } else if (shape === 'Circle' && buffer > 0) {
+    	    	geometryType = 'Point';
+	    		geometryFunction = function(coordinates, geometry) {
+	    			 if (!geometry) {
+	    				 geometry = new ol.geom.Circle(coordinates, buffer);
+	    			 }
+	    			 return geometry;
+	    		 }    	    	 
     	    }
 
 	    	me._draw = new ol.interaction.Draw({

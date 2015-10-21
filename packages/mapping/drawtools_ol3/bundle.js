@@ -27,20 +27,30 @@ Oskari.clazz.define("Oskari.mapping.drawtools.DrawToolsBundle",
 
             "scripts": [{
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/drawtools/instance.js"
+                "src": "../../../bundles/mapping/drawtools/instance.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/drawtools/plugin/DrawPlugin.ol3.js"
+                "src": "../../../bundles/mapping/drawtools/plugin/DrawPlugin.ol3.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/drawtools/request/StartDrawingRequest.js"
+                "src": "../../../bundles/mapping/drawtools/request/StartDrawingRequest.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/drawtools/request/StopDrawingRequest.js"
+                "src": "../../../bundles/mapping/drawtools/request/StopDrawingRequest.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/drawtools/event/DrawingEvent.js"
-            }]
+                "src": "../../../bundles/mapping/drawtools/event/DrawingEvent.js"
+            },
+            /*JSTS*/
+            {
+    			"type" : "text/javascript",
+    			"src" : "../../../libraries/jsts/jsts-0.16.0.min.js"
+    		},
+    		/*JAVASCRIPT.UTIL*/
+    		{
+    			"type" : "text/javascript",
+    			"src" : "../../../libraries/jsts/javascript.util.min.js"
+    		}]
         },
         "bundle": {
             "manifest": {
@@ -82,5 +92,5 @@ Oskari.clazz.define("Oskari.mapping.drawtools.DrawToolsBundle",
 
     });
 
-Oskari.bundle_manager.installBundleClass("drawtools",
+Oskari.bundle_manager.installBundleClass("drawtools_ol3",
     "Oskari.mapping.drawtools.DrawToolsBundle");
