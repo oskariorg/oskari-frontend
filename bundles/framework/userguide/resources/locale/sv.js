@@ -6,7 +6,7 @@ Oskari.registerLocalization(
         "title": "Hjälp",
         "desc": "",
         "flyout": {
-            "title": "Så här använder du Paikkatietoikkuna",
+            "title": "Bruksanvisningar",
             "loadingtxt": "<p>Laddar bruksanvisningar…</p>"
         },
         "tile": {
