@@ -2591,7 +2591,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         layerId: differenceLayerId,
                         featuresA1: featuresA1,
                         featuresB1: featuresB1,
-                        operator: spatialOperator
+                        operator: spatialOperator,
+                        no_data: me._getNoDataValue()
                     }
                 }
             };
@@ -3164,11 +3165,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var me = this,
                 no_data,
                 selectedLayer = me._getSelectedMapLayer();
-
             if (!selectedLayer) {
                 return no_data;
             }
-            if (selectedLayer.getLayerType() !== 'wfs') {
+            if (selectedLayer.getLayerType() !== 'wfs' && selectedLayer.getLayerType() !== 'analysis') {
                 return no_data;
             }
             var params = selectedLayer.getWpsLayerParams();
