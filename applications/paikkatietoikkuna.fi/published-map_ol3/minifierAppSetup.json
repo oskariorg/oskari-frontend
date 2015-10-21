@@ -50,6 +50,9 @@
             "mapmodule-plugin_ol3" : {
                 "bundlePath" : "../../../packages/mapping/"
             },
+            "mapstats": {
+                "bundlePath": "../../../packages/framework/bundle/"
+            },
             "mapstats_ol3" : {
                 "bundlePath" : "../../../packages/mapping/"
             },
@@ -102,6 +105,41 @@
             "Import-Bundle" : {
                 "publishedstatehandler" : {
                     "bundlePath" : "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance" : []
+        },
+        "instanceProps" : {}
+    },{
+        "title": "Published Grid",
+        "bundleinstancename": "publishedgrid",
+        "fi": "publishedgrid",
+        "sv": "publishedgrid",
+        "en": "publishedgrid",
+        "bundlename": "publishedgrid",
+        "metadata": {
+            "Import-Bundle": {
+                "publishedgrid": {
+                    "bundlePath": "../../../packages/statistics/bundle/"
+                },
+                "geostats": {
+                    "bundlePath": "../../../packages/libraries/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": [ ]
+        },
+        "instanceProps": {}
+    }, {
+        "title" : "Info Box",
+        "fi" : "infobox",
+        "sv" : "?",
+        "en" : "?",
+        "bundlename" : "infobox",
+        "bundleinstancename" : "infobox",
+        "metadata" : {
+            "Import-Bundle" : {
+                "infobox" : {
+                    "bundlePath" : "../../../packages/mapping/"
                 }
             },
             "Require-Bundle-Instance" : []
