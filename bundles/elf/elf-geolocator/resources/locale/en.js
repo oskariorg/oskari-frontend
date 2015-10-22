@@ -11,7 +11,7 @@ Oskari.registerLocalization(
         "tab": {
             "title": "Places",
             "searchTitle": "Search term",
-            "searchPlaceholder": "Search location by place name, address or real estate unit identifier.",
+            "searchPlaceholder": "Search location by place name or address.",
             "regionTitle": "Region filter",
             "regionPlaceholder": "Filter search results by municipalities or administrative units.",
             "additionalsTitle": "Search options",
