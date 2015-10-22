@@ -1102,7 +1102,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             this.setColumnValueRenderer(
                 field,
                 function (value) {
-                    var parsed = parseFloat(value);
+                    // Try 1st string - filter out values with pre 0
+                    var parsedString = String(value),
+                        parsed = parseFloat(value);
+                    if(parsedString){
+                        if(parsedString.indexOf("0") === 0 && parsedString.indexOf(".") === -1 ){
+                            return value;
+                        }
+                    }
                     if (!isNaN(parsed)) {
                         if (decimalCount === -1) {
                             var fieldValues = _.pluck(me.getDataModel().data, field);
