@@ -538,6 +538,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 len = state.selectedLayers.length;
                 for (i = 0; i < len; i += 1) {
                     layer = state.selectedLayers[i];
+
+                    var oskariLayer = me.getSandbox().findMapLayerFromAllAvailable(layer.id);
+                    if(oskariLayer) {
+                        oskariLayer.setVisible(layer.hidden !== true);
+                    
+                        if (layer.opacity || layer.opacity === 0) {
+                            oskariLayer.setOpacity(layer.opacity);
+                        }
+                        if (layer.style) {
+                            oskariLayer.selectStyle(layer.style);
+                        }
+                    }
                     me.getSandbox().request(
                         mapModuleName,
                         rbAdd(layer.id, true)

@@ -99,7 +99,9 @@ Oskari.clazz.define(
                 subLayers = layer.getSubLayers(),
                 layerIdPrefix = 'layer_',
                 i,
-                ilen;
+                ilen,
+                sandbox = this.getSandbox();
+
             // insert layer or sublayers into array to handle them identically
             if (subLayers.length > 0) {
                 // replace layers with sublayers
@@ -126,7 +128,7 @@ Oskari.clazz.define(
                         layerId: _layer.getWmsName(),
                         isBaseLayer: false,
                         displayInLayerSwitcher: false,
-                        visibility: true,
+                        visibility: layer.isInScale(sandbox.getMap().getScale()) && layer.isVisible(),
                         buffer: 0
                     },
                     layerParams = _layer.getParams(),
@@ -142,6 +144,8 @@ Oskari.clazz.define(
                     var layerResolutions = this.getMapModule().calculateLayerResolutions(_layer.getMaxScale(), _layer.getMinScale());
                     defaultOptions.resolutions = layerResolutions;
                 }
+
+
                 // override default params and options from layer
                 var key;
                 for (key in layerParams) {
@@ -156,7 +160,9 @@ Oskari.clazz.define(
                 }
 
                 var openLayer = new OpenLayers.Layer.WMS(layerIdPrefix + _layer.getId(), _layer.getWmsUrls(), defaultParams, defaultOptions);
-                openLayer.opacity = layer.getOpacity() / 100;
+                openLayer.opacity = layer.getOpacity() / 100; 
+
+//                openLayer.setVisibility(_layer.isVisible());
 
                 this.getMap().addLayer(openLayer);
                 this.getSandbox().printDebug(

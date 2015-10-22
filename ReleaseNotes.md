@@ -2,6 +2,19 @@
 
 ## 1.33
 
+## Layer plugins
+
+Fixed map layers handling when layer is not visible. Get layer image only then if layer is visible. 
+
+Fixed following plugins:
+- 'WmsLayerPlugin' 
+- 'WfsLayerPlugin'
+- 'MyPlacesLayerPlugin'
+- 'StatsLayerPlugin'
+- 'ArcGisLayerPlugin'
+- 'UserLayersLayerPlugin'
+- 'AnalysisLayerPlugin'
+
 ### routingUI
 
 Now start and end points are markered on the map. Also all route plan(s) are shown on search results. Fixed error handling.
@@ -21,6 +34,8 @@ Added functionality to mark a saved view as a default view.
 ### mapfull
 
 Fixed map content width. Now navigation, zoombar, XY etc. tools are visible also on smaller screens.
+
+Fixed map layers handling when layer is not visible. Get layer image only then if layer is visible. 
 
 ### map-module
 

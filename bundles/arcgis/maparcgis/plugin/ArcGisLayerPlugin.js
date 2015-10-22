@@ -132,7 +132,8 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
          * @param {Boolean} isBaseMap
          */
         addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
-            var me = this;
+            var me = this,
+                sandbox = me.getSandbox();
 
             if (!layer.isLayerOfType(me._layerType) && !layer.isLayerOfType(me._layerType2)) {
                 return;
@@ -166,6 +167,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                 me._layer[layer.getId()] = openLayer;
 
                 openLayer.opacity = layer.getOpacity() / 100;
+                openLayer.setVisibility(layer.isInScale(sandbox.getMap().getScale()) && layer.isVisible());
                 me.getMap().addLayer(openLayer);
 
                 if (keepLayerOnTop) {
@@ -192,7 +194,8 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
          * @param {Boolean} isBaseMap
          */
         _addMapLayer2ToMap: function (layer, keepLayerOnTop, isBaseMap) {
-            var me = this;
+            var me = this,
+                sandbox = me.getSandbox();
 
             if (!layer.isLayerOfType(me._layerType2)) {
                 return;
@@ -212,6 +215,8 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                 me._layer[layer.getId()] = openLayer;
 
                 openLayer.opacity = layer.getOpacity() / 100;
+                openLayer.setVisibility(layer.isInScale(sandbox.getMap().getScale()) && layer.isVisible());
+                
                 me.getMap().addLayer(openLayer);
 
                 if (keepLayerOnTop) {
