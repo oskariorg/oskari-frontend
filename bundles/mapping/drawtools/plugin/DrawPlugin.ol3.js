@@ -1,11 +1,9 @@
 /**
  * @class Oskari.mapping.drawtools.plugin.DrawPlugin
- *
- *  Map engine specific implementation for draw tools
+ * Map engine specific implementation for draw tools
  */
 Oskari.clazz.define(
     'Oskari.mapping.drawtools.plugin.DrawPlugin',
-
     /**
      * @method create called automatically on construction
      * @static
@@ -148,37 +146,56 @@ Oskari.clazz.define(
         	if(options.modifyControl !== false) {
         		me.addModifyInteraction(me._layerId, shape, options.buffer);
         	}
-
 //        	me.reportDrawingEvents();
         },
         /**
          * @method stopDrawing
-         * -  sends DrawingEvent and remove draw and modify controls
+         * -  sends DrawingEvent and removes draw and modify controls
          *
          * @param {String} id
          * @param {boolean} clearCurrent: if true, all selection will be removed from the map
          */
         stopDrawing : function(id, clearCurrent) {
+        	var me = this;        
+        	me.sendDrawingEvent(id, clearCurrent);
+            //deactivate draw nad modify controls
+            me.removeInteractions();
+        },
+        /**
+         * @method sendDrawingEvent
+         * -  sends DrawingEvent
+         *
+         * @param {String} id
+         * @param {boolean} clearCurrent: if true, all selection will be removed from the map
+         */
+        sendDrawingEvent: function(id, clearCurrent) {
         	var me = this;
-
+        	var features = me.getFeatures(me._layerId);
+        	var bufferedFeatures = me.getFeatures(me._bufferedFeatureLayerId);
+        	
+        	if(me._shape === 'Circle') {
+				bufferedFeatures = me.getCircleAsPolygonFeature(features);
+				features = me.getCircleAsPointFeature(features);
+			} else if(me._shape === 'LineString' && me._buffer > 0) {
+				me.addBufferPropertyToFeatures(features, me._buffer);
+			}
             // TODO: get geojson for matching id
-            var geojson = me.getFeaturesAsGeoJSON(me._layerId);
-            var bufferedGeoJson = me.getFeaturesAsGeoJSON(me._bufferedFeatureLayerId);
+            var geojson = me.getFeaturesAsGeoJSON(features);
+            var bufferedGeoJson = me.getFeaturesAsGeoJSON(bufferedFeatures);
+
             var data = {
                 lenght : '',
                 area : '',
                 bufferedGeoJson: bufferedGeoJson,
-                buffer: me._buffer,
                 shape: me._shape
             };
+//            console.log(geojson, data);
             if(clearCurrent) {
                 // TODO: clear the drawing matching the id from map
             	me.clearDrawing();
             }
             var event = me._sandbox.getEventBuilder('DrawingEvent')(id, geojson, data);
             me._sandbox.notifyAll(event);
-            // TODO: deactivate draw control
-            me.removeInteractions();
         },
         /**
          * @method addVectorLayer
@@ -221,9 +238,9 @@ Oskari.clazz.define(
 
     	    if (shape === 'LineString') {
     	    	 geometryFunction = function (coordinates, geometry) {
-	    	    	  if (!geometry) {
+	    	    	 if (!geometry) {
 	    	    		  geometry = new ol.geom.LineString(null);
-	    	          }
+	    	          }	    	    	
 	    	    	  geometry.setCoordinates(coordinates);	    	    	 
 	    	    	  if (buffer > 0) {
 	    	    		  me.drawBufferedGeometry(geometry, buffer);
@@ -266,11 +283,10 @@ Oskari.clazz.define(
 	        me._map.addInteraction(me._draw);
 
 			me._draw.on('drawstart', function() {
-//				me._draw.overlay_.style_ = me._modifyStyle;
 				if(allowMultipleDrawing !== true) {
 					me.clearDrawing();
 				}
-			});
+			});		       
 		},
 		 /**
          * @method addModifyInteraction
@@ -278,9 +294,11 @@ Oskari.clazz.define(
          *
          * @param {String} layerId
          * @param {String} shape
+         * @param {String} buffer
          */
         addModifyInteraction : function(layerId, shape, buffer) {
         	var me = this;
+        	
         	me._modify = new ol.interaction.Modify({
      		   features: me._drawLayers[layerId].getSource().getFeaturesCollection(),
      		   style: me._styles['modify'],
@@ -290,16 +308,16 @@ Oskari.clazz.define(
      	   });
 	       if (buffer > 0 && shape === "LineString") {
 	           me._modify.on('modifystart', function() {
-					me._drawLayers[me._layerId].getSource().on('changefeature', function(evt) {
+	        	   me._drawLayers[me._layerId].getSource().on('changefeature', function(evt) {
 						me.drawBufferedGeometry(evt.feature.getGeometry(), buffer);
 					});
 			   });
 	       }
      	   me._map.addInteraction(me._modify);
 
-     	   me._modify.on('modifystart', function() {
+//     	   me._modify.on('modifystart', function() {
 //     		  me._draw.overlay_.style_ = me._modifyStyle;
-		   });
+//		   });
         },
         /**
          * @method drawBufferedGeometry
@@ -310,7 +328,7 @@ Oskari.clazz.define(
          */
         drawBufferedGeometry : function(geometry, buffer) {
 			 var me = this;
-	    	 var bufferedFeature = me.getBufferedFeature(geometry, buffer, me._styles['draw']);
+	    	 var bufferedFeature = me.getBufferedFeature(geometry, buffer, me._styles['draw'], 30);
 	    	 me._drawLayers[me._bufferedFeatureLayerId].getSource().getFeaturesCollection().clear();
 	    	 me._drawLayers[me._bufferedFeatureLayerId].getSource().getFeaturesCollection().push(bufferedFeature);
 //	    	 _.each(me._drawLayers[me._layerId].getSource().getFeaturesCollection(), function (f) {
@@ -326,16 +344,16 @@ Oskari.clazz.define(
          * @param {Geometry} geometry
          * @param {Number} buffer
          * @param {ol.style.Style} style
-         *
+         * @param {Number} side amount of polygon
          * @return {ol.Feature} feature
          */
-		getBufferedFeature: function(geometry, buffer, style) {
+		getBufferedFeature: function(geometry, buffer, style, sides) {
 			var me = this;
 			var reader = new jsts.io.WKTReader();
 			var wktFormat = new ol.format.WKT();
 			var wktFormatString = wktFormat.writeGeometry(geometry);
 			var input = reader.read(wktFormatString);
-			var bufferGeometry = input.buffer(buffer, 30);
+			var bufferGeometry = input.buffer(buffer, sides);
 			var parser = new jsts.io.olParser();
 			bufferGeometry.CLASS_NAME = "jsts.geom.Polygon";
 			bufferGeometry = parser.write(bufferGeometry);
@@ -343,6 +361,7 @@ Oskari.clazz.define(
 				geometry: bufferGeometry
 			});
 			feature.setStyle(style);
+			feature.buffer = buffer;
 			return feature;
 		},
 		/**
@@ -438,7 +457,7 @@ Oskari.clazz.define(
          * -  gets features from layer
          *
          * @param {String} layerId
-         * @return {Collection} features
+         * @return {Array} features
          */
 		getFeatures: function (layerId) {
 			var me = this;
@@ -449,15 +468,81 @@ Oskari.clazz.define(
          * @method getFeaturesAsGeoJSON
          * - converts features to GeoJson
          *
-         * @param {String} layerId
+         * @param {Array} features
          * @return {String} geojson
          */
-		getFeaturesAsGeoJSON : function(layerId) {
+		getFeaturesAsGeoJSON : function(features) {
 			var me = this;
 			var geoJsonFormat = new ol.format.GeoJSON();
-			var stringJson = geoJsonFormat.writeFeatures(me.getFeatures(layerId));
-//			console.log(stringJson);
-			return stringJson;
+			var geoJsonObject =  {
+                    type: 'FeatureCollection',
+                    features: []
+                };
+			_.each(features, function (f) {
+				var buffer;
+				if(f.buffer) {
+					buffer = f.buffer;
+				}
+				var jsonObject = geoJsonFormat.writeFeatureObject(f);
+				if(buffer) {
+					jsonObject.properties = {
+	                    'buffer': buffer
+	                };
+				}
+				geoJsonObject.features.push(jsonObject);
+			});
+			//console.log(JSON.stringify(geoJsonObject));
+			return JSON.stringify(geoJsonObject);
+		},
+		 /**
+         * @method getCircleAsPolygonFeature
+         * - converts circle geometry to polygon geometry
+         *
+         * @param {Array} features
+         * @return {Array} polygonfeatures
+         */
+		getCircleAsPolygonFeature: function(features) {
+			var me = this;
+			var polygonFeatures = [];
+			_.each(features, function (f) {
+				var pointFeature = new ol.geom.Point(f.getGeometry().getCenter());
+				var bufferedFeature = me.getBufferedFeature(pointFeature, f.getGeometry().getRadius(), me._styles['draw'], 100);
+					polygonFeatures.push(bufferedFeature);
+				});
+			return polygonFeatures;
+		},
+		 /**
+         * @method getCircleAsPointFeature
+         * - converts circle geometry to point geometry
+         *
+         * @param {Array} features
+         * @return {Array} pointFeatures
+         */
+		getCircleAsPointFeature: function(features) {
+			var me = this;
+			var pointFeatures = [];
+			_.each(features, function (f) {
+				var feature = new ol.Feature({
+					  geometry:  new ol.geom.Point(f.getGeometry().getCenter())
+					});
+				me.addBufferPropertyToFeatures([feature], f.getGeometry().getRadius());
+				pointFeatures.push(feature);
+			});
+			return pointFeatures;
+		},
+		 /**
+         * @method addBufferPropertyToFeatures
+         * - adds buffer property to given features. This is needed for converting buffered Point and buffered LineString to geoJson
+         *
+         * @param {Array} features
+         * @return {Number} buffer
+         */
+		addBufferPropertyToFeatures: function(features, buffer) {
+			if(buffer) {
+				_.each(features, function (f) {
+					f.buffer = buffer;
+				});
+			}	
 		}
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
