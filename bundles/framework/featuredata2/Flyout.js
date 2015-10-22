@@ -20,6 +20,7 @@ Oskari.clazz.define(
         this.container = null;
         this.state = null;
         this.layers = {};
+        this._fixedDecimalCount = 2;
 
         this.tabsContainer = null;
         this.selectedTab = null;
@@ -570,7 +571,7 @@ Oskari.clazz.define(
                 }
                 panel.grid.setDataModel(model);
                 _.forEach(visibleFields, function (field) {
-                    grid.setNumericField(field);
+                    grid.setNumericField(field, me._fixedDecimalCount);
                 });
                 panel.grid.renderTo(panel.getContainer());
                 // define flyout size to adjust correctly to arbitrary tables

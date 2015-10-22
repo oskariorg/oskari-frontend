@@ -26,6 +26,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         me.layer_prefix = 'analysis_';
         me.max_analyse_layer_fields = 10;
         me.max_areaCount = 12;
+        me._fixedDecimalCount = 2;
         // unit -> multiplier
         me.bufferUnits = {
             'm': 1,
@@ -2877,14 +2878,13 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     gridModel.addData(tmpfea, true);
                 });
             });
-
             gridModel.setIdField('Property');
             gridModel.setFirstField('Property');
             me.grid.setDataModel(gridModel);
 
             fields = gridModel.getFields();
             _.forEach(fields, function (field) {
-                me.grid.setNumericField(field);
+                me.grid.setNumericField(field, me._fixedDecimalCount);
             });
 
             me.grid.renderTo(content);
@@ -2916,7 +2916,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 var rq = 'MapModulePlugin.RemoveFeaturesFromMapRequest';
                 me.instance.sandbox.postRequestByName(rq);
             });
-            popup.makeDraggable();
+            popup.makeDraggable({
+                scroll: false,
+                cancel: '.content'
+            });
+
             popup.show(me.loc.aggregatePopup.title, content, [storeBtn,closeBtn]);
         },
 
