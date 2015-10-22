@@ -29,12 +29,21 @@ jQuery(document).ready(function() {
         url: ajaxUrl + 'action_route=GetAppSetup',
         success : function(setup) {
             var app = Oskari.app;
+            if (false) for(var i = 0; i < setup.startupSequence.length; ++i) {
+                var bundle = setup.startupSequence[i];
+                if(bundle.bundlename === 'statsgrid') {
+                    bundle.bundlename = "statsgrid2";
+                    bundle.bundleinstancename = "statsgrid2";
+                    bundle.metadata['Import-Bundle'].statsgrid2 = bundle.metadata['Import-Bundle'].statsgrid;
+                    delete bundle.metadata['Import-Bundle'].statsgrid;
+                }
+            }
             app.setApplicationSetup(setup);
             app.setConfiguration(setup.configuration);
             app.startApplication(function(startupInfos) {
                 // all bundles have been loaded
             });
-        }
+        } 
     });
 
 });

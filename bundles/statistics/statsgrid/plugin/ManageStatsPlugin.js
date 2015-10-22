@@ -2,6 +2,12 @@
  * @class Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
  * Creates the indicator selection ui and the actual grid where the stats data will be displayed.
  * Handles sending the data out to create a visualization which then can be displayed on the map.
+ * 
+ * The sequence is roughly:
+ * 1. The page is loaded: This plugin queries the indicator metadata.
+ * 2. The hierarchical indicator selectors are created based on indicator metadata.
+ * 3. Selecting all the selectors and clicking "get data" will fetch the indicator values
+ *    based on the chosen selectors to the grid and to the map.
  */
 Oskari.clazz.define(
     'Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin',
@@ -29,13 +35,11 @@ Oskari.clazz.define(
         me.statsService = null;
         me.userIndicatorsService = undefined;
         // indicators (meta data)
-        me.indicators = [];
+        me.indicatorMetadata = {};
         me.stateIndicatorsLoaded = false;
-        // object to hold the data for each indicators.
+        // object to hold the data for each indicator.
         // Used in case the user changes the region category.
         me.indicatorsData = {};
-        // indicators meta for data sources
-        me.indicatorsMeta = {};
         me.selectedMunicipalities = {};
         // Array of open popups so we can easily get rid of them when the UI is
         // hidden. Stored as
@@ -114,8 +118,7 @@ Oskari.clazz.define(
 
         this.regionCategories = {};
         this._selectedRegionCategory = undefined;
-        this._defaultRegionCategory = 'KUNTA';
-        this._dataSources = {};
+        this._defaultRegionCategory = 'Kunta';
     }, {
         /**
          * @private @method startPlugin
@@ -135,9 +138,13 @@ Oskari.clazz.define(
             me.userIndicatorsService = me.getSandbox().getService(
                 'Oskari.statistics.bundle.statsgrid.UserIndicatorsService'
             );
+            // FIXME: What is this?
             me._published = (config.published || false);
+            // FIXME: What is this?
             me._state = (config.state || {});
+            // FIXME: What is this?
             me._layer = (config.layer || null);
+            // FIXME: What is this?
             me.selectMunicipalitiesMode = false;
         },
 
@@ -238,15 +245,21 @@ Oskari.clazz.define(
 
                 // Indicators
                 // success -> createIndicators
-                this.getStatsIndicators(container);
+                this.getStatsIndicatorsMetadata(container);
 
             }
             // Regions: success createMunicipalityGrid
             this.getStatsRegionData(container);
         },
 
+        /**
+         * This creates the selector container for:
+         * - Plug-in (source of the data)
+         * - Indicator name
+         * - Indicator-dependent selectors, such as year and gender.
+         */
         createDataSourceSelect: function (container) {
-            // FIXME select inside label
+            // FIXME select inside label // <- FIXME: What does this mean?
             var me = this,
                 dsElement = jQuery(
                     '<div class="data-source-select clearfix">' +
@@ -260,7 +273,10 @@ Oskari.clazz.define(
 
             dsElement.find('label').text(me._locale.tab.grid.organization);
 
-            _.each(this._dataSources, function (dataSource, id) {
+            var plugInIds = Object.keys(this.indicatorMetadata);
+            plugInIds.forEach(function(plugInId) {
+            	var localizationKey = this._indicatorMetadata[plugInId].localizationKey;
+            	var sourceName = me._locale[localizationKey];
                 me._renderDataSourcesToList(id, dataSource.name, false, sel);
             });
 
@@ -279,43 +295,22 @@ Oskari.clazz.define(
             return dsElement;
         },
 
-        addDataSource: function (dataSourceId, dataSourceName, data, isSelected, elem) {
-            this._dataSources[dataSourceId] = {
-                data: data,
-                name: dataSourceName
-            };
-
-            this._renderDataSourcesToList(
-                dataSourceId,
-                dataSourceName,
-                isSelected,
-                elem
-            );
-        },
-
-        updateDataSource: function (dataSourceId, data) {
-            var dataSource = this._dataSources[dataSourceId],
-                select;
-
-            if (dataSource) {
-                dataSource.data.push(data);
-                select = jQuery('#indi');
-                select.trigger('liszt:update');
-            }
-        },
-
         _renderDataSourcesToList: function (dataSourceId, dataSourceName, isSelected, elem) {
             var select = elem || jQuery('#statsgrid-data-source-select'),
                 option;
-
+            var plugInIds = Object.keys(this.indicatorMetadata);
             if (select.length) {
-                option = jQuery('<option></option>');
-                option.val(dataSourceId).text(dataSourceName);
-                if (isSelected === true) {
-                    option.prop('selected', true);
-                }
-                select.append(option);
-                select.trigger('liszt:updated');
+                plugInIds.forEach(function(plugInId) {
+                    var localizationKey = this._indicatorMetadata[plugInId].localizationKey;
+                    var sourceName = me._locale[localizationKey];
+                    option = jQuery('<option></option>');
+                    option.val(dataSourceId).text(dataSourceName);
+                    if (isSelected === true) {
+                        option.prop('selected', true);
+                    }
+                    select.append(option);
+                    select.trigger('liszt:updated');
+                });
             }
         },
 
@@ -690,29 +685,40 @@ Oskari.clazz.define(
         },
 
         /**
-         * Fetch all Stats indicators
+         * Fetch all Stats indicators with relevant metadata - this contains all the indicators, layers and selectors.
          *
-         * @method getStatsIndicators
+         * @method getStatsIndicatorsMetadata
          * @param container element
          */
-        getStatsIndicators: function (container) {
+        getStatsIndicatorsMetadata: function (container) {
             var me = this,
                 sandbox = me.getSandbox();
             // make the AJAX call
             me.statsService.fetchStatsData(sandbox.getAjaxUrl() +
-                'action_route=GetSotkaData&action=indicators&version=1.1',
+                'action_route=GetIndicatorMetadata',
                 //success callback
-                function (indicatorsdata) {
-                    if (indicatorsdata) {
-                        me.addDataSource(
-                            'sotkanet',
-                            'Sotkanet',
-                            indicatorsdata,
-                            true
-                        );
-                        //if fetch returned something we create drop down selector
-                        me.createIndicatorsSelect(container, indicatorsdata);
-                        me.createDemographicsSelects(container, null);
+                function (indicatorsData) {
+                    if (indicatorsData) {
+                    	/*
+                    	 * The response schema contains plugin classnames as keys to objects with information about the indicators.
+                    	 * "fi.nls.oskari.control.statistics.plugins.sotka.SotkaStatisticalDatasourcePlugin": {
+                    	 *   "indicators": {
+                    	 *     "1411":{
+                    	 *       "source": {...},
+                    	 *       "selectors": {...},
+                    	 *       "description": {...},
+                    	 *       "layers":[
+                    	 *         // FIXME: Localize the layerIds for the dropdown.
+                    	 *         {"layerVersion":"1","type":"FLOAT","layerId":"Kunta"},
+                    	 *         ...
+                    	 *       ],
+                    	 *       "name": {...}
+                    	 *     }, ...
+                    	 *   },
+                    	 *   "localizationKey":"fi.nls.oskari.control.statistics.plugins.sotka.plugin_name"
+                    	 * }
+                    	 */
+                        me.indicatorMetadata = indicatorsData;
                     } else {
                         me.showMessage(
                             me._locale.stats.errorTitle,
@@ -772,7 +778,7 @@ Oskari.clazz.define(
                 }
             }
 
-            // if the value changes, fetch indicator meta data
+            // if the value changes, create the selectors inputs:
             sel.change(function (e) {
                 var option = sel.find('option:selected'),
                     indicatorId = option.val(),
@@ -946,47 +952,6 @@ Oskari.clazz.define(
         },
 
         /**
-         * Get Stats indicator meta data
-         *
-         * @method getStatsIndicatorMeta
-         * @param container parent element.
-         * @param indicator id
-         */
-        getStatsIndicatorMeta: function (container, indicator) {
-            var me = this,
-                sandbox = me.getSandbox();
-            // fetch meta data for given indicator
-            me.statsService.fetchStatsData(
-                sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=indicator_metadata&indicator=' + indicator + '&version=1.1',
-                // success callback
-                function (indicatorMeta) {
-                    if (indicatorMeta) {
-                        //if fetch returned something we create drop down selector
-                        me.createIndicatorInfoButton(container, indicatorMeta);
-
-                        if (me._hasRegionCategoryValues(indicatorMeta)) {
-                            me.createDemographicsSelects(container, indicatorMeta);
-                        } else {
-                            me._warnOfInvalidIndicator(container, indicatorMeta);
-                        }
-                    } else {
-                        me.showMessage(
-                            me._locale.stats.errorTitle,
-                            me._locale.stats.indicatorMetaError
-                        );
-                    }
-                },
-                // error callback
-                function (jqXHR, textStatus) {
-                    me.showMessage(
-                        me._locale.stats.errorTitle,
-                        me._locale.stats.indicatorMetaXHRError
-                    );
-                });
-
-        },
-
-        /**
          * Checks if the indicator has values on the current category.
          * If it does not, we cannot display it in the grid at the moment.
          *
@@ -1068,19 +1033,17 @@ Oskari.clazz.define(
         },
 
         /**
-         * Create drop down selects for demographics (year & gender)
-         *
+         * Create drop down selects for indicator selectors (e.g. year & gender)
+         * FIXME: This replaces createDemographicsSelects
          * @method createDemographicsSelects
          * @param container parent element
          * @param indicator meta data
          */
-        createDemographicsSelects: function (container, indicator) {
+        createSelectorInputs: function (container, indicator) {
             var me = this,
                 selectors = container.find('.selectors-container');
             // year & gender are in a different container than indicator select
             var parameters = selectors.find('.parameters-cont'),
-                year = null,
-                gender = null,
                 columnId,
                 includedInGrid,
                 fetchButton,
@@ -1089,32 +1052,6 @@ Oskari.clazz.define(
             if (indicator) {
                 // We have an indicator, create the selects with its data
                 me.indicators.push(indicator);
-                // if there is a range we can create year select
-                if (indicator.range !== null && indicator.range !== undefined) {
-                    me.updateYearSelectorValues(
-                        parameters.find('select.year'),
-                        indicator.range.start,
-                        indicator.range.end
-                    );
-                    // by default the last value is selected in getYearSelectorHTML
-                    year = indicator.range.end;
-                }
-
-                // if there is a classification.sex we can create gender select
-                if (indicator.classifications && indicator.classifications.sex) {
-                    me.updateGenderSelectorValues(
-                        parameters.find('select.gender'),
-                        indicator.classifications.sex.values
-                    );
-                    // by default the last value is selected in getGenderSelectorHTML
-                    gender = indicator.classifications.sex.values[indicator.classifications.sex.values.length - 1];
-                }
-
-                gender = gender !== null && gender !== undefined ? gender : 'total';
-
-                // by default the last year and gender is selected
-                columnId = me._getIndicatorColumnId(indicator.id, gender, year);
-                includedInGrid = this.isIndicatorInGrid(columnId);
                 fetchButton = parameters.find('button.fetch-data');
                 fetchButton.prop('disabled', '');
                 removeButton = parameters.find('button.remove-data');
@@ -1136,10 +1073,6 @@ Oskari.clazz.define(
                 );
                 parameters.prepend(removeButton);
                 parameters.prepend(fetchButton);
-                parameters.prepend(me.getGenderSelectorHTML([]));
-                parameters.prepend(me.getYearSelectorHTML(0, -1));
-                parameters.find('select.year').prop('disabled', 'disabled');
-                parameters.find('select.gender').prop('disabled', 'disabled');
                 selectors.find('.indicator-cont').after(parameters);
             }
 
@@ -1147,12 +1080,8 @@ Oskari.clazz.define(
                 // click listener
                 fetchButton.unbind('click');
                 fetchButton.click(function (e) {
-                    var element = jQuery(e.currentTarget),
-                        year = jQuery('.statsgrid').find('.yearsel').find('.year').val(),
-                        gender = jQuery('.statsgrid').find('.gendersel').find('.gender').val();
-                    gender = gender !== null && gender !== undefined ? gender : 'total';
-                    // me.getStatsIndicatorData(container,indicator, gender, year);
-                    var columnId = me._getIndicatorColumnId(indicator.id, gender, year);
+                    var element = jQuery(e.currentTarget);
+                    // FIXME: Switch to using GetIndicatorData action.
                     me.getStatsIndicatorData(container, indicator.id, gender, year, function () {
                         me.addIndicatorMeta(indicator);
                     });
@@ -1160,9 +1089,6 @@ Oskari.clazz.define(
                 // click listener
                 removeButton.unbind('click');
                 removeButton.click(function (e) {
-                    var year = jQuery('.statsgrid').find('.yearsel').find('.year').val(),
-                        gender = jQuery('.statsgrid').find('.gendersel').find('.gender').val();
-                    gender = gender !== null && gender !== undefined ? gender : 'total';
                     var columnId = me._getIndicatorColumnId(indicator.id, gender, year);
                     me.removeIndicatorDataFromGrid(indicator.id, gender, year);
                 });
@@ -1185,17 +1111,13 @@ Oskari.clazz.define(
         },
 
         /**
-         * Update Demographics buttons
+         * Update selector inputs
          *
-         * @method updateDemographicsSelects
+         * @method updateSelectorInputs
          * @param container parent element
-         * @param indicator meta data
          */
-        updateDemographicsButtons: function (indicatorId, gender, year) {
+        updateSelectorInputs: function (indicatorId) {
             indicatorId = indicatorId || jQuery('.statsgrid').find('.indisel ').find('option:selected').val();
-            gender = gender || jQuery('.statsgrid').find('.gendersel').find('.gender').val();
-            gender = gender !== null && gender !== undefined ? gender : 'total';
-            year = year || jQuery('.statsgrid').find('.yearsel').find('.year').val();
 
             var columnId = 'indicator' + indicatorId + year + gender,
                 includedInGrid = this.isIndicatorInGrid(columnId);
@@ -1800,79 +1722,6 @@ Oskari.clazz.define(
             }
         },
 
-
-        /**
-         * Get metadata for given indicators
-         *
-         * @method getStatsIndicatorsMeta
-         * @param indicators for which we fetch data
-         * @param callback what to do after we have fetched metadata for all the indicators
-         */
-        getStatsIndicatorsMeta: function (container, indicators, callback) {
-            var me = this,
-                fetchedIndicators = 0,
-                i;
-
-            me.indicators = [];
-
-            for (i = 0; i < indicators.length; i += 1) {
-                var indicatorData = indicators[i],
-                    indicator = indicatorData.id;
-                if (indicator === null || indicator === undefined) {
-                    indicator = indicatorData.indicator;
-                }
-
-                // ajax call
-                me.statsService.fetchStatsData(
-                    // url
-                    me.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=indicator_metadata&indicator=' + indicator + '&version=1.1',
-                    // success callback
-                    // FIXME create function outside loop
-
-                    function (data) {
-                        //keep track of returned ajax calls
-                        fetchedIndicators += 1;
-
-                        if (data) {
-                            me.addIndicatorMeta(data);
-                            var j;
-                            for (j = 0; j < indicators.length; j += 1) {
-                                if (indicators[j].id === null || indicators[j].id === undefined) {
-                                    indicators[j].id = indicators[j].indicator;
-                                }
-                                if (indicators[j].id + '' === data.id + '') {
-                                    me.indicators[j] = data;
-                                }
-                            }
-
-                            // when all the indicators have been fetched
-                            // fire callback
-                            if (fetchedIndicators >= indicators.length) {
-                                callback();
-                            }
-
-                        } else {
-                            me.showMessage(
-                                me._locale.stats.errorTitle,
-                                me._locale.stats.indicatorDataError
-                            );
-                        }
-                    },
-                    // error callback
-                    // FIXME create function outside loop
-
-                    function (jqXHR, textStatus) {
-                        me.showMessage(
-                            me._locale.stats.errorTitle,
-                            me._locale.stats.indicatorDataXHRError
-                        );
-                        //keep track of returned ajax calls
-                        fetchedIndicators += 1;
-                    }
-                );
-            }
-        },
-
         /**
          * Get data for given indicators
          *
@@ -2072,27 +1921,7 @@ Oskari.clazz.define(
                 );
                 me.addIndicatorMeta(indicator);
             });
-
-            // FIXME change sotka to something general
-            if (indicators.sotka && indicators.sotka.length > 0) {
-                //send ajax calls and build the grid
-                me.getStatsIndicatorsMeta(
-                    container,
-                    indicators.sotka,
-                    function () {
-                        //send ajax calls and build the grid
-                        me.getStatsIndicatorsData(
-                            container,
-                            indicators.sotka,
-                            function () {
-                                me._afterStateIndicatorsLoaded(state);
-                            }
-                        );
-                    }
-                );
-            } else {
-                me._afterStateIndicatorsLoaded(state);
-            }
+            me._afterStateIndicatorsLoaded(state);
         },
 
         _afterStateIndicatorsLoaded: function (state) {
