@@ -515,7 +515,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             });
             
             for (i = 0; i<newestToOldestLayers.length; i++) {
-                list.push(this._loadedLayersList[i]);                
+                list.push(newestToOldestLayers[i]);                
                 if(list.length === count) {
                     break;
                 }

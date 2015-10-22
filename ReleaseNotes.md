@@ -2,6 +2,10 @@
 
 ## 1.33
 
+### Sandbox/map layer service
+
+Fixed getNewestLayers(count) method to find really newest layers.
+
 ## Layer plugins
 
 Fixed map layers handling when layer is not visible. Get layer image only then if layer is visible. 
