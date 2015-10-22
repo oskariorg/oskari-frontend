@@ -53,6 +53,17 @@ Added marker transient property, if this is setted to true then marker is not sa
 
 No longer generates an empty default style for WMS-layers.
 
+### analysis 
+
+Improvements in analysis methods:
+
+Aggregate layout and z-index fixes in no storage case
+
+
+### divmanazer/grid
+
+Changes in formating numeric values in grid (max 2 digits in decimals and handle grid value as string when beginning with "0"
+
 ### publisher2
 
 Added LayerSelectionTool. This tool user can add map layer tool on the map. User can also select visible baselayers.
