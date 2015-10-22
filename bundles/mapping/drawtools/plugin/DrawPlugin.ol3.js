@@ -224,7 +224,7 @@ Oskari.clazz.define(
 	    	    	  if (!geometry) {
 	    	    		  geometry = new ol.geom.LineString(null);
 	    	          }
-	    	    	  geometry.setCoordinates(coordinates);	    	    	 
+	    	    	  geometry.setCoordinates(coordinates);
 	    	    	  if (buffer > 0) {
 	    	    		  me.drawBufferedGeometry(geometry, buffer);
 	    	    	  }
@@ -253,7 +253,7 @@ Oskari.clazz.define(
 	    				 geometry = new ol.geom.Circle(coordinates, buffer);
 	    			 }
 	    			 return geometry;
-	    		 }    	    	 
+	    		 }
     	    }
 
 	    	me._draw = new ol.interaction.Draw({

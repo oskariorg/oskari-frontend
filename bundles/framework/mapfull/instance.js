@@ -542,7 +542,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     var oskariLayer = me.getSandbox().findMapLayerFromAllAvailable(layer.id);
                     if(oskariLayer) {
                         oskariLayer.setVisible(layer.hidden !== true);
-                    
+
                         if (layer.opacity || layer.opacity === 0) {
                             oskariLayer.setOpacity(layer.opacity);
                         }
