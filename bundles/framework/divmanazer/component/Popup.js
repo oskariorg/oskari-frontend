@@ -335,12 +335,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         /**
          * @method makeDraggable
          * Makes dialog draggable with jQuery Event Drag plugin
+         * @param options  optional options for draggable
          */
-        makeDraggable: function () {
-            var me = this;
-            me.dialog.css('position', 'absolute');
-            me.dialog.draggable({
+        makeDraggable: function (options) {
+            var me = this,
+                dragOptions = options ? options : {
                 scroll: false
-            });
+            };
+            me.dialog.css('position', 'absolute');
+            me.dialog.draggable(dragOptions);
         }
     });

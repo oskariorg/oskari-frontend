@@ -88,7 +88,7 @@ body {
 .oskari-flyout {
   background-color: #fafafa;
   position: absolute;
-  z-index: 1100;
+  z-index: 1600;
   margin: 0px;
   padding: 0px;
   border: 1px solid rgba(0, 0, 0, 0.2); }

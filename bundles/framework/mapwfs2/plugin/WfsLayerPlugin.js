@@ -472,7 +472,7 @@ Oskari.clazz.define(
             }
 
             for (i = 0; i < layers.length; i += 1) {
-                if (layers[i].hasFeatureData()) {
+                if (layers[i].hasFeatureData() && layers[i].isVisible()) {
                     // clean features lists
                     layers[i].setActiveFeatures([]);
                     if (grid !== null && grid !== undefined) {
@@ -736,6 +736,10 @@ Oskari.clazz.define(
                     event.getMapLayer().getId(),
                     event.getMapLayer().isVisible()
                 );
+
+                if(event.getMapLayer().isVisible()){
+                    this.mapMoveHandler(event.getMapLayer().getId());
+                }
             }
         },
 
@@ -791,7 +795,7 @@ Oskari.clazz.define(
             }
 
             layers.forEach(function (layer) {
-                if (layer.hasFeatureData() && layer.isManualRefresh()) {
+                if (layer.hasFeatureData() && layer.isManualRefresh() && layer.isVisible()) {
                     // clean features lists
                     layer.setActiveFeatures([]);
                     if (grid !== null && grid !== undefined) {
@@ -844,7 +848,7 @@ Oskari.clazz.define(
             layers = me.getSandbox().findAllSelectedMapLayers();
 
             layers.forEach(function (layer) {
-                if (layer.hasFeatureData()) {
+                if (layer.hasFeatureData() && layer.isVisible()) {
                     // clean features lists
                     layer.setActiveFeatures([]);
                     if (grid !== null && grid !== undefined) {
@@ -1146,6 +1150,8 @@ Oskari.clazz.define(
                     _layer.getMinScale()
                 ),
                 key,
+                me = this,
+                sandbox = me.getSandbox(),
                 defaultParams = {
                     layers: '',
                     transparent: true,
@@ -1158,7 +1164,7 @@ Oskari.clazz.define(
                     scales: layerScales,
                     isBaseLayer: false,
                     displayInLayerSwitcher: true,
-                    visibility: true,
+                    visibility: _layer.isInScale(sandbox.getMap().getScale()) && _layer.isVisible(),
                     buffer: 0,
                     _plugin: this,
 
