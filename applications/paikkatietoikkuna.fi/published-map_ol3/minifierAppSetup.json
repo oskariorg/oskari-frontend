@@ -130,10 +130,6 @@
         },
         "instanceProps": {}
     }, {
-        "title" : "Info Box",
-        "fi" : "infobox",
-        "sv" : "?",
-        "en" : "?",
         "bundlename" : "infobox",
         "bundleinstancename" : "infobox",
         "metadata" : {
@@ -141,9 +137,17 @@
                 "infobox" : {
                     "bundlePath" : "../../../packages/mapping/"
                 }
-            },
-            "Require-Bundle-Instance" : []
-        },
-        "instanceProps" : {}
+            }
+        }
+    }, {
+        "bundlename" : "drawtools_ol3",
+        "bundleinstancename" : "drawtools_ol3",
+        "metadata" : {
+            "Import-Bundle" : {
+                "drawtools_ol3" : {
+                    "bundlePath" : "../../../packages/mapping/"
+                }
+            }
+        }
     }]
 }

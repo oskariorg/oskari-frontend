@@ -33,6 +33,18 @@ function(id, geojson, data) {
     },
     getData : function() {
         return this._data;
+    }, 
+    /**
+     * Serialization for RPC
+     * @return {Object} object that includes event properties
+     */
+    getParams: function () {
+        return {
+            name: this.getName(),
+            id: this.getId(),
+            geojson: this.getGeoJson(),
+            data: this.getData()
+        };
     }
 }, {
     /**
