@@ -149,5 +149,25 @@
                 }
             }
         }
+    }, {
+        "bundlename" : "routingService",
+        "bundleinstancename" : "routingService",
+        "metadata" : {
+            "Import-Bundle" : {
+                "routingService" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
+                }
+            }
+        }
+    }, {
+        "bundlename" : "rpc",
+        "bundleinstancename" : "rpc",
+        "metadata" : {
+            "Import-Bundle" : {
+                "rpc" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
+                }
+            }
+        }
     }]
 }
