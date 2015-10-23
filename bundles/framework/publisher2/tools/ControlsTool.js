@@ -28,15 +28,27 @@ function() {
 
         if(me.state.enabled) {
             return {
-                mapfull: {
-                    conf: {
-                        plugins: [{ id: this.getTool().id, config: this.getPlugin().getConfig() }]
+                configuration: {
+                    mapfull: {
+                        conf: {
+                            plugins: [{ id: this.getTool().id, config: this.getPlugin().getConfig() }]
+                        }
                     }
                 }
             };
         } else {
             return null;
         }
+    },
+    /**
+    * Is the tool toggled on by default.
+    * @method isDefaultTool
+    * @public
+    *
+    * @returns {Boolean} is the tool toggled on by default.
+    */
+    isDefaultTool: function() {
+        return true;
     }
 }, {
     'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],

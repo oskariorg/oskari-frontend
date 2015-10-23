@@ -149,11 +149,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                 /** ENTER The Mode */
                 // Hide base layers, store hidden layers to state so we can show them on exit
                 layers = me.instance.sandbox.findAllSelectedMapLayers();
-                me.instance.state.hiddenLayers = [];
+                me.hiddenLayers = [];
                 for (i = 0; i < layers.length; i++) {
                     layer = layers[i];
                     if (layer && me._layer && layer.getId() !== me._layer.getId() && layer.isVisible()) {
-                        me.instance.state.hiddenLayers.push(layer);
+                        me.hiddenLayers.push(layer);
                         request = visibilityRequestBuilder(layer.getId(), false);
                         sandbox.request(me.instance.getName(), request);
                     }
@@ -202,7 +202,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
             } else {
                 /** EXIT The Mode */
                 // Make hidden layers visible
-                layers = me.instance.state.hiddenLayers;
+                layers = me.hiddenLayers;
                 if (layers) {
                     for (i = 0; i < layers.length; i++) {
                         layer = layers[i];
@@ -215,8 +215,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                 // remove stats layer if we added it and there's no active indicators
                 // this breaks published stats...
                 //me.instance.gridPlugin.resetLayer();
-
-                me.instance.state.hiddenLayers = [];
+                me.hiddenLayers = [];
                 me.instance.gridPlugin.destroyPopups(); // This is ugly, whose responsibility should this be?
                 jQuery('#contentMap').removeClass('statsgrid-contentMap');
                 jQuery('.oskariui-mode-content').removeClass('statsgrid-mode');

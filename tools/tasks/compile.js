@@ -27,13 +27,274 @@ module.exports = function(grunt) {
 
         grunt.log.writeln('Parsed appSetup:' + options.appSetupFile);
 
+        //the lang that has all the right keys. 
+        //Should probably be configurable.
+        //TODO: make configurable
+        this.templateLanguage = "en";
+
+        // Hackhack, easy way to read/load the localization files
+        var Oskari = {
+            localizations: {
+            },
+            registerLocalization: function (localization, boolParam) {
+                if (!this.localizations[localization.lang]) {
+                    this.localizations[localization.lang] = {};
+                }
+                this.localizations[localization.lang][localization.key] = {
+                    localization: localization,
+                    prefix: 'Oskari.registerLocalization('    
+                }
+                var suffix = '),'
+                if (boolParam !== undefined && boolParam !== null) {
+                    suffix = ', '+boolParam.toString()+'),';
+                }
+                this.localizations[localization.lang][localization.key].suffix = suffix;
+            }
+        };
         // internal minify i18n files function
         this.minifyLocalization = function(langfiles, path) {
-            for (var id in langfiles) {
-                //console.log('Minifying loc:' + id + '/' + langfiles[id]);
-                this.minifyJS(langfiles[id], path + 'oskari_lang_' + id + '.js', options.concat);
+
+            var template = this.readAndUglifyLocalization(langfiles[this.templateLanguage], this.templateLanguage);
+            if (!template) {
+                return;
             }
-        }
+            //evaluate the template -> Oskari-object filled with template values.
+            eval(template.code);
+
+            for (var id in langfiles) {
+                //lang all -> handled a wee bit different than the regular ones
+                if (id === 'all') {
+                    this.minifyLanguageAllJS(langfiles[id], id, path);
+                    continue;
+                } else {
+                    //reset Oskari's localization info per each language.
+                    Oskari.localizations[id] = {};
+                    this.minifyLanguageJS(langfiles[id], id);
+                }
+            }
+
+            //after looping all languages write all to disk.
+            for (var id in Oskari.localizations) {
+                var outputFile = path + 'oskari_lang_' + id + '.js'
+                var localizationsToProcess = Oskari.localizations[id]; 
+                this.writeLocalizationFile(localizationsToProcess, outputFile, id);
+            }
+        };
+        /*minify the "normal" lang files*/
+        this.minifyLanguageJS = function(files, languageId) {
+            var result = this.readAndUglifyLocalization(files, languageId);
+            if (!result) {
+                return;
+            }
+            eval(result.code);
+
+            /*don't compare the template to itself*/
+            if (languageId === this.templateLanguage) {
+                return;
+            }
+
+
+            var templateJSON = Oskari.localizations[this.templateLanguage];
+            var JSONToCompare = Oskari.localizations[languageId];
+            console.log("Processing localization "+languageId+" using "+this.templateLanguage+" as template.");
+            this.replaceMissingAndEmptyKeys(templateJSON, JSONToCompare, null, 0);
+        };
+
+        /*"special" handling for the language_all.js (might contain keys in several languages)*/
+        this.minifyLanguageAllJS = function(files, languageId, path) {
+            //"save" the registerLocalizationhack used by the other stuff...
+            var preservedOskariRegisterLocalization = Oskari.registerLocalization;
+            var languageAllTempHash = {};
+            Oskari.registerLocalization = function (localization, boolParam) {
+                if (!languageAllTempHash[localization.lang]) {
+                    languageAllTempHash[localization.lang] = {};
+                }
+                languageAllTempHash[localization.lang][localization.key] = {
+                    localization: localization,
+                    prefix: 'Oskari.registerLocalization('    
+                };
+                var suffix = '),'
+                if (boolParam !== undefined && boolParam !== null) {
+                    suffix = ', '+boolParam.toString()+'),';
+                }
+                languageAllTempHash[localization.lang][localization.key].suffix = suffix;
+            }
+            var result = this.readAndUglifyLocalization(files, languageId);
+            if (!result) {
+                return;
+            }            
+            eval(result.code);
+
+            var templateJSON = languageAllTempHash[this.templateLanguage];
+
+            for (var id in languageAllTempHash) {
+                //all -> no need to compare to template
+                if (id === 'all') {
+                    continue;
+                }
+                var JSONToCompare = languageAllTempHash[id];
+                console.log("Processing localization all, language "+id+" using "+this.templateLanguage+" as template.");
+                this.replaceMissingAndEmptyKeys(templateJSON, JSONToCompare, null, 0);
+            }
+
+            var outputFile = path + 'oskari_lang_all.js'
+            var data = '';
+            
+            for (var id in languageAllTempHash) {
+                for (var key in languageAllTempHash[id]) {
+                    data += languageAllTempHash[id][key].prefix+
+                            JSON.stringify(languageAllTempHash[id][key].localization)+
+                            languageAllTempHash[id][key].suffix;
+                }
+            }
+            //remove the last comma and replace with semicolon
+            data = data.substring(0, data.length - 1);
+            data += ";";
+
+            this.writeToDisc(outputFile, data);
+
+            //restore the "normal" registerlocalization in the end.
+            Oskari.registerLocalization = preservedOskariRegisterLocalization;
+        };
+
+        /*write a localization to disk*/
+        this.writeLocalizationFile = function(localization, outputFile, languageId) {
+            var data = '';
+            for (var key in localization) {
+                //Make sure the lang-property is correct. If an entire localization object was copied from the template (=i.e. an entire localisation key was missing), it's not.
+                //skip this part for the language_all - special case
+                if (languageId !== "all") {
+                    localization[key].localization.lang = languageId;
+                }
+
+                data += localization[key].prefix+
+                        JSON.stringify(localization[key].localization)+
+                        localization[key].suffix;
+            }
+            if (!data || data.length === 0) {
+                return;
+            }
+
+            //remove the last comma and replace with semicolon
+            data = data.substring(0, data.length - 1);
+            data += ";";
+
+            this.writeToDisc(outputFile, data);
+        };
+
+        /*when the raw data has been parsed, do the actual writing.*/
+        this.writeToDisc = function(outputFile, data) {
+            console.log("Target: "+outputFile);
+            try {
+                fs.writeFileSync(outputFile, data, 'utf8');
+            } catch(e) {
+                console.log("Error saving "+outputFile);
+                var err = new Error('Saving failed.');
+                if (e.message) {
+                    err.message += '\n' + e.message + '. \n';
+                    if (e.line) {
+                        err.message += 'Line ' + e.line + ' in ' + src + '\n';
+                    }
+                }
+                err.origError = e;
+                grunt.log.warn('Error writing ' + outputFile + ' to disk.');
+                grunt.fail.warn(err);
+            }
+        };
+        /*read and uglify a bunch of files. return result.*/
+        this.readAndUglifyLocalization = function(files, languageId) {
+            var okFiles = [],
+                fileMap = {},
+                result = null;
+
+            for (var i = 0; i < files.length; ++i) {
+                if (!fs.existsSync(files[i])) {
+                    var msg = 'Couldnt locate ' + files[i]; 
+                    grunt.log.warn(msg);
+
+                    /*only fail if the templatelanguage has missing files. Otherwise the keys will be substituted*/
+                    if (languageId === this.templateLanguage) {
+                        grunt.fail.fatal(msg);
+                        throw msg;
+                    } else {
+                        continue;
+                    }
+                }
+                // do not put duplicates on compiled code
+                if(!fileMap[files[i]]) {
+                    fileMap[files[i]] = true;
+                    okFiles.push(files[i]);
+                } else {
+                    grunt.log.writeln('File already added:' + files[i]);
+                }
+            }
+
+            try {
+                result = UglifyJS.minify(okFiles, {
+                    //outSourceMap : "out.js.map",
+                    warnings : true,
+                    compress : true
+                });
+            } catch (e) {
+                console.log(e);
+                var err = new Error('Uglification failed.');
+                if (e.message) {
+                    err.message += '\n' + e.message + '. \n';
+                    if (e.line) {
+                        err.message += 'Line ' + e.line + ' in ' + src + '\n';
+                    }
+                }
+                err.origError = e;
+                grunt.log.warn('Uglifying sources ' + okFiles.join() + ' failed.');
+                grunt.fail.warn(err);
+            }
+
+            return result;
+        };
+
+
+        /*dig in to the right level in json */
+        this.replaceMissingAndEmptyKeys = function(templateJSON, JSONToCompare, path, level) {
+            if (level === 0) {
+                for (var key in templateJSON) {
+                    if (!JSONToCompare[key]) {
+                        grunt.log.warn("Localization for bundle "+key+" missing.");
+                        JSONToCompare[key] = this.clone(templateJSON[key])
+                    } else {
+                        this.replaceMissingAndEmptyKeysRecursive(templateJSON[key].localization.value, JSONToCompare[key].localization.value, path, key, level);
+                    }
+                }
+            }
+        };
+
+        /*compares a locale to the corresponding template language locale, and fills in the missing/empty properties*/
+        this.replaceMissingAndEmptyKeysRecursive = function(templateJSON, JSONToCompare, path, bundle, level) {
+            var logkey = "";
+            if (level === 0) {
+                path = "";
+            }
+            for (var key in templateJSON) {
+                logkey = path && path.length ? path+"."+key : key;
+                if (typeof templateJSON[key] === 'string' || templateJSON[key] instanceof String) {
+                    if (!JSONToCompare[key] || JSONToCompare[key].length === 0) {
+                        grunt.log.warn("Key/Value missing "+bundle+": "+logkey);
+                        JSONToCompare[key] = templateJSON[key];
+                    }
+                } else if (templateJSON[key].constructor === Object) {
+                    if (!JSONToCompare[key]) {
+                        grunt.log.warn("Key/Value missing "+bundle+": "+logkey);
+                        JSONToCompare[key] = this.clone(templateJSON[key]);
+                    } else {
+                        this.replaceMissingAndEmptyKeysRecursive(templateJSON[key], JSONToCompare[key], logkey, bundle, level + 1);
+                    }
+                }
+            }
+            return;
+        };
+
+        this.clone = function(objectToClone) {
+            return JSON.parse(JSON.stringify(objectToClone));
+        };
 
         // internal minify JS function
         this.minifyJS = function(files, outputFile, concat) {

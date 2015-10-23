@@ -10,6 +10,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
             'Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin';
         me._name = 'WmtsLayerPlugin';
         me._supportedFormats = {};
+        this._layers = {};
     }, {
 
         register: function () {
@@ -27,19 +28,16 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                     'Oskari.mapframework.service.MapLayerService'
                 );
 
-            if (mapLayerService) {
-                mapLayerService.registerLayerModel(
-                    'wmtslayer',
-                    'Oskari.mapframework.wmts.domain.WmtsLayer'
-                );
-                layerModelBuilder = Oskari.clazz.create(
-                    'Oskari.mapframework.wmts.service.WmtsLayerModelBuilder'
-                );
-                mapLayerService.registerLayerModelBuilder(
-                    'wmtslayer',
-                    layerModelBuilder
-                );
+            if (!mapLayerService) {
+                // no map layer service - TODO: signal failure
+                return;
             }
+
+            mapLayerService.registerLayerModel('wmtslayer', 'Oskari.mapframework.wmts.domain.WmtsLayer');
+            layerModelBuilder = Oskari.clazz.create('Oskari.mapframework.wmts.service.WmtsLayerModelBuilder');
+            mapLayerService.registerLayerModelBuilder('wmtslayer', layerModelBuilder);
+
+            this.service = Oskari.clazz.create('Oskari.mapframework.wmts.service.WMTSLayerService', mapLayerService, this.getSandbox());
         },
 
         _createEventHandlers: function () {
@@ -93,70 +91,40 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                 return;
             }
 
+            // need to keep track of the index we should place the WMTS once capabilities have loaded
+            var selectedLayers = this.getSandbox().findAllSelectedMapLayers(layer);
+            var index = _.findIndex(selectedLayers, function(selected) {
+              return selected.getId() === layer.getId();
+            });
 
-            var me = this,
-                map = me.getMap(),
-                parser = new ol.format.WMTSCapabilities(),
-                WMTSservice = me.instance.service;
-
-            var layerName = null,
-                layerIdPrefix = 'layer_';
-            if (layer.isBaseLayer() || layer.isGroupLayer()) {
-                layerName = 'basemap_' + layer.getId();
-                layerIdPrefix = 'basemap_';
-            } else {
-                layerName = 'layer_' + layer.getId();
-            }
-
-            var matrixSet = layer.getWmtsMatrixSet();
-
-            var params = {layer: layer.getId()};
-
-            WMTSservice.getCapabilitiesForLayer(
-                params,
-                // Success callback
-                function (response) {
-                    var capabilitiesXML = response;
-                    var WMTSCaps = parser.read(capabilitiesXML);
-                    var options = ol.source.WMTS.optionsFromCapabilities(WMTSCaps, {layer: layerName, matrixSet: matrixSet});
-
-                    var wmtsLayer = new ol.layer.Tile({
-                        opacity: layer.getOpacity() / 100.0,
-                        source : new ol.source.WMTS(options)
-                    });
-                    sandbox.printDebug("[WmtsLayerPlugin] created WMTS layer " + wmtsLayer);
-
-                    map.addLayer(wmtsLayer);
-
+            var me = this;
+            var map = me.getMap();
+            var mapModule = me.getMapModule();
+            this.service.getCapabilitiesForLayer(layer, function(wmtsLayer) {
+                    me.getSandbox().printDebug("[WmtsLayerPlugin] created WMTS layer " + wmtsLayer);
                     if (keepLayerOnTop) {
-                        mapModule.setLayerIndex(wmtsLayer, mapModule.getLayers().length);
+                        // use the index as it was when addMapLayer was called
+                        // bringing layer on top causes timing errors, because of async capabilities load
+                        map.getLayers().insertAt(index, wmtsLayer);
                     } else {
-                        mapModule.setLayerIndex(wmtsLayer, 0);
+                        map.getLayers().insertAt(0, wmtsLayer);
                     }
-                },
-                // Error callback
-                function (jqXHR, textStatus, errorThrown) {
-                    //TODO: add better error handling
-                    console.log(jqXHR, textStatus, errorThrown);
-                }
-            );
+                    me._layers[layer.getId()] = wmtsLayer;
+            }, function() {
+                console.log("Error loading capabilitiesXML");
+            });
 
-        },
-
-        __getLayerName : function(layer) {
-            var name = 'layer_' + layer.getId();
-            if (layer.isBaseLayer() || layer.isGroupLayer()) {
-                name = 'basemap_' + layer.getId();
-            }
-            // removing all dots (they cause problems on OL)
-            return name.split('.').join('');
         },
 
         getOLMapLayers: function (layer) {
             if (!layer.isLayerOfType('WMTS')) {
                 return null;
             }
-            return this._map.getLayersByName(this.__getLayerName(layer));
+            if(!this._layers[layer.getId()]) {
+                return null;
+            }
+            // only single layer/id, wrap it in an array
+            return [this._layers[layer.getId()]];
         },
 
         /***********************************************************
@@ -178,33 +146,12 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
          */
         removeMapLayerFromMap: function(layer) {
 
-            if (!layer.isLayerOfType('WMTS')) {
+            if (!layer.isLayerOfType('WMTS') || !this._layers[layer.getId()]) {
                 return;
             }
-
-            if (layer.isBaseLayer() || layer.isGroupLayer()) {
-                var baseLayerId = "";
-                if (layer.getSubLayers().length > 0) {
-                    for (var i = 0; i < layer.getSubLayers().length; i++) {
-                        var subtmp = layer.getSubLayers()[i];
-                        var name = 'basemap_' + subtmp.getId();
-                        var remLayer = this.mapModule.getLayersByName(name);
-                        if (remLayer && remLayer[0] && remLayer[0].destroy) {
-                            /*remLayer[0].destroy();*/
-                            this.mapModule.removeLayer(remLayer[0], layer, name);
-                        }
-                    }
-                } else {
-                    var name = 'layer_' + layer.getId();
-                    var remLayer = this.mapModule.getLayersByName(name)[0];
-                    this.mapModule.removeLayer(remLayer, layer, name);
-                }
-            } else {
-                var name = 'layer_' + layer.getId();
-                var remLayer = this.mapModule.getLayersByName(name);
-                /* This should free all memory */
-                this.mapModule.removeLayer(remLayer[0], layer, name);
-            }
+            var wmtsLayer = this._layers[layer.getId()];
+            this.getMapModule().removeLayer(wmtsLayer, layer);
+            delete this._layers[layer.getId()];
         },
         /**
          * @method _afterChangeMapLayerOpacityEvent
@@ -215,27 +162,10 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
          */
         afterChangeMapLayerOpacityEvent: function(event) {
             var layer = event.getMapLayer();
-
-            if (layer.isBaseLayer() || layer.isGroupLayer()) {
-                if (layer.getSubLayers().length > 0) {
-                    for (var bl = 0; bl < layer.getSubLayers().length; bl++) {
-                        var mapLayer = this.mapModule.getLayersByName('basemap_' + layer
-                            .getSubLayers()[bl].getId());
-                        mapLayer[0].setOpacity(layer.getOpacity() / 100);
-                    }
-                } else {
-                    var mapLayer = this.mapModule.getLayersByName('layer_' + layer.getId());
-                    if (mapLayer[0] != null) {
-                        mapLayer[0].setOpacity(layer.getOpacity() / 100);
-                    }
-                }
-            } else {
-                this._sandbox.printDebug("Setting Layer Opacity for " + layer.getId() + " to " + layer.getOpacity());
-                var mapLayer = this._mapModule.getLayersByName('layer_' + layer.getId());
-                if (mapLayer[0] != null) {
-                    mapLayer[0].setOpacity(layer.getOpacity() / 100);
-                }
-            }
+            var olLayers = this.getOLMapLayers(layer);
+            _.each(olLayers, function(ol) {
+                ol.setOpacity(layer.getOpacity() / 100);
+            });
         },
 
         /**
@@ -245,18 +175,15 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
          *            event
          */
         afterChangeMapLayerStyleEvent: function(event) {
-            return;
             var layer = event.getMapLayer();
 
             // Change selected layer style to defined style
-            if (!layer.isBaseLayer()) {
-                var styledLayer = this.mapModule.getLayersByName('layer_' + layer.getId());
+            var styledLayer = this.getOLMapLayers(layer);
                 /*if (styledLayer != null) {
              styledLayer[0].mergeNewParams({
              styles : layer.getCurrentStyle().getName()
              });
              }*/
-            }
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],

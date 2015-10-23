@@ -31,14 +31,14 @@ Oskari.clazz.define(
      *
      *
      */
-    function () {
+    function (config) {
         var me = this;
         me._clazz =
-            'Oskari.mapframework.mapmodule.ControlsPlugin';
-        me._name = 'ControlsPlugin';
+            'Oskari.mapframework.mapmodule.InteractionsPlugin';
+        me._name = 'InteractionsPlugin';
     }, {
     /** @static @property __name plugin name */
-    __name : 'ControlsPlugin',
+    __name : 'InteractionsPlugin',
 
     /**
      * @method getName
@@ -56,173 +56,24 @@ Oskari.clazz.define(
         return true;
     },
     /**
-     * @method getMapModule
-     * @return {Oskari.mapframework.ui.module.common.MapModule} reference to map
-     * module
-     */
-    getMapModule : function() {
-
-        return this.mapModule;
-    },
-    /**
-     * @method setMapModule
-     * @param {Oskari.mapframework.ui.module.common.MapModule} reference to map
-     * module
-     */
-    setMapModule : function(mapModule) {
-        this.mapModule = mapModule;
-        if (mapModule) {
-            this.pluginName = mapModule.getName() + this.__name;
-            this._createMapControls();
-        }
-    },
-    /**
-     * @method register
-     * Interface method for the module protocol
-     */
-    register : function() {
-
-    },
-    /**
-     * @method unregister
-     * Interface method for the module protocol
-     */
-    unregister : function() {
-
-    },
-    /**
-     * @method init
+     * @private @method _startPluginImpl
+     * Interface method for the plugin protocol
      *
-     * Interface method for the module protocol
      *
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-     *          reference to application sandbox
      */
-    init : function(sandbox) {
+    _startPluginImpl: function() {
+        this._createMapInteractions();
+    },
+
+    _createRequestHandlers: function () {
         var me = this;
-        var mapMovementHandler = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapMovementControlsRequestHandler', me.getMapModule());
-        this.requestHandlers = {
-            'ToolSelectionRequest' : Oskari.clazz.create('Oskari.mapframework.mapmodule.ToolSelectionHandler', sandbox, me),
+        var mapMovementHandler = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapMovementInteractionsRequestHandler', me.getMapModule());
+        return {
             'EnableMapKeyboardMovementRequest' : mapMovementHandler,
             'DisableMapKeyboardMovementRequest' : mapMovementHandler,
             'EnableMapMouseMovementRequest' : mapMovementHandler,
             'DisableMapMouseMovementRequest' : mapMovementHandler
         };
-    },
-    /**
-     * @method startPlugin
-     *
-     * Interface method for the plugin protocol
-     *
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-     *          reference to application sandbox
-     */
-    startPlugin : function(sandbox) {
-        this._sandbox = sandbox;
-        this._map = this.getMapModule().getMap();
-
-        sandbox.register(this);
-
-        for(var reqName in this.requestHandlers ) {
-            sandbox.addRequestHandler(reqName, this.requestHandlers[reqName]);
-        }
-
-        for(var p in this.eventHandlers ) {
-            sandbox.registerForEventByName(this, p);
-        }
-        this._addMapControls();
-    },
-    /**
-     * @method stopPlugin
-     *
-     * Interface method for the plugin protocol
-     *
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-     *          reference to application sandbox
-     */
-    stopPlugin : function(sandbox) {
-
-        for(var reqName in this.requestHandlers ) {
-            sandbox.removeRequestHandler(reqName, this.requestHandlers[reqName]);
-        }
-
-        for(p in this.eventHandlers ) {
-            sandbox.unregisterFromEventByName(this, p);
-        }
-
-        sandbox.unregister(this);
-        this._removeMapControls();
-
-        this._map = null;
-        this._sandbox = null;
-    },
-    /**
-     * @method start
-     *
-     * Interface method for the module protocol
-     *
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-     *          reference to application sandbox
-     */
-    start : function(sandbox) {
-    },
-    /**
-     * @method stop
-     *
-     * Interface method for the module protocol
-     *
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-     *          reference to application sandbox
-     */
-    stop : function(sandbox) {
-    },
-    /**
-     * @property {Object} eventHandlers
-     * @static
-     */
-    eventHandlers : {
-        /**
-         * @method Toolbar.ToolSelectedEvent
-         * @param {Oskari.mapframework.bundle.toolbar.event.ToolSelectedEvent} event
-         */
-       'Toolbar.ToolSelectedEvent' : function(event) {
-            // changed tool -> cancel any current tool
-            if(this.conf.zoomBox !== false) {
-                this._zoomBoxTool.deactivate();
-            }
-            if(this.conf.measureControls !== false) {
-                this._measureControls.line.deactivate();
-                this._measureControls.area.deactivate();
-            }
-       }
-    },
-    /**
-     * @method onEvent
-     * @param {Oskari.mapframework.event.Event} event a Oskari event object
-     * Event is handled forwarded to correct #eventHandlers if found or discarded
-     * if not.
-     */
-    onEvent : function(event) {
-        return this.eventHandlers[event.getName()].apply(this, [event]);
-    },
-    /**
-     * @method _addMapControls
-     * Add necessary controls on the map
-     * @private
-     */
-    _addMapControls : function() {
-        var me = this;
-
-
-    },
-    /**
-     * @method _removeMapControls
-     * Remove added controls from the map
-     * @private
-     */
-    _removeMapControls : function() {
-
-
     },
 
     /**
@@ -238,122 +89,24 @@ Oskari.clazz.define(
             sandbox = me.getSandbox(),
             key;
 
-            // check if already created
-            if (me._zoomBoxTool) {
-                return;
-            }
-
-            if (conf.zoomBox !== false) {
-
-                me._zoomBoxTool = new ol.interaction.DragZoom();
-                // zoom tool
-                /* do we need this?
-                OpenLayers.Control.ZoomBox.prototype.draw = function () {
-                    this.handler = new OpenLayers.Handler.Box(this, {
-                        done: function (position) {
-                            this.zoomBox(position);
-                            if (me.getMapModule()) {
-                                me.getMapModule().notifyMoveEnd();
-                            }
-                        }
-                    }, {
-                        keyMask: this.keyMask
-                    });
-                };
-                */
-
-            }
+            //TODO: add Esc button handler
 
             // Map movement/keyboard control
-            if (conf.keyboardControls !== false) {
-                me._keyboardControls = new OpenLayers.Control.PorttiKeyboard();
-                me._keyboardControls.setup(me.getMapModule());
-            }
-
-            // Measure tools
-            var optionsLine = {
-                geodesic: geodesic,
-                handlerOptions: {
-                    persist: true
-                },
-                immediate: true
-            };
-            var optionsPolygon = {
-                geodesic: geodesic,
-                handlerOptions: {
-                    persist: true
-                },
-                immediate: true
-            };
-
-            me._measureControls = {};
-            if (conf.measureControls !== false) {
-                me._measureControls = {
-                    line: (new OpenLayers.Control.Measure(
-                        OpenLayers.Handler.Path,
-                        optionsLine
-                    )),
-                    area: (new OpenLayers.Control.Measure(
-                        OpenLayers.Handler.Polygon,
-                        optionsPolygon
-                    ))
-                };
-            }
-
-            function measurementsHandler(event, finished) {
-                var sandbox = me.getSandbox(),
-                    geometry = event.geometry,
-                    units = event.units,
-                    order = event.order,
-                    measure = event.measure,
-                    mapModule = me.getMapModule(),
-                    out = null,
-                    geomAsText = null,
-                    geomMimeType = null;
-
-                if (order === 1 || order === 2) {
-                    out = mapModule.formatMeasurementResult(
-                        geometry,
-                        order === 1 ? 'line' : 'area'
-                    );
-                }
-
-                if (finished) {
-                    if (OpenLayers.Format.GeoJSON) {
-                        var format = new (OpenLayers.Format.GeoJSON)();
-                        geomAsText = format.write(geometry, true);
-                        geomMimeType = 'application/json';
-                    }
-                }
-                sandbox.request(
-                    me,
-                    sandbox.getRequestBuilder(
-                        'ShowMapMeasurementRequest'
-                    )(out, finished, geomAsText, geomMimeType)
-                );
-            }
-            var measureHandler = function (event) {
-                    measurementsHandler(event, true);
-                },
-                measurePartialHandler = function (event) {
-                    measurementsHandler(event, false);
-                };
-            for (key in me._measureControls) {
-                if (me._measureControls.hasOwnProperty(key)) {
-                    me._measureControls[key].events.on({
-                        measure: measureHandler,
-                        measurepartial: measurePartialHandler
-                    });
-                }
+            if (conf.keyboardControls === false) {
+                me.getMap().removeInteraction(ol.interaction.KeyboardPan);
+                me.getMap().removeInteraction(ol.interaction.KeyboardZoom);
             }
 
             // mouse control
-            if (conf.mouseControls !== false) {
-                //this._mouseControls = new OpenLayers.Control.PorttiMouse(this.getConfig().mouse);
-                me._mouseControls = new OskariNavigation();
-                me._mouseControls.setup(this.getMapModule());
+            if (conf.mouseControls === false) {
+                me.getMap().removeInteraction(ol.interaction.DragPan);
+                me.getMap().removeInteraction(ol.interaction.MouseWheelZoom);
+                me.getMap().removeInteraction(ol.interaction.DoubleClickZoom);
+                me.getMap().removeInteraction(ol.interaction.DragZoom);
             }
+        }
 }, {
+        extend: ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
         /**
          * @static @property {string[]} protocol array of superclasses
          */

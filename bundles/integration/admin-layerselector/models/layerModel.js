@@ -123,21 +123,12 @@ if (!Function.prototype.bind) {
                 }
             },
             /**
-             * Extra handling per layertype. If data is not given assume getter, otherwise setup data.
+             * Extra handling per layertype in format key=layertype, value is a function that takes params data and reference to the map layer.
+             * Like "wmts" : function(data, mapLayer) {}
+             * If data is not given assume getter, otherwise setup data.
              * @type {Object}
              */
             _typeHandlers : {
-                "wmts" : function(data, mapLayer) {
-                    if(!data) {
-                        return {
-                            tileMatrix : this.getOriginalMatrixSetData()
-                        };
-                    }
-                    else {
-                        mapLayer.setOriginalMatrixSetData(data.tileMatrix);
-                    }
-                }
-
             },
             /**
              * Recursive function to search capabilities by layerName.
@@ -305,7 +296,22 @@ if (!Function.prototype.bind) {
              * Returns legend url
              * @returns {String} legend url
              */
-            getLegendUrl: function() {
+            getLegendUrl: function() {                
+                var adminBlock = this.getAdmin();
+                var currentStyleName = this.getCurrentStyle().getName();
+
+                if (adminBlock && currentStyleName && adminBlock.styles){
+                    var selectedStyle = jQuery.grep(adminBlock.styles ||[], function(style, index){
+                        return style.name === currentStyleName;
+                    });
+
+                    if(selectedStyle.length>0) {
+                        return selectedStyle[0].legend;
+                    } else {
+                        return adminBlock.getCurrentStyle().getLegend();
+                    }
+                }
+                
                 return this.getCurrentStyle().getLegend();
             },
 

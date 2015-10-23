@@ -106,9 +106,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
                 }
             }
 
-            me.backendConfiguration.formatProducers["application/pdf"] = (conf ? conf.backendConfiguration.formatProducers["application/pdf"] : null) || '';
-            me.backendConfiguration.formatProducers["image/png"] = (conf ? conf.backendConfiguration.formatProducers["image/png"] : null) || '';
+            me.backendConfiguration.formatProducers["application/pdf"] = (conf && !jQuery.isEmptyObject(conf.backendConfiguration) ? conf.backendConfiguration.formatProducers["application/pdf"] : null) || '';
+            me.backendConfiguration.formatProducers["image/png"] = (conf && !jQuery.isEmptyObject(conf.backendConfiguration) ? conf.backendConfiguration.formatProducers["image/png"] : null) || '';
 
+            if (!me.backendConfiguration.formatProducers["application/pdf"]){
+                me.backendConfiguration.formatProducers["application/pdf"] = sandbox.getAjaxUrl() + 'action_route=GetPreview&format=application/pdf&';
+            }
+            if (!me.backendConfiguration.formatProducers["image/png"]){
+                me.backendConfiguration.formatProducers["image/png"] = sandbox.getAjaxUrl() + 'action_route=GetPreview&format=image/png&';
+            }
             // requesthandler
             this.printoutHandler = Oskari.clazz.create('Oskari.mapframework.bundle.printout.request.PrintMapRequestHandler', sandbox, function () {
                 me.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'attach']);

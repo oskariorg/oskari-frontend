@@ -234,20 +234,14 @@
                 "Require-Bundle-Instance": []
             }
         }, {
-            "instanceProps": {},
-            "title": "Koordinaatit",
-            "bundleinstancename": "coordinatedisplay",
-            "fi": "coordinatedisplay",
-            "sv": "?",
-            "en": "?",
-            "bundlename": "coordinatedisplay",
-            "metadata": {
-                "Import-Bundle": {
-                    "coordinatedisplay": {
-                        "bundlePath": "../../../packages/framework/bundle/"
+            "bundlename" : "coordinatetool",
+            "bundleinstancename" : "coordinatetool",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "coordinatetool" : {
+                        "bundlePath" : "../../../packages/framework/bundle/"
                     }
-                },
-                "Require-Bundle-Instance": []
+                }
             }
         }, {
             "title": "PostProcessor",

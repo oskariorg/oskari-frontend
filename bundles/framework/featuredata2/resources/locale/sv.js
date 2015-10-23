@@ -145,6 +145,11 @@ Oskari.registerLocalization(
                     "boolean_operator_missing": "Den logiska operatören saknas."
                 }
             }
+        },
+        "gridFooter": {
+                 "aggregateColumnField": "Antal",
+                 "noDataMessage": "Antal = Antal utan skyddad objekt",
+                 "noDataCommonMessage": "Antal = Antal utan skyddad objekt"
         }
     }
 }

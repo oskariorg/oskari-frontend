@@ -16,7 +16,7 @@ Oskari.registerLocalization(
             "abstract": "Informazioni di base",
             "inspire": "Metadati inspire",
             "jhs": "ISO 19115 metadata",
-            "quality": "NOT TRANSLATED",
+            "quality": "Qualità dei dati",
             "xml": "ISO 19139 XML file",
             "map": "Estensione geografica",
             "pdf": "Stampa",
@@ -219,12 +219,12 @@ Oskari.registerLocalization(
                         "description": "L'informazione si applica alla caratteristica dell'elemento"
                     },
                     "collectionHardware": {
-                        "label": "?",
-                        "description": "?"
+                        "label": "NOT TRANSLATED",
+                        "description": "NOT TRANSLATED"
                     },
                     "collectionSession": {
-                        "label": "?",
-                        "description": "?"
+                        "label": "NOT TRANSLATED",
+                        "description": "NOT TRANSLATED"
                     },
                     "dataset": {
                         "label": "Dataset",
@@ -239,8 +239,8 @@ Oskari.registerLocalization(
                         "description": "L'informazione si applica al dataset non geografico"
                     },
                     "dimensionGroup": {
-                        "label": "?",
-                        "description": "?"
+                        "label": "NOT TRANSLATED",
+                        "description": "NOT TRANSLATED"
                     },
                     "feature": {
                         "label": "Elemento",
@@ -381,8 +381,8 @@ Oskari.registerLocalization(
                 }
             },
             "qualityContent": {
-                "qualityPassTrue": "NOT TRANSLATED",
-                "qualityPassFalse": "NOT TRANSLATED"
+                "qualityPassTrue": "Il dataset è conforme alle specifiche",
+                "qualityPassFalse": "Il dataset non è conforme alle specifiche"
             },
             "heading": {
                 "abstractTextData": "Riassunto (dato)",
@@ -415,21 +415,21 @@ Oskari.registerLocalization(
                 "temporalExtent": "Estensione temporale",
                 "topicCategory": "Categorie di argomenti",
                 "useLimitation": "Limitaizoni d'uso",
-                "absoluteExternalPositionalAccuracy": "NOT TRANSLATED",
-                "accuracyOfTimeMeasurement": "NOT TRANSLATED",
-                "completenessCommission": "NOT TRANSLATED",
-                "completenessOmission": "NOT TRANSLATED",
-                "conceptualConsistency": "NOT TRANSLATED",
-                "domainConsistency": "NOT TRANSLATED",
-                "formatConsistency": "NOT TRANSLATED",
-                "griddedDataPositionalAccuracy": "NOT TRANSLATED",
-                "nonQuantitativeAttributeAccuracy": "NOT TRANSLATED",
-                "quantitativeAttributeAccuracy": "NOT TRANSLATED",
-                "relativeInternalPositionalAccuracy": "NOT TRANSLATED",
-                "temporalConsistency": "NOT TRANSLATED",
-                "temporalValidity": "NOT TRANSLATED",
-                "thematicClassificationCorrectness": "NOT TRANSLATED",
-                "topologicalConsistency": "NOT TRANSLATED"
+                "absoluteExternalPositionalAccuracy": "Accuratezza di posizionamento assoluta",
+                "accuracyOfTimeMeasurement": "Accuratezza del tempo di misura",
+                "completenessCommission": "Errore di commissione",
+                "completenessOmission": "Errore di omissione",
+                "conceptualConsistency": "Correttezza concettuale",
+                "domainConsistency": "Correttezza del dominio",
+                "formatConsistency": "Correttezza del formato",
+                "griddedDataPositionalAccuracy": "Accuratezza di posizionamento dei dati grid",
+                "nonQuantitativeAttributeAccuracy": "Accuratezza non quantitativa degli attributi",
+                "quantitativeAttributeAccuracy": "Accuratezza quantitativa degli attributi",
+                "relativeInternalPositionalAccuracy": "Accuratezza di posizionamento relativa",
+                "temporalConsistency": "Correttezza temporale",
+                "temporalValidity": "Validità temporale",
+                "thematicClassificationCorrectness": "Correttezza della classificazione tematica",
+                "topologicalConsistency": "Correttezza topologica"
             }
         },
         "tile": {

@@ -30,7 +30,7 @@ Oskari.clazz.define(
                  */
                 {
                     "type": "text/javascript",
-                    "src": "../../../libraries/ol3/ol-v3.7.0-debug.js"
+                    "src": "../../../libraries/ol3/ol-v3.7.0.js"
                 },
                 /*
                  * Proj4js
@@ -68,23 +68,12 @@ Oskari.clazz.define(
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/Plugin.js"
                 },
                 /**
-                 * controls plugin
+                 * interactions plugin
                  */
                 {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/controls/ControlsPlugin.js"
-                }, 
-                /*{
-                    "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/controls/PorttiKeyboard.js"
+                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/interactions/InteractionsPlugin.js"
                 }, {
-                    "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/controls/OskariNavigation.js"
-                }, {
-                    "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/controls/OskariPinchZoom.js"
-                }, 
-                */{
                     "type": "text/javascript",
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/request/DisableMapKeyboardMovementRequest.js"
                 }, {
@@ -98,7 +87,7 @@ Oskari.clazz.define(
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/request/EnableMapMouseMovementRequest.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/request/MapMovementControlsRequestHandler.js"
+                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/request/MapMovementInteractionsRequestHandler.js"
                 }, 
                 /*{
                     "type": "text/javascript",
@@ -155,7 +144,7 @@ Oskari.clazz.define(
                 /**
                  * Data Source plugin
                  */
-                 /*
+
                 {
                     "type": "text/javascript",
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/datasource/DataSourcePlugin.js"
@@ -164,7 +153,6 @@ Oskari.clazz.define(
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/resources/css/datasource.css"
                 },
                 // IndexMap
-                */
                 {
                     "type": "text/javascript",
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/indexmap/IndexMapPlugin.js"
@@ -180,6 +168,29 @@ Oskari.clazz.define(
                     "type": "text/css",
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/resources/css/scalebar.css"
                 },
+                // Markers plugin
+                {
+                    "type": "text/javascript",
+                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/markers/MarkersPlugin.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/request/AddMarkerRequest.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/request/AddMarkerRequestHandler.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/request/RemoveMarkersRequest.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/request/RemoveMarkersRequestHandler.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/event/AfterAddMarkerEvent.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/event/AfterRemoveMarkersEvent.js"
+                },
                 /*
                 // FullScreen
                 {
@@ -193,7 +204,6 @@ Oskari.clazz.define(
                 /**
                  * MapLayer selection plugin
                  */
-                /*
                 {
                     "type": "text/javascript",
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/layers/LayerSelectionPlugin.js"
@@ -205,7 +215,6 @@ Oskari.clazz.define(
                 /**
                  * Background MapLayer selection plugin
                  */
-                /*
                 {
                     "type": "text/javascript",
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/layers/BackgroundLayerSelectionPlugin.js"
@@ -324,6 +333,9 @@ Oskari.clazz.define(
                     "type": "text/javascript",
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/publishertoolbar/request/ToolContainerRequestHandler.js"
                 }, {
+                    "type": "text/javascript",
+                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/publishertoolbar/request/ToolSelectionHandler.js"
+                }, {
                     "type": "text/css",
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/resources/css/publishertoolbar.css"
                 },
@@ -357,9 +369,6 @@ Oskari.clazz.define(
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/request/ToolSelectionRequest.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/controls/ToolSelectionHandler.js"
-                }, {
-                    "type": "text/javascript",
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/request/MapLayerUpdateRequest.js"
                 }, {
                     "type": "text/javascript",
@@ -367,14 +376,14 @@ Oskari.clazz.define(
                 }, {
                     "type": "text/javascript",
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/request/MapMoveRequestHandler.js"
-                }, 
-                /*{
+                }, {
                     "type": "text/javascript",
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/event/MapClickedEvent.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/event/EscPressedEvent.js"
-                }, {
+                }, 
+                /*{
                     "type": "text/javascript",
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/event/GetInfoResultEvent.js"
                 }, {
