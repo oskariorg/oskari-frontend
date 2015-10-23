@@ -41,15 +41,15 @@ Oskari.clazz.define("Oskari.mapping.drawtools.DrawToolsBundle",
                 "type": "text/javascript",
                 "src": "../../../bundles/mapping/drawtools/event/DrawingEvent.js"
             },
+            /*JAVASCRIPT.UTIL*/
+            {
+                "type" : "text/javascript",
+                "src" : "../../../libraries/jsts/javascript.util.min.js"
+            },
             /*JSTS*/
             {
     			"type" : "text/javascript",
     			"src" : "../../../libraries/jsts/jsts-0.16.0.min.js"
-    		},
-    		/*JAVASCRIPT.UTIL*/
-    		{
-    			"type" : "text/javascript",
-    			"src" : "../../../libraries/jsts/javascript.util.min.js"
     		}]
         },
         "bundle": {
