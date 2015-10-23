@@ -465,6 +465,9 @@ Oskari.clazz.define(
                 tiles,
                 x;
 
+
+
+
             // clean tiles for printing
             me._printTiles = {};
             // Update layer tile grid
@@ -498,6 +501,11 @@ Oskari.clazz.define(
                         layerId = layers[i].getId();
                         tiles = me.getNonCachedGrid(layerId, grid);
                         //debugger;
+                        //TODO: is there any point whatsoever in even calling this, if there are no tiles to update?
+                        //if (!tiles || tiles.length === 0) {
+                        //    continue;
+                        //}
+//                        console.log(grid.bounds.length+" "+tiles.length);
                         me.getIO().setLocation(
                             layerId,
                             srs, [
@@ -1159,6 +1167,7 @@ Oskari.clazz.define(
                     //Old temp tile (border tile) cant be used, because it is not valid after map move
                     //dataForTileTemp = me._tileDataTemp.mget(layerId,style,bboxKey);
                     //if (dataForTileTemp) return;
+//                    debugger;
                     me._tileDataTemp.mput(layerId,style,bboxKey,imageUrl);
                 }
 //                console.log("drawImageTile "+bboxKey+" "+imageUrl);
@@ -1172,7 +1181,10 @@ Oskari.clazz.define(
                             //debugger;
                             tile  = src.tileCache.get(bboxKey);
                             tile.getImage().src = imageUrl;
-                            tile.changed();
+                            //add flag whether this is a boundary tile, in which case it always needs to be redrawn.
+                            tile.isBoundaryTile = boundaryTile;
+//                            tile.changed();
+                            tile.handleImageLoad_();
                         } else {
 //                            console.log(imageUrl);
                             //console.log("DrawTileImage failure "+bboxKey);
@@ -1346,6 +1358,12 @@ Oskari.clazz.define(
             me._layers[openLayer.getSource().get('layerId')] = openLayer;
         },
 
+        /**
+         * @method createTileGrid
+         *
+         * Creates the base tilegrid for use with any Grid operations
+         *
+         */
         createTileGrid: function() {
             var me = this,
                 sandbox = me.getSandbox(),
@@ -1422,21 +1440,12 @@ Oskari.clazz.define(
 */            
         },
         getGrid: function () {
-            return this._getLayerGrid(1007);
             var me = this,
                 sandbox = me.getSandbox(),
                 resolution = me.getMap().getView().getResolution(),
                 mapExtent = sandbox.getMap().getExtent(),
                 z,
                 tileGrid = this._tileGrid,
-                /*
-                tileGrid = new ol.tilegrid.createXYZ({
-                    extent: mapExtent,//me.getMap().getView().calculateExtent(me.getMap().getSize()),
-                    maxZoom: me.getMapModule().getMaxZoomLevel(),
-                    tileSize: [256,256]
-                }),
-*/
-                tileGrid = this.tileGrid,
                 grid = {
                     bounds: [],
                     rows: null,
@@ -1444,9 +1453,6 @@ Oskari.clazz.define(
                 },
                 rowidx = 0,
                 tileRangeExtent;
-
-                console.log("getgrid - tileGrid extent "+tileGrid.extent_);
-
                 z =  tileGrid.getZForResolution(resolution);
                 tileRangeExtent = tileGrid.getTileRangeForExtentAndResolution(mapExtent, resolution);
                 for (var iy = tileRangeExtent.minY; iy <= tileRangeExtent.maxY; iy++) {
@@ -1461,113 +1467,7 @@ Oskari.clazz.define(
                 }                
                 grid.rows = rowidx;
                 grid.columns = colidx;
-                console.log("2) Getting grid - "+mapExtent+" "+resolution+" "+grid.bounds.length+" "+grid.rows+" "+grid.columns);
-//                debugger;
-                
-
-//                var grid2 = me._getLayerGrid(1007);
                 return grid;
-
-
-
-
-
-//            console.log("getGrid called, we really shouldn't!!!");
-//            console.log("And for now we're using a harcoded getLayerGrid call to get the grid. Shucks.");
-            var me = this;
-            return me._getLayerGrid(1007);
-//            console.log("returning null, THIS DEFINITELY MIGHT BE CAUSING YOU PROBLEMS!!!!!");
-            //debugger;
-
-
-            return null;
-            var me = this,
-                bounds,
-                clen,
-                grid = null,
-                iCol,
-                iRow,
-                len,
-                OLGrid,
-                row,
-                tile;
-            // get grid information out of tileStrategy
-            this.tileStrategy.update();
-            if(!this.tileStrategy.getGrid()){
-                return;
-            }
-            OLGrid = this.tileStrategy.getGrid().grid;
-
-            if (OLGrid) {
-                grid = {
-                    rows: OLGrid.length,
-                    columns: OLGrid[0].length,
-                    bounds: []
-                };
-                for (iRow = 0, len = OLGrid.length; iRow < len; iRow += 1) {
-                    row = OLGrid[iRow];
-                    for (iCol = 0, clen = row.length; iCol < clen; iCol += 1) {
-                        tile = row[iCol];
-
-                        // if failed grid
-                        if (me._isTile(tile) === false) {
-                            return null;
-                        }
-
-                        // left, bottom, right, top
-                        bounds = [];
-                        bounds[0] = tile.bounds[0];
-                        bounds[1] = tile.bounds[1];
-                        bounds[2] = tile.bounds[2];
-                        bounds[3] = tile.bounds[3];
-                        grid.bounds.push(bounds);
-                    }
-                }
-            }
-            console.log("Getting grid, although shouldn't - "+grid.bounds.length+" "+grid.rows+" "+grid.columns);
-            return grid;
-        },
-        /**
-         * Gets the tileGrid of the selected layer
-         *
-         */
-        _getLayerGrid: function(layerId) {
-            var me = this,
-                sandbox = me.getSandbox(),
-                layer = me._layers[layerId],
-                resolution = me.getMap().getView().getResolution(),
-                mapExtent = sandbox.getMap().getExtent(),
-                z,
-                tileGrid,
-                grid = {
-                    bounds: [],
-                    rows: null,
-                    columns: null
-                },
-                rowidx = 0,
-                tileRangeExtent;
-
-            if (layer && layer.getSource() && layer.getSource().getTileGrid()) {
-                tileGrid = layer.getSource().getTileGrid();
-                z =  tileGrid.getZForResolution(resolution);
-                tileRangeExtent = tileGrid.getTileRangeForExtentAndResolution(mapExtent, resolution);
-                for (var iy = tileRangeExtent.minY; iy <= tileRangeExtent.maxY; iy++) {
-                    rowidx++;
-                    var colidx = 0;
-                    for (var ix = tileRangeExtent.minX; ix <= tileRangeExtent.maxX; ix++) {
-                        colidx++;
-                        var zxy = [z,ix,iy];
-                        var tileBounds = tileGrid.getTileCoordExtent(zxy);
-                        grid.bounds.push(tileBounds);
-                    }
-                }                
-                grid.rows = rowidx;
-                grid.columns = colidx;
-                
-//                console.log("Getting grid - "+mapExtent+" "+resolution+" "+grid.bounds.length+" "+grid.rows+" "+grid.columns);
-                console.log("1) Getting grid - "+mapExtent+" "+resolution+" "+grid.bounds.length+" "+grid.rows+" "+grid.columns);
-                return grid;
-            }
         },
         /**
          * Checks at tile is ok.
@@ -1671,11 +1571,27 @@ Oskari.clazz.define(
             if (!layer) {
                 return result;
             }
-
             for (i = 0; i < grid.bounds.length; i += 1) {
                 bboxKey = me.bboxkeyStrip(grid.bounds[i]);
                 result.push(grid.bounds[i]);
-                //tile not in cache for some reason?-> what should be done?
+            }
+            return result;
+
+            for (i = 0; i < grid.bounds.length; i += 1) {
+                bboxKey = me.bboxkeyStrip(grid.bounds[i]);
+                //result.push(grid.bounds[i]);
+                //at this point the tile should already been cached by the layers getTile - function.
+                if (layer.getSource().tileCache.containsKey(bboxKey)) {
+                    var tile = layer.getSource().tileCache.get(bboxKey);
+                    //tile exists and not yet loaded.
+                    //TODO: what about TileState.Error && TileState.Loading? 
+                    //console.log("Tile found: "+bboxKey+" "+tile.state);
+
+                    //update tiles who's image has not yet been fetched at all, or who are boundaryTiles, which have to be fetched aaaanyways.
+                    if (tile.state === ol.TileState.IDLE || tile.state === ol.TileState.EMPTY || tile.isBoundaryTile) {
+                        result.push(grid.bounds[i]);
+                    }
+                }
                 /*
                 if (!layer.getSource().tileCache.containsKey(bboxKey)) {
                     //result.push(grid.bounds[i]);
@@ -1948,3 +1864,52 @@ Oskari.clazz.define(
         ]
     }
 );
+
+
+
+
+
+        /**
+         * Gets the tileGrid of the selected layer
+         *
+         */
+         /*
+        _getLayerGrid: function(layerId) {
+            var me = this,
+                sandbox = me.getSandbox(),
+                layer = me._layers[layerId],
+                resolution = me.getMap().getView().getResolution(),
+                mapExtent = sandbox.getMap().getExtent(),
+                z,
+                tileGrid,
+                grid = {
+                    bounds: [],
+                    rows: null,
+                    columns: null
+                },
+                rowidx = 0,
+                tileRangeExtent;
+
+            if (layer && layer.getSource() && layer.getSource().getTileGrid()) {
+                tileGrid = layer.getSource().getTileGrid();
+                z =  tileGrid.getZForResolution(resolution);
+                tileRangeExtent = tileGrid.getTileRangeForExtentAndResolution(mapExtent, resolution);
+                for (var iy = tileRangeExtent.minY; iy <= tileRangeExtent.maxY; iy++) {
+                    rowidx++;
+                    var colidx = 0;
+                    for (var ix = tileRangeExtent.minX; ix <= tileRangeExtent.maxX; ix++) {
+                        colidx++;
+                        var zxy = [z,ix,iy];
+                        var tileBounds = tileGrid.getTileCoordExtent(zxy);
+                        grid.bounds.push(tileBounds);
+                    }
+                }                
+                grid.rows = rowidx;
+                grid.columns = colidx;
+                
+//                console.log("Getting grid - "+mapExtent+" "+resolution+" "+grid.bounds.length+" "+grid.rows+" "+grid.columns);
+                //console.log("1) Getting grid - "+mapExtent+" "+resolution+" "+grid.bounds.length+" "+grid.rows+" "+grid.columns);
+                return grid;
+            }
+        },
+        */
