@@ -523,7 +523,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             // setting state
             if (state.selectedLayers) {
                 rbAdd = me.getSandbox().getRequestBuilder('AddMapLayerRequest');
-                
+
                 len = state.selectedLayers.length;
                 for (i = 0; i < len; i += 1) {
                     layer = state.selectedLayers[i];
