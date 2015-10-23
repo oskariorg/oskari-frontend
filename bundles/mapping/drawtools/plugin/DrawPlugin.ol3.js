@@ -156,7 +156,7 @@ Oskari.clazz.define(
          * @param {boolean} clearCurrent: if true, all selection will be removed from the map
          */
         stopDrawing : function(id, clearCurrent) {
-        	var me = this;        
+        	var me = this;
         	me.sendDrawingEvent(id, clearCurrent);
             //deactivate draw nad modify controls
             me.removeInteractions();
@@ -172,7 +172,7 @@ Oskari.clazz.define(
         	var me = this;
         	var features = me.getFeatures(me._layerId);
         	var bufferedFeatures = me.getFeatures(me._bufferedFeatureLayerId);
-        	
+
         	if(me._shape === 'Circle') {
 				bufferedFeatures = me.getCircleAsPolygonFeature(features);
 				features = me.getCircleAsPointFeature(features);
@@ -286,7 +286,7 @@ Oskari.clazz.define(
 				if(allowMultipleDrawing !== true) {
 					me.clearDrawing();
 				}
-			});		       
+			});
 		},
 		 /**
          * @method addModifyInteraction
@@ -298,7 +298,7 @@ Oskari.clazz.define(
          */
         addModifyInteraction : function(layerId, shape, buffer) {
         	var me = this;
-        	
+
         	me._modify = new ol.interaction.Modify({
      		   features: me._drawLayers[layerId].getSource().getFeaturesCollection(),
      		   style: me._styles['modify'],
@@ -542,7 +542,7 @@ Oskari.clazz.define(
 				_.each(features, function (f) {
 					f.buffer = buffer;
 				});
-			}	
+			}
 		}
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
