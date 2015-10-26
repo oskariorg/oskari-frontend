@@ -81,10 +81,8 @@ function() {
         'Publisher2.ToolEnabledChangedEvent': function (event) {
             var me = this;
             var tool = event.getTool();
-            if (tool.getTool().id === me.getTool().id && tool.isStarted()) {
-                if (me.values.colourScheme) {
-                    me._sendColourSchemeChangedEvent(me.values.colourScheme);
-                }
+            if (tool.getTool().id === me.getTool().id && tool.isStarted() && me.values.colourScheme) {
+                me._sendColourSchemeChangedEvent(me.values.colourScheme);
             }
         }
     },
@@ -119,19 +117,6 @@ function() {
             return;
         }
         return handler.apply(this, [event]);
-    },
-    /**
-    * Stop panel.
-    * @method stop
-    * @public
-    **/
-    stop: function(){
-        var me = this;
-        for (var p in me.eventHandlers) {
-            if (me.eventHandlers.hasOwnProperty(p)) {
-                me.__sandbox.unregisterFromEventByName(me, p);
-            }
-        }
     },
     /**
     * Get tool object.
@@ -649,6 +634,11 @@ function() {
                 me.__plugin.stopPlugin(me.__sandbox);
             }
             me.__mapmodule.unregisterPlugin(me.__plugin);
+        }
+        for (var p in me.eventHandlers) {
+            if (me.eventHandlers.hasOwnProperty(p)) {
+                me.__sandbox.unregisterFromEventByName(me, p);
+            }
         }
     }
 }, {

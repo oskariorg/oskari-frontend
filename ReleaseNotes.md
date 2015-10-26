@@ -1,10 +1,34 @@
 # Release Notes
 
+## 1.34
+
+### rpc
+
+New function is enabled by default:
+- 'getMapBbox' gets current map bbox
+
 ## 1.33
+
+### Sandbox/map layer service
+
+Fixed getNewestLayers(count) method to find really newest layers.
+
+## Layer plugins
+
+Fixed map layers handling when layer is not visible. Get layer image only then if layer is visible. 
+
+Fixed following plugins:
+- 'WmsLayerPlugin' 
+- 'WfsLayerPlugin'
+- 'MyPlacesLayerPlugin'
+- 'StatsLayerPlugin'
+- 'ArcGisLayerPlugin'
+- 'UserLayersLayerPlugin'
+- 'AnalysisLayerPlugin'
 
 ### routingUI
 
-Now start and end poins are markered on the map. Also all route plan(s) are showed on search results. Fixed error handling.
+Now start and end points are markered on the map. Also all route plan(s) are shown on search results. Fixed error handling.
 
 ### routingService
 
@@ -16,11 +40,13 @@ Now adds the indicator tab UI for user content/personaldata even if started afte
 
 ### Default view functionality
 
-Added functionality to mar a saved view as a default view.
+Added functionality to mark a saved view as a default view.
 
 ### mapfull
 
-Fixed map content width. Now navigation, zoombar, XY etc. tools are visible also smaller screens.
+Fixed map content width. Now navigation, zoombar, XY etc. tools are visible also on smaller screens.
+
+Fixed map layers handling when layer is not visible. Get layer image only then if layer is visible. 
 
 ### map-module
 
@@ -29,6 +55,10 @@ Added a new request 'ShowProgressSpinnerRequest' that shows / hides a progress i
 ### mapmodule-plugin/MarkersPlugin
 
 Added marker transient property, if this is setted to true then marker is not saved to state.
+
+### core/maplayer-service
+
+No longer generates an empty default style for WMS-layers.
 
 ### publisher2
 
@@ -39,7 +69,7 @@ Added LayerSelectionTool. This tool user can add map layer tool on the map. User
 WmtsLayerService no longer parses rest url template from capabilities, but relies on server providing it. 
 This enables proxying for WMTS-layers that use resourceURL and require credentials.
 
-### libararies/moment
+### libraries/moment
 
 Added Moment library for date/time presentation formatting.
 
@@ -50,6 +80,10 @@ New event is enabled by default:
 
 New request is enabled by default:
 - 'GetRouteRequest' requests to get route plan from routeService
+
+### admin-layerselector
+
+Now initializes the legendimage from style correctly when adding layers.
 
 ## 1.32.1
 

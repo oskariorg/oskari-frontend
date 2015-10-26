@@ -7,6 +7,16 @@ div.mapplugin.scalebar {
     font-weight: bold;
     line-height: 13px;
 
+    border-left: 2px solid #000000;
+    border-bottom: 2px solid #000000;
+    border-right: 2px solid #000000;
+
+    div.ol-scale-line {
+        div.ol-scale-line-inner {
+            padding: 2px;
+        }
+    }
+
     div {
         // Add a slight brightening to the bg so the scale is visible on dark backgrounds
         background-color: rgba(255, 255, 255, 0.2);

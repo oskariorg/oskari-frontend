@@ -246,7 +246,9 @@ Oskari.clazz.define(
             }
             if (layer) {
                 layer.setPropertyTypes(propertyJson.propertyTypes);
-                layer.setWpsLayerParams(propertyJson.wps_params);
+                if(propertyJson.wps_params) {
+                    layer.setWpsLayerParams(propertyJson.wps_params);
+                }
             }
         }
     }, {

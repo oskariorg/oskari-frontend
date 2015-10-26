@@ -5,19 +5,19 @@ Oskari.registerLocalization(
     "value": {
         "buttons": {
             "link": {
-                "tooltip": "Link",
+                "tooltip": "Make a link to the map view.",
                 "ok": "OK",
-                "title": "Make a link to the map view."
+                "title": "Link to Map View"
             },
             "print": {
-                "tooltip": "Print out the map view."
+                "tooltip": "Print the map view."
             },
             "history": {
-                "reset": "Return to the default map view.",
-                "back": "Return to the previous map view.",
+                "reset": "Move to the default map view.",
+                "back": "Move to the previous map view.",
                 "next": "Move to the next map view."
             },
-            "pan": "Pan the map view by dragging mouse on the map.",
+            "pan": "Pan the map by dragging it with a mouse.",
             "zoom": "Zoom in the map view.",
             "measure": {
                 "line": "Measure a line on the map.",
@@ -28,8 +28,8 @@ Oskari.registerLocalization(
             "title": "Measurement Results",
             "close": "Cancel",
             "guidance": {
-                "measureline": "Draw a line and measure its distance on the map. Click the start point of the line to start measuring. After that click all breakpoints of the line. Double-click the end point of the line to stop measuring.",
-                "measurearea": "Draw an area and measure it on the map. Click the start point of the area's border line to start measuring. After that click all breakpoints of the border line. Double-click the end point of the border line to stop measuring."
+                "measureline": "Draw a measurable line by cliking its breaking points. Finally double-click an ending point.",
+                "measurearea": "Draw a measurable area by clicking its corner points. Finally double-click an ending point."
             }
         }
     }

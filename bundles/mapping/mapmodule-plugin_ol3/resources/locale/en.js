@@ -12,7 +12,7 @@ Oskari.registerLocalization(
             "zoomLvl-4": "Town",
             "zoomLvl-5": "",
             "zoomLvl-6": "",
-            "zoomLvl-7": "Part of town",
+            "zoomLvl-7": "Town district",
             "zoomLvl-8": "",
             "zoomLvl-9": "",
             "zoomLvl-10": "Street",
@@ -38,15 +38,15 @@ Oskari.registerLocalization(
             },
             "LayerSelectionPlugin": {
                 "title": "Map layers",
-                "chooseDefaultBaseLayer": "Select the background map"
+                "chooseDefaultBaseLayer": "Select background map"
             },
             "SearchPlugin": {
                 "placeholder": "Search location",
                 "search": "Search",
                 "title": "Search Results",
                 "close": "Close search results.",
-                "noresults": "No results found. Please refine your search.",
-                "toomanyresults": "Over 100 results found. Please refine your search.",
+                "noresults": "No results could be found. Please check your search term and try again.",
+                "toomanyresults": "Over 100 results found. Please refine your search term and try again.",
                 "column_name": "Name",
                 "column_village": "Municipality",
                 "column_type": "Type"
@@ -62,13 +62,13 @@ Oskari.registerLocalization(
             "PublisherToolbarPlugin": {
                 "test": "test",
                 "history": {
-                    "reset": "Return to the default view",
-                    "back": "Return to the previous view",
-                    "next": "Move to the next view"
+                    "reset": "Move to default view",
+                    "back": "Move to previous view",
+                    "next": "Move to next view"
                 },
                 "measure": {
-                    "line": "Measure a distance",
-                    "area": "Measure an area"
+                    "line": "Measure distance",
+                    "area": "Measure area"
                 }
             },
             "MarkersPlugin": {
@@ -77,8 +77,8 @@ Oskari.registerLocalization(
                     "clear": "Delete all markers"
                 },
                 "form": {
-                    "title": "Point feature style",
-                    "tooltip": "",
+                    "title": "Map Marker Style",
+                    "tooltip": "Define a style for map markers.",
                     "symbol": {
                         "label": "Icon"
                     },
@@ -94,13 +94,13 @@ Oskari.registerLocalization(
                         "label": "Preview"
                     },
                     "message": {
-                        "label": "The text on the map",
-                        "hint": "Write a message"
+                        "label": "Text on map",
+                        "hint": "Name or description"
                     }
                 },
                 "dialog": {
-                    "title": "Map marker",
-                    "message": "Select a new location for the marker by clicking the map."
+                    "title": "Map Marker",
+                    "message": "Select a new location for your map marker by clicking the map."
                 }
             },
             "MyLocationPlugin": {

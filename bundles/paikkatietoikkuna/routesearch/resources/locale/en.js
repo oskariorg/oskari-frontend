@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "en",
     "key": "RouteSearch",
     "value": {
@@ -9,14 +10,15 @@ Oskari.registerLocalization({
             "description": "",
             "from": "From",
             "to": "To",
-            "fromMap": "Select location from map",
-            "routingService": "Routing Service",
-            "fetchRoute": "Fetch route",
-            "selectLocations": "Please select both locations"
+            "fromMap": "Select a location from the map.",
+            "routingService": "Routing service",
+            "fetchRoute": "Search route",
+            "selectLocations": "Select starting (from) and ending (to) points, and click one service to search a route."
         },
         "tile": {
             "title": "Route Search",
             "description": ""
         }
     }
-});
+}
+);

@@ -193,12 +193,10 @@ Oskari.clazz.define(
             }
             // TODO: get rid of ROUTEID by improving the apikey functionality in server side
             this.session.route = jQuery.cookie('ROUTEID') || '';
-
             var srs = this.plugin.getSandbox().getMap().getSrsName(),
                 bbox = this.plugin.getSandbox().getMap().getExtent(),
                 zoom = this.plugin.getSandbox().getMap().getZoom(),
                 mapScales = this.plugin.getMapModule().getMapScales();
-
             var message = {
                 session: this.session.session,
                 route: this.session.route,
@@ -207,11 +205,11 @@ Oskari.clazz.define(
                 browserVersion: this.session.browserVersion,
                 location: {
                     srs: srs,
-                    bbox: [bbox.left, bbox.bottom, bbox.right, bbox.top],
+                    bbox: [bbox[0], bbox[1], bbox[2], bbox[3]],
                     zoom: zoom
                 },
                 grid: this.plugin.getGrid() || {},
-                tileSize: this.plugin.getTileSize() || {},
+                tileSize: {"width" : this.plugin.getTileSize()[0],"height":this.plugin.getTileSize()[0]} || {},
                 mapSize: {
                     width: self.plugin.getSandbox().getMap().getWidth(),
                     height: self.plugin.getSandbox().getMap().getHeight()
@@ -341,6 +339,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             var event = sandbox.getEventBuilder('WFSFeaturesSelectedEvent')(me.WFSLayerService.getSelectedFeatureIds(layer._id), layer, selectFeatures);
             sandbox.notifyAll(event);
         } else {
+            // FIXME: pass coordinates from server in response, but not like this
             data.data.lonlat = this.lonlat;
             me.WFSLayerService.emptyWFSFeatureSelections(layer);
             var infoEvent = sandbox.getEventBuilder('GetInfoResultEvent')(data.data);
@@ -672,32 +671,17 @@ Oskari.clazz.category(
                 map = sandbox.getMap(),
                 srs = map.getSrsName();
 
+            // TODO: save coordinates???
             this.lonlat = lonlat;
             this.sendMessage('/service/wfs/setMapClick', {
                 'longitude': lonlat.lon,
                 'latitude': lonlat.lat,
+                'filter' : {
+                    geojson : lonlat.json
+                },
                 'keepPrevious': keepPrevious,
                 'geomRequest': geomRequest
             });
-
-            /**
-            if(keepPrevious !== null && keepPrevious === false) {
-                me.setFilter({
-                    "type":"FeatureCollection",
-                    "features":[
-                    {
-                        "type":"Feature",
-                        "properties":{},
-                        "geometry":{
-                            "type":
-                            "Point",
-                            "coordinates":[lonlat.lon,lonlat.lat]
-                        }
-                    }],
-                    "crs":{"type":"name","properties":{"name":srs}}}
-                );
-            }
-            */
         },
 
         /**

@@ -40,7 +40,8 @@ Oskari.clazz.define(
                 getSupportedEvents: true,
                 getSupportedFunctions: true,
                 getSupportedRequests: true,
-                getZoomRange: true
+                getZoomRange: true,
+                getMapBbox: true
             };
         }
 
@@ -272,6 +273,29 @@ Oskari.clazz.define(
                                 name : layer.getName()
                             };
                         });
+                    }
+                );
+            }
+
+            // bind get map bbox
+            if (me._allowedFunctions.getMapBbox) {
+                channel.bind(
+                    'getMapBbox',
+                    function (trans){
+                        if (!me._domainMatch(trans.origin)) {
+                            throw {
+                                error: 'invalid_origin',
+                                message: 'Invalid origin: ' + trans.origin
+                            };
+                        }
+
+                        var bbox = me.sandbox.getMap().getBbox();
+                        return {
+                            bottom: bbox.bottom,
+                            left: bbox.left,
+                            right: bbox.right,
+                            top: bbox.top
+                        }
                     }
                 );
             }

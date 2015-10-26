@@ -6,45 +6,45 @@ Oskari.registerLocalization(
         "title": "Karttatasot",
         "desc": "",
         "errors": {
-            "title": "Virhe!",
-            "generic": "Järjestelmässä tapahtui virhe. Yritä myöhemmin uudelleen.",
+            "title": "Virhe",
+            "generic": "Järjestelmässä tapahtui virhe.",
             "loadFailed": "Karttatasojen lataaminen epäonnistui. Päivitä sivu selaimessasi ja valitse karttatasot uudelleen.",
-            "noResults": "Antamallasi hakusanalla ei löytynyt yhtään karttatasoa.",
-            "noResultsForKeyword": "Antamallasi hakusanalla ei löytynyt yhtään karttatasoa.",
+            "noResults": "Hakutuloksia ei löytynyt. Tarkista hakusana ja yritä uudelleen.",
+            "noResultsForKeyword": "Karttatasoja ei löytynyt. Tarkista hakusana ja yritä uudelleen.",
             "minChars": "Antamasi hakusana on liian lyhyt. Hakusanassa on oltava vähintään neljä merkkiä."
         },
         "loading": "Haetaan...",
         "filter": {
             "text": "Hae karttatasoja",
-            "keywordsTitle": "Avainsanat:",
+            "keywordsTitle": "Avainsanat",
             "shortDescription": "Hae karttatasoa karttatason nimen, tiedontuottajan nimen tai avainsanan perusteella.",
-            "description": "Voi hakea karttatasoa karttatason nimen, tiedontuottajan nimen tai avainsanan perusteella. Voit kirjoittaa nimen kokonaan tai vain osan nimestä. Hakusanassa on oltava vähintään neljä merkkiä.",
+            "description": "Voit hakea karttatasoa karttatason nimen, tiedontuottajan nimen tai avainsanan perusteella. Voit kirjoittaa nimen kokonaan tai vain osan nimestä. Hakusanassa on oltava vähintään neljä merkkiä.",
             "inspire": "Aiheittain",
             "organization": "Tiedontuottajittain",
             "published": "Käyttäjät",
             "didYouMean": "Tarkoititko:"
         },
         "published": {
-            "organization": "Julkaistu taso",
-            "inspire": "Julkaistu taso"
+            "organization": "Julkaistu karttataso",
+            "inspire": "Julkaistu karttataso"
         },
         "tooltip": {
             "type-base": "Taustakartta",
             "type-wms": "Karttataso",
             "type-wfs": "Tietotuote",
-            "type-wfs-manual": "Tietotuote - WFS taso päivittyy kartalla Kohdetiedot- tai Päivitä-painikkeesta"
+            "type-wfs-manual": "Päivitä kohdetiedot kartalla klikkaamalla Kohdetiedot- tai Päivitä-painiketta karttanäkymässä."
         },
         "backendStatus": {
             "OK": {
-                "tooltip": "Karttataso on saatavilla tällä hetkellä.",
+                "tooltip": "Karttataso on käytettävissä tällä hetkellä.",
                 "iconClass": "backendstatus-ok"
             },
             "DOWN": {
-                "tooltip": "Karttataso ei ole saatavilla tällä hetkellä.",
+                "tooltip": "Karttataso ei tällä hetkellä käytettävissä.",
                 "iconClass": "backendstatus-down"
             },
             "MAINTENANCE": {
-                "tooltip": "Karttatason saatavuudessa on tiedossa käyttökatkoja lähipäivinä.",
+                "tooltip": "Karttataso voi olla ajoittain poissa käytöstä lähipäivinä.",
                 "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {

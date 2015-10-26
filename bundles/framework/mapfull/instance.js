@@ -501,9 +501,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 mapmodule = me.getMapModule(),
                 mapModuleName = mapmodule.getName(),
                 rbAdd,
-                rbOpacity,
-                rbVis,
-                rbStyle,
                 len,
                 i,
                 layer;
@@ -526,41 +523,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             // setting state
             if (state.selectedLayers) {
                 rbAdd = me.getSandbox().getRequestBuilder('AddMapLayerRequest');
-                rbOpacity = me.getSandbox().getRequestBuilder(
-                    'ChangeMapLayerOpacityRequest'
-                );
-                rbVis = me.getSandbox().getRequestBuilder(
-                    'MapModulePlugin.MapLayerVisibilityRequest'
-                );
-                rbStyle = me.getSandbox().getRequestBuilder(
-                    'ChangeMapLayerStyleRequest'
-                );
+
                 len = state.selectedLayers.length;
                 for (i = 0; i < len; i += 1) {
                     layer = state.selectedLayers[i];
+
+                    var oskariLayer = me.getSandbox().findMapLayerFromAllAvailable(layer.id);
+                    if(oskariLayer) {
+                        oskariLayer.setVisible(layer.hidden !== true);
+
+                        if (layer.opacity || layer.opacity === 0) {
+                            oskariLayer.setOpacity(layer.opacity);
+                        }
+                        if (layer.style) {
+                            oskariLayer.selectStyle(layer.style);
+                        }
+                    }
                     me.getSandbox().request(
                         mapModuleName,
                         rbAdd(layer.id, true)
                     );
-                    me.getSandbox().request(
-                        mapModuleName,
-                        rbVis(
-                            layer.id,
-                            layer.hidden !== true
-                        )
-                    );
-                    if (layer.style) {
-                        me.getSandbox().request(
-                            mapModuleName,
-                            rbStyle(layer.id, layer.style)
-                        );
-                    }
-                    if (layer.opacity || layer.opacity === 0) {
-                        me.getSandbox().request(
-                            mapModuleName,
-                            rbOpacity(layer.id, layer.opacity)
-                        );
-                    }
                 }
             }
 

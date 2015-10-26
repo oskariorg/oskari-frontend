@@ -26,6 +26,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         me.layer_prefix = 'analysis_';
         me.max_analyse_layer_fields = 10;
         me.max_areaCount = 12;
+        me._fixedDecimalCount = 2;
         // unit -> multiplier
         me.bufferUnits = {
             'm': 1,
@@ -2591,7 +2592,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         layerId: differenceLayerId,
                         featuresA1: featuresA1,
                         featuresB1: featuresB1,
-                        operator: spatialOperator
+                        operator: spatialOperator,
+                        no_data: me._getNoDataValue()
                     }
                 }
             };
@@ -2876,14 +2878,13 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     gridModel.addData(tmpfea, true);
                 });
             });
-
             gridModel.setIdField('Property');
             gridModel.setFirstField('Property');
             me.grid.setDataModel(gridModel);
 
             fields = gridModel.getFields();
             _.forEach(fields, function (field) {
-                me.grid.setNumericField(field);
+                me.grid.setNumericField(field, me._fixedDecimalCount);
             });
 
             me.grid.renderTo(content);
@@ -2915,7 +2916,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 var rq = 'MapModulePlugin.RemoveFeaturesFromMapRequest';
                 me.instance.sandbox.postRequestByName(rq);
             });
-            popup.makeDraggable();
+            popup.makeDraggable({
+                scroll: false,
+                cancel: '.content'
+            });
+
             popup.show(me.loc.aggregatePopup.title, content, [storeBtn,closeBtn]);
         },
 
@@ -3164,11 +3169,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var me = this,
                 no_data,
                 selectedLayer = me._getSelectedMapLayer();
-
             if (!selectedLayer) {
                 return no_data;
             }
-            if (selectedLayer.getLayerType() !== 'wfs') {
+            if (selectedLayer.getLayerType() !== 'wfs' && selectedLayer.getLayerType() !== 'analysis') {
                 return no_data;
             }
             var params = selectedLayer.getWpsLayerParams();

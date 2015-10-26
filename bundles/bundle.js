@@ -62,21 +62,30 @@ Oskari = (function () {
          *
          * @param  {string} key Key
          *
+         * @param  {string} lang Lang
+         *
+         * @param  {boolean} fallbackToDefault whether to fall back to Oskari Default language in case localization is not found for given lang
+         *
          * @return {string}     Localized value for key
          */
-        getLocalization: function (key, lang) {
+        getLocalization: function (key, lang, fallbackToDefault) {
             var l = lang || this.lang;
             if (key === null || key === undefined) {
                 throw new TypeError(
                     'getLocalization(): Missing key'
                 );
             }
-
-            if(this.localizations && this.localizations[l]) {
-                return this.localizations[l][key];
-            }
-            else {
+            if (!this.localizations) {
                 return null;
+            }
+            if(this.localizations[l] && this.localizations[l][key]) {
+                return this.localizations[l][key];
+            } else {
+                if (fallbackToDefault && this.localizations[Oskari.getDefaultLanguage()] && this.localizations[Oskari.getDefaultLanguage()][key]) {
+                    return this.localizations[Oskari.getDefaultLanguage()][key];
+                } else {
+                    return null;
+                }
             }
         },
 
@@ -3012,8 +3021,8 @@ D         * @param {Object} classInfo ClassInfo
          *
          * @return {string}
          */
-        getLocalization: function (key, lang) {
-            return blocale.getLocalization(key, lang);
+        getLocalization: function (key, lang, fallbackToDefault) {
+            return blocale.getLocalization(key, lang, fallbackToDefault);
         },
 
         /**

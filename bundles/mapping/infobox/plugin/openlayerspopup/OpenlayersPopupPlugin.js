@@ -91,7 +91,7 @@ Oskari.clazz.define(
                 '<div class="infoboxLine">separator</div>'
             );
             me._popupWrapper = jQuery(
-                '<div id="popup" class="olPopup"></div>'
+                '<div class="olPopup"></div>'
             );
         },
 
@@ -153,6 +153,7 @@ Oskari.clazz.define(
                 popupElement = me._popupWrapper.clone(),
                 lonlatArray = lonlat.split(",");
 
+            popupElement.attr('id', id);
             if (refresh) {
                 popup = me._popups[id].popup;
                 jQuery('.olPopup').empty();
@@ -162,7 +163,7 @@ Oskari.clazz.define(
                 popup = new ol.Overlay({
                     element: popupElement[0],
                     position: lonlatArray,
-                    offset: [0, -20],
+                    offset: [10, -20],
                     autoPan: true
                 });
                 me._popups[id] = {
@@ -397,9 +398,15 @@ Oskari.clazz.define(
         },
 
         _adaptPopupSize: function (olPopupId, isOld) {
-            var viewport = jQuery(this.getMapModule().getMapViewPortDiv()),
+            var viewportSize = this.getMap().getSize(),
                 popup = jQuery('#' + olPopupId),
-                left = parseFloat(popup.css('left'));
+                left = parseFloat(popup.css('left')),
+                maxWidth = viewportSize[0] * 0.7,
+                maxHeight = viewportSize[1] * 0.7;
+            // popup needs to move 10 pixels to the right
+            // so that header arrow can be moved out of container(left).
+            // Only move it if creating a new popup
+
             // popup needs to move 10 pixels to the right
             // so that header arrow can be moved out of container(left).
             // Only move it if creating a new popup
@@ -410,9 +417,8 @@ Oskari.clazz.define(
             popup.find('.popupHeaderArrow').css({
                 'margin-left': '-10px'
             });
+
             var header = popup.find('.popupHeader').css('width', '100%'),
-                maxWidth = viewport.width() * 0.7,
-                maxHeight = viewport.height() * 0.7,
                 content = popup.find('.popupContent').css({
                     'margin-left': '0',
                     'padding': '5px 20px 5px 20px',
@@ -432,6 +438,7 @@ Oskari.clazz.define(
                 'max-width': maxWidth + 'px',
                 'min-height': '200px',
                 'left': left + 'px',
+                'overflow' : 'visible',
                 'z-index': '16000'
             });
 
@@ -448,6 +455,7 @@ Oskari.clazz.define(
                     'height': height
                 });
             }
+
 
             //        popup.css({'height': 'auto', 'width': 'auto', 'min-width': '200px', 'left': left+'px'});
 

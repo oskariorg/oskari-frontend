@@ -114,7 +114,7 @@ function() {
         else if (request.getName() === 'DrawTools.StopDrawingRequest') {
             this.drawPlugin.stopDrawing(request.getId(), request.isClearCurrent());
         }
-    }
+    },
     /**
      * @method onEvent
      * @param {Oskari.mapframework.event.Event} event a Oskari event object

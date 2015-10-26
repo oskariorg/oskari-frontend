@@ -48,7 +48,9 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
             // return with cached capabilities
             var wmtsOptions = ol.source.WMTS.optionsFromCapabilities(caps, me.__getLayerConfig(caps, layer));
             var wmtsLayer = new ol.layer.Tile({
-                source: new ol.source.WMTS(wmtsOptions)
+                source: new ol.source.WMTS(wmtsOptions),
+                transparent: true,
+                visible: layer.isInScale(this.sandbox.getMap().getScale()) && layer.isVisible()
             });
             success(wmtsLayer);
             return;
@@ -119,8 +121,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
                 layer: layer.getLayerName(),
                 matrixSet: layer.getWmtsMatrixSetId(),
                 params : {},
-                visibility: layer.isInScale(this.sandbox.getMap().getScale()),
-
+                buffer: 0,
                 displayInLayerSwitcher: false,
                 isBaseLayer: false,
                 buffer: 0

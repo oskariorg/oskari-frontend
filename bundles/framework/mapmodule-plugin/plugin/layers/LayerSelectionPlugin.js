@@ -32,6 +32,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          */
         _initImpl: function () {
             var me = this;
+            me._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage(), true).plugin.LayerSelectionPlugin;
             me.templates.main = jQuery(
                 '<div class="mapplugin layerselection">' +
                 '  <div class="header">' +
@@ -659,12 +660,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             } else {
                 header.append(me.templates.defaultArrow.clone());
                 header.append(me._loc.title);
-                me._bindHeader(header);
-                me.closeSelection();
+
                 div.removeClass('published-styled-layerselector');
                 content.removeClass('published-styled-layerselector-content');
                 content.removeClass('layerselection-styled-content');
                 header.removeClass('published-styled-layerselector-header');
+
+                content.find('div.content-header').remove();
+                content.find('div.styled-header-arrow').remove();
 
                 // Set the styling to the content div based on the tool style.
                 this.changeCssClasses(

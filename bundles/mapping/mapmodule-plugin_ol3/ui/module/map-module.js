@@ -431,19 +431,19 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             });
 
             //NOTE! The next is only for demos, delete when going to release ol3!
-            map.on('dblclick', function (evt) {
-                if (this.emptyFeatures === undefined) {
-                    this.emptyFeatures = false;
-                }
-                if (!this.emptyFeatures) {
-                    me._testVectorPlugin(evt.coordinate[0], evt.coordinate[1]);
-                    this.emptyFeatures = true;
-                } else {
-                    var rn = 'MapModulePlugin.RemoveFeaturesFromMapRequest';
-                    me._sandbox.postRequestByName(rn, []);
-                    this.emptyFeatures = false;
-                }
-            });
+            //map.on('dblclick', function (evt) {
+            //    if (this.emptyFeatures === undefined) {
+            //        this.emptyFeatures = false;
+            //    }
+            //    if (!this.emptyFeatures) {
+            //        me._testVectorPlugin(evt.coordinate[0], evt.coordinate[1]);
+            //        this.emptyFeatures = true;
+            //    } else {
+            //        var rn = 'MapModulePlugin.RemoveFeaturesFromMapRequest';
+            //        me._sandbox.postRequestByName(rn, []);
+            //        this.emptyFeatures = false;
+            //    }
+            //});
 
             me._map = map;
 
@@ -496,18 +496,26 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         },
 
         _calculateScalesImpl: function(resolutions) {
-            return;
 
-            // FIX this to work with ol3
-            /*
             for (var i = 0; i < resolutions.length; ++i) {
-                var calculatedScale = OpenLayers.Util.getScaleFromResolution(resolutions[i], 'm');
+              /*  var calculatedScale = OpenLayers.Util.getScaleFromResolution(resolutions[i], 'm');
                 calculatedScale = calculatedScale * 10000;
                 calculatedScale = Math.round(calculatedScale);
-                calculatedScale = calculatedScale / 10000;
-                this._mapScales.push(calculatedScale);
+                calculatedScale = calculatedScale / 10000;  */
+
+                var units = this.getMap().getView().getProjection().getUnits();
+                var dpi = 25.4 / 0.28;
+                var mpu = ol.proj.METERS_PER_UNIT[units];
+                var scale = resolutions[i] * mpu * 39.37 * dpi;
+
+                    scale = Math.round(scale);
+
+
+
+
+                this._mapScales.push(scale);
             }
-            */
+
         },
 
         getZoomLevel: function() {
@@ -771,20 +779,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             return this._isInLayerToolsEditMode;
         },
 
-        /*
-        _calculateScalesImpl: function (resolutions) {
-            for (var i = 0; i < resolutions.length; i += 1) {
-                var calculatedScale = OpenLayers.Util.getScaleFromResolution(
-                    resolutions[i],
-                    'm'
-                );
-                calculatedScale = calculatedScale * 10000;
-                calculatedScale = Math.round(calculatedScale);
-                calculatedScale = calculatedScale / 10000;
-                this._mapScales.push(calculatedScale);
-            }
-        },
-        */
 
         /**
          * @method getMapEl

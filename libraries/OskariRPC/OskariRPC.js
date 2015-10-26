@@ -49,6 +49,21 @@
                 },
 
                 /**
+                 * @public @method getMapBbox
+                 *
+                 * @param {function} success Callback function
+                 * @param {function} error   Error handler
+                 *
+                 */
+                getMapBbox: function (success, error) {
+                    channel.call({
+                        method: 'getMapBbox',
+                        success: success,
+                        error: error
+                    });
+                },
+
+                /**
                  * @public @method getMapPosition
                  *
                  * @param {function} success Callback function

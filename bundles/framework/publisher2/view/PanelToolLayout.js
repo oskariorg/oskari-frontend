@@ -558,7 +558,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             } else if (!pluginClazz) {
                 return;
             }
-            
+
             for (i = 0; i < siblings.length; i += 1) {
                 if (!excludedSibling || siblings[i] !== excludedSibling) {
                     // sibling is not ignored, see if it's an allowed sibling

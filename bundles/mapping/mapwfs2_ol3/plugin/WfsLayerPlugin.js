@@ -26,6 +26,9 @@ Oskari.clazz.define(
         me.zoomLevel = null;
         me._isWFSOpen = 0;
 
+        // Manual refresh ui location
+        me._defaultLocation = 'top right';
+
         // printing
         me._printTiles = {};
 
@@ -98,7 +101,6 @@ Oskari.clazz.define(
                 me._config,
                 me
             );
-
              me.WFSLayerService = Oskari.clazz.create(
             'Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService', sandbox);
 
@@ -109,7 +111,6 @@ Oskari.clazz.define(
                 me._config,
                 me
             );
-
 
             // register domain model
             mapLayerService = sandbox.getService(
@@ -145,7 +146,99 @@ Oskari.clazz.define(
             me._visualizationForm = Oskari.clazz.create(
                 'Oskari.userinterface.component.VisualizationForm'
             );
+
+
+
         },
+        /**
+         * @method _createControlElement
+         * @private
+         * Creates UI div for manual refresh/load of wfs layer,
+         * where this plugin registered.
+         */
+        _createControlElement: function () {
+            var me = this,
+                sandbox = me.getSandbox(),
+                el = jQuery('<div class="mapplugin mapwfs2plugin">' +
+                '<a href="JavaScript: void(0);"></a>' +
+                '</div>');
+            var link = el.find('a');
+            me._loc = Oskari.getLocalization('MapWfs2', Oskari.getLang() || Oskari.getDefaultLanguage());
+            link.html(me._loc.refresh);
+            el.attr('title', me._loc.refresh_title);
+            me._bindLinkClick(link);
+            el.mousedown(function (event) {
+                event.stopPropagation();
+            });
+            return el;
+        },
+
+        _bindLinkClick: function (link) {
+            var me = this,
+                linkElement = link || me.getElement().find('a'),
+                sandbox = me.getSandbox();
+            linkElement.bind('click', function () {
+                var event = sandbox.getEventBuilder('WFSRefreshManualLoadLayersEvent')();
+                sandbox.notifyAll(event);
+                return false;
+            });
+        },
+        /**
+         * @method refresh
+         * Updates the plugins interface (hides if no manual load wfs layers selected)
+         */
+        refresh: function () {
+            var me = this,
+                sandbox = me.getMapModule().getSandbox(),
+                layers = sandbox.findAllSelectedMapLayers(),
+                i,
+                isVisible = false;
+            if(this.getElement()) {
+                this.getElement().hide();
+            }
+            // see if there's any wfs layers, show element if so
+            for (i = 0; i < layers.length; i++) {
+                if (layers[i].hasFeatureData() &&  layers[i].isManualRefresh() ) {
+                    isVisible = true;
+                }
+            }
+            if(isVisible && this.getElement()){
+                this.getElement().show();
+            }
+            me.setVisible(isVisible);
+
+        },
+        /**
+         * @method inform
+         * Inform the user how to manage manual refresh layers (only when 1st manual refresh layer in selection)
+         */
+        inform: function (event) {
+            var me = this,
+                config = me.getConfig(),
+                sandbox = me.getMapModule().getSandbox(),
+                layer = event.getMapLayer(),
+                layers = sandbox.findAllSelectedMapLayers(),
+                i,
+                count = 0,
+                render = false;
+
+            if(config){
+                render = config.isPublished;
+            }
+
+            // see if there's any wfs layers, show  if so
+            for (i = 0; i < layers.length; i++) {
+                if (layers[i].hasFeatureData() &&  layers[i].isManualRefresh() ) {
+                   count++;
+                }
+            }
+            if(count === 1 && layer.isManualRefresh()){
+               me.showMessage(me.getLocalization().information.title, me.getLocalization().information.info, me.getLocalization().button.close, render);
+            }
+
+
+        },
+
 
         /**
          * @method register
@@ -179,6 +272,7 @@ Oskari.clazz.define(
                         );
                         return;
                     }
+
                     me.mapMoveHandler();
                 },
 
@@ -187,7 +281,13 @@ Oskari.clazz.define(
                  * @param {Object} event
                  */
                 AfterMapLayerAddEvent: function (event) {
+
                     me.mapLayerAddHandler(event);
+                    // Refresh UI refresh button visible/invisible
+                    me.refresh();
+                    // Inform user, if manual refresh-load wfs layers in selected map layers
+                    // (only for 1st manual refresh layer)
+                    me.inform(event);
                 },
 
                 /**
@@ -195,7 +295,10 @@ Oskari.clazz.define(
                  * @param {Object} event
                  */
                 AfterMapLayerRemoveEvent: function (event) {
+
                     me.mapLayerRemoveHandler(event);
+                    // Refresh UI refresh button visible/invisible
+                    me.refresh();
                 },
 
                 /**
@@ -203,6 +306,7 @@ Oskari.clazz.define(
                  * @param {Object} event
                  */
                 WFSFeaturesSelectedEvent: function (event) {
+
                     me.featuresSelectedHandler(event);
                 },
 
@@ -211,6 +315,7 @@ Oskari.clazz.define(
                  * @param {Object} event
                  */
                 MapClickedEvent: function (event) {
+
                     me.mapClickedHandler(event);
                 },
 
@@ -219,14 +324,23 @@ Oskari.clazz.define(
                  * @param {Object} event
                  */
                 AfterChangeMapLayerStyleEvent: function (event) {
+
                     me.changeMapLayerStyleHandler(event);
                 },
-
+                /**
+                 * Refresh manual-refresh-flagged wfs layers
+                 * @param event
+                 * @constructor
+                 */
+                WFSRefreshManualLoadLayersEvent: function (event) {
+                    me.refreshManualLoadLayersHandler(event);
+                },
                 /**
                  * @method MapLayerVisibilityChangedEvent
                  * @param {Object} event
                  */
                 MapLayerVisibilityChangedEvent: function (event) {
+
                     me.mapLayerVisibilityChangedHandler(event);
                     if (event.getMapLayer().hasFeatureData() && me.getConfig() && me.getConfig().deferSetLocation) {
                         me.getSandbox().printDebug(
@@ -241,6 +355,7 @@ Oskari.clazz.define(
                  * @param {Object} event
                  */
                 AfterChangeMapLayerOpacityEvent: function (event) {
+
                     me.afterChangeMapLayerOpacityEvent(event);
                 },
 
@@ -249,6 +364,7 @@ Oskari.clazz.define(
                  * @param {Object} event
                  */
                 MapSizeChangedEvent: function (event) {
+
                     me.mapSizeChangedHandler(event);
                 },
 
@@ -257,6 +373,7 @@ Oskari.clazz.define(
                  * @param {Object} event
                  */
                 WFSSetFilter: function (event) {
+
                     me.setFilterHandler(event);
                 },
 
@@ -265,6 +382,7 @@ Oskari.clazz.define(
                  * @param {Object} event
                  */
                 WFSSetPropertyFilter: function (event) {
+
                     me.setPropertyFilterHandler(event);
                 },
 
@@ -273,6 +391,7 @@ Oskari.clazz.define(
                  * @param {Object} event
                  */
                 WFSImageEvent: function (event) {
+
                     me.drawImageTile(
                         event.getLayer(),
                         event.getImageUrl(),
@@ -346,10 +465,10 @@ Oskari.clazz.define(
 
             // clean tiles for printing
             me._printTiles = {};
+            // Update layer tile grid
 
             // update location
             grid = this.getGrid();
-
             // update cache
             this.refreshCaches();
             if(reqLayerId) {
@@ -372,16 +491,16 @@ Oskari.clazz.define(
                         me.getIO().setLocation(
                             layerId,
                             srs, [
-                                bbox.left,
-                                bbox.bottom,
-                                bbox.right,
-                                bbox.top
+                                bbox[0],
+                                bbox[1],
+                                bbox[2],
+                                bbox[3]
                             ],
                             zoom,
                             grid,
                             tiles
                         );
-                        me._tilesLayer.redraw();
+
                     }
                 }
             }
@@ -467,6 +586,7 @@ Oskari.clazz.define(
 
                 // send together
                 connection.get().batch(function () {
+
                     me.getIO().addMapLayer(
                         layer.getId(),
                         styleName
@@ -515,6 +635,7 @@ Oskari.clazz.define(
          * @param {Object} event
          */
         featuresSelectedHandler: function (event) {
+
             if (!event.getMapLayer().hasFeatureData()) {
                 // No featuredata available, return
                 return;
@@ -532,10 +653,6 @@ Oskari.clazz.define(
                 zoom;
 
             me.removeHighlightImages(layer);
-
-            if (!event.isKeepSelection()) {
-                return;
-            }
 
             // if no connection or the layer is not registered, get highlight with URl
             if (connection.isLazy() && (!connection.isConnected() || !sandbox.findMapLayerFromSelectedMapLayers(layerId))) {
@@ -569,6 +686,7 @@ Oskari.clazz.define(
          * @param {Object} event
          */
         mapClickedHandler: function (event) {
+
             // don't process while moving
             if (this.getSandbox().getMap().isMoving()) {
                 return;
@@ -576,7 +694,27 @@ Oskari.clazz.define(
             var lonlat = event.getLonLat(),
                 keepPrevious = this.getSandbox().isCtrlKeyDown();
 
-            this.getIO().setMapClick(lonlat, keepPrevious);
+            var point =  new ol.geom.Point(lonlat);
+            var geojson = new ol.format.GeoJSON(this.getMap().getView().getProjection());
+            var pixelTolerance = 15;
+            var json = {
+                type: 'FeatureCollection',
+                crs: this.getMap().getView().getProjection().getCode(),
+                features: [{
+                    type: 'Feature',
+                    geometry: JSON.parse(geojson.writeGeometry(point)),
+                    properties : {
+                        // add buffer based on resolution
+                        buffer_radius : this.getMap().getView().getResolution() * pixelTolerance
+                    }
+                }]
+            };
+
+            this.getIO().setMapClick({
+                lon : lonlat[0],
+                lat : lonlat[1],
+                json : json
+            }, keepPrevious);
         },
 
         /**
@@ -584,6 +722,7 @@ Oskari.clazz.define(
          * @param {Object} event
          */
         changeMapLayerStyleHandler: function (event) {
+
             if (event.getMapLayer().hasFeatureData()) {
                 // render "normal" layer with new style
                 var OLLayer = this.getOLMapLayer(
@@ -604,6 +743,7 @@ Oskari.clazz.define(
          * @param {Object} event
          */
         mapLayerVisibilityChangedHandler: function (event) {
+
             if (event.getMapLayer().hasFeatureData()) {
                 this.getIO().setMapLayerVisibility(
                     event.getMapLayer().getId(),
@@ -617,6 +757,7 @@ Oskari.clazz.define(
          * @param {Object} event
          */
         afterChangeMapLayerOpacityEvent: function (event) {
+
             var layer = event.getMapLayer(),
                 layers,
                 opacity;
@@ -630,7 +771,64 @@ Oskari.clazz.define(
                 layer.setOpacity(opacity);
             });
         },
+        /**
+         * @method  refreshManualLoadLayersHandler
+         * @param {Object} event
+         */
+        refreshManualLoadLayersHandler: function (event) {
+            var bbox,
+                grid,
+                layerId,
+                layers = [],
+                me = this,
+                map = me.getSandbox().getMap(),
+                srs,
+                tiles,
+                zoom;
 
+            //me.getIO().setMapSize(event.getWidth(), event.getHeight());
+
+            // update tiles
+            srs = map.getSrsName();
+            bbox = map.getExtent();
+            zoom = map.getZoom();
+            grid = me.getGrid();
+
+            // update cache
+            me.refreshCaches();
+            if(event.getLayerId()){
+
+                layers.push(me.getSandbox().findMapLayerFromSelectedMapLayers(event.getLayerId()));
+            }
+            else {
+                layers = me.getSandbox().findAllSelectedMapLayers();
+            }
+
+            layers.forEach(function (layer) {
+                if (layer.hasFeatureData() && layer.isManualRefresh()) {
+                    // clean features lists
+                    layer.setActiveFeatures([]);
+                    if (grid !== null && grid !== undefined) {
+                        layerId = layer.getId();
+                        tiles = me.getNonCachedGrid(layerId, grid);
+                        me.getIO().setLocation(
+                            layerId,
+                            srs, [
+                                bbox.left,
+                                bbox.bottom,
+                                bbox.right,
+                                bbox.top
+                            ],
+                            zoom,
+                            grid,
+                            tiles,
+                            true
+                        );
+                       // not in OL3 me._tilesLayer.redraw();
+                    }
+                }
+            });
+        },
         /**
          * @method mapSizeChangedHandler
          * @param {Object} event
@@ -645,6 +843,7 @@ Oskari.clazz.define(
                 srs,
                 tiles,
                 zoom;
+
 
             me.getIO().setMapSize(event.getWidth(), event.getHeight());
 
@@ -678,7 +877,7 @@ Oskari.clazz.define(
                             grid,
                             tiles
                         );
-                        me._tilesLayer.redraw();
+                       // not in OL3 me._tilesLayer.redraw();
                     }
                 }
             });
@@ -689,6 +888,8 @@ Oskari.clazz.define(
          * @param {Object} event
          */
         setFilterHandler: function (event) {
+
+
             var WFSLayerService = this.WFSLayerService,
                 layers = this.getSandbox().findAllSelectedMapLayers(),
                 keepPrevious = this.getSandbox().isCtrlKeyDown(),
@@ -704,6 +905,7 @@ Oskari.clazz.define(
          * @param {Object} event
          */
         setPropertyFilterHandler: function (event) {
+
             /// clean selected features lists
             var me = this,
                 layers = this.getSandbox().findAllSelectedMapLayers();
@@ -783,10 +985,10 @@ Oskari.clazz.define(
                 layerPart = layer.getId();
             }
 
-            layerName = new RegExp(
-                me.__layerPrefix + layerPart + '_' + me.__typeHighlight
-            );
-            removeLayers = map.getLayersByName(layerName);
+            layerName =  me.__layerPrefix + layerPart + '_' + me.__typeHighlight;
+
+
+            removeLayers = me.getMapModule().getLayersByName(layerName);
 
             removeLayers.forEach(function (removeLayer) {
                 removeLayer.destroy();
@@ -814,7 +1016,8 @@ Oskari.clazz.define(
                 return;
             }
 
-            var layerPart = '',
+            var me = this,
+                layerPart = '',
                 wfsReqExp;
 
             if (layer) {
@@ -824,7 +1027,7 @@ Oskari.clazz.define(
                 this.__layerPrefix + layerPart + '_(.*)',
                 'i'
             );
-            return this.getMap().getLayersByName(wfsReqExp);
+            return   me.getMapModule().getLayersByName(this.__layerPrefix + layerPart); //this.getMap().getLayersByName(wfsReqExp);
         },
 
         /**
@@ -840,7 +1043,7 @@ Oskari.clazz.define(
             var layerName = this.__layerPrefix + layer.getId() + '_' + type,
                 wfsReqExp = new RegExp(layerName);
 
-            return this.getMap().getLayersByName(wfsReqExp)[0];
+            return me.getMapModule().getLayersByName(layerName)[0]; //this.getMap().getLayersByName(wfsReqExp)[0];
         },
 
         /**
@@ -876,20 +1079,34 @@ Oskari.clazz.define(
                 highlightLayerExp,
                 BBOX,
                 bboxKey,
+                dataForTileTemp,
                 style,
                 tileToUpdate,
-                boundsObj = new OpenLayers.Bounds(imageBbox),
+                boundsObj = imageBbox, //ol.Extent
                 ols,
-                wfsMapImageLayer;
+                wfsMapImageLayer,
+                normalLayerExp = me.__layerPrefix + layerId + '_' + me.__typeNormal,
+                normalLayer = me.getMapModule().getLayersByName(normalLayerExp)[0];  //map.getLayersByName(normalLayerExp);
 
             /** Safety checks */
             if (!imageUrl || !boundsObj) return;
 
             if (layerType === me.__typeHighlight) {
-                ols = new OpenLayers.Size(imageSize.width,imageSize.height);
+                ols = [imageSize.width,imageSize.height];  //ol.Size
                 layerScales = me.getMapModule().calculateLayerScales(layer.getMaxScale(),layer.getMinScale());
 
-                wfsMapImageLayer = new OpenLayers.Layer.Image(
+                wfsMapImageLayer = new ol.layer.Image({
+                    source: new ol.source.ImageStatic({
+                        url: imageUrl,
+                        imageExtent: boundObj,
+                        imageSize: ols,
+                        logo: false
+
+                    }),
+                    title: layerName
+                })
+
+          /*      wfsMapImageLayer = new OpenLayers.Layer.Image(
                     layerName,imageUrl,
                     boundsObj, ols, {
                         scales: layerScales,
@@ -899,10 +1116,11 @@ Oskari.clazz.define(
                         displayInLayerSwitcher: false,
                         visibility: true,
                         buffer: 0 }
-                );
+                ); */
 
                 wfsMapImageLayer.opacity = layer.getOpacity() / 100;
-                map.addLayer(wfsMapImageLayer);
+               // map.addLayer(wfsMapImageLayer);
+                me.getMapModule().addLayer(wfsMapImageLayer, layer, layerName);
                 wfsMapImageLayer.setVisibility(true);
                 // also for draw
                 wfsMapImageLayer.redraw(true);
@@ -914,17 +1132,15 @@ Oskari.clazz.define(
                 }
 
                 // highlight picture on top of normal layer images
-                normalLayerExp = new RegExp(me.__layerPrefix + layerId + '_' + me.__typeNormal);
-                highlightLayerExp = new RegExp(me.__layerPrefix + layerId + '_' + me.__typeHighlight);
-                normalLayer = map.getLayersByName(normalLayerExp);
-                highlightLayer = map.getLayersByName(highlightLayerExp);
+                highlightLayerExp = me.__layerPrefix + layerId + '_' + me.__typeHighlight;
+                highlightLayer = me.getMapModule().getLayersByName(highlightLayerExp)[0]; // map.getLayersByName(highlightLayerExp);
 
                 if (normalLayer.length > 0 && highlightLayer.length > 0) {
                     normalLayerIndex = map.getLayerIndex(normalLayer[normalLayer.length - 1]);
                     map.setLayerIndex(highlightLayer[0],normalLayerIndex + 10);
                 }
             } else { // "normal"
-                BBOX = boundsObj.toArray(false);
+                BBOX = boundsObj;
                 bboxKey = this.bboxkeyStrip(BBOX);
                 style = layer.getCurrentStyle().getName();
                 tileToUpdate = me._tilesToUpdate.mget(layerId,'',bboxKey);
@@ -937,10 +1153,17 @@ Oskari.clazz.define(
                 // temp cached and redrawn if gotten better
                 else {
                     //Old temp tile (border tile) cant be used, because it is not valid after map move
+                    //dataForTileTemp = me._tileDataTemp.mget(layerId,style,bboxKey);
+                    //if (dataForTileTemp) return;
                     me._tileDataTemp.mput(layerId,style,bboxKey,imageUrl);
                 }
                 // QUEUES updates!
-                if (tileToUpdate) tileToUpdate.draw();
+               // ??? if (tileToUpdate) tileToUpdate.draw();
+                // How to refresh/reload  tileload of tile layer
+               // normalLayer.changed();
+               // normalLayer.render();
+               //normalLayer.redraw(true);
+
             }
         },
 
@@ -962,150 +1185,6 @@ Oskari.clazz.define(
                     _layer.getMinScale()
                 ),
                 key,
-                defaultParams = {
-                    layers: '',
-                    transparent: true,
-                    id: _layer.getId(),
-                    styles: _layer.getCurrentStyle().getName(),
-                    format: 'image/png'
-                },
-                defaultOptions = {
-                    layerId: _layer.getId(),
-                    scales: layerScales,
-                    isBaseLayer: false,
-                    displayInLayerSwitcher: true,
-                    visibility: true,
-                    buffer: 0,
-                    _plugin: this,
-
-                    getURL: function (bounds, theTile) {
-                        bounds = this.adjustBounds(bounds);
-
-                        var BBOX = bounds.toArray(false),
-                            bboxKey = this._plugin.bboxkeyStrip(BBOX);
-                            layer = this._plugin.getSandbox().findMapLayerFromSelectedMapLayers(
-                                this.layerId
-                            ),
-                            style = layer.getCurrentStyle().getName(),
-                            dataForTile = this._plugin._tileData.mget(
-                                this.layerId,
-                                style,
-                                bboxKey
-                            );
-
-                        if (dataForTile) {
-                            // remove from drawing
-                            this._plugin._tilesToUpdate.mdel(
-                                this.layerId,
-                                '',
-                                bboxKey
-                            );
-                        } else {
-                            // temp cache
-                            dataForTile = this._plugin._tileDataTemp.mget(
-                                this.layerId,
-                                style,
-                                bboxKey
-                            );
-
-                            // put in drawing
-                            this._plugin._tilesToUpdate.mput(
-                                this.layerId,
-                                '',
-                                bboxKey,
-                                theTile
-                            );
-                        }
-
-                        return dataForTile;
-                    },
-
-                    addTile: function (bounds, position) {
-                        var tileOpts = OpenLayers.Util.extend({},
-                            this.tileOptions
-                        );
-                        OpenLayers.Util.extend(tileOpts, {
-                            setBounds: function (bounds) {
-                                bounds = bounds.clone();
-                                if (this.layer.map.baseLayer.wrapDateLine) {
-                                    var worldExtent =
-                                        this.layer.map.getMaxExtent(),
-                                        tolerance =
-                                        this.layer.map.getResolution();
-
-                                    bounds = bounds.wrapDateLine(
-                                        worldExtent, {
-                                            leftTolerance: tolerance,
-                                            rightTolerance: tolerance
-                                        }
-                                    );
-                                }
-                                this.bounds = bounds;
-                            },
-                            renderTile: function () {
-                                this.layer.div.appendChild(this.getTile());
-                                if (this.layer.async) {
-                                    // Asynchronous image requests call the asynchronous getURL method
-                                    // on the layer to fetch an image that covers "this.bounds".
-                                    var id = this.asyncRequestId = (this.asyncRequestId || 0) + 1;
-                                    this.layer.getURLasync(
-                                        this.bounds,
-                                        function (url) {
-                                            if (id === this.asyncRequestId) {
-                                                this.url = url;
-                                                this.initImage();
-                                            }
-                                        },
-                                        this
-                                    );
-                                } else {
-                                    // synchronous image requests get the url immediately.
-                                    this.url = this.layer.getURL(
-                                        this.bounds,
-                                        this
-                                    );
-                                    this.initImage();
-                                }
-                            }
-                        });
-
-                        var tile = new this.tileClass(
-                            this,
-                            position,
-                            bounds,
-                            null,
-                            this.tileSize,
-                            tileOpts
-                        );
-
-                        this._plugin._tiles[tile.id] = tile;
-
-                        var BBOX = bounds.toArray(false),
-                            me = this,
-                            bboxKey = this._plugin.bboxkeyStrip(BBOX);
-
-                        this._plugin._tilesToUpdate.mput(
-                            this.layerId,
-                            '',
-                            bboxKey,
-                            tile
-                        );
-
-                        tile.events.register(
-                            'beforedraw',
-                            this,
-                            this.queueTileDraw
-                        );
-                        return tile;
-                    },
-
-                    destroyTile: function (tile) {
-                        this.removeTileMonitoringHooks(tile);
-                        delete this._plugin._tiles[tile.id];
-
-                        tile.destroy();
-                    }
-                },
                 layerParams = _layer.getParams(),
                 layerOptions = _layer.getOptions();
 
@@ -1120,16 +1199,78 @@ Oskari.clazz.define(
                     defaultOptions[key] = layerOptions[key];
                 }
             }
+            var projection = ol.proj.get('EPSG:3067');
+            var projectionExtent = projection.getExtent();
+            var me = this;
+            var tg = new ol.tilegrid.createXYZ({
+                extent:me.getMap().getView().calculateExtent(me.getMap().getSize()),
+                maxZoom: me.getMapModule().getMaxZoomLevel(),
+                tileSize: [256,256]
+            });
 
-            var openLayer = new OpenLayers.Layer.WMS(
-                layerName,
-                '',
-                defaultParams,
-                defaultOptions
-            );
+            var openLayer = new ol.layer.Tile({
+                source: new ol.source.TileImage({   // XYZ and TileImage(  tried
+                    tileLoadFunction: function (imageTile, src) {
+                        //    imageTile.getImage().src = window.URL.createObjectURL(res);
+
+                    },
+                    layerId: _layer.getId(),
+                    tileUrlFunction: function (tileCoord, pixelRatio, projection, theTile) {
+                      //  return tileCoord.join(",");
+                      return;
+                        // this method is not in minified ol js
+                        var bounds = this.getTileGrid().getTileCoordExtent(tileCoord);
+
+
+
+                        var BBOX = bounds,
+                            bboxKey = me.bboxkeyStrip(BBOX);
+                        layer = me.getSandbox().findMapLayerFromSelectedMapLayers(
+                            this.get('layerId')
+                        ),
+                            style = layer.getCurrentStyle().getName(),
+                            dataForTile = me._tileData.mget(
+                                this.get('layerId'),
+                                style,
+                                bboxKey
+                            );
+
+                        if (dataForTile) {
+                            // remove from drawing
+                            me._tilesToUpdate.mdel(
+                                this.get('layerId'),
+                                '',
+                                bboxKey
+                            );
+                        } else {
+                            // temp cache
+                            dataForTile = me._tileDataTemp.mget(
+                                this.get('layerId'),
+                                style,
+                                bboxKey
+                            );
+
+                            // put in drawing
+                            me._tilesToUpdate.mput(
+                                this.get('layerId'),
+                                '',
+                                bboxKey,
+                                theTile
+                            );
+                        }
+                         // Return data uri
+                        return dataForTile;
+                    },
+                    projection: projection,
+                    tileGrid: tg
+                })
+            });
+
+            openLayer.getSource().set('layerId',_layer.getId());
+
             openLayer.opacity = _layer.getOpacity() / 100;
-
-            this.getMap().addLayer(openLayer);
+            //this.getMap().addLayer(openLayer);
+            me.getMapModule().addLayer(openLayer, _layer, layerName);
         },
 
         // from tilesgridplugin
@@ -1142,7 +1283,8 @@ Oskari.clazz.define(
          *
          */
         createTilesGrid: function () {
-            var tileQueue = Oskari.clazz.create(
+            var me = this,
+                tileQueue = Oskari.clazz.create(
                     'Oskari.mapframework.bundle.mapwfs2.domain.TileQueue'
                 ),
                 strategy = Oskari.clazz.create(
@@ -1151,38 +1293,26 @@ Oskari.clazz.define(
                     }
                 );
 
+
+
             strategy.debugGridFeatures = false;
             this.tileQueue = tileQueue;
             this.tileStrategy = strategy;
 
-            var styles = new OpenLayers.StyleMap({
-                'default': new OpenLayers.Style({
-                    pointRadius: 3,
-                    strokeColor: 'red',
-                    strokeWidth: 2,
-                    fillColor: '#800000'
-                }),
-                'tile': new OpenLayers.Style({
-                    strokeColor: '#008080',
-                    strokeWidth: 5,
-                    fillColor: '#ffcc66',
-                    fillOpacity: 0.5
-                }),
-                'select': new OpenLayers.Style({
-                    fillColor: '#66ccff',
-                    strokeColor: '#3399ff'
-                })
-            });
+            this._tilesLayer = new ol.layer.Vector( {
+                source: new ol.source.Vector({
 
-            this._tilesLayer = new OpenLayers.Layer.Vector(
-                'Tiles Layer', {
-                    strategies: [strategy],
-                    styleMap: styles,
-                    visibility: true
                 }
+
+            ),
+               title:  'Tiles Layer',
+                visible: false}
             );
             this.getMap().addLayer(this._tilesLayer);
             this._tilesLayer.setOpacity(0.3);
+            this.tileStrategy.setLayer(this._tilesLayer);
+            this.tileStrategy.setMap( me.getMapModule().getMap());
+
         },
 
         getTileSize: function () {
@@ -1190,9 +1320,9 @@ Oskari.clazz.define(
             this.tileSize = null;
 
             if (OLGrid) {
-                this.tileSize = {};
-                this.tileSize.width = OLGrid[0][0].size.w;
-                this.tileSize.height = OLGrid[0][0].size.h;
+                this.tileSize = [];
+                this.tileSize[0] = OLGrid[0][0].size[0];
+                this.tileSize[1] = OLGrid[0][0].size[1];
             }
 
             return this.tileSize;
@@ -1212,6 +1342,9 @@ Oskari.clazz.define(
 
             // get grid information out of tileStrategy
             this.tileStrategy.update();
+            if(!this.tileStrategy.getGrid()){
+                return;
+            }
             OLGrid = this.tileStrategy.getGrid().grid;
 
             if (OLGrid) {
@@ -1232,10 +1365,10 @@ Oskari.clazz.define(
 
                         // left, bottom, right, top
                         bounds = [];
-                        bounds[0] = tile.bounds.left;
-                        bounds[1] = tile.bounds.bottom;
-                        bounds[2] = tile.bounds.right;
-                        bounds[3] = tile.bounds.top;
+                        bounds[0] = tile.bounds[0];
+                        bounds[1] = tile.bounds[1];
+                        bounds[2] = tile.bounds[2];
+                        bounds[3] = tile.bounds[3];
                         grid.bounds.push(bounds);
                     }
                 }
@@ -1253,13 +1386,13 @@ Oskari.clazz.define(
          * @return {Boolean} is tile ok
          */
          _isTile: function(tile){
-            if (typeof tile.bounds.left === 'undefined')
+            if (tile.bounds[0] === NaN)
                 return false;
-            if (typeof tile.bounds.bottom === 'undefined')
+            if (tile.bounds[1] === NaN)
                 return false;
-            if (typeof tile.bounds.right === 'undefined')
+            if (tile.bounds[2] === NaN)
                 return false;
-            if (typeof tile.bounds.top === 'undefined')
+            if (tile.bounds[3] === NaN)
                 return false;
             return true;
          },
@@ -1352,6 +1485,7 @@ Oskari.clazz.define(
             return this._isWFSOpen;
         },
 
+
         /**
          * @method _isArrayEqual
          * @param {String[]} current
@@ -1436,6 +1570,30 @@ Oskari.clazz.define(
             dialog.addClass('error_handling');
             dialog.show(popupLoc, content, [okBtn]);
             dialog.fadeout(5000);
+        },
+        /*
+         * @method showMessage
+         *
+         * @param {String} message dialog title
+         * @param {String} message  message to show to the user
+         * @param {String} locale string for OK-button
+         * @param {boolean} render manual refresh wfs layers in OK call back, if true
+         */
+        showMessage: function (title, message, ok, render) {
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+                me = this,
+                sandbox = me.getSandbox();
+            okBtn.setTitle(ok);
+            okBtn.addClass('primary');
+            okBtn.setHandler(function () {
+                if(render){
+                    var event = sandbox.getEventBuilder('WFSRefreshManualLoadLayersEvent')();
+                    sandbox.notifyAll(event);
+                }
+                dialog.close(true);
+            });
+            dialog.show(title, message, [okBtn]);
         },
 
         /**
@@ -1533,9 +1691,12 @@ Oskari.clazz.define(
                 stripbox[i] = bbox[i].toPrecision(13);
             }
             return stripbox.join(',');
+        },
+        hasUI: function() {
+            return false;
         }
     }, {
-        extend: ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
+        extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
         /**
          * @static @property {string[]} protocol array of superclasses
          */

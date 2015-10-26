@@ -242,12 +242,12 @@ Oskari.clazz.define(
                     scales: layerScales,
                     isBaseLayer: false,
                     displayInLayerSwitcher: false,
-                    visible: true,
+                    visible: layer.isInScale(me.getSandbox().getMap().getScale()) && layer.isVisible(),
                     singleTile: true,
                     buffer: 0
                 });
 
-            /* The next is highlight control, which we will fix after 
+            /* The next is highlight control, which we will fix after
             / everything else works
             */
 

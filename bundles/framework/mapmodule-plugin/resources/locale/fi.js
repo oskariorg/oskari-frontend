@@ -3,7 +3,7 @@ Oskari.registerLocalization(
     "lang": "fi",
     "key": "MapModule",
     "value": {
-        "status_update_map": "Päivitetään karttaa",
+        "status_update_map": "Päivitetään karttaa…",
         "zoombar_tooltip": {
             "zoomLvl-0": "Taustakartta",
             "zoomLvl-1": "Koko maa",
@@ -27,7 +27,7 @@ Oskari.registerLocalization(
                 "indicatorsHeader": "Indikaattorit"
             },
             "DataSourcePlugin": {
-                "link": "Aineiston lähde",
+                "link": "Tietolähde",
                 "popup": {
                     "title": "Tietolähteet",
                     "content": "NOT TRANSLATED"
@@ -41,12 +41,12 @@ Oskari.registerLocalization(
                 "chooseDefaultBaseLayer": "Valitse taustakartta"
             },
             "SearchPlugin": {
-                "placeholder": "Hae kohteita",
+                "placeholder": "Paikkahaku",
                 "search": "Hae",
-                "title": "Paikkahaun tulokset",
+                "title": "Hakutulokset",
                 "close": "Sulje hakutulokset",
                 "noresults": "Antamallasi hakusanalla ei löytynyt yhtään kohdetta.",
-                "toomanyresults": "Hakusi tuotti yli 100 hakutulosta. Anna tarkempi hakusana.",
+                "toomanyresults": "Hakusi tuotti yli 100 hakutulosta. Tarkenna hakusanaa ja yritä uudelleen.",
                 "column_name": "Nimi",
                 "column_village": "Kunta",
                 "column_type": "Tyyppi"
@@ -62,25 +62,25 @@ Oskari.registerLocalization(
             "PublisherToolbarPlugin": {
                 "test": "testi",
                 "history": {
-                    "reset": "Paluu oletusnäkymään",
-                    "back": "Takaisin",
-                    "next": "Eteenpäin"
+                    "reset": "Siirry oletusnäkymään.",
+                    "back": "Siirry edelliseen näkymään.",
+                    "next": "Siirry seuraavaan näkymään."
                 },
                 "measure": {
-                    "line": "Mittaa etäisyys",
-                    "area": "Mittaa alue"
+                    "line": "Mittaa etäisyys.",
+                    "area": "Mittaa pinta-ala."
                 }
             },
             "MarkersPlugin": {
                 "buttons": {
-                    "add": "Karttamerkintä",
-                    "clear": "Poista kaikki merkinnät"
+                    "add": "Tee karttamerkintä.",
+                    "clear": "Poista kaikki merkinnät."
                 },
                 "form": {
-                    "title": "Pistekohteen esitystapa",
-                    "tooltip": "",
+                    "title": "Karttamerkinnän esitystapa",
+                    "tooltip": "NOT TRANSLATED",
                     "symbol": {
-                        "label": "Pistekohteen kuvake"
+                        "label": "Symboli"
                     },
                     "size": {
                         "label": "Koko"
@@ -95,16 +95,16 @@ Oskari.registerLocalization(
                     },
                     "message": {
                         "label": "Teksti kartalla",
-                        "hint": "Kirjoita viestiteksti"
+                        "hint": "Nimi tai kuvaus"
                     }
                 },
                 "dialog": {
                     "title": "Karttamerkintä",
-                    "message": "Valitse kartalta uusi sijainti klikkaamalla."
+                    "message": "Valitse karttamerkinnälle uusi sijainti klikkaamalla pistettä kartalla."
                 }
             },
             "MyLocationPlugin": {
-                "tooltip": "Keskitä kartta omaan sijaintiisi"
+                "tooltip": "Keskitä kartta omaan sijaintiisi."
             }
         }
     }

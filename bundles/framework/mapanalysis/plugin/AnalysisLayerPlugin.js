@@ -205,6 +205,7 @@ Oskari.clazz.define(
             }
 
             var me = this,
+                sandbox = this.getSandbox(),
                 openLayerId = 'layer_' + layer.getId(),
                 imgUrl = layer.getWpsUrl() + layer.getWpsLayerId(),
                 layerScales = this.getMapModule().calculateLayerScales(
@@ -224,7 +225,7 @@ Oskari.clazz.define(
                         scales: layerScales,
                         isBaseLayer: false,
                         displayInLayerSwitcher: false,
-                        visibility: true,
+                        visibility: layer.isInScale(sandbox.getMap().getScale()) && layer.isVisible(),
                         singleTile: true,
                         buffer: 0
                     }

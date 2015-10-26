@@ -40,7 +40,7 @@ div.view {
       margin-right: 5px; }
 
 div.tab-content div.myViewsTabButtonContainer {
-  float: right; }
+  text-align: right; }
 
 div.personaldata a.categoryOp {
   margin: 5px; }

@@ -47,9 +47,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         this.modelBuilderMapping = {
 
         };
-        // get generic localization (linked by mapfull)
-        this._localization = Oskari.getLocalization('Generic');
-
     }, {
         /** @static @property __qname fully qualified name for service */
         __qname: "Oskari.mapframework.service.MapLayerService",
@@ -518,7 +515,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             });
             
             for (i = 0; i<newestToOldestLayers.length; i++) {
-                list.push(this._loadedLayersList[i]);                
+                list.push(newestToOldestLayers[i]);                
                 if(list.length === count) {
                     break;
                 }
@@ -953,13 +950,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 layer.setQueryFormat(jsonLayer.formats.value);
                 layer.setAvailableQueryFormats(jsonLayer.formats.available);
             }
-
-            var locDefaultStyle = this._localization['default-style'];
-            var defaultStyle = Oskari.clazz.create('Oskari.mapframework.domain.Style');
-            defaultStyle.setName("");
-            defaultStyle.setTitle(locDefaultStyle);
-            defaultStyle.setLegend("");
-            return this.populateStyles(layer, jsonLayer, defaultStyle);
+            return this.populateStyles(layer, jsonLayer);
         },
         /**
          * @method populateStyles

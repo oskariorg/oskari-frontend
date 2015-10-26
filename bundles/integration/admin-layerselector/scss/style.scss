@@ -35,6 +35,16 @@
     transition-property: $property;
 }
 
+/* capabilities popup */
+.admin-layerselector-capabilities-popup {
+    width : 50%;
+
+    textarea {
+        width : 95%;
+        height : 250px;
+    }
+}
+
 /* layer group container */
 div.admin-layerselector {
 
