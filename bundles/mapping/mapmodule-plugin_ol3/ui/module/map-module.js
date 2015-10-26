@@ -431,19 +431,19 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             });
 
             //NOTE! The next is only for demos, delete when going to release ol3!
-            map.on('dblclick', function (evt) {
-                if (this.emptyFeatures === undefined) {
-                    this.emptyFeatures = false;
-                }
-                if (!this.emptyFeatures) {
-                    me._testVectorPlugin(evt.coordinate[0], evt.coordinate[1]);
-                    this.emptyFeatures = true;
-                } else {
-                    var rn = 'MapModulePlugin.RemoveFeaturesFromMapRequest';
-                    me._sandbox.postRequestByName(rn, []);
-                    this.emptyFeatures = false;
-                }
-            });
+            //map.on('dblclick', function (evt) {
+            //    if (this.emptyFeatures === undefined) {
+            //        this.emptyFeatures = false;
+            //    }
+            //    if (!this.emptyFeatures) {
+            //        me._testVectorPlugin(evt.coordinate[0], evt.coordinate[1]);
+            //        this.emptyFeatures = true;
+            //    } else {
+            //        var rn = 'MapModulePlugin.RemoveFeaturesFromMapRequest';
+            //        me._sandbox.postRequestByName(rn, []);
+            //        this.emptyFeatures = false;
+            //    }
+            //});
 
             me._map = map;
 

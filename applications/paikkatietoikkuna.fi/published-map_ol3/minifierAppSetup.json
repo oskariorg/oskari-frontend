@@ -130,10 +130,6 @@
         },
         "instanceProps": {}
     }, {
-        "title" : "Info Box",
-        "fi" : "infobox",
-        "sv" : "?",
-        "en" : "?",
         "bundlename" : "infobox",
         "bundleinstancename" : "infobox",
         "metadata" : {
@@ -141,9 +137,37 @@
                 "infobox" : {
                     "bundlePath" : "../../../packages/mapping/"
                 }
-            },
-            "Require-Bundle-Instance" : []
-        },
-        "instanceProps" : {}
+            }
+        }
+    }, {
+        "bundlename" : "drawtools_ol3",
+        "bundleinstancename" : "drawtools_ol3",
+        "metadata" : {
+            "Import-Bundle" : {
+                "drawtools_ol3" : {
+                    "bundlePath" : "../../../packages/mapping/"
+                }
+            }
+        }
+    }, {
+        "bundlename" : "routingService",
+        "bundleinstancename" : "routingService",
+        "metadata" : {
+            "Import-Bundle" : {
+                "routingService" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
+                }
+            }
+        }
+    }, {
+        "bundlename" : "rpc",
+        "bundleinstancename" : "rpc",
+        "metadata" : {
+            "Import-Bundle" : {
+                "rpc" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
+                }
+            }
+        }
     }]
 }

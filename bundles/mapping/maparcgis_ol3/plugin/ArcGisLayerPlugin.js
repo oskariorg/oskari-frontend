@@ -144,7 +144,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                     scales: layerScales,
                     isBaseLayer: false,
                     displayInLayerSwitcher: false,
-                    visible: true,
+                    visible: layer.isInScale(sandbox.getMap().getScale()) && layer.isVisible(),
                     buffer: 0
                 });
 
@@ -163,7 +163,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                     scales: layerScales,
                     isBaseLayer: false,
                     displayInLayerSwitcher: false,
-                    visible: true,
+                    visible: layer.isInScale(sandbox.getMap().getScale()) && layer.isVisible(),
                     buffer: 0
                 });
                 layerType = 'ol3 Arcgis CACHE';

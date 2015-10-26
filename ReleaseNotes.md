@@ -1,5 +1,12 @@
 # Release Notes
 
+## 1.34
+
+### rpc
+
+New function is enabled by default:
+- 'getMapBbox' gets current map bbox
+
 ## 1.33
 
 ### Sandbox/map layer service
