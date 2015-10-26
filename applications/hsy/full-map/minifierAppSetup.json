@@ -1,5 +1,20 @@
 {
     "startupSequence": [
+		{
+            "title": "Lang overrides",
+            "fi": "Kielisyys muutokset",
+            "sv": "",
+            "en": "",
+            "bundlename": "hsy-lang-overrides",
+            "bundleinstancename": "hsy-lang-overrides",
+            "metadata": {
+                "Import-Bundle": {
+                    "hsy-lang-overrides": {
+                        "bundlePath": "../../../packages/hsy/bundle/"
+                    }
+                }
+            }
+        },
         {
             "instanceProps": {},
             "title": "OpenLayers",
@@ -104,7 +119,8 @@
                 },
                 "Require-Bundle-Instance": []
             }
-        }, {
+        },
+		{
             "instanceProps": {},
             "title": "Oskari DIV Manazer",
             "bundleinstancename": "divmanazer",

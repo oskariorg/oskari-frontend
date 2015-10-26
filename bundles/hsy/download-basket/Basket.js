@@ -168,6 +168,9 @@ Oskari.clazz.define(
                         btn.setHandler(function() {
                             jQuery('.oskari__download-basket-buttons').find('input.send').attr("disabled",false);
                             jQuery('.oskari__download-basket-user-info').find('input').val('');
+                            jQuery('.oskari__download-basket-buttons').find('input.prev').trigger('click');
+                            jQuery('.oskari__download-basket-buttons').find('input.empty').trigger('click');
+                            jQuery('.oskari__download-basket').parents('.oskari-flyoutcontentcontainer').find('.tabsItem>li>a').eq(0).trigger('click');
                             dialog.close();
                         });
                         btn.addClass('primary');
@@ -228,7 +231,7 @@ Oskari.clazz.define(
         validateUserInputs: function(form){
             var me = this,
             dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-            errorText = me._getLocalization('check-form-error')+", ",
+            errorText = me._getLocalization('check-form-error')+" ",
             error = false;
 
             form.find('input,select').each(function (index) {
@@ -236,7 +239,7 @@ Oskari.clazz.define(
                 if(el.hasClass('email')){
                     if(!me.validateEmail(el.val())){
                         error = true;
-                        errorText += el.prev('span').text();
+                        errorText += el.prev('span').text().toLowerCase();
                         return false;
                     }
                 }
@@ -244,14 +247,14 @@ Oskari.clazz.define(
                     var first = form.find('.email').val();
                     if(el.val() !== first){
                         error = true;
-                        errorText += el.prev('span').text();
+                        errorText += el.prev('span').text().toLowerCase();
                         return false;
                     }
                 }
             });
 
             if(error){
-                dialog.show(me._getLocalization('check-form-error'), errorText);
+                dialog.show(me._getLocalization('check-form-error-huom'), errorText);
                 dialog.fadeout();
             }
 

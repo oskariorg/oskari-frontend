@@ -2,6 +2,10 @@ body{
 	font-family: 'Source Sans Pro',sans-serif !important;
 }
 
+::selection{
+    background: #fee9d7 !important;
+}
+
 #logobar {
         height: 52px;
         margin: 15px 37px;
@@ -110,6 +114,13 @@ button.approve:hover:enabled, input.approve:hover:enabled{
 
 .layerselector2-layer-filter{
     display: none;
+}
+
+.logoplugin .icon{
+    background-image: url('../images/hsy-logo_50px.png') !important;
+    height: 26px !important;
+    width: 50px !important;
+    background-color: #FFFFFF !important;
 }
 
 table td {

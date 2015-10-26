@@ -73,6 +73,7 @@ Oskari.clazz.define(
                     //Cropping btn is allready selected
                     if(el.hasClass('selected')){
                         me.activateNormalGFI(true);
+                        me.activateNormalWFSReq(true);
                         jQuery('.cropping-btn').removeClass('selected');
                         me.disableAllCroppingLayers(_map);
                         me.removeAllFeaturesFromCroppingLayer(_map);
@@ -86,6 +87,7 @@ Oskari.clazz.define(
                         }else{
                             //Fresh user selection
                             me.activateNormalGFI(false);
+                            me.activateNormalWFSReq(false);
                             jQuery('.cropping-btn').removeClass('selected');
                             el.addClass('selected');
                             jQuery('.oskari__download-basket-help').show();
@@ -129,6 +131,19 @@ Oskari.clazz.define(
             );
             moveToBasketBtn.insertTo(me._templates.tempbasket);
             me._templates.tempbasket.find('p').html(me._getLocalization('users-temp-basket'));
+
+            var clearTempBasket = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            clearTempBasket.addClass('primary');
+            clearTempBasket.setTitle(me._getLocalization('temp-basket-empty'));
+            jQuery(clearTempBasket.getElement()).click(
+                function (event) {
+                    jQuery('.oskari__download-basket-temp-basket').hide();
+                    me.removeAllFeaturesFromCroppingLayer(_map);
+                    event.preventDefault();
+                }
+            );
+            clearTempBasket.insertTo(me._templates.tempbasket);
+
             me._templates.main.append(me._templates.tempbasket);
             me._templates.tempbasket.hide();
             
@@ -146,6 +161,20 @@ Oskari.clazz.define(
         activateNormalGFI: function(state){
             var me = this,
             reqBuilder = me._sandbox.getRequestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
+
+            if (reqBuilder) {
+                var request = reqBuilder(state); 
+                me._sandbox.request(me.instance, request);
+            }
+        },
+        /**
+         * [activateNormalWFSReq disables normal WFS click cause using mapclick in cropping]
+         * @param  {[type]} state [true/false]
+         * @return {[none]}
+         */
+        activateNormalWFSReq: function(state){
+            var me = this,
+            reqBuilder = me._sandbox.getRequestBuilder('WfsLayerPlugin.ActivateHighlightRequest');
 
             if (reqBuilder) {
                 var request = reqBuilder(state); 
@@ -396,6 +425,7 @@ Oskari.clazz.define(
                         me.reqularControl.deactivate();
                         me.createCroppingWMSLayer(value.getLayerName(),value.getLayerUrl(),_map);
                         me.activateNormalGFI(false);
+                        me.activateNormalWFSReq(false);
                     }
                     dialog.close();
                 });
@@ -413,6 +443,7 @@ Oskari.clazz.define(
                         me.reqularControl.deactivate();
                         me.createCroppingWMSLayer(value.getLayerName(),value.getLayerUrl(),_map);
                         me.activateNormalGFI(false);
+                        me.activateNormalWFSReq(false);
                     }
                     dialog.close();
                 });
@@ -599,9 +630,10 @@ Oskari.clazz.define(
                 if(!layer.isInScale(mapScale)) {
                     continue;
                 }
-                if(!layer.isFeatureInfoEnabled()) {
+                //for WFS layer
+               /* if(!layer.isFeatureInfoEnabled()) {
                     continue;
-                }           
+                }   */        
                 if(!layer.isVisible()) {
                     continue;
                 }
@@ -612,9 +644,9 @@ Oskari.clazz.define(
                 if(layer._layerType=='WMTS'){
                     continue;
                 }
-                if(attributes.rajaus){
+               /* if(attributes.rajaus){
                     continue;
-                }
+                }*/
                 if(attributes.basemap){
                     continue;
                 }
