@@ -2535,7 +2535,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var methodSelections = {
                 'buffer': {
                     methodParams: {
-                        distance: bufferSize
+                        distance: bufferSize,
+                        no_data: me._getNoDataValue()
                     },
                     opacity: layer.getOpacity()
                 },
@@ -2548,20 +2549,23 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 },
                 'union': {
                     methodParams: {
-                        layerId: unionLayerId
+                        layerId: unionLayerId,
+                        no_data: me._getNoDataValue()
                     }
                 },
                 'clip': {
                     methodParams: {
                         layerId: intersectLayerId,
-                        features: intersectFeatures
+                        features: intersectFeatures,
+                        no_data: me._getNoDataValue()
                     }
                 },
                 'intersect': {
                     methodParams: {
                         layerId: intersectLayerId,
                         operator: spatialOperator, // TODO: param name?
-                        features: intersectFeatures
+                        features: intersectFeatures,
+                        no_data: me._getNoDataValue()
                     }
                 },
                 'layer_union': {
