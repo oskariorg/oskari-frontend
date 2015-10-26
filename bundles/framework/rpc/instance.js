@@ -29,7 +29,8 @@ Oskari.clazz.define(
                 'MapClickedEvent': true,
                 'AfterAddMarkerEvent' : true,
                 'MarkerClickEvent' : true,
-                'RouteSuccessEvent': true
+                'RouteSuccessEvent': true,
+                'UserLocationEvent': true
             };
         }
 
@@ -54,7 +55,8 @@ Oskari.clazz.define(
                 'MapModulePlugin.RemoveMarkersRequest': true,
                 'MapMoveRequest': true,
                 'ShowProgressSpinnerRequest': true,
-                'GetRouteRequest': true
+                'GetRouteRequest': true,
+                'MyLocationPlugin.GetUserLocationRequest': true
             };
         }
 

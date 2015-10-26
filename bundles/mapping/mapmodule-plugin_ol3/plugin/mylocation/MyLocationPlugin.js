@@ -46,6 +46,15 @@ Oskari.clazz.define(
             return el;
         },
 
+        _createRequestHandlers: function () {
+            return {
+                'MyLocationPlugin.GetUserLocationRequest': Oskari.clazz.create(
+                    'Oskari.mapframework.bundle.mapmodule.request.GetUserLocationRequestHandler',
+                    this
+                )
+            };
+        },
+
         /**
          * @private @method _setLayerToolsEditModeImpl
          *
@@ -101,21 +110,37 @@ Oskari.clazz.define(
         },
 
         /**
+         * @method  @public getUserLocation
+         */
+        getUserLocation: function(centerMap){
+            var me = this;
+            me._setupLocation(centerMap);
+        },
+
+        /**
          * @private @method _setupLocation
          * Tries to get the geolocation from browser and move the map to the
          * location
          *
-         *
+         * @param {Boolean} centerMap centermap to location
          */
-        _setupLocation: function () {
+        _setupLocation: function (centerMap) {
             var me = this,
+                sandbox = me.getSandbox(),
                 callback = function (lon, lat) {
                     // transform coordinates from browser projection to current
                     var mapModule = me.getMapModule(),
                         lonlat = new ol.proj.fromLonLat([lon,lat], mapModule._options.srsName),
                         zoom = mapModule.getMaxZoomLevel() - 1;
+                    
+                    if(typeof centerMap === 'undefined' || centerMap === true){
+                        mapModule.setMapCenter(lonlat, zoom);
+                    }
 
-                    mapModule.setMapCenter(lonlat, zoom);
+                    var locationEvent = sandbox.getEventBuilder(
+                        'UserLocationEvent'
+                    )(lonlat[0], lonlat[1]);
+                    sandbox.notifyAll(locationEvent);
                 };
 
             if (navigator.geolocation) {

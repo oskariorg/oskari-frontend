@@ -49,6 +49,7 @@ Oskari.clazz.define(
          */
         _setupLocation: function () {
             var me = this,
+                sandbox = me.getSandbox(),
                 callback = function (lon, lat) {
                     // transform coordinates from browser projection to current
                     var lonlat = me.getMapModule()._transformCoordinates(
@@ -57,25 +58,12 @@ Oskari.clazz.define(
                     );
                     me.getMapModule().centerMap(lonlat, 6);
                     me._locationIsSet = true;
+                    var locationEvent = sandbox.getEventBuilder(
+                        'UserLocationEvent'
+                    )(lonlat.lon, lonlat.lat);
+                    sandbox.notifyAll(locationEvent);
                 };
-            /*
-            var showError = function (error) {
-                switch (error.code) {
-                    case error.PERMISSION_DENIED:
-                        alert("User denied the request for Geolocation.");
-                        break;
-                    case error.POSITION_UNAVAILABLE:
-                        alert("Location information is unavailable.");
-                        break;
-                    case error.TIMEOUT:
-                        alert("The request to get user location timed out.");
-                        break;
-                    case error.UNKNOWN_ERROR:
-                        alert("An unknown error occurred.");
-                        break;
-                }
-            };
-            */
+            
             if (navigator.geolocation) {
                 // if users just ignores/closes the browser dialog
                 // -> error handler won't be called in most browsers
