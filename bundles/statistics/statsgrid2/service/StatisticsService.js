@@ -16,8 +16,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
         this.sandbox = sandbox;
         this.cache = {};
 
-        this.__dataSources = [];
+        // This object contains all the data source indicator metadata keyed by the plugin name.
+        this.__indicatorsMetadata = {};
         this.__regionCategories = [];
+        // This object contains the data grid content values keyed by the indicator id, i.e. column.
         this.__indicators = {};
         this.cacheSize = 0;
         this.callbackQueue = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.CallbackQueue');
@@ -42,17 +44,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
         init: function () {
 
         },
-        addDataSource : function(data) {
-            var ds = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.domain.DataSource', data);
-            this.__dataSources.push(ds);
-        },
         getDataSources : function(callback) {
             if(!callback) {
                 this.sandbox.printWarn('Provide callback for StatisticsService.getDataSources()');
                 return;
             }
-            if(this.__dataSources.length > 0) {
-                callback(this.__dataSources);
+            if(this.__indicatorsMetadata.length > 0) {
+                callback(this.__indicatorsMetadata);
                 return;
             }
             var queueName = 'getDataSources';
@@ -60,72 +58,49 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
                 // already handling the request, all callbacks will be called when done
                 return;
             }
+            // make the AJAX call
+            me.statsService.fetchStatsData(sandbox.getAjaxUrl() +
+                'action_route=',
+                //success callback
+                function (indicatorsData) {
+
             var me = this,
-                url = Oskari.getSandbox().getAjaxUrl() + "action_route=StatisticalDatasources";
+                url = Oskari.getSandbox().getAjaxUrl() + "action_route=GetIndicatorsMetadata";
             jQuery.ajax({
                 type: "GET",
                 dataType: 'json',
                 url: url,
-                success: function (pResp) {
-                    if(!pResp || pResp.error) {
+                success: function (indicatorsMetadata) {
+                    if(!indicatorsMetadata || indicatorsMetadata.error) {
                         callback();
                         return;
                     }
 
-                    _.each(pResp.dataSources || [], function(item) {
-                        me.addDataSource(item);
-                    });
-                    me.callbackQueue.notifyCallbacks(queueName, [me.__dataSources]);
-                },
-                error: function (jqXHR, textStatus) {
-                    me.callbackQueue.notifyCallbacks(queueName);
-                }
-            });
-        },
-        getDataSource : function(id) {
-            if(!id) {
-                this.sandbox.printWarn('StatisticsService.getDataSource() with no id, returning null');
-                return null;
-            }
-            var ds =  _.find(this.__dataSources, function(item) {
-                // normalize to strings
-                return '' + item.getId() === '' + id;
-            });
-
-            if(!ds) {
-                this.sandbox.printWarn('Datasource with id ' + id + ' not found');
-            }
-            return ds;
-        },
-        getIndicatorMetadata : function(datasource, id, callback) {
-            if(!datasource || !id) {
-                this.sandbox.printWarn('StatisticsService.getIndicatorMetadata() with no datasource or id, returning null');
-                callback();
-                return;
-            }
-            var indicator =  this._findIndicator(datasource, id);
-            if(indicator.getMetadata()) {
-                callback(indicator);
-                return;
-            }
-            var queueName = this.callbackQueue.getQueueName('getIndicatorMetadata', arguments);
-            if(!this.callbackQueue.addCallbackToQueue(queueName, callback)) {
-                // already handling the request, all callbacks will be called when done
-                return;
-            }
-            var me = this,
-                url = this.getDataSource(datasource).getIndicatorMetadataUrl(id);
-            jQuery.ajax({
-                type: "GET",
-                dataType: 'json',
-                url: url,
-                success: function (pResp) {
-                    if(!pResp || pResp.error) {
-                        callback();
-                        return;
+                    if (indicatorsMetadata) {
+                        /*
+                         * The response schema contains plugin classnames as keys to objects with information about the indicators.
+                         * "fi.nls.oskari.control.statistics.plugins.sotka.SotkaStatisticalDatasourcePlugin": {
+                         *   "indicators": {
+                         *     "1411":{
+                         *       "source": {...},
+                         *       "selectors": {...},
+                         *       "description": {...},
+                         *       "layers":[
+                         *         // FIXME: Localize the layerIds for the dropdown.
+                         *         {"layerVersion":"1","type":"FLOAT","layerId":"Kunta"},
+                         *         ...
+                         *       ],
+                         *       "name": {...}
+                         *     }, ...
+                         *   },
+                         *   "localizationKey":"fi.nls.oskari.control.statistics.plugins.sotka.plugin_name"
+                         * }
+                         */
+                        me.__indicatorsMetadata = Oskari.clazz.create(
+                                'Oskari.statistics.bundle.statsgrid.domain.SourcesMetadata',
+                                indicatorsMetadata);
                     }
-                    indicator.setMetadata(pResp);
-                    me.callbackQueue.notifyCallbacks(queueName, [indicator]);
+                    me.callbackQueue.notifyCallbacks(queueName, [me.__indicatorsMetadata]);
                 },
                 error: function (jqXHR, textStatus) {
                     me.callbackQueue.notifyCallbacks(queueName);

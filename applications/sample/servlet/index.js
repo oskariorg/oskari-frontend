@@ -29,7 +29,7 @@ jQuery(document).ready(function() {
         url: ajaxUrl + 'action_route=GetAppSetup',
         success : function(setup) {
             var app = Oskari.app;
-            if (false) for(var i = 0; i < setup.startupSequence.length; ++i) {
+            if (true) for(var i = 0; i < setup.startupSequence.length; ++i) {
                 var bundle = setup.startupSequence[i];
                 if(bundle.bundlename === 'statsgrid') {
                     bundle.bundlename = "statsgrid2";

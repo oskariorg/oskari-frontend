@@ -18,20 +18,28 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
         me.__selectedIndicator = null;
         me.__dataSourceSelect = null;
         me.__indicatorSelect = null;
+        me.__layerSelect = null;
+        me.__selectorsSelects = [];
         me.__addRemoveButton = null;
         me.dialog = null;
+        me._indicatorMetadata = {};
     }, {
         _templates: {
-            main: '<form class="statsgrid2_indicator_selector">' +
+            'main': '<form class="statsgrid2_indicator_selector">' +
                       '<div class="indicator-cont">' +
+                          // At least these values must be selected for every indicator.
+                          // Additionally some indicator-dependent selectors might be needed.
                           '<label><span></span><select name="datasource"></select></label>' +
                           '<label><span></span><select name="indicator"></select></label>' +
+                          '<label><span></span><select name="layer"></select></label>' +
+                          // the optional selectors will be populated here when the above have been selected.
+                          '<div id="selectors-div"></div>' +
                       '</div><div class="parameters-cont"></div><div class="buttons-cont"></div>' +
                   '</form>',
-            selector: '<label><span></span><select></select></label>',
-            option: '<option></option>',
-            infoIcon: '<div class="icon-info"></div>',
-            metadataPopup: '<div>' +
+            'selector': '<label><span></span><select></select></label>',
+            'option': '<option></option>',
+            'infoIcon': '<div class="icon-info"></div>',
+            'metadataPopup': '<div>' +
                                '<h4 class="indicator-msg-popup-title"></h4>' +
                                '<p class="indicator-msg-popup-title"></p>' +
                                '<h4 class="indicator-msg-popup-source"></h4>' +
@@ -50,9 +58,12 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
                 sandbox = me.statisticsService.getSandbox();
 
             me.el = el;
-            me._createDataSourceSelect(el.find('select[name=datasource]').parent());
-            me._createIndicatorSelect(el.find('select[name=indicator]').parent());
-            container.append(el);
+            var plugInIds = Object.keys(this.indicatorMetadata);
+            plugInIds.forEach(function(plugInId) {
+                var localizationKey = this.indicatorMetadata[plugInId].localizationKey;
+                var sourceName = me._locale[localizationKey];
+            }
+            // Add column button adds the selected indicator (with selectors applied) to the grid as a column.
             btn.setTitle(me._locale.addColumn);
             btn.setHandler(function (event) {
                 event.preventDefault();
@@ -69,9 +80,12 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
             });
             btn.insertTo(el.find('.buttons-cont'));
             me.__addRemoveButton = btn;
+            // The button will be enabled when all the required selections are selected.
             btn.setEnabled(false);
 
             me.statisticsService.getDataSources(function (dsList) {
+                me._createDataSourceSelect(el.find('select[name=datasource]').parent());
+                container.append(el);
                 me.setDataSources(dsList, true);
             });
         },

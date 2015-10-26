@@ -3,7 +3,7 @@
  *
  *
  *   {
- *      "id" : 1,
+ *      "id" : "Kunta",
  *      "locale" : {
  *          "fi" : "Kunta"
  *      }

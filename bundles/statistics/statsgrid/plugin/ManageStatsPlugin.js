@@ -74,46 +74,27 @@ Oskari.clazz.define(
         // FIXME ugly
         this._config = jQuery.extend(true, defaults, this._config);
         this.templates = {
-            csvButton: '<button class="statsgrid-csv-button">csv</button>',
-            statsgridTotalsVar: '<span class="statsgrid-variable"></span>',
-            subHeader: '<span class="statsgrid-grid-subheader"></span>',
-            // FIXME put input inside label
-            gridHeaderMenu: '<li>' +
-                '  <input type="checkbox" /><label></label>' +
-                '</li>',
-            groupingHeader: '<span style="color:green"></span>',
-            toolbarButton: '<button class="statsgrid-select-municipalities"></button>',
-            filterPopup: '<div class="indicator-filter-popup">' +
-                '  <p class="filter-desc"></p>' +
-                '  <div class="filter-container"></div>' +
-                '</div>',
-            filterRow: '<div class="filter-row">' +
-                '  <div class="filter-label"></div>' +
-                '  <div class="filter-value"></div>' +
-                '</div>',
-            filterSelect: '<div>' +
-                '  <select class="filter-select"></select>' +
-                '  <div class="filter-inputs-container"></div>' +
-                '</div>',
-            filterOption: '<option></option>',
-            filterInputs: '<input type="text" class="filter-input filter-input1" />' +
-                '<span class="filter-between" style="display:none;">-</span>' +
-                '<input type="text" class="filter-input filter-input2" style="display:none;" />',
-            filterLink: '<a href="javascript:void(0);"></a>',
-            filterByRegion: '<div id="statsgrid-filter-by-region">' +
-                '  <p class="filter-desc"></p>' +
-                '  <div class="filter-container"></div>' +
-                '</div>',
-            regionCatSelect: '<div class="filter-region-category-select">' +
-                '  <select></select>' +
-                '</div>',
-            regionSelect: '<div class="filter-region-select">' +
-                '  <select class="filter-region-select" multiple tabindex="3"></select>' +
-                '</div>',
-            addOwnIndicator: '<div class="new-indicator-cont">' +
-                '  <input type="button"/>' +
-                '</div>',
-            cannotDisplayIndicator: '<p class="cannot-display-indicator"></p>'
+            'csvButton': '<button class="statsgrid-csv-button">csv</button>',
+            'statsgridTotalsVar': '<span class="statsgrid-variable"></span>',
+            'subHeader': '<span class="statsgrid-grid-subheader"></span>',
+            'gridHeaderMenu': '<li><input type="checkbox" /><label></label></li>',
+            'groupingHeader': '<span style="color:green"></span>',
+            'toolbarButton': '<button class="statsgrid-select-municipalities"></button>',
+            'filterPopup': '<div class="indicator-filter-popup"><p class="filter-desc"></p><div class="filter-container"></div></div>',
+            'filterRow': '<div class="filter-row"><div class="filter-label"></div><div class="filter-value"></div></div>',
+            'filterSelect': '<div><select class="filter-select"></select><div class="filter-inputs-container"></div></div>',
+            'filterOption': '<option></option>',
+            'filterInputs': '<input type="text" class="filter-input filter-input1" /><span class="filter-between" style="display:none;">-</span><input type="text" class="filter-input filter-input2" style="display:none;" />',
+            'filterLink': '<a href="javascript:void(0);"></a>',
+            'filterByRegion': '<div id="statsgrid-filter-by-region"><p class="filter-desc"></p><div class="filter-container"></div></div>',
+            'regionCatSelect': '<div class="filter-region-category-select"><select></select></div>',
+            'regionSelect': '<div class="filter-region-select"><select class="filter-region-select" multiple tabindex="3"></select></div>',
+            'addOwnIndicator': '<div class="new-indicator-cont"><input type="button"/></div>',
+            'cannotDisplayIndicator': '<p class="cannot-display-indicator"></p>'
+            'selectDataSource': '<div class="statistics-datasource-select"><select></select></div>',
+            'selectIndicator': '<div class="statistics-indicator-select"><select></select></div>',
+            'selectLayer': '<div class="statistics-layer-select"><select></select></div>',
+            'selectSelector': '<div class="statistics-selector-select"><select></select></div>',
         };
 
         this.regionCategories = {};
@@ -146,6 +127,10 @@ Oskari.clazz.define(
             me._layer = (config.layer || null);
             // FIXME: What is this?
             me.selectMunicipalitiesMode = false;
+            
+            var selectors = jQuery('<div class="selectors-container"></div>');
+            container.append(selectors);
+
         },
 
         _createEventHandlers: function () {
