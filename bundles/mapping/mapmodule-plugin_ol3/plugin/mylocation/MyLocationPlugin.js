@@ -132,7 +132,7 @@ Oskari.clazz.define(
                     var mapModule = me.getMapModule(),
                         lonlat = new ol.proj.fromLonLat([lon,lat], mapModule._options.srsName),
                         zoom = mapModule.getMaxZoomLevel() - 1;
-                    
+
                     if(typeof centerMap === 'undefined' || centerMap === true){
                         mapModule.setMapCenter(lonlat, zoom);
                     }

@@ -63,7 +63,7 @@ Oskari.clazz.define(
                     )(lonlat.lon, lonlat.lat);
                     sandbox.notifyAll(locationEvent);
                 };
-            
+
             if (navigator.geolocation) {
                 // if users just ignores/closes the browser dialog
                 // -> error handler won't be called in most browsers
