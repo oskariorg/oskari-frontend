@@ -83,11 +83,14 @@ Oskari.clazz.define(
                  */
 
                 'Toolbar.ToolSelectedEvent': function (event) {
+                    return;
                     // changed tool -> cancel any current tool
-                    //TODO Should we handle zoombox somehow?
+                    //TODO Should we handle changing tools somehow?
+                    /*
                     if (this.getConfig().measureControls !== false) {
                         this.getSandbox().postRequestByName('DrawTools.StopDrawingRequest', [false, true]);
                     }
+                    */
                 }
             };
         },

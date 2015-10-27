@@ -63,13 +63,13 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ToolSelectionHandler',
             } else if (toolName === 'map_control_measure_tool') {
                 var type = 'LineString',
                     id = 'measureline';
-                me.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [id, type], {
-                                   allowMultipleDrawing: 'single'});
+                me.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [id, type, {
+                                   allowMultipleDrawing: 'single'}]);
             } else if (toolName === 'map_control_measure_area_tool') {
                 var type = 'Polygon',
                     id = 'measurearea'
-                me.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [id, type], {
-                                   allowMultipleDrawing: 'single'});
+                me.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [id, type, {
+                                   allowMultipleDrawing: 'single'}]);
             }
         }
     }, {
