@@ -167,7 +167,7 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Map layers menu",
+                "label": "Map Layers",
                 "info": "Select map layers to be shown as background layers. You can select a default backgound map layer in the map preview.",
                 "tooltip": "The background layer is shown at the bottom layer on the map. If you select several background maps, only one of them can be visible at a time. User can select a background layer in the user interface. Please select a default background map in the map preview.",
                 "promote": "Do you want to show also orthophotos on the map?"
@@ -177,7 +177,7 @@ Oskari.registerLocalization(
             "zoomlevel": "Zoom level",
             "help": "Help",
             "error": {
-                "title": "Virhe",
+                "title": "Error",
                 "size": "The map size is invalid. Width must be at least 30 pixels and height at least 20 pixels. Use a point as a decimal separator.",
                 "domain": "The website is required. Please type an address and try again.",
                 "domainStart": "The website is invalid. Please type an address without http or www prefixes and try again.",
