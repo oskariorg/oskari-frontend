@@ -63,7 +63,7 @@ Oskari.clazz.define(
 		                   color: me._defaultStyle.textOutlineColor,
 		                   width: me._defaultStyle.width
 		                 })
-		              })		 
+		              })
       			});
       		});
         	//overwriting default styles if given
@@ -129,7 +129,7 @@ Oskari.clazz.define(
         	me._shape = shape;
         	me._buffer = options.buffer;
         	me._id = id;
-        	
+
         	me.setDefaultStyle(options.style);
 
         	me._sandbox = me.getSandbox();
@@ -159,7 +159,7 @@ Oskari.clazz.define(
          */
         drawShape : function(shape, options) {
         	var me = this;
-        	
+
          	if(options.geojson) {
          		var jsonFormat = new ol.format.GeoJSON();
             	var featuresFromJson = jsonFormat.readFeatures(options.geojson);
@@ -181,7 +181,7 @@ Oskari.clazz.define(
          * @param {boolean} clearCurrent: if true, all selection will be removed from the map
          */
         stopDrawing : function(id, clearCurrent) {
-        	var me = this;      
+        	var me = this;
         	var options = {
         		clearCurrent: clearCurrent,
         		isFinished: true
@@ -197,14 +197,14 @@ Oskari.clazz.define(
          * @param {String} id
          * @param {object} options include:
          * 				 	{Boolean} clearCurrent: true - all selection will be removed from the map after stopping plugin, false - will keep selection on the map. Default is false.
-         * 					{Boolean} isFinished: true - if drawing is completed. Default is false. 					
+         * 					{Boolean} isFinished: true - if drawing is completed. Default is false.
          */
         sendDrawingEvent: function(id, options) {
         	var me = this;
         	var features = me.getFeatures(me._layerId);
         	var bufferedFeatures = me.getFeatures(me._bufferedFeatureLayerId);
         	var isFinished = false;
-        	
+
         	if(me._shape === 'Circle') {
 				bufferedFeatures = me.getCircleAsPolygonFeature(features);
 				features = me.getCircleAsPointFeature(features);
@@ -280,8 +280,8 @@ Oskari.clazz.define(
     	    	 geometryFunction = function (coordinates, geometry) {
 	    	    	 if (!geometry) {
 	    	    		  geometry = new ol.geom.LineString(null);
-	    	          }	    	    	
-	    	    	  geometry.setCoordinates(coordinates);	    	    	 
+	    	          }
+	    	    	  geometry.setCoordinates(coordinates);
 	    	    	  if (options.buffer > 0) {
 	    	    		  me.drawBufferedGeometry(geometry, options.buffer);
 	    	    	  }
@@ -313,18 +313,18 @@ Oskari.clazz.define(
 	    			 }
 	        	     me.sendDrawingEvent(me._id, optionsForDrawingEvent);
 	    			 return geometry;
-	    		 }    	    	 
+	    		 }
     	    } else if(shape === 'Polygon') {
-    	    	geometryFunction = function(coordinates, geometry) {    	    		
+    	    	geometryFunction = function(coordinates, geometry) {
     	    		if (!geometry) {
     	    			geometry = new ol.geom.Polygon(null);
     	    	    }
     	    		geometry.setCoordinates(coordinates);
-        	    	me.showText(this.sketchFeature_, me.getPolygonArea(geometry), options);    
+        	    	me.showText(this.sketchFeature_, me.getPolygonArea(geometry), options);
 	        	    me.sendDrawingEvent(me._id, optionsForDrawingEvent);
 	    			return geometry;
-	    		 }  
-    	    } 
+	    		 }
+    	    }
 
 	    	me._draw = new ol.interaction.Draw({
     		  features: me._drawLayers[layerId].getSource().getFeaturesCollection(),
@@ -333,16 +333,16 @@ Oskari.clazz.define(
     	      geometryFunction:  geometryFunction,
     	      maxPoints: maxPoints
 	    	});
-	    	
+
 	        me._map.addInteraction(me._draw);
-	  
+
 			me._draw.on('drawstart', function(evt) {
-				me._sketch = evt.feature;				
+				me._sketch = evt.feature;
 				if(options.allowMultipleDrawing !== true) {
 					me.clearDrawing();
 				}
-			});		       
-		
+			});
+
 		},
 		 /**
          * @method addModifyInteraction
@@ -353,7 +353,7 @@ Oskari.clazz.define(
          * @param {Object} options
          */
         addModifyInteraction : function(layerId, shape, options) {
-        	var me = this;        	
+        	var me = this;
         	me._modify = new ol.interaction.Modify({
      		   features: me._drawLayers[layerId].getSource().getFeaturesCollection(),
      		   style: me._styles['modify'],
@@ -361,7 +361,7 @@ Oskari.clazz.define(
      		        return ol.events.condition.shiftKeyOnly(event) && ol.events.condition.singleClick(event);
      		   }
      	   });
-	       me.modifyStartEvent(shape, options);	      
+	       me.modifyStartEvent(shape, options);
      	   me._map.addInteraction(me._modify);
         },
 
@@ -398,10 +398,10 @@ Oskari.clazz.define(
         				if(options.buffer > 0) {
             				me.drawBufferedGeometry(evt.feature.getGeometry(), options.buffer);
         				} else {
-                			me.showText(evt.feature, me.getLineLength(evt.feature.getGeometry()), options);        			
+                			me.showText(evt.feature, me.getLineLength(evt.feature.getGeometry()), options);
         				}
         			} else if(shape === 'Polygon') {
-            			me.showText(evt.feature, me.getPolygonArea(evt.feature.getGeometry()), options);        			
+            			me.showText(evt.feature, me.getPolygonArea(evt.feature.getGeometry()), options);
         			}
 				});
 			 });
@@ -410,7 +410,7 @@ Oskari.clazz.define(
          * @method showText
          * -  triggered upon feature modification start
          *
-         * @param {ol.Feature} feature 
+         * @param {ol.Feature} feature
          * @param {String} text, that will be displayed on feature
          * @param {Object} options
          */
@@ -587,7 +587,7 @@ Oskari.clazz.define(
 				jsonObject.properties = {};
 				if(buffer) {
 					jsonObject.properties.buffer = buffer;
-				} 
+				}
 				if(me.getLineLength(f.getGeometry())) {
 					jsonObject.properties.length = me.getLineLength(f.getGeometry());
 				}
@@ -647,7 +647,7 @@ Oskari.clazz.define(
 				_.each(features, function (f) {
 					f.buffer = buffer;
 				});
-			}	
+			}
 		},
 		/** Check, if nested key exists
 		* @method hasNestedObj
