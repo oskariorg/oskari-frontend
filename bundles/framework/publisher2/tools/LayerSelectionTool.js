@@ -141,7 +141,7 @@ function() {
      */
     getExtraOptions: function (toolContainer) {
         var me = this;
-            backgroundLayerSelector = me._templates.backgroundLayerSelector;
+            backgroundLayerSelector = me._templates.backgroundLayerSelector.clone();
         if(!me._backgroundLayerSelector) {
             backgroundLayerSelector.find('.header').html(me.__loc.layerselection.info);
             me._backgroundLayerSelector = backgroundLayerSelector;
@@ -151,7 +151,7 @@ function() {
                 me._addLayer(layer);
             }
         }
-        return backgroundLayerSelector;
+        return me._backgroundLayerSelector;
     },
     /**
      * @method hasPublishRight
@@ -242,7 +242,6 @@ function() {
             layer.selected = true;
         }
         input.change(closureMagic(layer));
-
         me._backgroundLayerSelector.find('.layers').append(layerDiv);
     },
     /**
