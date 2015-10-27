@@ -106,7 +106,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                             callback: function () {
                                 var rn = 'map_control_measure_tool';
                                 if (gfiReqBuilder) {
-                                    sandbox.request(me, gfiReqBuilder(false));
+                                    sandbox.request(me, gfiReqBuilder(rn));
                                 }
                                 sandbox.request(me, reqBuilder(rn));
                             }
@@ -120,7 +120,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                             callback: function () {
                                 var rn = 'map_control_measure_area_tool';
                                 if (gfiReqBuilder) {
-                                    sandbox.request(me, gfiReqBuilder(false));
+                                    sandbox.request(me, gfiReqBuilder(rn));
                                 }
                                 sandbox.request(me, reqBuilder(rn));
                             }

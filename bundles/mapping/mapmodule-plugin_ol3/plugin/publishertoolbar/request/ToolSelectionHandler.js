@@ -14,9 +14,9 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ToolSelectionHandler',
      *            controlsPlugin reference to controlsPlugin
      */
 
-    function (sandbox, controlsPlugin) {
+    function (sandbox, publisherToolbarPlugin) {
         this.sandbox = sandbox;
-        this.controlsPlugin = controlsPlugin;
+        this.publisherToolbarPlugin = publisherToolbarPlugin;
     }, {
         /**
          * @method handleRequest
@@ -29,14 +29,18 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ToolSelectionHandler',
          *      request to handle
          */
         handleRequest: function (core, request) {
+            var me = this;
             var toolId = request.getToolId();
             var namespace = request.getNamespace();
             var toolName = request.getToolName();
+            var drawReqBuilder = me.sandbox.getRequestBuilder(
+                    'DrawTools.StartDrawingRequest'
+                );
             var stateHandler;
             if (toolName === 'map_control_tool_prev') {
                 // custom history (TODO: more testing needed + do this with request
                 // instead of findRegisteredModuleInstance)
-                stateHandler = this.sandbox.findRegisteredModuleInstance('StateHandler');
+                stateHandler = me.sandbox.findRegisteredModuleInstance('StateHandler');
                 if (stateHandler) {
                     stateHandler.historyMovePrevious();
                 }
@@ -44,30 +48,28 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ToolSelectionHandler',
             } else if (toolName === 'map_control_tool_next') {
                 // custom history (TODO: more testing needed + do this with request
                 // instead of findRegisteredModuleInstance)
-                stateHandler = this.sandbox.findRegisteredModuleInstance('StateHandler');
+                stateHandler = me.sandbox.findRegisteredModuleInstance('StateHandler');
                 if (stateHandler) {
                     stateHandler.historyMoveNext();
                 }
             } else if (toolName === 'map_control_select_tool') {
                 // clear selected area
-                var slp = this.sandbox.findRegisteredModuleInstance('SketchLayerPlugin');
+                var slp = me.sandbox.findRegisteredModuleInstance('SketchLayerPlugin');
                 if (slp) {
                     slp.clearBbox();
                 }
-            } else if (toolName === 'map_control_zoom_tool' && this.controlsPlugin._zoomBoxTool) {
-                this.controlsPlugin._zoomBoxTool.activate();
+            } else if (toolName === 'map_control_zoom_tool' && me.controlsPlugin._zoomBoxTool) {
+                me.controlsPlugin._zoomBoxTool.activate();
             } else if (toolName === 'map_control_measure_tool') {
-                var type = 'LineString';
-                measurePlugin = this.sandbox.findRegisteredModuleInstance('MeasurePlugin');
-                if (measurePlugin) {
-                    measurePlugin.startMeasure(type);
-                }
-            } else if (toolName === 'map_control_measure_area_tool' && this.controlsPlugin._measureControls) {
-                var type = 'Polygon';
-                measurePlugin = this.sandbox.findRegisteredModuleInstance('MeasurePlugin');
-                if (measurePlugin) {
-                    measurePlugin.startMeasure(type);
-                };
+                var type = 'LineString',
+                    id = 'measureline';
+                me.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [id, type], {
+                                   allowMultipleDrawing: 'single'});
+            } else if (toolName === 'map_control_measure_area_tool') {
+                var type = 'Polygon',
+                    id = 'measurearea'
+                me.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [id, type], {
+                                   allowMultipleDrawing: 'single'});
             }
         }
     }, {
