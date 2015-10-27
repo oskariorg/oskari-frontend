@@ -43,8 +43,8 @@ Oskari.registerLocalization(
                 "tooltip": "Select a languge to be used on the map. It affects the user interface and text on the map."
             },
             "size": {
-                "label": "Map size",
-                "tooltip": "Select a map size. The width must be at least 30 pixels and the height at least 20 pixels. Use a dot as a decimal separator. Check updates in the map preview."
+                "label": "Map Size",
+                "tooltip": "Select preview mode."
             },
             "maptools": {
                 "label": "Tools",
