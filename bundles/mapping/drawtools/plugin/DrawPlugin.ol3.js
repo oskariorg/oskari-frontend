@@ -230,7 +230,7 @@ Oskari.clazz.define(
             	isFinished = options.isFinished;
             }
             var event = me._sandbox.getEventBuilder('DrawingEvent')(id, geojson, data, isFinished);
-//            console.log(geojson, data, isFinished);
+//            console.log(geojson);
 
             me._sandbox.notifyAll(event);
         },
@@ -337,12 +337,16 @@ Oskari.clazz.define(
 	        me._map.addInteraction(me._draw);
 
 			me._draw.on('drawstart', function(evt) {
-				me._sketch = evt.feature;
-				if(options.allowMultipleDrawing !== true) {
+				me._sketch = evt.feature;				
+				if(options.allowMultipleDrawing === 'single') {
 					me.clearDrawing();
+				} 
+			});
+			me._draw.on('drawend', function() {
+				if(options.allowMultipleDrawing === false) {
+					me.stopDrawing(me._id, false);
 				}
 			});
-
 		},
 		 /**
          * @method addModifyInteraction
@@ -555,13 +559,15 @@ Oskari.clazz.define(
 		getFeatures: function (layerId) {
 			var me = this,
 				features = [];
-			features = me._drawLayers[layerId].getSource().getFeatures();
-			if(features.length===0 && me._sketch) {
-				features = [];
-				features.push(me._sketch);
-			}
+				var featuresFromLayer = me._drawLayers[layerId].getSource().getFeatures();
+				_.each(featuresFromLayer, function (f) {
+					features.push(f);
+				});
+				if(me._sketch && layerId === 'DrawLayer') {
+					features.push(me._sketch);
+				}
 			return features;
-	    },
+		},
 	    /**
          * @method getFeaturesAsGeoJSON
          * - converts features to GeoJson
@@ -588,8 +594,8 @@ Oskari.clazz.define(
 				if(buffer) {
 					jsonObject.properties.buffer = buffer;
 				}
-				if(me.getLineLength(f.getGeometry())) {
-					jsonObject.properties.length = me.getLineLength(f.getGeometry());
+				if(length) {
+					jsonObject.properties.length = length;
 				}
 				if(area) {
 					jsonObject.properties.area = area;
