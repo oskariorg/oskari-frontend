@@ -39,7 +39,7 @@ Oskari.clazz.define(
                 sandbox = Oskari.getSandbox(sandboxName);
 
             // check configured requests/events
-            this._init(conf);
+            this.__init(conf);
 
             me.sandbox = sandbox;
             sandbox.register(this);
