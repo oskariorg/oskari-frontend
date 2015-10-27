@@ -9,61 +9,10 @@
 Oskari.clazz.define(
     'Oskari.mapframework.bundle.rpc.RemoteProcedureCallInstance',
     function () {
-        'use strict';
-        var me = this,
-            allowedEvents,
-            allowedFunctions,
-            allowedRequests;
-
-        if (!me.conf) {
-            me.conf = {};
-        }
-
-        allowedEvents = me.conf.allowedEvents;
-        allowedFunctions = me.conf.allowedfunctions;
-        allowedRequests = me.conf.allowedRequests;
-
-        if (allowedEvents === null || allowedEvents === undefined) {
-            allowedEvents = {
-                'AfterMapMoveEvent': true,
-                'MapClickedEvent': true,
-                'AfterAddMarkerEvent' : true,
-                'MarkerClickEvent' : true,
-                'RouteSuccessEvent': true
-            };
-        }
-
-        if (allowedFunctions === null || allowedFunctions === undefined) {
-            allowedFunctions = {
-                getAllLayers: true,
-                getMapPosition: true,
-                getSupportedEvents: true,
-                getSupportedFunctions: true,
-                getSupportedRequests: true,
-                getZoomRange: true
-            };
-        }
-
-        if (allowedRequests === null || allowedRequests === undefined) {
-            allowedRequests = {
-                'InfoBox.ShowInfoBoxRequest': true,
-                'MapModulePlugin.AddMarkerRequest': true,
-                'MapModulePlugin.GetFeatureInfoRequest': true,
-                'MapModulePlugin.MapLayerVisibilityRequest': true,
-                'MapModulePlugin.RemoveMarkersRequest': true,
-                'MapMoveRequest': true,
-                'ShowProgressSpinnerRequest': true,
-                'GetRouteRequest': true
-            };
-        }
-
-        me._allowedEvents = allowedEvents;
-        me._allowedFunctions = allowedFunctions;
-        me._allowedRequests = allowedRequests;
-        me._channel = null;
-        me._localization = {};
-        me.eventHandlers = {};
-        me.requestHandlers = {};
+        this._channel = null;
+        this._localization = {};
+        this.eventHandlers = {};
+        this.requestHandlers = {};
     },
     {
         /**
@@ -73,7 +22,6 @@ Oskari.clazz.define(
          * @return {string} the name for the component
          */
         getName: function () {
-            'use strict';
             return 'RPC';
         },
 
@@ -85,10 +33,13 @@ Oskari.clazz.define(
             'use strict';
             var me = this,
                 channel,
-                conf = this.conf,
+                conf = this.conf || {},
                 domain = me.conf.domain,
-                sandboxName = conf && conf.sandbox ? conf.sandbox : 'sandbox',
+                sandboxName = conf.sandbox ? conf.sandbox : 'sandbox',
                 sandbox = Oskari.getSandbox(sandboxName);
+
+            // check configured requests/events
+            this.__init(conf);
 
             me.sandbox = sandbox;
             sandbox.register(this);
@@ -181,7 +132,60 @@ Oskari.clazz.define(
             me._bindFunctions(channel);
             me._channel = channel;
         },
+        /**
+         * Initialize allowed requests/events/functions based on config
+         * @param  {Object} conf bundle configuration
+         */
+        __init : function(conf) {
+            var me = this;
+            // sanitize conf to prevent unnecessary errors
+            conf = conf || {};
+            var allowedEvents = conf.allowedEvents;
+            var allowedFunctions = conf.allowedfunctions;
+            var allowedRequests = conf.allowedRequests;
 
+            if (allowedEvents === null || allowedEvents === undefined) {
+                allowedEvents = {
+                    'AfterMapMoveEvent': true,
+                    'MapClickedEvent': true,
+                    'AfterAddMarkerEvent' : true,
+                    'MarkerClickEvent' : true,
+                    'RouteSuccessEvent': true,
+                    'UserLocationEvent': true
+                };
+            }
+
+            if (allowedFunctions === null || allowedFunctions === undefined) {
+                allowedFunctions = {
+                    getAllLayers: true,
+                    getMapPosition: true,
+                    getSupportedEvents: true,
+                    getSupportedFunctions: true,
+                    getSupportedRequests: true,
+                    getZoomRange: true,
+                    getMapBbox: true
+                };
+            }
+
+            if (allowedRequests === null || allowedRequests === undefined) {
+                allowedRequests = {
+                    'InfoBox.ShowInfoBoxRequest': true,
+                    'MapModulePlugin.AddMarkerRequest': true,
+                    'MapModulePlugin.GetFeatureInfoRequest': true,
+                    'MapModulePlugin.MapLayerVisibilityRequest': true,
+                    'MapModulePlugin.RemoveMarkersRequest': true,
+                    'MapMoveRequest': true,
+                    'ShowProgressSpinnerRequest': true,
+                    'GetRouteRequest': true,
+                    'MyLocationPlugin.GetUserLocationRequest': true
+                };
+            }
+            // TODO: try to get event/request builder for each of these to see that they really are supported!!
+
+            me._allowedEvents = allowedEvents;
+            me._allowedFunctions = allowedFunctions;
+            me._allowedRequests = allowedRequests;
+        },
 
         /**
          * @private @method _bindFunctions
@@ -272,6 +276,29 @@ Oskari.clazz.define(
                                 name : layer.getName()
                             };
                         });
+                    }
+                );
+            }
+
+            // bind get map bbox
+            if (me._allowedFunctions.getMapBbox) {
+                channel.bind(
+                    'getMapBbox',
+                    function (trans){
+                        if (!me._domainMatch(trans.origin)) {
+                            throw {
+                                error: 'invalid_origin',
+                                message: 'Invalid origin: ' + trans.origin
+                            };
+                        }
+
+                        var bbox = me.sandbox.getMap().getBbox();
+                        return {
+                            bottom: bbox.bottom,
+                            left: bbox.left,
+                            right: bbox.right,
+                            top: bbox.top
+                        }
                     }
                 );
             }

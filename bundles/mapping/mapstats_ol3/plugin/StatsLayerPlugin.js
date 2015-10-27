@@ -242,7 +242,7 @@ Oskari.clazz.define(
                     scales: layerScales,
                     isBaseLayer: false,
                     displayInLayerSwitcher: false,
-                    visible: true,
+                    visible: layer.isInScale(me.getSandbox().getMap().getScale()) && layer.isVisible(),
                     singleTile: true,
                     buffer: 0
                 });

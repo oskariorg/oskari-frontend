@@ -358,6 +358,15 @@ Oskari.clazz.define(
                 }, {
                     "type": "text/css",
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/resources/css/mylocation.css"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/mylocation/request/GetUserLocationRequest.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/mylocation/request/GetUserLocationRequestHandler.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/event/UserLocationEvent.js"
                 },
 
                 /**

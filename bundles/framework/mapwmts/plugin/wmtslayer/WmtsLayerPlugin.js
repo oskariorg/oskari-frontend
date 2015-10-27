@@ -126,7 +126,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
             var map = me.getMap();
             this.service.getCapabilitiesForLayer(layer, function(wmtsLayer) {
                     me.getSandbox().printDebug("[WmtsLayerPlugin] created WMTS layer " + wmtsLayer);
-                    
+
                     map.addLayer(wmtsLayer);
                     if (keepLayerOnTop) {
                         // use the index as it was when addMapLayer was called

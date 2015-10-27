@@ -216,7 +216,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
 
                 openLayer.opacity = layer.getOpacity() / 100;
                 openLayer.setVisibility(layer.isInScale(sandbox.getMap().getScale()) && layer.isVisible());
-                
+
                 me.getMap().addLayer(openLayer);
 
                 if (keepLayerOnTop) {

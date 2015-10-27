@@ -1,5 +1,12 @@
 # Release Notes
 
+## 1.34
+
+### rpc
+
+New function is enabled by default:
+- 'getMapBbox' gets current map bbox
+
 ## 1.33
 
 ### Sandbox/map layer service
@@ -52,6 +59,17 @@ Added marker transient property, if this is setted to true then marker is not sa
 ### core/maplayer-service
 
 No longer generates an empty default style for WMS-layers.
+
+### analysis 
+
+Improvements in analysis methods:
+
+Aggregate layout and z-index fixes in no storage case
+
+
+### divmanazer/grid
+
+Changes in formating numeric values in grid (max 2 digits in decimals and handle grid value as string when beginning with "0"
 
 ### publisher2
 

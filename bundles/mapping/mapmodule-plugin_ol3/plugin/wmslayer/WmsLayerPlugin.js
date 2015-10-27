@@ -125,7 +125,12 @@ Oskari.clazz.define(
                             'LAYERS' : wms.LAYERS,
                             'FORMAT' : wms.FORMAT
                         }
-                    })
+                    }),
+                    transparent: true,
+                    scales: layerScales,
+                    isBaseLayer: false,
+                    displayInLayerSwitcher: false,
+                    visible: layer.isInScale(this._sandbox.getMap().getScale()) && layer.isVisible()
                 });
 
                 this.mapModule.addLayer(layerImpl, _layer, layerIdPrefix + _layer.getId());
