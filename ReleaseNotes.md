@@ -7,6 +7,12 @@
 New function is enabled by default:
 - 'getMapBbox' gets current map bbox
 
+New event is enabled by default:
+- 'UserLocationEvent' notifies at a user geolocation has getted
+
+New request is enabled by default:
+- 'MyLocationPlugin.GetUserLocationRequest' requests to get user geolocation
+
 ## 1.33
 
 ### Sandbox/map layer service
