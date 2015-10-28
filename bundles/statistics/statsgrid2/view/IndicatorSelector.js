@@ -252,20 +252,21 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
          * Sets the given values as layer options
          */
         setLayers: function (layers) {
-            var layerList = layers.map(function(layer) {
+            var me = this,
+                layerList = layers.map(function(layer) {
                 // This is the item object expected by the __setSelectOptions.
                 return {
                     getId: function() {
                         return layer.layerId;
                     },
                     getName: function(lang) {
-                        return (this._locale.layers[layerId])?
-                                this._locale.layers[layerId]:
-                                layerId;
+                        return (me._locale.layers[layer.layerId])?
+                                me._locale.layers[layer.layerId]:
+                                layer.layerId;
                     }
                 };
             });
-            this.__setSelectOptions(this.__layerSelect, layerList, false);
+            me.__setSelectOptions(me.__layerSelect, layerList, false);
         },
 
         /**
@@ -330,6 +331,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
 
             me.__selectedIndicator = ds.getIndicators().getIndicator(id);
             me.__showIndicatorInfoButton(me.__selectedIndicator);
+            me.setLayers(me.__selectedIndicator.getLayers());
         },
 
         /**
