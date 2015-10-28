@@ -150,6 +150,14 @@ Oskari.registerLocalization({
         "filter": "Filter",
         "filterByValue": "By value",
         "filterByRegion": "By region",
+        "selectorPlaceholders": {
+            "year": "Choose a year",
+            "sex": "Choose a sex"
+        },
+        "selectors": {
+            "year": "Year",
+            "sex": "Sex"
+        },
 
         "selectRegionCategory": "Region categories:",
         "regionCatPlaceholder": "Choose a region category",

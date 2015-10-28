@@ -149,6 +149,14 @@ Oskari.registerLocalization({
         "filter": "Suodata",
         "filterByValue": "Arvoilla",
         "filterByRegion": "Alueilla",
+        "selectorPlaceholders": {
+            "year": "Valitse vuosi",
+            "sex": "Valitse sukupuoli"
+        },
+        "selectors": {
+            "year": "Vuosi",
+            "sex": "Sukupuoli"
+        },
 
         "selectRegionCategory": "Aluejako:",
         "regionCatPlaceholder": "Valitse aluejako",

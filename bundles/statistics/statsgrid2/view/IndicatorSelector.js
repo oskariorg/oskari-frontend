@@ -16,6 +16,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
         me.el = null;
         me.__selectedDataSource = null;
         me.__selectedIndicator = null;
+        me.__selectedLayer = null;
+        me.__selectedSelections = {};
         me.__dataSourceSelect = null;
         me.__indicatorSelect = null;
         me.__layerSelect = null;
@@ -81,6 +83,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
 
             me._createDataSourceSelect(el.find('select[name=datasource]').parent());
             me._createIndicatorSelect(el.find('select[name=indicator]').parent());
+            // FIXME: Layer must be selected last.
             me._createLayerSelect(el.find('select[name=layer]').parent());
             container.append(el);
             me.statisticsService.getDataSources(function (indicatorMetadata) {
@@ -273,19 +276,40 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
          * @method setSelections
          * Creates user indicator selector select inputs
          */
-        setSelections: function () {
-            if (this.getSelectedIndicator()) {
-                var optionsContainer = this.getIndicatorParamsContainer(),
-                    select;
+        setSelections: function (selectors) {
+            var me = this,
+                optionsContainer = this.getIndicatorParamsContainer()
+            if (selectors) {
                 optionsContainer.empty();
 
-                _.each(select, function (selector) {
-                    var selectorSelect = jQuery('<select name="selectors-' + selector.id + '"></select>');
-                    me._initSelectChosen(selectorSelect);
-                    _.each(selector.allowedValues, function (allowedValue) {
-                        this._addOption(allowedValue, allowedValue, selectorSelect);
+                _.each(selectors, function (selector) {
+                    var selectorCont = jQuery('<label><span></span><select name="selectors-' + selector.id + '"' +
+                            ' style="width: 300px;"></select></label>'),
+                        selectorSelect = selectorCont.find('select[name=selectors-' + selector.id + ']'),
+                        label = selectorCont.find('span'),
+                        selectorsList = selector.allowedValues.map(function(allowedValue) {
+                        return {
+                                getId: function() {
+                                    return allowedValue;
+                                },
+                                getName: function(lang) {
+                                    // TODO: Should we localize these?
+                                    return allowedValue;
+                                }
+                            };
                     });
-                    optionsContainer.append(selectorSelect);
+                    // if the value changes, fetch indicator meta data to the grid and to the map.
+                    selectorSelect.change(function (e) {
+                        var option = select.find('option:selected');
+                        me.__selectedSelections[selector.id] = option.val();
+                    });
+
+                    label.text(me._locale.selectors[selector.id]);
+                    me._initSelectChosen(selectorSelect);
+                    selectorSelect.attr('data-placeholder', me._locale.selectorPlaceholders[selector.id]);
+                    selectorSelect.attr('data-no_results', me._locale.noMatch);
+                    me.__setSelectOptions(selectorSelect, selectorsList, false);
+                    optionsContainer.append(selectorCont);
                     // Update chosen options. Don't really know why 'liszt' instead of chosen but the linked chosen version seems to use it.
                     // Apparently newer chosen versions use 'chosen', so keep that in mind if you update the library.
                     selectorSelect.trigger('liszt:updated');
@@ -307,6 +331,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
                 return;
             }
             me.__selectedDataSource = ds;
+            me.__selectedIndicator = null;
+            me.__selectedLayer = null;
+            me.__selectedSelections = {};
 
             //clear the selectors containers
             me.setIndicators(ds.getIndicators());
@@ -329,6 +356,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
                 value,
                 ds = me.getSelectedDatasource();
 
+            me.__selectedLayer = null;
+            me.__selectedSelections = {};
             me.__selectedIndicator = ds.getIndicators().getIndicator(id);
             me.__showIndicatorInfoButton(me.__selectedIndicator);
             me.setLayers(me.__selectedIndicator.getLayers());
@@ -350,10 +379,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
 
             me.__selectedLayer = id;
 
-            // FIXME: Fetch indicator data if all selectors are selected.
-            // Layer selection decides the add/remove button status
+            me.__selectedSelections = {};
+            me.setSelections(me.__selectedIndicator.getSelectors());
+
             me._updateAddRemoveButtonState();
-            me.__addRemoveButton.setEnabled(!!indicator);
             //me.deleteIndicatorInfoButton(container);
             //me.getStatsIndicatorMeta(container, indicatorId);
         },
@@ -367,7 +396,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
             return function () {
                 var option = selectorSelect.find('option:selected');
                 this.__selectors[id] = option.val();
-                // FIXME: Fetch indicator data if all selectors are selected.
+                me._updateAddRemoveButtonState();
             };
         },
 
@@ -391,6 +420,20 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
         _disableAddRemoveButton: function () {
             this.__addRemoveButton.setEnabled(false);
         },
+        /**
+         * Checks if all the required values for the specific indicator are selected.
+         */
+        _selectionsOk: function() {
+            var ok = true,
+              me = this;
+            _.each(me.__selectorsSelects, function(selection) {
+                if (!selection.find('option:selected')) {
+                    // If a selection box exists that does not have a value selected, then this is not fine.
+                    ok = false;
+                }
+            });
+            return ok;
+        },
 
         /**
          * @method _updateAddRemoveButtonState
@@ -401,17 +444,24 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
             var me = this,
                 buttonTitle,
                 loc = me._locale,
-                primary = true,
-                selections = me.getSelections();
+                primary = true;
 
-            if (!selections.indicator || !me._indicatorRegionSupported(selections)) {
-                // no indicator selected
+            if (!me.__selectedDataSource ||
+                !me.__selectedIndicator ||
+                !me.__selectedLayer ||
+                !me._selectionsOk()) {
+                // no datasource, indicator, layer, or selections selected.
                 // set button to add
                 buttonTitle = loc.addColumn;
                 // disable button
                 me._disableAddRemoveButton();
             } else {
-                if (me.userSelectionService.isIndicatorSelected(selections)) {
+                if (me.userSelectionService.isIndicatorSelected(
+                        me.__selectedDataSource,
+                        me.__selectedIndicator,
+                        me.__selectedLayer,
+                        me.__selectedSelections
+                        )) {
                     // selection is already active
                     // set button to remove
                     buttonTitle = loc.removeColumn;
