@@ -222,7 +222,7 @@ Oskari.clazz.define(
                 bufferedGeoJson: bufferedGeoJson,
                 shape: me._shape
             };
-            if(options.clearCurrent) {
+            if(options.clearCurrent === true) {
                 // TODO: clear the drawing matching the id from map
             	me.clearDrawing();
             }
@@ -230,7 +230,7 @@ Oskari.clazz.define(
             	isFinished = options.isFinished;
             }
             var event = me._sandbox.getEventBuilder('DrawingEvent')(id, geojson, data, isFinished);
-//            console.log(geojson);
+            console.log(geojson);
 
             me._sandbox.notifyAll(event);
         },
@@ -407,6 +407,7 @@ Oskari.clazz.define(
         			} else if(shape === 'Polygon') {
             			me.showText(evt.feature, me.getPolygonArea(evt.feature.getGeometry()), options);
         			}
+        			me.sendDrawingEvent(me._id, options);
 				});
 			 });
         },
