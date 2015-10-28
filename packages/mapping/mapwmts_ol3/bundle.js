@@ -8,7 +8,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.MapWmtsBundle", function() {
 	 */
 	"create" : function() {
 
-		return Oskari.clazz.create("Oskari.mapframework.bundle.MapWmtsBundleInstance");
+		return null;
 	},
 	"update" : function(manager, bundle, bi, info) {
 		manager.alert("RECEIVED update notification " + info);
@@ -38,9 +38,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.MapWmtsBundle", function() {
 		}, {
 			"type" : "text/javascript",
 			"src" : "../../../bundles/mapping/mapwmts_ol3/service/WmtsLayerModelBuilder.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../bundles/mapping/mapwmts_ol3/instance.js"
 		}],
 		"resources" : []
 	},

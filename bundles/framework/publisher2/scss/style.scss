@@ -136,7 +136,7 @@ div.basic_publisher {
 
     > div.content {
         overflow: auto;
-        height: 89%;
+        height: calc(100% - 108px);
     }
 
     > div.header {
@@ -152,7 +152,6 @@ div.basic_publisher {
     .layer.selected {
         border: 1pt solid #c0d0e0;
         margin: 0 5px 5px 0;
-        height: unquote("70px\9"); /*IE9 */ 
 
         &.out-of-scale,
         &.out-of-content,

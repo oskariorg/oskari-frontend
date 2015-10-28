@@ -8,7 +8,7 @@ Oskari.registerLocalization(
         "desc": "",
         "btnTooltip": "Analysis",
         "NotLoggedView": {
-            "text": "Only logged user can create analysis.",
+            "text": "You have to be logged in to use analysis.",
             "signup": "Log in",
             "signupUrl": "/web/en/login",
             "register": "Register",
@@ -187,7 +187,7 @@ Oskari.registerLocalization(
                     },
                     {
                         "id": "oskari_analyse_NoDataCnt",
-                        "label": "The number of authorised features"
+                        "label": "The number of unauthorised features"
                     }
                 ],
                 "attribute": "Select the attribute",

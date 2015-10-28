@@ -94,6 +94,16 @@ function() {
             }
         };
     },
+    /**
+    * Is the tool toggled on by default.
+    * @method isDefaultTool
+    * @public
+    *
+    * @returns {Boolean} is the tool toggled on by default.
+    */
+    isDefaultTool: function() {
+        return true;
+    },
 
     isColourDialogOpen: false,
 
@@ -141,14 +151,16 @@ function() {
 
         if(me.state.enabled) {
             return {
-                mapfull: {
-                    conf: {
-                        plugins: [{
-                            id: this.getTool().id,
-                            config: {
-                                colourScheme: me.values.colourScheme || {}
-                            }
-                        }]
+                configuration: {
+                    mapfull: {
+                        conf: {
+                            plugins: [{
+                                id: this.getTool().id,
+                                config: {
+                                    colourScheme: me.values.colourScheme || {}
+                                }
+                            }]
+                        }
                     }
                 }
             };
@@ -569,6 +581,20 @@ function() {
         if (eventBuilder) {
             evt = eventBuilder(eventData);
             this.__sandbox.notifyAll(evt);
+        }
+    },
+    /**
+    * Stop tool.
+    * @method stop
+    * @public
+    */
+    stop: function(){
+        var me = this;
+        if(me.__plugin) {
+            if (me.__sandbox && me.__plugin.getSandbox()) {
+                me.__plugin.stopPlugin(me.__sandbox);
+            }
+            me.__mapmodule.unregisterPlugin(me.__plugin);
         }
     }
 }, {

@@ -8,24 +8,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddFeaturesToM
      * @method create called automatically on construction
      * @static
      *
-     * @param {String/OpenLayers.Format.GeoJSON} geometry the geometry
-     * @param {String} geometryType geometry type, WKT or GeoJSON
-     * @param {Object} attributes the attributes
-     * @param {Oskari.mapframework.domain.VectorLayer} layer the layer
-     * @param {String} operation the operation, supported: 'replace'
-     * @param {Boolean} keepLayerOnTop keep layer on top
-     * @param {OpenLayers.Style} style the features style
+     * @param {Object} geometry the geometry WKT string or GeoJSON object
+     * @param {String} geometryType the geometry type. Supported formats are: WKT and GeoJSON.
+     * @param {String} layerId Id of the layer where features will be added. If not given, will create new vector layer
+     * @param {String} operation layer operations. Supported: replace.
+     * @param {Boolean} keepLayerOnTop. If true add layer on the top. Default true.
+     * @param {ol.layer.Vector options} layerOptions options for layer.
+     * @param {ol.style.Style} featureStyle Style for the feature. This can be a single style object, an array of styles, or a function that takes a resolution and returns an array of styles.
      * @param {Boolean} centerTo center map to features. Default true.
      */
-    function (geometry, geometryType, attributes, layer, operation, keepLayerOnTop, style, centerTo) {
+    function (geometry, geometryType, layerId, operation, keepLayerOnTop, layerOptions, featureStyle, centerTo) {
         this._creator = null;
         this._geometry = geometry;
         this._geometryType = geometryType;
-        this._attributes = attributes;
-        this._layer = layer;
+        this._layerId = layerId;
         this._operation = operation; // supported now: 'replace'
-        this._style = style;
+        this._layerOptions = layerOptions;
         this._centerTo = centerTo;
+        this._featureStyle = featureStyle;
         this._keepLayerOnTop = keepLayerOnTop;
     }, {
         /** @static @property __name request name */
@@ -52,18 +52,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddFeaturesToM
             return this._geometryType;
         },
         /**
-         * @method getAttributes
-         * @return {Object} attributes object
+         * @method getLayerId
+         * @return {String} layerId
          */
-        getAttributes: function(){
-            return this._attributes;
-        },
-        /**
-         * @method getLayer
-         * @return {Oskari.mapframework.domain.VectorLayer} layer
-         */
-        getLayer: function(){
-            return this._layer;
+        getLayerId: function(){
+            return this._layerId;
         },
         /**
          * @method getOperation
@@ -80,11 +73,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddFeaturesToM
             return this._keepLayerOnTop;
         },
         /**
-         * @method getStyle
-         * @return {OpenLayers.Style} sld style
+         * @method getLayerOptions
+         * @return {ol.layer.Vector options} layer options
          */
-        getStyle: function(){
-            return this._style;
+        getLayerOptions: function(){
+            return this._layerOptions;
+        },
+        /**
+         * @method getLayerOptions
+         * @return {ol.layer.Vector options} layer options
+         */
+        getFeatureStyle: function(){
+            return this._featureStyle;
         },
         /**
          * @method getCenterTo

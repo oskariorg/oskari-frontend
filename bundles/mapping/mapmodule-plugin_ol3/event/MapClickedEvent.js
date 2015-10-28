@@ -11,11 +11,13 @@ Oskari.clazz.define(
      * @param {OpenLayers.LonLat} lonlat coordinates where the map was clicked
      * @param {Number} mouseX viewport mouse position x coordinate when click happened
      * @param {Number} mouseY viewport mouse position y coordinate when click happened
+     * @param {Boolean} CtrlDown true if Ctrl was pressed hwne clicked
      */
-    function (lonlat, mouseX, mouseY) {
+    function (lonlat, mouseX, mouseY, CtrlDown) {
         this._lonlat = lonlat;
         this._mouseX = mouseX;
         this._mouseY = mouseY;
+        this._ctrlPressed = CtrlDown;
     }, {
         /** @static @property __name event name */
         __name: "MapClickedEvent",
@@ -47,13 +49,21 @@ Oskari.clazz.define(
         getMouseY: function () {
             return this._mouseY;
         },
+        /**
+         * @method getCtrlPressed
+         * @return {Boolean}
+         */
+        getCtrlPressed: function () {
+            return this._ctrlPressed;
+        },
 
         getParams: function () {
             return {
                 lon: this._lonlat ? this._lonlat.lon : null,
                 lat: this._lonlat ? this._lonlat.lat : null,
                 x: this._mouseX,
-                y: this._mouseY
+                y: this._mouseY,
+                ctrlPressed: this._ctrlPressed
             };
         }
     }, {

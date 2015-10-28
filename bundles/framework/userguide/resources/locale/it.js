@@ -3,22 +3,52 @@ Oskari.registerLocalization(
     "lang": "it",
     "key": "userinterface.UserGuide",
     "value": {
-        "title": "Help",
+        "title": "Aiuto",
         "desc": "",
         "flyout": {
-            "title": "User Guide",
-            "loadingtxt": "<p>Loading the guide...</p>"
+            "title": "Guida utente",
+            "loadingtxt": "<p> Caricamento della guida ... </ p>"
         },
         "tile": {
-            "title": "User Guide"
+            "title": "Guida utente"
         },
         "error": {
-            "title": "Error!",
-            "generic": "Loading user guide failed. Please try again later."
+            "title": "Errore!",
+            "generic": "Caricamento della guida utente fallito. Si prega di riprovare più tardi."
         },
+        "tabs": [
+            {
+                "title": "Finestra della mappa",
+                "tags": "Finestra della mappa, guida utente"
+            },
+            {
+                "title": "NOT TRANSLATED",
+                "tags": "NOT TRANSLATED"
+            },
+            {
+                "title": "NOT TRANSLATED",
+                "tags": "NOT TRANSLATED"
+            },
+            {
+                "title": "NOT TRANSLATED",
+                "tags": "NOT TRANSLATED"
+            },
+            {
+                "title": "NOT TRANSLATED",
+                "tags": "NOT TRANSLATED"
+            },
+            {
+                "title": "NOT TRANSLATED",
+                "tags": "NOT TRANSLATED"
+            },
+            {
+                "title": "NOT TRANSLATED",
+                "tags": "NOT TRANSLATED"
+            }
+        ],
         "help": {
-            "tags": "map window,user guide",
-            "contentPart": "body"
+            "tags": "Finestra della mappa, guida utente",
+            "contentPart": "corpo"
         }
     }
 }

@@ -327,6 +327,10 @@ Oskari.clazz.define(
                 json = JSON.parse(selection);
 
             json.crs = this._getSRS();
+
+            // add resolution based buffer - handled in server side
+            var pixelTolerance = 15;
+            json.features[0].properties.buffer_radius = this.getMap().getResolution() * pixelTolerance;
             return json;
         },
 

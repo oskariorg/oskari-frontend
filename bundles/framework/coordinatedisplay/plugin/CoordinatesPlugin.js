@@ -12,6 +12,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatedisplay.plugin.Coordin
     function (config, locale) {
         // FIXME see if the inherited ._loc would work...
         this._locale = locale;
+        this._config = config;
         this._clazz =
             'Oskari.mapframework.bundle.coordinatedisplay.plugin.CoordinatesPlugin';
         this._defaultLocation = 'top right';
@@ -59,20 +60,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatedisplay.plugin.Coordin
          * Updates the given coordinates to the UI
          */
         refresh: function (data) {
-            var me = this;
+            var me = this,
+                conf = me._config,
+                roundToDecimals = 0;
+
+            if(conf && conf.roundToDecimals) {
+                roundToDecimals = conf.roundToDecimals;
+            }
+
             if (!data || !data.latlon) {
                 // update with map coordinates if coordinates not given
                 var map = me.getSandbox().getMap();
                 data = {
                     'latlon': {
-                        'lat': Math.floor(map.getY()),
-                        'lon': Math.floor(map.getX())
+                        'lat': parseFloat(map.getY()),
+                        'lon': parseFloat(map.getX())
                     }
                 };
             }
             if (me._latEl && me._lonEl) {
-                me._latEl.innerHTML = Math.floor(data.latlon.lat);
-                me._lonEl.innerHTML = Math.floor(data.latlon.lon);
+                me._latEl.innerHTML = data.latlon.lat.toFixed(roundToDecimals);
+                me._lonEl.innerHTML = data.latlon.lon.toFixed(roundToDecimals);
             }
         },
 
@@ -85,8 +93,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatedisplay.plugin.Coordin
                 MouseHoverEvent: function (event) {
                     this.refresh({
                         'latlon': {
-                            'lat': Math.floor(event.getLat()),
-                            'lon': Math.floor(event.getLon())
+                            'lat': parseFloat(event.getLat()),
+                            'lon': parseFloat(event.getLon())
                         }
                     });
                 },

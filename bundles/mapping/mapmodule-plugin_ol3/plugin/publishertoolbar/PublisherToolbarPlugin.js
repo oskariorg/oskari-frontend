@@ -136,7 +136,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                     'Oskari.mapframework.bundle.toolbar.request.ToolContainerRequestHandler',
                     this
                 ),
-                'ToolSelectionRequest' : Oskari.clazz.create('Oskari.mapframework.mapmodule.ToolSelectionHandler', sandbox, me)
+                'ToolSelectionRequest': Oskari.clazz.create(
+                    'Oskari.mapframework.mapmodule.ToolSelectionHandler',
+                    this.getSandbox(),
+                    this
+                )
             };
         },
 

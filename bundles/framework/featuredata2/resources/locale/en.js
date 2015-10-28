@@ -144,6 +144,11 @@ Oskari.registerLocalization({
                     "boolean_operator_missing": "The logical operator is missing."
                 }
             }
+        },
+        "gridFooter": {
+                "aggregateColumnField": "Count",
+                "noDataMessage": "Count = Number of features without unauthorized features",
+                "noDataCommonMessage": "There are unauthorized feature values in the data"
         }
     }
 });

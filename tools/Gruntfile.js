@@ -129,6 +129,12 @@ module.exports = function (grunt) {
                 src: ['../bundles/*/*/']
             }
         },
+        genL10nEmptyExcels: {
+            target: {
+                expand: true,
+                src: ['../bundles/*/*/']
+            }
+        },
         compress: {
             zip: {
                 options: {
@@ -177,6 +183,11 @@ module.exports = function (grunt) {
                 encoding: 'utf8',
                 failIfTrimmed: false
               }
+            }
+        },
+        localizationJSCleanup: {
+            target: {
+                src: ['../bundles/**/locale/*.js']
             }
         }
     });
