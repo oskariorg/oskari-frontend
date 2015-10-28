@@ -329,7 +329,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
                 ds = me.getSelectedDatasource();
 
             me.__selectedIndicator = ds.getIndicators().getIndicator(id);
-            me.__showIndicatorInfoButton(indicator);
+            me.__showIndicatorInfoButton(me.__selectedIndicator);
         },
 
         /**
@@ -444,7 +444,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
             var me = this,
                 infoIcon = jQuery(me._templates.infoIcon),
                 indicatorCont = me.el.find('.indicator-cont > label:last-of-type > span'),
-                meta = indicator.getMetadata();
+                source = indicator.getSource(),
+                description = indicator.getDescription();
             // append this indicator
             indicatorCont.append(infoIcon);
 
@@ -454,10 +455,12 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
                     desc = jQuery(me._templates.metadataPopup);
 
                 desc.find('h4.indicator-msg-popup-title').append(me._locale.stats.descriptionTitle);
-                desc.find('p.indicator-msg-popup-title').append(meta.description[lang]);
+                desc.find('p.indicator-msg-popup-title').append(
+                        me.getLocalizationFrom(description, "", lang));
                 desc.find('h4.indicator-msg-popup-source').append(me._locale.stats.sourceTitle);
-                desc.find('p.indicator-msg-popup-source').append(meta.organization.title[lang]);
-                me.showMessage(meta.title[lang], desc);
+                desc.find('p.indicator-msg-popup-source').append(
+                        me.getLocalizationFrom(source, "", lang));
+                me.showMessage(me.getLocalizationFrom(indicator.getName(), "", lang), desc);
             });
         },
 
