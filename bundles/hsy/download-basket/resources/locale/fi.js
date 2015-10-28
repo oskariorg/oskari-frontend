@@ -46,7 +46,7 @@ Oskari.registerLocalization({
                 "check-form-error" : "Tarkista",
                 "error-in-downloading" : "Aineistojen lataus epäonnistui",
                 "basket-thank-you" : "Kiitos latauksesta!",
-                "basket-email-will-be" : "Ilmoittamaasi sähköpostisoitteeseen lähetetään linkki, josta voit käydä lataamassa aineistot."
+                "basket-email-will-be" : "Ilmoittamaasi sähköpostisoitteeseen lähetetään linkki, josta voit käydä lataamassa aineistot. Latauslinkin lähettäminen saattaa kestää hieman, jos ladattavat aineistot ovat kooltaan suuria."
             }
         }
     }

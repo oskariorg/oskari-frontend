@@ -72,6 +72,7 @@ Oskari.clazz.define(
                 jQuery('.oskari__download-basket-wrapper').find('.empty-basket').show();
                 jQuery('.oskari__download-basket-buttons').find('input.empty').hide();
                 jQuery('.oskari__download-basket-buttons').find('input.next').hide();
+                jQuery('.cropping-btn.selected').trigger('click');
                 me.instance.addBasketNotify();
             });
             empty.insertTo(me._templates.basketButtons);
@@ -171,6 +172,7 @@ Oskari.clazz.define(
                             jQuery('.oskari__download-basket-buttons').find('input.prev').trigger('click');
                             jQuery('.oskari__download-basket-buttons').find('input.empty').trigger('click');
                             jQuery('.oskari__download-basket').parents('.oskari-flyoutcontentcontainer').find('.tabsItem>li>a').eq(0).trigger('click');
+                            jQuery('.cropping-btn.selected').trigger('click');
                             dialog.close();
                         });
                         btn.addClass('primary');
