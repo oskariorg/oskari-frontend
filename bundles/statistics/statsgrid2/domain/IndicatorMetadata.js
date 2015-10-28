@@ -4,7 +4,11 @@
  * 
  * {
  *   "source": {...},
- *   "selectors": {...},
+ *   "selectors": [{
+ *     "id": "Year",
+ *     "allowedValues": ["2010", ...]
+ *     },
+ *     ...],
  *   "description": {...},
  *   "layers":[
  *     // FIXME: Localize the layerIds for the dropdown.
@@ -24,25 +28,34 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.domain.IndicatorMetadata
 function(data) {
 	this.data = data || {};
 }, {
+    /**
+     * @return {LocalizedString}
+     */
     getSource : function() {
-        return data.source;
+        return Oskari.clazz.create(
+                'Oskari.statistics.bundle.statsgrid.domain.LocalizedString',
+                this.data.source);
     },
     getSelectors : function() {
-        return data.selectors;
+        return this.data.selectors;
     },
     /**
-     * @return {String}
+     * @return {LocalizedString}
      */
     getDescription : function() {
-        return data.description;
+        return Oskari.clazz.create(
+                'Oskari.statistics.bundle.statsgrid.domain.LocalizedString',
+                this.data.description);
     },
     getLayers : function() {
-        return data.layers;
+        return this.data.layers;
     },
     /**
      * @return {LocalizedString}
      */
     getName : function() {
-        return data.name;
+        return Oskari.clazz.create(
+                'Oskari.statistics.bundle.statsgrid.domain.LocalizedString',
+                this.data.name);
     }
 });

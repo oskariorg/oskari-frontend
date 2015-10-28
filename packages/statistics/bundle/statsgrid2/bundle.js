@@ -42,13 +42,22 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
                 "src": "../../../../bundles/statistics/statsgrid2/view/GridHelper.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/statsgrid2/domain/DataSource.js"
+                "src": "../../../../bundles/statistics/statsgrid2/domain/IndicatorMetadata.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/statsgrid2/domain/Indicator.js"
+                "src": "../../../../bundles/statistics/statsgrid2/domain/IndicatorsMetadata.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/statistics/statsgrid2/domain/LocalizedString.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/statistics/statsgrid2/domain/RegionCategory.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/statistics/statsgrid2/domain/SourceMetadata.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/statistics/statsgrid2/domain/SourcesMetadata.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/statistics/statsgrid2/service/StatisticsService.js"

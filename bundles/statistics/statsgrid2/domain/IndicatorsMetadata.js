@@ -5,7 +5,7 @@
  * {
  *   "1411":{
  *     "source": {...},
- *     "selectors": {...},
+ *     "selectors": [...],
  *     "description": {...},
  *     "layers":[
  *       // FIXME: Localize the layerIds for the dropdown.
@@ -40,6 +40,6 @@ function(data) {
     getIndicator : function(id) {
         return Oskari.clazz.create(
             'Oskari.statistics.bundle.statsgrid.domain.IndicatorMetadata',
-            this.data[id]);
+            this.data[id.toString()]);
     }
 });

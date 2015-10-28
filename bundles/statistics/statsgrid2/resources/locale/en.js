@@ -42,6 +42,7 @@ Oskari.registerLocalization({
         "addColumn": "Get data",
         "removeColumn": "Remove",
         "indicators": "Indicator",
+        "layers": "Layer",
         "cannotDisplayIndicator": "The indicator does not have values on the selected region category so it cannot be displayed in the grid.",
         "availableRegions": " The following region categories have values on the indicator: ",
         "year": "Year",
@@ -114,6 +115,13 @@ Oskari.registerLocalization({
                 "min": "Smallest value of the indicator",
                 "std": "Standard deviation of the indicator",
                 "sum": "The total sum of the indicator values"
+            },
+            "plugins": {
+                "fi.nls.oskari.control.statistics.plugins.sotka.plugin_name": "SotkaNET"
+            },
+            "selector": {
+                "Year": "Year",
+                "Sex": "Sex"
             }
         },
         "noIndicatorData": "Can not display indicator with selected region category",

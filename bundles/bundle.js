@@ -262,10 +262,10 @@ Oskari = (function () {
      * 'dev' adds ?ts=<instTs> parameter to js loads 'default' does not add
      * 'static' assumes srcs are already loaded <any-other> is assumed as a
      * request to load built js packs using this path pattern
-     * .../<bundles-path>/<bundle-name>/build/<any-ohther>.js
+     * .../<bundles-path>/<bundle-name>/build/<any-other>.js
      */
     var supportBundleAsync = false,
-        mode = 'dev',
+        mode = 'default',
         // 'static' / 'dynamic'
         instTs = new Date().getTime(),
         basePathForBundles = null,
@@ -296,9 +296,9 @@ Oskari = (function () {
              */
             dev: function (fileName, basePath) {
                 if (basePathForBundles) {
-                    return basePathForBundles + fileName + '?ts=' + instTs;
+                    return basePathForBundles + fileName;
                 }
-                return fileName + '?ts=' + instTs;
+                return fileName;
             }
         };
 

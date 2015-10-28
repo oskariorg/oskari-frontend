@@ -29,11 +29,12 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
                       '<div class="indicator-cont">' +
                           // At least these values must be selected for every indicator.
                           // Additionally some indicator-dependent selectors might be needed.
-                          '<label><span></span><select name="datasource"></select></label>' +
-                          '<label><span></span><select name="indicator"></select></label>' +
-                          '<label><span></span><select name="layer"></select></label>' +
+                          // Note that Chosen-select is used here.
+                          '<label><span></span><select name="datasource" style="width: 300px;"></select></label>' +
+                          '<label><span></span><select name="indicator" style="width: 300px;"></select></label>' +
+                          '<label><span></span><select name="layer" style="width: 300px;"></select></label>' +
                           // the optional selectors will be populated here when the above have been selected.
-                          '<div id="selectors-div"></div>' +
+                          '<div name="selectors-div"></div>' +
                       '</div><div class="parameters-cont"></div><div class="buttons-cont"></div>' +
                   '</form>',
             'selector': '<label><span></span><select></select></label>',
@@ -58,11 +59,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
                 sandbox = me.statisticsService.getSandbox();
 
             me.el = el;
-            var plugInIds = Object.keys(this.indicatorMetadata);
-            plugInIds.forEach(function(plugInId) {
-                var localizationKey = this.indicatorMetadata[plugInId].localizationKey;
-                var sourceName = me._locale[localizationKey];
-            }
             // Add column button adds the selected indicator (with selectors applied) to the grid as a column.
             btn.setTitle(me._locale.addColumn);
             btn.setHandler(function (event) {
@@ -83,9 +79,27 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
             // The button will be enabled when all the required selections are selected.
             btn.setEnabled(false);
 
-            me.statisticsService.getDataSources(function (dsList) {
-                me._createDataSourceSelect(el.find('select[name=datasource]').parent());
-                container.append(el);
+            me._createDataSourceSelect(el.find('select[name=datasource]').parent());
+            me._createIndicatorSelect(el.find('select[name=indicator]').parent());
+            me._createLayerSelect(el.find('select[name=layer]').parent());
+            container.append(el);
+            me.statisticsService.getDataSources(function (indicatorMetadata) {
+                me._indicatorMetadata = indicatorMetadata;
+                var dsList = indicatorMetadata.getPluginIds().map(function(pluginId) {
+                    // This is the item object expected by the setDataSources and other similar methods.
+                    return {
+                        getId: function() {
+                            return pluginId;
+                        },
+                        getName: function(lang) {
+                            // Note: lang is not needed here.
+                            var localizationKey = indicatorMetadata.getPlugin(pluginId).getLocalizationKey();
+                            return me._locale.statistic.plugins[localizationKey] ?
+                                    me._locale.statistic.plugins[localizationKey] :
+                                        localizationKey;
+                        }
+                    };
+                });
                 me.setDataSources(dsList, true);
             });
         },
@@ -109,9 +123,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
 
             select.attr('data-placeholder', me._locale.selectDataSource);
             select.attr('data-no_results', me._locale.noDataSource);
-            me._initSelectChosen(select);
-
             me.__dataSourceSelect = select;
+            me._initSelectChosen(select);
         },
 
         /**
@@ -124,25 +137,49 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
             var me = this,
                 label = container.find('span'),
                 select = container.find('select');
-            label.append(me._locale.indicators);
+            label.text(me._locale.indicators);
 
-            // if the value changes, fetch indicator meta data
-            select.change(function (e) {
-                var option = select.find('option:selected'),
-                    isOwn = option.attr('data-isOwnIndicator');
-                me.changeIndicator(option.val(), (isOwn === 'true'));
+            select.on('change', function (e) {
+                me.changeIndicator(e.target.value);
             });
-
             select.attr('data-placeholder', me._locale.selectIndicator);
             select.attr('data-no_results', me._locale.noMatch);
 
-            // we use chosen to create autocomplete version of indicator select element.
-            me._initSelectChosen(select);
             // used when populating later on
             me.__indicatorSelect = select;
+            // we use chosen to create autocomplete version of indicator select element.
+            me._initSelectChosen(select);
             // this gives indicators more space to show title on dropdown
             //container.find('.chzn-drop').css('width', '298px');
             //container.find('.chzn-search input').css('width', '263px');
+        },
+
+        /**
+         * Create layer drop down select
+         * @private
+         * @method _createLayerSelect
+         * @param {DOMElement} container
+         */
+        _createLayerSelect: function (container) {
+            var me = this,
+                label = container.find('span'),
+                select = container.find('select');
+            label.text(me._locale.layers);
+
+            // if the value changes, fetch indicator meta data to the grid and to the map.
+            select.change(function (e) {
+                var option = select.find('option:selected'),
+                    isOwn = option.attr('data-isOwnIndicator');
+                me.changeLayer(option.val(), (isOwn === 'true'));
+            });
+
+            select.attr('data-placeholder', me._locale.regionCatPlaceholder);
+            select.attr('data-no_results', me._locale.noMatch);
+
+            // used when populating later on
+            me.__layerSelect = select;
+            // we use chosen to create autocomplete version of layer select element.
+            me._initSelectChosen(select);
         },
 
         /**
@@ -168,17 +205,92 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
          */
         setDataSources: function (items) {
             this.__setSelectOptions(this.__dataSourceSelect, items, true);
-            this.setIndicators([]);
         },
 
+        getLocalizationFrom: function(localizedNames, fallback, lang) {
+            var name = localizedNames.getLocalization(lang);
+            if (!name) {
+                name = localizedNames.getLocalization("fi");
+            }
+            if (!name) {
+                name = localizedNames.getLocalization("en");
+            }
+            if (!name) {
+                if (Object.keys(localizedNames) > 0) {
+                    // Taking the first one.
+                    name = localizedNames[localizedNames.getLocalizationKeys()[0]];
+                } else {
+                    name = indicatorId;
+                }
+            }
+            return name;
+        },
         /**
          * @method setIndicators
          * @param {Array} indicators
          * Sets the given values as indicator options
          */
         setIndicators: function (indicators) {
-            this.__setSelectOptions(this.__indicatorSelect, indicators, false);
-            this.changeIndicator();
+            var me = this,
+                indicatorList = indicators.getIndicatorIds().map(function(indicatorId) {
+                // This is the item object expected by the __setSelectOptions.
+                return {
+                    getId: function() {
+                        return indicatorId;
+                    },
+                    getName: function(lang) {
+                        return me.getLocalizationFrom(indicators.getIndicator(indicatorId).getName(), indicatorId, lang);
+                    }
+                };
+            });
+            this.__setSelectOptions(this.__indicatorSelect, indicatorList, false);
+        },
+
+        /**
+         * @method setLayers
+         * @param {Array} layers
+         * Sets the given values as layer options
+         */
+        setLayers: function (layers) {
+            var layerList = layers.map(function(layer) {
+                // This is the item object expected by the __setSelectOptions.
+                return {
+                    getId: function() {
+                        return layer.layerId;
+                    },
+                    getName: function(lang) {
+                        return (this._locale.layers[layerId])?
+                                this._locale.layers[layerId]:
+                                layerId;
+                    }
+                };
+            });
+            this.__setSelectOptions(this.__layerSelect, layerList, false);
+        },
+
+        /**
+         * @method setSelections
+         * Creates user indicator selector select inputs
+         */
+        setSelections: function () {
+            if (this.getSelectedIndicator()) {
+                var optionsContainer = this.getIndicatorParamsContainer(),
+                    select;
+                optionsContainer.empty();
+
+                _.each(select, function (selector) {
+                    var selectorSelect = jQuery('<select name="selectors-' + selector.id + '"></select>');
+                    me._initSelectChosen(selectorSelect);
+                    _.each(selector.allowedValues, function (allowedValue) {
+                        this._addOption(allowedValue, allowedValue, selectorSelect);
+                    });
+                    optionsContainer.append(selectorSelect);
+                    // Update chosen options. Don't really know why 'liszt' instead of chosen but the linked chosen version seems to use it.
+                    // Apparently newer chosen versions use 'chosen', so keep that in mind if you update the library.
+                    selectorSelect.trigger('liszt:updated');
+                    selectorSelect.trigger('chosen:updated');
+                });
+            }
         },
 
         /**
@@ -186,29 +298,18 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
          * @param {String} id Data source ID
          * Sets the given value as data source
          */
-        changeDataSource: function (id) {
+        changeDataSource: function (pluginId) {
             var me = this;
-            me.setIndicators([]);
-            var ds = me.statisticsService.getDataSource(id);
+            var ds = me._indicatorMetadata.getPlugin(pluginId);
             if (!ds) {
-                //alert("Couldn't find Datasource for id " + id);
+                //alert("Couldn't find Datasource for id " + pluginId);
                 return;
             }
             me.__selectedDataSource = ds;
 
             //clear the selectors containers
-            me.statisticsService.getIndicators(
-                id,
-                function (indicators) {
-                    if (!indicators) {
-                        // something went wrong
-                        return;
-                    }
-                    me.setIndicators(indicators);
-                }
-            );
+            me.setIndicators(ds.getIndicators());
             var indicatorParamsContainer = me.getIndicatorParamsContainer();
-            //me.createDemographicsSelects(container, null);
         },
 
         /**
@@ -220,11 +321,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
             var me = this;
             // Disable button until we get indicator metadata
             me._disableAddRemoveButton();
-            if (!id) {
-                // clear previous indicator options
-                me._createDynamicIndicatorOptions();
-                return;
-            }
             // setup values for options
             var optionsContainer = me.getIndicatorParamsContainer(),
                 select,
@@ -232,44 +328,49 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
                 value,
                 ds = me.getSelectedDatasource();
 
-            me.statisticsService.getIndicatorMetadata(ds.getId(), id, function (indicator) {
-                if (!indicator) {
-                    // something went wrong
-                }
-                me.__selectedIndicator = indicator;
-                _.each(ds.getIndicatorParams(), function (item) {
-                    select = optionsContainer.find('select[name=' + item.name + ']');
-                    options = [];
-                    if (indicator) {
-                        // FIXME getParamValues should return:
-                        // - [{id: 1}] when there's no separate label
-                        // - [{id: 1, value: 'label'}] when label is not localized
-                        // - [{id: 1, value: {'fi', 'label'}}] when label is localized
-                        options = indicator.getParamValues(item.name);
-                    }
-                    // clear previous values
-                    select.empty();
-                    if (options.length === 0) {
-                        // no options for this select in selected indicator
-                        select.attr('disabled', 'disabled');
-                        return;
-                    }
-                    select.removeAttr('disabled');
-                    _.each(options, function (opt) {
-                        me._addOption(opt, opt, select);
-                    });
-                });
-                // Indicator selection decides the add/remove button status
-                me._updateAddRemoveButtonState();
-                me.__showIndicatorInfoButton(indicator);
-                me.__addRemoveButton.setEnabled(!!indicator);
-            });
+            me.__selectedIndicator = ds.getIndicators().getIndicator(id);
+            me.__showIndicatorInfoButton(indicator);
+        },
+
+        /**
+         * @method changeLayer
+         * @param {String} id
+         * Sets the given value as the layer
+         */
+        changeLayer: function (id) {
+            var me = this;
+            // setup values for options
+            var optionsContainer = me.getIndicatorParamsContainer(),
+                select,
+                options,
+                value,
+                ds = me.getSelectedDatasource();
+
+            me.__selectedLayer = id;
+
+            // FIXME: Fetch indicator data if all selectors are selected.
+            // Layer selection decides the add/remove button status
+            me._updateAddRemoveButtonState();
+            me.__addRemoveButton.setEnabled(!!indicator);
             //me.deleteIndicatorInfoButton(container);
             //me.getStatsIndicatorMeta(container, indicatorId);
         },
 
+        /**
+         * @method changeSelections
+         * Handler for the selectors being changed. Ultimately this fetches the indicator values and shows them.
+         * @return Handler for the certain selections being changed.
+         */
+        changeSelections: function(selectorSelect, id) {
+            return function () {
+                var option = selectorSelect.find('option:selected');
+                this.__selectors[id] = option.val();
+                // FIXME: Fetch indicator data if all selectors are selected.
+            };
+        },
+
         getIndicatorParamsContainer: function () {
-            return this.el.find('.parameters-cont');
+            return this.el.find('[name=selectors-div]');
         },
 
         getSelectedDatasource: function () {
@@ -278,36 +379,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
 
         getSelectedIndicator: function () {
             return this.__selectedIndicator;
-        },
-
-        /**
-         * @method getSelections
-         * @return {Object} User indicator selection
-         * Get user indicator selections
-         */
-        getSelections: function () {
-            var result = {
-                datasource: null,
-                indicator: null,
-                options: {}
-            };
-            if (this.getSelectedDatasource()) {
-                result.datasource = this.getSelectedDatasource().getId();
-            }
-            if (this.getSelectedIndicator()) {
-                result.indicator = this.getSelectedIndicator().getId();
-                var optionsContainer = this.getIndicatorParamsContainer(),
-                    select = optionsContainer.find('select');
-
-                _.each(select, function (opt) {
-                    var dom = jQuery(opt),
-                        value = dom.val();
-                    if (value !== null && value !== undefined) {
-                        result.options[dom.attr('name')] = value;
-                    }
-                });
-            }
-            return result;
         },
 
         /**
@@ -445,45 +516,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
         },
 
         /**
-         * @method _createDynamicIndicatorOptions
-         * @private
-         * Creates dynamic indicator options panel (usually year and gender)
-         */
-        _createDynamicIndicatorOptions: function () {
-            var me = this,
-                optionsContainer = me.getIndicatorParamsContainer(),
-                ds = me.getSelectedDatasource();
-            optionsContainer.empty(); // == me.deleteDemographicsSelect(container);
-            me.__removeIndicatorInfoButton();
-            if (!ds) {
-                // no datasource selection, only clear
-                return;
-            }
-            // Indicators' select container etc.
-            _.each(ds.getIndicatorParams(), function (item) {
-                var indicatorSelector = jQuery(me._templates.selector),
-                    label = indicatorSelector.find('> span'),
-                    select = indicatorSelector.find('select'),
-                    labelText = item.name;
-                // TODO: setup options locales in own structure like ~me.locale.optionLabels[key]
-                if (me._locale[item.name]) {
-                    labelText = me._locale[item.name];
-                }
-                label.append(labelText);
-                select.attr('name', item.name);
-                select.attr('disabled', 'disabled');
-                optionsContainer.append(indicatorSelector);
-            });
-            /*
-            var optionsContainer = this.getIndicatorParamsContainer();
-            _.each(ds.getIndicatorParams(), function (item) {
-                optionsContainer.find('select.' + item.getName()).attr('disabled', 'disabled');
-            });
-            */
-            //me._addOwnIndicatorButton(optionsContainer);
-        },
-
-        /**
          * @method __setSelectOptions
          * @param  {DOMElement} select    Select DOM element
          * @param  {Object[]}   items     Select options
@@ -520,6 +552,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
             // Update chosen options. Don't really know why 'liszt' instead of chosen but the linked chosen version seems to use it.
             // Apparently newer chosen versions use 'chosen', so keep that in mind if you update the library.
             select.trigger('liszt:updated');
+            select.trigger('chosen:updated');
         },
 
         /**
@@ -532,7 +565,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
          */
         _addOption: function (value, label, select) {
             var option = jQuery(this._templates.option);
-            option.val(value).text(label);
+            option.val(value);
+            option.text(label);
             if (select) {
                 select.append(option);
             }

@@ -58,11 +58,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
                 // already handling the request, all callbacks will be called when done
                 return;
             }
-            // make the AJAX call
-            me.statsService.fetchStatsData(sandbox.getAjaxUrl() +
-                'action_route=',
-                //success callback
-                function (indicatorsData) {
 
             var me = this,
                 url = Oskari.getSandbox().getAjaxUrl() + "action_route=GetIndicatorsMetadata";
@@ -115,7 +110,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
             }
             var indicator =  this._findIndicator(datasource, id);
             var me = this,
-                url = this.getDataSource(datasource).getIndicatorValuesUrl(id);
+                url = this.getDataSources(datasource).getIndicatorValuesUrl(id);
 
             var queueName = this.callbackQueue.getQueueName('getIndicatorValue', arguments);
             if(!this.callbackQueue.addCallbackToQueue(queueName, callback)) {
@@ -188,49 +183,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
             });
             this.__indicators[datasourceId] = parsed;
             callback(parsed);
-        },
-        getRegionCategories : function(callback) {
-            if(!callback) {
-                this.sandbox.printWarn('Provide callback for StatisticsService.getRegionCategories()');
-                return;
-            }
-            // return cached if available
-            if(this.__regionCategories.length > 0) {
-                callback(this.__regionCategories);
-                return;
-            }
-            var me = this,
-                url = Oskari.getSandbox().getAjaxUrl() + "action_route=StatisticalIndicatorRegionCategories";
-
-            var queueName = this.callbackQueue.getQueueName('getRegionCategories');
-            if(!this.callbackQueue.addCallbackToQueue(queueName, callback)) {
-                // already handling the request, all callbacks will be called when done
-                return;
-            }
-            jQuery.ajax({
-                type: "GET",
-                dataType: 'json',
-                url: url,
-                success: function (pResp) {
-                    if(!pResp || pResp.error) {
-                        callback();
-                        return;
-                    }
-                    me.__handleRegionCategoriesResponse(pResp);
-                    me.callbackQueue.notifyCallbacks(queueName, [me.__regionCategories]);
-                },
-                error: function (jqXHR, textStatus) {
-                    me.callbackQueue.notifyCallbacks(queueName);
-                }
-            });
-        },
-        __handleRegionCategoriesResponse : function(response) {
-            var parsed = [];
-            _.each(response, function(data) {
-                var category = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.domain.RegionCategory', data);
-                parsed.push(category);
-            });
-            this.__regionCategories = parsed;
         },
         getRegions : function(categoryId, callback) {
             if(!categoryId) {

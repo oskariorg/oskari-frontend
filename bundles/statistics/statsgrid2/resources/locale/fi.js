@@ -42,6 +42,7 @@ Oskari.registerLocalization({
         "addColumn": "Hae aineisto",
         "removeColumn": "Poista",
         "indicators": "Indikaattori",
+        "layers": "Taso",
         "cannotDisplayIndicator": "Indikaattorilla ei ole arvoja valitsemallasi aluejaolla, joten sitä ei voida näyttää taulukossa.",
         "availableRegions": " Arvot löytyvät seuraaville aluejaoille: ",
         "year": "Vuosi",
@@ -113,6 +114,13 @@ Oskari.registerLocalization({
                 "min": "Pienin indikaattorissa esiintyvä arvo",
                 "std": "Indikaattorin keskihajonta",
                 "sum": "Indikaattorin arvot yhteensä"
+            },
+            "plugins": {
+                "fi.nls.oskari.control.statistics.plugins.sotka.plugin_name": "SotkaNET"
+            },
+            "selector": {
+                "Year": "Vuosi",
+                "Sex": "Sukupuoli"
             }
         },
         "noIndicatorData": "Indikaattoria ei voi tarkastella tässä aluejaossa",

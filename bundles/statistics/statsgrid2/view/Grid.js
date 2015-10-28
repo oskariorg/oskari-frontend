@@ -24,7 +24,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.Grid',
             // clear container and start building the grid
             container.empty();
             var selectedCategory = this.getActiveRegionCategory();
-            this.service.getRegionCategories(function(categories) {
+            // FIXME: Get categories from the selected indicator.
+            /*function(categories) {
                 var category = _.find(categories, function(cat) {
                     return '' + cat.getId() === '' + selectedCategory;
                 });
@@ -37,7 +38,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.Grid',
 
                 // initially sort by region column
                 me.__grid.setSortColumn(me.helper.__columnIdRegion, true);
-            });
+            });*/
         },
         filterRegion : function(region, blnFilter) {
             if(blnFilter) {

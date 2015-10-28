@@ -6,7 +6,7 @@
  *   "indicators": {
  *     "1411":{
  *       "source": {...},
- *       "selectors": {...},
+ *       "selectors": [...],
  *       "description": {...},
  *       "layers":[
  *         // FIXME: Localize the layerIds for the dropdown.
