@@ -114,6 +114,27 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             var request = this.instance.sandbox.getRequestBuilder('DrawPlugin.StopDrawingRequest')(isCancel);
             this.instance.sandbox.request(this, request);
         },
+        setGeometryType: function (geometryType) {
+            this._parseLayerGeometryResponse(geometryType);
+        },
+        ParseWFSFeatureGeometries: function(evt) {
+            var processGeometry = false;
+            for (var i = 0; i < this.allVisibleLayers.length; i++) {
+                if (this.allVisibleLayers[i].getId() == evt.getMapLayer().getId()) {
+                    processGeometry = true;
+                    break;
+                }
+            }
+
+            if (processGeometry) {
+                var clickedGeometries = evt.getGeometries();
+                if (clickedGeometries.length > 0) {
+                    for (var i = 0; i < clickedGeometries.length; i++) {
+                        this.parseFeatureFromClickedFeature(clickedGeometries[i]);
+                    }
+                }
+            }
+        },
         /**
          * @method parseFeatureFromClickedFeature
          * Returns an OpenLayers feature or null.
@@ -125,6 +146,9 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             var data = clickedGeometry[1],
                 wkt = new OpenLayers.Format.WKT(),
                 feature = wkt.read(data);
+
+            this.setGeometryType(feature.geometry.id);
+            this._addDrawTools();
 
             if (feature != null && feature.geometry != null) {
                 this.layerGeometries = feature.geometry;
@@ -161,6 +185,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             var addFeatureButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
             addFeatureButton.setTitle("Add feature");
             addFeatureButton.setHandler(function () {
+                me.getLayerGeometryType();
                 me.sendStopDrawRequest(true);
                 var fields = layer.getFields().slice();
                 var featureData = [[]];
@@ -210,7 +235,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             var me = this;
             jQuery.ajax({
                 type : 'GET',
-                data : {'layer_id':this.layerId},
+                data : {'layer_id':me.layerId},
                 url : ajaxUrl + 'action_route=GetWFSLayerGeometryType',
                 success : function(response) {
                     me._parseLayerGeometryResponse(response);
@@ -432,6 +457,19 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         	}
         },
         _handleInfoResult: function (data, create) {
+            var isVisibleLayer = false;
+            for (var i = 0; i < this.allVisibleLayers.length; i++) {
+                if (this.allVisibleLayers[i].getId() == data.layerId) {
+                    isVisibleLayer = true;
+                    break;
+                }
+            }
+
+            if (!isVisibleLayer)
+            {
+                return;
+            }
+
             if (create == true) {
                 this.operationMode = "create";
             } else {
@@ -682,20 +720,31 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             {
                 this.layerGeometryType = "MultiPoint";
             }
+            else if (response.indexOf("OpenLayers_Geometry_Point_") > -1)
+            {
+                this.layerGeometryType = "Point";
+            }
             else if (response == "gml:MultiLineStringPropertyType")
             {
                 this.layerGeometryType = "MultiLineString";
             }
-            else if (response == "gml:MultiPolygonPropertyType" || response == "gml:MultiSurfacePropertyType")
+            else if (response == "gml:MultiPolygonPropertyType" || response == "gml:MultiSurfacePropertyType" || response.indexOf("OpenLayers_Geometry_MultiPolygon_") > -1)
             {
                 this.layerGeometryType = "MultiPolygon";
             }
+            else if (response.indexOf("OpenLayers_Geometry_Polygon_") > -1) {
+                this.layerGeometryType = "Polygon";
+            }
+            else if (response == "gml:GeometryPropertyType")
+            {
+                this.layerGeometryType = "GeometryPropertyType";
+            }
         },
         _addDrawTools: function () {
-            
             var me = this;
+            $(".content-draw-tools").empty();
             var pointButton = $("<div />").addClass('add-point tool');
-            if (me.layerGeometryType == "MultiPoint") {
+            if (me.layerGeometryType == "MultiPoint" || me.layerGeometryType == "Point" || me.layerGeometryType == "GeometryPropertyType") {
                 pointButton.on('click', function() {
                         me.startNewDrawing({
                             drawMode: 'point'
@@ -706,7 +755,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             }
             
             var lineButton = $("<div />").addClass('add-line tool');
-            if (me.layerGeometryType == "MultiLineString") {
+            if (me.layerGeometryType == "MultiLineString" || me.layerGeometryType == "GeometryPropertyType") {
                 lineButton.on('click', function() {
                         me.startNewDrawing({
                             drawMode: 'line'
@@ -717,7 +766,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             }
 
             var areaButton = $("<div />").addClass('add-area tool');
-            if (me.layerGeometryType == "MultiPolygon") {
+            if (me.layerGeometryType == "MultiPolygon" || me.layerGeometryType == "Polygon" || me.layerGeometryType == "GeometryPropertyType") {
                 areaButton.on('click', function() {
                         me.startNewDrawing({
                             drawMode: 'area'
@@ -730,24 +779,19 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             var geomEditButton = $("<div />").addClass('selection-area tool');
             geomEditButton.on('click', function() {
                 me.drawToolType = "edit";
-                me.clickedGeometryNumber = 0;
-                for (var i = 0; i < me.layerGeometries.components.length; i++) {
-                    if (me.layerGeometries.components[i].id.indexOf("Polygon") > -1)
-                    {
-                        if (me.layerGeometries.components[i].containsPoint(me.clickCoords))
-                        {
-                            me.clickedGeometryNumber = i;
-                            break;
+                me.clickedGeometryNumber = null;
+                if (me.layerGeometries.id.indexOf("Multi") > -1) {
+                    if (me.layerGeometries.components != undefined) {
+                        for (var i = 0; i < me.layerGeometries.components.length; i++) {
+                            if (me.layerGeometries.components[i].atPoint({lon:me.clickCoords.x,lat:me.clickCoords.y}))
+                            {
+                                me.clickedGeometryNumber = i;
+                                break;   
+                            }
                         }
                     }
-                    else
-                    {
-                        if (me.layerGeometries.components[i].atPoint({lon:me.clickCoords.x,lat:me.clickCoords.y}))
-                        {
-                            me.clickedGeometryNumber = i;
-                            break;   
-                        }
-                    }
+                } else {
+                    me.clickedGeometryNumber = null;
                 }
 
                 me.startNewDrawing({
@@ -755,7 +799,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 });
                 me.sendStopDrawRequest(true);
                 me.startNewDrawing({
-                    geometry: me.layerGeometries.components[me.clickedGeometryNumber]
+                    geometry: (me.clickedGeometryNumber != null ? me.layerGeometries.components[me.clickedGeometryNumber] : me.layerGeometries)
                 });
             });
 

@@ -152,16 +152,13 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
             WFSFeatureGeometriesEvent: function (evt) 
             {
                 if (this.sideContentEditor != null) {
-                    var clickedGeometries = evt.getGeometries();
-                    if (clickedGeometries.length > 0) {
-                        for (var i = 0; i < clickedGeometries.length; i++) {
-                            this.sideContentEditor.parseFeatureFromClickedFeature(clickedGeometries[i]);
-                        }
-                    }
+                    this.sideContentEditor.ParseWFSFeatureGeometries(evt);
                 }
             },
             'MapClickedEvent': function (event) {
-                this.sideContentEditor.setClickCoords({x: event.getLonLat().lon, y: event.getLonLat().lat});
+                if (this.sideContentEditor != null) {
+                    this.sideContentEditor.setClickCoords({x: event.getLonLat().lon, y: event.getLonLat().lat});
+                }
             }
         },
         /**
