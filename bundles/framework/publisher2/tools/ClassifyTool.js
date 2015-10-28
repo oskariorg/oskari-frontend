@@ -30,6 +30,7 @@ function() {
 
         me.setEnabled(false);
     },
+    bundleName: 'publishedgrid',
     /**
     * Set enabled.
     * @method setEnabled
@@ -128,14 +129,10 @@ function() {
         if(me.state.enabled && statsGridState) {
             return {
                 configuration: {
-                    /*
-                    mapfull: {
-                        conf: {
-                            plugins: [{ id: this.getTool().id, config: this.getPlugin().getConfig() }]
-                        }
-                    },
-                    */
                     publishedgrid: {
+                        conf: {
+                            allowClassification: true
+                        },
                         state: statsGridState
                     }
                 }
