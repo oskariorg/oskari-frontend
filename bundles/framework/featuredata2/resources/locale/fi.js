@@ -15,7 +15,7 @@ Oskari.registerLocalization(
         "featureDataPopup": "Tunnusluvut",
         "selectionTools": {
             "title": "Valitse kohteita",
-            "instructions": "NOT TRANSLATED",
+            "instructions": " ",
             "selectFromTop": "päällimmäiseltä karttatasolta",
             "selectAll": "kaikilta avoinna olevilta karttatasoilta",
             "link": {
