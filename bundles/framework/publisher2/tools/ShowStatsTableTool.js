@@ -10,27 +10,49 @@ function() {
     templates: {
         publishedGridTemplate: '<div class="publishedgrid"></div>'
     },
+        /**
+         * Initialize tool
+         * @params {} state data
+         * @method init
+         * @public
+         */
+        init: function (pdata) {
+            var me = this,
+                tool = me.getTool(pdata);
+
+
+            me.setEnabled(false);
+        },
+    bundleName: 'publishedgrid',
     /**
     * Get tool object.
+     * @params {}  pdta.configuration.publishedgrid.state
     * @method getTool
     * @private
     *
     * @returns {Object} tool
     */
-    getTool: function(){
+    getTool: function(pdata){
         var me = this,
             statsGrid = me.__sandbox.getStatefulComponents().statsgrid,
-            statsGridState = me._filterIndicators(_.clone(statsGrid.state, true)),
+            statsGridState = me.hasNestedObj(pdata, 'configuration.publishedgrid.state') ? pdata.configuration.publishedgrid.state : statsGrid.state,
             layer = me._getStatsLayer();
-        return {
-            id: 'Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin',
-            name: 'grid',
-            config: {
-                'published': true,
-                'layer': layer,
-                'state': statsGridState
-            }
-        };
+
+        if(!me.__tool) {
+            statsGridState = me._filterIndicators(_.clone(statsGridState, true));
+
+            me.__tool = {
+
+                id: 'Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin',
+                title: 'grid',
+                config: {
+                    'published': true,
+                    'layer': layer,
+                    'state': statsGridState
+                }
+            };
+         }
+        return me.__tool;
     },
     /**
     * Get stats layer.
@@ -141,23 +163,37 @@ function() {
     },
     getValues: function() {
         var me = this,
-            statsGrid = me.__sandbox.getStatefulComponents().statsgrid,
-            statsGridState = me._filterIndicators(_.clone(statsGrid.state, true));
+            statsGridState = me._getState();
         if(me.state.enabled && statsGridState) {
             return {
                 configuration: {
-                    mapfull: {
-                        conf: {
-                            plugins: [{ id: this.getTool().id, config: this.getPlugin().getConfig() }]
-                        }
-                    },
-                    publishedgrid: statsGridState
+                    publishedgrid: {
+                        state: statsGridState
+                    }
                 }
             };
         } else {
             return null;
         }
-    }
+    },
+        /**
+         * @private @method _getState
+         * Get state config from current tool, if sandbox returns  default config
+         *
+         */
+        _getState: function () {
+            var me = this,
+                statsGrid = me.__sandbox.getStatefulComponents().statsgrid,
+                statsGridState = statsGrid.state;
+
+            statsGridState.gridShown = me.state.enabled;
+            // Grid state is not in sandbox, if no touch to grid in view edit mode
+            // TODO improve state management in statsgrid
+            if(!('currentColumn' in statsGrid.state) && me.__tool) {
+                statsGridState = me.__tool.config.state;
+            }
+            return me._filterIndicators(_.clone(statsGridState, true));
+        }
 }, {
     'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
     'protocol' : ['Oskari.mapframework.publisher.Tool']

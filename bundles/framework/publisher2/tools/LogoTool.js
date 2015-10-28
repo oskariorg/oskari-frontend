@@ -23,7 +23,7 @@ function() {
     getTool: function(){
         return {
             id: 'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
-            name: 'LogoPlugin',
+            title: 'LogoPlugin',
             config: {}
         };
     },

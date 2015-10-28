@@ -32,6 +32,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          */
         _initImpl: function () {
             var me = this;
+            me._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage(), true).plugin.LayerSelectionPlugin;
             me.templates.main = jQuery(
                 '<div class="mapplugin layerselection">' +
                 '  <div class="header">' +
@@ -42,6 +43,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 '    <div class="baselayers"></div>' +
                 '  </div>' +
                 '</div>');
+            //same as in main, only used when returning from some other layout to default (publisher)
+            me.templates.defaultArrow = jQuery('<div class="header-icon icon-arrow-white-right"></div>');
             me.templates.layer = jQuery(
                 '<div class="layer"><label><span></span></label></div>'
             );
@@ -576,14 +579,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             var me = this,
                 conf = me.getConfig(),
                 element = me.getElement();
-
             if (conf) {
                 if (conf.toolStyle) {
                     me.changeToolStyle(conf.toolStyle, element);
+                } else {
+                    //not found -> use the style config obtained from the mapmodule.
+                    var toolStyle = me.getToolStyleFromMapModule();
+                    if (toolStyle !== null && toolStyle !== undefined) {
+                        me.changeToolStyle(toolStyle, me.getElement());
+                    }
                 }
 
                 if (conf.font) {
                     me.changeFont(conf.font, element);
+                } else {
+                    var font = me.getToolFontFromMapModule();
+                    if (font !== null && font !== undefined) {
+                        me.changeFont(font, element);
+                    }
                 }
 
                 if (conf.colourScheme) {
@@ -600,19 +613,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * @param {jQuery} div
          */
         changeToolStyle: function (styleName, div) {
+            var me = this;
             div = div || this.getElement();
-
             if (!div) {
-                return;
-            }
-
-            if (styleName === null) {
-                // reset plugin if active
-                if (this.getElement()) {
-                    delete this._config.toolStyle;
-                    this.stopPlugin();
-                    this.startPlugin();
-                }
                 return;
             }
 
@@ -631,31 +634,48 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 content.addClass('published-styled-layerselector-content');
                 content.addClass('layerselection-styled-content');
                 header.addClass('published-styled-layerselector-header');
+
                 // Set the styling to the content div based on the tool style.
-                this.getMapModule().changeCssClasses(
+                this.changeCssClasses(
                     'oskari-publisher-layers-' + styleName,
                     /oskari-publisher-layers-/, [content]
                 );
                 // Set the styling of the header as well since the border rounding affects them
-                this.getMapModule().changeCssClasses(
+                this.changeCssClasses(
                     'oskari-publisher-layers-header-' + styleName,
                     /oskari-publisher-layers-header-/, [contentHeader]
                 );
+
                 header.css({
                     'background-image': 'url("' + bgImg + '")'
                 });
+
+                content.find('div.content-header').remove();
+                content.find('div.styled-header-arrow').remove();
+                contentHeader.find('div.content-header-title').append(
+                    this._loc.title
+                );
+                content.prepend(contentHeader);
+                content.prepend(headerArrow);
             } else {
+                header.append(me.templates.defaultArrow.clone());
+                header.append(me._loc.title);
+
                 div.removeClass('published-styled-layerselector');
                 content.removeClass('published-styled-layerselector-content');
                 content.removeClass('layerselection-styled-content');
                 header.removeClass('published-styled-layerselector-header');
+
+                content.find('div.content-header').remove();
+                content.find('div.styled-header-arrow').remove();
+
                 // Set the styling to the content div based on the tool style.
-                this.getMapModule().changeCssClasses(
+                this.changeCssClasses(
                     '',
                     /oskari-publisher-layers-/, [content]
                 );
                 // Set the styling of the header as well since the border rounding affects them
-                this.getMapModule().changeCssClasses(
+                this.changeCssClasses(
                     '',
                     /oskari-publisher-layers-header-/, [contentHeader]
                 );
@@ -664,25 +684,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     'background-image': ''
                 });
             }
-
-            content.find('div.content-header').remove();
-            content.find('div.styled-header-arrow').remove();
-            contentHeader.find('div.content-header-title').append(
-                this._loc.title
-            );
-            content.prepend(contentHeader);
-            content.prepend(headerArrow);
-
             contentHeader.find('div.content-close').on('click', function () {
                 self.closeSelection();
             });
-
             // Pretty fugly, but needed here since we're modifying the DOM and
             // all the style changes disappear like Clint Eastwood rides into the sunset.
             var conf = this.getConfig();
             if (conf && conf.colourScheme) {
                 this.changeColourScheme(conf.colourScheme, this.getElement());
             }
+
+            me._setLayerToolsEditMode(
+                me.getMapModule().isInLayerToolsEditMode()
+            );
         },
 
         /**
@@ -743,7 +757,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             var classToAdd = 'oskari-publisher-font-' + fontId,
                 testRegex = /oskari-publisher-font-/;
 
-            this.getMapModule().changeCssClasses(classToAdd, testRegex, [div]);
+            this.changeCssClasses(classToAdd, testRegex, [div]);
         },
         /**
          * @method _checkBaseLayers

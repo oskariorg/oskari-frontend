@@ -6,12 +6,12 @@ Oskari.registerLocalization(
         "title": "FindByCoordinates",
         "desc": "FindByCoordinates",
         "tool": {
-            "tooltip": "Find nearest address by clicking the map"
+            "tooltip": "Finn nærmeste adresse ved å klikke i kartet"
         },
-        "resultsTitle": "Search results",
+        "resultsTitle": "Søkeresultater",
         "grid": {
-            "address": "Address",
-            "coordinates": "Coordinates"
+            "address": "Adresse",
+            "coordinates": "Koordinater"
         }
     }
 }

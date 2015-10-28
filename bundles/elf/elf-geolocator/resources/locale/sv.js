@@ -27,10 +27,10 @@ Oskari.registerLocalization(
             "resultsTitle": "Sökresultat",
             "fuzzyResultsTitle": "Ungefärlig sökning resultat",
             "filterResultsTitle": "Område begränsad sökresultat",
-            "countryFilter": "Country filter",
+            "countryFilter": "Statfilter",
             "backButton": "Tillbaka",
-            "geolocButton": "Locate nearest place",
-            "geolocDesc": "Click map for to locate nearest place",
+            "geolocButton": "Plasera näraste plats",
+            "geolocDesc": "Klicka kartan för att plasera närmaste plats",
             "noResults": "Inga sökresultat",
             "errors": {
                 "searchTermMissing": "Sökord krävs",

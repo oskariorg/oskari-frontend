@@ -1,24 +1,25 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "fi",
     "key": "FeatureData2",
     "value": {
         "title": "Kohdetiedot",
         "desc": "",
-        "loading": "Ladataan...",
+        "loading": "Ladataan…",
         "showmore": "Näytä",
-        "nodata": "Valitsemillasi karttatasoilla ei ole kohdetietoja.",
+        "nodata": "Valituilla karttatasoilla ei ole kohdetietoja.",
         "featureNameAll": "Tietotyyppi",
         "errorscale": "Kohdetietoja ei voida näyttää tällä mittakaavatasolla. Siirry sopivalle mittakaavatasolle mittakaavasäätimen avulla.",
-        "errordata": "Palvelimelta saatu tieto oli virheellistä. Siirrä hieman karttaa päivittääksesi tiedot.",
-        "columnSelectorTooltip": "Näytä sarakkeet",
-        "featureDataPopup" : "Lasketut tunnusluvut",
+        "errordata": "Palvelimelta saaduissa kohdetiedoissa oli virheitä. Siirrä hieman karttaa, jolloin tiedot päivittyvät.",
+        "columnSelectorTooltip": "Valitse näytettävät sarakkeet",
+        "featureDataPopup": "Tunnusluvut",
         "selectionTools": {
-            "title": "Valitse kohteita kartalta",
-            "instructions": "",
+            "title": "Valitse kohteita",
+            "instructions": " ",
             "selectFromTop": "päällimmäiseltä karttatasolta",
-            "selectAll": "kaikilta karttatasoilta",
+            "selectAll": "kaikilta avoinna olevilta karttatasoilta",
             "link": {
-                "title": "Lisää valinta"
+                "title": "Valitse lisää kohteita"
             },
             "button": {
                 "cancel": "Sulje",
@@ -29,22 +30,22 @@ Oskari.registerLocalization({
             },
             "tools": {
                 "point": {
-                    "tooltip": "Lisää piste"
+                    "tooltip": "Piirrä piste. Valintaan otetaan mukaan kaikki kohteet, joiden alueella piirtämäsi piste sijaitsee."
                 },
                 "line": {
-                    "tooltip": "Lisää viiva"
+                    "tooltip": "Piirrä viiva. Valintaan otetaan mukaan kaikki kohteet, joiden aluetta piirtämäsi viiva leikkaa."
                 },
                 "polygon": {
-                    "tooltip": "Lisää alue"
+                    "tooltip": "Piirrä alue. Valintaan otetaan mukaan kaikki kohteet, joiden aluetta piirtämäsi alue leikkaa."
                 },
                 "square": {
-                    "tooltip": "Lisää suorakulmio"
+                    "tooltip": "Piirrä suorakulmio. Valintaan otetaan mukaan kaikki kohteet, joiden aluetta piirtämäsi suorakulmio leikkaa."
                 },
                 "circle": {
-                    "tooltip": "Lisää ympyrä"
+                    "tooltip": "Piirrä ympyrä. Valintaan otetaan mukaan kaikki kohteet, joiden aluetta piirtämäsi ympyrä leikkaa."
                 },
                 "select": {
-                    "tooltip": "Valitse kohteita"
+                    "tooltip": "Piirrä geometria ja valitse sen avulla kohteet."
                 }
             }
         },
@@ -55,35 +56,35 @@ Oskari.registerLocalization({
             "hidden": "Karttataso on tilapäisesti piilotettu.",
             "out-of-scale": "Karttatasoa ei voida näyttää valitulla mittakaavatasolla.",
             "move-to-scale": "Siirry sopivalle mittakaavatasolle.",
-            "out-of-content-area": "Tällä karttatasolla ei ole aineistoa tässä sijainnissa",
-            "move-to-content-area": "Paikanna",
+            "out-of-content-area": "Karttatasolla ei ole kohteita karttanäkymän alueella.",
+            "move-to-content-area": "Siirry karttatason alueelle.",
             "description": "Kuvaus",
             "object-data": "Kohdetiedot",
             "rights": {
                 "notavailable": "Ei julkaistavissa",
-                "guest": "Kirjaudu sisään julkaistaksesi karttatason",
+                "guest": "Kirjaudu sisään, jos haluat julkaista karttatason upotetussa kartassa.",
                 "loggedin": "Julkaistavissa",
-                "official": "Julkaistavissa viranomaiskäyttöön.",
-                "need-login": "Karttatason voi julkaista upotetussa kartassa ainoastaan viranomaiskäyttöön. Mikäli olet viranomainen, ota yhteyttä Paikkatietoikkunan tukipalveluun ja pyydä julkaisuoikeuksia.",
+                "official": "Julkaistavisssa viranomaiskäyttöön",
+                "need-login": "Kirjaudu sisään julkaistaksesi karttoja.",
                 "can_be_published_by_provider": {
                     "label": "Julkaistavissa tiedontuottajana",
-                    "tooltip": "Ainoastaan tiedontuottajat voivat julkaista karttatason upotetussa kartassa. Mikäli olet tiedontuottaja, ota yhteyttä Paikkatietoikkunan tukipalveluun ja pyydä julkaisuoikeuksia."
+                    "tooltip": "Ainoastaan tiedontuottajat voivat julkaista karttatason upotetussa kartassa. Jos olet tiedontuottaja, ota yhteyttä palvelun ylläpitoon."
                 },
                 "can_be_published": {
                     "label": "Julkaistavissa",
-                    "tooltip": "Karttatason voi julkaista upotetussa kartassa ilman käyttömäärärajoituksia."
+                    "tooltip": "Karttatason voi julkaista upotetussa kartassa. Käyttömäärää ei ole rajoitettu."
                 },
                 "can_be_published_map_user": {
                     "label": "Julkaistavissa",
-                    "tooltip": "Karttatason voi julkaista upotetussa kartassa. Viikoittainen käyttömäärä voi olla rajoitettu."
+                    "tooltip": "Karttatason voi julkaista upotetussa kartassa. Viikottainen käyttömäärä voi olla rajoitettu."
                 },
                 "no_publication_permission": {
                     "label": "Ei julkaistavissa",
-                    "tooltip": "Karttatasoa ei voi julkaista upotetussa kartassa, koska julkaisulle ei ole tiedontuottajan lupaa."
+                    "tooltip": "Karttatasoa ei voi julkaista upotetussa kartassa. Tiedontuottaja ei ole antanut lupaa julkaisemiselle."
                 },
                 "can_be_published_by_authority": {
-                    "label": "Julkaistavissa",
-                    "tooltip": "Karttatason voi julkaista upotetussa kartassa ilman käyttömäärärajoituksia."
+                    "label": "Julkaistavissa viranomaiskäyttöön",
+                    "tooltip": "Karttatason voi julkaista upotetussa kartassa viranomaiskäyttöön. Jos olet viranomainen, ota yhteyttä palvelun ylläpitoon."
                 }
             },
             "tooltip": {
@@ -92,13 +93,13 @@ Oskari.registerLocalization({
                 "type-wfs": "Tietotuote"
             },
             "filter": {
-                "title": "Suodatus",
-                "description": "Valitse kohteet tasolta:",
+                "title": "Valitse kohteita",
+                "description": "Valitse kohteita karttatasolta:",
                 "cancelButton": "Poistu",
-                "clearButton": "Tyhjennä suodatin",
-                "refreshButton": "Päivitä suodatin",
-                "addFilter": "Lisää uusi suodatin.",
-                "removeFilter": "Poista suodatin.",
+                "clearButton": "Tyhjennä valinnat",
+                "refreshButton": "Päivitä valinnat",
+                "addFilter": "Lisää uusi ehto",
+                "removeFilter": "Poista ehto",
                 "bbox": {
                     "title": "Ikkunarajaus",
                     "on": "Ota mukaan vain kartalla näkyvät kohteet.",
@@ -109,7 +110,7 @@ Oskari.registerLocalization({
                     "label": "Ota mukaan vain kartalta valitut kohteet."
                 },
                 "values": {
-                    "title": "Suodata kohteet ominaisuustietojen perusteella",
+                    "title": "Valitse kohteet seuraavien ehtojen perusteella:",
                     "placeholders": {
                         "case-sensitive": "Kirjainkoko vaikuttaa valintoihin.",
                         "attribute": "Ominaisuustieto",
@@ -127,17 +128,17 @@ Oskari.registerLocalization({
                     "lessThanOrEqualTo": "on pienempi tai yhtä pieni kuin"
                 },
                 "aggregateAnalysisFilter": {
-                    "addAggregateFilter": "Käytä laskettua tunnuslukua",
-                    "aggregateValueSelectTitle": "Käytä laskettua tunnuslukua valintaan",
+                    "addAggregateFilter": "Käytä tunnuslukua",
+                    "aggregateValueSelectTitle": "Valitse käytettävät tunnusluvut",
                     "selectAggregateAnalyse": "Valitse analyysitaso",
                     "selectIndicator": "Valitse ominaisuustieto",
                     "selectReadyButton": "Sulje",
-                    "getAggregateAnalysisFailed": "Koosteanalyysidatan haku epäonnistui!",
-                    "noAggregateAnalysisPopupTitle": "Koosteanalyysejä ei löytynyt",
-                    "noAggregateAnalysisPopupContent": "Sinulla ei ole tallennettuja koosteanalyysejä. Voit luoda omia koosteanalyysejä Analyysi-toiminnolla ja käyttää koosteanalyysin arvoja kohteiden suodatuksessa"
+                    "getAggregateAnalysisFailed": "Tunnuslukujen haku epäonnistui.",
+                    "noAggregateAnalysisPopupTitle": "Tunnuslukuja ei löytynyt",
+                    "noAggregateAnalysisPopupContent": "Kyseiselle tasolle ei ole laskettu tunnuslukuja. Voit laskea tunnusluvut haluamallesi aineistolle Analyysi-toiminnon avulla.."
                 },
                 "validation": {
-                    "title": "Seuraavat virheet estivät suodattimen päivityksen:",
+                    "title": "Suodatusta ei voitu tehdä. Antamissasi tiedoissa on puutteita:",
                     "attribute_missing": "Ominaisuustieto puuttuu.",
                     "operator_missing": "Operaattori puuttuu.",
                     "value_missing": "Arvo puuttuu.",
@@ -151,4 +152,5 @@ Oskari.registerLocalization({
             "noDataCommonMessage": "Aineisto sisältää tietosuojattuja ominaisuustietoja, jotka eivät sisälly tunnuslukujen laskentaan"
         }
     }
-});
+}
+);

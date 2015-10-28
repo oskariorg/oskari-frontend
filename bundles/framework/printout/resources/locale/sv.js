@@ -17,9 +17,9 @@ Oskari.registerLocalization(
             "language": {
                 "label": "Språk",
                 "options": {
-                    "fi": "Finska",
-                    "sv": "Svenska",
-                    "en": "Engelska"
+                    "fi": "finska",
+                    "sv": "svenska",
+                    "en": "engelska"
                 },
                 "tooltip": "Välj det språk som ska användas i tryck. Observera språket i användargränssnittet och datasetet."
             },

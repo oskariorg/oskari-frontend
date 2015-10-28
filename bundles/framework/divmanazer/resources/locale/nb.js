@@ -242,7 +242,8 @@ Oskari.registerLocalization(
                 "additional": {
                     "title": "Tillegssinstillinger",
                     "dataSource": "Datakilde",
-                    "metadata": "Metadatalenke"
+                    "metadata": "Metadatalenke",
+                    "export_selection": "Eksporter kun valgte forekomster"
                 },
                 "columns": {
                     "title": "Kolonner",

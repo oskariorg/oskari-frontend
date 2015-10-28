@@ -89,6 +89,42 @@ Oskari.clazz.define(
                 '  <td></td>' +
                 '</tr>'
             );
+            me.toolStyles = {
+                'default': {
+                    val: null
+                },
+                'rounded-dark': {
+                    val: 'rounded-dark',
+                    widthLeft: 17,
+                    widthRight: 32
+                },
+                'rounded-light': {
+                    val: 'rounded-light',
+                    widthLeft: 17,
+                    widthRight: 32
+                },
+                'sharp-dark': {
+                    val: 'sharp-dark',
+                    widthLeft: 5,
+                    widthRight: 30
+                },
+                'sharp-light': {
+                    val: 'sharp-light',
+                    widthLeft: 5,
+                    widthRight: 30
+                },
+                '3d-dark': {
+                    val: '3d-dark',
+                    widthLeft: 5,
+                    widthRight: 44
+                },
+                '3d-light': {
+                    val: '3d-light',
+                    widthLeft: 5,
+                    widthRight: 44
+                }
+            }
+
             var conf = me.getConfig();
             if (conf && conf.url) {
                 ajaxUrl = conf.url;
@@ -106,7 +142,6 @@ Oskari.clazz.define(
             var me = this,
                 el = me.getElement(),
                 overlay;
-
             if (me.inLayerToolsEditMode()) {
                 me._inputField.prop('disabled', true);
                 me._searchButton.prop('disabled', true);
@@ -139,7 +174,9 @@ Oskari.clazz.define(
             var me = this,
                 conf = me.getConfig(),
                 el;
-
+            if (conf && !conf.toolStyle) {
+                conf.toolStyle = me.getToolStyleFromMapModule();
+            }
             if (conf && conf.toolStyle) {
                 el = me.styledTemplate.clone();
                 me._inputField = el.find('input[type=text]');
@@ -233,10 +270,26 @@ Oskari.clazz.define(
         refresh: function () {
             var me = this,
                 conf = me.getConfig(),
-                el = me.getElement();
+                element = me.getElement();
 
-            if (conf && conf.font) {
-                me.changeFont(conf.font, el);
+            if (conf) {
+                if (conf.toolStyle) {
+                    me.changeToolStyle(conf.toolStyle, element);
+                } else {
+                    var toolStyle = me.getToolStyleFromMapModule();
+                    if (toolStyle !== null && toolStyle !== undefined) {
+                        me.changeToolStyle(me.toolStyles[toolStyle], element);
+                    }
+                }
+
+                if (conf.font) {
+                    me.changeFont(conf.font, element);
+                } else {
+                    var font = me.getToolFontFromMapModule();
+                    if (font !== null && font !== undefined) {
+                        me.changeFont(font, element);
+                    }
+                }
             }
         },
 
@@ -498,7 +551,6 @@ Oskari.clazz.define(
                 this.getSandbox().getRequestBuilder('HideMapMarkerRequest')()
             );
         },
-
         /**
          * Changes the tool style of the plugin
          *
@@ -511,11 +563,15 @@ Oskari.clazz.define(
                 removedClass,
                 addedClass,
                 template;
-
             div = div || me.getElement();
-
-            if (!style || !div) {
+            if (!div) {
                 return;
+            }
+
+            if (!style) {
+                style = this.toolStyles["default"];
+            } if (!style.hasOwnProperty("widthLeft")) {
+                style = this.toolStyles[style] ? this.toolStyles[style] : this.toolStyles["default"];
             }
 
             // Set the correct template for the style... ugly.
@@ -528,11 +584,17 @@ Oskari.clazz.define(
                 div.removeClass('published-search-div').addClass(
                     'default-search-div'
                 );
+
+
                 div.empty();
                 me.template.children().clone().appendTo(div);
                 me._inputField = div.find('input[type=text]');
                 me._searchButton = div.find('input[type=button]');
                 me._bindUIEvents(div);
+                me._setLayerToolsEditMode(
+                    me.getMapModule().isInLayerToolsEditMode()
+                );
+
                 return;
             }
 
@@ -542,6 +604,7 @@ Oskari.clazz.define(
                 div.removeClass('default-search-div').addClass(
                     'published-search-div'
                 );
+
                 div.empty();
                 me.styledTemplate.children().clone().appendTo(div);
                 me._inputField = div.find('input[type=text]');
@@ -631,12 +694,7 @@ Oskari.clazz.define(
 
             var classToAdd = 'oskari-publisher-font-' + fontId,
                 testRegex = /oskari-publisher-font-/;
-
-            this.getMapModule().changeCssClasses(
-                classToAdd,
-                testRegex,
-                elements
-            );
+            this.changeCssClasses(classToAdd, testRegex, elements);
         },
 
         /**
@@ -652,7 +710,7 @@ Oskari.clazz.define(
             var cssClass = 'oskari-publisher-search-results-' + toolStyle.val,
                 testRegex = /oskari-publisher-search-results-/;
 
-            this.getMapModule().changeCssClasses(cssClass, testRegex, [div]);
+            this.changeCssClasses(cssClass, testRegex, [div]);
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

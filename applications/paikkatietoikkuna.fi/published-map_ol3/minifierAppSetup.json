@@ -50,6 +50,12 @@
             "mapmodule-plugin_ol3" : {
                 "bundlePath" : "../../../packages/mapping/"
             },
+            "mapstats": {
+                "bundlePath": "../../../packages/framework/bundle/"
+            },
+            "mapstats_ol3" : {
+                "bundlePath" : "../../../packages/mapping/"
+            },
             "mapwmts_ol3" : {
                 "bundlePath" : "../../../packages/mapping/"
             },
@@ -104,5 +110,64 @@
             "Require-Bundle-Instance" : []
         },
         "instanceProps" : {}
+    },{
+        "title": "Published Grid",
+        "bundleinstancename": "publishedgrid",
+        "fi": "publishedgrid",
+        "sv": "publishedgrid",
+        "en": "publishedgrid",
+        "bundlename": "publishedgrid",
+        "metadata": {
+            "Import-Bundle": {
+                "publishedgrid": {
+                    "bundlePath": "../../../packages/statistics/bundle/"
+                },
+                "geostats": {
+                    "bundlePath": "../../../packages/libraries/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": [ ]
+        },
+        "instanceProps": {}
+    }, {
+        "bundlename" : "infobox",
+        "bundleinstancename" : "infobox",
+        "metadata" : {
+            "Import-Bundle" : {
+                "infobox" : {
+                    "bundlePath" : "../../../packages/mapping/"
+                }
+            }
+        }
+    }, {
+        "bundlename" : "drawtools_ol3",
+        "bundleinstancename" : "drawtools_ol3",
+        "metadata" : {
+            "Import-Bundle" : {
+                "drawtools_ol3" : {
+                    "bundlePath" : "../../../packages/mapping/"
+                }
+            }
+        }
+    }, {
+        "bundlename" : "routingService",
+        "bundleinstancename" : "routingService",
+        "metadata" : {
+            "Import-Bundle" : {
+                "routingService" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
+                }
+            }
+        }
+    }, {
+        "bundlename" : "rpc",
+        "bundleinstancename" : "rpc",
+        "metadata" : {
+            "Import-Bundle" : {
+                "rpc" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
+                }
+            }
+        }
     }]
 }

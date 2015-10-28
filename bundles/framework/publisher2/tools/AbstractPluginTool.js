@@ -15,6 +15,7 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     this.__loc = localization[this.group];
     this.__instance = instance;
     this.__plugin = null;
+    this.__tool = null;
     this.__handlers = handlers;
     // This is used to watch tool plugin start/stop changes. If plugin is started then change this value to true, if stopped then change to false.
     // If tool plugin is started then we can call stop plugin if unchecking this tools (otherwise we get error when sopping plugin).
@@ -104,14 +105,14 @@ function(sandbox, mapmodule, localization, instance, handlers) {
         return null;
     },
     /**
-    * Get name.
-    * @method getName
+    * Get title.
+    * @method getTitle
     * @public
     *
-    * @returns {String} tool name
+    * @returns {String} tool title
     */
-    getName: function() {
-        return this.__loc[this.getTool().name];
+    getTitle: function() {
+        return this.__loc[this.getTool().title];
     },
     /**
     * Is displayed in mode.
@@ -158,7 +159,30 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     isDefaultTool: function() {
         return false;
     },
+   /**
+    * Check, if nested key exists
+    * @method hasNestedObj
+    * @params {}  object
+    * @params String object path
+    * @public
+    *
+    * @returns {Boolean}
+    */
+    hasNestedObj: function(obj, sobj) {
+       var tmpObj = obj,
+           cnt = 0,
+           splits = sobj.split('.');
 
+       for (i=0; tmpObj && i < splits.length; i++) {
+           if (splits[i] in tmpObj) {
+               tmpObj = tmpObj[splits[i]];
+               cnt++;
+           }
+       }
+       return cnt === splits.length;
+
+
+   },
     /**
     * Whether or not to create a panel and checkbox for the tool in the tools' panel.
     * @method isShownInToolsPanel

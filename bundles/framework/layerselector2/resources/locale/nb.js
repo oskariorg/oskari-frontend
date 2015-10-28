@@ -31,7 +31,8 @@ Oskari.registerLocalization(
         "tooltip": {
             "type-base": "Bakgrunnskart",
             "type-wms": "Kartlag (WMS, WMTS)",
-            "type-wfs": "Dataprodukt (WFS)"
+            "type-wfs": "Dataprodukt (WFS)",
+            "type-wfs-manual": "NOT TRANSLATED"
         },
         "backendStatus": {
             "OK": {
@@ -40,11 +41,11 @@ Oskari.registerLocalization(
             },
             "DOWN": {
                 "tooltip": "Kartlaget er for tiden utilgjengelig",
-                "iconClass": "backendstatus-down"
+                "iconClass": "backendstatus-nede"
             },
             "MAINTENANCE": {
                 "tooltip": "Kartlaget kan være midlertidig utilgjengelig de nærmeste dagene",
-                "iconClass": "backendstatus-maintenance"
+                "iconClass": "backendstatus-vedlikehold"
             },
             "UNKNOWN": {
                 "tooltip": "",

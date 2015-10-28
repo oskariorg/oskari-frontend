@@ -21,7 +21,7 @@ function() {
     getTool: function(){
         return {
             id: 'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin',
-            name: 'ScaleBarPlugin',
+            title: 'ScaleBarPlugin',
             config: {}
         };
     },

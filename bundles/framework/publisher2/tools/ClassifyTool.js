@@ -14,12 +14,13 @@ function() {
 
     /**
     * Initialize tool
+    * @params {} state data
     * @method init
     * @public
     */
-    init: function(){
+    init: function(pdata){
         var me = this,
-            tool = me.getTool();
+            tool = me.getTool(pdata);
 
         if(!me.__plugin) {
             me.__plugin = Oskari.clazz.create(tool.id, tool.config, Oskari.getLocalization('StatsGrid'));
@@ -29,6 +30,7 @@ function() {
 
         me.setEnabled(false);
     },
+    bundleName: 'publishedgrid',
     /**
     * Set enabled.
     * @method setEnabled
@@ -87,25 +89,32 @@ function() {
     },
     /**
     * Get tool object.
+    * @params {} state data
     * @method getTool
     *
     * @returns {Object} tool description
     */
-    getTool: function() {
+    getTool: function(pdata) {
         var me = this,
             statsGrid = me.__sandbox.getStatefulComponents().statsgrid,
-            statsGridState = me._filterIndicators(_.clone(statsGrid.state, true)),
+            statsGridState = me.hasNestedObj(pdata, 'configuration.publishedgrid.state') ? pdata.configuration.publishedgrid.state : statsGrid.state,
             layer = me._getStatsLayer();
-        statsGridState.allowClassification  = false;
-        return {
-            id: 'Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin',
-            name: 'allowClassification',
-            config: {
-                'published': true,
-                'layer': layer,
-                'state': statsGridState
-            }
-        };
+
+        if(!me.__tool){
+            statsGridState = me._filterIndicators(_.clone(statsGridState, true));
+            statsGridState.allowClassification  = false;
+            me.__tool = {
+                id: 'Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin',
+                title: 'allowClassification',
+                config: {
+                    'published': true,
+                    'layer': layer,
+                    'state': statsGridState
+                }
+            };
+        }
+        return me.__tool;
+
     },
     /**
     * Get values.
@@ -116,17 +125,16 @@ function() {
     */
     getValues: function () {
         var me = this,
-            statsGrid = me.__sandbox.getStatefulComponents().statsgrid,
-            statsGridState = me._filterIndicators(_.clone(statsGrid.state, true));
+            statsGridState = me._getState();
         if(me.state.enabled && statsGridState) {
             return {
                 configuration: {
-                    mapfull: {
+                    publishedgrid: {
                         conf: {
-                            plugins: [{ id: this.getTool().id, config: this.getPlugin().getConfig() }]
-                        }
-                    },
-                    publishedgrid: statsGridState
+                            allowClassification: true
+                        },
+                        state: statsGridState
+                    }
                 }
             };
         } else {
@@ -152,7 +160,18 @@ function() {
             );
         });
         return statsGridState;
-    }
+    },
+        /**
+         * @private @method _getState
+         * Get state config from current tool, if sandbox returns  default config
+         *
+         */
+        _getState: function () {
+            var me = this,
+                statsGrid = me.__sandbox.getStatefulComponents().statsgrid,
+                statsGridState = statsGrid.state;
+            return me._filterIndicators(_.clone(statsGridState, true));
+        }
 }, {
     'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
     'protocol' : ['Oskari.mapframework.publisher.Tool']

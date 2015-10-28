@@ -1,5 +1,87 @@
 # Release Notes
 
+## 1.33
+
+### publisher2
+
+The new publisher is production ready. Check out the migration guide under Oskari server on how to migrate to the new publisher.
+
+### Sandbox/map layer service
+
+Fixed getNewestLayers(count) method to find really newest layers.
+
+## Layer plugins
+
+Fixed map layers handling when layer is not visible. Get layer image only then if layer is visible. 
+
+Fixed following plugins:
+- 'WmsLayerPlugin' 
+- 'WfsLayerPlugin'
+- 'MyPlacesLayerPlugin'
+- 'StatsLayerPlugin'
+- 'ArcGisLayerPlugin'
+- 'UserLayersLayerPlugin'
+- 'AnalysisLayerPlugin'
+
+### routingUI
+
+Now start and end points are markered on the map. Also all route plan(s) are shown on search results. Fixed error handling.
+
+### routingService
+
+Support OpenTripPlanner response format. Sends RouteSuccessEvent with route plan, success and request parameters.
+
+### statsgrid
+
+Now adds the indicator tab UI for user content/personaldata even if started after personaldata bundle.
+
+### Default view functionality
+
+Added functionality to mark a saved view as a default view.
+
+### mapfull
+
+Fixed map content width. Now navigation, zoombar, XY etc. tools are visible also on smaller screens.
+
+Fixed map layers handling when layer is not visible. Get layer image only then if layer is visible. 
+
+### map-module
+
+Added a new request 'ShowProgressSpinnerRequest' that shows / hides a progress indicator on the map. The request is by default enabled in rpc.
+
+### mapmodule-plugin/MarkersPlugin
+
+Added marker transient property, if this is setted to true then marker is not saved to state.
+
+### core/maplayer-service
+
+No longer generates an empty default style for WMS-layers.
+
+### publisher2
+
+Added LayerSelectionTool. This tool user can add map layer tool on the map. User can also select visible baselayers.
+
+### framework/mapwmts and mapping/mapwmts_ol3
+
+WmtsLayerService no longer parses rest url template from capabilities, but relies on server providing it. 
+This enables proxying for WMTS-layers that use resourceURL and require credentials.
+
+### libraries/moment
+
+Added Moment library for date/time presentation formatting.
+
+### rpc
+
+New event is enabled by default:
+- 'RouteSuccessEvent' notifies at a routing has getted response
+
+New request is enabled by default:
+- 'GetRouteRequest' requests to get route plan from routeService
+
+### admin-layerselector
+
+Now initializes the legendimage from style correctly when adding layers.
+
 ## 1.32.1
 
 ### integration/admin-layerselector
@@ -170,7 +252,7 @@ Added currently selected style name as a sub header for legend flyout.
 
 ### publisher2
 
-Added GetInfoTool. GetInfoTool has now colous schema selection on extra options.
+Added GetInfoTool. GetInfoTool has now colour schema selection on extra options.
 
 PanelMapSize renamed to PanelMapPreview. PanelMapPreview allow select map preview mode in two different modes (mobile/desktop).
 
@@ -1119,6 +1201,30 @@ getSotkaIndicatorsData has been renamed as getStatsIndicatorsData.
 An injected empty conf no longer overwrites the basic functionality (default tile/flyout setting). getConfiguration() function should be preferred over referencing conf-property directly to ensure there's no issues with the config.
 
 DefaultTile now has methods setEnabled(bln) and isEnabled() for disabling/enabling the tile.
+
+Added DefaultModule to get boilerplate methods through inheritance. Based on DefaultExtension but removed flyout/tile/view methods. Usage example:
+
+```javascript
+Oskari.clazz.define('Oskari.mynamespace.bundle.mybundle.MyClass',
+    function () {
+        this.start();
+    },
+    {
+        "name" : "mybundle.MyClass",
+        afterStart : function(sandbox) {
+
+        },
+        "eventHandlers": {
+            "AfterMapMoveEvent" : function(e) {
+                console.log(e);
+            }
+        }
+    },
+    {
+        "extend" : ['Oskari.userinterface.extension.DefaultModule']
+    }
+);
+```
 
 ### arcgis / ArcGisLayer
 

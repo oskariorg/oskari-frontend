@@ -14,8 +14,8 @@ Oskari.registerLocalization(
             },
             "history": {
                 "reset": "Siirry oletusnäkymään.",
-                "back": "Siirry edelliseen karttanäkymään.",
-                "next": "Siirry seuraavaan karttanäkymään."
+                "back": "Siirry edelliseen näkymään.",
+                "next": "Siirry seuraavaan näkymään."
             },
             "pan": "Siirrä karttaa hiirellä raahaamalla.",
             "zoom": "Lähennä karttaa.",
@@ -28,8 +28,8 @@ Oskari.registerLocalization(
             "title": "Mittaustulokset",
             "close": "Lopeta",
             "guidance": {
-                "measureline": "Piirrä mitattava etäisyys klikkaamalla viivamaisen kohteen taitepisteitä hiirellä. Lopeta piirtäminen kaksoisklikkaamalla karttaa loppupisteessä.",
-                "measurearea": "Piirrä mitattava alue klikkaamalla alueen kulmapisteitä hiirellä. Lopeta piirtäminen kaksoisklikkaamalla karttaa alkupisteessä."
+                "measureline": "Piirrä mitattava etäisyys klikkaamalla viivan taitepisteitä. Lopuksi kaksoisklikkaa päätepistettä.",
+                "measurearea": "Piirrä mitattava alue klikkaamalla alueen kulmapisteitä. Lopuksi kaksoisklikka alkupistettä."
             }
         }
     }

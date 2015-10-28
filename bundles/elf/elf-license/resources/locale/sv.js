@@ -1,85 +1,87 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "sv",
     "key": "elf-license",
     "value": {
-        "getLicenseText": "License",
-    	"errors": {
-        	"cannotGetLicenseInformation": {
-        		"title": "Error for getting license information",
-        		"message": "Cannot get license information"
-        	},
-        	"failedGetLicenseInformation": {
-        		"title": "Failed to get license information",
-        		"message": "Cannot connect to license server"
-        	},
+        "getLicenseText": "Licens",
+        "errors": {
+            "cannotGetLicenseInformation": {
+                "title": "Fel",
+                "message": "Licensinfo kunde inte hämtas."
+            },
+            "failedGetLicenseInformation": {
+                "title": "Fel",
+                "message": "Licensserver kunde inte anslutas."
+            },
             "cannotGetLicensePrice": {
-                "title": "Failed to get license price",
-                "message": "Cannot get license price"
+                "title": "Fel",
+                "message": "Licenspris kunde inte hämtas."
             },
             "failedConclude": {
-                "title": "Error for conclude license",
-                "message": "Cannot conclude license."
+                "title": "Fel",
+                "message": "Licensen kunde inte beställas."
             },
             "concludeNoResponse": {
-                "title": "Cannot conclude license",
-                "message": "Cannot conclude license."
+                "title": "Fel",
+                "message": "Licensen kunde inte beställas."
             },
             "cannotDeactivateLicense": {
-                "title": "Failed to deactivate license",
-                "message": "Cannot deactivate license"
+                "title": "Fel",
+                "message": "Lisensen kunde inte avaktiverats."
             },
             "checkFields": {
-                "title": "Check required values",
-                "message": "Missing values from"
+                "title": "Fel",
+                "message": "Fäljande info fattas:"
             }
         },
         "success": {
             "deactivateLicense": {
-                "title": "License deactivated",
-                "message": "License deactivated successfully"
+                "title": "Licens avaktiverat",
+                "message": "Licens har avaktiverat."
             }
         },
         "dialog": {
-        	"licenseTitle": "License details",
-        	"licenseModelsTitle": "Licensemodels:",
+            "licenseTitle": "Licensinfo",
+            "licenseModelsTitle": "Licensmodeller",
             "noRightToAnyLicenseModels": "You have no rights to any licensemodels.",
             "loginShort": "Log in to show licensemodels.",
-            "licenseSummaryTitle": "License summary",
-            "priceTitle": "Price",
+            "licenseSummaryTitle": "Licensreferat",
+            "priceTitle": "Pris",
             "priceUnitEuro": "€",
             "help": {
-                "info": "Select a license model by clicking on it.",
-                "details": "Fill license details, all required fields are marked with asterisk (*). Press 'Next' to see license summary and price. If you want select different license model then press 'Previous'. You can also stop your order by pressing 'Close' button.",
-                "summary": "Read license and accept filled license pressing 'Conclude'. If you want edit some filled information, go back to by pressing 'Back' button. You can also stop your order by pressing 'Close' button.",
-                "orderDetails": "Above you will see your license order information. Close dialog by pressing 'Close' button. If you want deactivate your order then press 'Deactivate license' button."
+                "info": "Välj en licensmodell genom att klicka licensen du vill.",
+                "details": "Fyll in licensinfo. Obligatoriska data har markerat med en asterisk (*). Om du vill se licensreferaten och pris, klicka \"Nästa\". Om du vill välja en olik modell, klicka \"Tillbaka\". Om du vill avbryta beställningen, klicka \"Stäng\".",
+                "summary": "Läsa licensvillkor och godkänn dem genom att klicka \"Beställ licens\". Om du vill bearbeta beställningen, klicka \"Tillbaka\". Om du vill avbryta beställningen, klicka \"Stäng\".",
+                "orderDetails": "Du kan se licensinfo ovanför. Om du vill stänga fönster, klicka \"Stäng\". Om du vill avbryta beställningen, klicka \"Aktivera av beställning\"."
             },
-            "concludeSuccessTitle": "License concluded successfully",
+            "concludeSuccessTitle": "Licens har beställt.",
             "conclude": {
-                "title": "License order details",
-                "productid": "Product",
-                "licenseid": "License",
-                "validto": "Valid to"
+                "title": "Licensinfo",
+                "productid": "Produkt",
+                "licenseid": "Licens",
+                "validto": "Giltig till"
             },
             "deactivateConfirm": {
-                "title": "License deactivate",
-                "message": "Do you want deactivate your license?"
+                "title": "Licens avaktivering",
+                "message": "Vill du aktivera av beställningen?"
             },
-            "validTo": "Subscription valid for {day}",
-            "licenseId": "License id: {licenseid}",
-            "licenseServiceUrl": "License service URL: {serviceurl}",
-            "licenceConcluded" : {
-                "message": "License concluded, see below for the license details."
+            "validTo": "Beställningen är giltig till {day}.",
+            "licenseId": "Licensid: {licenseid}",
+            "licenseServiceUrl": "Licenstjänstens URL: {serviceurl}",
+            "licenceConcluded": {
+                "message": "Licens har beställt. Checka licensinfo nedifrån:"
             }
         },
         "buttons": {
-        	"close": "Close",
-        	"previous": "Previous",
-        	"next": "Next",
-            "conclude": "Conclude",
+            "close": "Stäng",
+            "previous": "Tillbaka",
+            "next": "Nästa",
+            "conclude": "Beställ licens",
             "ok": "OK",
-            "deactivate": "Deactivate license",
-            "no": "No",
-            "yes": "Yes"
+            "deactivate": "Aktivera av licens",
+            "no": "Nej",
+            "yes": "Ja"
         }
     }
-});
+}
+);

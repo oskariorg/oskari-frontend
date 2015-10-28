@@ -44,6 +44,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         };
         this._mapDivId = mapDivId;
         this._mapClickedBuilder;
+        this._progressSpinner = null;
 
         // override defaults
         var key;
@@ -254,10 +255,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         _addRequestHandlersImpl: function (sandbox) {
             this.requestHandlers = {
                 mapLayerUpdateHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapLayerUpdateRequestHandler', sandbox, this),
-                mapMoveRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapMoveRequestHandler', sandbox, this)
+                mapMoveRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapMoveRequestHandler', sandbox, this),
+                showSpinnerRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.ShowProgressSpinnerRequestHandler', sandbox, this)
             };
             sandbox.addRequestHandler('MapModulePlugin.MapLayerUpdateRequest', this.requestHandlers.mapLayerUpdateHandler);
             sandbox.addRequestHandler('MapMoveRequest', this.requestHandlers.mapMoveRequestHandler);
+            sandbox.addRequestHandler('ShowProgressSpinnerRequest', this.requestHandlers.showSpinnerRequestHandler);
         },
 
         /**
@@ -1026,6 +1029,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @param {Array[jQuery]} elements The elements where the classes should be changed.
          */
         changeCssClasses: function (classToAdd, removeClassRegex, elements) {
+
+            //TODO: deprecate this, make some error message appear or smthng
+
             var i,
                 j,
                 el;
@@ -1050,6 +1056,74 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
                 // Add the new font as a CSS class.
                 el.addClass(classToAdd);
+            }
+        },
+        /**
+         * Sets the style to be used on plugins and asks all the active plugins that support changing style to change their style accordingly.
+         *
+         * @method changeToolStyle
+         * @param {Object} style The style object to be applied on all plugins that support changing style.
+         */
+        changeToolStyle: function(style) {
+            var me = this;
+
+            if (me._options) {
+                me._options.style = _.cloneDeep(style);
+            }
+
+            //notify plugins of the style change.
+            if (style) {
+                _.each(me._pluginInstances, function(plugin) {
+                    if (plugin && plugin.hasUI()) {
+                        var styleConfig = me._options.style.toolStyle !== "default" ? me._options.style.toolStyle : null;
+                        if (plugin.changeToolStyle && typeof plugin.changeToolStyle === 'function') {
+                            plugin.changeToolStyle(styleConfig);
+                        }
+                        if (plugin.changeFont && typeof plugin.changeFont === 'function') {
+                            plugin.changeFont(me._options.style.font);
+                        }
+                    }
+                });
+            }
+        },
+        /**
+         * Gets the style to be used on plugins
+         *
+         * @method getToolStyle
+         * @return {String} style The mapmodule's style configuration.
+         */
+        getToolStyle: function() {
+            var me = this;
+            if (me._options && me._options.style && me._options.style.toolStyle) {
+                return me._options.style.toolStyle && me._options.style.toolStyle !== "default" ? me._options.style.toolStyle : null;
+            } else {
+                return null;
+            }
+        },
+        /**
+         * Gets the font to be used on plugins
+         * @method getToolFont
+         * @return {String} font The mapmodule's font configuration or null if not set.
+         */
+        getToolFont: function() {
+            var me = this;
+            if (me._options && me._options.style && me._options.style.font) {
+                return me._options.style.font;
+            } else {
+                return null;
+            }
+        },
+        /**
+         * Gets the colourscheme to be used on plugins
+         * @method getToolColourScheme
+         * @return {String} font The mapmodule's font configuration or null if not set.
+         */
+        getToolColourScheme: function() {
+            var me = this;
+            if (me._options && me._options.style && me._options.style.colourScheme) {
+                return me._options.style.colourScheme;
+            } else {
+                return null;
             }
         },
 

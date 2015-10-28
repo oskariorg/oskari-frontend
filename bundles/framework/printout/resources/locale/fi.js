@@ -3,80 +3,80 @@ Oskari.registerLocalization(
     "lang": "fi",
     "key": "Printout",
     "value": {
-        "title": "Tulosta näkymä",
-        "flyouttitle": "Siirry tulostamaan",
+        "title": "Tulosta karttanäkymä",
+        "flyouttitle": "Tulosta karttanäkymä",
         "desc": "",
-        "btnTooltip": "Tulosta",
+        "btnTooltip": "Tulosta nykyinen karttanäkymä png-kuvaksi tai pdf-tiedostoon.",
         "BasicView": {
-            "title": "Tulosta nykyinen karttanäkymä.",
+            "title": "Tulosta karttanäkymä",
             "name": {
                 "label": "Kartan nimi",
                 "placeholder": "pakollinen",
-                "tooltip": "Anna näkymälle kuvaileva nimi. Huomioi käyttöliittymän kieli."
+                "tooltip": "Anna tulostettavalle kartalle nimi. Ota huomioon kartan teksteissä käytetty kieli."
             },
             "language": {
                 "label": "Kieli",
                 "options": {
-                    "fi": "Suomi",
-                    "sv": "Ruotsi",
-                    "en": "Englanti"
+                    "fi": "suomi",
+                    "sv": "ruotsi",
+                    "en": "englanti"
                 },
-                "tooltip": "Valitse kieli, jota käytetään tulosteella. Huomioi käyttöliittymän ja aineiston kieli."
+                "tooltip": "Valitse tulosteessa käytettävä kieli. Ota huomioon käyttöliittymässä ja aineistossa käytetty kieli."
             },
             "size": {
-                "label": "Koko",
-                "tooltip": "Valitse arkkikoko. Näet karttanäkymän valitussa koossa esikatselukuvassa.",
+                "label": "Koko ja suunta",
+                "tooltip": "Valitse tulosteen arkkikoko ja suunta. Tarkista muutokset esikatselukuvasta.",
                 "options": [
                     {
                         "id": "A4",
-                        "label": "A4-tuloste",
+                        "label": "A4 pystysuunta",
                         "classForPreview": "preview-portrait",
                         "selected": true
                     },
                     {
                         "id": "A4_Landscape",
-                        "label": "A4-vaakatuloste",
+                        "label": "A4 vaakasuunta",
                         "classForPreview": "preview-landscape"
                     },
                     {
                         "id": "A3",
-                        "label": "A3-tuloste",
+                        "label": "A3 pystysuunta",
                         "classForPreview": "preview-portrait"
                     },
                     {
                         "id": "A3_Landscape",
-                        "label": "A3-vaakatuloste",
+                        "label": "A3 vaakasuunta",
                         "classForPreview": "preview-landscape"
                     }
                 ]
             },
             "preview": {
                 "label": "Esikatselu",
-                "tooltip": "Voit suurentaa esikatselukuvaa klikkaamalla kuvaa hiirellä.",
+                "tooltip": "Klikkaa esikatselukuvaa avataksesi sen suuremmassa koossa uudessa ikkunassa.",
                 "pending": "Esikatselukuva päivitetään hetken kuluttua.",
                 "notes": {
-                    "extent": "Esikatselukuvasta voit tarkistaa tulosteen kattavuusalueen.",
-                    "restriction": "Esikatselukuvassa ei näytetä kaikkia karttatasoja."
+                    "extent": "Tarkista tulosteen kattavuusalue esikatselukuvasta.",
+                    "restriction": "Esikatselukuvassa näytetään ainoastaan taustakartta."
                 }
             },
             "buttons": {
-                "save": "Hae tuloste",
+                "save": "Tulosta",
                 "ok": "OK",
                 "back": "Edellinen",
                 "cancel": "Peruuta"
             },
             "location": {
-                "label": "Sijainti ja mittakaavataso",
-                "tooltip": "Mittakaavataso vastaa selaimessa näkyvän karttanäkymän mittakaavaa.",
-                "zoomlevel": "Mittakaavataso"
+                "label": "Sijainti ja mittakaava",
+                "tooltip": "Kartan mittakaava tulosteessa vastaa esikatselukuvassa näytettävän kartan mittakaavaa.",
+                "zoomlevel": "Mittakaava"
             },
             "settings": {
                 "label": "Lisäasetukset",
-                "tooltip": "Valitse karttatulosteelle tiedostomuoto, otsikko, mittakaava ja päivämäärä."
+                "tooltip": "Valitse asetukset karttatulosteelle."
             },
             "format": {
                 "label": "Tiedostomuoto",
-                "tooltip": "Valitse tulosteen tiedostomuoto",
+                "tooltip": "Valitse tiedostomuoto, jossa haluat tulosteen.",
                 "options": [
                     {
                         "id": "png",
@@ -92,64 +92,64 @@ Oskari.registerLocalization(
                 ]
             },
             "mapTitle": {
-                "label": "Kartan otsikko",
-                "tooltip": "Anna karttatulosteelle otsikko."
+                "label": "Näytettävät tiedot",
+                "tooltip": "Valitse tulosteessa näytettävät tiedot."
             },
             "content": {
                 "options": [
                     {
                         "id": "pageLogo",
-                        "label": "Näytä paikkatietoikkunan logo tulosteessa.",
-                        "tooltip": "Voit halutessasi piilottaa Paikkatietoikkunan logon tulosteesta.",
+                        "label": "Näytä palvelun logo",
+                        "tooltip": "Näytä tulosteessa tämän palvelun logo.",
                         "checked": "checked"
                     },
                     {
                         "id": "pageScale",
                         "label": "Näytä mittakaava",
-                        "tooltip": "Voit halutessasi näyttää tulosteessa kartan mittakaavan.",
+                        "tooltip": "Näytä tulosteessa kartan mittakaava.",
                         "checked": "checked"
                     },
                     {
                         "id": "pageDate",
                         "label": "Näytä päivämäärä",
-                        "tooltip": "Voit halutessasi lisätä tulosteeseen päivämäärän.",
+                        "tooltip": "Näytä tulosteessa sen laatimispäivämäärä.",
                         "checked": "checked"
                     }
                 ]
             },
             "legend": {
-                "label": "Karttaselite",
-                "tooltip": "Valitse karttaselitteelle paikka. Karttaselitettä ei näytetä tulosteessa, jos paikkaa ei valittuna.",
+                "label": "Karttaselitteen sijainti",
+                "tooltip": "Valitse karttaselitteelle sijainti tulosteessa. Jos sijaintia ei ole valittuna, karttaselitettä ei näytetä tulosteessa.",
                 "options": [
                     {
                         "id": "oskari_legend_NO",
                         "loca": "NO",
-                        "label": "Ei karttaselitettä.",
+                        "label": "Ei karttaselitettä",
                         "tooltip": "Karttaselitettä ei näytetä tulosteessa.",
                         "selected": true
                     },
                     {
                         "id": "oskari_legend_LL",
                         "loca": "LL",
-                        "label": "Vasen alanurkka",
+                        "label": "Vasemmassa alanurkassa",
                         "tooltip": "Karttaselite näytetään tulosteen vasemmassa alanurkassa."
                     },
                     {
                         "id": "oskari_legend_LU",
                         "loca": "LU",
-                        "label": "Vasen ylänurkka",
+                        "label": "Vasemmassa ylänurkassa",
                         "tooltip": "Karttaselite näytetään tulosteen vasemmassa ylänurkassa."
                     },
                     {
                         "id": "oskari_legend_RU",
                         "loca": "RU",
-                        "label": "Oikea ylänurkka",
+                        "label": "Oikeassa ylänurkassa",
                         "tooltip": "Karttaselite näytetään tulosteen oikeassa ylänurkassa."
                     },
                     {
                         "id": "oskari_legend_RL",
                         "loca": "RL",
-                        "label": "Oikea alanurkka",
+                        "label": "Oikeassa alanurkassa",
                         "tooltip": "Karttaselite näytetään tulosteen oikeassa alanurkassa."
                     }
                 ]
@@ -158,17 +158,17 @@ Oskari.registerLocalization(
             "error": {
                 "title": "Virhe",
                 "size": "Tulosteen koko on virheellinen.",
-                "name": "Kartan nimi on pakollinen tieto.",
+                "name": "Kartalle ei ole annettu nimeä. Anna kartan nimi ja yritä uudelleen.",
                 "nohelp": "Ohjetta ei löytynyt.",
-                "saveFailed": "Karttanäkymän tulostus epäonnistui. Yritä myöhemmin uudelleen.",
-                "nameIllegalCharacters": "Kartan nimessä on luvattomia merkkejä. Sallittuja merkkejä ovat kaikki suomen kielen aakkoset, numerot sekä välilyönti ja yhdysmerkki."
+                "saveFailed": "Tulostus epäonnistui.",
+                "nameIllegalCharacters": "Kartan nimessä on kiellettyjä merkkejä. Sallittuja merkkejä ovat suomen kielen aakkoset (a-ö, A-Ö), numerot (0-9), välilyönti ja yhdysmerkki (-)."
             }
         },
         "StartView": {
-            "text": "Voit tulostaa tekemäsi karttanäkymän PNG-kuvaksi tai PDF-tulosteeksi.",
+            "text": "Tulosta karttanäkymä tiedostoon. Tiedosto voi olla joko PNG-kuva tai PDF-tiedosto.",
             "info": {
                 "maxLayers": "Tulosteessa voi olla enintään kahdeksan karttatasoa.",
-                "printoutProcessingTime": "Kartan tulostus voi kestää hetken, jos useita karttatasoja on valittuna."
+                "printoutProcessingTime": "Tulostus voi kestää hetken, jos valittuna on useita karttatasoja."
             },
             "buttons": {
                 "continue": "Jatka",

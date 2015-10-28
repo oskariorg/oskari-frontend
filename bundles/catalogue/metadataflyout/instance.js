@@ -155,6 +155,7 @@ Oskari.clazz.define(
             }
 
             /* request handler */
+            /*
             this._requestHandlers['catalogue.ShowMetadataRequest'] =
                 Oskari.clazz.create(
                     'Oskari.catalogue.bundle.metadataflyout.request.' +
@@ -162,17 +163,36 @@ Oskari.clazz.define(
                     sandbox,
                     this
                 );
-
             sandbox.addRequestHandler(
                 'catalogue.ShowMetadataRequest',
                 this._requestHandlers['catalogue.ShowMetadataRequest']
             );
+*/
 
             var request = sandbox.getRequestBuilder(
                 'userinterface.AddExtensionRequest'
             )(this);
 
             sandbox.request(this, request);
+
+            this._requestHandlers = {
+                'catalogue.ShowMetadataRequest': Oskari.clazz.create(
+                    'Oskari.catalogue.bundle.metadataflyout.request.ShowMetadataRequestHandler',
+                    sandbox,
+                    this
+                ),
+                'catalogue.AddTabRequest': Oskari.clazz.create(
+                    'Oskari.mapframework.bundle.catalogue.request.AddTabRequestHandler',
+                    sandbox,
+                    this.plugins['Oskari.userinterface.Flyout']
+                )
+            };
+
+            for (var key in this._requestHandlers) {
+                sandbox.addRequestHandler(key, this._requestHandlers[key])
+            }
+
+
 
             /* stateful */
             sandbox.registerAsStateful(this.mediator.bundleId, this);
@@ -238,10 +258,16 @@ Oskari.clazz.define(
                 p;
 
             /* request handler cleanup */
+            /*
             sandbox.removeRequestHandler(
                 'catalogue.ShowMetadataRequest',
                 this._requestHandlers['catalogue.ShowMetadataRequest']
             );
+            */
+            for (var key in this._requestHandlers) {
+                sandbox.removeRequestHandler(key, this._requestHandlers[key]
+                );
+            }
 
             /* sandbox cleanup */
             for (p in this.eventHandlers) {

@@ -3,10 +3,12 @@ Oskari.registerLocalization(
     "lang": "nb",
     "key": "MapWfs2",
     "value": {
-        "title": "NOT TRANSLATED",
+        "title": "MapWfs2",
         "desc": "",
         "default-style": "Standardstil",
         "own-style": "Egen stil",
+        "refresh": "NOT TRANSLATED",
+        "refresh_title": "NOT TRANSLATED",
         "tile": {
             "title": "MapWfs2"
         },
@@ -22,6 +24,10 @@ Oskari.registerLocalization(
             "wfs_configuring_layer_failed": "Konfigurering av WFS lag {layer} feilet.",
             "wfs_request_failed": "Spørring til WFS lag {layer} feilet.",
             "features_parsing_failed": "Lesing av objekter fra WFS lag {layer}) feilet"
+        },
+        "information": {
+            "title": "NOT TRANSLATED",
+            "info": "NOT TRANSLATED"
         },
         "button": {
             "cancel": "Avbryt",

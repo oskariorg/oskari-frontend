@@ -151,7 +151,8 @@ Oskari.clazz.define(
                 layerScales = this.getMapModule().calculateLayerScales(
                     layer.getMaxScale(),
                     layer.getMinScale()
-                );
+                ),
+                sandbox = this.getSandbox();
 
             openLayer = new OpenLayers.Layer.WMS(
                 openLayerId,
@@ -164,7 +165,7 @@ Oskari.clazz.define(
                     scales: layerScales,
                     isBaseLayer: false,
                     displayInLayerSwitcher: false,
-                    visibility: true,
+                    visibility: layer.isInScale(sandbox.getMap().getScale()) && layer.isVisible(),
                     singleTile: true,
                     transitionEffect: null
                 }

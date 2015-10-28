@@ -133,6 +133,7 @@ Oskari.clazz.define(
                         layer.getMaxScale(),
                         layer.getMinScale()
                     ),
+                sandbox = this.getSandbox(),
                 openLayer = new OpenLayers.Layer.WMS(openLayerId, imgUrl, {
                     layers: layer.getRenderingElement(),
                     transparent: true,
@@ -141,7 +142,7 @@ Oskari.clazz.define(
                     scales: layerScales,
                     isBaseLayer: false,
                     displayInLayerSwitcher: false,
-                    visibility: true,
+                    visibility: layer.isInScale(sandbox.getMap().getScale()) && layer.isVisible(),
                     singleTile: true,
                     buffer: 0
                 });

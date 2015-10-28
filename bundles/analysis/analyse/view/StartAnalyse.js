@@ -26,6 +26,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         me.layer_prefix = 'analysis_';
         me.max_analyse_layer_fields = 10;
         me.max_areaCount = 12;
+        me._fixedDecimalCount = 2;
         // unit -> multiplier
         me.bufferUnits = {
             'm': 1,
@@ -80,9 +81,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         me.accordion = null;
         me.mainPanel = null;
 
-        me.progressSpinner = Oskari.clazz.create(
-            'Oskari.userinterface.component.ProgressSpinner'
-        );
         me.alert = Oskari.clazz.create('Oskari.userinterface.component.Alert');
 
         me.previewContent = null;
@@ -321,9 +319,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 me.loc.error.nohelp
             );
 
-            /* progress */
-            me.progressSpinner.insertTo(container);
-
             me._addAnalyseData(contentPanel);
             // Show the possible warning of exceeding the feature property count.
             me.showInfos();
@@ -388,10 +383,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             if (!ret) {
                 // There's no user set values for the filter
                 ret = {};
+                // This set ret.featureIds
                 this._getSelectedFeatureIds(layer, ret);
-                // Set selected features only to true if there's a selection
-                ret.featureIds = ret.featureIds && ret.featureIds.length;
-                if (!ret.featureIds) {
+                // Set selected features only to true if there's a selection  ??
+                if (!(ret.featureIds && ret.featureIds.length)) {
                     // Set bbox if there's no selection
                     ret.bbox = this.instance.getSandbox().getMap().getBbox();
                 }
@@ -825,6 +820,22 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          */
         _selectedLayers: function () {
             return this._getLayerOptions(true, false, true);
+        },
+        /**
+         * @private @method _getOLGeometry
+         * parse JSON geometry to OL geometry
+         *
+         *@param {JSON} geojson
+         * @return {OL geometry} Returns OL geometry - only the 1st one
+         */
+        _getOLGeometry: function (geojson) {
+            var formatter = new OpenLayers.Format.GeoJSON();
+            if (geojson) {
+
+                var feature = formatter.read(geojson);
+                return feature[0].geometry;
+            }
+            return null;
         },
 
         /**
@@ -1313,9 +1324,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     toolContainer.find('input').attr('name', 'aggre');
                     me._createLabel(option, toolContainer, 'params_radiolabel');
 
-                    if (i !== options.length - 1) {
-                        toolContainer.find('input').attr('checked', 'checked');
-                    }
+                    toolContainer.find('input').attr('checked', 'checked');
 
                     contentPanel.append(toolContainer);
                     toolContainer.find('input').attr({
@@ -1325,8 +1334,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     });
                     toolContainer.find('input').change(closureMagic(option));
 
-                    // Disable last one, if no no data
-                    if (i === options.length - 1) {
+                    // Disable no data, if no no data
+                    if (option.id === 'oskari_analyse_NoDataCnt') {
                         if (me._getNoDataValue()) {
                             toolContainer.find('input').prop('disabled', false);
                             toolContainer.find('input').attr('checked', 'checked');
@@ -2409,7 +2418,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 fields = [];
             }
 
-            var title = container.find('.settings_name_field').val(),
+            var title = container.find('.settings_name_field').val() ? container.find('.settings_name_field').val() : '_',
                 defaults = {
                     name: title,
                     method: methodName,
@@ -2526,7 +2535,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var methodSelections = {
                 'buffer': {
                     methodParams: {
-                        distance: bufferSize
+                        distance: bufferSize,
+                        no_data: me._getNoDataValue()
                     },
                     opacity: layer.getOpacity()
                 },
@@ -2539,20 +2549,23 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 },
                 'union': {
                     methodParams: {
-                        layerId: unionLayerId
+                        layerId: unionLayerId,
+                        no_data: me._getNoDataValue()
                     }
                 },
                 'clip': {
                     methodParams: {
                         layerId: intersectLayerId,
-                        features: intersectFeatures
+                        features: intersectFeatures,
+                        no_data: me._getNoDataValue()
                     }
                 },
                 'intersect': {
                     methodParams: {
                         layerId: intersectLayerId,
                         operator: spatialOperator, // TODO: param name?
-                        features: intersectFeatures
+                        features: intersectFeatures,
+                        no_data: me._getNoDataValue()
                     }
                 },
                 'layer_union': {
@@ -2583,7 +2596,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         layerId: differenceLayerId,
                         featuresA1: featuresA1,
                         featuresB1: featuresB1,
-                        operator: spatialOperator
+                        operator: spatialOperator,
+                        no_data: me._getNoDataValue()
                     }
                 }
             };
@@ -2731,12 +2745,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 }
 
                 // Send the data for analysis to the backend
-                me.progressSpinner.start();
+                me.instance.sandbox.postRequestByName('ShowProgressSpinnerRequest',[true]);
                 me.instance.analyseService.sendAnalyseData(
                     data,
                     // Success callback
                     function (response) {
-                        me.progressSpinner.stop();
+                        me.instance.sandbox.postRequestByName('ShowProgressSpinnerRequest',[false]);
                         if (response) {
                             if (response.error) {
                                 showError(response.error);
@@ -2747,7 +2761,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     },
                     // Error callback
                     function (jqXHR, textStatus, errorThrown) {
-                        me.progressSpinner.stop();
+                        me.instance.sandbox.postRequestByName('ShowProgressSpinnerRequest',[false]);
                         showError(textStatus);
                     }
                 );
@@ -2784,7 +2798,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
                 me.instance.sandbox.postRequestByName(rn, [geojson, 'GeoJSON', null, null, 'replace', true, style, false]);
 
-                me._showAggregateResultPopup(aggregateValues, noDataCnt);
+                me._showAggregateResultPopup(aggregateValues, geojson, noDataCnt);
             } else {
                 mapLayerService = me.instance.mapLayerService;
                 // Create the layer model
@@ -2841,28 +2855,40 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          * Shows aggregate analysis results in popup
          *
          * @param {JSON} resultJson Analysis results
+         *
+         *[{"vaesto": [{"Kohteiden lukumäärä": "324"}, {"Tietosuojattujen kohteiden lukumäärä": "0"},..}]},{"miehet":[..
+         * @param {JSON}  geojson geometry of aggregate features union
          * @param {Boolean} noDataCnt True if the amount of authorised features is included in analysis
          *
          */
-        _showAggregateResultPopup: function (resultJson, noDataCnt) {
+        _showAggregateResultPopup: function (resultJson, geojson, noDataCnt) {
             var me = this,
                 popup =  Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 gridModel = Oskari.clazz.create('Oskari.userinterface.component.GridModel'),
                 content = this.template.wrapper.clone(),
+                contentPanel = me.contentPanel,
+                tmpfea = {},
                 fields;
-
-            _.forEach(resultJson, function(feature, key) {
-                feature.Property = key;
-                gridModel.addData(feature, true);
+            // Array Array is used for to keep order of rows and cols
+                    _.forEach(resultJson, function(feature, key) {
+                tmpfea = {};
+                _.forEach(feature, function(sfeature, skey) {
+                    _.forEach(sfeature, function(ssfeature, sskey) {
+                        _.forEach(ssfeature, function(value, ssskey) {
+                            tmpfea[ssskey] = value;
+                        });
+                    });
+                    tmpfea.Property = skey;
+                    gridModel.addData(tmpfea, true);
+                });
             });
-
             gridModel.setIdField('Property');
             gridModel.setFirstField('Property');
             me.grid.setDataModel(gridModel);
 
             fields = gridModel.getFields();
             _.forEach(fields, function (field) {
-                me.grid.setNumericField(field);
+                me.grid.setNumericField(field, me._fixedDecimalCount);
             });
 
             me.grid.renderTo(content);
@@ -2871,15 +2897,35 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 content.prepend('<div>' + me.loc.aggregate.footer + '</div>');
             }
 
+
+            var storeBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            storeBtn.setTitle(me.loc.aggregatePopup.store);
+            storeBtn.setTooltip(me.loc.aggregatePopup.store_tooltip);
+            storeBtn.setHandler(function () {
+                var rq = 'MapModulePlugin.RemoveFeaturesFromMapRequest';
+                me.instance.sandbox.postRequestByName(rq);
+                //Store temp geometry layer
+                var title = me.mainPanel.find('.settings_name_field').val() ? me.mainPanel.find('.settings_name_field').val() : '_';
+                contentPanel.addGeometry(me._getOLGeometry(geojson), title );
+                me._showFeatureDataWithoutSaving = false;
+                popup.close(true);
+
+            });
+
             var closeBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             closeBtn.setTitle(me.loc.aggregatePopup.close);
             closeBtn.setHandler(function () {
                 popup.close(true);
+                me._showFeatureDataWithoutSaving = false;
                 var rq = 'MapModulePlugin.RemoveFeaturesFromMapRequest';
                 me.instance.sandbox.postRequestByName(rq);
             });
-            popup.makeDraggable();
-            popup.show(me.loc.aggregatePopup.title, content, [closeBtn]);
+            popup.makeDraggable({
+                scroll: false,
+                cancel: '.content'
+            });
+
+            popup.show(me.loc.aggregatePopup.title, content, [storeBtn,closeBtn]);
         },
 
         /**
@@ -3127,11 +3173,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var me = this,
                 no_data,
                 selectedLayer = me._getSelectedMapLayer();
-
             if (!selectedLayer) {
                 return no_data;
             }
-            if (selectedLayer.getLayerType() !== 'wfs') {
+            if (selectedLayer.getLayerType() !== 'wfs' && selectedLayer.getLayerType() !== 'analysis') {
                 return no_data;
             }
             var params = selectedLayer.getWpsLayerParams();

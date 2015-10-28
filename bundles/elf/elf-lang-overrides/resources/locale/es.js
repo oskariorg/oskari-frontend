@@ -1,52 +1,30 @@
 Oskari.registerLocalization(
 {
     "lang": "es",
-    "key": "MapModule",
-    "value": {
-        "plugin": {
-            "LogoPlugin" : {
-                "dataSources": "Copyright",
-                "layersHeader": "&copy; ELF and listed service providers"
-            }
-        }
-    }
-}, true);
-
-Oskari.registerLocalization(
-{
-    "lang": "es",
-    "key": "catalogue.bundle.metadatacatalogue",
-    "value": {
-        "tabTitle": "Geo Product Finder"
-    }
-}, true);
-
-Oskari.registerLocalization(
-{
-    "lang": "es",
     "key": "admin-layerselector",
     "value": {
         "admin": {
             "en": {
                 "title": "En",
-                "placeholder": "Name in English",
-                "descplaceholder": "Description in English"
+                "placeholder": "Nombre en Inglés",
+                "descplaceholder": "Descripción en Inglés"
             },
             "fi": {
                 "title": "Fi",
-                "placeholder": "Name in Finnish",
-                "descplaceholder": "Description in Finnish"
+                "placeholder": "nombre en Finlandés",
+                "descplaceholder": "descripción en Finlandés"
             },
             "sv": {
                 "title": "Sv",
-                "placeholder": "Name in Swedish",
-                "descplaceholder": "Description in Swedish"
+                "placeholder": "Nombre en Sueco",
+                "descplaceholder": "Descripción enSueco"
             },
             "es": {
                 "title": "Es",
-                "placeholder": "Name in Spanish",
-                "descplaceholder": "Description in Spanish"
+                "placeholder": "Nombre en Español",
+                "descplaceholder": "descripción en Español"
             }
         }
     }
-}, true);
+}
+);
