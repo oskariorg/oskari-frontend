@@ -1241,16 +1241,35 @@ Oskari.clazz.define(
                         
                         if (src.tileCache.containsKey(bboxKey)) {
                             tile  = src.tileCache.get(bboxKey);
-                            tile.getImage().src = imageUrl;
-
+                            
                             try {
-                              tile.dispatchEvent(
-                                  new ol.source.TileEvent(ol.source.TileEventType.TILELOADEND, tile));
+                                var newTile = me.createNewTile(src, tile, imageUrl);
+                                src.tileCache.set(bboxKey, null);
+                                //src.tileCache.set(bboxKey, newTile);
+                                //newTile.changed();
                             } catch(e) {
                                 debugger;
                             }
+                            /*
+//                            tile.getImage().src = imageUrl;
+                            var image = tile.getImage();
+
+                            tile.image_.src = '';//imageUrl;
+                            tile.state = ol.TileState.LOADED;
+                            console.log(bboxSplit[0]+" "+bboxSplit[1]+" "+imageUrl);
 
 
+                            try {
+//                              tile.dispatchEvent(
+//                                  new ol.source.TileEvent(ol.source.TileEventType.TILELOADEND, tile));
+                                tile.changed();
+
+                            } catch(e) {
+                                console.log(e);
+                                debugger;
+                            }
+
+*/
 /*                            
                             console.log(bboxSplit[0]+" "+bboxSplit[1]+" "+imageUrl);
                             //add flag whether this is a boundary tile, in which case it always needs to be redrawn.
@@ -1269,6 +1288,28 @@ Oskari.clazz.define(
                     console.log("can't draw becaus no bboxkey");
                 }
             }
+        },
+        createNewTile: function(src, oldTile, imageUrl) {
+
+            try {
+                var tileCoord = oldTile.tileCoord;
+
+                var newTile = new src.tileClass(
+                    tileCoord,
+                    goog.isDef(imageUrl) ? ol.TileState.IDLE : ol.TileState.EMPTY,
+                    goog.isDef(imageUrl) ? imageUrl : '',
+                    src.crossOrigin,
+                    src.tileLoadFunction);
+
+                goog.events.listen(newTile, goog.events.EventType.CHANGE,
+                    src.handleTileChange_, false, src);
+
+
+                return newTile;
+            } catch(e) {
+                debugger;
+            }
+
         },
         /**
          * @method _addMapLayerToMap
@@ -1363,6 +1404,7 @@ Oskari.clazz.define(
                     this.handleTileChange_, false, this);
 
                 //use the bbox key as key to the tilecache instead of the zxy. Maybe reconsider this, there might be no advantage as to having bbox as the key, versus zxy...?
+                debugger;
                 if (!this.tileCache.containsKey(tileUrl)) {
                     this.tileCache.set(tileUrl, tile);
                     //console.log("creating tile: "+tileCoord+" "+tileUrl);
