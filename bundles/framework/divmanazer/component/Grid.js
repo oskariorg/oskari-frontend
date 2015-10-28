@@ -1102,7 +1102,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             this.setColumnValueRenderer(
                 field,
                 function (value) {
-                    // Try 1st string - filter out values with pre 0
+                    // Try 1st string - filter out values with leading 0 and no . in it
                     var parsedString = String(value),
                         parsed = parseFloat(value);
                     if(parsedString){
@@ -1110,7 +1110,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                             return value;
                         }
                     }
-                    if (!isNaN(parsed)) {
+                    if (Oskari.util.isNumber(value)) {
                         if (decimalCount === -1) {
                             var fieldValues = _.pluck(me.getDataModel().data, field);
                             decimalCount = Oskari.util.decimals(fieldValues);
@@ -1120,7 +1120,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                                 decimalCount = fixedCount;
                             }
                         }
-                        return parsed.toFixed(decimalCount);
+                        return parseFloat(parsed.toFixed(decimalCount));
                     } else {
                         return value;
                     }

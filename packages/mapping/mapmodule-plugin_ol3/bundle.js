@@ -68,11 +68,11 @@ Oskari.clazz.define(
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/Plugin.js"
                 },
                 /**
-                 * interactions plugin
+                 * controls plugin
                  */
                 {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/interactions/InteractionsPlugin.js"
+                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/controls/ControlsPlugin.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/request/DisableMapKeyboardMovementRequest.js"
@@ -88,12 +88,10 @@ Oskari.clazz.define(
                 }, {
                     "type": "text/javascript",
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/request/MapMovementInteractionsRequestHandler.js"
-                }, 
-                /*{
+                },{
                     "type": "text/javascript",
                     "src": "../../../sources/framework/request/common/show-map-measurement-request.js"
                 },
-                */
                 /**
                  * GFI
                  */
@@ -358,6 +356,15 @@ Oskari.clazz.define(
                 }, {
                     "type": "text/css",
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/resources/css/mylocation.css"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/mylocation/request/GetUserLocationRequest.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/mylocation/request/GetUserLocationRequestHandler.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/event/UserLocationEvent.js"
                 },
 
                 /**
