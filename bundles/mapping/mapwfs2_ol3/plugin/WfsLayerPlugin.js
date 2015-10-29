@@ -542,7 +542,10 @@ Oskari.clazz.define(
 
                         //clear the boundary temp tiles
                         me.tempVectorLayer.getSource().clear();
-
+                        //clean the tilehash
+                        me._tempTileHash = {};
+                        me.NUM_TILES_LOADING = tiles.length;
+                        console.log("setLocation: "+bbox);
                         me.getIO().setLocation(
                             layerId,
                             srs, [
@@ -1194,9 +1197,6 @@ Oskari.clazz.define(
             } else { // "normal"
                 BBOX = boundsObj;
                 bboxKey = this.bboxkeyStrip(BBOX);
-
-
-
                 /*
                 style = layer.getCurrentStyle().getName();
                 tileToUpdate = me._tilesToUpdate.mget(layerId,'',bboxKey);
@@ -1216,6 +1216,10 @@ Oskari.clazz.define(
                 }
                 */
 //                console.log("drawImageTile "+bboxKey+" "+imageUrl);
+
+                me.NUM_TILES_LOADING--;
+
+/*
                 var geometry = null;
                 var bboxSplit = bboxKey.split(',');
                 geometry = new ol.geom.Polygon([[
@@ -1233,6 +1237,7 @@ Oskari.clazz.define(
                 vectorFeature.isBoundaryTile = boundaryTile;
                 vectorFeature.bboxKey = bboxKey;
                 this.tempVectorLayer.getSource().addFeature(vectorFeature);
+*/
 
                 if (bboxKey) {
                     var src = normalLayer.getSource();
@@ -1241,75 +1246,29 @@ Oskari.clazz.define(
                         
                         if (src.tileCache.containsKey(bboxKey)) {
                             tile  = src.tileCache.get(bboxKey);
-                            
-                            try {
-                                var newTile = me.createNewTile(src, tile, imageUrl);
-                                src.tileCache.set(bboxKey, null);
-                                //src.tileCache.set(bboxKey, newTile);
-                                //newTile.changed();
-                            } catch(e) {
-                                debugger;
-                            }
-                            /*
-//                            tile.getImage().src = imageUrl;
-                            var image = tile.getImage();
-
-                            tile.image_.src = '';//imageUrl;
                             tile.state = ol.TileState.LOADED;
-                            console.log(bboxSplit[0]+" "+bboxSplit[1]+" "+imageUrl);
-
-
-                            try {
-//                              tile.dispatchEvent(
-//                                  new ol.source.TileEvent(ol.source.TileEventType.TILELOADEND, tile));
-                                tile.changed();
-
-                            } catch(e) {
-                                console.log(e);
-                                debugger;
+                            tile.src_ = imageUrl;
+                            tile.getImage().src = imageUrl;
+                            //All tiles for this stint have finished loading -> tell the canvas to update
+                            if (me.NUM_TILES_LOADING === 0) {
+                                /**
+                                TODO: figure out the "right" way to reset the renderer's tilerange to make sure it renders all tiles we want it to.
+                                */
+                                try {
+                                    var mapRenderer = me.getMap().getRenderer();
+                                    var layerRenderer = mapRenderer.getLayerRenderer(normalLayer);
+                                    layerRenderer.renderedCanvasTileRange_ = new ol.TileRange();
+                                    layerRenderer.renderedTiles_ = null;
+                                } catch(e) {
+                                    debugger;
+                                }
+                                
+                                src.changed();
                             }
-
-*/
-/*                            
-                            console.log(bboxSplit[0]+" "+bboxSplit[1]+" "+imageUrl);
-                            //add flag whether this is a boundary tile, in which case it always needs to be redrawn.
-                            tile.isBoundaryTile = boundaryTile;
-//                            tile.state = ol.TileState.LOADED;
-                            tile.changed();
-*/                            
-                        } else {
-                            console.log("DrawTileImage failure "+bboxKey);
-
                         }
-                    } else {
-                        console.log("!src || !src.tileCache");
-                    }
-                } else {
-                    console.log("can't draw becaus no bboxkey");
+                    } 
                 }
             }
-        },
-        createNewTile: function(src, oldTile, imageUrl) {
-
-            try {
-                var tileCoord = oldTile.tileCoord;
-
-                var newTile = new src.tileClass(
-                    tileCoord,
-                    goog.isDef(imageUrl) ? ol.TileState.IDLE : ol.TileState.EMPTY,
-                    goog.isDef(imageUrl) ? imageUrl : '',
-                    src.crossOrigin,
-                    src.tileLoadFunction);
-
-                goog.events.listen(newTile, goog.events.EventType.CHANGE,
-                    src.handleTileChange_, false, src);
-
-
-                return newTile;
-            } catch(e) {
-                debugger;
-            }
-
         },
         /**
          * @method _addMapLayerToMap
@@ -1359,10 +1318,8 @@ Oskari.clazz.define(
 //                source: new ol.source.XYZ({   // XYZ and TileImage(  tried
                 //visible: this.isInScale(me.sandbox.getMap().getScale()) && this.isVisible(),
                 source: new ol.source.TileImage({   // XYZ and TileImage(  tried
-                    //just return null to avoid calls to stupi urls. tiles get loaded outside of this logic.
+                    //just return null to avoid calls to stupid urls. Tiles loaded asynchronously over websocket.
                     tileLoadFunction: function (imageTile, src) {
-                        //    imageTile.getImage().src = window.URL.createObjectURL(res);
-                        //var tileData = me._tilesToUpdate.mget(me._source.get('layerId'), '', src);
                         return null;
                     },
                     
@@ -1380,6 +1337,7 @@ Oskari.clazz.define(
             });
 
             //Would be nice to be able to provide this in the constructor. Can't, however.
+            //And might also be it ain't necessary -> we could 
             openLayer.getSource().getTile = function(z, x, y, pixelRatio, projection) {
                 var tileCoordKey = this.getKeyZXY(z, x, y);
 
@@ -1390,6 +1348,7 @@ Oskari.clazz.define(
                     tileCoord, projection);
                 var tileUrl = goog.isNull(urlTileCoord) ? undefined :
                     this.tileUrlFunction(urlTileCoord, pixelRatio, projection);
+                
                 if (this.tileCache.containsKey(tileUrl)) {
                     return this.tileCache.get(tileUrl);
                 }
@@ -1404,7 +1363,6 @@ Oskari.clazz.define(
                     this.handleTileChange_, false, this);
 
                 //use the bbox key as key to the tilecache instead of the zxy. Maybe reconsider this, there might be no advantage as to having bbox as the key, versus zxy...?
-                debugger;
                 if (!this.tileCache.containsKey(tileUrl)) {
                     this.tileCache.set(tileUrl, tile);
                     //console.log("creating tile: "+tileCoord+" "+tileUrl);
@@ -2089,3 +2047,58 @@ Oskari.clazz.define(
             }
         },
         */
+
+
+/*        
+        _updateTiles: function(src) {
+            var me = this;
+            try {
+
+                //force tile update with ERROR status
+//                me.getMap().renderSync();
+                for (var bboxKey in me._tempTileHash) {
+                    if (src.tileCache.containsKey(bboxKey)) {
+                        console.log("updating tile "+bboxKey+" "+me._tempTileHash[bboxKey]);
+                        tile  = src.tileCache.get(bboxKey);
+                        tile.src_ = me._tempTileHash[bboxKey];
+                        tile.getImage().src = me._tempTileHash[bboxKey];
+                        tile.state = ol.TileState.LOADED;
+//                        tile.changed();
+//                        tile.image_.src_ = me._tempTileHash[bboxKey];
+
+                    }
+                }
+
+                //force update with the new status.
+                me.getMap().renderSync();
+
+
+            } catch(e) {
+                console.log("VIUHE!!!!");
+                debugger;
+            }
+        },
+        createNewTile: function(src, oldTile, imageUrl) {
+
+            try {
+                var tileCoord = oldTile.tileCoord;
+
+                var newTile = new src.tileClass(
+                    tileCoord,
+//                    goog.isDef(imageUrl) ? ol.TileState.IDLE : ol.TileState.EMPTY,
+                    ol.TileState.LOADED,
+                    goog.isDef(imageUrl) ? imageUrl : '',
+                    src.crossOrigin,
+                    src.tileLoadFunction);
+
+                goog.events.listen(newTile, goog.events.EventType.CHANGE,
+                    src.handleTileChange_, false, src);
+
+
+                return newTile;
+            } catch(e) {
+                debugger;
+            }
+
+        },
+*/        
