@@ -88,7 +88,7 @@
         "metadata": {
             "Import-Bundle": {
                 "toolbar": {
-                    "bundlePath": "../../../packages/framework/bundle/"
+                    "bundlePath": "../../../packages/mapping/"
                 }
             },
             "Require-Bundle-Instance": []

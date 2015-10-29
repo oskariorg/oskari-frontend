@@ -23,6 +23,7 @@ function() {
 
             me.setEnabled(false);
         },
+    bundleName: 'publishedgrid',
     /**
     * Get tool object.
      * @params {}  pdta.configuration.publishedgrid.state
@@ -166,11 +167,6 @@ function() {
         if(me.state.enabled && statsGridState) {
             return {
                 configuration: {
-                    mapfull: {
-                        conf: {
-                            plugins: [{ id: this.getTool().id, config: this.getPlugin().getConfig() }]
-                        }
-                    },
                     publishedgrid: {
                         state: statsGridState
                     }

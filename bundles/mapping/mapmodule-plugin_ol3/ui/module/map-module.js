@@ -539,8 +539,19 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
             //var bbox = new ol.extent.boundingExtent([extent[0], extent[1]], [extent[2], extent[3]]);
 
-            mapVO.setExtent(extent);
-            //mapVO.setBbox(bbox)
+            mapVO.setExtent({
+                left: extent[0],
+                bottom: extent[1],
+                right: extent[2],
+                top: extent[3]
+            });
+            
+            mapVO.setBbox({
+                left: extent[0],
+                bottom: extent[1],
+                right: extent[2],
+                top: extent[3]
+            });
 
             var maxBbox = this._maxExtent;
             //var maxExtentBounds = new ol.extent(maxBbox.left, maxBbox.bottom, maxBbox.right, maxBbox.top);

@@ -62,7 +62,7 @@ Oskari.registerLocalization(
             },
             "publishedmaps": {
                 "title": "Julkaistut kartat",
-                "show": "NOT TRANSLATED",
+                "show": "Näytä kartalla",
                 "getHTML": "HTML-koodi",
                 "edit": "Muokkaa",
                 "publish": "Julkaise kartta",

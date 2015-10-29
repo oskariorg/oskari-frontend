@@ -15,7 +15,7 @@ Oskari.registerLocalization(
         "featureDataPopup": "Statistical values",
         "selectionTools": {
             "title": "Select Features",
-            "instructions": "Draw a geometry and select features based the geometry.",
+            "instructions": " ",
             "selectFromTop": "From topmost layer",
             "selectAll": "From all layers",
             "link": {

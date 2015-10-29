@@ -177,7 +177,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                   _.each(me.tools, function(tool) {
                     if (tool.bundleName) {
                       if (me.data.configuration && me.data.configuration[tool.bundleName]) {
-                        enabledTools[tool.getTool().id] = true;
+
+                        //ugly classifytool special case
+                        if (tool.getTool().id === 'Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin') {
+                           if (me.data.configuration[tool.bundleName].conf && me.data.configuration[tool.bundleName].conf.allowClassification) {
+                            enabledTools[tool.getTool().id] = true
+                           }
+                        } else {
+                          enabledTools[tool.getTool().id] = true;
+                        }
                       }
                     } else {
                       if (me.data.configuration && me.data.configuration.mapfull && me.data.configuration.mapfull.conf && me.data.configuration.mapfull.conf.plugins) {

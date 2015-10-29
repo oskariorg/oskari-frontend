@@ -43,8 +43,8 @@ Oskari.registerLocalization(
                 "tooltip": "Select a languge to be used on the map. It affects the user interface and text on the map."
             },
             "size": {
-                "label": "Map size",
-                "tooltip": "Select a map size. The width must be at least 30 pixels and the height at least 20 pixels. Use a dot as a decimal separator. Check updates in the map preview."
+                "label": "Map Size",
+                "tooltip": "Select preview mode."
             },
             "maptools": {
                 "label": "Tools",
@@ -168,7 +168,8 @@ Oskari.registerLocalization(
             },
             "layerselection": {
                 "label": "Map layers menu",
-                "info": "Select map layers to be shown as background layers. You can select a default backgound map layer in the map preview.",
+                "label": "Map Layers",
+                "info": "Select the map layers to show on the published map",
                 "tooltip": "The background layer is shown at the bottom layer on the map. If you select several background maps, only one of them can be visible at a time. User can select a background layer in the user interface. Please select a default background map in the map preview.",
                 "promote": "Do you want to show also orthophotos on the map?"
             },
@@ -177,7 +178,7 @@ Oskari.registerLocalization(
             "zoomlevel": "Zoom level",
             "help": "Help",
             "error": {
-                "title": "Virhe",
+                "title": "Error",
                 "size": "The map size is invalid. Width must be at least 30 pixels and height at least 20 pixels. Use a point as a decimal separator.",
                 "domain": "The website is required. Please type an address and try again.",
                 "domainStart": "The website is invalid. Please type an address without http or www prefixes and try again.",

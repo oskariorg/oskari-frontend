@@ -169,27 +169,27 @@ Oskari.registerLocalization(
             "layerselection": {
                 "label": "Karttatasovalikko",
                 "info": "Valitse taustakarttoina näytettävät karttatasot. Oletusvalinnan voit tehdä esikatselukartassa.",
-                "tooltip": "NOT TRANSLATED",
-                "promote": "Taustakarttataso näkyy karttanäkymässä alimmaisena. Jos valitset useampia karttatasoja taustakarttatasoksi, kartalla näkyy kerralla vain yksi taustakarttataso. Käyttäjä voi halutessaan vaihtaa taustakarttatasoa. Oletusvalinnan voit tehdä esikatselukartassa."
+                "tooltip": "Valitse julkaistavalla kartalla näytettävät karttatasot.",
+                "promote": "Haluatko näyttää kartalla myös ilmakuvia?"
             },
-            "preview": "Haluatko näyttää kartalla myös ilmakuvia?",
-            "location": "Kartan esikatselu",
-            "zoomlevel": "Sijainti ja mittakaavataso",
-            "help": "Mittakaavataso",
+            "preview": "Kartan esikatselu",
+            "location": "Sijainti ja mittakaavataso",
+            "zoomlevel": "Mittakaavataso",
+            "help": "Ohje",
             "error": {
-                "title": "Ohje",
-                "size": "Virhe",
-                "domain": "Kartan koko on virheellinen. Leveyden on oltava vähintään 30 pikseliä ja korkeuden vähintään 20 pikseliä. Desimaalierottimena on piste.",
-                "domainStart": "Verkkosivuston osoite on pakollinen tieto. Anna sivuston osoite ja yritä uudelleen.",
-                "name": "Verkkosivuston osoite on väärässä muodossa. Anna osoite ilman http- tai www-etuliitteitä ja yritä uudelleen.",
-                "nohelp": "Kartan nimi on pakollinen tieto. Anna kartalle nimi ja yritä uudelleen.",
-                "saveFailed": "Ohjetta ei löytynyt.",
-                "nameIllegalCharacters": "Kartan tallennus epäonnistui.",
-                "domainIllegalCharacters": "Kartan nimessä on kiellettyjä merkkejä. Sallittuja merkkejä ovat aakkoset (a-ö, A-Ö), numerot (0-9), välilyönti ja yhdysmerkki (-). Poista kielletyt merkit ja yritä uudelleen."
+                "title": "Virhe",
+                "size": "Kartan koko on virheellinen. Leveyden on oltava vähintään 30 pikseliä ja korkeuden vähintään 20 pikseliä. Desimaalierottimena on piste.",
+                "domain": "Verkkosivuston osoite on pakollinen tieto. Anna sivuston osoite ja yritä uudelleen.",
+                "domainStart": "Verkkosivuston osoite on väärässä muodossa. Anna osoite ilman http- tai www-etuliitteitä ja yritä uudelleen.",
+                "name": "Kartan nimi on pakollinen tieto. Anna kartalle nimi ja yritä uudelleen.",
+                "nohelp": "Ohjetta ei löytynyt.",
+                "saveFailed": "Kartan tallennus epäonnistui.",
+                "nameIllegalCharacters": "Kartan nimessä on kiellettyjä merkkejä. Sallittuja merkkejä ovat aakkoset (a-ö, A-Ö), numerot (0-9), välilyönti ja yhdysmerkki (-). Poista kielletyt merkit ja yritä uudelleen.",
+                "domainIllegalCharacters": "Verkkosivuston osoitteessa on kiellettyjä merkkejä. Sallittuja merkkejä ovat aakkoset (a-z, A-Z), numerot (0-9) sekä yhdysviiva (-), alaviiva (_), piste (.), huutomerkki (!), aaltoviiva (~), asteriski (*), puolilainausmerkki (') ja sulut ()."
             }
         },
         "NotLoggedView": {
-            "text": "Verkkosivuston osoitteessa on kiellettyjä merkkejä. Sallittuja merkkejä ovat aakkoset (a-z, A-Z), numerot (0-9) sekä yhdysviiva (-), alaviiva (_), piste (.), huutomerkki (!), aaltoviiva (~), asteriski (*), puolilainausmerkki (') ja sulut ().",
+            "text": "\"Julkaise kartta\" -toiminnon avulla voit julkaista upotetun kartan omalla verkkosivulla. Upotetussa kartassa näkyy valitsemasi karttanäkymä ja työkalut. Kartan julkaisu vaatii kirjautumisen palveluun.",
             "signup": "Kirjaudu sisään",
             "signupUrl": "/web/fi/login",
             "register": "Rekisteröidy",
