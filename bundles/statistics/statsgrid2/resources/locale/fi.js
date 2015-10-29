@@ -157,22 +157,31 @@ Oskari.registerLocalization({
             "year": "Vuosi",
             "sex": "Sukupuoli"
         },
+        "selectorValues": {
+            "sex": {
+                "male": "miehet",
+                "female": "naiset",
+                "total": "yhteensä"
+            }
+        },
+        "regionCategories": {
+            "Kunta": "Kunta",
+            "Aluehallintovirasto": "Aluehallintovirasto",
+            "Maakunta": "Maakunta",
+            "Erva": "Sairaanhoitopiirien erityisvastuualueet",
+            "Maa": "Maa",
+            "Nuts1": "Manner-Suomi ja Ahvenanmaa",
+            "Sairaanhoitopiiri": "Sairaanhoitopiiri",
+            "Seutukunta": "Seutukunta",
+            "Suuralue": "Suuralue"
+        },
+        "regionCategoriesTitle": "Region categories",
 
         "selectRegionCategory": "Aluejako:",
         "regionCatPlaceholder": "Valitse aluejako",
         "selectRegion": "Alue:",
         "chosenRegionText": "Valitse alueita",
         "noRegionFound": "Aluetta ei löytynyt",
-        "regionCategories": {
-            "title": "Aluejaot",
-            "KUNTA": "Kunta",
-            "ALUEHALLINTOVIRASTO": "Aluehallintovirasto",
-            "MAAKUNTA": "Maakunta",
-            "NUTS1": "Manner-Suomi ja Ahvenanmaa",
-            "SAIRAANHOITOPIIRI": "Sairaanhoitopiiri",
-            "SEUTUKUNTA": "Seutukunta",
-            "SUURALUE": "Suuralue"
-        },
         "baseInfoTitle": "Tunnistetiedot",
         "dataTitle": "Aineisto",
         "addDataButton": "Lisää uusi",

@@ -20,9 +20,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
         me.__selectedSelections = {};
         me.__dataSourceSelect = null;
         me.__indicatorSelect = null;
-        me.__layerSelect = null;
         me.__selectorsSelects = [];
         me.__addRemoveButton = null;
+        me.__layerSelect = null;
         me.dialog = null;
         me._indicatorMetadata = {};
     }, {
@@ -33,10 +33,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
                           // Additionally some indicator-dependent selectors might be needed.
                           // Note that Chosen-select is used here.
                           '<label><span></span><select name="datasource" style="width: 300px;"></select></label>' +
-                          '<label><span></span><select name="indicator" style="width: 300px;"></select></label>' +
-                          '<label><span></span><select name="layer" style="width: 300px;"></select></label>' +
+                          '<label><span name="indicator-span"></span><select name="indicator" style="width: 300px;"></select></label>' +
                           // the optional selectors will be populated here when the above have been selected.
                           '<div name="selectors-div"></div>' +
+                          // TODO: Move the layer selection into the grid component
+                          '<label><span></span><select name="layer" style="width: 300px;"></select></label>' +
                       '</div><div class="parameters-cont"></div><div class="buttons-cont"></div>' +
                   '</form>',
             'selector': '<label><span></span><select></select></label>',
@@ -83,7 +84,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
 
             me._createDataSourceSelect(el.find('select[name=datasource]').parent());
             me._createIndicatorSelect(el.find('select[name=indicator]').parent());
-            // FIXME: Layer must be selected last.
             me._createLayerSelect(el.find('select[name=layer]').parent());
             container.append(el);
             me.statisticsService.getDataSources(function (indicatorMetadata) {
@@ -263,8 +263,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
                         return layer.layerId;
                     },
                     getName: function(lang) {
-                        return (me._locale.layers[layer.layerId])?
-                                me._locale.layers[layer.layerId]:
+                        return (me._locale.regionCategories[layer.layerId])?
+                                me._locale.regionCategories[layer.layerId]:
                                 layer.layerId;
                     }
                 };
@@ -293,8 +293,12 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
                                     return allowedValue;
                                 },
                                 getName: function(lang) {
-                                    // TODO: Should we localize these?
-                                    return allowedValue;
+                                    if (me._locale.selectorValues[selector.id] &&
+                                            me._locale.selectorValues[selector.id][allowedValue]) {
+                                        return me._locale.selectorValues[selector.id][allowedValue];
+                                    } else {
+                                        return allowedValue;
+                                    }
                                 }
                             };
                     });
@@ -332,7 +336,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
             }
             me.__selectedDataSource = ds;
             me.__selectedIndicator = null;
-            me.__selectedLayer = null;
             me.__selectedSelections = {};
 
             //clear the selectors containers
@@ -356,11 +359,19 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
                 value,
                 ds = me.getSelectedDatasource();
 
-            me.__selectedLayer = null;
             me.__selectedSelections = {};
             me.__selectedIndicator = ds.getIndicators().getIndicator(id);
             me.__showIndicatorInfoButton(me.__selectedIndicator);
+
+            me.__selectedSelections = {};
+            me.setSelections(me.__selectedIndicator.getSelectors());
+
+            // FIXME: Move the layer selection into the grid, where it will allow selecting all layers,
+            //        not only ones where the indicators are defined.
+            //        Also, fetch the layers from the geoserver.
+            //        This is here for development and debugging until the grid works.
             me.setLayers(me.__selectedIndicator.getLayers());
+            me._updateAddRemoveButtonState();
         },
 
         /**
@@ -378,9 +389,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
                 ds = me.getSelectedDatasource();
 
             me.__selectedLayer = id;
-
-            me.__selectedSelections = {};
-            me.setSelections(me.__selectedIndicator.getSelectors());
 
             me._updateAddRemoveButtonState();
             //me.deleteIndicatorInfoButton(container);
@@ -448,9 +456,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
 
             if (!me.__selectedDataSource ||
                 !me.__selectedIndicator ||
-                !me.__selectedLayer ||
                 !me._selectionsOk()) {
-                // no datasource, indicator, layer, or selections selected.
+                // no datasource, indicator, or selections selected.
                 // set button to add
                 buttonTitle = loc.addColumn;
                 // disable button
@@ -459,7 +466,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
                 if (me.userSelectionService.isIndicatorSelected(
                         me.__selectedDataSource,
                         me.__selectedIndicator,
-                        me.__selectedLayer,
                         me.__selectedSelections
                         )) {
                     // selection is already active
@@ -495,7 +501,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
             }
             var me = this,
                 infoIcon = jQuery(me._templates.infoIcon),
-                indicatorCont = me.el.find('.indicator-cont > label:last-of-type > span'),
+                indicatorCont = me.el.find('span[name=indicator-span]'),
                 source = indicator.getSource(),
                 description = indicator.getDescription();
             // append this indicator

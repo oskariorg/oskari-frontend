@@ -33,12 +33,6 @@ Oskari.registerLocalization({
                 "indicatorDeleteError": "Error occurred whilst removing an indicator. Please try again later"
             }
         },
-        "gender": "Gender",
-        "genders": {
-            "male": "men",
-            "female": "women",
-            "total": "total"
-        },
         "addColumn": "Get data",
         "removeColumn": "Remove",
         "indicators": "Indicator",
@@ -158,22 +152,31 @@ Oskari.registerLocalization({
             "year": "Year",
             "sex": "Sex"
         },
+        "selectorValues": {
+            "sex": {
+                "male": "male",
+                "female": "female",
+                "total": "total"
+            }
+        },
+        "regionCategories": {
+            "Kunta": "Municipality",
+            "Aluehallintovirasto": "Regional administrative agency",
+            "Maa": "Country",
+            "Maakunta": "Province",
+            "Erva": "Hospital special responsibility district",
+            "Nuts1": "Mainland Finland and the Åland Islands",
+            "Sairaanhoitopiiri": "Hospital district",
+            "Seutukunta": "Subregion",
+            "Suuralue": "Greater region"
+        },
+        "regionCategoriesTitle": "Region categories",
 
         "selectRegionCategory": "Region categories:",
         "regionCatPlaceholder": "Choose a region category",
         "selectRegion": "Regions:",
         "chosenRegionText": "Choose regions",
         "noRegionFound": "Region not found",
-        "regionCategories": {
-            "title": "Region categories",
-            "KUNTA": "Kunta",
-            "ALUEHALLINTOVIRASTO": "Aluehallintovirasto",
-            "MAAKUNTA": "Maakunta",
-            "NUTS1": "Manner-Suomi ja Ahvenanmaa",
-            "SAIRAANHOITOPIIRI": "Sairaanhoitopiiri",
-            "SEUTUKUNTA": "Seutukunta",
-            "SUURALUE": "Suuralue"
-        },
         "addDataButton": "Add indicator",
         "addDataTitle": "NOT TRANSLATED",
         "openImportDialogTip": "Import data from clipboard",
