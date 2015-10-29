@@ -942,6 +942,33 @@ Oskari.clazz.define(
                 }
             }
         },
+        _getContainerWithClasses: function (containerClasses) {
+            var mapDiv = this.getMapEl(),
+                containerDiv = jQuery(
+                    '<div class="mapplugins">' +
+                    '  <div class="mappluginsContainer">' +
+                    '    <div class="mappluginsContent"></div>' +
+                    '  </div>' +
+                    '</div>'
+                );
+
+            containerDiv.addClass(containerClasses);
+            containerDiv.attr('data-location', containerClasses);
+            return containerDiv;
+        },
+
+        _getContainerClasses: function () {
+            return [
+                'bottom center',
+                'center top',
+                'center right',
+                'center left',
+                'bottom right',
+                'bottom left',
+                'right top',
+                'left top'
+            ];
+        },
         /* IMPL specific */
 
         _crs2MapImpl: Oskari.AbstractFunc('_crs2MapImpl'),
