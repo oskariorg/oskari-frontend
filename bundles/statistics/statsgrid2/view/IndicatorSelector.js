@@ -16,8 +16,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
         me.el = null;
         me.__selectedDataSource = null;
         me.__selectedIndicator = null;
-        me.__selectedLayer = null;
         me.__selectedSelections = {};
+        me.__selectedLayer = null;
         me.__dataSourceSelect = null;
         me.__indicatorSelect = null;
         me.__selectorsSelects = [];
@@ -57,30 +57,29 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
          */
         render: function (container) {
             var me = this,
-                btn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SearchButton'),
+                addRemoveButton = Oskari.clazz.create('Oskari.userinterface.component.buttons.SearchButton'),
                 el = jQuery(me._templates.main),
                 sandbox = me.statisticsService.getSandbox();
 
             me.el = el;
             // Add column button adds the selected indicator (with selectors applied) to the grid as a column.
-            btn.setTitle(me._locale.addColumn);
-            btn.setHandler(function (event) {
+            addRemoveButton.setTitle(me._locale.addColumn);
+            addRemoveButton.setHandler(function (event) {
                 event.preventDefault();
                 // Notify other components of indicator selection
                 var opts,
                     eventBuilder = sandbox.getEventBuilder('StatsGrid.IndicatorSelectedEvent'),
                     evt;
                 if (eventBuilder) {
-                    opts = me.getSelections();
-                    evt = eventBuilder(opts.datasource, opts.indicator, opts.options);
+                    evt = eventBuilder(me.__selectedDataSource, me.__selectedIndicator, me.__selectedSelections);
                     sandbox.notifyAll(evt);
                 }
                 return false;
             });
-            btn.insertTo(el.find('.buttons-cont'));
-            me.__addRemoveButton = btn;
+            addRemoveButton.insertTo(el.find('.buttons-cont'));
+            me.__addRemoveButton = addRemoveButton;
             // The button will be enabled when all the required selections are selected.
-            btn.setEnabled(false);
+            addRemoveButton.setEnabled(false);
 
             me._createDataSourceSelect(el.find('select[name=datasource]').parent());
             me._createIndicatorSelect(el.find('select[name=indicator]').parent());

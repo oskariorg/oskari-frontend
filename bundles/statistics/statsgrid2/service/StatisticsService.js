@@ -110,8 +110,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
             }
             var indicator =  this._findIndicator(datasource, id);
             var me = this,
-                url = this.getDataSources(datasource).getIndicatorValuesUrl(id);
+                // &plugin_id=plugin_id&indicator=indicator_id&selectors=URL_ENCODED_JSON
+                url = Oskari.getSandbox().getAjaxUrl() + "action_route=GetIndicatorsMetadata&plugin_id=" +
+                    datasource + "&indicator=" + id + "&selectors=" + encodeURIComponent(JSON.stringify(options));
 
+            console.log("Calling: " + url);
             var queueName = this.callbackQueue.getQueueName('getIndicatorValue', arguments);
             if(!this.callbackQueue.addCallbackToQueue(queueName, callback)) {
                 // already handling the request, all callbacks will be called when done
@@ -130,44 +133,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
                         return;
                     }
                     me.callbackQueue.notifyCallbacks(queueName, [pResp]);
-                },
-                error: function (jqXHR, textStatus) {
-                    me.callbackQueue.notifyCallbacks(queueName);
-                }
-            });
-        },
-        getIndicators : function(datasourceId, callback) {
-            if(!callback || !datasourceId) {
-                this.sandbox.printWarn('Provide datasourceId and callback for StatisticsService.getIndicators()');
-                return;
-            }
-            // return cached if available
-            if(this.__indicators[datasourceId]) {
-                callback(this.__indicators[datasourceId]);
-                return;
-            }
-            // get indicators from backend
-            var ds = this.getDataSource(datasourceId);
-            if(!ds) {
-                callback();
-                return;
-            }
-            var me = this,
-                url = ds.getIndicatorListUrl();
-
-            var queueName = this.callbackQueue.getQueueName('getIndicators', arguments);
-            if(!this.callbackQueue.addCallbackToQueue(queueName, callback)) {
-                // already handling the request, all callbacks will be called when done
-                return;
-            }
-            jQuery.ajax({
-                type: "GET",
-                dataType: 'json',
-                url: url,
-                success: function (pResp) {
-                    me.__handleIndicatorsResponse(pResp, datasourceId, function() {
-                        me.callbackQueue.notifyCallbacks(queueName, arguments);
-                    });
                 },
                 error: function (jqXHR, textStatus) {
                     me.callbackQueue.notifyCallbacks(queueName);
