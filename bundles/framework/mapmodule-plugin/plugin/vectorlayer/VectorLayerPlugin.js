@@ -194,7 +194,14 @@ Oskari.clazz.define(
                 var feature = format.read(geometry);
 
                 if (attributes && attributes !== null) {
-                    feature.attributes = attributes;
+                    if(feature instanceof Array && geometryType === 'GeoJSON'){
+                        //Remark: It is preferred to use GeoJSON properties for attributes
+                        // There could be many features in GeoJson and now attributes are set only for 1st feature
+                        feature[0].attributes = attributes;
+                    }
+                    else {
+                        feature.attributes = attributes;
+                    }
                 }
 
                 olLayer = me._map.getLayersByName(me._olLayerPrefix + layerId)[0];

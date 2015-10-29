@@ -293,10 +293,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         _addRequestHandlersImpl: function (sandbox) {
             this.requestHandlers = {
                 mapLayerUpdateHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapLayerUpdateRequestHandler', sandbox, this),
-                mapMoveRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapMoveRequestHandler', sandbox, this)
+                mapMoveRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapMoveRequestHandler', sandbox, this),
+                showSpinnerRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.ShowProgressSpinnerRequestHandler', sandbox, this)
             };
             sandbox.addRequestHandler('MapModulePlugin.MapLayerUpdateRequest', this.requestHandlers.mapLayerUpdateHandler);
             sandbox.addRequestHandler('MapMoveRequest', this.requestHandlers.mapMoveRequestHandler);
+            sandbox.addRequestHandler('ShowProgressSpinnerRequest', this.requestHandlers.showSpinnerRequestHandler);
         },
 
         /**
@@ -539,8 +541,19 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
             //var bbox = new ol.extent.boundingExtent([extent[0], extent[1]], [extent[2], extent[3]]);
 
-            mapVO.setExtent(extent);
-            //mapVO.setBbox(bbox)
+            mapVO.setExtent({
+                left: extent[0],
+                bottom: extent[1],
+                right: extent[2],
+                top: extent[3]
+            });
+
+            mapVO.setBbox({
+                left: extent[0],
+                bottom: extent[1],
+                right: extent[2],
+                top: extent[3]
+            });
 
             var maxBbox = this._maxExtent;
             //var maxExtentBounds = new ol.extent(maxBbox.left, maxBbox.bottom, maxBbox.right, maxBbox.top);

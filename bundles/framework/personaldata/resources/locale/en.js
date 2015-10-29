@@ -62,7 +62,7 @@ Oskari.registerLocalization(
             },
             "publishedmaps": {
                 "title": "Embedded Maps",
-                "show": "NOT TRANSLATED",
+                "show": "Show on the map",
                 "getHTML": "HTML code",
                 "edit": "Edit",
                 "publish": "Publish",

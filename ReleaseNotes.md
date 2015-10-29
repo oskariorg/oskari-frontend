@@ -15,6 +15,10 @@ New request is enabled by default:
 
 ## 1.33
 
+### publisher2
+
+The new publisher is production ready. Check out the migration guide under Oskari server on how to migrate to the new publisher.
+
 ### Sandbox/map layer service
 
 Fixed getNewestLayers(count) method to find really newest layers.
