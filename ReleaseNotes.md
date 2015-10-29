@@ -13,6 +13,8 @@ New event is enabled by default:
 New request is enabled by default:
 - 'MyLocationPlugin.GetUserLocationRequest' requests to get user geolocation
 
+Domain validation fixed so at it accept urls where has - or _ characters.
+
 ## 1.33
 
 ### publisher2
