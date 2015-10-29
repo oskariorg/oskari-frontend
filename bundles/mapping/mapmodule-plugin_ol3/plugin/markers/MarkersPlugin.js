@@ -263,7 +263,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         afterHideMapMarkerEvent: function(event) {
             var markerLayer = this.getMarkersLayer();
             if (markerLayer) {
-                markerLayer.setVisibility(false);
+                markerLayer.setVisible(false);
             }
         },
 

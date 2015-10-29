@@ -337,10 +337,10 @@ Oskari.clazz.define(
 	        me._map.addInteraction(me._draw);
 
 			me._draw.on('drawstart', function(evt) {
-				me._sketch = evt.feature;				
+				me._sketch = evt.feature;
 				if(options.allowMultipleDrawing === 'single') {
 					me.clearDrawing();
-				} 
+				}
 			});
 			me._draw.on('drawend', function() {
 				if(options.allowMultipleDrawing === false) {
