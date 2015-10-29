@@ -13,6 +13,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMovementInt
     function (mapModule) {
         this.mapModule = mapModule;
     }, {
+        getMapModule : function() {
+            return this.mapModule;
+        },
         /**
          * @method handleRequest
          * Enables/disables mouse/keyboard movement.

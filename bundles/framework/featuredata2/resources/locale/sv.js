@@ -15,7 +15,7 @@ Oskari.registerLocalization(
         "featureDataPopup": "Summa värden",
         "selectionTools": {
             "title": "Markera objekt på kartan",
-            "instructions": "NOT TRANSLATED",
+            "instructions": " ",
             "selectFromTop": "Välj från topplager",
             "selectAll": "Välj från alla lagern",
             "link": {
