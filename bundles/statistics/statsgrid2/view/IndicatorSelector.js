@@ -14,7 +14,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
         me.statisticsService = statisticsService;
         me.userSelectionService = userSelectionService;
         me.el = null;
+        me.__selectedDataSourceId = null;
         me.__selectedDataSource = null;
+        me.__selectedIndicatorId = null;
         me.__selectedIndicator = null;
         me.__selectedSelections = {};
         me.__selectedLayer = null;
@@ -71,7 +73,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
                     eventBuilder = sandbox.getEventBuilder('StatsGrid.IndicatorSelectedEvent'),
                     evt;
                 if (eventBuilder) {
-                    evt = eventBuilder(me.__selectedDataSource, me.__selectedIndicator, me.__selectedSelections);
+                    evt = eventBuilder(me.__selectedDataSourceId, me.__selectedIndicatorId, me.__selectedSelections);
                     sandbox.notifyAll(evt);
                 }
                 return false;
@@ -280,6 +282,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
                 optionsContainer = this.getIndicatorParamsContainer()
             if (selectors) {
                 optionsContainer.empty();
+                me.__selectedSelections = {};
 
                 _.each(selectors, function (selector) {
                     var selectorCont = jQuery('<label><span></span><select name="selectors-' + selector.id + '"' +
@@ -301,18 +304,16 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
                                 }
                             };
                     });
-                    // if the value changes, fetch indicator meta data to the grid and to the map.
-                    selectorSelect.change(function (e) {
-                        var option = select.find('option:selected');
-                        me.__selectedSelections[selector.id] = option.val();
-                    });
+                    optionsContainer.append(selectorCont);
+                    selectorSelect.on('change', me.changeSelections(selectorSelect, selector.id));
+                    var option = selectorSelect.find('option:selected');
+                    me.__selectedSelections[selector.id] = option.val();
 
                     label.text(me._locale.selectors[selector.id]);
-                    me._initSelectChosen(selectorSelect);
                     selectorSelect.attr('data-placeholder', me._locale.selectorPlaceholders[selector.id]);
                     selectorSelect.attr('data-no_results', me._locale.noMatch);
                     me.__setSelectOptions(selectorSelect, selectorsList, false);
-                    optionsContainer.append(selectorCont);
+                    me._initSelectChosen(selectorSelect);
                     // Update chosen options. Don't really know why 'liszt' instead of chosen but the linked chosen version seems to use it.
                     // Apparently newer chosen versions use 'chosen', so keep that in mind if you update the library.
                     selectorSelect.trigger('liszt:updated');
@@ -333,7 +334,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
                 //alert("Couldn't find Datasource for id " + pluginId);
                 return;
             }
+            me.__selectedDataSourceId = pluginId;
             me.__selectedDataSource = ds;
+            me.__selectedIndicatorId = null;
             me.__selectedIndicator = null;
             me.__selectedSelections = {};
 
@@ -359,10 +362,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
                 ds = me.getSelectedDatasource();
 
             me.__selectedSelections = {};
+            me.__selectedIndicatorId = id;
             me.__selectedIndicator = ds.getIndicators().getIndicator(id);
             me.__showIndicatorInfoButton(me.__selectedIndicator);
 
-            me.__selectedSelections = {};
             me.setSelections(me.__selectedIndicator.getSelectors());
 
             // FIXME: Move the layer selection into the grid, where it will allow selecting all layers,
@@ -400,9 +403,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
          * @return Handler for the certain selections being changed.
          */
         changeSelections: function(selectorSelect, id) {
+            var me = this;
             return function () {
                 var option = selectorSelect.find('option:selected');
-                this.__selectors[id] = option.val();
+                me.__selectedSelections[id] = option.val();
                 me._updateAddRemoveButtonState();
             };
         },

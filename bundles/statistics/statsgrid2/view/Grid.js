@@ -94,7 +94,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.Grid',
                 return;
             }
             var me = this,
-                data = this.__indicatorCache[indicatorKey];
+                data = this.__indicatorCache[indicatorKey][me.getActiveRegionCategory()];
 
             this.service.getIndicatorMetadata(data.datasrc, data.id, function(indicator) {
                 me.helper.addIndicatorDataToGrid(indicatorKey, me.__constructLabel(indicator, data.opts), data.data);
@@ -119,20 +119,24 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.Grid',
                 // TODO: check if indicator is already present on grid:
                 // a) if not, add it
                 // b) if present, activate it
-                console.log(e);
                 var me = this;
-                if(this.__indicatorCache[e.getKey()]) {
+                if(me.__indicatorCache[e.getKey()] &&
+                        me.__indicatorCache[e.getKey()][me.getActiveRegionCategory()]) {
                     // just select it
                     this.selectIndicator(e.getKey());
                 }
                 else {
                     // add indicator placeholder and get the data
 
-                    this.service.getIndicatorValue(e.getDatasourceId(), e.getIndicatorId(), e.getOptions(), function(data) {
-                        me.__indicatorCache[e.getKey()] = {
-                            datasrc : e.getDatasourceId(),
-                            id : e.getIndicatorId(),
-                            opts : e.getOptions(),
+                    this.service.getIndicatorValue(e.getDatasourceId(), e.getIndicatorId(), e.getSelectors(),
+                            me.getActiveRegionCategory(),
+                            function(data) {
+                        me.__indicatorCache[e.getKey()] = {};
+                        me.__indicatorCache[e.getKey()][me.getActiveRegionCategory()] = {
+                            pluginId : e.getDatasourceId(),
+                            indicatorId : e.getIndicatorId(),
+                            selectors : e.getSelectors(),
+                            regionId : me.getActiveRegionCategory(),
                             data : data
                         };
                         me.selectIndicator(e.getKey());
