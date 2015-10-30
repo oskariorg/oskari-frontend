@@ -114,6 +114,8 @@ Oskari.registerLocalization(
             "username": "Username",
             "password": "Password",
             "attributes": "Attributes",
+            "selectedTime": "Selected time",
+            "time": "Supported time",
             "addInspireName": "Theme Name",
             "addInspireNameTitle": "Type a theme name in different languages.",
             "addOrganizationName": "Data Provider Name",

@@ -1,5 +1,12 @@
 # Release Notes
 
+## 1.33.1
+
+### admin-layerselector
+
+Added a missing label for "Selected time" field (WMS-T).
+Fixed: Legendimage field shows a proxy-URL if layer requires credentials. Now shows the correct URL for legendimage.
+
 ## 1.33
 
 ### publisher2
