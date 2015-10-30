@@ -376,7 +376,7 @@ Oskari.clazz.define(
             if (ret) {
                 parts = origin.split(domain);
                 if (parts) {
-                    ret = /^https?:\/\/([a-zA-Z0-9]+[.])*$/.test(parts[0]);
+                    ret = /^https?:\/\/([a-zA-Z0-9_-]+[.])*$/.test(parts[0]);
                     if (ret && parts.length > 1) {
                         ret = /^(:\d+)?$/.test(parts[1]);
                     }

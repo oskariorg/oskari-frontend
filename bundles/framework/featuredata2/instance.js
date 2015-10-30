@@ -126,6 +126,17 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                         }
                     };
                 sandbox.request(this, addBtnRequestBuilder('dialog', 'selectiontools', btn));
+
+                this.selectionPlugin = this.sandbox.findRegisteredModuleInstance("MainMapModuleMapSelectionPlugin");
+
+                if (!this.selectionPlugin) {
+                    var config = {
+                        id: "FeatureData"
+                    };
+                    this.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin', config, this.sandbox);
+                    mapModule.registerPlugin(this.selectionPlugin);
+                    mapModule.startPlugin(this.selectionPlugin);
+                }
             }
 
             // check if preselected layers included wfs layers -> act if they are added now
@@ -472,17 +483,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
             mapModule.registerPlugin(plugin);
             mapModule.startPlugin(plugin);
             this.plugin = plugin;
-
-            this.selectionPlugin = this.sandbox.findRegisteredModuleInstance("MainMapModuleMapSelectionPlugin");
-
-            if (!this.selectionPlugin) {
-                var config = {
-                    id: "FeatureData"
-                };
-                this.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin', config, this.sandbox);
-                mapModule.registerPlugin(this.selectionPlugin);
-                mapModule.startPlugin(this.selectionPlugin);
-            }
         }
     }, {
         /**
