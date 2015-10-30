@@ -7,9 +7,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.Grid',
         this.conf = jQuery.extend(true, {}, this.__defaults);
 	    this.controller = gridCtrl;
 	    this._locale = locale;
-    },
-    {
-        _templates : {
+        this._templates = {
             'csvButton': '<button class="statsgrid-csv-button">csv</button>',
             'statsgridTotalsVar': '<span class="statsgrid-variable"></span>',
             'subHeader': '<span class="statsgrid-grid-subheader"></span>',
@@ -31,7 +29,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.Grid',
             'grid': '<div class="clusterize"><table><thead></thead></table><div id="scrollArea" class="clusterize-scroll">' +
                 '<table><tbody id="contentArea" class="clusterize-content"><tr class="clusterize-no-data"><td></td></tr></tbody>' +
                 '</table></div></div>'
-        },
+        };
+    },
+    {
         "__columnIdRegion" : "region",
         "__groupingProperty" : "sel", // 'sel' is hardcoded in Slick.CheckboxSelectColumn2...
         "__groupDisabled" : "empty", // 'empty' is hardcoded in Slick.CheckboxSelectColumn2...
