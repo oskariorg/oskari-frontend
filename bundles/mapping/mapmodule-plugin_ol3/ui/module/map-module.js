@@ -46,13 +46,40 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         }
     }, {
         /**
-         * @method createBaseLayer
-         * Creates a dummy base layer and adds it to the map. Nothing to do with Oskari maplayers really.
-         * @private
+         * @method _initImpl
+         * Implements Module protocol init method. Creates the OpenLayers Map.
+         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @return {OpenLayers.Map}
          */
-        _createBaseLayer: function() {
-            // do nothing
+        _initImpl: function (sandbox, options, map) {
+            //var scales = this._calculateScalesFromResolutions(options.resolutions, map.units);
+            //this._mapScales = scales;
+
+            this._createBaseLayer();
+
+            // TODO remove this whenever we're ready to add the containers when needed
+            this._addMapControlPluginContainers();
+            return map;
         },
+
+        _startImpl: function () {
+            var sandbox = this.getSandbox();
+            this._addRequestHandlersImpl(sandbox);
+            return true;
+        },
+        
+        _addRequestHandlersImpl: function (sandbox) {
+            this.requestHandlers = {
+                mapLayerUpdateHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapLayerUpdateRequestHandler', sandbox, this),
+                mapMoveRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapMoveRequestHandler', sandbox, this),
+                showSpinnerRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.ShowProgressSpinnerRequestHandler', sandbox, this)
+            };
+            sandbox.addRequestHandler('MapModulePlugin.MapLayerUpdateRequest', this.requestHandlers.mapLayerUpdateHandler);
+            sandbox.addRequestHandler('MapMoveRequest', this.requestHandlers.mapMoveRequestHandler);
+            sandbox.addRequestHandler('ShowProgressSpinnerRequest', this.requestHandlers.showSpinnerRequestHandler);
+        },
+
+
         _getMapCenter: function() {
             return this._map.getView().getCenter();
         },
@@ -99,40 +126,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             return interactionInstance;
         },
 
-        /**
-         * @method _initImpl
-         * Implements Module protocol init method. Creates the OpenLayers Map.
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         * @return {OpenLayers.Map}
-         */
-        _initImpl: function (sandbox, options, map) {
-            //var scales = this._calculateScalesFromResolutions(options.resolutions, map.units);
-            //this._mapScales = scales;
-
-            this._createBaseLayer();
-
-            // TODO remove this whenever we're ready to add the containers when needed
-            this._addMapControlPluginContainers();
-            return map;
-        },
-
-        _startImpl: function () {
-            var sandbox = this.getSandbox();
-            this._addRequestHandlersImpl(sandbox);
-            return true;
-        },
-
-
-        _addRequestHandlersImpl: function (sandbox) {
-            this.requestHandlers = {
-                mapLayerUpdateHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapLayerUpdateRequestHandler', sandbox, this),
-                mapMoveRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapMoveRequestHandler', sandbox, this),
-                showSpinnerRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.ShowProgressSpinnerRequestHandler', sandbox, this)
-            };
-            sandbox.addRequestHandler('MapModulePlugin.MapLayerUpdateRequest', this.requestHandlers.mapLayerUpdateHandler);
-            sandbox.addRequestHandler('MapMoveRequest', this.requestHandlers.mapMoveRequestHandler);
-            sandbox.addRequestHandler('ShowProgressSpinnerRequest', this.requestHandlers.showSpinnerRequestHandler);
-        },
 
         /**
          * Changed to resolutions based map zoom levels, but we need to
@@ -283,6 +276,14 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             me._map = map;
 
             return me._map;
+        },
+        /**
+         * @method createBaseLayer
+         * Creates a dummy base layer and adds it to the map. Nothing to do with Oskari maplayers really.
+         * @private
+         */
+        _createBaseLayer: function() {
+            // do nothing
         },
 
         //NOTE! The next is only for demos, delete when going to release ol3!
