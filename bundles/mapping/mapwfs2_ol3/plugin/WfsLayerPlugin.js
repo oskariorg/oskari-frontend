@@ -429,7 +429,7 @@ Oskari.clazz.define(
                 sandbox = me.getSandbox(),
                 map = sandbox.getMap(),
                 srs = map.getSrsName(),
-                bbox = map.getExtent(),
+                bbox = me.ol2ExtentOl3Transform(map.getExtent()),
                 zoom = map.getZoom(),
                 geomRequest = false,
                 grid,
@@ -531,7 +531,25 @@ Oskari.clazz.define(
                 }
             });
         },
-
+        /**
+         * @method ol2ExtentOl3Transform
+         * 
+         * Transforms an ol2 - style extent object to an ol3 - style array. If extent is already in the array form, return the original.
+         */
+        ol2ExtentOl3Transform(ol2Extent) {
+            if (ol2Extent && ol2Extent.hasOwnProperty('left') && ol2Extent.hasOwnProperty('bottom') && ol2Extent.hasOwnProperty('right') && ol2Extent.hasOwnProperty('top')) {
+                return [
+                    ol2Extent.left,
+                    ol2Extent.bottom,
+                    ol2Extent.right,
+                    ol2Extent.top
+                ];
+            } else if (ol2Extent && ol2Extent.length && ol2Extent.length === 4) {
+                //supposedly already in ol3 form -> just return as is.
+                return ol2Extent;
+            }
+            return null;
+        },
         /**
          * @method mapLayerAddHandler
          */
@@ -1015,7 +1033,7 @@ Oskari.clazz.define(
          */
         drawImageTile: function (layer, imageUrl, imageBbox, imageSize, layerType, boundaryTile, keepPrevious) {
 
-            //TODO: cleanup on isle three
+            //TODO: clean up this method.
             var me = this,
                 map = me.getMap(),
                 layerId = layer.getId(),
@@ -1255,7 +1273,6 @@ Oskari.clazz.define(
             var me = this,
                 extent = me.getMapModule().getExtent(),//sandbox.getMap().getExtent(),
                 maxZoom = me.getMapModule().getMaxZoomLevel();
-
             this._tileGrid = new ol.tilegrid.createXYZ({
                 extent:extent,//me.getMap().getView().calculateExtent(me.getMap().getSize()),
                 maxZoom: maxZoom,//me.getMapModule().getMaxZoomLevel(),
@@ -1272,8 +1289,7 @@ Oskari.clazz.define(
             var me = this,
                 sandbox = me.getSandbox(),
                 resolution = me.getMap().getView().getResolution(),
-                mapExtent = sandbox.getMap().getExtent(),
-                mapViewExtent = me.getMap().getView().calculateExtent(me.getMap().getSize()),
+                mapExtent = me.ol2ExtentOl3Transform(sandbox.getMap().getExtent()),
                 z,
                 tileGrid = this._tileGrid,
                 grid = {
@@ -1285,8 +1301,6 @@ Oskari.clazz.define(
                 tileRangeExtent;
                 z =  tileGrid.getZForResolution(resolution);
                 tileRangeExtent = tileGrid.getTileRangeForExtentAndResolution(mapExtent, resolution);
-
-                this._tileGrid.getExtent();
                 for (var iy = tileRangeExtent.minY; iy <= tileRangeExtent.maxY; iy++) {
                     var colidx = 0;
                     for (var ix = tileRangeExtent.minX; ix <= tileRangeExtent.maxX; ix++) {
