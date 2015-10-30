@@ -31,7 +31,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             return this.__service;
 
         },
-        getUserSelections : function() {
+        "getUserSelections" : function() {
             if(!this.__userSelections) {
                 var sb = this.getSandbox();
                 this.__userSelections = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.UserSelectionsService', sb);
@@ -163,20 +163,20 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                 this._enableTile(true);
             }
         },
-        _enableTile: function (blnEnable) {
+        "_enableTile": function (blnEnable) {
             var layerPresent = this._isLayerPresent(),
                 tile = this.plugins['Oskari.userinterface.Tile'];
             if (layerPresent && tile) {
                 tile.setEnabled(blnEnable);
             }
         },
-        isLayerVisible: function () {
+        "isLayerVisible": function () {
             var ret,
                 layer = this.sandbox.findMapLayerFromSelectedMapLayers(this.conf.defaultLayerId);
             ret = layer !== null && layer !== undefined;
             return ret;
         },
-        _isLayerPresent: function () {
+        "_isLayerPresent": function () {
             var service = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
             if (this.conf && this.conf.defaultLayerId) {
                 var layer = service.findMapLayer(this.conf.defaultLayerId);
@@ -195,14 +195,14 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
          * @method getUserIndicatorsService
          * @return {Oskari.statistics.bundle.statsgrid.UserIndicatorsService}
          */
-        getUserIndicatorsService: function () {
+        "getUserIndicatorsService": function () {
             return this.userIndicatorsService;
         },
         /**
          * @method addUserIndicator
          * @param {Object} indicator
          */
-        addUserIndicator: function (indicator) {
+        "addUserIndicator": function (indicator) {
             var me = this,
                 view = me.getView(),
                 state = me.getState();
@@ -242,7 +242,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
          * @param {Object} state bundle state as JSON
          * @param {Boolean} ignoreLocation true to NOT set map location based on state
          */
-        setState: function (state, ignoreLocation) {
+        "setState": function (state, ignoreLocation) {
             this.state = jQuery.extend({}, {
                 indicators: [],
                 layerId: null
@@ -267,7 +267,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                 view.prepareMode(true, layer, false);
             }
         },
-        getState: function () {
+        "getState": function () {
             return this.state;
         },
 
@@ -280,7 +280,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
          * @method getStateParameters
          * @return {String} statsgrid state
          */
-        getStateParameters: function () {
+        "getStateParameters": function () {
             var me = this,
                 view = me.getView(),
                 state = me.state;
@@ -375,7 +375,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             return ret;
         },
 
-        getView: function () {
+        "getView": function () {
             return this.plugins['Oskari.userinterface.View'];
         },
 
@@ -385,7 +385,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
          * @method getSandbox
          * @return {Object} return the sandbox associated with this instance
          */
-        getSandbox: function () {
+        "getSandbox": function () {
             return this.sandbox;
         },
 
@@ -395,7 +395,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
          * @method getGridIndicators
          * @return {Object/null} returns the open indicators of the grid plugin, or null if no grid plugin
          */
-        getGridIndicators: function () {
+        "getGridIndicators": function () {
             return (this.gridPlugin ? this.gridPlugin.indicatorsMeta : null);
         },
 
@@ -408,7 +408,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
          * @private
          * @param {Object} layer
          */
-        _createPrintParams: function (layer) {
+        "_createPrintParams": function (layer) {
             if (!layer) {
                 return;
             }
@@ -457,7 +457,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
          * @private
          * @param {Object} event
          */
-        _afterStatsVisualizationChangeEvent: function (event) {
+        "_afterStatsVisualizationChangeEvent": function (event) {
             var me = this,
                 params = event.getParams(),
                 layer = event.getLayer();
@@ -479,7 +479,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
          * @private
          * @param {Object} event
          */
-        _afterMapLayerRemoveEvent: function (event) {
+        "_afterMapLayerRemoveEvent": function (event) {
             var layer = event.getMapLayer(),
                 layerId = layer.getId(),
                 view = this.getView();

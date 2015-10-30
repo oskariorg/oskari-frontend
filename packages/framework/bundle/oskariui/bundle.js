@@ -45,9 +45,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.oskariui.OskariUIBundle", functi
 		},{
 			"type" : "text/css",
 			"src" : "../../../../bundles/framework/oskariui/resources/bootstrap-grid.css"
+        },{
+            "type" : "text/css",
+            "src" : "../../../../libraries/Clusterize.js-0.12.0/clusterize.css"
 		},{
 			"type" : "text/javascript",
-			"src" : "../../../../libraries/lodash/2.3.0/lodash.js"
+			"src" : "../../../../libraries/Clusterize.js-0.12.0/clusterize.js"
+        },{
+            "type" : "text/javascript",
+            "src" : "../../../../libraries/lodash/2.3.0/lodash.js"
 		},{
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/oskariui/DomManager.js"
