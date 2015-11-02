@@ -19,6 +19,7 @@ Domain validation fixed to accept urls with - or _ characters.
 
 Files under Oskari/src/mapping/mapmodule have been moved to Oskari/bundles/mapping/mapmodule/.
 Removed most other files under Oskari/src and Oskari/srctest since they are not used.
+Renamed the remaining Oskari/src to Oskari/deprecated to signify these shouldn't be used.
 
 ## 1.33.2
 
