@@ -282,17 +282,22 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * Moves the map to the given position.
          * NOTE! Doesn't send an event if zoom level is not changed.
          * Call notifyMoveEnd() afterwards to notify other components about changed state.
-         * @param {OpenLayers.LonLat} lonlat coordinates to move the map to
+         * @param {OpenLayers.LonLat} or {Array} lonlat coordinates to move the map to
          * @param {Number} zoomAdjust relative change to the zoom level f.ex -1 (optional)
          * @param {Boolean} pIsDragging true if the user is dragging the map to a new location currently (optional)
          */
         moveMapToLanLot: function (lonlat, zoomAdjust, pIsDragging) {
-            // TODO: openlayers has isValidLonLat(); maybe use it here
+            //if lonlat is given as an array instead of OpenLayers.LonLat
+            // parse it to OpenLayers.LonLat for further use
+            if (_.isArray(lonlat)) {
+                var olLonLat = {};
+                olLonLat['lon'] = lonlat[0];
+                olLonLat['lat'] = lonlat[1];
+            } else {
+                var olLonLat = lonlat;
+            }
             var isDragging = (pIsDragging === true);
-            // TODO check if panTo (still) breaks IE9+ and if not, should we use it
-            // using panTo BREAKS IE on startup so do not
-            // should we spam events on dragmoves?
-            this._map.setCenter(lonlat, this._getMapZoom(), isDragging);
+            this._map.setCenter(olLonLat, this._getMapZoom(), isDragging);
 
             if (zoomAdjust) {
                 this.adjustZoomLevel(zoomAdjust, true);
@@ -641,7 +646,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             return this._map.getZoom();
         },
 
-        _getMapScale: function () {
+        getMapScale: function () {
             return this._map.getScale();
         },
 
@@ -669,7 +674,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
             var lonlat = this._getMapCenter();
             this._updateDomainImpl();
-            var evt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat.lon, lonlat.lat, this._getMapZoom(), false, this._getMapScale(), creator);
+            var evt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat.lon, lonlat.lat, this._getMapZoom(), false, this.getMapScale(), creator);
             sandbox.notifyAll(evt);
         },
 
@@ -721,7 +726,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
             mapVO.moveTo(lonlat.lon, lonlat.lat, this._getMapZoom());
 
-            mapVO.setScale(this._getMapScale());
+            mapVO.setScale(this.getMapScale());
 
             var size = this._map.getCurrentSize();
             mapVO.setWidth(size.w);

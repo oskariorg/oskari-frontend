@@ -546,8 +546,7 @@ Oskari.clazz.define(
                 return zoomLevel;
             }
 
-            // FIXME: relies on OL2 implementation, refactor to use Impl
-            var scale = this.getMap().getScale(),
+            var scale = this.getMapScale(),
                 i;
 
             if (scale < minScale) {
@@ -811,14 +810,6 @@ Oskari.clazz.define(
             }
             return -1;
 
-        },
-
-        getMapScale: function () {
-            var size = this.getMapSize(),
-                extent = this.getMapExtent(),
-                res = (extent[2] - extent[0]) / size[0];
-
-            return OpenLayers.Util.getScaleFromResolution(res, 'm');
         },
 
         /**
@@ -1221,7 +1212,7 @@ Oskari.clazz.define(
         getZoomLevel: function () {
             return this.getMap().getZoom();
         },
-        _getMapScale: Oskari.AbstractFunc('_getMapScale'),
+        getMapScale: Oskari.AbstractFunc('getMapScale'),
         /**
          * @method _updateDomainImpl
          * @private
