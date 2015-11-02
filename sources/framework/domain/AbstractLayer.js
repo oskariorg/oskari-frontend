@@ -690,7 +690,7 @@ Oskari.clazz.define(
          * Selects a #Oskari.mapframework.domain.Style with given name as #getCurrentStyle.
          * If style is not found, assigns an empty #Oskari.mapframework.domain.Style to #getCurrentStyle
          */
-        selectStyle: function (styleName, preventRecursion) {
+        selectStyle: function (styleName) {
             var me = this,
                 i,
                 style;
@@ -701,6 +701,11 @@ Oskari.clazz.define(
                     me._currentStyle = style;
                     return;
                 }
+            }
+            // if layer has only one style - always use it
+            if(me.getStyles().length === 1) {
+                this._currentStyle = me.getStyles()[0];
+                return;
             }
 
             // didn't match anything select the first one
