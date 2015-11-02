@@ -15,6 +15,10 @@ New request is enabled by default:
 
 Domain validation fixed to accept urls with - or _ characters.
 
+### File location changes
+
+Files under Oskari/src/mapping/mapmodule has been moved to Oskari/bundles/mapping/mapmodule/.
+
 ## 1.33.2
 
 AbstractLayer.getLegendImage() now returns the legend of current style if available. Fallback to base legendImage if style legend is not available. 
