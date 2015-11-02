@@ -76,6 +76,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.controllers.GridControll
             var me = this,
                 indicator = this.__indicatorCache[indicatorKey][me.getActiveRegionCategory()];
             me.viewmodel.addIndicator(indicator, me.view.constructLabel(indicator));
+            me.view.refresh();
         },
         "removeIndicator": function (indicatorKey) {
             // TODO: maybe send an event?

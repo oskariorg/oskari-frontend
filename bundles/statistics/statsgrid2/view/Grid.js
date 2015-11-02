@@ -57,7 +57,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.Grid',
             'addOwnIndicator': '<div class="new-indicator-cont"><input type="button"/></div>',
             'cannotDisplayIndicator': '<p class="cannot-display-indicator"></p>',
             'headerCategoryItem' : '<li><input type="radio" name="categorySelector"></input><label></label></li>',
-            'grid': '<div class="clusterize"><table><thead></thead></table><div id="scrollArea" class="clusterize-scroll">' +
+            'grid': '<div class="clusterize"><table><thead name="gridHeader"></thead></table><div id="scrollArea" class="clusterize-scroll">' +
                 '<table><tbody id="contentArea" class="clusterize-content"><tr class="clusterize-no-data"><td></td></tr></tbody>' +
                 '</table></div></div>'
         },
@@ -113,82 +113,92 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.Grid',
             });
             return name;
         },
-
         /**
-         * Add indicator data to the grid.
-         *
-         * @method addIndicatorDataToGrid
-         * @param indicatorId id
-         * @param gender (male/female/total)
-         * @param year selected year
-         * @param data related to the indicator
+         * Refreshes the grid to be in sync with the viewmodel.
          */
-        "addIndicatorDataToGrid": function (indicatorKey, title, data) {
+        "refresh" : function() {
             var me = this,
-                columnId = indicatorKey,
-                columns = me.getGrid().getColumns();
+                gridHeaderContainer = me.container.find('select[name=gridHeader]'),
+                indicators = me.viewmodel.getIndicators(),
+                layers = me.viewmodel.getLayers(),
+                menu = {
+                    items: []
+                };
 
-            var headerButtons = [{
-                cssClass: 'icon-close-dark statsgrid-remove-indicator',
-                tooltip: me._locale.removeColumn,
-                handler: function (e) {
-                	// TODO: fix
-                    me.removeIndicatorDataFromGrid(indicatorKey);
-                }
-            }];
-
-            columns.push({
-                id: columnId,
-                name: title,
-                field: columnId,
-                toolTip: title,
-                sortable: true,
-                header: {
-                    menu: {
-                        items: [{
-                            element: jQuery('<div></div>').text(me._locale.filter)
-                        }, {
-                            element: jQuery(me._templates.filterLink).text(me._locale.filterByValue),
-                            command: 'filter',
-                            actionType: 'link'
-                        }, {
-                            element: jQuery(me._templates.filterLink).text(me._locale.filterByRegion),
-                            command: 'filterByRegion',
-                            actionType: 'link'
-                        }]
-                    },
-                    icon: 'icon-funnel',
-                    buttons: ((this.conf && this.conf.published) ? null : headerButtons)
-                },
-
-                formatter: function (row, cell, value, columnDef, dataContext) {
-                    var numValue = Number(value),
-                        ret;
-                    if (isNaN(numValue) || columnDef.decimals === null || columnDef.decimals === undefined) {
-                        ret = value;
-                    } else {
-                        ret = numValue.toFixed(columnDef.decimals);
-                    }
-                    return ret;
-                },
-
-                groupTotalsFormatter: function (totals, columnDef) {
-                    var text = '';
-                    // create grouping footer texts. => how many values there is in different colums
-                    var valueCount = 0,
-                        rows = totals.group.rows,
-                        row,
-                        i;
-                    for (i = 0; i < rows.length; i++) {
-                        row = rows[i];
-                        if (row[columnDef.field] !== null && row[columnDef.field] !== undefined) {
-                            valueCount++;
-                        }
-                    }
-                    text = valueCount + ' ' + me._locale.values;
-                    return text;
-                }
+            gridHeaderContainer.empty();
+            
+            var indicatorLabels = Object.keys(indicators).map(function (indicatorKey) {
+                return me.constructLabel(indicators[indicatorKey].indicator);
             });
+            gridHeaderContainer.append("<th>REGION SELECTOR</th>");
+            indicatorLabels.forEach(function(indicatorLabel) {
+                gridHeaderContainer.append("<th>" + indicatorLabel + "</th>");
+            });
+
+            menu.items.push({
+                element: '<div class="header-menu-subheading">' + me._locale.regionCategories.title + '</div>',
+                disabled: true
+            });
+            // Region category selects
+            Object.keys(layers).forEach(function(categoryId) {
+                var categorySelector = jQuery(me._templates.headerCategoryItem);
+                categorySelector.find('input').attr({
+                    'id': 'category_' + categoryId,
+                    'checked': (categoryId === me.viewmodel.layerId ? 'checked' : false)
+                });
+                var label = categorySelector.find('label');
+                label.attr('for', 'category_' + categoryId);
+                label.html(me._locale.regionCategories[categoryId]);
+
+                menu.items.push({
+                    element: categorySelector,
+                    command: 'category_' + categoryId
+                });
+            });
+
+            menu.items.push({
+                element: '<div class="header-menu-subheading subheading-middle">' + me._locale.statistic.title + '</div>',
+                disabled: true
+            });
+            // Statistical variables
+            for (i = 0; i < me.conf.statistics.length; i++) {
+                var statistic = me.conf.statistics[i],
+                    elems = jQuery(me._templates.gridHeaderMenu).addClass('statsgrid-show-total-selects');
+
+                // create input element with localization
+                input = elems.find('input').attr({
+                    'id': 'statistics_' + statistic.id
+                });
+                // if variable is visible => check the checkbox
+                if (statistic.visible) {
+                    input.attr({
+                        'checked': 'checked'
+                    });
+                }
+                // create label with localization
+                elems.find('label').attr('for', 'statistics_' + statistic.id).text(me._locale.statistic[statistic.id]);
+                // add item to menu
+                menu.items.push({
+                    element: elems,
+                    command: statistic.id
+                });
+            }
+
+            // create checkbox for selecting rows toggle
+            var showRows = jQuery(me._templates.gridHeaderMenu).addClass('statsgrid-show-row-selects');
+            // create input element with localization
+            input = showRows.find('input').attr({
+                'id': 'statsgrid-show-row-selects'
+            });
+            // FIXME: check if select rows checkbox should be checked
+            input.attr('checked', 'checked');
+            // create label with localization
+            showRows.find('label').attr('for', 'statsgrid-show-row-selects').text(me._locale.selectRows);
+            menu.items.push({
+                element: showRows,
+                command: 'selectRows'
+            });
+
             var data = ['<tr><td>Fake data 1</td></tr>', '<tr><td>Fake data 2</td></tr>'];
 
             var clusterize = new Clusterize({
@@ -196,148 +206,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.Grid',
                 scrollId: 'scrollArea',
                 contentId: 'contentArea'
             });
-
-            me.grid.setColumns(columns);
-
-            me._updateIndicatorDataToGrid(columnId, data, columns);
-
-            me.autosizeColumns();
-
-            me.grid.setSortColumn(columnId, true);
-
         },
-        /**
-         * Remove indicator data to the grid.
-         *
-         * @method removeIndicatorDataFromGrid
-         * @param indicatorId id
-         * @param gender (male / female / total)
-         * @param year selected year
-         */
-        "removeIndicatorDataFromGrid" : function (indicatorKey) {
-            var columnId = indicatorKey,
-            	grid = this.getGrid(),
-            	dataView = grid.getData(),
-                columns = grid.getColumns(),
-                allOtherColumns = [],
-                found = false,
-                i = 0,
-                ilen = 0,
-                j = 0;
 
-            for (i = 0, ilen = columns.length, j = 0; i < ilen; i++) {
-                if (columnId === columns[i].id) {
-                    // Skip the column that is to be deleted
-                    found = true;
-                } else {
-                    allOtherColumns[j] = columns[i];
-                    j++;
-                }
-            }
-
-            // replace the columns with the columns without the column that was found
-            if (found) {
-                if (allOtherColumns.length === 2) {
-                    // Only checkbox and municipality columns left, resize municipality column to ~50%
-                    allOtherColumns[1].width = 318;
-                }
-                grid.setColumns(allOtherColumns);
-                grid.render();
-                dataView.refresh();
-                if (allOtherColumns.length !== 2) {
-                    this.autosizeColumns();
-                }
-            }
-            this.controller.removeIndicator(indicatorKey);
-        },
-        "_updateIndicatorDataToGrid" : function (columnId, data, columns) {
-            var me = this,
-                hasNoData = true,
-                column = me.getColumnById(columnId),
-                grid = me.getGrid(),
-                dataView = grid.getData(),
-                i,
-                indicatorId,
-                gender,
-                year,
-                numValue;
-
-            //data = data || me.indicatorsData[columnId];
-            //columns = columns || me.grid.getColumns();
-            dataView.beginUpdate();
-
-            // loop through data and get the values
-            var indicData,
-                regionId,
-                value,
-                item,
-                maxDecimals = 0,
-                getDecimalCount = function (val) {
-                    var match = ('' + val).match(/(?:\.(\d+))?(?:[eE]([+-]?\d+))?$/),
-                        ret = 0;
-                    if (match) {
-                        ret = Math.max(
-                            0, (match[1] ? match[1].length : 0) - (match[2] ? +match[2] : 0));
-                    }
-                    return ret;
-                };
-            for (i = 0; i < data.length; i++) {
-                indicData = data[i];
-                regionId = indicData.region;
-                value = indicData['primary value'].replace(',', '.');
-
-                if (regionId !== null && regionId !== undefined) {
-                    // find region
-                    item = dataView.getItemById(regionId);
-                    if (item) {
-                        hasNoData = false;
-                        // update row
-                        numValue = Number(value);
-                        if (isNaN(numValue)) {
-                            item[columnId] = value;
-                        } else {
-                            // get number's decimal count
-                            maxDecimals = Math.max(maxDecimals, getDecimalCount(numValue));
-                            item[columnId] = numValue;
-                        }
-                        dataView.updateItem(item.id, item);
-                    }
-                }
-            }
-            column.decimals = maxDecimals;
-
-            // Display a warning if cannot be displayed in the selected region category
-            if (column.header && column.header.buttons) {
-                me._addHeaderWarning(hasNoData, column.header.buttons);
-                grid.setColumns(columns);
-            }
-
-            // create all the aggregators we need
-            var aggregators = [];
-
-            for (i = 0; i < columns.length; i++) {
-                var id = columns[i].id;
-                aggregators.push(new Slick.Data.Aggregators.Avg(id));
-                aggregators.push(new Slick.Data.Aggregators.Std(id));
-                aggregators.push(new Slick.Data.Aggregators.Mdn(id));
-                aggregators.push(new Slick.Data.Aggregators.Mde(id));
-                aggregators.push(new Slick.Data.Aggregators.Sum(id));
-                aggregators.push(new Slick.Data.Aggregators.Max(id));
-                aggregators.push(new Slick.Data.Aggregators.Min(id));
-            }
-            dataView.setAggregators(aggregators, true);
-
-            // Add callback function for totals / statistics
-            dataView.setTotalsCallback(function (groups) {
-                me._updateTotals(groups);
-            });
-
-            dataView.endUpdate();
-            dataView.refresh();
-            grid.invalidateAllRows();
-            grid.render();
-            grid.setSortColumn(columnId, true);
-        },
         /**
          * Displays a warning in the header if the indicator data
          * cannot be displayed in the selected region category.
@@ -741,11 +611,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.Grid',
             // new header menu plugin
             var headerMenuPlugin = new Slick.Plugins.HeaderMenu2({});
             me.__addRegionColumnMenu(headerMenuPlugin, regionCategories);
-            // when command is given shos statistical variable as a new "row" in subheader
+            // when command is given shows the statistical variable as a new "row" in subheader
             headerMenuPlugin.onCommand.subscribe(function (e, args) {
                 var i;
                 if (args.command === 'selectRows') {
-                    me.__setRowSelectorEnabled(jQuery(e.target).is(":checked"));
+                    // FIXME: Select all rows here.
                 } else if (/^category_/.test(args.command)) {
                     me.controller.selectRegionCategory(_.last(args.command.split('_')));
                 } else if (args.command == 'filter') {
@@ -779,7 +649,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.Grid',
             // lets create a menu when user clicks the button.
             headerMenuPlugin.onBeforeMenuShow.subscribe(function (e, args) {
                 var menu = args.menu,
-                    activeCategory = me.controller.getActiveRegionCategory(),
+                    activeCategory = me.viewmodel.layerId,
                     i,
                     input;
                 if (args.column.id !== me.__columnIdRegion) {
@@ -843,10 +713,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.Grid',
                 input = showRows.find('input').attr({
                     'id': 'statsgrid-show-row-selects'
                 });
-                // check if select rows checkbox should be checked
-                if (me.__isRowSelectorActive()) {
-                    input.attr('checked', 'checked');
-                }
+                // FIXME: check if select rows checkbox should be checked
+                input.attr('checked', 'checked');
                 // create label with localization
                 showRows.find('label').attr('for', 'statsgrid-show-row-selects').text(me._locale.selectRows);
                 menu.items.push({
@@ -855,29 +723,5 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.Grid',
                 });
 
             });
-        },
-        "__setRowSelectorEnabled" : function(blnEnable) {
-            var grid = this.getGrid(),
-            	columns = grid.getColumns(),
-                columnDef = grid.getData().__OSKARI_EXT["checkboxSelector"].getColumnDefinition();
-            // should always be first column if on grid
-            var isPresent = this.__isRowSelectorActive();
-            if(isPresent && !blnEnable) {
-                // drop the first column
-                columns.shift();
-            }
-            else if(!isPresent && blnEnable) {
-                // add as first column
-                columns.unshift(columnDef);
-            }
-            grid.setColumns(columns);
-        },
-        "__isRowSelectorActive" : function() {
-            var columns = this.getGrid().getColumns(),
-                columnDef = this.getGrid().getData().__OSKARI_EXT["checkboxSelector"].getColumnDefinition();
-            // should always be first column if on grid
-            var isPresent = (columns[0].field === columnDef.field); // 'sel'
-            return isPresent;
         }
-
     });

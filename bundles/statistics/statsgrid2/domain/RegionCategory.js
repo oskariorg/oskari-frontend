@@ -1,5 +1,5 @@
 /**
- * Model for region category
+ * Model for region category, i.e. a layer
  *
  *
  *   {
