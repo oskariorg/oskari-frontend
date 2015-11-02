@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.viewmodels.GridViewModel
         "addIndicator": function(indicator, name) {
             var me = this;
             me.maxRank = me.maxRank + 1;
-            me.indicators[indicator.getId()] = {
+            me.indicators[indicator.key] = {
                 indicator: indicator,
                 // Defines the column order.
                 rank: me.maxRank,
@@ -58,5 +58,37 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.viewmodels.GridViewModel
             return me.indicators.map(function (indicator) {
                 return indicator.indicator.name;
             });
+        },
+        "transformRegionsToColumnData" : function(category) {
+            var me = this,
+                lang = Oskari.getLang();
+
+            var data = _.foldl(category.getRegions(), function (result, region) {
+                var row = {
+                    id: region.id,
+                    //code: indicator.code,
+                    title : region.locale[lang],
+                    // TODO: handle member of somehow, backend needs to provide it
+                    memberOf: [], //indicator.memberOf
+                };
+                //row[me.__columnIdRegion] = region.locale[lang];
+                // default to enabled group
+                row[me.__groupingProperty] = me.__groupEnabled;
+                result.push(row);
+                return result;
+            }, []);
+            return data;
+        },
+        "hasColumn" : function(columnId) {
+            return (this.getColumnById(columnId) != null);
+        },
+        /**
+         * Get column by key where the indicator ids are concatenated with options.
+         *
+         * @method getColumnById
+         * @param indicatorKey
+         */
+        "getColumnById" : function (indicatorKey) {
+            return this.indicators[indicatorKey];
         }
     });

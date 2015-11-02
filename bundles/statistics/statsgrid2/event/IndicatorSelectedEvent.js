@@ -9,7 +9,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.event.IndicatorSelectedE
      * @static
      */
 
-    function (datasourceId, indicatorId, selectors) {
+    function (indicator, datasourceId, indicatorId, selectors) {
+        this.indicator = indicator;
         this.indicatorId = indicatorId;
         this.datasourceId = datasourceId;
         this.selectors = selectors;
@@ -21,6 +22,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.event.IndicatorSelectedE
          */
         getName: function () {
             return 'StatsGrid.IndicatorSelectedEvent';
+        },
+        /**
+         * @method getIndicator
+         * @return {Indicator} indicator
+         */
+        getIndicator: function () {
+            return this.indicator;
         },
         /**
          * @method getIndicatorId

@@ -73,7 +73,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
                     eventBuilder = sandbox.getEventBuilder('StatsGrid.IndicatorSelectedEvent'),
                     evt;
                 if (eventBuilder) {
-                    evt = eventBuilder(me.__selectedDataSourceId, me.__selectedIndicatorId, me.__selectedSelections);
+                    evt = eventBuilder(me.__selectedIndicator, me.__selectedDataSourceId,
+                            me.__selectedIndicatorId, me.__selectedSelections);
                     sandbox.notifyAll(evt);
                 }
                 return false;
@@ -283,6 +284,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
             if (selectors) {
                 optionsContainer.empty();
                 me.__selectedSelections = {};
+                me.__selectorsSelects = [];
 
                 _.each(selectors, function (selector) {
                     var selectorCont = jQuery('<label><span></span><select name="selectors-' + selector.id + '"' +
@@ -318,6 +320,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
                     // Apparently newer chosen versions use 'chosen', so keep that in mind if you update the library.
                     selectorSelect.trigger('liszt:updated');
                     selectorSelect.trigger('chosen:updated');
+                    me.__selectorsSelects = me.__selectorsSelects.concat(selectorSelect);
                 });
             }
         },
@@ -437,9 +440,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
         _selectionsOk: function() {
             var ok = true,
               me = this;
-            _.each(me.__selectorsSelects, function(selection) {
-                if (!selection.find('option:selected')) {
-                    // If a selection box exists that does not have a value selected, then this is not fine.
+            Object.keys(me.__selectedSelections).forEach(function(selectorId) {
+                if (! me.__selectedSelections[selectorId]) {
                     ok = false;
                 }
             });
@@ -639,7 +641,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
 
         eventHandlers: {
             'StatsGrid.IndicatorSelectedEvent' : function(e) {
-                // TODO check if options match
+                // FIXME: check if options match
                 if (e && e.getDatasourceId() === this.getSelectedDatasource() &&
                         e.getIndicatorId() === this.getSelectedIndicator()) {
                     this._updateAddRemoveButtonState();

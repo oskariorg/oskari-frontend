@@ -3,33 +3,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.Grid',
     /**
      * @static constructor function
      */
-    function (gridCtrl, locale) {
+    function (gridCtrl, locale, viewmodel) {
         this.conf = jQuery.extend(true, {}, this.__defaults);
 	    this.controller = gridCtrl;
 	    this._locale = locale;
-        this._templates = {
-            'csvButton': '<button class="statsgrid-csv-button">csv</button>',
-            'statsgridTotalsVar': '<span class="statsgrid-variable"></span>',
-            'subHeader': '<span class="statsgrid-grid-subheader"></span>',
-            'gridHeaderMenu': '<li><input type="checkbox" /><label></label></li>',
-            'groupingHeader': '<span style="color:green"></span>',
-            'toolbarButton': '<button class="statsgrid-select-municipalities"></button>',
-            'filterPopup': '<div class="indicator-filter-popup"><p class="filter-desc"></p><div class="filter-container"></div></div>',
-            'filterRow': '<div class="filter-row"><div class="filter-label"></div><div class="filter-value"></div></div>',
-            'filterSelect': '<div><select class="filter-select"></select><div class="filter-inputs-container"></div></div>',
-            'filterOption': '<option></option>',
-            'filterInputs': '<input type="text" class="filter-input filter-input1" /><span class="filter-between" style="display:none;">-</span><input type="text" class="filter-input filter-input2" style="display:none;" />',
-            'filterLink': '<a href="javascript:void(0);"></a>',
-            'filterByRegion': '<div id="statsgrid-filter-by-region"><p class="filter-desc"></p><div class="filter-container"></div></div>',
-            'regionCatSelect': '<div class="filter-region-category-select"><select></select></div>',
-            'regionSelect': '<div class="filter-region-select"><select class="filter-region-select" multiple tabindex="3"></select></div>',
-            'addOwnIndicator': '<div class="new-indicator-cont"><input type="button"/></div>',
-            'cannotDisplayIndicator': '<p class="cannot-display-indicator"></p>',
-            'headerCategoryItem' : '<li><input type="radio" name="categorySelector"></input><label></label></li>',
-            'grid': '<div class="clusterize"><table><thead></thead></table><div id="scrollArea" class="clusterize-scroll">' +
-                '<table><tbody id="contentArea" class="clusterize-content"><tr class="clusterize-no-data"><td></td></tr></tbody>' +
-                '</table></div></div>'
-        };
+	    this.viewmodel = viewmodel;
     },
     {
         "__columnIdRegion" : "region",
@@ -60,12 +38,34 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.Grid',
                 "visible": true
             }]
         },
-        "render": function(container) {
-            var me = this;
+        "_templates": {
+            'csvButton': '<button class="statsgrid-csv-button">csv</button>',
+            'statsgridTotalsVar': '<span class="statsgrid-variable"></span>',
+            'subHeader': '<span class="statsgrid-grid-subheader"></span>',
+            'gridHeaderMenu': '<li><input type="checkbox" /><label></label></li>',
+            'groupingHeader': '<span style="color:green"></span>',
+            'toolbarButton': '<button class="statsgrid-select-municipalities"></button>',
+            'filterPopup': '<div class="indicator-filter-popup"><p class="filter-desc"></p><div class="filter-container"></div></div>',
+            'filterRow': '<div class="filter-row"><div class="filter-label"></div><div class="filter-value"></div></div>',
+            'filterSelect': '<div><select class="filter-select"></select><div class="filter-inputs-container"></div></div>',
+            'filterOption': '<option></option>',
+            'filterInputs': '<input type="text" class="filter-input filter-input1" /><span class="filter-between" style="display:none;">-</span><input type="text" class="filter-input filter-input2" style="display:none;" />',
+            'filterLink': '<a href="javascript:void(0);"></a>',
+            'filterByRegion': '<div id="statsgrid-filter-by-region"><p class="filter-desc"></p><div class="filter-container"></div></div>',
+            'regionCatSelect': '<div class="filter-region-category-select"><select></select></div>',
+            'regionSelect': '<div class="filter-region-select"><select class="filter-region-select" multiple tabindex="3"></select></div>',
+            'addOwnIndicator': '<div class="new-indicator-cont"><input type="button"/></div>',
+            'cannotDisplayIndicator': '<p class="cannot-display-indicator"></p>',
+            'headerCategoryItem' : '<li><input type="radio" name="categorySelector"></input><label></label></li>',
+            'grid': '<div class="clusterize"><table><thead></thead></table><div id="scrollArea" class="clusterize-scroll">' +
+                '<table><tbody id="contentArea" class="clusterize-content"><tr class="clusterize-no-data"><td></td></tr></tbody>' +
+                '</table></div></div>'
+        },
+        "render" : function(container) {
             this.container = container;
             // clear container and start building the grid
             container.empty();
-            container.append(jQuery(me._templates.grid));
+            container.append(jQuery(this._templates.grid));
             // FIXME: Get categories from the selected indicator.
             /*function(categories) {
                 var category = _.find(categories, function(cat) {
@@ -84,6 +84,34 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.Grid',
         },
         "getGrid" : function() {
         	return this.grid;
+        },
+        "getLocalizationFrom": function(localizedNames, fallback, lang) {
+            var name = localizedNames.getLocalization(lang);
+            if (!name) {
+                name = localizedNames.getLocalization("fi");
+            }
+            if (!name) {
+                name = localizedNames.getLocalization("en");
+            }
+            if (!name) {
+                if (Object.keys(localizedNames) > 0) {
+                    // Taking the first one.
+                    name = localizedNames[localizedNames.getLocalizationKeys()[0]];
+                } else {
+                    name = indicatorId;
+                }
+            }
+            return name;
+        },
+        "constructLabel" : function(indicator) {
+            var lang = Oskari.getLang(),
+                name = this.getLocalizationFrom(indicator.indicator.getName(), indicator.key, lang),
+                opts = indicator.selections;
+            
+            _.each(opts, function(value, key) {
+                name = name + '/' + value;
+            });
+            return name;
         },
 
         /**
@@ -221,28 +249,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.Grid',
                 }
             }
             this.controller.removeIndicator(indicatorKey);
-        },
-        "hasColumn" : function(columnId) {
-        	return (this.getColumnById(columnId) != null);
-        },
-        /**
-         * Get column by id
-         *
-         * @method getColumnById
-         * @param column id
-         */
-        "getColumnById" : function (columnId) {
-            // sendstats
-            var columns = this.getGrid().getColumns(),
-                column,
-                i;
-            for (i = 0; i < columns.length; i++) {
-                column = columns[i];
-                if (column.id === columnId) {
-                    return column;
-                }
-            }
-            return null;
         },
         "_updateIndicatorDataToGrid" : function (columnId, data, columns) {
             var me = this,
@@ -467,26 +473,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.Grid',
             });
 
             grid.autosizeColumns();
-        },
-        "transformRegionsToColumnData" : function(category) {
-            var me = this,
-                lang = Oskari.getLang();
-
-            var data = _.foldl(category.getRegions(), function (result, region) {
-                var row = {
-                    id: region.id,
-                    //code: indicator.code,
-                    title : region.locale[lang],
-                    // TODO: handle member of somehow, backend needs to provide it
-                    memberOf: [], //indicator.memberOf
-                };
-                //row[me.__columnIdRegion] = region.locale[lang];
-                // default to enabled group
-                row[me.__groupingProperty] = me.__groupEnabled;
-                result.push(row);
-                return result;
-            }, []);
-            return data;
         },
         "__handleColumnDataChanged" : function() {
             // NOTE!!! user removed/added some regions so indicator values needs to be refreshed for visualization

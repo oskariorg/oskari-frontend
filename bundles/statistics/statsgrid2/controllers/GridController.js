@@ -9,8 +9,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.controllers.GridControll
      * @static constructor function
      */
     function (localization, statisticsService, userSelections) {
-        this.view = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.view.Grid', this, localization);
-        this.render = this.view.render;
+        this.viewmodel = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.viewmodels.GridViewModel', this);
+        this.view = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.view.Grid', this, localization, this.viewmodel);
         this._locale = localization;
         this.service = statisticsService;
         this.userSelections = userSelections;
@@ -40,7 +40,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.controllers.GridControll
                 //dataView.setItems([]);
                 //grid.invalidateAllRows();
                 // set municipality data
-                dataView.setItems(me.helper.transformRegionsToColumnData(category));
+                dataView.setItems(me.viewmodel.transformRegionsToColumnData(category));
                 //-------------------------------------------
                 // TODO: setup any indicator values
                 // see changeGridRegion in statsgrid.ManageStatsPlugin
@@ -68,20 +68,14 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.controllers.GridControll
             if (indicatorKey === this.getState().currentColumn) {
                 return false;
             }
-            if(this.helper.hasColumn(indicatorKey)) {
+            if(this.viewmodel.hasColumn(indicatorKey)) {
                 // just select it
                 return;
             }
+            
             var me = this,
-                data = this.__indicatorCache[indicatorKey][me.getActiveRegionCategory()];
-            me.helper.addIndicatorDataToGrid(indicatorKey, me.__constructLabel(indicator, data.opts), data.data);
-        },
-        "__constructLabel" : function(indicator, opts) {
-            var name =  indicator.getName();
-            _.each(opts, function(value, key) {
-                name = name + '/' + value;
-            });
-            return name;
+                indicator = this.__indicatorCache[indicatorKey][me.getActiveRegionCategory()];
+            me.viewmodel.addIndicator(indicator, me.view.constructLabel(indicator));
         },
         "removeIndicator": function (indicatorKey) {
             // TODO: maybe send an event?
@@ -109,11 +103,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.controllers.GridControll
                             function(data) {
                         me.__indicatorCache[e.getKey()] = {};
                         me.__indicatorCache[e.getKey()][me.getActiveRegionCategory()] = {
+                            indicator: e.getIndicator(),
                             pluginId : e.getDatasourceId(),
                             indicatorId : e.getIndicatorId(),
                             selectors : e.getSelectors(),
                             regionId : me.getActiveRegionCategory(),
-                            data : data
+                            data : data,
+                            key: e.getKey()
                         };
                         me.selectIndicator(e.getKey());
                     });

@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.MainPanel',
 	    	this.indicatorSelector.render(container);
 
             var gridContainer = jQuery(this.__templates.gridWrapper);
-            this.grid.render(gridContainer);
+            this.grid.view.render(gridContainer);
             container.append(gridContainer);
 
             //window resize!
