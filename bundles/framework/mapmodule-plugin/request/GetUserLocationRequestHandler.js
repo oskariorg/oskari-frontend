@@ -8,7 +8,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.GetUserLocatio
 }, {
     handleRequest: function (core, request) {
         this.sandbox.printDebug('[Oskari.mapframework.bundle.mapmodule.request.GetUserLocationRequestHandler] Get user location');
-        debugger;
         this.myLocationPlugin.getLocation();
     }
 }, {
