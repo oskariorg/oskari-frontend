@@ -15,6 +15,11 @@ New request is enabled by default:
 
 Domain validation fixed to accept urls with - or _ characters.
 
+## 1.33.2
+
+AbstractLayer.getLegendImage() now returns the legend of current style if available. Fallback to base legendImage if style legend is not available. 
+AbstractLayer.selectStyle() no longer overwrites the base legendImage information.
+
 ## 1.33.1
 
 ### admin-layerselector

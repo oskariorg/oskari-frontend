@@ -699,9 +699,6 @@ Oskari.clazz.define(
                 style = me.getStyles()[i];
                 if (style.getName() === styleName) {
                     me._currentStyle = style;
-                    if (style.getLegend()) {
-                        me._legendImage = style.getLegend();
-                    }
                     return;
                 }
             }
@@ -800,6 +797,10 @@ Oskari.clazz.define(
          * @return {String} URL to a legend image
          */
         getLegendImage: function () {
+            var style = this.getCurrentStyle();
+            if(style && style.getLegend()) {
+                return style.getLegend();
+            }
             return this._legendImage;
         },
         /**
