@@ -57,7 +57,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.Grid',
             'addOwnIndicator': '<div class="new-indicator-cont"><input type="button"/></div>',
             'cannotDisplayIndicator': '<p class="cannot-display-indicator"></p>',
             'headerCategoryItem' : '<li><input type="radio" name="categorySelector"></input><label></label></li>',
-            'grid': '<div class="clusterize"><table><thead name="gridHeader"></thead></table><div id="scrollArea" class="clusterize-scroll">' +
+            'grid': '<div class="clusterize"><table><thead><tr name="gridHeader"></tr></thead></table><div id="scrollArea" class="clusterize-scroll">' +
                 '<table><tbody id="contentArea" class="clusterize-content"><tr class="clusterize-no-data"><td></td></tr></tbody>' +
                 '</table></div></div>'
         },
@@ -118,7 +118,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.Grid',
          */
         "refresh" : function() {
             var me = this,
-                gridHeaderContainer = me.container.find('select[name=gridHeader]'),
+                gridHeaderContainer = me.container.find('tr[name=gridHeader]'),
                 indicators = me.viewmodel.getIndicators(),
                 layers = me.viewmodel.getLayers(),
                 menu = {
@@ -130,13 +130,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.Grid',
             var indicatorLabels = Object.keys(indicators).map(function (indicatorKey) {
                 return me.constructLabel(indicators[indicatorKey].indicator);
             });
-            gridHeaderContainer.append("<th>REGION SELECTOR</th>");
-            indicatorLabels.forEach(function(indicatorLabel) {
-                gridHeaderContainer.append("<th>" + indicatorLabel + "</th>");
-            });
-
             menu.items.push({
-                element: '<div class="header-menu-subheading">' + me._locale.regionCategories.title + '</div>',
+                element: '<div class="header-menu-subheading">' + me._locale.regionCategoriesTitle + '</div>',
                 disabled: true
             });
             // Region category selects
@@ -197,6 +192,12 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.Grid',
             menu.items.push({
                 element: showRows,
                 command: 'selectRows'
+            });
+
+            // FIXME: Add the menu to the dropdown arrow here.
+            gridHeaderContainer.append("<th>REGION SELECTOR</th>");
+            indicatorLabels.forEach(function(indicatorLabel) {
+                gridHeaderContainer.append("<th>" + indicatorLabel + "</th>");
             });
 
             var data = ['<tr><td>Fake data 1</td></tr>', '<tr><td>Fake data 2</td></tr>'];
@@ -570,9 +571,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.Grid',
                 formatter: function (g) {
                     //a hack to name the groups
                     var text = (g.groupingKey === me.__groupEnabled ?
-                        me._locale.included :
-                        me._locale.not_included) + " (" + g.count + ")";
-                    return "<span style='color:green'>" + text + "</span>";
+                            me._locale.included :
+                            me._locale.not_included) + " (" + g.count + ")";
+                        return "<span style='color:green'>" + text + "</span>";
                 },
                 aggregateCollapsed: false
             });
