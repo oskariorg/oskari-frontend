@@ -114,6 +114,8 @@ Oskari.registerLocalization(
             "username": "Användarsnamn",
             "password": "Lösenord",
             "attributes": "Attribut",
+            "selectedTime": "Vald tid",
+            "time": "Stödd tid",
             "addInspireName": "Ämnets namn",
             "addInspireNameTitle": "Ämnets namn",
             "addOrganizationName": "Data&shy;producentens namn",

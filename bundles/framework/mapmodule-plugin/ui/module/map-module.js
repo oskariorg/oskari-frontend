@@ -282,17 +282,22 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * Moves the map to the given position.
          * NOTE! Doesn't send an event if zoom level is not changed.
          * Call notifyMoveEnd() afterwards to notify other components about changed state.
-         * @param {OpenLayers.LonLat} lonlat coordinates to move the map to
+         * @param {OpenLayers.LonLat} or {Array} lonlat coordinates to move the map to
          * @param {Number} zoomAdjust relative change to the zoom level f.ex -1 (optional)
          * @param {Boolean} pIsDragging true if the user is dragging the map to a new location currently (optional)
          */
         moveMapToLanLot: function (lonlat, zoomAdjust, pIsDragging) {
-            // TODO: openlayers has isValidLonLat(); maybe use it here
+            //if lonlat is given as an array instead of OpenLayers.LonLat
+            // parse it to OpenLayers.LonLat for further use
+            if (_.isArray(lonlat)) {
+                var olLonLat = {};
+                olLonLat['lon'] = lonlat[0];
+                olLonLat['lat'] = lonlat[1];
+            } else {
+                var olLonLat = lonlat;
+            }
             var isDragging = (pIsDragging === true);
-            // TODO check if panTo (still) breaks IE9+ and if not, should we use it
-            // using panTo BREAKS IE on startup so do not
-            // should we spam events on dragmoves?
-            this._map.setCenter(lonlat, this._getMapZoom(), isDragging);
+            this._map.setCenter(olLonLat, this._getMapZoom(), isDragging);
 
             if (zoomAdjust) {
                 this.adjustZoomLevel(zoomAdjust, true);
@@ -641,7 +646,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             return this._map.getZoom();
         },
 
-        _getMapScale: function () {
+        getMapScale: function () {
             return this._map.getScale();
         },
 
@@ -669,7 +674,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
             var lonlat = this._getMapCenter();
             this._updateDomainImpl();
-            var evt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat.lon, lonlat.lat, this._getMapZoom(), false, this._getMapScale(), creator);
+            var evt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat.lon, lonlat.lat, this._getMapZoom(), false, this.getMapScale(), creator);
             sandbox.notifyAll(evt);
         },
 
@@ -721,7 +726,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
             mapVO.moveTo(lonlat.lon, lonlat.lat, this._getMapZoom());
 
-            mapVO.setScale(this._getMapScale());
+            mapVO.setScale(this.getMapScale());
 
             var size = this._map.getCurrentSize();
             mapVO.setWidth(size.w);
@@ -852,113 +857,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             return results;
         },
 
-        /**
-         * Removes all the css classes which respond to given regex from all elements
-         * and adds the given class to them.
-         *
-         * @method changeCssClasses
-         * @param {String} classToAdd the css class to add to all elements.
-         * @param {RegExp} removeClassRegex the regex to test against to determine which classes should be removec
-         * @param {Array[jQuery]} elements The elements where the classes should be changed.
-         */
-        changeCssClasses: function (classToAdd, removeClassRegex, elements) {
-
-            //TODO: deprecate this, make some error message appear or smthng
-
-            var i,
-                j,
-                el;
-
-            for (i = 0; i < elements.length; i += 1) {
-                el = elements[i];
-                // FIXME build the function outside the loop
-                el.removeClass(function (index, classes) {
-                    var removeThese = '',
-                        classNames = classes.split(' ');
-
-                    // Check if there are any old font classes.
-                    for (j = 0; j < classNames.length; j += 1) {
-                        if (removeClassRegex.test(classNames[j])) {
-                            removeThese += classNames[j] + ' ';
-                        }
-                    }
-
-                    // Return the class names to be removed.
-                    return removeThese;
-                });
-
-                // Add the new font as a CSS class.
-                el.addClass(classToAdd);
-            }
-        },
-        /**
-         * Sets the style to be used on plugins and asks all the active plugins that support changing style to change their style accordingly.
-         *
-         * @method changeToolStyle
-         * @param {Object} style The style object to be applied on all plugins that support changing style.
-         */
-        changeToolStyle: function(style) {
-            var me = this;
-
-            if (me._options) {
-                me._options.style = _.cloneDeep(style);
-            }
-
-            //notify plugins of the style change.
-            if (style) {
-                _.each(me._pluginInstances, function(plugin) {
-                    if (plugin && plugin.hasUI()) {
-                        var styleConfig = me._options.style.toolStyle !== "default" ? me._options.style.toolStyle : null;
-                        if (plugin.changeToolStyle && typeof plugin.changeToolStyle === 'function') {
-                            plugin.changeToolStyle(styleConfig);
-                        }
-                        if (plugin.changeFont && typeof plugin.changeFont === 'function') {
-                            plugin.changeFont(me._options.style.font);
-                        }
-                    }
-                });
-            }
-        },
-        /**
-         * Gets the style to be used on plugins
-         *
-         * @method getToolStyle
-         * @return {String} style The mapmodule's style configuration.
-         */
-        getToolStyle: function() {
-            var me = this;
-            if (me._options && me._options.style && me._options.style.toolStyle) {
-                return me._options.style.toolStyle && me._options.style.toolStyle !== "default" ? me._options.style.toolStyle : null;
-            } else {
-                return null;
-            }
-        },
-        /**
-         * Gets the font to be used on plugins
-         * @method getToolFont
-         * @return {String} font The mapmodule's font configuration or null if not set.
-         */
-        getToolFont: function() {
-            var me = this;
-            if (me._options && me._options.style && me._options.style.font) {
-                return me._options.style.font;
-            } else {
-                return null;
-            }
-        },
-        /**
-         * Gets the colourscheme to be used on plugins
-         * @method getToolColourScheme
-         * @return {String} font The mapmodule's font configuration or null if not set.
-         */
-        getToolColourScheme: function() {
-            var me = this;
-            if (me._options && me._options.style && me._options.style.colourScheme) {
-                return me._options.style.colourScheme;
-            } else {
-                return null;
-            }
-        },
 
         isInLayerToolsEditMode: function () {
             return this._isInLayerToolsEditMode;

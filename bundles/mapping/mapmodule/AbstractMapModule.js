@@ -546,8 +546,7 @@ Oskari.clazz.define(
                 return zoomLevel;
             }
 
-            // FIXME: relies on OL2 implementation, refactor to use Impl
-            var scale = this.getMap().getScale(),
+            var scale = this.getMapScale(),
                 i;
 
             if (scale < minScale) {
@@ -683,6 +682,113 @@ Oskari.clazz.define(
             return handler.apply(this, [event]);
         },
         /**
+         * Removes all the css classes which respond to given regex from all elements
+         * and adds the given class to them.
+         *
+         * @method changeCssClasses
+         * @param {String} classToAdd the css class to add to all elements.
+         * @param {RegExp} removeClassRegex the regex to test against to determine which classes should be removec
+         * @param {Array[jQuery]} elements The elements where the classes should be changed.
+         */
+        changeCssClasses: function (classToAdd, removeClassRegex, elements) {
+
+            //TODO: deprecate this, make some error message appear or smthng
+
+            var i,
+                j,
+                el;
+
+            for (i = 0; i < elements.length; i += 1) {
+                el = elements[i];
+                // FIXME build the function outside the loop
+                el.removeClass(function (index, classes) {
+                    var removeThese = '',
+                        classNames = classes.split(' ');
+
+                    // Check if there are any old font classes.
+                    for (j = 0; j < classNames.length; j += 1) {
+                        if (removeClassRegex.test(classNames[j])) {
+                            removeThese += classNames[j] + ' ';
+                        }
+                    }
+
+                    // Return the class names to be removed.
+                    return removeThese;
+                });
+
+                // Add the new font as a CSS class.
+                el.addClass(classToAdd);
+            }
+        },
+        /**
+         * Sets the style to be used on plugins and asks all the active plugins that support changing style to change their style accordingly.
+         *
+         * @method changeToolStyle
+         * @param {Object} style The style object to be applied on all plugins that support changing style.
+         */
+        changeToolStyle: function(style) {
+            var me = this;
+
+            if (me._options) {
+                me._options.style = _.cloneDeep(style);
+            }
+
+            //notify plugins of the style change.
+            if (style) {
+                _.each(me._pluginInstances, function(plugin) {
+                    if (plugin && plugin.hasUI()) {
+                        var styleConfig = me._options.style.toolStyle !== "default" ? me._options.style.toolStyle : null;
+                        if (plugin.changeToolStyle && typeof plugin.changeToolStyle === 'function') {
+                            plugin.changeToolStyle(styleConfig);
+                        }
+                        if (plugin.changeFont && typeof plugin.changeFont === 'function') {
+                            plugin.changeFont(me._options.style.font);
+                        }
+                    }
+                });
+            }
+        },
+        /**
+         * Gets the style to be used on plugins
+         *
+         * @method getToolStyle
+         * @return {String} style The mapmodule's style configuration.
+         */
+        getToolStyle: function() {
+            var me = this;
+            if (me._options && me._options.style && me._options.style.toolStyle) {
+                return me._options.style.toolStyle && me._options.style.toolStyle !== "default" ? me._options.style.toolStyle : null;
+            } else {
+                return null;
+            }
+        },
+        /**
+         * Gets the font to be used on plugins
+         * @method getToolFont
+         * @return {String} font The mapmodule's font configuration or null if not set.
+         */
+        getToolFont: function() {
+            var me = this;
+            if (me._options && me._options.style && me._options.style.font) {
+                return me._options.style.font;
+            } else {
+                return null;
+            }
+        },
+        /**
+         * Gets the colourscheme to be used on plugins
+         * @method getToolColourScheme
+         * @return {String} font The mapmodule's font configuration or null if not set.
+         */
+        getToolColourScheme: function() {
+            var me = this;
+            if (me._options && me._options.style && me._options.style.colourScheme) {
+                return me._options.style.colourScheme;
+            } else {
+                return null;
+            }
+        },
+        /**
          * @method updateCurrentState
          * Setup layers from selected layers
          * This is needed if map layers are added before mapmodule/plugins are started.
@@ -811,14 +917,6 @@ Oskari.clazz.define(
             }
             return -1;
 
-        },
-
-        getMapScale: function () {
-            var size = this.getMapSize(),
-                extent = this.getMapExtent(),
-                res = (extent[2] - extent[0]) / size[0];
-
-            return OpenLayers.Util.getScaleFromResolution(res, 'm');
         },
 
         /**
@@ -1221,7 +1319,7 @@ Oskari.clazz.define(
         getZoomLevel: function () {
             return this.getMap().getZoom();
         },
-        _getMapScale: Oskari.AbstractFunc('_getMapScale'),
+        getMapScale: Oskari.AbstractFunc('getMapScale'),
         /**
          * @method _updateDomainImpl
          * @private

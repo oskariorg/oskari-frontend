@@ -30,7 +30,7 @@ Oskari.clazz.define(
                  */
                 {
                     "type": "text/javascript",
-                    "src": "../../../libraries/ol3/ol-v3.9.0.js"
+                    "src": "../../../libraries/ol3/ol-v3.9.0-debug.js"
                 },
                 /*
                  * Proj4js
@@ -46,16 +46,16 @@ Oskari.clazz.define(
 
                 {
                     "type": "text/javascript",
-                    "src": "../../../src/mapping/mapmodule/AbstractMapModule.js"
+                    "src": "../../../bundles/mapping/mapmodule/AbstractMapModule.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../src/mapping/mapmodule/plugin/AbstractMapModulePlugin.js"
+                    "src": "../../../bundles/mapping/mapmodule/plugin/AbstractMapModulePlugin.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../src/mapping/mapmodule/plugin/BasicMapModulePlugin.js"
+                    "src": "../../../bundles/mapping/mapmodule/plugin/BasicMapModulePlugin.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../src/mapping/mapmodule/AbstractMapLayerPlugin.js"
+                    "src": "../../../bundles/mapping/mapmodule/AbstractMapLayerPlugin.js"
                 },
                 /*
                  * map-module
@@ -121,7 +121,7 @@ Oskari.clazz.define(
                  
                 {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/search/SearchPlugin.js"
+                    "src": "../../../bundles/framework/mapmodule-plugin/plugin/search/SearchPlugin.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../bundles/framework/search/service/searchservice.js"

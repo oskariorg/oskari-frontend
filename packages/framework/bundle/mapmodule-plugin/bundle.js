@@ -31,13 +31,13 @@ Oskari.clazz.define(
 
                 {
                     "type": "text/javascript",
-                    "src": "../../../../src/mapping/mapmodule/AbstractMapModule.js"
+                    "src": "../../../../bundles/mapping/mapmodule/AbstractMapModule.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../../src/mapping/mapmodule/plugin/AbstractMapModulePlugin.js"
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/AbstractMapModulePlugin.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../../src/mapping/mapmodule/plugin/BasicMapModulePlugin.js"
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/BasicMapModulePlugin.js"
                 },
                 /*
                  * map-module

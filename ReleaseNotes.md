@@ -8,12 +8,28 @@ New function is enabled by default:
 - 'getMapBbox' gets current map bbox
 
 New event is enabled by default:
-- 'UserLocationEvent' notifies at a user geolocation has getted
+- 'UserLocationEvent' notifies about users geolocation status
 
 New request is enabled by default:
 - 'MyLocationPlugin.GetUserLocationRequest' requests to get user geolocation
 
-Domain validation fixed so at it accept urls where has - or _ characters.
+Domain validation fixed to accept urls with - or _ characters.
+
+### File location changes
+
+Files under Oskari/src/mapping/mapmodule has been moved to Oskari/bundles/mapping/mapmodule/.
+
+## 1.33.2
+
+AbstractLayer.getLegendImage() now returns the legend of current style if available. Fallback to base legendImage if style legend is not available. 
+AbstractLayer.selectStyle() no longer overwrites the base legendImage information.
+
+## 1.33.1
+
+### admin-layerselector
+
+Added a missing label for "Selected time" field (WMS-T).
+Fixed: Legendimage field shows a proxy-URL if layer requires credentials. Now shows the correct URL for legendimage.
 
 ## 1.33
 
