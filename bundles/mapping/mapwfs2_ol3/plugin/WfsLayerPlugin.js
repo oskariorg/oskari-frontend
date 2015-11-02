@@ -275,7 +275,7 @@ Oskari.clazz.define(
                  * @param {Object} event
                  */
                 AfterMapLayerRemoveEvent: function (event) {
-                    
+
                     me.mapLayerRemoveHandler(event);
                     // Refresh UI refresh button visible/invisible
                     me.refresh();
@@ -302,7 +302,7 @@ Oskari.clazz.define(
                  * @param {Object} event
                  */
                 AfterChangeMapLayerStyleEvent: function (event) {
-                    
+
                     me.changeMapLayerStyleHandler(event);
                 },
                 /**
@@ -318,7 +318,7 @@ Oskari.clazz.define(
                  * @param {Object} event
                  */
                 MapLayerVisibilityChangedEvent: function (event) {
-                    
+
                     me.mapLayerVisibilityChangedHandler(event);
                     if (event.getMapLayer().hasFeatureData() && me.getConfig() && me.getConfig().deferSetLocation) {
                         me.getSandbox().printDebug(
@@ -333,7 +333,7 @@ Oskari.clazz.define(
                  * @param {Object} event
                  */
                 AfterChangeMapLayerOpacityEvent: function (event) {
-                    
+
                     me.afterChangeMapLayerOpacityEvent(event);
                 },
 
@@ -342,7 +342,7 @@ Oskari.clazz.define(
                  * @param {Object} event
                  */
                 MapSizeChangedEvent: function (event) {
-                    
+
                     me.mapSizeChangedHandler(event);
                 },
 
@@ -351,7 +351,7 @@ Oskari.clazz.define(
                  * @param {Object} event
                  */
                 WFSSetFilter: function (event) {
-                    
+
                     me.setFilterHandler(event);
                 },
 
@@ -360,7 +360,7 @@ Oskari.clazz.define(
                  * @param {Object} event
                  */
                 WFSSetPropertyFilter: function (event) {
-                    
+
                     me.setPropertyFilterHandler(event);
                 },
 
@@ -533,7 +533,7 @@ Oskari.clazz.define(
         },
         /**
          * @method ol2ExtentOl3Transform
-         * 
+         *
          * Transforms an ol2 - style extent object to an ol3 - style array. If extent is already in the array form, return the original.
          */
         ol2ExtentOl3Transform(ol2Extent) {
@@ -582,7 +582,7 @@ Oskari.clazz.define(
                 ); // add WMS layer
                 // send together
                 connection.get().batch(function () {
-                    
+
                     me.getIO().addMapLayer(
                         layer.getId(),
                         styleName
@@ -631,7 +631,7 @@ Oskari.clazz.define(
          * @param {Object} event
          */
         featuresSelectedHandler: function (event) {
-            
+
             if (!event.getMapLayer().hasFeatureData()) {
                 // No featuredata available, return
                 return;
@@ -682,7 +682,7 @@ Oskari.clazz.define(
          * @param {Object} event
          */
         mapClickedHandler: function (event) {
-            
+
             // don't process while moving
             if (this.getSandbox().getMap().isMoving()) {
                 return;
@@ -697,7 +697,7 @@ Oskari.clazz.define(
          * @param {Object} event
          */
         changeMapLayerStyleHandler: function (event) {
-            
+
             if (event.getMapLayer().hasFeatureData()) {
                 // render "normal" layer with new style
                 var OLLayer = this.getOLMapLayer(
@@ -731,7 +731,7 @@ Oskari.clazz.define(
          * @param {Object} event
          */
         afterChangeMapLayerOpacityEvent: function (event) {
-            
+
             var layer = event.getMapLayer(),
                 layers,
                 opacity;
@@ -816,7 +816,7 @@ Oskari.clazz.define(
                 srs,
                 tiles,
                 zoom;
-            
+
 
             me.getIO().setMapSize(event.getWidth(), event.getHeight());
 
@@ -872,7 +872,7 @@ Oskari.clazz.define(
          * @param {Object} event
          */
         setPropertyFilterHandler: function (event) {
-            
+
             /// clean selected features lists
             var me = this,
                 layers = this.getSandbox().findAllSelectedMapLayers();
@@ -1110,7 +1110,7 @@ Oskari.clazz.define(
             } else { // "normal"
                 bboxKey = this.bboxkeyStrip(boundsObj);
 
-                //according to our bookkeeping the layer shouldn't be loading anymore...If it is though, probably should just assume the number of tiles to be loaded to zero...                
+                //according to our bookkeeping the layer shouldn't be loading anymore...If it is though, probably should just assume the number of tiles to be loaded to zero...
                 if (!me._layersLoading[layerId]) {
                     me._layersLoading[layerId] = 0;
                 } else {
@@ -1119,10 +1119,10 @@ Oskari.clazz.define(
                 me._layersLoading[layerId]--;
                 if (bboxKey) {
                     var src = normalLayer.getSource();
-                    //TODO: move this block to a method of it's own maybe? 
+                    //TODO: move this block to a method of it's own maybe?
                     //TODO: And also, figure out if there's a cleaner way for getting the zxy for a single tile's extent...?
                     //TODO: and besides it ain't event working when there are multiple zooms or anything. Resort to bbox after all, eh?
-                    /* 
+                    /*
                     var grid = src.tileGrid;
                     var resolution = me.getMap().getView().getResolution();
                     var z = grid.getZForResolution(resolution);
@@ -1133,14 +1133,14 @@ Oskari.clazz.define(
                         x = tileRange.minX;
                         y = tileRange.minY;
                     } else {
-                        //probably in the middle of something 
+                        //probably in the middle of something
                         return;
                     }
                     var tileCoordKey = src.getKeyZXY(z, x, y);
                     */
                     if (src && src.tileCache) {
                         var tile;
-                        
+
 //                        if (src.tileCache.containsKey(tileCoordKey)) {
 //                            tile  = src.tileCache.get(tileCoordKey);
                         if (src.tileCache.containsKey(bboxKey)) {
@@ -1159,7 +1159,7 @@ Oskari.clazz.define(
                                 src.changed();
                             }
                         }
-                    } 
+                    }
                 }
             }
         },
@@ -1169,7 +1169,7 @@ Oskari.clazz.define(
          */
         _overrideGetTile: function(openLayer) {
             //Would be nice to be able to provide this in the constructor. Can't, however.
-            //TODO: check whether there's a cool way of getting the tileCoordKey based on the tile's bbox in drawTileImage-function. 
+            //TODO: check whether there's a cool way of getting the tileCoordKey based on the tile's bbox in drawTileImage-function.
             //If so, we probably wouldn't need to override this...
             openLayer.getSource().getTile = function(z, x, y, pixelRatio, projection) {
                 var tileCoordKey = this.getKeyZXY(z, x, y);
@@ -1180,7 +1180,7 @@ Oskari.clazz.define(
                     tileCoord, projection);
                 var tileUrl = goog.isNull(urlTileCoord) ? undefined :
                     this.tileUrlFunction(urlTileCoord, pixelRatio, projection);
-                
+
                 if (this.tileCache.containsKey(tileUrl)) {
                     return this.tileCache.get(tileUrl);
                 }
@@ -1310,7 +1310,7 @@ Oskari.clazz.define(
                         colidx++;
                     }
                     rowidx++;
-                }                
+                }
                 grid.rows = rowidx;
                 grid.columns = colidx;
                 return grid;
