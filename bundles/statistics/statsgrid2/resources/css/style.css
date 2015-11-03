@@ -244,3 +244,17 @@ form.statsgrid2_indicator_selector {
       form.statsgrid2_indicator_selector .indicator-cont label .chzn-container .chzn-single, form.statsgrid2_indicator_selector .parameters-cont label .chzn-container .chzn-single {
         height: 34px;
         line-height: 35px; }
+
+.grid-header-menubutton {
+  width: 16px;
+  height: 16px;
+  background-image: url("/Oskari/libraries/slickgrid/images/down.gif");
+  background-position: 50% 50%;
+  right: 3px;
+  bottom: 3px;
+  padding: 2px;
+  cursor: pointer;
+  display: inline-block;
+  background-color: #ddd;
+  border: 1px solid #a5a5a5;
+  border-radius: 15px; }

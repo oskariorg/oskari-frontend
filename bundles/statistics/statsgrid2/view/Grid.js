@@ -124,7 +124,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.Grid',
                 onChange: function () {
                     var checked = this.checkbox().prop("checked");
                     this.$el.parent().toggleClass("selected", checked);
-                    this.model.trigger("backgrid:selected", this.model, checked);
                 },
                 render: function () {
                     this.$el.empty().append('<input type="checkbox" />');
@@ -147,7 +146,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.Grid',
                 },
                 render: function () {
                     this.$el.empty().append('<span>' + me._locale.regionCategories[this.selectedLayer] + '</span>');
-                    this.$el.empty().append('<select name="regionSelector"></select>');
+                    this.$el.append('<div class="grid-header-menubutton"></div>');
                     return this;
                 }
             });
