@@ -17,6 +17,11 @@ Domain validation fixed to accept urls with - or _ characters.
 
 ### File location changes
 
+Moved most of the files under Oskari/bundles/framework/mapmodule-plugin/ to Oskari/bundles/mapping/mapmodule to be used as common
+ resources instead of copy/pasting code/css/images. 
+The Openlayers 2 mapmodule from framework/mapmodule-plugin/ui/module/map-module.js is now in mapping/mapmodule/mapmodule.ol2.js.
+The Openlayers 3 mapmodule from mapping/mapmodule-plugin_ol3/ui/module/map-module.js is now in mapping/mapmodule/mapmodule.ol3.js.
+
 Files under Oskari/src/mapping/mapmodule have been moved to Oskari/bundles/mapping/mapmodule/.
 Removed most other files under Oskari/src and Oskari/srctest since they are not used.
 Renamed the remaining Oskari/src to Oskari/deprecated to signify these shouldn't be used.

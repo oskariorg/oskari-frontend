@@ -62,10 +62,10 @@ Oskari.clazz.define(
                  */
                 {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/ui/module/map-module.js"
+                    "src": "../../../bundles/mapping/mapmodule/mapmodule.ol3.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/Plugin.js"
+                    "src": "../../../bundles/mapping/mapmodule/plugin/Plugin.js"
                 },
                 /**
                  * controls plugin
@@ -90,7 +90,7 @@ Oskari.clazz.define(
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/request/MapMovementControlsRequestHandler.js"
                 },{
                     "type": "text/javascript",
-                    "src": "../../../sources/framework/request/common/show-map-measurement-request.js"
+                    "src": "../../../bundles/mapping/mapmodule/request/ShowMapMeasurementRequest.js"
                 },
                 /**
                  * GFI
@@ -121,13 +121,13 @@ Oskari.clazz.define(
                  
                 {
                     "type": "text/javascript",
-                    "src": "../../../bundles/framework/mapmodule-plugin/plugin/search/SearchPlugin.js"
+                    "src": "../../../bundles/mapping/mapmodule/plugin/search/SearchPlugin.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../bundles/framework/search/service/searchservice.js"
                 }, {
                     "type": "text/css",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/resources/css/search.css"
+                    "src": "../../../bundles/mapping/mapmodule/resources/css/search.css"
                 },
                 /**
                  * Logo plugin
