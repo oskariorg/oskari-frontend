@@ -297,7 +297,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 var olLonLat = lonlat;
             }
             var isDragging = (pIsDragging === true);
-            this._map.setCenter(olLonLat, this._getMapZoom(), isDragging);
+            this._map.setCenter(olLonLat, this.getMapZoom(), isDragging);
 
             if (zoomAdjust) {
                 this.adjustZoomLevel(zoomAdjust, true);
@@ -314,7 +314,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          *     wanting to notify at end of the chain for performance reasons or similar) (optional)
          */
         panMapToLonLat: function (lonlat, suppressEnd) {
-            this._map.setCenter(lonlat, this._getMapZoom());
+            this._map.setCenter(lonlat, this.getMapZoom());
             this._updateDomainImpl();
             if (suppressEnd !== true) {
                 this.notifyMoveEnd();
@@ -591,7 +591,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          */
         setZoomLevel: function (newZoomLevel, suppressEvent) {
             if (newZoomLevel < 0 || newZoomLevel > this._map.getNumZoomLevels()) {
-                newZoomLevel = this._getMapZoom();
+                newZoomLevel = this.getMapZoom();
             }
             this._map.zoomTo(newZoomLevel);
             this._updateDomainImpl();
@@ -611,13 +611,13 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          */
         _getNewZoomLevel: function (adjustment) {
             // TODO: check isNaN?
-            var requestedZoomLevel = this._getMapZoom() + adjustment;
+            var requestedZoomLevel = this.getMapZoom() + adjustment;
 
             if (requestedZoomLevel >= 0 && requestedZoomLevel <= this._map.getNumZoomLevels()) {
                 return requestedZoomLevel;
             }
             // if not in valid bounds, return original
-            return this._getMapZoom();
+            return this.getMapZoom();
         },
 
         /**
@@ -642,7 +642,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             return this._map.getCenter();
         },
 
-        _getMapZoom: function () {
+        getMapZoom: function () {
             return this._map.getZoom();
         },
 
@@ -674,7 +674,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
             var lonlat = this._getMapCenter();
             this._updateDomainImpl();
-            var evt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat.lon, lonlat.lat, this._getMapZoom(), false, this.getMapScale(), creator);
+            var evt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat.lon, lonlat.lat, this.getMapZoom(), false, this.getMapScale(), creator);
             sandbox.notifyAll(evt);
         },
 
@@ -724,7 +724,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 mapVO = sandbox.getMap(),
                 lonlat = this._getMapCenter();
 
-            mapVO.moveTo(lonlat.lon, lonlat.lat, this._getMapZoom());
+            mapVO.moveTo(lonlat.lon, lonlat.lat, this.getMapZoom());
 
             mapVO.setScale(this.getMapScale());
 

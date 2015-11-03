@@ -83,7 +83,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         _getMapCenter: function() {
             return this._map.getView().getCenter();
         },
-        _getMapZoom: function() {
+        getMapZoom: function() {
             return this._map.getView().getZoom();
         },
         _getMapLayersByName: function(layerName) {
@@ -362,7 +362,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var sandbox = this._sandbox;
             var mapVO = sandbox.getMap();
             var lonlat = this._getMapCenter();
-            var zoom = this._getMapZoom();
+            var zoom = this.getMapZoom();
             mapVO.moveTo(lonlat[0], lonlat[1], zoom);
 
             mapVO.setScale(this.getMapScale());
@@ -677,7 +677,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          */
         setZoomLevel: function (newZoomLevel, suppressEvent) {
             if (newZoomLevel < 0 || newZoomLevel > this.getMaxZoomLevel()) {
-                newZoomLevel = this._getMapZoom();
+                newZoomLevel = this.getMapZoom();
             }
             this._map.getView().setZoom(newZoomLevel);
             /*
@@ -862,7 +862,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
             var lonlat = this._getMapCenter();
             this._updateDomainImpl();
-            var evt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat.lon, lonlat.lat, this._getMapZoom(), false, this.getMapScale(), creator);
+            var evt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat.lon, lonlat.lat, this.getMapZoom(), false, this.getMapScale(), creator);
             sandbox.notifyAll(evt);
         }
 

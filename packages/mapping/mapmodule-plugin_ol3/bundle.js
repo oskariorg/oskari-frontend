@@ -409,10 +409,10 @@ Oskari.clazz.define(
                 }, 
                 {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/zoombar/Portti2Zoombar.js"
+                    "src": "../../../bundles/mapping/mapmodule/plugin/zoombar/Portti2Zoombar.js"
                 }, {
                     "type": "text/css",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/resources/css/porttizoombar.css"
+                    "src": "../../../bundles/mapping/mapmodule/resources/css/porttizoombar.css"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../bundles/mapping/mapmodule/plugin/panbuttons/PanButtons.js"

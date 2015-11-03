@@ -139,7 +139,7 @@ Oskari.clazz.define(
                             new OpenLayers.LonLat(lon, lat),
                             'EPSG:4326'
                         ),
-                        zoom = mapModule.getMap().getNumZoomLevels() - 1;
+                        zoom = mapModule.getMaxZoomLevel();
 
                     if(typeof centerMap === 'undefined' || centerMap === true){
                         mapModule.centerMap(lonlat, zoom);

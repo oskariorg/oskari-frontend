@@ -393,7 +393,7 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/mapping/mapmodule/event/MapSizeChangedEvent.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/mapmodule-plugin/plugin/zoombar/Portti2Zoombar.js"
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/zoombar/Portti2Zoombar.js"
                 }, {
                     "type": "text/css",
                     "src": "../../../../bundles/mapping/mapmodule/resources/css/porttizoombar.css"

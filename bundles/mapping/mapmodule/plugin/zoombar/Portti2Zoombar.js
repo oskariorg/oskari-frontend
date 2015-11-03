@@ -30,7 +30,82 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
         this._name = 'Portti2Zoombar';
         this._slider = null;
         this._suppressEvents = false;
+
+        this.toolStyles = {
+            'default': {
+                val: null
+            },
+            'rounded-dark': {
+                val: 'rounded-dark',
+                widthPlus: '22px',
+                widthMinus: '22px',
+                widthCenter: '22px',
+                heightPlus: '38px',
+                heightMinus: '39px',
+                heightCenter: 12,
+                heightCursor: '18px',
+                widthCursor: '17px'
+            },
+            'rounded-light': {
+                val: 'rounded-light',
+                widthPlus: '22px',
+                widthMinus: '22px',
+                widthCenter: '22px',
+                heightPlus: '38px',
+                heightMinus: '39px',
+                heightCenter: 12,
+                heightCursor: '18px',
+                widthCursor: '17px'
+            },
+            'sharp-dark': {
+                val: 'sharp-dark',
+                widthPlus: '23px',
+                widthMinus: '23px',
+                widthCenter: '23px',
+                heightPlus: '17px',
+                heightMinus: '18px',
+                heightCenter: 16,
+                heightCursor: '16px',
+                widthCursor: '23px'
+            },
+            'sharp-light': {
+                val: 'sharp-light',
+                widthPlus: '23px',
+                widthMinus: '23px',
+                widthCenter: '23px',
+                heightPlus: '17px',
+                heightMinus: '18px',
+                heightCenter: 16,
+                heightCursor: '16px',
+                widthCursor: '23px'
+            },
+            '3d-dark': {
+                val: '3d-dark',
+                widthPlus: '23px',
+                widthMinus: '23px',
+                widthCenter: '23px',
+                heightPlus: '35px',
+                heightMinus: '36px',
+                heightCenter: 13,
+                heightCursor: '13px',
+                widthCursor: '23px'
+            },
+            '3d-light': {
+                val: '3d-light',
+                widthPlus: '23px',
+                widthMinus: '23px',
+                widthCenter: '23px',
+                heightPlus: '35px',
+                heightMinus: '36px',
+                heightCenter: 13,
+                heightCursor: '13px',
+                widthCursor: '23px'
+            }
+        };
     }, {
+        getImagePath : function() {
+            return this.getMapModule().getImageUrl() + '/mapping/mapmodule/resources/images/';
+        },
         /**
          * @private @method _createControlElement
          * Draws the zoombar on the screen.
@@ -48,7 +123,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                     '  <div class="pzbDiv-minus"></div>' +
                     '</div>'
                 ),
-                map = me.getMap(),
+                mapModule = me.getMapModule(),
                 sliderEl = el.find('div.slider');
 
             sliderEl.attr('id', 'pzb-slider-' + me.getName());
@@ -61,23 +136,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
 
             sliderEl.css(
                 'height',
-                (me.getMapModule().getMaxZoomLevel() * 11) + 'px'
+                (mapModule.getMaxZoomLevel() * 11) + 'px'
             );
             me._slider = sliderEl.slider({
                 orientation: 'vertical',
                 range: 'min',
                 min: 0,
-                max: me.getMapModule().getMaxZoomLevel(),
-                value: me.getMapModule().getMapZoom(),
+                max: mapModule.getMaxZoomLevel(),
+                value: mapModule.getMapZoom(),
                 slide: function (event, ui) {
                     me.getMapModule().zoomTo(ui.value);
                 }
-
             });
 
             el.find('.pzbDiv-plus').bind('click', function (event) {
                 if (!me.inLayerToolsEditMode()) {
-                    if (me._slider.slider('value') < me.getMapModule().getMaxZoomLevel()) {
+                    if (me._slider.slider('value') < mapModule.getMaxZoomLevel()) {
                         me.getMapModule().zoomTo(
                             me._slider.slider('value') + 1
                         );
@@ -110,6 +184,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             // Change the style if in the conf
             if (conf && conf.toolStyle) {
                 me.changeToolStyle(conf.toolStyle, me.getElement());
+            } else {
+                var toolStyle = me.getToolStyleFromMapModule();
+                if (!toolStyle) {
+                    toolStyle = "default";
+                }
+                if (toolStyle !== null && toolStyle !== undefined) {
+                    me.changeToolStyle(me.toolStyles[toolStyle], me.getElement());
+                }
             }
             me._setZoombarValue(me.getMapModule().getMapZoom());
         },
@@ -126,7 +208,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             if (me._slider) {
                 // disable events in "onChange"
                 me._suppressEvents = true;
-                //me._slider.setValue(value);
+                /*me._slider.setValue(value);*/
                 me._slider.slider('value', value);
                 me._suppressEvents = false;
             }
@@ -162,7 +244,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
          * @public @method changeToolStyle
          * Changes the tool style of the plugin
          *
-         * @param {Object} style
+         * @param {Object} styleId
          * @param {jQuery} div
          *
          */
@@ -170,12 +252,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             // FIXME move under _setStyle or smthn...
             div = div || this.getElement();
 
-            if (!style || !div) {
+            if (!div) {
                 return;
             }
+            if (!style) {
+                style = this.toolStyles["default"];
+            } else if (!style.hasOwnProperty("widthCenter")) {
+                style = this.toolStyles[style] ? this.toolStyles[style] : this.toolStyles["default"];
+            }
 
-            var resourcesPath = this.getMapModule().getImageUrl(),
-                imgUrl = resourcesPath + '/framework/mapmodule-plugin/resources/images/',
+            var imgUrl = this.getImagePath(),
                 styleName = style.val,
                 zoombarImg = imgUrl + 'zoombar-' + styleName + '.png',
                 zoombarCursorImg = imgUrl + 'zoombar-cursor-' + styleName + '.png',

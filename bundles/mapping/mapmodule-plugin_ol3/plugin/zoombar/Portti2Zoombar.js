@@ -68,7 +68,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 range: 'min',
                 min: 0,
                 max: me.getMapModule().getMaxZoomLevel(),
-                value: me.getMapModule()._getMapZoom(),
+                value: me.getMapModule().getMapZoom(),
                 slide: function (event, ui) {
                     me.getMapModule().zoomTo(ui.value);
                 }
@@ -111,7 +111,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             if (conf && conf.toolStyle) {
                 me.changeToolStyle(conf.toolStyle, me.getElement());
             }
-            me._setZoombarValue(me.getMapModule()._getMapZoom());
+            me._setZoombarValue(me.getMapModule().getMapZoom());
         },
 
         /**

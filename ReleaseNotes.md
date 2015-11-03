@@ -15,6 +15,13 @@ New request is enabled by default:
 
 Domain validation fixed to accept urls with - or _ characters.
 
+### Mapmodule consistency
+
+In an effort to make Openlayers 2 ja 3 mapmodule API consistent some functions have been renamed:
+- Both: _getMapZoom() -> getMapZoom()
+- OL3: _getCurrentScale() -> _getMapScale()
+- OL2: getNumZoomLevels() -> getMaxZoomLevel()
+
 ### File location changes
 
 Moved most of the files under Oskari/bundles/framework/mapmodule-plugin/ to Oskari/bundles/mapping/mapmodule to be used as common
