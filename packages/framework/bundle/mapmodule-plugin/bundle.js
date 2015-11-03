@@ -399,7 +399,7 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/mapping/mapmodule/resources/css/porttizoombar.css"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/mapmodule-plugin/plugin/panbuttons/PanButtons.js"
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/panbuttons/PanButtons.js"
                 }, {
                     "type": "text/css",
                     "src": "../../../../bundles/mapping/mapmodule/resources/css/panbuttons.css"
