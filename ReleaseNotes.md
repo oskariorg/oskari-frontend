@@ -24,6 +24,8 @@ In an effort to make Openlayers 2 ja 3 mapmodule API consistent some functions h
 - OL2: getNumZoomLevels() -> getMaxZoomLevel()
 - OL3: getZoomLevel() removed as it's the same as getMapZoom()
 
+Fixed mapmodule.isValidLonLat() to use max extent as reference instead of hardcoded EPSG:3067 values.
+
 ### File location changes
 
 Moved most of the files under Oskari/bundles/framework/mapmodule-plugin/ to Oskari/bundles/mapping/mapmodule to be used as common

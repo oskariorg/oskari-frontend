@@ -459,7 +459,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {Object} transformed coordinates as object with lon and lat keys
          */
         transformCoordinates: function (pLonlat, srs) {
-            if(this.getProjection() === srs) {
+            if(!srs || this.getProjection() === srs) {
                 return pLonlat;
             }
             // TODO: check that srs definition exists as in OL2
@@ -855,6 +855,20 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             this._updateDomainImpl();
             var evt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat.lon, lonlat.lat, this.getMapZoom(), false, this.getMapScale(), creator);
             sandbox.notifyAll(evt);
+        },
+        /**
+         * Get map max extent.
+         * @method getMaxExtent
+         * @return {Object} max extent
+         */
+        getMaxExtent: function(){
+            var bbox = this.getSandbox().getMap().getBbox();
+            return {
+                bottom: bbox.bottom,
+                left: bbox.left,
+                right: bbox.right,
+                top: bbox.top
+            };
         }
 
     }, {

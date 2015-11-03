@@ -297,7 +297,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 var olLonLat = lonlat;
             }
             var isDragging = (pIsDragging === true);
-            this._map.setCenter(olLonLat, this.getMapZoom(), isDragging);
+            this._map.setCenter(new OpenLayers.LonLat(olLonLat.lon, olLonLat.lat), this.getMapZoom(), isDragging);
 
             if (zoomAdjust) {
                 this.adjustZoomLevel(zoomAdjust, true);
@@ -748,10 +748,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {Object} transformed coordinates as object with lon and lat keys
          */
         transformCoordinates: function (pLonlat, srs) {
-            if(this.getProjection() === srs) {
+            if(!srs || this.getProjection() === srs) {
                 return pLonlat;
             }
-            var isProjectionDefined = Proj4js.defs[srsName];
+            var isProjectionDefined = Proj4js.defs[srs];
             if (!isProjectionDefined) {
                 throw 'SrsName not supported! Provide Proj4js.def for ' + srs;
             }
@@ -933,7 +933,13 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {Object} max extent
          */
         getMaxExtent: function(){
-            return this._maxExtent;
+            var bbox = this._maxExtent;
+            return {
+                bottom: bbox.bottom,
+                left: bbox.left,
+                right: bbox.right,
+                top: bbox.top
+            };
         }
 
     }, {

@@ -510,23 +510,21 @@ Oskari.clazz.define(
 
         /**
          * @method isValidLonLat
-         * Checks that latitude is between 8 200 000 <> 6 250 000 and
-         * that longitude is between 0 <> 1 350 000
+         * Checks that lat and lon are within bounds of the map extent
          * @param {Number} lon longitude to check
          * @param {Number} lat latitude to check
-         * @return {Boolean} true if coordinates are in said boundaries
+         * @return {Boolean} true if coordinates are inside boundaries
          */
         isValidLonLat: function (lon, lat) {
-            // FIXME isn't this projection dependent?
-            var isOk = true;
-            if (lat < 6250000 || lat > 8200000) {
-                isOk = false;
-                return isOk;
+            var maxExtent = this.getMaxExtent();
+
+            if(isNaN(lon) || isNaN(lat)) {
+                return false;
+            } else if(lon < maxExtent.left || lon > maxExtent.right || lat < maxExtent.bottom || lat > maxExtent.top) {
+                return false;
+            } else {
+                return true;
             }
-            if (lon < 0 || lon > 1350000) {
-                isOk = false;
-            }
-            return isOk;
         },
 
         /**
