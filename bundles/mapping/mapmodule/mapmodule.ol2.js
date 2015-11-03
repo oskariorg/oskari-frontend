@@ -289,15 +289,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         moveMapToLanLot: function (lonlat, zoomAdjust, pIsDragging) {
             //if lonlat is given as an array instead of OpenLayers.LonLat
             // parse it to OpenLayers.LonLat for further use
-            if (_.isArray(lonlat)) {
-                var olLonLat = {};
-                olLonLat['lon'] = lonlat[0];
-                olLonLat['lat'] = lonlat[1];
-            } else {
-                var olLonLat = lonlat;
-            }
+            lonlat = this.normalizeLonLat(lonlat);
             var isDragging = (pIsDragging === true);
-            this._map.setCenter(new OpenLayers.LonLat(olLonLat.lon, olLonLat.lat), this.getMapZoom(), isDragging);
+            this._map.setCenter(new OpenLayers.LonLat(lonlat.lon, lonlat.lat), this.getMapZoom(), isDragging);
 
             if (zoomAdjust) {
                 this.adjustZoomLevel(zoomAdjust, true);
@@ -350,8 +344,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          *     wanting to notify at end of the chain for performance reasons or similar) (optional)
          */
         centerMap: function (lonlat, zoom, suppressEnd) {
-            // TODO: openlayers has isValidLonLat(); maybe use it here
-            this._map.setCenter(lonlat, zoom, false);
+            // TODO: we have isValidLonLat(); maybe use it here
+            lonlat = this.normalizeLonLat(lonlat);
+            this._map.setCenter(new OpenLayers.LonLat(lonlat.lon, lonlat.lat), zoom, false);
             this._updateDomainImpl();
             if (suppressEnd !== true) {
                 this.notifyMoveEnd();

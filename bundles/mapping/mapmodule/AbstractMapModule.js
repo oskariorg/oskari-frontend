@@ -1228,6 +1228,20 @@ Oskari.clazz.define(
             return this.panMapToLonLat.apply(this, arguments);
         },
         /**
+         * Changes array to object
+         * @param  {Object | Number[]} lonlat [description]
+         * @return {Object}        [description]
+         */
+        normalizeLonLat : function(lonlat) {
+            if (_.isArray(lonlat)) {
+                return {
+                    lon : lonlat[0],
+                    lat : lonlat[1]
+                };
+            } 
+            return lonlat;
+        },
+        /**
          * @method panMapToLonLat
          * Pans the map to the given position.
          * @param {OpenLayers.LonLat} lonlat coordinates to pan the map to

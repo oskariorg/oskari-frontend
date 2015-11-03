@@ -270,7 +270,7 @@ Oskari.clazz.define(
                  */
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/mapmodule-plugin/plugin/location/GeoLocationPlugin.js"
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/location/GeoLocationPlugin.js"
                 },
                 /**
                  * Draw plugin
