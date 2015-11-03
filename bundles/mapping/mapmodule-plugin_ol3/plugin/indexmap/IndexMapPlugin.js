@@ -61,57 +61,23 @@ Oskari.clazz.define(
              * create an overview map control with non-default
              * options
              */
-            var me = this,
-                projection = me.getMapModule().getProjection();
-
-            var ImageSource = new ol.source.TileImage({
-                    //url: me.getMapModule().getImageUrl() + me._indexMapUrl,
-                    imageSize: [120, 173],
-                    projection: projection,
-                    imageExtent: [26783, 6608595, 852783, 7787250],
-                    url: "/Oskari/bundles/mapping/mapmodule-plugin_ol3/resources/images/suomi25m_tm35fin.png"
-                });
-            var graphic = new ol.layer.Image({
-                    source: ImageSource,
-                    extent: [26783, 6608595, 852783, 7787250]
-                });
+            var me = this;
             var controlOptions = {
                     target: el[0],
-                    layers: [graphic]
                 };
+
             // initialize control, pass container
             me._indexMap = new ol.control.OverviewMap(controlOptions);
             // Set indexmap stable in container
             me._indexMap.isSuitableOverview = function () {
                 return true;
             };
-
-            /*
-            // Extends overviewmap to send AfterMapMove event
-            OpenLayers.Util.extend(me._indexMap, {
-                updateMapToRect: function () {
-                    var lonLatBounds = this.getMapBoundsFromRectBounds(
-                        this.rectPxBounds
-                    );
-                    if (this.ovmap.getProjection() !== this.map.getProjection()) {
-                        lonLatBounds = lonLatBounds.transform(
-                            this.ovmap.getProjectionObject(),
-                            this.map.getProjectionObject()
-                        );
-                    }
-                    this.map.panTo(lonLatBounds.getCenterLonLat());
-                    me.getMapModule().notifyMoveEnd(me.getClazz());
-                }
-            });
-*/
-
             return me._indexMap;
         },
 
         refresh: function () {
             var me = this,
                 toggleButton = me.getElement().find('.indexmapToggle');
-
             if (!toggleButton.length) {
                 toggleButton = jQuery('<div class="indexmapToggle"></div>');
                 // button has to be added separately so the element order is correct...
@@ -125,14 +91,7 @@ Oskari.clazz.define(
             var me = this;
             icon.unbind('click');
             icon.bind('click', function (event) {
-                event.preventDefault();
-                var miniMap = me.getElement().find(
-                    '.olControlOverviewMapElement'
-                );
-
-                miniMap.slideToggle({
-                    duration: 100
-                });
+                me._indexMap.handleToggle_();
             });
         },
 

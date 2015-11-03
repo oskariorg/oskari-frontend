@@ -46,3 +46,35 @@ div.mapplugin.indexmap {
 
 .olControlOverviewMapExtentRectangle {
   border: 2px dashed #f47729 !important; }
+
+/**
+  ol3 specific
+ */
+.ol-overviewmap .ol-overviewmap-map {
+  border: 1px solid #7b98bc;
+  height: 150px;
+  margin: 2px;
+  width: 150px; }
+
+.ol-overviewmap .ol-overviewmap-map, .ol-overviewmap button {
+  display: inline-block; }
+
+.ol-overviewmap:not(.ol-collapsed) {
+  background: rgba(255, 255, 255, 0.8); }
+
+.ol-overviewmap {
+  /*
+    left: -8em;
+    bottom: .5em;
+    */
+  margin-right: 46px;
+  margin-bottom: -46px; }
+
+.ol-overviewmap.ol-collapsed .ol-overviewmap-map, .ol-overviewmap.ol-uncollapsible button {
+  display: none; }
+
+.ol-overviewmap button {
+  display: none; }
+
+.ol-overviewmap-box {
+  border: 2px dotted rgba(0, 60, 136, 0.7); }
