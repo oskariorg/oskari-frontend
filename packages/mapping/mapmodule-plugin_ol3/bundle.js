@@ -352,19 +352,19 @@ Oskari.clazz.define(
                  */
                 {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/mylocation/MyLocationPlugin.js"
+                    "src": "../../../bundles/mapping/mapmodule/plugin/mylocation/MyLocationPlugin.js"
                 }, {
                     "type": "text/css",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/resources/css/mylocation.css"
+                    "src": "../../../bundles/mapping/mapmodule/resources/css/mylocation.css"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/mylocation/request/GetUserLocationRequest.js"
+                    "src": "../../../bundles/mapping/mapmodule/plugin/mylocation/request/GetUserLocationRequest.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/mylocation/request/GetUserLocationRequestHandler.js"
+                    "src": "../../../bundles/mapping/mapmodule/plugin/mylocation/request/GetUserLocationRequestHandler.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/event/UserLocationEvent.js"
+                    "src": "../../../bundles/mapping/mapmodule/event/UserLocationEvent.js"
                 },
 
                 /**
