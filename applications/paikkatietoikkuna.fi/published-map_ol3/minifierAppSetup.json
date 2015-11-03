@@ -60,7 +60,7 @@
                 "bundlePath" : "../../../packages/mapping/"
             },
             "mapwfs2" : {
-                "bundlePath" : "../../../packages/framework/bundle/"
+                "bundlePath" : "../../../packages/mapping/mapwfs2_ol3/"
             },
             "mapuserlayers" : {
                 "bundlePath" : "../../../packages/framework/bundle/"
