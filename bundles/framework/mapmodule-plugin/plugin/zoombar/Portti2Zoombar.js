@@ -103,6 +103,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             }
         };
     }, {
+        getImagePath : function() {
+            return this.getMapModule().getImageUrl() + '/mapping/mapmodule/resources/images/';
+        },
         /**
          * @private @method _createControlElement
          * Draws the zoombar on the screen.
@@ -258,8 +261,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 style = this.toolStyles[style] ? this.toolStyles[style] : this.toolStyles["default"];
             }
 
-            var resourcesPath = this.getMapModule().getImageUrl(),
-                imgUrl = resourcesPath + '/framework/mapmodule-plugin/resources/images/',
+            var imgUrl = this.getImagePath(),
                 styleName = style.val,
                 zoombarImg = imgUrl + 'zoombar-' + styleName + '.png',
                 zoombarCursorImg = imgUrl + 'zoombar-cursor-' + styleName + '.png',
