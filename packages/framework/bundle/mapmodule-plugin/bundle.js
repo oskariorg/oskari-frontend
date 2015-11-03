@@ -168,7 +168,7 @@ Oskari.clazz.define(
                  */
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/mapmodule-plugin/plugin/datasource/DataSourcePlugin.js"
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/datasource/DataSourcePlugin.js"
                 }, {
                     "type": "text/css",
                     "src": "../../../../bundles/mapping/mapmodule/resources/css/datasource.css"
