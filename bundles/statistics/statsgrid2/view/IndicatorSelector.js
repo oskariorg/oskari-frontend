@@ -19,12 +19,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
         me.__selectedIndicatorId = null;
         me.__selectedIndicator = null;
         me.__selectedSelections = {};
-        me.__selectedLayer = null;
         me.__dataSourceSelect = null;
         me.__indicatorSelect = null;
         me.__selectorsSelects = [];
         me.__addRemoveButton = null;
-        me.__layerSelect = null;
         me.dialog = null;
         me._indicatorMetadata = {};
     }, {
@@ -38,8 +36,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
                           '<label><span name="indicator-span"></span><select name="indicator" style="width: 300px;"></select></label>' +
                           // the optional selectors will be populated here when the above have been selected.
                           '<div name="selectors-div"></div>' +
-                          // TODO: Move the layer selection into the grid component
-                          '<label><span></span><select name="layer" style="width: 300px;"></select></label>' +
                       '</div><div class="parameters-cont"></div><div class="buttons-cont"></div>' +
                   '</form>',
             'selector': '<label><span></span><select></select></label>',
@@ -86,7 +82,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
 
             me._createDataSourceSelect(el.find('select[name=datasource]').parent());
             me._createIndicatorSelect(el.find('select[name=indicator]').parent());
-            me._createLayerSelect(el.find('select[name=layer]').parent());
             container.append(el);
             me.statisticsService.getDataSources(function (indicatorMetadata) {
                 me._indicatorMetadata = indicatorMetadata;
@@ -160,34 +155,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
         },
 
         /**
-         * Create layer drop down select
-         * @private
-         * @method _createLayerSelect
-         * @param {DOMElement} container
-         */
-        _createLayerSelect: function (container) {
-            var me = this,
-                label = container.find('span'),
-                select = container.find('select');
-            label.text(me._locale.layers);
-
-            // if the value changes, fetch indicator meta data to the grid and to the map.
-            select.change(function (e) {
-                var option = select.find('option:selected'),
-                    isOwn = option.attr('data-isOwnIndicator');
-                me.changeLayer(option.val(), (isOwn === 'true'));
-            });
-
-            select.attr('data-placeholder', me._locale.regionCatPlaceholder);
-            select.attr('data-no_results', me._locale.noMatch);
-
-            // used when populating later on
-            me.__layerSelect = select;
-            // we use chosen to create autocomplete version of layer select element.
-            me._initSelectChosen(select);
-        },
-
-        /**
          * @method _initSelectChosen
          * @param {DOMElement} select
          * @private
@@ -249,29 +216,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
                 };
             });
             this.__setSelectOptions(this.__indicatorSelect, indicatorList, false);
-        },
-
-        /**
-         * @method setLayers
-         * @param {Array} layers
-         * Sets the given values as layer options
-         */
-        setLayers: function (layers) {
-            var me = this,
-                layerList = layers.map(function(layer) {
-                // This is the item object expected by the __setSelectOptions.
-                return {
-                    getId: function() {
-                        return layer.layerId;
-                    },
-                    getName: function(lang) {
-                        return (me._locale.regionCategories[layer.layerId])?
-                                me._locale.regionCategories[layer.layerId]:
-                                layer.layerId;
-                    }
-                };
-            });
-            me.__setSelectOptions(me.__layerSelect, layerList, false);
         },
 
         /**
@@ -371,33 +315,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
 
             me.setSelections(me.__selectedIndicator.getSelectors());
 
-            // FIXME: Move the layer selection into the grid, where it will allow selecting all layers,
-            //        not only ones where the indicators are defined.
-            //        Also, fetch the layers from the geoserver.
-            //        This is here for development and debugging until the grid works.
-            me.setLayers(me.__selectedIndicator.getLayers());
             me._updateAddRemoveButtonState();
-        },
-
-        /**
-         * @method changeLayer
-         * @param {String} id
-         * Sets the given value as the layer
-         */
-        changeLayer: function (id) {
-            var me = this;
-            // setup values for options
-            var optionsContainer = me.getIndicatorParamsContainer(),
-                select,
-                options,
-                value,
-                ds = me.getSelectedDatasource();
-
-            me.__selectedLayer = id;
-
-            me._updateAddRemoveButtonState();
-            //me.deleteIndicatorInfoButton(container);
-            //me.getStatsIndicatorMeta(container, indicatorId);
         },
 
         /**

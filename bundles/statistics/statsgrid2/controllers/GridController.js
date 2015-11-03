@@ -27,38 +27,16 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.controllers.GridControll
                 this.userSelections.removeRegionFilter(region);
             }
         },
-        "selectRegionCategory" : function(categoryId) {
-            var me = this,
-                grid = this.getGrid(),
-                dataView = grid.getData();
+        "changeLayer" : function(layerId) {
+            var me = this;
 
-            this.service.getRegions(categoryId, function(category) {
-                // setup regions
-                // notify dataview that we are starting to update data
-                dataView.beginUpdate();
-                // empty the data view
-                //dataView.setItems([]);
-                //grid.invalidateAllRows();
-                // set municipality data
-                dataView.setItems(me.viewmodel.transformRegionsToColumnData(category));
-                //-------------------------------------------
-                // TODO: setup any indicator values
-                // see changeGridRegion in statsgrid.ManageStatsPlugin
-                //-------------------------------------------
-                // notify data view that we have updated data
-                dataView.endUpdate();
-                // invalidate() -> the values in the grid are not correct -> invalidate
-                grid.invalidate();
-                // render the grid
-                grid.render();
-                // TODO: change statslayer on map that presents this region category
-                //this._setLayerToCategory(this._selectedRegionCategory);
+            this.service.getRegions(layerId, function(regions) {
+                // FIXME: Update map regions.
+                me.viewmodel.setLayer(layerId);
+                me.view.refresh();
             });
 
-            this.userSelections.setActiveRegionCategory(categoryId);
-        },
-        "getGrid" : function() {
-            return this.__grid;
+            this.userSelections.setActiveRegionCategory(layerId);
         },
         "getActiveRegionCategory" : function() {
             return this.userSelections.getActiveRegionCategory();

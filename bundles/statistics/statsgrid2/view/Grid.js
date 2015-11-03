@@ -61,29 +61,160 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.Grid',
                 '<table><tbody id="contentArea" class="clusterize-content"><tr class="clusterize-no-data"><td></td></tr></tbody>' +
                 '</table></div></div>'
         },
+        /**
+         * Refreshes the grid to be in sync with the viewmodel.
+         */
         "render" : function(container) {
+            var me = this,
+                indicators = me.viewmodel.getIndicators(),
+                layers = me.viewmodel.getLayers();
+
             this.container = container;
             // clear container and start building the grid
             container.empty();
-            container.append(jQuery(this._templates.grid));
-            // FIXME: Get categories from the selected indicator.
-            /*function(categories) {
-                var category = _.find(categories, function(cat) {
-                    return '' + cat.getId() === '' + selectedCategory;
-                });
-                if(!category) {
-                    me.getSandbox().printWarn('Default region category not found!');
-                    return;
-                }
-                me.__grid = me.helper.createStatisticsGrid(container, category, categories);
-                me.selectRegionCategory(me.getActiveRegionCategory());
+            
+            var SelectCell = Backgrid.HeaderCell.extend({
+                tagName: "td",
+                events: {
+                    "change input[type=checkbox]": "onChange"
+                },
+                initialize: function (options) {
+                    var hc = this;
+                    this.listenTo(options.column, "change:renderable", function (column, renderable) {
+                        hc.$el.toggleClass("renderable", renderable);
+                    });
 
-                // initially sort by region column
-                me.__grid.setSortColumn(me.helper.__columnIdRegion, true);
-            });*/
+                    if (Backgrid.callByNeed(options.column.renderable(), options.column, hc.model)) {
+                        hc.$el.addClass("renderable");
+                    }
+
+                    this.listenTo(this.model, "backgrid:select", function (model, selected) {
+                        hc.$el.find("input[type=checkbox]").prop("checked", selected).change();
+                    });
+                },
+                onChange: function () {
+                    var checked = this.checkbox().prop("checked");
+                    this.$el.parent().toggleClass("selected", checked);
+                    this.model.trigger("backgrid:selected", this.model, checked);
+                },
+                render: function () {
+                    this.$el.empty().append('<input type="checkbox" />');
+                    this.delegateEvents();
+                    return this;
+                }
+            });
+            var SelectAllHeaderCell = Backgrid.HeaderCell.extend({
+                tagName: "th",
+                events: {
+                    "change input[type=checkbox]": "onChange"
+                },
+                initialize: function (options) {
+                    var hc = this;
+                    this.listenTo(options.column, "change:renderable", function (column, renderable) {
+                        hc.$el.toggleClass("renderable", renderable);
+                    });
+
+                    if (Backgrid.callByNeed(options.column.renderable(), options.column, hc.collection)) {
+                        hc.$el.addClass("renderable");
+                    }
+                },
+                checkbox: function () {
+                    return this.$el.find("input[type=checkbox]");
+                },
+                onChange: function () {
+                    var checked = this.checkbox().prop("checked");
+                    this.$el.parent().toggleClass("selected", checked);
+                    this.model.trigger("backgrid:selected", this.model, checked);
+                },
+                render: function () {
+                    this.$el.empty().append('<input type="checkbox" />');
+                    this.delegateEvents();
+                    return this;
+                }
+            });
+            var RegionsHeaderCell = Backgrid.HeaderCell.extend({
+                tagName: "th",
+                initialize: function (options) {
+                    var hc = this;
+                    hc.selectedLayer = "Kunta";
+                    this.listenTo(options.column, "change:renderable", function (column, renderable) {
+                        hc.$el.toggleClass("renderable", renderable);
+                    });
+
+                    if (Backgrid.callByNeed(options.column.renderable(), options.column, hc.model)) {
+                        hc.$el.addClass("renderable");
+                    }
+                },
+                render: function () {
+                    this.$el.empty().append('<span>' + me._locale.regionCategories[this.selectedLayer] + '</span>');
+                    this.$el.empty().append('<select name="regionSelector"></select>');
+                    return this;
+                }
+            });
+            var columns = [{
+                name: "selected",
+                label: "",
+                cell: "boolean",
+                headerCell: SelectAllHeaderCell,
+                sortable: false
+              }, {
+                name: "region",
+                headerCell: RegionsHeaderCell,
+                cell: "string"
+              }];
+            
+            Object.keys(indicators).forEach(function (indicatorKey) {
+                var indicatorLabel = me.constructLabel(indicators[indicatorKey].indicator);
+                var indicatorHeaderCell = Backgrid.HeaderCell.extend({
+                    // FIXME: Implement indicator header logic here.
+                    
+                });
+                columns.push({
+                    name: indicatorKey,
+                    label: indicatorLabel
+                });
+            });
+            var RowModel = Backbone.Model.extend({
+                defaults: {
+                    selected: true,
+                    regionId: "",
+                    indicatorValues: []
+                }
+            });
+
+            var CollectionModel = Backbone.Collection.extend({
+                model: RowModel
+            });
+            var collection = new CollectionModel();
+            // Initialize a new Grid instance
+            var grid = new Backgrid.Grid({
+              columns: columns,
+              collection: collection
+            });
+
+            // Render the grid
+            container.append(grid.render().el);
+            // Statistical variables
+            for (i = 0; i < me.conf.statistics.length; i++) {
+                var statistic = me.conf.statistics[i],
+                    elems = jQuery(me._templates.gridHeaderMenu).addClass('statsgrid-show-total-selects');
+
+                // create input element with localization
+                input = elems.find('input').attr({
+                    'id': 'statistics_' + statistic.id
+                });
+                // if variable is visible => check the checkbox
+                if (statistic.visible) {
+                    input.attr({
+                        'checked': 'checked'
+                    });
+                }
+                // create label with localization
+                elems.find('label').attr('for', 'statistics_' + statistic.id).text(me._locale.statistic[statistic.id]);
+            }
         },
-        "getGrid" : function() {
-        	return this.grid;
+        "refresh": function() {
+            this.render(this.container);
         },
         "getLocalizationFrom": function(localizedNames, fallback, lang) {
             var name = localizedNames.getLocalization(lang);
@@ -113,102 +244,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.Grid',
             });
             return name;
         },
-        /**
-         * Refreshes the grid to be in sync with the viewmodel.
-         */
-        "refresh" : function() {
-            var me = this,
-                gridHeaderContainer = me.container.find('tr[name=gridHeader]'),
-                indicators = me.viewmodel.getIndicators(),
-                layers = me.viewmodel.getLayers(),
-                menu = {
-                    items: []
-                };
-
-            gridHeaderContainer.empty();
-            
-            var indicatorLabels = Object.keys(indicators).map(function (indicatorKey) {
-                return me.constructLabel(indicators[indicatorKey].indicator);
-            });
-            menu.items.push({
-                element: '<div class="header-menu-subheading">' + me._locale.regionCategoriesTitle + '</div>',
-                disabled: true
-            });
-            // Region category selects
-            Object.keys(layers).forEach(function(categoryId) {
-                var categorySelector = jQuery(me._templates.headerCategoryItem);
-                categorySelector.find('input').attr({
-                    'id': 'category_' + categoryId,
-                    'checked': (categoryId === me.viewmodel.layerId ? 'checked' : false)
-                });
-                var label = categorySelector.find('label');
-                label.attr('for', 'category_' + categoryId);
-                label.html(me._locale.regionCategories[categoryId]);
-
-                menu.items.push({
-                    element: categorySelector,
-                    command: 'category_' + categoryId
-                });
-            });
-
-            menu.items.push({
-                element: '<div class="header-menu-subheading subheading-middle">' + me._locale.statistic.title + '</div>',
-                disabled: true
-            });
-            // Statistical variables
-            for (i = 0; i < me.conf.statistics.length; i++) {
-                var statistic = me.conf.statistics[i],
-                    elems = jQuery(me._templates.gridHeaderMenu).addClass('statsgrid-show-total-selects');
-
-                // create input element with localization
-                input = elems.find('input').attr({
-                    'id': 'statistics_' + statistic.id
-                });
-                // if variable is visible => check the checkbox
-                if (statistic.visible) {
-                    input.attr({
-                        'checked': 'checked'
-                    });
-                }
-                // create label with localization
-                elems.find('label').attr('for', 'statistics_' + statistic.id).text(me._locale.statistic[statistic.id]);
-                // add item to menu
-                menu.items.push({
-                    element: elems,
-                    command: statistic.id
-                });
-            }
-
-            // create checkbox for selecting rows toggle
-            var showRows = jQuery(me._templates.gridHeaderMenu).addClass('statsgrid-show-row-selects');
-            // create input element with localization
-            input = showRows.find('input').attr({
-                'id': 'statsgrid-show-row-selects'
-            });
-            // FIXME: check if select rows checkbox should be checked
-            input.attr('checked', 'checked');
-            // create label with localization
-            showRows.find('label').attr('for', 'statsgrid-show-row-selects').text(me._locale.selectRows);
-            menu.items.push({
-                element: showRows,
-                command: 'selectRows'
-            });
-
-            // FIXME: Add the menu to the dropdown arrow here.
-            gridHeaderContainer.append("<th>REGION SELECTOR</th>");
-            indicatorLabels.forEach(function(indicatorLabel) {
-                gridHeaderContainer.append("<th>" + indicatorLabel + "</th>");
-            });
-
-            var data = ['<tr><td>Fake data 1</td></tr>', '<tr><td>Fake data 2</td></tr>'];
-
-            var clusterize = new Clusterize({
-                rows: data,
-                scrollId: 'scrollArea',
-                contentId: 'contentArea'
-            });
-        },
-
         /**
          * Displays a warning in the header if the indicator data
          * cannot be displayed in the selected region category.
@@ -406,7 +441,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.Grid',
             // initial columns
             var columns = [checkboxSelector.getColumnDefinition(), {
                 id: me.__columnIdRegion,
-                name: category.getName(lang), // this._locale.regionCategories[selectedRegionCategory]
+                name: me._locale.regionCategories[selectedRegionCategory],
                 field: "title",
                 sortable: true,
                 width : 318
@@ -659,7 +694,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.Grid',
                 menu.items = [];
 
                 menu.items.push({
-                    element: '<div class="header-menu-subheading">' + me._locale.regionCategories.title + '</div>',
+                    element: '<div class="header-menu-subheading">' + me._locale.regionCategoriesTitle + '</div>',
                     disabled: true
                 });
                 // Region category selects
@@ -672,7 +707,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.Grid',
                     });
                     var label = categorySelector.find('label');
                     label.attr('for', 'category_' + categoryId);
-                    label.html(category.getName()); //me._locale.regionCategories[category]
+                    label.html(me._locale.regionCategories[category]);
 
                     menu.items.push({
                         element: categorySelector,
