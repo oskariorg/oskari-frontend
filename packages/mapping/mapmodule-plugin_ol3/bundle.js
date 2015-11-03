@@ -415,13 +415,13 @@ Oskari.clazz.define(
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/resources/css/porttizoombar.css"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/panbuttons/PanButtons.js"
+                    "src": "../../../bundles/mapping/mapmodule/plugin/panbuttons/PanButtons.js"
                 }, {
                     "type": "text/css",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/resources/css/panbuttons.css"
+                    "src": "../../../bundles/mapping/mapmodule/resources/css/panbuttons.css"
                 }, {
                     "type": "text/css",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/resources/css/mapmodule.css"
+                    "src": "../../../bundles/mapping/mapmodule/resources/css/mapmodule.css"
                 }
                 
             ],
