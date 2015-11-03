@@ -295,6 +295,11 @@ define(['src/oskari/oskari', 'jquery', 'exports', 'css'], function(Oskari, $, ex
 
                 me.log("got sources for " + bundleImpl);
 
+                // FIXME: You should use Object.keys(srcs).forEach(function(p) { here,
+                //        because for (.. in ..) also enumerates over prototype stuff, and can contain all kinds
+                //        of unexpected framework stuff.
+                //        Not fixed by the commenter, because you should also find other instances where " in " has
+                //        been used in the code.
                 for (p in srcs) {
                     if (p == 'scripts') {
 

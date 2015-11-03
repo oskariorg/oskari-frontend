@@ -31,12 +31,13 @@ Oskari.clazz.define("Oskari.integration.bundle.bb.BackBoneBundle", function() {
 
     "protocol" : ["Oskari.bundle.Bundle", "Oskari.bundle.BundleInstance", "Oskari.bundle.BundleInstance", "Oskari.mapframework.bundle.extension.ExtensionBundle"],
     "source" : {
-        "scripts" : [{
+        "scripts" : [
+        {
+            "type" : "text/css",
+            "src" : "../../../../libraries/backgrid-0.3.5/lib/backgrid.css"
+        },{
             "type" : "text/javascript",
-            "src" : "../../../../libraries/jquery/jquery-ui-1.9.2.custom.min.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../libraries/backbone/comp.js"
+            "src" : "../../../../libraries/dependency_sets/jquery_underscore_backbone_backgrid.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/integration/bb/Flyout.js"
@@ -53,12 +54,6 @@ Oskari.clazz.define("Oskari.integration.bundle.bb.BackBoneBundle", function() {
             "type" : "text/javascript",
             "src" : "../../../../bundles/integration/bb/Adapter.js"
 
-        },{
-            "type" : "text/css",
-            "src" : "../../../../libraries/backgrid-0.3.5/lib/backgrid.css"
-        },{
-            "type" : "text/javascript",
-            "src" : "../../../../libraries/backgrid-0.3.5/lib/backgrid.js"
         }],
         "resources" : []
     },
