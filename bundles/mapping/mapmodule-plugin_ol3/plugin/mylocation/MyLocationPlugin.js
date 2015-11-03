@@ -130,16 +130,14 @@ Oskari.clazz.define(
                 callback = function (lon, lat) {
                     // transform coordinates from browser projection to current
                     var mapModule = me.getMapModule(),
-                        lonlat = new ol.proj.fromLonLat([lon,lat], mapModule._options.srsName),
-                        zoom = mapModule.getMaxZoomLevel() - 1;
+                        lonlat = mapModule.transformCoordinates({ lon : lon, lat : lat}, 'EPSG:4326'),
+                        zoomAdjust = mapModule.getMaxZoomLevel() - mapModule.getMapZoom();
 
                     if(typeof centerMap === 'undefined' || centerMap === true){
-                        mapModule.setMapCenter(lonlat, zoom);
+                        mapModule.moveMapToLonLat(lonlat, zoomAdjust);
                     }
 
-                    var locationEvent = sandbox.getEventBuilder(
-                        'UserLocationEvent'
-                    )(lonlat[0], lonlat[1]);
+                    var locationEvent = sandbox.getEventBuilder('UserLocationEvent')(lonlat.lon, lonlat.lat);
                     sandbox.notifyAll(locationEvent);
                 };
 

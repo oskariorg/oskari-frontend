@@ -19,8 +19,10 @@ Domain validation fixed to accept urls with - or _ characters.
 
 In an effort to make Openlayers 2 ja 3 mapmodule API consistent some functions have been renamed:
 - Both: _getMapZoom() -> getMapZoom()
+- Both: _transformCoordinates -> transformCoordinates() also coordinates parameter is now an object with lat & lon keys and return value is an object with lat & lon keys
 - OL3: _getCurrentScale() -> _getMapScale()
 - OL2: getNumZoomLevels() -> getMaxZoomLevel()
+- OL3: getZoomLevel() removed as it's the same as getMapZoom()
 
 ### File location changes
 

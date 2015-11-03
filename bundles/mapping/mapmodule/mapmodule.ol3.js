@@ -342,11 +342,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
 
         },
-
-        getZoomLevel: function() {
-            return this._map.getView().getZoom();
-        },
-
         /**
          * @method _updateDomain
          * @private
@@ -458,33 +453,24 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
         /**
          * @method transformCoordinates
-         * Deprecated
          * Transforms coordinates from given projection to the maps projectino.
-         * @param {OpenLayers.LonLat} pLonlat
+         * @param {Object} pLonlat object with lon and lat keys
          * @param {String} srs projection for given lonlat params like "EPSG:4326"
-         * @return {OpenLayers.LonLat} transformed coordinates
+         * @return {Object} transformed coordinates as object with lon and lat keys
          */
         transformCoordinates: function (pLonlat, srs) {
-            this.getSandbox().printWarn(
-                'transformCoordinates is deprecated. Use _transformCoordinates instead if called from plugin. Otherwise, use Requests instead.'
-            );
-
-            return this._transformCoordinates(pLonlat, srs);
+            if(this.getProjection() === srs) {
+                return pLonlat;
+            }
+            // TODO: check that srs definition exists as in OL2
+            //var transformed = new ol.proj.fromLonLat([pLonlat.lon, pLonlat.lat], this.getProjection());
+            var transformed = ol.proj.transform([pLonlat.lon, pLonlat.lat], srs, this.getProjection());
+            return {
+              lon : transformed[0],
+              lat : transformed[1]
+            };
         },
 
-        /**
-         * @method _transformCoordinates
-         * Transforms coordinates from given projection to the maps projectino.
-         * @param {OpenLayers.LonLat} pLonlat
-         * @param {String} srs projection for given lonlat params like "EPSG:4326"
-         * @return {OpenLayers.LonLat} transformed coordinates
-         */
-        _transformCoordinates: function (pLonlat, srs) {
-            return pLonlat.transform(
-                new OpenLayers.Projection(srs),
-                this.getMap().getProjectionObject()
-            );
-        },
         /**
          * @property eventHandlers
          * @static
@@ -757,17 +743,22 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * Moves the map to the given position.
          * NOTE! Doesn't send an event if zoom level is not changed.
          * Call notifyMoveEnd() afterwards to notify other components about changed state.
-         * @param {OpenLayers.LonLat} lonlat coordinates to move the map to
+         * @param {Number[] | Object} lonlat coordinates to move the map to
          * @param {Number} zoomAdjust relative change to the zoom level f.ex -1 (optional)
          * @param {Boolean} pIsDragging true if the user is dragging the map to a new location currently (optional)
          */
         moveMapToLonLat: function (lonlat, zoomAdjust, pIsDragging) {
-            // TODO: openlayers has isValidLonLat(); maybe use it here
-            var isDragging = (pIsDragging === true);
-            // TODO check if panTo (still) breaks IE9+ and if not, should we use it
-            // using panTo BREAKS IE on startup so do not
+            //if lonlat is given as an array instead of OpenLayers.LonLat
+            // parse it to OpenLayers.LonLat for further use
+            var olLonLat = {};
+            if (_.isArray(lonlat)) {
+                olLonLat['lon'] = lonlat[0];
+                olLonLat['lat'] = lonlat[1];
+            } else {
+                olLonLat = lonlat;
+            }
             // should we spam events on dragmoves?
-            this._map.getView().setCenter([lonlat[0], lonlat[1]]);
+            this._map.getView().setCenter([olLonLat.lon, olLonLat.lat]);
 
             if (zoomAdjust) {
                 this.adjustZoomLevel(zoomAdjust, true);

@@ -52,15 +52,10 @@ Oskari.clazz.define(
                 sandbox = me.getSandbox(),
                 callback = function (lon, lat) {
                     // transform coordinates from browser projection to current
-                    var lonlat = me.getMapModule()._transformCoordinates(
-                        new OpenLayers.LonLat(lon, lat),
-                        'EPSG:4326'
-                    );
+                    var lonlat = me.getMapModule().transformCoordinates({ lon: lon, lat: lat }, 'EPSG:4326')
                     me.getMapModule().centerMap(lonlat, 6);
                     me._locationIsSet = true;
-                    var locationEvent = sandbox.getEventBuilder(
-                        'UserLocationEvent'
-                    )(lonlat.lon, lonlat.lat);
+                    var locationEvent = sandbox.getEventBuilder('UserLocationEvent')(lonlat.lon, lonlat.lat);
                     sandbox.notifyAll(locationEvent);
                 };
 

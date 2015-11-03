@@ -135,18 +135,13 @@ Oskari.clazz.define(
                 callback = function (lon, lat) {
                     // transform coordinates from browser projection to current
                     var mapModule = me.getMapModule(),
-                        lonlat = mapModule._transformCoordinates(
-                            new OpenLayers.LonLat(lon, lat),
-                            'EPSG:4326'
-                        ),
-                        zoom = mapModule.getMaxZoomLevel();
+                        lonlat = mapModule.transformCoordinates({ lon : lon, lat : lat}, 'EPSG:4326'),
+                        zoomAdjust = mapModule.getMaxZoomLevel() - mapModule.getMapZoom();
 
                     if(typeof centerMap === 'undefined' || centerMap === true){
-                        mapModule.centerMap(lonlat, zoom);
+                        mapModule.moveMapToLonLat(lonlat, zoomAdjust);
                     }
-                    var locationEvent = sandbox.getEventBuilder(
-                        'UserLocationEvent'
-                    )(lonlat.lon, lonlat.lat);
+                    var locationEvent = sandbox.getEventBuilder('UserLocationEvent')(lonlat.lon, lonlat.lat);
                     sandbox.notifyAll(locationEvent);
                 };
 

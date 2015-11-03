@@ -540,7 +540,7 @@ Oskari.clazz.define(
          * @return {Number} zoomLevel (0-12)
          */
         getClosestZoomLevel: function (maxScale, minScale) {
-            var zoomLevel = this.getZoomLevel();
+            var zoomLevel = this.getMapZoom();
             // FIXME: shouldn't we check appropriate level if even one is defined? '||' should be '&&'?
             if (!minScale || !maxScale) {
                 return zoomLevel;
@@ -1311,14 +1311,6 @@ Oskari.clazz.define(
          */
         setZoomLevel: Oskari.AbstractFunc('setZoomLevel'),
 
-        /**
-         * @method getZoomLevel
-         * gets the maps zoom level to given absolute number
-         * @return {Number} newZoomLevel absolute zoom level (0-12)
-         */
-        getZoomLevel: function () {
-            return this.getMap().getZoom();
-        },
         getMapScale: Oskari.AbstractFunc('getMapScale'),
         /**
          * @method _updateDomainImpl
