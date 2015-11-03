@@ -145,10 +145,10 @@ Oskari.clazz.define(
 
                 {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/datasource/DataSourcePlugin.js"
+                    "src": "../../../bundles/mapping/mapmodule/plugin/datasource/DataSourcePlugin.js"
                 }, {
                     "type": "text/css",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/resources/css/datasource.css"
+                    "src": "../../../bundles/mapping/mapmodule/resources/css/datasource.css"
                 },
                 // IndexMap
                 {
