@@ -536,7 +536,7 @@ Oskari.clazz.define(
          *
          * Transforms an ol2 - style extent object to an ol3 - style array. If extent is already in the array form, return the original.
          */
-        ol2ExtentOl3Transform(ol2Extent) {
+        ol2ExtentOl3Transform: function(ol2Extent) {
             if (ol2Extent && ol2Extent.hasOwnProperty('left') && ol2Extent.hasOwnProperty('bottom') && ol2Extent.hasOwnProperty('right') && ol2Extent.hasOwnProperty('top')) {
                 return [
                     ol2Extent.left,
