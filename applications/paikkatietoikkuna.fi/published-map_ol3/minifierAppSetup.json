@@ -59,8 +59,8 @@
             "mapwmts_ol3" : {
                 "bundlePath" : "../../../packages/mapping/"
             },
-            "mapwfs2" : {
-                "bundlePath" : "../../../packages/mapping/mapwfs2_ol3/"
+            "mapwfs2_ol3" : {
+                "bundlePath" : "../../../packages/mapping/"
             },
             "mapuserlayers" : {
                 "bundlePath" : "../../../packages/framework/bundle/"
