@@ -134,10 +134,10 @@ Oskari.clazz.define(
                  */
                 {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/logo/LogoPlugin.js"
+                    "src": "../../../bundles/mapping/mapmodule/plugin/logo/LogoPlugin.js"
                 }, {
                     "type": "text/css",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/resources/css/logoplugin.css"
+                    "src": "../../../bundles/mapping/mapmodule/resources/css/logoplugin.css"
                 },
                 /**
                  * Data Source plugin
