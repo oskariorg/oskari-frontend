@@ -287,44 +287,6 @@ Oskari.clazz.define(
                     "src": "../../../bundles/mapping/mapmodule/plugin/location/GeoLocationPlugin.js"
                 },
                 /**
-                 * Draw plugin
-                 */
-                /*
-                {
-                    "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/drawplugin/DrawPlugin.js"
-                }, {
-                    "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/drawplugin/event/AddedFeatureEvent.js"
-                }, {
-                    "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/drawplugin/event/FinishedDrawingEvent.js"
-                }, {
-                    "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/drawplugin/event/SelectedDrawingEvent.js"
-                }, {
-                    "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/drawplugin/event/ActiveDrawingEvent.js"
-                }, {
-                    "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/drawplugin/request/GetGeometryRequest.js"
-                }, {
-                    "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/drawplugin/request/GetGeometryRequestHandler.js"
-                }, {
-                    "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/drawplugin/request/StartDrawingRequest.js"
-                }, {
-                    "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/drawplugin/request/StartDrawingRequestHandler.js"
-                }, {
-                    "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/drawplugin/request/StopDrawingRequest.js"
-                }, {
-                    "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/drawplugin/request/StopDrawingRequestHandler.js"
-                },
-                /**
                  * Publishertoolbar plugin
                  */
                 {
