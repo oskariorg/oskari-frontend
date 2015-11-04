@@ -342,10 +342,10 @@ Oskari.clazz.define(
                  */
                 {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/realtime/RealtimePlugin.js"
+                    "src": "../../../bundles/mapping/mapmodule/plugin/realtime/RealtimePlugin.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/realtime/event/RefreshLayerEvent.js"
+                    "src": "../../../bundles/mapping/mapmodule/plugin/realtime/event/RefreshLayerEvent.js"
                 },
                 /**
                  * My Location plugin
