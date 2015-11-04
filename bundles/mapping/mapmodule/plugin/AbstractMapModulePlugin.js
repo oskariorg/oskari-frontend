@@ -75,6 +75,13 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
                     mapModule.getLocalization('plugin', true)[this._name];
             }
         },
+        /**
+         * Returns path to image resources
+         * @return {String}
+         */
+        getImagePath : function() {
+            return this.getMapModule().getImageUrl() + '/mapping/mapmodule/resources/images/';
+        },
 
         /**
          * @public @method getSandbox
