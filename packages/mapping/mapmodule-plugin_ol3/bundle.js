@@ -30,7 +30,7 @@ Oskari.clazz.define(
                  */
                 {
                     "type": "text/javascript",
-                    "src": "../../../libraries/ol3/ol-v3.9.0-debug.js"
+                    "src": "../../../libraries/ol3/ol-v3.11.0-beta.2.simple_optimizations.js"
                 },
                 /*
                  * Proj4js
