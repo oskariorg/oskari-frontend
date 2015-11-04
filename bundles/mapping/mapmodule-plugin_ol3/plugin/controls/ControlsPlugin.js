@@ -97,7 +97,7 @@ Oskari.clazz.define(
 
         _createRequestHandlers: function () {
             var me = this;
-            var mapMovementHandler = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapMovementInteractionsRequestHandler', me.getMapModule());
+            var mapMovementHandler = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapMovementControlsRequestHandler', me.getMapModule());
             return {
                 'EnableMapKeyboardMovementRequest' : mapMovementHandler,
                 'DisableMapKeyboardMovementRequest' : mapMovementHandler,

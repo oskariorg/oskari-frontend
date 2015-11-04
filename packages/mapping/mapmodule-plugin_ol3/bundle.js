@@ -30,7 +30,7 @@ Oskari.clazz.define(
                  */
                 {
                     "type": "text/javascript",
-                    "src": "../../../libraries/ol3/ol-v3.9.0-debug.js"
+                    "src": "../../../libraries/ol3/ol-v3.11.0-beta.2.simple_optimizations.js"
                 },
                 /*
                  * Proj4js
@@ -87,7 +87,7 @@ Oskari.clazz.define(
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/request/EnableMapMouseMovementRequest.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/request/MapMovementInteractionsRequestHandler.js"
+                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/request/MapMovementControlsRequestHandler.js"
                 },{
                     "type": "text/javascript",
                     "src": "../../../bundles/mapping/mapmodule/request/ShowMapMeasurementRequest.js"
