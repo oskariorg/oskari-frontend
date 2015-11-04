@@ -43,6 +43,7 @@ Oskari.clazz.define(
             // if zoom=0 -> if(zoom) is determined as false...
             if (zoom || zoom === 0) {
                 if (zoom.CLASS_NAME === 'OpenLayers.Bounds') {
+                    // TODO: maybe check for an object with left, top, bottom, right properties instead?
                     this.mapModule.zoomToExtent(zoom);
                 } else if (zoom.scale) {
                     this.mapModule.zoomToScale(zoom.scale);

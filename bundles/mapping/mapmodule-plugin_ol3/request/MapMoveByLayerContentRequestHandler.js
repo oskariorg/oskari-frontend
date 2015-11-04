@@ -46,7 +46,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMoveByLayer
                 // only move if not currently in geometry
                 if (!containsGeometry) {
                     var center = layer.getGeometry()[0].getCentroid();
-                    this.layersPlugin.getMapModule().moveMapToLanLot([center.x, center.y]);
+                    this.layersPlugin.getMapModule().moveMapToLonLat([center.x, center.y]);
                 }
             }
             // notify components that the map has moved

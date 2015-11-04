@@ -29,29 +29,29 @@ Oskari.clazz.define(
          *      request to handle
          */
         handleRequest: function(core, request) {
-            var longitude = request.getCenterX(),
-                latitude = request.getCenterY(),
-                zoom = request.getZoom(),
-                zoomAdjustment = 0,
+            var zoom = request.getZoom(),
                 srsName = request.getSrsName(),
-                lonlat = [longitude, latitude];
+                lonlat = { 
+                    lon : request.getCenterX(), 
+                    lat : request.getCenterY()
+                };
 
             // transform coordinates to given projection
-            if (srsName && (this.mapModule.getProjection() !== srsName)) {
-                var isProjectionDefined = Proj4js.defs[srsName];
-                if (!isProjectionDefined) {
-                    throw 'SrsName not supported!';
+            lonlat = this.mapModule.transformCoordinates(lonlat, srsName);
+
+            this.mapModule.moveMapToLonLat(lonlat, zoom, false);
+            // if zoom=0 -> if(zoom) is determined as false...
+            if (zoom || zoom === 0) {
+                if (zoom.CLASS_NAME === 'OpenLayers.Bounds') {
+                    this.mapModule.zoomToExtent(zoom);
+                } else if (zoom.scale) {
+                    this.mapModule.zoomToScale(zoom.scale);
+                } else {
+                    this.mapModule.zoomTo(zoom);
                 }
-                lonlat = new ol.proj.fromLonLat([longitude, latitude], srsName);
             }
 
-            var currentZoom = this.mapModule.getMapZoom();
-            zoom = parseInt(zoom);
-            if (isNaN(zoom)) {
-                zoom = currentZoom;
-            }
-            zoomAdjustment = zoom - currentZoom;
-            this.mapModule.moveMapToLonLat(lonlat, zoomAdjustment, false);
+            this.sandbox.printDebug('[MapMoveRequestHandler] map moved');
         }
     }, {
         /**

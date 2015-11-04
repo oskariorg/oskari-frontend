@@ -381,7 +381,7 @@ Oskari.clazz.define(
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/request/MapLayerUpdateRequestHandler.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/request/MapMoveRequestHandler.js"
+                    "src": "../../../bundles/mapping/mapmodule/request/MapMoveRequestHandler.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../bundles/mapping/mapmodule/request/ShowProgressSpinnerRequest.js"

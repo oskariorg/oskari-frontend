@@ -278,7 +278,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         },
 
         /**
-         * @method moveMapToLanLot
+         * @method moveMapToLonLat
          * Moves the map to the given position.
          * NOTE! Doesn't send an event if zoom level is not changed.
          * Call notifyMoveEnd() afterwards to notify other components about changed state.
@@ -286,7 +286,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @param {Number} zoomAdjust relative change to the zoom level f.ex -1 (optional)
          * @param {Boolean} pIsDragging true if the user is dragging the map to a new location currently (optional)
          */
-        moveMapToLanLot: function (lonlat, zoomAdjust, pIsDragging) {
+        moveMapToLonLat: function (lonlat, zoomAdjust, pIsDragging) {
             //if lonlat is given as an array instead of OpenLayers.LonLat
             // parse it to OpenLayers.LonLat for further use
             lonlat = this.normalizeLonLat(lonlat);
