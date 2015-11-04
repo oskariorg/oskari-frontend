@@ -627,7 +627,7 @@ Oskari.clazz.define(
                         if (!position ||
                             position.lon !== popup.lonlat.lon ||
                             position.lat !== popup.lonlat.lat) {
-                            popup.popup.destroy();
+                            popup.popup.setPosition(undefined);  //destroy();
                             delete this._popups[pid];
                         }
                     }

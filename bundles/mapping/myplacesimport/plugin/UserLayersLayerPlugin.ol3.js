@@ -125,42 +125,56 @@ Oskari.clazz.define(
             if (!layer.isLayerOfType(this._layerType)) {
                 return;
             }
-            var openLayerId = 'layer_' + layer.getId(),
+
+            var me = this,
                 layerId = _.last(layer.getId().split('_')),
                 imgUrl = (layer.getLayerUrls()[0] + layerId).replace(/&amp;/g, '&'),
                 layerScales = this.getMapModule()
                     .calculateLayerScales(
-                        layer.getMaxScale(),
-                        layer.getMinScale()
-                    ),
+                    layer.getMaxScale(),
+                    layer.getMinScale()
+                ),
                 sandbox = this.getSandbox(),
-                openLayer = new OpenLayers.Layer.WMS(openLayerId, imgUrl, {
-                    layers: layer.getRenderingElement(),
+
+                wms = {
+                    'URL' : imgUrl,
+                    'LAYERS' : layer.getRenderingElement(),
+                    'FORMAT' : 'image/png'
+                },
+
+                openlayer = new ol.layer.Tile({
+                    source : new ol.source.TileWMS({
+                        url : wms.URL,
+                        params : {
+                            'LAYERS' : wms.LAYERS,
+                            'FORMAT' : wms.FORMAT
+                        }
+                    }),
+                    id: layer.getId(),
                     transparent: true,
-                    format: 'image/png'
-                }, {
                     scales: layerScales,
                     isBaseLayer: false,
                     displayInLayerSwitcher: false,
-                    visibility: layer.isInScale(sandbox.getMap().getScale()) && layer.isVisible(),
+                    visible: layer.isInScale(me.getSandbox().getMap().getScale()) && layer.isVisible(),
                     singleTile: true,
                     buffer: 0
                 });
 
+            openlayer.opacity = layer.getOpacity() / 100;
 
-            openLayer.opacity = layer.getOpacity() / 100;
-            this.getMap().addLayer(openLayer);
-            this.getSandbox().printDebug(
+            this.getMapModule().addLayer(openlayer, layer, layer.getName());
+
+            this._layers[layer.getId()] = openlayer;
+
+            me.getSandbox().printDebug(
                 '#!#! CREATED OPENLAYER.LAYER.WMS for UserLayer ' +
                 layer.getId()
             );
 
-            this._layers[layer.getId()] = openLayer;
-
             if (keepLayerOnTop) {
-                this.getMapModule().bringToTop(openLayer);
+                me.getMapModule().setLayerIndex(openlayer, me.getMap().getLayers().getArray().length);
             } else {
-                this.getMap().setLayerIndex(openLayer, 0);
+                me.getMapModule().setLayerIndex(openlayer, 0);
             }
 
             this.handleBounds(layer);
