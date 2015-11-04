@@ -191,14 +191,13 @@ Oskari.clazz.define(
                     "type": "text/javascript",
                     "src": "../../../bundles/mapping/mapmodule/event/AfterRemoveMarkersEvent.js"
                 },
-                /*
                 // FullScreen
                 {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/fullscreen/FullScreen.js"
+                    "src": "../../../bundles/mapping/mapmodule/plugin/fullscreen/FullScreen.js"
                 }, {
                     "type": "text/css",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/resources/css/fullscreen.css"
+                    "src": "../../../bundles/mapping/mapmodule/resources/css/fullscreen.css"
                 },
 
                 /**
