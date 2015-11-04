@@ -170,18 +170,18 @@ Oskari.clazz.define(
                 // IndexMap
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/mapmodule-plugin/plugin/indexmap/IndexMapPlugin.js"
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/indexmap/IndexMapPlugin.ol2.js"
                 }, {
                     "type": "text/css",
-                    "src": "../../../../bundles/mapping/mapmodule/resources/css/indexmap.css"
+                    "src": "../../../../bundles/mapping/mapmodule/resources/css/indexmap.ol2.css"
                 },
                 // ScaleBar
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/mapmodule-plugin/plugin/scalebar/ScaleBarPlugin.js"
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/scalebar/ScaleBarPlugin.ol2.js"
                 }, {
                     "type": "text/css",
-                    "src": "../../../../bundles/mapping/mapmodule/resources/css/scalebar.css"
+                    "src": "../../../../bundles/mapping/mapmodule/resources/css/scalebar.ol2.css"
                 },
                 // FullScreen
                 {
@@ -405,7 +405,7 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/mapping/mapmodule/resources/css/panbuttons.css"
                 }, {
                     "type": "text/css",
-                    "src": "../../../../bundles/mapping/mapmodule/resources/css/mapmodule.css"
+                    "src": "../../../../bundles/mapping/mapmodule/resources/css/mapmodule.ol2.css"
                 }
             ],
             "locales": [{
