@@ -90,9 +90,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             // FIXME: Cannot detect Marker layer, which is called Overlays in OL3
             return [];
         },
-        getProjection: function() {
-            return this._projection;
-        },
         getExtent: function() {
             return this._extent;
         },
@@ -757,6 +754,14 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 this.adjustZoomLevel(zoomAdjust, true);
             }
             this._updateDomainImpl();
+        },
+        getPixelFromCoordinate : function(lonlat) {
+            lonlat = this.normalizeLonLat(lonlat);
+            var px = this._map.getPixelFromCoordinate([lonlat.lon, lonlat.lat]);
+            return {
+                x : px[0],
+                y : px[1]
+            };
         },
         /**
          * @method centerMap
