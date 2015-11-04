@@ -26,26 +26,26 @@ Oskari.clazz.define(
 
             "scripts": [{
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/mapanalysis/plugin/AnalysisLayerPlugin.ol2.js"
+                "src": "../../../bundles/mapping/mapanalysis/plugin/AnalysisLayerPlugin.ol3.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/mapanalysis/domain/AnalysisLayer.js"
+                "src": "../../../bundles/mapping/mapanalysis/domain/AnalysisLayer.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/mapanalysis/domain/AnalysisLayerModelBuilder.js"
+                "src": "../../../bundles/mapping/mapanalysis/domain/AnalysisLayerModelBuilder.js"
             }],
             "locales": [{
                 "lang": "fi",
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/mapanalysis/resources/locale/fi.js"
+                "src": "../../../bundles/mapping/mapanalysis/resources/locale/fi.js"
             }, {
                 "lang": "sv",
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/mapanalysis/resources/locale/sv.js"
+                "src": "../../../bundles/mapping/mapanalysis/resources/locale/sv.js"
             }, {
                 "lang": "en",
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/mapanalysis/resources/locale/en.js"
+                "src": "../../../bundles/mapping/mapanalysis/resources/locale/en.js"
             }]
         },
         "bundle": {
@@ -86,4 +86,4 @@ Oskari.clazz.define(
     }
 );
 
-Oskari.bundle_manager.installBundleClass("mapanalysis", "Oskari.mapframework.bundle.mapanalysis.MapAnalysisBundle");
+Oskari.bundle_manager.installBundleClass("mapanalysis_ol3", "Oskari.mapframework.bundle.mapanalysis.MapAnalysisBundle");
