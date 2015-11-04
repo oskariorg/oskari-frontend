@@ -35,7 +35,7 @@
           </select>
         </label>
         <!-- The optional selectors will be populated here when the above have been selected. -->
-        <div>
+        <div id="indicatorSelectors">
           <template is="dom-repeat" items="[[getSelectors(sources,datasourceId,indicatorId)]]" as="selector">
             <label>
               <span>{{selectorOption.label}}</span>
@@ -47,6 +47,7 @@
             </label>
           </template>
         </div>
+        <button type="button" on-click="onAdd">{{locale.addColumn}}</button>
       </div>
       <div class="parameters-cont"></div><div class="buttons-cont"></div>
       <content></content>
@@ -62,7 +63,15 @@
           "locale": Object,
           "language": String,
           "datasourceId": String,
-          "indicatorId": String
+          "indicatorId": String,
+          "selectors": {
+              "type": Array,
+              "value": []
+          },
+          "selectedIndicators": {
+              "type": Array,
+              "value": []
+          }
       },
       getDatasources: function(sources) {
           var me = this;
@@ -101,6 +110,25 @@
                   }))
               };
           });
+      },
+      onAdd: function(e) {
+          var selectors = this.$.indicatorSelectors;
+          var selects = selectors.querySelectorAll("select");
+          var values = [];
+          // Sorry about this, selects is a NodeList, not an Array, so no .map().
+          for (var i = 0; i < selects.length; ++i) {
+              var select = selects[i];
+              values.push({
+                  selectorId: select.name,
+                  value: select.value
+              });
+          }
+          this.selectedIndicators.push({
+              datasourceId: this.datasourceId,
+              indicatorId: this.indicatorId,
+              selectors: values
+          });
+          console.log("Selected indicators: " + JSON.stringify(this.selectedIndicators));
       },
       ready: function() {
           // this.$.indicatorsAjax.generateRequest();

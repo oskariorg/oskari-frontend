@@ -6,6 +6,15 @@
 <dom-module id="oskari-statsgrid">
 
   <template>
+    <iron-ajax
+    auto
+    url="{{ajaxUrl}}"
+    params="[[getParams(selectedIndicators)]]"
+    handle-as="json"
+    last-response="{{sources}}"
+    debounce-duration="300"
+    on-response="handleResponse"
+    id="indicatorsAjax"></iron-ajax>
     <div id="municipalGrid" class="municipal-grid">
       <vaadin-grid selection-mode="multi">
         <table>
@@ -28,6 +37,11 @@
           "layers": Array,
           "indicatorHeaders": Array,
           "rows": Array
+      },
+      getParams: function(selectedIndicators) {
+          return {
+              "action_route": "GetIndicatorData"
+          };
       }
     });
   </script>
