@@ -65,7 +65,6 @@ Oskari.clazz.define(
                     dialog.show(me._title, '', me._buttons);
                     var cancelBtn = me._buttons[0];
                     cancelBtn.setHandler(function () {
-                        debugger;
                         me._toolbar.getSandbox().postRequestByName('DrawTools.StopDrawingRequest', [false, true]);
                         me._dialogShown = false;
                         // ask toolbar to select default tool
