@@ -117,7 +117,7 @@ Oskari.clazz.define(
          * Adds a single user layer to the map
          *
          * @method addMapLayerToMap
-         * @param {Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer} layer
+         * @param {Oskari.mapframework.bundle.mapanalysis.domain.Userlayer} layer
          * @param {Boolean} keepLayerOnTop
          * @param {Boolean} isBaseMap
          */
@@ -256,76 +256,69 @@ Oskari.clazz.define(
             }
         },
 
+
+
         /**
-         * Removes the OpenLayers layer from the map
-         *
-         * @method _removeMapLayerFromMap
+         * @method _afterMapLayerRemoveEvent
+         * Removes the layer from the map
          * @private
-         * @param {Oskari.mapframework.bundle.myplacesimport.domain.UserLayer} layer
+         * @param {Oskari.mapframework.domain.Userlayer} layer
          */
         _removeMapLayerFromMap: function (layer) {
-            this._modifyOL(layer, function (oLayer) {
-                // This should free all memory
-                oLayer.destroy();
-            });
-        },
-
-        /**
-         * Changes the OpenLayers layer opacity.
-         *
-         * @method _changeMapLayerOpacity
-         * @private
-         * @param {Oskari.mapframework.bundle.myplacesimport.domain.UserLayer} layer
-         */
-        _changeMapLayerOpacity: function (layer) {
-            this._modifyOL(layer, function (oLayer) {
-                oLayer.setOpacity(layer.getOpacity() / 100);
-            });
-        },
-
-        /**
-         * Changes the OpenLayers layer visibility.
-         *
-         * @method _changeMapLayerVisibility
-         * @private
-         * @param {Oskari.mapframework.bundle.myplacesimport.domain.UserLayer}
-         */
-        _changeMapLayerVisibility: function (layer) {
-            this._modifyOL(layer, function (oLayer) {
-                oLayer.setVisibility(layer.isVisible());
-            });
-        },
-
-        /**
-         * Executes a callback on an OpenLayers layer if it's found on the map.
-         *
-         * @method _modifyOL
-         * @private
-         * @param {Oskari.mapframework.bundle.myplacesimport.domain.UserLayer} layer
-         * @param {Function} cb
-         */
-        _modifyOL: function (layer, cb) {
-            var oLayer = this.getOLMapLayers(layer);
-            if (oLayer && oLayer.length && oLayer[0] !== null && oLayer[0] !== undefined) {
-                cb(oLayer[0]);
+            if (!layer.isLayerOfType('USERLAYER') || !this._layers[layer.getId()]) {
+                return;
             }
+            var userLayer = this._layers[layer.getId()];
+            this.getMapModule().removeLayer(userLayer, layer);
+            delete this._layers[layer.getId()];
         },
 
         /**
-         * Returns references to OpenLayers layer objects for requested layer
-         * or null if layer is not added to map.
-         *
          * @method getOLMapLayers
-         * @param {Oskari.mapframework.bundle.myplacesimport.domain.UserLayer} layer
+         * Returns references to OpenLayers layer objects for requested layer or null if layer is not added to map.
+         * @param {Oskari.mapframework.domain.WfsLayer} layer
          * @return {OpenLayers.Layer[]}
          */
         getOLMapLayers: function (layer) {
-            // only single layer/id, wrap it in an array
+            if (!layer.isLayerOfType(this._layerType)) {
+                return null;
+            }
             if(!this._layers[layer.getId()]) {
                 return null;
             }
+            // only single layer/id, wrap it in an array
             return [this._layers[layer.getId()]];
+        },
+
+        /**
+         * @method _afterChangeMapLayerOpacityEvent
+         * Handle AfterChangeMapLayerOpacityEvent
+         * @private
+         * @param {OL3 layer}
+         *            event
+         */
+        _changeMapLayerOpacity: function (layer) {
+
+            var olLayers = this.getOLMapLayers(layer);
+            _.each(olLayers, function(ol) {
+                ol.setOpacity(layer.getOpacity() / 100);
+            });
+        },
+
+        /**
+         * @method _mapLayerVisibilityChangedEvent
+         * Handle MapLayerVisibilityChangedEvent
+         * @private
+         * @param {OL 3 layer}
+         */
+        _changeMapLayerVisibility: function (layer) {
+            var olLayers = this.getOLMapLayers(layer);
+
+            _.each(olLayers, function(ol) {
+                ol.setVisible(layer.isVisible());
+            });
         }
+
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
         /**
