@@ -314,7 +314,7 @@ Oskari.clazz.define(
                  */
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapmodule/plugin/publishertoolbar/PublisherToolbarPlugin.ol2.js"
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/publishertoolbar/PublisherToolbarPlugin.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/plugin/publishertoolbar/request/ToolContainerRequest.js"

@@ -329,16 +329,13 @@ Oskari.clazz.define(
                  */
                 {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule/plugin/publishertoolbar/PublisherToolbarPlugin.ol3.js"
+                    "src": "../../../bundles/mapping/mapmodule/plugin/publishertoolbar/PublisherToolbarPlugin.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../bundles/mapping/mapmodule/plugin/publishertoolbar/request/ToolContainerRequest.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../bundles/mapping/mapmodule/plugin/publishertoolbar/request/ToolContainerRequestHandler.js"
-                }, {
-                    "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule/plugin/publishertoolbar/request/ToolSelectionHandler_drawtools.ol3.js"
                 }, {
                     "type": "text/css",
                     "src": "../../../bundles/mapping/mapmodule/resources/css/publishertoolbar.css"
@@ -379,6 +376,9 @@ Oskari.clazz.define(
                 {
                     "type": "text/javascript",
                     "src": "../../../bundles/mapping/mapmodule/request/ToolSelectionRequest.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/controls/ToolSelectionHandler.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../bundles/mapping/mapmodule/request/MapLayerUpdateRequest.js"
