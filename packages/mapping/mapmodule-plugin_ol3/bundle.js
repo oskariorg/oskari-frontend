@@ -205,10 +205,10 @@ Oskari.clazz.define(
                  */
                 {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/layers/LayerSelectionPlugin.js"
+                    "src": "../../../bundles/mapping/mapmodule/plugin/layers/LayerSelectionPlugin.js"
                 }, {
                     "type": "text/css",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/resources/css/layersselection.css"
+                    "src": "../../../bundles/mapping/mapmodule/resources/css/layersselection.css"
                 },
 
                 /**
@@ -216,10 +216,10 @@ Oskari.clazz.define(
                  */
                 {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/layers/BackgroundLayerSelectionPlugin.js"
+                    "src": "../../../bundles/mapping/mapmodule/plugin/layers/BackgroundLayerSelectionPlugin.js"
                 }, {
                     "type": "text/css",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/resources/css/backgroundlayerselection.css"
+                    "src": "../../../bundles/mapping/mapmodule/resources/css/backgroundlayerselection.css"
                 },
                 /**
                  * Layers plugin
@@ -227,7 +227,7 @@ Oskari.clazz.define(
                 
                 {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/layers/LayersPlugin.js"
+                    "src": "../../../bundles/mapping/mapmodule/plugin/layers/LayersPlugin.ol3.js"
                 }, 
 
                 {
