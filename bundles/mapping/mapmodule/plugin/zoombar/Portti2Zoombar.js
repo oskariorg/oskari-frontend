@@ -103,6 +103,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             }
         };
     }, {
+        getImagePath : function() {
+            return this.getMapModule().getImageUrl() + '/mapping/mapmodule/resources/images/';
+        },
         /**
          * @private @method _createControlElement
          * Draws the zoombar on the screen.
@@ -120,7 +123,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                     '  <div class="pzbDiv-minus"></div>' +
                     '</div>'
                 ),
-                map = me.getMap(),
+                mapModule = me.getMapModule(),
                 sliderEl = el.find('div.slider');
 
             sliderEl.attr('id', 'pzb-slider-' + me.getName());
@@ -133,14 +136,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
 
             sliderEl.css(
                 'height',
-                (map.getNumZoomLevels() * 11) + 'px'
+                (mapModule.getMaxZoomLevel() * 11) + 'px'
             );
             me._slider = sliderEl.slider({
                 orientation: 'vertical',
                 range: 'min',
                 min: 0,
-                max: map.getNumZoomLevels() - 1,
-                value: map.getZoom(),
+                max: mapModule.getMaxZoomLevel(),
+                value: mapModule.getMapZoom(),
                 slide: function (event, ui) {
                     me.getMapModule().zoomTo(ui.value);
                 }
@@ -148,7 +151,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
 
             el.find('.pzbDiv-plus').bind('click', function (event) {
                 if (!me.inLayerToolsEditMode()) {
-                    if (me._slider.slider('value') < map.getNumZoomLevels()) {
+                    if (me._slider.slider('value') < mapModule.getMaxZoomLevel()) {
                         me.getMapModule().zoomTo(
                             me._slider.slider('value') + 1
                         );
@@ -190,7 +193,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                     me.changeToolStyle(me.toolStyles[toolStyle], me.getElement());
                 }
             }
-            me._setZoombarValue(me.getMap().getZoom());
+            me._setZoombarValue(me.getMapModule().getMapZoom());
         },
 
         /**
@@ -258,8 +261,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 style = this.toolStyles[style] ? this.toolStyles[style] : this.toolStyles["default"];
             }
 
-            var resourcesPath = this.getMapModule().getImageUrl(),
-                imgUrl = resourcesPath + '/framework/mapmodule-plugin/resources/images/',
+            var imgUrl = this.getImagePath(),
                 styleName = style.val,
                 zoombarImg = imgUrl + 'zoombar-' + styleName + '.png',
                 zoombarCursorImg = imgUrl + 'zoombar-cursor-' + styleName + '.png',
@@ -275,7 +277,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             // Used to get the cursor to the right position since
             // it's off by 2 pixels with the 'rounded' style.
             var isRounded = styleName && styleName.match(/^rounded/),
-                sliderHeight = this.getMap().getNumZoomLevels() * style.heightCenter;
+                sliderHeight = this.getMapModule().getMaxZoomLevel() * style.heightCenter;
 
             if (style.val === null) {
                 bar.css({

@@ -87,7 +87,7 @@ Oskari.clazz.define(
                     "src": "../../../bundles/mapping/mapmodule-plugin_ol3/request/EnableMapMouseMovementRequest.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/request/MapMovementInteractionsRequestHandler.js"
+                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/request/MapMovementControlsRequestHandler.js"
                 },{
                     "type": "text/javascript",
                     "src": "../../../bundles/mapping/mapmodule/request/ShowMapMeasurementRequest.js"
@@ -275,10 +275,9 @@ Oskari.clazz.define(
                 /**
                  * GeoLocation plugin
                  */
-                 /*
                 {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/location/GeoLocationPlugin.js"
+                    "src": "../../../bundles/mapping/mapmodule/plugin/location/GeoLocationPlugin.js"
                 },
                 /**
                  * Draw plugin
@@ -352,19 +351,19 @@ Oskari.clazz.define(
                  */
                 {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/mylocation/MyLocationPlugin.js"
+                    "src": "../../../bundles/mapping/mapmodule/plugin/mylocation/MyLocationPlugin.js"
                 }, {
                     "type": "text/css",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/resources/css/mylocation.css"
+                    "src": "../../../bundles/mapping/mapmodule/resources/css/mylocation.css"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/mylocation/request/GetUserLocationRequest.js"
+                    "src": "../../../bundles/mapping/mapmodule/plugin/mylocation/request/GetUserLocationRequest.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/mylocation/request/GetUserLocationRequestHandler.js"
+                    "src": "../../../bundles/mapping/mapmodule/plugin/mylocation/request/GetUserLocationRequestHandler.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/event/UserLocationEvent.js"
+                    "src": "../../../bundles/mapping/mapmodule/event/UserLocationEvent.js"
                 },
 
                 /**
@@ -409,10 +408,10 @@ Oskari.clazz.define(
                 }, 
                 {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/zoombar/Portti2Zoombar.js"
+                    "src": "../../../bundles/mapping/mapmodule/plugin/zoombar/Portti2Zoombar.js"
                 }, {
                     "type": "text/css",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/resources/css/porttizoombar.css"
+                    "src": "../../../bundles/mapping/mapmodule/resources/css/porttizoombar.css"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../bundles/mapping/mapmodule/plugin/panbuttons/PanButtons.js"
