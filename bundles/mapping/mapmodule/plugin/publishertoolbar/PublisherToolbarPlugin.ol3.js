@@ -230,9 +230,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             if (conf) {
                 if (conf.toolStyle) {
                     me.changeToolStyle(conf.toolStyle, me.getElement());
+                } else {
+                    var toolStyle = me.getToolStyleFromMapModule();
+                    if (toolStyle !== null && toolStyle !== undefined) {
+                        me.changeToolStyle(toolStyle, me.getElement());
+                    }
                 }
+
                 if (conf.font) {
                     me.changeFont(conf.font, me.getElement());
+                } else {
+                    var font = me.getToolFontFromMapModule();
+                    if (font !== null && font !== undefined) {
+                        me.changeFont(font, me.getElement());
+                    }
                 }
             }
         },
@@ -297,10 +308,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             if (!div) {
                 return;
             }
+            //no default exists for the menu icon, using rounded-dark instead...
+            if (!style) {
+                style = "rounded-dark";
+            }
 
-            //
-            var resourcesPath = me.getMapModule().getImageUrl(),
-                imgPath = resourcesPath + '/framework/mapmodule-plugin/resources/images/',
+            var imgPath = this.getImagePath(),
                 styledImg = imgPath + 'menu-' + style + '.png',
                 icon = div.find('.icon'),
                 toolsContent = div.find('.' + me.toolbarContent),
@@ -385,11 +398,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
 
             var classToAdd = 'oskari-publisher-font-' + fontId,
                 testRegex = /oskari-publisher-font-/;
-            this.getMapModule().changeCssClasses(
-                classToAdd,
-                testRegex,
-                elements
-            );
+
+            this.changeCssClasses(classToAdd, testRegex, elements);
         },
 
         /**

@@ -271,11 +271,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                         {
                             title: me._loc.title,
                             show: false,
-                            toolbarContainer: me.getElement().find('.' + me.toolbarContent),
-                            closeBoxCallback: function () {
-                                // this is useless, I guess.
-                                //view.prepareMode(false);
-                            }
+                            toolbarContainer: me.getElement().find('.' + me.toolbarContent)
                         }
                     ]
                 );
@@ -311,8 +307,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 style = "rounded-dark";
             }
 
-            var resourcesPath = me.getMapModule().getImageUrl(),
-                imgPath = resourcesPath + '/framework/mapmodule-plugin/resources/images/',
+            var imgPath = this.getImagePath(),
                 styledImg = imgPath + 'menu-' + style + '.png',
                 icon = div.find('.icon'),
                 toolsContent = div.find('.' + me.toolbarContent),

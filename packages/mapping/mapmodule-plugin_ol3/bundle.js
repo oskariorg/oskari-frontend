@@ -323,19 +323,19 @@ Oskari.clazz.define(
                  */
                 {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/publishertoolbar/PublisherToolbarPlugin.js"
+                    "src": "../../../bundles/mapping/mapmodule/plugin/publishertoolbar/PublisherToolbarPlugin.ol3.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/publishertoolbar/request/ToolContainerRequest.js"
+                    "src": "../../../bundles/mapping/mapmodule/plugin/publishertoolbar/request/ToolContainerRequest.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/publishertoolbar/request/ToolContainerRequestHandler.js"
+                    "src": "../../../bundles/mapping/mapmodule/plugin/publishertoolbar/request/ToolContainerRequestHandler.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/publishertoolbar/request/ToolSelectionHandler.js"
+                    "src": "../../../bundles/mapping/mapmodule/plugin/publishertoolbar/request/ToolSelectionHandler_drawtools.ol3.js"
                 }, {
                     "type": "text/css",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/resources/css/publishertoolbar.css"
+                    "src": "../../../bundles/mapping/mapmodule/resources/css/publishertoolbar.css"
                 },
                 /**
                  * Realtime plugin
