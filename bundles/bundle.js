@@ -1555,6 +1555,26 @@ Oskari = (function () {
         },
 
         /**
+         * @private @method _loadLink
+         *
+         * @param {string}   rel type
+         * @param {string}   href Contains import url
+         *
+         */
+        _loadLink: function (rel, href) {
+            this.log('Loading link ' + rel + ": " + href);
+            var importParentElement = document.head || document.body,
+                linkElement;
+
+            if (!_isPreloaded()) {
+                linkElement = document.createElement('link');
+                linkElement.rel = rel;
+                linkElement.href = href;
+                importParentElement.appendChild(linkElement);
+            }
+        },
+
+        /**
          * @private @method _self
          *
          *
@@ -1641,8 +1661,8 @@ Oskari = (function () {
          * @public @method installBundleClassInfo
          * Installs a bundle defined as Oskari native Class
          *
-         * @param {string} biid      Bundle implementation I
-D         * @param {Object} classInfo ClassInfo
+         * @param {string} biid      Bundle implementation ID
+         * @param {Object} classInfo ClassInfo
          *
          */
         installBundleClassInfo: function (biid, classInfo) {
@@ -1737,9 +1757,11 @@ D         * @param {Object} classInfo ClassInfo
             sourceDefinitions = sourceDefinitions || {};
             // linter doesn't recognize the filter expression
             /*jshint forin: false*/
-            for (p in sourceDefinitions) {
-                if (sourceDefinitions.hasOwnProperty(p) &&
-                        (p === 'scripts' || p === 'locales')) {
+            if (sourceDefinitions.links) {
+                Array.prototype.push.apply(srcFiles.links, sourceDefinitions.links);
+            }
+            Object.keys(sourceDefinitions).forEach(function (p) {
+                if (p === 'scripts' || p === 'locales') {
                     for (n = 0; n < sourceDefinitions[p].length; n += 1) {
                         def = sourceDefinitions[p][n];
                         if (def.type === 'text/css') {
@@ -1767,7 +1789,7 @@ D         * @param {Object} classInfo ClassInfo
                                         p: p,
                                         n: n,
                                         def: sourceDefinitions[p][n]
-                                    };
+                                };
                                 srcFiles.files.push({
                                     fn: fnWithPath,
                                     def: def
@@ -1776,7 +1798,7 @@ D         * @param {Object} classInfo ClassInfo
                         }
                     }
                 }
-            }
+            });
         },
 
         /**
@@ -1803,6 +1825,25 @@ D         * @param {Object} classInfo ClassInfo
                     this._loadCss(fn, callback);
                     this.log('- added css source ' + fn + ' for ' + biid);
                 }
+            }
+        },
+
+        /**
+         * @private @method _feedLinkLoader
+         *
+         * @param {string}   biid       Bundle implementation ID
+         * @param {string}   bundlePath Bundle path
+         * @param {Object}   srcFiles   Bundle source files object
+         *
+         */
+        _feedLinkLoader: function (biid, bundlePath, srcFiles) {
+            var me = this;
+            if (srcFiles.links) {
+                srcFiles.links.forEach(function (src) {
+                    var href = _buildPathForLoaderMode(src.href, bundlePath);
+                    me._loadLink(src.rel, href);
+                    me.log('- added link source ' + href + ", for: " + biid);
+                });
             }
         },
 
@@ -1940,7 +1981,8 @@ D         * @param {Object} classInfo ClassInfo
                 count: 0,
                 loaded: 0,
                 files: [],
-                css: {}
+                css: {},
+                links: []
             };
 
             callback = function () {
@@ -1961,6 +2003,11 @@ D         * @param {Object} classInfo ClassInfo
 
             me._feedCSSLoader(
                 callback,
+                biid,
+                bundlePath,
+                srcFiles
+            );
+            me._feedLinkLoader(
                 biid,
                 bundlePath,
                 srcFiles

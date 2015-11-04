@@ -28,6 +28,7 @@
     "tests"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.2.0"
+    "polymer": "Polymer/polymer#^1.2.0",
+    "vaadin-components": "vaadin-elements#~0.3.0-beta9"
   }
 }

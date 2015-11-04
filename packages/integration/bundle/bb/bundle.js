@@ -37,9 +37,6 @@ Oskari.clazz.define("Oskari.integration.bundle.bb.BackBoneBundle", function() {
             "src" : "../../../../libraries/backbone/comp.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../libraries/backgrid-0.3.5/lib/backgrid.js"
-        }, {
-            "type" : "text/javascript",
             "src" : "../../../../bundles/integration/bb/Flyout.js"
 
         }, {
