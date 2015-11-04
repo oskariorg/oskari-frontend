@@ -15,7 +15,7 @@ New request is enabled by default:
 
 Domain validation fixed to accept urls with - or _ characters.
 
-### Mapmodule consistency
+### Mapmodule consistency - POSSIBLE BREAKING CHANGES!
 
 In an effort to make Openlayers 2 ja 3 mapmodule API consistent some functions have been renamed:
 - Both: _getMapZoom() -> getMapZoom()
@@ -25,6 +25,20 @@ In an effort to make Openlayers 2 ja 3 mapmodule API consistent some functions h
 - OL3: getZoomLevel() removed as it's the same as getMapZoom()
 
 Fixed mapmodule.isValidLonLat() to use max extent as reference instead of hardcoded EPSG:3067 values.
+
+#### Oskari.mapframework.domain.Map
+
+Sandbox.getMap().getBbox() no longer returns the Openlayers.Bounds or ol but an object with top, bottom, left, right keys
+
+To fix your code using calls like 'sandbox.getMap().getBbox()' in Openlayers 2:
+	
+	var bbox = sandbox.getMap().getBbox();
+	var bounds = new Openlayers.Bounds(bbox.left, bbox.bottom, bbox.right, bbox.top);
+
+In Openlayers 3:
+
+	var bbox = sandbox.getMap().getBbox();
+	new ol.extent.boundingExtent(bbox.left, bbox.bottom, bbox.right, bbox.top);
 
 ### File location changes
 

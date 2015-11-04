@@ -97,22 +97,22 @@ Oskari.clazz.define(
                  */
                 {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/getinfo/GetFeatureInfoHandler.js"
+                    "src": "../../../bundles/mapping/mapmodule/plugin/getinfo/GetFeatureInfoHandler.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/request/GetFeatureInfoRequest.js"
+                    "src": "../../../bundles/mapping/mapmodule/request/GetFeatureInfoRequest.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/request/GetFeatureInfoActivationRequest.js"
+                    "src": "../../../bundles/mapping/mapmodule/request/GetFeatureInfoActivationRequest.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/getinfo/GetInfoPlugin.js"
+                    "src": "../../../bundles/mapping/mapmodule/plugin/getinfo/GetInfoPlugin.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/plugin/getinfo/GetFeatureInfoFormatter.js"
+                    "src": "../../../bundles/mapping/mapmodule/plugin/getinfo/GetFeatureInfoFormatter.js"
                 }, {
                     "type": "text/css",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/resources/css/getinfo.css"
+                    "src": "../../../bundles/mapping/mapmodule/resources/css/getinfo.css"
                 },
 
                 /**

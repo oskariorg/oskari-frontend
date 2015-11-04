@@ -298,6 +298,14 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
             this._updateDomainImpl();
         },
+        getPixelFromCoordinate : function(lonlat) {
+            lonlat = this.normalizeLonLat(lonlat);
+            var px = this._map.getViewPortPxFromLonLat(new OpenLayers.LonLat(lonlat.lon, lonlat.lat));
+            return {
+                x : px.x,
+                y : px.y
+            };
+        },
 
         /**
          * @method panMapToLonLat
