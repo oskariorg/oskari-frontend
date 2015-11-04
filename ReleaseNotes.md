@@ -24,6 +24,7 @@ In an effort to make Openlayers 2 ja 3 mapmodule API consistent some functions h
 - OL2: getNumZoomLevels() -> getMaxZoomLevel()
 - OL3: getZoomLevel() removed as it's the same as getMapZoom()
 
+MapClickedEvent.getLonlat() now returns an object with lon and lat keys regardless instead of Openlayers.Lonlat in OL2 or coordinate array in OL3.
 Fixed mapmodule.isValidLonLat() to use max extent as reference instead of hardcoded EPSG:3067 values.
 
 #### Oskari.mapframework.domain.Map

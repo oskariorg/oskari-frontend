@@ -8,7 +8,7 @@ Oskari.clazz.define(
     /**
      * @method create called automatically on construction
      * @static
-     * @param {OpenLayers.LonLat} lonlat coordinates where the map was clicked
+     * @param {Object} lonlat object with lon and lat keys as coordinates where the map was clicked
      * @param {Number} mouseX viewport mouse position x coordinate when click happened
      * @param {Number} mouseY viewport mouse position y coordinate when click happened
      */
@@ -28,7 +28,7 @@ Oskari.clazz.define(
         },
         /**
          * @method getLonLat
-         * @return {OpenLayers.LonLat}
+         * @return {Object}
          */
         getLonLat: function () {
             return this._lonlat;

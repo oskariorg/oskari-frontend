@@ -151,7 +151,7 @@ Oskari.clazz.define(
                 contentDiv = me._renderContentData(id, contentData),
                 popupContentHtml = me._renderPopupContent(id, title, contentDiv),
                 popupElement = me._popupWrapper.clone(),
-                lonlatArray = lonlat.split(",");
+                lonlatArray = [lonlat.lon, lonlat.lat];
 
             popupElement.attr('id', id);
             if (refresh) {
