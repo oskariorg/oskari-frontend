@@ -28,7 +28,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMovementCon
          *      request to handle
          */
         handleRequest: function (core, request) {
-            debugger;
             if (request.getName() === 'EnableMapKeyboardMovementRequest') {
                 var interactions = [];
                 interactions.push(this.getMapModule().getInteractionInstance(ol.interaction.KeyboardPan));
