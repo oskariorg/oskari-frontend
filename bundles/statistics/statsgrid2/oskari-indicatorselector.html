@@ -70,7 +70,8 @@
           },
           "selectedIndicators": {
               "type": Array,
-              "value": []
+              "value": [],
+              "notify": true
           }
       },
       getDatasources: function(sources) {
@@ -123,7 +124,7 @@
                   value: select.value
               });
           }
-          this.selectedIndicators.push({
+          this.push('selectedIndicators', {
               datasourceId: this.datasourceId,
               indicatorId: this.indicatorId,
               selectors: values
