@@ -1147,8 +1147,7 @@ Oskari.clazz.define(
                             tile = src.tileCache.get(bboxKey);
                             tile.isBoundaryTile = boundaryTile;
                             tile.getImage().src = imageUrl;
-//                            tile.state = ol.TileState.LOADED;
-                            tile.state = 2;
+                            tile.state = ol.TileState.LOADED;
                             //tile.src_ = imageUrl;
                             //All tiles for this stint / this layer have finished loading -> tell the canvas to update
                             //TODO: figure out a safer way for bookkeeping. Guessing this might get screwed when there are multiple sequential zoomins / -outs / pans
@@ -1189,13 +1188,8 @@ Oskari.clazz.define(
                 }
                 var tile = new this.tileClass(
                     tileCoord,
-                    /*
                     goog.isDef(tileUrl) ? ol.TileState.IDLE : ol.TileState.EMPTY,
                     goog.isDef(tileUrl) ? tileUrl : '',
-                    */
-                    //ol.TileState.IDLE = 0, ol.TileState.EMPTY = 4
-                    tileUrl ? 0 : 4,
-                    tileUrl ? tileUrl : '',
                     this.crossOrigin,
                     this.tileLoadFunction);
                 /*
@@ -1395,8 +1389,7 @@ Oskari.clazz.define(
                 //at this point the tile should already been cached by the layers getTile - function.
                 if (layer.getSource().tileCache.containsKey(bboxKey)) {
                     var tile = layer.getSource().tileCache.get(bboxKey);
-//                    if ((tile && tile.state !== ol.TileState.LOADED) || tile.isBoundaryTile === true || tile.isBoundaryTile === undefined) {
-                    if ((tile && tile.state !== 2) || tile.isBoundaryTile === true || tile.isBoundaryTile === undefined) {
+                    if ((tile && tile.state !== ol.TileState.LOADED) || tile.isBoundaryTile === true || tile.isBoundaryTile === undefined) {
                         tile.isBoundaryTile = false;
                         result.push(grid.bounds[i]);
                     }
