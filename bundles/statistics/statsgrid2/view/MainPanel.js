@@ -8,29 +8,21 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.MainPanel',
     /**
      * @static constructor function
      */
-    function (instance) {
+    function (instance, localization) {
+        this.localization = localization;
     },
     {
-    	"__templates" : {
-            'wrapper' : '<oskari-statsview></oskari-statsview>',
-    	},
 	    render : function(container, instance) {
-            // FIXME: this is called each time mode is activated?
+            var elementWrapper = document.createElement("oskari-statsview"),
+              rawUrl = Oskari.getSandbox().getAjaxUrl(),
+              // Removing the tailing question mark.
+              url = rawUrl.substring(0, rawUrl.length - 1);
             this.container = container;
-            var gridContainer = jQuery(this.__templates.wrapper);
-            container.empty().append(gridContainer);
-
-            //window resize!
-            // TODO: mapfull already checks resizing, maybe add an oskari event for it that can be used here?
-            var me = this,
-                resizeGridTimer;
-            jQuery(window).resize(function () {
-                clearTimeout(resizeGridTimer);
-                resizeGridTimer = setTimeout(function () {
-                    me.__fixGridHeight(container);
-                    me.grid.handleContainerResized();
-                }, 100);
-            });
+            container.empty();
+            elementWrapper.ajaxurl = url;
+            elementWrapper.locale = this.localization;
+            elementWrapper.language = Oskari.getLang();
+            Polymer.dom(container[0]).appendChild(elementWrapper);
 	    },
         getContainer : function() {
             return this.container;

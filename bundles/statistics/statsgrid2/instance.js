@@ -18,7 +18,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
     }, {
         "getMainPanel" : function() {
             if(!this.__mainPanel) {
-                this.__mainPanel = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.view.MainPanel', this);
+                this.__mainPanel = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.view.MainPanel', this,
+                        this.getLocalization());
             }
             return this.__mainPanel;
 
@@ -26,7 +27,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
         "getService" : function() {
             // previously known as this.statsService
             if(!this.__service) {
-                this.__service = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.StatisticsService', this.getSandbox());
+                this.__service = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.StatisticsService',
+                        this.getSandbox());
             }
             return this.__service;
 

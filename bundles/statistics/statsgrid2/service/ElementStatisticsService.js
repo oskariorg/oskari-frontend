@@ -107,6 +107,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
                 return;
             }
             var me = this,
+                // &plugin_id=plugin_id&indicator=indicator_id&selectors=URL_ENCODED_JSON
                 url = Oskari.getSandbox().getAjaxUrl() + "action_route=GetIndicatorsMetadata";
 
             var queueName = this.callbackQueue.getQueueName('getIndicatorValue', arguments);

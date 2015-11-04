@@ -1,26 +1,112 @@
 <link rel="import"
       href="libs/polymer/polymer.html">
 
+<link href="libs/promise-polyfill/promise-polyfill.html" rel="import">
+<link href="libs/iron-ajax/iron-ajax.html" rel="import">
+
 <dom-module id="oskari-indicatorselector">
 
-  <template>
-    <style>
-      div {
-        background-color: #ccc;
-        border-radius: 8px;
-        padding: 4px;
-      }
-    </style>
-    <div id="municipalGrid" class="municipal-grid">
+<template>
+  <iron-ajax
+    auto
+    url="{{ajaxurl}}"
+    params='{"action_route": "GetIndicatorsMetadata"}'
+    handle-as="json"
+    last-response="{{sources}}"
+    debounce-duration="300"
+    on-response="handleResponse"
+    id="indicatorsAjax"></iron-ajax>
+    <form class="statsgrid2_indicator_selector">
+      <div class="indicator-cont">
+        <label>
+          <span>{{locale.tab.grid.organization}}</span>
+          <select name="datasource" style="width: 300px;" value="{{datasourceid::change}}">
+            <template is="dom-repeat" items="[[getDatasources(sources)]]">
+              <option value="{{item.val}}">{{item.text}}</option>
+            </template>
+          </select>
+        </label>
+        <label>
+          <span name="indicator-span"></span>
+          <select name="indicator" style="width: 300px;" value="{{indicatorid::change}}">
+            <template is="dom-repeat" items="[[getIndicators(sources,datasourceid)]]">
+              <option value="{{item.val}}">{{item.text}}</option>
+            </template>
+          </select>
+        </label>
+        <!-- The optional selectors will be populated here when the above have been selected. -->
+        <div name="selectors-div">
+          <template is="dom-repeat" items="[[getSelectors(sources,datasourceid,indicatorid)]]" as="selector">
+            <label>
+              <span>selectorOption.label</span>
+              <select name="{{selector.name}}" style="width: 300px;" value="{{selector.value::change}}">
+                <template is="dom-repeat" items="{{selector.values}}" as="selectoroption">
+                  <option value="{{selectoroption.val}}">{{selectoroption.text}}</option>
+                </template>
+              </select>
+            </label>
+          </template>
+        </div>
+      </div>
+      <div class="parameters-cont"></div><div class="buttons-cont"></div>
       <content></content>
-    </div>
+    </form>
   </template>
 
   <script>
     Polymer({
       is: "oskari-indicatorselector",
+      properties: {
+          "ajaxurl": String,
+          "sources": Object,
+          "locale": Object,
+          "language": String,
+          "datasourceid": String,
+          "indicatorid": String
+      },
+      getDatasources: function(sources) {
+          var me = this;
+          return Object.keys(sources).map(function(sourceId) {
+              return {
+                  val: sourceId,
+                  text: me.locale.statistic.plugins[sources[sourceId].localizationKey]
+              };
+          }).concat([{val: "aa", text: "bb"}]);
+      },
+      getIndicators: function(sources, datasourceId) {
+          var me = this,
+            indicators = sources[datasourceId].indicators;
+          return Object.keys(indicators).map(function(indicatorId) {
+              var indicator = indicators[indicatorId];
+              return {
+                  val: indicatorId,
+                  text: indicator.name[me.language]
+              };
+          });
+      },
+      getSelectors: function(sources, datasourceId, indicatorId) {
+          var me = this,
+            indicator = sources[datasourceId].indicators[indicatorId],
+            selectors = indicator.selectors;
+          return selectors.map(function(selector) {
+              return {
+                  name: me.locale.selectors[selector.id],
+                  value: selector.id,
+                  values: selector.allowedValues.map(function (allowedValue) {
+                      return {
+                          val: allowedValue,
+                          text: allowedValue
+                      };
+                  })
+              };
+          });
+      },
+      ready: function() {
+          // this.$.indicatorsAjax.generateRequest();
+      },
+      handleResponse: function(response) {
+          console.log("Got response.");
+      }
     });
   </script>
-
 </dom-module>
-

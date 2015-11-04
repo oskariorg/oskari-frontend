@@ -6,24 +6,16 @@
 <dom-module id="oskari-statsgrid">
 
   <template>
-    <style>
-      div {
-        background-color: #ccc;
-        border-radius: 8px;
-        padding: 4px;
-      }
-    </style>
     <div id="municipalGrid" class="municipal-grid">
-    <vaadin-grid selection-mode="multi">
-      <table>
-        <!-- Define the columns -->
-        <col name="index" header-text="#" width="48">
-        <col name="user.picture.thumbnail" width="54">
-        <col name="user.name.first" header-text="First Name">
-        <col name="user.name.last" header-text="Last Name">
-        <col name="user.email" header-text="Email" flex>
-      </table>
-    </vaadin-grid>
+      <vaadin-grid selection-mode="multi">
+        <table>
+          <!-- Define the columns -->
+          <col name="region" header-text="{{selectedLayer}}" width="48">
+          <template is="dom-repeat" items="{{indicatorHeaders}}">
+            <col name="{{item.id}}" header-text="{{item.header}}" width="54">
+          </template>
+        </table>
+      </vaadin-grid>
       <content></content>
     </div>
   </template>
@@ -31,6 +23,12 @@
   <script>
     Polymer({
       is: "oskari-statsgrid",
+      properties: {
+          "selectedLayer": String,
+          "layers": Array,
+          "indicatorHeaders": Array,
+          "rows": Array
+      }
     });
   </script>
 

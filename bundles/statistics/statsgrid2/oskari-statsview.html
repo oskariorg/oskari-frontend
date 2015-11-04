@@ -7,8 +7,8 @@
 <dom-module id="oskari-statsview">
 
   <template>
-      <oskari-indicatorselector></oskari-indicatorselector>
-      <oskari-statsgrid></oskari-statsgrid>
+      <oskari-indicatorselector locale="[[locale]]" ajaxurl="[[ajaxurl]]" id="indicatorselector"></oskari-indicatorselector>
+      <oskari-statsgrid locale="[[locale]]" ajaxurl="[[ajaxurl]]" id="statsgrid"></oskari-statsgrid>
       <content></content>
     </div>
   </template>
@@ -16,6 +16,10 @@
   <script>
     Polymer({
       is: "oskari-statsview",
+      properties: {
+          "locale": Object,
+          "ajaxurl": String
+      }
     });
   </script>
 
