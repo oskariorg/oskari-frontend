@@ -19,7 +19,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.MainPanel',
               url = rawUrl.substring(0, rawUrl.length - 1);
             this.container = container;
             container.empty();
-            elementWrapper.ajaxurl = url;
+            elementWrapper.ajaxUrl = url;
             elementWrapper.locale = this.localization;
             elementWrapper.language = Oskari.getLang();
             Polymer.dom(container[0]).appendChild(elementWrapper);

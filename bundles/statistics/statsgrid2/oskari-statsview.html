@@ -7,8 +7,8 @@
 <dom-module id="oskari-statsview">
 
   <template>
-      <oskari-indicatorselector locale="[[locale]]" ajaxurl="[[ajaxurl]]" id="indicatorselector"></oskari-indicatorselector>
-      <oskari-statsgrid locale="[[locale]]" ajaxurl="[[ajaxurl]]" id="statsgrid"></oskari-statsgrid>
+      <oskari-indicatorselector locale="[[locale]]" language="[[language]]" ajax-url="[[ajaxUrl]]" id="indicatorselector"></oskari-indicatorselector>
+      <oskari-statsgrid locale="[[locale]]" language="[[language]]" ajax-url="[[ajaxUrl]]" id="statsgrid"></oskari-statsgrid>
       <content></content>
     </div>
   </template>
@@ -18,7 +18,8 @@
       is: "oskari-statsview",
       properties: {
           "locale": Object,
-          "ajaxurl": String
+          "language": String,
+          "ajaxUrl": String
       }
     });
   </script>
