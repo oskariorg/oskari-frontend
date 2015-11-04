@@ -510,23 +510,21 @@ Oskari.clazz.define(
 
         /**
          * @method isValidLonLat
-         * Checks that latitude is between 8 200 000 <> 6 250 000 and
-         * that longitude is between 0 <> 1 350 000
+         * Checks that lat and lon are within bounds of the map extent
          * @param {Number} lon longitude to check
          * @param {Number} lat latitude to check
-         * @return {Boolean} true if coordinates are in said boundaries
+         * @return {Boolean} true if coordinates are inside boundaries
          */
         isValidLonLat: function (lon, lat) {
-            // FIXME isn't this projection dependent?
-            var isOk = true;
-            if (lat < 6250000 || lat > 8200000) {
-                isOk = false;
-                return isOk;
+            var maxExtent = this.getMaxExtent();
+
+            if(isNaN(lon) || isNaN(lat)) {
+                return false;
+            } else if(lon < maxExtent.left || lon > maxExtent.right || lat < maxExtent.bottom || lat > maxExtent.top) {
+                return false;
+            } else {
+                return true;
             }
-            if (lon < 0 || lon > 1350000) {
-                isOk = false;
-            }
-            return isOk;
         },
 
         /**
@@ -540,7 +538,7 @@ Oskari.clazz.define(
          * @return {Number} zoomLevel (0-12)
          */
         getClosestZoomLevel: function (maxScale, minScale) {
-            var zoomLevel = this.getZoomLevel();
+            var zoomLevel = this.getMapZoom();
             // FIXME: shouldn't we check appropriate level if even one is defined? '||' should be '&&'?
             if (!minScale || !maxScale) {
                 return zoomLevel;
@@ -1230,6 +1228,20 @@ Oskari.clazz.define(
             return this.panMapToLonLat.apply(this, arguments);
         },
         /**
+         * Changes array to object
+         * @param  {Object | Number[]} lonlat [description]
+         * @return {Object}        [description]
+         */
+        normalizeLonLat : function(lonlat) {
+            if (_.isArray(lonlat)) {
+                return {
+                    lon : lonlat[0],
+                    lat : lonlat[1]
+                };
+            } 
+            return lonlat;
+        },
+        /**
          * @method panMapToLonLat
          * Pans the map to the given position.
          * @param {OpenLayers.LonLat} lonlat coordinates to pan the map to
@@ -1311,14 +1323,6 @@ Oskari.clazz.define(
          */
         setZoomLevel: Oskari.AbstractFunc('setZoomLevel'),
 
-        /**
-         * @method getZoomLevel
-         * gets the maps zoom level to given absolute number
-         * @return {Number} newZoomLevel absolute zoom level (0-12)
-         */
-        getZoomLevel: function () {
-            return this.getMap().getZoom();
-        },
         getMapScale: Oskari.AbstractFunc('getMapScale'),
         /**
          * @method _updateDomainImpl

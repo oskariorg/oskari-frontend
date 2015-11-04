@@ -29,20 +29,15 @@ Oskari.clazz.define(
          *      request to handle
          */
         handleRequest: function(core, request) {
-            var longitude = request.getCenterX(),
-                latitude = request.getCenterY(),
-                zoom = request.getZoom(),
+            var zoom = request.getZoom(),
                 srsName = request.getSrsName(),
-                lonlat = new OpenLayers.LonLat(longitude, latitude);
+                lonlat = { 
+                    lon : request.getCenterX(), 
+                    lat : request.getCenterY()
+                };
 
             // transform coordinates to given projection
-            if (srsName && (this.mapModule.getProjection() !== srsName)) {
-                var isProjectionDefined = Proj4js.defs[srsName];
-                if (!isProjectionDefined) {
-                    throw 'SrsName not supported!';
-                }
-                lonlat = this.mapModule._transformCoordinates(lonlat, srsName);
-            }
+            lonlat = this.mapModule.transformCoordinates(lonlat, srsName);
 
             this.mapModule.moveMapToLanLot(lonlat, zoom, false);
             // if zoom=0 -> if(zoom) is determined as false...

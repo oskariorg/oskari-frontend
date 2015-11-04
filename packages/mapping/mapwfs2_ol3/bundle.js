@@ -106,19 +106,7 @@ function() {
         }, {
             "type" : "text/javascript",
             "src" : "../../../bundles/framework/divmanazer/component/visualization-form/AreaForm.js"
-        }, /* {
-            "type" : "text/javascript",
-            "src" : "../../../bundles/mapping/divmanazer/component/VisualizationForm.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../bundles/mapping/divmanazer/component/visualization-form/DotForm.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../bundles/mapping/divmanazer/component/visualization-form/LineForm.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../bundles/mapping/divmanazer/component/visualization-form/AreaForm.js"
-        } */],
+        }],
         "locales" : [{
             "lang" : "en",
             "type" : "text/javascript",

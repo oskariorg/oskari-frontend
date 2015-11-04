@@ -282,22 +282,16 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * Moves the map to the given position.
          * NOTE! Doesn't send an event if zoom level is not changed.
          * Call notifyMoveEnd() afterwards to notify other components about changed state.
-         * @param {OpenLayers.LonLat} or {Array} lonlat coordinates to move the map to
+         * @param {Number[] | Object} or {Array} lonlat coordinates to move the map to
          * @param {Number} zoomAdjust relative change to the zoom level f.ex -1 (optional)
          * @param {Boolean} pIsDragging true if the user is dragging the map to a new location currently (optional)
          */
         moveMapToLanLot: function (lonlat, zoomAdjust, pIsDragging) {
             //if lonlat is given as an array instead of OpenLayers.LonLat
             // parse it to OpenLayers.LonLat for further use
-            if (_.isArray(lonlat)) {
-                var olLonLat = {};
-                olLonLat['lon'] = lonlat[0];
-                olLonLat['lat'] = lonlat[1];
-            } else {
-                var olLonLat = lonlat;
-            }
+            lonlat = this.normalizeLonLat(lonlat);
             var isDragging = (pIsDragging === true);
-            this._map.setCenter(olLonLat, this._getMapZoom(), isDragging);
+            this._map.setCenter(new OpenLayers.LonLat(lonlat.lon, lonlat.lat), this.getMapZoom(), isDragging);
 
             if (zoomAdjust) {
                 this.adjustZoomLevel(zoomAdjust, true);
@@ -314,7 +308,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          *     wanting to notify at end of the chain for performance reasons or similar) (optional)
          */
         panMapToLonLat: function (lonlat, suppressEnd) {
-            this._map.setCenter(lonlat, this._getMapZoom());
+            this._map.setCenter(lonlat, this.getMapZoom());
             this._updateDomainImpl();
             if (suppressEnd !== true) {
                 this.notifyMoveEnd();
@@ -350,8 +344,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          *     wanting to notify at end of the chain for performance reasons or similar) (optional)
          */
         centerMap: function (lonlat, zoom, suppressEnd) {
-            // TODO: openlayers has isValidLonLat(); maybe use it here
-            this._map.setCenter(lonlat, zoom, false);
+            // TODO: we have isValidLonLat(); maybe use it here
+            lonlat = this.normalizeLonLat(lonlat);
+            this._map.setCenter(new OpenLayers.LonLat(lonlat.lon, lonlat.lat), zoom, false);
             this._updateDomainImpl();
             if (suppressEnd !== true) {
                 this.notifyMoveEnd();
@@ -591,7 +586,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          */
         setZoomLevel: function (newZoomLevel, suppressEvent) {
             if (newZoomLevel < 0 || newZoomLevel > this._map.getNumZoomLevels()) {
-                newZoomLevel = this._getMapZoom();
+                newZoomLevel = this.getMapZoom();
             }
             this._map.zoomTo(newZoomLevel);
             this._updateDomainImpl();
@@ -611,13 +606,13 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          */
         _getNewZoomLevel: function (adjustment) {
             // TODO: check isNaN?
-            var requestedZoomLevel = this._getMapZoom() + adjustment;
+            var requestedZoomLevel = this.getMapZoom() + adjustment;
 
             if (requestedZoomLevel >= 0 && requestedZoomLevel <= this._map.getNumZoomLevels()) {
                 return requestedZoomLevel;
             }
             // if not in valid bounds, return original
-            return this._getMapZoom();
+            return this.getMapZoom();
         },
 
         /**
@@ -642,7 +637,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             return this._map.getCenter();
         },
 
-        _getMapZoom: function () {
+        getMapZoom: function () {
             return this._map.getZoom();
         },
 
@@ -674,7 +669,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
             var lonlat = this._getMapCenter();
             this._updateDomainImpl();
-            var evt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat.lon, lonlat.lat, this._getMapZoom(), false, this.getMapScale(), creator);
+            var evt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat.lon, lonlat.lat, this.getMapZoom(), false, this.getMapScale(), creator);
             sandbox.notifyAll(evt);
         },
 
@@ -724,7 +719,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 mapVO = sandbox.getMap(),
                 lonlat = this._getMapCenter();
 
-            mapVO.moveTo(lonlat.lon, lonlat.lat, this._getMapZoom());
+            mapVO.moveTo(lonlat.lon, lonlat.lat, this.getMapZoom());
 
             mapVO.setScale(this.getMapScale());
 
@@ -739,35 +734,31 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             mapVO.setBbox(this._map.calculateBounds());
         },
 
+
         /**
          * @method transformCoordinates
-         * Deprecated
-         * Transforms coordinates from given projection to the maps projectino.
-         * @param {OpenLayers.LonLat} pLonlat
+         * Transforms coordinates from given projection to the maps projection.
+         * @param {Object} pLonlat object with lon and lat keys
          * @param {String} srs projection for given lonlat params like "EPSG:4326"
-         * @return {OpenLayers.LonLat} transformed coordinates
+         * @return {Object} transformed coordinates as object with lon and lat keys
          */
         transformCoordinates: function (pLonlat, srs) {
-            this.getSandbox().printWarn(
-                'transformCoordinates is deprecated. Use _transformCoordinates instead if called from plugin. Otherwise, use Requests instead.'
-            );
+            if(!srs || this.getProjection() === srs) {
+                return pLonlat;
+            }
+            var isProjectionDefined = Proj4js.defs[srs];
+            if (!isProjectionDefined) {
+                throw 'SrsName not supported! Provide Proj4js.def for ' + srs;
+            }
+            var tmp = new OpenLayers.LonLat(pLonlat.lon, pLonlat.lat);
+            var transformed = tmp.transform(new OpenLayers.Projection(srs), this.getMap().getProjectionObject());
 
-            return this._transformCoordinates(pLonlat, srs);
+            return {
+                lon : transformed.lon,
+                lat : transformed.lat
+            };
         },
 
-        /**
-         * @method _transformCoordinates
-         * Transforms coordinates from given projection to the maps projectino.
-         * @param {OpenLayers.LonLat} pLonlat
-         * @param {String} srs projection for given lonlat params like "EPSG:4326"
-         * @return {OpenLayers.LonLat} transformed coordinates
-         */
-        _transformCoordinates: function (pLonlat, srs) {
-            return pLonlat.transform(
-                new OpenLayers.Projection(srs),
-                this.getMap().getProjectionObject()
-            );
-        },
         /**
          * @property eventHandlers
          * @static
@@ -937,7 +928,13 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {Object} max extent
          */
         getMaxExtent: function(){
-            return this._maxExtent;
+            var bbox = this._maxExtent;
+            return {
+                bottom: bbox.bottom,
+                left: bbox.left,
+                right: bbox.right,
+                top: bbox.top
+            };
         }
 
     }, {

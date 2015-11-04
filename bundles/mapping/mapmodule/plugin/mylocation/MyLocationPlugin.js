@@ -18,7 +18,7 @@ Oskari.clazz.define(
         me._clazz =
             'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin';
         me._defaultLocation = 'top right';
-        me._index = 6;
+        me._index = 4;
         me._name = 'MyLocationPlugin';
     }, {
         /**
@@ -85,6 +85,11 @@ Oskari.clazz.define(
             // Change the style if in the conf
             if (conf && conf.toolStyle) {
                 me.changeToolStyle(conf.toolStyle, me.getElement());
+            } else {
+                var toolStyle = me.getToolStyleFromMapModule();
+                if (toolStyle !== null && toolStyle !== undefined) {
+                    me.changeToolStyle(toolStyle, me.getElement());
+                }
             }
         },
 
@@ -106,7 +111,7 @@ Oskari.clazz.define(
 
             var styleClass = 'mylocation-' + (style ? style : 'rounded-dark');
 
-            me.getMapModule().changeCssClasses(styleClass, /^mylocation-/, [el]);
+            me.changeCssClasses(styleClass, /^mylocation-/, [el]);
         },
 
         /**
@@ -130,16 +135,13 @@ Oskari.clazz.define(
                 callback = function (lon, lat) {
                     // transform coordinates from browser projection to current
                     var mapModule = me.getMapModule(),
-                        lonlat = new ol.proj.fromLonLat([lon,lat], mapModule._options.srsName),
-                        zoom = mapModule.getMaxZoomLevel() - 1;
+                        lonlat = mapModule.transformCoordinates({ lon : lon, lat : lat}, 'EPSG:4326'),
+                        zoomAdjust = mapModule.getMaxZoomLevel() - mapModule.getMapZoom();
 
                     if(typeof centerMap === 'undefined' || centerMap === true){
-                        mapModule.setMapCenter(lonlat, zoom);
+                        mapModule.moveMapToLonLat(lonlat, zoomAdjust);
                     }
-
-                    var locationEvent = sandbox.getEventBuilder(
-                        'UserLocationEvent'
-                    )(lonlat[0], lonlat[1]);
+                    var locationEvent = sandbox.getEventBuilder('UserLocationEvent')(lonlat.lon, lonlat.lat);
                     sandbox.notifyAll(locationEvent);
                 };
 
