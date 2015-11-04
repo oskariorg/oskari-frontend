@@ -275,7 +275,7 @@ define(['src/oskari/oskari', 'jquery', 'exports', 'css'], function(Oskari, $, ex
             var srcFiles = {
                 count : 0,
                 loaded : 0,
-                files : {},
+                files : [],
                 config : {},
                 require : []
             };
@@ -306,7 +306,10 @@ define(['src/oskari/oskari', 'jquery', 'exports', 'css'], function(Oskari, $, ex
                         var defs = srcs[p];
 
                         for (var n = 0; n < defs.length; n++) {
-                            var def = defs[n];
+                            var def = {
+                                fn: fnWithPath,
+                                file: defs[n]
+                            };
 
                             srcFiles.count++;
 
@@ -319,14 +322,17 @@ define(['src/oskari/oskari', 'jquery', 'exports', 'css'], function(Oskari, $, ex
                                 fnWithPath = bundlePath + '/' + fn;
                             }
 
-                            srcFiles.files[fnWithPath] = def;
+                            srcFiles.files.push(def);
                         }
                     } else if (p == 'locales') {
                         var requiredLocale = Oskari.bundle_locale.getLang();
                         var defs = srcs[p];
 
                         for (var n = 0; n < defs.length; n++) {
-                            var def = defs[n];
+                            var def = {
+                                    fn: fnWithPath,
+                                    file: defs[n]
+                                };
 
                             if (requiredLocale && def.lang && def.lang != requiredLocale) {
                                 continue;
@@ -342,7 +348,7 @@ define(['src/oskari/oskari', 'jquery', 'exports', 'css'], function(Oskari, $, ex
                                 fnWithPath = bundlePath + '/' + fn;
                             }
 
-                            srcFiles.files[fnWithPath] = def;
+                            srcFiles.files.push(def);
 
                         }
 
@@ -402,10 +408,12 @@ define(['src/oskari/oskari', 'jquery', 'exports', 'css'], function(Oskari, $, ex
                  * else load any files
                  */
             } else {
-
-                for (js in srcFiles.files) {
-                    bl.add(js, srcFiles.files[js]);
-                    me.log("- added script source " + js + " for " + bundleImpl);
+                var sortedArray = [];
+                srcFiles.files.forEach(function(def) {
+                    bl.add(def.fn, def.file);
+                    me.log("- added script source " + def.fn + " for " + bundleImpl);
+                });
+                for (js in ) {
 
                 }
 

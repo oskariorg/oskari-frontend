@@ -1114,7 +1114,7 @@ Oskari = (function () {
 
         this.filesRequested = 0;
         this.filesLoaded = 0;
-        this.files = {};
+        this.files = [];
         this.fileList = [];
         this.metadata = {};
     };
@@ -1133,7 +1133,10 @@ Oskari = (function () {
             var me = this,
                 def;
 
-            if (!me.files[fn]) {
+            var matches = me.files.filter(function(item){
+                return item.fn === fn;
+            });
+            if (matches.length == 0) {
                 def = {
                     src: fn,
                     type: pdef && pdef.type ? pdef.type : 'text/javascript',
@@ -1141,7 +1144,10 @@ Oskari = (function () {
                     state: false
 
                 };
-                me.files[fn] = def;
+                me.files.push({
+                    fn: fn,
+                    def: def
+                });
 
                 if ('text/javascript' === def.type) {
                     me.filesRequested += 1;
@@ -1204,8 +1210,7 @@ Oskari = (function () {
                 }
             };
             f = false;
-            for (n = 0; n < me.fileList.length; n += 1) {
-                def = me.fileList[n];
+            me.fileList.forEach(function(def) {
                 fn = def.src;
                 st = me._buildScriptTag(fn, onFileLoaded, def.type, def.id);
                 if (st) {
@@ -1217,7 +1222,7 @@ Oskari = (function () {
                         f = true;
                     }
                 }
-            }
+            });
             if (f) {
                 me.head.appendChild(fragment);
             }
@@ -1743,6 +1748,7 @@ D         * @param {Object} classInfo ClassInfo
                             if (fn.indexOf('http') === -1) {
                                 fnWithPath = bundlePath + '/' + fn;
                             }
+                            // TODO: Order these like the files.
                             srcFiles.css[fnWithPath] = def;
                         } else if (def.type) {
                             srcFiles.count += 1;
@@ -1757,7 +1763,15 @@ D         * @param {Object} classInfo ClassInfo
                             if (p !== 'locales' || _isPackedMode() ||
                                     def.lang === undefined ||
                                     Oskari.getLang() === def.lang) {
-                                srcFiles.files[fnWithPath] = def;
+                                var def = {
+                                        p: p,
+                                        n: n,
+                                        def: sourceDefinitions[p][n]
+                                    };
+                                srcFiles.files.push({
+                                    fn: fnWithPath,
+                                    def: def
+                                });
                             }
                         }
                     }
@@ -1819,12 +1833,7 @@ D         * @param {Object} classInfo ClassInfo
              * if using compiled javascript
              */
             if (_isPackedMode()) {
-                fileCount = 0;
-                for (js in srcFiles.files) {
-                    if (srcFiles.files.hasOwnProperty(js)) {
-                        fileCount += 1;
-                    }
-                }
+                fileCount = srcFiles.files.length;
                 if (fileCount > 0) {
                     srcsFn = _buildPathForPackedMode(bundlePath);
                     bl.add(srcsFn, 'text/javascript');
@@ -1841,12 +1850,10 @@ D         * @param {Object} classInfo ClassInfo
                  * else load any files
                  */
             } else {
-                for (js in srcFiles.files) {
-                    if (srcFiles.files.hasOwnProperty(js)) {
-                        bl.add(js, srcFiles.files[js]);
-                        me.log('- added script source ' + js + ' for ' + biid);
-                    }
-                }
+                srcFiles.files.forEach(function (def) {
+                    bl.add(def.fn, def.def);
+                    me.log('- added script source ' + js + ' for ' + biid);
+                });
             }
 
             bl.commit();
@@ -1932,7 +1939,7 @@ D         * @param {Object} classInfo ClassInfo
             srcFiles = {
                 count: 0,
                 loaded: 0,
-                files: {},
+                files: [],
                 css: {}
             };
 

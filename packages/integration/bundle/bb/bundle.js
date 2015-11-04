@@ -33,11 +33,11 @@ Oskari.clazz.define("Oskari.integration.bundle.bb.BackBoneBundle", function() {
     "source" : {
         "scripts" : [
         {
-            "type" : "text/css",
-            "src" : "../../../../libraries/backgrid-0.3.5/lib/backgrid.css"
-        },{
             "type" : "text/javascript",
-            "src" : "../../../../libraries/dependency_sets/jquery_underscore_backbone_backgrid.js"
+            "src" : "../../../../libraries/backbone/comp.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../libraries/backgrid-0.3.5/lib/backgrid.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/integration/bb/Flyout.js"
