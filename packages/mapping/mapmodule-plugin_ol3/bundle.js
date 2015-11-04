@@ -177,13 +177,13 @@ Oskari.clazz.define(
                     "src": "../../../bundles/mapping/mapmodule/request/AddMarkerRequest.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/request/AddMarkerRequestHandler.js"
+                    "src": "../../../bundles/mapping/mapmodule/request/AddMarkerRequestHandler.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../bundles/mapping/mapmodule/request/RemoveMarkersRequest.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/request/RemoveMarkersRequestHandler.js"
+                    "src": "../../../bundles/mapping/mapmodule/request/RemoveMarkersRequestHandler.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../bundles/mapping/mapmodule/event/AfterAddMarkerEvent.js"
@@ -195,6 +195,12 @@ Oskari.clazz.define(
                 {
                     "type": "text/javascript",
                     "src": "../../../bundles/mapping/mapmodule/plugin/fullscreen/FullScreen.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../bundles/mapping/mapmodule/request/ToggleFullScreenControlRequest.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../bundles/mapping/mapmodule/request/ToggleFullScreenControlRequestHandler.js"
                 }, {
                     "type": "text/css",
                     "src": "../../../bundles/mapping/mapmodule/resources/css/fullscreen.css"
@@ -387,7 +393,7 @@ Oskari.clazz.define(
                     "src": "../../../bundles/mapping/mapmodule/request/ShowProgressSpinnerRequest.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../bundles/mapping/mapmodule-plugin_ol3/request/ShowProgressSpinnerRequestHandler.js"
+                    "src": "../../../bundles/mapping/mapmodule/request/ShowProgressSpinnerRequestHandler.js"
                 },
 
                 /**
