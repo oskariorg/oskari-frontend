@@ -59,9 +59,12 @@
       is: "oskari-indicatorselector",
       properties: {
           "ajaxUrl": String,
-          "sources": Object,
           "locale": Object,
           "language": String,
+          "sources": {
+              "type": Object,
+              "notify": true
+          },
           "datasourceId": String,
           "indicatorId": String,
           "selectors": {

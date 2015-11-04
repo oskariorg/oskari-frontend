@@ -14,9 +14,6 @@
           <template is="dom-repeat" items="{{indicatorHeaders}}">
             <col name="{{item.id}}" header-text="{{item.header}}" width="54">
           </template>
-          <template is="dom-repeat" items="{{indicatorHeaders}}">
-            <col name="{{item.id}}" header-text="{{item.header}}" width="54">
-          </template>
         </table>
       </vaadin-grid>
       <content></content>
@@ -30,6 +27,10 @@
           "ajaxUrl": String,
           "locale": Object,
           "language": String,
+          "sources": {
+              "type": Object,
+              "notify": true
+          },
           "selectedLayer": {
               type: String,
               value: "Kunta"
@@ -58,6 +59,12 @@
       "selectedIndicatorsChanged": function(splices) {
           var me = this,
             indicators = me.selectedIndicators;
+          me.indicatorHeaders = indicators.map(function(indicator) {
+              return {
+                  id: indicator.indicatorId,
+                  header: me.sources[indicator.datasourceId].indicators[indicator.indicatorId].name[me.language]
+              }
+          });
           indicators.forEach(function(indicator) {
               var selectors = me.toSelectorsParameter(indicator.selectors),
                   selectorsString = JSON.stringify(selectors),
@@ -98,10 +105,9 @@
               });
           });
           this.rows = Object.keys(regionKeyedValues).map(function(regionKey) {
-              var row = {},
-                indicatorValues = regionKeyedValues[regionKey];
-              Object.keys(indicatorValues).forEach(function(indicatorId) {
-                  row[indicatorId] = indicatorValues[indicatorId];
+              var indicatorValues = regionKeyedValues[regionKey],
+                  row = me.indicatorHeaders.map(function(indicatorHeader) {
+                  return indicatorValues[indicatorHeader.id];
               });
               return row;
           });
