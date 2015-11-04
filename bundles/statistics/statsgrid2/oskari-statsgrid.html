@@ -7,12 +7,15 @@
 
   <template>
     <div>
-      <vaadin-grid selection-mode="multi" id="indicator-data-grid" items="{{rows}}">
+      <vaadin-grid selection-mode="multi" id="indicator-data-grid" items="{{rows}}"
+        indicator-headers="[[indicatorHeaders]]" selecter-layer="[[selectedLayer]]">
+        <span>{{indicatorHeaders}}</span>
+        <span>{{selectedLayer}}</span>
         <table>
           <!-- Define the columns -->
-          <col name="region" header-text="{{selectedLayer}}" width="48">
-          <template is="dom-repeat" items="{{indicatorHeaders}}">
-            <col name="{{item.id}}" header-text="{{item.header}}" width="54">
+          <col name="region" header-text="[[selectedLayer]]" width="48">
+          <template is="dom-repeat" items="[[indicatorHeaders]]" as="header">
+            <col name="[[header.id]]" header-text="[[header.header]]" width="54">
           </template>
         </table>
       </vaadin-grid>
@@ -32,11 +35,15 @@
               "notify": true
           },
           "selectedLayer": {
-              type: String,
-              value: "Kunta"
+              "type": String,
+              "value": "Kunta",
+              "notify": true
           },
           "layers": Array,
-          "indicatorHeaders": Array,
+          "indicatorHeaders": {
+              "type": Array,
+              "notify": true
+          },
           "rows": Array,
           "selectedIndicators": {
               "type": Array,
@@ -59,19 +66,25 @@
       "selectedIndicatorsChanged": function(splices) {
           var me = this,
             indicators = me.selectedIndicators;
-          me.indicatorHeaders = indicators.map(function(indicator) {
+          this.set("indicatorHeaders", indicators.map(function(indicator) {
+              var selectors = me.toSelectorsParameter(indicator.selectors),
+                  selectorsString = JSON.stringify(selectors),
+                  cacheKey = me.getCacheKey(indicator.datasourceId, indicator.indicatorId,
+                      me.selectedLayer, selectorsString);
               return {
-                  id: indicator.indicatorId,
+                  id: cacheKey,
+                  indicatorId: indicator.indicatorId,
+                  // FIXME: Add selections to the header text.
                   header: me.sources[indicator.datasourceId].indicators[indicator.indicatorId].name[me.language]
               }
-          });
+          }));
           indicators.forEach(function(indicator) {
               var selectors = me.toSelectorsParameter(indicator.selectors),
                   selectorsString = JSON.stringify(selectors),
                   cacheKey = me.getCacheKey(indicator.datasourceId, indicator.indicatorId,
                       me.selectedLayer, selectorsString);
               if (me.cache[cacheKey]) {
-                  me.handleResponse(me.cache[cacheKey], cacheKey);
+                  me.handleResponse(me.cache[cacheKey]);
               }
               $.ajax({
                   url: me.ajaxUrl,
@@ -85,32 +98,34 @@
                   dataType: 'json',
                   success: function(results){
                       me.cache[cacheKey] = results;
-                      me.handleResponse(me.cache[cacheKey], cacheKey);
+                      me.handleResponse(me.cache[cacheKey]);
                   }
               });
           });
       },
-      "handleResponse": function(response, cacheKey) {
+      "handleResponse": function(response) {
           var me = this,
             regionKeyedValues = {};
           // Transposing the array keyed by indicators in cache to being keyed by regions.
-          Object.keys(response).forEach(function(indicatorId) {
-              var indicatorValues = me.cache[cacheKey];
+          me.indicatorHeaders.forEach(function(indicatorHeader) {
+              var cacheKey = indicatorHeader.id,
+                indicatorValues = me.cache[cacheKey];
               Object.keys(indicatorValues).forEach(function(regionKey) {
                   var value = indicatorValues[regionKey];
                   if (!regionKeyedValues[regionKey]) {
                       regionKeyedValues[regionKey] = {};
                   }
-                  regionKeyedValues[regionKey][indicatorId] = value;
+                  regionKeyedValues[regionKey][cacheKey] = value;
               });
           });
-          this.rows = Object.keys(regionKeyedValues).map(function(regionKey) {
+          this.set("rows", Object.keys(regionKeyedValues).map(function(regionKey) {
               var indicatorValues = regionKeyedValues[regionKey],
-                  row = me.indicatorHeaders.map(function(indicatorHeader) {
+                row = me.indicatorHeaders.map(function(indicatorHeader) {
                   return indicatorValues[indicatorHeader.id];
-              });
+                });
               return row;
-          });
+          }));
+          console.log(JSON.stringify(me.rows));
       },
       "getCacheKey": function(datasourceId, indicatorId, selectedLayer, selectorsString) {
           return datasourceId + ":" + indicatorId + ":" + selectedLayer + ":" + selectorsString;

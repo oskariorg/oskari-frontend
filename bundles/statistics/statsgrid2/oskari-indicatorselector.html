@@ -14,7 +14,6 @@
     handle-as="json"
     last-response="{{sources}}"
     debounce-duration="300"
-    on-response="handleResponse"
     id="indicatorsAjax"></iron-ajax>
     <form class="statsgrid2_indicator_selector">
       <div class="indicator-cont">
@@ -104,7 +103,6 @@
           return selectors.map(function(selector) {
               return {
                   name: selector.id,
-//                  value: selector.id,
                   values: [{text: me.locale.selectorPlaceholders[selector.id]}].concat(
                           selector.allowedValues.map(function (allowedValue) {
                       return {
@@ -133,12 +131,6 @@
               selectors: values
           });
           console.log("Selected indicators: " + JSON.stringify(this.selectedIndicators));
-      },
-      ready: function() {
-          // this.$.indicatorsAjax.generateRequest();
-      },
-      handleResponse: function(response) {
-          console.log("Got response.");
       }
     });
   </script>
