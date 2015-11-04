@@ -2,7 +2,7 @@
  * @class Oskari.mapframework.bundle.mapmodule.request.MapMovementInteractionsRequestHandler
  * Handles map movement control requests
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMovementInteractionsRequestHandler',
+Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMovementControlsRequestHandler',
     /**
      * @method create called automatically on construction
      * @static
@@ -28,6 +28,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMovementInt
          *      request to handle
          */
         handleRequest: function (core, request) {
+            debugger;
             if (request.getName() === 'EnableMapKeyboardMovementRequest') {
                 var interactions = [];
                 interactions.push(this.getMapModule().getInteractionInstance(ol.interaction.KeyboardPan));

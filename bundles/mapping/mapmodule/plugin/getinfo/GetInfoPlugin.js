@@ -270,7 +270,7 @@ Oskari.clazz.define(
                 ajaxUrl = this.getSandbox().getAjaxUrl(),
                 mapVO = me.getSandbox().getMap(),
                 olMap = me.getMapModule().getMap(),
-                px = olMap.getViewPortPxFromLonLat(lonlat);
+                px = me.getMapModule().getPixelFromCoordinate(lonlat);
 
             if (!layerIds) {
                 return;
@@ -328,7 +328,7 @@ Oskari.clazz.define(
                     lat: lonlat.lat,
                     width: mapVO.getWidth(),
                     height: mapVO.getHeight(),
-                    bbox: mapVO.getBbox().toBBOX(),
+                    bbox: mapVO.getBboxAsString(),
                     zoom: mapVO.getZoom(),
                     srs: mapVO.getSrsName()
                 },
