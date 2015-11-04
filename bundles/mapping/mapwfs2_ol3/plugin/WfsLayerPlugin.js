@@ -689,7 +689,28 @@ Oskari.clazz.define(
             }
             var lonlat = event.getLonLat(),
                 keepPrevious = this.getSandbox().isCtrlKeyDown();
-            this.getIO().setMapClick(lonlat, keepPrevious);
+
+            var point =  new ol.geom.Point(lonlat);
+            var geojson = new ol.format.GeoJSON(this.getMap().getView().getProjection());
+            var pixelTolerance = 15;
+            var json = {
+                type: 'FeatureCollection',
+                crs: this.getMap().getView().getProjection().getCode(),
+                features: [{
+                    type: 'Feature',
+                    geometry: JSON.parse(geojson.writeGeometry(point)),
+                    properties : {
+                        // add buffer based on resolution
+                        buffer_radius : this.getMap().getView().getResolution() * pixelTolerance
+                    }
+                }]
+            };
+
+            this.getIO().setMapClick({
+                lon : lonlat[0],
+                lat : lonlat[1],
+                json : json
+            }, keepPrevious);
         },
 
         /**
