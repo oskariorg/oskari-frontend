@@ -1147,7 +1147,8 @@ Oskari.clazz.define(
                             tile = src.tileCache.get(bboxKey);
                             tile.isBoundaryTile = boundaryTile;
                             tile.getImage().src = imageUrl;
-                            tile.state = ol.TileState.LOADED;
+//                            tile.state = ol.TileState.LOADED;
+                            tile.state = 2;
                             //tile.src_ = imageUrl;
                             //All tiles for this stint / this layer have finished loading -> tell the canvas to update
                             //TODO: figure out a safer way for bookkeeping. Guessing this might get screwed when there are multiple sequential zoomins / -outs / pans
@@ -1174,26 +1175,33 @@ Oskari.clazz.define(
             openLayer.getSource().getTile = function(z, x, y, pixelRatio, projection) {
                 var tileCoordKey = this.getKeyZXY(z, x, y);
 
-                goog.asserts.assert(projection, 'argument projection is truthy');
                 var tileCoord = [z, x, y];
                 var urlTileCoord = this.getTileCoordForTileUrlFunction(
                     tileCoord, projection);
+                /*
                 var tileUrl = goog.isNull(urlTileCoord) ? undefined :
                     this.tileUrlFunction(urlTileCoord, pixelRatio, projection);
+                */
+                var tileUrl = !urlTileCoord ? undefined : this.tileUrlFunction(urlTileCoord, pixelRatio, projection);
 
                 if (this.tileCache.containsKey(tileUrl)) {
                     return this.tileCache.get(tileUrl);
                 }
-
                 var tile = new this.tileClass(
                     tileCoord,
+                    /*
                     goog.isDef(tileUrl) ? ol.TileState.IDLE : ol.TileState.EMPTY,
                     goog.isDef(tileUrl) ? tileUrl : '',
+                    */
+                    //ol.TileState.IDLE = 0, ol.TileState.EMPTY = 4
+                    tileUrl ? 0 : 4,
+                    tileUrl ? tileUrl : '',
                     this.crossOrigin,
                     this.tileLoadFunction);
+                /*
                 goog.events.listen(tile, goog.events.EventType.CHANGE,
                     this.handleTileChange_, false, this);
-
+                */
                 //use the bbox key as key to the tilecache instead of the zxy. Maybe reconsider this, there might be no advantage as to having bbox as the key, versus zxy...?
                 if (!this.tileCache.containsKey(tileUrl)) {
                     this.tileCache.set(tileUrl, tile);
@@ -1248,6 +1256,7 @@ Oskari.clazz.define(
                     //TODO: it might also be possible to just use the zxy key? In that way I guess we shouldn't even have to override this...
                     tileUrlFunction: function (tileCoord, pixelRatio, projection, theTile) {
                         var bounds = this.tileGrid.getTileCoordExtent(tileCoord);
+//                        var bounds = me._getTileCoordExtent(me._tileGrid, tileCoord)//this.tileGrid.getTileCoordExtent(tileCoord);
                         var bboxKey = me.bboxkeyStrip(bounds);
                         return bboxKey;
                     },
@@ -1278,6 +1287,7 @@ Oskari.clazz.define(
                 maxZoom: maxZoom,//me.getMapModule().getMaxZoomLevel(),
                 tileSize: [256,256]
             });
+
         },
 
         getTileSize: function () {
@@ -1300,12 +1310,15 @@ Oskari.clazz.define(
                 rowidx = 0,
                 tileRangeExtent;
                 z =  tileGrid.getZForResolution(resolution);
+                //z = me._getZForResolution(tileGrid, resolution);
+//                tileRangeExtent = this._getTileRangeForExtentAndResolution(tileGrid, mapExtent, resolution);//tileGrid.getTileRangeForExtentAndResolution(mapExtent, resolution);
                 tileRangeExtent = tileGrid.getTileRangeForExtentAndResolution(mapExtent, resolution);
                 for (var iy = tileRangeExtent.minY; iy <= tileRangeExtent.maxY; iy++) {
                     var colidx = 0;
                     for (var ix = tileRangeExtent.minX; ix <= tileRangeExtent.maxX; ix++) {
                         var zxy = [z,ix,iy];
                         var tileBounds = tileGrid.getTileCoordExtent(zxy);
+//                        var tileBounds = me._getTileCoordExtent(me._tileGrid, zxy);
                         grid.bounds.push(tileBounds);
                         colidx++;
                     }
@@ -1382,7 +1395,8 @@ Oskari.clazz.define(
                 //at this point the tile should already been cached by the layers getTile - function.
                 if (layer.getSource().tileCache.containsKey(bboxKey)) {
                     var tile = layer.getSource().tileCache.get(bboxKey);
-                    if ((tile && tile.state !== ol.TileState.LOADED) || tile.isBoundaryTile === true || tile.isBoundaryTile === undefined) {
+//                    if ((tile && tile.state !== ol.TileState.LOADED) || tile.isBoundaryTile === true || tile.isBoundaryTile === undefined) {
+                    if ((tile && tile.state !== 2) || tile.isBoundaryTile === true || tile.isBoundaryTile === undefined) {
                         tile.isBoundaryTile = false;
                         result.push(grid.bounds[i]);
                     }
@@ -1617,7 +1631,146 @@ Oskari.clazz.define(
         },
         hasUI: function() {
             return false;
+        },
+
+
+
+        /**
+         * ol3 debug stuff we need to survive......
+         */
+         /*
+        _getZForResolution: function(tileGrid, resolution) {
+          var z = this._linearFindNearest(tileGrid.resolutions_, resolution, 0);
+          if (z < tileGrid.minZoom) {
+            z = tileGrid.minZoom;
+          } else if (z > tileGrid.maxZoom){
+            z = tileGrid.maxZoom;
+          }
+          return z;
+        },
+        _linearFindNearest: function(arr, target, direction) {
+
+
+          if (!arr || arr.length === 0) {
+            return -1;
+          }
+          var n = arr.length;
+          if (arr[0] <= target) {
+            return 0;
+          } else if (target <= arr[n - 1]) {
+            return n - 1;
+          } else {
+            var i;
+            if (direction > 0) {
+              for (i = 1; i < n; ++i) {
+                if (arr[i] < target) {
+                  return i - 1;
+                }
+              }
+            } else if (direction < 0) {
+              for (i = 1; i < n; ++i) {
+                if (arr[i] <= target) {
+                  return i;
+                }
+              }
+            } else {
+              for (i = 1; i < n; ++i) {
+                if (arr[i] == target) {
+                  return i;
+                } else if (arr[i] < target) {
+                  if (arr[i - 1] - target < target - arr[i]) {
+                    return i - 1;
+                  } else {
+                    return i;
+                  }
+                }
+              }
+            }
+            // We should never get here, but the compiler complains
+            // if it finds a path for which no number is returned.
+            return n - 1;
+          }
+        },
+        _getTileCoordExtent: function(tileGrid, tileCoord, opt_extent) {
+          var origin = tileGrid.getOrigin(tileCoord[0]);
+          var resolution = tileGrid.getResolution(tileCoord[0]);
+          var tileSize = ol.size.toSize(tileGrid.getTileSize(tileCoord[0]), tileGrid.tmpSize_);
+          var minX = origin[0] + tileCoord[1] * tileSize[0] * resolution;
+          var minY = origin[1] + tileCoord[2] * tileSize[1] * resolution;
+          var maxX = minX + tileSize[0] * resolution;
+          var maxY = minY + tileSize[1] * resolution;
+          return this._createOrUpdateExtent(minX, minY, maxX, maxY, opt_extent);
+        },
+        _createOrUpdateExtent: function(minX, minY, maxX, maxY, opt_extent) {
+          if (opt_extent) {
+            opt_extent[0] = minX;
+            opt_extent[1] = minY;
+            opt_extent[2] = maxX;
+            opt_extent[3] = maxY;
+            return opt_extent;
+          } else {
+            return [minX, minY, maxX, maxY];
+          }
+        },
+        _getTileRangeForExtentAndResolution: function(tileGrid, extent, resolution, opt_tileRange) {
+            var tileCoord = [0, 0, 0];
+            this._getTileCoordForXYAndResolution(tileGrid, extent[0], extent[1], resolution, false, tileCoord);
+            var minX = tileCoord[1];
+            var minY = tileCoord[2];
+            this._getTileCoordForXYAndResolution(tileGrid, extent[2], extent[3], resolution, true, tileCoord);
+            return this._createOrUpdateTileRange(minX, tileCoord[1], minY, tileCoord[2], opt_tileRange);
+        },
+        _getTileCoordForXYAndResolution: function(tileGrid, x, y, resolution, reverseIntersectionPolicy, opt_tileCoord) {
+          var z = this._getZForResolution(tileGrid, resolution);
+          var scale = resolution / tileGrid.getResolution(z);
+          var origin = tileGrid.getOrigin(z);
+          var tileSize = ol.size.toSize(tileGrid.getTileSize(z), tileGrid.tmpSize_);
+
+          var adjustX = reverseIntersectionPolicy ? 0.5 : 0;
+          var adjustY = reverseIntersectionPolicy ? 0 : 0.5;
+          var xFromOrigin = Math.floor((x - origin[0]) / resolution + adjustX);
+          var yFromOrigin = Math.floor((y - origin[1]) / resolution + adjustY);
+          var tileCoordX = scale * xFromOrigin / tileSize[0];
+          var tileCoordY = scale * yFromOrigin / tileSize[1];
+
+          if (reverseIntersectionPolicy) {
+            tileCoordX = Math.ceil(tileCoordX) - 1;
+            tileCoordY = Math.ceil(tileCoordY) - 1;
+          } else {
+            tileCoordX = Math.floor(tileCoordX);
+            tileCoordY = Math.floor(tileCoordY);
+          }
+
+          return this._createOrUpdateTileCoord(z, tileCoordX, tileCoordY, opt_tileCoord);
+        },
+        _createOrUpdateTileCoord: function(z, x, y, opt_tileCoord) {
+          if (opt_tileCoord) {
+            opt_tileCoord[0] = z;
+            opt_tileCoord[1] = x;
+            opt_tileCoord[2] = y;
+            return opt_tileCoord;
+          } else {
+            return [z, x, y];
+          }
+        },
+        _createOrUpdateTileRange: function(minX, maxX, minY, maxY, tileRange) {
+          if (tileRange) {
+            tileRange.minX = minX;
+            tileRange.maxX = maxX;
+            tileRange.minY = minY;
+            tileRange.maxY = maxY;
+            return tileRange;
+          } else {
+//            return new ol.TileRange(minX, maxX, minY, maxY);
+            return {
+                minX: minX, 
+                maxX: maxX, 
+                minY: minY, 
+                maxY: maxY
+            }
+          }
         }
+        */
     }, {
         extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
         /**

@@ -88,7 +88,7 @@ Oskari.clazz.define(
                  */
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/mapmodule-plugin/plugin/getinfo/GetFeatureInfoHandler.js"
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/getinfo/GetFeatureInfoHandler.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/request/GetFeatureInfoRequest.js"
@@ -97,10 +97,10 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/mapping/mapmodule/request/GetFeatureInfoActivationRequest.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/mapmodule-plugin/plugin/getinfo/GetInfoPlugin.js"
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/getinfo/GetInfoPlugin.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/mapmodule-plugin/plugin/getinfo/GetFeatureInfoFormatter.js"
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/getinfo/GetFeatureInfoFormatter.js"
                 }, {
                     "type": "text/css",
                     "src": "../../../../bundles/mapping/mapmodule/resources/css/getinfo.css"
