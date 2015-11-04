@@ -123,8 +123,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
                 params : {},
                 buffer: 0,
                 displayInLayerSwitcher: false,
-                isBaseLayer: false,
-                buffer: 0
+                isBaseLayer: false
             };
 
             var capsLayer = _.find(caps.Contents.Layer, function(capsLayer) {

@@ -786,10 +786,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
         },
 
-        _getMapCenter: function () {
-            return this._map.getView().getCenter();
-        },
-
         /**
          * @method adjustZoomLevel
          * Adjusts the maps zoom level by given relative number
