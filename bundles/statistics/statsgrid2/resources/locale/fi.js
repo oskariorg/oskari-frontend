@@ -119,8 +119,8 @@ Oskari.registerLocalization({
                 "fi.nls.oskari.control.statistics.plugins.sotka.plugin_name": "SotkaNET"
             },
             "selector": {
-                "Year": "Vuosi",
-                "Sex": "Sukupuoli"
+                "year": "Vuosi",
+                "sex": "Sukupuoli"
             }
         },
         "noIndicatorData": "Indikaattoria ei voi tarkastella tässä aluejaossa",

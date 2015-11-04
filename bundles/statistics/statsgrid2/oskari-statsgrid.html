@@ -6,11 +6,14 @@
 <dom-module id="oskari-statsgrid">
 
   <template>
-    <div id="municipalGrid" class="municipal-grid">
-      <vaadin-grid selection-mode="multi">
+    <div>
+      <vaadin-grid selection-mode="multi" id="indicator-data-grid" items="{{rows}}">
         <table>
           <!-- Define the columns -->
           <col name="region" header-text="{{selectedLayer}}" width="48">
+          <template is="dom-repeat" items="{{indicatorHeaders}}">
+            <col name="{{item.id}}" header-text="{{item.header}}" width="54">
+          </template>
           <template is="dom-repeat" items="{{indicatorHeaders}}">
             <col name="{{item.id}}" header-text="{{item.header}}" width="54">
           </template>
@@ -24,7 +27,13 @@
     Polymer({
       "is": "oskari-statsgrid",
       "properties": {
-          "selectedLayer": String,
+          "ajaxUrl": String,
+          "locale": Object,
+          "language": String,
+          "selectedLayer": {
+              type: String,
+              value: "Kunta"
+          },
           "layers": Array,
           "indicatorHeaders": Array,
           "rows": Array,
@@ -36,11 +45,72 @@
       "observers": [
           "selectedIndicatorsChanged(selectedIndicators.splices)"
       ],
-      "selectedIndicatorsChanged": function(splices) {
-          console.log("Selected indicators changed to: " + JSON.stringify(splices));
+      /**
+       * Converts the selector array into selectors key-value object required by the interface.
+       */
+      "toSelectorsParameter": function(selectorsArray) {
+          var selectors = {};
+          selectorsArray.forEach(function(selector) {
+              selectors[selector.selectorId] = selector.value;
+          });
+          return selectors;
       },
-      "handleResponse": function(e) {
-          console.log("Got indicators from backend: " + JSON.stringify(e.detail.response));
+      "selectedIndicatorsChanged": function(splices) {
+          var me = this,
+            indicators = me.selectedIndicators;
+          indicators.forEach(function(indicator) {
+              var selectors = me.toSelectorsParameter(indicator.selectors),
+                  selectorsString = JSON.stringify(selectors),
+                  cacheKey = me.getCacheKey(indicator.datasourceId, indicator.indicatorId,
+                      me.selectedLayer, selectorsString);
+              if (me.cache[cacheKey]) {
+                  me.handleResponse(me.cache[cacheKey], cacheKey);
+              }
+              $.ajax({
+                  url: me.ajaxUrl,
+                  data: {
+                      "action_route": "GetIndicatorData",
+                      "plugin_id": indicator.datasourceId,
+                      "indicator_id": indicator.indicatorId,
+                      "layer_id": me.selectedLayer,
+                      "selectors": selectorsString
+                  },
+                  dataType: 'json',
+                  success: function(results){
+                      me.cache[cacheKey] = results;
+                      me.handleResponse(me.cache[cacheKey], cacheKey);
+                  }
+              });
+          });
+      },
+      "handleResponse": function(response, cacheKey) {
+          var me = this,
+            regionKeyedValues = {};
+          // Transposing the array keyed by indicators in cache to being keyed by regions.
+          Object.keys(response).forEach(function(indicatorId) {
+              var indicatorValues = me.cache[cacheKey];
+              Object.keys(indicatorValues).forEach(function(regionKey) {
+                  var value = indicatorValues[regionKey];
+                  if (!regionKeyedValues[regionKey]) {
+                      regionKeyedValues[regionKey] = {};
+                  }
+                  regionKeyedValues[regionKey][indicatorId] = value;
+              });
+          });
+          this.rows = Object.keys(regionKeyedValues).map(function(regionKey) {
+              var row = {},
+                indicatorValues = regionKeyedValues[regionKey];
+              Object.keys(indicatorValues).forEach(function(indicatorId) {
+                  row[indicatorId] = indicatorValues[indicatorId];
+              });
+              return row;
+          });
+      },
+      "getCacheKey": function(datasourceId, indicatorId, selectedLayer, selectorsString) {
+          return datasourceId + ":" + indicatorId + ":" + selectedLayer + ":" + selectorsString;
+      },
+      "ready": function() {
+          this.cache = {};
       }
       
     });

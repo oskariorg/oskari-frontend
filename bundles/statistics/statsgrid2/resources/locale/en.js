@@ -114,8 +114,8 @@ Oskari.registerLocalization({
                 "fi.nls.oskari.control.statistics.plugins.sotka.plugin_name": "SotkaNET"
             },
             "selector": {
-                "Year": "Year",
-                "Sex": "Sex"
+                "year": "Year",
+                "sex": "Sex"
             }
         },
         "noIndicatorData": "Can not display indicator with selected region category",

@@ -100,8 +100,8 @@
             selectors = indicator && indicator.selectors || [];
           return selectors.map(function(selector) {
               return {
-                  name: me.locale.selectors[selector.id],
-                  value: selector.id,
+                  name: selector.id,
+//                  value: selector.id,
                   values: [{text: me.locale.selectorPlaceholders[selector.id]}].concat(
                           selector.allowedValues.map(function (allowedValue) {
                       return {
