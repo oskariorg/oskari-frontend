@@ -79,7 +79,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             sandbox.addRequestHandler('ShowProgressSpinnerRequest', this.requestHandlers.showSpinnerRequestHandler);
         },
 
-
         _getMapCenter: function() {
             return this._map.getView().getCenter();
         },
@@ -246,7 +245,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             map.on('singleclick', function (evt) {
                 var sandbox = me._sandbox;
                 var CtrlPressed = evt.originalEvent.ctrlKey;
-                var mapClickedEvent = sandbox.getEventBuilder('MapClickedEvent')(evt.coordinate, evt.pixel[0], evt.pixel[1], CtrlPressed);
+                var lonlat = {
+                  lon : evt.coordinate[0],
+                  lat : evt.coordinate[1]
+                };
+                var mapClickedEvent = sandbox.getEventBuilder('MapClickedEvent')(lonlat, evt.pixel[0], evt.pixel[1], CtrlPressed);
                 sandbox.notifyAll(mapClickedEvent);
             });
 
