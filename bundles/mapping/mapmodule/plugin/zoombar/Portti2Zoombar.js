@@ -103,9 +103,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             }
         };
     }, {
-        getImagePath : function() {
-            return this.getMapModule().getImageUrl() + '/mapping/mapmodule/resources/images/';
-        },
         /**
          * @private @method _createControlElement
          * Draws the zoombar on the screen.

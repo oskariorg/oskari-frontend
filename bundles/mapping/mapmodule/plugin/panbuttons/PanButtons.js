@@ -19,9 +19,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
         this._index = 0;
         this._name = 'PanButtons';
     }, {
-        getImagePath : function() {
-            return this.getMapModule().getImageUrl() + '/mapping/mapmodule/resources/images/';
-        },
         /**
          * @private @method _createControlElement
          * Draws the panbuttons on the screen.
