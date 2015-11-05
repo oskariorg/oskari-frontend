@@ -1350,7 +1350,7 @@ Oskari.clazz.define(
 
         _addMapControlImpl: Oskari.AbstractFunc('_addMapControlImpl(ctl)'),
 
-        _removeMapControlImpl: Oskari.AbstractFunc('_removeMapControlImpl(ctl)'),
+        _removeMapControlImpl: Oskari.AbstractFunc('_removeMapControlImpl(ctl)')
 
     }, {
         /**

@@ -130,7 +130,7 @@ Oskari.clazz.define(
                 this._bindIcon(icon);
             }
         }
-    },
+    }
     {
         extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
         /**

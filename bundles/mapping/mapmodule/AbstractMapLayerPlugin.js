@@ -353,7 +353,7 @@ Oskari.clazz.define(
         },
 
         /** @static @property __name plugin name */
-        __name: 'OVERRIDETHIS',
+        __name: 'OVERRIDETHIS'
     }, {
         /**
          * @property {String[]} protocol array of superclasses as {String}

@@ -1645,7 +1645,7 @@ Oskari.clazz.define(
         },
         hasUI: function() {
             return false;
-        },
+        }
 
 
 
@@ -1653,7 +1653,7 @@ Oskari.clazz.define(
          * ol3 debug stuff we need to survive......
          */
          /*
-        _getZForResolution: function(tileGrid, resolution) {
+        ,_getZForResolution: function(tileGrid, resolution) {
           var z = this._linearFindNearest(tileGrid.resolutions_, resolution, 0);
           if (z < tileGrid.minZoom) {
             z = tileGrid.minZoom;
