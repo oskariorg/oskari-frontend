@@ -139,8 +139,8 @@ Oskari.clazz.define(
                 this._sandbox.printDebug("#!#! CREATED ol.layer.TileLayer for " + _layer.getId());
 
                 if (keepLayerOnTop) {
-                    // This might not be completly correct. We assume keepLayerOnTop means put this layer at the bottom as a faked baselayer.
-                    this.mapModule.setLayerIndex(layerImpl, this.mapModule.getLayers().length);
+                    // This might not be completely correct. We assume keepLayerOnTop means put this layer at the bottom as a faked baselayer.
+                    this.mapModule.setLayerIndex(layerImpl, me.getMap().getLayers().getArray().length);
                 } else {
                     this.mapModule.setLayerIndex(layerImpl, 0);
                 }
