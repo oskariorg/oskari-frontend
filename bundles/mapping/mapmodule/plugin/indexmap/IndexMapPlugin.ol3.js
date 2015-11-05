@@ -63,7 +63,7 @@ Oskari.clazz.define(
              */
             var me = this;
             var controlOptions = {
-                    target: el[0],
+                    target: el[0]
                 };
 
             // initialize control, pass container
@@ -130,7 +130,7 @@ Oskari.clazz.define(
                 this._bindIcon(icon);
             }
         }
-    }
+    },
     {
         extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
         /**
