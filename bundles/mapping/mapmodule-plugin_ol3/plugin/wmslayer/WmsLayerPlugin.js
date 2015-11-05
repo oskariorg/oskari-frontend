@@ -95,7 +95,9 @@ Oskari.clazz.define(
                 return;
             }
 
-            var layers = [], layerIdPrefix = 'layer_';
+            var me=this,
+                layers = [],
+                layerIdPrefix = 'layer_';
             // insert layer or sublayers into array to handle them identically
             if ((layer.isGroupLayer() || layer.isBaseLayer() || isBaseMap == true) && (layer.getSubLayers().length > 0)) {
                 // replace layers with sublayers
@@ -137,10 +139,9 @@ Oskari.clazz.define(
                 this._layers[layerIdPrefix + _layer.getId()] = layerImpl;
 
                 this._sandbox.printDebug("#!#! CREATED ol.layer.TileLayer for " + _layer.getId());
-
                 if (keepLayerOnTop) {
-                    // This might not be completly correct. We assume keepLayerOnTop means put this layer at the bottom as a faked baselayer.
-                    this.mapModule.setLayerIndex(layerImpl, this.mapModule.getLayers().length);
+                    // This might not be completely correct. We assume keepLayerOnTop means put this layer at the bottom as a faked baselayer.
+                    this.mapModule.setLayerIndex(layerImpl, me.getMapModule().getMap().getLayers().getArray().length);
                 } else {
                     this.mapModule.setLayerIndex(layerImpl, 0);
                 }

@@ -75,27 +75,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
             )
         };
     },
-    /**
-     * @method startPlugin
-     *
-     * Interface method for the plugin protocol. Registers requesthandlers and
-     * eventlisteners.
-     *
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-     *          reference to application sandbox
-
-    startPlugin : function(sandbox) {
-        this._sandbox = sandbox;
-
-        sandbox.register(this);
-        for(p in this.eventHandlers) {
-            sandbox.registerForEventByName(this, p);
-        }
-        sandbox.addRequestHandler('MapModulePlugin.MapLayerVisibilityRequest', this.requestHandlers.layerVisibilityHandler);
-        sandbox.addRequestHandler('MapModulePlugin.MapMoveByLayerContentRequest', this.requestHandlers.layerContentHandler);
-
-    },
-    */
 
     /**
      * @method _parseGeometryForLayer
@@ -110,7 +89,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
      *
      */
     _parseGeometryForLayer : function(layer) {
-
         // parse geometry if available
         if(layer.getGeometry && layer.getGeometry().length == 0) {
             var layerWKTGeom = layer.getGeometryWKT();
@@ -118,25 +96,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
                 // no wkt, dont parse
                 return;
             }
-            // http://dev.openlayers.org/docs/files/OpenLayers/Format/WKT-js.html
-            // parse to OpenLayers.Geometry.Geometry[] array ->
-            // layer.setGeometry();
-            /*var wkt = new OpenLayers.Format.WKT();
 
-            var features = wkt.read(layerWKTGeom);
-            if(features) {
-                if(features.constructor != Array) {
-                    features = [features];
-                }
-                var geometries = [];
-                for(var i = 0; i < features.length; ++i) {
-                    geometries.push(features[i].geometry);
-                }
+            var wkt = new ol.format.WKT();
+            var geometries = wkt.readGeometry(layerWKTGeom);
+
+            if (geometries) {
                 layer.setGeometry(geometries);
-            } else {
-                // 'Bad WKT';
             }
-            */
         }
     },
 
@@ -151,26 +117,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
      * @return {Boolean} true if geometry is visible or cant determine if it isnt
      */
     isInGeometry : function(layer) {
-        /*var geometries = layer.getGeometry();
-        if( !geometries ) {
-            return true;
-        }
-        if( geometries.length == 0 ) {
+        var geometries = layer.getGeometry();
+        if(!geometries) {
             return true;
         }
 
-        var viewBounds = this.getMap().getExtent();
-        for(var i = 0; i < geometries.length; ++i) {
-            var bounds = geometries[i].getBounds();
-            if( !bounds ) {
-                continue;
-            }
-            if( bounds.intersectsBounds(viewBounds) ) {
-                return true;
-            }
+        if (geometries.length === 0) {
+            return true;
         }
-        return false;*/
-       return true;
+
+        var viewBounds = this.getMapModule().getExtent();
+
+        if(geometries.intersectsExtent(viewBounds)) {
+            return true;
+        }
+        return false;
     },
     /**
      * @method _scheduleVisiblityCheck
@@ -281,6 +242,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
         var layerIndex = 0;
 
         return;
+
+        //TODO: fix this code
+        
+        /*
         var opLayersLength = this.mapModule.getLayers().length;
 
         var changeLayer = this.mapModule.getLayersByName('Markers');
@@ -288,7 +253,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
             this.mapModule.setLayerIndex(changeLayer[0], opLayersLength);
             opLayersLength--;
         }
-        /*
+
         // TODO: could this be used here also?
         // get openlayers layer objects from map
         var layers = this.getMapModule().getOLMapLayers(layer.getId());
@@ -296,7 +261,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
             layers[i].setVisibility(layer.isVisible());
             layers[i].display(layer.isVisible());
         }
-         */
 
         for(var i = 0; i < layers.length; i++) {
 
@@ -328,6 +292,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
                 layerIndex++;
             }
         }
+        */
     }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
