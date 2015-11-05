@@ -191,7 +191,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                         slickHeader.width(slickHeader.width() + difference);
 
                         map.updateSize();
-                        me.instance.getMainPanel().resetColumnSizes();
                     }
                 });
 

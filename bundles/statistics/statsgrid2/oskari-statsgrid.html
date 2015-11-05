@@ -9,13 +9,11 @@
     <div>
       <vaadin-grid selection-mode="multi" id="indicator-data-grid" items="{{rows}}"
         indicator-headers="[[indicatorHeaders]]" selecter-layer="[[selectedLayer]]">
-        <span>{{indicatorHeaders}}</span>
-        <span>{{selectedLayer}}</span>
         <table>
           <!-- Define the columns -->
-          <col name="region" header-text="[[selectedLayer]]" width="48">
+          <col name="region" header-text$="[[selectedLayer]]" width="100">
           <template is="dom-repeat" items="[[indicatorHeaders]]" as="header">
-            <col name="[[header.id]]" header-text="[[header.header]]" width="54">
+            <col name$="[[header.id]]" header-text$="[[header.header]]" width="100">
           </template>
         </table>
       </vaadin-grid>
@@ -41,10 +39,14 @@
           },
           "layers": Array,
           "indicatorHeaders": {
+              "value": [],
               "type": Array,
               "notify": true
           },
-          "rows": Array,
+          "rows": {
+              "type": Array,
+              "notify": true
+          },
           "selectedIndicators": {
               "type": Array,
               "notify": true
@@ -120,12 +122,11 @@
           });
           this.set("rows", Object.keys(regionKeyedValues).map(function(regionKey) {
               var indicatorValues = regionKeyedValues[regionKey],
-                row = me.indicatorHeaders.map(function(indicatorHeader) {
+                row = [regionKey].concat(me.indicatorHeaders.map(function(indicatorHeader) {
                   return indicatorValues[indicatorHeader.id];
-                });
+                }));
               return row;
           }));
-          console.log(JSON.stringify(me.rows));
       },
       "getCacheKey": function(datasourceId, indicatorId, selectedLayer, selectorsString) {
           return datasourceId + ":" + indicatorId + ":" + selectedLayer + ":" + selectorsString;
