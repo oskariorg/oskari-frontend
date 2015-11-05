@@ -688,7 +688,7 @@ Oskari.clazz.define(
                 return;
             }
             var lonlat = event.getLonLat(),
-                keepPrevious = this.getSandbox().isCtrlKeyDown();
+                keepPrevious = event.getParams().ctrlKeyDown;
 
             var point =  new ol.geom.Point([lonlat.lon, lonlat.lat]);
             var geojson = new ol.format.GeoJSON(this.getMap().getView().getProjection());
@@ -979,7 +979,7 @@ Oskari.clazz.define(
             removeLayers = me.getMapModule().getLayersByName(layerName);
 
             removeLayers.forEach(function (removeLayer) {
-                removeLayer.destroy();
+                me.getMap().removeLayer(removeLayer);
             });
         },
 
@@ -990,7 +990,7 @@ Oskari.clazz.define(
         removeMapLayerFromMap: function (layer) {
             var removeLayer = this._layers[layer.getId()];
             if (removeLayer) {
-                removeLayer.destroy();
+                me.getMap().removeLayer(removeLayer);
             }
         },
 
@@ -1087,7 +1087,7 @@ Oskari.clazz.define(
                 wfsMapImageLayer = new ol.layer.Image({
                     source: new ol.source.ImageStatic({
                         url: imageUrl,
-                        imageExtent: boundObj,
+                        imageExtent: boundsObj,
                         imageSize: ols,
                         logo: false
 
