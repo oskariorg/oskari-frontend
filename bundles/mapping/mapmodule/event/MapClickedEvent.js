@@ -11,11 +11,13 @@ Oskari.clazz.define(
      * @param {Object} lonlat object with lon and lat keys as coordinates where the map was clicked
      * @param {Number} mouseX viewport mouse position x coordinate when click happened
      * @param {Number} mouseY viewport mouse position y coordinate when click happened
+     * @param {Boolean} ctrlKeyDown
      */
-    function (lonlat, mouseX, mouseY) {
+    function (lonlat, mouseX, mouseY, ctrlKeyDown) {
         this._lonlat = lonlat;
         this._mouseX = mouseX;
         this._mouseY = mouseY;
+        this._ctrlKeyDown = ctrlKeyDown;
     }, {
         /** @static @property __name event name */
         __name: "MapClickedEvent",
@@ -53,7 +55,8 @@ Oskari.clazz.define(
                 lon: this._lonlat ? this._lonlat.lon : null,
                 lat: this._lonlat ? this._lonlat.lat : null,
                 x: this._mouseX,
-                y: this._mouseY
+                y: this._mouseY,
+                ctrlKeyDown: this._ctrlKeyDown
             };
         }
     }, {
