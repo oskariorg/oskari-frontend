@@ -6,14 +6,31 @@
 <dom-module id="oskari-statsgrid">
 
   <template>
+    <iron-ajax
+      auto
+      url="{{ajaxUrl}}"
+      params='{"action_route": "GetLayerInfo"}'
+      handle-as="json"
+      last-response="{{layerInfo}}"
+      debounce-duration="300"
+      id="layerInfoAjax"></iron-ajax>
     <div>
+      <label>
+        <span>{{locale.selectRegionCategory}}</span>
+        <select style="width: 300px;" value="{{selectedLayer::change}}">
+          <template is="dom-repeat" items="[[getLayerInfoAsArray(layerInfo)]]">
+            <option value="{{item.val}}">{{item.text}}</option>
+          </template>
+        </select>
+      </label>
+      
       <vaadin-grid selection-mode="multi" id="indicator-data-grid" items="{{rows}}"
         indicator-headers="[[indicatorHeaders]]" selecter-layer="[[selectedLayer]]">
         <table>
           <!-- Define the columns -->
-          <col name="region" header-text$="[[selectedLayer]]" width="100">
+          <col name="region" header-text$="[[selectedLayer]]">
           <template is="dom-repeat" items="[[indicatorHeaders]]" as="header">
-            <col name$="[[header.id]]" header-text$="[[header.header]]" width="100">
+            <col name$="[[header.id]]" header-text$="[[header.header]]">
           </template>
         </table>
       </vaadin-grid>
@@ -34,7 +51,7 @@
           },
           "selectedLayer": {
               "type": String,
-              "value": "Kunta",
+              "value": "oskari:kunta2013",
               "notify": true
           },
           "layers": Array,
@@ -53,6 +70,7 @@
           }
       },
       "observers": [
+          "selectedLayerChanged(selectedLayer)",
           "selectedIndicatorsChanged(selectedIndicators.splices)"
       ],
       /**
@@ -64,6 +82,27 @@
               selectors[selector.selectorId] = selector.value;
           });
           return selectors;
+      },
+      "getLayerInfoAsArray": function(layerInfo) {
+          var array = [];
+          Object.keys(layerInfo).forEach(function(layerName) {
+              array.push({
+                  "val": layerName,
+                  "text": layerName
+              });
+          });
+          return array;
+      },
+      "selectedLayerChanged": function(layer) {
+          var me = this;
+          $.ajax({
+              url: me.ajaxUrl,
+              data: me.getRegionInfoParams(layer),
+              dataType: 'json',
+              success: function(results){
+                  me.regionInfo = results;
+              }
+          });
       },
       "selectedIndicatorsChanged": function(splices) {
           var me = this,
@@ -104,6 +143,14 @@
                   }
               });
           });
+      },
+      "getRegionInfoParams": function(selectedLayer) {
+          var res = {
+              "action_route": "GetRegionInfo",
+              "layer_id": selectedLayer
+          };
+          console.log(JSON.stringify(res));
+          return res;
       },
       "handleResponse": function(response) {
           var me = this,
