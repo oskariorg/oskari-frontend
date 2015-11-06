@@ -97,8 +97,13 @@ Oskari.clazz.define(
 
         _createRequestHandlers: function () {
             var me = this;
-            var mapMovementHandler = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapMovementInteractionsRequestHandler', me.getMapModule());
+            var mapMovementHandler = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapMovementControlsRequestHandler', me.getMapModule());
             return {
+                'ToolSelectionRequest': Oskari.clazz.create(
+                    'Oskari.mapframework.mapmodule.ToolSelectionHandler',
+                    me.getSandbox(),
+                    me
+                ),
                 'EnableMapKeyboardMovementRequest' : mapMovementHandler,
                 'DisableMapKeyboardMovementRequest' : mapMovementHandler,
                 'EnableMapMouseMovementRequest' : mapMovementHandler,

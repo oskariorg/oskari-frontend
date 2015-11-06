@@ -70,6 +70,7 @@ Oskari.clazz.define(
                         layer.isBaseLayer()
                     );
                     sandbox.request(me.instance, request);
+                    me.handleBounds(layer);
                     return false;
                 });
                 return link;
@@ -99,6 +100,49 @@ Oskari.clazz.define(
             me.update();
             return me.container;
         },
+
+        /**
+         * @method handleBounds
+         * @private
+         *
+         * Make use of the layer bounding box information to set appropriate map view
+         *
+         * @param
+         * {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer}
+         *            layer layer for which to handle bounds
+         *
+         */
+        handleBounds: function (layer) {
+            var sandbox = this.instance.sandbox;
+
+            var geom = layer.getGeometry();
+
+            if ((geom === null) || (typeof geom === 'undefined') ) {
+                return;
+            }
+            if (geom.length === 0) {
+                return;
+            }
+
+            var olPolygon = geom[0],
+                bounds = olPolygon.getBounds(),
+                centroid = olPolygon.getCentroid(),
+                epsilon = 1.0,
+                rb = sandbox.getRequestBuilder('MapMoveRequest'),
+                req;
+
+            if (rb) {
+                if (olPolygon.getArea() < epsilon) {
+                    // zoom to level 9 if a single point
+                    req = rb(centroid.x, centroid.y, 9);
+                    sandbox.request(this.instance, req);
+                } else {
+                    req = rb(centroid.x, centroid.y, bounds);
+                    sandbox.request(this.instance, req);
+                }
+            }
+        },
+
         /**
          * Updates the tab content with current analysis layers listing
          * @method update

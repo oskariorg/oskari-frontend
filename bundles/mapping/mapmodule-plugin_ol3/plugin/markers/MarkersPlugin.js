@@ -20,7 +20,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         me._markerFeatures = {};
         me._nextMarkerId = 0;
         me._svg = false;
-        me._defaultIconUrl = '/Oskari/bundles/framework/mapmodule-plugin/resources/images/marker.png';
         me._defaultIconUrlSize = 32;
         me._prevIconUrl = '';
         me._preSVGIconUrl = 'data:image/svg+xml;base64,';
@@ -54,6 +53,9 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         this.__layer = undefined;
 
     }, {
+        getDefaultIconUrl : function() {
+            return this.getImagePath() + 'marker.png';
+        },
         /**
          * @method hasUI
          * @return {Boolean} true
@@ -471,7 +473,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     size = this._getSizeInPixels(data.size);
                 }
             } else {
-                iconSrc = me._defaultIconUrl;
+                iconSrc = me.getDefaultIconUrl();
                 size = this._getSizeInPixels(data.size);
             }
 
@@ -529,7 +531,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             var me = this,
                 size,
                 color,
-                iconSrc = me._defaultIconUrl;
+                iconSrc = me.getDefaultIconUrl();
 
             if (typeof Raphael !== 'undefined') {
                 // Handling the size parameter

@@ -8,12 +8,62 @@ New function is enabled by default:
 - 'getMapBbox' gets current map bbox
 
 New event is enabled by default:
-- 'UserLocationEvent' notifies at a user geolocation has getted
+- 'UserLocationEvent' notifies about users geolocation status
 
 New request is enabled by default:
 - 'MyLocationPlugin.GetUserLocationRequest' requests to get user geolocation
 
-Domain validation fixed so at it accept urls where has - or _ characters.
+Domain validation fixed to accept urls with - or _ characters.
+
+### Mapmodule consistency - POSSIBLE BREAKING CHANGES!
+
+In an effort to make Openlayers 2 ja 3 mapmodule API consistent some functions have been renamed:
+- Both: _getMapZoom() -> getMapZoom()
+- Both: _transformCoordinates -> transformCoordinates() also coordinates parameter is now an object with lat & lon keys and return value is an object with lat & lon keys
+- OL3: _getCurrentScale() -> _getMapScale()
+- OL2: getNumZoomLevels() -> getMaxZoomLevel()
+- OL3: getZoomLevel() removed as it's the same as getMapZoom()
+- Both: moveMapToLanLot() -> moveMapToLonLat()
+
+MapClickedEvent.getLonlat() now returns an object with lon and lat keys regardless instead of Openlayers.Lonlat in OL2 or coordinate array in OL3.
+Fixed mapmodule.isValidLonLat() to use max extent as reference instead of hardcoded EPSG:3067 values.
+
+#### Oskari.mapframework.domain.Map
+
+Sandbox.getMap().getBbox() no longer returns the Openlayers.Bounds or ol but an object with top, bottom, left, right keys
+
+To fix your code using calls like 'sandbox.getMap().getBbox()' in Openlayers 2:
+	
+	var bbox = sandbox.getMap().getBbox();
+	var bounds = new Openlayers.Bounds(bbox.left, bbox.bottom, bbox.right, bbox.top);
+
+In Openlayers 3:
+
+	var bbox = sandbox.getMap().getBbox();
+	new ol.extent.boundingExtent(bbox.left, bbox.bottom, bbox.right, bbox.top);
+
+### File location changes
+
+Moved most of the files under Oskari/bundles/framework/mapmodule-plugin/ to Oskari/bundles/mapping/mapmodule to be used as common
+ resources instead of copy/pasting code/css/images. 
+The Openlayers 2 mapmodule from framework/mapmodule-plugin/ui/module/map-module.js is now in mapping/mapmodule/mapmodule.ol2.js.
+The Openlayers 3 mapmodule from mapping/mapmodule-plugin_ol3/ui/module/map-module.js is now in mapping/mapmodule/mapmodule.ol3.js.
+
+Files under Oskari/src/mapping/mapmodule have been moved to Oskari/bundles/mapping/mapmodule/.
+Removed most other files under Oskari/src and Oskari/srctest since they are not used.
+Renamed the remaining Oskari/src to Oskari/deprecated to signify these shouldn't be used.
+
+## 1.33.2
+
+AbstractLayer.getLegendImage() now returns the legend of current style if available. Fallback to base legendImage if style legend is not available. 
+AbstractLayer.selectStyle() no longer overwrites the base legendImage information.
+
+## 1.33.1
+
+### admin-layerselector
+
+Added a missing label for "Selected time" field (WMS-T).
+Fixed: Legendimage field shows a proxy-URL if layer requires credentials. Now shows the correct URL for legendimage.
 
 ## 1.33
 

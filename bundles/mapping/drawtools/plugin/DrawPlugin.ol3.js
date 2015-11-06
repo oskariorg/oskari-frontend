@@ -185,7 +185,7 @@ Oskari.clazz.define(
         	var options = {
         		clearCurrent: clearCurrent,
         		isFinished: true
-        	}
+        	};
         	me.sendDrawingEvent(id, options);
             //deactivate draw nad modify controls
             me.removeInteractions();
@@ -222,7 +222,7 @@ Oskari.clazz.define(
                 bufferedGeoJson: bufferedGeoJson,
                 shape: me._shape
             };
-            if(options.clearCurrent === true) {
+            if(options.clearCurrent) {
                 // TODO: clear the drawing matching the id from map
             	me.clearDrawing();
             }
@@ -230,7 +230,7 @@ Oskari.clazz.define(
             	isFinished = options.isFinished;
             }
             var event = me._sandbox.getEventBuilder('DrawingEvent')(id, geojson, data, isFinished);
-            console.log(geojson);
+//            console.log(geojson);
 
             me._sandbox.notifyAll(event);
         },
@@ -274,9 +274,9 @@ Oskari.clazz.define(
         	var sketch;
         	var optionsForDrawingEvent = {
  	        	isFinished: false
-	        }
-
-    	    if (shape === 'LineString') {
+	        };
+        	
+        	if (shape === 'LineString') {
     	    	 geometryFunction = function (coordinates, geometry) {
 	    	    	 if (!geometry) {
 	    	    		  geometry = new ol.geom.LineString(null);
@@ -421,7 +421,7 @@ Oskari.clazz.define(
          */
     	showText: function(feature, text, options) {
 			var me = this;
-    		if(feature && options.showMeasure === true) {
+    		if(feature && options.showMeasure) {
     			var featureStyle = _.clone(me._styles['draw']);
     			feature.style_ = featureStyle;
 	    		feature.style_.text_.text_ = text;

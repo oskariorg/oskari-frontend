@@ -50,6 +50,9 @@
             "mapmodule-plugin_ol3" : {
                 "bundlePath" : "../../../packages/mapping/"
             },
+            "mapanalysis_ol3" : {
+                "bundlePath" : "../../../packages/mapping/"
+            },
             "mapstats": {
                 "bundlePath": "../../../packages/framework/bundle/"
             },
@@ -59,11 +62,11 @@
             "mapwmts_ol3" : {
                 "bundlePath" : "../../../packages/mapping/"
             },
-            "mapwfs2" : {
-                "bundlePath" : "../../../packages/framework/bundle/"
+            "mapwfs2_ol3" : {
+                "bundlePath" : "../../../packages/mapping/"
             },
             "mapuserlayers" : {
-                "bundlePath" : "../../../packages/framework/bundle/"
+                "bundlePath" : "../../../packages/mapping/"
             },
             "oskariui" : {
                 "bundlePath" : "../../../packages/framework/bundle/"
