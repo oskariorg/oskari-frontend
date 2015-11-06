@@ -163,7 +163,8 @@ Oskari.clazz.define(
                     getSupportedFunctions: true,
                     getSupportedRequests: true,
                     getZoomRange: true,
-                    getMapBbox: true
+                    getMapBbox: true,
+                    resetState : true
                 };
             }
 
@@ -234,6 +235,9 @@ Oskari.clazz.define(
                     max: mapModule.getMaxZoomLevel(),
                     current: mapModule.getZoom()
                 };
+            },
+            resetState : function() {
+                this.sandbox.resetState();
             }
         },
 
@@ -251,7 +255,6 @@ Oskari.clazz.define(
                 funcs = this._allowedFunctions;
             var bindFunction = function(name) {
                 channel.bind(name, function (trans) {
-                    debugger;
                     if (!me._domainMatch(trans.origin)) {
                         throw {
                             error: 'invalid_origin',
