@@ -165,15 +165,14 @@ Oskari.registerLocalization({
             }
         },
         "regionCategories": {
-            "Kunta": "Kunta",
-            "Aluehallintovirasto": "Aluehallintovirasto",
-            "Maakunta": "Maakunta",
-            "Erva": "Sairaanhoitopiirien erityisvastuualueet",
-            "Maa": "Maa",
-            "Nuts1": "Manner-Suomi ja Ahvenanmaa",
-            "Sairaanhoitopiiri": "Sairaanhoitopiiri",
-            "Seutukunta": "Seutukunta",
-            "Suuralue": "Suuralue"
+            "oskari:kunnat2013": "Kunta",
+            "oskari:avi": "Aluehallintovirasto",
+            "oskari:maakunta": "Maakunta",
+            "oskari:erva-alueet": "Sairaanhoitopiirien erityisvastuualueet",
+            "oskari:nuts1": "Manner-Suomi ja Ahvenanmaa",
+            "oskari:sairaanhoitopiiri": "Sairaanhoitopiiri",
+            "oskari:seutukunta": "Seutukunta",
+            "oskari:ely": "ELY"
         },
         "regionCategoriesTitle": "Region categories",
 

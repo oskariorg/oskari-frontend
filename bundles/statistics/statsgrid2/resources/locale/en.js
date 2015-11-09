@@ -160,15 +160,14 @@ Oskari.registerLocalization({
             }
         },
         "regionCategories": {
-            "Kunta": "Municipality",
-            "Aluehallintovirasto": "Regional administrative agency",
-            "Maa": "Country",
-            "Maakunta": "Province",
-            "Erva": "Hospital special responsibility district",
-            "Nuts1": "Mainland Finland and the Åland Islands",
-            "Sairaanhoitopiiri": "Hospital district",
-            "Seutukunta": "Subregion",
-            "Suuralue": "Greater region"
+            "oskari:kunnat2013": "Municipality",
+            "oskari:avi": "Regional administrative agency",
+            "oskari:ely": "ELY",
+            "oskari:maakunta": "Province",
+            "oskari:erva-alueet": "Hospital special responsibility district",
+            "oskari:nuts1": "Mainland Finland and the Åland Islands",
+            "oskari:sairaanhoitopiiri": "Hospital district",
+            "oskari:seutukunta": "Subregion"
         },
         "regionCategoriesTitle": "Region categories",
 
