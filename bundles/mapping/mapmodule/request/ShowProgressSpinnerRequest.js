@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.mapmodule.request.AddMarkerRequest
+ * @class Oskari.mapframework.bundle.mapmodule.request.ShowProgressSpinnerRequest
  * @param  {bool} show, whether to show or hide the spinner
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.ShowProgressSpinnerRequest', function (show) {

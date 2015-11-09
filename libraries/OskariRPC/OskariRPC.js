@@ -124,6 +124,21 @@
                 },
 
                 /**
+                 * @public @method resetState
+                 *
+                 * @param {function} success Callback function
+                 * @param {function} error   Error handler
+                 *
+                 */
+                resetState: function (success, error) {
+                    channel.call({
+                        method: 'resetState',
+                        success: success,
+                        error: error
+                    });
+                },
+
+                /**
                  * @public @method handleEvent
                  *
                  * @param {string}   event   Event name
