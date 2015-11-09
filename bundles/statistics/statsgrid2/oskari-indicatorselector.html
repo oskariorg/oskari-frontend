@@ -33,6 +33,7 @@
             </template>
           </select>
         </label>
+        <div class="icon-info" on-click="showIndicatorInfo"></div>
         <!-- The optional selectors will be populated here when the above have been selected. -->
         <div id="indicatorSelectors">
           <template is="dom-repeat" items="[[getSelectors(sources,datasourceId,indicatorId)]]" as="selector">
@@ -55,8 +56,8 @@
 
   <script>
     Polymer({
-      is: "oskari-indicatorselector",
-      properties: {
+      "is": "oskari-indicatorselector",
+      "properties": {
           "ajaxUrl": String,
           "locale": Object,
           "language": String,
@@ -74,9 +75,69 @@
               "type": Array,
               "value": [],
               "notify": true
+          },
+          "dialog": Object
+      },
+      "getLocalizationFrom": function(localizedNames, fallback, lang) {
+          var name = localizedNames[lang];
+          if (!name) {
+              name = localizedNames["fi"];
+          }
+          if (!name) {
+              name = localizedNames["en"];
+          }
+          if (!name) {
+              if (Object.keys(localizedNames) > 0) {
+                  // Taking the first one.
+                  name = localizedNames[Object.keys(localizedNames)[0]];
+              } else {
+                  name = fallback;
+              }
+          }
+          return name;
+      },
+      "showIndicatorInfo": function() {
+          var me = this,
+              indicatorCont = new jQuery('<div>' +
+                  '<h4 class="indicator-msg-popup-title"></h4>' +
+                  '<p class="indicator-msg-popup-title"></p>' +
+                  '<h4 class="indicator-msg-popup-source"></h4>' +
+                  '<p class="indicator-msg-popup-source"></p>' +
+                  '</div>'),
+              indicators = me.sources[me.datasourceId].indicators,
+              indicator = indicators[me.indicatorId],
+              source = indicator.source,
+              description = indicator.description;
+          indicatorCont.find('h4.indicator-msg-popup-title').append(me.locale.stats.descriptionTitle);
+          indicatorCont.find('p.indicator-msg-popup-title').append(
+                  me.getLocalizationFrom(description, "", me.language));
+          indicatorCont.find('h4.indicator-msg-popup-source').append(me.locale.stats.sourceTitle);
+          indicatorCont.find('p.indicator-msg-popup-source').append(
+                  me.getLocalizationFrom(source, "", me.language));
+          me.showDialog(me.getLocalizationFrom(indicator.name, "", me.language), indicatorCont);
+      },
+      "showDialog": function(title, message, buttons) {
+          var me = this;
+          // Oskari components aren't available in a published map.
+          if (me.dialog) {
+              me.dialog.close(true);
+              me.dialog = null;
+              return;
+          }
+
+          me.dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+          if (buttons) {
+              me.dialog.show(title, message, buttons);
+          } else {
+              var okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
+              okBtn.setHandler(function () {
+                  me.dialog.close(true);
+                  me.dialog = null;
+              });
+              me.dialog.show(title, message, [okBtn]);
           }
       },
-      getDatasources: function(sources) {
+      "getDatasources": function(sources) {
           var me = this;
           return [{text: me.locale.selectDataSource}].concat(Object.keys(sources).map(function(sourceId) {
               return {
@@ -85,7 +146,7 @@
               };
           }));
       },
-      getIndicators: function(sources, datasourceId) {
+      "getIndicators": function(sources, datasourceId) {
           var me = this,
             indicators = sources[datasourceId] && sources[datasourceId].indicators || [];
           return [{text: me.locale.selectIndicator}].concat(Object.keys(indicators).map(function(indicatorId) {
@@ -96,7 +157,7 @@
               };
           }));
       },
-      getSelectors: function(sources, datasourceId, indicatorId) {
+      "getSelectors": function(sources, datasourceId, indicatorId) {
           var me = this,
             indicator = sources[datasourceId].indicators[indicatorId],
             selectors = indicator && indicator.selectors || [];
@@ -113,7 +174,7 @@
               };
           });
       },
-      onAdd: function(e) {
+      "onAdd": function(e) {
           var selectors = this.$.indicatorSelectors;
           var selects = selectors.querySelectorAll("select");
           var values = [];
