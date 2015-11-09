@@ -300,7 +300,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     return;
                 }
                 // Openlayers
-                markerLayer.removeFeatures(marker);
+                markerLayer.getSource().removeFeature(marker);
                 // internal data structure
                 me._markers[optionalMarkerId] = null;
                 delete me._markers[optionalMarkerId];
