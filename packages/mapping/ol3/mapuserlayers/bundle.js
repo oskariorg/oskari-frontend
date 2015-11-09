@@ -1,10 +1,9 @@
 /**
- * @class Oskari.mapframework.bundle.mapstats.MapStatsBundle
+ * @class Oskari.mapframework.bundle.mapuserlayers.MapUserLayersBundle
  */
 Oskari.clazz.define(
-    "Oskari.mapframework.bundle.mapstats.MapStatsBundle",
-    function () {},
-    {
+    "Oskari.mapframework.bundle.mapuserlayers.MapUserLayersBundle",
+    function () {}, {
         /*
          * implementation for protocol 'Oskari.bundle.Bundle'
          */
@@ -14,60 +13,38 @@ Oskari.clazz.define(
         "update": function (manager, bundle, bi, info) {
             manager.alert("RECEIVED update notification " + info);
         }
-    },
-
-    /**
-     * metadata
-     */
-    {
-
+    }, {
         "protocol": ["Oskari.bundle.Bundle", "Oskari.mapframework.bundle.extension.ExtensionBundle"],
         "source": {
-
             "scripts": [{
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/mapstats/plugin/StatsLayerPlugin.ol2.js"
+                "src": "../../../../bundles/mapping/myplacesimport/domain/UserLayer.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/mapstats/domain/StatsLayer.js"
+                "src": "../../../../bundles/mapping/myplacesimport/domain/UserLayerModelBuilder.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/mapstats/domain/StatsLayerModelBuilder.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/mapping/mapstats/event/StatsVisualizationChangeEvent.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/mapping/mapstats/event/FeatureHighlightedEvent.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/mapping/mapstats/event/HoverTooltipContentEvent.js"
-            }, {
-                "type": "text/css",
-                "src": "../../../../bundles/mapping/mapstats/resources/css/mapstats.css"
+                "src": "../../../../bundles/mapping/myplacesimport/plugin/UserLayersLayerPlugin.ol3.js"
             }],
+
             "locales": [{
                 "lang": "fi",
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/mapstats/resources/locale/fi.js"
+                "src": "../../../../bundles/mapping/myplacesimport/resources/locale/fi.js"
             }, {
                 "lang": "sv",
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/mapstats/resources/locale/sv.js"
+                "src": "../../../../bundles/mapping/myplacesimport/resources/locale/sv.js"
             }, {
                 "lang": "en",
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/mapstats/resources/locale/en.js"
-            }, {
-                "lang": "es",
-                "type": "text/javascript",
-                "src": "../../../../bundles/mapping/mapstats/resources/locale/es.js"
+                "src": "../../../../bundles/mapping/myplacesimport/resources/locale/en.js"
             }]
         },
         "bundle": {
             "manifest": {
-                "Bundle-Identifier": "mapstats",
-                "Bundle-Name": "mapstats",
+                "Bundle-Identifier": "mapuserlayers",
+                "Bundle-Name": "mapuserlayers",
                 "Bundle-Tag": {
                     "mapframework": true
                 },
@@ -90,8 +67,8 @@ Oskari.clazz.define(
                 }],
                 "Bundle-Name-Locale": {
                     "fi": {
-                        "Name": "Stats",
-                        "Title": "Stats"
+                        "Name": "Userlayers",
+                        "Title": "UserLayers"
                     },
                     "en": {}
                 },
@@ -102,4 +79,4 @@ Oskari.clazz.define(
     }
 );
 
-Oskari.bundle_manager.installBundleClass("mapstats", "Oskari.mapframework.bundle.mapstats.MapStatsBundle");
+Oskari.bundle_manager.installBundleClass("mapuserlayers", "Oskari.mapframework.bundle.mapuserlayers.MapUserLayersBundle");

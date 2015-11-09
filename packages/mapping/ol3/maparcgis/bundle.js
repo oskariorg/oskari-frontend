@@ -22,10 +22,9 @@ Oskari.clazz.define("Oskari.arcgis.bundle.arcgis.MapArcGisBundle", function() {
 
 	"protocol" : ["Oskari.bundle.Bundle", "Oskari.mapframework.bundle.extension.ExtensionBundle"],
 	"source" : {
-
 		"scripts" : [{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/mapping/maparcgis/plugin/ArcGisLayerPlugin.ol2.js"
+			"src" : "../../../../bundles/mapping/maparcgis/plugin/ArcGisLayerPlugin.ol3.js"
 		}, {
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/mapping/maparcgis/domain/ArcGisLayer.js"

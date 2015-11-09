@@ -26,7 +26,7 @@ Oskari.clazz.define(
 
             "scripts": [{
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/mapstats/plugin/StatsLayerPlugin.ol2.js"
+                "src": "../../../../bundles/mapping/mapstats/plugin/StatsLayerPlugin.ol3.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/mapping/mapstats/domain/StatsLayer.js"

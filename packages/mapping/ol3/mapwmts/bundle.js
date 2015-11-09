@@ -1,7 +1,7 @@
 /**
- * @class Oskari.arcgis.bundle.arcgis.MapArcGisBundle
+ * @class Oskari.mapframework.bundle.MapWmtsBundle
  */
-Oskari.clazz.define("Oskari.arcgis.bundle.arcgis.MapArcGisBundle", function() {
+Oskari.clazz.define("Oskari.mapframework.bundle.MapWmtsBundle", function() {
 }, {
 	/*
 	 * implementation for protocol 'Oskari.bundle.Bundle'
@@ -25,23 +25,30 @@ Oskari.clazz.define("Oskari.arcgis.bundle.arcgis.MapArcGisBundle", function() {
 
 		"scripts" : [{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/mapping/maparcgis/plugin/ArcGisLayerPlugin.ol2.js"
+			"src" : "../../../../bundles/mapping/mapwmts/plugin/WmtsLayerPlugin.ol3.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/mapping/maparcgis/domain/ArcGisLayer.js"
+			"src" : "../../../../sources/framework/domain/AbstractLayer.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/mapping/maparcgis/domain/ArcGis93Layer.js"
-		}
-       ]
+			"src" : "../../../../bundles/mapping/mapwmts/domain/WmtsLayer.js"
+		}, {
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/mapping/mapwmts/domain/WmtsLayerModelBuilder.js"
+		}, {
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/mapping/mapwmts/service/WmtsLayerService.ol3.js"
+		}],
+		"resources" : []
 	},
 	"bundle" : {
 		"manifest" : {
-			"Bundle-Identifier" : "maparcgis",
-			"Bundle-Name" : "maparcgis",
+			"Bundle-Identifier" : "mapwmts",
+			"Bundle-Name" : "mapwmts",
 			"Bundle-Tag" : {
 				"mapframework" : true
 			},
+
 			"Bundle-Icon" : {
 				"href" : "icon.png"
 			},
@@ -61,15 +68,18 @@ Oskari.clazz.define("Oskari.arcgis.bundle.arcgis.MapArcGisBundle", function() {
 			}],
 			"Bundle-Name-Locale" : {
 				"fi" : {
-					"Name" : "ArcGis",
-					"Title" : "ArcGis"
+					"Name" : "WMTS",
+					"Title" : "WMTS"
 				},
 				"en" : {}
 			},
 			"Bundle-Version" : "1.0.0",
-			"Import-Namespace" : ["Oskari"]
+			"Import-Namespace" : ["Oskari", "Ext"]
 		}
 	}
 });
 
-Oskari.bundle_manager.installBundleClass("maparcgis", "Oskari.arcgis.bundle.arcgis.MapArcGisBundle");
+/**
+ * Install this bundle
+ */
+Oskari.bundle_manager.installBundleClass("mapwmts", "Oskari.mapframework.bundle.MapWmtsBundle");
