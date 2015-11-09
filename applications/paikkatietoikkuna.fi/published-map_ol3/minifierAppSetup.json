@@ -132,6 +132,22 @@
             "Require-Bundle-Instance": [ ]
         },
         "instanceProps": {}
+    },{
+        "title": "Oskari DIV Manazer",
+        "fi": "Oskari DIV Manazer",
+        "sv": "Oskari DIV Manazer",
+        "en": "Oskari DIV Manazer",
+        "bundlename": "divmanazer",
+        "bundleinstancename": "divmanazer",
+        "metadata": {
+            "Import-Bundle": {
+                "divmanazer": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        },
+        "instanceProps": {}
     }, {
         "bundlename" : "infobox",
         "bundleinstancename" : "infobox",
