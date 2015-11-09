@@ -336,10 +336,10 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         _showForm: function(clickX, clickY) {
             this.stopMarkerAdd();
             var me = this;
-            var lonlat = me._map.getLonLatFromPixel({
-                x : clickX,
-                y : clickY
-            });
+            var lonlat = me._map.getCoordinateFromPixel([
+                clickX,
+                clickY
+            ]);
             var loc = me.getLocalization().form;
             me.dotForm = Oskari.clazz.create(
                 'Oskari.userinterface.component.visualization-form.DotForm',
@@ -363,8 +363,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
 
                 if (reqBuilder) {
                     var data = {
-                        x: lonlat.lon,
-                        y: lonlat.lat,
+                        x: lonlat[0],
+                        y: lonlat[1],
                         msg: values.message,
                         color: values.color,
                         shape: values.shape,

@@ -6,6 +6,7 @@
 
 New function is enabled by default:
 - 'getMapBbox' gets current map bbox
+- 'resetState' resets the map to initial state (location/layers etc)
 
 New event is enabled by default:
 - 'UserLocationEvent' notifies about users geolocation status

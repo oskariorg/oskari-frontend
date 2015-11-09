@@ -163,7 +163,8 @@ Oskari.clazz.define(
                     getSupportedFunctions: true,
                     getSupportedRequests: true,
                     getZoomRange: true,
-                    getMapBbox: true
+                    getMapBbox: true,
+                    resetState : true
                 };
             }
 
@@ -186,6 +187,59 @@ Oskari.clazz.define(
             me._allowedFunctions = allowedFunctions;
             me._allowedRequests = allowedRequests;
         },
+        _availableFunctions : {
+            getSupportedEvents : function() {
+                return this._allowedEvents;
+            },
+            getSupportedFunctions : function() {
+                return this._allowedFunctions;
+            },
+            getSupportedRequests : function() {
+                return this._allowedRequests;
+            },
+            getAllLayers : function() {
+                var mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+                var layers = mapLayerService.getAllLayers();
+                return layers.map(function (layer) {
+                    return {
+                        id: layer.getId(),
+                        opacity: layer.getOpacity(),
+                        visible: layer.isVisible(),
+                        name : layer.getName()
+                    };
+                });
+            },
+            getMapBbox : function() {
+                var bbox = this.sandbox.getMap().getBbox();
+                return {
+                    bottom: bbox.bottom,
+                    left: bbox.left,
+                    right: bbox.right,
+                    top: bbox.top
+                };
+            },
+            getMapPosition : function() {
+                var sbMap = this.sandbox.getMap();
+                return {
+                    centerX: sbMap.getX(),
+                    centerY: sbMap.getY(),
+                    zoom: sbMap.getZoom(),
+                    scale: sbMap.getScale(),
+                    srsName: sbMap.getSrsName()
+                };
+            },
+            getZoomRange : function() {
+                var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
+                return {
+                    min: 0,
+                    max: mapModule.getMaxZoomLevel(),
+                    current: mapModule.getZoom()
+                };
+            },
+            resetState : function() {
+                this.sandbox.resetState();
+            }
+        },
 
         /**
          * @private @method _bindFunctions
@@ -198,151 +252,24 @@ Oskari.clazz.define(
         _bindFunctions: function (channel) {
             'use strict';
             var me = this,
-                mapModule = me.sandbox.findRegisteredModuleInstance(
-                    'MainMapModule'
-                ),
-                map = mapModule.getMap(),
-                sbMap = me.sandbox.getMap();
-            // bind getSupportedEvents
-            if (me._allowedFunctions.getSupportedEvents) {
-                channel.bind(
-                    'getSupportedEvents',
-                    function (trans) {
-                        if (!me._domainMatch(trans.origin)) {
-                            throw {
-                                error: 'invalid_origin',
-                                message: 'Invalid origin: ' + trans.origin
-                            };
-                        }
-                        return me._allowedEvents;
-                    }
-                );
-            }
-
-            // bind getSupportedfunctions
-            if (me._allowedFunctions.getSupportedFunctions) {
-                channel.bind(
-                    'getSupportedFunctions',
-                    function (trans) {
-                        if (!me._domainMatch(trans.origin)) {
-                            throw {
-                                error: 'invalid_origin',
-                                message: 'Invalid origin: ' + trans.origin
-                            };
-                        }
-                        return me._allowedFunctions;
-                    }
-                );
-            }
-
-            // bind getSupportedRequests
-            if (me._allowedFunctions.getSupportedRequests) {
-                channel.bind(
-                    'getSupportedRequests',
-                    function (trans) {
-                        if (!me._domainMatch(trans.origin)) {
-                            throw {
-                                error: 'invalid_origin',
-                                message: 'Invalid origin: ' + trans.origin
-                            };
-                        }
-                        return me._allowedRequests;
-                    }
-                );
-            }
-
-            // bind get all layers (returns only IDs as the layers might contain private data)
-            if (me._allowedFunctions.getAllLayers) {
-                channel.bind(
-                    'getAllLayers',
-                    function (trans) {
-                        if (!me._domainMatch(trans.origin)) {
-                            throw {
-                                error: 'invalid_origin',
-                                message: 'Invalid origin: ' + trans.origin
-                            };
-                        }
-                        var mapLayerService = me.sandbox.getService(
-                                'Oskari.mapframework.service.MapLayerService'
-                            ),
-                            layers;
-
-                        layers = mapLayerService.getAllLayers();
-                        return layers.map(function (layer) {
-                            return {
-                                id: layer.getId(),
-                                opacity: layer.getOpacity(),
-                                visible: layer.isVisible(),
-                                name : layer.getName()
-                            };
-                        });
-                    }
-                );
-            }
-
-            // bind get map bbox
-            if (me._allowedFunctions.getMapBbox) {
-                channel.bind(
-                    'getMapBbox',
-                    function (trans){
-                        if (!me._domainMatch(trans.origin)) {
-                            throw {
-                                error: 'invalid_origin',
-                                message: 'Invalid origin: ' + trans.origin
-                            };
-                        }
-
-                        var bbox = me.sandbox.getMap().getBbox();
-                        return {
-                            bottom: bbox.bottom,
-                            left: bbox.left,
-                            right: bbox.right,
-                            top: bbox.top
-                        }
-                    }
-                );
-            }
-
-            // bind get map position
-            if (me._allowedFunctions.getMapPosition) {
-                channel.bind(
-                    'getMapPosition',
-                    function (trans) {
-                        if (!me._domainMatch(trans.origin)) {
-                            throw {
-                                error: 'invalid_origin',
-                                message: 'Invalid origin: ' + trans.origin
-                            };
-                        }
-                        return {
-                            centerX: sbMap.getX(),
-                            centerY: sbMap.getY(),
-                            zoom: sbMap.getZoom(),
-                            scale: sbMap.getScale(),
-                            srsName: sbMap.getSrsName()
+                funcs = this._allowedFunctions;
+            var bindFunction = function(name) {
+                channel.bind(name, function (trans) {
+                    if (!me._domainMatch(trans.origin)) {
+                        throw {
+                            error: 'invalid_origin',
+                            message: 'Invalid origin: ' + trans.origin
                         };
                     }
-                );
+                    return me._availableFunctions[name].apply(me);
+                });
             }
 
-            // bind get zoom range
-            if (me._allowedFunctions.getZoomRange) {
-                channel.bind(
-                    'getZoomRange',
-                    function (trans) {
-                        if (!me._domainMatch(trans.origin)) {
-                            throw {
-                                error: 'invalid_origin',
-                                message: 'Invalid origin: ' + trans.origin
-                            };
-                        }
-                        return {
-                            min: 0,
-                            max: mapModule.getMaxZoomLevel(),
-                            current: mapModule.getZoom()
-                        };
-                    }
-                );
+            for(var name in funcs) {
+                if(!funcs.hasOwnProperty(name) || !this._availableFunctions[name]) {
+                    continue;
+                }
+                bindFunction(name);
             }
         },
 
