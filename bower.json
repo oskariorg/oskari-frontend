@@ -30,6 +30,8 @@
   "dependencies": {
     "polymer": "Polymer/polymer#^1.2.0",
     "vaadin-components": "vaadin-elements#~0.3.0-beta9",
-    "iron-ajax": "PolymerElements/iron-ajax#~1.0.8"
+    "iron-ajax": "PolymerElements/iron-ajax#~1.0.8",
+    "mathjs": "~2.4.1",
+    "iron-collapse": "PolymerElements/iron-collapse#~1.0.4"
   }
 }

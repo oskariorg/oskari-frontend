@@ -1,11 +1,15 @@
-<link rel="import"
-      href="libs/polymer/polymer.html">
-
+<link href="libs/polymer/polymer.html" rel="import">
+<!-- TODO: If you start using the libs here in other bundles as well, they must be moved to a shared location. -->
 <link href="libs/vaadin-components/vaadin-components.html" rel="import">
+<link href="libs/iron-collapse/iron-collapse.html" rel="import">
+<link href="requirejs.html" rel="import">
 
 <dom-module id="oskari-statsgrid">
 
   <template>
+    <!-- TODO: If we want to vulcanize all this into one file, that is of course possible.
+               See: https://github.com/polymer/vulcanize
+    -->
     <iron-ajax
       auto
       url="{{ajaxUrl}}"
@@ -24,6 +28,19 @@
         </select>
       </label>
       
+      <button on-click="toggleStats">Statistics</button>
+      <iron-collapse id="statscollapse">
+        <vaadin-grid id="indicator-statistics-grid" items="{{statsrows}}"
+          indicator-headers="[[indicatorHeaders]]" selecter-layer="[[selectedLayer]]">
+          <table>
+            <!-- Define the columns -->
+            <col name="region" header-text$="[[selectedLayer]]">
+            <template is="dom-repeat" items="[[indicatorHeaders]]" as="header">
+              <col name$="[[header.id]]" header-text$="[[header.header]]">
+            </template>
+          </table>
+        </vaadin-grid>
+      </iron-collapse>
       <vaadin-grid selection-mode="multi" id="indicator-data-grid" items="{{rows}}"
         indicator-headers="[[indicatorHeaders]]" selecter-layer="[[selectedLayer]]">
         <table>
@@ -39,7 +56,8 @@
   </template>
 
   <script>
-    Polymer({
+      Polymer.require(["/Oskari/libraries/mathjs/dist/math.min.js"], function(math) {
+          return {
       "is": "oskari-statsgrid",
       "properties": {
           "ajaxUrl": String,
@@ -72,6 +90,10 @@
               "type": Array,
               "notify": true
           },
+          "statsrows": {
+              "type": Array,
+              "notify": true
+          },
           "selectedIndicators": {
               "type": Array,
               "notify": true
@@ -81,6 +103,9 @@
           "selectedLayerChanged(ajaxUrl, selectedLayer)",
           "selectedIndicatorsChanged(ajaxUrl, selectedIndicators.splices)"
       ],
+      "toggleStats": function() {
+          this.$.statscollapse.toggle();
+      },
       /**
        * Converts the selector array into selectors key-value object required by the interface.
        */
@@ -159,13 +184,63 @@
           };
           return res;
       },
+      "isDefined": function(value) {
+          return value !== undefined && value !== null;
+      },
+      "summarize": {
+          "min": function(values) {
+              return math.min(values);
+          },
+          "max": function(values) {
+              return math.max(values);
+          },
+          "avg": function(values) {
+              return math.mean(values);
+          },
+          "mde": function(values) {
+              return math.mode(values);
+          },
+          "mdn": function(values) {
+              return math.median(values);
+          },
+          "std": function(values) {
+              return math.std(values);
+          },
+          "sum": function(values) {
+              return math.sum(values);
+          }
+      },
       "handleResponse": function(response) {
           var me = this,
-            regionKeyedValues = {};
+              regionKeyedValues = {},
+              // For average, min, max, etc.
+              summaryIds = ["min", "max", "avg", "mde", "mdn", "std", "sum"],
+              // An array of {'min': value, 'max': value, ...} objects in the order of indicatorHeaders.
+              summariesForIndicators = me.indicatorHeaders.map(function(indicatorHeader) {
+                  // In ES6 we should definitely use "const" here.
+                  var cacheKey = indicatorHeader.id,
+                      indicatorValues = me.cache[cacheKey],
+                      values = Object.keys(indicatorValues).map(function(regionKey) {
+                          return indicatorValues[regionKey];
+                      }),
+                      // In ES6 we could use { [summaryFunction]: ... }
+                      summary = {};
+                  summaryIds.forEach(function(summaryFunction) {
+                      summary[summaryFunction] = me.summarize[summaryFunction](values.filter(me.isDefined));
+                  });
+                  return summary;
+              }),
+              summaryRows = summaryIds.map(function(summaryFunction) {
+                  return [me.locale.statistic[summaryFunction]].concat(
+                      summariesForIndicators.map(function(summaryValuesForIndicator) {
+                      return summaryValuesForIndicator[summaryFunction];
+                  }));
+              });
+
           // Transposing the array keyed by indicators in cache to being keyed by regions.
           me.indicatorHeaders.forEach(function(indicatorHeader) {
               var cacheKey = indicatorHeader.id,
-                indicatorValues = me.cache[cacheKey];
+                  indicatorValues = me.cache[cacheKey];
               Object.keys(indicatorValues).forEach(function(regionKey) {
                   var value = indicatorValues[regionKey];
                   if (!regionKeyedValues[regionKey]) {
@@ -174,13 +249,17 @@
                   regionKeyedValues[regionKey][cacheKey] = value;
               });
           });
-          this.set("rows", Object.keys(regionKeyedValues).map(function(regionKey) {
+
+          var newRows = Object.keys(regionKeyedValues).map(function(regionKey) {
               var indicatorValues = regionKeyedValues[regionKey],
-                row = [me.regionInfo[regionKey].name].concat(me.indicatorHeaders.map(function(indicatorHeader) {
+              
+              row = [me.regionInfo[regionKey].name].concat(me.indicatorHeaders.map(function(indicatorHeader) {
                   return indicatorValues[indicatorHeader.id];
-                }));
+              }));
               return row;
-          }));
+          });
+          this.set("statsrows", summaryRows);
+          this.set("rows", newRows);
       },
       "getCacheKey": function(datasourceId, indicatorId, selectedLayer, selectorsString) {
           return datasourceId + ":" + indicatorId + ":" + selectedLayer + ":" + selectorsString;
@@ -189,7 +268,8 @@
           this.cache = {};
       }
       
-    });
+    };
+  });
   </script>
 
 </dom-module>

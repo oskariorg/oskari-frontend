@@ -1,0 +1,9 @@
+  <script src="/Oskari/libraries/requirejs/require-2.1.15.js"></script>
+  <script>
+    Polymer.require = function(deps, func) {
+      require(deps, function() {
+        Polymer(func.apply(this, arguments));
+      });
+    };
+  </script>
+  
