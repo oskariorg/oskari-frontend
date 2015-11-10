@@ -3,6 +3,7 @@
 
 <link href="libs/promise-polyfill/promise-polyfill.html" rel="import">
 <link href="libs/iron-ajax/iron-ajax.html" rel="import">
+<link href="oskari-userindicator.html" rel="import">
 
 <dom-module id="oskari-indicatorselector">
 
@@ -15,7 +16,7 @@
       last-response="{{sources}}"
       debounce-duration="300"
       id="indicatorsAjax"></iron-ajax>
-    <div class="indicator-cont" hidden$="[[showUserIndicatorView]]">
+    <div hidden$="[[showUserIndicatorView]]">
       <form class="statsgrid2_indicator_selector">
         <div>
           <label for="datasource-selector">{{locale.tab.grid.organization}}</label>
@@ -24,7 +25,7 @@
               <option value="{{item.val}}">{{item.text}}</option>
             </template>
           </select>
-          <button on-click="onAddUserIndicator">[[locale.addDataButton]]</button>
+          <button type="button" on-click="onAddUserIndicator">[[locale.addDataButton]]</button>
         </div>
         <label for="indicator-selector">{{locale.indicators}}</label>
         <select id="indicator-selector" style="width: 300px;" value="{{indicatorId::change}}">
@@ -48,9 +49,16 @@
         <button type="button" on-click="onAddIndicatorToGrid" hidden$="[[!indicatorSelected]]"
           disabled$="[[!allSelectorsSelected]]">{{locale.addColumn}}</button>
       </form>
+      <oskari-statsgrid locale="[[locale]]" language="[[language]]" ajax-url="[[ajaxUrl]]"
+        sources="{{sources}}" selected-indicators="{{selectedIndicators}}" selected-layer="{{selectedLayer}}"
+        layer-info="{{layerInfo}}" region-info="{{regionInfo}}" hidden$="[[!showGrid]]"
+        id="statsgrid""></oskari-statsgrid>
     </div>
-    <oskari-userindicator hidden$="[[!showUserIndicatorView]]" selected-layer="{{selectedLayer}}"
-        layer-info="{{layerInfo}}" region-info="{{regionInfo}}"></oskari-userindicator>
+    <div hidden$="[[!showUserIndicatorView]]">
+      <oskari-userindicator ajax-url="[[ajaxUrl]]"
+        locale="[[locale]]" language="[[language]]" sources="[[sources]]" selected-layer="{{selectedLayer}}"
+        layer-info="[[layerInfo]]" region-info="[[regionInfo]]"></oskari-userindicator>
+    </div>
     <content></content>
   </template>
 
@@ -97,13 +105,23 @@
               "value": false,
               "notify": true
           },
+          "showGrid": {
+              "type": Boolean,
+              "notify": true,
+              "value": false
+          },
           "dialog": Object
       },
       "observers": [
           "indicatorChanged(indicatorId)",
           "getSelectors(sources, datasourceId, indicatorId)",
+          "selectedIndicatorsChanged(ajaxUrl, selectedIndicators.splices)",
           "selectorsChanged(sources, datasourceId, indicatorId, selectorItems.splices)"
       ],
+      "selectedIndicatorsChanged": function() {
+          this.set("showGrid", this.showUserIndicatorView && !!this.selectedIndicators
+                  && this.selectedIndicators.length > 0);
+      },
       "selectorsChanged": function(sources, datasourceId, indicatorId) {
           var me = this;
           this.allSelectorsSelected = true;
@@ -119,7 +137,7 @@
       "indicatorChanged": function(indicatorId) {
           this.indicatorSelected = indicatorId !== undefined && indicatorId !== null && indicatorId !== "undefined";
       },
-      "onAddUserIndicator": function(localizedNames, fallback, lang) {
+      "onAddUserIndicator": function() {
 		  this.showUserIndicatorView = true;
       },
       "getLocalizationFrom": function(localizedNames, fallback, lang) {

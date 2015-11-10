@@ -1,13 +1,9 @@
-<link rel="import"
-      href="libs/polymer/polymer.html">
-
-<link href="libs/promise-polyfill/promise-polyfill.html" rel="import">
-<link href="libs/iron-ajax/iron-ajax.html" rel="import">
+<link rel="import" href="libs/polymer/polymer.html">
 
 <dom-module id="oskari-userindicator">
 
   <template>
-    <div id="userIndicatorCont" visible?="[[showUserIndicatorView]]">
+    <div id="userIndicatorCont">
       <form class="add-indicator">
         <h2></h2>
         <fieldset class="form-meta">
@@ -24,12 +20,13 @@
           <select id="indicator_reference-layer"></select>
           <label for="indicator_text-import"></label>
           <textarea class="import-textarea" id="indicator_text-import"></textarea>
-          <button class="start-import primary" title=""></button>
+          <button type="button" class="start-import primary" title=""></button>
           <!-- We need the empty title so the tooltip will show up... --> 
-          <button class="clear-import" title=""></button>
+          <button type="button" class="clear-import" title=""></button>
         </fieldset>
         <fieldset class="form-regions">
-          <legend></legend><hr/>
+          <legend></legend>
+          <hr/>
           <ul class="regions"></ul>
           <template is="dom-repeat" items="{{selector.values}}" as="selectorOption">
             <li class="region-row">
@@ -38,9 +35,9 @@
           </template>
         </fieldset>
         <fieldset class="form-submit">
-          <button class="cancel-form-button"></button>
-          <button class="submit-form-button primary" title=""></button>
-          <button class="clear-form-button"></button>
+          <button type="button" class="cancel-form-button"></button>
+          <button type="button" class="submit-form-button primary" title=""></button>
+          <button type="button" class="clear-form-button"></button>
         </fieldset>
       </form>
     </div>
@@ -71,6 +68,9 @@
               "type": Object,
               "notify": true
           }
+      },
+      "ready": function() {
+          console.log("Ready.");
       }
     });
   </script>
