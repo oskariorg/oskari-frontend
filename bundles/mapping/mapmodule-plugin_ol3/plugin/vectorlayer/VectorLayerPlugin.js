@@ -14,6 +14,18 @@ Oskari.clazz.define(
         this._supportedFormats = {};
         this._nextVectorId = 0;
         this._nextFeatureId = 0;
+        this._defaultStyle = {
+            fillColor: 'rgba(255,0,255,0.2)',
+            strokeColor: 'rgba(0,0,0,1)',
+            width: 2,
+            radius: 4,
+            textScale: 1.3,
+            textOutlineColor: 'rgba(255,255,255,1)',
+            textColor: 'rgba(0,0,0,1)',
+            lineDash: [5]
+        };
+        this._styleTypes = ['default', 'feature', 'layer'];
+        this._styles = {};
         this._layers = {};
     }, {
         /**
@@ -123,13 +135,12 @@ Oskari.clazz.define(
          * @param {Object} geometry the geometry WKT string or GeoJSON object
          * @param {String} geometryType the geometry type. Supported formats are: WKT and GeoJSON.
          * @param {String} layerId Id of the layer where features will be added. If not given, will create new vector layer
-         * @param {String} operation layer operations. Supported: replace.
-         * @param {Boolean} keepLayerOnTop. If true add layer on the top. Default true.
-         * @param {ol.layer.Vector options} layerOptions options for layer
-         * @param {ol.style.Style} featureStyle Style for the feature. This can be a single style object, an array of styles, or a function that takes a resolution and returns an array of styles.
+         * @param {Boolean} replace
+         * @param {Object} layerOptions options for layer in JSON or String format
+         * @param {Object} featureStyle Style for the feature. A JSON or String object representation of OpenLayers style object
          * @param {Boolean} centerTo True to center the map to the given geometry.
          */
-        addFeaturesToMap: function(geometry, geometryType, layerId, operation, keepLayerOnTop, layerOptions, featureStyle, centerTo){
+        addFeaturesToMap: function(geometry, geometryType, layerId, replace, layerOptions, featureStyle, centerTo){
             var me = this,
                 format = me._supportedFormats[geometryType],
                 olLayer,
@@ -137,10 +148,6 @@ Oskari.clazz.define(
 
             if (!format) {
                 return;
-            }
-
-            if (!keepLayerOnTop) {
-                var keepLayerOnTop = true;
             }
 
             if (geometry) {
@@ -153,8 +160,9 @@ Oskari.clazz.define(
                 });
 
                 if (featureStyle) {
+                   me.setDefaultStyle(featureStyle);
                     _.forEach(features, function (feature) {
-                        feature.setStyle(featureStyle);
+                        feature.setStyle(styles.featureStyle);
                     });
                 }
 
@@ -162,7 +170,7 @@ Oskari.clazz.define(
                 if (me._layers[layerId]) {
                     //layer is already on map
                     //clear old features if defined so
-                    if (operation && operation !== null && operation === 'replace') {
+                    if (replace) {
                         layer.getSource().clear();
                     }
                     var vectorsource = layer.getSource();
@@ -183,9 +191,7 @@ Oskari.clazz.define(
                     me._map.addLayer(layer);
                 }
 
-                if (keepLayerOnTop) {
-                    me.raiseVectorLayer(layer);
-                }
+                me.raiseVectorLayer(layer);
 
                 if (centerTo === true) {
                     var extent = vectorsource.getExtent();
@@ -277,7 +283,123 @@ Oskari.clazz.define(
             }
             // only single layer/id, wrap it in an array
             return [this._layers[layer.getSource().get(id)]];
-        }
+        },
+        /**
+         * Possible workaround for arranging the feature draw order within a layer
+         *
+         */
+        rearrangeFeatures : function() {
+            var me = this,
+                layers = me.layers;
+            for(key in layers) {
+                if(layers[key].features.length > 0) {
+                    var layer = layers[key];
+                    var features = layer.features;
+                    features.sort(function(a, b) {
+                        if(a.config != undefined){
+                            if (a.config.positionInsideLayer < b.config.positionInsideLayer) {
+                                return -1;
+                            }
+                            if (a.config.positionInsideLayer > b.config.positionInsideLayer) {
+                                return 1;
+                            }
+                            return 0;
+                        }
+                    });
+                    layer.removeAllFeatures();
+                    layer.addFeatures(features);
+                }
+            }
+        },
+        /**
+         * @method setDefaultStyle
+         *
+         * @param {Object} styles. If not given, will set default styles
+         */
+        setDefaultStyle : function(styles) {
+            var me = this;
+            //setting defaultStyle
+            _.each(me._styleTypes, function (s) {
+                me._styles[s] = new ol.style.Style({
+                    fill: new ol.style.Fill({
+                      color: me._defaultStyle.fillColor
+                    }),
+                    stroke: new ol.style.Stroke({
+                      color: me._defaultStyle.strokeColor,
+                      width: me._defaultStyle.width
+                    }),
+                    image: new ol.style.Circle({
+                      radius: me._defaultStyle.radius,
+                      fill: new ol.style.Fill({
+                        color: me._defaultStyle.strokeColor
+                      })
+                    }),
+                    text: new ol.style.Text({
+                         scale: me._defaultStyle.textScale,
+                         fill: new ol.style.Fill({
+                           color: me._defaultStyle.textColor
+                         }),
+                         stroke: new ol.style.Stroke({
+                           color: me._defaultStyle.textOutlineColor,
+                           width: me._defaultStyle.width
+                         })
+                      })
+                });
+            });
+            //overwriting default styles if given
+            if(styles) {
+                _.each(styles, function (style, styleType) {
+                    if(me.hasNestedObj(style, 'fill.color')) {
+                        me._styles[styleType].getFill().setColor(style.fill.color);
+                    }
+                    if(me.hasNestedObj(style, 'stroke.color')) {
+                        me._styles[styleType].getStroke().setColor(style.stroke.color);
+                    }
+                    if(me.hasNestedObj(style, 'stroke.width')) {
+                        me._styles[styleType].getStroke().setWidth(style.stroke.width);
+                    }
+                    if(me.hasNestedObj(style, 'image.radius')) {
+                        me._styles[styleType].getImage().radius = style.image.radius;
+                    }
+                    if(me.hasNestedObj(style, 'image.fill.color')) {
+                        me._styles[styleType].getImage().getFill().setColor(style.image.fill.color);
+                    }
+                    if(me.hasNestedObj(style, 'text.fill.color')) {
+                        me._styles[styleType].getText().getFill().setColor(style.text.fill.color);
+                    }
+                    if(me.hasNestedObj(style, 'text.scale')) {
+                        me._styles[styleType].getText().setScale(style.text.scale);
+                    }
+                    if(me.hasNestedObj(style, 'text.stroke.color')) {
+                        me._styles[styleType].getText().getFill().setColor(style.text.stroke.color);
+                    }
+                    if(me.hasNestedObj(style, 'text.stroke.width')) {
+                        me._styles[styleType].getText().getStroke().setWidth(style.text.stroke.width);
+                    }
+                });
+            }
+        },
+        /** Check, if nested key exists
+        * @method hasNestedObj
+        * @params {}  object
+        * @params String object path
+        * @public
+        *
+        * @returns {Boolean}: true if nested key exists
+        */
+       hasNestedObj: function(obj, sobj) {
+          var tmpObj = obj,
+              cnt = 0,
+              splits = sobj.split('.');
+
+          for (i=0; tmpObj && i < splits.length; i++) {
+              if (splits[i] in tmpObj) {
+                  tmpObj = tmpObj[splits[i]];
+                  cnt++;
+              }
+          }
+          return cnt === splits.length;
+       }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
         /**
