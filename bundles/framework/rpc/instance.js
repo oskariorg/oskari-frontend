@@ -178,6 +178,7 @@ Oskari.clazz.define(
                     'MapMoveRequest': true,
                     'ShowProgressSpinnerRequest': true,
                     'GetRouteRequest': true,
+                    'ChangeMapLayerOpacityRequest': true,
                     'MyLocationPlugin.GetUserLocationRequest': true
                 };
             }
