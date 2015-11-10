@@ -40,18 +40,19 @@
         <hr/>
         <fieldset class="form-regions">
           <!-- FIXME: 300 px ok for all browsers? Should probably calculate this. -->
-          <paper-scroll-header-panel class="flex" style="height: 300px;">
-            <paper-toolbar>
-              <legend>[[selectedLayer.text]]</legend>
-            </paper-toolbar>
-            <ul class="regions"></ul>
-            <template is="dom-repeat" items="{{getRegionItems(regionInfo)}}" as="regionItem">
-              <li class="region-row">
-                <label class="region-row" for="[[regionItem.key]]">[[regionItem.text]]</label>
-                <input id="[[regionItem.key]]" type="text" value="{{regionItem.value::change}}"
-                  placeholder="[[locale.municipalityPlaceHolder]]" />
-              </li>
-            </template>
+          <paper-scroll-header-panel style="height: 300px;">
+            <legend>
+              [[getLayerName(locale, selectedLayer)]]
+            </legend>
+            <ul class="regions">
+              <template is="dom-repeat" items="{{getRegionItems(regionInfo)}}" as="regionItem">
+                <li class="region-row">
+                  <label class="region-row" for="[[regionItem.key]]">[[regionItem.text]]</label>
+                  <input id="[[regionItem.key]]" type="text" value="{{regionItem.value::change}}"
+                    placeholder="[[locale.municipalityPlaceHolder]]" />
+                </li>
+              </template>
+            </ul>
           </paper-scroll-header-panel>
         </fieldset>
         <fieldset class="form-submit">
@@ -93,6 +94,9 @@
               "value": false,
               "notify": true
           }
+      },
+      "getLayerName": function(locale, layerKey) {
+          return this.localize(this.locale.regionCategories, layerKey);
       },
       "getRegionItems": function(regionInfo) {
           var me = this;

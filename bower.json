@@ -32,6 +32,7 @@
     "vaadin-components": "vaadin-elements#~0.3.0-beta9",
     "iron-ajax": "PolymerElements/iron-ajax#~1.0.8",
     "mathjs": "~2.4.1",
-    "iron-collapse": "PolymerElements/iron-collapse#~1.0.4"
+    "iron-collapse": "PolymerElements/iron-collapse#~1.0.4",
+    "paper-scroll-header-panel": "PolymerElements/paper-scroll-header-panel#~1.0.10"
   }
 }
