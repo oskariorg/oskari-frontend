@@ -5,14 +5,19 @@
   <template>
     <div id="userIndicatorCont">
       <form class="add-indicator">
-        <h2></h2>
+        <h2>[[locale.addDataTitle]]</h2>
         <fieldset class="form-meta">
-          <legend></legend>
-          <label for="indicator_title"></label><input type="text" id="indicator_title" required />
-          <label for="indicator_sources"></label><input type="text" id="indicator_sources" required />
-          <label for="indicator_description"></label><input type="text" id="indicator_description" required />
-          <label for="indicator_year"></label><input type="text" id="indicator_year" required />
-          <label for="indicator_publicity"></label><input type="checkbox" id="indicator_publicity" />
+          <legend>[[locale.baseInfoTitle]]</legend>
+          <label for="indicator_title">[[locale.addDataMetaTitle]]</label>
+          <input type="text" id="indicator_title" placeholder="[[locale.addDataMetaTitlePH]]" required />
+          <label for="indicator_sources">[[locale.addDataMetaSources]]</label>
+          <input type="text" id="indicator_sources" placeholder="[[locale.addDataMetaSourcesPH]]" required />
+          <label for="indicator_description">[[locale.addDataMetaDescription]]</label>
+          <input type="text" id="indicator_description" placeholder="[[locale.addDataMetaDescriptionPH]]" required />
+          <label for="indicator_year">[[locale.addDataMetaYear]]</label>
+          <input type="text" id="indicator_year" placeholder="[[locale.addDataMetaYear]]" required />
+          <label for="indicator_publicity">[[locale.addDataMetaPublicity]]</label>
+          <input type="checkbox" id="indicator_publicity" placeholder="[[locale.addDataMetaTitlePH]]" />
         </fieldset>
         <fieldset class="form-import">
           <legend></legend>
@@ -20,9 +25,9 @@
           <select id="indicator_reference-layer"></select>
           <label for="indicator_text-import"></label>
           <textarea class="import-textarea" id="indicator_text-import"></textarea>
-          <button type="button" class="start-import primary" title=""></button>
+          <button type="button" class="start-import primary" title="" on-click="startImport"></button>
           <!-- We need the empty title so the tooltip will show up... --> 
-          <button type="button" class="clear-import" title=""></button>
+          <button type="button" class="clear-import" title="" on-click="clearImport"></button>
         </fieldset>
         <fieldset class="form-regions">
           <legend></legend>
@@ -35,9 +40,9 @@
           </template>
         </fieldset>
         <fieldset class="form-submit">
-          <button type="button" class="cancel-form-button"></button>
-          <button type="button" class="submit-form-button primary" title=""></button>
-          <button type="button" class="clear-form-button"></button>
+          <button type="button" class="cancel-form-button" on-click="cancelForm"></button>
+          <button type="button" class="submit-form-button primary" title="" on-click="submitForm"></button>
+          <button type="button" class="clear-form-button" on-click="clearForm"></button>
         </fieldset>
       </form>
     </div>
@@ -67,10 +72,29 @@
           "regionInfo": {
               "type": Object,
               "notify": true
+          },
+          "showUserIndicatorView": {
+              "type": Boolean,
+              "value": false,
+              "notify": true
           }
       },
-      "ready": function() {
-          console.log("Ready.");
+      "startImport": function() {
+          // FIXME: Implement
+      },
+      "clearImport": function() {
+          // FIXME: Implement
+      },
+      "cancelForm": function() {
+          this.set("showUserIndicatorView", false);
+      },
+      "submitForm": function() {
+          // FIXME: Implement
+          this.set("showUserIndicatorView", false);
+      },
+      "clearForm": function() {
+          // FIXME: Implement
+          this.set("showUserIndicatorView", false);
       }
     });
   </script>

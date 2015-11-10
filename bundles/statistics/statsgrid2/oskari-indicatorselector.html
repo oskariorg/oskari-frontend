@@ -57,7 +57,8 @@
     <div hidden$="[[!showUserIndicatorView]]">
       <oskari-userindicator ajax-url="[[ajaxUrl]]"
         locale="[[locale]]" language="[[language]]" sources="[[sources]]" selected-layer="{{selectedLayer}}"
-        layer-info="[[layerInfo]]" region-info="[[regionInfo]]"></oskari-userindicator>
+        layer-info="[[layerInfo]]" region-info="[[regionInfo]]"
+        show-user-indicator-view="{{showUserIndicatorView}}"></oskari-userindicator>
     </div>
     <content></content>
   </template>
@@ -119,7 +120,7 @@
           "selectorsChanged(sources, datasourceId, indicatorId, selectorItems.splices)"
       ],
       "selectedIndicatorsChanged": function() {
-          this.set("showGrid", this.showUserIndicatorView && !!this.selectedIndicators
+          this.set("showGrid", !this.showUserIndicatorView && !!this.selectedIndicators
                   && this.selectedIndicators.length > 0);
       },
       "selectorsChanged": function(sources, datasourceId, indicatorId) {
