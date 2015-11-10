@@ -1,0 +1,77 @@
+<link rel="import"
+      href="libs/polymer/polymer.html">
+
+<link href="libs/promise-polyfill/promise-polyfill.html" rel="import">
+<link href="libs/iron-ajax/iron-ajax.html" rel="import">
+
+<dom-module id="oskari-userindicator">
+
+  <template>
+    <div id="userIndicatorCont" visible?="[[showUserIndicatorView]]">
+      <form class="add-indicator">
+        <h2></h2>
+        <fieldset class="form-meta">
+          <legend></legend>
+          <label for="indicator_title"></label><input type="text" id="indicator_title" required />
+          <label for="indicator_sources"></label><input type="text" id="indicator_sources" required />
+          <label for="indicator_description"></label><input type="text" id="indicator_description" required />
+          <label for="indicator_year"></label><input type="text" id="indicator_year" required />
+          <label for="indicator_publicity"></label><input type="checkbox" id="indicator_publicity" />
+        </fieldset>
+        <fieldset class="form-import">
+          <legend></legend>
+          <label for="indicator_reference-layer"></label>
+          <select id="indicator_reference-layer"></select>
+          <label for="indicator_text-import"></label>
+          <textarea class="import-textarea" id="indicator_text-import"></textarea>
+          <button class="start-import primary" title=""></button>
+          <!-- We need the empty title so the tooltip will show up... --> 
+          <button class="clear-import" title=""></button>
+        </fieldset>
+        <fieldset class="form-regions">
+          <legend></legend><hr/>
+          <ul class="regions"></ul>
+          <template is="dom-repeat" items="{{selector.values}}" as="selectorOption">
+            <li class="region-row">
+              <label class="region-row"></label><input type="text" />
+            </li>
+          </template>
+        </fieldset>
+        <fieldset class="form-submit">
+          <button class="cancel-form-button"></button>
+          <button class="submit-form-button primary" title=""></button>
+          <button class="clear-form-button"></button>
+        </fieldset>
+      </form>
+    </div>
+    <content></content>
+  </template>
+
+  <script>
+    Polymer({
+      "is": "oskari-userindicator",
+      "properties": {
+          "ajaxUrl": String,
+          "locale": Object,
+          "language": String,
+          "sources": {
+              "type": Object,
+              "notify": true
+          },
+          "selectedLayer": {
+              "type": String,
+              "value": "oskari:kunnat2013",
+              "notify": true
+          },
+          "layerInfo": {
+              "type": Object,
+              "notify": true
+          },
+          "regionInfo": {
+              "type": Object,
+              "notify": true
+          }
+      }
+    });
+  </script>
+</dom-module>

@@ -80,7 +80,6 @@
               "type": Object,
               "notify": true
           },
-          "layers": Array,
           "indicatorHeaders": {
               "value": [],
               "type": Array,
@@ -228,14 +227,17 @@
                   // In ES6 we should definitely use "const" here.
                   var cacheKey = indicatorHeader.id,
                       indicatorValues = me.cache[cacheKey],
-                      values = Object.keys(indicatorValues).map(function(regionKey) {
+                      values = indicatorValues && Object.keys(indicatorValues).map(function(regionKey) {
                           return indicatorValues[regionKey];
-                      }),
+                      }) || [],
                       // In ES6 we could use { [summaryFunction]: ... }
-                      summary = {};
-                  summaryIds.forEach(function(summaryFunction) {
-                      summary[summaryFunction] = me.summarize[summaryFunction](values.filter(me.isDefined));
-                  });
+                      summary = {},
+                      definedValues = values.filter(me.isDefined);
+                  if (definedValues && values.length > 0) {
+                      summaryIds.forEach(function(summaryFunction) {
+                          summary[summaryFunction] = me.summarize[summaryFunction](definedValues);
+                      });
+                  }
                   return summary;
               }),
               summaryRows = summaryIds.map(function(summaryFunction) {
@@ -249,13 +251,15 @@
           me.indicatorHeaders.forEach(function(indicatorHeader) {
               var cacheKey = indicatorHeader.id,
                   indicatorValues = me.cache[cacheKey];
-              Object.keys(indicatorValues).forEach(function(regionKey) {
-                  var value = indicatorValues[regionKey];
-                  if (!regionKeyedValues[regionKey]) {
-                      regionKeyedValues[regionKey] = {};
-                  }
-                  regionKeyedValues[regionKey][cacheKey] = value;
-              });
+              if (indicatorValues) {
+                  Object.keys(indicatorValues).forEach(function(regionKey) {
+                      var value = indicatorValues[regionKey];
+                      if (!regionKeyedValues[regionKey]) {
+                          regionKeyedValues[regionKey] = {};
+                      }
+                      regionKeyedValues[regionKey][cacheKey] = value;
+                  });
+              }
           });
 
           var newRows = Object.keys(regionKeyedValues).map(function(regionKey) {

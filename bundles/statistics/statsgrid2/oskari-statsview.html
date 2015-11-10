@@ -8,10 +8,13 @@
 
   <template>
       <oskari-indicatorselector locale="[[locale]]" language="[[language]]" ajax-url="[[ajaxUrl]]"
-        sources="{{sources}}" selected-indicators="{{selectedIndicators}}"
+        sources="{{sources}}" selected-indicators="{{selectedIndicators}}" selected-layer="{{selectedLayer}}"
+        layer-info="{{layerInfo}}" region-info="{{regionInfo}}"
         id="indicatorselector"></oskari-indicatorselector>
       <oskari-statsgrid locale="[[locale]]" language="[[language]]" ajax-url="[[ajaxUrl]]"
-        sources="{{sources}}" selected-indicators="{{selectedIndicators}}" id="statsgrid"></oskari-statsgrid>
+        sources="{{sources}}" selected-indicators="{{selectedIndicators}}" selected-layer="{{selectedLayer}}"
+        layer-info="{{layerInfo}}" region-info="{{regionInfo}}" hidden$="[[!showGrid]]"
+        id="statsgrid"></oskari-statsgrid>
       <content></content>
     </div>
   </template>
@@ -24,7 +27,21 @@
           "language": String,
           "ajaxUrl": String,
           "sources": Object,
-          "selectedIndicators": Array
+          "selectedIndicators": {
+              "type": Array,
+              "notify": true
+          },
+          "showGrid": {
+              "type": Boolean,
+              "notify": true,
+              "value": false
+          }
+      },
+      "observers": [
+          "selectedIndicatorsChanged(ajaxUrl, selectedIndicators.splices)"
+      ],
+      "selectedIndicatorsChanged": function() {
+          this.set("showGrid", !!this.selectedIndicators && this.selectedIndicators.length > 0);
       }
     });
   </script>
