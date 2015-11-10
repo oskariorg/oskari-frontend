@@ -145,7 +145,7 @@ Oskari.clazz.define(
             var allowedRequests = conf.allowedRequests;
 
             if (allowedEvents === null || allowedEvents === undefined) {
-                allowedEvents = ['AfterMapMoveEvent', 'MapClickedEvent', 'AfterAddMarkerEvent', 'MarkerClickEvent', 'RouteSuccessEvent', 'UserLocationEvent'];
+                allowedEvents = ['AfterMapMoveEvent', 'MapClickedEvent', 'AfterAddMarkerEvent', 'MarkerClickEvent', 'RouteSuccessEvent', 'UserLocationEvent', 'DrawingEvent'];
             }
 
             if (allowedFunctions === null || allowedFunctions === undefined) {
@@ -165,7 +165,9 @@ Oskari.clazz.define(
                     'ShowProgressSpinnerRequest',
                     'GetRouteRequest',
                     'ChangeMapLayerOpacityRequest',
-                    'MyLocationPlugin.GetUserLocationRequest'];
+                    'MyLocationPlugin.GetUserLocationRequest', 
+                    'DrawTools.StartDrawingRequest',
+                    'DrawTools.StopDrawingRequest'];
             }
             // TODO: try to get event/request builder for each of these to see that they really are supported!!
             me._allowedEvents = this.__arrayToObject(allowedEvents);
