@@ -19,6 +19,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddFeaturesToM
     function (geometry, options) {
         this._creator = null;
         this._geometry = geometry;
+        if(!options) {
+            options = {};
+        }
         this._layerId = options.layerId;
         this._replace = options.replace;
         this._layerOptions = options.layerOptions;
