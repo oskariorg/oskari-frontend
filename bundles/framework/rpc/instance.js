@@ -145,60 +145,65 @@ Oskari.clazz.define(
             var allowedRequests = conf.allowedRequests;
 
             if (allowedEvents === null || allowedEvents === undefined) {
-                allowedEvents = {
-                    'AfterMapMoveEvent': true,
-                    'MapClickedEvent': true,
-                    'AfterAddMarkerEvent' : true,
-                    'MarkerClickEvent' : true,
-                    'RouteSuccessEvent': true,
-                    'UserLocationEvent': true
-                };
+                allowedEvents = ['AfterMapMoveEvent', 'MapClickedEvent', 'AfterAddMarkerEvent', 'MarkerClickEvent', 'RouteSuccessEvent', 'UserLocationEvent'];
             }
 
             if (allowedFunctions === null || allowedFunctions === undefined) {
-                allowedFunctions = {
-                    getAllLayers: true,
-                    getMapPosition: true,
-                    getSupportedEvents: true,
-                    getSupportedFunctions: true,
-                    getSupportedRequests: true,
-                    getZoomRange: true,
-                    getMapBbox: true,
-                    resetState : true
-                };
+                allowedFunctions = ['getAllLayers', 'getAllLayers', 'getMapPosition', 'getSupportedEvents', 'getSupportedFunctions', 'getSupportedRequests',
+                    'getZoomRange', 'getMapBbox', 'resetState'];
             }
 
             if (allowedRequests === null || allowedRequests === undefined) {
-                allowedRequests = {
-                    'InfoBox.ShowInfoBoxRequest': true,
-                    'MapModulePlugin.AddMarkerRequest': true,
-                    'MapModulePlugin.AddFeaturesToMapRequest': true,
-                    'MapModulePlugin.RemoveFeaturesFromMapRequest': true,
-                    'MapModulePlugin.GetFeatureInfoRequest': true,
-                    'MapModulePlugin.MapLayerVisibilityRequest': true,
-                    'MapModulePlugin.RemoveMarkersRequest': true,
-                    'MapMoveRequest': true,
-                    'ShowProgressSpinnerRequest': true,
-                    'GetRouteRequest': true,
-                    'ChangeMapLayerOpacityRequest': true,
-                    'MyLocationPlugin.GetUserLocationRequest': true
-                };
+                allowedRequests = ['InfoBox.ShowInfoBoxRequest',
+                    'MapModulePlugin.AddMarkerRequest',
+                    'MapModulePlugin.AddFeaturesToMapRequest',
+                    'MapModulePlugin.RemoveFeaturesFromMapRequest',
+                    'MapModulePlugin.GetFeatureInfoRequest',
+                    'MapModulePlugin.MapLayerVisibilityRequest',
+                    'MapModulePlugin.RemoveMarkersRequest',
+                    'MapMoveRequest',
+                    'ShowProgressSpinnerRequest',
+                    'GetRouteRequest',
+                    'ChangeMapLayerOpacityRequest',
+                    'MyLocationPlugin.GetUserLocationRequest'];
             }
             // TODO: try to get event/request builder for each of these to see that they really are supported!!
 
-            me._allowedEvents = allowedEvents;
-            me._allowedFunctions = allowedFunctions;
-            me._allowedRequests = allowedRequests;
+            me._allowedEvents = this.__arrayToObject(allowedEvents);
+            me._allowedFunctions = this.__arrayToObject(allowedFunctions);
+            me._allowedRequests = this.__arrayToObject(allowedRequests);
+        },
+        /**
+         * Maps a given array to a dictionary format for easier access
+         * @private
+         * @param  {String[]} list will be used as keys in the result object. Values are boolean 'true' for each
+         * @return {Object}   object with list items as keys and bln true as values
+         */
+        __arrayToObject: function(list) {
+            var result = {};
+            for(var i=0; i < list; ++i) {
+                result[list[i]] = true;
+            }
+            return result;
         },
         _availableFunctions : {
+            // format "supportedXYZ" to an object for easier checking for specific name
             getSupportedEvents : function() {
                 return this._allowedEvents;
             },
             getSupportedFunctions : function() {
-                return this._allowedFunctions;
+                var result = {};
+                for(var i=0; i < this._allowedFunctions; ++i) {
+                    result[this._allowedFunctions] = true;
+                }
+                return result;
             },
             getSupportedRequests : function() {
-                return this._allowedRequests;
+                var result = {};
+                for(var i=0; i < this._allowedRequests; ++i) {
+                    result[this._allowedRequests] = true;
+                }
+                return result;
             },
             getAllLayers : function() {
                 var mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');

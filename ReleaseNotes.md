@@ -4,6 +4,8 @@
 
 ### rpc
 
+Allowed functions/events/requests are now configured as an array ["AfterMapMoveEvent", "MapClickedEvent"] instead of an object { "AfterMapMoveEvent" : true, "MapClickedEvent" : true }
+
 New function is enabled by default:
 - 'getMapBbox' gets current map bbox
 - 'resetState' resets the map to initial state (location/layers etc)
