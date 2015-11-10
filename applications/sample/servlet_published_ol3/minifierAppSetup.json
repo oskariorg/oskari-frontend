@@ -1,29 +1,28 @@
 {
     "startupSequence": [{
-            "title": "Map",
             "bundlename": "mapfull_ol3",
             "metadata": {
                 "Import-Bundle": {
-                    "mapwmts_ol3": {
-                        "bundlePath": "../../../packages/mapping/"
+                    "mapwmts": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
                     },
-                    "mapwfs2_ol3": {
-                        "bundlePath": "../../../packages/mapping/"
+                    "mapwfs2": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
                     },
-                    "mapstats_ol3": {
-                        "bundlePath": "../../../packages/mapping/"
+                    "mapstats": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
                     },
-                    "mapanalysis_ol3": {
-                        "bundlePath": "../../../packages/mapping/"
+                    "mapanalysis": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
                     },
-                    "mapuserlayers_ol3": {
-                        "bundlePath": "../../../packages/mapping/"
+                    "mapuserlayers": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
                     },
-                    "maparcgis_ol3": {
-                        "bundlePath": "../../../packages/mapping/"
+                    "maparcgis": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
                     },
-                    "mapmodule_ol3": {
-                        "bundlePath": "../../../packages/mapping/"
+                    "mapmodule": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
                     },
                     "service-base": {
                         "bundlePath": "../../../packages/framework/bundle/"
@@ -76,7 +75,6 @@
                 }
             }
         }, {
-            "title": "Oskari DIV Manazer",
             "bundlename": "divmanazer",
             "metadata": {
                 "Import-Bundle": {
@@ -86,27 +84,24 @@
                 }
             }
         }, {
-            "title": "Info Box",
-            "bundlename": "infobox_ol3",
+            "bundlename": "infobox",
             "metadata": {
                 "Import-Bundle": {
-                    "infobox_ol3": {
-                        "bundlePath": "../../../packages/mapping/"
+                    "infobox": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
                     }
                 }
             }
         }, {
-            "title": "Toolbar",
-            "bundlename": "toolbar_ol3",
+            "bundlename": "toolbar",
             "metadata": {
                 "Import-Bundle": {
-                    "toolbar_ol3": {
-                        "bundlePath": "../../../packages/mapping/"
+                    "toolbar": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
                     }
                 }
             }
         }, {
-            "title" : "publishedstatehandler",
             "bundlename" : "publishedstatehandler",
             "metadata" : {
                 "Import-Bundle" : {
@@ -116,7 +111,6 @@
                 }
             }
         }, {
-            "title": "Featuredata",
             "bundlename": "featuredata2",
             "metadata": {
                 "Import-Bundle": {
@@ -126,17 +120,15 @@
                 }
             }
         }, {
-            "title": "Drawtools",
-            "bundlename": "drawtools_ol3",
+            "bundlename": "drawtools",
             "metadata": {
                 "Import-Bundle": {
-                    "drawtools_ol3": {
-                        "bundlePath": "../../../packages/mapping/"
+                    "drawtools": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
                     }
                 }
             }
         }, {
-            "title": "RoutingService",
             "bundlename": "routingService",
             "metadata": {
                 "Import-Bundle": {
@@ -146,7 +138,6 @@
                 }
             }
         }, {
-            "title": "Remote procedure call",
             "bundlename": "rpc",
             "metadata": {
                 "Import-Bundle": {
