@@ -172,6 +172,8 @@ Oskari.clazz.define(
                 allowedRequests = {
                     'InfoBox.ShowInfoBoxRequest': true,
                     'MapModulePlugin.AddMarkerRequest': true,
+                    'MapModulePlugin.AddFeaturesToMapRequest': true,
+                    'MapModulePlugin.RemoveFeaturesFromMapRequest': true,
                     'MapModulePlugin.GetFeatureInfoRequest': true,
                     'MapModulePlugin.MapLayerVisibilityRequest': true,
                     'MapModulePlugin.RemoveMarkersRequest': true,
