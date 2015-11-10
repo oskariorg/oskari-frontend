@@ -322,21 +322,25 @@ if (!Function.prototype.bind) {
              */
             getLegendUrl: function() {
                 var adminBlock = this.getAdmin();
+                var capabilitiesBlock = this.getCapabilities();
                 var currentStyleName = this.getCurrentStyle().getName();
 
-                if (adminBlock && currentStyleName && adminBlock.styles){
-                    var selectedStyle = jQuery.grep(adminBlock.styles ||[], function(style){
-                        return style.name === currentStyleName;
-                    });
+                if (capabilitiesBlock) {
+                    if(currentStyleName && capabilitiesBlock.styles) {
+                        var selectedStyle = jQuery.grep(capabilitiesBlock.styles ||[], function(style){
+                            return style.name === currentStyleName;
+                        });
 
-                    if(selectedStyle.length>0) {
-                        return selectedStyle[0].legend;
-                    } else {
-                        return adminBlock.getCurrentStyle().getLegend();
+                        if(selectedStyle.length>0) {
+                            return selectedStyle[0].legend;
+                        }
+                    }
+                    if(adminBlock) {
+                        return adminBlock.legendImage;
                     }
                 }
 
-                return this.getCurrentStyle().getLegend();
+                return ''; //this.getCurrentStyle().getLegend();
             },
 
             /**

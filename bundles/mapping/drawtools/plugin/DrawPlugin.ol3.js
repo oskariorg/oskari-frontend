@@ -185,7 +185,7 @@ Oskari.clazz.define(
         	var options = {
         		clearCurrent: clearCurrent,
         		isFinished: true
-        	}
+        	};
         	me.sendDrawingEvent(id, options);
             //deactivate draw nad modify controls
             me.removeInteractions();
@@ -274,9 +274,9 @@ Oskari.clazz.define(
         	var sketch;
         	var optionsForDrawingEvent = {
  	        	isFinished: false
-	        }
-
-    	    if (shape === 'LineString') {
+	        };
+        	
+        	if (shape === 'LineString') {
     	    	 geometryFunction = function (coordinates, geometry) {
 	    	    	 if (!geometry) {
 	    	    		  geometry = new ol.geom.LineString(null);
@@ -337,10 +337,10 @@ Oskari.clazz.define(
 	        me._map.addInteraction(me._draw);
 
 			me._draw.on('drawstart', function(evt) {
-				me._sketch = evt.feature;				
+				me._sketch = evt.feature;
 				if(options.allowMultipleDrawing === 'single') {
 					me.clearDrawing();
-				} 
+				}
 			});
 			me._draw.on('drawend', function() {
 				if(options.allowMultipleDrawing === false) {
@@ -407,6 +407,7 @@ Oskari.clazz.define(
         			} else if(shape === 'Polygon') {
             			me.showText(evt.feature, me.getPolygonArea(evt.feature.getGeometry()), options);
         			}
+        			me.sendDrawingEvent(me._id, options);
 				});
 			 });
         },
@@ -420,7 +421,7 @@ Oskari.clazz.define(
          */
     	showText: function(feature, text, options) {
 			var me = this;
-    		if(feature && options.showMeasure === true) {
+    		if(feature && options.showMeasure) {
     			var featureStyle = _.clone(me._styles['draw']);
     			feature.style_ = featureStyle;
 	    		feature.style_.text_.text_ = text;

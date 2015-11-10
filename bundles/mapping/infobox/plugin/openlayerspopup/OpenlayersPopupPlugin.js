@@ -151,7 +151,7 @@ Oskari.clazz.define(
                 contentDiv = me._renderContentData(id, contentData),
                 popupContentHtml = me._renderPopupContent(id, title, contentDiv),
                 popupElement = me._popupWrapper.clone(),
-                lonlatArray = lonlat.split(",");
+                lonlatArray = [lonlat.lon, lonlat.lat];
 
             popupElement.attr('id', id);
             if (refresh) {
@@ -627,7 +627,7 @@ Oskari.clazz.define(
                         if (!position ||
                             position.lon !== popup.lonlat.lon ||
                             position.lat !== popup.lonlat.lat) {
-                            popup.popup.destroy();
+                            popup.popup.setPosition(undefined);  //destroy();
                             delete this._popups[pid];
                         }
                     }
