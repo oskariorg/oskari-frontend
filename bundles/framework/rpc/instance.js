@@ -168,7 +168,6 @@ Oskari.clazz.define(
                     'MyLocationPlugin.GetUserLocationRequest'];
             }
             // TODO: try to get event/request builder for each of these to see that they really are supported!!
-
             me._allowedEvents = this.__arrayToObject(allowedEvents);
             me._allowedFunctions = this.__arrayToObject(allowedFunctions);
             me._allowedRequests = this.__arrayToObject(allowedRequests);
@@ -181,7 +180,7 @@ Oskari.clazz.define(
          */
         __arrayToObject: function(list) {
             var result = {};
-            for(var i=0; i < list; ++i) {
+            for(var i=0; i < list.length; ++i) {
                 result[list[i]] = true;
             }
             return result;
