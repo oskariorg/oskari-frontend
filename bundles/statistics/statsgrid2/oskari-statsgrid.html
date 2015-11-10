@@ -19,14 +19,12 @@
       debounce-duration="300"
       id="layerInfoAjax"></iron-ajax>
     <div>
-      <label>
-        <span>{{locale.selectRegionCategory}}</span>
-        <select style="width: 300px;" value="{{selectedLayer::change}}">
-          <template is="dom-repeat" items="[[getLayerInfoAsArray(layerInfo)]]">
-            <option value="{{item.val}}">{{item.text}}</option>
-          </template>
-        </select>
-      </label>
+      <label for="selectRegionCategory">{{locale.selectRegionCategory}}</label>
+      <select id="selectRegionCategory" style="width: 300px;" value="{{selectedLayer::change}}">
+        <template is="dom-repeat" items="[[getLayerInfoAsArray(layerInfo)]]">
+          <option value="{{item.val}}">{{item.text}}</option>
+        </template>
+      </select>
       
       <button on-click="toggleStats">Statistics</button>
       <iron-collapse id="statscollapse">

@@ -200,7 +200,7 @@ Oskari.registerLocalization({
         "clearImportDataButton": "NOT TRANSLATED",
         "importDataButton": "Add",
         "popupTitle": "Import data",
-        "importDataDescription": "You can bring region value duples by copying them to the textarea. \nPlace every municipality to their own row. You can separate the values with tabulator, colon or comma. \nExample 1: Alajärvi, 1234 \nExample 2: 009    2100",
+        "importDataDescription": "You can bring region value tuples by copying them to the textarea. \nPlace every region to their own row. You can separate the values with tabulator, colon or comma. \nExample 1: Alajärvi, 1234 \nExample 2: 009    2100",
         "failedSubmit": "Add indicator's metadata: ",
         "connectionProblem": "We could not save the data due to connection problems",
         "parsedDataInfo": "Imported regions count",

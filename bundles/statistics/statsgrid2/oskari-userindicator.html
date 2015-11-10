@@ -1,4 +1,5 @@
 <link rel="import" href="libs/polymer/polymer.html">
+<link href="libs/paper-scroll-header-panel/paper-scroll-header-panel.html" rel="import">
 
 <dom-module id="oskari-userindicator">
 
@@ -20,29 +21,43 @@
           <input type="checkbox" id="indicator_publicity" placeholder="[[locale.addDataMetaTitlePH]]" />
         </fieldset>
         <fieldset class="form-import">
-          <legend></legend>
-          <label for="indicator_reference-layer"></label>
-          <select id="indicator_reference-layer"></select>
-          <label for="indicator_text-import"></label>
-          <textarea class="import-textarea" id="indicator_text-import"></textarea>
-          <button type="button" class="start-import primary" title="" on-click="startImport"></button>
+          <legend>[[locale.addDataTitle]]</legend>
+          <label for="indicator_reference-layer">[[locale.addDataMetaReferenceLayer]]</label>
+          <select id="selectRegionCategory" style="width: 300px;" value="{{selectedLayer::change}}">
+            <template is="dom-repeat" items="[[getLayerInfoAsArray(layerInfo)]]">
+              <option value="{{item.val}}">{{item.text}}</option>
+            </template>
+          </select>
+          <label for="indicator_text-import">[[locale.dataRows]]</label>
+          <textarea class="import-textarea" id="indicator_text-import"
+            placeholder="[[locale.importDataDescription]]"></textarea>
+          <button type="button" class="start-import primary" title=""
+            on-click="startImport">[[locale.importDataButton]]</button>
           <!-- We need the empty title so the tooltip will show up... --> 
-          <button type="button" class="clear-import" title="" on-click="clearImport"></button>
+          <button type="button" class="clear-import" title=""
+            on-click="clearImport">[[locale.clearImportDataButton]]</button>
         </fieldset>
+        <hr/>
         <fieldset class="form-regions">
-          <legend></legend>
-          <hr/>
-          <ul class="regions"></ul>
-          <template is="dom-repeat" items="{{selector.values}}" as="selectorOption">
-            <li class="region-row">
-              <label class="region-row"></label><input type="text" />
-            </li>
-          </template>
+          <!-- FIXME: 300 px ok for all browsers? Should probably calculate this. -->
+          <paper-scroll-header-panel class="flex" style="height: 300px;">
+            <paper-toolbar>
+              <legend>[[selectedLayer.text]]</legend>
+            </paper-toolbar>
+            <ul class="regions"></ul>
+            <template is="dom-repeat" items="{{getRegionItems(regionInfo)}}" as="regionItem">
+              <li class="region-row">
+                <label class="region-row" for="[[regionItem.key]]">[[regionItem.text]]</label>
+                <input id="[[regionItem.key]]" type="text" value="{{regionItem.value::change}}"
+                  placeholder="[[locale.municipalityPlaceHolder]]" />
+              </li>
+            </template>
+          </paper-scroll-header-panel>
         </fieldset>
         <fieldset class="form-submit">
-          <button type="button" class="cancel-form-button" on-click="cancelForm"></button>
-          <button type="button" class="submit-form-button primary" title="" on-click="submitForm"></button>
-          <button type="button" class="clear-form-button" on-click="clearForm"></button>
+          <button type="button" class="cancel-form-button" on-click="cancelForm">[[locale.formCancel]]</button>
+          <button type="button" class="submit-form-button primary" title="" on-click="submitForm">[[locale.formSubmit]]</button>
+          <button type="button" class="clear-form-button" on-click="clearForm">[[locale.formEmpty]]</button>
         </fieldset>
       </form>
     </div>
@@ -79,6 +94,15 @@
               "notify": true
           }
       },
+      "getRegionItems": function(regionInfo) {
+          var me = this;
+          return Object.keys(regionInfo).map(function (regionKey) {
+              return {
+                  val: regionKey,
+                  text: me.localize(me.locale.regionCategories, me.regionInfo[regionKey].name)
+              };
+          });
+      },
       "startImport": function() {
           // FIXME: Implement
       },
@@ -95,6 +119,21 @@
       "clearForm": function() {
           // FIXME: Implement
           this.set("showUserIndicatorView", false);
+      },
+      "localize": function(prefix, key) {
+          return prefix[key] || key;
+      },
+      "getLayerInfoAsArray": function(layerInfo) {
+          // FIXME: This is duplicated to oskari-statsgrid. Store layerinfo as array and pass it instead.
+          var me = this,
+              array = [];
+          Object.keys(layerInfo).forEach(function(layerName) {
+              array.push({
+                  "key": layerName,
+                  "text": me.localize(me.locale.regionCategories, layerName)
+              });
+          });
+          return array;
       }
     });
   </script>

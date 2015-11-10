@@ -207,7 +207,7 @@ Oskari.registerLocalization({
         "clearImportDataButton": "Tyhjennä aineistorivit",
         "importDataButton": "Lisää",
         "popupTitle": "Tuo arvot",
-        "importDataDescription": "Voit tuoda kunta - arvo -pareja kopioimalla ne tekstikenttään. \nJokainen kunta omalle rivilleen ja erottimeksi käy tabulaattori, kaksoispiste ja pilkku. \nEsimerkki 1: Alajärvi, 1234 \nEsimerkki 2: 009   2100",
+        "importDataDescription": "Voit tuoda alue - arvo -pareja kopioimalla ne tekstikenttään. \nJokainen alue omalle rivilleen ja erottimeksi käy tabulaattori, kaksoispiste ja pilkku. \nEsimerkki 1: Alajärvi, 1234 \nEsimerkki 2: 009   2100",
         "failedSubmit": "Lisää indikaattorin metatiedot: ",
         "connectionProblem": "Dataa ei voitu tallentaa yhteysongelman takia.",
         "parsedDataInfo": "Tuotuja alueita oli yhteensä",
