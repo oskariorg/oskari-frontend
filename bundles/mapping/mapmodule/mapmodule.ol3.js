@@ -316,8 +316,20 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                   ]
                 };
 
+            var testOptions = {
+                'minResolution': 2,
+                'maxResolution': 100
+            };
+
+            var testStyle = new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: '#3399CC',
+                    width: 5
+                })
+            });
+
             var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
-            this._sandbox.postRequestByName(rn, [geojsonObject, 'GeoJSON', null, 'replace', true, null, null, true]);
+            this._sandbox.postRequestByName(rn, [geojsonObject, 'GeoJSON', null, 'replace', true, testOptions, testStyle, true]);
         },
 
         _calculateScalesImpl: function(resolutions) {
