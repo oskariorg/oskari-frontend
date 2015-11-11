@@ -132,7 +132,7 @@ Oskari.clazz.define(
                     scales: layerScales,
                     isBaseLayer: false,
                     displayInLayerSwitcher: false,
-                    visible: layer.isInScale(this._sandbox.getMap().getScale()) && layer.isVisible()
+                    visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible()
                 });
 
                 this.mapModule.addLayer(layerImpl, _layer, layerIdPrefix + _layer.getId());
