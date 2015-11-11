@@ -36,7 +36,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.search.SearchBundle", function (
         }, {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/search/event/TabChangedEvent.js"
-        }, {
+        },  {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/search/event/SearchResultEvent.js"
+        },{
             "type": "text/javascript",
             "src": "../../../../bundles/framework/search/request/AddTabRequest.js"
         }, {
@@ -51,7 +54,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.search.SearchBundle", function (
         }, {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/search/request/SearchResultActionRequestHandler.js"
-        }, {
+        },  {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/search/request/SearchRequest.js"
+        },{
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/search/request/SearchRequestHandler.js"
+        },{
             "type": "text/css",
             "src": "../../../../bundles/framework/search/resources/css/style.css"
         }],

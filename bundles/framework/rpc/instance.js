@@ -145,7 +145,7 @@ Oskari.clazz.define(
             var allowedRequests = conf.allowedRequests;
 
             if (allowedEvents === null || allowedEvents === undefined) {
-                allowedEvents = ['AfterMapMoveEvent', 'MapClickedEvent', 'AfterAddMarkerEvent', 'MarkerClickEvent', 'RouteSuccessEvent', 'UserLocationEvent', 'DrawingEvent'];
+                allowedEvents = ['AfterMapMoveEvent', 'MapClickedEvent', 'AfterAddMarkerEvent', 'MarkerClickEvent', 'RouteSuccessEvent','SearchResultEvent', 'UserLocationEvent', 'DrawingEvent'];
             }
 
             if (allowedFunctions === null || allowedFunctions === undefined) {
@@ -164,6 +164,7 @@ Oskari.clazz.define(
                     'MapMoveRequest',
                     'ShowProgressSpinnerRequest',
                     'GetRouteRequest',
+                    'SearchRequest',
                     'ChangeMapLayerOpacityRequest',
                     'MyLocationPlugin.GetUserLocationRequest', 
                     'DrawTools.StartDrawingRequest',
