@@ -10,11 +10,13 @@ New function is enabled by default:
 - 'getMapBbox' gets current map bbox
 - 'resetState' resets the map to initial state (location/layers etc)
 
-New event is enabled by default:
+New events are enabled by default:
 - 'UserLocationEvent' notifies about users geolocation status
+- 'SearchResultEvent' notifies about users that SearchRequest response data is available for to handle
 
-New request is enabled by default:
+New requests are enabled by default:
 - 'MyLocationPlugin.GetUserLocationRequest' requests to get user geolocation
+- 'SearchRequest' requests search result for requested search item using Oskari search channels
 
 Domain validation fixed to accept urls with - or _ characters.
 
