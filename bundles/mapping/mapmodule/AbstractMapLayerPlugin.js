@@ -16,8 +16,11 @@ Oskari.clazz.define(
         this._supportedFormats = {};
 
         this.tileSize = [256, 256];
+        this._layerImplRefs = {};
 
     }, {
+        /** @static @property __name plugin name */
+        __name: 'OVERRIDETHIS',
         /**
          * @method getName
          * @return {String} plugin name
@@ -26,6 +29,9 @@ Oskari.clazz.define(
             return this.pluginName;
         },
 
+        getSandbox : function() {
+            return this._sandbox;
+        },
         /**
          * @method getMapModule
          * @return {Oskari.mapframework.ui.module.common.MapModule} reference to map
@@ -159,6 +165,14 @@ Oskari.clazz.define(
          * @static
          */
         eventHandlers: {
+            MapLayerEvent: function(event) {
+                var op = event.getOperation(),
+                    layer = this.getSandbox().findMapLayerFromSelectedMapLayers(event.getLayerId());
+
+                if (op === 'update' && layer) {
+                    this._updateLayer(layer);
+                }
+            },
             AfterMapLayerAddEvent: function (event) {
                 var layer = event.getMapLayer();
                 if (!layer.isLayerOfType(this.getLayerTypeSelector())) {
@@ -206,23 +220,20 @@ Oskari.clazz.define(
         /**
          * @method preselectLayers
          * Adds given layers to map if of type WMS
-         * @param {Oskari.mapframework.domain.WmsLayer[]} layers
+         * @param {Oskari.mapframework.domain.AbstractLayer[]} layers
          */
         preselectLayers: function (layers) {
-            var sandbox = this._sandbox,
-                i,
-                layer,
-                layerId;
+            var sandbox = this.getSandbox,
+                layer;
 
-            for (i = 0; i < layers.length; i += 1) {
+            for (var i = 0; i < layers.length; i += 1) {
                 layer = layers[i];
-                layerId = layer.getId();
 
-                if (!layer.isLayerOfType(this.getLayerTypeSelector())) {
+                if (!this.isLayerSupported(layer)) {
                     continue;
                 }
 
-                sandbox.printDebug('preselecting ' + layerId);
+                sandbox.printDebug('preselecting ' + layer.getId());
                 this._addMapLayerToMap(layer, true, layer.isBaseLayer());
             }
         },
@@ -255,46 +266,40 @@ Oskari.clazz.define(
         },
 
         /**
+         * Store references to map-engine specific layer objects
+         * @param {String} layerId ID for Oskari.mapframework.domain.AbstractLayer
+         * @param {Object[]} layers  Single or an array of layers used to present the layer in map engine
+         */
+        setOLMapLayers: function (layerId, layers) {
+            if(!layers) {
+                delete this._layerImplRefs[layerId];
+            }
+            else {
+                this._layerImplRefs[layerId] = layers;
+            }
+        },
+        /**
          * @method getOLMapLayers
          * Returns references to OpenLayers layer objects for requested layer
          * or null if layer is not added to map.
          *
          * @param {Oskari.mapframework.domain.WmsLayer} layer
          *
-         * @return {OpenLayers.Layer[]}
+         * @return {Object[]} map engine implementation object for maplayers
          */
         getOLMapLayers: function (layer) {
-            var baseLayerId,
-                i,
-                olLayers,
-                tmpLayers;
-
-            if (!layer.isLayerOfType(this.getLayerTypeSelector())) {
+            if (!this.isLayerSupported(layer)) {
                 return null;
             }
-
-            if (layer.isBaseLayer() || layer.isGroupLayer()) {
-                baseLayerId = '';
-                if (layer.getSubLayers().length > 0) {
-                    olLayers = [];
-                    for (i = 0; i < layer.getSubLayers().length; i += 1) {
-                        tmpLayers = this.mapModule.getLayersByName(
-                            'basemap_' + layer.getSubLayers()[i].getId()
-                        );
-                        olLayers.push(tmpLayers[0]);
-                    }
-                    return olLayers;
-                } else {
-                    return this.mapModule.getLayersByName(
-                        'layer_' + layer.getId()
-                    );
-                }
-            } else {
-                return this.mapModule.getLayersByName(
-                    'layer_' + layer.getId()
-                );
+            var layerRefs = this._layerImplRefs[layer.getId()];
+            if(!layerRefs) {
+                // not found
+                return [];
             }
-            return null;
+            if(Array.isArray(layerRefs)) {
+                return layerRefs;
+            }
+            return [layerRefs];
         },
 
         /* Inherited classes must implement (at least) following methods */
@@ -303,7 +308,18 @@ Oskari.clazz.define(
         getLayerTypeSelector: function () {
             return undefined;
         },
-
+        /**
+         * Checks if the layer can be handled by this plugin
+         * @method  isLayerSupported 
+         * @param  {Oskari.mapframework.domain.AbstractLayer}  layer 
+         * @return {Boolean}       true if this plugin handles the type of layers
+         */
+        isLayerSupported : function(layer) {
+            if(!layer) {
+                return false;
+            }
+            return layer.isLayerOfType(this.getLayerTypeSelector());
+        },
         /* To Be Overwritten by implementing class - one of wmslayer, wmtslayer ....*/
         getLayerTypeIdentifier: function () {
             return undefined;
@@ -328,7 +344,18 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.domain.WmsLayer} layer
          */
         _removeMapLayerFromMap: function (layer) {
+            var olLayers = this.getOLMapLayers(layer);
 
+            if (!olLayers || olLayers.length === 0) {
+                return;
+            }
+
+            this.getSandbox().printDebug('Removing Layer from map ' + layer.getId());
+            for(var i = 0; i < olLayers.length; ++i) {
+                this.getMapModule().removeLayer(olLayers[i], layer);
+            }
+            // reset the impl references for this layer
+            this.setOLMapLayers(layer.getId());
         },
 
         /**
@@ -338,10 +365,22 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.event.common.AfterChangeMapLayerOpacityEvent}
          *            event
          */
-        _afterChangeMapLayerOpacityEvent: function (event) {
+        _afterChangeMapLayerOpacityEvent : function(event) {
+            var layer = event.getMapLayer();
+            var olLayers = this.getOLMapLayers(layer);
 
+            if (!olLayers || olLayers.length === 0) {
+                return;
+            }
+
+            this.getSandbox().printDebug(
+                'Setting Layer Opacity for ' + layer.getId() + ' to ' +
+                layer.getOpacity()
+            );
+            for(var i = 0; i < olLayers.length; ++i) {
+                olLayers[i].setOpacity(layer.getOpacity() / 100);
+            }
         },
-
         /**
          * Handle AfterChangeMapLayerStyleEvent
          * @private
@@ -351,9 +390,14 @@ Oskari.clazz.define(
         _afterChangeMapLayerStyleEvent: function (event) {
 
         },
-
-        /** @static @property __name plugin name */
-        __name: 'OVERRIDETHIS'
+        /**
+         * Update the layer on map if style etc was changed when administrating layers
+         * @method _updateLayer 
+         * @param  {Oskari.mapframework.domain.AbstractLayer} layer [description]
+         */
+        _updateLayer : function(layer) {
+            this.getSandbox().printDebug('TODO: update layer on map');
+        }
     }, {
         /**
          * @property {String[]} protocol array of superclasses as {String}
