@@ -99,7 +99,7 @@ Oskari.clazz.define(
                 layers = [],
                 layerIdPrefix = 'layer_';
             // insert layer or sublayers into array to handle them identically
-            if ((layer.isGroupLayer() || layer.isBaseLayer() || isBaseMap == true) && (layer.getSubLayers().length > 0)) {
+            if ((layer.isGroupLayer() || layer.isBaseLayer() || isBaseMap === true) && (layer.getSubLayers().length > 0)) {
                 // replace layers with sublayers
                 layers = layer.getSubLayers();
                 layerIdPrefix = 'basemap_';
@@ -219,28 +219,21 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.event.common.AfterChangeMapLayerOpacityEvent}
          *            event
          */
-        _afterChangeMapLayerOpacityEvent : function(event) {
-            var layer = event.getMapLayer();
-            if (layer.isBaseLayer() || layer.isGroupLayer()) {
-                if (layer.getSubLayers().length > 0) {
-                    for (var bl = 0; bl < layer.getSubLayers().length; bl++) {
-                        var mapLayer = this.mapModule.getLayersByName('basemap_' + layer
-                        .getSubLayers()[bl].getId());
-                        mapLayer[0].setOpacity(layer.getOpacity() / 100);
-                    }
-                } else {
-                    var mapLayer = this.mapModule.getLayersByName('layer_' + layer.getId());
-                    if (mapLayer[0] != null) {
-                        mapLayer[0].setOpacity(layer.getOpacity() / 100);
-                    }
-                }
-            } else {
-                this._sandbox.printDebug("Setting Layer Opacity for " + layer.getId() + " to " + layer.getOpacity());
-                var mapLayer = this.mapModule.getLayersByName('layer_' + layer.getId());
-                if (mapLayer[0] != null) {
-                    mapLayer[0].setOpacity(layer.getOpacity() / 100);
-                }
-            }
+        _afterChangeMapLayerOpacityEvent: function (event) {
+           var layer = event.getMapLayer();
+           var olLayers = this.getOLMapLayers(layer);
+
+           if (!olLayers || olLayers.length === 0) {
+               return;
+           }
+
+           this.getSandbox().printDebug(
+               'Setting Layer Opacity for ' + layer.getId() + ' to ' +
+               layer.getOpacity()
+           );
+           for(var i = 0; i < olLayers.length; ++i) {
+               olLayers[i].setOpacity(layer.getOpacity() / 100);
+           }
         },
         /**
          * Handle AfterChangeMapLayerStyleEvent
