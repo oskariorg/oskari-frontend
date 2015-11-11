@@ -1053,7 +1053,6 @@ Oskari.clazz.define(
          *           true to not delete existing tile
          */
         drawImageTile: function (layer, imageUrl, imageBbox, imageSize, layerType, boundaryTile, keepPrevious) {
-
             //TODO: clean up this method.
             var me = this,
                 map = me.getMap(),
@@ -1106,7 +1105,6 @@ Oskari.clazz.define(
                         visibility: true,
                         buffer: 0 }
                 ); */
-
                 wfsMapImageLayer.opacity = layer.getOpacity() / 100;
                // map.addLayer(wfsMapImageLayer);
                 me.getMapModule().addLayer(wfsMapImageLayer, layer, layerName);
@@ -1257,7 +1255,7 @@ Oskari.clazz.define(
                     defaultOptions[key] = layerOptions[key];
                 }
             }
-            var projection = ol.proj.get('EPSG:3067');
+            var projection = ol.proj.get(this.getMapModule().getMap().getView().getProjection());
             var projectionExtent = projection.getExtent();
             var me = this;
             var openLayer = new ol.layer.Tile({
@@ -1282,7 +1280,7 @@ Oskari.clazz.define(
             //custom getTile function
             me._overrideGetTile(openLayer);
             openLayer.getSource().set('layerId',_layer.getId());
-            openLayer.opacity = _layer.getOpacity() / 100;
+            openLayer.setOpacity(_layer.getOpacity() / 100);
             me.getMapModule().addLayer(openLayer, _layer, layerName);
             me._layers[openLayer.getSource().get('layerId')] = openLayer;
         },
