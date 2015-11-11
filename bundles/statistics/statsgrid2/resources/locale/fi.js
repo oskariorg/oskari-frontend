@@ -116,7 +116,8 @@ Oskari.registerLocalization({
                 "sum": "Indikaattorin arvot yhteensä"
             },
             "plugins": {
-                "fi.nls.oskari.control.statistics.plugins.sotka.plugin_name": "SotkaNET"
+                "fi.nls.oskari.control.statistics.plugins.sotka.plugin_name": "SotkaNET",
+                "USER": "Omat indikaattorit"
             },
             "selector": {
                 "year": "Vuosi",
@@ -212,6 +213,7 @@ Oskari.registerLocalization({
         "connectionProblem": "Dataa ei voitu tallentaa yhteysongelman takia.",
         "parsedDataInfo": "Tuotuja alueita oli yhteensä",
         "parsedDataUnrecognized": "Tunnistamattomia alueita",
-        "loginToSaveIndicator": "Kirjaudu ensin sisään jos haluat tallentaa aineiston."
+        "loginToSaveIndicator": "Kirjaudu ensin sisään jos haluat tallentaa aineiston.",
+        "ownIndicators": "Omat indikaattorit"
     }
 });

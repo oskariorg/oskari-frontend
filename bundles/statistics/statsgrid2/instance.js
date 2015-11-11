@@ -19,7 +19,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
         "getMainPanel" : function() {
             if(!this.__mainPanel) {
                 this.__mainPanel = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.view.MainPanel', this,
-                        this.getLocalization());
+                        this.getLocalization(),
+                        this.getSandbox());
             }
             return this.__mainPanel;
 
@@ -59,42 +60,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             sandbox.registerService(userIndicatorsService);
             userIndicatorsService.init();
             this.userIndicatorsService = userIndicatorsService;
-
-            // Register stats plugin for map which creates
-            // - the indicator selection UI (unless 'published' param in the conf is true)
-            // - the grid.
-            var gridConf = {
-                'state': me.getState(),
-                //'csvDownload' : true,
-                "statistics": [{
-                    "id": "min",
-                    "visible": true
-                }, {
-                    "id": "max",
-                    "visible": true
-                }, {
-                    "id": "avg",
-                    "visible": true
-                }, {
-                    "id": "mde",
-                    "visible": true
-                }, {
-                    "id": "mdn",
-                    "visible": true
-                }, {
-                    "id": "std",
-                    "visible": true
-                }, {
-                    "id": "sum",
-                    "visible": true
-                }]
-            };
-            /*
-            var gridPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin', gridConf, locale);
-            mapModule.registerPlugin(gridPlugin);
-            mapModule.startPlugin(gridPlugin);
-            this.gridPlugin = gridPlugin;
-            */
 
             // Register classification plugin for map.
             var classifyPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin', {
@@ -218,7 +183,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             if (view.isVisible) {
                 // AH-1110 ugly hack, we have to wait until ManageStatsPlugin has initialized
                 // If we set the state as below and then prepareMode(true), slickgrid breaks with no visible error
-                /*
                 window.setTimeout(
                     function () {
                         me.gridPlugin.changeGridRegion(indicator.category);
@@ -228,7 +192,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                         me.gridPlugin.addIndicatorMeta(indicator);
                     }, 1000
                 );
-*/
             } else {
                 // show the view.
                 state.layerId = indicator.layerId || state.layerId;

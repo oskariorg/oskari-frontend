@@ -111,7 +111,8 @@ Oskari.registerLocalization({
                 "sum": "The total sum of the indicator values"
             },
             "plugins": {
-                "fi.nls.oskari.control.statistics.plugins.sotka.plugin_name": "SotkaNET"
+                "fi.nls.oskari.control.statistics.plugins.sotka.plugin_name": "SotkaNET",
+                "fi.nls.oskari.control.statistics.plugins.user.plugin_name": "Your indicators"
             },
             "selector": {
                 "year": "Year",
@@ -177,7 +178,7 @@ Oskari.registerLocalization({
         "chosenRegionText": "Choose regions",
         "noRegionFound": "Region not found",
         "addDataButton": "Add indicator",
-        "addDataTitle": "NOT TRANSLATED",
+        "addDataTitle": "Add new indicator",
         "openImportDialogTip": "Import data from clipboard",
         "openImportDataButton": "Import data",
         "addDataMetaTitle": "Title",
@@ -191,13 +192,13 @@ Oskari.registerLocalization({
         "addDataMetaYearPH": "Year",
         "addDataMetaPublicity": "Publishable",
         "municipalityHeader": "Municipalities",
-        "dataRows": "NOT TRANSLATED",
+        "dataRows": "Data rows",
         "municipalityPlaceHolder": "Give value",
-        "formEmpty": "NOT TRANSLATED",
+        "formEmpty": "Reset",
         "formCancel": "Cancel",
         "formSubmit": "Submit",
         "cancelButton": "Cancel",
-        "clearImportDataButton": "NOT TRANSLATED",
+        "clearImportDataButton": "Reset",
         "importDataButton": "Add",
         "popupTitle": "Import data",
         "importDataDescription": "You can bring region value tuples by copying them to the textarea. \nPlace every region to their own row. You can separate the values with tabulator, colon or comma. \nExample 1: Alajärvi, 1234 \nExample 2: 009    2100",
@@ -205,6 +206,6 @@ Oskari.registerLocalization({
         "connectionProblem": "We could not save the data due to connection problems",
         "parsedDataInfo": "Imported regions count",
         "parsedDataUnrecognized": "Unrecognized regions count",
-        "loginToSaveIndicator": "NOT TRANSLATED"
+        "loginToSaveIndicator": "Log in if you want to save your indicators"
     }
 });

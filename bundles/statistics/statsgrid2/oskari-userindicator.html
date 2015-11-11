@@ -4,8 +4,8 @@
 <dom-module id="oskari-userindicator">
 
   <template>
-    <div id="userIndicatorCont">
-      <form class="add-indicator">
+    <div id="userIndicatorCont" style="min-height: 100%;">
+      <form class="add-indicator" style="min-height: 100%;">
         <h2>[[locale.addDataTitle]]</h2>
         <fieldset class="form-meta">
           <legend>[[locale.baseInfoTitle]]</legend>
@@ -38,14 +38,14 @@
             on-click="clearImport">[[locale.clearImportDataButton]]</button>
         </fieldset>
         <hr/>
-        <fieldset class="form-regions">
+        <fieldset class="form-regions statsgrid-table">
           <!-- FIXME: 300 px ok for all browsers? Should probably calculate this. -->
-          <paper-scroll-header-panel style="height: 300px;">
+          <paper-scroll-header-panel class="statsgrid-table" style="min-height: 200px; height: 320px;">
             <legend>
               [[getLayerName(locale, selectedLayer)]]
             </legend>
             <ul class="regions">
-              <template is="dom-repeat" items="{{getRegionItems(regionInfo)}}" as="regionItem">
+              <template is="dom-repeat" items="{{regionItems}}" as="regionItem">
                 <li class="region-row">
                   <label class="region-row" for="[[regionItem.key]]">[[regionItem.text]]</label>
                   <input id="[[regionItem.key]]" type="text" value="{{regionItem.value::change}}"
@@ -72,6 +72,7 @@
           "ajaxUrl": String,
           "locale": Object,
           "language": String,
+          "user": Object,
           "sources": {
               "type": Object,
               "notify": true
@@ -89,40 +90,99 @@
               "type": Object,
               "notify": true
           },
+          "regionItems": {
+              "type": Object,
+              "notify": true
+          },
           "showUserIndicatorView": {
               "type": Boolean,
               "value": false,
               "notify": true
           }
       },
+      "observers": [
+          "getRegionItems(regionInfo)"
+      ],
       "getLayerName": function(locale, layerKey) {
           return this.localize(this.locale.regionCategories, layerKey);
       },
       "getRegionItems": function(regionInfo) {
           var me = this;
-          return Object.keys(regionInfo).map(function (regionKey) {
+          me.set("regionItems", Object.keys(regionInfo).map(function (regionKey) {
               return {
-                  val: regionKey,
-                  text: me.localize(me.locale.regionCategories, me.regionInfo[regionKey].name)
+                  key: regionKey,
+                  text: me.localize(me.locale.regionCategories, regionInfo[regionKey].name)
               };
-          });
+          }));
       },
       "startImport": function() {
           // FIXME: Implement
       },
       "clearImport": function() {
-          // FIXME: Implement
+          this.$["indicator_text-import"].value = "";
       },
       "cancelForm": function() {
           this.set("showUserIndicatorView", false);
       },
       "submitForm": function() {
-          // FIXME: Implement
+          /*
+          An example message:
+          {
+            title:{"fi":"c"}
+            source:{"fi":"c"}
+            description:{"fi":"c"}
+            year:2015
+            published:true
+            category:"oskari:nuts1"
+            data:[{"region":"727","primary value":"4"},{"region":"728","primary value":"5"}]
+          }
+          */
+          var title = {};
+          var source = {};
+          var description = {};
+          title[this.language] = this.$.indicator_title.value;
+          source[this.language] = this.$.indicator_sources.value;
+          description[this.language] = this.$.indicator_description.value;
+          var rows = this.regionItems.map(function (regionItem) {
+              return {
+                  "region": regionItem.key,
+                  "primary value": regionItem.value
+              };
+          });
+          var formData = "title=" + encodeURIComponent(JSON.stringify(title)) + "&" +
+            "source=" + encodeURIComponent(JSON.stringify(source)) + "&" +
+            "description=" + encodeURIComponent(JSON.stringify(description)) + "&" +
+            "year=" + encodeURIComponent(this.$.indicator_year.value) + "&" +
+            "published=" + encodeURIComponent(this.$.indicator_publicity.value) + "&" +
+            "category="+ encodeURIComponent(this.selectedLayer) + "&" +
+            "data=" + encodeURIComponent(JSON.stringify(rows));
+          $.ajax({
+              // For old jQuery.
+              type: "POST",
+              url: this.ajaxUrl + "?action_route=SaveUserIndicator",
+              data: formData,
+              success: function(response) {
+                  // TODO: We should automatically add the added indicator here to the grid.
+              }
+          });
           this.set("showUserIndicatorView", false);
       },
       "clearForm": function() {
-          // FIXME: Implement
-          this.set("showUserIndicatorView", false);
+          this.$.indicator_title.value = "";
+          this.$.indicator_sources.value = "";
+          this.$.indicator_description.value = "";
+          this.$.indicator_year.value = "";
+          this.$.indicator_publicity.value = false;
+          var newRegionItems = this.regionItems.map(function (regionItem) {
+              // Cloning to force update.
+              var newRegionItem = {
+                  "value": "",
+                  "key": regionItem.key,
+                  "text": regionItem.text
+              };
+              return newRegionItem;
+          }).slice(0);
+          this.set("regionItems", newRegionItems);
       },
       "localize": function(prefix, key) {
           return prefix[key] || key;

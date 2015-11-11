@@ -8,7 +8,7 @@
 
   <template>
       <oskari-indicatorselector locale="[[locale]]" language="[[language]]" ajax-url="[[ajaxUrl]]"
-        id="indicatorselector"></oskari-indicatorselector>
+        user="[[user]]" id="indicatorselector"></oskari-indicatorselector>
       <content></content>
     </div>
   </template>
@@ -19,7 +19,8 @@
       properties: {
           "locale": Object,
           "language": String,
-          "ajaxUrl": String
+          "ajaxUrl": String,
+          "user": Object
       }
     });
   </script>

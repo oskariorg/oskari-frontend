@@ -16,6 +16,14 @@
       last-response="{{sources}}"
       debounce-duration="300"
       id="indicatorsAjax"></iron-ajax>
+    <iron-ajax
+      auto
+      url="{{ajaxUrl}}"
+      params='{"action_route": "GetUserIndicators"}'
+      handle-as="json"
+      last-response="{{userIndicators}}"
+      debounce-duration="300"
+      id="userIndicatorsAjax"></iron-ajax>
     <div hidden$="[[showUserIndicatorView]]">
       <form class="statsgrid2_indicator_selector">
         <div>
@@ -51,12 +59,14 @@
       </form>
       <oskari-statsgrid locale="[[locale]]" language="[[language]]" ajax-url="[[ajaxUrl]]"
         sources="{{sources}}" selected-indicators="{{selectedIndicators}}" selected-layer="{{selectedLayer}}"
-        layer-info="{{layerInfo}}" region-info="{{regionInfo}}" hidden$="[[!showGrid]]"
+        layer-info="{{layerInfo}}" region-info="{{regionInfo}}" user-indicators="[[userIndicators]]"
+        hidden$="[[!showGrid]]"
         id="statsgrid""></oskari-statsgrid>
     </div>
     <div hidden$="[[!showUserIndicatorView]]">
       <oskari-userindicator ajax-url="[[ajaxUrl]]"
-        locale="[[locale]]" language="[[language]]" sources="[[sources]]" selected-layer="{{selectedLayer}}"
+        locale="[[locale]]" language="[[language]]" user="[[user]]"
+        sources="[[sources]]" selected-layer="{{selectedLayer}}"
         layer-info="[[layerInfo]]" region-info="[[regionInfo]]"
         show-user-indicator-view="{{showUserIndicatorView}}"></oskari-userindicator>
     </div>
@@ -70,7 +80,12 @@
           "ajaxUrl": String,
           "locale": Object,
           "language": String,
+          "user": Object,
           "sources": {
+              "type": Object,
+              "notify": true
+          },
+          "userIndicators": {
               "type": Object,
               "notify": true
           },
@@ -137,9 +152,34 @@
       },
       "indicatorChanged": function(indicatorId) {
           this.indicatorSelected = indicatorId !== undefined && indicatorId !== null && indicatorId !== "undefined";
+          this.allSelectorsSelected = true;
+          this.selectorItems.forEach(function(select) {
+              if (!select.value || select.value === null || select.value === "undefined") {
+                  me.set("allSelectorsSelected", false);
+              }
+          });
       },
       "onAddUserIndicator": function() {
+          var me = this;
 		  this.showUserIndicatorView = true;
+          // Warn the user if they're not logged in
+          if (!me.user || !me.user.isLoggedIn()) {
+              var dialog = Oskari.clazz.create(
+                      'Oskari.userinterface.component.Popup'
+                  ),
+                  okBtn = Oskari.clazz.create(
+                      'Oskari.userinterface.component.buttons.OkButton'
+                  );
+              okBtn.setPrimary(true);
+              okBtn.setHandler(function () {
+                  dialog.close(true);
+                  me.createIndicatorForm(container);
+              });
+              dialog.show(
+                  me._locale.addDataTitle,
+                  me._locale.loginToSaveIndicator, [okBtn]
+              );
+          }
       },
       "getLocalizationFrom": function(localizedNames, fallback, lang) {
           var name = localizedNames[lang];
@@ -202,7 +242,11 @@
       },
       "getDatasources": function(sources) {
           var me = this;
-          return [{text: me.locale.selectDataSource}].concat(Object.keys(sources).map(function(sourceId) {
+          if (!sources) {
+              return [];
+          }
+          return [{text: me.locale.selectDataSource}]
+              .concat(Object.keys(sources).map(function(sourceId) {
               return {
                   val: sourceId,
                   text: me.locale.statistic.plugins[sources[sourceId].localizationKey]
@@ -216,7 +260,7 @@
               var indicator = indicators[indicatorId];
               return {
                   val: indicatorId,
-                  text: indicator.name[me.language]
+                  text: indicator.name[me.language] || indicator.name.fi || indicatorId
               };
           }));
       },
