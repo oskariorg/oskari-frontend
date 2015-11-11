@@ -7,8 +7,6 @@ Oskari.clazz.define(
 
     /**
      * @static @method create called automatically on construction
-     *
-     *
      */
     function () {
     },
@@ -41,7 +39,7 @@ Oskari.clazz.define(
                 olLayers = [],
                 layerIdPrefix = 'layer_';
             // insert layer or sublayers into array to handle them identically
-            if ((layer.isGroupLayer() || layer.isBaseLayer() || isBaseMap == true) && (layer.getSubLayers().length > 0)) {
+            if ((layer.isGroupLayer() || layer.isBaseLayer() || isBaseMap === true) && (layer.getSubLayers().length > 0)) {
                 // replace layers with sublayers
                 layers = layer.getSubLayers();
                 layerIdPrefix = 'basemap_';
@@ -119,7 +117,6 @@ Oskari.clazz.define(
                 }
             }
         }
-
     }, {
         /**
          * @property {String[]} protocol array of superclasses as {String}

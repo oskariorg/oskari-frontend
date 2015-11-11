@@ -203,9 +203,8 @@ Oskari.clazz.define(
          * @method addMapLayerToMap
          * @param {Oskari.mapframework.domain.WmsLayer} layer
          * @param {Boolean} keepLayerOnTop
-         * @param {Boolean} isBaseMap
          */
-        addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
+        addMapLayerToMap: function (layer, keepLayerOnTop) {
             if (!layer.isLayerOfType(this._layerType)) {
                 return;
             }
