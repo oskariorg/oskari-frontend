@@ -175,7 +175,7 @@ Oskari.clazz.define(
             },
             AfterMapLayerAddEvent: function (event) {
                 var layer = event.getMapLayer();
-                if (!layer.isLayerOfType(this.getLayerTypeSelector())) {
+                if (!this.isLayerSupported(layer)) {
                     return;
                 }
 
@@ -184,7 +184,7 @@ Oskari.clazz.define(
 
             AfterMapLayerRemoveEvent: function (event) {
                 var layer = event.getMapLayer();
-                if (!layer.isLayerOfType(this.getLayerTypeSelector())) {
+                if (!this.isLayerSupported(layer)) {
                     return;
                 }
                 this._afterMapLayerRemoveEvent(event);
@@ -192,7 +192,7 @@ Oskari.clazz.define(
 
             AfterChangeMapLayerOpacityEvent: function (event) {
                 var layer = event.getMapLayer();
-                if (!layer.isLayerOfType(this.getLayerTypeSelector())) {
+                if (!this.isLayerSupported(layer)) {
                     return;
                 }
                 this._afterChangeMapLayerOpacityEvent(event);
@@ -200,7 +200,7 @@ Oskari.clazz.define(
 
             AfterChangeMapLayerStyleEvent: function (event) {
                 var layer = event.getMapLayer();
-                if (!layer.isLayerOfType(this.getLayerTypeSelector())) {
+                if (!this.isLayerSupported(layer)) {
                     return;
                 }
                 this._afterChangeMapLayerStyleEvent(event);
@@ -352,7 +352,8 @@ Oskari.clazz.define(
 
             this.getSandbox().printDebug('Removing Layer from map ' + layer.getId());
             for(var i = 0; i < olLayers.length; ++i) {
-                this.getMapModule().removeLayer(olLayers[i], layer);
+                var loopLayer = olLayers[i];
+                this.getMapModule().removeLayer(loopLayer, layer);
             }
             // reset the impl references for this layer
             this.setOLMapLayers(layer.getId());

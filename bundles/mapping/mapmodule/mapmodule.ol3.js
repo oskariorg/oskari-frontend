@@ -449,6 +449,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
         _removeLayerImpl: function(layerImpl) {
             this._map.removeLayer(layerImpl);
+            if(typeof layerImpl.destroy === 'function') {
+                layerImpl.destroy();
+            }
         },
 
         setLayerIndex: function(layerImpl, index) {
