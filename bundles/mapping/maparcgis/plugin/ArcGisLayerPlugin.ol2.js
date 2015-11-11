@@ -9,7 +9,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
      * @static
      */
 
-    function (config) {
+    function () {
         var me = this;
 
         me._clazz =
@@ -76,8 +76,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                 AfterChangeMapLayerOpacityEvent: function (event) {
                     this._afterChangeMapLayerOpacityEvent(event);
                 },
-                AfterChangeMapLayerStyleEvent: function (event) {
-                    //this._afterChangeMapLayerStyleEvent(event);
+                AfterChangeMapLayerStyleEvent: function () {
                 },
                 AfterMapMoveEvent: function (event) {
                     this._afterMapMoveEvent(event);
@@ -114,7 +113,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
          * @param {Oskari.mapframework.event.common.AfterMapLayerAddEvent}
          *            event
          */
-        _afterMapMoveEvent: function (event) {
+        _afterMapMoveEvent: function () {
             //TODO: not an excellent solution, but close enough
             var id;
             for (id in this._layer) {
@@ -129,9 +128,8 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
          * @method addMapLayerToMap
          * @param {Oskari.arcgis.domain.ArcGisLayer} layer
          * @param {Boolean} keepLayerOnTop
-         * @param {Boolean} isBaseMap
          */
-        addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
+        addMapLayerToMap: function (layer, keepLayerOnTop) {
             var me = this,
                 sandbox = me.getSandbox();
 
@@ -140,7 +138,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
             }
 
             if (layer.isLayerOfType(me._layerType2)) {
-                me._addMapLayer2ToMap(layer, keepLayerOnTop, isBaseMap)
+                me._addMapLayer2ToMap(layer, keepLayerOnTop);
                 return;
             }
 
@@ -148,8 +146,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
             jsonp.createRequest(layer.getLayerUrls()[0], {
                 f: 'json',
                 pretty: 'true'
-            }, function initMap(layerInfo) {
-                //TODO: this fixing 3 errors
+            }, function (layerInfo) {
                 layerInfo.spatialReference.wkid = me.getMap().projection.substr(
                     me.getMap().projection.indexOf(':') + 1
                 );
@@ -191,9 +188,8 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
          * @method addMapLayerToMap
          * @param {Oskari.arcgis.domain.ArcGis93Layer} layer
          * @param {Boolean} keepLayerOnTop
-         * @param {Boolean} isBaseMap
          */
-        _addMapLayer2ToMap: function (layer, keepLayerOnTop, isBaseMap) {
+        _addMapLayer2ToMap: function (layer, keepLayerOnTop) {
             var me = this,
                 sandbox = me.getSandbox();
 
@@ -260,8 +256,11 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
          * @param {Oskari.arcgis.domain.ArcGisLayer} layer
          */
         _removeMapLayerFromMap: function (layer) {
-            /* This should free all memory */
+            if(!this._layer[layer.getId()]) {
+                return;
+            }
             this._layer[layer.getId()].destroy();
+            delete this._layer[layer.getId()];
         },
         /**
          * @method getOLMapLayers
@@ -272,6 +271,9 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
         getOLMapLayers: function (layer) {
             if (!layer.isLayerOfType(this._layerType) && !layer.isLayerOfType(this._layerType2)) {
                 return null;
+            }
+            if(!this._layer[layer.getId()]) {
+                return [];
             }
 
             return [this._layer[layer.getId()]];
@@ -286,8 +288,9 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
          */
         _afterChangeMapLayerOpacityEvent: function (event) {
             var layer = event.getMapLayer();
+            var olLayers = this.getOLMapLayers(layer);
 
-            if (!layer.isLayerOfType(this._layerType) && !layer.isLayerOfType(this._layerType2)) {
+            if (!olLayers || olLayers.length === 0) {
                 return;
             }
 
@@ -295,19 +298,9 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                 'Setting Layer Opacity for ' + layer.getId() + ' to ' +
                 layer.getOpacity()
             );
-            if (this._layer[layer.getId()] !== null && this._layer[layer.getId()] !== undefined) {
-                this._layer[layer.getId()].setOpacity(layer.getOpacity() / 100);
+            for(var i = 0; i < olLayers.length; ++i) {
+                olLayers[i].setOpacity(layer.getOpacity() / 100);
             }
-        },
-        /**
-         * Handle AfterChangeMapLayerStyleEvent
-         * @private
-         * @param {Oskari.mapframework.event.common.AfterChangeMapLayerStyleEvent}
-         *            event
-         */
-        _afterChangeMapLayerStyleEvent: function (event) {
-            var layer = event.getMapLayer();
-            //TODO: not implemented yet
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
