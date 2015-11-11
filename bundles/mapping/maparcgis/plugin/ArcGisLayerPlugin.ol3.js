@@ -14,8 +14,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
         __name : 'ArcGisLayerPlugin',
         _clazz : 'Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
 
-        /** @static @property _layerType type of layers this plugin handles */
-        _layerType: 'arcgis',
+        layertype : 'arcgis',
 
         /** @static @property _layerType2 type of layers this plugin handles */
         _layerType2: 'arcgis93',
@@ -30,7 +29,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
             if(!layer) {
                 return false;
             }
-            return layer.isLayerOfType(this._layerType) || layer.isLayerOfType(this._layerType2);
+            return layer.isLayerOfType(this.layerType) || layer.isLayerOfType(this._layerType2);
         },
         /**
          * @private @method _initImpl

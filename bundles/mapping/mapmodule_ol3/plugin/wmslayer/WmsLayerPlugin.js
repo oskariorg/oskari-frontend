@@ -13,10 +13,8 @@ Oskari.clazz.define(
     {
         __name : 'WmsLayerPlugin',
         _clazz : 'Oskari.mapframework.mapmodule.WmsLayerPlugin',
+        layertype : 'wmslayer',
 
-        getLayerTypeIdentifier : function() {
-            return 'wmslayer';
-        },
         getLayerTypeSelector : function() {
             return 'WMS';
         },

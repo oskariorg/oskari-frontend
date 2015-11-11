@@ -320,9 +320,9 @@ Oskari.clazz.define(
             }
             return layer.isLayerOfType(this.getLayerTypeSelector());
         },
-        /* To Be Overwritten by implementing class - one of wmslayer, wmtslayer ....*/
+        
         getLayerTypeIdentifier: function () {
-            return undefined;
+            return this.layertype;
         },
 
         /**
