@@ -2,6 +2,7 @@
 <!-- TODO: If you start using the libs here in other bundles as well, they must be moved to a shared location. -->
 <link href="libs/vaadin-components/vaadin-components.html" rel="import">
 <link href="libs/iron-collapse/iron-collapse.html" rel="import">
+<link href="libs/paper-menu/paper-menu.html" rel="import">
 <link href="requirejs.html" rel="import">
 
 <dom-module id="oskari-statsgrid">
@@ -32,9 +33,9 @@
           indicator-headers="[[indicatorHeaders]]" selecter-layer="[[selectedLayer]]">
           <table>
             <!-- Define the columns -->
-            <col name="region" header-text$="[[localize(locale.regionCategories, selectedLayer)]]">
+            <col name="region" header-text$="[[localize(locale.regionCategories, selectedLayer)]]"></col>
             <template is="dom-repeat" items="[[indicatorHeaders]]" as="header">
-              <col name$="[[header.id]]" header-text$="[[header.header]]">
+              <col name$="[[header.id]]" header-text$="[[header.header]]"></col>
             </template>
           </table>
         </vaadin-grid>
@@ -43,9 +44,9 @@
         indicator-headers="[[indicatorHeaders]]" selecter-layer="[[selectedLayer]]">
         <table>
           <!-- Define the columns -->
-          <col name="region" header-text$="[[localize(locale.regionCategories, selectedLayer)]]">
+          <col name="region" header-text$="[[localize(locale.regionCategories, selectedLayer)]]"></col>
           <template is="dom-repeat" items="[[indicatorHeaders]]" as="header">
-            <col name$="[[header.id]]" header-text$="[[header.header]]" on-click="[[sortBasedOnColumn(header.index)]]">
+            <col name$="[[header.id]]" header-text$="[[header.header]]" on-click="[[sortBasedOnColumn(header.index)]]"></col>
           </template>
         </table>
       </vaadin-grid>
@@ -118,15 +119,54 @@
           "selectedLayerChanged(ajaxUrl, selectedLayer)",
           "selectedIndicatorsChanged(ajaxUrl, selectedIndicators.splices)",
           "sortChanged(sortColumnIdx, sortDirection)",
-          "selectedIndicatorChanged(selectedIndicatorKey, cache)"
+          "selectedIndicatorChanged(selectedIndicatorKey, cache)",
+          "headersChanged(indicatorHeaders)"
       ],
+      "headersChanged": function() {
+          var me = this;
+          // We need to put this function after all the other stuff being triggered in the sequence...
+          // A dirty hack, yes, but Vaadin grid does not give us a lifecycle event for done rendering.
+          setTimeout(function() {
+              // Because Vaadin grid doesn't give any way to affect headers, we will simply modify the DOM here:
+              var grid = me.$["indicator-data-grid"];
+              var headerThs = grid.querySelectorAll("th");
+              // headerThs is not an array... The 0 index is the selection column.
+              for (var index = 1; index < headerThs.length; index++) {
+                  var th = headerThs[index];
+                  // The header.
+                  var thSpan = th.querySelector("span");
+                  // Workaround to prevent adding multiple event listeners here.
+                  // All this is because Vaadin grid does not support configurable header cells.
+                  if (!th.oskariBound) {
+                      th.oskariBound = true;
+                      me.addFilterMenu(th, index);
+                      me.addDeleteX(th, index);
+                      th.addEventListener("click", function(sortColumn) {
+                          return function() {
+                              // The first column is the selection checkbox.
+                              me.sortBasedOnColumn(sortColumn - 1);
+                              // The clicked indicator is also selected.
+                              var indicatorHeader = me.indicatorHeaders[sortColumn - 1];
+                              if (indicatorHeader) {
+                                  me.selectedIndicatorKey = indicatorHeader.id;
+                              }
+                          };
+                      }(index));
+                  }
+              }
+          }, 100);
+      },
       "selectedIndicatorChanged": function(indicatorKey) {
-          var indicatorHeader;
+          var me = this,
+              indicatorHeader;
           me.indicatorHeaders.forEach(function (header) {
               if (header.id === indicatorKey) {
                   indicatorHeader = header;
               }
           });
+          if (!indicatorHeader) {
+              return;
+          }
           me.selectedIndicator = {
               header: indicatorHeader,
               data: me.cache[indicatorHeader.id]
@@ -440,6 +480,16 @@
       "localize": function(prefix, key) {
           return prefix[key] || key;
       },
+      "addFilterMenu": function(th) {
+          var filterMenu = document.createElement("div");
+          filterMenu.classList.add("icon-funnel");
+          th.appendChild(filterMenu);
+      },
+      "addDeleteX": function(th) {
+          var spanX = document.createElement("span");
+          spanX.innerHTML = "X";
+          th.appendChild(spanX);
+      },
       "handleResponse": function(response) {
           var me = this;
           if (!me.indicatorHeaders.every(function(indicatorHeader) {
@@ -502,22 +552,6 @@
               }));
               return row;
           });
-          // Because Vaadin grid doesn't give any way to affect headers, we will simply modify the DOM here:
-          var grid = this.$["indicator-data-grid"];
-          var headerThs = grid.querySelectorAll("th");
-          // headerThs is not an array... The 0 index is the selection column.
-          for (var index = 1; index < headerThs.length; index++) {
-              var th = headerThs[index];
-              th.addEventListener("click", function(sortColumn) {
-                  return function() {
-                      // The first column is the selection checkbox.
-                      me.sortBasedOnColumn(sortColumn - 1);
-                      // The clicked indicator is also selected.
-                      var indicatorHeader = me.indicatorHeaders[sortColumn - 1];
-                      me.selectedIndicatorKey = indicatorHeader.id;
-                  };
-              }(index));
-          }
           this.set("statsrows", summaryRows);
           this.set("rows", newRows);
       },
