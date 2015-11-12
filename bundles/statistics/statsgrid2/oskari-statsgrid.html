@@ -414,7 +414,15 @@
           return prefix[key] || key;
       },
       "handleResponse": function(response) {
-          var me = this,
+          var me = this;
+          if (!me.indicatorHeaders.every(function(indicatorHeader) {
+                  // TODO: This would be cleaner using promises.
+                  // If we haven't fetched all the indicator values yet, we will do nothing.
+                  return me.cache[indicatorHeader.id] != undefined;
+              })) {
+              return;
+          }
+          var
               regionKeyedValues = {},
               // For average, min, max, etc.
               summaryIds = ["min", "max", "avg", "mde", "mdn", "std", "sum"],
@@ -487,8 +495,20 @@
           return datasourceId + ":" + indicatorId + ":" + selectedLayer + ":" + selectorsString;
       },
       "sortIndicatorDataGrid": function (idx, direction) {
+          var me = this;
           return function(a, b) {
               var lesser = direction == 'asc' ? -1 : 1;
+              // Ambiguous order, using region name order.
+              if (((a[idx] === undefined) && (b[idx] === undefined)) ||
+                  (a[idx] === b[idx])) {
+                  return me.sortIndicatorDataGrid(0, direction)(a, b);
+              }
+              // Undefined values are considered the smallest.
+              if (a[idx] === undefined) {
+                  return lesser;
+              } else if (b[idx] === undefined) {
+                  return -lesser;
+              }
               return (a[idx] < b[idx]) ? lesser : -lesser;
           };
       },
