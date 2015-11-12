@@ -63,7 +63,8 @@ Oskari.clazz.define(
                         //crossOrigin : 'anonymous',
                         params : {
                             'LAYERS' : wms.LAYERS,
-                            'FORMAT' : wms.FORMAT
+                            'FORMAT' : wms.FORMAT,
+                            'srs' : this.getMapModule().getProjection()
                         }
                     }),
                     transparent: true,

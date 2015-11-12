@@ -116,22 +116,21 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                 return;
             }
 
-            // need to keep track of the index we should place the WMTS once capabilities have loaded
-            var selectedLayers = this.getSandbox().findAllSelectedMapLayers();
-            var index = _.findIndex(selectedLayers, function(selected) {
-              return selected.getId() === layer.getId();
-            });
-
             var me = this;
             var map = me.getMap();
-            this.service.getCapabilitiesForLayer(layer, function(wmtsLayer) {
+            // Add placeholder for the layer
+            var wmtsHolderLayer = this._getPlaceHolderWmtsLayer(layer);
+            map.addLayer(wmtsHolderLayer);
+            index = map.layers.length;
+                this.service.getCapabilitiesForLayer(layer, function(wmtsLayer) {
                     me.getSandbox().printDebug("[WmtsLayerPlugin] created WMTS layer " + wmtsLayer);
-
+                    // Get the reserved current index for wmts layer
+                    var holderLayerIndex = map.getLayerIndex(wmtsHolderLayer);
+                    map.removeLayer(wmtsHolderLayer);
                     map.addLayer(wmtsLayer);
                     if (keepLayerOnTop) {
-                        // use the index as it was when addMapLayer was called
-                        // bringing layer on top causes timing errors, because of async capabilities load
-                        map.setLayerIndex(wmtsLayer, index);
+                        // use the placeholder layer index for valid layer order because of async add
+                        map.setLayerIndex(wmtsLayer, holderLayerIndex);
                     } else {
                         map.setLayerIndex(wmtsLayer, 0);
                     }
@@ -218,8 +217,22 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                     style: newStyle
                 });
             }
+        },
+        /**
+         * Reserves correct position for wmts layer, which will be added async later
+         * This layer is removed, when the finalized wmts layer will be added
+         * @param layer
+         * @returns {*}
+         * @private
+         */
+        _getPlaceHolderWmtsLayer: function (layer) {
+
+            var layerHolder = new OpenLayers.Layer.Vector('layer_' + layer.getId(),{
+                visibility: false
+            });
+            return layerHolder;
         }
-    }, {
+}, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
         /**
          * @static @property {string[]} protocol array of superclasses
