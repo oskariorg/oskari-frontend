@@ -69,6 +69,11 @@ In Openlayers 3:
 
 	var bbox = sandbox.getMap().getBbox();
 	new ol.extent.boundingExtent(bbox.left, bbox.bottom, bbox.right, bbox.top);
+	
+### mapwmts
+
+Layer order fixed in Openlayers map, when wmts layers on url parameters or in selectedLayers or in published view
+Opacity is now set for wmts layer, when added to map
 
 ### File location changes
 
