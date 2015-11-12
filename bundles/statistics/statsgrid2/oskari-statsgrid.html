@@ -45,7 +45,7 @@
           <!-- Define the columns -->
           <col name="region" header-text$="[[localize(locale.regionCategories, selectedLayer)]]">
           <template is="dom-repeat" items="[[indicatorHeaders]]" as="header">
-            <col name$="[[header.id]]" header-text$="[[header.header]]">
+            <col name$="[[header.id]]" header-text$="[[header.header]]" on-click="[[sortBasedOnColumn(header.index)]]">
           </template>
         </table>
       </vaadin-grid>
@@ -102,7 +102,8 @@
       },
       "observers": [
           "selectedLayerChanged(ajaxUrl, selectedLayer)",
-          "selectedIndicatorsChanged(ajaxUrl, selectedIndicators.splices)"
+          "selectedIndicatorsChanged(ajaxUrl, selectedIndicators.splices)",
+          "sortChanged(sortColumnIdx, sortDirection)"
       ],
       "toggleStats": function() {
           this.$.statscollapse.toggle();
@@ -466,16 +467,47 @@
               }));
               return row;
           });
+          // Because Vaadin grid doesn't give any way to affect headers, we will simply modify the DOM here:
+          var grid = this.$["indicator-data-grid"];
+          var headerThs = grid.querySelectorAll("th");
+          // headerThs is not an array... The 0 index is the selection column.
+          for (var index = 1; index < headerThs.length; index++) {
+              var th = headerThs[index];
+              th.addEventListener("click", function(sortColumn) {
+                  return function() {
+                      // The first column is the selection checkbox.
+                      me.sortBasedOnColumn(sortColumn - 1);
+                  };
+              }(index));
+          }
           this.set("statsrows", summaryRows);
           this.set("rows", newRows);
       },
       "getCacheKey": function(datasourceId, indicatorId, selectedLayer, selectorsString) {
           return datasourceId + ":" + indicatorId + ":" + selectedLayer + ":" + selectorsString;
       },
+      "sortIndicatorDataGrid": function (idx, direction) {
+          return function(a, b) {
+              var lesser = direction == 'asc' ? -1 : 1;
+              return (a[idx] < b[idx]) ? lesser : -lesser;
+          };
+      },
+      "sortChanged": function() {
+          var me = this;
+          me.rows.sort(me.sortIndicatorDataGrid(me.sortColumnIdx, me.sortDirection));
+          me.set("rows", me.rows.slice(0));
+      },
+      "sortBasedOnColumn": function(idx) {
+          if (this.sortColumnIdx === idx) {
+              this.sortDirection = this.sortDirection == "asc" ? "desc" : "asc";
+          } else {
+              this.sortDirection = "asc";
+          }
+          this.sortColumnIdx = idx;
+      },
       "ready": function() {
           this.cache = {};
       }
-      
     };
   });
   </script>
