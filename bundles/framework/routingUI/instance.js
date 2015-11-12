@@ -297,7 +297,14 @@ function () {
         style.strokeColor = color;
         style.strokeWidth = 5;
         style.strokeOpacity = 0.7;
-        this.sandbox.postRequestByName(rn, [geom, 'GeoJSON', null, null, 'replace', true, style, false]);
+        this.sandbox.postRequestByName(rn, [geom, {
+            layerId: null, 
+            replace: 'replace',
+            layerOptions: null,
+            centerTo: false,
+            attributes: null, 
+            featureStyle: style
+        }]);
     },
 
 

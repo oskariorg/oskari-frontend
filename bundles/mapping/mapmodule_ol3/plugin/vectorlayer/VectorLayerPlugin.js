@@ -14,6 +14,18 @@ Oskari.clazz.define(
         this._supportedFormats = {};
         this._nextVectorId = 0;
         this._nextFeatureId = 0;
+        this._defaultStyle = {
+            fillColor: 'rgba(255,0,255,0.2)',
+            strokeColor: 'rgba(0,0,0,1)',
+            width: 2,
+            radius: 4,
+            textScale: 1.3,
+            textOutlineColor: 'rgba(255,255,255,1)',
+            textColor: 'rgba(0,0,0,1)',
+            lineDash: [5]
+        };
+        this._styleTypes = ['default', 'feature', 'layer'];
+        this._styles = {};
         this._layers = {};
     }, {
         /**
@@ -88,49 +100,72 @@ Oskari.clazz.define(
          * @public
          * Removes all/selected features from map.
          *
-         * @param {String} featureId Id of the feature that should be removed. If not given, will remove all the features from the layer.
-         * @param {String} layerId id of the layer where features should be removed. If not given, will remove all the features from map.
+         * @param {String} identifier the feature attribute identifier
+         * @param {String} value the feature identifier value
+         * @param {Oskari.mapframework.domain.VectorLayer} layer layer details
          */
-        removeFeaturesFromMap: function(featureId, layerId){
+        removeFeaturesFromMap: function(identifier, value, layer){
             var me = this,
-                foundedFeatures,
-                mapLayer;
+                foundFeatures,
+                olLayer,
+                layerId;
 
-            if (_.isEmpty(this._layers)) {
-                return;
+            if(layer && layer !== null){
+                layerId = layer.getId();
+                olLayer = me._layers[layerId];
             }
-            mapLayer = this._layers[layerId];
-
-            if (mapLayer) {
-                if (featureId) {
-                    var feature = mapLayer.getSource().getFeatureById(featureId);
-                    mapLayer.getSource().removeFeature(feature);
-                } else {
-                    me._map.removeLayer(mapLayer);
-                    me.removeMapLayerFromMap(mapLayer);
+            if (olLayer) {
+                // Removes only wanted features from the given maplayer
+                if (identifier && identifier !== null && value && value !== null) {
+                    me._removeFeaturesByAttribute(olLayer, identifier, value);
                 }
-            } else {
-                _.forEach(this._layers, function (layer) {
-                    me.removeMapLayerFromMap(layer);
-                });
+                //remove all features from the given layer
+                else {
+                    this._map.removeLayer(me._layers[layerId]);
+                    delete this._layers[layerId];
+                } 
+            }
+            // Removes all features from all layers
+            else {
+                for (var layerId in me._layers) {
+                    this._map.removeLayer(me._layers[layerId]);
+                    delete this._layers[layerId];
+                }
             }
         },
+        _removeFeaturesByAttribute: function(olLayer, identifier, value) {
+            var source = olLayer.getSource(),
+                featuresToRemove = [];
+
+            source.forEachFeature(function(feature) {
+                if (feature.get(identifier) === value) {
+                    featuresToRemove.push(feature);
+                }
+            });
+            
+            for (var i = 0; i < featuresToRemove.length; i++) {
+                source.removeFeature(featuresToRemove[i]);
+            }
+
+        },
+        _getGeometryType: function(geometry){
+            if (typeof geometry === 'string' || geometry instanceof String) {
+                return 'WKT';
+            }
+            return 'GeoJSON';
+        },
         /**
-         * @method addFeaturesOnMap
+         * @method addFeaturesToMap
          * @public
          * Add feature on the map
          *
          * @param {Object} geometry the geometry WKT string or GeoJSON object
-         * @param {String} geometryType the geometry type. Supported formats are: WKT and GeoJSON.
-         * @param {String} layerId Id of the layer where features will be added. If not given, will create new vector layer
-         * @param {String} operation layer operations. Supported: replace.
-         * @param {Boolean} keepLayerOnTop. If true add layer on the top. Default true.
-         * @param {ol.layer.Vector options} layerOptions options for layer
-         * @param {ol.style.Style} featureStyle Style for the feature. This can be a single style object, an array of styles, or a function that takes a resolution and returns an array of styles.
-         * @param {Boolean} centerTo True to center the map to the given geometry.
+         * @param {Object} options additional options
          */
-        addFeaturesToMap: function(geometry, geometryType, layerId, operation, keepLayerOnTop, layerOptions, featureStyle, centerTo){
+
+        addFeaturesToMap: function(geometry, options){
             var me = this,
+                geometryType = me._getGeometryType(geometry),
                 format = me._supportedFormats[geometryType],
                 olLayer,
                 mapLayerService = me._sandbox.getService('Oskari.mapframework.service.MapLayerService');
@@ -139,11 +174,11 @@ Oskari.clazz.define(
                 return;
             }
 
-            if (!keepLayerOnTop) {
-                var keepLayerOnTop = true;
-            }
-
             if (geometry) {
+                //if there's no layerId provided -> Just use a generic vector layer for all.
+                if (!options.layerId) {
+                    options.layerId = 'VECTOR';
+                }
                 var features = format.readFeatures(geometry);
                 _.forEach(features, function (feature) {
                     if (!feature.getId()) {
@@ -152,17 +187,19 @@ Oskari.clazz.define(
                     }
                 });
 
-                if (featureStyle) {
+                if (options.featureStyle) {
+                   me.setDefaultStyle(options.featureStyle);
                     _.forEach(features, function (feature) {
-                        feature.setStyle(featureStyle);
+                        feature.setStyle(options.featureStyle);
                     });
                 }
 
                 //check if layer is already on map
-                if (me._layers[layerId]) {
+                if (me._layers[options.layerId]) {
+                    layer = me._layers[options.layerId];
                     //layer is already on map
                     //clear old features if defined so
-                    if (operation && operation !== null && operation === 'replace') {
+                    if (options.replace && options.replace === 'replace') {
                         layer.getSource().clear();
                     }
                     var vectorsource = layer.getSource();
@@ -172,22 +209,19 @@ Oskari.clazz.define(
                     var vectorsource = new ol.source.Vector({
                         features: features
                     });
-                    var id = 'V' + me._nextVectorId++;
-                    var layer = new ol.layer.Vector({name: me._olLayerPrefix + id,
-                                                    id: id,
+                    var layer = new ol.layer.Vector({name: me._olLayerPrefix + options.layerId,
+                                                    id: options.layerId,
                                                     source: vectorsource});
-                    if (layerOptions) {
-                        layer.setProperties(layerOptions);
+                    if (options.layerOptions) {
+                        layer.setProperties(options.layerOptions);
                     }
-                    me._layers[id] = layer;
+//                    me._layers[id] = layer;
+                    me._layers[options.layerId] = layer;
                     me._map.addLayer(layer);
-                }
-
-                if (keepLayerOnTop) {
                     me.raiseVectorLayer(layer);
                 }
 
-                if (centerTo === true) {
+                if (options.centerTo === true) {
                     var extent = vectorsource.getExtent();
                     me.getMapModule().zoomToExtent(extent);
                 }
@@ -277,7 +311,123 @@ Oskari.clazz.define(
             }
             // only single layer/id, wrap it in an array
             return [this._layers[layer.getSource().get(id)]];
-        }
+        },
+        /**
+         * Possible workaround for arranging the feature draw order within a layer
+         *
+         */
+        rearrangeFeatures : function() {
+            var me = this,
+                layers = me.layers;
+            for(key in layers) {
+                if(layers[key].features.length > 0) {
+                    var layer = layers[key];
+                    var features = layer.features;
+                    features.sort(function(a, b) {
+                        if(a.config != undefined){
+                            if (a.config.positionInsideLayer < b.config.positionInsideLayer) {
+                                return -1;
+                            }
+                            if (a.config.positionInsideLayer > b.config.positionInsideLayer) {
+                                return 1;
+                            }
+                            return 0;
+                        }
+                    });
+                    layer.removeAllFeatures();
+                    layer.addFeatures(features);
+                }
+            }
+        },
+        /**
+         * @method setDefaultStyle
+         *
+         * @param {Object} styles. If not given, will set default styles
+         */
+        setDefaultStyle : function(styles) {
+            var me = this;
+            //setting defaultStyle
+            _.each(me._styleTypes, function (s) {
+                me._styles[s] = new ol.style.Style({
+                    fill: new ol.style.Fill({
+                      color: me._defaultStyle.fillColor
+                    }),
+                    stroke: new ol.style.Stroke({
+                      color: me._defaultStyle.strokeColor,
+                      width: me._defaultStyle.width
+                    }),
+                    image: new ol.style.Circle({
+                      radius: me._defaultStyle.radius,
+                      fill: new ol.style.Fill({
+                        color: me._defaultStyle.strokeColor
+                      })
+                    }),
+                    text: new ol.style.Text({
+                         scale: me._defaultStyle.textScale,
+                         fill: new ol.style.Fill({
+                           color: me._defaultStyle.textColor
+                         }),
+                         stroke: new ol.style.Stroke({
+                           color: me._defaultStyle.textOutlineColor,
+                           width: me._defaultStyle.width
+                         })
+                      })
+                });
+            });
+            //overwriting default styles if given
+            if(styles) {
+                _.each(styles, function (style, styleType) {
+                    if(me.hasNestedObj(style, 'fill.color')) {
+                        me._styles[styleType].getFill().setColor(style.fill.color);
+                    }
+                    if(me.hasNestedObj(style, 'stroke.color')) {
+                        me._styles[styleType].getStroke().setColor(style.stroke.color);
+                    }
+                    if(me.hasNestedObj(style, 'stroke.width')) {
+                        me._styles[styleType].getStroke().setWidth(style.stroke.width);
+                    }
+                    if(me.hasNestedObj(style, 'image.radius')) {
+                        me._styles[styleType].getImage().radius = style.image.radius;
+                    }
+                    if(me.hasNestedObj(style, 'image.fill.color')) {
+                        me._styles[styleType].getImage().getFill().setColor(style.image.fill.color);
+                    }
+                    if(me.hasNestedObj(style, 'text.fill.color')) {
+                        me._styles[styleType].getText().getFill().setColor(style.text.fill.color);
+                    }
+                    if(me.hasNestedObj(style, 'text.scale')) {
+                        me._styles[styleType].getText().setScale(style.text.scale);
+                    }
+                    if(me.hasNestedObj(style, 'text.stroke.color')) {
+                        me._styles[styleType].getText().getFill().setColor(style.text.stroke.color);
+                    }
+                    if(me.hasNestedObj(style, 'text.stroke.width')) {
+                        me._styles[styleType].getText().getStroke().setWidth(style.text.stroke.width);
+                    }
+                });
+            }
+        },
+        /** Check, if nested key exists
+        * @method hasNestedObj
+        * @params {}  object
+        * @params String object path
+        * @public
+        *
+        * @returns {Boolean}: true if nested key exists
+        */
+       hasNestedObj: function(obj, sobj) {
+          var tmpObj = obj,
+              cnt = 0,
+              splits = sobj.split('.');
+
+          for (i=0; tmpObj && i < splits.length; i++) {
+              if (splits[i] in tmpObj) {
+                  tmpObj = tmpObj[splits[i]];
+                  cnt++;
+              }
+          }
+          return cnt === splits.length;
+       }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
         /**
