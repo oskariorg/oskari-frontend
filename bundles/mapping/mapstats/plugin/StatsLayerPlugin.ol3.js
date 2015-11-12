@@ -71,7 +71,7 @@ Oskari.clazz.define(
             var layerModelBuilder,
                 mapLayerService = this.getSandbox().getService(
                     'Oskari.mapframework.service.MapLayerService'
-                ); // register domain builder
+                );
 
             if (mapLayerService) {
                 mapLayerService.registerLayerModel(
@@ -204,9 +204,8 @@ Oskari.clazz.define(
          * @method addMapLayerToMap
          * @param {Oskari.mapframework.domain.WmsLayer} layer
          * @param {Boolean} keepLayerOnTop
-         * @param {Boolean} isBaseMap
          */
-        addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
+        addMapLayerToMap: function (layer, keepLayerOnTop) {
             if (!layer.isLayerOfType(this._layerType)) {
                 return;
             }

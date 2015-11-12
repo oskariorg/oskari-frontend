@@ -110,7 +110,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
                 matrixSet: layer.getWmtsMatrixSetId(),
                 params : {},
                 visibility: layer.isInScale(this.sandbox.getMap().getScale()) && layer.isVisible(),
-
+                opacity : layer.getOpacity() / 100,
                 displayInLayerSwitcher: false,
                 isBaseLayer: false,
                 buffer: 0

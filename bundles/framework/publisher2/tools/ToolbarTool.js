@@ -325,9 +325,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                             toolButton.selectTool.find('label')
                                 .attr('for', 'tool-opt-' + toolName).append(me.__loc.toolbarToolNames[toolName]);
 
-                            if (me.toolbarConfig[buttonGroup.name] && me.toolbarConfig[buttonGroup.name][toolName]) {
-                                toolButton.selectTool.find('input').attr('checked', 'checked');
-                            }
+                            toolButton.selectTool.find('input').attr('checked', 'checked');
+
+                            _toggleToolOption(toolName, buttonGroup.name, toolButton, 'toolbarConfig', toolButton.selectTool.find('input'))();
+
                             //toggle toolbar tool. i.e. send requests
                             toolElement = toolButton.selectTool.find('input')
                                 .attr('id', 'tool-opt-' + toolName)
