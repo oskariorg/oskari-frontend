@@ -31,8 +31,8 @@ Oskari.clazz.define(
         handleRequest: function(core, request) {
             var zoom = request.getZoom(),
                 srsName = request.getSrsName(),
-                lonlat = { 
-                    lon : request.getCenterX(), 
+                lonlat = {
+                    lon : request.getCenterX(),
                     lat : request.getCenterY()
                 };
 

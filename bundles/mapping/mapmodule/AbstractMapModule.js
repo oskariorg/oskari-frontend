@@ -81,7 +81,7 @@ Oskari.clazz.define(
             ];
         }
         else {
-            me._extent = [];   
+            me._extent = [];
         }
         // arr
 
@@ -1239,7 +1239,7 @@ Oskari.clazz.define(
                     lon : lonlat[0],
                     lat : lonlat[1]
                 };
-            } 
+            }
             return lonlat;
         },
         /**

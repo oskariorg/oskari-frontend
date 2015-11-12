@@ -212,8 +212,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             var me = this,
                 markerLayer = new ol.layer.Vector({title: 'Markers', source: new ol.source.Vector()});
 
-            this.getMap().addLayer(markerLayer);
-            this.raiseMarkerLayer(markerLayer);
+            me.getMap().addLayer(markerLayer);
+            me.raiseMarkerLayer(markerLayer);
             return markerLayer;
         },
         /**
@@ -546,10 +546,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 var paper = Raphael(0, 0, size, size);
                 paper.clear();
 
-                // Test lines for pixel level accuracy
-                // var lines = paper.path("M0 0L"+size+" "+size+" M0 "+size+" L"+size+" 0");
-                // lines.attr("stroke", "#000");
-
                 // Construct marker parameters
                 var font = paper.getFont(me._font.name),
                     charIndex = me.getFont().baseIndex;
@@ -613,7 +609,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 layer = this.getMarkersLayer();
             }
             this.getMapModule().bringToTop(layer);
-            //layer.setVisibility(true);
         },
 
         /**

@@ -54,6 +54,29 @@ In an effort to make Openlayers 2 ja 3 mapmodule API consistent some functions h
 MapClickedEvent.getLonlat() now returns an object with lon and lat keys instead of Openlayers.Lonlat in OL2 or coordinate array in OL3.
 Fixed mapmodule.isValidLonLat() to use max extent as reference instead of hardcoded EPSG:3067 values.
 
+Both ol2 and ol3 implementations of AddFeaturesToMapRequest / AddFeaturesToMapRequestHandler have been changed to take only geometry and options as their parameters. Also both implementations of VectorLayerPlugin have been changed accordingly. i.e.
+
+The old way: 
+sandbox.postRequestByName(rn, [geojson, 'GeoJSON', null, null, 'replace', true, style, false]);
+
+Now:
+sandbox.postRequestByName(rn, [geojson, {
+    layerId: 'ANALYSIS_VECTOR',
+    replace: 'replace',
+    layerOptions: null,
+    centerTo: false,
+    featureStyle: style,
+    attributes: null
+}]);
+- layerId: If left out, a generic vector layer is used by VectorLayerPlugin. 
+- replace: whether to clear out all previous features
+- layerOptions: additional layerOptions
+- centerTo: whether to zoom in to the features
+- featureStyle: style of the features
+- attributes: additional attributes of the features
+(geometryType from the old call has been removed. From now on the VectorLayerPlugin will determine geometry type from the geometry)
+
+
 #### Oskari.mapframework.domain.Map
 
 Sandbox.getMap().getBbox() no longer returns the Openlayers.Bounds or ol but an object with top, bottom, left, right keys
@@ -67,6 +90,11 @@ In Openlayers 3:
 
 	var bbox = sandbox.getMap().getBbox();
 	new ol.extent.boundingExtent(bbox.left, bbox.bottom, bbox.right, bbox.top);
+	
+### mapwmts
+
+Layer order fixed in Openlayers map, when wmts layers on url parameters or in selectedLayers or in published view
+Opacity is now set for wmts layer, when added to map
 
 ### File location changes
 

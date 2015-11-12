@@ -1775,9 +1775,9 @@ Oskari.clazz.define(
           } else {
 //            return new ol.TileRange(minX, maxX, minY, maxY);
             return {
-                minX: minX, 
-                maxX: maxX, 
-                minY: minY, 
+                minX: minX,
+                maxX: maxX,
+                minY: minY,
                 maxY: maxY
             }
           }

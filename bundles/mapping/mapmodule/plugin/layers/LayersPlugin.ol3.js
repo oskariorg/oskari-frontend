@@ -243,7 +243,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
         return;
 
         //TODO: fix this code
-        
+
         /*
         var opLayersLength = this.mapModule.getLayers().length;
 

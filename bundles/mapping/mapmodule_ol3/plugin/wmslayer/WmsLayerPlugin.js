@@ -18,7 +18,7 @@ Oskari.clazz.define(
         getLayerTypeSelector : function() {
             return 'WMS';
         },
-        
+
         /**
          * @method _addMapLayerToMap
          * @private
@@ -63,7 +63,8 @@ Oskari.clazz.define(
                         //crossOrigin : 'anonymous',
                         params : {
                             'LAYERS' : wms.LAYERS,
-                            'FORMAT' : wms.FORMAT
+                            'FORMAT' : wms.FORMAT,
+                            'srs' : this.getMapModule().getProjection()
                         }
                     }),
                     transparent: true,
@@ -73,6 +74,15 @@ Oskari.clazz.define(
                     visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
                     opacity: layer.getOpacity() / 100
                 });
+                // Set min max Resolutions
+                if (_layer.getMaxScale() || _layer.getMinScale()) {
+                    // use resolutions instead of scales to minimize chance of transformation errors
+                    var layerResolutions = this.getMapModule().calculateLayerResolutions(_layer.getMaxScale(), _layer.getMinScale());
+                    if (layerResolutions) {
+                        layerImpl.setMaxResolution(layerResolutions[0]);
+                        layerImpl.setMinResolution(layerResolutions[layerResolutions.length-1]);
+                    }
+                }
                 this.mapModule.addLayer(layerImpl, _layer, layerIdPrefix + _layer.getId());
                 // gather references to layers
                 olLayers.push(layerImpl);
