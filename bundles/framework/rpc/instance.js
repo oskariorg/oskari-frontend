@@ -79,7 +79,7 @@ Oskari.clazz.define(
                     if (!me._domainMatch(trans.origin)) {
                         throw {
                             error: 'invalid_origin',
-                            message: 'Invalid origin: ' + trans.origin
+                            message: 'Invalid domain for parent page/origin. Published domain does not match: ' + trans.origin
                         };
                     }
                     if (me._allowedEvents[params[0]]) {
@@ -149,8 +149,15 @@ Oskari.clazz.define(
             }
 
             if (allowedFunctions === null || allowedFunctions === undefined) {
-                allowedFunctions = ['getAllLayers', 'getAllLayers', 'getMapPosition', 'getSupportedEvents', 'getSupportedFunctions', 'getSupportedRequests',
-                    'getZoomRange', 'getMapBbox', 'resetState'];
+                allowedFunctions = [];
+                // allow all available functions by default
+                var funcs = this._availableFunctions;
+                for(var name in funcs) {
+                    if(!funcs.hasOwnProperty(name)) {
+                        continue;
+                    }
+                    allowedFunctions.push(name);
+                }
             }
 
             if (allowedRequests === null || allowedRequests === undefined) {
@@ -194,18 +201,10 @@ Oskari.clazz.define(
                 return this._allowedEvents;
             },
             getSupportedFunctions : function() {
-                var result = {};
-                for(var i=0; i < this._allowedFunctions; ++i) {
-                    result[this._allowedFunctions] = true;
-                }
-                return result;
+                return this._allowedFunctions;
             },
             getSupportedRequests : function() {
-                var result = {};
-                for(var i=0; i < this._allowedRequests; ++i) {
-                    result[this._allowedRequests] = true;
-                }
-                return result;
+                return this._allowedRequests;
             },
             getAllLayers : function() {
                 var mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
@@ -243,7 +242,7 @@ Oskari.clazz.define(
                 return {
                     min: 0,
                     max: mapModule.getMaxZoomLevel(),
-                    current: mapModule.getZoom()
+                    current: mapModule.getMapZoom()
                 };
             },
             resetState : function() {

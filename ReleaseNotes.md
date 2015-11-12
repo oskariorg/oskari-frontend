@@ -2,9 +2,30 @@
 
 ## 1.34
 
+### OskariRPC (client library)
+
+Functions are now generated depending on the configuration of the providing platform (allowed functions configuration). This means that any calls made to remote functions
+are available only after the connection to map has been established. This enables better errorhandling, but means that function calls will result in "is not a function" errors 
+if called before connection is established. An onReady()-hook has been added where you can check the available functions:
+
+    // init connection
+    var channel = OskariRPC.connect(
+        elements.iframe,
+        IFRAME_DOMAIN
+    );
+    var blnFunctionExists = typeof channel.getAllLayers === 'function';
+    // -> blnFunctionExists = false
+	channel.onReady(function() {
+	    var blnFunctionExists = typeof channel.getAllLayers === 'function';
+	    // -> blnFunctionExists = true
+	    channel.getAllLayers(function (data) {
+	    	console.log(data);
+    	});
+	});
+
 ### rpc
 
-Allowed functions/events/requests are now configured as an array ["AfterMapMoveEvent", "MapClickedEvent"] instead of an object { "AfterMapMoveEvent" : true, "MapClickedEvent" : true }
+Allowed functions/events/requests are now configured as an array ["AfterMapMoveEvent", "MapClickedEvent"] instead of an object { "AfterMapMoveEvent" : true, "MapClickedEvent" : true }.
 
 New function is enabled by default:
 - 'getMapBbox' gets current map bbox
@@ -30,7 +51,7 @@ In an effort to make Openlayers 2 ja 3 mapmodule API consistent some functions h
 - OL3: getZoomLevel() removed as it's the same as getMapZoom()
 - Both: moveMapToLanLot() -> moveMapToLonLat()
 
-MapClickedEvent.getLonlat() now returns an object with lon and lat keys regardless instead of Openlayers.Lonlat in OL2 or coordinate array in OL3.
+MapClickedEvent.getLonlat() now returns an object with lon and lat keys instead of Openlayers.Lonlat in OL2 or coordinate array in OL3.
 Fixed mapmodule.isValidLonLat() to use max extent as reference instead of hardcoded EPSG:3067 values.
 
 #### Oskari.mapframework.domain.Map
