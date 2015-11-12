@@ -338,14 +338,17 @@
             indicators = me.selectedIndicators;
           this.set("indicatorHeaders", indicators.map(function(indicator) {
               var selectors = me.toSelectorsParameter(indicator.selectors),
-                  selectorsString = JSON.stringify(selectors),
+                  selectorsKey = JSON.stringify(selectors),
                   cacheKey = me.getCacheKey(indicator.datasourceId, indicator.indicatorId,
-                      me.selectedLayer, selectorsString);
+                      me.selectedLayer, selectorsKey),
+                  selectorsAsString = indicator.selectors.map(function(selector) {
+                      return selector.value;
+                  }).join("/");
               return {
                   id: cacheKey,
                   indicatorId: indicator.indicatorId,
-                  // FIXME: Add selections to the header text.
                   header: me.sources[indicator.datasourceId].indicators[indicator.indicatorId].name[me.language]
+                    + ((selectorsAsString.length > 0)?"/":"") + selectorsAsString
               }
           }));
           indicators.forEach(function(indicator) {

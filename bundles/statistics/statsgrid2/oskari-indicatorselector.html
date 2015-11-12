@@ -89,8 +89,14 @@
               "type": Object,
               "notify": true
           },
-          "datasourceId": String,
-          "indicatorId": String,
+          "datasourceId": {
+              "type": String,
+              "notify": true
+          },
+          "indicatorId": {
+              "type": String,
+              "notify": true
+          },
           "indicatorSelected": {
               "type": Boolean,
               "value": false,
@@ -129,18 +135,23 @@
           "dialog": Object
       },
       "observers": [
+          "datasourceChanged(datasourceId)",
           "indicatorChanged(indicatorId)",
           "getSelectors(sources, datasourceId, indicatorId)",
           "selectedIndicatorsChanged(ajaxUrl, selectedIndicators.splices)",
-          "selectorsChanged(sources, datasourceId, indicatorId, selectorItems.splices)"
+          "selectorsChanged(selectorItems.splices)",
+          "selectorsChanged(selectors)"
       ],
       "selectedIndicatorsChanged": function() {
           this.set("showGrid", !this.showUserIndicatorView && !!this.selectedIndicators
                   && this.selectedIndicators.length > 0);
       },
-      "selectorsChanged": function(sources, datasourceId, indicatorId) {
+      "selectorsChanged": function() {
           var me = this;
-          this.allSelectorsSelected = true;
+          me.set("allSelectorsSelected", true);
+          if (this.selectorItems === undefined || this.selectorItems === null) {
+              return;
+          }
           this.selectorItems.forEach(function(select) {
               if (!select.value || select.value === null || select.value === "undefined") {
                   me.set("allSelectorsSelected", false);
@@ -150,14 +161,13 @@
       "onSelectorsChanged": function(event) {
           this.selectorsChanged(this.sources, this.datasourceId, this.indicatorId);
       },
+      "datasourceChanged": function(datasourceId) {
+          var me = this;
+          this.set("indicatorId", undefined);
+      },
       "indicatorChanged": function(indicatorId) {
+          var me = this;
           this.indicatorSelected = indicatorId !== undefined && indicatorId !== null && indicatorId !== "undefined";
-          this.allSelectorsSelected = true;
-          this.selectorItems.forEach(function(select) {
-              if (!select.value || select.value === null || select.value === "undefined") {
-                  me.set("allSelectorsSelected", false);
-              }
-          });
       },
       "onAddUserIndicator": function() {
           var me = this;
