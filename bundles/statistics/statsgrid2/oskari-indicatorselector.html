@@ -60,8 +60,8 @@
       <oskari-statsgrid locale="[[locale]]" language="[[language]]" ajax-url="[[ajaxUrl]]"
         sources="{{sources}}" selected-indicators="{{selectedIndicators}}" selected-layer="{{selectedLayer}}"
         layer-info="{{layerInfo}}" region-info="{{regionInfo}}" user-indicators="[[userIndicators]]"
-        hidden$="[[!showGrid]]"
-        id="statsgrid""></oskari-statsgrid>
+        selected-indicator-key="{{selectedIndicatorKey}}"
+        hidden$="[[!showGrid]]" id="statsgrid""></oskari-statsgrid>
     </div>
     <div hidden$="[[!showUserIndicatorView]]">
       <oskari-userindicator ajax-url="[[ajaxUrl]]"
@@ -131,6 +131,10 @@
               "type": Boolean,
               "notify": true,
               "value": false
+          },
+          "selectedIndicatorKey": {
+              "type": String,
+              "notify": true
           },
           "dialog": Object
       },
@@ -291,6 +295,16 @@
               };
           }));
       },
+      "getSelectorsKey": function() {
+          var selectors = {};
+          this.selectorItems.forEach(function(selector) {
+              selectors[selector.name] = selector.value;
+          });
+          return selectors;
+      },
+      "getIndicatorKey": function(datasourceId, indicatorId, selectedLayer, selectorsString) {
+          return datasourceId + ":" + indicatorId + ":" + selectedLayer + ":" + selectorsString;
+      },
       "onAddIndicatorToGrid": function(e) {
           var selectors = this.$.indicatorSelectors,
             selects = this.selectorItems,
@@ -306,6 +320,8 @@
               indicatorId: this.indicatorId,
               selectors: values
           });
+          this.selectedIndicatorKey = this.getIndicatorKey(this.datasourceId, this.indicatorId,
+              this.selectedLayer, this.getSelectorsKey());
       }
     });
   </script>

@@ -98,13 +98,40 @@
           "selectedIndicators": {
               "type": Array,
               "notify": true
+          },
+          /**
+           * For example the indicator selector can notify of selected indicator with this.
+           */
+          "selectedIndicatorKey": {
+              "type": String,
+              "notify": true
+          },
+          /**
+           * This designates the indicator that is currently active in the map.
+           */
+          "selectedIndicator": {
+              "type": Object,
+              "notify": true
           }
       },
       "observers": [
           "selectedLayerChanged(ajaxUrl, selectedLayer)",
           "selectedIndicatorsChanged(ajaxUrl, selectedIndicators.splices)",
-          "sortChanged(sortColumnIdx, sortDirection)"
+          "sortChanged(sortColumnIdx, sortDirection)",
+          "selectedIndicatorChanged(selectedIndicatorKey, cache)"
       ],
+      "selectedIndicatorChanged": function(indicatorKey) {
+          var indicatorHeader;
+          me.indicatorHeaders.forEach(function (header) {
+              if (header.id === indicatorKey) {
+                  indicatorHeader = header;
+              }
+          });
+          me.selectedIndicator = {
+              header: indicatorHeader,
+              data: me.cache[indicatorHeader.id]
+          };
+      },
       "toggleStats": function() {
           this.$.statscollapse.toggle();
       },
@@ -349,7 +376,7 @@
                   id: cacheKey,
                   indicatorId: indicator.indicatorId,
                   header: me.sources[indicator.datasourceId].indicators[indicator.indicatorId].name[me.language]
-                    + ((selectorsAsString.length > 0)?"/":"") + selectorsAsString
+                    + ((selectorsAsString.length > 0) ? "/" : "") + selectorsAsString
               }
           }));
           indicators.forEach(function(indicator) {
@@ -370,7 +397,7 @@
                       "selectors": selectorsString
                   },
                   dataType: 'json',
-                  success: function(results){
+                  success: function(results) {
                       me.cache[cacheKey] = results;
                       me.handleResponse(me.cache[cacheKey]);
                   }
@@ -485,6 +512,9 @@
                   return function() {
                       // The first column is the selection checkbox.
                       me.sortBasedOnColumn(sortColumn - 1);
+                      // The clicked indicator is also selected.
+                      var indicatorHeader = me.indicatorHeaders[sortColumn - 1];
+                      me.selectedIndicatorKey = indicatorHeader.id;
                   };
               }(index));
           }
