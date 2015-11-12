@@ -116,7 +116,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
                 buffer: 0
             };
 
-            var capsLayer = _.find(caps.contents.layers, function(capsLayer) {
+            _.find(caps.contents.layers, function(capsLayer) {
               return capsLayer.identifier === config.layer;
             });
 

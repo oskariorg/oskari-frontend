@@ -27,7 +27,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                 );
 
             if (!mapLayerService) {
-                // no map layer service - TODO: signal failure
+                //TODO: signal failure - no map layer service
                 return;
             }
 
@@ -73,9 +73,9 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
          *
          */
         _replaceMapLayer: function(layer) {
-            var me = this;
-            var olMapLayers = me.getOLMapLayers(layer),
-                sandbox = me.getSandbox();
+            var me = this,
+                olMapLayers = me.getOLMapLayers(layer);
+
             if (!olMapLayers || olMapLayers.length === 0) {
                 return;
             }
