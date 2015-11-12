@@ -139,12 +139,12 @@ Oskari.clazz.define(
                     foundFeatures = olLayer.getFeaturesByAttribute(identifier, value);
                     olLayer.removeFeatures(foundFeatures);
                     olLayer.refresh();
-                } 
+                }
                 //remove all features from the given layer
                 else {
                     this._map.removeLayer(me._layers[layerId]);
                     delete this._layers[layerId];
-                } 
+                }
             }
             // Removes all features from all layers
             else {
@@ -185,47 +185,36 @@ Oskari.clazz.define(
                 if (!options.layerId) {
                     options.layerId = 'VECTOR';
                 }
-
-
                 if (options.attributes && options.attributes !== null) {
                     if(feature instanceof Array && geometryType === 'GeoJSON'){
                         //Remark: It is preferred to use GeoJSON properties for attributes
                         // There could be many features in GeoJson and now attributes are set only for 1st feature
                         feature[0].attributes = options.attributes;
-                    }
-                    else {
+                    } else {
                         feature.attributes = options.attributes;
                     }
                 }
-
                 olLayer = me._map.getLayersByName(me._olLayerPrefix + options.layerId)[0];
-
                 if (!olLayer) {
                     var opacity = 100;
                     if(layer){
                         opacity = layer.getOpacity() / 100;
                     }
                     olLayer = new OpenLayers.Layer.Vector(me._olLayerPrefix + options.layerId);
-
                     olLayer.setOpacity(opacity);
                     isOlLayerAdded = false;
                 }
-
                 if (options.replace && options.replace !== null && options.replace === 'replace') {
                     olLayer.removeAllFeatures();
                     olLayer.refresh();
                 }
-
                 if (options.featureStyle && options.featureStyle !== null) {
                     for (i=0; i < feature.length; i++) {
                         featureInstance = feature[i];
                         featureInstance.style = options.featureStyle;
                     }
                 }
-
                 olLayer.addFeatures(feature);
-
-
                 if(isOlLayerAdded === false) {
                     me._map.addLayer(olLayer);
                     me._map.setLayerIndex(
@@ -255,7 +244,6 @@ Oskari.clazz.define(
                             left,
                             top,
                             right;
-
                         for(var f=0;f<feature.length;f++) {
                             var feat = feature[f];
                             var featBounds = feat.geometry.getBounds();
@@ -272,11 +260,9 @@ Oskari.clazz.define(
                                 right = featBounds.right;
                             }
                         }
-
                         bounds = new OpenLayers.Bounds();
                         bounds.extend(new OpenLayers.LonLat(left,bottom));
                         bounds.extend(new OpenLayers.LonLat(right,top));
-
                         center = new OpenLayers.LonLat((right-((right-left)/2)),(top-((top-bottom)/2)));
                     }
 
@@ -313,9 +299,8 @@ Oskari.clazz.define(
          *
          * @param {Oskari.mapframework.domain.VectorLayer} layer
          * @param {Boolean} keepLayerOnTop keep layer on top
-         * @param {Boolean} isBaseMap is basemap
          */
-        addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
+        addMapLayerToMap: function (layer, keepLayerOnTop) {
             if (!layer.isLayerOfType('VECTOR')) {
                 return;
             }
@@ -411,7 +396,9 @@ Oskari.clazz.define(
                 remLayer = this.getMap().getLayersByName(me._olLayerPrefix + layer.getId());
 
             // This should free all memory
-            if(remLayer[0]) remLayer[0].destroy();
+            if(remLayer[0]) {
+                remLayer[0].destroy();
+            }
         },
         /**
          * @method getOLMapLayers
@@ -434,7 +421,6 @@ Oskari.clazz.define(
          */
         handleFeaturesAvailableEvent: function (event) {
             var me = this,
-                layer = event.getMapLayer(),
                 mimeType = event.getMimeType(),
                 features = event.getFeatures(),
                 op = event.getOp(),

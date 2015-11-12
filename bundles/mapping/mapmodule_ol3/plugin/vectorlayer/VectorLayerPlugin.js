@@ -106,7 +106,6 @@ Oskari.clazz.define(
          */
         removeFeaturesFromMap: function(identifier, value, layer){
             var me = this,
-                foundFeatures,
                 olLayer,
                 layerId;
 
@@ -123,7 +122,7 @@ Oskari.clazz.define(
                 else {
                     this._map.removeLayer(me._layers[layerId]);
                     delete this._layers[layerId];
-                } 
+                }
             }
             // Removes all features from all layers
             else {
@@ -142,7 +141,7 @@ Oskari.clazz.define(
                     featuresToRemove.push(feature);
                 }
             });
-            
+
             for (var i = 0; i < featuresToRemove.length; i++) {
                 source.removeFeature(featuresToRemove[i]);
             }
@@ -167,7 +166,8 @@ Oskari.clazz.define(
             var me = this,
                 geometryType = me._getGeometryType(geometry),
                 format = me._supportedFormats[geometryType],
-                olLayer,
+                layer,
+                vectorSource,
                 mapLayerService = me._sandbox.getService('Oskari.mapframework.service.MapLayerService');
 
             if (!format) {
@@ -202,27 +202,26 @@ Oskari.clazz.define(
                     if (options.replace && options.replace === 'replace') {
                         layer.getSource().clear();
                     }
-                    var vectorsource = layer.getSource();
-                    vectorsource.addFeatures(features);
+                    vectorSource = layer.getSource();
+                    vectorSource.addFeatures(features);
                 } else {
                     //let's create vector layer with features and add it to the map
-                    var vectorsource = new ol.source.Vector({
+                    vectorSource = new ol.source.Vector({
                         features: features
                     });
-                    var layer = new ol.layer.Vector({name: me._olLayerPrefix + options.layerId,
+                    layer = new ol.layer.Vector({name: me._olLayerPrefix + options.layerId,
                                                     id: options.layerId,
-                                                    source: vectorsource});
+                                                    source: vectorSource});
                     if (options.layerOptions) {
                         layer.setProperties(options.layerOptions);
                     }
-//                    me._layers[id] = layer;
                     me._layers[options.layerId] = layer;
                     me._map.addLayer(layer);
                     me.raiseVectorLayer(layer);
                 }
 
                 if (options.centerTo === true) {
-                    var extent = vectorsource.getExtent();
+                    var extent = vectorSource.getExtent();
                     me.getMapModule().zoomToExtent(extent);
                 }
             }
@@ -265,9 +264,8 @@ Oskari.clazz.define(
          *
          * @param {Oskari.mapframework.domain.VectorLayer} layer
          * @param {Boolean} keepLayerOnTop keep layer on top
-         * @param {Boolean} isBaseMap is basemap
          */
-        addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
+        addMapLayerToMap: function (layer, keepLayerOnTop) {
                 return;
         },
         /**

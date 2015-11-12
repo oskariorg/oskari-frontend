@@ -298,11 +298,11 @@ function () {
         style.strokeWidth = 5;
         style.strokeOpacity = 0.7;
         this.sandbox.postRequestByName(rn, [geom, {
-            layerId: null, 
+            layerId: null,
             replace: 'replace',
             layerOptions: null,
             centerTo: false,
-            attributes: null, 
+            attributes: null,
             featureStyle: style
         }]);
     },

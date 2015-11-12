@@ -1041,7 +1041,7 @@ Oskari.clazz.define(
                                 else {
                                     var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
                                     me.sandbox.postRequestByName(rn, [row.geom, {
-                                        layerId: 'METADATACATALOGUE_VECTORLAYER', 
+                                        layerId: 'METADATACATALOGUE_VECTORLAYER',
                                         replace: 'replace',
                                         layerOptions: null,
                                         centerTo: true,

@@ -2788,7 +2788,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 requestBuilder,
                 showFeatureDataReqBuilder,
                 request;
-                
+
             if (me._showFeatureDataWithoutSaving) {
                 var aggregateValues = analyseJson.aggregate,
                     geojson = analyseJson.geojson.features[0];
@@ -2796,7 +2796,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 var rn = 'MapModulePlugin.AddFeaturesToMapRequest',
                     style = OpenLayers.Util.applyDefaults(style, OpenLayers.Feature.Vector.style['default']);
                 me.instance.sandbox.postRequestByName(rn, [geojson, {
-                    layerId: 'ANALYSIS_VECTOR', 
+                    layerId: 'ANALYSIS_VECTOR',
                     replace: 'replace',
                     layerOptions: null,
                     centerTo: false,

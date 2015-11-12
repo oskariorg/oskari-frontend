@@ -30,13 +30,10 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ToolSelectionHandler',
          */
         handleRequest: function (core, request) {
             var me = this;
-            var toolId = request.getToolId();
-            var namespace = request.getNamespace();
             var toolName = request.getToolName();
-            var drawReqBuilder = me.sandbox.getRequestBuilder(
-                    'DrawTools.StartDrawingRequest'
-                );
             var stateHandler;
+            var type = null;
+            var id = null;
             if (toolName === 'map_control_tool_prev') {
                 // custom history (TODO: more testing needed + do this with request
                 // instead of findRegisteredModuleInstance)
@@ -61,13 +58,13 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ToolSelectionHandler',
             } else if (toolName === 'map_control_zoom_tool' && me.controlsPlugin._zoomBoxTool) {
                 me.controlsPlugin._zoomBoxTool.activate();
             } else if (toolName === 'map_control_measure_tool') {
-                var type = 'LineString',
-                    id = 'measureline';
+                type = 'LineString';
+                id = 'measureline';
                 me.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [id, type, {
                                    allowMultipleDrawing: 'single'}]);
             } else if (toolName === 'map_control_measure_area_tool') {
-                var type = 'Polygon',
-                    id = 'measurearea'
+                type = 'Polygon';
+                id = 'measurearea';
                 me.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [id, type, {
                                    allowMultipleDrawing: 'single'}]);
             }

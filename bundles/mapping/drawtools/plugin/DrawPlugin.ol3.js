@@ -275,7 +275,7 @@ Oskari.clazz.define(
         	var optionsForDrawingEvent = {
  	        	isFinished: false
 	        };
-        	
+
         	if (shape === 'LineString') {
     	    	 geometryFunction = function (coordinates, geometry) {
 	    	    	 if (!geometry) {

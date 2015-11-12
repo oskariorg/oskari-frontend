@@ -92,7 +92,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         getExtent: function() {
             return this._extent;
         },
-        
+
         getMapScale: function () {
             var map = this.getMap();
             var view = map.getView(); ;

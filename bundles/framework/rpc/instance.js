@@ -166,7 +166,7 @@ Oskari.clazz.define(
                     'GetRouteRequest',
                     'SearchRequest',
                     'ChangeMapLayerOpacityRequest',
-                    'MyLocationPlugin.GetUserLocationRequest', 
+                    'MyLocationPlugin.GetUserLocationRequest',
                     'DrawTools.StartDrawingRequest',
                     'DrawTools.StopDrawingRequest'];
             }

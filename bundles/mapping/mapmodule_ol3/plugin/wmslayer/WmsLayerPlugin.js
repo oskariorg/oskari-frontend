@@ -18,7 +18,7 @@ Oskari.clazz.define(
         getLayerTypeSelector : function() {
             return 'WMS';
         },
-        
+
         /**
          * @method _addMapLayerToMap
          * @private
