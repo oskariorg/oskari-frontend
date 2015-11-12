@@ -100,48 +100,72 @@ Oskari.clazz.define(
          * @public
          * Removes all/selected features from map.
          *
-         * @param {String} featureId Id of the feature that should be removed. If not given, will remove all the features from the layer.
-         * @param {String} layerId id of the layer where features should be removed. If not given, will remove all the features from map.
+         * @param {String} identifier the feature attribute identifier
+         * @param {String} value the feature identifier value
+         * @param {Oskari.mapframework.domain.VectorLayer} layer layer details
          */
-        removeFeaturesFromMap: function(featureId, layerId){
+        removeFeaturesFromMap: function(identifier, value, layer){
             var me = this,
-                foundedFeatures,
-                mapLayer;
+                foundFeatures,
+                olLayer,
+                layerId;
 
-            if (_.isEmpty(this._layers)) {
-                return;
+            if(layer && layer !== null){
+                layerId = layer.getId();
+                olLayer = me._layers[layerId];
             }
-            mapLayer = this._layers[layerId];
-
-            if (mapLayer) {
-                if (featureId) {
-                    var feature = mapLayer.getSource().getFeatureById(featureId);
-                    mapLayer.getSource().removeFeature(feature);
-                } else {
-                    me._map.removeLayer(mapLayer);
-                    me.removeMapLayerFromMap(mapLayer);
+            if (olLayer) {
+                // Removes only wanted features from the given maplayer
+                if (identifier && identifier !== null && value && value !== null) {
+                    me._removeFeaturesByAttribute(olLayer, identifier, value);
                 }
-            } else {
-                _.forEach(this._layers, function (layer) {
-                    me.removeMapLayerFromMap(layer);
-                });
+                //remove all features from the given layer
+                else {
+                    this._map.removeLayer(me._layers[layerId]);
+                    delete this._layers[layerId];
+                } 
+            }
+            // Removes all features from all layers
+            else {
+                for (var layerId in me._layers) {
+                    this._map.removeLayer(me._layers[layerId]);
+                    delete this._layers[layerId];
+                }
             }
         },
+        _removeFeaturesByAttribute: function(olLayer, identifier, value) {
+            var source = olLayer.getSource(),
+                featuresToRemove = [];
+
+            source.forEachFeature(function(feature) {
+                if (feature.get(identifier) === value) {
+                    featuresToRemove.push(feature);
+                }
+            });
+            
+            for (var i = 0; i < featuresToRemove.length; i++) {
+                source.removeFeature(featuresToRemove[i]);
+            }
+
+        },
+        _getGeometryType: function(geometry){
+            if (typeof geometry === 'string' || geometry instanceof String) {
+                return 'WKT';
+            }
+            return 'GeoJSON';
+        },
         /**
-         * @method addFeaturesOnMap
+         * @method addFeaturesToMap
          * @public
          * Add feature on the map
          *
          * @param {Object} geometry the geometry WKT string or GeoJSON object
-         * @param {String} geometryType the geometry type. Supported formats are: WKT and GeoJSON.
-         * @param {String} layerId Id of the layer where features will be added. If not given, will create new vector layer
-         * @param {Boolean} replace
-         * @param {Object} layerOptions options for layer in JSON or String format
-         * @param {Object} featureStyle Style for the feature. A JSON or String object representation of OpenLayers style object
-         * @param {Boolean} centerTo True to center the map to the given geometry.
+         * @param {Object} options additional options
          */
-        addFeaturesToMap: function(geometry, geometryType, layerId, replace, layerOptions, featureStyle, centerTo){
+
+        addFeaturesToMap: function(geometry, options){
             var me = this,
+                geometryType = me._getGeometryType(geometry),
                 format = me._supportedFormats[geometryType],
                 olLayer,
                 mapLayerService = me._sandbox.getService('Oskari.mapframework.service.MapLayerService');
@@ -151,6 +175,10 @@ Oskari.clazz.define(
             }
 
             if (geometry) {
+                //if there's no layerId provided -> Just use a generic vector layer for all.
+                if (!options.layerId) {
+                    options.layerId = 'VECTOR';
+                }
                 var features = format.readFeatures(geometry);
                 _.forEach(features, function (feature) {
                     if (!feature.getId()) {
@@ -159,18 +187,19 @@ Oskari.clazz.define(
                     }
                 });
 
-                if (featureStyle) {
-                   me.setDefaultStyle(featureStyle);
+                if (options.featureStyle) {
+                   me.setDefaultStyle(options.featureStyle);
                     _.forEach(features, function (feature) {
-                        feature.setStyle(styles.featureStyle);
+                        feature.setStyle(options.featureStyle);
                     });
                 }
 
                 //check if layer is already on map
-                if (me._layers[layerId]) {
+                if (me._layers[options.layerId]) {
+                    layer = me._layers[options.layerId];
                     //layer is already on map
                     //clear old features if defined so
-                    if (replace) {
+                    if (options.replace && options.replace === 'replace') {
                         layer.getSource().clear();
                     }
                     var vectorsource = layer.getSource();
@@ -180,20 +209,19 @@ Oskari.clazz.define(
                     var vectorsource = new ol.source.Vector({
                         features: features
                     });
-                    var id = 'V' + me._nextVectorId++;
-                    var layer = new ol.layer.Vector({name: me._olLayerPrefix + id,
-                                                    id: id,
+                    var layer = new ol.layer.Vector({name: me._olLayerPrefix + options.layerId,
+                                                    id: options.layerId,
                                                     source: vectorsource});
-                    if (layerOptions) {
-                        layer.setProperties(layerOptions);
+                    if (options.layerOptions) {
+                        layer.setProperties(options.layerOptions);
                     }
-                    me._layers[id] = layer;
+//                    me._layers[id] = layer;
+                    me._layers[options.layerId] = layer;
                     me._map.addLayer(layer);
+                    me.raiseVectorLayer(layer);
                 }
 
-                me.raiseVectorLayer(layer);
-
-                if (centerTo === true) {
+                if (options.centerTo === true) {
                     var extent = vectorsource.getExtent();
                     me.getMapModule().zoomToExtent(extent);
                 }
