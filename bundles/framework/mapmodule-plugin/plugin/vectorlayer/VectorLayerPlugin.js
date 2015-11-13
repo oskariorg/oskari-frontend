@@ -149,8 +149,10 @@ Oskari.clazz.define(
             // Removes all features from all layers
             else {
                 for (var layerId in me._layers) {
-                    this._map.removeLayer(me._layers[layerId]);
-                    delete this._layers[layerId];
+                    if (me._layers.hasOwnProperty(layerId)) {
+                        this._map.removeLayer(me._layers[layerId]);
+                        delete this._layers[layerId];
+                    }
                 }
             }
         },
@@ -225,7 +227,6 @@ Oskari.clazz.define(
                 }
 
                 if (layer && layer !== null) {
-                    var mapLayerService = me._sandbox.getService('Oskari.mapframework.service.MapLayerService');
                     mapLayerService.addLayer(layer, false);
 
                     window.setTimeout(function(){

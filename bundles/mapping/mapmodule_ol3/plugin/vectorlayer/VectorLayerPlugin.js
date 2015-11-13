@@ -127,8 +127,10 @@ Oskari.clazz.define(
             // Removes all features from all layers
             else {
                 for (var layerId in me._layers) {
-                    this._map.removeLayer(me._layers[layerId]);
-                    delete this._layers[layerId];
+                    if (me._layers.hasOwnProperty(layerId)) {
+                        this._map.removeLayer(me._layers[layerId]);
+                        delete this._layers[layerId];
+                    }
                 }
             }
         },
@@ -322,7 +324,7 @@ Oskari.clazz.define(
                     var layer = layers[key];
                     var features = layer.features;
                     features.sort(function(a, b) {
-                        if(a.config != undefined){
+                        if(a.config !== undefined){
                             if (a.config.positionInsideLayer < b.config.positionInsideLayer) {
                                 return -1;
                             }

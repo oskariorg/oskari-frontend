@@ -135,11 +135,15 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @returns {number}  index of nearest item in an array
          */
         getNearestNumber: function (a, n) {
-            if ((l = a.length) < 2)
+            var l;
+            if ((l = a.length) < 2) {
                 return l - 1;
-            for (var l, p = Math.abs(a[--l] - n); l--;)
-                if (p < (p = Math.abs(a[l] - n)))
+            }
+            for (var l, p = Math.abs(a[--l] - n); l--;) {
+                if (p < (p = Math.abs(a[l] - n))) {
                     break;
+                }
+            }
             return l + 1;
         },
 
@@ -850,8 +854,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          *     wanting to notify at end of the chain for performance reasons or similar) (optional)
          */
         zoomToScale: function (scale, closest, suppressEnd) {
-            var isClosest = (closest === true),
-                zoom = this.getZoom4Scale(scale);
+            var zoom = this.getZoom4Scale(scale);
             this._map.getView().setZoom(zoom);
             this._updateDomainImpl();
             if (suppressEnd !== true) {
