@@ -1,3 +1,20 @@
+/**
+ * Oskari RPC client
+ * Version: 1.1.0
+ *
+ * Changes to 1.0.0:
+ * - added onReady callback to detect when we have a successful connection
+ * - removed hardcoded RPC-functions that might be disabled on Oskari instance
+ * - functions are now generated based on what's available in the Oskari platform the client connects to. 
+        This means you can be sure the map is listening if the client has it (after onReady-triggers).
+ * - added default errorhandler to make it clear when an error happens. Used when custom errorhandler is not specified.
+ * - added enableDebug(blnEnabled) to log some more info to console when enabled.
+ * - Changed handleEvent to enable multiple listeners.
+ * - handleEvent can no longer be used to unregister listener.
+ * - Added unregisterEventHandler() for unregistering listeners (previously done with handleEvent without giving listener function).
+ * 
+ * @return {Object}  reference to postMessage channel implementation
+ */
 ;var OskariRPC = (function () {
     'use strict';
     return {
@@ -21,7 +38,6 @@
             var readyCallbacks = [];
             var isDebug = false;
             var defaultErrorHandler = function() {
-                debugger;
                 if(isDebug && window.console && window.console.log) {
                     console.log('Error', arguments);
                 }
@@ -49,7 +65,8 @@
                 }
 
                 if(ready) {
-                // if ready before adding the listener -> call callback immediately
+                    // if ready before adding the listener
+                    // -> don't store reference/trigger callback immediately
                     cb();
                 }
                 else {
@@ -62,34 +79,76 @@
                 channel.destroy();
             };
 
+            var eventHandlers = {};
             /**
              * @public @method handleEvent
              *
-             * @param {string}   event   Event name
+             * @param {string}   eventName   Event name
              * @param {function} success Callback function
-             * @param {function} error   Error handler
-             *
              */
-            RPC_API.handleEvent = function (event, success, error) {
-                var register = !!success;
-                if (register) {
-                    // Bind event so we react to receiving it
-                    channel.bind(
-                        event,
-                        function (trans, data) {
-                            success(data);
-                        }
-                    );
-                } else {
-                    channel.unbind(event);
+            RPC_API.handleEvent = function (eventName, handler) {
+                if(!eventName) {
+                    throw new Error('Event name not specified');
                 }
+                if(typeof handler !== 'function') {
+                    throw new Error('Handler is not a function');
+                }
+                if(!eventHandlers[eventName]) {
+                    eventHandlers[eventName] = [];
+                }
+                eventHandlers[eventName].push(handler);
+                if(eventHandlers[eventName].length !== 1) {
+                    // not the first one so we are already listening to the event
+                    return;
+                }
+
+                // first one, bind listening to it
+                channel.bind(eventName, function (trans, data) {
+                    // loop eventHandlers[eventName] and call handlers
+                    var handlers = eventHandlers[eventName];
+                    for(var i = 0; i < handlers.length; ++i) {
+                        handlers[i](data);
+                    }
+                });
+
                 // Listen to event
                 channel.call({
                     method: 'handleEvent',
-                    params: [event, register],
-                    success: function () {return undefined; },
-                    error: error || defaultErrorHandler
+                    params: [eventName, true],
+                    success: function () { return undefined; },
+                    error: defaultErrorHandler
                 });
+            };
+
+            RPC_API.unregisterEventHandler = function (eventName, handler) {
+                if(!eventName) {
+                    throw new Error('Event name not specified');
+                }
+                var handlers = eventHandlers[eventName];
+                if(!handlers || !handlers.length) {
+                    if(window.console && window.console.log) {
+                        console.log('Trying to unregister listener, but there are none for event: ' + eventName);
+                    }
+                    return;
+                }
+                var remainingHandlers = [];
+                for(var i = 0; i < handlers.length; ++i) {
+                    if(handlers[i] !== handler) {
+                        remainingHandlers.push(handlers[i]);
+                    }
+                }
+                eventHandlers[eventName] = remainingHandlers;
+                // if last handler -> 
+                if(!remainingHandlers.length) {
+                    channel.unbind(eventName);
+                    // unregister listening to event
+                    channel.call({
+                        method: 'handleEvent',
+                        params: [eventName, false],
+                        success: function () { return undefined; },
+                        error: defaultErrorHandler
+                    }); 
+                }
             };
 
             /**
@@ -104,7 +163,7 @@
                 channel.call({
                     method: 'postRequest',
                     params: [request, params],
-                    success: function () {return undefined; },
+                    success: function () { return undefined; },
                     error: error || defaultErrorHandler
                 });
             };

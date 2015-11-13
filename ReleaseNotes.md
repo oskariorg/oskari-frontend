@@ -2,7 +2,7 @@
 
 ## 1.34
 
-### OskariRPC (client library)
+### OskariRPC 1.1 new version for client library
 
 Functions are now generated depending on the configuration of the providing platform (allowed functions configuration). This means that any calls made to remote functions
 are available only after the connection to map has been established. This enables better errorhandling, but means that function calls will result in "is not a function" errors 
@@ -13,19 +13,32 @@ if called before connection is established. An onReady()-hook has been added whe
         elements.iframe,
         IFRAME_DOMAIN
     );
-    var blnFunctionExists = typeof channel.getAllLayers === 'function';
-    // -> blnFunctionExists = false
+    var blnFunctionExists = typeof channel.getAllLayers === 'function'; // -> false
 	channel.onReady(function() {
-	    var blnFunctionExists = typeof channel.getAllLayers === 'function';
-	    // -> blnFunctionExists = true
+	    var blnFunctionExists = typeof channel.getAllLayers === 'function'; // -> true
 	    channel.getAllLayers(function (data) {
 	    	console.log(data);
     	});
 	});
 
+Changes to 1.0.0:
+- added onReady callback to detect when we have a successful connection
+- removed hardcoded RPC-functions that might be disabled on Oskari instance
+- functions are now generated based on what's available in the Oskari platform the client connects to. 
+  This means you can be sure the map is listening if the client has it (after onReady-triggers).
+- added default errorhandler to make it clear when an error happens. Used when custom errorhandler is not specified.
+- added enableDebug(blnEnabled) to log some more info to console when enabled.
+- Changed handleEvent to enable multiple listeners.
+- handleEvent can no longer be used to unregister listener.
+- Added unregisterEventHandler() for unregistering listeners (previously done with handleEvent without giving listener function).
+
+Filename change: 
+- Oskari/libraries/OskariRPC/OskariRPC.js is now Oskari/libraries/OskariRPC/OskariRPC-1.0.0.js
+
 ### rpc
 
 Allowed functions/events/requests are now configured as an array ["AfterMapMoveEvent", "MapClickedEvent"] instead of an object { "AfterMapMoveEvent" : true, "MapClickedEvent" : true }.
+Reduced configuration for adding new functions - all available functions are now allowed if not explicitly restricted.
 
 New function is enabled by default:
 - 'getMapBbox' gets current map bbox
