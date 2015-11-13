@@ -127,8 +127,10 @@
             header = event.detail.header;
           if (index == 0) {
               // Filtering based on region.
+              this.filterOnRegion();
           } else {
               // Filtering based on indicator values.
+              this.filterOnValue();
           }
           console.log("onFilter: " + id + ", " + index + "," + JSON.stringify(header));
       },
@@ -151,12 +153,11 @@
       "toggleStats": function() {
           this.$.statscollapse.toggle();
       },
-      "filterOnValue": function(event) {
-          var me = this,
-              index = event.target.index;
+      "filterOnValue": function() {
+          var me = this;
           var filterDialog = document.createElement("paper-dialog");
           filterDialog.innerHTML = "<span>FILTER</span>";
-          me.$.appendChild(filterDialog)
+          me.appendChild(filterDialog)
           filterDialog.toggle();
       },
       "filterOnRegion": function(event) {
@@ -510,6 +511,7 @@
                       // In ES6 we could use { [summaryFunction]: ... }
                       summary = {},
                       definedValues = values.filter(me.isDefined);
+                  // FIXME: Filter based on selected value
                   if (definedValues && values.length > 0) {
                       summaryIds.forEach(function(summaryFunction) {
                           summary[summaryFunction] = me.summarize[summaryFunction](definedValues);
@@ -580,7 +582,8 @@
       "sortChanged": function() {
           var me = this;
           me.rows.sort(me.sortIndicatorDataGrid(me.sortColumnIdx, me.sortDirection));
-          me.set("rows", me.rows.slice(0));
+          // TODO: It might be a bit cleaner to use Polymer repeat element sort functionality here.
+          this.$["indicator-data-grid"].refresh();
       },
       "sortBasedOnColumn": function(idx) {
           if (this.sortColumnIdx === idx) {

@@ -10,7 +10,7 @@
           <template is="dom-if" if="[[selection]]">
             <th><input type="checkbox" value="{{allSelected}}"></input></th>
           </template>
-          <template is="dom-repeat" items="[[headers]]" as="header">
+          <template is="dom-repeat" items="[[headers]]" as="header" id="headersTemplate">
             <th>
               <span on-tap="onSort" index="[[index]]" header="[[header]]">[[header.title]]</span>
               <template is="dom-if" if="[[header.filter]]">
@@ -26,7 +26,7 @@
         </tr>
       </thead>
       <tbody>
-        <template is="dom-repeat" items="[[rows]]" as="row">
+        <template is="dom-repeat" items="[[rows]]" as="row" id="rowsTemplate">
           <tr>
             <template is="dom-if" if="[[selection]]">
               <td><input type="checkbox" value="{{row.selected}}"></input></td>
@@ -47,6 +47,42 @@
     Polymer({
       is: "oskari-grid",
       properties: {
+          "rows": {
+              "type": Array,
+              "notify": true
+          },
+          "allSelected": {
+              "type": Array,
+              "notify": true,
+              "value": true
+          }
+      },
+      observers: [
+          "allSelectedChanged(allSelected)",
+          "anyUnselected(rows.*.selected)"
+      ],
+      "allSelectedChanged": function(allSelected) {
+          var me = this;
+          if (allSelected.value) {
+              me.rows.forEach(function (row, index) {
+                  me.set("rows." + index + ".selected", true);
+              });
+          }
+      },
+      "anyUnselected": function(rows) {
+          var me = this;
+          me.rows.forEach(function (row, index) {
+              if (!row.selected) {
+                  me.allSelected = false;
+              }
+          });
+      },
+      /**
+       * This is just used for sorting.
+       */
+      "refresh": function() {
+          this.$.headersTemplate.render();
+          this.$.rowsTemplate.render();
       },
       "onSort": function(event) {
           this.fire("onSort", {index: event.target.index, header: event.target.header});
