@@ -59,6 +59,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
             // TODO remove this whenever we're ready to add the containers when needed
             this._addMapControlPluginContainers();
+            this.getMapEl().addClass('olMap');
             return map;
         },
 
