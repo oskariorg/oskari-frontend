@@ -67,6 +67,26 @@ jQuery(document).ready(function() {
 
         function start(appSetup, appConfig, cb) {
             var app = Oskari.app;
+        var plugins = appConfig.mapfull.conf.plugins,
+            wfs;
+        for (var i = 0, pLen = plugins.length; i < pLen; ++i) {
+            if (plugins[i].id === 'Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin') {
+                wfs = plugins[i];
+                break;
+            }
+        }
+        if (wfs) {
+            wfs.config = {
+                "maxBackoff": 60000,
+                "port": "80",
+                "maxNetworkDelay": 10000,
+                "hostname": "dev.paikkatietoikkuna.fi",
+                "contextPath": "/transport-0.0.1",
+                "lazy": true,
+                "backoffIncrement": 1000,
+                "disconnectTime": 30000
+            };
+        }
 
             app.setApplicationSetup(appSetup);
             app.setConfiguration(appConfig);
