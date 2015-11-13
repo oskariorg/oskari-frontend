@@ -2,17 +2,42 @@
 
 ## 1.34
 
+### OskariRPC (client library)
+
+Functions are now generated depending on the configuration of the providing platform (allowed functions configuration). This means that any calls made to remote functions
+are available only after the connection to map has been established. This enables better errorhandling, but means that function calls will result in "is not a function" errors 
+if called before connection is established. An onReady()-hook has been added where you can check the available functions:
+
+    // init connection
+    var channel = OskariRPC.connect(
+        elements.iframe,
+        IFRAME_DOMAIN
+    );
+    var blnFunctionExists = typeof channel.getAllLayers === 'function';
+    // -> blnFunctionExists = false
+	channel.onReady(function() {
+	    var blnFunctionExists = typeof channel.getAllLayers === 'function';
+	    // -> blnFunctionExists = true
+	    channel.getAllLayers(function (data) {
+	    	console.log(data);
+    	});
+	});
+
 ### rpc
+
+Allowed functions/events/requests are now configured as an array ["AfterMapMoveEvent", "MapClickedEvent"] instead of an object { "AfterMapMoveEvent" : true, "MapClickedEvent" : true }.
 
 New function is enabled by default:
 - 'getMapBbox' gets current map bbox
 - 'resetState' resets the map to initial state (location/layers etc)
 
-New event is enabled by default:
+New events are enabled by default:
 - 'UserLocationEvent' notifies about users geolocation status
+- 'SearchResultEvent' notifies about users that SearchRequest response data is available for to handle
 
-New request is enabled by default:
+New requests are enabled by default:
 - 'MyLocationPlugin.GetUserLocationRequest' requests to get user geolocation
+- 'SearchRequest' requests search result for requested search item using Oskari search channels
 
 Domain validation fixed to accept urls with - or _ characters.
 
@@ -26,8 +51,31 @@ In an effort to make Openlayers 2 ja 3 mapmodule API consistent some functions h
 - OL3: getZoomLevel() removed as it's the same as getMapZoom()
 - Both: moveMapToLanLot() -> moveMapToLonLat()
 
-MapClickedEvent.getLonlat() now returns an object with lon and lat keys regardless instead of Openlayers.Lonlat in OL2 or coordinate array in OL3.
+MapClickedEvent.getLonlat() now returns an object with lon and lat keys instead of Openlayers.Lonlat in OL2 or coordinate array in OL3.
 Fixed mapmodule.isValidLonLat() to use max extent as reference instead of hardcoded EPSG:3067 values.
+
+Both ol2 and ol3 implementations of AddFeaturesToMapRequest / AddFeaturesToMapRequestHandler have been changed to take only geometry and options as their parameters. Also both implementations of VectorLayerPlugin have been changed accordingly. i.e.
+
+The old way: 
+sandbox.postRequestByName(rn, [geojson, 'GeoJSON', null, null, 'replace', true, style, false]);
+
+Now:
+sandbox.postRequestByName(rn, [geojson, {
+    layerId: 'ANALYSIS_VECTOR',
+    replace: 'replace',
+    layerOptions: null,
+    centerTo: false,
+    featureStyle: style,
+    attributes: null
+}]);
+- layerId: If left out, a generic vector layer is used by VectorLayerPlugin. 
+- replace: whether to clear out all previous features
+- layerOptions: additional layerOptions
+- centerTo: whether to zoom in to the features
+- featureStyle: style of the features
+- attributes: additional attributes of the features
+(geometryType from the old call has been removed. From now on the VectorLayerPlugin will determine geometry type from the geometry)
+
 
 #### Oskari.mapframework.domain.Map
 
@@ -42,6 +90,11 @@ In Openlayers 3:
 
 	var bbox = sandbox.getMap().getBbox();
 	new ol.extent.boundingExtent(bbox.left, bbox.bottom, bbox.right, bbox.top);
+	
+### mapwmts
+
+Layer order fixed in Openlayers map, when wmts layers on url parameters or in selectedLayers or in published view
+Opacity is now set for wmts layer, when added to map
 
 ### File location changes
 

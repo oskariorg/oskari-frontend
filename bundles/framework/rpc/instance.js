@@ -79,7 +79,7 @@ Oskari.clazz.define(
                     if (!me._domainMatch(trans.origin)) {
                         throw {
                             error: 'invalid_origin',
-                            message: 'Invalid origin: ' + trans.origin
+                            message: 'Invalid domain for parent page/origin. Published domain does not match: ' + trans.origin
                         };
                     }
                     if (me._allowedEvents[params[0]]) {
@@ -145,49 +145,58 @@ Oskari.clazz.define(
             var allowedRequests = conf.allowedRequests;
 
             if (allowedEvents === null || allowedEvents === undefined) {
-                allowedEvents = {
-                    'AfterMapMoveEvent': true,
-                    'MapClickedEvent': true,
-                    'AfterAddMarkerEvent' : true,
-                    'MarkerClickEvent' : true,
-                    'RouteSuccessEvent': true,
-                    'UserLocationEvent': true
-                };
+                allowedEvents = ['AfterMapMoveEvent', 'MapClickedEvent', 'AfterAddMarkerEvent', 'MarkerClickEvent', 'RouteSuccessEvent','SearchResultEvent', 'UserLocationEvent', 'DrawingEvent'];
             }
 
             if (allowedFunctions === null || allowedFunctions === undefined) {
-                allowedFunctions = {
-                    getAllLayers: true,
-                    getMapPosition: true,
-                    getSupportedEvents: true,
-                    getSupportedFunctions: true,
-                    getSupportedRequests: true,
-                    getZoomRange: true,
-                    getMapBbox: true,
-                    resetState : true
-                };
+                allowedFunctions = [];
+                // allow all available functions by default
+                var funcs = this._availableFunctions;
+                for(var name in funcs) {
+                    if(!funcs.hasOwnProperty(name)) {
+                        continue;
+                    }
+                    allowedFunctions.push(name);
+                }
             }
 
             if (allowedRequests === null || allowedRequests === undefined) {
-                allowedRequests = {
-                    'InfoBox.ShowInfoBoxRequest': true,
-                    'MapModulePlugin.AddMarkerRequest': true,
-                    'MapModulePlugin.GetFeatureInfoRequest': true,
-                    'MapModulePlugin.MapLayerVisibilityRequest': true,
-                    'MapModulePlugin.RemoveMarkersRequest': true,
-                    'MapMoveRequest': true,
-                    'ShowProgressSpinnerRequest': true,
-                    'GetRouteRequest': true,
-                    'MyLocationPlugin.GetUserLocationRequest': true
-                };
+                allowedRequests = ['InfoBox.ShowInfoBoxRequest',
+                    'MapModulePlugin.AddMarkerRequest',
+                    'MapModulePlugin.AddFeaturesToMapRequest',
+                    'MapModulePlugin.RemoveFeaturesFromMapRequest',
+                    'MapModulePlugin.GetFeatureInfoRequest',
+                    'MapModulePlugin.MapLayerVisibilityRequest',
+                    'MapModulePlugin.RemoveMarkersRequest',
+                    'MapMoveRequest',
+                    'ShowProgressSpinnerRequest',
+                    'GetRouteRequest',
+                    'SearchRequest',
+                    'ChangeMapLayerOpacityRequest',
+                    'MyLocationPlugin.GetUserLocationRequest',
+                    'DrawTools.StartDrawingRequest',
+                    'DrawTools.StopDrawingRequest'];
             }
             // TODO: try to get event/request builder for each of these to see that they really are supported!!
-
-            me._allowedEvents = allowedEvents;
-            me._allowedFunctions = allowedFunctions;
-            me._allowedRequests = allowedRequests;
+            me._allowedEvents = this.__arrayToObject(allowedEvents);
+            me._allowedFunctions = this.__arrayToObject(allowedFunctions);
+            me._allowedRequests = this.__arrayToObject(allowedRequests);
+        },
+        /**
+         * Maps a given array to a dictionary format for easier access
+         * @private
+         * @param  {String[]} list will be used as keys in the result object. Values are boolean 'true' for each
+         * @return {Object}   object with list items as keys and bln true as values
+         */
+        __arrayToObject: function(list) {
+            var result = {};
+            for(var i=0; i < list.length; ++i) {
+                result[list[i]] = true;
+            }
+            return result;
         },
         _availableFunctions : {
+            // format "supportedXYZ" to an object for easier checking for specific name
             getSupportedEvents : function() {
                 return this._allowedEvents;
             },
@@ -233,7 +242,7 @@ Oskari.clazz.define(
                 return {
                     min: 0,
                     max: mapModule.getMaxZoomLevel(),
-                    current: mapModule.getZoom()
+                    current: mapModule.getMapZoom()
                 };
             },
             resetState : function() {

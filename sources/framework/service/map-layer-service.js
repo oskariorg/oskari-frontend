@@ -390,33 +390,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
                 if (this._reservedLayerIds[mapLayer.getId()] !== true) {
                     this.addLayer(mapLayer, true);
-                } else {
-                    // Set additional data to an existing layer.
-                    existingLayer = this.findMapLayer(mapLayer.getId());
-
-                    if (allLayers[i].admin !== null && allLayers[i].admin !== undefined) {
-                        existingLayer.admin = allLayers[i].admin;
-                    }
-                    if (allLayers[i].names) {
-                        existingLayer.names = allLayers[i].names;
-                    }
-
-                    if (existingLayer.getSubLayers() !== null && existingLayer.getSubLayers() !== undefined) { // Set additional data to an sublayers
-
-                        exSubLayers = existingLayer.getSubLayers();
-                        mapSubLayers = mapLayer.getSubLayers();
-
-                        for (subI = 0; subI < exSubLayers.length; subI++) {
-
-                            existingSubLayer = exSubLayers[subI];
-                            if (exSubLayers[subI].admin !== null && exSubLayers[subI].admin !== undefined) {
-                                existingSubLayer.admin = mapSubLayers[subI].admin;
-                            }
-                            if (exSubLayers[subI].names) {
-                                existingSubLayer.names = mapSubLayers[subI].names;
-                            }
-                        }
-                    }
                 }
             }
             // notify components of added layer if not suppressed

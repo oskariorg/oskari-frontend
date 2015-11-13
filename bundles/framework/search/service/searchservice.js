@@ -24,8 +24,7 @@ function (searchUrl) {
      * @method getQName
      * @return {String} fully qualified name for service
      */
-    getQName : function() {
-        return this.__qname;
+    getQName : function() { return this.__qname;
     },
     /** @static @property __name service name */
     __name : "SearchService",
@@ -67,8 +66,26 @@ function (searchUrl) {
             error : onError,
             success : onSuccess
         });
-    }
-}, {
+    },
+        getSearchResult: function (params) {
+            var me = this;
+            success = function (response) {
+                var success = true,
+                    requestParameters = params,
+                    result = response;
+
+                var evt = Oskari.getSandbox().getEventBuilder('SearchResultEvent')(success, requestParameters, result);
+                Oskari.getSandbox().notifyAll(evt);
+            };
+
+            me.doSearch(params.searchKey, success, me.searchError);
+        },
+        searchError: function (response) {
+            // TODO: send an event about failure (for RPC etc)
+        }
+},
+
+{
     /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static

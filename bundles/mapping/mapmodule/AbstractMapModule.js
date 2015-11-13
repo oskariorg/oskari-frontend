@@ -81,7 +81,7 @@ Oskari.clazz.define(
             ];
         }
         else {
-            me._extent = [];   
+            me._extent = [];
         }
         // arr
 
@@ -859,8 +859,9 @@ Oskari.clazz.define(
             this._addLayerImpl(layerImpl, index);
         },
 
-        removeLayer: function (layerImpl, layer, name) {
+        removeLayer: function (layerImpl, layer) {
             this._removeLayerImpl(layerImpl);
+            // FIXME: layerDefsById is basically the same as in AbstractMapLayerPlugin - remove the other!!!!
             delete this.layerDefsById[layer.getId()];
 
             var newDefs = [],
@@ -1238,7 +1239,7 @@ Oskari.clazz.define(
                     lon : lonlat[0],
                     lat : lonlat[1]
                 };
-            } 
+            }
             return lonlat;
         },
         /**

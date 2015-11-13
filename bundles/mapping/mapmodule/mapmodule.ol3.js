@@ -92,7 +92,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         getExtent: function() {
             return this._extent;
         },
-        
+
         getMapScale: function () {
             var map = this.getMap();
             var view = map.getView(); ;
@@ -102,6 +102,45 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var mpu = ol.proj.METERS_PER_UNIT[units];
             var scale = resolution * mpu * 39.37 * dpi;
             return scale;
+        },
+        /**
+         * Resolution of requested scale
+         *
+         * @param scale
+         * @returns {number} resolution (not rounded)
+         */
+
+        getScaleResolution: function (scale) {
+            var units = this.getMap().getView().getProjection().getUnits(),
+                dpi = 25.4 / 0.28,
+                mpu = ol.proj.METERS_PER_UNIT[units],
+                resolution = scale / ( mpu * 39.37 * dpi );
+
+            return resolution;
+        },
+        /**
+         * Returns zoom level for any scale
+         * @param scale any scale
+         * @returns {number}  zoom level
+         */
+        getZoom4Scale: function (scale) {
+            var resolution = this.getScaleResolution(scale);
+            //Get nearest real resolution index = zoom level
+            return this.getNearestNumber(this._options.resolutions, resolution);
+        },
+        /**
+         * Return index of nearest item in an array to requested key
+         * @param a  array
+         * @param n  key
+         * @returns {number}  index of nearest item in an array
+         */
+        getNearestNumber: function (a, n) {
+            if ((l = a.length) < 2)
+                return l - 1;
+            for (var l, p = Math.abs(a[--l] - n); l--;)
+                if (p < (p = Math.abs(a[l] - n)))
+                    break;
+            return l + 1;
         },
 
         /**
@@ -316,8 +355,20 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                   ]
                 };
 
+            var testOptions = {
+                'minResolution': 2,
+                'maxResolution': 100
+            };
+
+            var testStyle = new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: '#3399CC',
+                    width: 5
+                })
+            });
+
             var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
-            this._sandbox.postRequestByName(rn, [geojsonObject, 'GeoJSON', null, 'replace', true, null, null, true]);
+            this._sandbox.postRequestByName(rn, [geojsonObject, 'GeoJSON', null, 'replace', true, testOptions, testStyle, true]);
         },
 
         _calculateScalesImpl: function(resolutions) {
@@ -398,6 +449,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
         _removeLayerImpl: function(layerImpl) {
             this._map.removeLayer(layerImpl);
+            if(typeof layerImpl.destroy === 'function') {
+                layerImpl.destroy();
+            }
         },
 
         setLayerIndex: function(layerImpl, index) {
@@ -779,6 +833,25 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             // TODO: we have isValidLonLat(); maybe use it here
             lonlat = this.normalizeLonLat(lonlat);
             this._map.getView().setCenter([lonlat[0], lonlat[1]]);
+            this._map.getView().setZoom(zoom);
+            this._updateDomainImpl();
+            if (suppressEnd !== true) {
+                this.notifyMoveEnd();
+            }
+        },
+        /**
+         * @method zoomToScale
+         * Pans the map to the given position.
+         * @param {float} scale the new scale
+         * @param {Boolean} closest find the zoom level that most closely fits the specified scale.
+         *   Note that this may result in a zoom that does not exactly contain the entire extent.  Default is false
+         * @param {Boolean} suppressEnd true to NOT send an event about the map move
+         *  (other components wont know that the map has moved, only use when chaining moves and
+         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+         */
+        zoomToScale: function (scale, closest, suppressEnd) {
+            var isClosest = (closest === true),
+                zoom = this.getZoom4Scale(scale);
             this._map.getView().setZoom(zoom);
             this._updateDomainImpl();
             if (suppressEnd !== true) {

@@ -136,6 +136,10 @@ Oskari.clazz.define(
                 'Oskari.mapframework.bundle.search.service.SearchService',
                 ajaxUrl
             );
+            searchRequestHandler = Oskari.clazz.create('Oskari.mapframework.bundle.search.request.SearchRequestHandler', me.service);
+            me.getSandbox().addRequestHandler(
+                'SearchRequest',
+                searchRequestHandler);
         },
 
         _setLayerToolsEditModeImpl: function() {
@@ -339,7 +343,23 @@ Oskari.clazz.define(
                 };
             me.service.doSearch(searchText, searchCallback, onErrorCallback);
         },
+        /**
+         * @private @method _doSearch2
+         * Execute search via SearchRequest and SearchResultEvent
+         *
+         *
+         */
+        _doSearch2: function() {
+            var me = this,
+                params = {};
 
+                params.searchKey = me.getElement().find('input[type=text]').val();
+                params.epsg = me.getSandbox().getMap().getSrsName();
+
+            me.getSandbox().postRequestByName('SearchRequest', [params]);
+
+
+        },
 
         _setMarker: function(result) {
             var me = this,

@@ -25,19 +25,19 @@ Oskari.clazz.define("Oskari.mapframework.bundle.MapWmtsBundle", function() {
 
 		"scripts" : [{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/mapwmts/plugin/wmtslayer/WmtsLayerPlugin.js"
+			"src" : "../../../../bundles/mapping/mapwmts/plugin/WmtsLayerPlugin.ol2.js"
 		}, {
 			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/domain/AbstractLayer.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/mapwmts/domain/WmtsLayer.js"
+			"src" : "../../../../bundles/mapping/mapwmts/domain/WmtsLayer.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/mapwmts/service/WmtsLayerService.js"
+			"src" : "../../../../bundles/mapping/mapwmts/domain/WmtsLayerModelBuilder.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/mapwmts/service/WmtsLayerModelBuilder.js"
+			"src" : "../../../../bundles/mapping/mapwmts/service/WmtsLayerService.ol2.js"
 		}],
 		"resources" : []
 	},

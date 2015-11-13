@@ -185,7 +185,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
      * @return {Boolean} true maplayer is visible in current zoomlevel
      */
     _isInScale: function (layer) {
-        var scale = this.getSandbox().getMap().getScale();
+        var scale = this.getMapModule().getMapScale();
         return layer.isInScale(scale);
     },
     /**
@@ -207,21 +207,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
         // NOTE: DO NOT CHANGE visibility in internal layer object (it will
         // change in UI also)
         // this is for optimization purposes
-        var mapModule = this._mapModule;
+        var mapModule = this.getMapModule(),
+            mapLayers = mapModule.getOLMapLayers(layer.getId()),
+            mapLayer = mapLayers.length ? mapLayers[0] : null;
+
         if(scaleOk && geometryMatch && layer.isVisible()) {
-            // show non-baselayer if in scale, in geometry and layer visible
-            var mapLayers = mapModule.getLayersByName('layer_' + layer.getId());
-            var mapLayer = mapLayers.length ? mapLayers[0] : null;
-/*            if(mapLayer && !mapLayer.getVisible()) {
-                mapLayer.setVisible(true);
-            }*/
+            // show non-baselayer if in scale, in geometry and layer visible
+            if (mapLayer && !mapLayer.getVisible()) {
+                mapLayer.setVisible(true);
+            }
         } else {
-            // otherwise hide non-baselayer
-            var mapLayers = mapModule.getLayersByName('layer_' + layer.getId());
-            var mapLayer = mapLayers.length ? mapLayers[0]: null;
-            /*if(mapLayer && mapLayer.getVisible()) {
-                mapLayer.setVisible(false);
-            }*/
+            // otherwise hide non-baselayer
+            if (mapLayer && mapLayer.getVisible()) {
+                mapLayer.setVisible(false);
+            }
         }
         var event = this._sandbox.getEventBuilder('MapLayerVisibilityChangedEvent')(layer, scaleOk, geometryMatch);
         this._sandbox.notifyAll(event);
@@ -244,7 +243,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
         return;
 
         //TODO: fix this code
-        
+
         /*
         var opLayersLength = this.mapModule.getLayers().length;
 
