@@ -1,0 +1,64 @@
+<link rel="import"
+      href="libs/polymer/polymer.html">
+
+<dom-module id="oskari-grid">
+
+  <template>
+    <table class="oskari-grid">
+      <thead>
+        <tr>
+          <template is="dom-if" if="[[selection]]">
+            <th><input type="checkbox" value="{{allSelected}}"></input></th>
+          </template>
+          <template is="dom-repeat" items="[[headers]]" as="header">
+            <th>
+              <span on-tap="onSort" index="[[index]]" header="[[header]]">[[header.title]]</span>
+              <template is="dom-if" if="[[header.filter]]">
+                <div on-tap="onFilter" class="icon-funnel" title="[[onFilterTitle]]"
+                  index="[[index]]" header="[[header]]"></div>
+              </template>
+              <template is="dom-if" if="[[header.delete]]">
+                <div on-tap="onDelete" class="icon-close-dark statsgrid-remove-indicator"
+                  title="[[onDeleteTitle]]" index="[[index]]" header="[[header]]"></div>
+              </template>
+            </th>
+          </template>
+        </tr>
+      </thead>
+      <tbody>
+        <template is="dom-repeat" items="[[rows]]" as="row">
+          <tr>
+            <template is="dom-if" if="[[selection]]">
+              <td><input type="checkbox" value="{{row.selected}}"></input></td>
+            </template>
+            <template is="dom-repeat" items="[[row.data]]" as="datum">
+              <td>
+                <span>[[datum]]</span>
+              </td>
+            </template>
+          </tr>
+        </template>
+      </tbody>
+    </table>
+    <content></content>
+  </template>
+
+  <script>
+    Polymer({
+      is: "oskari-grid",
+      properties: {
+      },
+      "onSort": function(event) {
+          this.fire("onSort", {index: event.target.index, header: event.target.header});
+      },
+      "onDelete": function(event) {
+          this.fire("onDelete", {index: event.target.index, header: event.target.header});
+      },
+      "onFilter": function(event) {
+          this.fire("onFilter", {index: event.target.index, header: event.target.header});
+      }
+    });
+  </script>
+
+</dom-module>
+

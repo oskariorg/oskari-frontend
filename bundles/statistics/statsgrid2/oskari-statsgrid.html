@@ -1,8 +1,9 @@
 <link href="libs/polymer/polymer.html" rel="import">
 <!-- TODO: If you start using the libs here in other bundles as well, they must be moved to a shared location. -->
-<link href="libs/vaadin-components/vaadin-components.html" rel="import">
 <link href="libs/iron-collapse/iron-collapse.html" rel="import">
 <link href="libs/paper-menu/paper-menu.html" rel="import">
+<link href="libs/paper-dialog/paper-dialog.html" rel="import">
+<link href="oskari-grid.html" rel="import">
 <link href="requirejs.html" rel="import">
 
 <dom-module id="oskari-statsgrid">
@@ -29,27 +30,10 @@
       
       <button on-click="toggleStats">Statistics</button>
       <iron-collapse id="statscollapse">
-        <vaadin-grid id="indicator-statistics-grid" items="{{statsrows}}"
-          indicator-headers="[[indicatorHeaders]]" selecter-layer="[[selectedLayer]]">
-          <table>
-            <!-- Define the columns -->
-            <col name="region" header-text$="[[localize(locale.regionCategories, selectedLayer)]]"></col>
-            <template is="dom-repeat" items="[[indicatorHeaders]]" as="header">
-              <col name$="[[header.id]]" header-text$="[[header.header]]"></col>
-            </template>
-          </table>
-        </vaadin-grid>
+        <oskari-grid id="indicator-statistics-grid" rows="[[statsrows]]" headers="[[rowHeaders]]"/>
       </iron-collapse>
-      <vaadin-grid selection-mode="multi" id="indicator-data-grid" items="{{rows}}"
-        indicator-headers="[[indicatorHeaders]]" selecter-layer="[[selectedLayer]]">
-        <table>
-          <!-- Define the columns -->
-          <col name="region" header-text$="[[localize(locale.regionCategories, selectedLayer)]]"></col>
-          <template is="dom-repeat" items="[[indicatorHeaders]]" as="header">
-            <col name$="[[header.id]]" header-text$="[[header.header]]" on-click="[[sortBasedOnColumn(header.index)]]"></col>
-          </template>
-        </table>
-      </vaadin-grid>
+      <oskari-grid id="indicator-data-grid" rows="[[rows]]" headers="[[rowHeaders]]" selection="1"
+        on-sort="onSort" on-filter="onFilter" on-delete="onDelete" />
       <content></content>
     </div>
   </template>
@@ -66,10 +50,6 @@
               "type": Object,
               "notify": true
           },
-          "userIndicators": {
-              "type": Object,
-              "notify": true
-          },
           "selectedLayer": {
               "type": String,
               "value": "oskari:kunnat2013",
@@ -83,7 +63,7 @@
               "type": Object,
               "notify": true
           },
-          "indicatorHeaders": {
+          "rowHeaders": {
               "value": [],
               "type": Array,
               "notify": true
@@ -115,51 +95,47 @@
               "notify": true
           }
       },
+      "listeners": {
+          "onSort": "onSort",
+          "onDelete": "onDelete",
+          "onFilter": "onFilter"
+      },
       "observers": [
           "selectedLayerChanged(ajaxUrl, selectedLayer)",
           "selectedIndicatorsChanged(ajaxUrl, selectedIndicators.splices)",
           "sortChanged(sortColumnIdx, sortDirection)",
-          "selectedIndicatorChanged(selectedIndicatorKey, cache)",
-          "headersChanged(indicatorHeaders)"
+          "selectedIndicatorChanged(selectedIndicatorKey, cache)"
       ],
-      "headersChanged": function() {
-          var me = this;
-          // We need to put this function after all the other stuff being triggered in the sequence...
-          // A dirty hack, yes, but Vaadin grid does not give us a lifecycle event for done rendering.
-          setTimeout(function() {
-              // Because Vaadin grid doesn't give any way to affect headers, we will simply modify the DOM here:
-              var grid = me.$["indicator-data-grid"];
-              var headerThs = grid.querySelectorAll("th");
-              // headerThs is not an array... The 0 index is the selection column.
-              for (var index = 1; index < headerThs.length; index++) {
-                  var th = headerThs[index];
-                  // The header.
-                  var thSpan = th.querySelector("span");
-                  // Workaround to prevent adding multiple event listeners here.
-                  // All this is because Vaadin grid does not support configurable header cells.
-                  if (!th.oskariBound) {
-                      th.oskariBound = true;
-                      me.addFilterMenu(th, index);
-                      me.addDeleteX(th, index);
-                      th.addEventListener("click", function(sortColumn) {
-                          return function() {
-                              // The first column is the selection checkbox.
-                              me.sortBasedOnColumn(sortColumn - 1);
-                              // The clicked indicator is also selected.
-                              var indicatorHeader = me.indicatorHeaders[sortColumn - 1];
-                              if (indicatorHeader) {
-                                  me.selectedIndicatorKey = indicatorHeader.id;
-                              }
-                          };
-                      }(index));
-                  }
-              }
-          }, 100);
+      "onSort": function(event) {
+          var id = event.target.id,
+            index = event.detail.index,
+            header = event.detail.header;
+          if (id === "indicator-statistics-grid") {
+              // The statistics summary grid is not sortable.
+              this.sortBasedOnColumn(index);
+          }
+      },
+      "onDelete": function(event) {
+          var id = event.target.id,
+            index = event.detail.index,
+            header = event.detail.header;
+          this.deleteIndicator(index - 1);
+      },
+      "onFilter": function(event) {
+          var id = event.target.id,
+            index = event.detail.index,
+            header = event.detail.header;
+          if (index == 0) {
+              // Filtering based on region.
+          } else {
+              // Filtering based on indicator values.
+          }
+          console.log("onFilter: " + id + ", " + index + "," + JSON.stringify(header));
       },
       "selectedIndicatorChanged": function(indicatorKey) {
           var me = this,
               indicatorHeader;
-          me.indicatorHeaders.forEach(function (header) {
+          me.rowHeaders.forEach(function (header) {
               if (header.id === indicatorKey) {
                   indicatorHeader = header;
               }
@@ -174,6 +150,17 @@
       },
       "toggleStats": function() {
           this.$.statscollapse.toggle();
+      },
+      "filterOnValue": function(event) {
+          var me = this,
+              index = event.target.index;
+          var filterDialog = document.createElement("paper-dialog");
+          filterDialog.innerHTML = "<span>FILTER</span>";
+          me.$.appendChild(filterDialog)
+          filterDialog.toggle();
+      },
+      "filterOnRegion": function(event) {
+          console.log(JSON.stringify(event));
       },
       "filterPopup": function() {
           /*
@@ -404,21 +391,30 @@
       "selectedIndicatorsChanged": function(ajaxUrl, splices) {
           var me = this,
             indicators = me.selectedIndicators;
-          this.set("indicatorHeaders", indicators.map(function(indicator) {
-              var selectors = me.toSelectorsParameter(indicator.selectors),
-                  selectorsKey = JSON.stringify(selectors),
-                  cacheKey = me.getCacheKey(indicator.datasourceId, indicator.indicatorId,
-                      me.selectedLayer, selectorsKey),
-                  selectorsAsString = indicator.selectors.map(function(selector) {
-                      return selector.value;
-                  }).join("/");
-              return {
-                  id: cacheKey,
-                  indicatorId: indicator.indicatorId,
-                  header: me.sources[indicator.datasourceId].indicators[indicator.indicatorId].name[me.language]
-                    + ((selectorsAsString.length > 0) ? "/" : "") + selectorsAsString
-              }
-          }));
+          this.set("rowHeaders", [{
+              title: me.localize(me.locale.regionCategories, me.selectedLayer),
+              sort: true,
+              filter: true
+          }].concat(
+              indicators.map(function(indicator) {
+                  var selectors = me.toSelectorsParameter(indicator.selectors),
+                      selectorsKey = JSON.stringify(selectors),
+                      cacheKey = me.getCacheKey(indicator.datasourceId, indicator.indicatorId,
+                          me.selectedLayer, selectorsKey),
+                      selectorsAsString = indicator.selectors.map(function(selector) {
+                          return selector.value;
+                      }).join("/");
+                  indicator.id = cacheKey;
+                  return {
+                      id: cacheKey,
+                      indicatorId: indicator.indicatorId,
+                      title: me.sources[indicator.datasourceId].indicators[indicator.indicatorId].name[me.language]
+                        + ((selectorsAsString.length > 0) ? "/" : "") + selectorsAsString,
+                      sort: true,
+                      filter: true,
+                      delete: true
+                  }
+          })));
           indicators.forEach(function(indicator) {
               var selectors = me.toSelectorsParameter(indicator.selectors),
                   selectorsString = JSON.stringify(selectors),
@@ -480,22 +476,22 @@
       "localize": function(prefix, key) {
           return prefix[key] || key;
       },
-      "addFilterMenu": function(th) {
-          var filterMenu = document.createElement("div");
-          filterMenu.classList.add("icon-funnel");
-          th.appendChild(filterMenu);
+      "deleteIndicator": function(index) {
+          this.splice("rowHeaders", index + 1, 1);
+          this.splice("selectedIndicators", index, 1);
       },
-      "addDeleteX": function(th) {
-          var spanX = document.createElement("span");
-          spanX.innerHTML = "X";
-          th.appendChild(spanX);
+      "onDeleteIndicator": function(event) {
+          var me = this,
+              // The first index is the header column.
+              index = event.target.index - 1;
+          this.deleteIndicator(index);
       },
       "handleResponse": function(response) {
           var me = this;
-          if (!me.indicatorHeaders.every(function(indicatorHeader) {
+          if (!me.selectedIndicators.every(function(indicator) {
                   // TODO: This would be cleaner using promises.
                   // If we haven't fetched all the indicator values yet, we will do nothing.
-                  return me.cache[indicatorHeader.id] != undefined;
+                  return me.cache[indicator.id] != undefined;
               })) {
               return;
           }
@@ -503,10 +499,10 @@
               regionKeyedValues = {},
               // For average, min, max, etc.
               summaryIds = ["min", "max", "avg", "mde", "mdn", "std", "sum"],
-              // An array of {'min': value, 'max': value, ...} objects in the order of indicatorHeaders.
-              summariesForIndicators = me.indicatorHeaders.map(function(indicatorHeader) {
+              // An array of {'min': value, 'max': value, ...} objects in the order of selectedIndicators.
+              summariesForIndicators = me.selectedIndicators.map(function(indicator) {
                   // In ES6 we should definitely use "const" here.
-                  var cacheKey = indicatorHeader.id,
+                  var cacheKey = indicator.id,
                       indicatorValues = me.cache[cacheKey],
                       values = indicatorValues && Object.keys(indicatorValues).map(function(regionKey) {
                           return indicatorValues[regionKey];
@@ -522,15 +518,18 @@
                   return summary;
               }),
               summaryRows = summaryIds.map(function(summaryFunction) {
-                  return [me.locale.statistic[summaryFunction]].concat(
-                      summariesForIndicators.map(function(summaryValuesForIndicator) {
-                      return summaryValuesForIndicator[summaryFunction];
-                  }));
+                  return {
+                      selected: true,
+                      data: [me.locale.statistic[summaryFunction]].concat(
+                              summariesForIndicators.map(function(summaryValuesForIndicator) {
+                          return summaryValuesForIndicator[summaryFunction];
+                      }))
+                  };
               });
 
           // Transposing the array keyed by indicators in cache to being keyed by regions.
-          me.indicatorHeaders.forEach(function(indicatorHeader) {
-              var cacheKey = indicatorHeader.id,
+          me.selectedIndicators.forEach(function(indicator) {
+              var cacheKey = indicator.id,
                   indicatorValues = me.cache[cacheKey];
               if (indicatorValues) {
                   Object.keys(indicatorValues).forEach(function(regionKey) {
@@ -546,10 +545,12 @@
           var newRows = Object.keys(regionKeyedValues).map(function(regionKey) {
               var indicatorValues = regionKeyedValues[regionKey],
               
-              row = [me.regionInfo[regionKey].localizedName]
-                  .concat(me.indicatorHeaders.map(function(indicatorHeader) {
-                  return indicatorValues[indicatorHeader.id];
-              }));
+              row = {
+                  selected: true,
+                  data: [me.regionInfo[regionKey].localizedName]
+                      .concat(me.selectedIndicators.map(function(indicator) {
+                          return indicatorValues[indicator.id];
+              }))};
               return row;
           });
           this.set("statsrows", summaryRows);
@@ -563,17 +564,17 @@
           return function(a, b) {
               var lesser = direction == 'asc' ? -1 : 1;
               // Ambiguous order, using region name order.
-              if (((a[idx] === undefined) && (b[idx] === undefined)) ||
-                  (a[idx] === b[idx])) {
+              if (((a.data[idx] === undefined) && (b.data[idx] === undefined)) ||
+                  (a.data[idx] === b.data[idx])) {
                   return me.sortIndicatorDataGrid(0, direction)(a, b);
               }
               // Undefined values are considered the smallest.
-              if (a[idx] === undefined) {
+              if (a.data[idx] === undefined) {
                   return lesser;
-              } else if (b[idx] === undefined) {
+              } else if (b.data[idx] === undefined) {
                   return -lesser;
               }
-              return (a[idx] < b[idx]) ? lesser : -lesser;
+              return (a.data[idx] < b.data[idx]) ? lesser : -lesser;
           };
       },
       "sortChanged": function() {

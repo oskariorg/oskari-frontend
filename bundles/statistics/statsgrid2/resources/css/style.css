@@ -43,7 +43,7 @@
     padding: 4px;
     background-color: #80F0A0;
     cursor: pointer; }
-  .statsgrid .municipal-grid {
+  .statsgrid .region-grid {
     width: 100%;
     height: 80%; }
 
@@ -145,7 +145,6 @@ div.filter-region-select ul {
   margin: 0 !important; }
 
 .statsgrid-remove-indicator {
-  position: absolute;
   top: 5px;
   right: 5px;
   width: 16px !important;
