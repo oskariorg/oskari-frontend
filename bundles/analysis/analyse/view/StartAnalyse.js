@@ -2795,8 +2795,13 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
                 var rn = 'MapModulePlugin.AddFeaturesToMapRequest',
                     style = OpenLayers.Util.applyDefaults(style, OpenLayers.Feature.Vector.style['default']);
-
-                me.instance.sandbox.postRequestByName(rn, [geojson, 'GeoJSON', null, null, 'replace', true, style, false]);
+                me.instance.sandbox.postRequestByName(rn, [geojson, {
+                    layerId: 'ANALYSIS_VECTOR',
+                    replace: 'replace',
+                    layerOptions: null,
+                    centerTo: false,
+                    featureStyle: style
+                }]);
 
                 me._showAggregateResultPopup(aggregateValues, geojson, noDataCnt);
             } else {

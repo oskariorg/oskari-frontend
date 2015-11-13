@@ -1,3 +1,8 @@
+/**
+ * Oskari RPC client
+ * Version: 1.0
+ * @return {Object}  reference to postMessage channel implementation
+ */
 ;var OskariRPC = (function () {
     'use strict';
     return {

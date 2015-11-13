@@ -1040,7 +1040,13 @@ Oskari.clazz.define(
                                 // Else show info area is not active, add geom to map
                                 else {
                                     var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
-                                    me.sandbox.postRequestByName(rn, [row.geom, 'WKT', {id:row.id}, null, 'replace', true, style, true]);
+                                    me.sandbox.postRequestByName(rn, [row.geom, {
+                                        layerId: 'METADATACATALOGUE_VECTORLAYER',
+                                        replace: 'replace',
+                                        layerOptions: null,
+                                        centerTo: true,
+                                        featureStyle: style
+                                    }]);
                                     me._unactiveShowInfoAreaIcons();
                                     jQuery(this).removeClass('icon-info-area').addClass('icon-info-area-active');
                                     jQuery(this).parent().attr('title', me.getLocalization('grid').removeBBOX);

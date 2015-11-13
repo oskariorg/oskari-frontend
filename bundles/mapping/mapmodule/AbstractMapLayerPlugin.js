@@ -310,8 +310,8 @@ Oskari.clazz.define(
         },
         /**
          * Checks if the layer can be handled by this plugin
-         * @method  isLayerSupported 
-         * @param  {Oskari.mapframework.domain.AbstractLayer}  layer 
+         * @method  isLayerSupported
+         * @param  {Oskari.mapframework.domain.AbstractLayer}  layer
          * @return {Boolean}       true if this plugin handles the type of layers
          */
         isLayerSupported : function(layer) {
@@ -320,7 +320,7 @@ Oskari.clazz.define(
             }
             return layer.isLayerOfType(this.getLayerTypeSelector());
         },
-        
+
         getLayerTypeIdentifier: function () {
             return this.layertype;
         },
@@ -393,7 +393,7 @@ Oskari.clazz.define(
         },
         /**
          * Update the layer on map if style etc was changed when administrating layers
-         * @method _updateLayer 
+         * @method _updateLayer
          * @param  {Oskari.mapframework.domain.AbstractLayer} layer [description]
          */
         _updateLayer : function(layer) {

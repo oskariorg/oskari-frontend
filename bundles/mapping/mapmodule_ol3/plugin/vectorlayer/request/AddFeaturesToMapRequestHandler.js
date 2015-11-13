@@ -22,8 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddFeaturesToM
          */
 	    handleRequest: function (core, request) {
 	        this.sandbox.printDebug('[Oskari.mapframework.bundle.mapmodule.request.AddFeaturesToMapRequestHandler] Add Features');
-	        this.vectorLayerPlugin.addFeaturesToMap(request.getGeometry(), request.getGeometryType(), request.getLayerId(), request.getReplace(),
-	        	request.getLayerOptions(), request.getFeatureStyle(), request.getCenterTo());
+			this.vectorLayerPlugin.addFeaturesToMap(request.getGeometry(), request.getOptions());
 	    }
 	}, {
 		/**

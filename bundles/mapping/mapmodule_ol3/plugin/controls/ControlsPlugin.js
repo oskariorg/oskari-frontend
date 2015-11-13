@@ -84,13 +84,6 @@ Oskari.clazz.define(
 
                 'Toolbar.ToolSelectedEvent': function (event) {
                     return;
-                    // changed tool -> cancel any current tool
-                    //TODO Should we handle changing tools somehow?
-                    /*
-                    if (this.getConfig().measureControls !== false) {
-                        this.getSandbox().postRequestByName('DrawTools.StopDrawingRequest', [false, true]);
-                    }
-                    */
                 }
             };
         },
@@ -119,10 +112,7 @@ Oskari.clazz.define(
          */
         _createMapInteractions: function () {
              var me = this,
-            conf = me.getConfig(),
-            geodesic = conf.geodesic === undefined ? true : conf.geodesic,
-            sandbox = me.getSandbox(),
-            key;
+            conf = me.getConfig();
 
             //TODO: add Esc button handler
 

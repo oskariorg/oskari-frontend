@@ -21,8 +21,8 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
 
         /**
          * Checks if the layer can be handled by this plugin
-         * @method  isLayerSupported 
-         * @param  {Oskari.mapframework.domain.AbstractLayer}  layer 
+         * @method  isLayerSupported
+         * @param  {Oskari.mapframework.domain.AbstractLayer}  layer
          * @return {Boolean}       true if this plugin handles the type of layers
          */
         isLayerSupported : function(layer) {
