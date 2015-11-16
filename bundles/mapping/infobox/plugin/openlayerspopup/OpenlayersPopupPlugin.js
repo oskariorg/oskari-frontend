@@ -403,9 +403,6 @@ Oskari.clazz.define(
                 left = parseFloat(popup.css('left')),
                 maxWidth = viewportSize[0] * 0.7,
                 maxHeight = viewportSize[1] * 0.7;
-            // popup needs to move 10 pixels to the right
-            // so that header arrow can be moved out of container(left).
-            // Only move it if creating a new popup
 
             // popup needs to move 10 pixels to the right
             // so that header arrow can be moved out of container(left).
@@ -488,8 +485,8 @@ Oskari.clazz.define(
                 pany = height - (pixels[1] + infoboxHeight);
             }
             // check that we are not "over the top"
-            else if (pixels[1] < 25) {
-                pany = 25;
+            else if (pixels[1] < 70) {
+                pany = 70;
             }
             if (panx !== 0 || pany !== 0) {
                 me.getMapModule().panMapByPixels(-panx, -pany);
