@@ -8,7 +8,7 @@
       <thead>
         <tr>
           <template is="dom-if" if="[[selection]]">
-            <th><input type="checkbox" checked="{{allSelected::change}}" disabled="{{allCheckboxDisabled}}"
+            <th><input type="checkbox" checked="{{allSelected::change}}" on-change="allSelectedChanged"
                 id="allSelectedCheckbox"></input></th>
           </template>
           <template is="dom-repeat" items="[[headers]]" as="header" id="headersTemplate">
@@ -27,7 +27,7 @@
         </tr>
       </thead>
       <tbody>
-        <template is="dom-repeat" items="[[rows]]" as="row" id="rowsTemplate">
+        <template is="dom-repeat" items="{{rows}}" as="row" id="rowsTemplate">
           <tr>
             <template is="dom-if" if="[[selection]]">
               <td><input type="checkbox" checked="{{row.selected::change}}" on-change="selectionsChanged"></input></td>
@@ -56,41 +56,33 @@
               "type": Boolean,
               "notify": true,
               "value": true
-          },
-          "allCheckboxDisabled": {
-              "type": Boolean,
-              "notify": true,
-              "value": true
           }
       },
-      "observers": [
-          "allSelectedChanged(allSelected)"
-      ],
-      "allSelectedChanged": function(allSelected) {
+      "allSelectedChanged": function() {
           var me = this;
-          if (allSelected && me.rows) {
-              me.rows.forEach(function (row, index) {
-                  me.set("rows." + index + ".selected", true);
-              });
-              // Disabling checkbox if it's on.
-              me.allCheckboxDisabled = true;
+          if (me.rows) {
+             if (me.allSelected) {
+                  me.rows.forEach(function (row, index) {
+                      me.set("rows." + index + ".selected", true);
+                  });
+              } else {
+                  me.rows.forEach(function (row, index) {
+                      me.set("rows." + index + ".selected", false);
+                  });
+              }
           }
       },
       "selectionsChanged": function() {
           var me = this;
           me.allSelected = true;
-          // Disabling checkbox if it's on.
-          me.allCheckboxDisabled = true;
           me.rows.forEach(function (row, index) {
               if (!row.selected) {
                   me.allSelected = false;
-                  // Enabling checkbox if it's off.
-                  me.allCheckboxDisabled = false;
               }
           });
       },
       /**
-       * This is just used for sorting.
+       * This is just used for sorting and filtering.
        */
       "refresh": function() {
           this.$.headersTemplate.render();
