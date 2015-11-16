@@ -24,6 +24,9 @@ Oskari.clazz.define(
         getName: function () {
             return 'RPC';
         },
+        getSandbox: function () {
+            return this.sandbox;
+        },
 
         /**
          * @public @method start
@@ -38,11 +41,11 @@ Oskari.clazz.define(
                 sandboxName = conf.sandbox ? conf.sandbox : 'sandbox',
                 sandbox = Oskari.getSandbox(sandboxName);
 
-            // check configured requests/events
-            this.__init(conf);
-
             me.sandbox = sandbox;
             sandbox.register(this);
+
+            // check configured requests/events
+            this.__init(conf);
 
             if (!Channel) {
                 me.sandbox.printWarn('RemoteProcedureCallInstance.startPlugin(): JSChannel not found.');
@@ -90,8 +93,8 @@ Oskari.clazz.define(
                         }
                     } else {
                         throw {
-                            error: 'event_not_allowed',
-                            message: 'Event not allowed: ' + params[0]
+                            error: 'event_not_available',
+                            message: 'Event not available: ' + params[0]
                         };
                     }
                 }
@@ -108,24 +111,14 @@ Oskari.clazz.define(
                             message: 'Invalid origin: ' + trans.origin
                         };
                     }
-                    if (me._allowedRequests[params[0]]) {
-                        var builder = me.sandbox.getRequestBuilder(params[0]),
-                            request;
-                        if (builder) {
-                            request = builder.apply(me, params[1]);
-                            me.sandbox.request(me, request);
-                        } else {
-                            throw {
-                                error: 'builder_not_found',
-                                message: 'No builder found for: ' + params[0]
-                            };
-                        }
-                    } else {
+                    var builder = me.sandbox.getRequestBuilder(params[0]);
+                    if (!me._allowedRequests[params[0]] || !builder) {
                         throw {
-                            error: 'request_not_allowed',
-                            message: 'Request not allowed: ' + params[0]
+                            error: 'request_not_available',
+                            message: 'Request not available: ' + params[0]
                         };
                     }
+                    me.sandbox.request(me, builder.apply(me, params[1]));
                 }
             );
 
@@ -177,10 +170,30 @@ Oskari.clazz.define(
                     'DrawTools.StartDrawingRequest',
                     'DrawTools.StopDrawingRequest'];
             }
-            // TODO: try to get event/request builder for each of these to see that they really are supported!!
-            me._allowedEvents = this.__arrayToObject(allowedEvents);
             me._allowedFunctions = this.__arrayToObject(allowedFunctions);
-            me._allowedRequests = this.__arrayToObject(allowedRequests);
+            // try to get event/request builder for each of these to see that they really are supported!!
+            me.__setupAvailableEvents(allowedEvents);
+            me.__setupAvailableRequests(allowedRequests);
+        },
+        __setupAvailableEvents : function(allowedEvents) {
+            var available = [];
+            var sb = this.getSandbox();
+            for(var i=0; i < allowedEvents.length; ++i) {
+                if(typeof sb.getEventBuilder(allowedEvents[i]) === 'function') {
+                    available.push(allowedEvents[i]);
+                }
+            }
+            this._allowedEvents = this.__arrayToObject(available);
+        },
+        __setupAvailableRequests : function(allowedRequests) {
+            var available = [];
+            var sb = this.getSandbox();
+            for(var i=0; i < allowedRequests.length; ++i) {
+                if(typeof sb.getRequestBuilder(allowedRequests[i]) === 'function') {
+                    available.push(allowedRequests[i]);
+                }
+            }
+            this._allowedRequests = this.__arrayToObject(available);
         },
         /**
          * Maps a given array to a dictionary format for easier access

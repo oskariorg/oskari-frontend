@@ -54,6 +54,10 @@ New requests are enabled by default:
 
 Domain validation fixed to accept urls with - or _ characters.
 
+Changed error messaging from "event/request_not_allowed" to "event/request_not_available". 
+Available events/requests are now checked when RPC-bundle starts and those which aren't technically available/part of the appsetup will be removed from the "supported events/requests" listings. 
+Note that this requires RPC to be started after any bundle offering RPC-enabled events/requests to work correctly (so all events/requests have been loaded and handlers registered for requests before the check).
+
 ### Mapmodule consistency - POSSIBLE BREAKING CHANGES!
 
 In an effort to make Openlayers 2 ja 3 mapmodule API consistent some functions have been renamed:
