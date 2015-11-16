@@ -165,10 +165,6 @@
           filterDialog.columnId = me.rowHeaders[index].id;
           filterDialog.columnIndex = index;
           filterDialog.rows = me.rows;
-          filterDialog.onRowsFiltered = function(rows) {
-              me.set("rows", rows);
-              me.$["indicator-data-grid"].set("rows", rows);
-          };
           filterDialog.onClose = function() {
               me.dialogs.forEach(function(dialog) {
                   // In some cases if you click filtering many times, the other dialogs linger around invisible.
@@ -176,9 +172,7 @@
                   dialog.remove();
               });
               me.dialogs = [];
-              me.$["indicator-data-grid"].set("rows", me.rows);
               me.$["indicator-data-grid"].selectionsChanged();
-              me.$["indicator-data-grid"].refresh();
           };
           me.appendChild(filterDialog);
       },

@@ -80,6 +80,11 @@
                   me.allSelected = false;
               }
           });
+          // For updating the checkbox states.
+          me.rows.forEach(function (row, index) {
+              me.set("rows." + index + ".selected", row.selected);
+          });
+          this.$.rowsTemplate.render();
       },
       /**
        * This is just used for sorting and filtering.
