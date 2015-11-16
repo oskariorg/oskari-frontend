@@ -182,6 +182,11 @@ Oskari.clazz.define(
                     options.layerId = 'VECTOR';
                 }
                 var features = format.readFeatures(geometry);
+                if (options.attributes && options.attributes !== null) {
+                    if (features instanceof Array && features.length) {
+                        features[0].setProperties(options.attributes);
+                    }
+                }
                 _.forEach(features, function (feature) {
                     if (!feature.getId()) {
                         var id = 'F' + me._nextFeatureId++;
