@@ -223,7 +223,7 @@ Oskari.clazz.define(
 
                 wms = {
                     'URL' : me.ajaxUrl + '&LAYERID=' + layer.getId(),
-                    'LAYERS' : layer.getWmsName(),
+                    'LAYERS' : layer.getLayerName(),
                     'FORMAT' : 'image/png'
                 },
 

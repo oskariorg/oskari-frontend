@@ -118,14 +118,14 @@ Oskari.clazz.define(
 
                 // default params and options
                 var defaultParams = {
-                        layers: _layer.getWmsName(),
+                        layers: _layer.getLayerName(),
                         transparent: true,
                         id: _layer.getId(),
                         styles: _layer.getCurrentStyle().getName(),
                         format: 'image/png'
                     },
                     defaultOptions = {
-                        layerId: _layer.getWmsName(),
+                        layerId: _layer.getLayerName(),
                         isBaseLayer: false,
                         displayInLayerSwitcher: false,
                         visibility: layer.isInScale(sandbox.getMap().getScale()) && layer.isVisible(),

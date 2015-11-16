@@ -2,6 +2,10 @@
 
 ## 1.34
 
+### mapstats
+
+Changed references from set/getWmsName() -> set/getLayerName() to use the inherited property from AbstractLayer.
+
 ### OskariRPC 1.1 new version for client library
 
 Functions are now generated depending on the configuration of the providing platform (allowed functions configuration). This means that any calls made to remote functions
