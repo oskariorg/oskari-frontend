@@ -45,9 +45,11 @@ Filename change:
 Allowed functions/events/requests are now configured as an array ["AfterMapMoveEvent", "MapClickedEvent"] instead of an object { "AfterMapMoveEvent" : true, "MapClickedEvent" : true }.
 Reduced configuration for adding new functions - all available functions are now allowed if not explicitly restricted.
 
-New function is enabled by default:
+New functions enabled by default:
 - 'getMapBbox' gets current map bbox
 - 'resetState' resets the map to initial state (location/layers etc)
+- 'getCurrentState' returns a JSON presentation of the map state (location/layers etc). Usable with useState() as parameter.
+- 'useState' sets the map to given state (location/layers etc). Parameter should be given as returned by getCurrentState()
 
 New events are enabled by default:
 - 'UserLocationEvent' notifies about users geolocation status

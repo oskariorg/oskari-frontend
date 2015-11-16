@@ -260,6 +260,12 @@ Oskari.clazz.define(
             },
             resetState : function() {
                 this.sandbox.resetState();
+            },
+            getCurrentState : function() {
+                return this.sandbox.getCurrentState();
+            },
+            useState : function(state) {
+                this.sandbox.useState(state);
             }
         },
 
