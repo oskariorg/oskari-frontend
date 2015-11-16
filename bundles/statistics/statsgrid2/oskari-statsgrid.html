@@ -128,13 +128,7 @@
           var id = event.target.id,
             index = event.detail.index,
             header = event.detail.header;
-          if (index == 0) {
-              // Filtering based on region.
-              this.filterOnRegion();
-          } else {
-              // Filtering based on indicator values.
-              this.filterOnValue(index);
-          }
+          this.filterOnValue(index);
       },
       "selectedIndicatorChanged": function(indicatorKey) {
           var me = this,
@@ -175,9 +169,6 @@
               me.$["indicator-data-grid"].selectionsChanged();
           };
           me.appendChild(filterDialog);
-      },
-      "filterOnRegion": function(event) {
-          console.log(JSON.stringify(event));
       },
       /**
        * Converts the selector array into selectors key-value object required by the interface.
