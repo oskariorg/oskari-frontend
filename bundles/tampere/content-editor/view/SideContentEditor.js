@@ -183,7 +183,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             content.find('.content').append($("<div>" + me.loc.toolInfo + "</div>"));
             content.find('.content').append($("<div>" + me.loc.geometryModifyInfo + "</div>"));
             var addFeatureButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            addFeatureButton.setTitle("Add feature");
+            addFeatureButton.setTitle(me.loc.buttons.addFeature);
             addFeatureButton.setHandler(function () {
                 me.getLayerGeometryType();
                 me.sendStopDrawRequest(true);
