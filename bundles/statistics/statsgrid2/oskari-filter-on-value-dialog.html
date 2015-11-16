@@ -15,16 +15,16 @@
         <div class="filter-label">[[locale.filterCondition]]</div>
         <div class="filter-value">
           <div>
-            <select class="filter-select" value="{{filterValue}}">
+            <select class="filter-select" value="{{filterCondition::change}}">
               <template is="dom-repeat" items="[[filterConditions]]" as="filterCondition">
                 <option value="[[filterCondition.value]]">[[filterCondition.text]]</option>
               </template>
             </select>
             <div class="filter-inputs-container">
-              <input type="text" class="filter-input filter-input1" value="{{input1}}"/>
-              <div hidden="[[!isRange(filterValue)]]">
+              <input type="text" class="filter-input filter-input1" value="{{input1::change}}"/>
+              <div hidden="[[!isRange(filterCondition)]]">
                 <span class="filter-between">-</span>
-                <input type="text" class="filter-input filter-input2" value="{{input2}}"/>
+                <input type="text" class="filter-input filter-input2" value="{{input2::change}}"/>
               </div>
           </div>
         </div>
@@ -40,7 +40,7 @@
     Polymer({
       is: "oskari-filter-on-value-dialog",
       properties: {
-          "filterValue": {
+          "filterCondition": {
               "type": String,
               "notify": true,
               "value": ""
@@ -55,7 +55,12 @@
               "notify": true,
               "value": ""
           },
+          "rows": {
+              "type": Array,
+              "notify": true
+          },
           "columnId": String,
+          "columnIndex": Number,
           "locale": Object
       },
       "filterConditions": {
@@ -69,37 +74,80 @@
           this.$["oskari-filter-on-value-dialog"].close();
           this.onClose();
       },
-      "isRange": function(filterValue) {
-          return filterValue == "...";
+      "isRange": function(filterCondition) {
+          return filterCondition == "...";
+      },
+      "filter": function() {
+          var me = this;
+          this.rows.forEach(function(row) {
+              if (row.selected) {
+                  var value = row.data[me.columnIndex];
+                  if (value === null || value === undefined) {
+                      me.set("row.selected", false);
+                  }
+                  switch (me.filterCondition) {
+                  case '>':
+                      if (value <= me.input1) {
+                          me.set("row.selected", false);
+                      }
+                      break;
+                  case '>=':
+                      if (value < me.input1) {
+                          me.set("row.selected", false);
+                      }
+                      break;
+                  case '=':
+                      if (value !== me.input1) {
+                          me.set("row.selected", false);
+                      }
+                      break;
+                  case '<=':
+                      if (value > me.input1) {
+                          me.set("row.selected", false);
+                      }
+                      break;
+                  case '<':
+                      if (value >= me.input1) {
+                          me.set("row.selected", false);
+                      }
+                      break;
+                  case '...':
+                      if (me.input1 >= value || value >= me.input2) {
+                          me.set("row.selected", false);
+                      }
+                      break;
+                  }
+              }
+          });
       },
       "localeReady": function(locale) {
           this.set("filterConditions", [
               {
-                  val: "",
+                  value: "",
                   text: locale.filterSelectCondition
               },
               {
-                  val: ">",
+                  value: ">",
                   text: locale.filterGT
               },
               {
-                  val: ">=",
+                  value: ">=",
                   text: locale.filterGTOE
               },
               {
-                  val: "=",
+                  value: "=",
                   text: locale.filterE
               },
               {
-                  val: "<=",
+                  value: "<=",
                   text: locale.filterLTOE
               },
               {
-                  val: "<",
+                  value: "<",
                   text: locale.filterLT
               },
               {
-                  val: "...",
+                  value: "...",
                   text: locale.filterBetween
               }
           ]);

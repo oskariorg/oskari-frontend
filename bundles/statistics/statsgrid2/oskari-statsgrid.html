@@ -160,7 +160,8 @@
           filterDialog.label = me.rowHeaders[index].title;
           filterDialog.id = "filterDialog";
           filterDialog.columnId = me.rowHeaders[index].id;
-          filterDialog.rows = "{{rows}}";
+          filterDialog.columnIndex = index;
+          filterDialog.rows = me.rows;
           filterDialog.onClose = function() {
               me.dialogs.forEach(function(dialog) {
                   // In some cases if you click filtering many times, the other dialogs linger around invisible.
