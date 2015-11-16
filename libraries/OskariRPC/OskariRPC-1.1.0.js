@@ -12,6 +12,7 @@
  * - Changed handleEvent to enable multiple listeners.
  * - handleEvent can no longer be used to unregister listener.
  * - Added unregisterEventHandler() for unregistering listeners (previously done with handleEvent without giving listener function).
+ * - Added log() for debug logging without the need to check if window.console.log() exists
  * 
  * @return {Object}  reference to postMessage channel implementation
  */
@@ -52,6 +53,12 @@
              */
             RPC_API.enableDebug = function(blnEnabled) {
                 isDebug = !!blnEnabled;
+            };
+
+            RPC_API.log = function() {
+                if(window.console && window.console.log) {
+                    window.console.log.apply(window.console, arguments);
+                }
             };
             
             RPC_API.isReady = function() {

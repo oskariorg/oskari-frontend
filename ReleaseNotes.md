@@ -31,6 +31,7 @@ Changes to 1.0.0:
 - Changed handleEvent to enable multiple listeners.
 - handleEvent can no longer be used to unregister listener.
 - Added unregisterEventHandler() for unregistering listeners (previously done with handleEvent without giving listener function).
+- Added log() for debug logging without the need to check if window.console.log() exists
 
 Filename change: 
 - Oskari/libraries/OskariRPC/OskariRPC.js is now Oskari/libraries/OskariRPC/OskariRPC-1.0.0.js
