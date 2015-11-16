@@ -71,4 +71,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.domain.StatsLayerModelB
                 'ELY-KESKUS': 'ely_nro'
             }
         });
+    }
 });
