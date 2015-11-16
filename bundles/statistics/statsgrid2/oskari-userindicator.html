@@ -5,7 +5,7 @@
 
   <template>
     <div id="userIndicatorCont" style="min-height: 100%;">
-      <form class="add-indicator" style="min-height: 100%;">
+      <form class="add-indicator" id="add-indicator" style="min-height: 100%;" on-keydown="stopWindowEvents" on-keyup="stopWindowEvents">
         <h2>[[locale.addDataTitle]]</h2>
         <fieldset class="form-meta">
           <legend>[[locale.baseInfoTitle]]</legend>
@@ -256,6 +256,12 @@
               });
           });
           return array;
+      },
+      /**
+       * This stops for example the F key from propagating to the OpenLayers map fullscreen toggle.
+       */
+      "stopWindowEvents": function(e) {
+          e.stopPropagation();
       }
     });
   </script>
