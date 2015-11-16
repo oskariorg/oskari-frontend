@@ -31,11 +31,11 @@
       
       <button on-click="toggleStats">Statistics</button>
       <iron-collapse id="statscollapse">
-        <oskari-grid id="indicator-statistics-grid" rows="[[statsrows]]" headers="[[rowHeaders]]"/>
+        <oskari-grid id="indicator-statistics-grid" rows="[[statsrows]]" headers="[[rowHeaders]]" />
       </iron-collapse>
       <paper-scroll-header-panel style="height: 500px;">
         <oskari-grid id="indicator-data-grid" rows="{{rows}}" headers="[[rowHeaders]]" selection="1"
-          on-sort="onSort" on-filter="onFilter" on-delete="onDelete" />
+          on-sort="onSort" on-filter="onFilter" on-delete="onDelete" filtering sorting deleting />
       </paper-scroll-header-panel>
       <content></content>
     </div>
