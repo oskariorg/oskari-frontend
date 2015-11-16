@@ -988,7 +988,8 @@ Oskari.clazz.define(
          * @param {Object} layer
          */
         removeMapLayerFromMap: function (layer) {
-            var removeLayer = this._layers[layer.getId()];
+            var me = this,
+                removeLayer = this._layers[layer.getId()];
             if (removeLayer) {
                 me.getMap().removeLayer(removeLayer);
             }
@@ -1052,7 +1053,8 @@ Oskari.clazz.define(
          * @param {Boolean} keepPrevious
          *           true to not delete existing tile
          */
-        drawImageTile: function (layer, imageUrl, imageBbox, imageSize, layerType, boundaryTile, keepPrevious) {
+         
+        drawImageTile_old: function (layer, imageUrl, imageBbox, imageSize, layerType, boundaryTile, keepPrevious) {
             //TODO: clean up this method.
             var me = this,
                 map = me.getMap(),
@@ -1076,7 +1078,7 @@ Oskari.clazz.define(
                 normalLayerExp = me.__layerPrefix + layerId + '_' + me.__typeNormal,
                 normalLayer = me.getMapModule().getLayersByName(normalLayerExp)[0];  //map.getLayersByName(normalLayerExp);
 
-            /** Safety checks */
+            //Safety checks 
             if (!imageUrl || !boundsObj) return;
 
             if (layerType === me.__typeHighlight) {
@@ -1229,6 +1231,7 @@ Oskari.clazz.define(
          * @param {Object} layer
          * @param {String} layerType
          */
+         /*
         _addMapLayerToMap: function (_layer, layerType) {
             if (!_layer.hasFeatureData()) {
                 return;
@@ -1284,7 +1287,7 @@ Oskari.clazz.define(
             me.getMapModule().addLayer(openLayer, _layer, layerName);
             me._layers[openLayer.getSource().get('layerId')] = openLayer;
         },
-
+        */
         /**
          * @method createTileGrid
          *
@@ -1392,6 +1395,7 @@ Oskari.clazz.define(
          *
          * @param grid
          */
+         /*
         getNonCachedGrid: function (layerId, grid) {
             var layer = this._layers[layerId],
             //    style = layer.getCurrentStyle().getName(),
@@ -1416,6 +1420,7 @@ Oskari.clazz.define(
             }
             return result;
         },
+        */
 
         /*
          * @method isWFSOpen
@@ -1643,146 +1648,350 @@ Oskari.clazz.define(
         },
         hasUI: function() {
             return false;
-        }
+        },
 
-
-
+        /******
+        *
+        * @nls-jajuko
+        ********/
+        _getWFSTileCache: function(layerId) {
+            var me = this;
+            if( !me.___tileLayerCache  ) {
+               me.___tileLayerCache  = {};
+            }
+            
+            var layerTileInfos = me.___tileLayerCache[layerId];
+            if( !layerTileInfos) {
+                layerTileInfos = me.___tileLayerCache[layerId] = {
+                    tileSetIdentifier: 0,
+                    tileInfos: {}
+                };
+            }
+            return layerTileInfos;
+        },
+        
+        _purgeWFSTileCache: function(layerId) {
+            var me = this,
+                wfsTileCache = me._getWFSTileCache(layerId),
+                layerTileInfos = wfsTileCache.tileInfos,
+                lastTileSetIdentifier =  wfsTileCache.tileSetIdentifier;
+            _.each(layerTileInfos,function(lti,key) {
+                //console.log("PURGE ?",key,"===",lti, lti.isBoundaryTile ? "PURGE": "", (lti.tileSetIdentifier < lastTileSetIdentifier -1 ? "PURGE": "" ));
+                /*
+                if( !lti.isBoundaryTile) {
+                    delete layerTileInfos[key];
+                }
+                if( lti.tileSetIdentifier < lastTileSetIdentifier-1 ) {
+                    delete layerTileInfos[key];
+                }
+                */
+            });
+            
+        },
         /**
-         * ol3 debug stuff we need to survive......
+         * @method _addMapLayerToMap
+         *
+         * @param {Object} layer
+         * @param {String} layerType
          */
-         /*
-        ,_getZForResolution: function(tileGrid, resolution) {
-          var z = this._linearFindNearest(tileGrid.resolutions_, resolution, 0);
-          if (z < tileGrid.minZoom) {
-            z = tileGrid.minZoom;
-          } else if (z > tileGrid.maxZoom){
-            z = tileGrid.maxZoom;
-          }
-          return z;
-        },
-        _linearFindNearest: function(arr, target, direction) {
-
-
-          if (!arr || arr.length === 0) {
-            return -1;
-          }
-          var n = arr.length;
-          if (arr[0] <= target) {
-            return 0;
-          } else if (target <= arr[n - 1]) {
-            return n - 1;
-          } else {
-            var i;
-            if (direction > 0) {
-              for (i = 1; i < n; ++i) {
-                if (arr[i] < target) {
-                  return i - 1;
-                }
-              }
-            } else if (direction < 0) {
-              for (i = 1; i < n; ++i) {
-                if (arr[i] <= target) {
-                  return i;
-                }
-              }
-            } else {
-              for (i = 1; i < n; ++i) {
-                if (arr[i] == target) {
-                  return i;
-                } else if (arr[i] < target) {
-                  if (arr[i - 1] - target < target - arr[i]) {
-                    return i - 1;
-                  } else {
-                    return i;
-                  }
-                }
-              }
+        _addMapLayerToMap: function (_layer, layerType) {
+            
+            if (!_layer.hasFeatureData()) {
+                return;
             }
-            // We should never get here, but the compiler complains
-            // if it finds a path for which no number is returned.
-            return n - 1;
-          }
-        },
-        _getTileCoordExtent: function(tileGrid, tileCoord, opt_extent) {
-          var origin = tileGrid.getOrigin(tileCoord[0]);
-          var resolution = tileGrid.getResolution(tileCoord[0]);
-          var tileSize = ol.size.toSize(tileGrid.getTileSize(tileCoord[0]), tileGrid.tmpSize_);
-          var minX = origin[0] + tileCoord[1] * tileSize[0] * resolution;
-          var minY = origin[1] + tileCoord[2] * tileSize[1] * resolution;
-          var maxX = minX + tileSize[0] * resolution;
-          var maxY = minY + tileSize[1] * resolution;
-          return this._createOrUpdateExtent(minX, minY, maxX, maxY, opt_extent);
-        },
-        _createOrUpdateExtent: function(minX, minY, maxX, maxY, opt_extent) {
-          if (opt_extent) {
-            opt_extent[0] = minX;
-            opt_extent[1] = minY;
-            opt_extent[2] = maxX;
-            opt_extent[3] = maxY;
-            return opt_extent;
-          } else {
-            return [minX, minY, maxX, maxY];
-          }
-        },
-        _getTileRangeForExtentAndResolution: function(tileGrid, extent, resolution, opt_tileRange) {
-            var tileCoord = [0, 0, 0];
-            this._getTileCoordForXYAndResolution(tileGrid, extent[0], extent[1], resolution, false, tileCoord);
-            var minX = tileCoord[1];
-            var minY = tileCoord[2];
-            this._getTileCoordForXYAndResolution(tileGrid, extent[2], extent[3], resolution, true, tileCoord);
-            return this._createOrUpdateTileRange(minX, tileCoord[1], minY, tileCoord[2], opt_tileRange);
-        },
-        _getTileCoordForXYAndResolution: function(tileGrid, x, y, resolution, reverseIntersectionPolicy, opt_tileCoord) {
-          var z = this._getZForResolution(tileGrid, resolution);
-          var scale = resolution / tileGrid.getResolution(z);
-          var origin = tileGrid.getOrigin(z);
-          var tileSize = ol.size.toSize(tileGrid.getTileSize(z), tileGrid.tmpSize_);
 
-          var adjustX = reverseIntersectionPolicy ? 0.5 : 0;
-          var adjustY = reverseIntersectionPolicy ? 0 : 0.5;
-          var xFromOrigin = Math.floor((x - origin[0]) / resolution + adjustX);
-          var yFromOrigin = Math.floor((y - origin[1]) / resolution + adjustY);
-          var tileCoordX = scale * xFromOrigin / tileSize[0];
-          var tileCoordY = scale * yFromOrigin / tileSize[1];
+            var me = this;
+            var layerName =
+                this.__layerPrefix + _layer.getId() + '_' + layerType,
+                layerScales = this.getMapModule().calculateLayerScales(
+                    _layer.getMaxScale(),
+                    _layer.getMinScale()
+                ),
+                key,
+                layerParams = _layer.getParams(),
+                layerOptions = _layer.getOptions();
 
-          if (reverseIntersectionPolicy) {
-            tileCoordX = Math.ceil(tileCoordX) - 1;
-            tileCoordY = Math.ceil(tileCoordY) - 1;
-          } else {
-            tileCoordX = Math.floor(tileCoordX);
-            tileCoordY = Math.floor(tileCoordY);
-          }
-
-          return this._createOrUpdateTileCoord(z, tileCoordX, tileCoordY, opt_tileCoord);
-        },
-        _createOrUpdateTileCoord: function(z, x, y, opt_tileCoord) {
-          if (opt_tileCoord) {
-            opt_tileCoord[0] = z;
-            opt_tileCoord[1] = x;
-            opt_tileCoord[2] = y;
-            return opt_tileCoord;
-          } else {
-            return [z, x, y];
-          }
-        },
-        _createOrUpdateTileRange: function(minX, maxX, minY, maxY, tileRange) {
-          if (tileRange) {
-            tileRange.minX = minX;
-            tileRange.maxX = maxX;
-            tileRange.minY = minY;
-            tileRange.maxY = maxY;
-            return tileRange;
-          } else {
-//            return new ol.TileRange(minX, maxX, minY, maxY);
-            return {
-                minX: minX,
-                maxX: maxX,
-                minY: minY,
-                maxY: maxY
+            // override default params and options from layer
+            for (key in layerParams) {
+                if (layerParams.hasOwnProperty(key)) {
+                    defaultParams[key] = layerParams[key];
+                }
             }
-          }
+            for (key in layerOptions) {
+                if (layerOptions.hasOwnProperty(key)) {
+                    defaultOptions[key] = layerOptions[key];
+                }
+            }
+            
+            var projection = ol.proj.get('EPSG:3067');
+            var projectionExtent = projection.getExtent();
+            var me = this;
+            
+            var tileSrc = new ol.source.TileImage({  
+                    layerId: _layer.getId(),
+                    tileUrlFunction: function (tileCoord, pixelRatio, projection) {
+                        var bounds = this.tileGrid.getTileCoordExtent(tileCoord);                        
+                        var bboxKey = me.bboxkeyStrip(bounds);
+                        var wfsTileCache = me._getWFSTileCache(_layer.getId()),
+                            layerTileInfos = wfsTileCache.tileInfos,
+                            tileSetIdentifier = wfsTileCache.tileSetIdentifier;
+                        layerTileInfos[bboxKey] = { "tileCoord": tileCoord, bounds: bounds, tileSetIdentifier: tileSetIdentifier};
+                        //console.log("tileUrlFunction",bboxKey, tileSetIdentifier);
+                        return bboxKey;
+                    },
+                    tileLoadFunction: function(imageTile, imagesrc) {
+                        var bboxKey = imagesrc;
+                        var wfsTileCache = me._getWFSTileCache(_layer.getId()),
+                            layerTileInfos = wfsTileCache.tileInfos,
+                            tileSetIdentifier = wfsTileCache.tileSetIdentifier,
+                            imageTileLayerTileInfos = layerTileInfos[bboxKey]  ;
+                        if(imageTile.layerTileInfos &&!imageTileLayerTileInfos) {
+                            layerTileInfos[bboxKey] = imageTile.layerTileInfos;
+                        } 
+                        imageTile.PLACEHOLDER = true; 
+                        imageTile.state = ol.TileState.LOADING;
+                        console.log("tileLoadFunction",imageTile,imagesrc, layerTileInfos[bboxKey]);
+                        
+                        
+                    },
+                    projection: projection,
+                    tileGrid: this._tileGrid
+                });
+            var openLayer = new ol.layer.Tile({
+                source: tileSrc
+            });
+            
+            //custom getTile function            
+            openLayer.getSource().set('layerId',_layer.getId());
+            openLayer.setOpacity(_layer.getOpacity() / 100);
+            me.getMapModule().addLayer(openLayer, _layer, layerName);
+            me._layers[openLayer.getSource().get('layerId')] = openLayer;
+        },
+        /*
+         * @method getNonCachedGrid
+         *
+         * @param grid
+         */
+        getNonCachedGrid: function (layerId, grid) {
+            var layer = this._layers[layerId],
+            //    style = layer.getCurrentStyle().getName(),
+                result = [],
+                i,
+                me = this,
+                bboxKey,
+                dataForTile;
+            
+            if (!layer) {
+                return result;
+            }
+            
+            var wfsTileCache = me._getWFSTileCache(layerId),
+                layerTileInfos = wfsTileCache.tileInfos,
+                lastTileSetIdentifier =  wfsTileCache.tileSetIdentifier;
+            
+            this._purgeWFSTileCache(layerId);
+            
+            wfsTileCache.tileSetIdentifier =  ++wfsTileCache.tileSetIdentifier ;
+                // new Date().getTime();
+            
+            for (i = 0; i < grid.bounds.length; i += 1) {
+                bboxKey = me.bboxkeyStrip(grid.bounds[i]);
+                //at this point the tile should already been cached by the layers getTile - function.
+                    var tileInfo = layerTileInfos[bboxKey],
+                    tileCoord = tileInfo ? tileInfo.tileCoord: undefined,
+                            tileCoordKey = tileCoord? ol.tilecoord.getKeyZXY(tileCoord[0],tileCoord[1],tileCoord[2]) : undefined,
+                            tile;
+                            if( tileCoordKey && layer.getSource().tileCache.containsKey (tileCoordKey)) {
+                                tile = layer.getSource().tileCache.get(tileCoordKey);
+                            }
+                                
+                    if (tile ) {
+                        if( tile.PLACEHOLDER === true) {
+                            result.push(grid.bounds[i]);
+                        } else if(tile.state !== ol.TileState.LOADED) {
+                            result.push(grid.bounds[i]);
+                        } else if( tile.isBoundaryTile === true ) {
+                            console.log("getNonCachedGrid","TILE! BOUNDARYTILE -> RELOAD");
+                            result.push(grid.bounds[i]);
+                        } else {
+                            
+                        }
+                    } else {
+                        delete layerTileInfos[bboxKey];
+                        console.log("getNonCachedGrid","TILE NOT FOUND -> PURGE");
+                    }
+                
+            }
+            /*
+            for( var bboxKey in layerTileInfos ) {
+              var val = layerTileInfos[bboxKey];
+                if( val == undefined ) {
+                    continue;
+                }
+                if( val.pushed ) {
+                    continue;
+                }
+                val.pushed = true;
+                                              
+                result.push(val.bounds);
+            }
+            */
+            console.log("GetNonCachedGRID",result.length,result);
+            return result;
+        },
+  
+    
+          drawImageTile: function (layer, imageUrl, imageBbox, imageSize, layerType, boundaryTile, keepPrevious) {
+            var args = [layer, imageUrl, imageBbox, imageSize, layerType, boundaryTile, keepPrevious];
+            //  console.log(args,"LOADING ",Oskari.getSandbox().findRegisteredModuleInstance("MainMapModule").getMap().tileQueue_.getTilesLoading());
+              if( boundaryTile) {
+            //console.log("drawImageTile",args);
+              }
+            var me = this,
+                map = me.getMap(),
+                layerId = layer.getId(),
+                layerIndex = null,
+                layerName = me.__layerPrefix + layerId + '_' + layerType,
+                layerScales,
+                normalLayer,
+                normalLayerExp,
+                normalLayerIndex,
+                highlightLayer,
+                highlightLayerExp,
+                BBOX,
+                bboxKey,
+                dataForTileTemp,
+                style,
+                tileToUpdate,
+                boundsObj = imageBbox, //ol.Extent
+                ols,
+                wfsMapImageLayer,
+                normalLayerExp = me.__layerPrefix + layerId + '_' + me.__typeNormal,
+                normalLayer = me.getMapModule().getLayersByName(normalLayerExp)[0];  //map.getLayersByName(normalLayerExp);
+
+            /** Safety checks */
+            if (!imageUrl || !boundsObj) return;
+
+            if (layerType === me.__typeHighlight) {
+                  ols = [imageSize.width,imageSize.height];  //ol.Size
+                layerScales = me.getMapModule().calculateLayerScales(layer.getMaxScale(),layer.getMinScale());
+
+                wfsMapImageLayer = new ol.layer.Image({
+                    source: new ol.source.ImageStatic({
+                        url: imageUrl,
+                        imageExtent: boundsObj,
+                        imageSize: ols,
+                        logo: false
+
+                    }),
+                    title: layerName
+                })
+
+          /*      wfsMapImageLayer = new OpenLayers.Layer.Image(
+                    layerName,imageUrl,
+                    boundsObj, ols, {
+                        scales: layerScales,
+                        transparent: true,
+                        format: 'image/png',
+                        isBaseLayer: false,
+                        displayInLayerSwitcher: false,
+                        visibility: true,
+                        buffer: 0 }
+                ); */
+                wfsMapImageLayer.opacity = layer.getOpacity() / 100;
+               // map.addLayer(wfsMapImageLayer);
+                me.getMapModule().addLayer(wfsMapImageLayer, layer, layerName);
+                wfsMapImageLayer.setVisibility(true);
+                // also for draw
+                wfsMapImageLayer.redraw(true);
+
+                // if removed set to same index [but if wfsMapImageLayer created
+                // in add (sets just in draw - not needed then here)]
+                if (layerIndex !== null && wfsMapImageLayer !== null) {
+                    map.setLayerIndex(wfsMapImageLayer, layerIndex);
+                }
+
+                // highlight picture on top of normal layer images
+                highlightLayerExp = me.__layerPrefix + layerId + '_' + me.__typeHighlight;
+                highlightLayer = me.getMapModule().getLayersByName(highlightLayerExp)[0]; // map.getLayersByName(highlightLayerExp);
+
+                if (normalLayer.length > 0 && highlightLayer.length > 0) {
+                    normalLayerIndex = map.getLayerIndex(normalLayer[normalLayer.length - 1]);
+                    map.setLayerIndex(highlightLayer[0],normalLayerIndex + 10);
+                }
+          
+            } else { // "normal"
+                //console.log("LOADING ",Oskari.getSandbox().findRegisteredModuleInstance("MainMapModule").getMap().tileQueue_.getTilesLoading());
+                
+                bboxKey = this.bboxkeyStrip(boundsObj);
+                if (bboxKey) {
+                    //console.log("GOT WFS TILE",bboxKey);
+                        var ollayer = me._layers[layerId];
+                        var layerTileInfos = me._getWFSTileCache(layerId).tileInfos;
+                        var tileInfo = layerTileInfos[bboxKey],
+                            tileCoord = tileInfo ? tileInfo.tileCoord: undefined,
+                            tileCoordKey = tileCoord? ol.tilecoord.getKeyZXY(tileCoord[0],tileCoord[1],tileCoord[2]) : undefined,
+                            tile;
+                            if( tileCoordKey && ollayer.getSource().tileCache.containsKey (tileCoordKey)) {
+                                tile = ollayer.getSource().tileCache.get(tileCoordKey);
+                            }
+                        if( tile != null) {
+                            //console.log("SETTING WFS TILE IMAGE",bboxKey,tile);
+                            
+                            
+                            var tilestate = tile.state;
+                            switch(tilestate) {                                    
+                                case  0 : // IDLE: 0,
+                                case 1: //LOADING: 1,                                    
+                                   // console.log("LOADED TILE",bboxKey,tile.getKey());    
+                                    tile.PLACEHOLDER = false;
+                                    tile.getImage().src = imageUrl;
+                                    tile.state = 2;
+                                    tile.changed(); 
+                                    
+                                    var mapRenderer = map.getRenderer();
+                                    var layerRenderer = mapRenderer.getLayerRenderer(ollayer);
+                                    //console.log(layerRenderer,mapRenderer);
+                                    //reset the renderers memory of it's tilerange as to make sure that our boundary tiles get drawn perfectly
+                                    layerRenderer.renderedCanvasTileRange_ = new ol.TileRange();
+                                    ollayer.changed();
+                                    break;
+                                
+                                case 2: // LOADED: 
+                                case 3: // ERROR: 
+                                case 4: // EMPTY
+                                    //console.log("INVALID STATE FOR TILE ? ",tile.state,tile, bboxKey);
+                                    //tile.state = 0;
+                                    tile.PLACEHOLDER = false;
+                                    tile.getImage().src = imageUrl;
+                                    tile.state = 2;
+                                    tile.changed();
+                                    
+                                    var mapRenderer = map.getRenderer();
+                                    var layerRenderer = mapRenderer.getLayerRenderer(ollayer);
+                                    //reset the renderers memory of it's tilerange as to make sure that our boundary tiles get drawn perfectly
+                                    layerRenderer.renderedCanvasTileRange_ = new ol.TileRange();
+                                    ollayer.changed();
+                                    me._map.renderSync();
+                                    break;
+                                default:
+                                    tile.handleImageError_();
+                            }
+                            
+                            tile.isBoundaryTile = boundaryTile;
+                            tileInfo.isBoundaryTile = boundaryTile;
+                            if( !tile.isBoundaryTile ) {
+                                delete layerTileInfos[bboxKey]  ;
+                            } else {
+                            }
+                        } else { 
+                            console.log("NO CACHED TILEREF FOR ",bboxKey,tc);    
+                        }                  
+                } else {
+                    console.log("NULL BBOX KEY");
+                }
+            }
         }
-        */
     }, {
         extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
         /**
