@@ -137,6 +137,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                 this._enableTile(true);
             }
         },
+        "sendTooltipData": function(feature) {
+            return this.__mainPanel.sendTooltipData(feature);
+        },
         "_enableTile": function (blnEnable) {
             var layerPresent = this._isLayerPresent(),
                 tile = this.plugins['Oskari.userinterface.Tile'];

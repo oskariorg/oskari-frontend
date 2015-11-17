@@ -90,6 +90,13 @@
           /**
            * For example the indicator selector can notify of selected indicator with this.
            */
+          "selectorSelectedIndicatorKey": {
+              "type": String,
+              "notify": true
+          },
+          /**
+           * For example the indicator selector can notify of selected indicator with this.
+           */
           "selectedIndicatorKey": {
               "type": String,
               "notify": true
@@ -113,6 +120,33 @@
           "sortChanged(sortColumnIdx, sortDirection)",
           "selectedIndicatorChanged(selectedIndicatorKey, cache)"
       ],
+      "sendTooltipData": function(feature) {
+          var featureAttributes = feature.attributes,
+              regionCode = featureAttributes[this.layerInfo[this.selectedLayer].idTag],
+              eventBuilder = this.sandbox.getEventBuilder(
+                  'MapStats.HoverTooltipContentEvent'
+              ),
+              item = this.selectedIndicator.data[regionCode],
+              content;
+
+          if (item === null || item === undefined) {
+              this.sandbox.printWarn(
+                  'sendTooltipData: item not found for',
+                  regionCode,
+                  'in',
+                  this.selectedIndicator.data
+              );
+          }
+
+          content = '<p>' + this.regionInfo[regionCode].localizedName;
+          content += item ? '<br />' + item : '';
+          content += '</p>';
+
+          if (eventBuilder) {
+              var event = eventBuilder(content);
+              this.sandbox.notifyAll(event);
+          }
+      },
       "showIndicatorOnMap": function(cacheKey, index, header) {
           var me = this,
               eventBuilder = me.sandbox.getEventBuilder('StatsGrid.StatsDataChangedEvent'),
@@ -127,6 +161,7 @@
               col_values = vis_codes.map(function(regionKey) {
                   return indicatorValues[regionKey];
               });
+          me.selectedIndicatorKey = cacheKey;
           if (eventBuilder) {
               // CUR_COL:"indicator..." , VIS_NAME: "ows:kunnat2013", VIS_ATTR: "kuntakoodi", VIS_CODES: munArray, COL_VALUES: statArray
               var data = {
@@ -152,6 +187,7 @@
           var id = event.target.id,
             index = event.detail.index,
             header = event.detail.header;
+          this.selectedIndicatorKey = header.id;
           if (id === "indicator-data-grid") {
               // The statistics summary grid is not sortable.
               this.sortBasedOnColumn(index);

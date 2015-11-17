@@ -146,6 +146,9 @@
           "selectorsChanged(selectorItems.splices)",
           "selectorsChanged(selectors)"
       ],
+      "sendTooltipData": function(feature) {
+          return this.$.statsgrid.sendTooltipData(feature);
+      },
       "selectedIndicatorsChanged": function() {
           this.set("showGrid", !this.showUserIndicatorView && !!this.selectedIndicators
                   && this.selectedIndicators.length > 0);

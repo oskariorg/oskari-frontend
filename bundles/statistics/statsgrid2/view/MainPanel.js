@@ -19,6 +19,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.MainPanel',
               // Removing the tailing question mark.
               url = rawUrl.substring(0, rawUrl.length - 1);
             this.container = container;
+            this.element = elementWrapper;
             container.empty();
             elementWrapper.ajaxUrl = url;
             elementWrapper.locale = this.localization;
@@ -29,6 +30,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.MainPanel',
 	    },
         getContainer : function() {
             return this.container;
+        },
+        "sendTooltipData": function(feature) {
+            return this.element.sendTooltipData(feature);
         },
         handleSizeChanged : function() {
             // TODO
