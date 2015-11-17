@@ -302,7 +302,7 @@ function () {
             };
         this.sandbox.postRequestByName(rn, [geom, {
             layerId: null,
-            replace: 'replace',
+            clearPrevious: true,
             layerOptions: null,
             centerTo: false,
             attributes: null,

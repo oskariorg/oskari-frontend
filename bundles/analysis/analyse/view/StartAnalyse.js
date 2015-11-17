@@ -2796,7 +2796,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
                 me.instance.sandbox.postRequestByName(rn, [geojson, {
                     layerId: 'ANALYSIS_VECTOR',
-                    replace: 'replace',
+                    clearPrevious: true,
                     layerOptions: null,
                     centerTo: false,
                     featureStyle: null

@@ -988,11 +988,12 @@ Oskari.clazz.define(
          * @param {Object} layer
          */
         removeMapLayerFromMap: function (layer) {
-            // TODO: this will leave reference to this._layers[id]!!! is this intentional??
-            var removeLayer = this._layers[layer.getId()];
+            var layerId = layer.getId(),
+                removeLayer = this._layers[layerId];
             if (removeLayer) {
                 this.getMap().removeLayer(removeLayer);
             }
+            delete this._layers[layerId];
         },
 
         /**

@@ -207,7 +207,7 @@ Oskari.clazz.define(
                     olLayer.setOpacity(opacity);
                     isOlLayerAdded = false;
                 }
-                if (options.replace && options.replace !== null && options.replace === 'replace') {
+                if (options.clearPrevious === true) {
                     olLayer.removeAllFeatures();
                     olLayer.refresh();
                 }
