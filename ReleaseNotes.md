@@ -6,7 +6,7 @@
 
 Changed references from set/getWmsName() -> set/getLayerName() to use the inherited property from AbstractLayer.
 
-### OskariRPC 1.1 new version for client library
+### OskariRPC 1.1 version for client library
 
 Functions are now generated depending on the configuration of the providing platform (allowed functions configuration). This means that any calls made to remote functions
 are available only after the connection to map has been established. This enables better errorhandling, but means that function calls will result in "is not a function" errors 
@@ -36,8 +36,9 @@ Changes to 1.0.0:
 - handleEvent can no longer be used to unregister listener.
 - Added unregisterEventHandler() for unregistering listeners (previously done with handleEvent without giving listener function).
 - Added log() for debug logging without the need to check if window.console.log() exists
+- function-calls can now have parameters as first argument array to allow multiple (treated as a success callback instead if it's type is function)
 
-Filename change: 
+Filename change for original OskariRPC.js: 
 - Oskari/libraries/OskariRPC/OskariRPC.js is now Oskari/libraries/OskariRPC/OskariRPC-1.0.0.js
 
 ### rpc

@@ -3807,7 +3807,7 @@ Oskari.util = (function () {
         return parts.join('');
     };
 
-   /** 
+   /**
     * Check, if nested key exists
     * @method keyExists
     * @params {Object}  object to check { "test" : { "this" : true }}

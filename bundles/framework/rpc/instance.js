@@ -282,14 +282,14 @@ Oskari.clazz.define(
             var me = this,
                 funcs = this._allowedFunctions;
             var bindFunction = function(name) {
-                channel.bind(name, function (trans) {
+                channel.bind(name, function (trans, params) {
                     if (!me._domainMatch(trans.origin)) {
                         throw {
                             error: 'invalid_origin',
                             message: 'Invalid origin: ' + trans.origin
                         };
                     }
-                    return me._availableFunctions[name].apply(me);
+                    return me._availableFunctions[name].apply(me, params);
                 });
             }
 

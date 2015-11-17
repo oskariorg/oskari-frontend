@@ -16,6 +16,7 @@ Oskari.clazz.define(
             multipleSymbolizers: false,
             namedLayersAsArray: true
         });
+        this._style = OpenLayers.Util.applyDefaults({}, OpenLayers.Feature.Vector.style['default']);
         this._layers = {};
     }, {
         /**
@@ -206,14 +207,16 @@ Oskari.clazz.define(
                     olLayer.setOpacity(opacity);
                     isOlLayerAdded = false;
                 }
-                if (options.replace && options.replace !== null && options.replace === 'replace') {
+                if (options.clearPrevious === true) {
                     olLayer.removeAllFeatures();
                     olLayer.refresh();
                 }
-                if (options.featureStyle && options.featureStyle !== null) {
+
+                if (options.featureStyle) {
+                    me.setDefaultStyle(options.featureStyle);
                     for (i=0; i < feature.length; i++) {
                         featureInstance = feature[i];
-                        featureInstance.style = options.featureStyle;
+                        featureInstance.style = me._style;
                     }
                 }
                 olLayer.addFeatures(feature);
@@ -269,6 +272,35 @@ Oskari.clazz.define(
 
                     mapmoveRequest = me._sandbox.getRequestBuilder('MapMoveRequest')(center.x, center.y, bounds, false);
                     me._sandbox.request(me, mapmoveRequest);
+                }
+            }
+        },
+        /**
+         * @method setDefaultStyle
+         *
+         * @param {Object} styles. If not given, will set default styles
+         */
+        setDefaultStyle : function(styles) {
+            var me = this;
+            //overwriting default style if given
+            if(styles) {
+                if(Oskari.util.keyExists(styles, 'fill.color')) {
+                    me._style.fillColor = styles.fill.color;
+                }
+                if(Oskari.util.keyExists(styles, 'stroke.color')) {
+                    me._style.strokeColor = styles.stroke.color;
+                }
+                if(Oskari.util.keyExists(styles, 'stroke.width')) {
+                    me._style.strokeWidth = styles.stroke.width;
+                }
+                if(Oskari.util.keyExists(styles, 'text.fill.color')) {
+                    me._style.fontColor = styles.text.fill.color;
+                }
+                if(Oskari.util.keyExists(styles, 'text.stroke.color')) {
+                    me._style.labelOutlineColor = styles.text.stroke.color;
+                }
+                if(Oskari.util.keyExists(styles, 'text.stroke.width')) {
+                    me._style.getText().labelOutlineWidth = styles.text.stroke.width;
                 }
             }
         },
