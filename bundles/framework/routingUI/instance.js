@@ -138,6 +138,15 @@ function () {
     },
 
     /**
+     * @method  @private __isPopupVisible is popup visible
+     * @return {Boolean} is visible
+     */
+    __isPopupVisible: function(){
+        var popup = jQuery('.tools_routing_selection:visible');
+        return popup.length>0;
+    },
+
+    /**
      * eventHandlers event handlers
      */
     eventHandlers: {
@@ -145,6 +154,11 @@ function () {
             if (!this.toolActive) {
                 return;
             }
+
+            if(!this.__isPopupVisible()) {
+                return;
+            }
+
             var me = this,
                 roundToDecimals = 0,
                 conf = me.conf,
@@ -160,7 +174,6 @@ function () {
 
             if (this.countMapClicked === null) {
                 this.countMapClicked += 1;
-
                 this.popup.setStartingPoint(lonlat);
             } else if (this.countMapClicked === 1) {
                 this.countMapClicked = null;
@@ -170,6 +183,9 @@ function () {
         'RouteSuccessEvent': function (event) {
             var me = this,
                 loc = me.localization;
+            if(!me.__isPopupVisible()) {
+                return;
+            }
 
             me.popup.progressSpinner.stop();
             if(event.getSuccess()) {
@@ -248,7 +264,7 @@ function () {
                 content.find('div.walk-distance div.itinerary__content').html(me._formatLenght(itinerary.walkDistance));
 
                 var btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-                btn.setTitle('Näytä reitti');
+                btn.setTitle(loc.routeInstructions.showRoute);
                 btn.setHandler(function() {
                     var routeColorIndex = index;
                     if(index>me.routeColors.length-1) {
@@ -281,7 +297,14 @@ function () {
         style.strokeColor = color;
         style.strokeWidth = 5;
         style.strokeOpacity = 0.7;
-        this.sandbox.postRequestByName(rn, [geom, 'GeoJSON', null, null, 'replace', true, style, false]);
+        this.sandbox.postRequestByName(rn, [geom, {
+            layerId: null,
+            replace: 'replace',
+            layerOptions: null,
+            centerTo: false,
+            attributes: null,
+            featureStyle: style
+        }]);
     },
 
 

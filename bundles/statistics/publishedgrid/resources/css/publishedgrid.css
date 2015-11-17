@@ -3,6 +3,6 @@
   height: 27px;
   z-index: 20000; }
   #publishedgridToggle.hidePublishedGrid {
-    background: url(../../../../framework/mapmodule-plugin/resources/images/hide-navigation.png); }
+    background: url(../../../../mapping/mapmodule/resources/images/hide-navigation.png); }
   #publishedgridToggle.showPublishedGrid {
-    background: url(../../../../framework/mapmodule-plugin/resources/images/show-navigation.png); }
+    background: url(../../../../mapping/mapmodule/resources/images/show-navigation.png); }

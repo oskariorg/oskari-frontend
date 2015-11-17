@@ -30,6 +30,7 @@ function() {
 
         me.setEnabled(false);
     },
+    bundleName: 'publishedgrid',
     /**
     * Set enabled.
     * @method setEnabled
@@ -96,7 +97,7 @@ function() {
     getTool: function(pdata) {
         var me = this,
             statsGrid = me.__sandbox.getStatefulComponents().statsgrid,
-            statsGridState = me.hasNestedObj(pdata, 'configuration.publishedgrid.state') ? pdata.configuration.publishedgrid.state : statsGrid.state,
+            statsGridState = Oskari.util.keyExists(pdata, 'configuration.publishedgrid.state') ? pdata.configuration.publishedgrid.state : statsGrid.state,
             layer = me._getStatsLayer();
 
         if(!me.__tool){
@@ -128,12 +129,10 @@ function() {
         if(me.state.enabled && statsGridState) {
             return {
                 configuration: {
-                    mapfull: {
-                        conf: {
-                            plugins: [{ id: this.getTool().id, config: this.getPlugin().getConfig() }]
-                        }
-                    },
                     publishedgrid: {
+                        conf: {
+                            allowClassification: true
+                        },
                         state: statsGridState
                     }
                 }

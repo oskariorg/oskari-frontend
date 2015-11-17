@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "fi",
     "key": "AdminUsers",
     "value": {
@@ -8,34 +9,35 @@ Oskari.registerLocalization({
             "title": "A: Käyttäjät"
         },
         "flyout": {
-            "title": "A: Users",
-            "adminusers" : {
-                "title" : "A: Users",
+            "title": "Käyttäjien ylläpito",
+            "adminusers": {
+                "title": "Käyttäjät",
                 "firstName": "Etunimi",
                 "lastName": "Sukunimi",
                 "user": "Nimimerkki",
                 "pass": "Salasana",
                 "pass_retype": "Salasana uudestaan",
-                "addRole": "Lisää rooli(t)",
+                "addRole": "Valitse rooli(t)",
                 "password_mismatch": "Salasanat eivät täsmää.",
-                "password_too_short": "Salasanan pitää olla vähintään 8 merkkiä.",
-                "form_invalid": "Puuttuvia/vääräarvoisia kenttiä",
+                "password_too_short": "Salasanan on oltava vähintään kahdeksan merkkiä pitkä.",
+                "form_invalid": "Annetut arvot ovat virheellisiä tai puutteellisia.",
                 "field_required": "Kenttä \"{fieldName}\" on pakollinen",
                 "confirm_delete": "Haluatko varmasti poistaa käyttäjän {user}?",
-                "delete_failed": "Poistaminen epäonnistui",
-                "fetch_failed": "Käyttäjien hakeminen epäonnistui",
-                "save_failed": "Save failed",
-                "noMatch": "No results matched",
-                "selectRole": "Select role"
+                "delete_failed": "Käyttäjän poistaminen epäonnistui.",
+                "fetch_failed": "Käyttäjien tietoja ei voitu hakea.",
+                "save_failed": "Tallennus epäonnistui.",
+                "noMatch": "Ei hakutuloksia.",
+                "selectRole": "Valitse rooli"
             },
-            "adminroles" : {
-                "title" : "A: Roles",
-                "newrole" : "Lisää rooli:",
+            "adminroles": {
+                "title": "A: Roolit",
+                "newrole": "Lisää rooli:",
                 "confirm_delete": "Haluatko varmasti poistaa roolin {role}?",
-                "delete_failed": "Poistaminen epäonnistui",
-                "doSave_failed": "Virhe roolin tallentamisessa!"
+                "delete_failed": "Käyttäjän poistaminen epäonnistui.",
+                "doSave_failed": "Roolin tallennus epäonnistui."
             }
         },
         "save": "tallenna"
     }
-});
+}
+);

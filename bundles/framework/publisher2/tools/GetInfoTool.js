@@ -77,10 +77,46 @@ function() {
 
     maxColourValue: 255,
     minColourValue: 0,
-    init: function(data) {
-        if (data && data.metadata && data.metadata.style && data.metadata.style.colourScheme) {
-            this.values.colourScheme = data.metadata.style.colourScheme;
+    eventHandlers: {
+        'Publisher2.ToolEnabledChangedEvent': function (event) {
+            var me = this;
+            var tool = event.getTool();
+            if (tool.getTool().id === me.getTool().id && tool.isStarted() && me.values.colourScheme) {
+                me._sendColourSchemeChangedEvent(me.values.colourScheme);
+            }
         }
+    },
+    init: function(data) {
+        var me = this;
+        if (data && data.configuration && data.configuration.mapfull && data.configuration.mapfull.conf && data.configuration.mapfull.conf.plugins) {
+            var tool = this.getTool();
+            _.each(data.configuration.mapfull.conf.plugins, function(plugin) {
+                if (tool.id === plugin.id && plugin.config && plugin.config.colourScheme) {
+                    me.values.colourScheme = plugin.config.colourScheme;
+                    me._sendColourSchemeChangedEvent(me.values.colourScheme);
+                }
+            });
+        }
+        for (var p in me.eventHandlers) {
+            if (me.eventHandlers.hasOwnProperty(p)) {
+                me.__sandbox.registerForEventByName(me, p);
+            }
+        }
+    },
+    getName: function() {
+        return "Oskari.mapframework.publisher.tool.GetInfoTool";
+    },
+    /**
+     * @method onEvent
+     * @param {Oskari.mapframework.event.Event} event a Oskari event object
+     * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
+     */
+    onEvent: function (event) {
+        var handler = this.eventHandlers[event.getName()];
+        if (!handler) {
+            return;
+        }
+        return handler.apply(this, [event]);
     },
     /**
     * Get tool object.
@@ -166,11 +202,6 @@ function() {
                             }]
                         }
                     }
-                },
-                metadata: {
-                    style: {
-                        colourScheme: me.values.colourScheme || {}
-                    }
                 }
             };
         } else {
@@ -199,7 +230,6 @@ function() {
             prevColour = me.values.colourScheme,
             selectedColour,
             customColourButton;
-
         closeButton.setTitle(me.__instance._localization.BasicView.layout.popup.close);
         closeButton.setHandler(function () {
             popup.close(true);
@@ -604,6 +634,11 @@ function() {
                 me.__plugin.stopPlugin(me.__sandbox);
             }
             me.__mapmodule.unregisterPlugin(me.__plugin);
+        }
+        for (var p in me.eventHandlers) {
+            if (me.eventHandlers.hasOwnProperty(p)) {
+                me.__sandbox.unregisterFromEventByName(me, p);
+            }
         }
     }
 }, {

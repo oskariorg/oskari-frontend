@@ -1,11 +1,12 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "fi",
     "key": "findbycoordinates",
     "value": {
-        "title": "Koordinaateilla haku",
-        "desc": "Koordinaateilla haku",
+        "title": "Etsi lähin osoite",
+        "desc": "NOT TRANSLATED",
         "tool": {
-            "tooltip": "Hae lähin osoite osoittamalla karttaa"
+            "tooltip": "Klikkaa pistettä kartalla. Hakutuloksena saat pisteen koordinaatit ja pistettä lähimmän osoitteen."
         },
         "resultsTitle": "Hakutulokset",
         "grid": {
@@ -13,4 +14,5 @@ Oskari.registerLocalization({
             "coordinates": "Koordinaatit"
         }
     }
-});
+}
+);

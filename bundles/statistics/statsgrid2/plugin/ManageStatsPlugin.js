@@ -860,7 +860,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 form = Oskari.clazz.create(
                     'Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
                     me._sandbox, me._locale, me.regionCategories,
-                    me._layer.getWmsName(), me._layer.getId(),
+                    me._layer.getLayerName(), me._layer.getId(),
                     me._selectedRegionCategory);
 
             container.find('.selectors-container').hide();
@@ -1673,7 +1673,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             me.statsService.sendStatsData(me._layer, {
                 CHECKED_COUNT: this.getItemsByGroupingKey('checked').length, // how many municipalities there is checked
                 CUR_COL: curCol,
-                VIS_NAME: me._layer.getWmsName(), //"ows:kunnat2013",
+                VIS_NAME: me._layer.getLayerName(), //"ows:kunnat2013",
                 VIS_ATTR: me._layer.getFilterPropertyName(), //"kuntakoodi",
                 VIS_CODES: munArray,
                 COL_VALUES: statArray
@@ -2291,7 +2291,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             var layer = this.getLayer(),
                 categoryMappings = layer.getCategoryMappings();
 
-            layer.setWmsName(categoryMappings.wmsNames[category]);
+            layer.setLayerName(categoryMappings.wmsNames[category]);
             layer.setFilterPropertyName(categoryMappings.filterProperties[category]);
         },
 

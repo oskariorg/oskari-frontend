@@ -155,7 +155,8 @@ Oskari.clazz.define(
                     sandbox, this.plugins['Oskari.userinterface.Flyout']),
                 addSearchResultActionRequestHandler: Oskari.clazz.create(
                     'Oskari.mapframework.bundle.search.request.SearchResultActionRequestHandler',
-                    sandbox, this.plugins['Oskari.userinterface.Flyout'])
+                    sandbox, this.plugins['Oskari.userinterface.Flyout']),
+                searchRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.search.request.SearchRequestHandler', this.service)
             };
             sandbox.addRequestHandler(
                 'Search.AddTabRequest',
@@ -166,6 +167,9 @@ Oskari.clazz.define(
             sandbox.addRequestHandler(
                 'Search.RemoveSearchResultActionRequest',
                 this.requestHandlers.addSearchResultActionRequestHandler);
+            sandbox.addRequestHandler(
+                'SearchRequest',
+                this.requestHandlers.searchRequestHandler);
         },
 
         /**

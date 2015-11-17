@@ -1,8 +1,10 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "fi",
     "key": "GeometryEditor",
     "value": {
-        "title": "Geometriaeditori",
+        "title": "Geometrian muokkaus",
         "desc": ""
     }
-});
+}
+);

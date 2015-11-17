@@ -136,7 +136,7 @@ div.basic_publisher {
 
     > div.content {
         overflow: auto;
-        height: calc(100% - 108px);
+        height: unquote("calc(100% - 108px)");
     }
 
     > div.header {

@@ -3,35 +3,35 @@ Oskari.registerLocalization(
     "lang": "en",
     "key": "Publisher2",
     "value": {
-        "tile" : {
+        "tile": {
             "title": "Map publishing"
         },
-        "flyout" : {
-            "title": "Map publishing"
+        "flyout": {
+            "title": "Create Embedded Map"
         },
         "published": {
-            "title": "Map created to embed",
-            "desc": "Map has been created. Embed the map by adding the HTML code below to your website and you have the map on your website:"
+            "title": "Embedded Map Saved",
+            "desc": "The embedded map has been saved. Publish it on your website by copying this code to the html code on your website:"
         },
         "edit": {
             "popup": {
-                "title": "Opening the embedded map for editing",
-                "msg": "Updating the data for the previously embedded map."
+                "title": "Opening embedded map…",
+                "msg": "Updating embedded map…"
             }
         },
         "BasicView": {
-            "title": "Embed the Map",
-            "titleEdit": "Edit the Embedded Map",
+            "title": "Create Embedded Map",
+            "titleEdit": "Update Embedded Map",
             "domain": {
-                "title": "Website",
-                "label": "Website for embedded map",
-                "placeholder": "Website address without the prefix http or www.",
-                "tooltip": "Give the domain name of the website e.g. the url-address of the website without the prefixes http or www or the address of the subpage. For example: homepage.com."
+                "title": "Basic settings",
+                "label": "Website address (without http and www prefixes)",
+                "placeholder": "Website address",
+                "tooltip": "Type a website URL-address without prefixes or a subpage address. For example: homepage.com."
             },
             "name": {
-                "label": "The name of the map",
-                "placeholder": "required",
-                "tooltip": "Give your map a descriptive name. Note that the name should be the same language as the map user interface."
+                "label": "Map name (required)",
+                "placeholder": "Map name",
+                "tooltip": "Type a map name. Please note the language used on the map."
             },
             "language": {
                 "label": "Language",
@@ -40,43 +40,43 @@ Oskari.registerLocalization(
                     "sv": "Swedish",
                     "en": "English"
                 },
-                "tooltip": "Select the laguage for the map user interface and data shown on the map."
+                "tooltip": "Select a languge to be used on the map. It affects the user interface and text on the map."
             },
             "size": {
-                "label": "Map preview",
-                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
+                "label": "Map Size",
+                "tooltip": "Select preview mode."
             },
             "maptools": {
                 "label": "Tools",
-                "tooltip": "Select the tools to be shown on the map. You can see the tool placement in the map preview.",
+                "tooltip": "Select available map tools. Check a placement in the map preview.",
                 "ScaleBarPlugin": "Scale bar",
                 "IndexMapPlugin": "Index map",
                 "PanButtons": "Pan tool",
                 "Portti2Zoombar": "Zoom bar",
-                "MyLocationPlugin": "Center to user's location",
-                "ControlsPlugin": "Pan the map by dragging",
-                "SearchPlugin": "Addess and place name search",
+                "MyLocationPlugin": "Center to location",
+                "ControlsPlugin": "Pan by mouse",
+                "SearchPlugin": "Place search",
                 "FeaturedataPlugin": "Feature data",
-                "GetInfoPlugin": "Query tool for feature data",
+                "GetInfoPlugin": "Feature query tool",
                 "PublisherToolbarPlugin": "Map tools",
-                "selectDrawLayer": "Select layer for new features",
-                "LayerSelectionPlugin":"Map layers menu",
+                "selectDrawLayer": "Select map layer",
+                "LayerSelectionPlugin": "Map layers menu",
                 "toolbarToolNames": {
-                    "history_back": "Move backwards",
-                    "history_forward": "Move forward",
+                    "history_back": "Move to previous view",
+                    "history_forward": "Move to next view",
                     "measureline": "Measure distance",
                     "measurearea": "Measure area",
                     "drawTools": "Drawing tools",
-                    "point": "Allow users to add point features.",
-                    "line": "Allow users to add line features.",
-                    "area": "Allow users to add area features."
+                    "point": "Adding own places",
+                    "line": "Allow point features",
+                    "area": "Allow line features"
                 },
                 "layers": {
-                    "add": "Create new layer for new features.",
+                    "add": "Allow area features",
                     "label": "Map Layers",
-                    "addselect": "Add a drawing layer to the map",
+                    "addselect": "Add a drawing layer to map layers.",
                     "defaultLayer": "(Default map layer)",
-                    "useAsDefaultLayer": "Use as the default layer."
+                    "useAsDefaultLayer": "Use as default"
                 },
                 "myplaces": {
                     "label": "My map layers"
@@ -86,20 +86,19 @@ Oskari.registerLocalization(
                     "selectAsBaselayer": "Select as baselayer"
                 }
             },
-
             "toollayout": {
                 "label": "Tool Placement",
-                "tooltip": "Select the placement for the tool to be shown on the map.",
+                "tooltip": "Select a placement for map tools.",
                 "lefthanded": "Lefthanded",
                 "righthanded": "Righthanded",
-                "userlayout": "Custom layout",
+                "userlayout": "Custom placement",
                 "usereditmode": "Start editing",
                 "usereditmodeoff": "Finish editing"
             },
             "data": {
-                "label": "Statistics",
-                "tooltip": "Show map statistics",
-                "grid": "Show statistics",
+                "label": "Thematic maps",
+                "tooltip": "Show thematic maps on the map.",
+                "grid": "Show thematic data in table",
                 "allowClassification": "Allow classification"
             },
             "layout": {
@@ -107,7 +106,7 @@ Oskari.registerLocalization(
                 "fields": {
                     "colours": {
                         "label": "Color scheme",
-                        "placeholder": "Select the color scheme.",
+                        "placeholder": "Color scheme",
                         "buttonLabel": "Select",
                         "light_grey": "Light gray",
                         "dark_grey": "Dark gray",
@@ -115,11 +114,11 @@ Oskari.registerLocalization(
                         "red": "Red",
                         "green": "Green",
                         "yellow": "Yellow",
-                        "custom": "Own color scheme",
+                        "custom": "My colour scheme",
                         "customLabels": {
                             "bgLabel": "Identifier background",
                             "titleLabel": "Identifier text",
-                            "headerLabel": "Header text",
+                            "headerLabel": "Placename",
                             "iconLabel": "Icon",
                             "iconCloseLabel": "Dark",
                             "iconCloseWhiteLabel": "Light"
@@ -143,9 +142,9 @@ Oskari.registerLocalization(
                     "title": "Select Color Scheme",
                     "close": "Close",
                     "gfiDialog": {
-                        "title": "Feature info",
+                        "title": "Feature Info",
                         "featureName": "Preview",
-                        "featureDesc": "The color scheme only defines the color of the popup windows for the feature info and map layer selection."
+                        "featureDesc": "The selected color scheme affects a graphic layout of feature and map layer popup info wimdows."
                     }
                 }
             },
@@ -155,63 +154,63 @@ Oskari.registerLocalization(
             },
             "buttons": {
                 "save": "Save",
-                "saveNew": "Save new",
+                "saveNew": "Save new map",
                 "ok": "OK",
-                "replace": "Replace",
+                "replace": "Update map",
                 "cancel": "Cancel",
-                "add": "Add a map layer"
+                "add": "Add map layer"
             },
             "confirm": {
                 "replace": {
-                    "title": "Do you wish to replace the embedded map?",
-                    "msg": "The changes into the previously embedded map will be shown without delay on the map. You do not need to add the HTML-code to your website again."
+                    "title": "Do you want to update this map?",
+                    "msg": "Updates are shown immediately on the map. You do not need to update the html code on your website."
                 }
             },
             "layerselection": {
-                "label": "Map layers",
-                "info": "Select the background map layer. You can select the default background map layer in the map preview.",
-                "tooltip": "The background map layer is shown at the bottom layer of the map. Only one background map layer can be shown at a time. The user can change the background map if there is more map layers selected to background maps. The default backgound map layer can be selected in the map preview.",
-                "promote": "Do you wish to show also aerial images?"
+                "label": "Map Layers",
+                "info": "Select the map layers to show on the published map",
+                "tooltip": "The background layer is shown at the bottom layer on the map. If you select several background maps, only one of them can be visible at a time. User can select a background layer in the user interface. Please select a default background map in the map preview.",
+                "promote": "Do you want to show also orthophotos on the map?"
             },
-            "preview": "The embedded map preview",
+            "preview": "Map preview",
             "location": "Location and zoom level",
             "zoomlevel": "Zoom level",
             "help": "Help",
             "error": {
                 "title": "Error",
-                "size": "Error in size definitions.",
-                "domain": "The website is required.",
-                "domainStart": "Give the website address without prefixes http and www.",
-                "name": "The name of the map is required.",
+                "size": "The map size is invalid. Width must be at least 30 pixels and height at least 20 pixels. Use a point as a decimal separator.",
+                "domain": "The website is required. Please type an address and try again.",
+                "domainStart": "The website is invalid. Please type an address without http or www prefixes and try again.",
+                "name": "The map name is required. Plese type a name and try again.",
                 "nohelp": "The user guide is not available.",
-                "saveFailed": "Embedding the map failed. Please try again later.",
-                "nameIllegalCharacters": "The name of the map contains illegal characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces and hyphens.",
-                "domainIllegalCharacters": "The name of the website contains illegal characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces and hyphens."
+                "saveFailed": "The embedded map could not be saved.",
+                "nameIllegalCharacters": "The map name contains illegal characters. Allowed characters are letters (a-z, A-Z, å, ä, ö, Å, Ä, Ö), numbers (0-9), spaces and hyphens (-). Please correct the name and try again.",
+                "domainIllegalCharacters": "The website address contains illegal characters. Allowed characters are letters (a-z, A-Z, å, ä, ö, Å, Ä, Ö), numbers (0-9) and special characters (-, _, ., !, ~, *, ' and ()). Please correct the address and try again."
             }
         },
         "NotLoggedView": {
-            "text": "You can create embedded maps after you have logged in the service.",
+            "text": "Welcome to publish embedded map on your website. Please log in or register first.",
             "signup": "Log in",
-            "signupUrl": "/web/en/login",
+            "signupUrl": "/web/fi/login",
             "register": "Register",
-            "registerUrl": "/web/en/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "registerUrl": "/web/fi/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
         },
         "StartView": {
-            "text": "You can create the map and embed it to your own website.",
-            "touLink": "Show Terms of use for Embedded maps",
-            "layerlist_title": "Embeddable map layers",
-            "layerlist_empty": "Selected map layers cannot be published in a embedded map. Check the rights to publish in the menu \"Selected Map Layers\" before you start creating the map.",
-            "layerlist_denied": "The map layer cannot be published in a embedded map.",
-            "denied_tooltip": "The data producers have not granted permission to publish selected map layers in a embedded map. Check the rights to publish in the menu \"Selected Map Layers\" before you start creating the map.",
-            "myPlacesDisclaimer": "NB. You are publishing your own map layer.",
+            "text": "Welcome to publish embedded map on your website.",
+            "touLink": "Show Terms of Use",
+            "layerlist_title": "Publishable map layers open in map window:",
+            "layerlist_empty": "No publishable map layers are open in the map window. Please check publishable map layers in the Selected Layers menu.",
+            "layerlist_denied": "Unpublishable map layers open in map window:",
+            "denied_tooltip": "These map layers are not publishable in embedded maps. Data producers have not granted permissions for publishing. Please check publishable map layers in the Selected Layers menu.",
+            "myPlacesDisclaimer": "NOTE! If you are using this map layer in an embedded map, the map layer will be published.",
             "buttons": {
                 "continue": "Continue",
-                "continueAndAccept": "Accept the Terms of Use and continue",
+                "continueAndAccept": "Accept and continue",
                 "cancel": "Cancel",
                 "close": "Close"
             },
             "tou": {
-                "notfound": "The Terms of Use could not be found.",
+                "notfound": "Terms of Use could not be found.",
                 "reject": "Reject",
                 "accept": "Accept"
             }
@@ -222,8 +221,8 @@ Oskari.registerLocalization(
             "hidden": "The map layer is temporarily hidden.",
             "rights": {
                 "can_be_published_map_user": {
-                    "label": "The map layer can be published in a embedded map.",
-                    "tooltip": "The map layer can be published in a embedded map. The weekly number of users can be limited."
+                    "label": "Publishable",
+                    "tooltip": "The map layer is publishable in embedded maps. The weekly user amount can be limited."
                 }
             }
         },
@@ -232,7 +231,7 @@ Oskari.registerLocalization(
                 "publishable": "Publishable"
             },
             "tooltips": {
-                "publishable": "Show only publishable map layers"
+                "publishable": "Show only publishable map layers."
             }
         }
     }

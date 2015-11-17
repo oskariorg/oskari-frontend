@@ -74,7 +74,6 @@ function() {
         var me = this,
             tool = me.getTool(),
             sandbox = me.__sandbox;
-
         //state actually hasn't changed -> do nothing
         if (me.state.enabled !== undefined && me.state.enabled !== null && enabled === me.state.enabled) {
             return;
@@ -142,7 +141,7 @@ function() {
      */
     getExtraOptions: function (toolContainer) {
         var me = this;
-            backgroundLayerSelector = me._templates.backgroundLayerSelector;
+            backgroundLayerSelector = me._templates.backgroundLayerSelector.clone();
         if(!me._backgroundLayerSelector) {
             backgroundLayerSelector.find('.header').html(me.__loc.layerselection.info);
             me._backgroundLayerSelector = backgroundLayerSelector;
@@ -152,7 +151,7 @@ function() {
                 me._addLayer(layer);
             }
         }
-        return backgroundLayerSelector;
+        return me._backgroundLayerSelector;
     },
     /**
      * @method hasPublishRight
@@ -243,7 +242,6 @@ function() {
             layer.selected = true;
         }
         input.change(closureMagic(layer));
-
         me._backgroundLayerSelector.find('.layers').append(layerDiv);
     },
     /**
@@ -343,6 +341,12 @@ function() {
             if (me.eventHandlers.hasOwnProperty(p)) {
                 me.__sandbox.unregisterFromEventByName(me, p);
             }
+        }
+        if(me.__plugin) {
+            if(me.__sandbox){
+                me.__plugin.stopPlugin(me.__sandbox);
+            }
+            me.__mapmodule.unregisterPlugin(me.__plugin);
         }
     },
     /**

@@ -1092,22 +1092,35 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         /**
          * @method setNumericField
          * @param {String} field Name of the column
+         * @param {integer}
          * Adds column renderers for numeric columns, each renderer rendering
          * the numbers with the highest decimal count found in the column.
          */
-        setNumericField: function (field) {
+        setNumericField: function (field, fixedCount) {
             var me = this,
                 decimalCount = -1;
             this.setColumnValueRenderer(
                 field,
                 function (value) {
-                    var parsed = parseFloat(value);
-                    if (!isNaN(parsed)) {
+                    // Try 1st string - filter out values with leading 0 and no . in it
+                    var parsedString = String(value),
+                        parsed = parseFloat(value);
+                    if(parsedString){
+                        if(parsedString.indexOf("0") === 0 && parsedString.indexOf(".") === -1 ){
+                            return value;
+                        }
+                    }
+                    if (Oskari.util.isNumber(value)) {
                         if (decimalCount === -1) {
                             var fieldValues = _.pluck(me.getDataModel().data, field);
                             decimalCount = Oskari.util.decimals(fieldValues);
                         }
-                        return parsed.toFixed(decimalCount);
+                        if(fixedCount){
+                            if(!isNaN(fixedCount) && fixedCount < decimalCount){
+                                decimalCount = fixedCount;
+                            }
+                        }
+                        return parseFloat(parsed.toFixed(decimalCount));
                     } else {
                         return value;
                     }

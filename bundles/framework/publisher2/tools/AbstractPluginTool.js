@@ -159,30 +159,6 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     isDefaultTool: function() {
         return false;
     },
-   /**
-    * Check, if nested key exists
-    * @method hasNestedObj
-    * @params {}  object
-    * @params String object path
-    * @public
-    *
-    * @returns {Boolean}
-    */
-    hasNestedObj: function(obj, sobj) {
-       var tmpObj = obj,
-           cnt = 0,
-           splits = sobj.split('.');
-
-       for (i=0; tmpObj && i < splits.length; i++) {
-           if (splits[i] in tmpObj) {
-               tmpObj = tmpObj[splits[i]];
-               cnt++;
-           }
-       }
-       return cnt === splits.length;
-
-
-   },
     /**
     * Whether or not to create a panel and checkbox for the tool in the tools' panel.
     * @method isShownInToolsPanel
