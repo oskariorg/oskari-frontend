@@ -13,6 +13,7 @@
  * - handleEvent can no longer be used to unregister listener.
  * - Added unregisterEventHandler() for unregistering listeners (previously done with handleEvent without giving listener function).
  * - Added log() for debug logging without the need to check if window.console.log() exists
+ * - function-calls can now have parameters as first argument array to allow multiple (treated as a success callback instead if type is function)
  * 
  * @return {Object}  reference to postMessage channel implementation
  */
@@ -178,13 +179,20 @@
             // connect and setup allowed functions
             var __bindFunctionCall = function(name) {
                 /**
-                 * Any of the allowed functions
+                 * Any of the allowed functions. Arguments are shifted if params is a function so there's no need to give an empty params array.
+                 * @param {Array} params optional array of parameters for the function. Treated as success callback if a function instead.
                  * @param {function} success Callback function
                  * @param {function} error   Error handler
                  */
-                RPC_API[name] = function (success, error) {
+                RPC_API[name] = function (params, success, error) {
+                    if(typeof params === 'function') {
+                        error = success;
+                        success = params;
+                        params = [];
+                    }
                     channel.call({
                         method: name,
+                        params: params,
                         success: success,
                         error: error || defaultErrorHandler
                     });
