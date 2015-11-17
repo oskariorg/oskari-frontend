@@ -60,7 +60,7 @@
       <oskari-statsgrid locale="[[locale]]" language="[[language]]" ajax-url="[[ajaxUrl]]"
         sources="{{sources}}" selected-indicators="{{selectedIndicators}}" selected-layer="{{selectedLayer}}"
         layer-info="{{layerInfo}}" region-info="{{regionInfo}}" user-indicators="[[userIndicators]]"
-        selected-indicator-key="{{selectedIndicatorKey}}" sandbox="{{sandbox}}"
+        selector-selected-indicator-key="{{selectorSelectedIndicatorKey}}" sandbox="{{sandbox}}"
         hidden$="[[!showGrid]]" id="statsgrid""></oskari-statsgrid>
     </div>
     <div hidden$="[[!showUserIndicatorView]]">
@@ -132,7 +132,7 @@
               "notify": true,
               "value": false
           },
-          "selectedIndicatorKey": {
+          "selectorSelectedIndicatorKey": {
               "type": String,
               "notify": true
           },
@@ -323,7 +323,7 @@
               indicatorId: this.indicatorId,
               selectors: values
           });
-          this.selectedIndicatorKey = this.getIndicatorKey(this.datasourceId, this.indicatorId,
+          this.selectorSelectedIndicatorKey = this.getIndicatorKey(this.datasourceId, this.indicatorId,
               this.selectedLayer, this.getSelectorsKey());
       }
     });
