@@ -49,6 +49,10 @@
           "ajaxUrl": String,
           "locale": Object,
           "language": String,
+          "sandbox": {
+              "type": Object,
+              "notify": true
+          },
           "sources": {
               "type": Object,
               "notify": true
@@ -109,6 +113,41 @@
           "sortChanged(sortColumnIdx, sortDirection)",
           "selectedIndicatorChanged(selectedIndicatorKey, cache)"
       ],
+      "showIndicatorOnMap": function(cacheKey, index, header) {
+          var me = this,
+              eventBuilder = me.sandbox.getEventBuilder('StatsGrid.StatsDataChangedEvent'),
+              indicatorValues = me.cache[cacheKey],
+              cur_col = {
+                  // TODO: This is a legacy code workaround. Now unnecessary, but the classification plugin wants it.
+                  field: "indicator: " + header.title
+              },
+              vis_name = me.selectedLayer,
+              vis_attr = me.layerInfo.idTag,
+              vis_codes = Object.keys(indicatorValues),
+              col_values = vis_codes.map(function(regionKey) {
+                  return indicatorValues[regionKey];
+              });
+          if (eventBuilder) {
+              // CUR_COL:"indicator..." , VIS_NAME: "ows:kunnat2013", VIS_ATTR: "kuntakoodi", VIS_CODES: munArray, COL_VALUES: statArray
+              var data = {
+                  CUR_COL: cur_col,
+                  VIS_NAME: vis_name,
+                  VIS_ATTR: vis_attr,
+                  VIS_CODES: vis_codes,
+                  COL_VALUES: col_values
+              },
+              // Oskari.mapframework.domain.WmsLayer
+              // layertype STATS
+                  layer;
+              _.forEach(me.sandbox.findAllSelectedMapLayers(), function (oneLayer) {
+                  if (oneLayer.getLayerName() === me.selectedLayer) {
+                      layer = oneLayer;
+                  }
+              });
+              var event = eventBuilder(layer, data);
+              me.sandbox.notifyAll(event);
+          }
+      },
       "onSort": function(event) {
           var id = event.target.id,
             index = event.detail.index,
@@ -116,6 +155,8 @@
           if (id === "indicator-data-grid") {
               // The statistics summary grid is not sortable.
               this.sortBasedOnColumn(index);
+              // This also selects the indicator into the map.
+              this.showIndicatorOnMap(header.id, index, header);
           }
       },
       "onDelete": function(event) {
@@ -295,6 +336,8 @@
           return prefix[key] || key;
       },
       "deleteIndicator": function(index) {
+          // FIXME: When indicators are deleted, the selected indicator on the map should be changed also
+          //        so that it will not be an indicator that was deleted.
           this.splice("rowHeaders", index + 1, 1);
           this.splice("selectedIndicators", index, 1);
       },
@@ -374,6 +417,11 @@
           });
           this.set("statsrows", summaryRows);
           this.set("rows", newRows);
+          if (me.selectedIndicators.length === 1) {
+              // If this is the first added indicator, or the only indicator left, we will update the map.
+              var theOnlyIndicator = me.selectedIndicators[0];
+              me.showIndicatorOnMap(theOnlyIndicator.id, 1, this.rowHeaders[1]);
+          }
       },
       "getCacheKey": function(datasourceId, indicatorId, selectedLayer, selectorsString) {
           return datasourceId + ":" + indicatorId + ":" + selectedLayer + ":" + selectorsString;

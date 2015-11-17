@@ -61,6 +61,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             userIndicatorsService.init();
             this.userIndicatorsService = userIndicatorsService;
 
+            var statsService = Oskari.clazz.create(
+                'Oskari.statistics.bundle.statsgrid.StatisticsService',
+                me.sandbox
+            );
+            sandbox.registerService(statsService);
+            me.statsService = statsService;
+                
             // Register classification plugin for map.
             var classifyPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin', {
                 'state': me.getState()
