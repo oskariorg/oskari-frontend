@@ -223,7 +223,7 @@ Oskari.clazz.define(
 
                 wms = {
                     'URL' : me.ajaxUrl + '&LAYERID=' + layer.getId(),
-                    'LAYERS' : layer.getWmsName(),
+                    'LAYERS' : layer.getLayerName(),
                     'FORMAT' : 'image/png'
                 },
 
@@ -632,7 +632,7 @@ Oskari.clazz.define(
 
             var maplayer = this._layers[layer.getId()];
             /* This should free all memory */
-            if (mapLayer !== null && mapLayer !== undefined) {
+            if (maplayer !== null && maplayer !== undefined) {
                 this.getMapModule().removeLayer(maplayer, layer);
                 delete this._layers[layer.getId()];
             }

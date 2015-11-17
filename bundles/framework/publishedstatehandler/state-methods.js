@@ -17,19 +17,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.publishedstatehandler.Publishe
             // dont do anything if we dont have a saved state
             return [];
         }
-        var components = this.sandbox.getStatefulComponents(),
-            loopedComponents = [],
-            id;
-        for (id in state) {
-            if (state.hasOwnProperty(id)) {
-                if (components[id] && components[id].setState) {
-                    // safety check that we have the component in current config
-                    components[id].setState(state[id].state);
-                }
-                loopedComponents.push(id);
-            }
-        }
-        return loopedComponents;
+        this.sandbox.useState(state);
     },
 
     /**

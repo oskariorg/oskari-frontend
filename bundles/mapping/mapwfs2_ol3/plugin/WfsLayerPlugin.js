@@ -988,11 +988,12 @@ Oskari.clazz.define(
          * @param {Object} layer
          */
         removeMapLayerFromMap: function (layer) {
-            var me = this,
-                removeLayer = this._layers[layer.getId()];
+            var layerId = layer.getId(),
+                removeLayer = this._layers[layerId];
             if (removeLayer) {
-                me.getMap().removeLayer(removeLayer);
+                this.getMap().removeLayer(removeLayer);
             }
+            delete this._layers[layerId];
         },
 
         /**

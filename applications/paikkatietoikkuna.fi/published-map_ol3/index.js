@@ -67,6 +67,7 @@ jQuery(document).ready(function() {
 
         function start(appSetup, appConfig, cb) {
             var app = Oskari.app;
+            /*
         var plugins = appConfig.mapfull.conf.plugins,
             wfs;
         for (var i = 0, pLen = plugins.length; i < pLen; ++i) {
@@ -87,13 +88,12 @@ jQuery(document).ready(function() {
                 "disconnectTime": 30000
             };
         }
-
+*/
             app.setApplicationSetup(appSetup);
             app.setConfiguration(appConfig);
             app.startApplication(function(startupInfos) {
-              var instance = startupInfos.bundlesInstanceInfos.mapfull.bundleInstance;
               if (cb) {
-                  cb(instance);
+                  cb();
               }
     /*
                  var ugStartup = {
@@ -147,11 +147,6 @@ jQuery(document).ready(function() {
         jQuery.ajax({
             type : 'GET',
             dataType : 'json',
-            beforeSend : function(x) {
-                if (x && x.overrideMimeType) {
-                    x.overrideMimeType("application/j-son;charset=UTF-8");
-                }
-            },
             data : getAppSetupParams,
             url : ajaxUrl + 'action_route=GetAppSetup&noSavedState=true',
             success : function(app) {
@@ -159,8 +154,8 @@ jQuery(document).ready(function() {
                   var appSetup = {
                     "startupSequence": app.startupSequence
                   };
-                  start(appSetup, app.configuration, function(instance) {
-                        var sb = instance.getSandbox();
+                  start(appSetup, app.configuration, function() {
+                        var sb = Oskari.getSandbox();
                         gfiParamHandler(sb);
                     });
                 } else {
