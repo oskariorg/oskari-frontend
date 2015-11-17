@@ -76,16 +76,25 @@ div.mapplugin.indexmap {
   ol3 specific
  */
 .ol-overviewmap .ol-overviewmap-map {
-    border: 1px solid #7b98bc;
+    border: 1px solid #3c3c3c;
     height: 150px;
-    margin: 2px;
+    margin: -1px;
     width: 150px;
+    margin-bottom: -46px;
 }
 .ol-overviewmap .ol-overviewmap-map, .ol-overviewmap button {
     display: inline-block;
 }
 .ol-overviewmap:not(.ol-collapsed) {
     background: rgba(255,255,255,.8);
+    width: 150px;
+    height: 150px;
+}
+
+.ol-overviewmap.ol-unselectable.ol-control:not(.ol-collapsed) {
+  width: 150px;
+  height: 150px;
+  margin-bottom: -46px;
 }
 
 .ol-overviewmap {
@@ -94,7 +103,7 @@ div.mapplugin.indexmap {
     bottom: .5em;
     */
     margin-right: 46px;
-    margin-bottom: -46px;
+    margin-top: 10px;
 }
 .ol-overviewmap.ol-collapsed .ol-overviewmap-map, .ol-overviewmap.ol-uncollapsible button {
     display: none;
