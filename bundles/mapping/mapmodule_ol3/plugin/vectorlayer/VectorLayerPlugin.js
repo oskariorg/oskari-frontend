@@ -21,11 +21,9 @@ Oskari.clazz.define(
             radius: 4,
             textScale: 1.3,
             textOutlineColor: 'rgba(255,255,255,1)',
-            textColor: 'rgba(0,0,0,1)',
-            lineDash: [5]
+            textColor: 'rgba(0,0,0,1)'
         };
-        this._styleTypes = ['default', 'feature', 'layer'];
-        this._styles = {};
+        this._style = {};
         this._layers = {};
     }, {
         /**
@@ -197,7 +195,7 @@ Oskari.clazz.define(
                 if (options.featureStyle) {
                    me.setDefaultStyle(options.featureStyle);
                     _.forEach(features, function (feature) {
-                        feature.setStyle(options.featureStyle);
+                        feature.setStyle(me._style);
                     });
                 }
 
@@ -351,88 +349,64 @@ Oskari.clazz.define(
          */
         setDefaultStyle : function(styles) {
             var me = this;
-            //setting defaultStyle
-            _.each(me._styleTypes, function (s) {
-                me._styles[s] = new ol.style.Style({
-                    fill: new ol.style.Fill({
-                      color: me._defaultStyle.fillColor
-                    }),
-                    stroke: new ol.style.Stroke({
-                      color: me._defaultStyle.strokeColor,
-                      width: me._defaultStyle.width
-                    }),
-                    image: new ol.style.Circle({
-                      radius: me._defaultStyle.radius,
-                      fill: new ol.style.Fill({
-                        color: me._defaultStyle.strokeColor
-                      })
-                    }),
-                    text: new ol.style.Text({
-                         scale: me._defaultStyle.textScale,
-                         fill: new ol.style.Fill({
-                           color: me._defaultStyle.textColor
-                         }),
-                         stroke: new ol.style.Stroke({
-                           color: me._defaultStyle.textOutlineColor,
-                           width: me._defaultStyle.width
-                         })
-                      })
-                });
+            //create defaultStyle
+            me._style = new ol.style.Style({
+                fill: new ol.style.Fill({
+                  color: me._defaultStyle.fillColor
+                }),
+                stroke: new ol.style.Stroke({
+                  color: me._defaultStyle.strokeColor,
+                  width: me._defaultStyle.width
+                }),
+                image: new ol.style.Circle({
+                  radius: me._defaultStyle.radius,
+                  fill: new ol.style.Fill({
+                    color: me._defaultStyle.strokeColor
+                  })
+                }),
+                text: new ol.style.Text({
+                     scale: me._defaultStyle.textScale,
+                     fill: new ol.style.Fill({
+                       color: me._defaultStyle.textColor
+                     }),
+                     stroke: new ol.style.Stroke({
+                       color: me._defaultStyle.textOutlineColor,
+                       width: me._defaultStyle.width
+                     })
+                  })
             });
-            //overwriting default styles if given
-            if(styles) {
-                _.each(styles, function (style, styleType) {
-                    if(me.hasNestedObj(style, 'fill.color')) {
-                        me._styles[styleType].getFill().setColor(style.fill.color);
-                    }
-                    if(me.hasNestedObj(style, 'stroke.color')) {
-                        me._styles[styleType].getStroke().setColor(style.stroke.color);
-                    }
-                    if(me.hasNestedObj(style, 'stroke.width')) {
-                        me._styles[styleType].getStroke().setWidth(style.stroke.width);
-                    }
-                    if(me.hasNestedObj(style, 'image.radius')) {
-                        me._styles[styleType].getImage().radius = style.image.radius;
-                    }
-                    if(me.hasNestedObj(style, 'image.fill.color')) {
-                        me._styles[styleType].getImage().getFill().setColor(style.image.fill.color);
-                    }
-                    if(me.hasNestedObj(style, 'text.fill.color')) {
-                        me._styles[styleType].getText().getFill().setColor(style.text.fill.color);
-                    }
-                    if(me.hasNestedObj(style, 'text.scale')) {
-                        me._styles[styleType].getText().setScale(style.text.scale);
-                    }
-                    if(me.hasNestedObj(style, 'text.stroke.color')) {
-                        me._styles[styleType].getText().getFill().setColor(style.text.stroke.color);
-                    }
-                    if(me.hasNestedObj(style, 'text.stroke.width')) {
-                        me._styles[styleType].getText().getStroke().setWidth(style.text.stroke.width);
-                    }
-                });
-            }
-        },
-        /** Check, if nested key exists
-        * @method hasNestedObj
-        * @params {}  object
-        * @params String object path
-        * @public
-        *
-        * @returns {Boolean}: true if nested key exists
-        */
-       hasNestedObj: function(obj, sobj) {
-          var tmpObj = obj,
-              cnt = 0,
-              splits = sobj.split('.');
 
-          for (i=0; tmpObj && i < splits.length; i++) {
-              if (splits[i] in tmpObj) {
-                  tmpObj = tmpObj[splits[i]];
-                  cnt++;
-              }
-          }
-          return cnt === splits.length;
-       }
+            //overwriting default style if given
+            if(styles) {
+                if(Oskari.util.keyExists(styles, 'fill.color')) {
+                    me._style.getFill().setColor(styles.fill.color);
+                }
+                if(Oskari.util.keyExists(styles, 'stroke.color')) {
+                    me._style.getStroke().setColor(styles.stroke.color);
+                }
+                if(Oskari.util.keyExists(styles, 'stroke.width')) {
+                    me._style.getStroke().setWidth(styles.stroke.width);
+                }
+                if(Oskari.util.keyExists(styles, 'image.radius')) {
+                    me._style.getImage().radius = styles.image.radius;
+                }
+                if(Oskari.util.keyExists(styles, 'image.fill.color')) {
+                    me._style.getImage().getFill().setColor(styles.image.fill.color);
+                }
+                if(Oskari.util.keyExists(styles, 'text.fill.color')) {
+                    me._style.getText().getFill().setColor(styles.text.fill.color);
+                }
+                if(Oskari.util.keyExists(styles, 'text.scale')) {
+                    me._style.getText().setScale(styles.text.scale);
+                }
+                if(Oskari.util.keyExists(styles, 'text.stroke.color')) {
+                    me._style.getText().getFill().setColor(styles.text.stroke.color);
+                }
+                if(Oskari.util.keyExists(styles, 'text.stroke.width')) {
+                    me._style.getText().getStroke().setWidth(styles.text.stroke.width);
+                }
+            }
+        }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
         /**

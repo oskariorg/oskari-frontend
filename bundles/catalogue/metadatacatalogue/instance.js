@@ -886,14 +886,15 @@ Oskari.clazz.define(
             };
             var selectedLayers = me.sandbox.findAllSelectedMapLayers(),
                 i,
-                style = OpenLayers.Util.applyDefaults(style, OpenLayers.Feature.Vector.style['default']);
-            style.pointRadius = 8;
-            style.strokeColor = '#D3BB1B';
-            style.fillColor = '#FFDE00';
-            style.fillOpacity = 0.6;
-            style.strokeOpacity = 0.8;
-            style.strokeWidth = 2;
-            style.cursor = 'pointer';
+                style = {
+                    stroke: {
+                        color: 'rgba(211, 187, 27, 0.8)',
+                        width: 2
+                    },
+                    fill: {
+                        color: 'rgba(255,222,0, 0.6)'
+                    }
+                };
 
             for (i = 0; i < results.length; i += 1) {
                 if ((!results[i].name) || (results[i].name.length === 0)) {
