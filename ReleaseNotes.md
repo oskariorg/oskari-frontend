@@ -36,7 +36,7 @@ Changes to 1.0.0:
 - handleEvent can no longer be used to unregister listener.
 - Added unregisterEventHandler() for unregistering listeners (previously done with handleEvent without giving listener function).
 - Added log() for debug logging without the need to check if window.console.log() exists
-- function-calls can now have parameters as first argument array to allow multiple (treated as a success callback instead if it's type is function)
+- function-calls can now have parameters as first argument. Use function parameters wrapped in an array as first argument. First argument istreated as a success callback instead if it's type is a function.
 
 Filename change for original OskariRPC.js: 
 - Oskari/libraries/OskariRPC/OskariRPC.js is now Oskari/libraries/OskariRPC/OskariRPC-1.0.0.js
