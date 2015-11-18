@@ -456,6 +456,7 @@ Oskari.clazz.define(
             else {
                 layers = sandbox.findAllSelectedMapLayers();
             }
+
             for (i = 0; i < layers.length; i += 1) {
                 if (layers[i].hasFeatureData()) {
                     // clean features lists
@@ -483,7 +484,6 @@ Oskari.clazz.define(
             // update zoomLevel and highlight pictures
             // must be updated also in map move, because of hili in bordertiles
             me.zoomLevel = zoom;
-
             srs = map.getSrsName();
             bbox = map.getExtent();
             zoom = map.getZoom();
@@ -1449,11 +1449,48 @@ Oskari.clazz.define(
                     projection: projection,
                     tileGrid: this._tileGrid
                 });
+
+                tileSrc.getTile =
+                    function(z, x, y, pixelRatio, projection) {
+                  var tileCoordKey = this.getKeyZXY(z, x, y);
+                  if (this.tileCache.containsKey(tileCoordKey)) {
+                    return /** @type {!ol.Tile} */ (this.tileCache.get(tileCoordKey));
+                  } else {
+                    goog.asserts.assert(projection, 'argument projection is truthy');
+                    var tileCoord = [z, x, y];
+                    var urlTileCoord = this.getTileCoordForTileUrlFunction(
+                        tileCoord, projection);
+                    var tileUrl = goog.isNull(urlTileCoord) ? undefined :
+                        this.tileUrlFunction(urlTileCoord, pixelRatio, projection);
+                    var tile = new this.tileClass(
+                        tileCoord,
+                        ol.TileState.LOADING,
+                        goog.isDef(tileUrl) ? tileUrl : '',
+                        this.crossOrigin,
+                        this.tileLoadFunction);
+                    goog.events.listen(tile, goog.events.EventType.CHANGE,
+                        this.handleTileChange_, false, this);
+
+
+                    //this would normally get done in the tile's load function, but now that we're fooling ol3 by not setting the idle state, we gotta do this manually.
+                    //without this it's "Uncaught AssertionError: Assertion failed: this.imageListenerKeys_ should not be null" when expiring tileCache
+                    tile.imageListenerKeys_ = [
+                      goog.events.listenOnce(tile.image_, goog.events.EventType.ERROR,
+                          tile.handleImageError_, false, tile),
+                      goog.events.listenOnce(tile.image_, goog.events.EventType.LOAD,
+                          tile.handleImageLoad_, false, tile)
+                    ];
+
+                    this.tileCache.set(tileCoordKey, tile);
+                    return tile;
+                  }
+                };
+            
+
+
             var openLayer = new ol.layer.Tile({
                 source: tileSrc
             });
-            
-            //custom getTile function            
             openLayer.getSource().set('layerId',_layer.getId());
             openLayer.setOpacity(_layer.getOpacity() / 100);
             me.getMapModule().addLayer(openLayer, _layer, layerName);
