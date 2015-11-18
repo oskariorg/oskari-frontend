@@ -98,7 +98,12 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'state-methods', {
                 continue;
             }
             // newStateConfig has all the states from GetAppSetup.
-            bundleState = newStateConfig[bundleid].state;
+            if(newStateConfig[bundleid]) {
+                bundleState = newStateConfig[bundleid].state;
+            }
+            else {
+                bundleState = {};
+            }
             // reset to the default state
             bundle.setState(bundleState);
         }
