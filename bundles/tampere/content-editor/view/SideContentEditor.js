@@ -62,6 +62,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         me.operationMode = null;
         me.drawToolType = null;
         me.clickCoords = null;
+        me.drawingActive = false;
     }, {
         __name: 'ContentEditor',
         /**
@@ -204,12 +205,18 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             saveButton.setPrimary(true);
             saveButton.setTitle(me.loc.buttons.save);
             saveButton.setHandler(function() {
-                me.sendStopDrawRequest();
+                if (me.drawingActive == true) {
+                    me.drawingActive = false;
+                    me.sendStopDrawRequest();
+                } else {
+                    me.sendRequest(null);
+                }
             });
             
             var cancelButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
             cancelButton.setTitle(me.loc.buttons.cancel);
             cancelButton.setHandler(function() {
+                me.drawingActive = false;
                 me.sendStopDrawRequest(true);
             	me._handleInfoResult(me.currentData, (me.operationMode == "create" ? true : false));
             });
@@ -402,7 +409,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         _hideLayers: function () {
             var me = this,
                 sandbox = me.sandbox,
-                removeRequestBuilder = sandbox.getRequestBuilder('RemoveMapLayerRequest'),
                 i,
                 layer;
             
@@ -746,6 +752,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             var pointButton = $("<div />").addClass('add-point tool');
             if (me.layerGeometryType == "MultiPoint" || me.layerGeometryType == "Point" || me.layerGeometryType == "GeometryPropertyType") {
                 pointButton.on('click', function() {
+                        me.drawingActive = true;
                         me.startNewDrawing({
                             drawMode: 'point'
                         });
@@ -757,6 +764,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             var lineButton = $("<div />").addClass('add-line tool');
             if (me.layerGeometryType == "MultiLineString" || me.layerGeometryType == "GeometryPropertyType") {
                 lineButton.on('click', function() {
+                        me.drawingActive = true;
                         me.startNewDrawing({
                             drawMode: 'line'
                         });
@@ -768,6 +776,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             var areaButton = $("<div />").addClass('add-area tool');
             if (me.layerGeometryType == "MultiPolygon" || me.layerGeometryType == "Polygon" || me.layerGeometryType == "GeometryPropertyType") {
                 areaButton.on('click', function() {
+                        me.drawingActive = true;
                         me.startNewDrawing({
                             drawMode: 'area'
                         });
