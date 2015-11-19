@@ -531,19 +531,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         },
 
         /**
-         * @property eventHandlers
-         * @static
-         */
-        eventHandlers: {
-            'AfterMapLayerAddEvent': function (event) {
-                this._afterMapLayerAddEvent(event);
-            },
-            'LayerToolsEditModeEvent': function (event) {
-                this._isInLayerToolsEditMode = event.isInMode();
-            }
-        },
-
-        /**
          * Adds the layer to the map through the correct plugin for the layer's type.
          *
          * @method _afterMapLayerAddEvent
@@ -575,48 +562,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             for (i = 0; i < layerFunctions.length; i += 1) {
                 layerFunctions[i].apply();
             }
-        },
-
-        /**
-         * @method getOLMapLayers
-         * Returns references to OpenLayers layer objects for requested layer or null if layer is not added to map.
-         * Internally calls getOLMapLayers() on all registered layersplugins.
-         * @param {String} layerId
-         * @return {OpenLayers.Layer[]}
-         */
-        getOLMapLayers: function (layerId) {
-            var me = this,
-                sandbox = me._sandbox,
-                layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
-            if (!layer) {
-                // not found
-                return null;
-            }
-            var lps = this.getLayerPlugins(),
-                p,
-                layersPlugin,
-                layerList,
-                results = [];
-            // let the actual layerplugins find the layer since the name depends on
-            // type
-            for (p in lps) {
-                if (lps.hasOwnProperty(p)) {
-                    layersPlugin = lps[p];
-                    if (!layersPlugin) {
-                        me.getSandbox().printWarn(
-                            'LayerPlugins has no entry for "' + p + '"'
-                        );
-                    }
-                    // find the actual openlayers layers (can be many)
-                    layerList = layersPlugin ? layersPlugin.getOLMapLayers(layer): null;
-                    if (layerList) {
-                        // if found -> add to results
-                        // otherwise continue looping
-                        results = results.concat(layerList);
-                    }
-                }
-            }
-            return results;
         },
 
         /**
@@ -654,10 +599,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 // Add the new font as a CSS class.
                 el.addClass(classToAdd);
             }
-        },
-
-        isInLayerToolsEditMode: function () {
-            return this._isInLayerToolsEditMode;
         },
 
 
@@ -699,7 +640,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * Orders layers by Z-indexes.
          */
         orderLayersByZIndex: function() {
-            this._map.layers.sort(function(a, b){
+            this._map.getLayers().getArray().sort(function(a, b){
                 return a.getZIndex()-b.getZIndex();
             });
         },
