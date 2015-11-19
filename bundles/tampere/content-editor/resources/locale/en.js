@@ -11,9 +11,10 @@ Oskari.registerLocalization(
             "toolInfo": "Choose point, line or polygon tool to draw new geometries.",
             "geometryModifyInfo": "With geometry editing tool you can edit feature geometry.",
             "buttons": {
-            	"save": "Save",
-            	"cancel": "Cancel",
-                "ok": "Ok"
+                "save": "Save",
+                "cancel": "Cancel",
+                "ok": "Ok",
+                "addFeature": "Add feature"
             },
             "featureUpdate": {
                 "header": "Feature update",

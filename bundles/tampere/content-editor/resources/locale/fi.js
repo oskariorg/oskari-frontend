@@ -11,14 +11,15 @@ Oskari.registerLocalization(
             "toolInfo": "Valitse piste, viiva tai aluepiirtotyökalu piirtääksesi uuttageometriaa.",
             "geometryModifyInfo": "Geometrian muokkautyökalulla voit muokata kohteen geometriaa.",
             "buttons": {
-            	"save": "SaveFi",
-                "cancel": "CancelFi",
-                "ok": "OkFi"
+                "save": "Tallenna",
+                "cancel": "Peruuta",
+                "ok": "Ok",
+                "addFeature": "Lisää kohde"
             },
             "featureUpdate": {
-                "header": "Feature updateFi",
-                "success": "Feature properties updated successfullyFi",
-                "error": "Error occured during feature properties updateFi"
+                "header": "Kohde päivitetty",
+                "success": "Kohteen päivittäminen onnistui",
+                "error": "Kohteen päivittäminen epäonnistui"
             }
         }
     }
