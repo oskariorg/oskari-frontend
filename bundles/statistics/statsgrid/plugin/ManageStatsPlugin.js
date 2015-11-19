@@ -2972,7 +2972,7 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.bundle.mapstats.event.FeatureHighlightedEvent} event
          */
         _featureHighlightedEvent: function (event) {
-            var featureAtts = event.getFeature().attributes,
+            var featureAtts = event.getFeaAttributes(),
                 isHighlighted = event.isHighlighted(),
                 property = this._getHilightPropertyName(),
                 idx = this.getIdxByCode(featureAtts[property]),
@@ -3010,7 +3010,7 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.bundle.mapstats.event.FeatureHighlightedEvent} event
          */
         _featureSelectedEvent: function (event) {
-            var featureAtts = event.getFeature().attributes,
+            var featureAtts = event.getFeaAttributes(),
                 isHighlighted = event.isHighlighted(),
                 property = this._getHilightPropertyName(),
                 item = this.getItemByCode(featureAtts[property]);

@@ -26,6 +26,9 @@ Oskari.clazz.define(
         me._modeVisible = false;
         me.ajaxUrl = null;
         me.featureAttribute = 'kuntakoodi';
+        me.featureLayer = null;
+        me.highlightStyle = null;
+        me.invisibleStyle = null;
         me._layers = {};
         if (me._config) {
             if (me._config.ajaxUrl) {
@@ -168,20 +171,6 @@ Oskari.clazz.define(
 
         },
 
-        /**
-         * Activates the hover and select controls.
-         *
-         * @method activateControls
-         */
-        activateControls: function () {
-            var me = this;
-            if (me._getFeatureControlHover) {
-                me._getFeatureControlHover.activate();
-            }
-            if (me._getFeatureControlSelect) {
-                me._getFeatureControlSelect.activate();
-            }
-        },
 
         /**
          * Deactivates the hover and select controls.
@@ -190,12 +179,10 @@ Oskari.clazz.define(
          */
         deactivateControls: function () {
             var me = this;
-            if (me._getFeatureControlHover) {
-                me._getFeatureControlHover.deactivate();
+            if ( me._handleSingleClick) {
+                me.getMap().un('singleclick', me._handleSingleClick, me);
             }
-            if (me._getFeatureControlSelect) {
-                me._getFeatureControlSelect.deactivate();
-            }
+
         },
 
         /**
@@ -222,18 +209,18 @@ Oskari.clazz.define(
 
 
                 wms = {
-                    'URL' : me.ajaxUrl + '&LAYERID=' + layer.getId(),
-                    'LAYERS' : layer.getLayerName(),
-                    'FORMAT' : 'image/png'
+                    'URL': me.ajaxUrl + '&LAYERID=' + layer.getId(),
+                    'LAYERS': layer.getLayerName(),
+                    'FORMAT': 'image/png'
                 },
 
                 openlayer = new ol.layer.Tile({
-                    source : new ol.source.TileWMS({
-                        url : wms.URL,
+                    source: new ol.source.TileWMS({
+                        url: wms.URL,
                         //crossOrigin : 'anonymous',
-                        params : {
-                            'LAYERS' : wms.LAYERS,
-                            'FORMAT' : wms.FORMAT
+                        params: {
+                            'LAYERS': wms.LAYERS,
+                            'FORMAT': wms.FORMAT
                         }
                     }),
                     id: layer.getId(),
@@ -246,216 +233,49 @@ Oskari.clazz.define(
                     buffer: 0
                 });
 
-            /* The next is highlight control, which we will fix after
-            / everything else works
-            */
 
-            /*
+            //Select control styles
 
-            // Select control
-            me._statsDrawLayer = new OpenLayers.Layer.Vector(
-                'Stats Draw Layer',
-                {
-                    styleMap: new OpenLayers.StyleMap({
-                        'default': new OpenLayers.Style({
-                            fillOpacity: 0.0,
-                            strokeOpacity: 0.0
-                        }),
-                        'temporary': new OpenLayers.Style({
-                            strokeColor: '#ff6666',
-                            strokeOpacity: 1.0,
-                            strokeWidth: 3,
-                            fillColor: '#ff0000',
-                            fillOpacity: 0.0,
-                            graphicZIndex: 2,
-                            cursor: 'pointer'
-                        }),
-                        'select': new OpenLayers.Style({})
-                    })
+            var map = me.getMap();
+            this.highlightStyle = new ol.style.Style({
+                fill: new ol.style.Fill({
+                    color: 'rgba(219, 112, 147, 0.2)'
+                }),
+                stroke: new ol.style.Stroke({
+                    color: '#ff6666',
+                    width: 2
+                })
+            });
+            this.invisibleStyle = new ol.style.Style({
+                fill: new ol.style.Fill({
+                    color: 'rgba(219, 112, 147, 0.0)'
+                }),
+                stroke: new ol.style.Stroke({
+                    color: 'rgba(219, 112, 147, 0.0)',
+                    width: 2
+                })
+            });
+
+            this._statsDrawLayer = new ol.layer.Vector({
+                    source: new ol.source.Vector({}
+                    ),
+                    title: 'Stats Draw Layer',
+                    style: this.highlightStyle
                 }
             );
-            me.getMap().addLayers([me._statsDrawLayer]);
 
-            // Hover control
-            me._highlightCtrl = new OpenLayers.Control.SelectFeature(
-                me._statsDrawLayer,
-                {
-                    hover: true,
-                    highlightOnly: true,
-                    outFeature: function (feature) {
-                        me._highlightCtrl.unhighlight(feature);
-                        me._removePopup();
-                    },
-                    renderIntent: 'temporary'
-                }
-            );
-            // Make sure selected feature doesn't swallow events so we can drag above it
-            // http://trac.osgeo.org/openlayers/wiki/SelectFeatureControlMapDragIssues
-            if (me._highlightCtrl.handlers !== undefined) { // OL 2.7
-                me._highlightCtrl.handlers.feature.stopDown = false;
-            } else if (me._highlightCtrl.handler !== undefined) { // OL < 2.7
-                me._highlightCtrl.handler.stopDown = false;
-                me._highlightCtrl.handler.stopUp = false;
-            }
-            me.getMap().addControl(this._highlightCtrl);
-            me._highlightCtrl.activate();
 
-            var queryableMapLayers = [openLayer];
 
-            me._getFeatureControlHover = new OpenLayers.Control.WMSGetFeatureInfo({
-                drillDown: false,
-                hover: true,
-                handlerOptions: {
-                    'hover': {
-                        delay: 0
-                    },
-                    'stopSingle': false
-                },
-                infoFormat: 'application/vnd.ogc.gml',
-                layers: queryableMapLayers,
-                eventListeners: {
-                    getfeatureinfo: function (event) {
-                        var drawLayer = me.getDrawLayer(),
-                            i;
-                        if (typeof drawLayer === 'undefined') {
-                            return;
-                        }
-                        if (event.features.length === 0) {
-                            for (i = 0; i < drawLayer.features.length; i += 1) {
-                                if (!drawLayer.features[i].selected) {
-                                    drawLayer.removeFeatures(
-                                        [drawLayer.features[i]]
-                                    );
-                                }
-                            }
-                            me._removePopup();
-                            return;
-                        }
-                        var found = false,
-                            attrText = me.featureAttribute;
-
-                        for (i = 0; i < drawLayer.features.length; i += 1) {
-                            if (drawLayer.features[i].attributes[attrText] === event.features[0].attributes[attrText]) {
-                                found = true;
-                            } else if (!drawLayer.features[i].selected) {
-                                drawLayer.removeFeatures(
-                                    [drawLayer.features[i]]
-                                );
-                            }
-                        }
-
-                        if (!found) {
-                            drawLayer.addFeatures([event.features[0]]);
-                            me._highlightCtrl.highlight(event.features[0]);
-
-                            me._removePopup();
-                            me._addPopup(event);
-                        }
-                        drawLayer.redraw();
-                    },
-                    beforegetfeatureinfo: function (event) {},
-                    nogetfeatureinfo: function (event) {}
-                }
-            });
-            // Add the control to the map
-            me.getMap().addControl(me._getFeatureControlHover);
-            // Activate only is mode is on.
-            if (me._modeVisible) {
-                me._getFeatureControlHover.activate();
-            }
-
-            // Select control
-            me._getFeatureControlSelect = new OpenLayers.Control.WMSGetFeatureInfo({
-                drillDown: true,
-                hover: false,
-                handlerOptions: {
-                    'click': {
-                        delay: 0
-                    },
-                    'pixelTolerance': 5
-                },
-                infoFormat: 'application/vnd.ogc.gml',
-                layers: queryableMapLayers,
-                eventListeners: {
-                    getfeatureinfo: function (event) {
-                        if (event.features.length === 0) {
-                            return;
-                        }
-                        var newFeature = event.features[0],
-                            drawLayer = me.getDrawLayer();
-
-                        if (typeof drawLayer === 'undefined') {
-                            return;
-                        }
-                        var foundInd = -1,
-                            attrText = me.featureAttribute,
-                            i,
-                            featureStyle;
-
-                        for (i = 0; i < drawLayer.features.length; i += 1) {
-                            if (drawLayer.features[i].attributes[attrText] === event.features[0].attributes[attrText]) {
-                                foundInd = i;
-                                break;
-                            }
-                        }
-                        featureStyle = OpenLayers.Util.applyDefaults(
-                            featureStyle,
-                            OpenLayers.Feature.Vector.style['default']
-                        );
-                        featureStyle.fillColor = '#ff0000';
-                        featureStyle.strokeColor = '#ff3333';
-                        featureStyle.strokeWidth = 3;
-                        featureStyle.fillOpacity = 0.2;
-
-                        if (foundInd >= 0) {
-                            drawLayer.features[i].selected =
-                                !drawLayer.features[i].selected;
-                            if (drawLayer.features[i].selected) {
-                                drawLayer.features[i].style = featureStyle;
-                            } else {
-                                drawLayer.features[i].style = null;
-                                me._highlightCtrl.highlight(drawLayer.features[i]);
-                            }
-                            if (eventBuilder) {
-                                highlightEvent = eventBuilder(
-                                    drawLayer.features[i],
-                                    drawLayer.features[i].selected,
-                                    'click'
-                                );
-                            }
-                        } else {
-                            drawLayer.addFeatures([newFeature]);
-                            newFeature.selected = true;
-                            newFeature.style = featureStyle;
-                            if (eventBuilder) {
-                                highlightEvent = eventBuilder(
-                                    newFeature,
-                                    newFeature.selected,
-                                    'click'
-                                );
-                            }
-                        }
-                        drawLayer.redraw();
-
-                        if (highlightEvent) {
-                            me.getSandbox().notifyAll(highlightEvent);
-                        }
-                    },
-                    beforegetfeatureinfo: function (event) {},
-                    nogetfeatureinfo: function (event) {}
-                }
-            });
-            // Add the control to the map
-            me.getMap().addControl(me._getFeatureControlSelect);
-            // Activate only is mode is on.
-            if (me._modeVisible) {
-                me._getFeatureControlSelect.activate();
-            }
-            */
             openlayer.opacity = layer.getOpacity() / 100;
 
             me.getMap().addLayer(openlayer);
             me._layers[openlayer.get('id')] = openlayer;
+
+            //Select control
+            map.on('singleclick', me._handleSingleClick, this);
+
+            //TODO: Hover with timer
+            //  map.on('pointermove',  me._handleHover, this);
 
             me.getSandbox().printDebug(
                 '#!#! CREATED OPENLAYER.LAYER.WMS for StatsLayer ' +
@@ -467,6 +287,8 @@ Oskari.clazz.define(
             } else {
                 me.getMapModule().setLayerIndex(openlayer, 0);
             }
+            // Add stats draw layer on top
+            me.getMap().addLayer(this._statsDrawLayer);
         },
 
         /**
@@ -490,82 +312,118 @@ Oskari.clazz.define(
                 this._removePopup();
             }
         },
-        /**
-         * Clear hilighted features
-         *
-         * @method _clearHilights
-         * @private
-         * @param {Oskari.statistics.bundle.statsgrid.event.ClearHilightsEvent} event
-         */
-         /*
-        _clearHilights: function (event) {
-            var drawLayer = this.getDrawLayer(),
-                i;
-
-            if (drawLayer) {
-                for (i = 0; i < drawLayer.features.length; i += 1) {
-                    //clear style
-                    drawLayer.features[i].style = null;
-                    // notify highlight control
-                    this._highlightCtrl.highlight(drawLayer.features[i]);
-                }
-            }
-            drawLayer.redraw();
-            //remove popup also
-            this._removePopup();
-        },
-        */
 
         /**
-         * Hilight features
-         *
-         * @method _hilightFeatures
+         * @method _drawGetFeatureInfo
+         * Draws getfeatureinfo geometry and label data
          * @private
-         * @param {Oskari.statistics.bundle.statsgrid.event.SelectHilightsModeEvent} event
+         * @param {geojson featurecollection}
+         * @param {boolean}  if true, remove old features
+         *            event
          */
+        _drawGetFeatureInfo: function (response, clear) {
+            var parser = new ol.format.GeoJSON(),
+                feature = parser.readFeatures(response),
+                eventBuilder = this.getSandbox().getEventBuilder(
+                    'MapStats.FeatureHighlightedEvent'
+                ),
+                highlightEvent,
+                source = this._statsDrawLayer.getSource();
 
-         /*
-        _hilightFeatures: function (event) {
-            // which municipalities should be hilighted
-            var codes = event.getCodes(),
-                drawLayer = this.getDrawLayer();
-
-            // drawLayer can not be undefined
-            if (typeof drawLayer === 'undefined') {
+            if(!feature  || feature.length < 1 ) {
                 return;
             }
+            if(clear){
+                this._statsDrawLayer.getSource().clear();
+            }
+            var isNew = true,
+                attrText = this.featureAttribute;
+            if(source.getFeatures().length > 0 ) {
+                for (var i = 0; i < source.getFeatures().length; i += 1) {
+                    if (source.getFeatures()[i].getProperties()[attrText] === feature[0].getProperties()[attrText]) {
+                        isNew = false;
+                        // remove feature
+                        source.removeFeature(source.getFeatures()[i]);
+                    }
+                }
+            }
+            if(isNew){
+                source.addFeatures(feature);
+            }
 
-            var attrText = this.featureAttribute,
-                featureStyle;
+            if (eventBuilder) {
+                highlightEvent = eventBuilder(
+                    feature[0].getProperties(),
+                    isNew,
+                    'click'
+                );
+                if (highlightEvent) {
+                    this.getSandbox().notifyAll(highlightEvent);
+                }
+            }
 
 
-            // add hilight feature style
-            featureStyle = OpenLayers.Util.applyDefaults(
-                featureStyle,
-                OpenLayers.Feature.Vector.style['default']
-            );
-            featureStyle.fillColor = '#ff0000';
-            featureStyle.strokeColor = '#ff3333';
-            featureStyle.strokeWidth = 3;
-            featureStyle.fillOpacity = 0.2;
 
-            // loop through codes and features to find out if feature should be hilighted
-            var key,
-                i;
-            for (key in codes) {
-                if (codes.hasOwnProperty(key)) {
-                    for (i = 0; i < drawLayer.features.length; i += 1) {
-                        if (drawLayer.features[i].attributes[attrText] === key && codes[key]) {
-                            drawLayer.features[i].style = featureStyle;
-                            this._highlightCtrl.highlight(drawLayer.features[i]);
-                            break;
+        },
+        /**
+         * OL3 single click listener
+         * - get featureinfo of WMS layer feature
+         * - draw feature to this._statsDrawLayer layer
+         * @param evt
+         * @private
+         */
+        _handleSingleClick: function (evt) {
+            var me = this,
+                map = evt.map,
+                view = map.getView(),
+                reso = view.getResolution(),
+                proj = view.getProjection(),
+                olLayer = null;
+
+            for (var lay in me._layers) {
+                olLayer = me._layers[lay];
+            }
+
+            if (olLayer) {
+                if(olLayer.getVisible()) {
+                    var url = olLayer.getSource().getGetFeatureInfoUrl(evt.coordinate, reso, proj, {'INFO_FORMAT': 'application/json'});
+                    jQuery.ajax(url).then(function (response) {
+                        //Response is geojson
+                        // Render geometry and label
+                        me._drawGetFeatureInfo(response, false);
+                    });
+                }
+            }
+        },
+        /**
+         * Manage feature visibility, if all layer feature data is changed
+         * @param params params.VIS_NAME= new region data name , params.VIS_ATTR= key attribute
+         * @private
+         */
+        _manageFeatureVisibility: function (params) {
+            var highlightEvent,
+                layerName = params.VIS_NAME,
+                attrText =  params.VIS_ATTR,
+                source = this._statsDrawLayer.getSource();
+
+            if (layerName && this.featureLayer !== layerName) {
+                this.featureLayer = layerName;
+
+                if (source.getFeatures().length > 0) {
+                    for (var i = 0; i < source.getFeatures().length; i += 1) {
+                        // Set selected features invisible, which are not in current feature data
+                        if (source.getFeatures()[i].getProperties()[this.featureAttribute]) {
+                            // Set invisible style
+                            source.getFeatures()[i].setStyle(this.invisibleStyle);
+                        }
+                        if (source.getFeatures()[i].getProperties()[attrText]) {
+                            // Set highlight style
+                            source.getFeatures()[i].setStyle(this.highlightStyle);
                         }
                     }
                 }
             }
-            drawLayer.redraw();
         },
-        */
 
         /**
          * @method _afterMapLayerRemoveEvent
@@ -589,7 +447,7 @@ Oskari.clazz.define(
 //            me.getMap().removeControl(me._navCtrl);
             me.getMap().removeControl(me._getFeatureControlHover);
             me.getMap().removeControl(me._getFeatureControlSelect);
-            //me.getMap().removeLayer(me._statsDrawLayer);
+            me.getMap().removeLayer(me._statsDrawLayer);
         },
 
         /**
@@ -603,20 +461,7 @@ Oskari.clazz.define(
             if (mapLayer._layerType !== 'STATS') {
                 return;
             }
-            /*
             this._statsDrawLayer.setVisible(mapLayer.isVisible());
-
-            // Do nothing if not in statistics mode.
-            if (this._modeVisible) {
-                if (mapLayer.isVisible()) {
-                    this._getFeatureControlHover.activate();
-                    this._getFeatureControlSelect.activate();
-                } else {
-                    this._getFeatureControlHover.deactivate();
-                    this._getFeatureControlSelect.deactivate();
-                }
-            }
-            */
         },
 
         /**
@@ -748,6 +593,8 @@ Oskari.clazz.define(
             var layer = event.getLayer(),
                 params = event.getParams(),
                 mapLayer = this._layers[layer.getId()];
+
+            this._manageFeatureVisibility(params);
 
             this.featureAttribute = params.VIS_ATTR;
 
