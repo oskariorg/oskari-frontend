@@ -6,7 +6,7 @@ jQuery(document).ready(function() {
 
 
     //TODO: remove the ugly ol3 hack once we have a way to build a working ol3...
-    jQuery.getScript("/Oskari/libraries/ol3/ol-v3.11.2-debug.js", function() {
+    jQuery.getScript("/Oskari/libraries/ol3/ol-v3.11.2-debug-oskari.js", function() {
         if(!ajaxUrl) {
             jQuery('#mapdiv').append('Unable to start');
             return;
