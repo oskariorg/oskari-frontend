@@ -19,6 +19,7 @@ Oskari.clazz.define(
         me._defaultLocation = 'top left';
         me._index = 1;
         me._name = 'SearchPlugin';
+        me._searchMarkerId = 'SEARCH_RESULT_MARKER';
     }, {
 
         /**
@@ -362,19 +363,13 @@ Oskari.clazz.define(
         },
 
         _setMarker: function(result) {
+            debugger;
             var me = this,
                 reqBuilder,
                 sandbox = me.getSandbox(),
                 lat = typeof result.lat !== 'number' ? parseFloat(result.lat) : result.lat,
                 lon = typeof result.lon !== 'number' ? parseFloat(result.lon) : result.lon;
 
-            // Remove old markers
-            reqBuilder = sandbox.getRequestBuilder(
-                'MapModulePlugin.RemoveMarkersRequest'
-            );
-            if (reqBuilder) {
-                sandbox.request(me.getName(), reqBuilder());
-            }
             // Add new marker
             reqBuilder = sandbox.getRequestBuilder(
                 'MapModulePlugin.AddMarkerRequest'
@@ -389,7 +384,7 @@ Oskari.clazz.define(
                         size: 3,
                         x: lon,
                         y: lat
-                    })
+                    }, me._searchMarkerId)
                 );
             }
         },
@@ -568,7 +563,7 @@ Oskari.clazz.define(
             // This is done just so the user can get rid of the marker somehow...
             this.getSandbox().request(
                 this.getName(),
-                this.getSandbox().getRequestBuilder('HideMapMarkerRequest')()
+                this.getSandbox().getRequestBuilder('MapModulePlugin.RemoveMarkersRequest')(this._searchMarkerId)
             );
         },
         /**

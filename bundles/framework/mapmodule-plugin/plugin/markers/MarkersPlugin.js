@@ -79,9 +79,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 'Toolbar.ToolbarLoadedEvent': function() {
                     me._registerTools();
                 },
-                SearchClearedEvent: function() {
-                    me.removeMarkers();
-                },
                 AfterRearrangeSelectedMapLayerEvent: function() {
                     me.raiseMarkerLayer();
                 }
