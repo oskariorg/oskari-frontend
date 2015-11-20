@@ -77,11 +77,16 @@ function (searchUrl) {
                 var evt = Oskari.getSandbox().getEventBuilder('SearchResultEvent')(success, requestParameters, result);
                 Oskari.getSandbox().notifyAll(evt);
             };
+            error = function (response) {
+                var success = false,
+                    requestParameters = params,
+                    result = response;
 
-            me.doSearch(params.searchKey, success, me.searchError);
-        },
-        searchError: function (response) {
-            // TODO: send an event about failure (for RPC etc)
+                var evt = Oskari.getSandbox().getEventBuilder('SearchResultEvent')(success, requestParameters, result);
+                Oskari.getSandbox().notifyAll(evt);
+            };
+
+            me.doSearch(params.searchKey, success, error);
         }
 },
 

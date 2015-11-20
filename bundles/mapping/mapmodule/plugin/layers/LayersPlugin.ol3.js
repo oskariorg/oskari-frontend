@@ -33,9 +33,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
         var me = this;
 
         return {
-            AfterRearrangeSelectedMapLayerEvent: function (event) {
-                me._afterRearrangeSelectedMapLayerEvent(event);
-            },
             MapMoveStartEvent: function () {
                 // clear out any previous visibility check when user starts to move
                 // map
@@ -224,75 +221,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
         }
         var event = this._sandbox.getEventBuilder('MapLayerVisibilityChangedEvent')(layer, scaleOk, geometryMatch);
         this._sandbox.notifyAll(event);
-    },
-    /**
-     * @method _afterRearrangeSelectedMapLayerEvent
-     * @private
-     * Handles AfterRearrangeSelectedMapLayerEvent.
-     * Changes the layer order in Openlayers to match the selected layers list in
-     * Oskari.
-     *
-     * @param
-     * {Oskari.mapframework.event.common.AfterRearrangeSelectedMapLayerEvent}
-     *            event
-     */
-    _afterRearrangeSelectedMapLayerEvent : function(event) {
-        var layers = this._sandbox.findAllSelectedMapLayers();
-        var layerIndex = 0;
-
-        return;
-
-        //TODO: fix this code
-
-        /*
-        var opLayersLength = this.mapModule.getLayers().length;
-
-        var changeLayer = this.mapModule.getLayersByName('Markers');
-        if(changeLayer.length > 0) {
-            this.mapModule.setLayerIndex(changeLayer[0], opLayersLength);
-            opLayersLength--;
-        }
-
-        // TODO: could this be used here also?
-        // get openlayers layer objects from map
-        var layers = this.getMapModule().getOLMapLayers(layer.getId());
-        for ( var i = 0; i < layers.length; i++) {
-            layers[i].setVisibility(layer.isVisible());
-            layers[i].display(layer.isVisible());
-        }
-
-        for(var i = 0; i < layers.length; i++) {
-
-            if(layers[i].isBaseLayer()||layers[i].isGroupLayer()) {
-                for(var bl = 0; bl < layers[i].getSubLayers().length; bl++) {
-                    var changeLayer = this.mapModule.getLayersByName('basemap_' + layers[i]
-                    .getSubLayers()[bl].getId());
-                    this.mapModule.setLayerIndex(changeLayer[0], layerIndex);
-                    layerIndex++;
-                }
-            } else if(layers[i].isLayerOfType('WFS')) {
-                var wfsReqExp = new RegExp('wfs_layer_' + layers[i].getId() + '_WFS_LAYER_IMAGE*', 'i');
-                var mapLayers = this.mapModule.getLayersByName(wfsReqExp);
-                for(var k = 0; k < mapLayers.length; k++) {
-                    this.mapModule.setLayerIndex(mapLayers[k], layerIndex);
-                    layerIndex++;
-                }
-
-                var wfsReqExp = new RegExp('wfs_layer_' + layers[i].getId() + '_HIGHLIGHTED_FEATURE*', 'i');
-                var changeLayer = this.mapModule.getLayersByName(wfsReqExp);
-                if(changeLayer.length > 0) {
-                    this.mapModule.setLayerIndex(changeLayer[0], layerIndex);
-                    layerIndex++;
-                }
-
-            } else {
-                var changeLayer = this.mapModule.getLayersByName('layer_' + layers[i].getId());
-                this.mapModule.setLayerIndex(changeLayer[0], layerIndex);
-                layerIndex++;
-            }
-        }
-        */
-    }
+    }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
         /**

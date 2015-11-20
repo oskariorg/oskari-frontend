@@ -87,14 +87,14 @@ sandbox.postRequestByName(rn, [geojson, 'GeoJSON', null, null, 'replace', true, 
 Now:
 sandbox.postRequestByName(rn, [geojson, {
     layerId: 'ANALYSIS_VECTOR',
-    replace: 'replace',
+    clearPrevious: true,
     layerOptions: null,
     centerTo: false,
     featureStyle: style,
     attributes: null
 }]);
 - layerId: If left out, a generic vector layer is used by VectorLayerPlugin. 
-- replace: whether to clear out all previous features
+- clearPrevious: whether to clear out all previous features
 - layerOptions: additional layerOptions
 - centerTo: whether to zoom in to the features
 - featureStyle: style of the features
