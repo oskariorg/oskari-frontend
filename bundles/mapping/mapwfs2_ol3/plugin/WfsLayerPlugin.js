@@ -1350,7 +1350,7 @@ Oskari.clazz.define(
             if( !me.___tileLayerCache  ) {
                me.___tileLayerCache  = {};
             }
-            
+
             var layerTileInfos = me.___tileLayerCache[layerId];
             if( !layerTileInfos) {
                 layerTileInfos = me.___tileLayerCache[layerId] = {
@@ -1374,9 +1374,9 @@ Oskari.clazz.define(
                     delete layerTileInfos[key];
                 }
                 */
-                
+
             });
-            
+
         },
         /**
          * @method _addMapLayerToMap
@@ -1385,7 +1385,7 @@ Oskari.clazz.define(
          * @param {String} layerType
          */
         _addMapLayerToMap: function (_layer, layerType) {
-            
+
             if (!_layer.hasFeatureData()) {
                 return;
             }
@@ -1415,11 +1415,11 @@ Oskari.clazz.define(
             var projection = ol.proj.get(me.getMapModule().getProjection());
             var projectionExtent = projection.getExtent();
             var me = this;
-            
-            var tileSrc = new ol.source.TileImage({  
+
+            var tileSrc = new ol.source.TileImage({
                     layerId: _layer.getId(),
                     tileUrlFunction: function (tileCoord, pixelRatio, projection) {
-                        var bounds = this.tileGrid.getTileCoordExtent(tileCoord);                        
+                        var bounds = this.tileGrid.getTileCoordExtent(tileCoord);
                         var bboxKey = me.bboxkeyStrip(bounds);
                         var wfsTileCache = me._getWFSTileCache(_layer.getId()),
                             layerTileInfos = wfsTileCache.tileInfos,
@@ -1462,7 +1462,7 @@ Oskari.clazz.define(
                     return tile;
                   }
                 };
-            
+
 
 
             var openLayer = new ol.layer.Tile({
@@ -1485,17 +1485,17 @@ Oskari.clazz.define(
                 me = this,
                 bboxKey,
                 dataForTile;
-            
+
             if (!layer) {
                 return result;
             }
-            
+
             var wfsTileCache = me._getWFSTileCache(layerId),
                 layerTileInfos = wfsTileCache.tileInfos,
                 lastTileSetIdentifier =  wfsTileCache.tileSetIdentifier;
-            
+
             this._purgeWFSTileCache(layerId);
-            
+
             wfsTileCache.tileSetIdentifier =  ++wfsTileCache.tileSetIdentifier ;
             for (i = 0; i < grid.bounds.length; i += 1) {
                 bboxKey = me.bboxkeyStrip(grid.bounds[i]);
@@ -1507,7 +1507,7 @@ Oskari.clazz.define(
                     if( tileCoordKey && layer.getSource().tileCache.containsKey (tileCoordKey)) {
                         tile = layer.getSource().tileCache.get(tileCoordKey);
                     }
-                                
+
                     if (tile ) {
                         if( tile.PLACEHOLDER === true) {
                             result.push(grid.bounds[i]);
@@ -1585,7 +1585,7 @@ Oskari.clazz.define(
                     normalLayerIndex = map.getLayerIndex(normalLayer[normalLayer.length - 1]);
                     map.setLayerIndex(highlightLayer[0],normalLayerIndex + 10);
                 }
-          
+
             } else { // "normal"
                 bboxKey = this.bboxkeyStrip(boundsObj);
                 if (bboxKey) {
@@ -1600,30 +1600,30 @@ Oskari.clazz.define(
                     }
                     if( tile != null) {
                         var tilestate = tile.state;
-                        switch(tilestate) {                                    
+                        switch(tilestate) {
                             case  0 : // IDLE: 0,
-                            case 1: //LOADING: 1,                                    
+                            case 1: //LOADING: 1,
                                 tile.PLACEHOLDER = false;
                                 tile.getImage().src = imageUrl;
                                 tile.state = 2;
-                                tile.changed(); 
-                                
+                                tile.changed();
+
                                 var mapRenderer = map.getRenderer();
                                 var layerRenderer = mapRenderer.getLayerRenderer(ollayer);
                                 //reset the renderers memory of it's tilerange as to make sure that our boundary tiles get drawn perfectly
                                 layerRenderer.renderedCanvasTileRange_ = new ol.TileRange();
                                 ollayer.changed();
                                 break;
-                            
-                            case 2: // LOADED: 
-                            case 3: // ERROR: 
+
+                            case 2: // LOADED:
+                            case 3: // ERROR:
                             case 4: // EMPTY
                                 //tile.state = 0;
                                 tile.PLACEHOLDER = false;
                                 tile.getImage().src = imageUrl;
                                 tile.state = 2;
                                 tile.changed();
-                                
+
                                 var mapRenderer = map.getRenderer();
                                 var layerRenderer = mapRenderer.getLayerRenderer(ollayer);
                                 //reset the renderers memory of it's tilerange as to make sure that our boundary tiles get drawn perfectly
@@ -1633,7 +1633,7 @@ Oskari.clazz.define(
                             default:
                                 tile.handleImageError_();
                         }
-                        
+
                         tile.isBoundaryTile = boundaryTile;
                         tileInfo.isBoundaryTile = boundaryTile;
                         if( !tile.isBoundaryTile ) {
