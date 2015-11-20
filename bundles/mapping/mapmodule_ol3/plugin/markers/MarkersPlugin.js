@@ -331,7 +331,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @private
          */
         _showForm: function(clickX, clickY) {
-            this.stopMarkerAdd();
             var me = this;
             var lonlat = me._map.getCoordinateFromPixel([
                 clickX,
@@ -369,6 +368,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     };
                     var request = reqBuilder(data);
                     me.getSandbox().request(me.getName(), request);
+                    me.stopMarkerAdd();
                 }
                 me.dotForm.getDialog().close(true);
                 me.enableGfi(true);
