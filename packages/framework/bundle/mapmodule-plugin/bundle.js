@@ -144,6 +144,15 @@ Oskari.clazz.define(
                     "type": "text/javascript",
                     "src": "../../../../bundles/framework/search/service/searchservice.js"
                 }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/framework/search/event/SearchResultEvent.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/framework/search/request/SearchRequest.js"
+                },{
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/framework/search/request/SearchRequestHandler.js"
+                }, {
                     "type": "text/css",
                     "src": "../../../../bundles/mapping/mapmodule/resources/css/search.css"
                 },

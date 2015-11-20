@@ -22,7 +22,6 @@ Oskari.clazz.define(
         me._io = null;
 
         // state
-        me.tileSize = null;
         me.zoomLevel = null;
         me._isWFSOpen = 0;
 
@@ -1036,49 +1035,43 @@ Oskari.clazz.define(
          *
          */
         createTileGrid: function() {
-            var me = this,
-                extent = me.getMapModule().getExtent(),
-                maxZoom = me.getMapModule().getMaxZoomLevel();
-            this._tileGrid = new ol.tilegrid.createXYZ({
-                extent:extent,
-                maxZoom: maxZoom,
-                tileSize: [256,256]
+            this._tileGrid = new ol.tilegrid.TileGrid({
+                extent: this.getMapModule().getExtent(),
+                tileSize: this.getTileSize(),
+                resolutions : this.getMapModule().getResolutionArray()
             });
         },
 
         getTileSize: function () {
-            this.tileSize = [256, 256];
-            return this.tileSize;
+            return [256, 256];
         },
         getGrid: function () {
             var me = this,
                 sandbox = me.getSandbox(),
                 resolution = me.getMap().getView().getResolution(),
                 mapExtent = me.ol2ExtentOl3Transform(sandbox.getMap().getExtent()),
-                z,
+                z = me.getMapModule().getMapZoom(),
                 tileGrid = this._tileGrid,
                 grid = {
                     bounds: [],
                     rows: null,
                     columns: null
                 },
-                rowidx = 0,
-                tileRangeExtent;
-                z =  tileGrid.getZForResolution(resolution);
-                tileRangeExtent = tileGrid.getTileRangeForExtentAndResolution(mapExtent, resolution);
-                for (var iy = tileRangeExtent.minY; iy <= tileRangeExtent.maxY; iy++) {
-                    var colidx = 0;
-                    for (var ix = tileRangeExtent.minX; ix <= tileRangeExtent.maxX; ix++) {
-                        var zxy = [z,ix,iy];
-                        var tileBounds = tileGrid.getTileCoordExtent(zxy);
-                        grid.bounds.push(tileBounds);
-                        colidx++;
-                    }
-                    rowidx++;
+                rowidx = 0;
+            var tileRangeExtent = tileGrid.getTileRangeForExtentAndResolution(mapExtent, resolution);
+            for (var iy = tileRangeExtent.minY; iy <= tileRangeExtent.maxY; iy++) {
+                var colidx = 0;
+                for (var ix = tileRangeExtent.minX; ix <= tileRangeExtent.maxX; ix++) {
+                    var zxy = [z,ix,iy];
+                    var tileBounds = tileGrid.getTileCoordExtent(zxy);
+                    grid.bounds.push(tileBounds);
+                    colidx++;
                 }
-                grid.rows = rowidx;
-                grid.columns = colidx;
-                return grid;
+                rowidx++;
+            }
+            grid.rows = rowidx;
+            grid.columns = colidx;
+            return grid;
         },
         /**
          * Checks at tile is ok.
@@ -1357,7 +1350,7 @@ Oskari.clazz.define(
             if( !me.___tileLayerCache  ) {
                me.___tileLayerCache  = {};
             }
-            
+
             var layerTileInfos = me.___tileLayerCache[layerId];
             if( !layerTileInfos) {
                 layerTileInfos = me.___tileLayerCache[layerId] = {
@@ -1381,9 +1374,9 @@ Oskari.clazz.define(
                     delete layerTileInfos[key];
                 }
                 */
-                
+
             });
-            
+
         },
         /**
          * @method _addMapLayerToMap
@@ -1392,7 +1385,7 @@ Oskari.clazz.define(
          * @param {String} layerType
          */
         _addMapLayerToMap: function (_layer, layerType) {
-            
+
             if (!_layer.hasFeatureData()) {
                 return;
             }
@@ -1422,11 +1415,11 @@ Oskari.clazz.define(
             var projection = ol.proj.get(me.getMapModule().getProjection());
             var projectionExtent = projection.getExtent();
             var me = this;
-            
-            var tileSrc = new ol.source.TileImage({  
+
+            var tileSrc = new ol.source.TileImage({
                     layerId: _layer.getId(),
                     tileUrlFunction: function (tileCoord, pixelRatio, projection) {
-                        var bounds = this.tileGrid.getTileCoordExtent(tileCoord);                        
+                        var bounds = this.tileGrid.getTileCoordExtent(tileCoord);
                         var bboxKey = me.bboxkeyStrip(bounds);
                         var wfsTileCache = me._getWFSTileCache(_layer.getId()),
                             layerTileInfos = wfsTileCache.tileInfos,
@@ -1434,24 +1427,11 @@ Oskari.clazz.define(
                         layerTileInfos[bboxKey] = { "tileCoord": tileCoord, bounds: bounds, tileSetIdentifier: tileSetIdentifier};
                         return bboxKey;
                     },
-                    tileLoadFunction: function(imageTile, imagesrc) {
-                        var bboxKey = imagesrc;
-                        var wfsTileCache = me._getWFSTileCache(_layer.getId()),
-                            layerTileInfos = wfsTileCache.tileInfos,
-                            tileSetIdentifier = wfsTileCache.tileSetIdentifier,
-                            imageTileLayerTileInfos = layerTileInfos[bboxKey]  ;
-                        if(imageTile.layerTileInfos &&!imageTileLayerTileInfos) {
-                            layerTileInfos[bboxKey] = imageTile.layerTileInfos;
-                        } 
-                        imageTile.PLACEHOLDER = true; 
-                        imageTile.state = ol.TileState.LOADING;
-                    },
                     projection: projection,
                     tileGrid: this._tileGrid
                 });
 
-                tileSrc.getTile =
-                    function(z, x, y, pixelRatio, projection) {
+                tileSrc.getTile = function(z, x, y, pixelRatio, projection) {
                   var tileCoordKey = this.getKeyZXY(z, x, y);
                   if (this.tileCache.containsKey(tileCoordKey)) {
                     return /** @type {!ol.Tile} */ (this.tileCache.get(tileCoordKey));
@@ -1468,9 +1448,6 @@ Oskari.clazz.define(
                         goog.isDef(tileUrl) ? tileUrl : '',
                         this.crossOrigin,
                         this.tileLoadFunction);
-                    goog.events.listen(tile, goog.events.EventType.CHANGE,
-                        this.handleTileChange_, false, this);
-
 
                     //this would normally get done in the tile's load function, but now that we're fooling ol3 by not setting the idle state, we gotta do this manually.
                     //without this it's "Uncaught AssertionError: Assertion failed: this.imageListenerKeys_ should not be null" when expiring tileCache
@@ -1485,7 +1462,7 @@ Oskari.clazz.define(
                     return tile;
                   }
                 };
-            
+
 
 
             var openLayer = new ol.layer.Tile({
@@ -1508,17 +1485,17 @@ Oskari.clazz.define(
                 me = this,
                 bboxKey,
                 dataForTile;
-            
+
             if (!layer) {
                 return result;
             }
-            
+
             var wfsTileCache = me._getWFSTileCache(layerId),
                 layerTileInfos = wfsTileCache.tileInfos,
                 lastTileSetIdentifier =  wfsTileCache.tileSetIdentifier;
-            
+
             this._purgeWFSTileCache(layerId);
-            
+
             wfsTileCache.tileSetIdentifier =  ++wfsTileCache.tileSetIdentifier ;
             for (i = 0; i < grid.bounds.length; i += 1) {
                 bboxKey = me.bboxkeyStrip(grid.bounds[i]);
@@ -1530,7 +1507,7 @@ Oskari.clazz.define(
                     if( tileCoordKey && layer.getSource().tileCache.containsKey (tileCoordKey)) {
                         tile = layer.getSource().tileCache.get(tileCoordKey);
                     }
-                                
+
                     if (tile ) {
                         if( tile.PLACEHOLDER === true) {
                             result.push(grid.bounds[i]);
@@ -1608,7 +1585,7 @@ Oskari.clazz.define(
                     normalLayerIndex = map.getLayerIndex(normalLayer[normalLayer.length - 1]);
                     map.setLayerIndex(highlightLayer[0],normalLayerIndex + 10);
                 }
-          
+
             } else { // "normal"
                 bboxKey = this.bboxkeyStrip(boundsObj);
                 if (bboxKey) {
@@ -1623,30 +1600,30 @@ Oskari.clazz.define(
                     }
                     if( tile != null) {
                         var tilestate = tile.state;
-                        switch(tilestate) {                                    
+                        switch(tilestate) {
                             case  0 : // IDLE: 0,
-                            case 1: //LOADING: 1,                                    
+                            case 1: //LOADING: 1,
                                 tile.PLACEHOLDER = false;
                                 tile.getImage().src = imageUrl;
                                 tile.state = 2;
-                                tile.changed(); 
-                                
+                                tile.changed();
+
                                 var mapRenderer = map.getRenderer();
                                 var layerRenderer = mapRenderer.getLayerRenderer(ollayer);
                                 //reset the renderers memory of it's tilerange as to make sure that our boundary tiles get drawn perfectly
                                 layerRenderer.renderedCanvasTileRange_ = new ol.TileRange();
                                 ollayer.changed();
                                 break;
-                            
-                            case 2: // LOADED: 
-                            case 3: // ERROR: 
+
+                            case 2: // LOADED:
+                            case 3: // ERROR:
                             case 4: // EMPTY
                                 //tile.state = 0;
                                 tile.PLACEHOLDER = false;
                                 tile.getImage().src = imageUrl;
                                 tile.state = 2;
                                 tile.changed();
-                                
+
                                 var mapRenderer = map.getRenderer();
                                 var layerRenderer = mapRenderer.getLayerRenderer(ollayer);
                                 //reset the renderers memory of it's tilerange as to make sure that our boundary tiles get drawn perfectly
@@ -1656,7 +1633,7 @@ Oskari.clazz.define(
                             default:
                                 tile.handleImageError_();
                         }
-                        
+
                         tile.isBoundaryTile = boundaryTile;
                         tileInfo.isBoundaryTile = boundaryTile;
                         if( !tile.isBoundaryTile ) {

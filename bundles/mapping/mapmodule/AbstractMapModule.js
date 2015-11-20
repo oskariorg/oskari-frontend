@@ -465,6 +465,9 @@ Oskari.clazz.define(
         getResolutionArray: function () {
             return this._mapResolutions;
         },
+        getResolution: function () {
+            return this.getResolutionArray()[this.getMapZoom()];
+        },
         getExtentArray: function () {
             return this._extent;
         },
