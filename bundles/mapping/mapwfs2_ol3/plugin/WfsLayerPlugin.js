@@ -22,7 +22,6 @@ Oskari.clazz.define(
         me._io = null;
 
         // state
-        me.tileSize = null;
         me.zoomLevel = null;
         me._isWFSOpen = 0;
 
@@ -1036,49 +1035,43 @@ Oskari.clazz.define(
          *
          */
         createTileGrid: function() {
-            var me = this,
-                extent = me.getMapModule().getExtent(),
-                maxZoom = me.getMapModule().getMaxZoomLevel();
-            this._tileGrid = new ol.tilegrid.createXYZ({
-                extent:extent,
-                maxZoom: maxZoom,
-                tileSize: [256,256]
+            this._tileGrid = new ol.tilegrid.TileGrid({
+                extent: this.getMapModule().getExtent(),
+                tileSize: this.getTileSize(),
+                resolutions : this.getMapModule().getResolutionArray()
             });
         },
 
         getTileSize: function () {
-            this.tileSize = [256, 256];
-            return this.tileSize;
+            return [256, 256];
         },
         getGrid: function () {
             var me = this,
                 sandbox = me.getSandbox(),
                 resolution = me.getMap().getView().getResolution(),
                 mapExtent = me.ol2ExtentOl3Transform(sandbox.getMap().getExtent()),
-                z,
+                z = me.getMapModule().getMapZoom(),
                 tileGrid = this._tileGrid,
                 grid = {
                     bounds: [],
                     rows: null,
                     columns: null
                 },
-                rowidx = 0,
-                tileRangeExtent;
-                z =  tileGrid.getZForResolution(resolution);
-                tileRangeExtent = tileGrid.getTileRangeForExtentAndResolution(mapExtent, resolution);
-                for (var iy = tileRangeExtent.minY; iy <= tileRangeExtent.maxY; iy++) {
-                    var colidx = 0;
-                    for (var ix = tileRangeExtent.minX; ix <= tileRangeExtent.maxX; ix++) {
-                        var zxy = [z,ix,iy];
-                        var tileBounds = tileGrid.getTileCoordExtent(zxy);
-                        grid.bounds.push(tileBounds);
-                        colidx++;
-                    }
-                    rowidx++;
+                rowidx = 0;
+            var tileRangeExtent = tileGrid.getTileRangeForExtentAndResolution(mapExtent, resolution);
+            for (var iy = tileRangeExtent.minY; iy <= tileRangeExtent.maxY; iy++) {
+                var colidx = 0;
+                for (var ix = tileRangeExtent.minX; ix <= tileRangeExtent.maxX; ix++) {
+                    var zxy = [z,ix,iy];
+                    var tileBounds = tileGrid.getTileCoordExtent(zxy);
+                    grid.bounds.push(tileBounds);
+                    colidx++;
                 }
-                grid.rows = rowidx;
-                grid.columns = colidx;
-                return grid;
+                rowidx++;
+            }
+            grid.rows = rowidx;
+            grid.columns = colidx;
+            return grid;
         },
         /**
          * Checks at tile is ok.
@@ -1434,24 +1427,11 @@ Oskari.clazz.define(
                         layerTileInfos[bboxKey] = { "tileCoord": tileCoord, bounds: bounds, tileSetIdentifier: tileSetIdentifier};
                         return bboxKey;
                     },
-                    tileLoadFunction: function(imageTile, imagesrc) {
-                        var bboxKey = imagesrc;
-                        var wfsTileCache = me._getWFSTileCache(_layer.getId()),
-                            layerTileInfos = wfsTileCache.tileInfos,
-                            tileSetIdentifier = wfsTileCache.tileSetIdentifier,
-                            imageTileLayerTileInfos = layerTileInfos[bboxKey]  ;
-                        if(imageTile.layerTileInfos &&!imageTileLayerTileInfos) {
-                            layerTileInfos[bboxKey] = imageTile.layerTileInfos;
-                        } 
-                        imageTile.PLACEHOLDER = true; 
-                        imageTile.state = ol.TileState.LOADING;
-                    },
                     projection: projection,
                     tileGrid: this._tileGrid
                 });
 
-                tileSrc.getTile =
-                    function(z, x, y, pixelRatio, projection) {
+                tileSrc.getTile = function(z, x, y, pixelRatio, projection) {
                   var tileCoordKey = this.getKeyZXY(z, x, y);
                   if (this.tileCache.containsKey(tileCoordKey)) {
                     return /** @type {!ol.Tile} */ (this.tileCache.get(tileCoordKey));
@@ -1468,9 +1448,6 @@ Oskari.clazz.define(
                         goog.isDef(tileUrl) ? tileUrl : '',
                         this.crossOrigin,
                         this.tileLoadFunction);
-                    goog.events.listen(tile, goog.events.EventType.CHANGE,
-                        this.handleTileChange_, false, this);
-
 
                     //this would normally get done in the tile's load function, but now that we're fooling ol3 by not setting the idle state, we gotta do this manually.
                     //without this it's "Uncaught AssertionError: Assertion failed: this.imageListenerKeys_ should not be null" when expiring tileCache

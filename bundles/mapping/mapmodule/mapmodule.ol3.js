@@ -447,7 +447,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
         },
 
-
         _addLayerImpl: function(layerImpl) {
             this._map.addLayer(layerImpl);
         },
