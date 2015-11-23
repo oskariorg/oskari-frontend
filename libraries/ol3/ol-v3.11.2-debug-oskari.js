@@ -115666,6 +115666,7 @@ ol.source.OskariAsyncTileImage = function(options) {
       tileSetIdentifier: 0,
       tileInfos: {}
   };
+  this.__refreshTimer = null;
 };
 goog.inherits(ol.source.OskariAsyncTileImage, ol.source.TileImage);
 
@@ -115784,7 +115785,7 @@ ol.source.OskariAsyncTileImage.prototype.createTile_ = function(z, x, y, pixelRa
 /**
  * @param  {Array.<number>} boundsObj     tile bounds
  * @param  {string}         imageData     dataurl or actual url for image
- * @param  {ol.renderer.canvas.Layer}     canvasRenderer to force rerendering of tiles (ugly hack)
+ * @param  {ol.renderer.canvas.TileLayer}     canvasRenderer to force rerendering of tiles (ugly hack)
  * @param  {boolean}        boundaryTile  true if this an incomplete tile
  */
 ol.source.OskariAsyncTileImage.prototype.setupImageContent = function(boundsObj, imageData, canvasRenderer, boundaryTile) {
@@ -115807,28 +115808,13 @@ ol.source.OskariAsyncTileImage.prototype.setupImageContent = function(boundsObj,
     switch(tile.getState()) {
         case ol.TileState.IDLE : // IDLE: 0,
         case ol.TileState.LOADING: //LOADING: 1,
-            tile.PLACEHOLDER = false;
-            tile.getImage().src = imageData;
-            //tile.state = ol.TileState.LOADED;
-
-            //reset the renderers memory of it's tilerange as to make sure that our boundary tiles get drawn perfectly
-            canvasRenderer.renderedCanvasTileRange_ = new ol.TileRange();
-            this.dispatchEvent(new ol.source.TileEvent(ol.source.TileEventType.TILELOADEND, tile));
-            this.changed();
+            this.__fixTile(tile, imageData, canvasRenderer);
             break;
 
         case ol.TileState.LOADED: // LOADED: 2
         case ol.TileState.ERROR: // ERROR: 3
         case ol.TileState.EMPTY: // EMPTY: 4
-            tile.PLACEHOLDER = false;
-            tile.getImage().src = imageData;
-
-            //tile.state = ol.TileState.LOADED;
-
-            //reset the renderers memory of it's tilerange as to make sure that our boundary tiles get drawn perfectly
-            canvasRenderer.renderedCanvasTileRange_ = new ol.TileRange();
-            this.dispatchEvent(new ol.source.TileEvent(ol.source.TileEventType.TILELOADEND, tile));
-            this.changed();
+            this.__fixTile(tile, imageData, canvasRenderer);
             break;
         default:
             tile.handleImageError_();
@@ -115841,6 +115827,21 @@ ol.source.OskariAsyncTileImage.prototype.setupImageContent = function(boundsObj,
     }
 };
 
+ol.source.OskariAsyncTileImage.prototype.__fixTile = function(tile, imageData, canvasRenderer) {
+    clearTimeout(this.__refreshTimer);
+    tile.PLACEHOLDER = false;
+    tile.getImage().src = imageData;
+    //tile.state = ol.TileState.LOADED;
+
+    this.dispatchEvent(new ol.source.TileEvent(ol.source.TileEventType.TILELOADEND, tile));
+    var me = this;
+    this.__refreshTimer = setTimeout(function() {
+      //reset the renderers memory of it's tilerange as to make sure that our boundary tiles get drawn perfectly
+      canvasRenderer.renderedCanvasTileRange_ = new ol.TileRange();
+      me.changed();
+    }, 500);
+
+};
 /**
  * Note! Always uses the non-projected internal tile getter
  */
