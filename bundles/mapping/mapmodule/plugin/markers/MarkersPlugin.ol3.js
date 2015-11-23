@@ -225,6 +225,12 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 this._showForm(event.getMouseX(), event.getMouseY());
                 return;
             }
+            var me = this;
+            this.getMap().forEachFeatureAtPixel([event.getMouseX(), event.getMouseY()], function (feature, layer) {
+                if(layer === me.getMarkersLayer()) {
+                    me.__markerClicked(feature.get('id'));
+                }
+            });
         },
         /**
          * Called when a marker has been clicked.
