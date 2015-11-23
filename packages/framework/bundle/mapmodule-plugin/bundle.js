@@ -253,7 +253,7 @@ Oskari.clazz.define(
                 /** Layers backport */
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/mapmodule-plugin/plugin/wmslayer/WmsLayerPlugin.js"
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/wmslayer/WmsLayerPlugin.ol2.js"
                 },
                 /**
                  * Vector Layer plugin
