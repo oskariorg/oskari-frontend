@@ -314,6 +314,7 @@ Oskari.clazz.define(
                             contentData[i].actions[text]();
                         }
                     }
+                    evt.stopPropagation();
                 },
                 scope: popup
             });
