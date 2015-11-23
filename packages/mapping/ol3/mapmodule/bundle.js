@@ -277,19 +277,19 @@ Oskari.clazz.define(
                  */
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapmodule_ol3/plugin/vectorlayer/VectorLayerPlugin.js"
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/vectorlayer/VectorLayerPlugin.ol3.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapmodule_ol3/plugin/vectorlayer/request/AddFeaturesToMapRequest.js"
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/vectorlayer/request/AddFeaturesToMapRequest.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapmodule_ol3/plugin/vectorlayer/request/AddFeaturesToMapRequestHandler.js"
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/vectorlayer/request/AddFeaturesToMapRequestHandler.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapmodule_ol3/plugin/vectorlayer/request/RemoveFeaturesFromMapRequest.js"
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/vectorlayer/request/RemoveFeaturesFromMapRequest.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapmodule_ol3/plugin/vectorlayer/request/RemoveFeaturesFromMapRequestHandler.js"
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/vectorlayer/request/RemoveFeaturesFromMapRequestHandler.js"
                 },
                 /**
                  * GeoLocation plugin
