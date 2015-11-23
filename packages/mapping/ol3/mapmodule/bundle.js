@@ -280,6 +280,9 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/mapping/mapmodule/plugin/vectorlayer/VectorLayerPlugin.ol3.js"
                 }, {
                     "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/event/FeatureEvent.js"
+                }, {
+                    "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/plugin/vectorlayer/request/AddFeaturesToMapRequest.js"
                 }, {
                     "type": "text/javascript",

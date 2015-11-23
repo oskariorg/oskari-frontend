@@ -59,10 +59,42 @@ Oskari.clazz.define(
             var me = this;
 
             return {
+                MapClickedEvent: function(event) {
+                    me.__mapClick(event);
+                },
                 AfterMapLayerRemoveEvent: function (event) {
                     me.afterMapLayerRemoveEvent(event);
                 }
             };
+        },
+        /**
+         * Find features from layers controlled by vectorlayerplugin and handle clicks for all those features
+         * @param  {Oskari.mapframework.bundle.mapmodule.event.MapClickedEvent} event [description]
+         */
+        __mapClick : function(event) {
+            var me = this;
+            var features = [];
+            this.getMap().forEachFeatureAtPixel([event.getMouseX(), event.getMouseY()], function (feature, layer) {
+                _.forEach(me._layers, function (vectorlayer, id) {
+                    if(vectorlayer === layer) {
+                        features.push({
+                            feature : feature,
+                            layerId : id
+                        });
+                    }
+                });
+            });
+            me.__featureClicked(features);
+        },
+        __featureClicked: function(features) {
+            var sandbox = this.getSandbox();
+            var clickEvent = sandbox.getEventBuilder('FeatureEvent')().setOpClick();
+            var formatter = this._supportedFormats['GeoJSON'];
+            _.forEach(features, function (obj) {
+                var geojson = formatter.writeFeaturesObject([obj.feature]);
+                clickEvent.addFeature(obj.feature.getId(), geojson, obj.layerId);
+            });
+            sandbox.notifyAll(clickEvent);
         },
         /**
          * @method registerVectorFormat
@@ -118,7 +150,8 @@ Oskari.clazz.define(
                 }
                 //remove all features from the given layer
                 else {
-                    this._map.removeLayer(me._layers[layerId]);
+                    this._map.removeLayer(olLayer);
+                    this._removeFeaturesByAttribute(olLayer);
                     delete this._layers[layerId];
                 }
             }
@@ -126,7 +159,9 @@ Oskari.clazz.define(
             else {
                 for (var layerId in me._layers) {
                     if (me._layers.hasOwnProperty(layerId)) {
-                        this._map.removeLayer(me._layers[layerId]);
+                        olLayer = me._layers[layerId];
+                        this._map.removeLayer(olLayer);
+                        this._removeFeaturesByAttribute(olLayer);
                         delete this._layers[layerId];
                     }
                 }
@@ -136,18 +171,29 @@ Oskari.clazz.define(
             var source = olLayer.getSource(),
                 featuresToRemove = [];
 
+            // add all features if identifier and value are missing or 
+            // if given -> features that have
             source.forEachFeature(function(feature) {
-                if (feature.get(identifier) === value) {
+                if ((!identifier && !value) ||
+                    feature.get(identifier) === value) {
                     featuresToRemove.push(feature);
                 }
             });
 
-            for (var i = 0; i < featuresToRemove.length; i++) {
-                source.removeFeature(featuresToRemove[i]);
-            }
+            // notify other components of removal
+            var formatter = this._supportedFormats['GeoJSON'];
+            var sandbox = this.getSandbox();
+            var removeEvent = sandbox.getEventBuilder('FeatureEvent')().setOpRemove();
 
+            for (var i = 0; i < featuresToRemove.length; i++) {
+                var feature = featuresToRemove[i];
+                source.removeFeature(feature);
+                var geojson = formatter.writeFeaturesObject([feature]);
+                removeEvent.addFeature(feature.getId(), geojson, olLayer.get('id'));
+            }
+            sandbox.notifyAll(removeEvent);
         },
-        _getGeometryType: function(geometry){
+        _getGeometryType: function(geometry) {
             if (typeof geometry === 'string' || geometry instanceof String) {
                 return 'WKT';
             }
@@ -203,6 +249,7 @@ Oskari.clazz.define(
                     //layer is already on map
                     //clear old features if defined so
                     if (options.clearPrevious === true) {
+                        this._removeFeaturesByAttribute(layer);
                         layer.getSource().clear();
                     }
                     vectorSource = layer.getSource();
@@ -223,6 +270,18 @@ Oskari.clazz.define(
                     me.raiseVectorLayer(layer);
                 }
 
+                // notify other components that features have been added
+                var formatter = this._supportedFormats['GeoJSON'];
+                var sandbox = this.getSandbox();
+                var addEvent = sandbox.getEventBuilder('FeatureEvent')().setOpAdd();
+
+                _.forEach(features, function (feature) {
+                    var geojson = formatter.writeFeaturesObject([feature]);
+                    addEvent.addFeature(feature.getId(), geojson, layer.get('id'));
+                });
+                sandbox.notifyAll(addEvent);
+
+                // re-position map when opted
                 if (options.centerTo === true) {
                     var extent = vectorSource.getExtent();
                     me.getMapModule().zoomToExtent(extent);
