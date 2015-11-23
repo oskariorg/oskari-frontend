@@ -110,7 +110,7 @@ Oskari.clazz.define(
                  */
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/mapmodule-plugin/plugin/markers/MarkersPlugin.js"
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/markers/MarkersPlugin.ol2.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/request/AddMarkerRequest.js"

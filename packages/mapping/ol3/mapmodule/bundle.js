@@ -180,7 +180,7 @@ Oskari.clazz.define(
                 // Markers plugin
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapmodule_ol3/plugin/markers/MarkersPlugin.js"
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/markers/MarkersPlugin.ol3.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/request/AddMarkerRequest.js"
@@ -196,6 +196,9 @@ Oskari.clazz.define(
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/event/AfterAddMarkerEvent.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/event/MarkerClickEvent.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/event/AfterRemoveMarkersEvent.js"
