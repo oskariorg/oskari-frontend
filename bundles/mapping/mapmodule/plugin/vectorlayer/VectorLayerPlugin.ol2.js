@@ -63,6 +63,17 @@ Oskari.clazz.define(
                 }
             };
         },
+        __featureClicked: function(features, olLayer) {
+            var sandbox = this.getSandbox();
+            var clickEvent = sandbox.getEventBuilder('FeatureEvent')().setOpClick();
+            var formatter = this._supportedFormats['GeoJSON'];
+            var me = this;
+            _.forEach(features, function (feature) {
+                var geojson = formatter.write([feature]);
+                clickEvent.addFeature(feature.id, geojson, me._getLayerId(olLayer.name));
+            });
+            sandbox.notifyAll(clickEvent);
+        },
         /**
          * @method preselectLayers
          * @public preselect layers
@@ -239,6 +250,13 @@ Oskari.clazz.define(
                         opacity = layer.getOpacity() / 100;
                     }
                     olLayer = new OpenLayers.Layer.Vector(me._olLayerPrefix + options.layerId);
+                    olLayer.events.register('click', this, function(e) {
+                        // clicking on map, check if feature is hit
+                        if (e.target && e.target._featureId) {
+                            me.__featureClicked([olLayer.getFeatureById(e.target._featureId)], olLayer);
+                        }
+                        return true;
+                    });
                     olLayer.setOpacity(opacity);
                     isOlLayerAdded = false;
                 }
