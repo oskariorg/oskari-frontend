@@ -649,7 +649,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @param {Number} zoomLevel the new zoom level
          */
         zoomTo: function (zoomLevel) {
-            this.setZoomLevel(zoomLevel, false);
+            this.setZoomLevel(zoomLevel);
         },
 
         /**
@@ -665,13 +665,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 newZoomLevel = this.getMapZoom();
             }
             this._map.getView().setZoom(newZoomLevel);
-            /*
             this._updateDomainImpl();
             if (suppressEvent !== true) {
                 //send note about map change
                 this.notifyMoveEnd();
             }
-            */
         },
 
         /**
@@ -686,20 +684,34 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          *     wanting to notify at end of the chain for performance reasons or similar) (optional)
          */
         zoomToExtent: function (bounds, suppressStart, suppressEnd) {
-            this._map.getView().fit(bounds, this._map.getSize());
+            var extent = this.__boundsToArray(bounds);
+            this._map.getView().fit(extent, this._map.getSize());
             this._updateDomainImpl();
             // send note about map change
-            /*
             if (suppressStart !== true) {
                 this.notifyStartMove();
             }
             if (suppressEnd !== true) {
                 this.notifyMoveEnd();
             }
-            */
         },
-
-
+        /**
+         * Transforms a bounds object with left,top,bottom and right properties
+         * to an OL3 array. Returns the parameter as is if those properties don't exist.
+         * @param  {Object | Array} bounds bounds object or OL3 array
+         * @return {Array}          Ol3 presentation of bounds
+         */
+        __boundsToArray : function(bounds) {
+            var extent = bounds;
+            if(bounds.left && bounds.top && bounds.right && bounds.bottom) {
+              extent = [
+                    bounds.left,
+                    bounds.bottom,
+                    bounds.right,
+                    bounds.top];
+            }
+            return extent;
+        },
         /**
          * @method panMapByPixels
          * Pans the map by given amount of pixels.
