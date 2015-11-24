@@ -87,6 +87,9 @@ Oskari.clazz.define(
             me.__featureClicked(features);
         },
         __featureClicked: function(features) {
+            if(!features || !features.length) {
+                return;
+            }
             var sandbox = this.getSandbox();
             var clickEvent = sandbox.getEventBuilder('FeatureEvent')().setOpClick();
             var formatter = this._supportedFormats['GeoJSON'];
