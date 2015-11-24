@@ -2,6 +2,10 @@
 
 ## 1.34
 
+### mapmodule-plugin/zoombar
+
+Added mobile styled zoombar buttons. Mobile styled icons showed when map height is smaller than 500 px.
+
 ### mapstats
 
 Changed references from set/getWmsName() -> set/getLayerName() to use the inherited property from AbstractLayer.

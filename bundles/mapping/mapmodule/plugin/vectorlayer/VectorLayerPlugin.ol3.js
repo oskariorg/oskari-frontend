@@ -174,7 +174,7 @@ Oskari.clazz.define(
             var source = olLayer.getSource(),
                 featuresToRemove = [];
 
-            // add all features if identifier and value are missing or 
+            // add all features if identifier and value are missing or
             // if given -> features that have
             source.forEachFeature(function(feature) {
                 if ((!identifier && !value) ||

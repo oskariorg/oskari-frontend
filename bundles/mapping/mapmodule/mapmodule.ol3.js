@@ -509,6 +509,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
         updateSize: function() {
             this._map.updateSize();
+            this._updateDomainImpl();
 
             var sandbox = this._sandbox,
                 mapVO = sandbox.getMap(),

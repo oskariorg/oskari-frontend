@@ -244,7 +244,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var sandbox = this._sandbox;
             /* may be this should dispatch to mapmodule */
             var lonlat = this._map.getLonLatFromViewPortPx(evt.xy),
-                event = this._mapClickedBuilder(lonlat, evt.xy.x, evt.xy.y, sandbox.isCtrlKeyDown());
+                event = this._mapClickedBuilder(lonlat, evt.xy.x, evt.xy.y);
             sandbox.notifyAll(event);
         },
 
@@ -705,12 +705,14 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 mapVO = sandbox.getMap(),
                 width =  mapVO.getWidth(),
                 height = mapVO.getHeight();
+            
+
             // send as an event forward
             if(width && height) {
-                var evt = sandbox.getEventBuilder(
-                    'MapSizeChangedEvent'
-                )(mapVO.getWidth(), mapVO.getHeight());
-                sandbox.notifyAll(evt);
+              var evt = sandbox.getEventBuilder(
+                  'MapSizeChangedEvent'
+              )(width, height);
+              sandbox.notifyAll(evt);
             }
         },
 
@@ -742,7 +744,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var sandbox = this.getSandbox(),
                 mapVO = sandbox.getMap(),
                 lonlat = this._getMapCenter();
-
             mapVO.moveTo(lonlat.lon, lonlat.lat, this.getMapZoom());
 
             mapVO.setScale(this.getMapScale());
