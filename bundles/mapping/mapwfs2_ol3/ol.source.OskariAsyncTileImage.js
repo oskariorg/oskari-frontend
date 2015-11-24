@@ -130,9 +130,9 @@ ol.source.OskariAsyncTileImage.prototype.getNonCachedGrid = function (grid) {
 
 
 /**
- * Note! Same as the original function, but tilestate is initialized to LOADING 
+ * Note! Same as the original function, but tilestate is initialized to LOADING
  * so tilequeue isn't blocked by the async nature of Oskari WFS
- * 
+ *
  * @param {number} z Tile coordinate z.
  * @param {number} x Tile coordinate x.
  * @param {number} y Tile coordinate y.
@@ -151,7 +151,7 @@ ol.source.OskariAsyncTileImage.prototype.createTile_ = function(z, x, y, pixelRa
   var tile = new this.tileClass(
       tileCoord,
       // always set state as LOADING since loading is handled outside ol3
-      // IDLE state will result in a call to loadTileFunction and block rendering on other sources if 
+      // IDLE state will result in a call to loadTileFunction and block rendering on other sources if
       // we don't get results because of async load errors/job cancellation etc
       ol.TileState.LOADING,
       tileUrl !== undefined ? tileUrl : '',

@@ -173,7 +173,7 @@ Oskari.clazz.define(
         _removeFeaturesByAttribute: function(olLayer, identifier, value) {
             var featuresToRemove = [];
 
-            // add all features if identifier and value are missing or 
+            // add all features if identifier and value are missing or
             // if given -> features that have
             if (!identifier && !value) {
                 featuresToRemove = olLayer.features;
@@ -242,7 +242,7 @@ Oskari.clazz.define(
                 }
                 if(!Array.isArray(features)) {
                     features = [features];
-                } 
+                }
                 olLayer = me._map.getLayersByName(me._olLayerPrefix + options.layerId)[0];
                 if (!olLayer) {
                     var opacity = 100;

@@ -275,7 +275,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 minus.css(me._desktopStyles.minus.css);
                 div.width(18);
             }
-            
+
         },
 
         _setLayerToolsEditModeImpl: function () {
@@ -388,7 +388,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 minus.css(me._desktopStyles.minus.css);
                 slider.css({
                     'height': sliderHeight + 'px'
-                });                
+                });
             }
 
             me._handleMapSizeChanges(mapModule.getSize(), div);
