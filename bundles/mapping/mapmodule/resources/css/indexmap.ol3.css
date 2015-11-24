@@ -48,6 +48,11 @@ div.mapplugin.indexmap {
 .olControlOverviewMapExtentRectangle {
   border: 2px dashed #f47729 !important; }
 
+div.mapplugin.indexmap .mapplugin.ol_indexmap {
+  width: 150px !important;
+  height:150px !important;
+  display: inline;}
+
 /**
   ol3 specific
  */
