@@ -341,16 +341,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                     'height': '',
                     'margin-left': ''
                 });
-                plus.css({
-                    'background-image': '',
-                    'width': '',
-                    'height': ''
-                });
-                minus.css({
-                    'background-image': '',
-                    'width': '',
-                    'height': ''
-                });
+
+                me._desktopStyles = {
+                    plus: {
+                        css: {
+                            'background-image': '',
+                            'width': '',
+                            'height': ''
+                        }
+                    },
+                    minus: {
+                        css: {
+                            'background-image': '',
+                            'width': '',
+                            'height': ''
+                        }
+                    }
+                };
+                plus.css(me._desktopStyles.plus.css);
+                minus.css(me._desktopStyles.minus.css);
+
                 slider.css({
                     'height': sliderHeight + 'px'
                 });

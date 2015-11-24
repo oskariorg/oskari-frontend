@@ -110,7 +110,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
 
                 mapContainer.width(mapWidth);
 
-
                 // notify map module that size has changed
                 me.updateSize();
             }
@@ -163,13 +162,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 );
             });
 
-            me.adjustMapSize();
+            
 
             module.start(me.getSandbox());
 
             if (!me.nomaprender) {
                 map.render(me.mapDivId);
             }
+
+            me.adjustMapSize();
+            
             // startup plugins
             if (me.conf.plugins) {
                 var plugins = this.conf.plugins,
