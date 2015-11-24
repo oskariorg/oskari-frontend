@@ -4,6 +4,7 @@ goog.require('goog.events.EventType');
 goog.require('ol.TileState');
 goog.require('ol.proj');
 goog.require('ol.source.TileImage');
+goog.require('ol.TileRange');
 
 /**
  * @classdesc
@@ -16,6 +17,12 @@ goog.require('ol.source.TileImage');
  * @api
  */
 ol.source.OskariAsyncTileImage = function(options) {
+    this.tileLayerCache = {
+      /** @export */
+      'tileSetIdentifier': 0,
+      /** @export */
+      'tileInfos': {}
+    }
   goog.base(this, {
     attributions: options.attributions,
     extent: options.extent,
@@ -42,14 +49,16 @@ ol.source.OskariAsyncTileImage = function(options) {
     urls: options.urls,
     wrapX: options.wrapX
   });
-
-  this.___tileLayerCache = {
-      tileSetIdentifier: 0,
-      tileInfos: {}
-  };
 };
 goog.inherits(ol.source.OskariAsyncTileImage, ol.source.TileImage);
 
+
+/**
+ * @api
+ */
+ol.source.OskariAsyncTileImage.prototype.getTileRangeForExtentAndResolution =  function (extent, resolution) {
+    return this.tileGrid.getTileRangeForExtentAndResolution(extent, resolution);
+}
 
 /**
  * Strip bbox for unique key because of some inaccucate cases
@@ -65,8 +74,11 @@ ol.source.OskariAsyncTileImage.prototype.bboxkeyStrip_ =  function (bbox) {
     return stripbox.join(',');
 };
 
+/**
+ * @return {!Object.<string, *>}
+ */
 ol.source.OskariAsyncTileImage.prototype.getWFSTileCache_ = function() {
-    return this.___tileLayerCache;
+    return this.tileLayerCache;
 };
 
 ol.source.OskariAsyncTileImage.prototype.purgeWFSTileCache_ = function() {
@@ -87,6 +99,9 @@ ol.source.OskariAsyncTileImage.prototype.purgeWFSTileCache_ = function() {
         */
 };
 
+/**
+ * @api
+ */
 ol.source.OskariAsyncTileImage.prototype.getNonCachedGrid = function (grid) {
     var result = [],
         i,
@@ -137,39 +152,83 @@ ol.source.OskariAsyncTileImage.prototype.getNonCachedGrid = function (grid) {
  * @param {number} y Tile coordinate y.
  * @param {number} pixelRatio Pixel ratio.
  * @param {ol.proj.Projection} projection Projection.
- * @param {string} key The key set on the tile.
- * @return {ol.Tile} Tile.
+ * @return {!ol.Tile} Tile.
  * @private
  */
-ol.source.OskariAsyncTileImage.prototype.createTile_ = function(z, x, y, pixelRatio, projection, key) {
-  var tileCoord = [z, x, y];
-  var urlTileCoord = this.getTileCoordForTileUrlFunction(
-      tileCoord, projection);
-  var tileUrl = urlTileCoord ?
-      this.tileUrlFunction(urlTileCoord, pixelRatio, projection) : undefined;
-  var tile = new this.tileClass(
-      tileCoord,
-      // always set state as LOADING since loading is handled outside ol3
-      // IDLE state will result in a call to loadTileFunction and block rendering on other sources if 
-      // we don't get results because of async load errors/job cancellation etc
-      ol.TileState.LOADING,
-      tileUrl !== undefined ? tileUrl : '',
-      this.crossOrigin,
-      this.tileLoadFunction);
-  tile.key = key;
-  goog.events.listen(tile, goog.events.EventType.CHANGE,
-      this.handleTileChange, false, this);
-  return tile;
+ol.source.OskariAsyncTileImage.prototype.createTile_ = function(z, x, y, pixelRatio, projection) {
+  var tileCoordKey = this.getKeyZXY(z, x, y);
+  if (this.tileCache.containsKey(tileCoordKey)) {
+    return /** @type {!ol.Tile} */ (this.tileCache.get(tileCoordKey));
+  } else {
+    goog.asserts.assert(projection, 'argument projection is truthy');
+    var tileCoord = [z, x, y];
+    var urlTileCoord = this.getTileCoordForTileUrlFunction(
+        tileCoord, projection);
+    var tileUrl = !urlTileCoord ? undefined :
+        this.tileUrlFunction(urlTileCoord, pixelRatio, projection);
+    var tile = new this.tileClass(
+        tileCoord,
+        // always set state as LOADING since loading is handled outside ol3
+        // IDLE state will result in a call to loadTileFunction and block rendering on other sources if 
+        // we don't get results because of async load errors/job cancellation etc
+        ol.TileState.LOADING,
+        tileUrl !== undefined ? tileUrl : '',
+        this.crossOrigin,
+        this.tileLoadFunction);
+    goog.events.listen(tile, goog.events.EventType.CHANGE,
+        this.handleTileChange, false, this);
+
+    this.tileCache.set(tileCoordKey, tile);
+    return tile;
+  }
 };
 
 /**
+ * Workaround for being able to access renderer's private tile range property...
+ * @api
+ * @return  {ol.renderer.canvas.TileLayer}     canvasRenderer to force rerendering of tiles (ugly hack)
+ */
+ ol.source.OskariAsyncTileImage.prototype.getCanvasRenderer = function(layer, map){
+    return map.getRenderer().getLayerRenderer(layer);
+ }
+
+/**
+ * Workaround for being able to access renderer's private tile range property...
+ * @api
+ */
+ ol.renderer.canvas.TileLayer.prototype.resetRenderedCanvasTileRange = function() {
+  this.renderedCanvasTileRange_ = new ol.TileRange(NaN, NaN, NaN, NaN);
+ }
+
+/**
+ * Workaround for being able to set the imageTile's state manually.
+ * @api
+ */
+ol.ImageTile.prototype.setState = function(state) {
+  this.state = state;
+};
+
+/**
+ * Reveal TileGrid's innermost wanted properties
+ * @api
+ */
+ ol.tilegrid.TileGrid.prototype.getTileRangeForExtentAndResolutionWrapper = function(mapExtent, resolution) {
+    var tileRange = this.getTileRangeForExtentAndResolution(mapExtent, resolution);
+    //return as array to avoid the closure compiler's dirty renaming deeds without having to expose the tilerange as well... 
+    return [tileRange.minX, tileRange.minY, tileRange.maxX, tileRange.maxY];
+    
+ }
+/**
  * @param  {Array.<number>} boundsObj     tile bounds
  * @param  {string}         imageData     dataurl or actual url for image
- * @param  {ol.renderer.canvas.Layer}     canvasRenderer to force rerendering of tiles (ugly hack)
+ * @param  {ol.layer.Tile}     layer whose renderer will be fooled into thinking it's gotta redraw everything (ugly hack)
+ * @param  {ol.Map}     map from which to dig up the layerrenderer to hack (ugly hack)
  * @param  {boolean}        boundaryTile  true if this an incomplete tile
+ * @api
  */
-ol.source.OskariAsyncTileImage.prototype.setupImageContent = function(boundsObj, imageData, canvasRenderer, boundaryTile) {
-    var bboxKey = this.bboxkeyStrip_(boundsObj);
+ol.source.OskariAsyncTileImage.prototype.setupImageContent = function(boundsObj, imageData, layer, map, boundaryTile) {
+    var me = this,
+        bboxKey = this.bboxkeyStrip_(boundsObj);
     if (!bboxKey) {
       return;
     }
@@ -190,25 +249,19 @@ ol.source.OskariAsyncTileImage.prototype.setupImageContent = function(boundsObj,
         case ol.TileState.LOADING: //LOADING: 1,
             tile.PLACEHOLDER = false;
             tile.getImage().src = imageData;
-            //tile.state = ol.TileState.LOADED;
-
+            tile.setState(ol.TileState.LOADED);
             //reset the renderers memory of it's tilerange as to make sure that our boundary tiles get drawn perfectly
-            canvasRenderer.renderedCanvasTileRange_ = new ol.TileRange();
-            this.dispatchEvent(new ol.source.TileEvent(ol.source.TileEventType.TILELOADEND, tile));
+            me.getCanvasRenderer(layer, map).resetRenderedCanvasTileRange();
             this.changed();
             break;
-
         case ol.TileState.LOADED: // LOADED: 2
         case ol.TileState.ERROR: // ERROR: 3
         case ol.TileState.EMPTY: // EMPTY: 4
             tile.PLACEHOLDER = false;
             tile.getImage().src = imageData;
-
-            //tile.state = ol.TileState.LOADED;
-
+            tile.setState(ol.TileState.LOADED);
             //reset the renderers memory of it's tilerange as to make sure that our boundary tiles get drawn perfectly
-            canvasRenderer.renderedCanvasTileRange_ = new ol.TileRange();
-            this.dispatchEvent(new ol.source.TileEvent(ol.source.TileEventType.TILELOADEND, tile));
+            me.getCanvasRenderer(layer, map).resetRenderedCanvasTileRange();
             this.changed();
             break;
         default:
@@ -224,7 +277,8 @@ ol.source.OskariAsyncTileImage.prototype.setupImageContent = function(boundsObj,
 
 /**
  * Note! Always uses the non-projected internal tile getter
+ * @inheritDoc
  */
 ol.source.OskariAsyncTileImage.prototype.getTile = function(z, x, y, pixelRatio, projection) {
-    return this.getTileInternal(z, x, y, pixelRatio, projection);
+    return this.createTile_(z, x, y, pixelRatio, projection);
 };

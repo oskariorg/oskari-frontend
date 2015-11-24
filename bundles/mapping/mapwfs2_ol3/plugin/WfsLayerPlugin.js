@@ -1064,7 +1064,13 @@ Oskari.clazz.define(
                     columns: null
                 },
                 rowidx = 0;
-            var tileRangeExtent = tileGrid.getTileRangeForExtentAndResolution(mapExtent, resolution);
+            var tileRangeExtentArray = tileGrid.getTileRangeForExtentAndResolutionWrapper(mapExtent, resolution);
+            var tileRangeExtent = {
+                minX: tileRangeExtentArray[0],
+                minY: tileRangeExtentArray[1],
+                maxX: tileRangeExtentArray[2],
+                maxY: tileRangeExtentArray[3]
+            }
             for (var iy = tileRangeExtent.minY; iy <= tileRangeExtent.maxY; iy++) {
                 var colidx = 0;
                 for (var ix = tileRangeExtent.minX; ix <= tileRangeExtent.maxX; ix++) {
@@ -1381,10 +1387,10 @@ Oskari.clazz.define(
                 projection: projection,
                 tileGrid: this._tileGrid
             });
-
             var openLayer = new ol.layer.Tile({
                 source: tileSrc
             });
+
             openLayer.setOpacity(_layer.getOpacity() / 100);
             me.getMapModule().addLayer(openLayer, _layer, layerName);
             me._layers[_layer.getId()] = openLayer;
@@ -1455,9 +1461,7 @@ Oskari.clazz.define(
 
             } else { // "normal"
                 var ollayer = me._layers[layerId];
-                var mapRenderer = map.getRenderer();
-                var layerRenderer = mapRenderer.getLayerRenderer(ollayer);
-                ollayer.getSource().setupImageContent(boundsObj, imageUrl, layerRenderer, boundaryTile);
+                ollayer.getSource().setupImageContent(boundsObj, imageUrl, ollayer, map, boundaryTile);
             }
         }
     }, {
