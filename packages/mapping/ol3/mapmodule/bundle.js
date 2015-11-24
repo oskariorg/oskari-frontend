@@ -180,7 +180,7 @@ Oskari.clazz.define(
                 // Markers plugin
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapmodule_ol3/plugin/markers/MarkersPlugin.js"
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/markers/MarkersPlugin.ol3.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/request/AddMarkerRequest.js"
@@ -196,6 +196,9 @@ Oskari.clazz.define(
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/event/AfterAddMarkerEvent.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/event/MarkerClickEvent.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/event/AfterRemoveMarkersEvent.js"
@@ -267,26 +270,29 @@ Oskari.clazz.define(
                 /** Layers backport */
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapmodule_ol3/plugin/wmslayer/WmsLayerPlugin.js"
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/wmslayer/WmsLayerPlugin.ol3.js"
                 },
                 /**
                  * Vector Layer plugin
                  */
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapmodule_ol3/plugin/vectorlayer/VectorLayerPlugin.js"
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/vectorlayer/VectorLayerPlugin.ol3.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapmodule_ol3/plugin/vectorlayer/request/AddFeaturesToMapRequest.js"
+                    "src": "../../../../bundles/mapping/mapmodule/event/FeatureEvent.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapmodule_ol3/plugin/vectorlayer/request/AddFeaturesToMapRequestHandler.js"
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/vectorlayer/request/AddFeaturesToMapRequest.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapmodule_ol3/plugin/vectorlayer/request/RemoveFeaturesFromMapRequest.js"
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/vectorlayer/request/AddFeaturesToMapRequestHandler.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapmodule_ol3/plugin/vectorlayer/request/RemoveFeaturesFromMapRequestHandler.js"
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/vectorlayer/request/RemoveFeaturesFromMapRequest.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/vectorlayer/request/RemoveFeaturesFromMapRequestHandler.js"
                 },
                 /**
                  * GeoLocation plugin

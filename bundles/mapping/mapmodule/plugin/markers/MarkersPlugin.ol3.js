@@ -79,9 +79,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 'Toolbar.ToolbarLoadedEvent': function() {
                     me._registerTools();
                 },
-                SearchClearedEvent: function() {
-                    me.removeMarkers();
-                },
                 AfterRearrangeSelectedMapLayerEvent: function() {
                     me.raiseMarkerLayer();
                 }
@@ -211,23 +208,10 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          */
         _createMapMarkerLayer: function() {
             var me = this,
-                markerLayer = new OpenLayers.Layer.Vector('Markers');
-            markerLayer.events.fallThrough = true;
-            // featureclick/nofeatureclick doesn't seem to be emitted, so working around that
-            markerLayer.events.register('click', this, function(e) {
-                if(me._waitingUserClickToAddMarker) {
-                    // adding a marker, handled in __mapClick()
-                    return true;
-                }
-                // clicking on map, check if marker is hit
-                if (e.target && e.target._featureId) {
-                    me.__markerClicked(e.target._featureId);
-                }
-                return true;
-            });
+                markerLayer = new ol.layer.Vector({title: 'Markers', source: new ol.source.Vector()});
 
-            this.getMap().addLayer(markerLayer);
-            this.raiseMarkerLayer(markerLayer);
+            me.getMap().addLayer(markerLayer);
+            me.raiseMarkerLayer(markerLayer);
             return markerLayer;
         },
         /**
@@ -242,6 +226,12 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 this._showForm(event.getMouseX(), event.getMouseY());
                 return;
             }
+            var me = this;
+            this.getMap().forEachFeatureAtPixel([event.getMouseX(), event.getMouseY()], function (feature, layer) {
+                if(layer === me.getMarkersLayer()) {
+                    me.__markerClicked(feature.get('id'));
+                }
+            });
         },
         /**
          * Called when a marker has been clicked.
@@ -279,7 +269,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         afterHideMapMarkerEvent: function(event) {
             var markerLayer = this.getMarkersLayer();
             if (markerLayer) {
-                markerLayer.setVisibility(false);
+                markerLayer.setVisible(false);
             }
         },
 
@@ -299,7 +289,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             // remove all
             if (!optionalMarkerId) {
                 // Openlayers
-                markerLayer.removeAllFeatures();
+                markerLayer.getSource().clear();
                 // internal data structure
                 delete me._markers;
                 me._markers = {};
@@ -314,7 +304,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     return;
                 }
                 // Openlayers
-                markerLayer.removeFeatures(marker);
+                markerLayer.getSource().removeFeature(marker);
                 // internal data structure
                 me._markers[optionalMarkerId] = null;
                 delete me._markers[optionalMarkerId];
@@ -348,12 +338,11 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @private
          */
         _showForm: function(clickX, clickY) {
-            this.stopMarkerAdd();
             var me = this;
-            var lonlat = me._map.getLonLatFromPixel({
-                x : clickX,
-                y : clickY
-            });
+            var lonlat = me._map.getCoordinateFromPixel([
+                clickX,
+                clickY
+            ]);
             var loc = me.getLocalization().form;
             me.dotForm = Oskari.clazz.create(
                 'Oskari.userinterface.component.visualization-form.DotForm',
@@ -377,8 +366,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
 
                 if (reqBuilder) {
                     var data = {
-                        x: lonlat.lon,
-                        y: lonlat.lat,
+                        x: lonlat[0],
+                        y: lonlat[1],
                         msg: values.message,
                         color: values.color,
                         shape: values.shape,
@@ -386,6 +375,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     };
                     var request = reqBuilder(data);
                     me.getSandbox().request(me.getName(), request);
+                    me.stopMarkerAdd();
                 }
                 me.dotForm.getDialog().close(true);
                 me.enableGfi(true);
@@ -492,32 +482,34 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             }
 
             var markerLayer = this.getMarkersLayer(),
-                point = new OpenLayers.Geometry.Point(data.x, data.y),
-                newMarker = new OpenLayers.Feature.Vector(point, {
-                    markerId: data.id
-                }, {
-                    externalGraphic: iconSrc,
-                    graphicWidth: size,
-                    graphicHeight: size,
-                    fillOpacity: 1,
-                    label: decodeURIComponent(data.msg),
-                    fontColor: '$000000',
-                    fontSize: '16px',
-                    fontFamily: 'Arial',
-                    fontWeight: 'bold',
-
-                    labelAlign: 'lm',
-                    labelXOffset: 8 + 2 * data.size,
-                    labelYOffset: 8,
-                    labelOutlineColor: 'white',
-                    labelOutlineWidth: 1
-                });
-            newMarker.id = data.id;
+                markerStyle = new ol.style.Style({
+                    image: new ol.style.Icon({
+                        src: iconSrc,
+                        size: [size,size]
+                    }),
+                    text: new ol.style.Text({
+                        text: decodeURIComponent(data.msg),
+                        textAlign: 'left',
+                        textBaseline: 'middle',
+                        offsetX: 8 + 2 * data.size,
+                        offsetY: -8,
+                        fill: new ol.style.Fill({
+                            color: '#000000'
+                        }),
+                        stroke: new ol.style.Stroke({
+                            color: '#ffffff',
+                            width: 1
+                        }),
+                        font: 'bold 16px Arial'
+                    })
+                }),
+                newMarker = new ol.Feature({id: data.id, geometry: new ol.geom.Point([data.x, data.y])});
 
             this._markerFeatures[data.id] = newMarker;
             this._markers[data.id] = data;
+            newMarker.setStyle(markerStyle);
 
-            markerLayer.addFeatures([newMarker]);
+            markerLayer.getSource().addFeature(newMarker);
             this.raiseMarkerLayer(markerLayer);
 
             // Save generated icon
@@ -557,10 +549,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 size = this._getSizeInPixels(size);
                 var paper = Raphael(0, 0, size, size);
                 paper.clear();
-
-                // Test lines for pixel level accuracy
-                // var lines = paper.path("M0 0L"+size+" "+size+" M0 "+size+" L"+size+" 0");
-                // lines.attr("stroke", "#000");
 
                 // Construct marker parameters
                 var font = paper.getFont(me._font.name),
@@ -625,7 +613,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 layer = this.getMarkersLayer();
             }
             this.getMapModule().bringToTop(layer);
-            layer.setVisibility(true);
         },
 
         /**
@@ -777,7 +764,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 me.state = {};
             }
             me.state.markers = [];
-            _.each(me._markers, function(marker) {
+            _.each(me._markers, function(value) {
                 if(!marker.transient) {
                     me.state.markers.push(marker);
                 }

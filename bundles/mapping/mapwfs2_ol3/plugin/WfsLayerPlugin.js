@@ -22,7 +22,6 @@ Oskari.clazz.define(
         me._io = null;
 
         // state
-        me.tileSize = null;
         me.zoomLevel = null;
         me._isWFSOpen = 0;
 
@@ -456,17 +455,16 @@ Oskari.clazz.define(
             else {
                 layers = sandbox.findAllSelectedMapLayers();
             }
+
             for (i = 0; i < layers.length; i += 1) {
                 if (layers[i].hasFeatureData()) {
                     // clean features lists
                     layers[i].setActiveFeatures([]);
                     if (grid !== null && grid !== undefined) {
                         layerId = layers[i].getId();
-                        tiles = me.getNonCachedGrid(layerId, grid);
-                        //TODO: is there any point whatsoever in even calling this, if there are no tiles to update?
-                        //if (!tiles || tiles.length === 0) {
-                        //    continue;
-                        //}
+                        var ollayer = this._layers[layerId];
+                        tiles = ollayer.getSource().getNonCachedGrid(grid);
+                        //tiles = me.getNonCachedGrid(layerId, grid);
                         me._layersLoading[layerId] = tiles.length;
                         me.getIO().setLocation(
                             layerId,
@@ -487,7 +485,6 @@ Oskari.clazz.define(
             // update zoomLevel and highlight pictures
             // must be updated also in map move, because of hili in bordertiles
             me.zoomLevel = zoom;
-
             srs = map.getSrsName();
             bbox = map.getExtent();
             zoom = map.getZoom();
@@ -804,7 +801,9 @@ Oskari.clazz.define(
                     layer.setActiveFeatures([]);
                     if (grid !== null && grid !== undefined) {
                         layerId = layer.getId();
-                        tiles = me.getNonCachedGrid(layerId, grid);
+                        var ollayer = this._layers[layerId];
+                        tiles = ollayer.getSource().getNonCachedGrid(grid);
+                        //tiles = me.getNonCachedGrid(layerId, grid);
                         me.getIO().setLocation(
                             layerId,
                             srs, [
@@ -856,19 +855,23 @@ Oskari.clazz.define(
                     layer.setActiveFeatures([]);
                     if (grid !== null && grid !== undefined) {
                         layerId = layer.getId();
-                        tiles = me.getNonCachedGrid(layerId, grid);
-                        me.getIO().setLocation(
-                            layerId,
-                            srs, [
-                                bbox.left,
-                                bbox.bottom,
-                                bbox.right,
-                                bbox.top
-                            ],
-                            zoom,
-                            grid,
-                            tiles
-                        );
+                        if(this._layers) {
+                            var ollayer = this._layers[layerId];
+                            tiles = ollayer.getSource().getNonCachedGrid(grid);
+                            //tiles = me.getNonCachedGrid(layerId, grid);
+                            me.getIO().setLocation(
+                                layerId,
+                                srs, [
+                                    bbox.left,
+                                    bbox.bottom,
+                                    bbox.right,
+                                    bbox.top
+                                ],
+                                zoom,
+                                grid,
+                                tiles
+                            );
+                        }
                        // not in OL3 me._tilesLayer.redraw();
                     }
                 }
@@ -988,7 +991,8 @@ Oskari.clazz.define(
          * @param {Object} layer
          */
         removeMapLayerFromMap: function (layer) {
-            var removeLayer = this._layers[layer.getId()];
+            var me = this,
+                removeLayer = this._layers[layer.getId()];
             if (removeLayer) {
                 me.getMap().removeLayer(removeLayer);
             }
@@ -1032,259 +1036,6 @@ Oskari.clazz.define(
 
             return me.getMapModule().getLayersByName(layerName)[0]; //this.getMap().getLayersByName(wfsReqExp)[0];
         },
-
-        /**
-         * @method drawImageTile
-         *
-         * Adds a tile to the Openlayers map
-         *
-         * @param {Oskari.mapframework.domain.WfsLayer} layer
-         *           WFS layer that we want to update
-         * @param {String} imageUrl
-         *           url that will be used to download the tile image
-         * @param {OpenLayers.Bounds} imageBbox
-         *           bounds for the tile
-         * @param {Object} imageSize
-         * @param {String} layerType
-         *           postfix so we can identify the tile as highlight/normal
-         * @param {Boolean} boundaryTile
-         *           true if on the boundary and should be redrawn
-         * @param {Boolean} keepPrevious
-         *           true to not delete existing tile
-         */
-        drawImageTile: function (layer, imageUrl, imageBbox, imageSize, layerType, boundaryTile, keepPrevious) {
-            //TODO: clean up this method.
-            var me = this,
-                map = me.getMap(),
-                layerId = layer.getId(),
-                layerIndex = null,
-                layerName = me.__layerPrefix + layerId + '_' + layerType,
-                layerScales,
-                normalLayer,
-                normalLayerExp,
-                normalLayerIndex,
-                highlightLayer,
-                highlightLayerExp,
-                BBOX,
-                bboxKey,
-                dataForTileTemp,
-                style,
-                tileToUpdate,
-                boundsObj = imageBbox, //ol.Extent
-                ols,
-                wfsMapImageLayer,
-                normalLayerExp = me.__layerPrefix + layerId + '_' + me.__typeNormal,
-                normalLayer = me.getMapModule().getLayersByName(normalLayerExp)[0];  //map.getLayersByName(normalLayerExp);
-
-            /** Safety checks */
-            if (!imageUrl || !boundsObj) return;
-
-            if (layerType === me.__typeHighlight) {
-                ols = [imageSize.width,imageSize.height];  //ol.Size
-                layerScales = me.getMapModule().calculateLayerScales(layer.getMaxScale(),layer.getMinScale());
-
-                wfsMapImageLayer = new ol.layer.Image({
-                    source: new ol.source.ImageStatic({
-                        url: imageUrl,
-                        imageExtent: boundsObj,
-                        imageSize: ols,
-                        logo: false
-
-                    }),
-                    title: layerName
-                })
-
-          /*      wfsMapImageLayer = new OpenLayers.Layer.Image(
-                    layerName,imageUrl,
-                    boundsObj, ols, {
-                        scales: layerScales,
-                        transparent: true,
-                        format: 'image/png',
-                        isBaseLayer: false,
-                        displayInLayerSwitcher: false,
-                        visibility: true,
-                        buffer: 0 }
-                ); */
-                wfsMapImageLayer.opacity = layer.getOpacity() / 100;
-               // map.addLayer(wfsMapImageLayer);
-                me.getMapModule().addLayer(wfsMapImageLayer, layer, layerName);
-                wfsMapImageLayer.setVisibility(true);
-                // also for draw
-                wfsMapImageLayer.redraw(true);
-
-                // if removed set to same index [but if wfsMapImageLayer created
-                // in add (sets just in draw - not needed then here)]
-                if (layerIndex !== null && wfsMapImageLayer !== null) {
-                    map.setLayerIndex(wfsMapImageLayer, layerIndex);
-                }
-
-                // highlight picture on top of normal layer images
-                highlightLayerExp = me.__layerPrefix + layerId + '_' + me.__typeHighlight;
-                highlightLayer = me.getMapModule().getLayersByName(highlightLayerExp)[0]; // map.getLayersByName(highlightLayerExp);
-
-                if (normalLayer.length > 0 && highlightLayer.length > 0) {
-                    normalLayerIndex = map.getLayerIndex(normalLayer[normalLayer.length - 1]);
-                    map.setLayerIndex(highlightLayer[0],normalLayerIndex + 10);
-                }
-            } else { // "normal"
-                bboxKey = this.bboxkeyStrip(boundsObj);
-
-                //according to our bookkeeping the layer shouldn't be loading anymore...If it is though, probably should just assume the number of tiles to be loaded to zero...
-                if (!me._layersLoading[layerId]) {
-                    me._layersLoading[layerId] = 0;
-                } else {
-
-                }
-                me._layersLoading[layerId]--;
-                if (bboxKey) {
-                    var src = normalLayer.getSource();
-                    //TODO: move this block to a method of it's own maybe?
-                    //TODO: And also, figure out if there's a cleaner way for getting the zxy for a single tile's extent...?
-                    //TODO: and besides it ain't event working when there are multiple zooms or anything. Resort to bbox after all, eh?
-                    /*
-                    var grid = src.tileGrid;
-                    var resolution = me.getMap().getView().getResolution();
-                    var z = grid.getZForResolution(resolution);
-                    var x, y;
-                    //this should be a range where minx = maxx and miny = maxy (cos where getting the tilerange for exactly one tile)
-                    var tileRange = grid.getTileRangeForExtentAndZ(boundsObj, z);
-                    if (tileRange.minX === tileRange.maxX && tileRange.minY === tileRange.maxY) {
-                        x = tileRange.minX;
-                        y = tileRange.minY;
-                    } else {
-                        //probably in the middle of something
-                        return;
-                    }
-                    var tileCoordKey = src.getKeyZXY(z, x, y);
-                    */
-                    if (src && src.tileCache) {
-                        var tile;
-
-//                        if (src.tileCache.containsKey(tileCoordKey)) {
-//                            tile  = src.tileCache.get(tileCoordKey);
-                        if (src.tileCache.containsKey(bboxKey)) {
-                            tile = src.tileCache.get(bboxKey);
-                            tile.isBoundaryTile = boundaryTile;
-                            tile.getImage().src = imageUrl;
-                            tile.state = ol.TileState.LOADED;
-                            //tile.src_ = imageUrl;
-                            //All tiles for this stint / this layer have finished loading -> tell the canvas to update
-                            //TODO: figure out a safer way for bookkeeping. Guessing this might get screwed when there are multiple sequential zoomins / -outs / pans
-                            if (me._layersLoading[layerId] === 0) {
-                                var mapRenderer = me.getMap().getRenderer();
-                                var layerRenderer = mapRenderer.getLayerRenderer(normalLayer);
-                                //reset the renderers memory of it's tilerange as to make sure that our boundary tiles get drawn perfectly
-                                layerRenderer.renderedCanvasTileRange_ = new ol.TileRange();
-                                src.changed();
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        /**
-         * @method _overrideGetTile
-         * Overrides the get tile function for the given layer. Using bboxkey as the key to the cache instead of the tileCoordKey.
-         */
-        _overrideGetTile: function(openLayer) {
-            //Would be nice to be able to provide this in the constructor. Can't, however.
-            //TODO: check whether there's a cool way of getting the tileCoordKey based on the tile's bbox in drawTileImage-function.
-            //If so, we probably wouldn't need to override this...
-            openLayer.getSource().getTile = function(z, x, y, pixelRatio, projection) {
-                var tileCoordKey = this.getKeyZXY(z, x, y);
-
-                var tileCoord = [z, x, y];
-                var urlTileCoord = this.getTileCoordForTileUrlFunction(
-                    tileCoord, projection);
-                /*
-                var tileUrl = goog.isNull(urlTileCoord) ? undefined :
-                    this.tileUrlFunction(urlTileCoord, pixelRatio, projection);
-                */
-                var tileUrl = !urlTileCoord ? undefined : this.tileUrlFunction(urlTileCoord, pixelRatio, projection);
-
-                if (this.tileCache.containsKey(tileUrl)) {
-                    return this.tileCache.get(tileUrl);
-                }
-                var tile = new this.tileClass(
-                    tileCoord,
-                    goog.isDef(tileUrl) ? ol.TileState.IDLE : ol.TileState.EMPTY,
-                    goog.isDef(tileUrl) ? tileUrl : '',
-                    this.crossOrigin,
-                    this.tileLoadFunction);
-                /*
-                goog.events.listen(tile, goog.events.EventType.CHANGE,
-                    this.handleTileChange_, false, this);
-                */
-                //use the bbox key as key to the tilecache instead of the zxy. Maybe reconsider this, there might be no advantage as to having bbox as the key, versus zxy...?
-                if (!this.tileCache.containsKey(tileUrl)) {
-                    this.tileCache.set(tileUrl, tile);
-                }
-                return tile;
-            };
-
-        },
-        /**
-         * @method _addMapLayerToMap
-         *
-         * @param {Object} layer
-         * @param {String} layerType
-         */
-        _addMapLayerToMap: function (_layer, layerType) {
-            if (!_layer.hasFeatureData()) {
-                return;
-            }
-
-            var layerName =
-                this.__layerPrefix + _layer.getId() + '_' + layerType,
-                layerScales = this.getMapModule().calculateLayerScales(
-                    _layer.getMaxScale(),
-                    _layer.getMinScale()
-                ),
-                key,
-                layerParams = _layer.getParams(),
-                layerOptions = _layer.getOptions();
-
-            // override default params and options from layer
-            for (key in layerParams) {
-                if (layerParams.hasOwnProperty(key)) {
-                    defaultParams[key] = layerParams[key];
-                }
-            }
-            for (key in layerOptions) {
-                if (layerOptions.hasOwnProperty(key)) {
-                    defaultOptions[key] = layerOptions[key];
-                }
-            }
-            var projection = ol.proj.get(this.getMapModule().getMap().getView().getProjection());
-            var projectionExtent = projection.getExtent();
-            var me = this;
-            var openLayer = new ol.layer.Tile({
-                source: new ol.source.TileImage({   // XYZ and TileImage(  tried
-                    //just return null to avoid calls to stupid urls. Tiles loaded asynchronously over websocket.
-                    tileLoadFunction: function (imageTile, src) {
-                        return null;
-                    },
-                    layerId: _layer.getId(),
-
-                    //TODO: it might also be possible to just use the zxy key? In that way I guess we shouldn't even have to override this...
-                    tileUrlFunction: function (tileCoord, pixelRatio, projection, theTile) {
-                        var bounds = this.tileGrid.getTileCoordExtent(tileCoord);
-//                        var bounds = me._getTileCoordExtent(me._tileGrid, tileCoord)//this.tileGrid.getTileCoordExtent(tileCoord);
-                        var bboxKey = me.bboxkeyStrip(bounds);
-                        return bboxKey;
-                    },
-                    projection: projection,
-                    tileGrid: this._tileGrid
-                })
-            });
-            //custom getTile function
-            me._overrideGetTile(openLayer);
-            openLayer.getSource().set('layerId',_layer.getId());
-            openLayer.setOpacity(_layer.getOpacity() / 100);
-            me.getMapModule().addLayer(openLayer, _layer, layerName);
-            me._layers[openLayer.getSource().get('layerId')] = openLayer;
-        },
-
         /**
          * @method createTileGrid
          *
@@ -1292,54 +1043,49 @@ Oskari.clazz.define(
          *
          */
         createTileGrid: function() {
-            var me = this,
-                extent = me.getMapModule().getExtent(),//sandbox.getMap().getExtent(),
-                maxZoom = me.getMapModule().getMaxZoomLevel();
-            this._tileGrid = new ol.tilegrid.createXYZ({
-                extent:extent,//me.getMap().getView().calculateExtent(me.getMap().getSize()),
-                maxZoom: maxZoom,//me.getMapModule().getMaxZoomLevel(),
-                tileSize: [256,256]
+            this._tileGrid = new ol.tilegrid.TileGrid({
+                extent: this.getMapModule().getExtent(),
+                tileSize: this.getTileSize(),
+                resolutions : this.getMapModule().getResolutionArray()
             });
-
         },
 
         getTileSize: function () {
-            //TODO: NO hardcoding!
-            this.tileSize = [256, 256];
-            return this.tileSize;
+            return [256, 256];
         },
         getGrid: function () {
             var me = this,
                 sandbox = me.getSandbox(),
                 resolution = me.getMap().getView().getResolution(),
                 mapExtent = me.ol2ExtentOl3Transform(sandbox.getMap().getExtent()),
-                z,
+                z = me.getMapModule().getMapZoom(),
                 tileGrid = this._tileGrid,
                 grid = {
                     bounds: [],
                     rows: null,
                     columns: null
                 },
-                rowidx = 0,
-                tileRangeExtent;
-                z =  tileGrid.getZForResolution(resolution);
-                //z = me._getZForResolution(tileGrid, resolution);
-//                tileRangeExtent = this._getTileRangeForExtentAndResolution(tileGrid, mapExtent, resolution);//tileGrid.getTileRangeForExtentAndResolution(mapExtent, resolution);
-                tileRangeExtent = tileGrid.getTileRangeForExtentAndResolution(mapExtent, resolution);
-                for (var iy = tileRangeExtent.minY; iy <= tileRangeExtent.maxY; iy++) {
-                    var colidx = 0;
-                    for (var ix = tileRangeExtent.minX; ix <= tileRangeExtent.maxX; ix++) {
-                        var zxy = [z,ix,iy];
-                        var tileBounds = tileGrid.getTileCoordExtent(zxy);
-//                        var tileBounds = me._getTileCoordExtent(me._tileGrid, zxy);
-                        grid.bounds.push(tileBounds);
-                        colidx++;
-                    }
-                    rowidx++;
+                rowidx = 0;
+            var tileRangeExtentArray = tileGrid.getTileRangeForExtentAndResolutionWrapper(mapExtent, resolution);
+            var tileRangeExtent = {
+                minX: tileRangeExtentArray[0],
+                minY: tileRangeExtentArray[1],
+                maxX: tileRangeExtentArray[2],
+                maxY: tileRangeExtentArray[3]
+            }
+            for (var iy = tileRangeExtent.minY; iy <= tileRangeExtent.maxY; iy++) {
+                var colidx = 0;
+                for (var ix = tileRangeExtent.minX; ix <= tileRangeExtent.maxX; ix++) {
+                    var zxy = [z,ix,iy];
+                    var tileBounds = tileGrid.getTileCoordExtent(zxy);
+                    grid.bounds.push(tileBounds);
+                    colidx++;
                 }
-                grid.rows = rowidx;
-                grid.columns = colidx;
-                return grid;
+                rowidx++;
+            }
+            grid.rows = rowidx;
+            grid.columns = colidx;
+            return grid;
         },
         /**
          * Checks at tile is ok.
@@ -1386,37 +1132,6 @@ Oskari.clazz.define(
                 'url': imageUrl
             });
         },
-
-        /*
-         * @method getNonCachedGrid
-         *
-         * @param grid
-         */
-        getNonCachedGrid: function (layerId, grid) {
-            var layer = this._layers[layerId],
-            //    style = layer.getCurrentStyle().getName(),
-                result = [],
-                i,
-                me = this,
-                bboxKey,
-                dataForTile;
-            if (!layer) {
-                return result;
-            }
-            for (i = 0; i < grid.bounds.length; i += 1) {
-                bboxKey = me.bboxkeyStrip(grid.bounds[i]);
-                //at this point the tile should already been cached by the layers getTile - function.
-                if (layer.getSource().tileCache.containsKey(bboxKey)) {
-                    var tile = layer.getSource().tileCache.get(bboxKey);
-                    if ((tile && tile.state !== ol.TileState.LOADED) || tile.isBoundaryTile === true || tile.isBoundaryTile === undefined) {
-                        tile.isBoundaryTile = false;
-                        result.push(grid.bounds[i]);
-                    }
-                }
-            }
-            return result;
-        },
-
         /*
          * @method isWFSOpen
          */
@@ -1627,162 +1342,130 @@ Oskari.clazz.define(
         setHighlighted: function (highlighted) {
             this._highlighted = highlighted;
         },
-        /**
-         * Strip bbox for unique key because of some inaccucate cases
-         * OL computation (init grid in tilesizes)  is inaccurate in last decimal
-         * @param bbox
-         * @returns {string}
-         */
-        bboxkeyStrip: function (bbox) {
-            var stripbox = [];
-            if (!bbox) return;
-            for (var i = bbox.length; i--;) {
-                stripbox[i] = bbox[i].toPrecision(13);
-            }
-            return stripbox.join(',');
-        },
         hasUI: function() {
             return false;
-        }
-
-
-
+        },
         /**
-         * ol3 debug stuff we need to survive......
+         * @method _addMapLayerToMap
+         *
+         * @param {Object} layer
+         * @param {String} layerType
          */
-         /*
-        ,_getZForResolution: function(tileGrid, resolution) {
-          var z = this._linearFindNearest(tileGrid.resolutions_, resolution, 0);
-          if (z < tileGrid.minZoom) {
-            z = tileGrid.minZoom;
-          } else if (z > tileGrid.maxZoom){
-            z = tileGrid.maxZoom;
-          }
-          return z;
-        },
-        _linearFindNearest: function(arr, target, direction) {
+        _addMapLayerToMap: function (_layer, layerType) {
 
-
-          if (!arr || arr.length === 0) {
-            return -1;
-          }
-          var n = arr.length;
-          if (arr[0] <= target) {
-            return 0;
-          } else if (target <= arr[n - 1]) {
-            return n - 1;
-          } else {
-            var i;
-            if (direction > 0) {
-              for (i = 1; i < n; ++i) {
-                if (arr[i] < target) {
-                  return i - 1;
-                }
-              }
-            } else if (direction < 0) {
-              for (i = 1; i < n; ++i) {
-                if (arr[i] <= target) {
-                  return i;
-                }
-              }
-            } else {
-              for (i = 1; i < n; ++i) {
-                if (arr[i] == target) {
-                  return i;
-                } else if (arr[i] < target) {
-                  if (arr[i - 1] - target < target - arr[i]) {
-                    return i - 1;
-                  } else {
-                    return i;
-                  }
-                }
-              }
+            if (!_layer.hasFeatureData()) {
+                return;
             }
-            // We should never get here, but the compiler complains
-            // if it finds a path for which no number is returned.
-            return n - 1;
-          }
-        },
-        _getTileCoordExtent: function(tileGrid, tileCoord, opt_extent) {
-          var origin = tileGrid.getOrigin(tileCoord[0]);
-          var resolution = tileGrid.getResolution(tileCoord[0]);
-          var tileSize = ol.size.toSize(tileGrid.getTileSize(tileCoord[0]), tileGrid.tmpSize_);
-          var minX = origin[0] + tileCoord[1] * tileSize[0] * resolution;
-          var minY = origin[1] + tileCoord[2] * tileSize[1] * resolution;
-          var maxX = minX + tileSize[0] * resolution;
-          var maxY = minY + tileSize[1] * resolution;
-          return this._createOrUpdateExtent(minX, minY, maxX, maxY, opt_extent);
-        },
-        _createOrUpdateExtent: function(minX, minY, maxX, maxY, opt_extent) {
-          if (opt_extent) {
-            opt_extent[0] = minX;
-            opt_extent[1] = minY;
-            opt_extent[2] = maxX;
-            opt_extent[3] = maxY;
-            return opt_extent;
-          } else {
-            return [minX, minY, maxX, maxY];
-          }
-        },
-        _getTileRangeForExtentAndResolution: function(tileGrid, extent, resolution, opt_tileRange) {
-            var tileCoord = [0, 0, 0];
-            this._getTileCoordForXYAndResolution(tileGrid, extent[0], extent[1], resolution, false, tileCoord);
-            var minX = tileCoord[1];
-            var minY = tileCoord[2];
-            this._getTileCoordForXYAndResolution(tileGrid, extent[2], extent[3], resolution, true, tileCoord);
-            return this._createOrUpdateTileRange(minX, tileCoord[1], minY, tileCoord[2], opt_tileRange);
-        },
-        _getTileCoordForXYAndResolution: function(tileGrid, x, y, resolution, reverseIntersectionPolicy, opt_tileCoord) {
-          var z = this._getZForResolution(tileGrid, resolution);
-          var scale = resolution / tileGrid.getResolution(z);
-          var origin = tileGrid.getOrigin(z);
-          var tileSize = ol.size.toSize(tileGrid.getTileSize(z), tileGrid.tmpSize_);
 
-          var adjustX = reverseIntersectionPolicy ? 0.5 : 0;
-          var adjustY = reverseIntersectionPolicy ? 0 : 0.5;
-          var xFromOrigin = Math.floor((x - origin[0]) / resolution + adjustX);
-          var yFromOrigin = Math.floor((y - origin[1]) / resolution + adjustY);
-          var tileCoordX = scale * xFromOrigin / tileSize[0];
-          var tileCoordY = scale * yFromOrigin / tileSize[1];
+            var me = this;
+            var layerName =
+                this.__layerPrefix + _layer.getId() + '_' + layerType,
+                layerScales = this.getMapModule().calculateLayerScales(
+                    _layer.getMaxScale(),
+                    _layer.getMinScale()
+                ),
+                key,
+                layerParams = _layer.getParams(),
+                layerOptions = _layer.getOptions();
 
-          if (reverseIntersectionPolicy) {
-            tileCoordX = Math.ceil(tileCoordX) - 1;
-            tileCoordY = Math.ceil(tileCoordY) - 1;
-          } else {
-            tileCoordX = Math.floor(tileCoordX);
-            tileCoordY = Math.floor(tileCoordY);
-          }
-
-          return this._createOrUpdateTileCoord(z, tileCoordX, tileCoordY, opt_tileCoord);
-        },
-        _createOrUpdateTileCoord: function(z, x, y, opt_tileCoord) {
-          if (opt_tileCoord) {
-            opt_tileCoord[0] = z;
-            opt_tileCoord[1] = x;
-            opt_tileCoord[2] = y;
-            return opt_tileCoord;
-          } else {
-            return [z, x, y];
-          }
-        },
-        _createOrUpdateTileRange: function(minX, maxX, minY, maxY, tileRange) {
-          if (tileRange) {
-            tileRange.minX = minX;
-            tileRange.maxX = maxX;
-            tileRange.minY = minY;
-            tileRange.maxY = maxY;
-            return tileRange;
-          } else {
-//            return new ol.TileRange(minX, maxX, minY, maxY);
-            return {
-                minX: minX,
-                maxX: maxX,
-                minY: minY,
-                maxY: maxY
+            // override default params and options from layer
+            for (key in layerParams) {
+                if (layerParams.hasOwnProperty(key)) {
+                    defaultParams[key] = layerParams[key];
+                }
             }
-          }
+            for (key in layerOptions) {
+                if (layerOptions.hasOwnProperty(key)) {
+                    defaultOptions[key] = layerOptions[key];
+                }
+            }
+            var projection = ol.proj.get(me.getMapModule().getProjection());
+            var projectionExtent = projection.getExtent();
+            var me = this;
+
+            //var tileSrc = new ol.source.TileImage({
+            var tileSrc = new ol.source.OskariAsyncTileImage({
+                layerId: _layer.getId(),
+                projection: projection,
+                tileGrid: this._tileGrid
+            });
+            var openLayer = new ol.layer.Tile({
+                source: tileSrc
+            });
+
+            openLayer.setOpacity(_layer.getOpacity() / 100);
+            me.getMapModule().addLayer(openLayer, _layer, layerName);
+            me._layers[_layer.getId()] = openLayer;
+        },
+        drawImageTile: function (layer, imageUrl, imageBbox, imageSize, layerType, boundaryTile, keepPrevious) {
+            var args = [layer, imageUrl, imageBbox, imageSize, layerType, boundaryTile, keepPrevious];
+            var me = this,
+                map = me.getMap(),
+                layerId = layer.getId(),
+                layerIndex = null,
+                layerName = me.__layerPrefix + layerId + '_' + layerType,
+                layerScales,
+                normalLayer,
+                normalLayerExp,
+                normalLayerIndex,
+                highlightLayer,
+                highlightLayerExp,
+                BBOX,
+                bboxKey,
+                dataForTileTemp,
+                style,
+                tileToUpdate,
+                boundsObj = imageBbox,
+                ols,
+                wfsMapImageLayer,
+                normalLayerExp = me.__layerPrefix + layerId + '_' + me.__typeNormal,
+                normalLayer = me.getMapModule().getLayersByName(normalLayerExp)[0];
+
+            /** Safety checks */
+            if (!imageUrl || !boundsObj) {
+                return;
+            }
+
+            if (layerType === me.__typeHighlight) {
+                  ols = [imageSize.width,imageSize.height];  //ol.Size
+                layerScales = me.getMapModule().calculateLayerScales(layer.getMaxScale(),layer.getMinScale());
+
+                wfsMapImageLayer = new ol.layer.Image({
+                    source: new ol.source.ImageStatic({
+                        url: imageUrl,
+                        imageExtent: boundsObj,
+                        imageSize: ols,
+                        logo: false
+
+                    }),
+                    title: layerName
+                })
+                wfsMapImageLayer.opacity = layer.getOpacity() / 100;
+                me.getMapModule().addLayer(wfsMapImageLayer, layer, layerName);
+                wfsMapImageLayer.setVisibility(true);
+                // also for draw
+                wfsMapImageLayer.redraw(true);
+
+                // if removed set to same index [but if wfsMapImageLayer created
+                // in add (sets just in draw - not needed then here)]
+                if (layerIndex !== null && wfsMapImageLayer !== null) {
+                    map.setLayerIndex(wfsMapImageLayer, layerIndex);
+                }
+
+                // highlight picture on top of normal layer images
+                highlightLayerExp = me.__layerPrefix + layerId + '_' + me.__typeHighlight;
+                highlightLayer = me.getMapModule().getLayersByName(highlightLayerExp)[0]; // map.getLayersByName(highlightLayerExp);
+
+                if (normalLayer.length > 0 && highlightLayer.length > 0) {
+                    normalLayerIndex = map.getLayerIndex(normalLayer[normalLayer.length - 1]);
+                    map.setLayerIndex(highlightLayer[0],normalLayerIndex + 10);
+                }
+
+            } else { // "normal"
+                var ollayer = me._layers[layerId];
+                ollayer.getSource().setupImageContent(boundsObj, imageUrl, ollayer, map, boundaryTile);
+            }
         }
-        */
     }, {
         extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
         /**

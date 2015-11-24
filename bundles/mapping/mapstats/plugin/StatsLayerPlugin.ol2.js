@@ -223,7 +223,7 @@ Oskari.clazz.define(
                     'layer_' + layer.getId(),
                     me.ajaxUrl + '&LAYERID=' + layer.getId(),
                     {
-                        layers: layer.getWmsName(),
+                        layers: layer.getLayerName(),
                         transparent: true,
                         format: 'image/png'
                     },
@@ -403,7 +403,7 @@ Oskari.clazz.define(
                             }
                             if (eventBuilder) {
                                 highlightEvent = eventBuilder(
-                                    drawLayer.features[i],
+                                    drawLayer.features[i].attributes,
                                     drawLayer.features[i].selected,
                                     'click'
                                 );
@@ -414,7 +414,7 @@ Oskari.clazz.define(
                             newFeature.style = featureStyle;
                             if (eventBuilder) {
                                 highlightEvent = eventBuilder(
-                                    newFeature,
+                                    newFeature.attributes,
                                     newFeature.selected,
                                     'click'
                                 );

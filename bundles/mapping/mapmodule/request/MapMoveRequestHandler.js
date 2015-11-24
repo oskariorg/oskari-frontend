@@ -42,7 +42,7 @@ Oskari.clazz.define(
             this.mapModule.moveMapToLonLat(lonlat, zoom, false);
             // if zoom=0 -> if(zoom) is determined as false...
             if (zoom || zoom === 0) {
-                if (zoom.CLASS_NAME === 'OpenLayers.Bounds') {
+                if (zoom.left && zoom.top && zoom.bottom && zoom.right) {
                     this.mapModule.zoomToExtent(zoom);
                 } else if (zoom.scale) {
                     this.mapModule.zoomToScale(zoom.scale);

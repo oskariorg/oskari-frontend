@@ -2,7 +2,15 @@
 
 ## 1.34
 
-### OskariRPC (client library)
+### mapmodule-plugin/zoombar
+
+Added mobile styled zoombar buttons. Mobile styled icons showed when map height is smaller than 500 px.
+
+### mapstats
+
+Changed references from set/getWmsName() -> set/getLayerName() to use the inherited property from AbstractLayer.
+
+### OskariRPC 1.1 version for client library
 
 Functions are now generated depending on the configuration of the providing platform (allowed functions configuration). This means that any calls made to remote functions
 are available only after the connection to map has been established. This enables better errorhandling, but means that function calls will result in "is not a function" errors 
@@ -13,33 +21,55 @@ if called before connection is established. An onReady()-hook has been added whe
         elements.iframe,
         IFRAME_DOMAIN
     );
-    var blnFunctionExists = typeof channel.getAllLayers === 'function';
-    // -> blnFunctionExists = false
+    var blnFunctionExists = typeof channel.getAllLayers === 'function'; // -> false
 	channel.onReady(function() {
-	    var blnFunctionExists = typeof channel.getAllLayers === 'function';
-	    // -> blnFunctionExists = true
+	    var blnFunctionExists = typeof channel.getAllLayers === 'function'; // -> true
 	    channel.getAllLayers(function (data) {
 	    	console.log(data);
     	});
 	});
 
+Changes to 1.0.0:
+- added onReady callback to detect when we have a successful connection
+- removed hardcoded RPC-functions that might be disabled on Oskari instance
+- functions are now generated based on what's available in the Oskari platform the client connects to. 
+  This means you can be sure the map is listening if the client has it (after onReady-triggers).
+- added default errorhandler to make it clear when an error happens. Used when custom errorhandler is not specified.
+- added enableDebug(blnEnabled) to log some more info to console when enabled.
+- Changed handleEvent to enable multiple listeners.
+- handleEvent can no longer be used to unregister listener.
+- Added unregisterEventHandler() for unregistering listeners (previously done with handleEvent without giving listener function).
+- Added log() for debug logging without the need to check if window.console.log() exists
+- function-calls can now have parameters as first argument. Use function parameters wrapped in an array as first argument. First argument istreated as a success callback instead if it's type is a function.
+
+Filename change for original OskariRPC.js: 
+- Oskari/libraries/OskariRPC/OskariRPC.js is now Oskari/libraries/OskariRPC/OskariRPC-1.0.0.js
+
 ### rpc
 
 Allowed functions/events/requests are now configured as an array ["AfterMapMoveEvent", "MapClickedEvent"] instead of an object { "AfterMapMoveEvent" : true, "MapClickedEvent" : true }.
+Reduced configuration for adding new functions - all available functions are now allowed if not explicitly restricted.
 
-New function is enabled by default:
+New functions enabled by default:
 - 'getMapBbox' gets current map bbox
 - 'resetState' resets the map to initial state (location/layers etc)
+- 'getCurrentState' returns a JSON presentation of the map state (location/layers etc). Usable with useState() as parameter.
+- 'useState' sets the map to given state (location/layers etc). Parameter should be given as returned by getCurrentState()
 
 New events are enabled by default:
 - 'UserLocationEvent' notifies about users geolocation status
 - 'SearchResultEvent' notifies about users that SearchRequest response data is available for to handle
+- 'FeatureEvent' notifies about add, remove, click events on features
 
 New requests are enabled by default:
 - 'MyLocationPlugin.GetUserLocationRequest' requests to get user geolocation
 - 'SearchRequest' requests search result for requested search item using Oskari search channels
 
 Domain validation fixed to accept urls with - or _ characters.
+
+Changed error messaging from "event/request_not_allowed" to "event/request_not_available". 
+Available events/requests are now checked when RPC-bundle starts and those which aren't technically available/part of the appsetup will be removed from the "supported events/requests" listings. 
+Note that this requires RPC to be started after any bundle offering RPC-enabled events/requests to work correctly (so all events/requests have been loaded and handlers registered for requests before the check).
 
 ### Mapmodule consistency - POSSIBLE BREAKING CHANGES!
 
@@ -62,20 +92,21 @@ sandbox.postRequestByName(rn, [geojson, 'GeoJSON', null, null, 'replace', true, 
 Now:
 sandbox.postRequestByName(rn, [geojson, {
     layerId: 'ANALYSIS_VECTOR',
-    replace: 'replace',
+    clearPrevious: true,
     layerOptions: null,
     centerTo: false,
     featureStyle: style,
     attributes: null
 }]);
 - layerId: If left out, a generic vector layer is used by VectorLayerPlugin. 
-- replace: whether to clear out all previous features
+- clearPrevious: whether to clear out all previous features
 - layerOptions: additional layerOptions
 - centerTo: whether to zoom in to the features
 - featureStyle: style of the features
 - attributes: additional attributes of the features
 (geometryType from the old call has been removed. From now on the VectorLayerPlugin will determine geometry type from the geometry)
 
+An event named 'FeatureEvent' is emitted when features are added, removed or clicked. The event holds features as an array of objects with feature id, geojson and layer id as content.
 
 #### Oskari.mapframework.domain.Map
 

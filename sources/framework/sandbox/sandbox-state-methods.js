@@ -44,35 +44,68 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'state-methods', {
     },
 
     /**
+     * @method getCurrentState
+     * @return {Object} JSON object presenting the state of the application at
+     * the moment.
+     */
+    getCurrentState: function () {
+        var state = {},
+            components = this.getStatefulComponents(),
+            bundleid;
+        for (bundleid in components) {
+            if (!components.hasOwnProperty(bundleid)) {
+                continue;
+            }
+            if (components[bundleid].getState) {
+                state[bundleid] = {
+                    // wrap with additional state property so we can use the same json as in startup configuration
+                    'state': components[bundleid].getState()
+                };
+            } else {
+                this.sandbox.printWarn('Stateful component ' + bundleid + ' doesnt have getState()');
+            }
+        }
+        return state;
+    },
+    /**
      * @method resetState
      * Resets the application state to the initial state provided by GetAppSetup action route.
      */
     resetState: function () {
-        var initialConf = Oskari.app.getConfiguration(), // conf got loaded when application started
-            statefuls = this.getStatefulComponents(),
-            initialState,
+         // conf got loaded when application started
+        this.useState(Oskari.app.getConfiguration());
+    },
+
+    /**
+     * Sets application state for stateful bundles. 
+     * InitialConf is a configuration object similar to GetAppSetup.configuration with bundleid as keys and a state object under the bundleid key.
+     * @param  {Object} initialConf state configuration object including data for all bundles
+     */
+    useState: function (initialConf) {
+        var newStateConfig = jQuery.extend(true, {}, initialConf),
+            components = this.getStatefulComponents(),
+            bundleState,
             bundle,
-            b;
-
-        // Let's loop trough all the stateful bundles.
-        for (b in statefuls) {
-            if (statefuls.hasOwnProperty(b)) {
-                bundle = statefuls[b];
-                // initialConf has all the states gotten from GetAppSetup.
-                initialState = initialConf[b].state;
-
-                // Double check that the bundle really is stateful
-                if (bundle.setState) {
-                    // If it has a default state that's not empty
-                    if (!jQuery.isEmptyObject(initialState)) {
-                        // reset to the default state
-                        bundle.setState(initialState);
-                    } else {
-                        // otherwise just set an empty state.
-                        bundle.setState();
-                    }
-                }
+            bundleid;
+        // loop trough all the stateful bundles.
+        for (bundleid in components) {
+            if (!components.hasOwnProperty(bundleid)) {
+                continue;
             }
+            bundle = components[bundleid];
+            // Double check that the bundle really is stateful
+            if (!bundle.setState) {
+                continue;
+            }
+            // newStateConfig has all the states from GetAppSetup.
+            if(newStateConfig[bundleid]) {
+                bundleState = newStateConfig[bundleid].state;
+            }
+            else {
+                bundleState = {};
+            }
+            // reset to the default state
+            bundle.setState(bundleState);
         }
     },
     setSessionExpiring: function (minutes, callback) {

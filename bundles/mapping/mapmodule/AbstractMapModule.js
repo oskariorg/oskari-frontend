@@ -465,6 +465,9 @@ Oskari.clazz.define(
         getResolutionArray: function () {
             return this._mapResolutions;
         },
+        getResolution: function () {
+            return this.getResolutionArray()[this.getMapZoom()];
+        },
         getExtentArray: function () {
             return this._extent;
         },
@@ -663,7 +666,17 @@ Oskari.clazz.define(
          * @property eventHandlers
          * @static
          */
-        eventHandlers: {},
+        eventHandlers: {
+            'AfterMapLayerAddEvent': function (event) {
+                this.afterMapLayerAddEvent(event);
+            },
+            'LayerToolsEditModeEvent': function (event) {
+                this._isInLayerToolsEditMode = event.isInMode();
+            },
+            AfterRearrangeSelectedMapLayerEvent: function (event) {
+                this.afterRearrangeSelectedMapLayerEvent(event);
+            }
+        },
 
         /**
          * @method onEvent
@@ -718,6 +731,121 @@ Oskari.clazz.define(
                 el.addClass(classToAdd);
             }
         },
+        /**
+         * Adds the layer to the map through the correct plugin for the layer's type.
+         *
+         * @method afterMapLayerAddEvent
+         * @param  {Object} layer Oskari layer of any type registered to the mapmodule plugin
+         * @param  {Boolean} keepLayersOrder
+         * @param  {Boolean} isBaseMap
+         * @return {undefined}
+         */
+        afterMapLayerAddEvent: function (event) {
+            var map = this.getMap(),
+                layer = event.getMapLayer(),
+                keepLayersOrder = event.getKeepLayersOrder(),
+                isBaseMap = event.isBasemap(),
+                layerPlugins = this.getLayerPlugins(),
+                layerFunctions = [],
+                i;
+
+            _.each(layerPlugins, function (plugin) {
+                //FIXME if (plugin && _.isFunction(plugin.addMapLayerToMap)) {
+                if (_.isFunction(plugin.addMapLayerToMap)) {
+                    var layerFunction = plugin.addMapLayerToMap(layer, keepLayersOrder, isBaseMap);
+                    if (_.isFunction(layerFunction)) {
+                        layerFunctions.push(layerFunction);
+                    }
+                }
+            });
+
+            // Execute each layer function
+            for (i = 0; i < layerFunctions.length; i += 1) {
+                layerFunctions[i].apply();
+            }
+        },
+
+
+        isInLayerToolsEditMode: function () {
+            return this._isInLayerToolsEditMode;
+        },
+
+        /**
+         * @method afterRearrangeSelectedMapLayerEvent
+         * @private
+         * Handles AfterRearrangeSelectedMapLayerEvent.
+         * Changes the layer order in Openlayers to match the selected layers list in
+         * Oskari.
+         *
+         * @param
+         * {Oskari.mapframework.event.common.AfterRearrangeSelectedMapLayerEvent}
+         *            event
+         */
+        afterRearrangeSelectedMapLayerEvent: function (event) {
+            var layers = this.getSandbox().findAllSelectedMapLayers(),
+                layerIndex = 0;
+
+            var i,
+                ilen,
+                j,
+                jlen,
+                olLayers;
+
+            for (i = 0, ilen = layers.length; i < ilen; i += 1) {
+                if (layers[i] !== null && layers[i] !== undefined) {
+                    olLayers =
+                        this.getOLMapLayers(layers[i].getId());
+                    for (j = 0, jlen = olLayers.length; j < jlen; j += 1) {
+                        this.setLayerIndex(olLayers[j], layerIndex);
+                        layerIndex += 1;
+                    }
+                }
+            }
+            this.orderLayersByZIndex();
+        },
+
+        /**
+         * @method getOLMapLayers
+         * Returns references to OpenLayers layer objects for requested layer or null if layer is not added to map.
+         * Internally calls getOLMapLayers() on all registered layersplugins.
+         * @param {String} layerId
+         * @return {OpenLayers.Layer[]}
+         */
+        getOLMapLayers: function (layerId) {
+            var me = this,
+                sandbox = me._sandbox,
+                layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
+            if (!layer) {
+                // not found
+                return null;
+            }
+            var lps = this.getLayerPlugins(),
+                p,
+                layersPlugin,
+                layerList,
+                results = [];
+            // let the actual layerplugins find the layer since the name depends on
+            // type
+            for (p in lps) {
+                if (lps.hasOwnProperty(p)) {
+                    layersPlugin = lps[p];
+                    if (!layersPlugin) {
+                        me.getSandbox().printWarn(
+                            'LayerPlugins has no entry for "' + p + '"'
+                        );
+                    }
+                    // find the actual openlayers layers (can be many)
+                    layerList = layersPlugin ? layersPlugin.getOLMapLayers(layer): null;
+                    if (layerList) {
+                        // if found -> add to results
+                        // otherwise continue looping
+                        results = results.concat(layerList);
+                    }
+                }
+            }
+            return results;
+        },
+
         /**
          * Sets the style to be used on plugins and asks all the active plugins that support changing style to change their style accordingly.
          *
@@ -1213,6 +1341,8 @@ Oskari.clazz.define(
 
         updateSize: Oskari.AbstractFunc('updateSize'),
 
+        getSize: Oskari.AbstractFunc('getSize'),
+
         /**
          * @method _createMapImpl
          * @private
@@ -1325,6 +1455,11 @@ Oskari.clazz.define(
         setZoomLevel: Oskari.AbstractFunc('setZoomLevel'),
 
         getMapScale: Oskari.AbstractFunc('getMapScale'),
+
+        orderLayersByZIndex: Oskari.AbstractFunc('orderLayersByZIndex'),
+
+        setLayerIndex: Oskari.AbstractFunc('setLayerIndex'),
+
         /**
          * @method _updateDomainImpl
          * @private

@@ -6,7 +6,7 @@ jQuery(document).ready(function() {
 
 
     //TODO: remove the ugly ol3 hack once we have a way to build a working ol3...
-    jQuery.getScript("/Oskari/libraries/ol3/ol-v3.9.0-debug.js", function() {
+    jQuery.getScript("/Oskari/libraries/ol3/ol-v3.11.2-debug-oskari.js", function() {
         if(!ajaxUrl) {
             jQuery('#mapdiv').append('Unable to start');
             return;
@@ -67,13 +67,33 @@ jQuery(document).ready(function() {
 
         function start(appSetup, appConfig, cb) {
             var app = Oskari.app;
-
+            /*
+        var plugins = appConfig.mapfull.conf.plugins,
+            wfs;
+        for (var i = 0, pLen = plugins.length; i < pLen; ++i) {
+            if (plugins[i].id === 'Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin') {
+                wfs = plugins[i];
+                break;
+            }
+        }
+        if (wfs) {
+            wfs.config = {
+                "maxBackoff": 60000,
+                "port": "80",
+                "maxNetworkDelay": 10000,
+                "hostname": "dev.paikkatietoikkuna.fi",
+                "contextPath": "/transport-0.0.1",
+                "lazy": true,
+                "backoffIncrement": 1000,
+                "disconnectTime": 30000
+            };
+        }
+*/
             app.setApplicationSetup(appSetup);
             app.setConfiguration(appConfig);
             app.startApplication(function(startupInfos) {
-              var instance = startupInfos.bundlesInstanceInfos.mapfull.bundleInstance;
               if (cb) {
-                  cb(instance);
+                  cb();
               }
     /*
                  var ugStartup = {
@@ -127,11 +147,6 @@ jQuery(document).ready(function() {
         jQuery.ajax({
             type : 'GET',
             dataType : 'json',
-            beforeSend : function(x) {
-                if (x && x.overrideMimeType) {
-                    x.overrideMimeType("application/j-son;charset=UTF-8");
-                }
-            },
             data : getAppSetupParams,
             url : ajaxUrl + 'action_route=GetAppSetup&noSavedState=true',
             success : function(app) {
@@ -139,8 +154,8 @@ jQuery(document).ready(function() {
                   var appSetup = {
                     "startupSequence": app.startupSequence
                   };
-                  start(appSetup, app.configuration, function(instance) {
-                        var sb = instance.getSandbox();
+                  start(appSetup, app.configuration, function() {
+                        var sb = Oskari.getSandbox();
                         gfiParamHandler(sb);
                     });
                 } else {

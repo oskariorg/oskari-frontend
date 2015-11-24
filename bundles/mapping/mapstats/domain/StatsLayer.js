@@ -16,20 +16,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.domain.StatsLayer',
     }, {
         /* Layer type specific functions */
         /**
-         * @method setWmsName
-         * @param {String} wmsName used to identify service
-         */
-        setWmsName: function (wmsName) {
-            this._wmsName = wmsName;
-        },
-        /**
-         * @method getWmsName
-         * @return {String} wmsName used to identify service
-         */
-        getWmsName: function () {
-            return this._wmsName;
-        },
-        /**
          * @method setFilterPropertyName
          * @param {String} filterPropertyName is the key field name to map layer features
          */

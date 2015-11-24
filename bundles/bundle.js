@@ -3807,5 +3807,28 @@ Oskari.util = (function () {
         return parts.join('');
     };
 
+   /**
+    * Check, if nested key exists
+    * @method keyExists
+    * @params {Object}  object to check { "test" : { "this" : true }}
+    * @params String object path "test.this"
+    * @public
+    *
+    * @returns {Boolean}: true if nested key exists
+    */
+    util.keyExists = function(obj, keypath) {
+        var tmpObj = obj,
+            cnt = 0,
+            splits = keypath.split('.');
+
+        for (var i=0; tmpObj && i < splits.length; i++) {
+            if (splits[i] in tmpObj) {
+                tmpObj = tmpObj[splits[i]];
+                cnt++;
+            }
+        }
+        return cnt === splits.length;
+    };
+
     return util;
 }());
