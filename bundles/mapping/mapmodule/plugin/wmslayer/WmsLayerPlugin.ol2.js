@@ -122,7 +122,8 @@ Oskari.clazz.define(
                         transparent: true,
                         id: _layer.getId(),
                         styles: _layer.getCurrentStyle().getName(),
-                        format: 'image/png'
+                        format: 'image/png',
+                        version : _layer.getVersion()
                     },
                     defaultOptions = {
                         layerId: _layer.getLayerName(),
