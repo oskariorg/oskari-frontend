@@ -149,22 +149,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     .height(me.conf.size.height);
                 // TODO check if we need to set mapDiv size at all here...
                 jQuery('#' + me.mapDivId).height(me.conf.size.height);
-            } else {
-                // react to window resize with timer so app stays responsive
-                var resizeTimer;
-                jQuery(window).resize(function () {
-                    clearTimeout(resizeTimer);
-                    resizeTimer = setTimeout(
-                        function () {
-                            me.adjustMapSize();
-                        },
-                        100
-                    );
-                });
-
-                me.adjustMapSize();
             }
+            
+            // react to window resize with timer so app stays responsive
+            var resizeTimer;
+            jQuery(window).resize(function () {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(
+                    function () {
+                        me.adjustMapSize();
+                    },
+                    100
+                );
+            });
 
+            me.adjustMapSize();
 
             module.start(me.getSandbox());
 
