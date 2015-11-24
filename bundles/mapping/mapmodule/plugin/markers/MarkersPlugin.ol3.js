@@ -33,7 +33,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             color: 'ffde00',
             msg: '',
             shape: 2,
-            size: 1
+            size: 1,
+            transient: false
         };
         me._strokeStyle = {
             'stroke-width': 1,
@@ -764,7 +765,9 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             }
             me.state.markers = [];
             _.each(me._markers, function(value) {
-                me.state.markers.push(value);
+                if(!marker.transient) {
+                    me.state.markers.push(marker);
+                }
             });
         },
 
