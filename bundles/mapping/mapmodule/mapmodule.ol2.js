@@ -244,7 +244,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var sandbox = this._sandbox;
             /* may be this should dispatch to mapmodule */
             var lonlat = this._map.getLonLatFromViewPortPx(evt.xy),
-                event = this._mapClickedBuilder(lonlat, evt.xy.x, evt.xy.y);
+                event = this._mapClickedBuilder(lonlat, evt.xy.x, evt.xy.y, sandbox.isCtrlKeyDown());
             sandbox.notifyAll(event);
         },
 
