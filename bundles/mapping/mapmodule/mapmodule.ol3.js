@@ -495,9 +495,33 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
             return -1;
         },
+        getSize: function(){
+            var sandbox = this._sandbox,
+                mapVO = sandbox.getMap(),
+                width =  mapVO.getWidth(),
+                height = mapVO.getHeight();
+
+            return {
+                width: width,
+                height: height
+            };
+        },
 
         updateSize: function() {
             this._map.updateSize();
+
+            var sandbox = this._sandbox,
+                mapVO = sandbox.getMap(),
+                width =  mapVO.getWidth(),
+                height = mapVO.getHeight();
+
+            // send as an event forward
+            if(width && height) {
+              var evt = sandbox.getEventBuilder(
+                  'MapSizeChangedEvent'
+              )(width, height);
+              sandbox.notifyAll(evt);
+            }
         },
 
         _addMapControlImpl: function(ctl) {

@@ -30,6 +30,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
         this._name = 'Portti2Zoombar';
         this._slider = null;
         this._suppressEvents = false;
+        this._desktopStyles = {
+            plus: {
+                css: {}
+            },
+            minus: {
+                css: {}
+            }
+        };
+
+        this._mobileDefs = {
+            height: 500
+        };
 
         this.toolStyles = {
             'default': {
@@ -223,8 +235,47 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             return {
                 AfterMapMoveEvent: function (event) {
                     me._setZoombarValue(event.getZoom());
+                },
+                MapSizeChangedEvent: function (evt) {
+                    me._handleMapSizeChanges({width:evt.getWidth(), height:evt.getHeight()});
                 }
             };
+        },
+
+        /**
+         * @method  @private _handleMapSizeChanges handle map size changes
+         * @param  {Object} size {width:100, height:200}
+         */
+        _handleMapSizeChanges: function(size){
+            var me = this,
+                div = this.getElement(),
+                plus = div.find('.pzbDiv-plus'),
+                minus = div.find('.pzbDiv-minus'),
+                slider = div.find('div.slider');
+
+            if(size.height < me._mobileDefs.height) {
+                slider.hide();
+                plus.css({
+                    'background-image': 'url("' + this.getImagePath() + 'zoombar_plus_mobile.png")',
+                    'width': 43,
+                    'height': 43
+                });
+
+                minus.css({
+                    'background-image': 'url("' + this.getImagePath() + 'zoombar_minus_mobile.png")',
+                    'width': 43,
+                    'height': 43
+                });
+                div.width(43);
+
+            }
+            else {
+                slider.show();
+                plus.css(me._desktopStyles.plus.css);
+                minus.css(me._desktopStyles.minus.css);
+                div.width(18);
+            }
+            
         },
 
         _setLayerToolsEditModeImpl: function () {
@@ -246,6 +297,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
          *
          */
         changeToolStyle: function (style, div) {
+            var me = this;
             // FIXME move under _setStyle or smthn...
             div = div || this.getElement();
 
@@ -313,19 +365,29 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                     'height': style.heightCursor,
                     'margin-left': (isRounded ? '2px' : '0')
                 });
-                plus.css({
-                    'background-image': 'url("' + zoombarPlusImg + '")',
-                    'width': style.widthPlus,
-                    'height': style.heightPlus
-                });
-                minus.css({
-                    'background-image': 'url("' + zoombarMinusImg + '")',
-                    'width': style.widthMinus,
-                    'height': style.heightMinus
-                });
+
+                me._desktopStyles = {
+                    plus: {
+                        css: {
+                            'background-image': 'url("' + zoombarPlusImg + '")',
+                            'width': style.widthPlus,
+                            'height': style.heightPlus
+                        }
+                    },
+                    minus: {
+                        css: {
+                            'background-image': 'url("' + zoombarMinusImg + '")',
+                            'width': style.widthMinus,
+                            'height': style.heightMinus
+                        }
+                    }
+                };
+
+                plus.css(me._desktopStyles.plus.css);
+                minus.css(me._desktopStyles.minus.css);
                 slider.css({
                     'height': sliderHeight + 'px'
-                });
+                });                
             }
         }
     }, {
