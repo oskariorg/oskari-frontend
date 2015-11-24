@@ -26,6 +26,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          */
         this.mapDivId = 'mapdiv';
         this.contentMapDivId = 'contentMap';
+        this.resizeTimer = null;
     }, {
         getName: function () {
             return this.__name;
@@ -150,12 +151,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 // TODO check if we need to set mapDiv size at all here...
                 jQuery('#' + me.mapDivId).height(me.conf.size.height);
             }
-            
+
             // react to window resize with timer so app stays responsive
-            var resizeTimer;
             jQuery(window).resize(function () {
-                clearTimeout(resizeTimer);
-                resizeTimer = setTimeout(
+                clearTimeout(me.resizeTimer);
+                me.resizeTimer = setTimeout(
                     function () {
                         me.adjustMapSize();
                     },

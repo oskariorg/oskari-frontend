@@ -246,9 +246,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
          * @method  @private _handleMapSizeChanges handle map size changes
          * @param  {Object} size {width:100, height:200}
          */
-        _handleMapSizeChanges: function(size){
+        _handleMapSizeChanges: function(size, el){
             var me = this,
-                div = this.getElement(),
+                div = el || this.getElement(),
                 plus = div.find('.pzbDiv-plus'),
                 minus = div.find('.pzbDiv-minus'),
                 slider = div.find('div.slider');
@@ -320,7 +320,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 cursor = div.find('.ui-slider-handle'),
                 plus = div.find('.pzbDiv-plus'),
                 minus = div.find('.pzbDiv-minus'),
-                slider = div.find('div.slider');
+                slider = div.find('div.slider'),
+                mapModule = me.getMapModule();
 
             // FIXME get rid of this, rounded style should be fixed instead
             // Used to get the cursor to the right position since
@@ -389,6 +390,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                     'height': sliderHeight + 'px'
                 });                
             }
+
+            me._handleMapSizeChanges(mapModule.getSize(), div);
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
