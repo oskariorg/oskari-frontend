@@ -363,7 +363,6 @@ Oskari.clazz.define(
         },
 
         _setMarker: function(result) {
-            debugger;
             var me = this,
                 reqBuilder,
                 sandbox = me.getSandbox(),

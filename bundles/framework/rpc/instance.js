@@ -138,7 +138,8 @@ Oskari.clazz.define(
             var allowedRequests = conf.allowedRequests;
 
             if (allowedEvents === null || allowedEvents === undefined) {
-                allowedEvents = ['AfterMapMoveEvent', 'MapClickedEvent', 'AfterAddMarkerEvent', 'MarkerClickEvent', 'RouteSuccessEvent','SearchResultEvent', 'UserLocationEvent', 'DrawingEvent'];
+                allowedEvents = ['AfterMapMoveEvent', 'MapClickedEvent', 'AfterAddMarkerEvent', 'MarkerClickEvent',
+                'RouteSuccessEvent','SearchResultEvent', 'UserLocationEvent', 'DrawingEvent', "FeatureEvent"];
             }
 
             if (allowedFunctions === null || allowedFunctions === undefined) {

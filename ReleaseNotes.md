@@ -2,6 +2,10 @@
 
 ## 1.34
 
+### mapmodule-plugin/zoombar
+
+Added mobile styled zoombar buttons. Mobile styled icons showed when map height is smaller than 500 px.
+
 ### mapstats
 
 Changed references from set/getWmsName() -> set/getLayerName() to use the inherited property from AbstractLayer.
@@ -55,6 +59,7 @@ New functions enabled by default:
 New events are enabled by default:
 - 'UserLocationEvent' notifies about users geolocation status
 - 'SearchResultEvent' notifies about users that SearchRequest response data is available for to handle
+- 'FeatureEvent' notifies about add, remove, click events on features
 
 New requests are enabled by default:
 - 'MyLocationPlugin.GetUserLocationRequest' requests to get user geolocation
@@ -101,6 +106,7 @@ sandbox.postRequestByName(rn, [geojson, {
 - attributes: additional attributes of the features
 (geometryType from the old call has been removed. From now on the VectorLayerPlugin will determine geometry type from the geometry)
 
+An event named 'FeatureEvent' is emitted when features are added, removed or clicked. The event holds features as an array of objects with feature id, geojson and layer id as content.
 
 #### Oskari.mapframework.domain.Map
 

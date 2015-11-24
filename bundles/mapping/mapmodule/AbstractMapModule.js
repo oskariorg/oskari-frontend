@@ -1341,6 +1341,8 @@ Oskari.clazz.define(
 
         updateSize: Oskari.AbstractFunc('updateSize'),
 
+        getSize: Oskari.AbstractFunc('getSize'),
+
         /**
          * @method _createMapImpl
          * @private

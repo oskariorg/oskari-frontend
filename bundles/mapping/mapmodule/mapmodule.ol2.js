@@ -681,6 +681,18 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             sandbox.notifyAll(evt);
         },
 
+        getSize: function(){
+            var sandbox = this._sandbox,
+                mapVO = sandbox.getMap(),
+                width =  mapVO.getWidth(),
+                height = mapVO.getHeight();
+
+            return {
+                width: width,
+                height: height
+            };
+        },
+
         /**
          * @method updateSize
          * Notifies OpenLayers that the map size has changed and updates the size in sandbox map domain object.
@@ -690,12 +702,18 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             this._updateDomainImpl();
 
             var sandbox = this.getSandbox(),
-                mapVO = sandbox.getMap();
-            // send as an event forward to WFSPlugin (draws)
-            var evt = sandbox.getEventBuilder(
-                'MapSizeChangedEvent'
-            )(mapVO.getWidth(), mapVO.getHeight());
-            sandbox.notifyAll(evt);
+                mapVO = sandbox.getMap(),
+                width =  mapVO.getWidth(),
+                height = mapVO.getHeight();
+            
+
+            // send as an event forward
+            if(width && height) {
+              var evt = sandbox.getEventBuilder(
+                  'MapSizeChangedEvent'
+              )(width, height);
+              sandbox.notifyAll(evt);
+            }
         },
 
         /**
@@ -726,7 +744,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var sandbox = this.getSandbox(),
                 mapVO = sandbox.getMap(),
                 lonlat = this._getMapCenter();
-
             mapVO.moveTo(lonlat.lon, lonlat.lat, this.getMapZoom());
 
             mapVO.setScale(this.getMapScale());

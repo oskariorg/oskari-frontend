@@ -33,7 +33,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             color: 'ffde00',
             msg: '',
             shape: 2,
-            size: 1
+            size: 1,
+            transient: false
         };
         me._strokeStyle = {
             'stroke-width': 1,
@@ -225,6 +226,12 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 this._showForm(event.getMouseX(), event.getMouseY());
                 return;
             }
+            var me = this;
+            this.getMap().forEachFeatureAtPixel([event.getMouseX(), event.getMouseY()], function (feature, layer) {
+                if(layer === me.getMarkersLayer()) {
+                    me.__markerClicked(feature.get('id'));
+                }
+            });
         },
         /**
          * Called when a marker has been clicked.
@@ -758,7 +765,9 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             }
             me.state.markers = [];
             _.each(me._markers, function(value) {
-                me.state.markers.push(value);
+                if(!marker.transient) {
+                    me.state.markers.push(marker);
+                }
             });
         },
 

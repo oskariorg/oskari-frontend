@@ -855,21 +855,23 @@ Oskari.clazz.define(
                     layer.setActiveFeatures([]);
                     if (grid !== null && grid !== undefined) {
                         layerId = layer.getId();
-                        var ollayer = this._layers[layerId];
-                        tiles = ollayer.getSource().getNonCachedGrid(grid);
-                        //tiles = me.getNonCachedGrid(layerId, grid);
-                        me.getIO().setLocation(
-                            layerId,
-                            srs, [
-                                bbox.left,
-                                bbox.bottom,
-                                bbox.right,
-                                bbox.top
-                            ],
-                            zoom,
-                            grid,
-                            tiles
-                        );
+                        if(this._layers) {
+                            var ollayer = this._layers[layerId];
+                            tiles = ollayer.getSource().getNonCachedGrid(grid);
+                            //tiles = me.getNonCachedGrid(layerId, grid);
+                            me.getIO().setLocation(
+                                layerId,
+                                srs, [
+                                    bbox.left,
+                                    bbox.bottom,
+                                    bbox.right,
+                                    bbox.top
+                                ],
+                                zoom,
+                                grid,
+                                tiles
+                            );
+                        }
                        // not in OL3 me._tilesLayer.redraw();
                     }
                 }

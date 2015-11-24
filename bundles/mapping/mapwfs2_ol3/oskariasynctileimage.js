@@ -144,9 +144,9 @@ ol.source.OskariAsyncTileImage.prototype.getNonCachedGrid = function (grid) {
 
 
 /**
- * Note! Same as the original function, but tilestate is initialized to LOADING 
+ * Note! Same as the original function, but tilestate is initialized to LOADING
  * so tilequeue isn't blocked by the async nature of Oskari WFS
- * 
+ *
  * @param {number} z Tile coordinate z.
  * @param {number} x Tile coordinate x.
  * @param {number} y Tile coordinate y.
@@ -247,22 +247,28 @@ ol.source.OskariAsyncTileImage.prototype.setupImageContent = function(boundsObj,
     switch(tile.getState()) {
         case ol.TileState.IDLE : // IDLE: 0,
         case ol.TileState.LOADING: //LOADING: 1,
+            me.__fixTile(tile, imageData, layer, map);
+            /*
             tile.PLACEHOLDER = false;
             tile.getImage().src = imageData;
             tile.setState(ol.TileState.LOADED);
+            */
             //reset the renderers memory of it's tilerange as to make sure that our boundary tiles get drawn perfectly
-            me.getCanvasRenderer(layer, map).resetRenderedCanvasTileRange();
-            this.changed();
+            //me.getCanvasRenderer(layer, map).resetRenderedCanvasTileRange();
+            //this.changed();
             break;
         case ol.TileState.LOADED: // LOADED: 2
         case ol.TileState.ERROR: // ERROR: 3
         case ol.TileState.EMPTY: // EMPTY: 4
+            me.__fixTile(tile, imageData, layer, map);
+            /*
             tile.PLACEHOLDER = false;
             tile.getImage().src = imageData;
             tile.setState(ol.TileState.LOADED);
+            */
             //reset the renderers memory of it's tilerange as to make sure that our boundary tiles get drawn perfectly
-            me.getCanvasRenderer(layer, map).resetRenderedCanvasTileRange();
-            this.changed();
+            //me.getCanvasRenderer(layer, map).resetRenderedCanvasTileRange();
+            //this.changed();
             break;
         default:
             tile.handleImageError_();
@@ -275,6 +281,25 @@ ol.source.OskariAsyncTileImage.prototype.setupImageContent = function(boundsObj,
     }
 };
 
+ol.source.OskariAsyncTileImage.prototype.__fixTile = function(tile, imageData, layer, map) {
+    clearTimeout(this.__refreshTimer);
+    tile.PLACEHOLDER = false;
+    tile.getImage().src = imageData;
+    tile.setState(ol.TileState.LOADED);
+
+//    this.dispatchEvent(new ol.source.TileEvent(ol.source.TileEventType.TILELOADEND, tile));
+    var me = this;
+    this.__refreshTimer = setTimeout(function() {
+        //reset the renderers memory of it's tilerange as to make sure that our boundary tiles get drawn perfectly
+//        canvasRenderer.renderedCanvasTileRange_ = new ol.TileRange();
+//        me.changed();
+        me.getCanvasRenderer(layer, map).resetRenderedCanvasTileRange();
+        me.changed();
+
+
+    }, 500);
+
+};
 /**
  * Note! Always uses the non-projected internal tile getter
  * @inheritDoc

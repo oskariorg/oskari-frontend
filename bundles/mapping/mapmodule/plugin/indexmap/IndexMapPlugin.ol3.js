@@ -22,6 +22,7 @@ Oskari.clazz.define(
         me._index = 5;
         me._name = 'IndexMapPlugin';
         me._indexMap = null;
+        me._indElement = null;
         // FIXME a more generic filename or get it from config...
         me._indexMapUrl = '/mapping/mapmodule/resources/images/suomi25m_tm35fin.png';
     },
@@ -62,16 +63,13 @@ Oskari.clazz.define(
              * options
              */
             var me = this;
-            var controlOptions = {
-                    target: el[0]
-                };
-
             // initialize control, pass container
-            me._indexMap = new ol.control.OverviewMap(controlOptions);
-            // Set indexmap stable in container
-            me._indexMap.isSuitableOverview = function () {
-                return true;
-            };
+            me._indexMap = new ol.control.OverviewMap();
+            me._indexMap.setCollapsed(true);
+            // Ol indexmap target
+            me._indElement = jQuery('<div class="mapplugin ol_indexmap"></div>');
+            me.getElement().append(me._indElement);
+
             return me._indexMap;
         },
 
@@ -89,9 +87,39 @@ Oskari.clazz.define(
 
         _bindIcon: function (icon) {
             var me = this;
+
             icon.unbind('click');
             icon.bind('click', function (event) {
-                me._indexMap.handleToggle_();
+
+                //Add index map control - remove old one
+                if (me._indexMap.getCollapsed()) {
+                    // get/Set only base layer to index map
+                    var layer = me._getLayers();
+                    var tt = me.getElement()[0];
+                    if (layer) {
+                        var controlOptions = {
+                            target: me._indElement[0],
+                            layers: [ layer ],
+                            view: new ol.View({
+                                center: me.getMap().getView().getCenter(),
+                                projection: me.getMap().getView().getProjection(),
+                                zoom: me.getMap().getView().getZoom()
+                            })
+                        };
+                        // initialize control, pass container
+                        me.getMapModule().removeMapControl(me._name, me._indexMap);
+                        me._indexMap = new ol.control.OverviewMap(controlOptions);
+                        me._indexMap.setCollapsible(true);
+                        me.getMapModule().addMapControl(me._name, me._indexMap);
+
+                    }
+                    me._indexMap.setCollapsed(false);
+                }
+
+                else {
+                    me._indexMap.setCollapsed(true);
+                }
+
             });
         },
 
@@ -129,6 +157,12 @@ Oskari.clazz.define(
                 // enable icon
                 this._bindIcon(icon);
             }
+        },
+        _getLayers: function () {
+            if (this._indexMap) {
+                return this._map.getLayers().item(0);
+            }
+            return null;
         }
     },
     {
