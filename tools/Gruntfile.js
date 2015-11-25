@@ -602,7 +602,7 @@ module.exports = function (grunt) {
                 matcherSize = TO_MATCH.length + 1;
             var value = [];
             _.each(list, function(dep) {
-                var actual =  dep.path || '';
+                var actual =  dep.resourcesPath || '';
                 var index = actual.toLowerCase().indexOf(TO_MATCH);
                 if(index !== -1) {
                     //console.log(actual.substring(index + matcherSize));

@@ -103,7 +103,7 @@ function () {
                     requestParameters = response.requestParameters,
                     plan = response.plan;
 
-                var evt = me.sandbox.getEventBuilder('RouteSuccessEvent')(success, requestParameters, plan);
+                var evt = me.sandbox.getEventBuilder('RouteResultEvent')(success, requestParameters, plan);
                 me.sandbox.notifyAll(evt);
             }
         });

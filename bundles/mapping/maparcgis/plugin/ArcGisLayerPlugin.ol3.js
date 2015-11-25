@@ -54,6 +54,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
             var strToFind = "/export",
                 length = strToFind.length;
             return _.map(urls, function(url) {
+                // Note! endsWith requires a polyfill. One is available in bundles/bundle.js
                 if(url.endsWith(strToFind)) {
                     return url.substring(0, url.length - length);
                 }
