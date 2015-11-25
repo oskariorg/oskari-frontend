@@ -160,7 +160,7 @@ Oskari.clazz.define(
                     buffer: 0
                 });
 
-            openlayer.opacity = layer.getOpacity() / 100;
+            openlayer.setOpacity(layer.getOpacity() / 100);
 
             this.getMapModule().addLayer(openlayer, layer, layer.getName());
 

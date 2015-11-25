@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.34.1
+
+### mapping/myplacesimport - UserLayersLayerPlugin.ol3
+
+Opacity is now set correctly when layer is added to map.
+
 ## 1.34
 
 ### mapmodule-plugin/zoombar
