@@ -6,6 +6,10 @@
 
 Opacity is now set correctly when layer is added to map.
 
+### mapping/mapwfs_ol3 - WfsLayerPlugin for ol3
+
+Opacity is now set correctly for highlighted features.
+
 ## 1.34
 
 ### mapmodule-plugin/zoombar
