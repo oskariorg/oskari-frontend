@@ -116924,12 +116924,6 @@ goog.require('ol.TileRange');
  * @api
  */
 ol.source.OskariAsyncTileImage = function(options) {
-    this.tileLayerCache = {
-      /** @export */
-      'tileSetIdentifier': 0,
-      /** @export */
-      'tileInfos': {}
-    }
   goog.base(this, {
     attributions: options.attributions,
     extent: options.extent,
@@ -116949,16 +116943,29 @@ ol.source.OskariAsyncTileImage = function(options) {
         var wfsTileCache = this.getWFSTileCache_(),
             layerTileInfos = wfsTileCache.tileInfos,
             tileSetIdentifier = wfsTileCache.tileSetIdentifier;
-        layerTileInfos[bboxKey] = { "tileCoord": tileCoord, bounds: bounds, tileSetIdentifier: tileSetIdentifier};
+
+        layerTileInfos[bboxKey] = { 
+            tileCoord: tileCoord, 
+            bounds: bounds, 
+            tileSetIdentifier: tileSetIdentifier
+        };
         return bboxKey;
     },
     url: options.url,
     urls: options.urls,
     wrapX: options.wrapX
   });
-};
-goog.inherits(ol.source.OskariAsyncTileImage, ol.source.TileImage);
 
+  this.tileLayerCache = {
+    tileSetIdentifier: 0,
+    tileInfos: {
+    }
+  };
+
+  this.__refreshTimer = null;
+};
+
+goog.inherits(ol.source.OskariAsyncTileImage, ol.source.TileImage);
 
 /**
  * @api
@@ -117092,7 +117099,6 @@ ol.source.OskariAsyncTileImage.prototype.createTile_ = function(z, x, y, pixelRa
 
 /**
  * Workaround for being able to access renderer's private tile range property...
- * @api
  * @return  {ol.renderer.canvas.TileLayer}     canvasRenderer to force rerendering of tiles (ugly hack)
  */
  ol.source.OskariAsyncTileImage.prototype.getCanvasRenderer = function(layer, map){
@@ -117101,7 +117107,6 @@ ol.source.OskariAsyncTileImage.prototype.createTile_ = function(z, x, y, pixelRa
 
 /**
  * Workaround for being able to access renderer's private tile range property...
- * @api
  */
  ol.renderer.canvas.TileLayer.prototype.resetRenderedCanvasTileRange = function() {
   this.renderedCanvasTileRange_ = new ol.TileRange(NaN, NaN, NaN, NaN);
@@ -117109,14 +117114,13 @@ ol.source.OskariAsyncTileImage.prototype.createTile_ = function(z, x, y, pixelRa
 
 /**
  * Workaround for being able to set the imageTile's state manually.
- * @api
  */
 ol.ImageTile.prototype.setState = function(state) {
   this.state = state;
 };
 
 /**
- * Reveal TileGrid's innermost wanted properties
+ * Workaround for obtaining a tilerange for a resolution and extent in wfslayerplugin
  * @api
  */
  ol.tilegrid.TileGrid.prototype.getTileRangeForExtentAndResolutionWrapper = function(mapExtent, resolution) {
@@ -117140,6 +117144,7 @@ ol.source.OskariAsyncTileImage.prototype.setupImageContent = function(boundsObj,
       return;
     }
 
+    var tileCache = this.getWFSTileCache_();
     var layerTileInfos = this.getWFSTileCache_().tileInfos;
     var tileInfo = layerTileInfos[bboxKey],
         tileCoord = tileInfo ? tileInfo.tileCoord: undefined,
@@ -117155,27 +117160,11 @@ ol.source.OskariAsyncTileImage.prototype.setupImageContent = function(boundsObj,
         case ol.TileState.IDLE : // IDLE: 0,
         case ol.TileState.LOADING: //LOADING: 1,
             me.__fixTile(tile, imageData, layer, map);
-            /*
-            tile.PLACEHOLDER = false;
-            tile.getImage().src = imageData;
-            tile.setState(ol.TileState.LOADED);
-            */
-            //reset the renderers memory of it's tilerange as to make sure that our boundary tiles get drawn perfectly
-            //me.getCanvasRenderer(layer, map).resetRenderedCanvasTileRange();
-            //this.changed();
             break;
         case ol.TileState.LOADED: // LOADED: 2
         case ol.TileState.ERROR: // ERROR: 3
         case ol.TileState.EMPTY: // EMPTY: 4
             me.__fixTile(tile, imageData, layer, map);
-            /*
-            tile.PLACEHOLDER = false;
-            tile.getImage().src = imageData;
-            tile.setState(ol.TileState.LOADED);
-            */
-            //reset the renderers memory of it's tilerange as to make sure that our boundary tiles get drawn perfectly
-            //me.getCanvasRenderer(layer, map).resetRenderedCanvasTileRange();
-            //this.changed();
             break;
         default:
             tile.handleImageError_();
@@ -117194,16 +117183,10 @@ ol.source.OskariAsyncTileImage.prototype.__fixTile = function(tile, imageData, l
     tile.getImage().src = imageData;
     tile.setState(ol.TileState.LOADED);
 
-//    this.dispatchEvent(new ol.source.TileEvent(ol.source.TileEventType.TILELOADEND, tile));
     var me = this;
     this.__refreshTimer = setTimeout(function() {
-        //reset the renderers memory of it's tilerange as to make sure that our boundary tiles get drawn perfectly
-//        canvasRenderer.renderedCanvasTileRange_ = new ol.TileRange();
-//        me.changed();
         me.getCanvasRenderer(layer, map).resetRenderedCanvasTileRange();
         me.changed();
-
-
     }, 500);
 
 };
@@ -124436,21 +124419,6 @@ goog.exportProperty(
     ol.source.OskariAsyncTileImage.prototype,
     'getNonCachedGrid',
     ol.source.OskariAsyncTileImage.prototype.getNonCachedGrid);
-
-goog.exportProperty(
-    ol.source.OskariAsyncTileImage.prototype,
-    'getCanvasRenderer',
-    ol.source.OskariAsyncTileImage.prototype.getCanvasRenderer);
-
-goog.exportProperty(
-    ol.renderer.canvas.TileLayer.prototype,
-    'resetRenderedCanvasTileRange',
-    ol.renderer.canvas.TileLayer.prototype.resetRenderedCanvasTileRange);
-
-goog.exportProperty(
-    ol.ImageTile.prototype,
-    'setState',
-    ol.ImageTile.prototype.setState);
 
 goog.exportProperty(
     ol.tilegrid.TileGrid.prototype,

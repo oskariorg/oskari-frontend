@@ -180,7 +180,7 @@ function () {
                 this.popup.setFinishingPoint(lonlat);
             }
         },
-        'RouteSuccessEvent': function (event) {
+        'RouteResultEvent': function (event) {
             var me = this,
                 loc = me.localization;
             if(!me.__isPopupVisible()) {
