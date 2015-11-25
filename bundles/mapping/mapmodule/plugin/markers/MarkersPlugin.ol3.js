@@ -764,7 +764,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 me.state = {};
             }
             me.state.markers = [];
-            _.each(me._markers, function(value) {
+            _.each(me._markers, function(marker) {
                 if(!marker.transient) {
                     me.state.markers.push(marker);
                 }
