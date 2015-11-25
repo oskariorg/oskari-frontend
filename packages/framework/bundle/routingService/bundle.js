@@ -17,7 +17,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingService.RoutingServiceBun
             "src": "../../../../bundles/framework/routingService/instance.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/routingService/event/RouteSuccessEvent.js"
+            "src": "../../../../bundles/framework/routingService/event/RouteResultEvent.js"
         }, {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/routingService/request/GetRouteRequest.js"

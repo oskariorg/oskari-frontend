@@ -1,9 +1,9 @@
 /**
- * @class Oskari.mapframework.bundle.routingService.event.RouteSuccessEvent
+ * @class Oskari.mapframework.bundle.routingService.event.RouteResultEvent
  *
  * Used to notify routingUI that route has been got successfully from the service
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.routingService.event.RouteSuccessEvent',
+Oskari.clazz.define('Oskari.mapframework.bundle.routingService.event.RouteResultEvent',
 /**
  * @method create called automatically on construction
  * @static
@@ -17,7 +17,7 @@ function(success, requestParameters, plan) {
     this._plan = plan;
 }, {
     /** @static @property __name event name */
-    __name : "RouteSuccessEvent",
+    __name : "RouteResultEvent",
 
     /**
      * @method getName
