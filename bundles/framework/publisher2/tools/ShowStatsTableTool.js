@@ -35,7 +35,7 @@ function() {
     getTool: function(pdata){
         var me = this,
             statsGrid = me.__sandbox.getStatefulComponents().statsgrid,
-            statsGridState = me.hasNestedObj(pdata, 'configuration.publishedgrid.state') ? pdata.configuration.publishedgrid.state : statsGrid.state,
+            statsGridState = Oskari.util.keyExists(pdata, 'configuration.publishedgrid.state') ? pdata.configuration.publishedgrid.state : statsGrid.state,
             layer = me._getStatsLayer();
 
         if(!me.__tool) {

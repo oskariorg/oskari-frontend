@@ -69,34 +69,34 @@ Oskari.clazz.define(
         	//overwriting default styles if given
         	if(styles) {
         		_.each(styles, function (style, styleType) {
-        			if(me.hasNestedObj(style, 'fill.color')) {
+        			if(Oskari.util.keyExists(style, 'fill.color')) {
             			me._styles[styleType].getFill().setColor(style.fill.color);
         			}
-		        	if(me.hasNestedObj(style, 'stroke.color')) {
+		        	if(Oskari.util.keyExists(style, 'stroke.color')) {
 			    		me._styles[styleType].getStroke().setColor(style.stroke.color);
 		        	}
-		        	if(me.hasNestedObj(style, 'stroke.width')) {
+		        	if(Oskari.util.keyExists(style, 'stroke.width')) {
 			    		me._styles[styleType].getStroke().setWidth(style.stroke.width);
 		        	}
 //		        	if(me.hasNestedObj(style, 'stroke.lineDash')) {
 //			    		me._styles[styleType].getStroke().setLineDash(style.stroke.lineDash);
 //		        	}
-		        	if(me.hasNestedObj(style, 'image.radius')) {
+		        	if(Oskari.util.keyExists(style, 'image.radius')) {
 			    		me._styles[styleType].getImage().radius = style.image.radius;
 		        	}
-		        	if(me.hasNestedObj(style, 'image.fill.color')) {
+		        	if(Oskari.util.keyExists(style, 'image.fill.color')) {
 			    		me._styles[styleType].getImage().getFill().setColor(style.image.fill.color);
 		        	}
-		        	if(me.hasNestedObj(style, 'text.fill.color')) {
+		        	if(Oskari.util.keyExists(style, 'text.fill.color')) {
 			    		me._styles[styleType].getText().getFill().setColor(style.text.fill.color);
 		        	}
-		        	if(me.hasNestedObj(style, 'text.scale')) {
+		        	if(Oskari.util.keyExists(style, 'text.scale')) {
 			    		me._styles[styleType].getText().setScale(style.text.scale);
 		        	}
-		        	if(me.hasNestedObj(style, 'text.stroke.color')) {
+		        	if(Oskari.util.keyExists(style, 'text.stroke.color')) {
 			    		me._styles[styleType].getText().getFill().setColor(style.text.stroke.color);
 		        	}
-		        	if(me.hasNestedObj(style, 'text.stroke.width')) {
+		        	if(Oskari.util.keyExists(style, 'text.stroke.width')) {
 			    		me._styles[styleType].getText().getStroke().setWidth(style.text.stroke.width);
 		        	}
         		});
@@ -185,7 +185,7 @@ Oskari.clazz.define(
         	var options = {
         		clearCurrent: clearCurrent,
         		isFinished: true
-        	}
+        	};
         	me.sendDrawingEvent(id, options);
             //deactivate draw nad modify controls
             me.removeInteractions();
@@ -274,9 +274,9 @@ Oskari.clazz.define(
         	var sketch;
         	var optionsForDrawingEvent = {
  	        	isFinished: false
-	        }
+	        };
 
-    	    if (shape === 'LineString') {
+        	if (shape === 'LineString') {
     	    	 geometryFunction = function (coordinates, geometry) {
 	    	    	 if (!geometry) {
 	    	    		  geometry = new ol.geom.LineString(null);
@@ -337,10 +337,10 @@ Oskari.clazz.define(
 	        me._map.addInteraction(me._draw);
 
 			me._draw.on('drawstart', function(evt) {
-				me._sketch = evt.feature;				
+				me._sketch = evt.feature;
 				if(options.allowMultipleDrawing === 'single') {
 					me.clearDrawing();
-				} 
+				}
 			});
 			me._draw.on('drawend', function() {
 				if(options.allowMultipleDrawing === false) {
@@ -407,6 +407,7 @@ Oskari.clazz.define(
         			} else if(shape === 'Polygon') {
             			me.showText(evt.feature, me.getPolygonArea(evt.feature.getGeometry()), options);
         			}
+        			me.sendDrawingEvent(me._id, options);
 				});
 			 });
         },
@@ -420,7 +421,7 @@ Oskari.clazz.define(
          */
     	showText: function(feature, text, options) {
 			var me = this;
-    		if(feature && options.showMeasure === true) {
+    		if(feature && options.showMeasure) {
     			var featureStyle = _.clone(me._styles['draw']);
     			feature.style_ = featureStyle;
 	    		feature.style_.text_.text_ = text;
@@ -654,28 +655,7 @@ Oskari.clazz.define(
 					f.buffer = buffer;
 				});
 			}
-		},
-		/** Check, if nested key exists
-		* @method hasNestedObj
-		* @params {}  object
-		* @params String object path
-		* @public
-		*
-		* @returns {Boolean}: true if nested key exists
-		*/
-	   hasNestedObj: function(obj, sobj) {
-	      var tmpObj = obj,
-	          cnt = 0,
-	          splits = sobj.split('.');
-
-	      for (i=0; tmpObj && i < splits.length; i++) {
-	          if (splits[i] in tmpObj) {
-	              tmpObj = tmpObj[splits[i]];
-	              cnt++;
-	          }
-	      }
-	      return cnt === splits.length;
-	   }
+		}
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
         /**

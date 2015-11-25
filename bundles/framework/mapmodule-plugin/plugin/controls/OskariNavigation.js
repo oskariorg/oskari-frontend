@@ -16,14 +16,12 @@ OskariNavigation = OpenLayers.Class(OpenLayers.Control.Navigation, {
         OpenLayers.Control.Navigation.prototype.initialize.apply(this, [bounds, options]);
     },
       /* @method setup */
-      setup : function(mapmodule) {
+    setup : function(mapmodule) {
         this.mapmodule = mapmodule;
         this.sandbox = this.mapmodule.getSandbox();
         this._hoverEventBuilder = this.sandbox.getEventBuilder('MouseHoverEvent');
         this._hoverEvent = this._hoverEventBuilder();
-        this._mapClickedBuilder = this.sandbox.getEventBuilder('MapClickedEvent');
-      },
-
+    },
 
     draw: function() {
         // disable right mouse context menu for support of right click events
