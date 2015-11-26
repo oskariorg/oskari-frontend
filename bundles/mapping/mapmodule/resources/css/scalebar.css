@@ -1,0 +1,31 @@
+div.mapplugin.scalebar {
+  clear: both;
+  direction: ltr;
+  display: inline-block;
+  /* 12px would be too big... */
+  font-size: 10px;
+  font-weight: bold;
+  line-height: 13px; }
+  div.mapplugin.scalebar div {
+    background-color: rgba(255, 255, 255, 0.2);
+    direction: ltr;
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.35); }
+  div.mapplugin.scalebar.medium div.olControlScaleLineTop {
+    border-color: #FF0000; }
+  div.mapplugin.scalebar.medium div.olControlScaleLineBottom {
+    border-color: #FF0000; }
+  div.mapplugin.scalebar.large div.olControlScaleLineTop {
+    border-color: #00FF00; }
+  div.mapplugin.scalebar.large div.olControlScaleLineBottom {
+    border-color: #00FF00; }
+  div.mapplugin.scalebar.fill div.olControlScaleLineTop {
+    border-color: #0000FF; }
+  div.mapplugin.scalebar.fill div.olControlScaleLineBottom {
+    border-color: #0000FF; }
+  div.mapplugin.scalebar.custom div.olControlScaleLineTop {
+    border-color: #FF00FF; }
+  div.mapplugin.scalebar.custom div.olControlScaleLineBottom {
+    border-color: #FF00FF; }
+
+.right div.mapplugin.scalebar {
+  direction: rtl; }

@@ -65,10 +65,10 @@ div.coordinatetool__popup {
 
 div.mapplugin.coordinatetool {
     &.toolstyle-default{
-        background-image: url('../images/coordinates-style1-dark.png') !important;  
+        background-image: url('../images/coordinates-style1-dark.png');  
         
         .active{
-            background-image: url('../images/coordinates-style1-dark-active.png') !important;
+            background-image: url('../images/coordinates-style1-dark-active.png');
         }
     }
 

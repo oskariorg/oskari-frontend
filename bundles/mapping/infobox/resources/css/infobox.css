@@ -75,11 +75,7 @@ div.olPopup {
   padding: 0;
   overflow: auto;
   /*\0/ !important*/
-  height: auto;
-  width: auto;
-  min-height: 200px;
-  min-width: 300px;
-  max-width: 1197px;
+  height: 400px;
   /*\0/ !important*/
   z-index: 16000; }
 
