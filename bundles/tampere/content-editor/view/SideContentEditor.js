@@ -787,6 +787,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
 
             var geomEditButton = $("<div />").addClass('selection-area tool');
             geomEditButton.on('click', function() {
+                me.drawingActive = true;
                 me.drawToolType = "edit";
                 me.clickedGeometryNumber = null;
                 if (me.layerGeometries.id.indexOf("Multi") > -1) {
