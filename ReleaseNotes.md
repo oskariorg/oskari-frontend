@@ -10,6 +10,11 @@ Opacity is now set correctly when layer is added to map.
 
 Opacity is now set correctly for highlighted features.
 
+### infobox
+
+Only prevent event-propagation if target is not a link. Event-propagation is stopped so map doesn't get click events 
+when clicking the info-box. However without this fix links on infobox don't work.
+
 ## 1.34
 
 ### mapmodule-plugin/zoombar
