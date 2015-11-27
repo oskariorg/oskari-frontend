@@ -730,7 +730,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             {
                 this.layerGeometryType = "Point";
             }
-            else if (response == "gml:MultiLineStringPropertyType")
+            else if (response == "gml:MultiLineStringPropertyType" || response.indexOf("OpenLayers_Geometry_MultiLineString_") > -1)
             {
                 this.layerGeometryType = "MultiLineString";
             }
