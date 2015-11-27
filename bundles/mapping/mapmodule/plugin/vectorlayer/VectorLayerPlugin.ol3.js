@@ -81,6 +81,7 @@ Oskari.clazz.define(
                             feature : feature,
                             layerId : id
                         });
+                        break;
                     }
                 });
             });
@@ -229,6 +230,14 @@ Oskari.clazz.define(
                     options.layerId = 'VECTOR';
                 }
                 var features = format.readFeatures(geometry);
+
+                if(options.cursor){ 
+                    if (!options.attributes){
+                      options.attributes = {};
+                    }
+                    options.attributes['oskari-cursor'] = options.cursor;
+                }
+
                 if (options.attributes && options.attributes !== null && features instanceof Array && features.length) {
                     features[0].setProperties(options.attributes);
                 }
@@ -268,6 +277,9 @@ Oskari.clazz.define(
                     if (options.layerOptions) {
                         layer.setProperties(options.layerOptions);
                     }
+
+
+
                     me._layers[options.layerId] = layer;
                     me._map.addLayer(layer);
                     me.raiseVectorLayer(layer);
@@ -289,6 +301,25 @@ Oskari.clazz.define(
                     var extent = vectorSource.getExtent();
                     me.getMapModule().zoomToExtent(extent);
                 }
+
+                me._map.on("pointermove", function (evt) {
+                  var target = me._map.getTarget();
+                  var jTarget = typeof target === "string" ? jQuery("#" + target) : jQuery(target);
+                  var cursor = null;
+                  var hit = this.forEachFeatureAtPixel(evt.pixel,
+                      function(feature, layer) {
+                        if(feature.getProperties()['oskari-cursor']) {
+                          cursor = feature.getProperties()['oskari-cursor'];
+                        }
+                        return true;
+                      }); 
+                    
+                    if (hit && cursor) {  
+                      jTarget.css('cursor', cursor);
+                    } else {
+                      jTarget.css('cursor', '');
+                    }
+                });
             }
         },
 

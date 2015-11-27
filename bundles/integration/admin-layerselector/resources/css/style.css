@@ -1,17 +1,15 @@
 /* Mixins */
+/* capabilities popup */
+.admin-layerselector-capabilities-popup {
+  width: 50%; }
+  .admin-layerselector-capabilities-popup textarea {
+    width: 95%;
+    height: 250px; }
+
 /* layer group container */
 div.admin-layerselector {
   /* For long lists, make capabilities list scrollable */
   /* layer container */ }
-
-  .admin-layerselector-capabilities-popup {
-    width : 50%;
-  }
-
-  .admin-layerselector-capabilities-popup textarea {
-    width : 95%;
-    height : 250px;
-  }
   div.admin-layerselector div.layerGroup {
     background-color: #F3F3F3;
     border: 1pt solid #C0D0D0;
