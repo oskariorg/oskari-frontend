@@ -35,7 +35,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             units: 'm'
         };
         this._mapDivId = mapDivId || 'mapdiv';
-        this._dpi = 25.4 / 0.28;
+        this._dpi = 72;   //   25.4 / 0.28;  use OL2 dpi
         // override defaults
         var key;
         if (options) {
