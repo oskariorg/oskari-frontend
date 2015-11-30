@@ -35,6 +35,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             units: 'm'
         };
         this._mapDivId = mapDivId || 'mapdiv';
+        this._dpi = 25.4 / 0.28;
         // override defaults
         var key;
         if (options) {
@@ -52,10 +53,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {OpenLayers.Map}
          */
         _initImpl: function (sandbox, options, map) {
-            //var scales = this._calculateScalesFromResolutions(options.resolutions, map.units);
-            //this._mapScales = scales;
 
-            this._createBaseLayer();
 
             // TODO remove this whenever we're ready to add the containers when needed
             this._addMapControlPluginContainers();
@@ -99,54 +97,24 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var view = map.getView(); ;
             var resolution = view.getResolution();
             var units = map.getView().getProjection().getUnits();
-            var dpi = 25.4 / 0.28;
             var mpu = ol.proj.METERS_PER_UNIT[units];
-            var scale = resolution * mpu * 39.37 * dpi;
+            var scale = resolution * mpu * 39.37 * this._dpi;
             return scale;
         },
-        /**
-         * Resolution of requested scale
-         *
-         * @param scale
-         * @returns {number} resolution (not rounded)
-         */
 
-        getScaleResolution: function (scale) {
-            var units = this.getMap().getView().getProjection().getUnits(),
-                dpi = 25.4 / 0.28,
-                mpu = ol.proj.METERS_PER_UNIT[units],
-                resolution = scale / ( mpu * 39.37 * dpi );
-
-            return resolution;
-        },
         /**
          * Returns zoom level for any scale
+         * Find 1st the scale range of OL3 resolution scales of requested scale
          * @param scale any scale
-         * @returns {number}  zoom level
+         * @param {Boolean} closest  closest resolution for scale
+         * @returns {number}  zoom level ( OL3 scale range min or closest)
          */
-        getZoom4Scale: function (scale) {
-            var resolution = this.getScaleResolution(scale);
-            //Get nearest real resolution index = zoom level
-            return this.getNearestNumber(this._options.resolutions, resolution);
+        getZoom4Scale: function (scale, closest) {
+            var resolution = this.calculateScaleResolution(scale),
+                zoom = this._options.resolutions.indexOf(resolution);
+            return  (zoom !== -1) ? zoom : 5;
         },
-        /**
-         * Return index of nearest item in an array to requested key
-         * @param a  array
-         * @param n  key
-         * @returns {number}  index of nearest item in an array
-         */
-        getNearestNumber: function (a, n) {
-            var l;
-            if ((l = a.length) < 2) {
-                return l - 1;
-            }
-            for (var l, p = Math.abs(a[--l] - n); l--;) {
-                if (p < (p = Math.abs(a[l] - n))) {
-                    break;
-                }
-            }
-            return l + 1;
-        },
+
 
         /**
         * @method getMaxZoomLevel
@@ -166,33 +134,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             })[0];
             return interactionInstance;
         },
-
-
-        /**
-         * Changed to resolutions based map zoom levels, but we need to
-         * calculate scales array for backward compatibility
-         *
-         * @param  {Number[]} resolutions configured resolutions array
-         * @param  {String} units         OpenLayers unit (m/degree etc)
-         * @return {Number[]}             calculated matching scales array
-         * @private
-         */
-         /*
-        _calculateScalesFromResolutions: function (resolutions, units) {
-            var scales = [],
-                i,
-                calculatedScale;
-            for (i = 0; i < resolutions.length; i += 1) {
-                calculatedScale = OpenLayers.Util.getScaleFromResolution(resolutions[i], units);
-                // rounding off the resolution to scale calculation
-                calculatedScale = calculatedScale * 100000000;
-                calculatedScale = Math.round(calculatedScale);
-                calculatedScale = calculatedScale / 100000000;
-                scales.push(calculatedScale);
-            }
-            return scales;
-        },
-        */
 
         /**
          * @method getMapViewPortDiv
@@ -331,68 +272,13 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             // do nothing
         },
 
-        //NOTE! The next is only for demos, delete when going to release ol3!
-        _testVectorPlugin: function (x,y) {
-            var geojsonObject = {
-                  'type': 'FeatureCollection',
-                  'crs': {
-                    'type': 'name',
-                    'properties': {
-                      'name': 'EPSG:3067'
-                    }
-                  },
-                  'features': [
-                    {
-                      'type': 'Feature',
-                      'geometry': {
-                        'type': 'LineString',
-                        'coordinates': [[x, y], [x+1000, y+1000]]
-                      }
-                    },
-                    {
-                      'type': 'Feature',
-                      'geometry': {
-                        'type': 'Point',
-                        'coordinates': [x, y]
-                      }
-                    }
-
-                  ]
-                };
-
-            var testOptions = {
-                'minResolution': 2,
-                'maxResolution': 100
-            };
-
-            var testStyle = new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: '#3399CC',
-                    width: 5
-                })
-            });
-
-            var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
-            this._sandbox.postRequestByName(rn, [geojsonObject, 'GeoJSON', null, 'replace', true, testOptions, testStyle, true]);
-        },
-
         _calculateScalesImpl: function(resolutions) {
+            var units = this.getMap().getView().getProjection().getUnits(),
+                mpu = ol.proj.METERS_PER_UNIT[units];
 
             for (var i = 0; i < resolutions.length; ++i) {
-              /*  var calculatedScale = OpenLayers.Util.getScaleFromResolution(resolutions[i], 'm');
-                calculatedScale = calculatedScale * 10000;
-                calculatedScale = Math.round(calculatedScale);
-                calculatedScale = calculatedScale / 10000;  */
-
-                var units = this.getMap().getView().getProjection().getUnits();
-                var dpi = 25.4 / 0.28;
-                var mpu = ol.proj.METERS_PER_UNIT[units];
-                var scale = resolutions[i] * mpu * 39.37 * dpi;
-
+                var scale = resolutions[i] * mpu * 39.37 * this._dpi;
                     scale = Math.round(scale);
-
-
-
 
                 this._mapScales.push(scale);
             }
@@ -832,7 +718,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          *     wanting to notify at end of the chain for performance reasons or similar) (optional)
          */
         zoomToScale: function (scale, closest, suppressEnd) {
-            var zoom = this.getZoom4Scale(scale);
+            var zoom = this.getZoom4Scale(scale, closest);
             this._map.getView().setZoom(zoom);
             this._updateDomainImpl();
             if (suppressEnd !== true) {
