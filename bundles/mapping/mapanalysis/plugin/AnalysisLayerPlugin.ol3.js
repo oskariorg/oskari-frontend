@@ -215,31 +215,22 @@ Oskari.clazz.define(
                 ),
 
                 wms = {
-                    'URL' : imgUrl,
-                    'LAYERS' : layer.getWpsName(),
-                    'FORMAT' : 'image/png'
+                    'URL': imgUrl,
+                    'LAYERS': layer.getWpsName(),
+                    'FORMAT': 'image/png'
                 },
-
-                openlayer = new ol.layer.Tile({
-                    source : new ol.source.TileWMS({
-                        url : wms.URL,
-                        params : {
-                            'LAYERS' : wms.LAYERS,
-                            'FORMAT' : wms.FORMAT
+                openlayer = new ol.layer.Image({
+                    source: new ol.source.ImageWMS({
+                        url: wms.URL,
+                        params: {
+                            'LAYERS': wms.LAYERS,
+                            'FORMAT': wms.FORMAT
                         }
                     }),
-                    id: layer.getId(),
-                    transparent: true,
-                    scales: layerScales,
-                    isBaseLayer: false,
-                    displayInLayerSwitcher: false,
-                    visible: layer.isInScale(me.getSandbox().getMap().getScale()) && layer.isVisible(),
-                    singleTile: true,
-                    styles: layer.getOverrideSld(),
-                    buffer: 0
+                    visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
+                    opacity: layer.getOpacity() / 100
                 });
 
-            openlayer.opacity = layer.getOpacity() / 100;
 
             this.getMapModule().addLayer(openlayer, layer, layer.getName());
 
