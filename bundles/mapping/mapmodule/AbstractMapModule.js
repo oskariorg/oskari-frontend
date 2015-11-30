@@ -1119,6 +1119,34 @@ Oskari.clazz.define(
             return layerResolutions;
         },
         /**
+         * @method calculateScaleResolution
+         * Calculate max resolution for the scale
+         * If scale is not defined return default
+         * @param {Number} scale
+         * @return {Number[]} calculated resolution
+         */
+        calculateScaleResolution: function (scale) {
+            var resIndex = -1,
+                defIndex = 5,
+                i;
+            if(scale) {
+                for (i = 1; i < this._mapScales.length; i += 1) {
+                    if ((scale > this._mapScales[i]) && (scale <= this._mapScales[i-1])) {
+                        // resolutions are in the same order as scales so just use them
+                        resIndex = i - 1;
+                        break;
+                    }
+                }
+                // Is scale out of OL3 scale ranges
+                if(resIndex === -1){
+                    resIndex = scale < this._mapScales[0] ?  this._mapScales.length - 1 : 0;
+                }
+                return this._options.resolutions[resIndex];
+            }
+
+            return this._options.resolutions[defIndex];
+        },
+        /**
          * Returns state for mapmodule including plugins that have getState() function
          * @method getState
          * @return {Object} properties for each pluginName
