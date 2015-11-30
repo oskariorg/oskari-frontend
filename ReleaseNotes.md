@@ -1,5 +1,12 @@
 # Release Notes
 
+## 1.35
+
+### mapping/mapmodule/plugin/vectorlayer
+
+Both ol2 and ol3 implementations of VectorLayerPlugin have been changed to allow define mouse over cursor for added feature (added cursor option handling).
+
+
 ## 1.34
 
 ### mapmodule-plugin/zoombar
@@ -96,8 +103,7 @@ sandbox.postRequestByName(rn, [geojson, {
     layerOptions: null,
     centerTo: false,
     featureStyle: style,
-    attributes: null,
-    cursor: null
+    attributes: null
 }]);
 - layerId: If left out, a generic vector layer is used by VectorLayerPlugin. 
 - clearPrevious: whether to clear out all previous features
@@ -105,7 +111,6 @@ sandbox.postRequestByName(rn, [geojson, {
 - centerTo: whether to zoom in to the features
 - featureStyle: style of the features
 - attributes: additional attributes of the features
-- cursor: addition cursor ('pointer', 'zoom-in', 'zoom-out' etc.) of mouse over feature
 (geometryType from the old call has been removed. From now on the VectorLayerPlugin will determine geometry type from the geometry)
 
 An event named 'FeatureEvent' is emitted when features are added, removed or clicked. The event holds features as an array of objects with feature id, geojson and layer id as content.
