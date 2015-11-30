@@ -226,7 +226,7 @@ Oskari.clazz.define(
             if (!format) {
                 return;
             }
-            
+
             if (geometry) {
                 var features = format.read(geometry);
                 //if there's no layerId provided -> Just use a generic vector layer for all.
@@ -267,7 +267,7 @@ Oskari.clazz.define(
                     olLayer.removeAllFeatures();
                     olLayer.refresh();
                 }
-                
+
 
                 if (options.featureStyle) {
                     me.setDefaultStyle(options.featureStyle);
@@ -287,7 +287,7 @@ Oskari.clazz.define(
                                 cursor: options.cursor
                             };
                         }
-                    }                    
+                    }
                 }
 
                 olLayer.addFeatures(features);

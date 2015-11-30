@@ -162,7 +162,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 );
             });
 
-            
+
 
             module.start(me.getSandbox());
 
@@ -171,7 +171,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             }
 
             me.adjustMapSize();
-            
+
             // startup plugins
             if (me.conf.plugins) {
                 var plugins = this.conf.plugins,

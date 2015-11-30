@@ -233,16 +233,16 @@ Oskari.clazz.define(
                 var features = format.readFeatures(geometry);
 
                 //add cursor if defined so
-                if(options.cursor){ 
+                if(options.cursor){
                     if (!options.attributes){
                       options.attributes = {};
                     }
-                    
+
                     options.attributes['oskari-cursor'] = options.cursor;
 
                     // Add pointer move if not added already
                     if(!me._pointerMoveAdded) {
-                        me._map.on('pointermove', function (evt) {                    
+                        me._map.on('pointermove', function (evt) {
                           var target = me._map.getTarget();
                           var jTarget = typeof target === "string" ? jQuery("#" + target) : jQuery(target);
                           var cursor = null;
@@ -252,9 +252,9 @@ Oskari.clazz.define(
                                   cursor = feature.getProperties()['oskari-cursor'];
                                 }
                                 return true;
-                              }); 
-                            
-                            if (hit && cursor) {  
+                              });
+
+                            if (hit && cursor) {
                               jTarget.css('cursor', cursor);
                             } else {
                               jTarget.css('cursor', '');
