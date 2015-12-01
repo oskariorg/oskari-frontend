@@ -11,8 +11,30 @@ Both ol2 and ol3 implementations of VectorLayerPlugin have been changed to allow
 Removed unneccasy code:
 - setMode functions, because plugin tool handles allready own visibility/style when using mobile or desktop size map
 
+## 1.34.1
 
+### mapping/myplacesimport - UserLayersLayerPlugin.ol3
 
+Opacity is now set correctly when layer is added to map.
+Layers are loaded as a singletile to speed up the loading.
+
+### mapping/mapanalyse - AnalysisLayerPlugin.ol3
+
+Opacity is now set correctly when layer is added to map.
+Layers are loaded as a singletile to speed up the loading.
+
+### mapping/mapwfs_ol3 - WfsLayerPlugin for ol3
+
+Opacity is now set correctly for highlighted features.
+
+### infobox
+
+Only prevent event-propagation if target is not a link. Event-propagation is stopped so map doesn't get click events 
+when clicking the info-box. However without this fix links on infobox don't work.
+
+### publisher2
+
+Fixed a default tools bug, when modifying an existing map
 
 ## 1.34
 
