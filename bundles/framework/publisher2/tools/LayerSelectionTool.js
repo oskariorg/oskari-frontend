@@ -91,9 +91,6 @@ function() {
             setTimeout(function(){
                 me._checkLayerSelections();
             }, 300);
-            if(me.state.mode && me.__plugin && typeof me.__plugin.setMode === 'function'){
-                me.__plugin.setMode(me.state.mode);
-            }
         } else if(me.__started === true) {
             me.__plugin.stopPlugin(me.__sandbox);
         }
@@ -348,17 +345,6 @@ function() {
             }
             me.__mapmodule.unregisterPlugin(me.__plugin);
         }
-    },
-    /**
-    * Set mode to.
-    * @method setMode
-    * @public
-    *
-    * @param {String} mode the mode
-    */
-    setMode: function(mode){
-        var me = this;
-        me.state.mode = mode;
     }
 }, {
     'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],

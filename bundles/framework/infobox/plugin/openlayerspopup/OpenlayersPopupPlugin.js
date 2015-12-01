@@ -301,7 +301,6 @@ Oskari.clazz.define(
             popup.events.on({
                 'click': function (evt) {
                     var link = jQuery(evt.target || evt.srcElement);
-
                     if (link.hasClass('olPopupCloseBox')) { // Close button
                         me.close(id);
                     } else { // Action links
@@ -314,7 +313,9 @@ Oskari.clazz.define(
                             contentData[i].actions[text]();
                         }
                     }
-                    evt.stopPropagation();
+                    if(!link.is('a')) {
+                        evt.stopPropagation();
+                    }
                 },
                 scope: popup
             });

@@ -221,10 +221,12 @@ Oskari.clazz.define(
                 format = me._supportedFormats[geometryType],
                 olLayer,
                 layer,
-                mapLayerService = me._sandbox.getService('Oskari.mapframework.service.MapLayerService');
+                mapLayerService = me._sandbox.getService('Oskari.mapframework.service.MapLayerService'),
+                featureInstance;
             if (!format) {
                 return;
             }
+
             if (geometry) {
                 var features = format.read(geometry);
                 //if there's no layerId provided -> Just use a generic vector layer for all.
@@ -266,6 +268,7 @@ Oskari.clazz.define(
                     olLayer.refresh();
                 }
 
+
                 if (options.featureStyle) {
                     me.setDefaultStyle(options.featureStyle);
                     for (i=0; i < features.length; i++) {
@@ -273,6 +276,20 @@ Oskari.clazz.define(
                         featureInstance.style = me._style;
                     }
                 }
+
+                if(options.cursor){
+                    for (i=0; i < features.length; i++) {
+                        featureInstance = features[i];
+                        if(featureInstance.style) {
+                            featureInstance.style.cursor = options.cursor;
+                        } else {
+                            featureInstance.style = {
+                                cursor: options.cursor
+                            };
+                        }
+                    }
+                }
+
                 olLayer.addFeatures(features);
                 if(isOlLayerAdded === false) {
                     me._map.addLayer(olLayer);

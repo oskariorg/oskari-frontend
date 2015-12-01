@@ -87,10 +87,6 @@ function(sandbox, mapmodule, localization, instance, handlers) {
                 me.__plugin.stopPlugin(me.__sandbox);
             }
         }
-
-        if(enabled === true && me.state.mode !== null && me.__plugin && typeof me.__plugin.setMode === 'function'){
-            me.__plugin.setMode(me.state.mode);
-        }
         var event = sandbox.getEventBuilder('Publisher2.ToolEnabledChangedEvent')(me);
         sandbox.notifyAll(event);
     },
@@ -169,22 +165,7 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     isShownInToolsPanel: function() {
         return true;
     },
-
-    /**
-    * Set mode to.
-    * @method setMode
-    * @public
-    *
-    * @param {String} mode the mode
-    */
-    setMode: function(mode){
-        var me = this;
-        me.state.mode = mode;
-
-        if(me.__plugin && typeof me.__plugin.setMode === 'function'){
-            me.__plugin.setMode(mode);
-        }
-    },
+    
     /**
     * Get group
     * @method getGroup

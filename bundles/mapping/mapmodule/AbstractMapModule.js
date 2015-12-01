@@ -1139,7 +1139,7 @@ Oskari.clazz.define(
                 }
                 // Is scale out of OL3 scale ranges
                 if(resIndex === -1){
-                    resIndex = scale < this._mapScales[0] ?  this._mapScales.length - 1 : 0;
+                    resIndex = scale < this._mapScales[this._mapScales.length - 1] ?  this._mapScales.length - 1 : 0;
                 }
                 return this._options.resolutions[resIndex];
             }
