@@ -101,6 +101,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                 // Get the reserved current index for wmts layer
                 var holderLayerIndex = mapModule.getLayerIndex(wmtsHolderLayer);
                 map.removeLayer(wmtsHolderLayer);
+                wmtsLayer.setVisible(layer.isVisible());
                     if (keepLayerOnTop) {
                         // use the index as it was when addMapLayer was called
                         // bringing layer on top causes timing errors, because of async capabilities load

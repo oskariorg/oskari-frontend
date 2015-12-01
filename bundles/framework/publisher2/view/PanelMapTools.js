@@ -129,7 +129,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                 //setup values when editing an existing map
                 if (enabledTools && enabledTools[tool.getTool().id]) {
                     ui.find('input').prop('checked','checked');
-                } else if (tool.isDefaultTool()) {
+                } else if (!enabledTools && tool.isDefaultTool()) {
                     ui.find('input').prop('checked','checked');
                 }
 
