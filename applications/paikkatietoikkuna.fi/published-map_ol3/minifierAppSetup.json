@@ -114,6 +114,15 @@
             }
         }
     }, {
+        "bundlename": "featuredata2",
+        "metadata": {
+            "Import-Bundle": {
+                "featuredata2": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            }
+        }
+    },{
         "bundlename" : "infobox",
         "bundleinstancename" : "infobox",
         "metadata" : {

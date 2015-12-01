@@ -33,9 +33,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
             var me = this;
 
             return {
-                AfterRearrangeSelectedMapLayerEvent: function (event) {
-                    me._afterRearrangeSelectedMapLayerEvent(event);
-                },
                 MapMoveStartEvent: function () {
                     // clear out any previous visibility check when user starts to move
                     // map
@@ -258,45 +255,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
                 'MapLayerVisibilityChangedEvent'
             )(layer, scaleOk, geometryMatch);
             this.getSandbox().notifyAll(event);
-        },
-        /**
-         * @method _afterRearrangeSelectedMapLayerEvent
-         * @private
-         * Handles AfterRearrangeSelectedMapLayerEvent.
-         * Changes the layer order in Openlayers to match the selected layers list in
-         * Oskari.
-         *
-         * @param
-         * {Oskari.mapframework.event.common.AfterRearrangeSelectedMapLayerEvent}
-         *            event
-         */
-        _afterRearrangeSelectedMapLayerEvent: function (event) {
-            var layers = this.getSandbox().findAllSelectedMapLayers(),
-                layerIndex = 0,
-                opLayersLength = this.getMap().layers.length,
-                changeLayer = this.getMap().getLayersByName('Markers');
-
-            if (changeLayer.length > 0) {
-                this.getMap().setLayerIndex(changeLayer[0], opLayersLength);
-                opLayersLength -= 1;
-            }
-            var i,
-                ilen,
-                j,
-                jlen,
-                olLayers;
-
-            for (i = 0, ilen = layers.length; i < ilen; i += 1) {
-                if (layers[i] !== null && layers[i] !== undefined) {
-                    olLayers =
-                        this.getMapModule().getOLMapLayers(layers[i].getId());
-                    for (j = 0, jlen = olLayers.length; j < jlen; j += 1) {
-                        this._map.setLayerIndex(olLayers[j], layerIndex);
-                        layerIndex += 1;
-                    }
-                }
-            }
-            this.getMapModule().orderLayersByZIndex();
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],

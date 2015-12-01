@@ -40,6 +40,13 @@ Oskari.clazz.define(
         getMapModule: function () {
             return this.mapModule;
         },
+        /**
+         * @method getMap
+         * @return {Object} reference to map-engine (ol2/ol3)
+         */
+        getMap: function () {
+            return this.getMapModule().getMap();
+        },
 
         /**
          * @method setMapModule
@@ -99,7 +106,12 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
          *          reference to application sandbox
          */
-        init: function (sandbox) {},
+        init: function (sandbox) {
+            this._initImpl(sandbox);
+        },
+        _initImpl: function (sandbox) {
+            // no-op
+        },
 
         /**
          * @method startPlugin

@@ -681,6 +681,18 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             sandbox.notifyAll(evt);
         },
 
+        getSize: function(){
+            var sandbox = this._sandbox,
+                mapVO = sandbox.getMap(),
+                width =  mapVO.getWidth(),
+                height = mapVO.getHeight();
+
+            return {
+                width: width,
+                height: height
+            };
+        },
+
         /**
          * @method updateSize
          * Notifies OpenLayers that the map size has changed and updates the size in sandbox map domain object.
@@ -690,12 +702,18 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             this._updateDomainImpl();
 
             var sandbox = this.getSandbox(),
-                mapVO = sandbox.getMap();
-            // send as an event forward to WFSPlugin (draws)
-            var evt = sandbox.getEventBuilder(
-                'MapSizeChangedEvent'
-            )(mapVO.getWidth(), mapVO.getHeight());
-            sandbox.notifyAll(evt);
+                mapVO = sandbox.getMap(),
+                width =  mapVO.getWidth(),
+                height = mapVO.getHeight();
+            
+
+            // send as an event forward
+            if(width && height) {
+              var evt = sandbox.getEventBuilder(
+                  'MapSizeChangedEvent'
+              )(width, height);
+              sandbox.notifyAll(evt);
+            }
         },
 
         /**
@@ -726,7 +744,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var sandbox = this.getSandbox(),
                 mapVO = sandbox.getMap(),
                 lonlat = this._getMapCenter();
-
             mapVO.moveTo(lonlat.lon, lonlat.lat, this.getMapZoom());
 
             mapVO.setScale(this.getMapScale());
@@ -767,100 +784,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             };
         },
 
-        /**
-         * @property eventHandlers
-         * @static
-         */
-        eventHandlers: {
-            'AfterMapLayerAddEvent': function (event) {
-                this._afterMapLayerAddEvent(event);
-            },
-            'LayerToolsEditModeEvent': function (event) {
-                this._isInLayerToolsEditMode = event.isInMode();
-            }
-        },
-
-        /**
-         * Adds the layer to the map through the correct plugin for the layer's type.
-         *
-         * @method _afterMapLayerAddEvent
-         * @param  {Object} layer Oskari layer of any type registered to the mapmodule plugin
-         * @param  {Boolean} keepLayersOrder
-         * @param  {Boolean} isBaseMap
-         * @return {undefined}
-         */
-        _afterMapLayerAddEvent: function (event) {
-            var map = this.getMap(),
-                layer = event.getMapLayer(),
-                keepLayersOrder = event.getKeepLayersOrder(),
-                isBaseMap = event.isBasemap(),
-                layerPlugins = this.getLayerPlugins(),
-                layerFunctions = [],
-                i;
-
-            _.each(layerPlugins, function (plugin) {
-                //FIXME if (plugin && _.isFunction(plugin.addMapLayerToMap)) {
-                if (_.isFunction(plugin.addMapLayerToMap)) {
-                    var layerFunction = plugin.addMapLayerToMap(layer, keepLayersOrder, isBaseMap);
-                    if (_.isFunction(layerFunction)) {
-                        layerFunctions.push(layerFunction);
-                    }
-                }
-            });
-
-            // Execute each layer function
-            for (i = 0; i < layerFunctions.length; i += 1) {
-                layerFunctions[i].apply();
-            }
-        },
-
-        /**
-         * @method getOLMapLayers
-         * Returns references to OpenLayers layer objects for requested layer or null if layer is not added to map.
-         * Internally calls getOLMapLayers() on all registered layersplugins.
-         * @param {String} layerId
-         * @return {OpenLayers.Layer[]}
-         */
-        getOLMapLayers: function (layerId) {
-            var me = this,
-                sandbox = me._sandbox,
-                layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
-            if (!layer) {
-                // not found
-                return null;
-            }
-            var lps = this.getLayerPlugins(),
-                p,
-                layersPlugin,
-                layerList,
-                results = [];
-            // let the actual layerplugins find the layer since the name depends on
-            // type
-            for (p in lps) {
-                if (lps.hasOwnProperty(p)) {
-                    layersPlugin = lps[p];
-                    if (!layersPlugin) {
-                        me.getSandbox().printWarn(
-                            'LayerPlugins has no entry for "' + p + '"'
-                        );
-                    }
-                    // find the actual openlayers layers (can be many)
-                    layerList = layersPlugin ? layersPlugin.getOLMapLayers(layer): null;
-                    if (layerList) {
-                        // if found -> add to results
-                        // otherwise continue looping
-                        results = results.concat(layerList);
-                    }
-                }
-            }
-            return results;
-        },
-
-
-        isInLayerToolsEditMode: function () {
-            return this._isInLayerToolsEditMode;
-        },
-
         _calculateScalesImpl: function (resolutions) {
             for (var i = 0; i < resolutions.length; i += 1) {
                 var calculatedScale = OpenLayers.Util.getScaleFromResolution(
@@ -882,6 +805,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             this._map.removeControl(ctl);
         },
 
+        setLayerIndex: function (layerImpl, index) {
+            this._map.setLayerIndex(layerImpl, index);
+        },
         /**
          * @method getMapEl
          * Get jQuery map element

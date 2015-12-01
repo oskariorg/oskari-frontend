@@ -180,7 +180,7 @@ function () {
                 this.popup.setFinishingPoint(lonlat);
             }
         },
-        'RouteSuccessEvent': function (event) {
+        'RouteResultEvent': function (event) {
             var me = this,
                 loc = me.localization;
             if(!me.__isPopupVisible()) {
@@ -293,13 +293,16 @@ function () {
     _renderRoute: function (geom, color) {
         var me = this,
             rn = 'MapModulePlugin.AddFeaturesToMapRequest',
-            style = OpenLayers.Util.applyDefaults(style, OpenLayers.Feature.Vector.style['default']);
-        style.strokeColor = color;
-        style.strokeWidth = 5;
-        style.strokeOpacity = 0.7;
+            colorRGB = Oskari.util.hexToRgb(color),
+            style = {
+                stroke: {
+                    width: 5,
+                    color: 'rgba('+colorRGB.r+', '+colorRGB.g+','+colorRGB.b+', 0.7)'
+                }
+            };
         this.sandbox.postRequestByName(rn, [geom, {
             layerId: null,
-            replace: 'replace',
+            clearPrevious: true,
             layerOptions: null,
             centerTo: false,
             attributes: null,

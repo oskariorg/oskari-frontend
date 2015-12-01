@@ -2,6 +2,10 @@
 
 ## 1.34
 
+### mapmodule-plugin/zoombar
+
+Added mobile styled zoombar buttons. Mobile styled icons showed when map height is smaller than 500 px.
+
 ### mapstats
 
 Changed references from set/getWmsName() -> set/getLayerName() to use the inherited property from AbstractLayer.
@@ -36,7 +40,7 @@ Changes to 1.0.0:
 - handleEvent can no longer be used to unregister listener.
 - Added unregisterEventHandler() for unregistering listeners (previously done with handleEvent without giving listener function).
 - Added log() for debug logging without the need to check if window.console.log() exists
-- function-calls can now have parameters as first argument array to allow multiple (treated as a success callback instead if it's type is function)
+- function-calls can now have parameters as first argument. Use function parameters wrapped in an array as first argument. First argument istreated as a success callback instead if it's type is a function.
 
 Filename change for original OskariRPC.js: 
 - Oskari/libraries/OskariRPC/OskariRPC.js is now Oskari/libraries/OskariRPC/OskariRPC-1.0.0.js
@@ -55,6 +59,7 @@ New functions enabled by default:
 New events are enabled by default:
 - 'UserLocationEvent' notifies about users geolocation status
 - 'SearchResultEvent' notifies about users that SearchRequest response data is available for to handle
+- 'FeatureEvent' notifies about add, remove, click events on features
 
 New requests are enabled by default:
 - 'MyLocationPlugin.GetUserLocationRequest' requests to get user geolocation
@@ -87,20 +92,21 @@ sandbox.postRequestByName(rn, [geojson, 'GeoJSON', null, null, 'replace', true, 
 Now:
 sandbox.postRequestByName(rn, [geojson, {
     layerId: 'ANALYSIS_VECTOR',
-    replace: 'replace',
+    clearPrevious: true,
     layerOptions: null,
     centerTo: false,
     featureStyle: style,
     attributes: null
 }]);
 - layerId: If left out, a generic vector layer is used by VectorLayerPlugin. 
-- replace: whether to clear out all previous features
+- clearPrevious: whether to clear out all previous features
 - layerOptions: additional layerOptions
 - centerTo: whether to zoom in to the features
 - featureStyle: style of the features
 - attributes: additional attributes of the features
 (geometryType from the old call has been removed. From now on the VectorLayerPlugin will determine geometry type from the geometry)
 
+An event named 'FeatureEvent' is emitted when features are added, removed or clicked. The event holds features as an array of objects with feature id, geojson and layer id as content.
 
 #### Oskari.mapframework.domain.Map
 

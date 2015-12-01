@@ -16,6 +16,7 @@ Oskari.clazz.define(
             multipleSymbolizers: false,
             namedLayersAsArray: true
         });
+        this._style = OpenLayers.Util.applyDefaults({}, OpenLayers.Feature.Vector.style['default']);
         this._layers = {};
     }, {
         /**
@@ -61,6 +62,17 @@ Oskari.clazz.define(
                     me._afterChangeMapLayerOpacityEvent(event);
                 }
             };
+        },
+        __featureClicked: function(features, olLayer) {
+            var sandbox = this.getSandbox();
+            var clickEvent = sandbox.getEventBuilder('FeatureEvent')().setOpClick();
+            var formatter = this._supportedFormats['GeoJSON'];
+            var me = this;
+            _.forEach(features, function (feature) {
+                var geojson = formatter.write([feature]);
+                clickEvent.addFeature(feature.id, geojson, me._getLayerId(olLayer.name));
+            });
+            sandbox.notifyAll(clickEvent);
         },
         /**
          * @method preselectLayers
@@ -136,13 +148,13 @@ Oskari.clazz.define(
             // Removes only wanted features from the given maplayer
             if (olLayer) {
                 if (identifier && identifier !== null && value && value !== null) {
-                    foundFeatures = olLayer.getFeaturesByAttribute(identifier, value);
-                    olLayer.removeFeatures(foundFeatures);
+                    me._removeFeaturesByAttribute(olLayer, identifier, value);
                     olLayer.refresh();
                 }
                 //remove all features from the given layer
                 else {
                     this._map.removeLayer(me._layers[layerId]);
+                    this._removeFeaturesByAttribute(olLayer);
                     delete this._layers[layerId];
                 }
             }
@@ -150,17 +162,49 @@ Oskari.clazz.define(
             else {
                 for (var layerId in me._layers) {
                     if (me._layers.hasOwnProperty(layerId)) {
-                        this._map.removeLayer(me._layers[layerId]);
+                        olLayer = me._layers[layerId];
+                        this._map.removeLayer(olLayer);
+                        this._removeFeaturesByAttribute(olLayer);
                         delete this._layers[layerId];
                     }
                 }
             }
+        },
+        _removeFeaturesByAttribute: function(olLayer, identifier, value) {
+            var featuresToRemove = [];
+
+            // add all features if identifier and value are missing or
+            // if given -> features that have
+            if (!identifier && !value) {
+                featuresToRemove = olLayer.features;
+            }
+            else {
+                featuresToRemove = olLayer.getFeaturesByAttribute(identifier, value);
+
+            }
+
+            // notify other components of removal
+            var formatter = this._supportedFormats['GeoJSON'];
+            var sandbox = this.getSandbox();
+            var removeEvent = sandbox.getEventBuilder('FeatureEvent')().setOpRemove();
+
+            olLayer.removeFeatures(featuresToRemove);
+            for (var i = 0; i < featuresToRemove.length; i++) {
+                var feature = featuresToRemove[i];
+                var geojson = formatter.write([feature]);
+                removeEvent.addFeature(feature.id, geojson, this._getLayerId(olLayer.name));
+            }
+            sandbox.notifyAll(removeEvent);
         },
         _getGeometryType: function(geometry){
             if (typeof geometry === 'string' || geometry instanceof String) {
                 return 'WKT';
             }
             return 'GeoJSON';
+        },
+        _getLayerId : function(name) {
+            var index = this._olLayerPrefix.length;
+            return name.substring(index +1);
         },
 
         /**
@@ -182,19 +226,22 @@ Oskari.clazz.define(
                 return;
             }
             if (geometry) {
-                var feature = format.read(geometry);
+                var features = format.read(geometry);
                 //if there's no layerId provided -> Just use a generic vector layer for all.
                 if (!options.layerId) {
                     options.layerId = 'VECTOR';
                 }
                 if (options.attributes && options.attributes !== null) {
-                    if(feature instanceof Array && geometryType === 'GeoJSON'){
+                    if(features instanceof Array && geometryType === 'GeoJSON'){
                         //Remark: It is preferred to use GeoJSON properties for attributes
                         // There could be many features in GeoJson and now attributes are set only for 1st feature
-                        feature[0].attributes = options.attributes;
+                        features[0].attributes = options.attributes;
                     } else {
-                        feature.attributes = options.attributes;
+                        features.attributes = options.attributes;
                     }
+                }
+                if(!Array.isArray(features)) {
+                    features = [features];
                 }
                 olLayer = me._map.getLayersByName(me._olLayerPrefix + options.layerId)[0];
                 if (!olLayer) {
@@ -203,20 +250,30 @@ Oskari.clazz.define(
                         opacity = layer.getOpacity() / 100;
                     }
                     olLayer = new OpenLayers.Layer.Vector(me._olLayerPrefix + options.layerId);
+                    olLayer.events.register('click', this, function(e) {
+                        // clicking on map, check if feature is hit
+                        if (e.target && e.target._featureId) {
+                            me.__featureClicked([olLayer.getFeatureById(e.target._featureId)], olLayer);
+                        }
+                        return true;
+                    });
                     olLayer.setOpacity(opacity);
                     isOlLayerAdded = false;
                 }
-                if (options.replace && options.replace !== null && options.replace === 'replace') {
+                if (options.clearPrevious === true) {
+                    this._removeFeaturesByAttribute(olLayer);
                     olLayer.removeAllFeatures();
                     olLayer.refresh();
                 }
-                if (options.featureStyle && options.featureStyle !== null) {
-                    for (i=0; i < feature.length; i++) {
-                        featureInstance = feature[i];
-                        featureInstance.style = options.featureStyle;
+
+                if (options.featureStyle) {
+                    me.setDefaultStyle(options.featureStyle);
+                    for (i=0; i < features.length; i++) {
+                        featureInstance = features[i];
+                        featureInstance.style = me._style;
                     }
                 }
-                olLayer.addFeatures(feature);
+                olLayer.addFeatures(features);
                 if(isOlLayerAdded === false) {
                     me._map.addLayer(olLayer);
                     me._map.setLayerIndex(
@@ -235,18 +292,28 @@ Oskari.clazz.define(
                         },
                     50);
                 }
+                // notify other components that features have been added
+                var formatter = this._supportedFormats['GeoJSON'];
+                var sandbox = this.getSandbox();
+                var addEvent = sandbox.getEventBuilder('FeatureEvent')().setOpAdd();
+                _.forEach(features, function (feature) {
+                    var geojson = formatter.write([feature]);
+                    addEvent.addFeature(feature.id, geojson, options.layerId);
+                });
+                sandbox.notifyAll(addEvent);
+
                 if(options.centerTo === true){
                     var center, bounds;
                     if(geometry.type !== 'FeatureCollection') {
-                        center = feature.geometry.getCentroid();
-                        bounds = feature.geometry.getBounds();
+                        center = features[0].geometry.getCentroid();
+                        bounds = features[0].geometry.getBounds();
                     } else {
                         var bottom,
                             left,
                             top,
                             right;
-                        for(var f=0;f<feature.length;f++) {
-                            var feat = feature[f];
+                        for(var f=0;f<features.length;f++) {
+                            var feat = features[f];
                             var featBounds = feat.geometry.getBounds();
                             if(!bottom || featBounds.bottom<bottom) {
                                 bottom = featBounds.bottom;
@@ -269,6 +336,35 @@ Oskari.clazz.define(
 
                     mapmoveRequest = me._sandbox.getRequestBuilder('MapMoveRequest')(center.x, center.y, bounds, false);
                     me._sandbox.request(me, mapmoveRequest);
+                }
+            }
+        },
+        /**
+         * @method setDefaultStyle
+         *
+         * @param {Object} styles. If not given, will set default styles
+         */
+        setDefaultStyle : function(styles) {
+            var me = this;
+            //overwriting default style if given
+            if(styles) {
+                if(Oskari.util.keyExists(styles, 'fill.color')) {
+                    me._style.fillColor = styles.fill.color;
+                }
+                if(Oskari.util.keyExists(styles, 'stroke.color')) {
+                    me._style.strokeColor = styles.stroke.color;
+                }
+                if(Oskari.util.keyExists(styles, 'stroke.width')) {
+                    me._style.strokeWidth = styles.stroke.width;
+                }
+                if(Oskari.util.keyExists(styles, 'text.fill.color')) {
+                    me._style.fontColor = styles.text.fill.color;
+                }
+                if(Oskari.util.keyExists(styles, 'text.stroke.color')) {
+                    me._style.labelOutlineColor = styles.text.stroke.color;
+                }
+                if(Oskari.util.keyExists(styles, 'text.stroke.width')) {
+                    me._style.getText().labelOutlineWidth = styles.text.stroke.width;
                 }
             }
         },

@@ -34,9 +34,6 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
         /**
          * @private @method _initImpl
          * Interface method for the module protocol.
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
          */
         _initImpl: function () {
             // register domain builder
@@ -51,6 +48,18 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                     'Oskari.arcgis.bundle.maparcgis.domain.ArcGis93Layer'
                 );
             }
+        },
+
+        __tuneURLsForOL3 : function(urls) {
+            var strToFind = "/export",
+                length = strToFind.length;
+            return _.map(urls, function(url) {
+                // Note! endsWith requires a polyfill. One is available in bundles/bundle.js
+                if(url.endsWith(strToFind)) {
+                    return url.substring(0, url.length - length);
+                }
+                return url;
+            });
         },
 
         /**
@@ -80,13 +89,12 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                 openlayer = new ol.layer.Tile({
                     extent: me.getMap().getView().getProjection().getExtent(),
                     source: new ol.source.TileArcGISRest({
-                        url: layer.getLayerUrls()[0]
+                        urls: this.__tuneURLsForOL3(layer.getLayerUrls()),
+                        params : {
+                            'layers' : 'show:' + layer.getLayerName()
+                        }
                     }),
                     id: layer.getId(),
-                    transparent: true,
-                    scales: layerScales,
-                    isBaseLayer: false,
-                    displayInLayerSwitcher: false,
                     visible: layer.isInScale(sandbox.getMap().getScale()) && layer.isVisible(),
                     buffer: 0
                 });
@@ -97,13 +105,9 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                 // Layer URL is like: http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x} format
                 openlayer = new ol.layer.Tile({
                     source: new ol.source.XYZ({
-                         url: layer.getLayerUrls()[0]
+                         url: layer.getLayerUrl()
                     }),
                     id: layer.getId(),
-                    transparent: true,
-                    scales: layerScales,
-                    isBaseLayer: false,
-                    displayInLayerSwitcher: false,
                     visible: layer.isInScale(sandbox.getMap().getScale()) && layer.isVisible(),
                     buffer: 0
                 });

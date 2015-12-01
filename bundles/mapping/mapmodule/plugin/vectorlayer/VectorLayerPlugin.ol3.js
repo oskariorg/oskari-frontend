@@ -21,11 +21,9 @@ Oskari.clazz.define(
             radius: 4,
             textScale: 1.3,
             textOutlineColor: 'rgba(255,255,255,1)',
-            textColor: 'rgba(0,0,0,1)',
-            lineDash: [5]
+            textColor: 'rgba(0,0,0,1)'
         };
-        this._styleTypes = ['default', 'feature', 'layer'];
-        this._styles = {};
+        this._style = {};
         this._layers = {};
     }, {
         /**
@@ -61,10 +59,45 @@ Oskari.clazz.define(
             var me = this;
 
             return {
+                MapClickedEvent: function(event) {
+                    me.__mapClick(event);
+                },
                 AfterMapLayerRemoveEvent: function (event) {
                     me.afterMapLayerRemoveEvent(event);
                 }
             };
+        },
+        /**
+         * Find features from layers controlled by vectorlayerplugin and handle clicks for all those features
+         * @param  {Oskari.mapframework.bundle.mapmodule.event.MapClickedEvent} event [description]
+         */
+        __mapClick : function(event) {
+            var me = this;
+            var features = [];
+            this.getMap().forEachFeatureAtPixel([event.getMouseX(), event.getMouseY()], function (feature, layer) {
+                _.forEach(me._layers, function (vectorlayer, id) {
+                    if(vectorlayer === layer) {
+                        features.push({
+                            feature : feature,
+                            layerId : id
+                        });
+                    }
+                });
+            });
+            me.__featureClicked(features);
+        },
+        __featureClicked: function(features) {
+            if(!features || !features.length) {
+                return;
+            }
+            var sandbox = this.getSandbox();
+            var clickEvent = sandbox.getEventBuilder('FeatureEvent')().setOpClick();
+            var formatter = this._supportedFormats['GeoJSON'];
+            _.forEach(features, function (obj) {
+                var geojson = formatter.writeFeaturesObject([obj.feature]);
+                clickEvent.addFeature(obj.feature.getId(), geojson, obj.layerId);
+            });
+            sandbox.notifyAll(clickEvent);
         },
         /**
          * @method registerVectorFormat
@@ -120,7 +153,8 @@ Oskari.clazz.define(
                 }
                 //remove all features from the given layer
                 else {
-                    this._map.removeLayer(me._layers[layerId]);
+                    this._map.removeLayer(olLayer);
+                    this._removeFeaturesByAttribute(olLayer);
                     delete this._layers[layerId];
                 }
             }
@@ -128,7 +162,9 @@ Oskari.clazz.define(
             else {
                 for (var layerId in me._layers) {
                     if (me._layers.hasOwnProperty(layerId)) {
-                        this._map.removeLayer(me._layers[layerId]);
+                        olLayer = me._layers[layerId];
+                        this._map.removeLayer(olLayer);
+                        this._removeFeaturesByAttribute(olLayer);
                         delete this._layers[layerId];
                     }
                 }
@@ -138,18 +174,29 @@ Oskari.clazz.define(
             var source = olLayer.getSource(),
                 featuresToRemove = [];
 
+            // add all features if identifier and value are missing or
+            // if given -> features that have
             source.forEachFeature(function(feature) {
-                if (feature.get(identifier) === value) {
+                if ((!identifier && !value) ||
+                    feature.get(identifier) === value) {
                     featuresToRemove.push(feature);
                 }
             });
 
-            for (var i = 0; i < featuresToRemove.length; i++) {
-                source.removeFeature(featuresToRemove[i]);
-            }
+            // notify other components of removal
+            var formatter = this._supportedFormats['GeoJSON'];
+            var sandbox = this.getSandbox();
+            var removeEvent = sandbox.getEventBuilder('FeatureEvent')().setOpRemove();
 
+            for (var i = 0; i < featuresToRemove.length; i++) {
+                var feature = featuresToRemove[i];
+                source.removeFeature(feature);
+                var geojson = formatter.writeFeaturesObject([feature]);
+                removeEvent.addFeature(feature.getId(), geojson, olLayer.get('id'));
+            }
+            sandbox.notifyAll(removeEvent);
         },
-        _getGeometryType: function(geometry){
+        _getGeometryType: function(geometry) {
             if (typeof geometry === 'string' || geometry instanceof String) {
                 return 'WKT';
             }
@@ -182,10 +229,8 @@ Oskari.clazz.define(
                     options.layerId = 'VECTOR';
                 }
                 var features = format.readFeatures(geometry);
-                if (options.attributes && options.attributes !== null) {
-                    if (features instanceof Array && features.length) {
-                        features[0].setProperties(options.attributes);
-                    }
+                if (options.attributes && options.attributes !== null && features instanceof Array && features.length) {
+                    features[0].setProperties(options.attributes);
                 }
                 _.forEach(features, function (feature) {
                     if (!feature.getId()) {
@@ -197,7 +242,7 @@ Oskari.clazz.define(
                 if (options.featureStyle) {
                    me.setDefaultStyle(options.featureStyle);
                     _.forEach(features, function (feature) {
-                        feature.setStyle(options.featureStyle);
+                        feature.setStyle(me._style);
                     });
                 }
 
@@ -206,7 +251,8 @@ Oskari.clazz.define(
                     layer = me._layers[options.layerId];
                     //layer is already on map
                     //clear old features if defined so
-                    if (options.replace && options.replace === 'replace') {
+                    if (options.clearPrevious === true) {
+                        this._removeFeaturesByAttribute(layer);
                         layer.getSource().clear();
                     }
                     vectorSource = layer.getSource();
@@ -227,6 +273,18 @@ Oskari.clazz.define(
                     me.raiseVectorLayer(layer);
                 }
 
+                // notify other components that features have been added
+                var formatter = this._supportedFormats['GeoJSON'];
+                var sandbox = this.getSandbox();
+                var addEvent = sandbox.getEventBuilder('FeatureEvent')().setOpAdd();
+
+                _.forEach(features, function (feature) {
+                    var geojson = formatter.writeFeaturesObject([feature]);
+                    addEvent.addFeature(feature.getId(), geojson, layer.get('id'));
+                });
+                sandbox.notifyAll(addEvent);
+
+                // re-position map when opted
                 if (options.centerTo === true) {
                     var extent = vectorSource.getExtent();
                     me.getMapModule().zoomToExtent(extent);
@@ -351,88 +409,64 @@ Oskari.clazz.define(
          */
         setDefaultStyle : function(styles) {
             var me = this;
-            //setting defaultStyle
-            _.each(me._styleTypes, function (s) {
-                me._styles[s] = new ol.style.Style({
-                    fill: new ol.style.Fill({
-                      color: me._defaultStyle.fillColor
-                    }),
-                    stroke: new ol.style.Stroke({
-                      color: me._defaultStyle.strokeColor,
-                      width: me._defaultStyle.width
-                    }),
-                    image: new ol.style.Circle({
-                      radius: me._defaultStyle.radius,
-                      fill: new ol.style.Fill({
-                        color: me._defaultStyle.strokeColor
-                      })
-                    }),
-                    text: new ol.style.Text({
-                         scale: me._defaultStyle.textScale,
-                         fill: new ol.style.Fill({
-                           color: me._defaultStyle.textColor
-                         }),
-                         stroke: new ol.style.Stroke({
-                           color: me._defaultStyle.textOutlineColor,
-                           width: me._defaultStyle.width
-                         })
-                      })
-                });
+            //create defaultStyle
+            me._style = new ol.style.Style({
+                fill: new ol.style.Fill({
+                  color: me._defaultStyle.fillColor
+                }),
+                stroke: new ol.style.Stroke({
+                  color: me._defaultStyle.strokeColor,
+                  width: me._defaultStyle.width
+                }),
+                image: new ol.style.Circle({
+                  radius: me._defaultStyle.radius,
+                  fill: new ol.style.Fill({
+                    color: me._defaultStyle.strokeColor
+                  })
+                }),
+                text: new ol.style.Text({
+                     scale: me._defaultStyle.textScale,
+                     fill: new ol.style.Fill({
+                       color: me._defaultStyle.textColor
+                     }),
+                     stroke: new ol.style.Stroke({
+                       color: me._defaultStyle.textOutlineColor,
+                       width: me._defaultStyle.width
+                     })
+                  })
             });
-            //overwriting default styles if given
-            if(styles) {
-                _.each(styles, function (style, styleType) {
-                    if(me.hasNestedObj(style, 'fill.color')) {
-                        me._styles[styleType].getFill().setColor(style.fill.color);
-                    }
-                    if(me.hasNestedObj(style, 'stroke.color')) {
-                        me._styles[styleType].getStroke().setColor(style.stroke.color);
-                    }
-                    if(me.hasNestedObj(style, 'stroke.width')) {
-                        me._styles[styleType].getStroke().setWidth(style.stroke.width);
-                    }
-                    if(me.hasNestedObj(style, 'image.radius')) {
-                        me._styles[styleType].getImage().radius = style.image.radius;
-                    }
-                    if(me.hasNestedObj(style, 'image.fill.color')) {
-                        me._styles[styleType].getImage().getFill().setColor(style.image.fill.color);
-                    }
-                    if(me.hasNestedObj(style, 'text.fill.color')) {
-                        me._styles[styleType].getText().getFill().setColor(style.text.fill.color);
-                    }
-                    if(me.hasNestedObj(style, 'text.scale')) {
-                        me._styles[styleType].getText().setScale(style.text.scale);
-                    }
-                    if(me.hasNestedObj(style, 'text.stroke.color')) {
-                        me._styles[styleType].getText().getFill().setColor(style.text.stroke.color);
-                    }
-                    if(me.hasNestedObj(style, 'text.stroke.width')) {
-                        me._styles[styleType].getText().getStroke().setWidth(style.text.stroke.width);
-                    }
-                });
-            }
-        },
-        /** Check, if nested key exists
-        * @method hasNestedObj
-        * @params {}  object
-        * @params String object path
-        * @public
-        *
-        * @returns {Boolean}: true if nested key exists
-        */
-       hasNestedObj: function(obj, sobj) {
-          var tmpObj = obj,
-              cnt = 0,
-              splits = sobj.split('.');
 
-          for (i=0; tmpObj && i < splits.length; i++) {
-              if (splits[i] in tmpObj) {
-                  tmpObj = tmpObj[splits[i]];
-                  cnt++;
-              }
-          }
-          return cnt === splits.length;
-       }
+            //overwriting default style if given
+            if(styles) {
+                if(Oskari.util.keyExists(styles, 'fill.color')) {
+                    me._style.getFill().setColor(styles.fill.color);
+                }
+                if(Oskari.util.keyExists(styles, 'stroke.color')) {
+                    me._style.getStroke().setColor(styles.stroke.color);
+                }
+                if(Oskari.util.keyExists(styles, 'stroke.width')) {
+                    me._style.getStroke().setWidth(styles.stroke.width);
+                }
+                if(Oskari.util.keyExists(styles, 'image.radius')) {
+                    me._style.getImage().radius = styles.image.radius;
+                }
+                if(Oskari.util.keyExists(styles, 'image.fill.color')) {
+                    me._style.getImage().getFill().setColor(styles.image.fill.color);
+                }
+                if(Oskari.util.keyExists(styles, 'text.fill.color')) {
+                    me._style.getText().getFill().setColor(styles.text.fill.color);
+                }
+                if(Oskari.util.keyExists(styles, 'text.scale')) {
+                    me._style.getText().setScale(styles.text.scale);
+                }
+                if(Oskari.util.keyExists(styles, 'text.stroke.color')) {
+                    me._style.getText().getFill().setColor(styles.text.stroke.color);
+                }
+                if(Oskari.util.keyExists(styles, 'text.stroke.width')) {
+                    me._style.getText().getStroke().setWidth(styles.text.stroke.width);
+                }
+            }
+        }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
         /**

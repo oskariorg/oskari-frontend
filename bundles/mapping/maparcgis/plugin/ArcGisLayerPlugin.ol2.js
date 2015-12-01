@@ -143,7 +143,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
             }
 
             var jsonp = new OpenLayers.Protocol.Script();
-            jsonp.createRequest(layer.getLayerUrls()[0], {
+            jsonp.createRequest(layer.getLayerUrl(), {
                 f: 'json',
                 pretty: 'true'
             }, function (layerInfo) {
@@ -152,7 +152,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                 );
                 var openLayer = new OpenLayers.Layer.ArcGISCache(
                     'arcgislayer_' + layer.getId(),
-                    layer.getLayerUrls()[0],
+                    layer.getLayerUrl(),
                     {
                         layerInfo: layerInfo,
                         // OpenLayers.Layer.ArcGISCache defaults to baselayer
@@ -197,7 +197,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                 return;
             }
             var params = {
-                layers: 'show:0',
+                layers: 'show:' + layer.getLayerName(),
                 srs:me.getMap().projection.substr(
                     me.getMap().projection.indexOf(':') + 1),
                 transparent: 'true'};

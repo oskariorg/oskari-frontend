@@ -51,29 +51,48 @@ Oskari.clazz.define(
                 var _layer = layers[i];
                 var layerScales = this.getMapModule().calculateLayerScales(_layer.getMaxScale(), _layer.getMinScale());
 
-                var wms = {
-                    'URL' : _layer.getLayerUrl(),
-                    'LAYERS' : _layer.getLayerName(),
-                    'FORMAT' : 'image/png'
-                };
+                var defaultParams = {
+                        'LAYERS': _layer.getLayerName(),
+                        'TRANSPARENT': true,
+                        'ID': _layer.getId(),
+                        'STYLES': _layer.getCurrentStyle().getName(),
+                        'FORMAT': 'image/png',
+                        'VERSION' : _layer.getVersion()
+                    },
+                    layerParams = _layer.getParams() || {},
+                    layerOptions = _layer.getOptions() || {};
 
-                var layerImpl = new ol.layer.Tile({
-                    source : new ol.source.TileWMS({
-                        url : wms.URL,
-                        //crossOrigin : 'anonymous',
-                        params : {
-                            'LAYERS' : wms.LAYERS,
-                            'FORMAT' : wms.FORMAT,
-                            'srs' : this.getMapModule().getProjection()
-                        }
-                    }),
-                    transparent: true,
-                    scales: layerScales,
-                    isBaseLayer: false,
-                    displayInLayerSwitcher: false,
-                    visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
-                    opacity: layer.getOpacity() / 100
-                });
+                if (_layer.isRealtime()) {
+                    var date = new Date();
+                    defaultParams['TIME'] = date.toISOString();
+                }
+                // override default params and options from layer
+                for (var key in layerParams) {
+                    if (layerParams.hasOwnProperty(key)) {
+                        defaultParams[key.toUpperCase()] = layerParams[key];
+                    }
+                }
+                var layerImpl = null;
+                if(layerOptions.singleTile === true) {
+
+                      layerImpl = new ol.layer.Image({
+                        source: new ol.source.ImageWMS({
+                            url : _layer.getLayerUrl(),
+                            params : defaultParams
+                        }),
+                        visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
+                        opacity: layer.getOpacity() / 100
+                    });
+                } else {
+                    layerImpl = new ol.layer.Tile({
+                        source : new ol.source.TileWMS({
+                            url : _layer.getLayerUrl(),
+                            params : defaultParams
+                        }),
+                        visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
+                        opacity: layer.getOpacity() / 100
+                    });
+                }
                 // Set min max Resolutions
                 if (_layer.getMaxScale() || _layer.getMinScale()) {
                     // use resolutions instead of scales to minimize chance of transformation errors

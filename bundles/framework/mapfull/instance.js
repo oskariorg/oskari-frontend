@@ -26,6 +26,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          */
         this.mapDivId = 'mapdiv';
         this.contentMapDivId = 'contentMap';
+        this.resizeTimer = null;
     }, {
         getName: function () {
             return this.__name;
@@ -109,7 +110,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
 
                 mapContainer.width(mapWidth);
 
-
                 // notify map module that size has changed
                 me.updateSize();
             }
@@ -149,28 +149,29 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     .height(me.conf.size.height);
                 // TODO check if we need to set mapDiv size at all here...
                 jQuery('#' + me.mapDivId).height(me.conf.size.height);
-            } else {
-                // react to window resize with timer so app stays responsive
-                var resizeTimer;
-                jQuery(window).resize(function () {
-                    clearTimeout(resizeTimer);
-                    resizeTimer = setTimeout(
-                        function () {
-                            me.adjustMapSize();
-                        },
-                        100
-                    );
-                });
-
-                me.adjustMapSize();
             }
 
+            // react to window resize with timer so app stays responsive
+            jQuery(window).resize(function () {
+                clearTimeout(me.resizeTimer);
+                me.resizeTimer = setTimeout(
+                    function () {
+                        me.adjustMapSize();
+                    },
+                    100
+                );
+            });
+
+            
 
             module.start(me.getSandbox());
 
             if (!me.nomaprender) {
                 map.render(me.mapDivId);
             }
+
+            me.adjustMapSize();
+            
             // startup plugins
             if (me.conf.plugins) {
                 var plugins = this.conf.plugins,
