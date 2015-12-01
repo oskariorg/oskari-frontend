@@ -1,5 +1,6 @@
 /**
 * @class Oskari.mapframework.publisher.tool.Tool
+* This clazz documentates publisher2 tools definations. When new tools has implemented it's must define these functions and properties.
 * Protocol/interface declaration for Publisher2 tool.
 * Provides an interface for bundles to add tool to publisher2.
 */
@@ -106,27 +107,6 @@ function(sandbox, mapmodule, localization) {
     */
     isDisplayed: function() {
         return true;
-    },
-    /**
-    * Set mode to.
-    * @method setMode
-    * @public
-    *
-    * @param {String} mode the mode
-    */
-    setMode: function(mode){
-        var me = this;
-        me.state.mode = mode;
-
-        if(me.state.enabled === true && me.isDisplayedInMode(mode) === false) {
-            me.setEnabled(false);
-        } else if(me.state.enabled === false && me.isDisplayedInMode(mode) === true) {
-            me.setEnabled(true);
-        }
-
-        if(me.__plugin && typeof me.__plugin.setMode === 'function'){
-            me.__plugin.setMode(mode);
-        }
     },
     /**
     * Get group
