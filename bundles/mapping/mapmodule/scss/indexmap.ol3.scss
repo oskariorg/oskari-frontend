@@ -84,8 +84,7 @@ div.mapplugin.indexmap {
     border: 1px solid #3c3c3c;
     height: 150px;
     margin: -1px;
-    width: 150px;
-    margin-bottom: -46px;
+    width: 150px;;
 }
 .ol-overviewmap .ol-overviewmap-map, .ol-overviewmap button {
     display: inline-block;
@@ -98,16 +97,14 @@ div.mapplugin.indexmap {
 
 .ol-overviewmap.ol-unselectable.ol-control:not(.ol-collapsed) {
   width: 150px;
-  height: 150px;
-  margin-bottom: -46px;
+  height: 150px;;
 }
 
 .ol-overviewmap {
     /*
     left: -8em;
     bottom: .5em;
-    */
-    margin-right: 46px;
+    */;
     margin-top: 10px;
 }
 .ol-overviewmap.ol-collapsed .ol-overviewmap-map, .ol-overviewmap.ol-uncollapsible button {

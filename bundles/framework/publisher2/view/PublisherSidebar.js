@@ -200,9 +200,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 );
 
             // initialize form (restore data when editing)
-            form.init(me.data, function(value) {
-                me.setMode(value);
-            });
+            form.init(me.data, function(value) {});
 
             return form;
         },
@@ -221,9 +219,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
 
 
             // initialize form (restore data when editing)
-            form.init(me.data, function(value) {
-                me.setMode(value);
-            });
+            form.init(me.data, function(value) {});
 
             return form;
         },
@@ -241,9 +237,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 );
 
             // initialize form (restore data when editing)
-            form.init(me.data, function(value) {
-                me.setMode(value);
-            });
+            form.init(me.data, function(value) {});
 
             return form;
         },
@@ -261,25 +255,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
 
 
             // initialize form (restore data when editing)
-            form.init(me.data, function(value) {
-                me.setMode(value);
-            });
+            form.init(me.data, function(value) {});
 
             return form;
         },
 
-        /**
-         * @method setMode
-         * @param {String} mode the mode
-         */
-        setMode: function (mode) {
-            var me = this;
-            jQuery.each(me.panels, function(index, panel){
-                if(typeof panel.setMode === 'function') {
-                    panel.setMode(mode);
-                }
-            });
-        },
         setPluginLanguage : function(lang) {
             var me = this;
             if (lang === null || lang === undefined) {
@@ -328,7 +308,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             var allTools = [];
             // group tools per tool-group
             _.each(definedTools, function(ignored, toolname) {
-                // TODO: document localization requirements!
                 var tool = Oskari.clazz.create(toolname, sandbox, mapmodule, me.loc, me.instance, me.getHandlers());
                 if(tool.isDisplayed() === true && tool.isShownInToolsPanel()) {
                     var group = tool.getGroup();
@@ -345,7 +324,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             // create panel for each tool group
             var panels = [];
             _.each(grouping, function(tools, group) {
-                // TODO: document localization requirements!
                 var panel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                     group, tools, sandbox, me.loc, me.instance
                 );
