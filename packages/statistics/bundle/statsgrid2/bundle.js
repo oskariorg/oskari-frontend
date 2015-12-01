@@ -98,9 +98,6 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
                 "src": "../../../../bundles/statistics/statsgrid2/plugin/ManageClassificationPlugin.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/statsgrid2/plugin/ManageStatsPlugin.js"
-            }, {
-                "type": "text/javascript",
                 "src": "../../../../bundles/statistics/statsgrid2/event/StatsDataChangedEvent.js"
             }, {
                 "type": "text/javascript",
