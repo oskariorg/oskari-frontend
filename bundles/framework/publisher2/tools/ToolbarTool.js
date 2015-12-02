@@ -133,6 +133,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 var data = me.__instance.publisher.data;
                 if (data && data.configuration && data.configuration.toolbar) {
                     me._storedData.toolbarConfig = _.cloneDeep(data.configuration.toolbar.conf);
+                    me.setEnabled(true);
                 }
                 if (data && data.configuration && data.configuration.publishedmyplaces2) {
                     me._storedData.publishedmyplaces2Config = _.cloneDeep(data.configuration.publishedmyplaces2.conf);
@@ -325,7 +326,13 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                             toolButton.selectTool.find('label')
                                 .attr('for', 'tool-opt-' + toolName).append(me.__loc.toolbarToolNames[toolName]);
 
-                            toolButton.selectTool.find('input').attr('checked', 'checked');
+                            if (!me.toolbarConfig[groupName]) {
+                                toolButton.selectTool.find('input').attr('checked', 'checked');
+                            } else if (me.toolbarConfig[groupName] && me.toolbarConfig[groupName][toolName] === undefined) {
+                                toolButton.selectTool.find('input').attr('checked', 'checked');
+                            } else if (me.toolbarConfig[groupName][toolName]) {
+                                toolButton.selectTool.find('input').attr('checked', 'checked');
+                            }
 
                             _toggleToolOption(toolName, buttonGroup.name, toolButton, 'toolbarConfig', toolButton.selectTool.find('input'))();
 

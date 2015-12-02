@@ -32,9 +32,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
         init: function (pData) {
             var me = this;
             me.data = pData;
-            _.each(me.tools, function (tool) {
-                tool.init(me.data);
-            });
+
+            if (me.data) {
+              _.each(me.tools, function (tool) {
+                  tool.init(me.data);
+              });
+            }
 
 
             for (var p in me.eventHandlers) {
@@ -112,11 +115,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                 panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel'),
                 contentPanel = panel.getContainer(),
                 tools = this.tools,
-                tooltipCont = me.templates.help.clone(),
-                enabledTools = null;
-            if (me.data) {
-                enabledTools = me._getEnabledTools();
-            }
+                tooltipCont = me.templates.help.clone();
+
             panel.setTitle(me.loc[me.group].label);
             tooltipCont.attr('title', me.loc[me.group].tooltip);
             contentPanel.append(tooltipCont);
@@ -127,9 +127,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             _.each(tools, function(tool) {
                 var ui = jQuery(me.templates.tool({title : tool.getTitle() }));
                 //setup values when editing an existing map
-                if (enabledTools && enabledTools[tool.getTool().id]) {
-                    ui.find('input').prop('checked','checked');
-                } else if (tool.isDefaultTool()) {
+                if (tool.isEnabled()) {
                     ui.find('input').prop('checked','checked');
                 }
 
@@ -172,33 +170,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             var me = this,
                 enabledTools = null;
 
-              if (me.data) {
-                  enabledTools = {};
-                  _.each(me.tools, function(tool) {
-                    if (tool.bundleName) {
-                      if (me.data.configuration && me.data.configuration[tool.bundleName]) {
-
-                        //ugly classifytool special case
-                        if (tool.getTool().id === 'Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin') {
-                           if (me.data.configuration[tool.bundleName].conf && me.data.configuration[tool.bundleName].conf.allowClassification) {
-                            enabledTools[tool.getTool().id] = true
-                           }
-                        } else {
-                          enabledTools[tool.getTool().id] = true;
-                        }
-                      }
-                    } else {
-                      if (me.data.configuration && me.data.configuration.mapfull && me.data.configuration.mapfull.conf && me.data.configuration.mapfull.conf.plugins) {
-                          _.each(me.data.configuration.mapfull.conf.plugins, function(plugin) {
-                              enabledTools[plugin.id] = true;
-                          });
-                      }
-                    }
-                  });
-                  return enabledTools;
-              }
+            if (me.data) {
+                enabledTools = {};
+                _.each(me.tools, function(tool) {
+                  if (tool.isEnabled()) {
+                    enabledTools[tool.getTool().id] = true;
+                  }
+                });
+                return enabledTools;
+            }
             return null;
-      },
+        },
         /**
          * Returns the selections the user has done with the form inputs.
          * @method getValues

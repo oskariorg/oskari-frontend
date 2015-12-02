@@ -94,6 +94,7 @@ function() {
                 if (tool.id === plugin.id && plugin.config && plugin.config.colourScheme) {
                     me.values.colourScheme = plugin.config.colourScheme;
                     me._sendColourSchemeChangedEvent(me.values.colourScheme);
+                    me.setEnabled(true);
                 }
             });
         }
@@ -147,6 +148,48 @@ function() {
 
     isColourDialogOpen: false,
 
+    /**
+    * Set enabled.
+    * @method setEnabled
+    * @public
+    *
+    * @param {Boolean} enabled is tool enabled or not
+    */
+    setEnabled : function(enabled) {
+        var me = this,
+            tool = me.getTool(),
+            sandbox = me.__sandbox;
+
+        //state actually hasn't changed -> do nothing
+        if (me.state.enabled !== undefined && me.state.enabled !== null && enabled === me.state.enabled) {
+            return;
+        }
+
+        me.state.enabled = enabled;
+        if(!me.__plugin && enabled) {
+            me.__plugin = Oskari.clazz.create(tool.id, tool.config);
+            me.__mapmodule.registerPlugin(me.__plugin);
+        }
+
+        if(enabled === true) {
+            me.__plugin.startPlugin(me.__sandbox);
+            me.__started = true;
+        } else {
+            if(me.__started === true) {
+                me.__plugin.stopPlugin(me.__sandbox);
+            }
+        }
+
+        if(enabled === true && me.state.mode !== null && me.__plugin && typeof me.__plugin.setMode === 'function'){
+            me.__plugin.setMode(me.state.mode);
+        }
+        var event = sandbox.getEventBuilder('Publisher2.ToolEnabledChangedEvent')(me);
+        sandbox.notifyAll(event);
+    },
+
+    isEnabled: function () {
+        return this.state.enabled;
+    },
     /**
     * Get extra options.
     * @method getExtraOptions
