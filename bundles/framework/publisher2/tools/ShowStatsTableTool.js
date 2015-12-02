@@ -10,20 +10,22 @@ function() {
     templates: {
         publishedGridTemplate: '<div class="publishedgrid"></div>'
     },
-        /**
-         * Initialize tool
-         * @params {} state data
-         * @method init
-         * @public
-         */
-        init: function (pdata) {
-            var me = this,
-                tool = me.getTool(pdata);
+    /**
+     * Initialize tool
+     * @params {} state data
+     * @method init
+     * @public
+     */
+    init: function (pdata) {
+        var me = this,
+            tool = me.getTool(pdata);
 
-
+        if (pdata && Oskari.util.keyExists(pdata, 'configuration.publishedgrid.state.gridShown') && pdata.configuration.publishedgrid.state.gridShown === true) {
+            me.setEnabled(true);
+        } else {
             me.setEnabled(false);
-        },
-    bundleName: 'publishedgrid',
+        }
+    },
     /**
     * Get tool object.
      * @params {}  pdta.configuration.publishedgrid.state
