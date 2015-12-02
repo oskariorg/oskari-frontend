@@ -33,6 +33,18 @@ function() {
     },
     //Key in view config non-map-module-plugin tools (for returning the state when modifying an existing published map).
     bundleName: 'featuredata2',
+
+    /**
+     * Initialise tool
+     * @method init
+     */
+    init: function(data) {
+        var me = this;
+
+        if (data.configuration[me.bundleName]) {
+            me.setEnabled(true);
+        }
+    },
     /**
     * Get values.
     * @method getValues

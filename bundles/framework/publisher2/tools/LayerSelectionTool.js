@@ -301,7 +301,16 @@ function() {
      */
     init: function (data) {
         var me = this;
-        me.data  =data;
+        me.data = data;
+
+        if (data.configuration && data.configuration.mapfull && data.configuration.mapfull.conf && data.configuration.mapfull.conf.plugins) {
+            _.each(data.configuration.mapfull.conf.plugins, function(plugin) {
+                if (me.getTool().id === plugin.id) {
+                    me.setEnabled(true);
+                }
+            });
+        }
+
         for (var p in me.eventHandlers) {
             if (me.eventHandlers.hasOwnProperty(p)) {
                 me.__sandbox.registerForEventByName(me, p);

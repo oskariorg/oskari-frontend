@@ -40,11 +40,21 @@ function(sandbox, mapmodule, localization, instance, handlers) {
 
     /**
     * Initialize tool
+    * Override if tool is not mapfull plugin
     * @method init
     * @public
     */
-    init: function(){
-        // override
+    init: function(pdata){
+        var me = this,
+            data = pdata;
+
+        if (data.configuration && data.configuration.mapfull && data.configuration.mapfull.conf && data.configuration.mapfull.conf.plugins) {
+            _.each(data.configuration.mapfull.conf.plugins, function(plugin) {
+                if (me.getTool().id === plugin.id) {
+                    me.setEnabled(true);
+                }
+            });
+        }
     },
     /**
     * Get tool object.
@@ -90,6 +100,11 @@ function(sandbox, mapmodule, localization, instance, handlers) {
         var event = sandbox.getEventBuilder('Publisher2.ToolEnabledChangedEvent')(me);
         sandbox.notifyAll(event);
     },
+
+    isEnabled: function () {
+        return this.state.enabled;
+    },
+
     /**
     * Get extra options.
     * @method getExtraOptions
