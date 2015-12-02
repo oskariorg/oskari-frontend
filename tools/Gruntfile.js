@@ -189,6 +189,10 @@ module.exports = function (grunt) {
             target: {
                 src: ['../bundles/**/locale/*.js']
             }
+        },
+        buildOskariOL3: {
+            main: {
+            }
         }
     });
 
@@ -602,7 +606,7 @@ module.exports = function (grunt) {
                 matcherSize = TO_MATCH.length + 1;
             var value = [];
             _.each(list, function(dep) {
-                var actual =  dep.resourcesPath || '';
+                var actual =  dep.path || '';
                 var index = actual.toLowerCase().indexOf(TO_MATCH);
                 if(index !== -1) {
                     //console.log(actual.substring(index + matcherSize));

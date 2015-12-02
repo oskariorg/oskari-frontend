@@ -25,6 +25,7 @@ Oskari.clazz.define(
         };
         this._style = {};
         this._layers = {};
+        this._pointerMoveAdded = false;
     }, {
         /**
          * @method register
@@ -81,7 +82,7 @@ Oskari.clazz.define(
                             feature : feature,
                             layerId : id
                         });
-                        break;
+                        return true;
                     }
                 });
             });
@@ -225,18 +226,44 @@ Oskari.clazz.define(
             }
 
             if (geometry) {
-                //if there's no layerId provided -> Just use a generic vector layer for all.
+                // if there's no layerId provided -> Just use a generic vector layer for all.
                 if (!options.layerId) {
                     options.layerId = 'VECTOR';
                 }
                 var features = format.readFeatures(geometry);
 
-                if(options.cursor){ 
+                //add cursor if defined so
+                if(options.cursor){
                     if (!options.attributes){
                       options.attributes = {};
                     }
+
                     options.attributes['oskari-cursor'] = options.cursor;
+
+                    // Add pointer move if not added already
+                    if(!me._pointerMoveAdded) {
+                        me._map.on('pointermove', function (evt) {
+                          var target = me._map.getTarget();
+                          var jTarget = typeof target === "string" ? jQuery("#" + target) : jQuery(target);
+                          var cursor = null;
+                          var hit = this.forEachFeatureAtPixel(evt.pixel,
+                              function(feature, layer) {
+                                if(feature.getProperties()['oskari-cursor']) {
+                                  cursor = feature.getProperties()['oskari-cursor'];
+                                }
+                                return true;
+                              });
+
+                            if (hit && cursor) {
+                              jTarget.css('cursor', cursor);
+                            } else {
+                              jTarget.css('cursor', '');
+                            }
+                      });
+                      me._pointerMoveAdded = true;
+                  }
                 }
+
 
                 if (options.attributes && options.attributes !== null && features instanceof Array && features.length) {
                     features[0].setProperties(options.attributes);
@@ -301,25 +328,6 @@ Oskari.clazz.define(
                     var extent = vectorSource.getExtent();
                     me.getMapModule().zoomToExtent(extent);
                 }
-
-                me._map.on("pointermove", function (evt) {
-                  var target = me._map.getTarget();
-                  var jTarget = typeof target === "string" ? jQuery("#" + target) : jQuery(target);
-                  var cursor = null;
-                  var hit = this.forEachFeatureAtPixel(evt.pixel,
-                      function(feature, layer) {
-                        if(feature.getProperties()['oskari-cursor']) {
-                          cursor = feature.getProperties()['oskari-cursor'];
-                        }
-                        return true;
-                      }); 
-                    
-                    if (hit && cursor) {  
-                      jTarget.css('cursor', cursor);
-                    } else {
-                      jTarget.css('cursor', '');
-                    }
-                });
             }
         },
 

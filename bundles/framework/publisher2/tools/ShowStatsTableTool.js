@@ -120,10 +120,6 @@ function() {
             jQuery('.publishedgrid').remove();
         }
 
-        if(enabled === true && me.state.mode !== null && me.__plugin && typeof me.__plugin.setMode === 'function'){
-            me.__plugin.setMode(me.state.mode);
-        }
-
         if (enabled) {
             if(me.__handlers['MapSizeChanged']) {
                 me.__handlers.MapSizeChanged();

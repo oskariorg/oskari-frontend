@@ -705,7 +705,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 mapVO = sandbox.getMap(),
                 width =  mapVO.getWidth(),
                 height = mapVO.getHeight();
-            
+
 
             // send as an event forward
             if(width && height) {

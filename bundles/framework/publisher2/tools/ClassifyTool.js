@@ -48,10 +48,6 @@ function() {
         } else {
             me.__plugin.showClassificationOptions(false);
         }
-
-        if(enabled === true && me.state.mode !== null && me.__plugin && typeof me.__plugin.setMode === 'function'){
-            me.__plugin.setMode(me.state.mode);
-        }
     },
 
     /**

@@ -114220,49 +114220,6 @@ ol.layer.Heatmap.prototype.setRadius = function(radius) {
   this.set(ol.layer.HeatmapLayerProperty.RADIUS, radius);
 };
 
-goog.provide('ol.raster.Operation');
-goog.provide('ol.raster.OperationType');
-
-
-/**
- * Raster operation type. Supported values are `'pixel'` and `'image'`.
- * @enum {string}
- * @api
- */
-ol.raster.OperationType = {
-  PIXEL: 'pixel',
-  IMAGE: 'image'
-};
-
-
-/**
- * A function that takes an array of input data, performs some operation, and
- * returns an array of ouput data.  For `'pixel'` type operations, functions
- * will be called with an array of {@link ol.raster.Pixel} data and should
- * return an array of the same.  For `'image'` type operations, functions will
- * be called with an array of {@link ImageData
- * https://developer.mozilla.org/en-US/docs/Web/API/ImageData} and should return
- * an array of the same.  The operations are called with a second "data"
- * argument, which can be used for storage.  The data object is accessible
- * from raster events, where it can be initialized in "beforeoperations" and
- * accessed again in "afteroperations".
- *
- * @typedef {function((Array.<ol.raster.Pixel>|Array.<ImageData>), Object):
- *     (Array.<ol.raster.Pixel>|Array.<ImageData>)}
- * @api
- */
-ol.raster.Operation;
-
-goog.provide('ol.raster.Pixel');
-
-
-/**
- * An array of numbers representing pixel values.
- * @typedef {Array.<number>} ol.raster.Pixel
- * @api
- */
-ol.raster.Pixel;
-
 goog.provide('ol.reproj.Tile');
 goog.provide('ol.reproj.TileFunctionType');
 
@@ -114595,6 +114552,629 @@ ol.reproj.Tile.prototype.unlistenSources_ = function() {
   this.sourcesListenerKeys_.forEach(goog.events.unlistenByKey);
   this.sourcesListenerKeys_ = null;
 };
+
+goog.provide('ol.source.TileImage');
+
+goog.require('goog.asserts');
+goog.require('goog.events');
+goog.require('goog.events.EventType');
+goog.require('goog.object');
+goog.require('ol.ImageTile');
+goog.require('ol.TileCache');
+goog.require('ol.TileState');
+goog.require('ol.proj');
+goog.require('ol.reproj.Tile');
+goog.require('ol.source.UrlTile');
+
+
+
+/**
+ * @classdesc
+ * Base class for sources providing images divided into a tile grid.
+ *
+ * @constructor
+ * @fires ol.source.TileEvent
+ * @extends {ol.source.UrlTile}
+ * @param {olx.source.TileImageOptions} options Image tile options.
+ * @api
+ */
+ol.source.TileImage = function(options) {
+
+  goog.base(this, {
+    attributions: options.attributions,
+    extent: options.extent,
+    logo: options.logo,
+    opaque: options.opaque,
+    projection: options.projection,
+    state: options.state !== undefined ?
+        /** @type {ol.source.State} */ (options.state) : undefined,
+    tileGrid: options.tileGrid,
+    tileLoadFunction: options.tileLoadFunction ?
+        options.tileLoadFunction : ol.source.TileImage.defaultTileLoadFunction,
+    tilePixelRatio: options.tilePixelRatio,
+    tileUrlFunction: options.tileUrlFunction,
+    url: options.url,
+    urls: options.urls,
+    wrapX: options.wrapX
+  });
+
+  /**
+   * @protected
+   * @type {?string}
+   */
+  this.crossOrigin =
+      options.crossOrigin !== undefined ? options.crossOrigin : null;
+
+  /**
+   * @protected
+   * @type {function(new: ol.ImageTile, ol.TileCoord, ol.TileState, string,
+   *        ?string, ol.TileLoadFunctionType)}
+   */
+  this.tileClass = options.tileClass !== undefined ?
+      options.tileClass : ol.ImageTile;
+
+  /**
+   * @protected
+   * @type {Object.<string, ol.TileCache>}
+   */
+  this.tileCacheForProjection = {};
+
+  /**
+   * @protected
+   * @type {Object.<string, ol.tilegrid.TileGrid>}
+   */
+  this.tileGridForProjection = {};
+
+  /**
+   * @private
+   * @type {number|undefined}
+   */
+  this.reprojectionErrorThreshold_ = options.reprojectionErrorThreshold;
+
+  /**
+   * @private
+   * @type {boolean}
+   */
+  this.renderReprojectionEdges_ = false;
+};
+goog.inherits(ol.source.TileImage, ol.source.UrlTile);
+
+
+/**
+ * @inheritDoc
+ */
+ol.source.TileImage.prototype.canExpireCache = function() {
+  if (!ol.ENABLE_RASTER_REPROJECTION) {
+    return goog.base(this, 'canExpireCache');
+  }
+  var canExpire = this.tileCache.canExpireCache();
+  if (canExpire) {
+    return true;
+  } else {
+    return goog.object.some(this.tileCacheForProjection, function(tileCache) {
+      return tileCache.canExpireCache();
+    });
+  }
+};
+
+
+/**
+ * @inheritDoc
+ */
+ol.source.TileImage.prototype.expireCache = function(projection, usedTiles) {
+  if (!ol.ENABLE_RASTER_REPROJECTION) {
+    goog.base(this, 'expireCache', projection, usedTiles);
+    return;
+  }
+  var usedTileCache = this.getTileCacheForProjection(projection);
+
+  this.tileCache.expireCache(this.tileCache == usedTileCache ? usedTiles : {});
+  goog.object.forEach(this.tileCacheForProjection, function(tileCache) {
+    tileCache.expireCache(tileCache == usedTileCache ? usedTiles : {});
+  });
+};
+
+
+/**
+ * @inheritDoc
+ */
+ol.source.TileImage.prototype.getTileGridForProjection = function(projection) {
+  if (!ol.ENABLE_RASTER_REPROJECTION) {
+    return goog.base(this, 'getTileGridForProjection', projection);
+  }
+  var thisProj = this.getProjection();
+  if (this.tileGrid &&
+      (!thisProj || ol.proj.equivalent(thisProj, projection))) {
+    return this.tileGrid;
+  } else {
+    var projKey = goog.getUid(projection).toString();
+    if (!(projKey in this.tileGridForProjection)) {
+      this.tileGridForProjection[projKey] =
+          ol.tilegrid.getForProjection(projection);
+    }
+    return this.tileGridForProjection[projKey];
+  }
+};
+
+
+/**
+ * @inheritDoc
+ */
+ol.source.TileImage.prototype.getTileCacheForProjection = function(projection) {
+  if (!ol.ENABLE_RASTER_REPROJECTION) {
+    return goog.base(this, 'getTileCacheForProjection', projection);
+  }
+  var thisProj = this.getProjection();
+  if (!thisProj || ol.proj.equivalent(thisProj, projection)) {
+    return this.tileCache;
+  } else {
+    var projKey = goog.getUid(projection).toString();
+    if (!(projKey in this.tileCacheForProjection)) {
+      this.tileCacheForProjection[projKey] = new ol.TileCache();
+    }
+    return this.tileCacheForProjection[projKey];
+  }
+};
+
+
+/**
+ * @inheritDoc
+ */
+ol.source.TileImage.prototype.getTile =
+    function(z, x, y, pixelRatio, projection) {
+  if (!ol.ENABLE_RASTER_REPROJECTION ||
+      !this.getProjection() ||
+      !projection ||
+      ol.proj.equivalent(this.getProjection(), projection)) {
+    return this.getTileInternal(z, x, y, pixelRatio, projection);
+  } else {
+    var cache = this.getTileCacheForProjection(projection);
+    var tileCoordKey = this.getKeyZXY(z, x, y);
+    if (cache.containsKey(tileCoordKey)) {
+      return /** @type {!ol.Tile} */(cache.get(tileCoordKey));
+    } else {
+      var sourceProjection = this.getProjection();
+      var sourceTileGrid = this.getTileGridForProjection(sourceProjection);
+      var targetTileGrid = this.getTileGridForProjection(projection);
+      var tile = new ol.reproj.Tile(
+          sourceProjection, sourceTileGrid,
+          projection, targetTileGrid,
+          z, x, y, this.getTilePixelRatio(),
+          goog.bind(function(z, x, y, pixelRatio) {
+            return this.getTileInternal(z, x, y, pixelRatio, sourceProjection);
+          }, this), this.reprojectionErrorThreshold_,
+          this.renderReprojectionEdges_);
+
+      cache.set(tileCoordKey, tile);
+      return tile;
+    }
+  }
+};
+
+
+/**
+ * @param {number} z Tile coordinate z.
+ * @param {number} x Tile coordinate x.
+ * @param {number} y Tile coordinate y.
+ * @param {number} pixelRatio Pixel ratio.
+ * @param {ol.proj.Projection} projection Projection.
+ * @return {!ol.Tile} Tile.
+ * @protected
+ */
+ol.source.TileImage.prototype.getTileInternal =
+    function(z, x, y, pixelRatio, projection) {
+  var tileCoordKey = this.getKeyZXY(z, x, y);
+  if (this.tileCache.containsKey(tileCoordKey)) {
+    return /** @type {!ol.Tile} */ (this.tileCache.get(tileCoordKey));
+  } else {
+    goog.asserts.assert(projection, 'argument projection is truthy');
+    var tileCoord = [z, x, y];
+    var urlTileCoord = this.getTileCoordForTileUrlFunction(
+        tileCoord, projection);
+    var tileUrl = !urlTileCoord ? undefined :
+        this.tileUrlFunction(urlTileCoord, pixelRatio, projection);
+    var tile = new this.tileClass(
+        tileCoord,
+        tileUrl !== undefined ? ol.TileState.IDLE : ol.TileState.EMPTY,
+        tileUrl !== undefined ? tileUrl : '',
+        this.crossOrigin,
+        this.tileLoadFunction);
+    goog.events.listen(tile, goog.events.EventType.CHANGE,
+        this.handleTileChange, false, this);
+
+    this.tileCache.set(tileCoordKey, tile);
+    return tile;
+  }
+};
+
+
+/**
+ * Sets whether to render reprojection edges or not (usually for debugging).
+ * @param {boolean} render Render the edges.
+ * @api
+ */
+ol.source.TileImage.prototype.setRenderReprojectionEdges = function(render) {
+  if (!ol.ENABLE_RASTER_REPROJECTION ||
+      this.renderReprojectionEdges_ == render) {
+    return;
+  }
+  this.renderReprojectionEdges_ = render;
+  goog.object.forEach(this.tileCacheForProjection, function(tileCache) {
+    tileCache.clear();
+  });
+  this.changed();
+};
+
+
+/**
+ * Sets the tile grid to use when reprojecting the tiles to the given
+ * projection instead of the default tile grid for the projection.
+ *
+ * This can be useful when the default tile grid cannot be created
+ * (e.g. projection has no extent defined) or
+ * for optimization reasons (custom tile size, resolutions, ...).
+ *
+ * @param {ol.proj.ProjectionLike} projection Projection.
+ * @param {ol.tilegrid.TileGrid} tilegrid Tile grid to use for the projection.
+ * @api
+ */
+ol.source.TileImage.prototype.setTileGridForProjection =
+    function(projection, tilegrid) {
+  if (ol.ENABLE_RASTER_REPROJECTION) {
+    var proj = ol.proj.get(projection);
+    if (proj) {
+      var projKey = goog.getUid(proj).toString();
+      if (!(projKey in this.tileGridForProjection)) {
+        this.tileGridForProjection[projKey] = tilegrid;
+      }
+    }
+  }
+};
+
+
+/**
+ * @param {ol.ImageTile} imageTile Image tile.
+ * @param {string} src Source.
+ */
+ol.source.TileImage.defaultTileLoadFunction = function(imageTile, src) {
+  imageTile.getImage().src = src;
+};
+
+goog.provide('ol.source.OskariAsyncTileImage');
+
+goog.require('goog.events.EventType');
+goog.require('ol.TileState');
+goog.require('ol.proj');
+goog.require('ol.source.TileImage');
+goog.require('ol.TileRange');
+
+/**
+ * @classdesc
+ * Base class for sources providing images divided into a tile grid.
+ *
+ * @constructor
+ * @fires ol.source.TileEvent
+ * @extends {ol.source.TileImage}
+ * @param {olx.source.TileImageOptions} options Image tile options.
+ * @api
+ */
+ol.source.OskariAsyncTileImage = function(options) {
+  goog.base(this, {
+    attributions: options.attributions,
+    extent: options.extent,
+    logo: options.logo,
+    opaque: options.opaque,
+    projection: options.projection,
+    state: options.state !== undefined ?
+        /** @type {ol.source.State} */ (options.state) : undefined,
+    tileGrid: options.tileGrid,
+    tileLoadFunction: options.tileLoadFunction ? options.tileLoadFunction : function() {
+      // no-op: loading is handled with transport/mediator
+    },
+    tilePixelRatio: options.tilePixelRatio,
+    tileUrlFunction:  function (tileCoord, pixelRatio, projection) {
+        var bounds = this.tileGrid.getTileCoordExtent(tileCoord);
+        var bboxKey = this.bboxkeyStrip_(bounds);
+        var wfsTileCache = this.getWFSTileCache_(),
+            layerTileInfos = wfsTileCache.tileInfos,
+            tileSetIdentifier = wfsTileCache.tileSetIdentifier;
+
+        layerTileInfos[bboxKey] = { 
+            tileCoord: tileCoord, 
+            bounds: bounds, 
+            tileSetIdentifier: tileSetIdentifier
+        };
+        return bboxKey;
+    },
+    url: options.url,
+    urls: options.urls,
+    wrapX: options.wrapX
+  });
+
+  this.tileLayerCache = {
+    tileSetIdentifier: 0,
+    tileInfos: {
+    }
+  };
+
+  this.__refreshTimer = null;
+};
+
+goog.inherits(ol.source.OskariAsyncTileImage, ol.source.TileImage);
+
+/**
+ * @api
+ */
+ol.source.OskariAsyncTileImage.prototype.getTileRangeForExtentAndResolution =  function (extent, resolution) {
+    return this.tileGrid.getTileRangeForExtentAndResolution(extent, resolution);
+}
+
+/**
+ * Strip bbox for unique key because of some inaccucate cases
+ * OL computation (init grid in tilesizes)  is inaccurate in last decimal
+ * @return {string}
+ */
+ol.source.OskariAsyncTileImage.prototype.bboxkeyStrip_ =  function (bbox) {
+    var stripbox = [];
+    if (!bbox) return '';
+    for (var i = bbox.length; i--;) {
+        stripbox[i] = bbox[i].toPrecision(13);
+    }
+    return stripbox.join(',');
+};
+
+/**
+ * @return {!Object.<string, *>}
+ */
+ol.source.OskariAsyncTileImage.prototype.getWFSTileCache_ = function() {
+    return this.tileLayerCache;
+};
+
+ol.source.OskariAsyncTileImage.prototype.purgeWFSTileCache_ = function() {
+    var me = this,
+        wfsTileCache = this.getWFSTileCache_(),
+        layerTileInfos = wfsTileCache.tileInfos,
+        lastTileSetIdentifier =  wfsTileCache.tileSetIdentifier;
+        /*
+    _.each(layerTileInfos,function(lti,key) {
+        if( !lti.isBoundaryTile) {
+            delete layerTileInfos[key];
+        }
+        if( lti.tileSetIdentifier < lastTileSetIdentifier-1 ) {
+            delete layerTileInfos[key];
+        }
+
+    });
+        */
+};
+
+/**
+ * @api
+ */
+ol.source.OskariAsyncTileImage.prototype.getNonCachedGrid = function (grid) {
+    var result = [],
+        i,
+        me = this,
+        bboxKey,
+        dataForTile;
+
+    var wfsTileCache = me.getWFSTileCache_(),
+        layerTileInfos = wfsTileCache.tileInfos,
+        lastTileSetIdentifier =  wfsTileCache.tileSetIdentifier;
+
+    this.purgeWFSTileCache_();
+
+    wfsTileCache.tileSetIdentifier =  ++wfsTileCache.tileSetIdentifier ;
+    for (i = 0; i < grid.bounds.length; i += 1) {
+        bboxKey = me.bboxkeyStrip_(grid.bounds[i]);
+        //at this point the tile should already been cached by the layers getTile - function.
+            var tileInfo = layerTileInfos[bboxKey],
+                tileCoord = tileInfo ? tileInfo.tileCoord: undefined,
+                tileCoordKey = tileCoord? ol.tilecoord.getKeyZXY(tileCoord[0],tileCoord[1],tileCoord[2]) : undefined,
+                tile;
+            if( tileCoordKey && this.tileCache.containsKey(tileCoordKey)) {
+                tile = this.tileCache.get(tileCoordKey);
+            }
+
+            if (tile ) {
+                if( tile.PLACEHOLDER === true) {
+                    result.push(grid.bounds[i]);
+                } else if(tile.getState() !== ol.TileState.LOADED) {
+                    result.push(grid.bounds[i]);
+                } else if( tile.isBoundaryTile === true ) {
+                    result.push(grid.bounds[i]);
+                }
+            } else {
+                delete layerTileInfos[bboxKey];
+            }
+    }
+    return result;
+};
+
+
+/**
+ * Note! Same as the original function, but tilestate is initialized to LOADING
+ * so tilequeue isn't blocked by the async nature of Oskari WFS
+ *
+ * @param {number} z Tile coordinate z.
+ * @param {number} x Tile coordinate x.
+ * @param {number} y Tile coordinate y.
+ * @param {number} pixelRatio Pixel ratio.
+ * @param {ol.proj.Projection} projection Projection.
+ * @return {!ol.Tile} Tile.
+ * @private
+ */
+ol.source.OskariAsyncTileImage.prototype.createTile_ = function(z, x, y, pixelRatio, projection) {
+  var tileCoordKey = this.getKeyZXY(z, x, y);
+  if (this.tileCache.containsKey(tileCoordKey)) {
+    return /** @type {!ol.Tile} */ (this.tileCache.get(tileCoordKey));
+  } else {
+    goog.asserts.assert(projection, 'argument projection is truthy');
+    var tileCoord = [z, x, y];
+    var urlTileCoord = this.getTileCoordForTileUrlFunction(
+        tileCoord, projection);
+    var tileUrl = !urlTileCoord ? undefined :
+        this.tileUrlFunction(urlTileCoord, pixelRatio, projection);
+    var tile = new this.tileClass(
+        tileCoord,
+        // always set state as LOADING since loading is handled outside ol3
+        // IDLE state will result in a call to loadTileFunction and block rendering on other sources if 
+        // we don't get results because of async load errors/job cancellation etc
+        ol.TileState.LOADING,
+        tileUrl !== undefined ? tileUrl : '',
+        this.crossOrigin,
+        this.tileLoadFunction);
+    goog.events.listen(tile, goog.events.EventType.CHANGE,
+        this.handleTileChange, false, this);
+
+    this.tileCache.set(tileCoordKey, tile);
+    return tile;
+  }
+};
+
+/**
+ * Workaround for being able to access renderer's private tile range property...
+ * @return  {ol.renderer.canvas.TileLayer}     canvasRenderer to force rerendering of tiles (ugly hack)
+ */
+ ol.source.OskariAsyncTileImage.prototype.getCanvasRenderer = function(layer, map){
+    return map.getRenderer().getLayerRenderer(layer);
+ }
+
+/**
+ * Workaround for being able to access renderer's private tile range property...
+ */
+ ol.renderer.canvas.TileLayer.prototype.resetRenderedCanvasTileRange = function() {
+  this.renderedCanvasTileRange_ = new ol.TileRange(NaN, NaN, NaN, NaN);
+ }
+
+/**
+ * Workaround for being able to set the imageTile's state manually.
+ */
+ol.ImageTile.prototype.setState = function(state) {
+  this.state = state;
+};
+
+/**
+ * Workaround for obtaining a tilerange for a resolution and extent in wfslayerplugin
+ * @api
+ */
+ ol.tilegrid.TileGrid.prototype.getTileRangeForExtentAndResolutionWrapper = function(mapExtent, resolution) {
+    var tileRange = this.getTileRangeForExtentAndResolution(mapExtent, resolution);
+    //return as array to avoid the closure compiler's dirty renaming deeds without having to expose the tilerange as well... 
+    return [tileRange.minX, tileRange.minY, tileRange.maxX, tileRange.maxY];
+    
+ }
+/**
+ * @param  {Array.<number>} boundsObj     tile bounds
+ * @param  {string}         imageData     dataurl or actual url for image
+ * @param  {ol.layer.Tile}     layer whose renderer will be fooled into thinking it's gotta redraw everything (ugly hack)
+ * @param  {ol.Map}     map from which to dig up the layerrenderer to hack (ugly hack)
+ * @param  {boolean}        boundaryTile  true if this an incomplete tile
+ * @api
+ */
+ol.source.OskariAsyncTileImage.prototype.setupImageContent = function(boundsObj, imageData, layer, map, boundaryTile) {
+    var me = this,
+        bboxKey = this.bboxkeyStrip_(boundsObj);
+    if (!bboxKey) {
+      return;
+    }
+
+    var tileCache = this.getWFSTileCache_();
+    var layerTileInfos = this.getWFSTileCache_().tileInfos;
+    var tileInfo = layerTileInfos[bboxKey],
+        tileCoord = tileInfo ? tileInfo.tileCoord: undefined,
+        tileCoordKey = tileCoord? ol.tilecoord.getKeyZXY(tileCoord[0],tileCoord[1],tileCoord[2]) : undefined,
+        tile;
+    if( tileCoordKey && this.tileCache.containsKey (tileCoordKey)) {
+        tile = this.tileCache.get(tileCoordKey);
+    }
+    if(!tile) {
+      return;
+    }
+    switch(tile.getState()) {
+        case ol.TileState.IDLE : // IDLE: 0,
+        case ol.TileState.LOADING: //LOADING: 1,
+            me.__fixTile(tile, imageData, layer, map);
+            break;
+        case ol.TileState.LOADED: // LOADED: 2
+        case ol.TileState.ERROR: // ERROR: 3
+        case ol.TileState.EMPTY: // EMPTY: 4
+            me.__fixTile(tile, imageData, layer, map);
+            break;
+        default:
+            tile.handleImageError_();
+    }
+
+    tile.isBoundaryTile = boundaryTile;
+    tileInfo.isBoundaryTile = boundaryTile;
+    if( !tile.isBoundaryTile ) {
+        delete layerTileInfos[bboxKey];
+    }
+};
+
+ol.source.OskariAsyncTileImage.prototype.__fixTile = function(tile, imageData, layer, map) {
+    clearTimeout(this.__refreshTimer);
+    tile.PLACEHOLDER = false;
+    tile.getImage().src = imageData;
+    tile.setState(ol.TileState.LOADED);
+
+    var me = this;
+    this.__refreshTimer = setTimeout(function() {
+        me.getCanvasRenderer(layer, map).resetRenderedCanvasTileRange();
+        me.changed();
+    }, 500);
+
+};
+/**
+ * Note! Always uses the non-projected internal tile getter
+ * @inheritDoc
+ */
+ol.source.OskariAsyncTileImage.prototype.getTile = function(z, x, y, pixelRatio, projection) {
+    return this.createTile_(z, x, y, pixelRatio, projection);
+};
+
+goog.provide('ol.raster.Operation');
+goog.provide('ol.raster.OperationType');
+
+
+/**
+ * Raster operation type. Supported values are `'pixel'` and `'image'`.
+ * @enum {string}
+ * @api
+ */
+ol.raster.OperationType = {
+  PIXEL: 'pixel',
+  IMAGE: 'image'
+};
+
+
+/**
+ * A function that takes an array of input data, performs some operation, and
+ * returns an array of ouput data.  For `'pixel'` type operations, functions
+ * will be called with an array of {@link ol.raster.Pixel} data and should
+ * return an array of the same.  For `'image'` type operations, functions will
+ * be called with an array of {@link ImageData
+ * https://developer.mozilla.org/en-US/docs/Web/API/ImageData} and should return
+ * an array of the same.  The operations are called with a second "data"
+ * argument, which can be used for storage.  The data object is accessible
+ * from raster events, where it can be initialized in "beforeoperations" and
+ * accessed again in "afteroperations".
+ *
+ * @typedef {function((Array.<ol.raster.Pixel>|Array.<ImageData>), Object):
+ *     (Array.<ol.raster.Pixel>|Array.<ImageData>)}
+ * @api
+ */
+ol.raster.Operation;
+
+goog.provide('ol.raster.Pixel');
+
+
+/**
+ * An array of numbers representing pixel values.
+ * @typedef {Array.<number>} ol.raster.Pixel
+ * @api
+ */
+ol.raster.Pixel;
 
 // Copyright 2011 The Closure Library Authors. All Rights Reserved.
 //
@@ -115321,293 +115901,6 @@ goog.net.Jsonp.addPayloadToUri_ = function(payload, uri) {
 // /q=xx&btnl, /url, www.googlepages.com, etc.)
 //
 // WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING
-
-goog.provide('ol.source.TileImage');
-
-goog.require('goog.asserts');
-goog.require('goog.events');
-goog.require('goog.events.EventType');
-goog.require('goog.object');
-goog.require('ol.ImageTile');
-goog.require('ol.TileCache');
-goog.require('ol.TileState');
-goog.require('ol.proj');
-goog.require('ol.reproj.Tile');
-goog.require('ol.source.UrlTile');
-
-
-
-/**
- * @classdesc
- * Base class for sources providing images divided into a tile grid.
- *
- * @constructor
- * @fires ol.source.TileEvent
- * @extends {ol.source.UrlTile}
- * @param {olx.source.TileImageOptions} options Image tile options.
- * @api
- */
-ol.source.TileImage = function(options) {
-
-  goog.base(this, {
-    attributions: options.attributions,
-    extent: options.extent,
-    logo: options.logo,
-    opaque: options.opaque,
-    projection: options.projection,
-    state: options.state !== undefined ?
-        /** @type {ol.source.State} */ (options.state) : undefined,
-    tileGrid: options.tileGrid,
-    tileLoadFunction: options.tileLoadFunction ?
-        options.tileLoadFunction : ol.source.TileImage.defaultTileLoadFunction,
-    tilePixelRatio: options.tilePixelRatio,
-    tileUrlFunction: options.tileUrlFunction,
-    url: options.url,
-    urls: options.urls,
-    wrapX: options.wrapX
-  });
-
-  /**
-   * @protected
-   * @type {?string}
-   */
-  this.crossOrigin =
-      options.crossOrigin !== undefined ? options.crossOrigin : null;
-
-  /**
-   * @protected
-   * @type {function(new: ol.ImageTile, ol.TileCoord, ol.TileState, string,
-   *        ?string, ol.TileLoadFunctionType)}
-   */
-  this.tileClass = options.tileClass !== undefined ?
-      options.tileClass : ol.ImageTile;
-
-  /**
-   * @protected
-   * @type {Object.<string, ol.TileCache>}
-   */
-  this.tileCacheForProjection = {};
-
-  /**
-   * @protected
-   * @type {Object.<string, ol.tilegrid.TileGrid>}
-   */
-  this.tileGridForProjection = {};
-
-  /**
-   * @private
-   * @type {number|undefined}
-   */
-  this.reprojectionErrorThreshold_ = options.reprojectionErrorThreshold;
-
-  /**
-   * @private
-   * @type {boolean}
-   */
-  this.renderReprojectionEdges_ = false;
-};
-goog.inherits(ol.source.TileImage, ol.source.UrlTile);
-
-
-/**
- * @inheritDoc
- */
-ol.source.TileImage.prototype.canExpireCache = function() {
-  if (!ol.ENABLE_RASTER_REPROJECTION) {
-    return goog.base(this, 'canExpireCache');
-  }
-  var canExpire = this.tileCache.canExpireCache();
-  if (canExpire) {
-    return true;
-  } else {
-    return goog.object.some(this.tileCacheForProjection, function(tileCache) {
-      return tileCache.canExpireCache();
-    });
-  }
-};
-
-
-/**
- * @inheritDoc
- */
-ol.source.TileImage.prototype.expireCache = function(projection, usedTiles) {
-  if (!ol.ENABLE_RASTER_REPROJECTION) {
-    goog.base(this, 'expireCache', projection, usedTiles);
-    return;
-  }
-  var usedTileCache = this.getTileCacheForProjection(projection);
-
-  this.tileCache.expireCache(this.tileCache == usedTileCache ? usedTiles : {});
-  goog.object.forEach(this.tileCacheForProjection, function(tileCache) {
-    tileCache.expireCache(tileCache == usedTileCache ? usedTiles : {});
-  });
-};
-
-
-/**
- * @inheritDoc
- */
-ol.source.TileImage.prototype.getTileGridForProjection = function(projection) {
-  if (!ol.ENABLE_RASTER_REPROJECTION) {
-    return goog.base(this, 'getTileGridForProjection', projection);
-  }
-  var thisProj = this.getProjection();
-  if (this.tileGrid &&
-      (!thisProj || ol.proj.equivalent(thisProj, projection))) {
-    return this.tileGrid;
-  } else {
-    var projKey = goog.getUid(projection).toString();
-    if (!(projKey in this.tileGridForProjection)) {
-      this.tileGridForProjection[projKey] =
-          ol.tilegrid.getForProjection(projection);
-    }
-    return this.tileGridForProjection[projKey];
-  }
-};
-
-
-/**
- * @inheritDoc
- */
-ol.source.TileImage.prototype.getTileCacheForProjection = function(projection) {
-  if (!ol.ENABLE_RASTER_REPROJECTION) {
-    return goog.base(this, 'getTileCacheForProjection', projection);
-  }
-  var thisProj = this.getProjection();
-  if (!thisProj || ol.proj.equivalent(thisProj, projection)) {
-    return this.tileCache;
-  } else {
-    var projKey = goog.getUid(projection).toString();
-    if (!(projKey in this.tileCacheForProjection)) {
-      this.tileCacheForProjection[projKey] = new ol.TileCache();
-    }
-    return this.tileCacheForProjection[projKey];
-  }
-};
-
-
-/**
- * @inheritDoc
- */
-ol.source.TileImage.prototype.getTile =
-    function(z, x, y, pixelRatio, projection) {
-  if (!ol.ENABLE_RASTER_REPROJECTION ||
-      !this.getProjection() ||
-      !projection ||
-      ol.proj.equivalent(this.getProjection(), projection)) {
-    return this.getTileInternal(z, x, y, pixelRatio, projection);
-  } else {
-    var cache = this.getTileCacheForProjection(projection);
-    var tileCoordKey = this.getKeyZXY(z, x, y);
-    if (cache.containsKey(tileCoordKey)) {
-      return /** @type {!ol.Tile} */(cache.get(tileCoordKey));
-    } else {
-      var sourceProjection = this.getProjection();
-      var sourceTileGrid = this.getTileGridForProjection(sourceProjection);
-      var targetTileGrid = this.getTileGridForProjection(projection);
-      var tile = new ol.reproj.Tile(
-          sourceProjection, sourceTileGrid,
-          projection, targetTileGrid,
-          z, x, y, this.getTilePixelRatio(),
-          goog.bind(function(z, x, y, pixelRatio) {
-            return this.getTileInternal(z, x, y, pixelRatio, sourceProjection);
-          }, this), this.reprojectionErrorThreshold_,
-          this.renderReprojectionEdges_);
-
-      cache.set(tileCoordKey, tile);
-      return tile;
-    }
-  }
-};
-
-
-/**
- * @param {number} z Tile coordinate z.
- * @param {number} x Tile coordinate x.
- * @param {number} y Tile coordinate y.
- * @param {number} pixelRatio Pixel ratio.
- * @param {ol.proj.Projection} projection Projection.
- * @return {!ol.Tile} Tile.
- * @protected
- */
-ol.source.TileImage.prototype.getTileInternal =
-    function(z, x, y, pixelRatio, projection) {
-  var tileCoordKey = this.getKeyZXY(z, x, y);
-  if (this.tileCache.containsKey(tileCoordKey)) {
-    return /** @type {!ol.Tile} */ (this.tileCache.get(tileCoordKey));
-  } else {
-    goog.asserts.assert(projection, 'argument projection is truthy');
-    var tileCoord = [z, x, y];
-    var urlTileCoord = this.getTileCoordForTileUrlFunction(
-        tileCoord, projection);
-    var tileUrl = !urlTileCoord ? undefined :
-        this.tileUrlFunction(urlTileCoord, pixelRatio, projection);
-    var tile = new this.tileClass(
-        tileCoord,
-        tileUrl !== undefined ? ol.TileState.IDLE : ol.TileState.EMPTY,
-        tileUrl !== undefined ? tileUrl : '',
-        this.crossOrigin,
-        this.tileLoadFunction);
-    goog.events.listen(tile, goog.events.EventType.CHANGE,
-        this.handleTileChange, false, this);
-
-    this.tileCache.set(tileCoordKey, tile);
-    return tile;
-  }
-};
-
-
-/**
- * Sets whether to render reprojection edges or not (usually for debugging).
- * @param {boolean} render Render the edges.
- * @api
- */
-ol.source.TileImage.prototype.setRenderReprojectionEdges = function(render) {
-  if (!ol.ENABLE_RASTER_REPROJECTION ||
-      this.renderReprojectionEdges_ == render) {
-    return;
-  }
-  this.renderReprojectionEdges_ = render;
-  goog.object.forEach(this.tileCacheForProjection, function(tileCache) {
-    tileCache.clear();
-  });
-  this.changed();
-};
-
-
-/**
- * Sets the tile grid to use when reprojecting the tiles to the given
- * projection instead of the default tile grid for the projection.
- *
- * This can be useful when the default tile grid cannot be created
- * (e.g. projection has no extent defined) or
- * for optimization reasons (custom tile size, resolutions, ...).
- *
- * @param {ol.proj.ProjectionLike} projection Projection.
- * @param {ol.tilegrid.TileGrid} tilegrid Tile grid to use for the projection.
- * @api
- */
-ol.source.TileImage.prototype.setTileGridForProjection =
-    function(projection, tilegrid) {
-  if (ol.ENABLE_RASTER_REPROJECTION) {
-    var proj = ol.proj.get(projection);
-    if (proj) {
-      var projKey = goog.getUid(proj).toString();
-      if (!(projKey in this.tileGridForProjection)) {
-        this.tileGridForProjection[projKey] = tilegrid;
-      }
-    }
-  }
-};
-
-
-/**
- * @param {ol.ImageTile} imageTile Image tile.
- * @param {string} src Source.
- */
-ol.source.TileImage.defaultTileLoadFunction = function(imageTile, src) {
-  imageTile.getImage().src = src;
-};
 
 goog.provide('ol.source.BingMaps');
 
@@ -116903,299 +117196,6 @@ ol.source.MapQuestConfig = {
  */
 ol.source.MapQuest.prototype.getLayer = function() {
   return this.layer_;
-};
-
-goog.provide('ol.source.OskariAsyncTileImage');
-
-goog.require('goog.events.EventType');
-goog.require('ol.TileState');
-goog.require('ol.proj');
-goog.require('ol.source.TileImage');
-goog.require('ol.TileRange');
-
-/**
- * @classdesc
- * Base class for sources providing images divided into a tile grid.
- *
- * @constructor
- * @fires ol.source.TileEvent
- * @extends {ol.source.TileImage}
- * @param {olx.source.TileImageOptions} options Image tile options.
- * @api
- */
-ol.source.OskariAsyncTileImage = function(options) {
-  goog.base(this, {
-    attributions: options.attributions,
-    extent: options.extent,
-    logo: options.logo,
-    opaque: options.opaque,
-    projection: options.projection,
-    state: options.state !== undefined ?
-        /** @type {ol.source.State} */ (options.state) : undefined,
-    tileGrid: options.tileGrid,
-    tileLoadFunction: options.tileLoadFunction ? options.tileLoadFunction : function() {
-      // no-op: loading is handled with transport/mediator
-    },
-    tilePixelRatio: options.tilePixelRatio,
-    tileUrlFunction:  function (tileCoord, pixelRatio, projection) {
-        var bounds = this.tileGrid.getTileCoordExtent(tileCoord);
-        var bboxKey = this.bboxkeyStrip_(bounds);
-        var wfsTileCache = this.getWFSTileCache_(),
-            layerTileInfos = wfsTileCache.tileInfos,
-            tileSetIdentifier = wfsTileCache.tileSetIdentifier;
-
-        layerTileInfos[bboxKey] = { 
-            tileCoord: tileCoord, 
-            bounds: bounds, 
-            tileSetIdentifier: tileSetIdentifier
-        };
-        return bboxKey;
-    },
-    url: options.url,
-    urls: options.urls,
-    wrapX: options.wrapX
-  });
-
-  this.tileLayerCache = {
-    tileSetIdentifier: 0,
-    tileInfos: {
-    }
-  };
-
-  this.__refreshTimer = null;
-};
-
-goog.inherits(ol.source.OskariAsyncTileImage, ol.source.TileImage);
-
-/**
- * @api
- */
-ol.source.OskariAsyncTileImage.prototype.getTileRangeForExtentAndResolution =  function (extent, resolution) {
-    return this.tileGrid.getTileRangeForExtentAndResolution(extent, resolution);
-}
-
-/**
- * Strip bbox for unique key because of some inaccucate cases
- * OL computation (init grid in tilesizes)  is inaccurate in last decimal
- * @return {string}
- */
-ol.source.OskariAsyncTileImage.prototype.bboxkeyStrip_ =  function (bbox) {
-    var stripbox = [];
-    if (!bbox) return '';
-    for (var i = bbox.length; i--;) {
-        stripbox[i] = bbox[i].toPrecision(13);
-    }
-    return stripbox.join(',');
-};
-
-/**
- * @return {!Object.<string, *>}
- */
-ol.source.OskariAsyncTileImage.prototype.getWFSTileCache_ = function() {
-    return this.tileLayerCache;
-};
-
-ol.source.OskariAsyncTileImage.prototype.purgeWFSTileCache_ = function() {
-    var me = this,
-        wfsTileCache = this.getWFSTileCache_(),
-        layerTileInfos = wfsTileCache.tileInfos,
-        lastTileSetIdentifier =  wfsTileCache.tileSetIdentifier;
-        /*
-    _.each(layerTileInfos,function(lti,key) {
-        if( !lti.isBoundaryTile) {
-            delete layerTileInfos[key];
-        }
-        if( lti.tileSetIdentifier < lastTileSetIdentifier-1 ) {
-            delete layerTileInfos[key];
-        }
-
-    });
-        */
-};
-
-/**
- * @api
- */
-ol.source.OskariAsyncTileImage.prototype.getNonCachedGrid = function (grid) {
-    var result = [],
-        i,
-        me = this,
-        bboxKey,
-        dataForTile;
-
-    var wfsTileCache = me.getWFSTileCache_(),
-        layerTileInfos = wfsTileCache.tileInfos,
-        lastTileSetIdentifier =  wfsTileCache.tileSetIdentifier;
-
-    this.purgeWFSTileCache_();
-
-    wfsTileCache.tileSetIdentifier =  ++wfsTileCache.tileSetIdentifier ;
-    for (i = 0; i < grid.bounds.length; i += 1) {
-        bboxKey = me.bboxkeyStrip_(grid.bounds[i]);
-        //at this point the tile should already been cached by the layers getTile - function.
-            var tileInfo = layerTileInfos[bboxKey],
-                tileCoord = tileInfo ? tileInfo.tileCoord: undefined,
-                tileCoordKey = tileCoord? ol.tilecoord.getKeyZXY(tileCoord[0],tileCoord[1],tileCoord[2]) : undefined,
-                tile;
-            if( tileCoordKey && this.tileCache.containsKey(tileCoordKey)) {
-                tile = this.tileCache.get(tileCoordKey);
-            }
-
-            if (tile ) {
-                if( tile.PLACEHOLDER === true) {
-                    result.push(grid.bounds[i]);
-                } else if(tile.getState() !== ol.TileState.LOADED) {
-                    result.push(grid.bounds[i]);
-                } else if( tile.isBoundaryTile === true ) {
-                    result.push(grid.bounds[i]);
-                }
-            } else {
-                delete layerTileInfos[bboxKey];
-            }
-    }
-    return result;
-};
-
-
-/**
- * Note! Same as the original function, but tilestate is initialized to LOADING
- * so tilequeue isn't blocked by the async nature of Oskari WFS
- *
- * @param {number} z Tile coordinate z.
- * @param {number} x Tile coordinate x.
- * @param {number} y Tile coordinate y.
- * @param {number} pixelRatio Pixel ratio.
- * @param {ol.proj.Projection} projection Projection.
- * @return {!ol.Tile} Tile.
- * @private
- */
-ol.source.OskariAsyncTileImage.prototype.createTile_ = function(z, x, y, pixelRatio, projection) {
-  var tileCoordKey = this.getKeyZXY(z, x, y);
-  if (this.tileCache.containsKey(tileCoordKey)) {
-    return /** @type {!ol.Tile} */ (this.tileCache.get(tileCoordKey));
-  } else {
-    goog.asserts.assert(projection, 'argument projection is truthy');
-    var tileCoord = [z, x, y];
-    var urlTileCoord = this.getTileCoordForTileUrlFunction(
-        tileCoord, projection);
-    var tileUrl = !urlTileCoord ? undefined :
-        this.tileUrlFunction(urlTileCoord, pixelRatio, projection);
-    var tile = new this.tileClass(
-        tileCoord,
-        // always set state as LOADING since loading is handled outside ol3
-        // IDLE state will result in a call to loadTileFunction and block rendering on other sources if 
-        // we don't get results because of async load errors/job cancellation etc
-        ol.TileState.LOADING,
-        tileUrl !== undefined ? tileUrl : '',
-        this.crossOrigin,
-        this.tileLoadFunction);
-    goog.events.listen(tile, goog.events.EventType.CHANGE,
-        this.handleTileChange, false, this);
-
-    this.tileCache.set(tileCoordKey, tile);
-    return tile;
-  }
-};
-
-/**
- * Workaround for being able to access renderer's private tile range property...
- * @return  {ol.renderer.canvas.TileLayer}     canvasRenderer to force rerendering of tiles (ugly hack)
- */
- ol.source.OskariAsyncTileImage.prototype.getCanvasRenderer = function(layer, map){
-    return map.getRenderer().getLayerRenderer(layer);
- }
-
-/**
- * Workaround for being able to access renderer's private tile range property...
- */
- ol.renderer.canvas.TileLayer.prototype.resetRenderedCanvasTileRange = function() {
-  this.renderedCanvasTileRange_ = new ol.TileRange(NaN, NaN, NaN, NaN);
- }
-
-/**
- * Workaround for being able to set the imageTile's state manually.
- */
-ol.ImageTile.prototype.setState = function(state) {
-  this.state = state;
-};
-
-/**
- * Workaround for obtaining a tilerange for a resolution and extent in wfslayerplugin
- * @api
- */
- ol.tilegrid.TileGrid.prototype.getTileRangeForExtentAndResolutionWrapper = function(mapExtent, resolution) {
-    var tileRange = this.getTileRangeForExtentAndResolution(mapExtent, resolution);
-    //return as array to avoid the closure compiler's dirty renaming deeds without having to expose the tilerange as well... 
-    return [tileRange.minX, tileRange.minY, tileRange.maxX, tileRange.maxY];
-    
- }
-/**
- * @param  {Array.<number>} boundsObj     tile bounds
- * @param  {string}         imageData     dataurl or actual url for image
- * @param  {ol.layer.Tile}     layer whose renderer will be fooled into thinking it's gotta redraw everything (ugly hack)
- * @param  {ol.Map}     map from which to dig up the layerrenderer to hack (ugly hack)
- * @param  {boolean}        boundaryTile  true if this an incomplete tile
- * @api
- */
-ol.source.OskariAsyncTileImage.prototype.setupImageContent = function(boundsObj, imageData, layer, map, boundaryTile) {
-    var me = this,
-        bboxKey = this.bboxkeyStrip_(boundsObj);
-    if (!bboxKey) {
-      return;
-    }
-
-    var tileCache = this.getWFSTileCache_();
-    var layerTileInfos = this.getWFSTileCache_().tileInfos;
-    var tileInfo = layerTileInfos[bboxKey],
-        tileCoord = tileInfo ? tileInfo.tileCoord: undefined,
-        tileCoordKey = tileCoord? ol.tilecoord.getKeyZXY(tileCoord[0],tileCoord[1],tileCoord[2]) : undefined,
-        tile;
-    if( tileCoordKey && this.tileCache.containsKey (tileCoordKey)) {
-        tile = this.tileCache.get(tileCoordKey);
-    }
-    if(!tile) {
-      return;
-    }
-    switch(tile.getState()) {
-        case ol.TileState.IDLE : // IDLE: 0,
-        case ol.TileState.LOADING: //LOADING: 1,
-            me.__fixTile(tile, imageData, layer, map);
-            break;
-        case ol.TileState.LOADED: // LOADED: 2
-        case ol.TileState.ERROR: // ERROR: 3
-        case ol.TileState.EMPTY: // EMPTY: 4
-            me.__fixTile(tile, imageData, layer, map);
-            break;
-        default:
-            tile.handleImageError_();
-    }
-
-    tile.isBoundaryTile = boundaryTile;
-    tileInfo.isBoundaryTile = boundaryTile;
-    if( !tile.isBoundaryTile ) {
-        delete layerTileInfos[bboxKey];
-    }
-};
-
-ol.source.OskariAsyncTileImage.prototype.__fixTile = function(tile, imageData, layer, map) {
-    clearTimeout(this.__refreshTimer);
-    tile.PLACEHOLDER = false;
-    tile.getImage().src = imageData;
-    tile.setState(ol.TileState.LOADED);
-
-    var me = this;
-    this.__refreshTimer = setTimeout(function() {
-        me.getCanvasRenderer(layer, map).resetRenderedCanvasTileRange();
-        me.changed();
-    }, 500);
-
-};
-/**
- * Note! Always uses the non-projected internal tile getter
- * @inheritDoc
- */
-ol.source.OskariAsyncTileImage.prototype.getTile = function(z, x, y, pixelRatio, projection) {
-    return this.createTile_(z, x, y, pixelRatio, projection);
 };
 
 goog.provide('ol.ext.pixelworks');
@@ -123906,6 +123906,31 @@ goog.exportSymbol(
     OPENLAYERS);
 
 goog.exportSymbol(
+    'ol.source.OskariAsyncTileImage',
+    ol.source.OskariAsyncTileImage,
+    OPENLAYERS);
+
+goog.exportProperty(
+    ol.source.OskariAsyncTileImage.prototype,
+    'getTileRangeForExtentAndResolution',
+    ol.source.OskariAsyncTileImage.prototype.getTileRangeForExtentAndResolution);
+
+goog.exportProperty(
+    ol.source.OskariAsyncTileImage.prototype,
+    'getNonCachedGrid',
+    ol.source.OskariAsyncTileImage.prototype.getNonCachedGrid);
+
+goog.exportProperty(
+    ol.tilegrid.TileGrid.prototype,
+    'getTileRangeForExtentAndResolutionWrapper',
+    ol.tilegrid.TileGrid.prototype.getTileRangeForExtentAndResolutionWrapper);
+
+goog.exportProperty(
+    ol.source.OskariAsyncTileImage.prototype,
+    'setupImageContent',
+    ol.source.OskariAsyncTileImage.prototype.setupImageContent);
+
+goog.exportSymbol(
     'ol.Overlay',
     ol.Overlay,
     OPENLAYERS);
@@ -124404,31 +124429,6 @@ goog.exportProperty(
     ol.source.MapQuest.prototype,
     'getLayer',
     ol.source.MapQuest.prototype.getLayer);
-
-goog.exportSymbol(
-    'ol.source.OskariAsyncTileImage',
-    ol.source.OskariAsyncTileImage,
-    OPENLAYERS);
-
-goog.exportProperty(
-    ol.source.OskariAsyncTileImage.prototype,
-    'getTileRangeForExtentAndResolution',
-    ol.source.OskariAsyncTileImage.prototype.getTileRangeForExtentAndResolution);
-
-goog.exportProperty(
-    ol.source.OskariAsyncTileImage.prototype,
-    'getNonCachedGrid',
-    ol.source.OskariAsyncTileImage.prototype.getNonCachedGrid);
-
-goog.exportProperty(
-    ol.tilegrid.TileGrid.prototype,
-    'getTileRangeForExtentAndResolutionWrapper',
-    ol.tilegrid.TileGrid.prototype.getTileRangeForExtentAndResolutionWrapper);
-
-goog.exportProperty(
-    ol.source.OskariAsyncTileImage.prototype,
-    'setupImageContent',
-    ol.source.OskariAsyncTileImage.prototype.setupImageContent);
 
 goog.exportSymbol(
     'ol.source.OSM',
@@ -130066,6 +130066,526 @@ goog.exportProperty(
     ol.MapBrowserPointerEvent.prototype.frameState);
 
 goog.exportProperty(
+    ol.source.Source.prototype,
+    'get',
+    ol.source.Source.prototype.get);
+
+goog.exportProperty(
+    ol.source.Source.prototype,
+    'getKeys',
+    ol.source.Source.prototype.getKeys);
+
+goog.exportProperty(
+    ol.source.Source.prototype,
+    'getProperties',
+    ol.source.Source.prototype.getProperties);
+
+goog.exportProperty(
+    ol.source.Source.prototype,
+    'set',
+    ol.source.Source.prototype.set);
+
+goog.exportProperty(
+    ol.source.Source.prototype,
+    'setProperties',
+    ol.source.Source.prototype.setProperties);
+
+goog.exportProperty(
+    ol.source.Source.prototype,
+    'unset',
+    ol.source.Source.prototype.unset);
+
+goog.exportProperty(
+    ol.source.Source.prototype,
+    'changed',
+    ol.source.Source.prototype.changed);
+
+goog.exportProperty(
+    ol.source.Source.prototype,
+    'dispatchEvent',
+    ol.source.Source.prototype.dispatchEvent);
+
+goog.exportProperty(
+    ol.source.Source.prototype,
+    'getRevision',
+    ol.source.Source.prototype.getRevision);
+
+goog.exportProperty(
+    ol.source.Source.prototype,
+    'on',
+    ol.source.Source.prototype.on);
+
+goog.exportProperty(
+    ol.source.Source.prototype,
+    'once',
+    ol.source.Source.prototype.once);
+
+goog.exportProperty(
+    ol.source.Source.prototype,
+    'un',
+    ol.source.Source.prototype.un);
+
+goog.exportProperty(
+    ol.source.Source.prototype,
+    'unByKey',
+    ol.source.Source.prototype.unByKey);
+
+goog.exportProperty(
+    ol.source.Tile.prototype,
+    'getAttributions',
+    ol.source.Tile.prototype.getAttributions);
+
+goog.exportProperty(
+    ol.source.Tile.prototype,
+    'getLogo',
+    ol.source.Tile.prototype.getLogo);
+
+goog.exportProperty(
+    ol.source.Tile.prototype,
+    'getProjection',
+    ol.source.Tile.prototype.getProjection);
+
+goog.exportProperty(
+    ol.source.Tile.prototype,
+    'getState',
+    ol.source.Tile.prototype.getState);
+
+goog.exportProperty(
+    ol.source.Tile.prototype,
+    'setAttributions',
+    ol.source.Tile.prototype.setAttributions);
+
+goog.exportProperty(
+    ol.source.Tile.prototype,
+    'get',
+    ol.source.Tile.prototype.get);
+
+goog.exportProperty(
+    ol.source.Tile.prototype,
+    'getKeys',
+    ol.source.Tile.prototype.getKeys);
+
+goog.exportProperty(
+    ol.source.Tile.prototype,
+    'getProperties',
+    ol.source.Tile.prototype.getProperties);
+
+goog.exportProperty(
+    ol.source.Tile.prototype,
+    'set',
+    ol.source.Tile.prototype.set);
+
+goog.exportProperty(
+    ol.source.Tile.prototype,
+    'setProperties',
+    ol.source.Tile.prototype.setProperties);
+
+goog.exportProperty(
+    ol.source.Tile.prototype,
+    'unset',
+    ol.source.Tile.prototype.unset);
+
+goog.exportProperty(
+    ol.source.Tile.prototype,
+    'changed',
+    ol.source.Tile.prototype.changed);
+
+goog.exportProperty(
+    ol.source.Tile.prototype,
+    'dispatchEvent',
+    ol.source.Tile.prototype.dispatchEvent);
+
+goog.exportProperty(
+    ol.source.Tile.prototype,
+    'getRevision',
+    ol.source.Tile.prototype.getRevision);
+
+goog.exportProperty(
+    ol.source.Tile.prototype,
+    'on',
+    ol.source.Tile.prototype.on);
+
+goog.exportProperty(
+    ol.source.Tile.prototype,
+    'once',
+    ol.source.Tile.prototype.once);
+
+goog.exportProperty(
+    ol.source.Tile.prototype,
+    'un',
+    ol.source.Tile.prototype.un);
+
+goog.exportProperty(
+    ol.source.Tile.prototype,
+    'unByKey',
+    ol.source.Tile.prototype.unByKey);
+
+goog.exportProperty(
+    ol.source.UrlTile.prototype,
+    'getTileGrid',
+    ol.source.UrlTile.prototype.getTileGrid);
+
+goog.exportProperty(
+    ol.source.UrlTile.prototype,
+    'getAttributions',
+    ol.source.UrlTile.prototype.getAttributions);
+
+goog.exportProperty(
+    ol.source.UrlTile.prototype,
+    'getLogo',
+    ol.source.UrlTile.prototype.getLogo);
+
+goog.exportProperty(
+    ol.source.UrlTile.prototype,
+    'getProjection',
+    ol.source.UrlTile.prototype.getProjection);
+
+goog.exportProperty(
+    ol.source.UrlTile.prototype,
+    'getState',
+    ol.source.UrlTile.prototype.getState);
+
+goog.exportProperty(
+    ol.source.UrlTile.prototype,
+    'setAttributions',
+    ol.source.UrlTile.prototype.setAttributions);
+
+goog.exportProperty(
+    ol.source.UrlTile.prototype,
+    'get',
+    ol.source.UrlTile.prototype.get);
+
+goog.exportProperty(
+    ol.source.UrlTile.prototype,
+    'getKeys',
+    ol.source.UrlTile.prototype.getKeys);
+
+goog.exportProperty(
+    ol.source.UrlTile.prototype,
+    'getProperties',
+    ol.source.UrlTile.prototype.getProperties);
+
+goog.exportProperty(
+    ol.source.UrlTile.prototype,
+    'set',
+    ol.source.UrlTile.prototype.set);
+
+goog.exportProperty(
+    ol.source.UrlTile.prototype,
+    'setProperties',
+    ol.source.UrlTile.prototype.setProperties);
+
+goog.exportProperty(
+    ol.source.UrlTile.prototype,
+    'unset',
+    ol.source.UrlTile.prototype.unset);
+
+goog.exportProperty(
+    ol.source.UrlTile.prototype,
+    'changed',
+    ol.source.UrlTile.prototype.changed);
+
+goog.exportProperty(
+    ol.source.UrlTile.prototype,
+    'dispatchEvent',
+    ol.source.UrlTile.prototype.dispatchEvent);
+
+goog.exportProperty(
+    ol.source.UrlTile.prototype,
+    'getRevision',
+    ol.source.UrlTile.prototype.getRevision);
+
+goog.exportProperty(
+    ol.source.UrlTile.prototype,
+    'on',
+    ol.source.UrlTile.prototype.on);
+
+goog.exportProperty(
+    ol.source.UrlTile.prototype,
+    'once',
+    ol.source.UrlTile.prototype.once);
+
+goog.exportProperty(
+    ol.source.UrlTile.prototype,
+    'un',
+    ol.source.UrlTile.prototype.un);
+
+goog.exportProperty(
+    ol.source.UrlTile.prototype,
+    'unByKey',
+    ol.source.UrlTile.prototype.unByKey);
+
+goog.exportProperty(
+    ol.source.TileImage.prototype,
+    'getTileLoadFunction',
+    ol.source.TileImage.prototype.getTileLoadFunction);
+
+goog.exportProperty(
+    ol.source.TileImage.prototype,
+    'getTileUrlFunction',
+    ol.source.TileImage.prototype.getTileUrlFunction);
+
+goog.exportProperty(
+    ol.source.TileImage.prototype,
+    'getUrls',
+    ol.source.TileImage.prototype.getUrls);
+
+goog.exportProperty(
+    ol.source.TileImage.prototype,
+    'setTileLoadFunction',
+    ol.source.TileImage.prototype.setTileLoadFunction);
+
+goog.exportProperty(
+    ol.source.TileImage.prototype,
+    'setTileUrlFunction',
+    ol.source.TileImage.prototype.setTileUrlFunction);
+
+goog.exportProperty(
+    ol.source.TileImage.prototype,
+    'setUrl',
+    ol.source.TileImage.prototype.setUrl);
+
+goog.exportProperty(
+    ol.source.TileImage.prototype,
+    'setUrls',
+    ol.source.TileImage.prototype.setUrls);
+
+goog.exportProperty(
+    ol.source.TileImage.prototype,
+    'getTileGrid',
+    ol.source.TileImage.prototype.getTileGrid);
+
+goog.exportProperty(
+    ol.source.TileImage.prototype,
+    'getAttributions',
+    ol.source.TileImage.prototype.getAttributions);
+
+goog.exportProperty(
+    ol.source.TileImage.prototype,
+    'getLogo',
+    ol.source.TileImage.prototype.getLogo);
+
+goog.exportProperty(
+    ol.source.TileImage.prototype,
+    'getProjection',
+    ol.source.TileImage.prototype.getProjection);
+
+goog.exportProperty(
+    ol.source.TileImage.prototype,
+    'getState',
+    ol.source.TileImage.prototype.getState);
+
+goog.exportProperty(
+    ol.source.TileImage.prototype,
+    'setAttributions',
+    ol.source.TileImage.prototype.setAttributions);
+
+goog.exportProperty(
+    ol.source.TileImage.prototype,
+    'get',
+    ol.source.TileImage.prototype.get);
+
+goog.exportProperty(
+    ol.source.TileImage.prototype,
+    'getKeys',
+    ol.source.TileImage.prototype.getKeys);
+
+goog.exportProperty(
+    ol.source.TileImage.prototype,
+    'getProperties',
+    ol.source.TileImage.prototype.getProperties);
+
+goog.exportProperty(
+    ol.source.TileImage.prototype,
+    'set',
+    ol.source.TileImage.prototype.set);
+
+goog.exportProperty(
+    ol.source.TileImage.prototype,
+    'setProperties',
+    ol.source.TileImage.prototype.setProperties);
+
+goog.exportProperty(
+    ol.source.TileImage.prototype,
+    'unset',
+    ol.source.TileImage.prototype.unset);
+
+goog.exportProperty(
+    ol.source.TileImage.prototype,
+    'changed',
+    ol.source.TileImage.prototype.changed);
+
+goog.exportProperty(
+    ol.source.TileImage.prototype,
+    'dispatchEvent',
+    ol.source.TileImage.prototype.dispatchEvent);
+
+goog.exportProperty(
+    ol.source.TileImage.prototype,
+    'getRevision',
+    ol.source.TileImage.prototype.getRevision);
+
+goog.exportProperty(
+    ol.source.TileImage.prototype,
+    'on',
+    ol.source.TileImage.prototype.on);
+
+goog.exportProperty(
+    ol.source.TileImage.prototype,
+    'once',
+    ol.source.TileImage.prototype.once);
+
+goog.exportProperty(
+    ol.source.TileImage.prototype,
+    'un',
+    ol.source.TileImage.prototype.un);
+
+goog.exportProperty(
+    ol.source.TileImage.prototype,
+    'unByKey',
+    ol.source.TileImage.prototype.unByKey);
+
+goog.exportProperty(
+    ol.source.OskariAsyncTileImage.prototype,
+    'setRenderReprojectionEdges',
+    ol.source.OskariAsyncTileImage.prototype.setRenderReprojectionEdges);
+
+goog.exportProperty(
+    ol.source.OskariAsyncTileImage.prototype,
+    'setTileGridForProjection',
+    ol.source.OskariAsyncTileImage.prototype.setTileGridForProjection);
+
+goog.exportProperty(
+    ol.source.OskariAsyncTileImage.prototype,
+    'getTileLoadFunction',
+    ol.source.OskariAsyncTileImage.prototype.getTileLoadFunction);
+
+goog.exportProperty(
+    ol.source.OskariAsyncTileImage.prototype,
+    'getTileUrlFunction',
+    ol.source.OskariAsyncTileImage.prototype.getTileUrlFunction);
+
+goog.exportProperty(
+    ol.source.OskariAsyncTileImage.prototype,
+    'getUrls',
+    ol.source.OskariAsyncTileImage.prototype.getUrls);
+
+goog.exportProperty(
+    ol.source.OskariAsyncTileImage.prototype,
+    'setTileLoadFunction',
+    ol.source.OskariAsyncTileImage.prototype.setTileLoadFunction);
+
+goog.exportProperty(
+    ol.source.OskariAsyncTileImage.prototype,
+    'setTileUrlFunction',
+    ol.source.OskariAsyncTileImage.prototype.setTileUrlFunction);
+
+goog.exportProperty(
+    ol.source.OskariAsyncTileImage.prototype,
+    'setUrl',
+    ol.source.OskariAsyncTileImage.prototype.setUrl);
+
+goog.exportProperty(
+    ol.source.OskariAsyncTileImage.prototype,
+    'setUrls',
+    ol.source.OskariAsyncTileImage.prototype.setUrls);
+
+goog.exportProperty(
+    ol.source.OskariAsyncTileImage.prototype,
+    'getTileGrid',
+    ol.source.OskariAsyncTileImage.prototype.getTileGrid);
+
+goog.exportProperty(
+    ol.source.OskariAsyncTileImage.prototype,
+    'getAttributions',
+    ol.source.OskariAsyncTileImage.prototype.getAttributions);
+
+goog.exportProperty(
+    ol.source.OskariAsyncTileImage.prototype,
+    'getLogo',
+    ol.source.OskariAsyncTileImage.prototype.getLogo);
+
+goog.exportProperty(
+    ol.source.OskariAsyncTileImage.prototype,
+    'getProjection',
+    ol.source.OskariAsyncTileImage.prototype.getProjection);
+
+goog.exportProperty(
+    ol.source.OskariAsyncTileImage.prototype,
+    'getState',
+    ol.source.OskariAsyncTileImage.prototype.getState);
+
+goog.exportProperty(
+    ol.source.OskariAsyncTileImage.prototype,
+    'setAttributions',
+    ol.source.OskariAsyncTileImage.prototype.setAttributions);
+
+goog.exportProperty(
+    ol.source.OskariAsyncTileImage.prototype,
+    'get',
+    ol.source.OskariAsyncTileImage.prototype.get);
+
+goog.exportProperty(
+    ol.source.OskariAsyncTileImage.prototype,
+    'getKeys',
+    ol.source.OskariAsyncTileImage.prototype.getKeys);
+
+goog.exportProperty(
+    ol.source.OskariAsyncTileImage.prototype,
+    'getProperties',
+    ol.source.OskariAsyncTileImage.prototype.getProperties);
+
+goog.exportProperty(
+    ol.source.OskariAsyncTileImage.prototype,
+    'set',
+    ol.source.OskariAsyncTileImage.prototype.set);
+
+goog.exportProperty(
+    ol.source.OskariAsyncTileImage.prototype,
+    'setProperties',
+    ol.source.OskariAsyncTileImage.prototype.setProperties);
+
+goog.exportProperty(
+    ol.source.OskariAsyncTileImage.prototype,
+    'unset',
+    ol.source.OskariAsyncTileImage.prototype.unset);
+
+goog.exportProperty(
+    ol.source.OskariAsyncTileImage.prototype,
+    'changed',
+    ol.source.OskariAsyncTileImage.prototype.changed);
+
+goog.exportProperty(
+    ol.source.OskariAsyncTileImage.prototype,
+    'dispatchEvent',
+    ol.source.OskariAsyncTileImage.prototype.dispatchEvent);
+
+goog.exportProperty(
+    ol.source.OskariAsyncTileImage.prototype,
+    'getRevision',
+    ol.source.OskariAsyncTileImage.prototype.getRevision);
+
+goog.exportProperty(
+    ol.source.OskariAsyncTileImage.prototype,
+    'on',
+    ol.source.OskariAsyncTileImage.prototype.on);
+
+goog.exportProperty(
+    ol.source.OskariAsyncTileImage.prototype,
+    'once',
+    ol.source.OskariAsyncTileImage.prototype.once);
+
+goog.exportProperty(
+    ol.source.OskariAsyncTileImage.prototype,
+    'un',
+    ol.source.OskariAsyncTileImage.prototype.un);
+
+goog.exportProperty(
+    ol.source.OskariAsyncTileImage.prototype,
+    'unByKey',
+    ol.source.OskariAsyncTileImage.prototype.unByKey);
+
+goog.exportProperty(
     ol.Overlay.prototype,
     'get',
     ol.Overlay.prototype.get);
@@ -130624,386 +131144,6 @@ goog.exportProperty(
     ol.reproj.Tile.prototype,
     'getTileCoord',
     ol.reproj.Tile.prototype.getTileCoord);
-
-goog.exportProperty(
-    ol.source.Source.prototype,
-    'get',
-    ol.source.Source.prototype.get);
-
-goog.exportProperty(
-    ol.source.Source.prototype,
-    'getKeys',
-    ol.source.Source.prototype.getKeys);
-
-goog.exportProperty(
-    ol.source.Source.prototype,
-    'getProperties',
-    ol.source.Source.prototype.getProperties);
-
-goog.exportProperty(
-    ol.source.Source.prototype,
-    'set',
-    ol.source.Source.prototype.set);
-
-goog.exportProperty(
-    ol.source.Source.prototype,
-    'setProperties',
-    ol.source.Source.prototype.setProperties);
-
-goog.exportProperty(
-    ol.source.Source.prototype,
-    'unset',
-    ol.source.Source.prototype.unset);
-
-goog.exportProperty(
-    ol.source.Source.prototype,
-    'changed',
-    ol.source.Source.prototype.changed);
-
-goog.exportProperty(
-    ol.source.Source.prototype,
-    'dispatchEvent',
-    ol.source.Source.prototype.dispatchEvent);
-
-goog.exportProperty(
-    ol.source.Source.prototype,
-    'getRevision',
-    ol.source.Source.prototype.getRevision);
-
-goog.exportProperty(
-    ol.source.Source.prototype,
-    'on',
-    ol.source.Source.prototype.on);
-
-goog.exportProperty(
-    ol.source.Source.prototype,
-    'once',
-    ol.source.Source.prototype.once);
-
-goog.exportProperty(
-    ol.source.Source.prototype,
-    'un',
-    ol.source.Source.prototype.un);
-
-goog.exportProperty(
-    ol.source.Source.prototype,
-    'unByKey',
-    ol.source.Source.prototype.unByKey);
-
-goog.exportProperty(
-    ol.source.Tile.prototype,
-    'getAttributions',
-    ol.source.Tile.prototype.getAttributions);
-
-goog.exportProperty(
-    ol.source.Tile.prototype,
-    'getLogo',
-    ol.source.Tile.prototype.getLogo);
-
-goog.exportProperty(
-    ol.source.Tile.prototype,
-    'getProjection',
-    ol.source.Tile.prototype.getProjection);
-
-goog.exportProperty(
-    ol.source.Tile.prototype,
-    'getState',
-    ol.source.Tile.prototype.getState);
-
-goog.exportProperty(
-    ol.source.Tile.prototype,
-    'setAttributions',
-    ol.source.Tile.prototype.setAttributions);
-
-goog.exportProperty(
-    ol.source.Tile.prototype,
-    'get',
-    ol.source.Tile.prototype.get);
-
-goog.exportProperty(
-    ol.source.Tile.prototype,
-    'getKeys',
-    ol.source.Tile.prototype.getKeys);
-
-goog.exportProperty(
-    ol.source.Tile.prototype,
-    'getProperties',
-    ol.source.Tile.prototype.getProperties);
-
-goog.exportProperty(
-    ol.source.Tile.prototype,
-    'set',
-    ol.source.Tile.prototype.set);
-
-goog.exportProperty(
-    ol.source.Tile.prototype,
-    'setProperties',
-    ol.source.Tile.prototype.setProperties);
-
-goog.exportProperty(
-    ol.source.Tile.prototype,
-    'unset',
-    ol.source.Tile.prototype.unset);
-
-goog.exportProperty(
-    ol.source.Tile.prototype,
-    'changed',
-    ol.source.Tile.prototype.changed);
-
-goog.exportProperty(
-    ol.source.Tile.prototype,
-    'dispatchEvent',
-    ol.source.Tile.prototype.dispatchEvent);
-
-goog.exportProperty(
-    ol.source.Tile.prototype,
-    'getRevision',
-    ol.source.Tile.prototype.getRevision);
-
-goog.exportProperty(
-    ol.source.Tile.prototype,
-    'on',
-    ol.source.Tile.prototype.on);
-
-goog.exportProperty(
-    ol.source.Tile.prototype,
-    'once',
-    ol.source.Tile.prototype.once);
-
-goog.exportProperty(
-    ol.source.Tile.prototype,
-    'un',
-    ol.source.Tile.prototype.un);
-
-goog.exportProperty(
-    ol.source.Tile.prototype,
-    'unByKey',
-    ol.source.Tile.prototype.unByKey);
-
-goog.exportProperty(
-    ol.source.UrlTile.prototype,
-    'getTileGrid',
-    ol.source.UrlTile.prototype.getTileGrid);
-
-goog.exportProperty(
-    ol.source.UrlTile.prototype,
-    'getAttributions',
-    ol.source.UrlTile.prototype.getAttributions);
-
-goog.exportProperty(
-    ol.source.UrlTile.prototype,
-    'getLogo',
-    ol.source.UrlTile.prototype.getLogo);
-
-goog.exportProperty(
-    ol.source.UrlTile.prototype,
-    'getProjection',
-    ol.source.UrlTile.prototype.getProjection);
-
-goog.exportProperty(
-    ol.source.UrlTile.prototype,
-    'getState',
-    ol.source.UrlTile.prototype.getState);
-
-goog.exportProperty(
-    ol.source.UrlTile.prototype,
-    'setAttributions',
-    ol.source.UrlTile.prototype.setAttributions);
-
-goog.exportProperty(
-    ol.source.UrlTile.prototype,
-    'get',
-    ol.source.UrlTile.prototype.get);
-
-goog.exportProperty(
-    ol.source.UrlTile.prototype,
-    'getKeys',
-    ol.source.UrlTile.prototype.getKeys);
-
-goog.exportProperty(
-    ol.source.UrlTile.prototype,
-    'getProperties',
-    ol.source.UrlTile.prototype.getProperties);
-
-goog.exportProperty(
-    ol.source.UrlTile.prototype,
-    'set',
-    ol.source.UrlTile.prototype.set);
-
-goog.exportProperty(
-    ol.source.UrlTile.prototype,
-    'setProperties',
-    ol.source.UrlTile.prototype.setProperties);
-
-goog.exportProperty(
-    ol.source.UrlTile.prototype,
-    'unset',
-    ol.source.UrlTile.prototype.unset);
-
-goog.exportProperty(
-    ol.source.UrlTile.prototype,
-    'changed',
-    ol.source.UrlTile.prototype.changed);
-
-goog.exportProperty(
-    ol.source.UrlTile.prototype,
-    'dispatchEvent',
-    ol.source.UrlTile.prototype.dispatchEvent);
-
-goog.exportProperty(
-    ol.source.UrlTile.prototype,
-    'getRevision',
-    ol.source.UrlTile.prototype.getRevision);
-
-goog.exportProperty(
-    ol.source.UrlTile.prototype,
-    'on',
-    ol.source.UrlTile.prototype.on);
-
-goog.exportProperty(
-    ol.source.UrlTile.prototype,
-    'once',
-    ol.source.UrlTile.prototype.once);
-
-goog.exportProperty(
-    ol.source.UrlTile.prototype,
-    'un',
-    ol.source.UrlTile.prototype.un);
-
-goog.exportProperty(
-    ol.source.UrlTile.prototype,
-    'unByKey',
-    ol.source.UrlTile.prototype.unByKey);
-
-goog.exportProperty(
-    ol.source.TileImage.prototype,
-    'getTileLoadFunction',
-    ol.source.TileImage.prototype.getTileLoadFunction);
-
-goog.exportProperty(
-    ol.source.TileImage.prototype,
-    'getTileUrlFunction',
-    ol.source.TileImage.prototype.getTileUrlFunction);
-
-goog.exportProperty(
-    ol.source.TileImage.prototype,
-    'getUrls',
-    ol.source.TileImage.prototype.getUrls);
-
-goog.exportProperty(
-    ol.source.TileImage.prototype,
-    'setTileLoadFunction',
-    ol.source.TileImage.prototype.setTileLoadFunction);
-
-goog.exportProperty(
-    ol.source.TileImage.prototype,
-    'setTileUrlFunction',
-    ol.source.TileImage.prototype.setTileUrlFunction);
-
-goog.exportProperty(
-    ol.source.TileImage.prototype,
-    'setUrl',
-    ol.source.TileImage.prototype.setUrl);
-
-goog.exportProperty(
-    ol.source.TileImage.prototype,
-    'setUrls',
-    ol.source.TileImage.prototype.setUrls);
-
-goog.exportProperty(
-    ol.source.TileImage.prototype,
-    'getTileGrid',
-    ol.source.TileImage.prototype.getTileGrid);
-
-goog.exportProperty(
-    ol.source.TileImage.prototype,
-    'getAttributions',
-    ol.source.TileImage.prototype.getAttributions);
-
-goog.exportProperty(
-    ol.source.TileImage.prototype,
-    'getLogo',
-    ol.source.TileImage.prototype.getLogo);
-
-goog.exportProperty(
-    ol.source.TileImage.prototype,
-    'getProjection',
-    ol.source.TileImage.prototype.getProjection);
-
-goog.exportProperty(
-    ol.source.TileImage.prototype,
-    'getState',
-    ol.source.TileImage.prototype.getState);
-
-goog.exportProperty(
-    ol.source.TileImage.prototype,
-    'setAttributions',
-    ol.source.TileImage.prototype.setAttributions);
-
-goog.exportProperty(
-    ol.source.TileImage.prototype,
-    'get',
-    ol.source.TileImage.prototype.get);
-
-goog.exportProperty(
-    ol.source.TileImage.prototype,
-    'getKeys',
-    ol.source.TileImage.prototype.getKeys);
-
-goog.exportProperty(
-    ol.source.TileImage.prototype,
-    'getProperties',
-    ol.source.TileImage.prototype.getProperties);
-
-goog.exportProperty(
-    ol.source.TileImage.prototype,
-    'set',
-    ol.source.TileImage.prototype.set);
-
-goog.exportProperty(
-    ol.source.TileImage.prototype,
-    'setProperties',
-    ol.source.TileImage.prototype.setProperties);
-
-goog.exportProperty(
-    ol.source.TileImage.prototype,
-    'unset',
-    ol.source.TileImage.prototype.unset);
-
-goog.exportProperty(
-    ol.source.TileImage.prototype,
-    'changed',
-    ol.source.TileImage.prototype.changed);
-
-goog.exportProperty(
-    ol.source.TileImage.prototype,
-    'dispatchEvent',
-    ol.source.TileImage.prototype.dispatchEvent);
-
-goog.exportProperty(
-    ol.source.TileImage.prototype,
-    'getRevision',
-    ol.source.TileImage.prototype.getRevision);
-
-goog.exportProperty(
-    ol.source.TileImage.prototype,
-    'on',
-    ol.source.TileImage.prototype.on);
-
-goog.exportProperty(
-    ol.source.TileImage.prototype,
-    'once',
-    ol.source.TileImage.prototype.once);
-
-goog.exportProperty(
-    ol.source.TileImage.prototype,
-    'un',
-    ol.source.TileImage.prototype.un);
-
-goog.exportProperty(
-    ol.source.TileImage.prototype,
-    'unByKey',
-    ol.source.TileImage.prototype.unByKey);
 
 goog.exportProperty(
     ol.source.BingMaps.prototype,
@@ -132214,146 +132354,6 @@ goog.exportProperty(
     ol.source.MapQuest.prototype,
     'unByKey',
     ol.source.MapQuest.prototype.unByKey);
-
-goog.exportProperty(
-    ol.source.OskariAsyncTileImage.prototype,
-    'setRenderReprojectionEdges',
-    ol.source.OskariAsyncTileImage.prototype.setRenderReprojectionEdges);
-
-goog.exportProperty(
-    ol.source.OskariAsyncTileImage.prototype,
-    'setTileGridForProjection',
-    ol.source.OskariAsyncTileImage.prototype.setTileGridForProjection);
-
-goog.exportProperty(
-    ol.source.OskariAsyncTileImage.prototype,
-    'getTileLoadFunction',
-    ol.source.OskariAsyncTileImage.prototype.getTileLoadFunction);
-
-goog.exportProperty(
-    ol.source.OskariAsyncTileImage.prototype,
-    'getTileUrlFunction',
-    ol.source.OskariAsyncTileImage.prototype.getTileUrlFunction);
-
-goog.exportProperty(
-    ol.source.OskariAsyncTileImage.prototype,
-    'getUrls',
-    ol.source.OskariAsyncTileImage.prototype.getUrls);
-
-goog.exportProperty(
-    ol.source.OskariAsyncTileImage.prototype,
-    'setTileLoadFunction',
-    ol.source.OskariAsyncTileImage.prototype.setTileLoadFunction);
-
-goog.exportProperty(
-    ol.source.OskariAsyncTileImage.prototype,
-    'setTileUrlFunction',
-    ol.source.OskariAsyncTileImage.prototype.setTileUrlFunction);
-
-goog.exportProperty(
-    ol.source.OskariAsyncTileImage.prototype,
-    'setUrl',
-    ol.source.OskariAsyncTileImage.prototype.setUrl);
-
-goog.exportProperty(
-    ol.source.OskariAsyncTileImage.prototype,
-    'setUrls',
-    ol.source.OskariAsyncTileImage.prototype.setUrls);
-
-goog.exportProperty(
-    ol.source.OskariAsyncTileImage.prototype,
-    'getTileGrid',
-    ol.source.OskariAsyncTileImage.prototype.getTileGrid);
-
-goog.exportProperty(
-    ol.source.OskariAsyncTileImage.prototype,
-    'getAttributions',
-    ol.source.OskariAsyncTileImage.prototype.getAttributions);
-
-goog.exportProperty(
-    ol.source.OskariAsyncTileImage.prototype,
-    'getLogo',
-    ol.source.OskariAsyncTileImage.prototype.getLogo);
-
-goog.exportProperty(
-    ol.source.OskariAsyncTileImage.prototype,
-    'getProjection',
-    ol.source.OskariAsyncTileImage.prototype.getProjection);
-
-goog.exportProperty(
-    ol.source.OskariAsyncTileImage.prototype,
-    'getState',
-    ol.source.OskariAsyncTileImage.prototype.getState);
-
-goog.exportProperty(
-    ol.source.OskariAsyncTileImage.prototype,
-    'setAttributions',
-    ol.source.OskariAsyncTileImage.prototype.setAttributions);
-
-goog.exportProperty(
-    ol.source.OskariAsyncTileImage.prototype,
-    'get',
-    ol.source.OskariAsyncTileImage.prototype.get);
-
-goog.exportProperty(
-    ol.source.OskariAsyncTileImage.prototype,
-    'getKeys',
-    ol.source.OskariAsyncTileImage.prototype.getKeys);
-
-goog.exportProperty(
-    ol.source.OskariAsyncTileImage.prototype,
-    'getProperties',
-    ol.source.OskariAsyncTileImage.prototype.getProperties);
-
-goog.exportProperty(
-    ol.source.OskariAsyncTileImage.prototype,
-    'set',
-    ol.source.OskariAsyncTileImage.prototype.set);
-
-goog.exportProperty(
-    ol.source.OskariAsyncTileImage.prototype,
-    'setProperties',
-    ol.source.OskariAsyncTileImage.prototype.setProperties);
-
-goog.exportProperty(
-    ol.source.OskariAsyncTileImage.prototype,
-    'unset',
-    ol.source.OskariAsyncTileImage.prototype.unset);
-
-goog.exportProperty(
-    ol.source.OskariAsyncTileImage.prototype,
-    'changed',
-    ol.source.OskariAsyncTileImage.prototype.changed);
-
-goog.exportProperty(
-    ol.source.OskariAsyncTileImage.prototype,
-    'dispatchEvent',
-    ol.source.OskariAsyncTileImage.prototype.dispatchEvent);
-
-goog.exportProperty(
-    ol.source.OskariAsyncTileImage.prototype,
-    'getRevision',
-    ol.source.OskariAsyncTileImage.prototype.getRevision);
-
-goog.exportProperty(
-    ol.source.OskariAsyncTileImage.prototype,
-    'on',
-    ol.source.OskariAsyncTileImage.prototype.on);
-
-goog.exportProperty(
-    ol.source.OskariAsyncTileImage.prototype,
-    'once',
-    ol.source.OskariAsyncTileImage.prototype.once);
-
-goog.exportProperty(
-    ol.source.OskariAsyncTileImage.prototype,
-    'un',
-    ol.source.OskariAsyncTileImage.prototype.un);
-
-goog.exportProperty(
-    ol.source.OskariAsyncTileImage.prototype,
-    'unByKey',
-    ol.source.OskariAsyncTileImage.prototype.unByKey);
 
 goog.exportProperty(
     ol.source.OSM.prototype,
