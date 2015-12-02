@@ -8,7 +8,7 @@ Both ol2 and ol3 implementations of VectorLayerPlugin have been changed to allow
 
 ### publisher2
 
-Removed unneccasy code:
+Removed unneccary code:
 - setMode functions, because plugin tool handles allready own visibility/style when using mobile or desktop size map
 
 ## 1.34.1

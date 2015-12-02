@@ -153,7 +153,7 @@ Oskari.clazz.define(
                     visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
                     opacity: layer.getOpacity() / 100
                 });
-            
+
             this.getMapModule().addLayer(openlayer, layer, layer.getName());
 
             this._layers[layer.getId()] = openlayer;
