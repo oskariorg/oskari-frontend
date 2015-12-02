@@ -2,6 +2,10 @@
 
 ## 1.34.1
 
+### proj4js handling
+
+Fixed proj4js handling to work ol3. Deleted packages/openlayers/startup.js file because it is not needed anymore.
+
 ### mapping/mapmodule/plugin/getinfo
 
 Fixed my places layer title.
