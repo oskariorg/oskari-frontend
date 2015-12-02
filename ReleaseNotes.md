@@ -24,6 +24,10 @@ Layers are loaded as a singletile to speed up the loading.
 
 Opacity is now set correctly for highlighted features.
 
+### mapping/mapwmts
+
+Visibility is now set to Wmts layer.
+
 ### infobox
 
 Only prevent event-propagation if target is not a link. Event-propagation is stopped so map doesn't get click events 
@@ -31,7 +35,14 @@ when clicking the info-box. However without this fix links on infobox don't work
 
 ### publisher2
 
-Fixed a default tools bug, when modifying an existing map
+Default tools in map publishing are now defined in PublishMapEditorRequestHandler and those default values are used if the PublishMapEditorRequest doesn't include any data about published map to edit.
+
+Tools check themselves if they should be enabled when editing published map. Function isEnabled() can be used to ask this from tools.
+
+### indexmap
+
+Indexmap is now shown above the icon to avoid the problem with indexmap on the left to be rendered behind the icon.
+
 
 ## 1.34
 
