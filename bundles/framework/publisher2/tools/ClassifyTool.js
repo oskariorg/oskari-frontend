@@ -28,9 +28,12 @@ function() {
             me.__plugin.startPlugin(me.__sandbox);
         }
 
-        me.setEnabled(false);
+        if (pdata && Oskari.util.keyExists(pdata, 'configuration.publishedgrid.conf.allowClassification') && pdata.configuration.publishedgrid.conf.allowClassification === true) {
+            me.setEnabled(true);
+        } else {
+            me.setEnabled(false);
+        }
     },
-    bundleName: 'publishedgrid',
     /**
     * Set enabled.
     * @method setEnabled
