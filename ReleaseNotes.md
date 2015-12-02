@@ -2,6 +2,10 @@
 
 ## 1.34.1
 
+### mapping/mapmodule/plugin/getinfo
+
+Fixed my places layer title.
+
 ### mapping/myplacesimport - UserLayersLayerPlugin.ol3
 
 Opacity is now set correctly when layer is added to map.
