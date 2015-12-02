@@ -2,9 +2,23 @@
 
 ## 1.34.1
 
+### Proj4js/proj4 handling
+
+Fixed Proj4js/proj4 handling to work OL3. Deleted packages/openlayers/startup.js file because it is not needed anymore.
+
+### mapping/mapmodule/plugin/getinfo
+
+Fixed my places layer title.
+
 ### mapping/myplacesimport - UserLayersLayerPlugin.ol3
 
 Opacity is now set correctly when layer is added to map.
+Layers are loaded as a singletile to speed up the loading.
+
+### mapping/mapanalyse - AnalysisLayerPlugin.ol3
+
+Opacity is now set correctly when layer is added to map.
+Layers are loaded as a singletile to speed up the loading.
 
 ### mapping/mapwfs_ol3 - WfsLayerPlugin for ol3
 

@@ -242,8 +242,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var maxExtent = me._maxExtent;
             var extent = me._extent;
 
-            proj4.defs("EPSG:3067","+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
-
             var projection = ol.proj.get(me._projectionCode);
             projection.setExtent(extent);
 
