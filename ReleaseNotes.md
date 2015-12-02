@@ -2,9 +2,9 @@
 
 ## 1.34.1
 
-### proj4js handling
+### Proj4js/proj4 handling
 
-Fixed proj4js handling to work ol3. Deleted packages/openlayers/startup.js file because it is not needed anymore.
+Fixed Proj4js/proj4 handling to work OL3. Deleted packages/openlayers/startup.js file because it is not needed anymore.
 
 ### mapping/mapmodule/plugin/getinfo
 
