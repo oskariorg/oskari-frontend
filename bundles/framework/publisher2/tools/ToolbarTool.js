@@ -133,7 +133,9 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 var data = me.__instance.publisher.data;
                 if (data && data.configuration && data.configuration.toolbar) {
                     me._storedData.toolbarConfig = _.cloneDeep(data.configuration.toolbar.conf);
-                    me.setEnabled(true);
+                    if (me._hasActiveTools()) {
+                        me.setEnabled(true);
+                    }
                 }
                 if (data && data.configuration && data.configuration.publishedmyplaces2) {
                     me._storedData.publishedmyplaces2Config = _.cloneDeep(data.configuration.publishedmyplaces2.conf);
@@ -712,6 +714,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 buttonGroup,
                 toolName,
                 me = this;
+
+            if (!me.toolbarConfig) {
+                me.toolbarConfig = _.cloneDeep(me._storedData.toolbarConfig);
+            }
 
             for (i = 0, ilen = me.buttonGroups.length; i < ilen; i++) {
                 buttonGroup = me.buttonGroups[i];
