@@ -139,6 +139,9 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 }
                 if (data && data.configuration && data.configuration.publishedmyplaces2) {
                     me._storedData.publishedmyplaces2Config = _.cloneDeep(data.configuration.publishedmyplaces2.conf);
+                    if (me._hasSelectedDrawTool()) {
+                        me.setEnabled(true);
+                    }
                 }
             }
         },
@@ -715,7 +718,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 toolName,
                 me = this;
 
-            if (!me.toolbarConfig) {
+            if (!me.toolbarConfig.toolbarId) {
                 me.toolbarConfig = _.cloneDeep(me._storedData.toolbarConfig);
             }
 
