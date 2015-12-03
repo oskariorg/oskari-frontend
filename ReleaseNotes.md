@@ -2,6 +2,10 @@
 
 ## 1.34.1
 
+### mapmodule/ol3
+
+Fixed scale calculation on ol3 mapmodule to match the ol2 version. Layers are now visible on same zoom levels on both implementations (layer min/maxscale limits).
+
 ### Proj4js/proj4 handling
 
 Fixed Proj4js/proj4 handling to work OL3. Deleted packages/openlayers/startup.js file because it is not needed anymore.
