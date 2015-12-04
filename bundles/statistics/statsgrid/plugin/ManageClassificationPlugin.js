@@ -346,7 +346,7 @@ Oskari.clazz.define(
 
             // Get classification method
             method = me._state.methodId;
-            //TODO: better management for non numeric values - colors overflows
+            //TODO: better management for non numeric values - colors owerflows
             if (me._hasNonNumericValues(params.COL_VALUES)) {
                 isNonNumeric = true;
                 this._hideClassificationOptions(el);
