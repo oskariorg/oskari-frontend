@@ -28,9 +28,12 @@ function() {
             me.__plugin.startPlugin(me.__sandbox);
         }
 
-        me.setEnabled(false);
+        if (pdata && Oskari.util.keyExists(pdata, 'configuration.publishedgrid.conf.allowClassification') && pdata.configuration.publishedgrid.conf.allowClassification === true) {
+            me.setEnabled(true);
+        } else {
+            me.setEnabled(false);
+        }
     },
-    bundleName: 'publishedgrid',
     /**
     * Set enabled.
     * @method setEnabled
@@ -47,10 +50,6 @@ function() {
             me.__plugin.showClassificationOptions(true);
         } else {
             me.__plugin.showClassificationOptions(false);
-        }
-
-        if(enabled === true && me.state.mode !== null && me.__plugin && typeof me.__plugin.setMode === 'function'){
-            me.__plugin.setMode(me.state.mode);
         }
     },
 

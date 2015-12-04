@@ -104,34 +104,34 @@
   background-color: yellow; }
 
 /* Filter popup */
-.divmanazerpopup .filter-row {
+.popup .filter-row {
   clear: both;
   padding-top: 10px; }
 
-.divmanazerpopup .filter-label {
+.popup .filter-label {
   float: left;
   width: 100px;
   /* FIXME use an h3 here or something... */
   font-weight: bold; }
 
-.divmanazerpopup .filter-value {
+.popup .filter-value {
   float: left;
   margin-left: 10px; }
 
-.divmanazerpopup .filter-container:after {
+.popup .filter-container:after {
   content: "";
   display: table;
   clear: both; }
 
-.divmanazerpopup .filter-select {
+.popup .filter-select {
   width: 195px; }
 
-.divmanazerpopup .filter-input {
+.popup .filter-input {
   width: 70px;
   float: left;
   margin-top: 10px; }
 
-.divmanazerpopup .filter-between {
+.popup .filter-between {
   display: none;
   float: left;
   margin: 20px 10px;

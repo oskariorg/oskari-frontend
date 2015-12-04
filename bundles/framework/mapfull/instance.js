@@ -162,7 +162,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 );
             });
 
-            
+
 
             module.start(me.getSandbox());
 
@@ -171,7 +171,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             }
 
             me.adjustMapSize();
-            
+
             // startup plugins
             if (me.conf.plugins) {
                 var plugins = this.conf.plugins,
@@ -400,16 +400,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          *
          */
         _handleProjectionDefs: function (defs) {
-            // ensure static projections are defined
-            Proj4js.defs = {
+            var defaultDefs = {
                 'EPSG:3067': '+proj=utm +zone=35 +ellps=GRS80 +units=m +no_defs',
                 'EPSG:4326': '+title=WGS 84 +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs'
             };
 
-            // use given defs instead
-            if (defs) {
-                Proj4js.defs = defs;
-            }
+            // OL3 uses proj4
+            if(window.proj4) {
+                // ensure static projections are defined
+                jQuery.each(defs || defaultDefs, function(srs, defs) {
+                    window.proj4.defs(srs, defs);
+                });
+            } 
+            // OL2 uses Proj4js
+            else {
+                if(!Proj4js) {
+                    window.Proj4js = {};
+                }
+                // ensure static projections are defined
+                Proj4js.defs = defs || defaultDefs;
+            }            
         },
 
         /**
@@ -510,7 +520,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
 
             // map location needs to be set before layers are added
             // otherwise f.ex. wfs layers break on add
-            if (state.east && ignoreLocation !== true) {
+            if (state.hasOwnProperty('east') && ignoreLocation !== true) {
                 me.getSandbox().getMap().moveTo(
                     state.east,
                     state.north,

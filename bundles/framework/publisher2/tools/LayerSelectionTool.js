@@ -91,9 +91,6 @@ function() {
             setTimeout(function(){
                 me._checkLayerSelections();
             }, 300);
-            if(me.state.mode && me.__plugin && typeof me.__plugin.setMode === 'function'){
-                me.__plugin.setMode(me.state.mode);
-            }
         } else if(me.__started === true) {
             me.__plugin.stopPlugin(me.__sandbox);
         }
@@ -304,7 +301,16 @@ function() {
      */
     init: function (data) {
         var me = this;
-        me.data  =data;
+        me.data = data;
+
+        if (data.configuration && data.configuration.mapfull && data.configuration.mapfull.conf && data.configuration.mapfull.conf.plugins) {
+            _.each(data.configuration.mapfull.conf.plugins, function(plugin) {
+                if (me.getTool().id === plugin.id) {
+                    me.setEnabled(true);
+                }
+            });
+        }
+
         for (var p in me.eventHandlers) {
             if (me.eventHandlers.hasOwnProperty(p)) {
                 me.__sandbox.registerForEventByName(me, p);
@@ -348,17 +354,6 @@ function() {
             }
             me.__mapmodule.unregisterPlugin(me.__plugin);
         }
-    },
-    /**
-    * Set mode to.
-    * @method setMode
-    * @public
-    *
-    * @param {String} mode the mode
-    */
-    setMode: function(mode){
-        var me = this;
-        me.state.mode = mode;
     }
 }, {
     'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],

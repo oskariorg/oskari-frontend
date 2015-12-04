@@ -1440,7 +1440,7 @@ Oskari.clazz.define(
                     }),
                     title: layerName
                 })
-                wfsMapImageLayer.opacity = layer.getOpacity() / 100;
+                wfsMapImageLayer.setOpacity(layer.getOpacity() / 100);
                 me.getMapModule().addLayer(wfsMapImageLayer, layer, layerName);
                 wfsMapImageLayer.setVisibility(true);
                 // also for draw

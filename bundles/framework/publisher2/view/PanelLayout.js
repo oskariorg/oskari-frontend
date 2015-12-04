@@ -230,7 +230,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
                 }
             }
 
-            if (me.data !== null && me.data !== undefined) {
+            if (me.data.metadata) {
                 me._changeMapModuleToolstyle(me.data.metadata.style);
             }
 

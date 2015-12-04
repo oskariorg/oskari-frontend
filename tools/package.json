@@ -65,7 +65,8 @@
     "build": "./node_modules/.bin/grunt release",
     "build-paikkis": "./node_modules/.bin/grunt release:paikkis:../applications/paikkatietoikkuna.fi/full-map/minifierAppSetup.json,../applications/paikkatietoikkuna.fi/full-map_guest/minifierAppSetup.json,../applications/paikkatietoikkuna.fi/published-map/minifierAppSetup.json",
     "build-asdi": "./node_modules/.bin/grunt release:asdi:../applications/asdi/asdi_guest/minifierAppSetup.json,../applications/asdi/asdi_published/minifierAppSetup.json",
-    "build-elf": "./node_modules/.bin/grunt release:elf:../applications/elf/elf_guest/minifierAppSetup.json,../applications/elf/elf_published/minifierAppSetup.json",
+    "build-elf" : "./node_modules/.bin/grunt release:elf:../applications/elf/elf_guest/minifierAppSetup.json,../applications/elf/elf_published/minifierAppSetup.json",
+    "build-ol3" : "./node_modules/.bin/grunt buildOskariOL3",
     "trim": "./node_modules/.bin/grunt trimtrailingspaces",
     "lint": "./node_modules/.bin/jshint ../bundles"
   },
@@ -77,6 +78,7 @@
     "karma-jasmine": "~0.3.6",
     "karma-phantomjs-launcher": "^0.2.1",
     "karma-requirejs": "~0.2.2",
-    "phantomjs": "^1.9.18"
+    "phantomjs": "^1.9.18",
+    "openlayers":"3.11.2"
   }
 }

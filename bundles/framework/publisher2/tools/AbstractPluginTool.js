@@ -40,11 +40,21 @@ function(sandbox, mapmodule, localization, instance, handlers) {
 
     /**
     * Initialize tool
+    * Override if tool is not mapfull plugin
     * @method init
     * @public
     */
-    init: function(){
-        // override
+    init: function(pdata){
+        var me = this,
+            data = pdata;
+
+        if (data.configuration && data.configuration.mapfull && data.configuration.mapfull.conf && data.configuration.mapfull.conf.plugins) {
+            _.each(data.configuration.mapfull.conf.plugins, function(plugin) {
+                if (me.getTool().id === plugin.id) {
+                    me.setEnabled(true);
+                }
+            });
+        }
     },
     /**
     * Get tool object.
@@ -87,13 +97,14 @@ function(sandbox, mapmodule, localization, instance, handlers) {
                 me.__plugin.stopPlugin(me.__sandbox);
             }
         }
-
-        if(enabled === true && me.state.mode !== null && me.__plugin && typeof me.__plugin.setMode === 'function'){
-            me.__plugin.setMode(me.state.mode);
-        }
         var event = sandbox.getEventBuilder('Publisher2.ToolEnabledChangedEvent')(me);
         sandbox.notifyAll(event);
     },
+
+    isEnabled: function () {
+        return this.state.enabled;
+    },
+
     /**
     * Get extra options.
     * @method getExtraOptions
@@ -169,22 +180,7 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     isShownInToolsPanel: function() {
         return true;
     },
-
-    /**
-    * Set mode to.
-    * @method setMode
-    * @public
-    *
-    * @param {String} mode the mode
-    */
-    setMode: function(mode){
-        var me = this;
-        me.state.mode = mode;
-
-        if(me.__plugin && typeof me.__plugin.setMode === 'function'){
-            me.__plugin.setMode(mode);
-        }
-    },
+    
     /**
     * Get group
     * @method getGroup
