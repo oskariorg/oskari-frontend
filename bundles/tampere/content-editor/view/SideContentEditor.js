@@ -65,6 +65,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         me.drawingActive = false;
         me.currentEditFeatureFid = null;
         me.allClickedFeatures = [];
+        me.fieldsTypes = [];
     }, {
         __name: 'ContentEditor',
         /**
@@ -184,10 +185,12 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
          * @param {jQuery} container reference to DOM element this component will be
          * rendered to
          */
-        render: function (container) {     	
+        render: function (container) {
             var me = this,
                 content = me.template.clone();
+            me.allLayers = me.sandbox.findAllSelectedMapLayers();
             me.getLayerGeometryType();
+            me.getFieldsTypes();
             me.mainPanel = content;
             var mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
             drawPlugin = Oskari.clazz.create('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin', {id: 'ContentEditorDrawPlugin',multipart: true});
@@ -252,8 +255,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             content.find('.content').append(buttonsContainer);
             content.find('.content').append($("<div />").addClass("properties-container"));
             
-            me.allLayers = me.sandbox.findAllSelectedMapLayers();
-            
             if (!me._checkLayerVisibility(me.layerId)) {
             	me.isLayerVisible = false;
             	me._setLayerVisibility(me.layerId, true);
@@ -270,6 +271,16 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 success : function(response) {
                     me._parseLayerGeometryResponse(response);
                     me._addDrawTools();
+                }
+            });
+        },
+        getFieldsTypes: function () {
+            var me = this;
+            jQuery.ajax({
+                type : 'GET',
+                url : ajaxUrl + 'action_route=GetWFSDescribeFeature&layer_id=' + me.layerId,
+                success : function(response) {
+                    me.fieldsTypes = response.propertyTypes;
                 }
             });
         },
@@ -489,7 +500,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         		}
         	}
         },
-        _handleInfoResult: function (data, create, editableFeatureFid) {
+        _handleInfoResult: function (data, create, editableFeatureFid) {            
             var layer = this._getLayerById(data.layerId);
             if (editableFeatureFid === undefined)
             {
@@ -696,6 +707,21 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
 						valColumn.append(value);
 					} else {
                         valInput = $(this.templates.tableInput);
+                        switch (this.fieldsTypes[key])
+                        {
+                            case 'string':
+                                valInput.prop('type', 'text');
+                                break;
+                            case 'numeric':
+                                valInput.prop('type', 'number');
+                                break;
+                            case 'decimal':
+                                valInput.prop('type', 'number').prop('step', 0.01);
+                                break;
+                            case 'date':
+                                valInput.prop('type', 'date');
+                                break;
+                        }
                         valInput.val(value);
                         valColumn.append(valInput);
 					}
