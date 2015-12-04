@@ -156,7 +156,7 @@
                   field: "indicator: " + header.title
               },
               vis_name = me.selectedLayer,
-              vis_attr = me.layerInfo.idTag,
+              vis_attr = me.layerInfo[me.selectedLayer].idTag,
               vis_codes = Object.keys(indicatorValues),
               col_values = vis_codes.map(function(regionKey) {
                   return indicatorValues[regionKey];
