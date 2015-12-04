@@ -14,7 +14,8 @@ Oskari.registerLocalization(
                 "save": "Tallenna",
                 "cancel": "Peruuta",
                 "ok": "Ok",
-                "addFeature": "Lisää kohde"
+                "addFeature": "Lisää kohde",
+                "editFeature": "Muokkaa kohdetta"
             },
             "featureUpdate": {
                 "header": "Kohde päivitetty",

@@ -14,7 +14,8 @@ Oskari.registerLocalization(
                 "save": "Save",
                 "cancel": "Cancel",
                 "ok": "Ok",
-                "addFeature": "Add feature"
+                "addFeature": "Add feature",
+                "editFeature": "Edit feature"
             },
             "featureUpdate": {
                 "header": "Feature update",
