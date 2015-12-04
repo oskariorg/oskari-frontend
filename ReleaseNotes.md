@@ -6,6 +6,11 @@
 
 Popup not show anymore dublicate info.
 
+### mapping/mapmodule/mapmodule.ol2
+
+ - _calculateScalesFromResolutions function removed. Use _calculateScalesImpl instead
+ - _ensureExists function removed as it is not used by anyone
+
 ### mapping/mapmodule/plugin/vectorlayer
 
 Both ol2 and ol3 implementations of VectorLayerPlugin have been changed to allow define mouse over cursor for added feature (added cursor option handling).
@@ -20,6 +25,10 @@ Bugfixes when disabling / enabling statsgrid or classification in publisher
 Fixed a bug in toolbar's allowed locations (drag & drop) 
 
 ## 1.34.1
+
+### mapmodule/ol3
+
+Fixed scale calculation on ol3 mapmodule to match the ol2 version. Layers are now visible on same zoom levels on both implementations (layer min/maxscale limits).
 
 ### Proj4js/proj4 handling
 

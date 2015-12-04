@@ -59,7 +59,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.request.PublishMapEdit
                 var defaultToolsConfig = me.__defaultToolsConfig;
                 me.instance.setPublishMode(true, me.instance.getLayersWithoutPublishRights(), defaultToolsConfig);
             }
-            
+
         },
         /**
          * @method _showEditNotification

@@ -180,7 +180,7 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     isShownInToolsPanel: function() {
         return true;
     },
-    
+
     /**
     * Get group
     * @method getGroup

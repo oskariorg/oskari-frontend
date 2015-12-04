@@ -209,11 +209,8 @@ Oskari.clazz.define(
                 sandbox = this.getSandbox(),
                 openLayerId = 'layer_' + layer.getId(),
                 imgUrl = layer.getWpsUrl() + layer.getWpsLayerId(),
-                layerScales = this.getMapModule().calculateLayerScales(
-                    layer.getMaxScale(),
-                    layer.getMinScale()
-                ),
-
+                minResolution = this.getMapModule().calculateResolution(layer.getMinScale()),
+                maxResolution = this.getMapModule().calculateResolution(layer.getMaxScale()),
                 wms = {
                     'URL': imgUrl,
                     'LAYERS': layer.getWpsName(),
@@ -227,6 +224,8 @@ Oskari.clazz.define(
                             'FORMAT': wms.FORMAT
                         }
                     }),
+                    minResolution: minResolution,
+                    maxResolution: maxResolution,
                     visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
                     opacity: layer.getOpacity() / 100
                 });

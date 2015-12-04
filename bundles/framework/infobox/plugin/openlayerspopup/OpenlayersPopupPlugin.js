@@ -313,7 +313,7 @@ Oskari.clazz.define(
                             contentData[i].actions[text]();
                         }
                     }
-                    if(!link.is('a')) {
+                    if(!link.is('a') || link.parents('.getinforesult_table').length) {
                         evt.stopPropagation();
                     }
                 },

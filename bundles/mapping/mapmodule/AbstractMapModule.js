@@ -282,6 +282,17 @@ Oskari.clazz.define(
         },
 
         /**
+         * @method _createMap
+         * Depricated
+         * @private
+         * Creates the OpenLayers.Map object
+         * @return {OpenLayers.Map}
+         */
+        _createMap: function () {
+            this.getSandbox().printWarn('_createMap is deprecated. Use _createMapImpl instead.');
+            this._createMapImpl();
+        },
+        /**
          * @method getPluginInstances
          * Returns object containing plugins that have been registered to the map.
          * @return {Object} contains plugin ids as keys and plugin objects as values
@@ -633,6 +644,16 @@ Oskari.clazz.define(
                     sandbox.registerForEventByName(this, p);
                 }
             }
+
+            //register request handlers
+            this.requestHandlers = {
+                mapLayerUpdateHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapLayerUpdateRequestHandler', sandbox, this),
+                mapMoveRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapMoveRequestHandler', sandbox, this),
+                showSpinnerRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.ShowProgressSpinnerRequestHandler', sandbox, this)
+            };
+            sandbox.addRequestHandler('MapModulePlugin.MapLayerUpdateRequest', this.requestHandlers.mapLayerUpdateHandler);
+            sandbox.addRequestHandler('MapMoveRequest', this.requestHandlers.mapMoveRequestHandler);
+            sandbox.addRequestHandler('ShowProgressSpinnerRequest', this.requestHandlers.showSpinnerRequestHandler);
 
             this.startPlugins(sandbox);
             this.updateCurrentState();
