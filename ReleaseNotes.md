@@ -2,6 +2,11 @@
 
 ## 1.35
 
+### mapping/mapmodule/mapmodule.ol2
+
+ - _calculateScalesFromResolutions function removed. Use _calculateScalesImpl instead
+ - _ensureExists function removed as it is not used by anyone
+
 ### mapping/mapmodule/plugin/vectorlayer
 
 Both ol2 and ol3 implementations of VectorLayerPlugin have been changed to allow define mouse over cursor for added feature (added cursor option handling).
