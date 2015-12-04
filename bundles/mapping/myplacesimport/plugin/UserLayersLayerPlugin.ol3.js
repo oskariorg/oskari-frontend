@@ -129,19 +129,14 @@ Oskari.clazz.define(
             var me = this,
                 layerId = _.last(layer.getId().split('_')),
                 imgUrl = (layer.getLayerUrls()[0] + layerId).replace(/&amp;/g, '&'),
-                layerScales = this.getMapModule()
-                    .calculateLayerScales(
-                    layer.getMaxScale(),
-                    layer.getMinScale()
-                ),
+                minResolution = this.getMapModule().calculateResolution(layer.getMinScale()),
+                maxResolution = this.getMapModule().calculateResolution(layer.getMaxScale()),
                 sandbox = this.getSandbox(),
-
                 wms = {
                     'URL': imgUrl,
                     'LAYERS': layer.getRenderingElement(),
                     'FORMAT': 'image/png'
                 },
-
                 openlayer = new ol.layer.Image({
                     source: new ol.source.ImageWMS({
                         url: wms.URL,
@@ -150,6 +145,8 @@ Oskari.clazz.define(
                             'FORMAT': wms.FORMAT
                         }
                     }),
+                    minResolution: minResolution,
+                    maxResolution: maxResolution,
                     visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
                     opacity: layer.getOpacity() / 100
                 });

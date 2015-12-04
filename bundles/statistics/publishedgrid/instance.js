@@ -102,8 +102,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
             mapModule.startPlugin(gridPlugin);
             me.gridPlugin = gridPlugin;
 
-            //if classification not explicitly allowed, don't allow it. 
-            //This will however also change the behaviour of existing published maps where classification has previously been allwed. 
+            //if classification not explicitly allowed, don't allow it.
+            //This will however also change the behaviour of existing published maps where classification has previously been allwed.
             //Those maps need to be manually updated in order to get the classifying back in action.
             var state = me.getState();
             if (!me.conf || (me.conf && !me.conf.allowClassification)) {
