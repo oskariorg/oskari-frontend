@@ -57,25 +57,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
             // TODO remove this whenever we're ready to add the containers when needed
             this._addMapControlPluginContainers();
+
             this.getMapEl().addClass('olMap');
             return map;
-        },
-
-        _startImpl: function () {
-            var sandbox = this.getSandbox();
-            this._addRequestHandlersImpl(sandbox);
-            return true;
-        },
-
-        _addRequestHandlersImpl: function (sandbox) {
-            this.requestHandlers = {
-                mapLayerUpdateHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapLayerUpdateRequestHandler', sandbox, this),
-                mapMoveRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapMoveRequestHandler', sandbox, this),
-                showSpinnerRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.ShowProgressSpinnerRequestHandler', sandbox, this)
-            };
-            sandbox.addRequestHandler('MapModulePlugin.MapLayerUpdateRequest', this.requestHandlers.mapLayerUpdateHandler);
-            sandbox.addRequestHandler('MapMoveRequest', this.requestHandlers.mapMoveRequestHandler);
-            sandbox.addRequestHandler('ShowProgressSpinnerRequest', this.requestHandlers.showSpinnerRequestHandler);
         },
 
         _getMapCenter: function() {
@@ -83,13 +67,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         },
         getMapZoom: function() {
             return this._map.getView().getZoom();
-        },
-        _getMapLayersByName: function(layerName) {
-            // FIXME: Cannot detect Marker layer, which is called Overlays in OL3
-            return [];
-        },
-        getExtent: function() {
-            return this._extent;
         },
 
         getMapScale: function () {
@@ -103,38 +80,28 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         },
 
         /**
-         * Returns zoom level for any scale
-         * Find 1st the scale range of OL3 resolution scales of requested scale
-         * @param scale any scale
-         * @param {Boolean} closest  closest resolution for scale
-         * @returns {number}  zoom level ( OL3 scale range min or closest)
+         * @method getMapEl
+         * Get jQuery map element
          */
-        getZoom4Scale: function (scale, closest) {
-            var resolution = this.calculateScaleResolution(scale),
-                zoom = this._options.resolutions.indexOf(resolution);
-            return  (zoom !== -1) ? zoom : 5;
+        getMapEl: function () {
+            var mapDiv = jQuery('#' + this._mapDivId);
+            if (!mapDiv.length) {
+                this.getSandbox().printWarn('mapDiv not found with #' + this._mapDivId);
+            }
+            return mapDiv;
         },
-
 
         /**
-        * @method getMaxZoomLevel
-        * Gets map max zoom level.
-        *
-        * @return {Integer} map max zoom level
-        */
-        getMaxZoomLevel: function(){
-            // getNumZoomLevels returns OL map resolutions length, so need decreased by one (this return max OL zoom)
-            return this._options.resolutions.length - 1;
+         * @method getMapElDom
+         * Get DOM map element
+         */
+        getMapElDom: function () {
+            return this.getMapEl().get(0);
         },
 
-        getInteractionInstance: function (interactionName) {
-            var interactions = this.getMap().getInteractions().getArray();
-            var interactionInstance = interactions.filter(function(interaction) {
-              return interaction instanceof interactionName;
-            })[0];
-            return interactionInstance;
-        },
 
+/* Check if the next functions are necessary. Do they work?
+------------------------------------------------------------------> */
         /**
          * @method getMapViewPortDiv
          * Returns a reference to the map viewport div for setting correct z-ordering of divs
@@ -153,16 +120,41 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             return this._map.layerContainerDiv;
         },
 
+        getMapLayersByName: function(layerName) {
+            // FIXME: Cannot detect Marker layer, which is called Overlays in OL3
+            return [];
+        },
+        getExtent: function() {
+            return this._extent;
+        },
+
+/*<--------------------------------------------------------------- */
+
+        getPixelFromCoordinate : function(lonlat) {
+            lonlat = this.normalizeLonLat(lonlat);
+            var px = this._map.getPixelFromCoordinate([lonlat.lon, lonlat.lat]);
+            return {
+                x : px[0],
+                y : px[1]
+            };
+        },
         /**
-         * @method _createMap
-         * Depricated
-         * @private
-         * Creates the OpenLayers.Map object
-         * @return {OpenLayers.Map}
-         */
-        _createMap: function () {
-            this.getSandbox().printWarn('_createMap is deprecated. Use _createMapImpl instead.');
-            this._createMapImpl();
+        * @method getMaxZoomLevel
+        * Gets map max zoom level.
+        *
+        * @return {Integer} map max zoom level
+        */
+        getMaxZoomLevel: function(){
+            // getNumZoomLevels returns OL map resolutions length, so need decreased by one (this return max OL zoom)
+            return this._options.resolutions.length - 1;
+        },
+
+        getInteractionInstance: function (interactionName) {
+            var interactions = this.getMap().getInteractions().getArray();
+            var interactionInstance = interactions.filter(function(interaction) {
+              return interaction instanceof interactionName;
+            })[0];
+            return interactionInstance;
         },
 
         /**
@@ -242,21 +234,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 sandbox.notifyAll(hoverEvent);
             });
 
-            //NOTE! The next is only for demos, delete when going to release ol3!
-            //map.on('dblclick', function (evt) {
-            //    if (this.emptyFeatures === undefined) {
-            //        this.emptyFeatures = false;
-            //    }
-            //    if (!this.emptyFeatures) {
-            //        me._testVectorPlugin(evt.coordinate[0], evt.coordinate[1]);
-            //        this.emptyFeatures = true;
-            //    } else {
-            //        var rn = 'MapModulePlugin.RemoveFeaturesFromMapRequest';
-            //        me._sandbox.postRequestByName(rn, []);
-            //        this.emptyFeatures = false;
-            //    }
-            //});
-
             me._map = map;
 
             return me._map;
@@ -282,6 +259,71 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
 
         },
+
+        /**
+         * @method zoomToScale
+         * Pans the map to the given position.
+         * @param {float} scale the new scale
+         * @param {Boolean} closest find the zoom level that most closely fits the specified scale.
+         *   Note that this may result in a zoom that does not exactly contain the entire extent.  Default is false
+         * @param {Boolean} suppressEnd true to NOT send an event about the map move
+         *  (other components wont know that the map has moved, only use when chaining moves and
+         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+         */
+        zoomToScale: function (scale, closest, suppressEnd) {
+            var zoom = this.getZoomForScale(scale, closest);
+            this._map.getView().setZoom(zoom);
+            this._updateDomainImpl();
+            if (suppressEnd !== true) {
+                this.notifyMoveEnd();
+            }
+        },
+
+        /**
+         * @method zoomToExtent
+         * Zooms the map to fit given bounds on the viewport
+         * @param {OpenLayers.Bounds} bounds BoundingBox that should be visible on the viewport
+         * @param {Boolean} suppressStart true to NOT send an event about the map starting to move
+         *  (other components wont know that the map has started moving, only use when chaining moves and
+         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+         * @param {Boolean} suppressEnd true to NOT send an event about the map move
+         *  (other components wont know that the map has moved, only use when chaining moves and
+         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+         */
+        zoomToExtent: function (bounds, suppressStart, suppressEnd) {
+            var extent = this.__boundsToArray(bounds);
+            this._map.getView().fit(extent, this._map.getSize());
+            this._updateDomainImpl();
+            // send note about map change
+            if (suppressStart !== true) {
+                this.notifyStartMove();
+            }
+            if (suppressEnd !== true) {
+                this.notifyMoveEnd();
+            }
+        },
+
+        /**
+         * @method moveMapToLonLat
+         * Moves the map to the given position.
+         * NOTE! Doesn't send an event if zoom level is not changed.
+         * Call notifyMoveEnd() afterwards to notify other components about changed state.
+         * @param {Number[] | Object} lonlat coordinates to move the map to
+         * @param {Number} zoomAdjust relative change to the zoom level f.ex -1 (optional)
+         * @param {Boolean} pIsDragging true if the user is dragging the map to a new location currently (optional)
+         */
+        moveMapToLonLat: function (lonlat, zoomAdjust, pIsDragging) {
+            // parse lonlat if it's given as an array instead of {lon : x, lat : y}
+            lonlat = this.normalizeLonLat(lonlat);
+            // should we spam events on dragmoves?
+            this._map.getView().setCenter([lonlat.lon, lonlat.lat]);
+
+            if (zoomAdjust) {
+                this.adjustZoomLevel(zoomAdjust, true);
+            }
+            this._updateDomainImpl();
+        },
+
         /**
          * @method _updateDomain
          * @private
@@ -329,6 +371,72 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             //var maxExtentBounds = new ol.extent(maxBbox.left, maxBbox.bottom, maxBbox.right, maxBbox.top);
             //mapVO.setMaxExtent(maxExtentBounds);
 
+        },
+
+        /**
+         * @method centerMap
+         * Moves the map to the given position and zoomlevel.
+         * @param {Number[] | Object} lonlat coordinates to move the map to
+         * @param {Number} zoomLevel absolute zoomlevel to set the map to
+         * @param {Boolean} suppressEnd true to NOT send an event about the map move
+         *  (other components wont know that the map has moved, only use when chaining moves and
+         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+         */
+        centerMap: function (lonlat, zoom, suppressEnd) {
+            // TODO: we have isValidLonLat(); maybe use it here
+            lonlat = this.normalizeLonLat(lonlat);
+            this._map.getView().setCenter([lonlat[0], lonlat[1]]);
+            this._map.getView().setZoom(zoom);
+            this._updateDomainImpl();
+            if (suppressEnd !== true) {
+                this.notifyMoveEnd();
+            }
+        },
+        
+        /**
+         * @method zoomTo
+         * Sets the zoom level to given value
+         * @param {Number} zoomLevel the new zoom level
+         */
+        zoomTo: function (zoomLevel) {
+            this.setZoomLevel(zoomLevel);
+        },
+        
+        /**
+         * @method panMapByPixels
+         * Pans the map by given amount of pixels.
+         * @param {Number} pX amount of pixels to pan on x axis
+         * @param {Number} pY amount of pixels to pan on y axis
+         * @param {Boolean} suppressStart true to NOT send an event about the map starting to move
+         *  (other components wont know that the map has started moving, only use when chaining moves and
+         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+         * @param {Boolean} suppressEnd true to NOT send an event about the map move
+         *  (other components wont know that the map has moved, only use when chaining moves and
+         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+         * @param {Boolean} isDrag true if the user is dragging the map to a new location currently (optional)
+         */
+        panMapByPixels: function (pX, pY, suppressStart, suppressEnd, isDrag) {
+            var view = this._map.getView(),
+                centerCoords = view.getCenter();
+                centerPixels = this._map.getPixelFromCoordinate(centerCoords),
+                newCenterPixels = [centerPixels[0] + pX, centerPixels[1] + pY],
+                newCenterCoords = this._map.getCoordinateFromPixel(newCenterPixels),
+                pan = ol.animation.pan({
+                    duration: 100,
+                    source: (centerCoords)
+                });
+
+            this._map.beforeRender(pan);
+            view.setCenter(newCenterCoords);
+
+            this._updateDomainImpl();
+            // send note about map change
+            if (suppressStart !== true) {
+                this.notifyStartMove();
+            }
+            if (suppressEnd !== true) {
+                this.notifyMoveEnd();
+            }
         },
 
         _addLayerImpl: function(layerImpl) {
@@ -379,6 +487,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
             return -1;
         },
+        
         getSize: function(){
             var sandbox = this._sandbox,
                 mapVO = sandbox.getMap(),
@@ -509,27 +618,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
         },
 
-
-        /**
-         * @method getMapEl
-         * Get jQuery map element
-         */
-        getMapEl: function () {
-            var mapDiv = jQuery('#' + this._mapDivId);
-            if (!mapDiv.length) {
-                this.getSandbox().printWarn('mapDiv not found with #' + this._mapDivId);
-            }
-            return mapDiv;
-        },
-
-        /**
-         * @method getMapElDom
-         * Get DOM map element
-         */
-        getMapElDom: function () {
-            return this.getMapEl().get(0);
-        },
-
         /**
          * Brings map layer to top
          * @method bringToTop
@@ -551,14 +639,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             this._map.getLayers().getArray().sort(function(a, b){
                 return a.getZIndex()-b.getZIndex();
             });
-        },
-        /**
-         * @method zoomTo
-         * Sets the zoom level to given value
-         * @param {Number} zoomLevel the new zoom level
-         */
-        zoomTo: function (zoomLevel) {
-            this.setZoomLevel(zoomLevel);
         },
 
         /**
@@ -582,29 +662,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         },
 
         /**
-         * @method zoomToExtent
-         * Zooms the map to fit given bounds on the viewport
-         * @param {OpenLayers.Bounds} bounds BoundingBox that should be visible on the viewport
-         * @param {Boolean} suppressStart true to NOT send an event about the map starting to move
-         *  (other components wont know that the map has started moving, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         * @param {Boolean} suppressEnd true to NOT send an event about the map move
-         *  (other components wont know that the map has moved, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         */
-        zoomToExtent: function (bounds, suppressStart, suppressEnd) {
-            var extent = this.__boundsToArray(bounds);
-            this._map.getView().fit(extent, this._map.getSize());
-            this._updateDomainImpl();
-            // send note about map change
-            if (suppressStart !== true) {
-                this.notifyStartMove();
-            }
-            if (suppressEnd !== true) {
-                this.notifyMoveEnd();
-            }
-        },
-        /**
          * Transforms a bounds object with left,top,bottom and right properties
          * to an OL3 array. Returns the parameter as is if those properties don't exist.
          * @param  {Object | Array} bounds bounds object or OL3 array
@@ -621,107 +678,19 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
             return extent;
         },
-        /**
-         * @method panMapByPixels
-         * Pans the map by given amount of pixels.
-         * @param {Number} pX amount of pixels to pan on x axis
-         * @param {Number} pY amount of pixels to pan on y axis
-         * @param {Boolean} suppressStart true to NOT send an event about the map starting to move
-         *  (other components wont know that the map has started moving, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         * @param {Boolean} suppressEnd true to NOT send an event about the map move
-         *  (other components wont know that the map has moved, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         * @param {Boolean} isDrag true if the user is dragging the map to a new location currently (optional)
-         */
-        panMapByPixels: function (pX, pY, suppressStart, suppressEnd, isDrag) {
-            var view = this._map.getView(),
-                centerCoords = view.getCenter();
-                centerPixels = this._map.getPixelFromCoordinate(centerCoords),
-                newCenterPixels = [centerPixels[0] + pX, centerPixels[1] + pY],
-                newCenterCoords = this._map.getCoordinateFromPixel(newCenterPixels),
-                pan = ol.animation.pan({
-                    duration: 100,
-                    source: (centerCoords)
-                });
 
-            this._map.beforeRender(pan);
-            view.setCenter(newCenterCoords);
-
-            this._updateDomainImpl();
-            // send note about map change
-            if (suppressStart !== true) {
-                this.notifyStartMove();
-            }
-            if (suppressEnd !== true) {
-                this.notifyMoveEnd();
-            }
-        },
 
         /**
-         * @method moveMapToLonLat
-         * Moves the map to the given position.
-         * NOTE! Doesn't send an event if zoom level is not changed.
-         * Call notifyMoveEnd() afterwards to notify other components about changed state.
-         * @param {Number[] | Object} lonlat coordinates to move the map to
-         * @param {Number} zoomAdjust relative change to the zoom level f.ex -1 (optional)
-         * @param {Boolean} pIsDragging true if the user is dragging the map to a new location currently (optional)
+         * Returns zoom level for any scale
+         * Find 1st the scale range of OL3 resolution scales of requested scale
+         * @param scale any scale
+         * @param {Boolean} closest  closest resolution for scale
+         * @returns {number}  zoom level ( OL3 scale range min or closest)
          */
-        moveMapToLonLat: function (lonlat, zoomAdjust, pIsDragging) {
-            // parse lonlat if it's given as an array instead of {lon : x, lat : y}
-            lonlat = this.normalizeLonLat(lonlat);
-            // should we spam events on dragmoves?
-            this._map.getView().setCenter([lonlat.lon, lonlat.lat]);
-
-            if (zoomAdjust) {
-                this.adjustZoomLevel(zoomAdjust, true);
-            }
-            this._updateDomainImpl();
-        },
-        getPixelFromCoordinate : function(lonlat) {
-            lonlat = this.normalizeLonLat(lonlat);
-            var px = this._map.getPixelFromCoordinate([lonlat.lon, lonlat.lat]);
-            return {
-                x : px[0],
-                y : px[1]
-            };
-        },
-        /**
-         * @method centerMap
-         * Moves the map to the given position and zoomlevel.
-         * @param {Number[] | Object} lonlat coordinates to move the map to
-         * @param {Number} zoomLevel absolute zoomlevel to set the map to
-         * @param {Boolean} suppressEnd true to NOT send an event about the map move
-         *  (other components wont know that the map has moved, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         */
-        centerMap: function (lonlat, zoom, suppressEnd) {
-            // TODO: we have isValidLonLat(); maybe use it here
-            lonlat = this.normalizeLonLat(lonlat);
-            this._map.getView().setCenter([lonlat[0], lonlat[1]]);
-            this._map.getView().setZoom(zoom);
-            this._updateDomainImpl();
-            if (suppressEnd !== true) {
-                this.notifyMoveEnd();
-            }
-        },
-        /**
-         * @method zoomToScale
-         * Pans the map to the given position.
-         * @param {float} scale the new scale
-         * @param {Boolean} closest find the zoom level that most closely fits the specified scale.
-         *   Note that this may result in a zoom that does not exactly contain the entire extent.  Default is false
-         * @param {Boolean} suppressEnd true to NOT send an event about the map move
-         *  (other components wont know that the map has moved, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         */
-        zoomToScale: function (scale, closest, suppressEnd) {
-            var zoom = this.getZoom4Scale(scale, closest);
-            this._map.getView().setZoom(zoom);
-            this._updateDomainImpl();
-            if (suppressEnd !== true) {
-                this.notifyMoveEnd();
-            }
+        getZoomForScale: function (scale, closest) {
+            var resolution = this.calculateScaleResolution(scale),
+                zoom = this._options.resolutions.indexOf(resolution);
+            return  (zoom !== -1) ? zoom : 5;
         },
 
         /**
