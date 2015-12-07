@@ -39,9 +39,11 @@ function() {
 
         if(me.state.enabled) {
             return {
-                mapfull: {
-                    conf: {
-                        plugins: [{ id: this.getTool().id, config: this.getPlugin().getConfig() }]
+                configuration: {
+                    mapfull: {
+                        conf: {
+                            plugins: [{ id: this.getTool().id, config: this.getPlugin().getConfig() }]
+                        }
                     }
                 }
             };
@@ -50,7 +52,7 @@ function() {
         }
     },
     isShownInToolsPanel: function() {
-        return false
+        return false;
     }
 }, {
     'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],

@@ -1,8 +1,10 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "nl",
     "key": "elf-language-selector",
     "value": {
-        "title" : "Change language",
+        "title": "Change language",
         "change": "Change"
     }
-});
+}
+);

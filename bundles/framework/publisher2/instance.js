@@ -25,6 +25,73 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
         this.publisher = null;
     }, {
         /**
+         * @static
+         * @property __name
+         */
+        __name: 'Publisher2',
+        /**
+         * @method getName
+         * @return {String} the name for the component
+         */
+        getName: function () {
+            return this.__name;
+        },
+        /**
+         * @method onEvent
+         * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
+         * @param {Oskari.mapframework.event.Event} event a Oskari event object
+         */
+        onEvent: function (event) {
+            var handler = this.eventHandlers[event.getName()];
+            if (!handler) {
+                return;
+            }
+            return handler.apply(this, [event]);
+        },
+
+        /**
+         * @property {Object} eventHandlers
+         * @static
+         */
+        eventHandlers: {
+            /**
+             * @method Publisher.MapPublishedEvent
+             * @param {Oskari.mapframework.bundle.publisher.event.MapPublishedEvent} event
+             */
+            'Publisher.MapPublishedEvent': function (event) {
+                var loc = this.getLocalization(),
+                    dialog = Oskari.clazz.create(
+                        'Oskari.userinterface.component.Popup'
+                    ),
+                    okBtn = dialog.createCloseButton(loc.BasicView.buttons.ok),
+                    url,
+                    iframeCode,
+                    textarea,
+                    content,
+                    width = event.getWidth(),
+                    height = event.getHeight();
+
+                okBtn.addClass('primary');
+                url = event.getUrl();
+                //url = this.sandbox.getLocalizedProperty(this.conf.publishedMapUrl) + event.getId();
+                iframeCode = '<div class="codesnippet"><code>&lt;iframe src="' + url + '" style="border: none;';
+                if (width !== null && width !== undefined) {
+                    iframeCode += ' width: ' + width + ';';
+                }
+
+                if (height !== null && height !== undefined) {
+                    iframeCode += ' height: ' + height + ';';
+                }
+
+                iframeCode += '"&gt;&lt;/iframe&gt;</code></div>';
+
+                content = loc.published.desc + '<br/><br/>' + iframeCode;
+
+                dialog.show(loc.published.title, content, [okBtn]);
+                this.setPublishMode(false);
+            }
+        },
+        /**
          * @method afterStart
          */
         afterStart: function () {
@@ -34,9 +101,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             this.__service = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.PublisherService', sandbox);
             // create and register request handler
             var reqHandler = Oskari.clazz.create(
-                    'Oskari.mapframework.bundle.publisher2.request.PublishMapEditorRequestHandler',
+                    'Oskari.mapframework.bundle.publisher.request.PublishMapEditorRequestHandler',
                     this);
-            sandbox.addRequestHandler('Publisher2.PublishMapEditorRequest', reqHandler);
+            sandbox.addRequestHandler('Publisher.PublishMapEditorRequest', reqHandler);
 
             // Let's add publishable filter to layerlist if user is logged in
             if(sandbox.getUser().isLoggedIn()) {
@@ -161,6 +228,43 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             sandbox.request(me.getName(), request);
 
             return layer;
+        },
+        /**
+         * @method hasPublishRight
+         * Checks if the layer can be published.
+         * @param
+         * {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer}
+         * layer
+         *      layer to check
+         * @return {Boolean} true if the layer can be published
+         */
+        hasPublishRight: function (layer) {
+            // permission might be "no_publication_permission"
+            // or nothing at all
+            return (layer.getPermission('publish') === 'publication_permission_ok');
+        },
+
+        /**
+         * @method getLayersWithoutPublishRights
+         * Checks currently selected layers and returns a subset of the list
+         * that has the layers that can't be published. If all selected
+         * layers can be published, returns an empty list.
+         * @return
+         * {Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Mixed}
+         * list of layers that can't be published.
+         */
+        getLayersWithoutPublishRights: function () {
+            var deniedLayers = [],
+                selectedLayers = this.sandbox.findAllSelectedMapLayers(),
+                i,
+                layer;
+            for (i = 0; i < selectedLayers.length; i += 1) {
+                layer = selectedLayers[i];
+                if (!this.hasPublishRight(layer)) {
+                    deniedLayers.push(layer);
+                }
+            }
+            return deniedLayers;
         },
 
         /**

@@ -97,9 +97,3 @@ div.oskari-flyoutcontent.featuredata ul.tabsItem li a.loading {
 
 div.oskari-flyoutcontent.featuredata ul.tabsItem li a.error {
   color: red; }
-
-div.tool.active {
-  background-color: #e6e6e6; }
-
-label.selectFeaturesOptions {
-  display: block; }

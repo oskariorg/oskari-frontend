@@ -37,8 +37,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibi
             var layers = module.getOLMapLayers(layer.getId()),
                 i;
             for (i = 0; i < layers.length; i++) {
-                layers[i].setVisibility(layer.isVisible());
-                layers[i].display(layer.isVisible());
+                layers[i].setVisible(layer.isVisible());
             }
 
             // notify other components

@@ -21,6 +21,7 @@ Oskari.registerLocalization(
                 "privateTooltip": "Karttataso on yksityinen. Muuta karttataso julkiseksi klikkaamalla tästä.",
                 "publicTooltip": "Karttataso on julkinen. Muuta karttataso yksityiseksi klikkaamalla tästä."
             },
+            "addCategoryFormButton": "Uusi karttataso",
             "addCategory": "Lisää karttataso",
             "editCategory": "Muokkaa karttatasoa",
             "deleteCategory": "Poista karttataso",

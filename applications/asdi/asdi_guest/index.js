@@ -45,14 +45,6 @@ jQuery(document).ready(function() {
 
     Oskari.setLoaderMode('dev');
     Oskari.setPreloaded(preloaded);
-
-  
-
-    /* let's start some ASDI specific ops */
-    function startASDI(sb) {
-
-
-    }
  
     /* let's start the app after config has been loaded successfully */
     function start(appSetup, appConfig, cb) {
@@ -60,12 +52,7 @@ jQuery(document).ready(function() {
 
         app.setApplicationSetup(appSetup);
         app.setConfiguration(appConfig);
-        app.startApplication(function(startupInfos) {
-            var instance = startupInfos.bundlesInstanceInfos.mapfull.bundleInstance;
-            if(cb) {
-                cb(instance);
-            }
-        });
+        app.startApplication();
     }
 
 
@@ -85,9 +72,7 @@ jQuery(document).ready(function() {
                 var appSetup = {
                     "startupSequence" : app.startupSequence
                 };
-                start(appSetup, app.configuration, function(instance) {
-                    startASDI();
-                });
+                start(appSetup, app.configuration);
             } else {
                 jQuery('#mapdiv').append('Unable to start');
             }

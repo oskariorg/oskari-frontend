@@ -38,9 +38,11 @@ function() {
 
         if(me.state.enabled) {
             return {
-                mapfull: {
-                    conf: {
-                        plugins: [{ id: this.getTool().id, config: this.getPlugin().getConfig() }]
+                configuration: {
+                    mapfull: {
+                        conf: {
+                            plugins: [{ id: this.getTool().id, config: this.getPlugin().getConfig() }]
+                        }
                     }
                 }
             };

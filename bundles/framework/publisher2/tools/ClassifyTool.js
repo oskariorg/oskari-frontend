@@ -116,13 +116,22 @@ function() {
     */
     getValues: function () {
         var me = this,
-            saveState = {
-                tool: me.getTool().id,
-                show: me.state.enabled,
-                subTools : []
+            statsGrid = me.__sandbox.getStatefulComponents().statsgrid,
+            statsGridState = me._filterIndicators(_.clone(statsGrid.state, true));
+        if(me.state.enabled && statsGridState) {
+            return {
+                configuration: {
+                    mapfull: {
+                        conf: {
+                            plugins: [{ id: this.getTool().id, config: this.getPlugin().getConfig() }]
+                        }
+                    },
+                    publishedgrid: statsGridState
+                }
             };
-
-        return saveState;
+        } else {
+            return null;
+        }
     },
 
     /**
