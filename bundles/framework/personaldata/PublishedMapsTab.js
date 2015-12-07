@@ -386,10 +386,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 link.append(name);
                 link.bind('click', function () {
                     var view = me._getViewById(data.id),
-                        size = view ? view.state.mapfull.config.size : {
-                            height: '525px',
-                            width: '700px'
-                        };
+                        size = view.metadata && view.metadata.size ? view.metadata.size : undefined;
                     me._showIframeCodePopup(url, size, view.name);
                 });
                 return link;

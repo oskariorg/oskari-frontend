@@ -13,7 +13,9 @@ Removed unneccary code:
 
 Bugfixes when disabling / enabling statsgrid or classification in publisher
 
-Fixed a bug in toolbar's allowed locations (drag & drop) 
+Fixed a bug in toolbar's allowed locations (drag & drop)
+
+Replaced mobile / desktop - preview size settings with predefined (fill, small etc.) iframe size settings.
 
 ## 1.34.1
 

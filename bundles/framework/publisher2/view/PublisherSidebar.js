@@ -480,9 +480,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                         okBtn = dialog.createCloseButton(me.loc.buttons.ok);
                     dialog.show(me.loc.error.title, me.loc.error.saveFailed, [okBtn]);
                 };
-            if (selections.size) {
-                totalWidth = selections.size.width + 'px';
-                totalHeight = selections.size.height + 'px';
+            if (selections.metadata.size) {
+                totalWidth = selections.metadata.size.width + 'px';
+                totalHeight = selections.metadata.size.height + 'px';
             }
             // make the ajax call
             jQuery.ajax({
