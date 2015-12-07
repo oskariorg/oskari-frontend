@@ -42,7 +42,9 @@ Oskari.clazz.define(
 
         me._id = id;
         me._mapDivId = mapDivId;
-        me._imageUrl = imageUrl;
+        // FIXME: use imageUrl || '/Oskari/bundles';
+        // requires db update since currently uses /Oskari/resources
+        me._imageUrl = '/Oskari/bundles';
         me._options = {
             resolutions: [2000, 1000, 500, 200, 100, 50, 20, 10, 4, 2, 1, 0.5, 0.25],
             srsName : 'EPSG:3067',
@@ -69,23 +71,10 @@ Oskari.clazz.define(
 
         // _mapScales are calculated in _calculateScalesImpl based on resolutions in options
         me._mapScales = [];
+        // array of resolutions
         me._mapResolutions = me._options.resolutions;
-        // arr
-        me._maxExtent = me._options.maxExtent || {};
         // props: left,bottom,right, top
-        if(me._maxExtent.left) {
-            // FIXME: isn't this ol3 specific?
-            me._extent = [
-                me._maxExtent.left,
-                me._maxExtent.bottom,
-                me._maxExtent.right,
-                me._maxExtent.top
-            ];
-        }
-        else {
-            me._extent = [];
-        }
-        // arr
+        me._maxExtent = me._options.maxExtent || {};
 
         me._sandbox = null;
         me._stealth = false;
@@ -148,6 +137,9 @@ Oskari.clazz.define(
         getMap: function () {
             return this._map;
         },
+        getMapElementId : function() {
+            return this._mapDivId;
+        },
         /**
          * @method start
          * implements BundleInstance protocol start method
@@ -164,8 +156,7 @@ Oskari.clazz.define(
             sandbox.printDebug('Starting ' + this.getName());
 
             // register events handlers
-            var p;
-            for (p in this.eventHandlers) {
+            for (var p in this.eventHandlers) {
                 if (this.eventHandlers.hasOwnProperty(p)) {
                     sandbox.registerForEventByName(this, p);
                 }
@@ -189,7 +180,6 @@ Oskari.clazz.define(
         _startImpl: function () {
             return true;
         },
-
         /**
          * @method stop
          * implements BundleInstance protocol stop method
@@ -258,12 +248,6 @@ Oskari.clazz.define(
          * @return {String}
          */
         getImageUrl: function () {
-            if (!this._imageUrl) {
-                // default if not set
-                return '/Oskari/bundles';
-            }
-            return '/Oskari/bundles';
-            // TODO Oskari2 change, fixed temporary to always return /Oskari/bundles -folder. Remove this when configs are updated.
             return this._imageUrl;
         },
         /**
@@ -575,9 +559,6 @@ Oskari.clazz.define(
         },
         getResolution: function () {
             return this.getResolutionArray()[this.getMapZoom()];
-        },
-        getExtentArray: function () {
-            return this._extent;
         },
 
         /**

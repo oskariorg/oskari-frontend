@@ -30,6 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
     function (id, imageUrl, options, mapDivId) {
         this._dpi = 72;   //   25.4 / 0.28;  use OL2 dpi so scales are calculated the same way
+        this._extent = this.__boundsToArray(this._maxExtent);
     }, {
         /**
          * @method _initImpl
@@ -58,41 +59,39 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             // object... so we will move the map to correct location
             // by making a MapMoveRequest in application startup
 
-            var maxExtent = me._maxExtent;
-            var extent = me._extent;
-
-            var projection = ol.proj.get(me._projectionCode);
-            projection.setExtent(extent);
-
-            var projectionExtent = projection.getExtent();
-            //me._projection = projection;
-
             var map = new ol.Map({
-                extent: projectionExtent,
-                isBaseLayer: true,
-                maxExtent: maxExtent,
                 keyboardEventTarget: document,
-                target: this._mapDivId
-
+                target: this.getMapElementId()
             });
-
-            var resolutions = me._options.resolutions;
-
+            
+            var projection = ol.proj.get(me.getProjection());
+            projection.setExtent(me._extent);
 
             map.setView(new ol.View({
+                extent: projection.getExtent(),
                 projection: projection,
                 center: [383341, 6673843],
                 zoom: 5,
-                resolutions: resolutions
+                resolutions: this.getResolutionArray()
             }));
 
+            me._setupMapEvents(map);
+
+            return map;
+        },
+        /**
+         * Add map event handlers
+         * @method @private _setupMapEvents
+         */
+        _setupMapEvents: function(map){
+            var me = this;
+            var sandbox = me._sandbox;
 
             map.on('moveend', function(evt) {
                 var map = evt.map;
                 var extent = map.getView().calculateExtent(map.getSize());
                 var center = map.getView().getCenter();
 
-                var sandbox = me._sandbox;
                 sandbox.getMap().setMoving(false);
                 sandbox.printDebug("sending AFTERMAPMOVE EVENT from map Event handler");
 
@@ -104,7 +103,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             });
 
             map.on('singleclick', function (evt) {
-                var sandbox = me._sandbox;
                 var CtrlPressed = evt.originalEvent.ctrlKey;
                 var lonlat = {
                   lon : evt.coordinate[0],
@@ -115,12 +113,13 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             });
 
             map.on('pointermove', function (evt) {
-                var sandbox = me._sandbox;
                 var hoverEvent = sandbox.getEventBuilder('MouseHoverEvent')(evt.coordinate[0], evt.coordinate[1], false);
                 sandbox.notifyAll(hoverEvent);
             });
-
-            return map;
+        },
+        _startImpl: function () {
+            this.getMap().render();
+            return true;
         },
         _getMapCenter: function() {
             return this._map.getView().getCenter();
@@ -617,7 +616,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {Array}          Ol3 presentation of bounds
          */
         __boundsToArray : function(bounds) {
-            var extent = bounds;
+            var extent = bounds || [];
             if(bounds.left && bounds.top && bounds.right && bounds.bottom) {
               extent = [
                     bounds.left,

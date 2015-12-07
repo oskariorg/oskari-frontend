@@ -93,8 +93,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 controls: [],
                 units: this._options.units, //'m',
                 maxExtent: mapExtent,
-                resolutions: this._options.resolutions,
-                projection: this._options.srsName,
+                resolutions: this.getResolutionArray(),
+                projection: this.getProjection(),
                 isBaseLayer: true,
                 center: lonlat,
                 // https://github.com/openlayers/openlayers/blob/master/notes/2.13.md#map-property-fallthrough-defaults-to-false
@@ -105,16 +105,16 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 zoomMethod: null
             });
 
-            me._addClickControl(map);
+            me._setupMapEvents(map);
 
             return map;
         },
 
         /**
          * Add map click handler
-         * @method @private _addClickControl
+         * @method @private _setupMapEvents
          */
-        _addClickControl: function(map){
+        _setupMapEvents: function(map){
             var me = this;
             //Set up a click handler
             OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
@@ -143,6 +143,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var click = new OpenLayers.Control.Click();
             map.addControl(click);
             click.activate();
+        },
+        _startImpl: function () {
+            this.getMap().render(this.getMapElementId());
+            return true;
         },
         _getMapCenter: function () {
             return this._map.getCenter();
