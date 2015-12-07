@@ -29,22 +29,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
      */
 
     function (id, imageUrl, options, mapDivId) {
-        this._options = {
-            resolutions: [2000, 1000, 500, 200, 100, 50, 20, 10, 4, 2, 1, 0.5, 0.25],
-            srsName: 'EPSG:3067',
-            units: 'm'
-        };
-        this._mapDivId = mapDivId || 'mapdiv';
-        this._dpi = 72;   //   25.4 / 0.28;  use OL2 dpi
-        // override defaults
-        var key;
-        if (options) {
-            for (key in options) {
-                if (options.hasOwnProperty(key)) {
-                    this._options[key] = options[key];
-                }
-            }
-        }
+        this._dpi = 72;   //   25.4 / 0.28;  use OL2 dpi so scales are calculated the same way
     }, {
         /**
          * @method _initImpl
@@ -53,15 +38,90 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {OpenLayers.Map}
          */
         _initImpl: function (sandbox, options, map) {
-
-
             // TODO remove this whenever we're ready to add the containers when needed
             this._addMapControlPluginContainers();
-
+            // css references use olMap as selectors so we need to add it
             this.getMapEl().addClass('olMap');
             return map;
         },
 
+        /**
+         * @method createMap
+         * Creates Openlayers 3 map implementation
+         * @return {ol.Map}
+         */
+        createMap: function() {
+
+            var me = this;
+            var sandbox = me._sandbox;
+            // this is done BEFORE enhancement writes the values to map domain
+            // object... so we will move the map to correct location
+            // by making a MapMoveRequest in application startup
+
+            var maxExtent = me._maxExtent;
+            var extent = me._extent;
+
+            var projection = ol.proj.get(me._projectionCode);
+            projection.setExtent(extent);
+
+            var projectionExtent = projection.getExtent();
+            //me._projection = projection;
+
+            var map = new ol.Map({
+                extent: projectionExtent,
+                isBaseLayer: true,
+                maxExtent: maxExtent,
+                keyboardEventTarget: document,
+                target: this._mapDivId
+
+            });
+
+            var resolutions = me._options.resolutions;
+
+
+            map.setView(new ol.View({
+                projection: projection,
+                center: [383341, 6673843],
+                zoom: 5,
+                resolutions: resolutions
+            }));
+
+
+            map.on('moveend', function(evt) {
+                var map = evt.map;
+                var extent = map.getView().calculateExtent(map.getSize());
+                var center = map.getView().getCenter();
+
+                var sandbox = me._sandbox;
+                sandbox.getMap().setMoving(false);
+                sandbox.printDebug("sending AFTERMAPMOVE EVENT from map Event handler");
+
+                var lonlat = map.getView().getCenter();
+                me._updateDomainImpl();
+                var sboxevt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat[0], lonlat[1], map.getView().getZoom(), false, me.getMapScale());
+                sandbox.notifyAll(sboxevt);
+
+            });
+
+            map.on('singleclick', function (evt) {
+                var sandbox = me._sandbox;
+                var CtrlPressed = evt.originalEvent.ctrlKey;
+                var lonlat = {
+                  lon : evt.coordinate[0],
+                  lat : evt.coordinate[1]
+                };
+                var mapClickedEvent = sandbox.getEventBuilder('MapClickedEvent')(lonlat, evt.pixel[0], evt.pixel[1], CtrlPressed);
+                sandbox.notifyAll(mapClickedEvent);
+            });
+
+            map.on('pointermove', function (evt) {
+                var sandbox = me._sandbox;
+                var hoverEvent = sandbox.getEventBuilder('MouseHoverEvent')(evt.coordinate[0], evt.coordinate[1], false);
+                sandbox.notifyAll(hoverEvent);
+            });
+
+            return map;
+        },
         _getMapCenter: function() {
             return this._map.getView().getCenter();
         },
@@ -78,27 +138,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var scale = resolution * mpu * 39.37 * this._dpi;
             return scale;
         },
-
-        /**
-         * @method getMapEl
-         * Get jQuery map element
-         */
-        getMapEl: function () {
-            var mapDiv = jQuery('#' + this._mapDivId);
-            if (!mapDiv.length) {
-                this.getSandbox().printWarn('mapDiv not found with #' + this._mapDivId);
-            }
-            return mapDiv;
-        },
-
-        /**
-         * @method getMapElDom
-         * Get DOM map element
-         */
-        getMapElDom: function () {
-            return this.getMapEl().get(0);
-        },
-
 
 /* Check if the next functions are necessary. Do they work?
 ------------------------------------------------------------------> */
@@ -155,96 +194,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
               return interaction instanceof interactionName;
             })[0];
             return interactionInstance;
-        },
-
-        /**
-         * @method createMap
-         * @private
-         * OL3!!!
-         * Creates the OpenLayers.Map object
-         * @return {OpenLayers.Map}
-         */
-        _createMapImpl: function() {
-
-            var me = this;
-            var sandbox = me._sandbox;
-            // this is done BEFORE enhancement writes the values to map domain
-            // object... so we will move the map to correct location
-            // by making a MapMoveRequest in application startup
-
-            var maxExtent = me._maxExtent;
-            var extent = me._extent;
-
-            var projection = ol.proj.get(me._projectionCode);
-            projection.setExtent(extent);
-
-            var projectionExtent = projection.getExtent();
-            me._projection = projection;
-
-            var map = new ol.Map({
-                extent: projectionExtent,
-                isBaseLayer: true,
-                maxExtent: maxExtent,
-                keyboardEventTarget: document,
-                target: this._mapDivId
-
-            });
-
-            var resolutions = me._options.resolutions;
-
-
-            map.setView(new ol.View({
-                projection: projection,
-                center: [383341, 6673843],
-                zoom: 5,
-                resolutions: resolutions
-            }));
-
-
-            map.on('moveend', function(evt) {
-                var map = evt.map;
-                var extent = map.getView().calculateExtent(map.getSize());
-                var center = map.getView().getCenter();
-
-                var sandbox = me._sandbox;
-                sandbox.getMap().setMoving(false);
-                sandbox.printDebug("sending AFTERMAPMOVE EVENT from map Event handler");
-
-                var lonlat = map.getView().getCenter();
-                me._updateDomainImpl();
-                var sboxevt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat[0], lonlat[1], map.getView().getZoom(), false, me.getMapScale());
-                sandbox.notifyAll(sboxevt);
-
-            });
-
-            map.on('singleclick', function (evt) {
-                var sandbox = me._sandbox;
-                var CtrlPressed = evt.originalEvent.ctrlKey;
-                var lonlat = {
-                  lon : evt.coordinate[0],
-                  lat : evt.coordinate[1]
-                };
-                var mapClickedEvent = sandbox.getEventBuilder('MapClickedEvent')(lonlat, evt.pixel[0], evt.pixel[1], CtrlPressed);
-                sandbox.notifyAll(mapClickedEvent);
-            });
-
-            map.on('pointermove', function (evt) {
-                var sandbox = me._sandbox;
-                var hoverEvent = sandbox.getEventBuilder('MouseHoverEvent')(evt.coordinate[0], evt.coordinate[1], false);
-                sandbox.notifyAll(hoverEvent);
-            });
-
-            me._map = map;
-
-            return me._map;
-        },
-        /**
-         * @method createBaseLayer
-         * Creates a dummy base layer and adds it to the map. Nothing to do with Oskari maplayers really.
-         * @private
-         */
-        _createBaseLayer: function() {
-            // do nothing
         },
 
         _calculateScalesImpl: function(resolutions) {

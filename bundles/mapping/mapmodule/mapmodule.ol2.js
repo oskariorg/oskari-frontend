@@ -1,11 +1,7 @@
 /**
  * @class Oskari.mapframework.ui.module.common.MapModule
  *
- * Provides map functionality/Wraps actual map implementation (Openlayers).
- * Currently hardcoded at 13 zoomlevels (0-12) and SRS projection code 'EPSG:3067'.
- * There are plans to make these more configurable in the future.
- *
- * See http://www.oskari.org/trac/wiki/DocumentationBundleMapmodule
+ * Provides map functionality/Wraps actual map implementation for Openlayers 2.
  */
 Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
     /**
@@ -33,42 +29,29 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
      */
 
     function (id, imageUrl, options, mapDivId) {
-        this._options = {
-            resolutions: [2000, 1000, 500, 200, 100, 50, 20, 10, 4, 2, 1, 0.5, 0.25],
-            srsName: 'EPSG:3067',
-            units: 'm',
-            openLayers : {
-                imageReloadAttemps: 5,
-                onImageLoadErrorColor: 'transparent'
-            }
-        };
-        this._mapDivId = mapDivId;
-        this._mapClickedBuilder;
-        this._progressSpinner = null;
-
-        // override defaults
-        var key;
-        if (options) {
-            for (key in options) {
-                if (options.hasOwnProperty(key)) {
-                    this._options[key] = options[key];
-                }
-            }
-        }
     }, {
 
         /**
          * @method _initImpl
          * Implements Module protocol init method. Creates the OpenLayers Map.
+         * Called at the end of AbstractMapModule init() 
          * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
          * @return {OpenLayers.Map}
          */
         _initImpl: function (sandbox, options, map) {
             /*Added to handle pink tiles */
-            OpenLayers.IMAGE_RELOAD_ATTEMPTS = options.openLayers.imageReloadAttemps;
-            OpenLayers.Util.onImageLoadErrorColor = options.openLayers.onImageLoadErrorColor;
+            var olOpts = options.openLayers || {};
+            OpenLayers.IMAGE_RELOAD_ATTEMPTS = olOpts.imageReloadAttemps || 5;
+            OpenLayers.Util.onImageLoadErrorColor = olOpts.onImageLoadErrorColor || 'transparent';
 
-            this._createBaseLayer();
+            // This is something that OL2 needs to work, without it Ol2 doesn't startup correctly
+            // can be ignored after it's done
+            var base = new OpenLayers.Layer('BaseLayer', {
+                layerId: 0,
+                isBaseLayer: true,
+                displayInLayerSwitcher: false
+            });
+            this._map.addLayer(base);
 
             // TODO remove this whenever we're ready to add the containers when needed
             this._addMapControlPluginContainers();
@@ -76,6 +59,91 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             return map;
         },
 
+        /**
+         * @method createMap
+         * @private
+         * Creates Openlayers 2 map implementation
+         * Called by init
+         * @return {OpenLayers.Map}
+         */
+        createMap: function () {
+            var me = this;
+            var sandbox = this._sandbox;
+            // this is done BEFORE enhancement writes the values to map domain
+            // object... so we will move the map to correct location
+            // by making a MapMoveRequest in application startup
+            var lonlat = new OpenLayers.LonLat(0, 0),
+                mapExtent = new OpenLayers.Bounds(0, 0, 10000000, 10000000);
+            // FIXME use some cleaner check
+            if (this._options !== null &&
+                this._options !== undefined &&
+                this._options.maxExtent !== null &&
+                this._options.maxExtent !== undefined &&
+                this._options.maxExtent.left !== null &&
+                this._options.maxExtent.left !== undefined &&
+                this._options.maxExtent.bottom !== null &&
+                this._options.maxExtent.bottom !== undefined &&
+                this._options.maxExtent.right !== null &&
+                this._options.maxExtent.right !== undefined &&
+                this._options.maxExtent.top !== null &&
+                this._options.maxExtent.top !== undefined) {
+                mapExtent = new OpenLayers.Bounds(this._options.maxExtent.left, this._options.maxExtent.bottom, this._options.maxExtent.right, this._options.maxExtent.top);
+            }
+            var map = new OpenLayers.Map({
+                controls: [],
+                units: this._options.units, //'m',
+                maxExtent: mapExtent,
+                resolutions: this._options.resolutions,
+                projection: this._options.srsName,
+                isBaseLayer: true,
+                center: lonlat,
+                // https://github.com/openlayers/openlayers/blob/master/notes/2.13.md#map-property-fallthrough-defaults-to-false
+                // fallThrough: true is needed for statsgrid drag resizing
+                fallThrough: true,
+                theme: null,
+                zoom: 0,
+                zoomMethod: null
+            });
+
+            me._addClickControl(map);
+
+            return map;
+        },
+
+        /**
+         * Add map click handler
+         * @method @private _addClickControl
+         */
+        _addClickControl: function(map){
+            var me = this;
+            //Set up a click handler
+            OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
+                defaultHandlerOptions: {
+                    'double': true,
+                    'stopDouble': true
+                },
+
+                initialize: function(options) {
+                    this.handlerOptions = OpenLayers.Util.extend(
+                        {}, this.defaultHandlerOptions
+                    );
+                    OpenLayers.Control.prototype.initialize.apply(
+                        this, arguments
+                    );
+                    this.handler = new OpenLayers.Handler.Click(
+                        this, {
+                            'click': function(evt){
+                                me.__sendMapClickEvent(evt);
+                            }
+                        }, this.handlerOptions
+                    );
+                }
+            });
+
+            var click = new OpenLayers.Control.Click();
+            map.addControl(click);
+            click.activate();
+        },
         _getMapCenter: function () {
             return this._map.getCenter();
         },
@@ -86,26 +154,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
         getMapScale: function () {
             return this._map.getScale();
-        },
-
-        /**
-         * @method getMapEl
-         * Get jQuery map element
-         */
-        getMapEl: function () {
-            var mapDiv = jQuery('#' + this._mapDivId);
-            if (!mapDiv.length) {
-                this.getSandbox().printWarn('mapDiv not found with #' + this._mapDivId);
-            }
-            return mapDiv;
-        },
-
-        /**
-         * @method getMapElDom
-         * Get DOM map element
-         */
-        getMapElDom: function () {
-            return this.getMapEl().get(0);
         },
 
 /* Check if the next functions are necessary. Do they work?
@@ -155,91 +203,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         },
 
         /**
-         * @method _createMapImpl
-         * @private
-         * Creates the OpenLayers.Map object
-         * @return {OpenLayers.Map}
-         */
-        _createMapImpl: function () {
-            var me = this;
-            var sandbox = this._sandbox;
-            // this is done BEFORE enhancement writes the values to map domain
-            // object... so we will move the map to correct location
-            // by making a MapMoveRequest in application startup
-            var lonlat = new OpenLayers.LonLat(0, 0),
-                mapExtent = new OpenLayers.Bounds(0, 0, 10000000, 10000000);
-            // FIXME use some cleaner check
-            if (this._options !== null &&
-                this._options !== undefined &&
-                this._options.maxExtent !== null &&
-                this._options.maxExtent !== undefined &&
-                this._options.maxExtent.left !== null &&
-                this._options.maxExtent.left !== undefined &&
-                this._options.maxExtent.bottom !== null &&
-                this._options.maxExtent.bottom !== undefined &&
-                this._options.maxExtent.right !== null &&
-                this._options.maxExtent.right !== undefined &&
-                this._options.maxExtent.top !== null &&
-                this._options.maxExtent.top !== undefined) {
-                mapExtent = new OpenLayers.Bounds(this._options.maxExtent.left, this._options.maxExtent.bottom, this._options.maxExtent.right, this._options.maxExtent.top);
-            }
-            this._map = new OpenLayers.Map({
-                controls: [],
-                units: this._options.units, //'m',
-                maxExtent: mapExtent,
-                resolutions: this._options.resolutions,
-                projection: this._options.srsName,
-                isBaseLayer: true,
-                center: lonlat,
-                // https://github.com/openlayers/openlayers/blob/master/notes/2.13.md#map-property-fallthrough-defaults-to-false
-                // fallThrough: true is needed for statsgrid drag resizing
-                fallThrough: true,
-                theme: null,
-                zoom: 0,
-                zoomMethod: null
-            });
-
-            me._addClickControl();
-
-            return this._map;
-        },
-
-        /**
-         * Add map click handler
-         * @method @private _addClickControl
-         */
-        _addClickControl: function(){
-            var me = this;
-            //Set up a click handler
-            OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
-                defaultHandlerOptions: {
-                    'double': true,
-                    'stopDouble': true
-                },
-
-                initialize: function(options) {
-                    this.handlerOptions = OpenLayers.Util.extend(
-                        {}, this.defaultHandlerOptions
-                    );
-                    OpenLayers.Control.prototype.initialize.apply(
-                        this, arguments
-                    );
-                    this.handler = new OpenLayers.Handler.Click(
-                        this, {
-                            'click': function(evt){
-                                me.__sendMapClickEvent(evt);
-                            }
-                        }, this.handlerOptions
-                    );
-                }
-            });
-
-            var click = new OpenLayers.Control.Click();
-            me._map.addControl(click);
-            click.activate();
-        },
-
-        /**
          * Send map click event.
          * @method  @private __sendMapClickEvent
          * @param  {Object} evt event object
@@ -250,25 +213,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var lonlat = this._map.getLonLatFromViewPortPx(evt.xy),
                 event = this._mapClickedBuilder(lonlat, evt.xy.x, evt.xy.y);
             sandbox.notifyAll(event);
-        },
-
-        /**
-         * @method createBaseLayer
-         * Creates a dummy base layer and adds it to the map. Nothing to do with Oskari maplayers really.
-         * @private
-         */
-        _createBaseLayer: function () {
-
-            var base = new OpenLayers.Layer(
-                'BaseLayer',
-                {
-                    layerId: 0,
-                    isBaseLayer: true,
-                    displayInLayerSwitcher: false
-                }
-            );
-
-            this._map.addLayer(base);
         },
 
         _calculateScalesImpl: function (resolutions) {

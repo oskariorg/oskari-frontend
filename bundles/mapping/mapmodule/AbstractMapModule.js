@@ -36,14 +36,15 @@ Oskari.clazz.define(
      srsName : "EPSG:3067"
      *  }
      */
-    function (id, imageUrl, options) {
+    function (id, imageUrl, options, mapDivId) {
         var me = this,
             key;
 
         me._id = id;
+        me._mapDivId = mapDivId;
         me._imageUrl = imageUrl;
         me._options = {
-            resolutions : [2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5],
+            resolutions: [2000, 1000, 500, 200, 100, 50, 20, 10, 4, 2, 1, 0.5, 0.25],
             srsName : 'EPSG:3067',
             units : 'm'
         };
@@ -73,6 +74,7 @@ Oskari.clazz.define(
         me._maxExtent = me._options.maxExtent || {};
         // props: left,bottom,right, top
         if(me._maxExtent.left) {
+            // FIXME: isn't this ol3 specific?
             me._extent = [
                 me._maxExtent.left,
                 me._maxExtent.bottom,
@@ -97,6 +99,158 @@ Oskari.clazz.define(
         me.layerDefs = [];
         me.layerDefsById = {};
     }, {
+        /**
+         * @method init
+         * Implements Module protocol init method. Creates the Map.
+         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @return {Map}
+         */
+        init: function (sandbox) {
+            var me = this;
+            sandbox.printDebug(
+                'Initializing oskari map module...#############################################'
+            );
+
+            me._sandbox = sandbox;
+
+            if (me._options) {
+                if (me._options.resolutions) {
+                    me._mapResolutions = me._options.resolutions;
+                }
+                if (me._options.srsName) {
+                    me._projectionCode = me._options.srsName;
+                    // set srsName to Oskari.mapframework.domain.Map
+                    if (me._sandbox) {
+                        me._sandbox.getMap().setSrsName(me._projectionCode);
+                    }
+                }
+            }
+
+            me._map = me.createMap();
+
+            // changed to resolutions based map zoom levels
+            // -> calculate scales array for backward compatibility
+            me._calculateScalesImpl(me._mapResolutions);
+
+            return me._initImpl(me._sandbox, me._options, me._map);
+        },
+        /**
+         * @method createMap
+         * Creates the Implementation specific Map object
+         * @return {Map}
+         */
+        createMap: Oskari.AbstractFunc('createMap'),
+        /**
+         * @method getMap
+         * Returns a reference to the actual OpenLayers implementation
+         * @return {OpenLayers.Map}
+         */
+        getMap: function () {
+            return this._map;
+        },
+        /**
+         * @method start
+         * implements BundleInstance protocol start method
+         * Starts the plugins registered on the map and adds
+         * selected layers on the map if layers were selected before
+         * mapmodule was registered to listen to these events.
+         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         */
+        start: function (sandbox) {
+            if (this.started) {
+                return;
+            }
+
+            sandbox.printDebug('Starting ' + this.getName());
+
+            // register events handlers
+            var p;
+            for (p in this.eventHandlers) {
+                if (this.eventHandlers.hasOwnProperty(p)) {
+                    sandbox.registerForEventByName(this, p);
+                }
+            }
+
+            //register request handlers
+            this.requestHandlers = {
+                mapLayerUpdateHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapLayerUpdateRequestHandler', sandbox, this),
+                mapMoveRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapMoveRequestHandler', sandbox, this),
+                showSpinnerRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.ShowProgressSpinnerRequestHandler', sandbox, this)
+            };
+            sandbox.addRequestHandler('MapModulePlugin.MapLayerUpdateRequest', this.requestHandlers.mapLayerUpdateHandler);
+            sandbox.addRequestHandler('MapMoveRequest', this.requestHandlers.mapMoveRequestHandler);
+            sandbox.addRequestHandler('ShowProgressSpinnerRequest', this.requestHandlers.showSpinnerRequestHandler);
+
+            this.startPlugins(sandbox);
+            this.updateCurrentState();
+            this.started = this._startImpl();
+        },
+
+        _startImpl: function () {
+            return true;
+        },
+
+        /**
+         * @method stop
+         * implements BundleInstance protocol stop method
+         * Stops the plugins registered on the map.
+         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         */
+        stop: function (sandbox) {
+
+            if (!this.started) {
+                return;
+            }
+
+            this.stopPlugins(sandbox);
+            this.started = this._stopImpl();
+        },
+        _stopImpl: function () {
+            return false;
+        },
+
+        /**
+         * @property eventHandlers
+         * @static
+         */
+        eventHandlers: {
+            'AfterMapLayerAddEvent': function (event) {
+                this.afterMapLayerAddEvent(event);
+            },
+            'LayerToolsEditModeEvent': function (event) {
+                this._isInLayerToolsEditMode = event.isInMode();
+            },
+            AfterRearrangeSelectedMapLayerEvent: function (event) {
+                this.afterRearrangeSelectedMapLayerEvent(event);
+            }
+        },
+        /**
+         * Returns a reference to the map implementation
+         * @return {[type]} [description]
+         */
+        getMap : function() {
+            return this._map;
+        },
+        /**
+         * @method getMapEl
+         * Get jQuery map element
+         */
+        getMapEl: function () {
+            var mapDiv = jQuery('#' + this._mapDivId);
+            if (!mapDiv.length) {
+                this.getSandbox().printWarn('mapDiv not found with #' + this._mapDivId);
+            }
+            return mapDiv;
+        },
+
+        /**
+         * @method getMapElDom
+         * Get DOM map element
+         */
+        getMapElDom: function () {
+            return this.getMapEl().get(0);
+        },
+
         /**
          * @method getImageUrl
          * Returns a base url for plugins to show. Can be set in constructor and
@@ -234,41 +388,6 @@ Oskari.clazz.define(
             return this._localization;
         },
 
-        /**
-         * @method init
-         * Implements Module protocol init method. Creates the Map.
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         * @return {Map}
-         */
-        init: function (sandbox) {
-            var me = this;
-            sandbox.printDebug(
-                'Initializing oskari map module...#############################################'
-            );
-
-            me._sandbox = sandbox;
-
-            if (me._options) {
-                if (me._options.resolutions) {
-                    me._mapResolutions = me._options.resolutions;
-                }
-                if (me._options.srsName) {
-                    me._projectionCode = me._options.srsName;
-                    // set srsName to Oskari.mapframework.domain.Map
-                    if (me._sandbox) {
-                        me._sandbox.getMap().setSrsName(me._projectionCode);
-                    }
-                }
-            }
-
-            me._map = me._createMapImpl();
-
-            // changed to resolutions based map zoom levels
-            // -> calculate scales array for backward compatibility
-            me._calculateScalesImpl(me._mapResolutions);
-
-            return me._initImpl(me._sandbox, me._options, me._map);
-        },
 
         /**
          * @method _initImpl
@@ -281,17 +400,6 @@ Oskari.clazz.define(
             return map;
         },
 
-        /**
-         * @method _createMap
-         * Depricated
-         * @private
-         * Creates the OpenLayers.Map object
-         * @return {OpenLayers.Map}
-         */
-        _createMap: function () {
-            this.getSandbox().printWarn('_createMap is deprecated. Use _createMapImpl instead.');
-            this._createMapImpl();
-        },
         /**
          * @method getPluginInstances
          * Returns object containing plugins that have been registered to the map.
@@ -452,14 +560,6 @@ Oskari.clazz.define(
 
             this.getSandbox().notifyAll(event, retainEvent);
         },
-        /**
-         * @method getMap
-         * Returns a reference to the actual OpenLayers implementation
-         * @return {OpenLayers.Map}
-         */
-        getMap: function () {
-            return this._map;
-        },
 
         /**
          * @method getProjection
@@ -469,9 +569,6 @@ Oskari.clazz.define(
          */
         getProjection: function () {
             return this._projectionCode;
-        },
-        getProjectionObject: function () {
-            return this._projection;
         },
         getResolutionArray: function () {
             return this._mapResolutions;
@@ -622,82 +719,6 @@ Oskari.clazz.define(
             ) + unit;
         },
 
-        /**
-         * @method start
-         * implements BundleInstance protocol start method
-         * Starts the plugins registered on the map and adds
-         * selected layers on the map if layers were selected before
-         * mapmodule was registered to listen to these events.
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         */
-        start: function (sandbox) {
-            if (this.started) {
-                return;
-            }
-
-            sandbox.printDebug('Starting ' + this.getName());
-
-            // register events handlers
-            var p;
-            for (p in this.eventHandlers) {
-                if (this.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.registerForEventByName(this, p);
-                }
-            }
-
-            //register request handlers
-            this.requestHandlers = {
-                mapLayerUpdateHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapLayerUpdateRequestHandler', sandbox, this),
-                mapMoveRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapMoveRequestHandler', sandbox, this),
-                showSpinnerRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.ShowProgressSpinnerRequestHandler', sandbox, this)
-            };
-            sandbox.addRequestHandler('MapModulePlugin.MapLayerUpdateRequest', this.requestHandlers.mapLayerUpdateHandler);
-            sandbox.addRequestHandler('MapMoveRequest', this.requestHandlers.mapMoveRequestHandler);
-            sandbox.addRequestHandler('ShowProgressSpinnerRequest', this.requestHandlers.showSpinnerRequestHandler);
-
-            this.startPlugins(sandbox);
-            this.updateCurrentState();
-            this.started = this._startImpl();
-        },
-
-        _startImpl: function () {
-            return true;
-        },
-
-        /**
-         * @method stop
-         * implements BundleInstance protocol stop method
-         * Stops the plugins registered on the map.
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         */
-        stop: function (sandbox) {
-
-            if (!this.started) {
-                return;
-            }
-
-            this.stopPlugins(sandbox);
-            this.started = this._stopImpl();
-        },
-        _stopImpl: function () {
-            return true;
-        },
-
-        /**
-         * @property eventHandlers
-         * @static
-         */
-        eventHandlers: {
-            'AfterMapLayerAddEvent': function (event) {
-                this.afterMapLayerAddEvent(event);
-            },
-            'LayerToolsEditModeEvent': function (event) {
-                this._isInLayerToolsEditMode = event.isInMode();
-            },
-            AfterRearrangeSelectedMapLayerEvent: function (event) {
-                this.afterRearrangeSelectedMapLayerEvent(event);
-            }
-        },
 
         /**
          * @method onEvent
@@ -1391,14 +1412,6 @@ Oskari.clazz.define(
         updateSize: Oskari.AbstractFunc('updateSize'),
 
         getSize: Oskari.AbstractFunc('getSize'),
-
-        /**
-         * @method _createMapImpl
-         * @private
-         * Creates the Implementation specific Map object
-         * @return {Map}
-         */
-        _createMapImpl: Oskari.AbstractFunc('_createMapImpl'),
 
         /**
          * @method moveMapToLanLot

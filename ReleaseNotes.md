@@ -6,10 +6,16 @@
 
 Popup not show anymore dublicate info.
 
-### mapping/mapmodule/mapmodule.ol2
+### Mapmodule consistency - POSSIBLE BREAKING CHANGES!
 
- - _calculateScalesFromResolutions function removed. Use _calculateScalesImpl instead
- - _ensureExists function removed as it is not used by anyone
+Renamed functions
+- _calculateScalesFromResolutions() removed. Use _calculateScalesImpl() instead.
+- _createMap() and _createMapImpl() removed. Use createMap() instead. Also the function no longer has side-effects and returns the created map implementation.
+
+Unused functions removed:
+  - _ensureExists()
+  - getProjectionObject()
+  - _createBaseLayer()
 
 ### mapping/mapmodule/plugin/vectorlayer
 
