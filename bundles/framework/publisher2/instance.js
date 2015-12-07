@@ -175,6 +175,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             } else {
                 me._destroyGrid();
                 Oskari.setLang(me.oskariLang);
+
+                //change the mapmodule toolstyle back to normal
+                var mapModule = me.sandbox.findRegisteredModuleInstance("MainMapModule");
+                mapModule.changeToolStyle(null);
+
                 if (me.publisher) {
                     // show flyout?
                     // TODO: move to default flyout/extension as "mode functionality"?

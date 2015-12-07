@@ -51,5 +51,8 @@ Oskari.clazz.define(
 
             // default style for WFS is given as last parameter
             maplayerService.populateStyles(layer, mapLayerJson, defaultStyle);
+
+            // Wps Params
+            layer.setWpsLayerParams(mapLayerJson.wps_params);
         }
     });

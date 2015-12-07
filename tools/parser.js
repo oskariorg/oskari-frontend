@@ -59,7 +59,7 @@ function OskariParser() {
                 fileRelativePath = '.';
             }
             var normalizedImplPath = path.resolve(fileRelativePath, implFile.src);
-            if (implFile.type == "text/javascript") {
+            if (implFile.type === "text/javascript") {
                 bundleDef.javascript.push(normalizedImplPath);
                 // only get path for bundles inside bundles (not src) and try to determine bundle path
                 // TODO: this will be refactored for Oskari 2
@@ -73,7 +73,19 @@ function OskariParser() {
                     // rest can be ignored
                     bundleDef.path = path.join(begin, namespace, bundleId);
                 }
-            } else if (implFile.type == "text/css") {
+            } else if (implFile.type === "text/css") {
+                // only get path for bundles inside bundles (not src) and try to determine bundle path
+                // TODO: this will be refactored for Oskari 2
+                var bundlesIndex = normalizedImplPath.indexOf('bundles');
+                if(bundlesIndex !== -1 && !bundleDef.resourcesPath) {
+                    var begin = normalizedImplPath.substring(0, bundlesIndex + 'bundles'.length);
+                    var tmpPath = normalizedImplPath.substring(bundlesIndex + 'bundles'.length + 1);
+                    var pathParts = tmpPath.split(path.sep);
+                    var namespace = pathParts[0];
+                    var bundleId = pathParts[1];
+                    // rest can be ignored
+                    bundleDef.resourcesPath = path.join(begin, namespace, bundleId);
+                }
                 bundleDef.css.push(normalizedImplPath);
             } else {
                 bundleDef.unknown.push({
@@ -105,6 +117,47 @@ function OskariParser() {
             }
         }
         return bundleDef;
+    }
+
+
+    this.getBundles = function(appSetupFile,grunt) {
+        
+        var appSetupData = fs.readFileSync(appSetupFile,'utf8');
+        var data = JSON.parse(appSetupData);
+        data = data.startupSequence;
+        var basePath = path.dirname(appSetupFile);
+
+        var bundles = [];
+
+        var bundleSequence = [];
+        for (var i = 0; i < data.length; ++i) {
+            var bundle = data[i];
+            var component = {
+                name : bundle.bundlename,
+                dependencies : []
+            };
+            bundleSequence.push(component);
+            var bundleDeps = bundle.metadata['Import-Bundle'];
+            for(var key in bundleDeps){
+                bundles.push(key);
+            }
+
+            for (var id in bundleDeps) {
+                var bundleBasePath = basePath;
+                // "openlayers-default-theme" : { "bundlePath" : "../../../packages/openlayers/bundle/" },
+                var bundlePath = bundleDeps[id].bundlePath;
+
+                //console.log('bundleBasePath: ', bundleBasePath);
+                if(bundlePath.indexOf('/') === 0) {
+                    bundlePath = '.' + bundlePath;
+                    bundleBasePath = '.';
+                }
+                var normalizedPath = path.resolve(bundleBasePath, bundlePath);
+                component.dependencies.push(this.handleBundle(id, normalizedPath));
+            }
+        }
+        bundleSequence[0].originalData = data;
+        return bundles;
     }
 
     this.findArray = function(content, arrayName, pathForLogging) {

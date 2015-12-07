@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "fi",
     "key": "DivManazer",
     "value": {
@@ -14,7 +15,7 @@ Oskari.registerLocalization({
             "search": "Hae"
         },
         "LanguageSelect": {
-            "title": "kieli",
+            "title": "Kieli",
             "tooltip": "Valitse kieli",
             "languages": {
                 "af": "afrikaans",
@@ -145,7 +146,7 @@ Oskari.registerLocalization({
             },
             "dot": {
                 "title": "Pisteen esitystapa",
-                "tooltip": "",
+                "tooltip": "Määrittele esitystapa pistekohteille.",
                 "symbol": {
                     "label": "Symboli"
                 },
@@ -167,7 +168,7 @@ Oskari.registerLocalization({
             },
             "line": {
                 "title": "Viivan esitystapa",
-                "tooltip": "",
+                "tooltip": "Määrittele esitystapa viivakohteille.",
                 "style": {
                     "label": "Tyyli"
                 },
@@ -195,7 +196,7 @@ Oskari.registerLocalization({
             },
             "area": {
                 "title": "Alueen esitystapa",
-                "tooltip": "",
+                "tooltip": "Määrittele esitystapa aluekohteille.",
                 "linestyle": {
                     "label": "Viivan tyyli"
                 },
@@ -241,8 +242,8 @@ Oskari.registerLocalization({
                 "additional": {
                     "title": "Lisäasetukset",
                     "dataSource": "Tietolähde",
-                    "metadata": "Metatietolinkki",
-                    "export_selection": "Vie vain valitut kohteet"
+                    "metadata": "Linkki metatietoihin",
+                    "export_selection": "Tuo vain valitut kohteet"
                 },
                 "columns": {
                     "title": "Sarakkeet",
@@ -255,7 +256,7 @@ Oskari.registerLocalization({
                     "csv": "CSV"
                 },
                 "delimiter": {
-                    "title": "CSV-tiedoston erotin",
+                    "title": "Erotin CSV-tiedostossa",
                     "comma": "Pilkku",
                     "semicolon": "Puolipiste",
                     "tabulator": "Sarkain"
@@ -263,4 +264,5 @@ Oskari.registerLocalization({
             }
         }
     }
-});
+}
+);

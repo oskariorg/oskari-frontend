@@ -9,38 +9,38 @@ Oskari.registerLocalization(
             "style": "Style",
             "show": "Show",
             "hide": "Hide",
-            "hidden": "The map layer has been temporarily hidden.",
+            "hidden": "The map layer is temporarily hidden.",
             "out-of-scale": "The map layer cannot be shown at this scale level.",
-            "move-to-scale": "Please move to a suitable scale level.",
-            "out-of-content-area": "The map layer contains no data at this location.",
-            "move-to-content-area": "Please move to a suitable location.",
+            "move-to-scale": "Please move to a suitable map level.",
+            "out-of-content-area": "The map layer has no features at the map view area.",
+            "move-to-content-area": "Move to a suitable location.",
             "description": "Description",
             "object-data": "Feature data",
             "rights": {
-                "notavailable": "Publication prohibited.",
-                "guest": "Please log in to publish the map layer in an embedded map.",
+                "notavailable": "Publication prohibited",
+                "guest": "Please log in, if you want to publish the map layer in an embedded map.",
                 "loggedin": "Publication permitted",
-                "official": "Publication permitted only for use by authorities.",
-                "need-login": "You need to log in to publish the map level in an embedded map.",
+                "official": "Publishable only for authorities",
+                "need-login": "Please log in to publish embedded maps.",
                 "can_be_published_by_provider": {
-                    "label": "Publication permitted as a data provider",
-                    "tooltip": "Only the data provider can publish the map layer in an embedded map.  If you are a data provider, please contact the support service of Paikkatietoikkuna."
+                    "label": "Publication permitted for data providers",
+                    "tooltip": "The map layer is publishable in embedded maps only for data providers. If you are a data provider, please contact the support service."
                 },
                 "can_be_published": {
                     "label": "Publication permitted",
-                    "tooltip": "The map layer can be published in an embedded map. The limit of the usage is not limited."
+                    "tooltip": "The map layer is publishable in embedded maps. The usage limit is not limited."
                 },
                 "can_be_published_map_user": {
                     "label": "Publication permitted",
-                    "tooltip": "The map layer can be published in an embedded map. The limit of the usage may be limited."
+                    "tooltip": "The map layer is publishable in embedded maps. The weekly usage limit may be limited."
                 },
                 "no_publication_permission": {
                     "label": "Publication prohibited",
-                    "tooltip": "The map layer cannot be published in an embedded map. The data provider has not granted permission to that."
+                    "tooltip": "The map layer is not publishable in embedded maps. The data provider has not granted permissions."
                 },
                 "can_be_published_by_authority": {
-                    "label": "Publication permitted",
-                    "tooltip": "The map layer can be published in an embedded map. The limit of the usage is not limited."
+                    "label": "Publication permitted for authorities",
+                    "tooltip": "The map layer is publishable in embedded maps only for authorities. If you are an authority, please contact the support service."
                 }
             },
             "tooltip": {
@@ -49,29 +49,29 @@ Oskari.registerLocalization(
                 "type-wfs": "Data product"
             },
             "refresh_load": {
-                "tooltip": "Refresh layer data. Layer is not drawn automatically "
+                "tooltip": "Refresh the map layer data. Data is not updated automatically on the map."
             },
             "filter": {
                 "title": "Filter",
-                "description": "Select the features from the map layer:",
+                "description": "Filter values on map layer:",
                 "cancelButton": "Cancel",
-                "clearButton": "Clear the filter",
-                "refreshButton": "Refresh the filter",
-                "addFilter": "Add a new filter",
-                "removeFilter": "Delete the filter",
+                "clearButton": "Clear filter",
+                "refreshButton": "Refresh filter",
+                "addFilter": "Add filter",
+                "removeFilter": "Remove filter",
                 "bbox": {
-                    "title": "Map window filter",
-                    "on": "Only the feature visible on the map window.",
-                    "off": "All features."
+                    "title": "Map filter",
+                    "on": "Only features visible on the map",
+                    "off": "All features"
                 },
                 "clickedFeatures": {
-                    "title": "Feature selection filter",
-                    "label": "Only the features selected on the map."
+                    "title": "Feature filter",
+                    "label": "Only features selected on the map"
                 },
                 "values": {
-                    "title": "Filter the features by attribute data",
+                    "title": "Attribute filter",
                     "placeholders": {
-                        "case-sensitive": "The filter is case sensitive.",
+                        "case-sensitive": "Filter is case-sensitive",
                         "attribute": "Attribute",
                         "boolean": "Logical operator",
                         "operator": "Operator",
@@ -87,17 +87,17 @@ Oskari.registerLocalization(
                     "lessThanOrEqualTo": "is smaller than or equal to"
                 },
                 "aggregateAnalysisFilter": {
-                    "addAggregateFilter": "Previously calculated key ratios",
-                    "aggregateValueSelectTitle": "Use a previously calculated key ratios",
-                    "selectAggregateAnalyse": "Select an analysis layer",
+                    "addAggregateFilter": "Use statistical values",
+                    "aggregateValueSelectTitle": "Select Statistical Values",
+                    "selectAggregateAnalyse": "Select analysis layer",
                     "selectIndicator": "Select property",
                     "selectReadyButton": "Close",
-                    "getAggregateAnalysisFailed": "The aggregate data could not be found.",
-                    "noAggregateAnalysisPopupTitle": "The aggregate analysis did not found.",
-                    "noAggregateAnalysisPopupContent": "You have not done any aggregate analysis. You can create your own aggregata data by the analysis function and then use values in filtering."
+                    "getAggregateAnalysisFailed": "The statistical values could not be fetched.",
+                    "noAggregateAnalysisPopupTitle": "Statistical Values Not Found",
+                    "noAggregateAnalysisPopupContent": "The statistical values are not computed for this map layer. You can compute them in the Analysis function."
                 },
                 "validation": {
-                    "title": "The filter could not be refreshed because of following mistakes:",
+                    "title": "Features could not be filtered. The following errors occurred:",
                     "attribute_missing": "The attribute is missing.",
                     "operator_missing": "The operator is missing.",
                     "value_missing": "The value is missing.",

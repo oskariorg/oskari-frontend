@@ -36,9 +36,20 @@ if (!Function.prototype.bind) {
                         }
                     }
                 }
+                this._selectFirstStyle();
                 this.supportedLanguages = Oskari.getSupportedLanguages();
                 // setup backbone id so collections work
                 this.id = model.getId();
+            },
+            /**
+             * Selects the first style so legendImage will show initial value
+             * @return {[type]} [description]
+             */
+            _selectFirstStyle : function() {
+                var styles = this.getStyles();
+                if(styles.length) {
+                    this.selectStyle(styles[0].getName());
+                }
             },
             /**
              * Sets the internal state for full capabilities response.
@@ -108,6 +119,8 @@ if (!Function.prototype.bind) {
                 this.set(mapLayer, {
                     silent: true
                 });
+
+                this._selectFirstStyle();
 
                 // this will trigger change so the previous can be done silently
                 this.setCapabilitiesResponse(capabilities);
@@ -240,6 +253,17 @@ if (!Function.prototype.bind) {
                 return null;
             },
             /**
+             * Returns capabilities for layer JSON
+             * @return {Object} capabilities
+             */
+            getCapabilities: function () {
+                var adminBlock = this.getAdmin();
+                if (adminBlock) {
+                    return adminBlock.capabilities;
+                }
+                return null;
+            },
+            /**
              * Returns wfs service manual refresh mode
              * @return {Boolean} true/false
              */
@@ -297,7 +321,26 @@ if (!Function.prototype.bind) {
              * @returns {String} legend url
              */
             getLegendUrl: function() {
-                return this.getCurrentStyle().getLegend();
+                var adminBlock = this.getAdmin();
+                var capabilitiesBlock = this.getCapabilities();
+                var currentStyleName = this.getCurrentStyle().getName();
+
+                if (capabilitiesBlock) {
+                    if(currentStyleName && capabilitiesBlock.styles) {
+                        var selectedStyle = jQuery.grep(capabilitiesBlock.styles ||[], function(style){
+                            return style.name === currentStyleName;
+                        });
+
+                        if(selectedStyle.length>0) {
+                            return selectedStyle[0].legend;
+                        }
+                    }
+                    if(adminBlock) {
+                        return adminBlock.legendImage;
+                    }
+                }
+
+                return ''; //this.getCurrentStyle().getLegend();
             },
 
             /**

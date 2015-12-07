@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "fi",
     "key": "RouteSearch",
     "value": {
@@ -12,11 +13,12 @@ Oskari.registerLocalization({
             "fromMap": "Valitse paikka kartalta",
             "routingService": "Reitityspalvelu",
             "fetchRoute": "Hae reitti",
-            "selectLocations": "Valitse molemmat paikat"
+            "selectLocations": "Valitse lähtöpiste ja päätepiste, ja klikkaa valitsemaasi palvelua hakeaksesi reittiä."
         },
         "tile": {
             "title": "Reittihaku",
             "description": ""
         }
     }
-});
+}
+);

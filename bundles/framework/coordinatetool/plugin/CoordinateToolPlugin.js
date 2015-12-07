@@ -130,28 +130,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         },
 
         /**
-         * Validate lon and lat inputs.
-         * @method  @private _isValidLonLat
-         *
-         * @param  {Object} lon lon coordinate
-         * @param  {Object lat lat coordinate
-         *
-         * @return {Boolean} is valid or not
-         */
-        _isValidLonLat: function(lon,lat){
-            var me = this,
-                maxExtent = me._mapmodule.getMaxExtent();
-
-            if(isNaN(lon) || isNaN(lat)) {
-                return false;
-            } else if(lon < maxExtent.left || lon > maxExtent.right || lat < maxExtent.bottom || lat > maxExtent.top) {
-                return false;
-            } else {
-                return true;
-            }
-        },
-
-        /**
          * Center map to selected coordinates.
          * @method  @private _centerMapToSelectedCoordinates
          *
@@ -162,7 +140,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 lonVal = me._lonInput.val(),
                 latVal = me._latInput.val(),
                 loc = me._locale;
-            if(me._isValidLonLat(lonVal,latVal)) {
+            if(this.getMapModule().isValidLonLat(lonVal,latVal)) {
                 var moveReqBuilder = me._sandbox.getRequestBuilder('MapMoveRequest');
                 var moveReq = moveReqBuilder(lonVal, latVal);
                 me._sandbox.request(this, moveReq);
@@ -331,7 +309,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                  * Shows map center coordinates after map move
                  */
                 AfterMapMoveEvent: function (event) {
-                    if(this._showMouseCoordinates) {
+                    if(!this._showMouseCoordinates) {
                         this.refresh();
                     }
                 },

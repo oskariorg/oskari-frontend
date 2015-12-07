@@ -20,6 +20,7 @@ Oskari.clazz.define(
         this.container = null;
         this.state = null;
         this.layers = {};
+        this._fixedDecimalCount = 2;
 
         this.tabsContainer = null;
         this.selectedTab = null;
@@ -570,7 +571,7 @@ Oskari.clazz.define(
                 }
                 panel.grid.setDataModel(model);
                 _.forEach(visibleFields, function (field) {
-                    grid.setNumericField(field);
+                    grid.setNumericField(field, me._fixedDecimalCount);
                 });
                 panel.grid.renderTo(panel.getContainer());
                 // define flyout size to adjust correctly to arbitrary tables
@@ -586,6 +587,10 @@ Oskari.clazz.define(
                 if (me.resizable) {
                     this._enableResize();
                 }
+
+                // Extra footer message under grid
+                this._appendFooter(flyout, locales, layer);
+
             }
         },
 
@@ -620,7 +625,7 @@ Oskari.clazz.define(
                     }
 
                     for (j = 0; j < fields.length; j += 1) {
-                        if (values[j] === null || values[j] === undefined || values[j] === '') {
+                        if (!values || values[j] === null || values[j] === undefined || values[j] === '') {
                             featureData[fields[j]] = '';
                         } else {
                             // Generate and url links
@@ -850,7 +855,52 @@ Oskari.clazz.define(
             else {
                 link.removeClass(strClass);
             }
+        },
+        /**
+         * Add footer text under tab data grid, if analysislayer
+         * - Not the best solution, but ..
+         * @private
+         * @param  {jQuery} flyout
+         * @param  {Array} locales localized field names
+         * @param  {String} layer  Oskari layer
+         */
+        _appendFooter: function (flyout, locales, layer) {
+            var footer = this.template.wrapper.clone(),
+                sandbox = this.instance.getSandbox(),
+                inputid,
+                inputlayer,
+                loc = this.instance.getLocalization('gridFooter'),
+                message;
+
+            if (!loc || !layer || layer.getLayerType().toUpperCase() !== 'ANALYSIS') {
+                return;
+            }
+            // Extract analysis input layer id
+            inputid = layer.getId().split("_")[1];
+            inputlayer = sandbox.findMapLayerFromAllAvailable(inputid);
+            if (inputlayer &&  inputlayer.getLayerType().toUpperCase() === 'WFS') {
+                if (inputlayer.getWpsLayerParams()) {
+                    if (inputlayer.getWpsLayerParams().no_data) {
+                        message = loc.noDataCommonMessage + ' (' + inputlayer.getWpsLayerParams().no_data + ').';
+                        if(locales){
+                            _.forEach(locales, function (field) {
+                                if (field === loc.aggregateColumnField){
+                                    message = loc.noDataMessage + ' (' + inputlayer.getWpsLayerParams().no_data + ').';
+                                }
+                            });
+                        }
+
+                    }
+                }
+            }
+
+
+            if (message) {
+                flyout.find('div.tab-content').append(footer.html(message));
+            }
+
         }
+
     }, {
         /**
          * @static @property {String[]} protocol

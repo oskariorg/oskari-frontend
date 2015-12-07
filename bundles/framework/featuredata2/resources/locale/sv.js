@@ -12,12 +12,12 @@ Oskari.registerLocalization(
         "errorscale": "Uppgifter om objekt kan inte visas på denna skalnivå. Byt skalnivå.",
         "errordata": "Fel i data från servern. Flytta lite på kartan för att uppdatera den.",
         "columnSelectorTooltip": "Välj synliga kolumner",
-        "featureDataPopup" : "Aggregate values",
+        "featureDataPopup": "Summa värden",
         "selectionTools": {
             "title": "Markera objekt på kartan",
-            "instructions": "",
-            "selectFromTop": "Select from the top layer",
-            "selectAll": "Select from all layers",
+            "instructions": " ",
+            "selectFromTop": "Välj från topplager",
+            "selectAll": "Välj från alla lagern",
             "link": {
                 "title": "Välj fler funktioner"
             },
@@ -145,6 +145,11 @@ Oskari.registerLocalization(
                     "boolean_operator_missing": "Den logiska operatören saknas."
                 }
             }
+        },
+        "gridFooter": {
+            "aggregateColumnField": "Antal",
+            "noDataMessage": "Antal = Antal utan skyddad objekt",
+            "noDataCommonMessage": "Antal = Antal utan skyddad objekt"
         }
     }
 }

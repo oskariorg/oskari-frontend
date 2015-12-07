@@ -1,14 +1,287 @@
 # Release Notes
 
+## 1.34
+
+### mapmodule-plugin/zoombar
+
+Added mobile styled zoombar buttons. Mobile styled icons showed when map height is smaller than 500 px.
+
+### mapstats
+
+Changed references from set/getWmsName() -> set/getLayerName() to use the inherited property from AbstractLayer.
+
+### OskariRPC 1.1 version for client library
+
+Functions are now generated depending on the configuration of the providing platform (allowed functions configuration). This means that any calls made to remote functions
+are available only after the connection to map has been established. This enables better errorhandling, but means that function calls will result in "is not a function" errors 
+if called before connection is established. An onReady()-hook has been added where you can check the available functions:
+
+    // init connection
+    var channel = OskariRPC.connect(
+        elements.iframe,
+        IFRAME_DOMAIN
+    );
+    var blnFunctionExists = typeof channel.getAllLayers === 'function'; // -> false
+	channel.onReady(function() {
+	    var blnFunctionExists = typeof channel.getAllLayers === 'function'; // -> true
+	    channel.getAllLayers(function (data) {
+	    	console.log(data);
+    	});
+	});
+
+Changes to 1.0.0:
+- added onReady callback to detect when we have a successful connection
+- removed hardcoded RPC-functions that might be disabled on Oskari instance
+- functions are now generated based on what's available in the Oskari platform the client connects to. 
+  This means you can be sure the map is listening if the client has it (after onReady-triggers).
+- added default errorhandler to make it clear when an error happens. Used when custom errorhandler is not specified.
+- added enableDebug(blnEnabled) to log some more info to console when enabled.
+- Changed handleEvent to enable multiple listeners.
+- handleEvent can no longer be used to unregister listener.
+- Added unregisterEventHandler() for unregistering listeners (previously done with handleEvent without giving listener function).
+- Added log() for debug logging without the need to check if window.console.log() exists
+- function-calls can now have parameters as first argument. Use function parameters wrapped in an array as first argument. First argument istreated as a success callback instead if it's type is a function.
+
+Filename change for original OskariRPC.js: 
+- Oskari/libraries/OskariRPC/OskariRPC.js is now Oskari/libraries/OskariRPC/OskariRPC-1.0.0.js
+
+### rpc
+
+Allowed functions/events/requests are now configured as an array ["AfterMapMoveEvent", "MapClickedEvent"] instead of an object { "AfterMapMoveEvent" : true, "MapClickedEvent" : true }.
+Reduced configuration for adding new functions - all available functions are now allowed if not explicitly restricted.
+
+New functions enabled by default:
+- 'getMapBbox' gets current map bbox
+- 'resetState' resets the map to initial state (location/layers etc)
+- 'getCurrentState' returns a JSON presentation of the map state (location/layers etc). Usable with useState() as parameter.
+- 'useState' sets the map to given state (location/layers etc). Parameter should be given as returned by getCurrentState()
+
+New events are enabled by default:
+- 'UserLocationEvent' notifies about users geolocation status
+- 'SearchResultEvent' notifies about users that SearchRequest response data is available for to handle
+- 'FeatureEvent' notifies about add, remove, click events on features
+
+New requests are enabled by default:
+- 'MyLocationPlugin.GetUserLocationRequest' requests to get user geolocation
+- 'SearchRequest' requests search result for requested search item using Oskari search channels
+
+Domain validation fixed to accept urls with - or _ characters.
+
+Changed error messaging from "event/request_not_allowed" to "event/request_not_available". 
+Available events/requests are now checked when RPC-bundle starts and those which aren't technically available/part of the appsetup will be removed from the "supported events/requests" listings. 
+Note that this requires RPC to be started after any bundle offering RPC-enabled events/requests to work correctly (so all events/requests have been loaded and handlers registered for requests before the check).
+
+### Mapmodule consistency - POSSIBLE BREAKING CHANGES!
+
+In an effort to make Openlayers 2 ja 3 mapmodule API consistent some functions have been renamed:
+- Both: _getMapZoom() -> getMapZoom()
+- Both: _transformCoordinates -> transformCoordinates() also coordinates parameter is now an object with lat & lon keys and return value is an object with lat & lon keys
+- OL3: _getCurrentScale() -> _getMapScale()
+- OL2: getNumZoomLevels() -> getMaxZoomLevel()
+- OL3: getZoomLevel() removed as it's the same as getMapZoom()
+- Both: moveMapToLanLot() -> moveMapToLonLat()
+
+MapClickedEvent.getLonlat() now returns an object with lon and lat keys instead of Openlayers.Lonlat in OL2 or coordinate array in OL3.
+Fixed mapmodule.isValidLonLat() to use max extent as reference instead of hardcoded EPSG:3067 values.
+
+Both ol2 and ol3 implementations of AddFeaturesToMapRequest / AddFeaturesToMapRequestHandler have been changed to take only geometry and options as their parameters. Also both implementations of VectorLayerPlugin have been changed accordingly. i.e.
+
+The old way: 
+sandbox.postRequestByName(rn, [geojson, 'GeoJSON', null, null, 'replace', true, style, false]);
+
+Now:
+sandbox.postRequestByName(rn, [geojson, {
+    layerId: 'ANALYSIS_VECTOR',
+    clearPrevious: true,
+    layerOptions: null,
+    centerTo: false,
+    featureStyle: style,
+    attributes: null
+}]);
+- layerId: If left out, a generic vector layer is used by VectorLayerPlugin. 
+- clearPrevious: whether to clear out all previous features
+- layerOptions: additional layerOptions
+- centerTo: whether to zoom in to the features
+- featureStyle: style of the features
+- attributes: additional attributes of the features
+(geometryType from the old call has been removed. From now on the VectorLayerPlugin will determine geometry type from the geometry)
+
+An event named 'FeatureEvent' is emitted when features are added, removed or clicked. The event holds features as an array of objects with feature id, geojson and layer id as content.
+
+#### Oskari.mapframework.domain.Map
+
+Sandbox.getMap().getBbox() no longer returns the Openlayers.Bounds or ol but an object with top, bottom, left, right keys
+
+To fix your code using calls like 'sandbox.getMap().getBbox()' in Openlayers 2:
+	
+	var bbox = sandbox.getMap().getBbox();
+	var bounds = new Openlayers.Bounds(bbox.left, bbox.bottom, bbox.right, bbox.top);
+
+In Openlayers 3:
+
+	var bbox = sandbox.getMap().getBbox();
+	new ol.extent.boundingExtent(bbox.left, bbox.bottom, bbox.right, bbox.top);
+	
+### mapwmts
+
+Layer order fixed in Openlayers map, when wmts layers on url parameters or in selectedLayers or in published view
+Opacity is now set for wmts layer, when added to map
+
+### File location changes
+
+Moved most of the files under Oskari/bundles/framework/mapmodule-plugin/ to Oskari/bundles/mapping/mapmodule to be used as common
+ resources instead of copy/pasting code/css/images. 
+The Openlayers 2 mapmodule from framework/mapmodule-plugin/ui/module/map-module.js is now in mapping/mapmodule/mapmodule.ol2.js.
+The Openlayers 3 mapmodule from mapping/mapmodule-plugin_ol3/ui/module/map-module.js is now in mapping/mapmodule/mapmodule.ol3.js.
+
+Files under Oskari/src/mapping/mapmodule have been moved to Oskari/bundles/mapping/mapmodule/.
+Removed most other files under Oskari/src and Oskari/srctest since they are not used.
+Renamed the remaining Oskari/src to Oskari/deprecated to signify these shouldn't be used.
+
+## 1.33.2
+
+AbstractLayer.getLegendImage() now returns the legend of current style if available. Fallback to base legendImage if style legend is not available. 
+AbstractLayer.selectStyle() no longer overwrites the base legendImage information.
+
+## 1.33.1
+
+### admin-layerselector
+
+Added a missing label for "Selected time" field (WMS-T).
+Fixed: Legendimage field shows a proxy-URL if layer requires credentials. Now shows the correct URL for legendimage.
+
+## 1.33
+
+### publisher2
+
+The new publisher is production ready. Check out the migration guide under Oskari server on how to migrate to the new publisher.
+
+### Sandbox/map layer service
+
+Fixed getNewestLayers(count) method to find really newest layers.
+
+## Layer plugins
+
+Fixed map layers handling when layer is not visible. Get layer image only then if layer is visible. 
+
+Fixed following plugins:
+- 'WmsLayerPlugin' 
+- 'WfsLayerPlugin'
+- 'MyPlacesLayerPlugin'
+- 'StatsLayerPlugin'
+- 'ArcGisLayerPlugin'
+- 'UserLayersLayerPlugin'
+- 'AnalysisLayerPlugin'
+
+### routingUI
+
+Now start and end points are markered on the map. Also all route plan(s) are shown on search results. Fixed error handling.
+
+### routingService
+
+Support OpenTripPlanner response format. Sends RouteSuccessEvent with route plan, success and request parameters.
+
+### statsgrid
+
+Now adds the indicator tab UI for user content/personaldata even if started after personaldata bundle.
+
+### Default view functionality
+
+Added functionality to mark a saved view as a default view.
+
+### mapfull
+
+Fixed map content width. Now navigation, zoombar, XY etc. tools are visible also on smaller screens.
+
+Fixed map layers handling when layer is not visible. Get layer image only then if layer is visible. 
+
+### map-module
+
+Added a new request 'ShowProgressSpinnerRequest' that shows / hides a progress indicator on the map. The request is by default enabled in rpc.
+
+### mapmodule-plugin/MarkersPlugin
+
+Added marker transient property, if this is setted to true then marker is not saved to state.
+
+### core/maplayer-service
+
+No longer generates an empty default style for WMS-layers.
+
+### analysis 
+
+Improvements in analysis methods:
+
+Aggregate layout and z-index fixes in no storage case
+
+
+### divmanazer/grid
+
+Changes in formating numeric values in grid (max 2 digits in decimals and handle grid value as string when beginning with "0"
+
+### publisher2
+
+Added LayerSelectionTool. This tool user can add map layer tool on the map. User can also select visible baselayers.
+
+### framework/mapwmts and mapping/mapwmts_ol3
+
+WmtsLayerService no longer parses rest url template from capabilities, but relies on server providing it. 
+This enables proxying for WMTS-layers that use resourceURL and require credentials.
+
+### libraries/moment
+
+Added Moment library for date/time presentation formatting.
+
+### rpc
+
+New event is enabled by default:
+- 'RouteSuccessEvent' notifies at a routing has getted response
+
+New request is enabled by default:
+- 'GetRouteRequest' requests to get route plan from routeService
+
+### admin-layerselector
+
+Now initializes the legendimage from style correctly when adding layers.
+
+## 1.32.1
+
+### integration/admin-layerselector
+
+Fixed legend url handling for layers that need credentials.
+
+### WMTS-layers
+
+Since adding WMTS-layer to map is now an async operation, workaround for visibility/opacity setting has been implemented.
+This needs further development for mapmodule to handle async layers properly, but for now it works.
+
 ## 1.32
+
+### catalogue/metadataflyout
+
+Added configurable ISO 1913139 XML or Print -links hiding. Defaults showing links. Configuration is done by adding the following information to a bundle config:
+
+    {
+        hideMetadataXMLLink: true,
+        hideMetaDataPrintLink: true
+    }
 
 ### map-module
 
 Modified styles not display error pink tiles (where is CSS olImageLoadError-class). Also added configurable OpenLayers IMAGE_RELOAD_ATTEMPTS and onImageLoadErrorColor.
 
+Added mapclick handling.
+
+### mapmodule-plugin/plugin/controls/OskariNavigation.js
+
+Removed mapclick handling because this breaks publisher featuredata functionality.
+
 ### sample/servlet
 
 Modified minifierAppSetup.json to also include coordinatetool -bundle.
+
+### admin-layerselector
+
+Added support for time values for WMS layers. The available time values are stored in layer attributes and the selected time value can be passed to GetMap requests through layer parameters. Added a field to the admin UI for selecting the desired time value.
 
 ### mapwmts
 
@@ -40,18 +313,21 @@ Added possibility to configure how many decimals coordinates are rounded. If not
 
 Added possibility to configure how many decimals coordinates are rounded. If not configured then using zero decimals.
 
+Fixed map double click handling, now when double clicked map the coordinate textboxes are updated map centeer values (if show mouse coordinate is not checked).
+
 ### mapwfs2
 
 Wfs layer rendering is improved. Improvements also made in the backend Transport service for this item
 
-### tampere/admin-wfs-search-channel
+### Analysis  / aggregate method
 
-*New  bundle!* Adds new WFS search admin tool. Admin can define new WFS search channels.
+Resultset content format is changed in backend. There is now one record for each property with aggregate function values.
 
-### tampere/search-from-channels
+Resultset was earlier one record with json attributes.
 
-*New  bundle!* Adds new WFS search.
+## 1.31.2
 
+Fixed a bug when saving a view with statsgrid on
 
 ## 1.31.1
 
@@ -137,7 +413,7 @@ Added currently selected style name as a sub header for legend flyout.
 
 ### publisher2
 
-Added GetInfoTool. GetInfoTool has now colous schema selection on extra options.
+Added GetInfoTool. GetInfoTool has now colour schema selection on extra options.
 
 PanelMapSize renamed to PanelMapPreview. PanelMapPreview allow select map preview mode in two different modes (mobile/desktop).
 
@@ -1086,6 +1362,30 @@ getSotkaIndicatorsData has been renamed as getStatsIndicatorsData.
 An injected empty conf no longer overwrites the basic functionality (default tile/flyout setting). getConfiguration() function should be preferred over referencing conf-property directly to ensure there's no issues with the config.
 
 DefaultTile now has methods setEnabled(bln) and isEnabled() for disabling/enabling the tile.
+
+Added DefaultModule to get boilerplate methods through inheritance. Based on DefaultExtension but removed flyout/tile/view methods. Usage example:
+
+```javascript
+Oskari.clazz.define('Oskari.mynamespace.bundle.mybundle.MyClass',
+    function () {
+        this.start();
+    },
+    {
+        "name" : "mybundle.MyClass",
+        afterStart : function(sandbox) {
+
+        },
+        "eventHandlers": {
+            "AfterMapMoveEvent" : function(e) {
+                console.log(e);
+            }
+        }
+    },
+    {
+        "extend" : ['Oskari.userinterface.extension.DefaultModule']
+    }
+);
+```
 
 ### arcgis / ArcGisLayer
 
@@ -2424,4 +2724,3 @@ bundles/framework/bundle/mapmodule-plugin/request/MapLayerUpdateRequestHandler.j
 ## Release notes 1.0
 
 Initial versio for new Oskari
-

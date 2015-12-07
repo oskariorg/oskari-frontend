@@ -1,28 +1,29 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "en",
     "key": "Search",
     "value": {
         "title": "Search",
         "desc": "",
-        "tabTitle": "Location Search",
-        "invalid_characters": "Search term contains illegal characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces, question marks (?), stars (*) and hyphens (-).",
-        "searchDescription": "Search location by place name, address or real estate unit identifier.",
+        "tabTitle": "Location search",
+        "invalid_characters": "The search term contains illegal characters. Allowed characters are letters (a-z, å, ä, ö, A-Z, Å, Ä, Ö), numbers (0-9), a dot (.), a comma (,), a hyphen (-) and an exclamation mark (!). You can also replace one mark with a question mark (?) or an end part with an asterisk (*).",
+        "searchDescription": "Search location by placename, address or real estate unit identifier.",
         "searchButton": "Search",
-        "searchAssistance": "Write the search term.",
-        "searchResultCount": "Your search returned",
+        "searchAssistance": "Type search term",
+        "searchResultCount": "You search returned",
         "searchResultCount2": "results.",
-        "searchResultDescriptionMoreResults": "Define the search to decrease the number of results.",
-        "searchResultDescriptionOrdering": "You can also order results in the table below by clicking the column headings.",
-        "searchResults": "Search results:",
+        "searchResultDescriptionMoreResults": "Decrease search results by defining the search term.",
+        "searchResultDescriptionOrdering": "Sort search results by clicking a column heading in the table below.",
+        "searchResults": "Search result",
         "searchResultsDescription": "results by search term",
         "searchservice_search_alert_title": "Error",
-        "searchservice_search_not_found_anything_text": "No results found.",
-        "too_short": "The search term is too short.",
-        "cannot_be_empty": "The search term must contain at least one character. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces and hyphens.",
-        "too_many_stars": "The search term contains too many stars (*-characters). It may contain at most N *-characters.",
-        "generic_error": "Search failed. Please try again later.",
+        "searchservice_search_not_found_anything_text": "No search results found. Please check the search term and try again.",
+        "too_short": "The search term is too short. It must be at least one character long. If you use an asterisk (*), the search tearm must contain at least four other characters.",
+        "cannot_be_empty": "The search term must contain at least one character.",
+        "too_many_stars": "The search term must contain at most one asterisk (*) in the end of the term.",
+        "generic_error": "The search failed.",
         "grid": {
-            "name": "Place name",
+            "name": "Placename",
             "village": "Municipality",
             "type": "Type"
         },
@@ -31,4 +32,5 @@ Oskari.registerLocalization({
             "title": "Search Results"
         }
     }
-});
+}
+);

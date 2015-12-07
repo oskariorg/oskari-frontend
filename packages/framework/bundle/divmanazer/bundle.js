@@ -161,6 +161,12 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
                 "src": "../../../../bundles/framework/divmanazer/component/PasswordInput.js"
             }, {
                 "type": "text/javascript",
+                "src": "../../../../bundles/framework/divmanazer/extension/DefaultModule.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/divmanazer/extension/DefaultView.js"
+            }, {
+                "type": "text/javascript",
                 "src": "../../../../bundles/framework/divmanazer/component/SearchInput.js"
             }, {
                 "type": "text/javascript",

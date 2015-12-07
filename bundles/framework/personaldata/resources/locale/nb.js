@@ -6,7 +6,7 @@ Oskari.registerLocalization(
         "title": "Mine data",
         "desc": "Mine data",
         "notLoggedIn": "Mine data inneholder din brukerprofil og dine lagrede forekomster, kart, 'embeddede' kart, indikatorer, analyser og datasett. <a href='/web/nb/login'>Logg inn for å sjekke dine data</a>.",
-        "notLoggedInText": "NOT TRANSLATED",
+        "notLoggedInText": "Logg inn for å kontrollere dine data",
         "tabs": {
             "myviews": {
                 "title": "Mine kart",
@@ -123,7 +123,7 @@ Oskari.registerLocalization(
                 "changeInfo": "Oppdater kontoinformasjon",
                 "changePassword": "Endre passord",
                 "removeAccount": "Slett din konto",
-                "changeInfoUrl": "NOT TRANSLATED"
+                "changeInfoUrl": "/web/en/profile"
             }
         },
         "button": {

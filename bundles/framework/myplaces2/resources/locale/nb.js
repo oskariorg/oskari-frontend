@@ -21,6 +21,7 @@ Oskari.registerLocalization(
                 "privateTooltip": "Dette kartlaget er privat. Klikk her for å publisere.",
                 "publicTooltip": "Dette kartlaget er offentlig. Klikk her for å avslutte publisering."
             },
+            "addCategoryFormButton": "NOT TRANSLATED",
             "addCategory": "Legg til kartlaget",
             "editCategory": "Tilpass kartlaget",
             "deleteCategory": "Slett kartlaget",
@@ -130,8 +131,7 @@ Oskari.registerLocalization(
             },
             "imagelink": {
                 "placeholder": "Lenke til bildet",
-                "previewLabel": "Forhåndsvis bilde",
-                "add": "Nytt kartlag"
+                "previewLabel": "Forhåndsvis bilde"
             },
             "rendering": {
                 "label": "Sted utforming",

@@ -8,26 +8,26 @@ Oskari.registerLocalization(
         "default-style": "Default style",
         "own-style": "Own style",
         "refresh": "Refresh",
-        "refresh_title": "Refresh WFS-layers, which are not rendered automatically on a map",
+        "refresh_title": "Refresh data products not rendering automatically on the map.",
         "tile": {
-            "title": "MapWfs2"
+            "title": "Data Products (WFS) Management"
         },
         "flyout": {
-            "title": "MapWfs2",
-            "message": "MapWfs2"
+            "title": "Data Products (WFS) Management",
+            "message": "Data Products (WFS) Management"
         },
         "error": {
             "title": "Error",
-            "connection_not_available": "Connection to the WFS background service is unavailable.",
-            "connection_broken": "Connection to the WFS background service broke down.",
-            "wfs_no_permissions": "You do not have the permission to use WFS layer {layer}.",
-            "wfs_configuring_layer_failed": "Configuring WFS layer {layer} failed.",
-            "wfs_request_failed": "Request to WFS layer {layer} failed.",
-            "features_parsing_failed": "The feature parsing of WFS layer {layer}) failed."
+            "connection_not_available": "The data product is not available. The WFS background service could not be connected.",
+            "connection_broken": "The data product is not availlable. The connection to the WFS background service broke down.",
+            "wfs_no_permissions": "You do not have rights to use the data product {layer}.",
+            "wfs_configuring_layer_failed": "Settings for the data product {layer} could not be configured.",
+            "wfs_request_failed": "The data product {layer} request could not be completed.",
+            "features_parsing_failed": "Feature data on the data product {layer} could not be retrieved."
         },
         "information": {
-            "title": "WFS-data rendering",
-            "info": "There are WFS-layers on a map, which are not rendered automatically.<br/> Locate and zoom first an area, where features are located.<br/> Feature data and features are retreaved via Feature data-button <br/> Features are rendered via Refresh-button"
+            "title": "Feature Data Rendering",
+            "info": "Some of data products are not rendered automatically. <br/><br/> Pleace select an area on the map and click the Refresh button. <br/><br/> Click Feature data to see feature data on the data product."
         },
         "button": {
             "cancel": "Cancel",

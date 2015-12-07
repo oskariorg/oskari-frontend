@@ -45,9 +45,22 @@ define([
                 'click .admin-remove-group': 'removeLayerCollection',
                 'click .add-layer-record.capabilities li': 'handleCapabilitiesSelection',
                 'change .admin-interface-version': 'handleInterfaceVersionChange',
-                'change .admin-layer-style': 'handleLayerStyleChange'
+                'change .admin-layer-style': 'handleLayerStyleChange',
+                'click .layer-capabilities.icon-info' : 'showCapabilitiesPopup'
             },
-
+            showCapabilitiesPopup : function() {
+                var caps = this.model.getCapabilities();
+                if(!caps) {
+                    return;
+                }
+                var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                dialog.addClass('admin-layerselector-capabilities-popup');
+                // Show stringified JSON in textarea
+                var content = jQuery('<textarea></textarea>').append(JSON.stringify(caps, null, 2));
+                var title = this.options.instance.getLocalization('admin').capabilitiesLabel;
+                dialog.show(title, content, [dialog.createCloseButton()]);
+                dialog.makeDraggable();
+            },
             /**
              * At initialization we add model for this tabPanelView, add templates
              * and do other initialization steps.
@@ -349,14 +362,11 @@ define([
              */
             handleLayerStyleChange: function (e) {
                 e.stopPropagation();
-                var
-                    me = this,
-                    element = jQuery(e.currentTarget),
+                var element = jQuery(e.currentTarget),
                     form = element.parents('.admin-add-layer'),
                     cur_style_name = form.find('#add-layer-style').val();
-
-                me.model.selectStyle(cur_style_name);
-                form.find('#add-layer-legendImage').val(me.model.getLegendUrl());
+                this.model.selectStyle(cur_style_name);
+                form.find('#add-layer-legendImage').val(this.model.getLegendUrl());
             },
 
             /**
@@ -606,6 +616,7 @@ define([
                 if(data.layerType === 'wmslayer') {
                     data.xslt = form.find('#add-layer-xslt').val();
                     data.gfiType = form.find('#add-layer-responsetype').val();
+                    data.params = form.find('#add-layer-selectedtime').val();
                 }
                 else if(data.layerType === 'wmtslayer') {
                     data.matrixSetId = form.find('#add-layer-matrixSetId').val();

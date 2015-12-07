@@ -472,7 +472,7 @@ Oskari.clazz.define(
             }
 
             for (i = 0; i < layers.length; i += 1) {
-                if (layers[i].hasFeatureData()) {
+                if (layers[i].hasFeatureData() && layers[i].isVisible()) {
                     // clean features lists
                     layers[i].setActiveFeatures([]);
                     if (grid !== null && grid !== undefined) {
@@ -682,7 +682,28 @@ Oskari.clazz.define(
             var lonlat = event.getLonLat(),
                 keepPrevious = this.getSandbox().isCtrlKeyDown();
 
-            this.getIO().setMapClick(lonlat, keepPrevious);
+            var geojson_format = new OpenLayers.Format.GeoJSON();
+            var point = new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat);
+
+            var pixelTolerance = 15;
+            var selection = geojson_format.write(point);
+            var json = {
+                    type: 'FeatureCollection',
+                    crs: this.getMap().getProjection(),
+                    features: [{
+                        type: 'Feature',
+                        geometry: JSON.parse(selection),
+                        properties : {
+                            // add buffer based on resolution
+                            buffer_radius : this.getMap().getResolution() * pixelTolerance
+                        }
+                    }]
+                };
+            this.getIO().setMapClick({
+                lon : lonlat.lon,
+                lat : lonlat.lat,
+                json : json
+            }, keepPrevious);
         },
 
         /**
@@ -715,6 +736,10 @@ Oskari.clazz.define(
                     event.getMapLayer().getId(),
                     event.getMapLayer().isVisible()
                 );
+
+                if(event.getMapLayer().isVisible()){
+                    this.mapMoveHandler(event.getMapLayer().getId());
+                }
             }
         },
 
@@ -770,7 +795,7 @@ Oskari.clazz.define(
             }
 
             layers.forEach(function (layer) {
-                if (layer.hasFeatureData() && layer.isManualRefresh()) {
+                if (layer.hasFeatureData() && layer.isManualRefresh() && layer.isVisible()) {
                     // clean features lists
                     layer.setActiveFeatures([]);
                     if (grid !== null && grid !== undefined) {
@@ -823,7 +848,7 @@ Oskari.clazz.define(
             layers = me.getSandbox().findAllSelectedMapLayers();
 
             layers.forEach(function (layer) {
-                if (layer.hasFeatureData()) {
+                if (layer.hasFeatureData() && layer.isVisible()) {
                     // clean features lists
                     layer.setActiveFeatures([]);
                     if (grid !== null && grid !== undefined) {
@@ -1039,7 +1064,6 @@ Oskari.clazz.define(
                 highlightLayerExp,
                 BBOX,
                 bboxKey,
-                dataForTileTemp,
                 style,
                 tileToUpdate,
                 boundsObj = new OpenLayers.Bounds(imageBbox),
@@ -1100,8 +1124,7 @@ Oskari.clazz.define(
                 }
                 // temp cached and redrawn if gotten better
                 else {
-                    dataForTileTemp = me._tileDataTemp.mget(layerId,style,bboxKey);
-                    if (dataForTileTemp) {}
+                    //Old temp tile (border tile) cant be used, because it is not valid after map move
                     me._tileDataTemp.mput(layerId,style,bboxKey,imageUrl);
                 }
                 // QUEUES updates!
@@ -1127,6 +1150,8 @@ Oskari.clazz.define(
                     _layer.getMinScale()
                 ),
                 key,
+                me = this,
+                sandbox = me.getSandbox(),
                 defaultParams = {
                     layers: '',
                     transparent: true,
@@ -1139,7 +1164,7 @@ Oskari.clazz.define(
                     scales: layerScales,
                     isBaseLayer: false,
                     displayInLayerSwitcher: true,
-                    visibility: true,
+                    visibility: _layer.isInScale(sandbox.getMap().getScale()) && _layer.isVisible(),
                     buffer: 0,
                     _plugin: this,
 

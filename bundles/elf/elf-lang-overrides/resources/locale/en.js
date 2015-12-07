@@ -50,3 +50,12 @@ Oskari.registerLocalization(
         }
     }
 }, true);
+
+Oskari.registerLocalization(
+{
+    "lang": "en",
+    "key": "PersonalData",
+    "value": {
+        "notLoggedIn": "My data contains your user profile and all your saved features, map views, embedded maps and datasets."
+    }
+}, true);
