@@ -80,7 +80,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
 
             // setup title based on new/edit
             var sidebarTitle = content.find('div.header h3');
-            if (me.data) {
+
+            if (me.data.uuid) {
                 sidebarTitle.append(me.loc.titleEdit);
             } else {
                 sidebarTitle.append(me.loc.title);
@@ -443,7 +444,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 'Oskari.userinterface.component.buttons.SaveButton'
             );
 
-            if (me.data) {
+            if (me.data.uuid) {
                 var save = function () {
                     var selections = me._gatherSelections();
                     if (selections) {

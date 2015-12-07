@@ -50,7 +50,6 @@ Oskari.clazz.define(
             for (var i = 0, ilen = layers.length; i < ilen; i++) {
                 var _layer = layers[i];
                 var layerScales = this.getMapModule().calculateLayerScales(_layer.getMaxScale(), _layer.getMinScale());
-
                 var defaultParams = {
                         'LAYERS': _layer.getLayerName(),
                         'TRANSPARENT': true,
@@ -94,12 +93,13 @@ Oskari.clazz.define(
                     });
                 }
                 // Set min max Resolutions
-                if (_layer.getMaxScale() || _layer.getMinScale()) {
-                    // use resolutions instead of scales to minimize chance of transformation errors
-                    var layerResolutions = this.getMapModule().calculateLayerResolutions(_layer.getMaxScale(), _layer.getMinScale());
-                    if (layerResolutions) {
-                        layerImpl.setMaxResolution(layerResolutions[0]);
-                        layerImpl.setMinResolution(layerResolutions[layerResolutions.length-1]);
+                if (_layer.getMaxScale() && _layer.getMaxScale() !== -1 ) {
+                        layerImpl.setMinResolution(this.getMapModule().calculateScaleResolution(_layer.getMaxScale()));
+                }
+                if (_layer.getMinScale()  && _layer.getMinScale() !== -1 ) {
+                    // No definition, if scale is greater than max resolution scale
+                    if (_layer.getMinScale() < this.getMapModule().getMapScales()[0] ) {
+                        layerImpl.setMaxResolution(this.getMapModule().calculateScaleResolution(_layer.getMinScale()));
                     }
                 }
                 this.mapModule.addLayer(layerImpl, _layer, layerIdPrefix + _layer.getId());
