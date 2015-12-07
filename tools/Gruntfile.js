@@ -49,7 +49,7 @@ module.exports = function (grunt) {
                 concat: true
             }
         },
-        release: {
+        releaseManual: {
             options: {
                 configs: '../applications/sample/servlet/minifierAppSetup.json',
                 defaultIconDirectoryPath: '../applications/default/icons/'
@@ -274,6 +274,7 @@ module.exports = function (grunt) {
     grunt.registerTask('default', ['karma:dev', 'compileAppSetupToStartupSequence', 'compileDev', 'karma:dev:run', 'watch']);
     grunt.registerTask('ci', ['compileAppSetupToStartupSequence', 'compileDev', 'karma:ci']);
     grunt.registerTask('minifyStats', ['clean:build', 'minifyPolymer', 'minifyPolymerCSS', 'copy:stats', 'vulcanize']);
+    grunt.registerTask('release', ['minifyStats', 'releaseManual']);
     // Default task.
     //    grunt.registerTask('default', 'watch testacularServer:dev');
     //    grunt.registerTask('default', 'testacularServer:dev watch');
@@ -337,7 +338,7 @@ module.exports = function (grunt) {
         done();
     });
 
-    grunt.registerTask('release', 'Release build', function (version, configs, defaultIconDirectoryPath, copyResourcesToApplications, skipDocumentation) {
+    grunt.registerTask('releaseManual', 'Release build', function (version, configs, defaultIconDirectoryPath, copyResourcesToApplications, skipDocumentation) {
         var i,
             ilen,
             config,
@@ -357,12 +358,12 @@ module.exports = function (grunt) {
         if(!version) {
             version  = new Date().toISOString().replace(/:/g,'');
             grunt.log.writeln('No version specified, using current timestamp: ' + version + 
-                '\nUsage: grunt release:<version>:"../path/to/minifierAppSetup.json"');
+                '\nUsage: grunt releaseManual:<version>:"../path/to/minifierAppSetup.json"');
         }
         if (options.configs && !configs) {
             configs = options.configs;
             grunt.log.writeln('No setup specified, using default: ' + configs + 
-                '\nUsage: grunt release:<version>:"../path/to/minifierAppSetup.json"');
+                '\nUsage: grunt releaseManual:<version>:"../path/to/minifierAppSetup.json"');
         }
         if (options.defaultIconDirectoryPath && !defaultIconDirectoryPath) {
             defaultIconDirectoryPath = options.defaultIconDirectoryPath;
