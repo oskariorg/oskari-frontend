@@ -333,7 +333,8 @@ Oskari.clazz.define(
          * @return {Object[]}
          */
         _getChangedContentData: function (oldData, newData) {
-            var retData,
+            var me = this,
+                retData,
                 i,
                 j,
                 nLen,
@@ -350,7 +351,39 @@ Oskari.clazz.define(
                 }
             }
 
-            retData = oldData.concat(newData);
+            return me._mergeContentData(oldData, newData);
+        },
+
+        /**
+         * Merge content data
+         * @method  @private_mergeContentData
+         * @param  {Object[]} oldData
+         * @param  {Object[]} newData
+         * @return {Object[]}
+         */
+        _mergeContentData: function(oldData, newData){
+            var retData,
+                i,
+                j,
+                nLen,
+                oLen,
+                found,
+                notSameData = [];
+
+            for (j = 0, nLen = newData.length; j < nLen; j += 1) {            
+                found = false;                
+                for (i = 0, oLen = oldData.length; i < oLen; i += 1) {
+                    if(newData[j].html === oldData[i].html && newData[j].layerId === oldData[i].layerId){
+                        found = true;
+                    }
+                }
+
+                if(!found){
+                    notSameData.push(newData[j])
+                }
+            }
+
+            retData = oldData.concat(notSameData);
 
             return retData;
         },
