@@ -149,8 +149,14 @@ Oskari.registerLocalization(
                 }
             },
             "sizes": {
-                "mobile": "Mobiili",
-                "desktop": "Työpöytä"
+                "small": "Pieni",
+                "medium": "Keskikokoinen",
+                "large": "Suuri",
+                "fill": "Tilan täyttävä",
+                "custom": "Määritä oma koko",
+                "width": "leveys",
+                "height": "korkeus",
+                "separator": "x"
             },
             "buttons": {
                 "save": "Tallenna",

@@ -149,8 +149,14 @@ Oskari.registerLocalization(
                 }
             },
             "sizes": {
-                "mobile": "Mobile",
-                "desktop": "Desktop"
+                "small": "Small",
+                "medium": "Medium",
+                "large": "Large",
+                "fill": "Space filling",
+                "custom": "Custom size",
+                "width": "width",
+                "height": "height",
+                "separator": "x"
             },
             "buttons": {
                 "save": "Save",
