@@ -1,81 +1,87 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "es",
     "key": "elf-license",
     "value": {
-        "getLicenseText": "License",
+        "getLicenseText": "Licencia",
         "errors": {
             "cannotGetLicenseInformation": {
-                "title": "Error for getting license information",
-                "message": "Cannot get license information"
+                "title": "Error al obtener la información de la licencia",
+                "message": "No es posible obtener la información de la licencia"
             },
             "failedGetLicenseInformation": {
-                "title": "Failed to get license information",
-                "message": "Cannot connect to license server"
+                "title": "fallo en la obtención de la información de la licencia",
+                "message": "no es posible conectar con el servidor de la licencia"
             },
             "cannotGetLicensePrice": {
-                "title": "Failed to get license price",
-                "message": "Cannot get license price"
+                "title": "fallo en la obtención del precio de la  licencia",
+                "message": "no es posible obtener el precio de la licencia"
             },
             "failedConclude": {
-                "title": "Error for conclude license",
-                "message": "Cannot conclude license."
+                "title": "error al finalizar la licencia",
+                "message": "no se puede finalizar la licencia"
             },
             "concludeNoResponse": {
-                "title": "Cannot conclude license",
-                "message": "Cannot conclude license."
+                "title": "no se puede finalizar la licencia",
+                "message": "no se puede finalizar la licencia"
             },
             "cannotDeactivateLicense": {
-                "title": "Failed to deactivate license",
-                "message": "Cannot deactivate license"
+                "title": "fallo en la desactivación de la licencia",
+                "message": "no se puede desactivar la licencia"
+            },
+            "checkFields": {
+                "title": "comprueba los valores requeridos",
+                "message": "faltan valores de"
             }
         },
         "success": {
             "deactivateLicense": {
-                "title": "License deactivated",
-                "message": "License deactivated successfully"
+                "title": "licencia desactivada",
+                "message": "licencia desactivada satisfactoriamente"
             }
         },
         "dialog": {
-            "licenseTitle": "License details",
-            "licenseModelsTitle": "Licensemodels:",
-            "noRightToAnyLicenseModels": "You have no rights to any licensemodels.",
-            "loginShort": "Log in to show licensemodels.",
-            "licenseSummaryTitle": "License summary",
-            "priceTitle": "Price",
+            "licenseTitle": "detalles de la licencia",
+            "licenseModelsTitle": "modelos de licencia",
+            "noRightToAnyLicenseModels": "no tiene permisos para ninguna licencia",
+            "loginShort": "acceda para ver los modelos de licencia",
+            "licenseSummaryTitle": "resumen de la licencia",
+            "priceTitle": "Precio",
             "priceUnitEuro": "€",
             "help": {
-                "info": "Select a license model by clicking on it.",
-                "details": "Fill license details, all required fields are marked with asterisk (*). Press 'Next' to see license summary and price. If you want select different license model then press 'Previous'. You can also stop your order by pressing 'Close' button.",
-                "summary": "Read license and accept filled license pressing 'Conclude'. If you want edit some filled information, go back to by pressing 'Back' button. You can also stop your order by pressing 'Close' button.",
-                "orderDetails": "Above you will see your license order information. Close dialog by pressing 'Close' button. If you want deactivate your order then press 'Deactivate license' button."
+                "info": "Seleccione el modelo de licencia clicando en ello",
+                "details": "Rellene los  detalles de la licencia, todos los campos  marcados con un asterisco ( * ) son obligatorios . Pulse \"Siguiente\" para ver  el resumen de la licencia y el precio. Si desea seleccionar otro modelo de licencia , pulse 'Anterior'. También puede abandonar su solicitud pulsando el botón 'Cerrar'",
+                "summary": "Leea la  licencia y aceptela presionando 'Terminar'. Si quieres editar algunos campos de la solicitud, regrese a pulsando botón 'retornar'. También puede abandonar su solicitud pulsando el botón 'Cerrar'",
+                "orderDetails": "arriba verá  la información de la solicitud  de licencia. Cierre el cuadro de diálogo pulsando el botón 'Cerrar'. Si desea desactivar su orden pulse el botón \"desactivar licencia\"."
             },
-            "concludeSuccessTitle": "License concluded successfully",
+            "concludeSuccessTitle": "licencia finalizada satisfactoriamente",
             "conclude": {
-                "title": "License order details",
-                "productid": "Product",
-                "licenseid": "License",
-                "validto": "Valid to"
+                "title": "detalles de la solicitud de licencia",
+                "productid": "producto",
+                "licenseid": "licencia",
+                "validto": "valida hasta"
             },
             "deactivateConfirm": {
-                "title": "License deactivate",
-                "message": "Do you want deactivate your license?"
+                "title": "licencia desactivada",
+                "message": "quiere desactivar la licencia"
             },
-            "validTo": "Subscription valid for {day}",
-            "licenseId": "License id: {licenseid}",
-            "licenseServiceUrl": "License service URL: {serviceurl}",
-            "licenceConcluded" : {
-                "message": "License concluded, see below for the license details."
+            "validTo": "subscripción valida por {dia}",
+            "licenseId": "id de la licencia : {licenseid}",
+            "licenseServiceUrl": "servicio de la licencia  URL: {serviceurl}",
+            "licenceConcluded": {
+                "message": "Licencia finalizada vea debajo los detales de la licencia"
             }
         },
         "buttons": {
-            "close": "Close",
-            "previous": "Previous",
-            "next": "Next",
-            "conclude": "Conclude",
+            "close": "cierre",
+            "previous": "anterior",
+            "next": "siguiente",
+            "conclude": "finalizado",
             "ok": "OK",
-            "deactivate": "Deactivate license",
+            "deactivate": "licencia desactivada",
             "no": "No",
-            "yes": "Yes"
+            "yes": "si"
         }
     }
-});
+}
+);

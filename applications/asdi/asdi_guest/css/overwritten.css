@@ -34,8 +34,7 @@ table {
         height: 100%;
     }
 
-    img.panbuttonDivImg {
-        border: 0;
+    img.panbuttonDivImg {        border: 0;
     }
 
    .oskari-tile {
@@ -140,5 +139,9 @@ table {
 	.search .resultList div h3 {
 		font-size: 14px;	
 	}
+}
+
+.layer-backendstatus-icon{
+    display: none;
 }
 

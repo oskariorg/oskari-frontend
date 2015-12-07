@@ -16,14 +16,12 @@ OskariNavigation = OpenLayers.Class(OpenLayers.Control.Navigation, {
         OpenLayers.Control.Navigation.prototype.initialize.apply(this, [bounds, options]);
     },
       /* @method setup */
-      setup : function(mapmodule) {
+    setup : function(mapmodule) {
         this.mapmodule = mapmodule;
         this.sandbox = this.mapmodule.getSandbox();
         this._hoverEventBuilder = this.sandbox.getEventBuilder('MouseHoverEvent');
         this._hoverEvent = this._hoverEventBuilder();
-        this._mapClickedBuilder = this.sandbox.getEventBuilder('MapClickedEvent');
-      },
-
+    },
 
     draw: function() {
         // disable right mouse context menu for support of right click events
@@ -46,17 +44,8 @@ OskariNavigation = OpenLayers.Class(OpenLayers.Control.Navigation, {
                 return value;
             };
         };
-        var clickHook = function(actualmethod, ctx) {
-            return function() {
-                var c = ctx || me;
-                var value = actualmethod.apply(c, arguments);
-                me.__sendMapClickEvent(arguments[0]);
-                return value;
-            };
-        };
 
         var clickCallbacks = {
-            'click': clickHook(this.defaultClick),
             'dblclick': movementHook(this.defaultDblClick),
             'dblrightclick': movementHook(this.defaultDblRightClick)
         };
@@ -147,11 +136,5 @@ OskariNavigation = OpenLayers.Class(OpenLayers.Control.Navigation, {
         var lonlat = this.map.getLonLatFromViewPortPx(evt.xy);
         this._hoverEvent.set(lonlat.lon, lonlat.lat, true, evt.pageX, evt.pageY);
         this.sandbox.notifyAll(this._hoverEvent);
-    },
-    __sendMapClickEvent : function(evt) {
-        /* may be this should dispatch to mapmodule */
-        var lonlat = this.map.getLonLatFromViewPortPx(evt.xy),
-            event = this._mapClickedBuilder(lonlat, evt.xy.x, evt.xy.y);
-        this.sandbox.notifyAll(event);
     }
 });

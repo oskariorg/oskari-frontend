@@ -11,6 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
      */
     function (instance, config, locale, mapmodule, sandbox) {
         this._locale = locale;
+        this._config = config;
         this._mapmodule = mapmodule;
         this._sandbox = sandbox;
         this._instance = instance;
@@ -129,28 +130,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         },
 
         /**
-         * Validate lon and lat inputs.
-         * @method  @private _isValidLonLat
-         *
-         * @param  {Object} lon lon coordinate
-         * @param  {Object lat lat coordinate
-         *
-         * @return {Boolean} is valid or not
-         */
-        _isValidLonLat: function(lon,lat){
-            var me = this,
-                maxExtent = me._mapmodule.getMaxExtent();
-
-            if(isNaN(lon) || isNaN(lat)) {
-                return false;
-            } else if(lon < maxExtent.left || lon > maxExtent.right || lat < maxExtent.bottom || lat > maxExtent.top) {
-                return false;
-            } else {
-                return true;
-            }
-        },
-
-        /**
          * Center map to selected coordinates.
          * @method  @private _centerMapToSelectedCoordinates
          *
@@ -161,7 +140,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 lonVal = me._lonInput.val(),
                 latVal = me._latInput.val(),
                 loc = me._locale;
-            if(me._isValidLonLat(lonVal,latVal)) {
+            if(this.getMapModule().isValidLonLat(lonVal,latVal)) {
                 var moveReqBuilder = me._sandbox.getRequestBuilder('MapMoveRequest');
                 var moveReq = moveReqBuilder(lonVal, latVal);
                 me._sandbox.request(this, moveReq);
@@ -187,7 +166,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             var me = this,
                 loc = me._locale,
                 crs = me.getMapModule().getProjection(),
-                crsText = loc.crs[crs] || crs,
                 el = me._templates.coordinatetool.clone(),
                 popup = me._templates.popup.clone(),
                 popupContent = me._templates.popupContent.clone(),
@@ -253,10 +231,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * @return {[type]}      [description]
          */
         _updateLonLat: function(data){
-            var me = this;
+            var me = this,
+                conf = me._config,
+                roundToDecimals = 0;
+
+            if(conf && conf.roundToDecimals) {
+                roundToDecimals = conf.roundToDecimals;
+            }
+
             if (me._latInput && me._lonInput) {
-                me._latInput.val(Math.floor(data.lonlat.lat));
-                me._lonInput.val(Math.floor(data.lonlat.lon));
+                me._latInput.val(data.lonlat.lat.toFixed(roundToDecimals));
+                me._lonInput.val(data.lonlat.lon.toFixed(roundToDecimals));
             }
         },
 
@@ -268,15 +253,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          */
         refresh: function (data) {
             var me = this,
-                conf = me.getConfig();
+                conf = me._config;
 
             if (!data || !data.lonlat) {
                 // update with map coordinates if coordinates not given
                 var map = me.getSandbox().getMap();
                 data = {
                     'lonlat': {
-                        'lat': Math.floor(map.getY()),
-                        'lon': Math.floor(map.getX())
+                        'lat': parseFloat(map.getY()),
+                        'lon': parseFloat(map.getX())
                     }
                 };
                 me._updateLonLat(data);
@@ -312,8 +297,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     if(this._showMouseCoordinates) {
                         this.refresh({
                             'lonlat': {
-                                'lat': Math.floor(event.getLat()),
-                                'lon': Math.floor(event.getLon())
+                                'lat': parseFloat(event.getLat()),
+                                'lon': parseFloat(event.getLon())
                             }
                         });
                     }
@@ -324,7 +309,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                  * Shows map center coordinates after map move
                  */
                 AfterMapMoveEvent: function (event) {
-                    if(this._showMouseCoordinates) {
+                    if(!this._showMouseCoordinates) {
                         this.refresh();
                     }
                 },
@@ -337,8 +322,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                         var lonlat = event.getLonLat();
                         this.refresh({
                             'lonlat': {
-                                'lat': Math.floor(lonlat.lat),
-                                'lon': Math.floor(lonlat.lon)
+                                'lat': parseFloat(lonlat.lat),
+                                'lon': parseFloat(lonlat.lon)
                             }
                         });
                     }

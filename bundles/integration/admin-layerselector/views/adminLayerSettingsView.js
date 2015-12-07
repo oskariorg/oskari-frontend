@@ -44,9 +44,23 @@ define([
                 'click .admin-add-group-cancel': 'hideLayerSettings',
                 'click .admin-remove-group': 'removeLayerCollection',
                 'click .add-layer-record.capabilities li': 'handleCapabilitiesSelection',
-                'change .admin-interface-version': 'handleInterfaceVersionChange'
+                'change .admin-interface-version': 'handleInterfaceVersionChange',
+                'change .admin-layer-style': 'handleLayerStyleChange',
+                'click .layer-capabilities.icon-info' : 'showCapabilitiesPopup'
             },
-
+            showCapabilitiesPopup : function() {
+                var caps = this.model.getCapabilities();
+                if(!caps) {
+                    return;
+                }
+                var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                dialog.addClass('admin-layerselector-capabilities-popup');
+                // Show stringified JSON in textarea
+                var content = jQuery('<textarea></textarea>').append(JSON.stringify(caps, null, 2));
+                var title = this.options.instance.getLocalization('admin').capabilitiesLabel;
+                dialog.show(title, content, [dialog.createCloseButton()]);
+                dialog.makeDraggable();
+            },
             /**
              * At initialization we add model for this tabPanelView, add templates
              * and do other initialization steps.
@@ -341,6 +355,19 @@ define([
                 }
 
             },
+            /**
+             * Handle layer style change
+             *
+             * @method handleLayerStyleChange
+             */
+            handleLayerStyleChange: function (e) {
+                e.stopPropagation();
+                var element = jQuery(e.currentTarget),
+                    form = element.parents('.admin-add-layer'),
+                    cur_style_name = form.find('#add-layer-style').val();
+                this.model.selectStyle(cur_style_name);
+                form.find('#add-layer-legendImage').val(this.model.getLegendUrl());
+            },
 
             /**
              * Remove layer
@@ -582,18 +609,17 @@ define([
                 data.legendImage = form.find('#add-layer-legendImage').val();
                 data.inspireTheme = form.find('#add-layer-inspire-theme').val();
                 data.metadataId = form.find('#add-layer-datauuid').val();
+                data.attributes = form.find('#add-layer-attributes').val();
 
                 // layer type specific
                 // TODO: maybe something more elegant?
                 if(data.layerType === 'wmslayer') {
                     data.xslt = form.find('#add-layer-xslt').val();
                     data.gfiType = form.find('#add-layer-responsetype').val();
-                    data.attributes = form.find('#add-layer-attributes').val();
+                    data.params = form.find('#add-layer-selectedtime').val();
                 }
                 else if(data.layerType === 'wmtslayer') {
                     data.matrixSetId = form.find('#add-layer-matrixSetId').val();
-                    data.matrixSet = form.find('#add-layer-matrixSet').val();
-                    data.attributes = form.find('#add-layer-attributes').val();
                 }
                 else if(data.layerType === 'wfslayer') {
                     admin = me.model.getAdmin();
@@ -839,16 +865,8 @@ define([
                     warningDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                     warningDialogOkBtn = warningDialog.createCloseButton(me.instance.getLocalization().ok),
                     warningMessage;
-                if(layerType === 'wmslayer') {
-                    me.model.setCapabilitiesResponse(response);
-                }
-                else if(layerType === 'wmtslayer') {
-                    var format = new OpenLayers.Format.WMTSCapabilities(),
-                        caps = format.read(response.xml);
-                    me.model.setOriginalMatrixSetData(caps);
-                    me.model.setCapabilitiesResponse(response);
-                } else if(layerType === 'wfslayer') {
-                    me.model.setCapabilitiesResponse(response);
+                me.model.setCapabilitiesResponse(response);
+                if(layerType === 'wfslayer') {
                     //check layers with error and act accordingly.
                     var capabilities = me.model.get("capabilities");
                     if (capabilities && capabilities.layersWithErrors && capabilities.layersWithErrors.length > 0) {

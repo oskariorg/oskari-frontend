@@ -46,50 +46,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
 
         me.normalMapPlugins = [];
 
-        me.grid = {};
-        me.grid.selected = true;
-
         if (data) {
             if (data.lang) {
                 Oskari.setLang(data.lang);
-            }
-            if (me.data.state.mapfull.config.layout) {
-                me.activeToolLayout = me.data.state.mapfull.config.layout;
-            }
-            // setup initial size
-            var sizeIsSet = false,
-                initWidth,
-                initHeight,
-                option,
-                i;
-
-            if (me.data.state.mapfull.config.size) {
-                initWidth = me.data.state.mapfull.config.size.width;
-                initHeight = me.data.state.mapfull.config.size.height;
-            }
-
-            if (initWidth === null || initWidth === undefined) {
-                initWidth = '';
-            }
-
-            if (initHeight === null || initHeight === undefined) {
-                initHeight = '';
-            }
-
-            for (i = 0; i < me.sizeOptions.length; i += 1) {
-                option = me.sizeOptions[i];
-                if (initWidth === option.width && initHeight === option.height) {
-                    option.selected = true;
-                    sizeIsSet = true;
-                } else {
-                    option.selected = false;
-                }
-            }
-            if (!sizeIsSet) {
-                var customSizeOption = me.sizeOptions[me.sizeOptions.length - 1];
-                customSizeOption.selected = true;
-                customSizeOption.width = initWidth;
-                customSizeOption.height = initHeight;
             }
         }
 
@@ -110,7 +69,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         render: function (container) {
             var me = this,
                 content = me.template.clone();
-
             me.mainPanel = content;
 
             container.append(content);
@@ -190,7 +148,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             var me = this;
             _.each(me.panels, function(panel) {
                if(panel.init) {
-                    panel.init();
+                    panel.init(me.data);
                 }
             });
         },
@@ -282,7 +240,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                     tools, sandbox, mapModule, me.loc, me.instance
                 );
 
-
             // initialize form (restore data when editing)
             form.init(me.data, function(value) {
                 me.setMode(value);
@@ -291,9 +248,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             return form;
         },
         /**
-         * @private @method _createToolLayoutPanel
-         * Creates the tool layout panel of publisher
-         * @param {Oskari.mapframework.publisher.tool.Tool[]} tools
+         * @private @method _createLayoutPanel
+         * Creates the layout panel of publisher
          */
         _createLayoutPanel: function () {
             var me = this,
@@ -324,11 +280,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 }
             });
         },
-
-        setPluginLanguage : function() {
-            alert('TODO');
+        setPluginLanguage : function(lang) {
+            var me = this;
+            if (lang === null || lang === undefined) {
+                throw new TypeError(
+                    'Oskari.mapframework.bundle.publisher.view.BasicPublisher' +
+                    '.setPluginLanguage: missing language'
+                );
+            }
+            Oskari.setLang(lang);
+            _.each(me.panels, function(panel) {
+                if (panel._restartActivePlugins && typeof panel._restartActivePlugins === 'function') {
+                    panel._restartActivePlugins();
+                }
+            });
         },
-
         /**
         * Get panel/tool handlers
         * @method getHandlers
@@ -399,12 +365,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         _gatherSelections: function(){
             var me = this,
                 sandbox = this.instance.getSandbox(),
-                selections = {},
+                selections = {
+                    configuration: {
+
+                    }
+                },
                 errors = [];
 
-
             var mapFullState = sandbox.getStatefulComponents().mapfull.getState();
-            selections.mapfull = {
+            selections.configuration.mapfull = {
                 state: mapFullState
             };
 
@@ -420,8 +389,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 me._showValidationErrorMessage(errors);
                 return null;
             }
-
-//            console.log(selections);
             return selections;
         },
 
@@ -486,8 +453,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 };
                 saveBtn.setTitle(me.loc.buttons.saveNew);
                 saveBtn.setHandler(function () {
-                    me.data.id = null;
-                    delete me.data.id;
+                    me.data.uuid = null;
+                    delete me.data.uuid;
                     save();
                 });
                 saveBtn.insertTo(buttonCont);
@@ -534,18 +501,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                         okBtn = dialog.createCloseButton(me.loc.buttons.ok);
                     dialog.show(me.loc.error.title, me.loc.error.saveFailed, [okBtn]);
                 };
-
             if (selections.size) {
                 totalWidth = selections.size.width + 'px';
                 totalHeight = selections.size.height + 'px';
             }
-
             // make the ajax call
             jQuery.ajax({
-                url: url + '&action_route=REPLACE_WITH_NEW_PUBLISHER_ACTION_ROUTE',
+                url: url + '&action_route=AppSetup',
                 type: 'POST',
                 dataType: 'json',
                 data: {
+                    uuid: (me.data && me.data.uuid) ? me.data.uuid : undefined,
                     pubdata: JSON.stringify(selections)
                 },
                 beforeSend: function (x) {
@@ -564,6 +530,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                             response.lang,
                             sandbox.createURL(response.url)
                         );
+
+                        me._editToolLayoutOff();
                         sandbox.notifyAll(event);
                     } else {
                         errorHandler();
@@ -664,6 +632,33 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 content.append(row);
             }
             dialog.show(this.loc.error.title, content, [okBtn]);
+        },
+        /**
+         * @private @method _showReplaceConfirm
+         * Shows a confirm dialog for replacing published map
+         *
+         * @param {Function} continueCallback function to call if the user confirms
+         *
+         */
+        _showReplaceConfirm: function (continueCallback) {
+            var dialog = Oskari.clazz.create(
+                    'Oskari.userinterface.component.Popup'
+                ),
+                okBtn = Oskari.clazz.create(
+                    'Oskari.userinterface.component.Button'
+                );
+            okBtn.setTitle(this.loc.buttons.replace);
+            okBtn.addClass('primary');
+            okBtn.setHandler(function () {
+                dialog.close();
+                continueCallback();
+            });
+            var cancelBtn = dialog.createCloseButton(this.loc.buttons.cancel);
+            dialog.show(
+                this.loc.confirm.replace.title,
+                this.loc.confirm.replace.msg,
+                [cancelBtn, okBtn]
+            );
         },
         /**
          * @method destroy

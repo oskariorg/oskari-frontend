@@ -43,7 +43,7 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
         /**
          * @property flyoutZIndexBase
          */
-        this.flyoutZIndexBase = 1100;
+        this.flyoutZIndexBase = 1600;
 
         /**
          * @property menubarContainerId
@@ -1336,7 +1336,7 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
                 zprops = {},
                 zextns = {},
                 zflyout = {},
-                min = 1100,
+                min = 1600,
                 idx,
                 e,
                 extensionInfo,

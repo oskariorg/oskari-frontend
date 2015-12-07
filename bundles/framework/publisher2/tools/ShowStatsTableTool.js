@@ -10,27 +10,49 @@ function() {
     templates: {
         publishedGridTemplate: '<div class="publishedgrid"></div>'
     },
+        /**
+         * Initialize tool
+         * @params {} state data
+         * @method init
+         * @public
+         */
+        init: function (pdata) {
+            var me = this,
+                tool = me.getTool(pdata);
+
+
+            me.setEnabled(false);
+        },
+    bundleName: 'publishedgrid',
     /**
     * Get tool object.
+     * @params {}  pdta.configuration.publishedgrid.state
     * @method getTool
     * @private
     *
     * @returns {Object} tool
     */
-    getTool: function(){
+    getTool: function(pdata){
         var me = this,
             statsGrid = me.__sandbox.getStatefulComponents().statsgrid,
-            statsGridState = me._filterIndicators(_.clone(statsGrid.state, true)),
+            statsGridState = Oskari.util.keyExists(pdata, 'configuration.publishedgrid.state') ? pdata.configuration.publishedgrid.state : statsGrid.state,
             layer = me._getStatsLayer();
-        return {
-            id: 'Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin',
-            name: 'grid',
-            config: {
-                'published': true,
-                'layer': layer,
-                'state': statsGridState
-            }
-        };
+
+        if(!me.__tool) {
+            statsGridState = me._filterIndicators(_.clone(statsGridState, true));
+
+            me.__tool = {
+
+                id: 'Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin',
+                title: 'grid',
+                config: {
+                    'published': true,
+                    'layer': layer,
+                    'state': statsGridState
+                }
+            };
+         }
+        return me.__tool;
     },
     /**
     * Get stats layer.
@@ -59,6 +81,7 @@ function() {
     *
     * @param {Boolean} enabled is tool enabled or not
     */
+
     setEnabled : function(enabled) {
         var me = this,
             tool = me.getTool(),
@@ -89,17 +112,22 @@ function() {
             elLeft.html(me.statsContainer);
             me.__plugin.startPlugin(me.__sandbox);
             me.__plugin.createStatsOut(me.statsContainer);
+            me.__started = true;
         } else {
-            me.__plugin.stopPlugin(me.__sandbox);
+            if (me.__started === true) {
+                me.__plugin.stopPlugin(me.__sandbox);
+            }
             jQuery('.publishedgrid').remove();
-        }
-
-        if(me.__handlers['MapSizeChanged']) {
-            me.__handlers.MapSizeChanged();
         }
 
         if(enabled === true && me.state.mode !== null && me.__plugin && typeof me.__plugin.setMode === 'function'){
             me.__plugin.setMode(me.state.mode);
+        }
+
+        if (enabled) {
+            if(me.__handlers['MapSizeChanged']) {
+                me.__handlers.MapSizeChanged();
+            }
         }
     },
     /**
@@ -134,9 +162,38 @@ function() {
         return statsGridState;
     },
     getValues: function() {
-        //TODO
-        return;
-    }
+        var me = this,
+            statsGridState = me._getState();
+        if(me.state.enabled && statsGridState) {
+            return {
+                configuration: {
+                    publishedgrid: {
+                        state: statsGridState
+                    }
+                }
+            };
+        } else {
+            return null;
+        }
+    },
+        /**
+         * @private @method _getState
+         * Get state config from current tool, if sandbox returns  default config
+         *
+         */
+        _getState: function () {
+            var me = this,
+                statsGrid = me.__sandbox.getStatefulComponents().statsgrid,
+                statsGridState = statsGrid.state;
+
+            statsGridState.gridShown = me.state.enabled;
+            // Grid state is not in sandbox, if no touch to grid in view edit mode
+            // TODO improve state management in statsgrid
+            if(!('currentColumn' in statsGrid.state) && me.__tool) {
+                statsGridState = me.__tool.config.state;
+            }
+            return me._filterIndicators(_.clone(statsGridState, true));
+        }
 }, {
     'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
     'protocol' : ['Oskari.mapframework.publisher.Tool']

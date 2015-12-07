@@ -32,7 +32,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
         );
 
         me.toolLayouts = ['lefthanded', 'righthanded', 'userlayout'];
-        me.activeToolLayout = 'lefthanded';
+        me.data = me.instance.publisher.data;
+        me.activeToolLayout = me.instance.publisher.data && me.instance.publisher.data.metadata && me.instance.publisher.data.metadata.toolLayout ?
+                                me.instance.publisher.data.metadata.toolLayout : 'lefthanded';
+        me.toolLayoutEditMode = false;
     }, {
         eventHandlers: {
             'Publisher2.ToolEnabledChangedEvent': function (event) {
@@ -45,35 +48,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                     //just update the plugins' locationdata
                     me._changeToolLayout(me.activeToolLayout, null);
                 }
-            },
-            'Publisher2.ToolStyleChangedEvent': function(event) {
-                var me = this;
-                me._changeToolStyles(event.getStyle());
-            },
-            'Publisher2.FontChangedEvent': function(event) {
-                var me = this;
-                me._changeFont(event.getFont());
             }
         },
         /**
          * @method init
          * Creates the Oskari.userinterface.component.AccordionPanel where the UI is rendered
          */
-        init: function () {
+        init: function (data) {
             var me = this;
+            me.toolLayoutEditMode = false;
             for (var p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
                     me.sandbox.registerForEventByName(me, p);
                 }
             }
-
             if (!me.panel) {
-                me.panel = me._populateToolLayoutPanel();
+                me.panel = me._populateToolLayoutPanel(data);
             }
 
             me._toggleAdditionalTools();
             //init the tools' plugins location infos
-            me._changeToolLayout(me.activeToolLayout, null);
+            if (me.data && me.activeToolLayout === 'userlayout' ) {
+                me._initUserLayout();
+            } else {
+                me._changeToolLayout(me.activeToolLayout, null);
+            }
         },
         getName: function() {
             return "Oskari.mapframework.bundle.publisher2.view.PanelToolLayout";
@@ -91,8 +90,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
         */
         _extendRecursive: function(defaults, extend){
             var me = this;
-
-            if (extend === null || jQuery.isEmptyObject(extend)) {
+            if (extend === null || extend === undefined || jQuery.isEmptyObject(extend)) {
                 return defaults;
             } else if (jQuery.isEmptyObject(defaults)) {
                 return jQuery.extend(true, defaults, extend);
@@ -103,9 +101,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                     });
                 }
                 return defaults;
-            } else {
+            } else if (extend.constructor && extend.constructor === Object) {
                 jQuery.each(extend, function(key, value){
-                    if(defaults[key] === null) {
+                    //not an array or an object -> just use the plain value
+                    if( defaults[key] === null || defaults[key] === undefined || !(defaults[key] instanceof Array || defaults[key] instanceof Object)) {
                         defaults[key] = value;
                     } else {
                         defaults[key] = me._extendRecursive(defaults[key], value);
@@ -115,7 +114,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 return defaults;
             }
         },
-
         /**
          * Returns the selections the user has done with the form inputs.
          * @method getValues
@@ -129,11 +127,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
 
                 if (tool.isDisplayed()) {
                     var value = tool.getValues();
-                    me._extendRecursive(values, value);
+                    if (value !== undefined && value !== null) {
+                        me._extendRecursive(values, value);
+                    }
                 }
             });
 
-            values['toolLayout'] = me.activeToolLayout;
+            var toolLayout = {
+                metadata: {
+                    toolLayout: me.activeToolLayout
+                }
+            };
+            me._extendRecursive(values, toolLayout);
             return values;
         },
         /**
@@ -170,7 +175,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
          */
         getPanel: function () {
             if (!this.panel) {
-	            this._populateToolLayoutPanel();
+                this._populateToolLayoutPanel();
             }
             return this.panel;
         },
@@ -259,6 +264,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                     me._editToolLayoutOff();
                 }
                 // set location for all tools
+
                 for (i = tools.length - 1; i > -1; i -= 1) {
                     tool = tools[i].getTool();
                     if (tools[i][layout]) {
@@ -276,6 +282,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                     }
                 }
 
+
                 if (event) {
                     target = jQuery(event.currentTarget);
                     button = target.parents('.content').find('input#editModeBtn');
@@ -289,8 +296,41 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                     button = target.parents('.tool').find('input#editModeBtn');
                     button.prop('disabled', false);
                     button.removeClass('disabled-button');
+
                     me._editToolLayoutOn();
                 }
+            }
+        },
+
+        /**
+         * Initialises the plugins' location info when restoring a published map that has a user defined layout
+         * @method _initToolLayout
+         */
+        _initUserLayout: function() {
+            var me = this,
+                tools = this.tools,
+                pluginConfigs;
+            //gotta figure out some nicer way to check the existence of (deep) nested properties in an object...
+            try {
+                pluginConfigs = me.data.configuration.mapfull.conf.plugins;
+            } catch(e) {
+                pluginConfigs = null;
+            }
+            if (pluginConfigs && pluginConfigs.length) {
+                var pluginConfig = null;
+                _.each(tools, function(tool) {
+                    for (var i = 0; i < pluginConfigs.length; i++) {
+                        pluginConfig = pluginConfigs[i];
+                        if (tool.getTool().id === pluginConfig.id) {
+                            if (pluginConfig.config && pluginConfig.config.location && pluginConfig.config.location.classes) {
+                                tool.getTool().config.location = pluginConfig.config.location;
+                                if (tool.getPlugin() && tool.getPlugin().setLocation) {
+                                    tool.getPlugin().setLocation(pluginConfig.config.location.classes);
+                                }
+                            }
+                        }
+                    }
+                });
             }
         },
         /**
@@ -300,11 +340,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
         _editToolLayoutOn: function () {
             var me = this,
                 sandbox = Oskari.getSandbox('sandbox');
-
             if (me.toolLayoutEditMode) {
                 return;
             }
-
             me.toolLayoutEditMode = true;
             jQuery('#editModeBtn').val(me.loc.toollayout.usereditmodeoff);
             jQuery('.mapplugins').show();
@@ -335,7 +373,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                     hoverClass: 'ui-state-highlight',
                     tolerance: 'pointer' // bit of a compromise, we'd need a combination of pointer and intersect
                 });
-
             var event = sandbox.getEventBuilder('LayerToolsEditModeEvent')(true);
             sandbox.notifyAll(event);
         },
@@ -346,11 +383,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
         _editToolLayoutOff: function () {
             var me = this,
                 sandbox = Oskari.getSandbox('sandbox');
-
             if (!me.toolLayoutEditMode) {
                 return;
             }
-
             me.toolLayoutEditMode = false;
             jQuery('#editModeBtn').val(me.loc.toollayout.usereditmode);
             jQuery('.mapplugin').removeClass('toollayoutedit');
@@ -480,9 +515,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
         stop: function(){
             var me = this;
             _.each(me.tools, function(tool){
-                tool.stop();
-                tool.setEnabled(false);
+                //just call stop for the tools that haven't already been shut down by the tool panel
+                if (tool.isStarted() && tool.getPlugin() && tool.getPlugin().getSandbox()) {
+                    tool.stop();
+                    tool.setEnabled(false);
+                }
             });
+
+            for (var p in me.eventHandlers) {
+                if (me.eventHandlers.hasOwnProperty(p)) {
+                    me.sandbox.unregisterFromEventByName(me, p);
+                }
+            }
         },
 
         /**
@@ -508,14 +552,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 ret = 2,
                 tool = me.getToolById(pluginClazz);
 
-            if (!pluginClazz || !tool) {
+            //no tool matching the plugin class -> drop probably allowed (case wfslayerplugin)
+            if (!tool) {
+                return 2;
+            } else if (!pluginClazz) {
                 return;
             }
-
 
             for (i = 0; i < siblings.length; i += 1) {
                 if (!excludedSibling || siblings[i] !== excludedSibling) {
                     // sibling is not ignored, see if it's an allowed sibling
+                    // sibling can't be moved to source
                     if (jQuery.inArray(siblings[i], tool.allowedSiblings) < 0 && pluginClazz !== siblings[i]) {
                         // not an allowed sibling, see if we can move it out of the way (don't pass a source, it'd cause an infinite loop)
                         // only accept 2/yes as a result, moving source plugins out of the way would get too weird
@@ -523,7 +570,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                             // sibling can be moved to source
                             ret = 1;
                         } else {
-                            // sibling can't be moved to source
                             ret = 0;
                             break;
                         }
@@ -576,7 +622,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             for (i = 0; i < siblings.length; i += 1) {
                 if (jQuery.inArray(siblings[i], tool.allowedSiblings) < 0) {
                     // Unallowed sibling, move to source
-                    sibling = me.getToolById(siblings[i]).getPlugin();
+                    sibling = me.getToolById(siblings[i]) && me.getToolById(siblings[i]).getPlugin() ? me.getToolById(siblings[i]).getPlugin() : null;
                     if (sibling) {
                         sibling.setLocation(source.attr('data-location'));
                     } else {
@@ -589,120 +635,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             }
         },
         /**
-         * @method changeToolStyles
-         * Changes the style of each tool, if the tool's plugin supports it.
-         *
-         * @param {Object} style
+         * Restarts all active plugins in case of i.e. changing the language.
+         * @method _restartActivePlugins
          *
          */
-        _changeToolStyles: function (style) {
-            if (!style) {
-                return;
-            }
-
+        _restartActivePlugins: function () {
             var me = this,
-                styleConfig,
-                i,
-                tool,
-                toolInstance,
                 tools = me.tools;
 
-            if (style.val === 'default') {
-                style.val = null;
-            }
-
-            // Set the toolStyle to the config of each tool
-            // and change the style immedately.
-            for (i = 0; i < tools.length; i += 1) {
-                toolInstance = tools[i];
-                tool = toolInstance.getTool();
-                // special object for zoombar
-                if (tool.id.indexOf('Portti2Zoombar') >= 0) {
-                    styleConfig = style.zoombar || {};
-                    styleConfig.val = style.val;
-                } else if (tool.id.indexOf('SearchPlugin') >= 0) {
-                    // same for search plugin
-                    styleConfig = style.search || {};
-                    styleConfig.val = style.val;
-                } else {
-                    // otherwise just use the style's id
-                    styleConfig = style.val;
+            _.each(me.tools, function(tool) {
+                if (tool.isDisplayed() && tool.isStarted()) {
+                    //reset
+                    tool.setEnabled(false);
+                    tool.setEnabled(true);
                 }
-
-                if (tool.config) {
-                    tool.config.toolStyle = styleConfig;
-                }
-                if (toolInstance.__started === true && toolInstance.getPlugin() && toolInstance.getPlugin().changeToolStyle) {
-                    toolInstance.getPlugin().changeToolStyle(styleConfig);
-                    // tools in toolbar plugin needs to be configured
-                    /* TODO: to do
-                    if (tool.id.indexOf('PublisherToolbarPlugin') >= 0) {
-                        if (me.toolsPanel.toolbarConfig && me.toolsPanel.toolbarConfig.classes) {
-                            me.toolsPanel.toolbarConfig.classes = tool.plugin.getToolConfs();
-                        }
-                    }
-                    */
-                }
-            }
-
-            // Recreate draggable if need be
-            if (me.toolLayoutEditMode) {
-                me._makeDraggable(jQuery('.mapplugin'));
-            }
-        },
-        /**
-         * @method changeFont
-         * Changes the font of each tool (has to be done separately for each one)
-         * if the plugin supports it.
-         *
-         * @param {string} font the id of the font
-         *
-         */
-        _changeFont: function (font) {
-            if (!font) {
-                return;
-            }
-
-            var me = this,
-                i,
-                tool,
-                toolInstance,
-                tools = me.tools;
-
-            // Set the font to the config of each tool
-            // and change the font immedately.
-            for (i = 0; i < tools.length; i += 1) {
-                toolInstance = tools[i];
-                tool = toolInstance.getTool();
-                if (tool.config) {
-                    tool.config.font = font;
-                }
-                if (toolInstance.__started && toolInstance.getPlugin().changeFont) {
-                    toolInstance.getPlugin().changeFont(font);
-                }
-            }
-        },
-        /**
-         * @method changeColourScheme
-         * Changes the colour scheme of the getinfo plugin and layer selection plugin.
-         *
-         * @param {Object} colourScheme
-         *
-         */
-        _changeColourScheme: function (colourScheme) {
-            var infoPlugin = this._getGetInfoPlugin();
-            if (infoPlugin) {
-                var conf = infoPlugin.config;
-                conf.colourScheme = colourScheme;
-                infoPlugin.config = conf;
-            }
-        },
-        _getGetInfoPlugin: function() {
-            for (tool in me.tools) {
-                if (tool.getTool().id === 'Oskari.mapframework.mapmodule.GetInfoPlugin') {
-                    return tool.getPlugin();
-                }
-            }
+            });
         }
     }
 );

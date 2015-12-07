@@ -3,7 +3,7 @@ Oskari.registerLocalization(
     "lang": "nb",
     "key": "FeatureData2",
     "value": {
-        "title": "NOT TRANSLATED",
+        "title": "Feature Data",
         "desc": "",
         "loading": "Laster…",
         "showmore": "Vis",
@@ -12,9 +12,12 @@ Oskari.registerLocalization(
         "errorscale": "Data i dette kartlaget kan ikke vises i denne målestokken. Vennligst tilpass målestokken.",
         "errordata": "Serverdata inneholder feil. Vennligst oppfrisk kartet ved å bevege det.",
         "columnSelectorTooltip": "Velg synlige kolonner.",
+        "featureDataPopup": "NOT TRANSLATED",
         "selectionTools": {
             "title": "Velg forekomster på kartet",
             "instructions": "NOT TRANSLATED",
+            "selectFromTop": "NOT TRANSLATED",
+            "selectAll": "Velg fra alle lag",
             "link": {
                 "title": "Velg flere forekomster"
             },
@@ -131,7 +134,7 @@ Oskari.registerLocalization(
                     "selectIndicator": "Velg indikator",
                     "selectReadyButton": "Klar",
                     "getAggregateAnalysisFailed": "Aggregerte data ikke funnet",
-                    "noAggregateAnalysisPopupTitle": "NOT TRANSLATED",
+                    "noAggregateAnalysisPopupTitle": "The aggregate analysis did not found.",
                     "noAggregateAnalysisPopupContent": "Du har ikke gjort noen aggregert analyse. Du kan sette sammen dine egne aggregerte data ved hjelp av analysefunksjonen, og deretter filtrere på verdier."
                 },
                 "validation": {
@@ -142,6 +145,11 @@ Oskari.registerLocalization(
                     "boolean_operator_missing": "Logisk operator mangler"
                 }
             }
+        },
+        "gridFooter": {
+            "aggregateColumnField": "NOT TRANSLATED",
+            "noDataMessage": "NOT TRANSLATED",
+            "noDataCommonMessage": "NOT TRANSLATED"
         }
     }
 }

@@ -11,16 +11,17 @@ Oskari.registerLocalization(
             "inspire": "Omat kohteet"
         },
         "guest": {
-            "loginShort": "Kirjaudu sisään lisätäksesi omia kohteita."
+            "loginShort": "Kirjaudu sisään, jotta voit lisätä kohteita."
         },
         "tab": {
             "title": "Kohteet",
             "nocategories": "Sinulla ei ole tallennettuja omia kohteita.",
-            "maxFeaturesExceeded": "Kaikkia kohteita ei voitu ladata. Vähennä kohteiden lukumäärää.",
+            "maxFeaturesExceeded": "Sinulla on liikaa omia kohteita. Poista osa kohteista.",
             "publishCategory": {
                 "privateTooltip": "Karttataso on yksityinen. Muuta karttataso julkiseksi klikkaamalla tästä.",
                 "publicTooltip": "Karttataso on julkinen. Muuta karttataso yksityiseksi klikkaamalla tästä."
             },
+            "addCategoryFormButton": "Uusi karttataso",
             "addCategory": "Lisää karttataso",
             "editCategory": "Muokkaa karttatasoa",
             "deleteCategory": "Poista karttataso",
@@ -38,55 +39,55 @@ Oskari.registerLocalization(
             "notification": {
                 "delete": {
                     "title": "Kohteen poistaminen",
-                    "confirm": "Haluatko poistaa kohteen",
+                    "confirm": "Haluatko poistaa kohteen?",
                     "btnDelete": "Poista",
                     "btnCancel": "Peruuta",
                     "success": "Kohde on poistettu.",
-                    "error": "Kohteen poistaminen epäonnistui. Yritä myöhemmin uudelleen.",
-                    "cancel": "Kohteen poistaminen epäonnistui. Yritä myöhemmin uudelleen."
+                    "error": "Kohteen poistaminen epäonnistui.",
+                    "cancel": "Kohdetta ei ole poistettu."
                 }
             }
         },
         "tools": {
             "measureline": {
                 "title": "Mittaa etäisyys",
-                "tooltip": "Mittaa etäisyys",
-                "add": "",
-                "next": "",
-                "edit": "Muokkaa viivaa liikuttamalla viivan taitepisteitä hiirellä raahaamalla.",
+                "tooltip": "Piirrä viivan taitepisteet ja mittaa niiden yhteenlaskettu etäisyys.",
+                "add": "Lisää viiva",
+                "next": "Seuraava",
+                "edit": "Klikkaa viivan alkupistettä ja taitepisteitä. Kaksoisklikkaa viivan päätepistettä. Voit siirtää pisteitä raahaamalla niitä hiirellä. Jos piirrät useamman viivan, viivojen pituudet lasketaan yhteen.",
                 "noResult": "0 m"
             },
             "measurearea": {
                 "title": "Mittaa pinta-ala",
-                "tooltip": "Mittaa pinta-ala",
-                "add": "",
-                "next": "",
-                "edit": "Muokkaa aluetta liikuttamalla reunaviivan taitepisteitä hiirellä raahaamalla.",
+                "tooltip": "Piirrä alue ja mittaa sen pinta-ala.",
+                "add": "Lisää alue",
+                "next": "Seuraava",
+                "edit": "Piirrä alueen reunaviiva klikkaamalla kulmia. Kaksoisklikkaa lopuksi viimeistä kulmaa. Voit siirtää pisteitä raahaamalla niitä hiirellä. Jos piirrät useamman alueen, niiden pinta-alat lasketaan yhteen.",
                 "noResult": "0 m²"
             },
             "point": {
-                "title": "Lisää piste",
-                "tooltip": "Lisää piste",
+                "title": "Lisää piste omiin kohteisiin",
+                "tooltip": "Piirrä piste ja lisää se omiin kohteisiin. Voit liittää saman kohteeseen useampia pisteitä.",
                 "add": "Piirrä piste klikkaamalla karttaa.",
-                "next": "Voit halutessasi piirtää useampia pisteitä samaan kohteeseen piirtämällä kartalle useamman pisteen.",
-                "edit": "Siirrä pistettä raahaamalla sitä hiirellä.",
+                "next": "Voit piirtää samaan kohteeseen useita pisteitä.",
+                "edit": "Voit siirtää pistettä raahaamalla sitä hiirellä.",
                 "save": "Tallenna kohde"
             },
             "line": {
-                "title": "Lisää viiva",
-                "tooltip": "Lisää viiva",
-                "add": "Piirrä viiva klikkaamalla viivan taitepisteitä kartalla. Lopeta piirtäminen tuplaklikkaamalla tai painamalla \"Tallenna kohde\".",
-                "next": "Voit halutessasi piirtää useampia viivoja samaan kohteeseen piirtämällä kartalle useamman viivan.",
-                "edit": "Muokkaa viivaa liikuttamalla viivan taitepisteitä hiirellä raahaamalla.",
+                "title": "Lisää viiva omiin kohteisiin",
+                "tooltip": "Piirrä viiva ja lisää se omiin kohteisiin.",
+                "add": "Piirrä viiva kartalle. Klikkaa viivan taitepisteitä. Lopuksi kaksoisklikkaa päätepistettä tai paina \"Tallenna kohde\".",
+                "next": "Voit piirtää samaan kohteeseen useita viivoja.",
+                "edit": "Voit siirtää taitepisteitä raahaamalla niitä hiirellä.",
                 "save": "Tallenna kohde",
                 "noResult": "0 m"
             },
             "area": {
-                "title": "Lisää alue",
-                "tooltip": "Lisää alue",
-                "add": "Piirrä alue klikkaamalla reunaviivan taitepisteitä kartalla. Voit piirtää alueeseen reiän pitämällä ALT-näppäintä pohjassa. Lopeta piirtäminen tuplaklikkaamalla tai painamalla \"Lopeta piirto\".",
-                "next": "Voit halutessasi piirtää useampia alueita samaan kohteeseen piirtämällä kartalle useamman alueen.",
-                "edit": "Muokkaa aluetta liikuttamalla reunaviivan taitepisteitä hiirellä raahaamalla.",
+                "title": "Lisää alue omiin kohteisiin",
+                "tooltip": "Piirrä alue ja lisää se omiin kohteisiin.",
+                "add": "Piirrä alue kartalle. Klikkaa alueen reunapisteitä. Lopuksi kaksoisklikkaa viimeistä pistettä tai paina \"Tallenna kohde\". Voit piirtää alueeseen reiän pitämällä ALT-näppäintä pohjassa reiän piirtämisen ajan.",
+                "next": "Voit piirtää samaan kohteeseen useita alueita.",
+                "edit": "Voit siirtää taitepisteitä raahaamalla niitä hiirellä.",
                 "save": "Tallenna kohde",
                 "noResult": "0 m²"
             }
@@ -98,20 +99,20 @@ Oskari.registerLocalization(
             "finish": "Tallenna kohde",
             "save": "Tallenna",
             "saveAsMyPlace": "Tallenna omiin kohteisiin",
-            "movePlaces": "Siirrä kohteet ja poista karttataso",
+            "movePlaces": "Siirrä kohteet ja poista",
             "deleteCategory": "Poista karttataso",
-            "deleteCategoryAndPlaces": "Poista karttataso kohteineen",
+            "deleteCategoryAndPlaces": "Poista kohteineen",
             "changeToPublic": "Muuta julkiseksi",
             "changeToPrivate": "Muuta yksityiseksi"
         },
         "placeform": {
-            "title": "Anna kohteen tiedot",
-            "tooltip": "Piirtämäsi kohde tallennetaan Omiin tietoihisi valitsemallesi omalle karttatasolle. Kohteen tallentamista varten anna kohteelle vähintään nimi ja kuvaus. Lisäksi voit antaa kohteelle kartalla kohteessa näkyvän tekstin, verkko-osoitteen (josta saa lisätietoa kohteesta) ja/tai kuvalinkin (jonka kautta on nähtävillä kuva kohteesta). Lopuksi valitse karttataso, jolle kohde tallennetaan, tai luo uusi karttataso.",
+            "title": "Kohteen tiedot",
+            "tooltip": "Tallenna kohde omiin tietoihisi. Kohteelle on annettava vähintään nimi ja kuvaus. Lopuksi valitse karttataso, johon kohde tallennetaan, tai luo uusi karttataso. Löydät kohteet myöhemmin \"Omat tiedot\"-valikosta.",
             "placename": {
                 "placeholder": "Kohteen nimi"
             },
             "placelink": {
-                "placeholder": "Verkko-osoite lisätietoihin kohteesta"
+                "placeholder": "Linkki lisätietoihin kohteesta"
             },
             "placedesc": {
                 "placeholder": "Kohteen kuvaus"
@@ -130,8 +131,7 @@ Oskari.registerLocalization(
             },
             "imagelink": {
                 "placeholder": "Linkki kuvaan kohteesta",
-                "previewLabel": "Kuvan esikatselu",
-                "add": "Uusi karttataso"
+                "previewLabel": "Kuvan esikatselu"
             },
             "rendering": {
                 "label": "Karttatasolla olevien kohteiden esitystavat",
@@ -178,21 +178,21 @@ Oskari.registerLocalization(
             "rendering": {
                 "label": "Karttatason kohteiden esitystavat",
                 "point": {
-                    "tooltip": "Muokkaa pistemäisten kohteiden esitystapaa."
+                    "tooltip": "Muokkaa pisteiden esitystapaa. Huom! Tämä muuttaa kaikkien karttatasolla olevien pisteiden esitystapaa."
                 },
                 "area": {
-                    "tooltip": "Muokkaa aluemaisten kohteiden esitystapaa."
+                    "tooltip": "Muokkaa alueiden esitystapaa. Huom! Tämä muuttaa kaikkien karttatasolla olevien alueiden esitystapaa."
                 },
                 "line": {
-                    "tooltip": "Muokkaa viivamaisten kohteiden esitystapaa."
+                    "tooltip": "Muokkaa viivojen esitystapaa. Huom! Tämä muuttaa kaikkien karttatasolla olevien viivojen esitystapaa."
                 }
             }
         },
         "pointform": {
             "title": "Pisteen esitystapa",
-            "tooltip": "",
+            "tooltip": "Määrittele esitystapa pistekohteille.",
             "symbol": {
-                "label": "Kuvake"
+                "label": "Symboli"
             },
             "size": {
                 "label": "Koko"
@@ -212,7 +212,7 @@ Oskari.registerLocalization(
         },
         "lineform": {
             "title": "Viivan esitystapa",
-            "tooltip": "",
+            "tooltip": "Määrittele esitystapa viivakohteille.",
             "style": {
                 "label": "Tyyli"
             },
@@ -240,7 +240,7 @@ Oskari.registerLocalization(
         },
         "areaform": {
             "title": "Alueen esitystapa",
-            "tooltip": "",
+            "tooltip": "Määrittele esitystapa aluekohteille.",
             "linestyle": {
                 "label": "Reunaviivan tyyli"
             },
@@ -281,29 +281,29 @@ Oskari.registerLocalization(
             },
             "categorySaved": {
                 "title": "Karttataso on tallennettu.",
-                "message": "Karttatasoon tehtyjen muutosten tallentaminen onnistui."
+                "message": "Karttataso on päivitetty."
             },
             "categoryDelete": {
                 "title": "Karttatason poistaminen",
-                "deleteConfirmMove": "Karttataso \"{0}\" sisältää {1} kohdetta. Haluatko poistaa karttatason ja siirtää sen kohteet oletuskarttatasolle \"{2}\" vai haluatko poistaa karttatason kohteineen?",
+                "deleteConfirmMove": "Olet poistamassa karttatasoa {0}. Karttatasolla on {1} kohdetta. Haluatko: <br/> 1. poistaa karttatason kohteineen <br/> 2. siirtää kohteet oletuskarttatasolle ennen karttatason poistoa?",
                 "deleteConfirm": "Haluatko poistaa karttatason {0}?",
                 "deleted": "Karttataso on poistettu."
             },
             "categoryToPublic": {
-                "title": "Muuta karttataso julkiseksi",
-                "message": "Olet muuttamassa karttatasoa \"{0}\" julkiseksi. Tämän jälkeen karttataso on julkisesti jaettavissa verkossa ja sen voi liittää karttatasona toiseen verkkopalveluun. Karttataso on myös muiden Paikkatietoikkunan käyttäjien katseltavissa."
+                "title": "Muuta karttataso julkiseksi.",
+                "message": "Olet muuttamassa karttatasoa {0} julkiseksi. Karttataso on tämän jälkeen julkisesti jaettavissa ja sen voi liittää toiseen verkkopalveluun. Karttataso on myös muiden palvelun käyttäjien nähtävissä."
             },
             "categoryToPrivate": {
-                "title": "Muuta karttataso yksityiseksi",
-                "message": "Olet muuttamassa karttatasoa \"{0}\" yksityiseksi. Tämän jälkeen karttataso ei ole enää julkisesti jaettavissa verkossa ja sitä ei voi liittää karttatasona toiseen verkkopalveluun. Karttataso ei myöskään ole enää muiden Paikkatietoikkunan käyttäjien katseltavissa."
+                "title": "Muuta karttataso yksityiseksi.",
+                "message": "Olet muuttamassa karttatasoa {0} yksityiseksi. Karttataso ei ole enää julkisesti jaettavissa ja sitä ei voi liittää toiseen verkkopalveluun. Karttataso ei ole enää muiden palvelun käyttäjien nähtävissä."
             },
             "error": {
-                "addCategory": "Karttatason tallentaminen epäonnistui. Myöskään kohdetta ei tallennettu. Yritä myöhemmin uudelleen.",
-                "editCategory": "Karttatason tallentaminen epäonnistui. Yritä myöhemmin uudelleen.",
-                "savePlace": "Kohteen tallentaminen epäonnistui. Yritä myöhemmin uudelleen.",
-                "title": "Virhe!",
-                "generic": "Järjestelmässä tapahtui virhe. Yritä myöhemmin uudelleen.",
-                "deleteCategory": "Poistossa tapahtui virhe. Yritä myöhemmin uudelleen.",
+                "addCategory": "Karttatasoa ja sen kohteita ei voitu tallentaa.",
+                "editCategory": "Karttatason tallentaminen epäonnistui.",
+                "savePlace": "Kohteen tallentaminen epäonnistui.",
+                "title": "Virhe",
+                "generic": "Järjestelmässä tapahtui virhe.",
+                "deleteCategory": "Karttatason poistaminen epäonnistui.",
                 "deleteDefault": "Oletuskarttatasoa ei voi poistaa."
             }
         },

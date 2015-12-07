@@ -129,6 +129,12 @@ module.exports = function (grunt) {
                 src: ['../bundles/*/*/']
             }
         },
+        genL10nEmptyExcels: {
+            target: {
+                expand: true,
+                src: ['../bundles/*/*/']
+            }
+        },
         compress: {
             zip: {
                 options: {
@@ -177,6 +183,11 @@ module.exports = function (grunt) {
                 encoding: 'utf8',
                 failIfTrimmed: false
               }
+            }
+        },
+        localizationJSCleanup: {
+            target: {
+                src: ['../bundles/**/locale/*.js']
             }
         }
     });
@@ -591,7 +602,7 @@ module.exports = function (grunt) {
                 matcherSize = TO_MATCH.length + 1;
             var value = [];
             _.each(list, function(dep) {
-                var actual =  dep.path || '';
+                var actual =  dep.resourcesPath || '';
                 var index = actual.toLowerCase().indexOf(TO_MATCH);
                 if(index !== -1) {
                     //console.log(actual.substring(index + matcherSize));

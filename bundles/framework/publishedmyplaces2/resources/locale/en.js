@@ -16,14 +16,14 @@ Oskari.registerLocalization(
         "tab": {
             "title": "Places",
             "nocategories": "You do not have any saved places yet.",
-            "maxFeaturesExceeded": "You have exceeded the maximum amount of the own places. All the places have not been loaded.",
+            "maxFeaturesExceeded": "You have too many own places. Please remove some places.",
             "publishCategory": {
                 "privateTooltip": "This map layer is private. Click here to publish it.",
                 "publicTooltip": "This map layer is public. Click here to unpublish it."
             },
-            "addCategory": "Add the map layer",
-            "editCategory": "Edit the map layer",
-            "deleteCategory": "Delete the map layer",
+            "addCategory": "Add map layer",
+            "editCategory": "Edit map layer",
+            "deleteCategory": "Delete map layer",
             "edit": "Edit",
             "delete": "Delete",
             "grid": {
@@ -50,44 +50,44 @@ Oskari.registerLocalization(
         "tools": {
             "measureline": {
                 "title": "Measure Distance",
-                "tooltip": "Measure Distance",
-                "add": "",
-                "next": "",
-                "edit": "You can edit the line by clicking and dragging its breakpoints.",
+                "tooltip": "Click breakpoints and measure a total distance between them.",
+                "add": "Add line",
+                "next": "Next",
+                "edit": "Click a starting point and breaking points. Finally double-click an ending point. You can drag points to another location by mouse. If you draw several lines, distances are summed up.",
                 "noResult": "0 m"
             },
             "measurearea": {
                 "title": "Measure Area",
-                "tooltip": "Measure Area",
-                "add": "",
-                "next": "",
-                "edit": "You can edit the area by clicking and dragging its breakpoints on its edge line.",
+                "tooltip": "Draw an area and measure it.",
+                "add": "Add area",
+                "next": "Next",
+                "edit": "Click corner points. Finally double-click an ending point. You can drag points to another location by mouse. If you draw several areas, areas are summed up.",
                 "noResult": "0 m²"
             },
             "point": {
                 "title": "Add Point",
-                "tooltip": "Add a point to the \"My places\".",
+                "tooltip": "Draw a point and add it to your own places. There can be several points in one feature.",
                 "add": "Draw a point by clicking the map.",
-                "next": "One place can contain one or more points.",
-                "edit": "Move the point by clicking and dragging.",
-                "save": "Save as my place"
+                "next": "You can draw several points in one feature.",
+                "edit": "You can move points to another location by clicking them with a mouse.",
+                "save": "Save My Place"
             },
             "line": {
-                "title": "Add Line",
-                "tooltip": "Add a line to the \"My places\".",
-                "add": "Draw a line by adding the break points to the map. You can add the break points by clicking the map. Stop drawing by double clicking or by clicking \"Save as my place\".",
-                "next": "One place can contain one or more lines.",
-                "edit": "Edit the line by clicking and dragging its break points.",
-                "save": "Save as my place",
+                "title": "Add Line to Own Places",
+                "tooltip": "Draw a line and add it to your own places.",
+                "add": "Draw a line to the map. Click breaking points. Finally double-click an ending point and click \"Save My Place\".",
+                "next": "You can move breaking points to another location by clicking them with a mouse.",
+                "edit": "You can move breaking points to another location by clicking them with a mouse.",
+                "save": "Save My Place",
                 "noResult": "0 m"
             },
             "area": {
-                "title": "Add Area",
-                "tooltip": "Add an area to the \"My places\".",
-                "add": "Draw an area by adding the edge line's break points to the map. You can add the break points by clicking the map. Stop drawing by double clicking or by clicking \"Save as my place\".",
-                "next": "One place can contain one or more areas.",
-                "edit": "Edit the area by clicking and dragging the break points on its edge line.",
-                "save": "Save as my place",
+                "title": "Add Area to Own Places",
+                "tooltip": "Draw an area and add it to your own places.",
+                "add": "Draw an area to the map. Click breaking points. Finally double-click an ending point and click \"Save My Place\". You can draw a hole to an area by keeping \"Alt\"-key down.",
+                "next": "You can draw several areas in one feature.",
+                "edit": "You can move breaking points to another location by clicking them with a mouse.",
+                "save": "Save My Place",
                 "noResult": "0 m²"
             }
         },
@@ -95,29 +95,29 @@ Oskari.registerLocalization(
             "ok": "OK",
             "cancel": "Cancel",
             "close": "Cancel",
-            "finish": "Save as my place",
+            "finish": "Save My Place",
             "save": "Save",
-            "saveAsMyPlace": "Save as my place",
-            "movePlaces": "Move the places and delete the layer",
+            "saveAsMyPlace": "Save My Place",
+            "movePlaces": "Move places and delete",
             "deleteCategory": "Delete",
-            "deleteCategoryAndPlaces": "Delete the map layer and its places",
+            "deleteCategoryAndPlaces": "Delete with places",
             "changeToPublic": "Publish",
             "changeToPrivate": "Unpublish"
         },
         "placeform": {
             "title": "Place data",
-            "tooltip": "The place is saved to \"My places\". You can view them on the menu \"My data\". Please give the data for the place. The place name and description are mandatory. You can also give the text to be shown on the map besides the place, the link to the website to get more information about the place and the link to the image about the place. Finally create a new map layer or select one of the existing map layers where the place will be added.",
+            "tooltip": "Save the feature as your own place. Please give at least a name and a description. Finally select a map layer where the feature will be saved or create a new map layer. Later you can find your own places in the My Data menu.",
             "placename": {
                 "placeholder": "Place name"
             },
             "placelink": {
-                "placeholder": "Link to the information about the place"
+                "placeholder": "Link to additional information"
             },
             "placedesc": {
                 "placeholder": "Place description"
             },
             "placeAttention": {
-                "placeholder": "Place text on the map"
+                "placeholder": "Text visible on map"
             },
             "measurement": {
                 "line": "Line length:",
@@ -125,16 +125,16 @@ Oskari.registerLocalization(
             },
             "category": {
                 "label": "Map layer",
-                "newLayer": "Create a new map layer",
+                "newLayer": "Create new layer",
                 "choose": "or select one of your existing map layers:"
             },
             "imagelink": {
-                "placeholder": "Link to the image",
+                "placeholder": "Link to feature image",
                 "previewLabel": "Image preview",
-                "add": "New map layer"
+                "add": "Add link to image"
             },
             "rendering": {
-                "label": "Place style",
+                "label": "Styles for places at map layer",
                 "point": {
                     "tooltip": "Point"
                 }
@@ -171,26 +171,26 @@ Oskari.registerLocalization(
                 "image": "Image"
             },
             "edit": {
-                "title": "Edit the map layer",
+                "title": "Edit map layer",
                 "save": "Save",
                 "cancel": "Cancel"
             },
             "rendering": {
                 "label": "Place style",
                 "point": {
-                    "tooltip": "Edit the point style"
+                    "tooltip": "Edit the point style. Note! The selection affects all the point features at this map layer."
                 },
                 "area": {
-                    "tooltip": "Edit the area style"
+                    "tooltip": "Edit the area style. Note! The selection affects all the area features at this map layer."
                 },
                 "line": {
-                    "tooltip": "Edit the line style"
+                    "tooltip": "Edit the line style. Note! The selection affects all the line features at this map layer."
                 }
             }
         },
         "pointform": {
             "title": "Point style",
-            "tooltip": "",
+            "tooltip": "Define a style for point features.",
             "symbol": {
                 "label": "Icon"
             },
@@ -212,7 +212,7 @@ Oskari.registerLocalization(
         },
         "lineform": {
             "title": "Line style",
-            "tooltip": "",
+            "tooltip": "Define a style for line features.",
             "style": {
                 "label": "Style"
             },
@@ -240,7 +240,7 @@ Oskari.registerLocalization(
         },
         "areaform": {
             "title": "Area Style",
-            "tooltip": "",
+            "tooltip": "Define a style for area features.",
             "linestyle": {
                 "label": "Edge line style"
             },
@@ -281,47 +281,47 @@ Oskari.registerLocalization(
             },
             "categorySaved": {
                 "title": "The map layer has been saved.",
-                "message": "The map layer editings have been saved."
+                "message": "The map layer has been updated."
             },
             "categoryDelete": {
-                "title": "Delete the map layer",
-                "deleteConfirmMove": "The map layer \"{0}\" contains {1} places. Do you want to delete the map layer and move its places to the default map layer \"{2}\" or do you want to delete the map layer and its places?",
+                "title": "Delete Map Layer",
+                "deleteConfirmMove": "You are deleting the map layer {0}. There are {1} places on the map layer. Do you want to: <br/> 1. delete the map layer and its places <br/> 2. move places to the default map layer before deleting the map layer?",
                 "deleteConfirm": "Do you want to delete the map layer {0}?",
                 "deleted": "The map layer has been deleted."
             },
             "categoryToPublic": {
-                "title": "Publish the map layer",
-                "message": "You are publishing the map layer \"{0}\". After that you can in public share the map layer in the internet or embed it as a map layer on another web service. Also other users in Paikkatietoikkuna can view the map layer."
+                "title": "Publish Map Layer",
+                "message": "You are publishing the map layer {0}. After that the map layer can be shared in public and embedded in another map service. Also other users can view the map layer."
             },
             "categoryToPrivate": {
-                "title": "Unpublish the map layer",
-                "message": "You are unpublishing the map layer \"{0}\". After that it will no longer be possible to share the map layer in the internet anymore or embed it on another website. Other users in Paikkatietoikkuna can no longer view the map layer."
+                "title": "Unpublish Map Layer",
+                "message": "You are unpublishing the map layer {0}. After that the map layer cannot be shared in public and embedded in another map service. Also other users cannot view the map layer anymore."
             },
             "error": {
-                "addCategory": "The map layer could not be saved. The place has not been saved. Please try again later.",
-                "editCategory": "The map layer could not be saved. Please try again later.",
-                "savePlace": "The place could not be saved. Please try again later.",
-                "title": "Error!",
-                "generic": "The system error occurred. Please try again later.",
-                "deleteCategory": "The error occurred while deleting. Please try again later.",
+                "addCategory": "The map layer and its places could not be saved.",
+                "editCategory": "The map layer could not be saved.",
+                "savePlace": "The place could not be saved.",
+                "title": "Error",
+                "generic": "A system error occurred.",
+                "deleteCategory": "The map layer could not be deleted.",
                 "deleteDefault": "The default map layer cannot be deleted."
             }
         },
         "validation": {
-            "title": "The given data contains errors:",
-            "placeName": "Place name is missing.",
-            "categoryName": "Map layer name is missing.",
-            "placeNameIllegal": "The place name contains disallowed characters. The allowed characters are letters (a-z, A-Z and å,ä,ö,Å,Ä,Ö), numbers (0-9), backspaces and hyphens (-).",
-            "descIllegal": "The place description contains disallowed characters. The allowed characters are letters (a-z, A-Z and å,ä,ö,Å,Ä,Ö), numbers (0-9), backspaces and hyphens (-).",
-            "categoryNameIllegal": "The map layer name contains disallowed characters. The allowed characters are letters (a-z, A-Z and å,ä,ö,Å,Ä,Ö), numbers (0-9), backspaces and hyphens (-).",
-            "dotSize": "The point size is invalid. The size must be between 1 and 5.",
-            "dotColor": "The point colour is invalid. The colour values must be between 0 and 255.",
-            "dotShape": "The point shape is invalid.",
-            "lineSize": "The line width is invalid. The size must be between 0 and 50.",
-            "lineColor": "The line colour is invalid. The colour values must be between 0 and 255.",
-            "areaLineSize": "The edge line width is invalid. The size must be between 0 and 50.",
-            "areaLineColor": "The edge line colour is invalid. The colour values must be between 0 and 255.",
-            "areaFillColor": "The fill colour is invalid. The colour values must be between 0 and 255."
+            "title": "The given data are invalid:",
+            "placeName": "A place name is missing.",
+            "categoryName": "A map layer name is missing.",
+            "placeNameIllegal": "The place name contains illegal characters. The allowed characters are letters (a-z, A-Z and å,ä,ö,Å,Ä,Ö), numbers (0-9), backspaces and hyphens (-).",
+            "descIllegal": "The place description contains illegal characters. The allowed characters are letters (a-z, A-Z and å,ä,ö,Å,Ä,Ö), numbers (0-9), backspaces and hyphens (-).",
+            "categoryNameIllegal": "The map layer name contains illegal characters. The allowed characters are letters (a-z, A-Z and å,ä,ö,Å,Ä,Ö), numbers (0-9), backspaces and hyphens (-).",
+            "dotSize": "The point size is invalid. It must be between 1 and 5.",
+            "dotColor": "The point colour is invalid. All the RGB values must be between 0 and 255.",
+            "dotShape": "The point icon is invalid.",
+            "lineSize": "The line width is invalid. It must be between 1 and 50.",
+            "lineColor": "The line colour is invalid. All the RGB values must be between 0 and 255.",
+            "areaLineSize": "The line width is invalid. It must be between 1 and 50.",
+            "areaLineColor": "The edge line colour is invalid. All the RGB values must be between 0 and 255.",
+            "areaFillColor": "The fill colour is invalid. All the RGB values must be between 0 and 255."
         }
     }
 }

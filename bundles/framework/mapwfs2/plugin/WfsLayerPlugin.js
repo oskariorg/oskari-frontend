@@ -216,11 +216,17 @@ Oskari.clazz.define(
          */
         inform: function (event) {
             var me = this,
+                config = me.getConfig(),
                 sandbox = me.getMapModule().getSandbox(),
                 layer = event.getMapLayer(),
                 layers = sandbox.findAllSelectedMapLayers(),
                 i,
-                count = 0;
+                count = 0,
+                render = false;
+
+            if(config){
+                render = config.isPublished;
+            }
 
             // see if there's any wfs layers, show  if so
             for (i = 0; i < layers.length; i++) {
@@ -229,7 +235,7 @@ Oskari.clazz.define(
                 }
             }
             if(count === 1 && layer.isManualRefresh()){
-               me.showMessage(me.getLocalization().information.title, me.getLocalization().information.info, me.getLocalization().button.close);
+               me.showMessage(me.getLocalization().information.title, me.getLocalization().information.info, me.getLocalization().button.close, render);
             }
 
 
@@ -466,7 +472,7 @@ Oskari.clazz.define(
             }
 
             for (i = 0; i < layers.length; i += 1) {
-                if (layers[i].hasFeatureData()) {
+                if (layers[i].hasFeatureData() && layers[i].isVisible()) {
                     // clean features lists
                     layers[i].setActiveFeatures([]);
                     if (grid !== null && grid !== undefined) {
@@ -485,6 +491,7 @@ Oskari.clazz.define(
                             tiles
                         );
                         me._tilesLayer.redraw();
+
                     }
                 }
             }
@@ -675,7 +682,28 @@ Oskari.clazz.define(
             var lonlat = event.getLonLat(),
                 keepPrevious = this.getSandbox().isCtrlKeyDown();
 
-            this.getIO().setMapClick(lonlat, keepPrevious);
+            var geojson_format = new OpenLayers.Format.GeoJSON();
+            var point = new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat);
+
+            var pixelTolerance = 15;
+            var selection = geojson_format.write(point);
+            var json = {
+                    type: 'FeatureCollection',
+                    crs: this.getMap().getProjection(),
+                    features: [{
+                        type: 'Feature',
+                        geometry: JSON.parse(selection),
+                        properties : {
+                            // add buffer based on resolution
+                            buffer_radius : this.getMap().getResolution() * pixelTolerance
+                        }
+                    }]
+                };
+            this.getIO().setMapClick({
+                lon : lonlat.lon,
+                lat : lonlat.lat,
+                json : json
+            }, keepPrevious);
         },
 
         /**
@@ -708,6 +736,10 @@ Oskari.clazz.define(
                     event.getMapLayer().getId(),
                     event.getMapLayer().isVisible()
                 );
+
+                if(event.getMapLayer().isVisible()){
+                    this.mapMoveHandler(event.getMapLayer().getId());
+                }
             }
         },
 
@@ -763,7 +795,7 @@ Oskari.clazz.define(
             }
 
             layers.forEach(function (layer) {
-                if (layer.hasFeatureData() && layer.isManualRefresh()) {
+                if (layer.hasFeatureData() && layer.isManualRefresh() && layer.isVisible()) {
                     // clean features lists
                     layer.setActiveFeatures([]);
                     if (grid !== null && grid !== undefined) {
@@ -816,7 +848,7 @@ Oskari.clazz.define(
             layers = me.getSandbox().findAllSelectedMapLayers();
 
             layers.forEach(function (layer) {
-                if (layer.hasFeatureData()) {
+                if (layer.hasFeatureData() && layer.isVisible()) {
                     // clean features lists
                     layer.setActiveFeatures([]);
                     if (grid !== null && grid !== undefined) {
@@ -1032,7 +1064,6 @@ Oskari.clazz.define(
                 highlightLayerExp,
                 BBOX,
                 bboxKey,
-                dataForTileTemp,
                 style,
                 tileToUpdate,
                 boundsObj = new OpenLayers.Bounds(imageBbox),
@@ -1093,8 +1124,7 @@ Oskari.clazz.define(
                 }
                 // temp cached and redrawn if gotten better
                 else {
-                    dataForTileTemp = me._tileDataTemp.mget(layerId,style,bboxKey);
-                    if (dataForTileTemp) return;
+                    //Old temp tile (border tile) cant be used, because it is not valid after map move
                     me._tileDataTemp.mput(layerId,style,bboxKey,imageUrl);
                 }
                 // QUEUES updates!
@@ -1120,6 +1150,8 @@ Oskari.clazz.define(
                     _layer.getMinScale()
                 ),
                 key,
+                me = this,
+                sandbox = me.getSandbox(),
                 defaultParams = {
                     layers: '',
                     transparent: true,
@@ -1132,7 +1164,7 @@ Oskari.clazz.define(
                     scales: layerScales,
                     isBaseLayer: false,
                     displayInLayerSwitcher: true,
-                    visibility: true,
+                    visibility: _layer.isInScale(sandbox.getMap().getScale()) && _layer.isVisible(),
                     buffer: 0,
                     _plugin: this,
 
@@ -1595,27 +1627,26 @@ Oskari.clazz.define(
             dialog.show(popupLoc, content, [okBtn]);
             dialog.fadeout(5000);
         },
-        /**
-         * @public @method showMessage
-         * Shows user a message with ok button
+        /*
+         * @method showMessage
          *
-         * @param {String} title popup title
-         * @param {String} message popup message
-         *
+         * @param {String} message dialog title
+         * @param {String} message  message to show to the user
+         * @param {String} locale string for OK-button
+         * @param {boolean} render manual refresh wfs layers in OK call back, if true
          */
-        showMessage: function (title, message) {
-            var dialog = Oskari.clazz.create(
-                'Oskari.userinterface.component.Popup'
-            );
-            dialog.show(title, message);
-            dialog.fadeout(5000);
-        },
-        showMessage: function (title, message, ok) {
+        showMessage: function (title, message, ok, render) {
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+                me = this,
+                sandbox = me.getSandbox();
             okBtn.setTitle(ok);
             okBtn.addClass('primary');
             okBtn.setHandler(function () {
+                if(render){
+                    var event = sandbox.getEventBuilder('WFSRefreshManualLoadLayersEvent')();
+                    sandbox.notifyAll(event);
+                }
                 dialog.close(true);
             });
             dialog.show(title, message, [okBtn]);

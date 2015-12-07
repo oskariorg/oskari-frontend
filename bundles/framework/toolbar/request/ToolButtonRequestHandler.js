@@ -27,7 +27,6 @@ function(toolbar) {
     handleRequest : function(core, request) {
         var sandbox = core.getSandbox(),
             requestName = request.getName();
-
         if(requestName == 'Toolbar.AddToolButtonRequest') {
             this._handleAdd(sandbox, request);
         }

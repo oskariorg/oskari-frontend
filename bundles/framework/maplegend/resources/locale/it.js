@@ -4,7 +4,8 @@ Oskari.registerLocalization(
     "key": "maplegend",
     "value": {
         "title": "Legenda della mappa",
-        "desc": ""
+        "desc": "",
+        "noLegendsText": "Nessuna legenda disponibile"
     }
 }
 );

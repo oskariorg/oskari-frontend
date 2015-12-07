@@ -253,6 +253,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 isPublic = (view.isPublic === true);
                 data = {
                     'id': view.id,
+                    'uuid': view.uuid,
                     'state': view.state,
                     'name': view.name,
                     'url': view.url,
