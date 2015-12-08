@@ -141,6 +141,16 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             this.getMap().render(this.getMapElementId());
             return true;
         },
+
+
+
+
+
+
+
+
+
+
         _getMapCenter: function () {
             return this._map.getCenter();
         },
@@ -153,32 +163,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             return this._map.getScale();
         },
 
-/* Check if the next functions are necessary. Do they work?
-------------------------------------------------------------------> */
-        /**
-         * @method getMapViewPortDiv
-         * Returns a reference to the map viewport div for setting correct z-ordering of divs
-         * @return {HTMLDivElement}
-         */
-        getMapViewPortDiv: function () {
-            return this._map.viewPortDiv;
-        },
-
-        /**
-         * @method getMapLayersContainerDiv
-         * Returns a reference to the div containing the map layers for setting correct z-ordering of divs
-         * @return {HTMLDivElement}
-         */
-        getMapLayersContainerDiv: function () {
-            return this._map.layerContainerDiv;
-        },
-
-        _getMapLayersByName: function (layerName) {
-            return this._map.getLayersByName(layerName);
-        },
-
-
-/*<--------------------------------------------------------------- */
         getPixelFromCoordinate : function(lonlat) {
             lonlat = this.normalizeLonLat(lonlat);
             var px = this._map.getViewPortPxFromLonLat(new OpenLayers.LonLat(lonlat.lon, lonlat.lat));
@@ -186,17 +170,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 x : px.x,
                 y : px.y
             };
-        },
-
-        /**
-         * @method getMaxZoomLevel
-         * Gets map max zoom level.
-         *
-         * @return {Integer} map max zoom level
-        */
-        getMaxZoomLevel: function(){
-            // getNumZoomLevels returns OL map resolutions length, so need decreased by one (this return max OL zoom)
-            return this._map.getNumZoomLevels() - 1;
         },
 
         /**

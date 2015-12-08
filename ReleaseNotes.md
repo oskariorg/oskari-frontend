@@ -18,6 +18,11 @@ Unused functions removed:
   - getProjectionObject()
   - _createBaseLayer()
   - getExtentArray()
+  - getMapViewPortDiv()
+  - getMapLayersContainerDiv()
+  - _getMapLayersByName()
+  - getMapLayersByName()
+  - getMapElDom()
 
 Added functions so internal references don't need to be called:
 - getMapElementId()

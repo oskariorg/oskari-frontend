@@ -139,30 +139,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             return scale;
         },
 
-/* Check if the next functions are necessary. Do they work?
+/* OL3 specific - check if this can be done in a common way 
 ------------------------------------------------------------------> */
-        /**
-         * @method getMapViewPortDiv
-         * Returns a reference to the map viewport div for setting correct z-ordering of divs
-         * @return {HTMLDivElement}
-         */
-        getMapViewPortDiv: function () {
-            return this._map.viewPortDiv;
-        },
-
-        /**
-         * @method getMapLayersContainerDiv
-         * Returns a reference to the div containing the map layers for setting correct z-ordering of divs
-         * @return {HTMLDivElement}
-         */
-        getMapLayersContainerDiv: function () {
-            return this._map.layerContainerDiv;
-        },
-
-        getMapLayersByName: function(layerName) {
-            // FIXME: Cannot detect Marker layer, which is called Overlays in OL3
-            return [];
-        },
         getExtent: function() {
             return this._extent;
         },
@@ -177,17 +155,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 y : px[1]
             };
         },
-        /**
-        * @method getMaxZoomLevel
-        * Gets map max zoom level.
-        *
-        * @return {Integer} map max zoom level
-        */
-        getMaxZoomLevel: function(){
-            // getNumZoomLevels returns OL map resolutions length, so need decreased by one (this return max OL zoom)
-            return this._options.resolutions.length - 1;
-        },
-
+        
         getInteractionInstance: function (interactionName) {
             var interactions = this.getMap().getInteractions().getArray();
             var interactionInstance = interactions.filter(function(interaction) {

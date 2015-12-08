@@ -215,6 +215,19 @@ Oskari.clazz.define(
                 this.afterRearrangeSelectedMapLayerEvent(event);
             }
         },
+/** SHARED FUNCTIONS */
+
+        /**
+         * @method getMaxZoomLevel
+         * Gets map max zoom level.
+         *
+         * @return {Integer} map max zoom level
+        */
+        getMaxZoomLevel: function(){
+            // getNumZoomLevels returns OL map resolutions length, so need decreased by one (this return max OL zoom)
+            return this.getResolutionArray().length - 1;
+        },
+
         /**
          * Returns a reference to the map implementation
          * @return {[type]} [description]
@@ -233,14 +246,7 @@ Oskari.clazz.define(
             }
             return mapDiv;
         },
-
-        /**
-         * @method getMapElDom
-         * Get DOM map element
-         */
-        getMapElDom: function () {
-            return this.getMapEl().get(0);
-        },
+/** /SHARED FUNCTIONS */
 
         /**
          * @method getImageUrl
