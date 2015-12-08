@@ -1,68 +1,328 @@
-{ 
-  "startupSequence" : [ 
-      { 
-        "title" : "OpenLayers",
-        "en" : "OpenLayers",
-        "fi" : "OpenLayers",
-        "sv" : "OpenLayers",
-        "bundleinstancename" : "openlayers-default-theme",
-        "bundlename" : "openlayers-default-theme",
-        "instanceProps" : {  },
-        "metadata" : { 
-            "Import-Bundle" : { 
-                "openlayers-default-theme" : { "bundlePath" : "../../../../packages/openlayers/bundle/" },
-                "openlayers-single-full" : { "bundlePath" : "../../../../packages/openlayers/bundle/" }
-            },
-            "Require-Bundle-Instance" : [  ]
-        }
+{
+  "startupSequence":[
+    {
+      "title":"OpenLayers",
+      "en":"OpenLayers",
+      "fi":"OpenLayers",
+      "sv":"OpenLayers",
+      "bundleinstancename":"openlayers-default-theme",
+      "bundlename":"openlayers-default-theme",
+      "instanceProps":{
+        
       },
-      { 
-        "title" : "Map",
-        "en" : "Map",
-        "fi" : "Map",
-        "sv" : "Map",
-        "bundleinstancename" : "mapfull",
-        "bundlename" : "mapfull",
-        "instanceProps" : {  },
-        "metadata" : { 
-            "Import-Bundle" : { 
-                "common" : { "bundlePath" : "../../../../packages/framework/bundle/" },
-                "core-base" : { "bundlePath" : "../../../../packages/framework/bundle/" },
-                "core-map" : { "bundlePath" : "../../../../packages/framework/bundle/" },
-                "domain" : { "bundlePath" : "../../../../packages/framework/bundle/" },
-                "event-base" : { "bundlePath" : "../../../../packages/framework/bundle/" },
-                "event-map" : { "bundlePath" : "../../../../packages/framework/bundle/" },
-                "event-map-layer" : { "bundlePath" : "../../../../packages/framework/bundle/" },
-                "mapfull" : { "bundlePath" : "../../../../packages/framework/bundle/" },
-                "mapmodule-plugin" : { "bundlePath" : "../../../../packages/framework/bundle/" },
-                "mapwmts" : { "bundlePath" : "../../../../packages/framework/bundle/" },
-                "request-base" : { "bundlePath" : "../../../../packages/framework/bundle/" },
-                "request-map" : { "bundlePath" : "../../../../packages/framework/bundle/" },
-                "request-map-layer" : { "bundlePath" : "../../../../packages/framework/bundle/" },
-                "runtime" : { "bundlePath" : "../../../../packages/framework/bundle/" },
-                "sandbox-base" : { "bundlePath" : "../../../../packages/framework/bundle/" },
-                "sandbox-map" : { "bundlePath" : "../../../../packages/framework/bundle/" },
-                "service-base" : { "bundlePath" : "../../../../packages/framework/bundle/" },
-                "service-map" : { "bundlePath" : "../../../../packages/framework/bundle/" },
-                "myplaces2" : { "bundlePath" : "../../../../packages/framework/bundle/" }
-            },
-            "Require-Bundle-Instance" : [  ]
-        }
-      },
-      { 
-        "title" : "lupapiste",
-        "en" : "lupapiste",
-        "fi" : "lupapiste",
-        "sv" : "lupapiste",
-        "bundleinstancename" : "lupakartta",
-        "bundlename" : "lupakartta",
-        "instanceProps" : {  },
-        "metadata" : { 
-            "Import-Bundle" : { 
-                "lupakartta" : { "bundlePath" : "../../../../packages/lupapiste/bundle/" } 
-            },
-            "Require-Bundle-Instance" : [  ]
-        }
+      "metadata":{
+        "Import-Bundle":{
+          "openlayers-default-theme":{
+            "bundlePath":"../../../../packages/openlayers/bundle/"
+          },
+          "openlayers-single-full":{
+            "bundlePath":"../../../../packages/openlayers/bundle/"
+          }
+        },
+        "Require-Bundle-Instance":[
+          
+        ]
       }
+    },
+    {
+      "title":"Map",
+      "en":"Map",
+      "fi":"Map",
+      "sv":"Map",
+      "bundleinstancename":"mapfull",
+      "bundlename":"mapfull",
+      "instanceProps":{
+        
+      },
+      "metadata":{
+        "Import-Bundle":{
+          "oskariui":{
+            "bundlePath":"../../../../packages/framework/bundle/"
+          },
+          "core-base":{
+            "bundlePath":"../../../../packages/framework/bundle/"
+          },
+          "core-map":{
+            "bundlePath":"../../../../packages/framework/bundle/"
+          },
+          "domain":{
+            "bundlePath":"../../../../packages/framework/bundle/"
+          },
+          "event-base":{
+            "bundlePath":"../../../../packages/framework/bundle/"
+          },
+          "event-map":{
+            "bundlePath":"../../../../packages/framework/bundle/"
+          },
+          "event-map-layer":{
+            "bundlePath":"../../../../packages/framework/bundle/"
+          },
+          "mapfull":{
+            "bundlePath":"../../../../packages/framework/bundle/"
+          },
+          "mapmodule-plugin":{
+            "bundlePath":"../../../../packages/framework/bundle/"
+          },
+          "mapwmts":{
+            "bundlePath":"../../../../packages/framework/bundle/"
+          },
+          "request-base":{
+            "bundlePath":"../../../../packages/framework/bundle/"
+          },
+          "request-map":{
+            "bundlePath":"../../../../packages/framework/bundle/"
+          },
+          "request-map-layer":{
+            "bundlePath":"../../../../packages/framework/bundle/"
+          },
+          "sandbox-base":{
+            "bundlePath":"../../../../packages/framework/bundle/"
+          },
+          "sandbox-map":{
+            "bundlePath":"../../../../packages/framework/bundle/"
+          },
+          "service-base":{
+            "bundlePath":"../../../../packages/framework/bundle/"
+          },
+          "service-map":{
+            "bundlePath":"../../../../packages/framework/bundle/"
+          }
+        },
+        "Require-Bundle-Instance":[
+          
+        ]
+      }
+    },
+    {
+      "title":"Oskari DIV Manazer",
+      "fi":"Oskari DIV Manazer",
+      "sv":"Oskari DIV Manazer",
+      "en":"Oskari DIV Manazer",
+      "bundlename":"divmanazer",
+      "bundleinstancename":"divmanazer",
+      "metadata":{
+        "Import-Bundle":{
+          "divmanazer":{
+            "bundlePath":"../../../../packages/framework/bundle/"
+          }
+        },
+        "Require-Bundle-Instance":[
+          
+        ]
+      },
+      "instanceProps":{
+        
+      }
+    },
+    {
+      "title":"Toolbar",
+      "en":"Toolbar",
+      "fi":"Toolbar",
+      "sv":"Toolbar",
+      "bundleinstancename":"toolbar",
+      "bundlename":"toolbar",
+      "instanceProps":{
+        
+      },
+      "metadata":{
+        "Import-Bundle":{
+          "toolbar":{
+            "bundlePath":"../../../../packages/framework/bundle/"
+          }
+        },
+        "Require-Bundle-Instance":[
+          
+        ]
+      }
+    },
+    {
+      "instanceProps":{
+        
+      },
+      "title":"Valitut karttatasot",
+      "bundleinstancename":"layerselection2",
+      "fi":"layerselection",
+      "sv":"?",
+      "en":"?",
+      "bundlename":"layerselection2",
+      "metadata":{
+        "Import-Bundle":{
+          "layerselection2":{
+            "bundlePath":"../../../../packages/framework/bundle/"
+          }
+        },
+        "Require-Bundle-Instance":[
+          
+        ]
+      }
+    },
+    {
+      "instanceProps":{
+        
+      },
+      "title":"Info Box",
+      "bundleinstancename":"infobox",
+      "fi":"infobox",
+      "sv":"?",
+      "en":"?",
+      "bundlename":"infobox",
+      "metadata":{
+        "Import-Bundle":{
+          "infobox":{
+            "bundlePath":"../../../../packages/framework/bundle/"
+          }
+        },
+        "Require-Bundle-Instance":[
+          
+        ]
+      }
+    },
+    {
+      "instanceProps":{
+        
+      },
+      "title":"lupapiste-personaldata",
+      "bundleinstancename":"lupapiste-personaldata",
+      "fi":"infobox",
+      "sv":"?",
+      "en":"?",
+      "bundlename":"lupapiste-personaldata",
+      "metadata":{
+        "Import-Bundle":{
+          "lupapiste-personaldata":{
+            "bundlePath":"../../../../packages/lupapiste/bundle/"
+          }
+        },
+        "Require-Bundle-Instance":[
+          
+        ]
+      }
+    },
+    {
+      "title":"lupapiste-myplaces2",
+      "en":"lupapiste-myplaces2",
+      "fi":"lupapiste-myplaces2",
+      "sv":"lupapiste-myplaces2",
+      "bundleinstancename":"lupapiste-myplaces2",
+      "bundlename":"lupapiste-myplaces2",
+      "instanceProps":{
+        
+      },
+      "metadata":{
+        "Import-Bundle":{
+          "lupapiste-myplaces2":{
+            "bundlePath":"../../../../packages/lupapiste/bundle/"
+          }
+        },
+        "Require-Bundle-Instance":[
+          
+        ]
+      }
+    },
+    {
+      "title":"lupapiste",
+      "en":"lupapiste",
+      "fi":"lupapiste",
+      "sv":"lupapiste",
+      "bundleinstancename":"lupakartta",
+      "bundlename":"lupakartta",
+      "instanceProps":{
+        
+      },
+      "metadata":{
+        "Import-Bundle":{
+          "lupakartta":{
+            "bundlePath":"../../../../packages/lupapiste/bundle/"
+          }
+        },
+        "Require-Bundle-Instance":[
+          
+        ]
+      }
+    },
+    {
+      "title":"lupapiste-shpimport",
+      "en":"lupapiste-shpimport",
+      "fi":"lupapiste-shpimport",
+      "sv":"lupapiste-shpimport",
+      "bundleinstancename":"lupapiste-shpimport",
+      "bundlename":"lupapiste-shpimport",
+      "instanceProps":{
+        
+      },
+      "metadata":{
+        "Import-Bundle":{
+          "lupapiste-shpimport":{
+            "bundlePath":"../../../../packages/lupapiste/bundle/"
+          }
+        },
+        "Require-Bundle-Instance":[
+          
+        ]
+      }
+    },
+    {
+      "title":"printout",
+      "en":"printout",
+      "fi":"printout",
+      "sv":"printout",
+      "bundleinstancename":"printout",
+      "bundlename":"printout",
+      "instanceProps":{
+        
+      },
+      "metadata":{
+        "Import-Bundle":{
+          "printout":{
+            "bundlePath":"../../../../packages/framework/bundle/"
+          }
+        },
+        "Require-Bundle-Instance":[
+          
+        ]
+      }
+    },
+    {
+      "title":"userguide",
+      "en":"userguide",
+      "fi":"userguide",
+      "sv":"userguide",
+      "bundleinstancename":"userguide",
+      "bundlename":"userguide",
+      "instanceProps":{
+        
+      },
+      "metadata":{
+        "Import-Bundle":{
+          "userguide":{
+            "bundlePath":"../../../../packages/framework/bundle/"
+          }
+        },
+        "Require-Bundle-Instance":[
+          
+        ]
+      }
+    },
+    {
+      "title":"planbundle",
+      "fi":"planbundle",
+      "sv":"?",
+      "en":"?",
+      "bundlename":"planbundle",
+      "bundleinstancename":"planbundle",
+      "metadata":{
+        "Import-Bundle":{
+          "planbundle":{
+            "bundlePath":"../../../packages/lupapiste/bundle/"
+          }
+        },
+        "Require-Bundle-Instance":[
+          
+        ]
+      },
+      "instanceProps":{
+        
+      }
+    }
   ]
 }

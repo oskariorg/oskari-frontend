@@ -1,10 +1,8 @@
-(defproject fi.sito/oskari "0.9.2"
-  :description "Oskari map stuff for Lupapiste"
-  :dependencies [[org.clojure/clojure "1.4.0"]]
-  :deploy-repositories {"snapshots" {:url "http://mvn.solita.fi/archiva/repository/solita"
-                                     :username "solita"
-                                     :password "Solita321"}
-                        "releases"  {:url "http://mvn.solita.fi/archiva/repository/solita"
-                                     :username "solita"
-                                     :password "Solita321"
-                                     :sign-releases false}})
+(defproject lupapiste/oskari "0.9.54" ;;; also modify x4 the fullmap.html file
+  :description "Oskari map for Lupapiste - fork of http://www.oskari.org/ v1.19.3"
+  :url "https://www.lupapiste.fi"
+  :license {:name "European Union Public Licence (EUPL v.1.1)"
+            :url "https://joinup.ec.europa.eu/community/eupl/og_page/eupl"
+            :distribution :repo}
+  :scm {:url "https://github.com/lupapiste/oskari.git"}
+  :dependencies [[org.clojure/clojure "1.7.0"]])

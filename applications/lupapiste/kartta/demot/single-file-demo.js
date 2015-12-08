@@ -56,7 +56,7 @@ jQuery(document).ready(function() {
 	//event demot
 	jQuery("#button1").click(function() {
 		//jQuery("#eventMessages").trigger("center",[parseInt(jQuery("#inputx").val(),10), parseInt(jQuery("#inputy").val(),10)]);
-		hub.send("documents-map", {
+		hub.send("oskari-center-map", {
 			clear : jQuery("#checkbox1").is(":checked"),
 			data : [{
 				id : new Date().getTime(),
@@ -75,7 +75,7 @@ jQuery(document).ready(function() {
 	});
 	jQuery("#button2").click(function() {
 		//jQuery("#eventMessages").trigger("center",[parseInt(jQuery("#inputx").val(),10), parseInt(jQuery("#inputy").val(),10)]);
-		hub.send("documents-map", {
+		hub.send("oskari-center-map", {
 			clear : jQuery("#checkbox1").is(":checked"),
 			data : [{
 				id : "11",
@@ -149,7 +149,38 @@ jQuery(document).ready(function() {
 		hub.send("map-clear-request");
 		return false;
 	});
-	hub.subscribe("map-initialized", function(e) {
+	
+	jQuery("#oskari-set-layers_button").click(function() {
+		hub.send("oskari-set-layers", [
+   			{name: '90', visible: 'true'},
+			{name: '99', visible: 'false'},
+		]);
+	});
+	
+	jQuery("#oskari-show-layers_button").click(function() {
+		hub.send("oskari-show-layers", [
+			{name: 'base_35', visible: 'true'},
+			{name: '90', visible: 'false'},
+		]);		
+	});
+	
+	jQuery("#oskari-show-shapes_button").click(function() {
+		hub.send("oskari-show-shapes", {
+			  clear : true,
+			  drawings : [ {
+			    id : "id",
+			    name : "name",
+			    desc : "desc",
+			    category : 123,
+				height : 5,
+				length : 60,
+			    geometry : "POLYGON((404241.539 6693842.301,404270.039 6693780.051,404331.289 6693829.301,404241.539 6693842.301))"
+			  } ]
+		});	
+	});
+	
+	
+	hub.subscribe("oskari-map-initialized", function(e) {
 		jQuery("#eventMessages").html("map-initilized<br/>" + jQuery("#eventMessages").html())
 	});
 	hub.subscribe("inforequest-map-click", function(e) {

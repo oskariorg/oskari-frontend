@@ -1,7 +1,7 @@
 /**
  * @class Oskari.lupapiste.bundle.myplaces2.plugin.DrawPlugin
  */
-Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.plugin.DrawPlugin', function () {
+Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.plugin.DrawPlugin', function() {
     this.mapModule = null;
     this.pluginName = null;
     this._sandbox = null;
@@ -11,15 +11,15 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.plugin.DrawPlugin', funct
     this.editMode = false;
     this.currentDrawMode = null;
 }, {
-    __name: 'LupaPisteMyPlaces.DrawPlugin',
+    __name : 'LupaPisteMyPlaces.DrawPlugin',
 
-    getName: function () {
+    getName : function() {
         return this.pluginName;
     },
-    getMapModule: function () {
+    getMapModule : function() {
         return this.mapModule;
     },
-    setMapModule: function (mapModule) {
+    setMapModule : function(mapModule) {
         this.mapModule = mapModule;
         this._map = mapModule.getMap();
         this.pluginName = mapModule.getName() + this.__name;
@@ -31,29 +31,30 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.plugin.DrawPlugin', funct
      * @param params includes drawMode, geometry and style
      * @method
      */
-    startDrawing: function (params) {
-        if (params.isModify) {
+    startDrawing : function(params) {
+        if(params.isModify) {
             // preselect it for modification
             this.modifyControls.select.select(this.drawLayer.features[0]);
-        } else {
-            // remove possible old drawing
-            this.drawLayer.destroyFeatures();
-
-            if (params.geometry) {
-                // sent existing geometry == edit mode
-                this.editMode = true;
-                // add feature to draw layer
-                var features = [new OpenLayers.Feature.Vector(params.geometry)];
-                this.drawLayer.addFeatures(features);
-                // preselect it for modification
-                this.modifyControls.select.select(this.drawLayer.features[0]);
-            } else {
-                // otherwise activate requested draw control for new geometry
-                this.editMode = false;
-                this.toggleControl(params.drawMode);
-            }
         }
-
+        else {
+	        // remove possible old drawing
+	        this.drawLayer.destroyFeatures();
+        	
+	        if(params.geometry) {
+	            // sent existing geometry == edit mode
+	            this.editMode = true;
+	            // add feature to draw layer
+	            var features = [new OpenLayers.Feature.Vector(params.geometry)];
+	            this.drawLayer.addFeatures(features);
+	            // preselect it for modification
+	            this.modifyControls.select.select(this.drawLayer.features[0]);
+	        } else {
+	            // otherwise activate requested draw control for new geometry
+	            this.editMode = false;
+	            this.toggleControl(params.drawMode);
+	        }
+        }
+    
 
     },
     /**
@@ -61,39 +62,48 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.plugin.DrawPlugin', funct
      * clears the layer of any drawn features
      * @method
      */
-    stopDrawing: function () {
+    stopDrawing : function() {
         // disable all draw controls
         this.toggleControl();
         // clear drawing
         this.drawLayer.destroyFeatures();
+        
+        //refresh the layer with Lupapiste shapes                
+        var map = this._sandbox.findRegisteredModuleInstance('MainMapModule').getMap();
+        var layer = map.getLayersByName("LupapisteVectors")[0];
+        layer.redraw();
+        
+        this.modifyControls.modify.unselectFeature();
+        
     },
-
-    forceFinishDraw: function () {
-        try {
-            this.drawControls[this.currentDrawMode].finishSketch();
-        } catch (error) {
-            // happens when the sketch isn't even started -> reset state
-            this.stopDrawing();
-            var event = this._sandbox.getEventBuilder('LupaPisteMyPlaces.MyPlaceSelectedEvent')();
-            this._sandbox.notifyAll(event);
-        }
+    
+    forceFinishDraw : function() {
+    	try {
+    		this.drawControls[this.currentDrawMode].finishSketch();
+    	}
+    	catch(error) {
+    		// happens when the sketch isn't even started -> reset state
+        	this.stopDrawing();
+	        var event = this._sandbox.getEventBuilder('LupaPisteMyPlaces.MyPlaceSelectedEvent')();
+	        this._sandbox.notifyAll(event);
+    	}
     },
-
+    
     /**
      * Called when drawing is finished.
      * Disables all draw controls and
      * sends a LupaPisteMyPlaces.FinishedDrawingEvent with the drawn the geometry.
      * @method
      */
-    finishedDrawing: function () {
+    finishedDrawing : function() {
         this.toggleControl();
-        if (!this.editMode) {
-            // programmatically select the drawn feature ("not really supported by openlayers")
-            // http://lists.osgeo.org/pipermail/openlayers-users/2009-February/010601.html
-            this.modifyControls.select.select(this.drawLayer.features[0]);
+        if(!this.editMode) {
+	        // programmatically select the drawn feature ("not really supported by openlayers")
+	        // http://lists.osgeo.org/pipermail/openlayers-users/2009-February/010601.html
+        	this.modifyControls.select.select(this.drawLayer.features[0]);
+        	var event = this._sandbox.getEventBuilder('LupaPisteMyPlaces.FinishedDrawingEvent')(this.getDrawing(), this.editMode);
+        	this._sandbox.notifyAll(event);
         }
-        var event = this._sandbox.getEventBuilder('LupaPisteMyPlaces.FinishedDrawingEvent')(this.getDrawing(), this.editMode);
-        this._sandbox.notifyAll(event);
     },
     /**
      * Enables the given draw control
@@ -102,12 +112,12 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.plugin.DrawPlugin', funct
      * controls)
      * @method
      */
-    toggleControl: function (drawMode) {
-        this.currentDrawMode = drawMode;
-
-        for (var key in this.drawControls) {
+    toggleControl : function(drawMode) {
+    	this.currentDrawMode = drawMode;
+    	
+        for(var key in this.drawControls) {
             var control = this.drawControls[key];
-            if (drawMode == key) {
+            if(drawMode == key) {
                 control.activate();
             } else {
                 control.deactivate();
@@ -122,12 +132,12 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.plugin.DrawPlugin', funct
      * @param sandbox reference to Oskari sandbox
      * @method
      */
-    init: function (sandbox) {
+    init : function(sandbox) {
         var me = this;
         this.requestHandlers = {
-            startDrawingHandler: Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.request.StartDrawingRequestPluginHandler', sandbox, me),
-            stopDrawingHandler: Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.request.StopDrawingRequestPluginHandler', sandbox, me),
-            getGeometryHandler: Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.request.GetGeometryRequestPluginHandler', sandbox, me)
+            startDrawingHandler : Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.request.StartDrawingRequestPluginHandler', sandbox, me),
+            stopDrawingHandler : Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.request.StopDrawingRequestPluginHandler', sandbox, me),
+            getGeometryHandler : Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.request.GetGeometryRequestPluginHandler', sandbox, me)
         };
 
         this.drawLayer = new OpenLayers.Layer.Vector("MyPlaces Draw Layer", {
@@ -137,33 +147,62 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.plugin.DrawPlugin', funct
              fillOpacity: 0,
              cursor: "pointer"
              },*/
-            eventListeners: {
-                "featuresadded": function (layer) {
-                    // send an event that the drawing has been completed
+            eventListeners : {
+                "featuresadded" : function(layer) {
+                	// send an event that the drawing has been completed
                     me.finishedDrawing();
-                }
+                },
+				"vertexmodified" : function(event) {
+					me._sendActiveGeometry(me.getDrawing());
+				}
             }
         });
-
+        
         this.drawControls = {
-            point: new OpenLayers.Control.DrawFeature(me.drawLayer,
-                OpenLayers.Handler.Point),
-            line: new OpenLayers.Control.DrawFeature(me.drawLayer,
-                OpenLayers.Handler.Path),
-            area: new OpenLayers.Control.DrawFeature(me.drawLayer,
-                OpenLayers.Handler.Polygon),
-            box: new OpenLayers.Control.DrawFeature(me.drawLayer,
-                OpenLayers.Handler.RegularPolygon, {
-                    handlerOptions: {
-                        sides: 4,
-                        irregular: true
-                    }
-                })
+            point : new OpenLayers.Control.DrawFeature(me.drawLayer, 
+            		OpenLayers.Handler.Point),
+            line : new OpenLayers.Control.DrawFeature(me.drawLayer,
+            		OpenLayers.Handler.Path, {
+            			callbacks: {
+            				modify: function(geom, feature) {
+            					me._sendActiveGeometry(feature.geometry, 'line');
+							}
+						}
+					}),
+            area : new OpenLayers.Control.DrawFeature(me.drawLayer,
+            		OpenLayers.Handler.Polygon, {
+						callbacks: {
+							modify: function(geom, feature) {
+								me._sendActiveGeometry(feature.geometry, 'area');
+							}
+						}
+					}),
+            box : new OpenLayers.Control.DrawFeature(me.drawLayer, 
+                        OpenLayers.Handler.RegularPolygon, {
+                            handlerOptions: {
+                                sides: 4,
+                                irregular: true
+                            }
+                        }),
+            circle : new OpenLayers.Control.DrawFeature(me.drawLayer,
+            			OpenLayers.Handler.RegularPolygon, {
+            				handlerOptions: {
+            					sides: 40,
+            					irregular: false
+            				}
+						}),
+            ellipse : new OpenLayers.Control.DrawFeature(me.drawLayer,
+        			OpenLayers.Handler.RegularPolygon, {
+        				handlerOptions: {
+        					sides: 40,
+        					irregular: true
+        				}
+					})
         };
-
+        
         // doesn't really need to be in array, but lets keep it for future development
         this.modifyControls = {
-            modify: new OpenLayers.Control.ModifyFeature(me.drawLayer, {
+            modify : new OpenLayers.Control.ModifyFeature(me.drawLayer, {
                 standalone: true
             })
         };
@@ -176,13 +215,12 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.plugin.DrawPlugin', funct
             onUnselect: this.modifyControls.modify.unselectFeature,
             scope: this.modifyControls.modify
         });
-
+        
         this._map.addLayers([me.drawLayer]);
-        var key;
-        for (key in this.drawControls) {
+        for(var key in this.drawControls) {
             this._map.addControl(this.drawControls[key]);
         }
-        for (key in this.modifyControls) {
+        for(var key in this.modifyControls) {
             this._map.addControl(this.modifyControls[key]);
         }
         // no harm in activating straight away
@@ -192,14 +230,46 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.plugin.DrawPlugin', funct
      * Returns the drawn geometry from the draw layer
      * @method
      */
-    getDrawing: function () {
+    getDrawing : function() {
+    	if (this.drawLayer.features.length === 0) {
+            return null;
+        }
         return this.drawLayer.features[0].geometry;
     },
-    register: function () {
+
+	_sendActiveGeometry: function(geometry, drawMode) {
+        var eventBuilder = this._sandbox.getEventBuilder('LupaPisteMyPlaces.ActiveDrawingEvent'),
+            event, featClass;
+		
+
+        if (drawMode == null) {
+            featClass = geometry.CLASS_NAME;
+            switch (featClass) {
+            case "OpenLayers.Geometry.LineString":
+            case "OpenLayers.Geometry.MultiLineString":
+                drawMode = 'line';
+                break;
+            case "OpenLayers.Geometry.Polygon":
+            case "OpenLayers.Geometry.MultiPolygon":
+                drawMode = 'area';
+                break;
+            default:
+                return;
+            }
+        }
+
+        if (eventBuilder) {
+            event = eventBuilder(geometry, drawMode);
+            this._sandbox.notifyAll(event);
+        }
+    },	
+	
+    register : function() {
 
     },
-    unregister: function () {},
-    startPlugin: function (sandbox) {
+    unregister : function() {
+    },
+    startPlugin : function(sandbox) {
         this._sandbox = sandbox;
 
         sandbox.register(this);
@@ -208,7 +278,7 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.plugin.DrawPlugin', funct
         sandbox.addRequestHandler('LupaPisteMyPlaces.GetGeometryRequest', this.requestHandlers.getGeometryHandler);
 
     },
-    stopPlugin: function (sandbox) {
+    stopPlugin : function(sandbox) {
 
         sandbox.removeRequestHandler('LupaPisteMyPlaces.StartDrawingRequest', this.requestHandlers.startDrawingHandler);
         sandbox.removeRequestHandler('LupaPisteMyPlaces.StopDrawingRequest', this.requestHandlers.stopDrawingHandler);
@@ -221,13 +291,15 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.plugin.DrawPlugin', funct
     /* @method start
      * called from sandbox
      */
-    start: function (sandbox) {},
+    start : function(sandbox) {
+    },
     /**
      * @method stop
      * called from sandbox
      *
      */
-    stop: function (sandbox) {}
+    stop : function(sandbox) {
+    }
 }, {
-    'protocol': ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+    'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
 });

@@ -1,172 +1,34 @@
 jQuery(document).ready(function() {
-	Oskari.setLang('en');
-	Oskari.setLoaderMode('dev');
-	var appSetup;
-	var appConfig;
-
-	var downloadConfig = function(notifyCallback) {
-		jQuery.ajax({
-			type : 'GET',
-			dataType : 'json',
-			url : 'config.json',
-			beforeSend : function(x) {
-				if (x && x.overrideMimeType) {
-					x.overrideMimeType("application/j-son;charset=UTF-8");
-				}
-			},
-			success : function(config) {
-				appConfig = config;
-				notifyCallback();
-			}
-		});
-	};
-	var downloadAppSetup = function(notifyCallback) {
-		jQuery.ajax({
-			type : 'GET',
-			dataType : 'json',
-			url : 'appsetup.json',
-			beforeSend : function(x) {
-				if (x && x.overrideMimeType) {
-					x.overrideMimeType("application/j-son;charset=UTF-8");
-				}
-			},
-			// For some braindead reason success and error callbacks won't
-			// work for downloadAppSetup, even though they worked for downloadConfig.
-			complete: function(xhr, status) {
-				if (status === 'error' || !xhr.responseText) {
-					console.log("error ", xhr);
-				} else {
-					appSetup = xhr.responseText;
-					appSetup = JSON.parse(appSetup);
-				}
-			}
-			// success : function(appSetup) {
-			// 	console.log("appsetup");
-			// 	appSetup = appSetup;
-			// 	notifyCallback();
-			// },
-			// error : function(jqXHR, textStatus, errorThrown) {
-			// 	console.log("jqXHR ", jqXHR);
-			// 	console.log("textStatus ", textStatus);
-			// 	console.log("errorThrown ", errorThrown);
-			// }
-		});
-	};
-
-	var startApplication = function() {
-		// check that both setup and config are loaded
-		// before actually starting the application
-		if (appSetup && appConfig) {
-			var app = Oskari.app;
-			app.setApplicationSetup(appSetup);
-			app.setConfiguration(appConfig);
-			app.startApplication(function(startupInfos) {
-			});
-		}
-	};
-	downloadAppSetup(startApplication);
-	downloadConfig(startApplication);
-
-	//event demot
-	jQuery("#button1").click(function() {
-		//jQuery("#eventMessages").trigger("center",[parseInt(jQuery("#inputx").val(),10), parseInt(jQuery("#inputy").val(),10)]);
-		hub.send("documents-map", {
-			clear : jQuery("#checkbox1").is(":checked"),
-			data : [{
-				id : new Date().getTime(),
-				location : {
-					x : parseInt(jQuery("#inputx").val(), 10),
-					y : parseInt(jQuery("#inputy").val(), 10)
-				},
-				events : {
-					click : function(e) {
-						jQuery("#eventMessages").html("click<br/>" + jQuery("#eventMessages").html())
-					}
-				}
-			}]
-		});
+  
+	jQuery("#avaa").click(function() {
+		window.open("fullmap.html?coord=404241_6693842&zoomLevel=10&municipality=" + jQuery("#municipality").val());
 		return false;
 	});
-	jQuery("#button2").click(function() {
-		//jQuery("#eventMessages").trigger("center",[parseInt(jQuery("#inputx").val(),10), parseInt(jQuery("#inputy").val(),10)]);
-		hub.send("documents-map", {
-			clear : jQuery("#checkbox1").is(":checked"),
-			data : [{
-				id : "11",
-				location : {
-					x : parseInt(jQuery("#inputx").val(), 10),
-					y : parseInt(jQuery("#inputy").val(), 10)
-				},
-				events : {
-					click : function(e) {
-						jQuery("#eventMessages").html("click11<br/>" + jQuery("#eventMessages").html())
-					}
-				}
-			}, {
-				id : "22",
-				location : {
-					x : parseInt(jQuery("#inputx").val(), 10) - 1000 + Math.random() * 2000,
-					y : parseInt(jQuery("#inputy").val(), 10) - 1000 + Math.random() * 2000
-				},
-				events : {
-					click : function(e) {
-						jQuery("#eventMessages").html("click22<br/>" + jQuery("#eventMessages").html())
-					}
-				}
-			}, {
-				id : "33",
-				location : {
-					x : parseInt(jQuery("#inputx").val(), 10) - 1000 + Math.random() * 2000,
-					y : parseInt(jQuery("#inputy").val(), 10) - 1000 + Math.random() * 2000
-				},
-				events : {
-					click : function(e) {
-						jQuery("#eventMessages").html("click33<br/>" + jQuery("#eventMessages").html())
-					}
-				}
-			}, {
-				id : "44",
-				location : {
-					x : parseInt(jQuery("#inputx").val(), 10) - 1000 + Math.random() * 2000,
-					y : parseInt(jQuery("#inputy").val(), 10) - 1000 + Math.random() * 2000
-				},
-				events : {
-					click : function(e) {
-						jQuery("#eventMessages").html("click44<br/>" + jQuery("#eventMessages").html())
-					}
-				}
-			}, {
-				id : "55",
-				location : {
-					x : parseInt(jQuery("#inputx").val(), 10) - 1000 + Math.random() * 2000,
-					y : parseInt(jQuery("#inputy").val(), 10) - 1000 + Math.random() * 2000
-				},
-				events : {
-					click : function(e) {
-						jQuery("#eventMessages").html("click55<br/>" + jQuery("#eventMessages").html())
-					}
-				}
-			}]
+	jQuery("#full").click(function() {
+	  window.open("../build/package/resources/public/oskari/fullmap.html?coord=404241_6693842&zoomLevel=10&build=" + Date.now() + "&municipality=" + jQuery("#municipality").val());
+	  return false;
+	});
+	hub.subscribe("oskari-map-initialized", function(e) {
+		jQuery("#eventMessages").html("map-initilized<br/>" + jQuery("#eventMessages").html());
+		hub.send("oskari-show-shapes", {
+		  clear : true,
+		  drawings : [ {
+		    id : "id",
+		    name : "name",
+		    description : "desc",
+		    category : 123,
+		  height : 5,
+		    geometry : "POLYGON((404241.539 6693842.301,404270.039 6693780.051,404331.289 6693829.301,404241.539 6693842.301))"
+		  } ]
 		});
-		return false;
 	});
-	jQuery("#piirra").click(function() {
-		//jQuery("#eventMessages").trigger("piirra");
-		hub.send("inforequest-map-start", {
-			drawMode : 'point',
-			clear : jQuery("#checkbox1").is(":checked")
-		});
-		return false;
-	});
-	jQuery("#tyhjenna").click(function() {
-		//jQuery("#eventMessages").trigger("tyhjenna");
-		hub.send("map-clear-request");
-		return false;
-	});
-	hub.subscribe("map-initialized", function(e) {
-		jQuery("#eventMessages").html("map-initilized<br/>" + jQuery("#eventMessages").html())
-	});
+  hub.subscribe("oskari-map-uninitialized", function(e) {
+    jQuery("#eventMessages").html("map-uninitilized<br/>" + jQuery("#eventMessages").html())
+  });
 	hub.subscribe("inforequest-map-click", function(e) {
 		jQuery("#eventMessages").html("inforequest-map-click (" + e.data.kunta.kuntanimi_fi + " " + e.data.kunta.kuntanumero + "," + e.data.location.x + "," + e.data.location.y + ")<br/>" + jQuery("#eventMessages").html())
+	});
+	hub.subscribe("oskari-save-drawings", function(e) {
+		jQuery("#eventMessages").html("oskari-save-drawings (" + JSON.parse(e.data.drawings).length + ")<br/>" + jQuery("#eventMessages").html())
 	});
 });
