@@ -16,7 +16,7 @@ Oskari.clazz.define(
             multipleSymbolizers: false,
             namedLayersAsArray: true
         });
-        
+
         this._layers = {};
         this._features = {};
     }, {
@@ -284,7 +284,7 @@ Oskari.clazz.define(
                 for (i=0; i < features.length; i++) {
                     featureInstance = features[i];
                     featureInstance.style = me.getStyle(options.featureStyle);
-                }                
+                }
 
                 if(options.cursor){
                     for (i=0; i < features.length; i++) {
@@ -300,7 +300,7 @@ Oskari.clazz.define(
                 }
 
                 // prio handling
-                var prio = options.prio || 0;                
+                var prio = options.prio || 0;
                 me._features[options.layerId].push({
                   data: features,
                   prio: prio
@@ -314,8 +314,8 @@ Oskari.clazz.define(
                     me._features[options.layerId].sort(function(a,b){
                       return b.prio - a.prio;
                     });
-                    
-                    _.forEach(me._features[options.layerId], function(featObj) {                      
+
+                    _.forEach(me._features[options.layerId], function(featObj) {
                         olLayer.addFeatures(featObj.data);
                     });
                 } else {

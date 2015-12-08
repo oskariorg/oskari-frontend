@@ -63,7 +63,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 keyboardEventTarget: document,
                 target: this.getMapElementId()
             });
-            
+
             var projection = ol.proj.get(me.getProjection());
             projection.setExtent(me._extent);
 
@@ -340,7 +340,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 this.notifyMoveEnd();
             }
         },
-        
+
         /**
          * @method zoomTo
          * Sets the zoom level to given value
@@ -349,7 +349,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         zoomTo: function (zoomLevel) {
             this.setZoomLevel(zoomLevel);
         },
-        
+
         /**
          * @method panMapByPixels
          * Pans the map by given amount of pixels.
@@ -435,7 +435,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
             return -1;
         },
-        
+
         getSize: function(){
             var sandbox = this._sandbox,
                 mapVO = sandbox.getMap(),

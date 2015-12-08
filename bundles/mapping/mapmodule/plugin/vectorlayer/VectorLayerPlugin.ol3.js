@@ -279,15 +279,15 @@ Oskari.clazz.define(
 
                 _.forEach(features, function (feature) {
                     feature.setStyle(me.getStyle(options.featureStyle));
-                });                
-               
+                });
+
                 if(!me._features[options.layerId]) {
                   me._features[options.layerId] = [];
                 }
 
                 //check if layer is already on map
                 if (me._layers[options.layerId]) {
-                    layer = me._layers[options.layerId];                    
+                    layer = me._layers[options.layerId];
                     vectorSource = layer.getSource();
 
                     //layer is already on map
@@ -297,8 +297,8 @@ Oskari.clazz.define(
                         vectorSource.clear();
                         me._features[options.layerId] = [];
                     }
-                    
-                    // prio handling                    
+
+                    // prio handling
                     me._features[options.layerId].push({
                       data: features,
                       prio: prio
