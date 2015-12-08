@@ -369,6 +369,18 @@ Oskari.clazz.define(
 
             return this.getResolutionArray()[defIndex];
         },
+
+        /**
+         * @method getMapScales
+         * @return {Number[]} calculated mapscales
+         */
+        getMapScales: function () {
+            return this._mapScales;
+        },
+        getMapScale: function () {
+            var scales = this.getMapScales();
+            return scales[this.getMapZoom()];
+        },
 /* --------------- /SHARED FUNCTIONS --------------- */
 
 /* Impl specific - found in ol2 AND ol3 modules
@@ -376,7 +388,6 @@ Oskari.clazz.define(
         getPixelFromCoordinate: Oskari.AbstractFunc('getPixelFromCoordinate'),
         getMapCenter: Oskari.AbstractFunc('getMapCenter'),
         getMapZoom: Oskari.AbstractFunc('getMapZoom'),
-        getMapScale: Oskari.AbstractFunc('getMapScale'),
         /**
          * @method setZoomLevel
          * Sets the maps zoom level to given absolute number
@@ -1246,13 +1257,6 @@ Oskari.clazz.define(
                 min: minScaleZoom,
                 max: maxScaleZoom
             };
-        },
-        /**
-         * @method getMapScales
-         * @return {Number[]} calculated mapscales
-         */
-        getMapScales: function () {
-            return this._mapScales;
         },
         /**
          * @method calculateLayerScales

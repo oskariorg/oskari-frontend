@@ -162,15 +162,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             return this._map.getView().getZoom();
         },
 
-        getMapScale: function () {
-            var map = this.getMap();
-            var view = map.getView(); ;
-            var resolution = view.getResolution();
-            var units = map.getView().getProjection().getUnits();
-            var mpu = ol.proj.METERS_PER_UNIT[units];
-            var scale = resolution * mpu * 39.37 * this._dpi;
-            return scale;
-        },
 /* --------- /Impl specific --------------------------------------> */
 
 
@@ -303,15 +294,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             if (suppressEnd !== true) {
                 this.notifyMoveEnd();
             }
-        },
-
-        /**
-         * @method zoomTo
-         * Sets the zoom level to given value
-         * @param {Number} zoomLevel the new zoom level
-         */
-        zoomTo: function (zoomLevel) {
-            this.setZoomLevel(zoomLevel);
         },
 
         /**

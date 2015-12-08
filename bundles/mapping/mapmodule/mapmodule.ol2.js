@@ -183,10 +183,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         getMapZoom: function () {
             return this._map.getZoom();
         },
-
-        getMapScale: function () {
-            return this._map.getScale();
-        },
         /**
          * @method zoomToExtent
          * Zooms the map to fit given bounds on the viewport
