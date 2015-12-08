@@ -156,6 +156,15 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 /* Impl specific - found in ol2 AND ol3 modules
 ------------------------------------------------------------------> */
 
+        addLayer: function(layerImpl) {
+            this.getMap().addLayer(layerImpl);
+        },
+        removeLayer : function(layerImpl) {
+            this.getMap().removeLayer(layerImpl);
+            if(typeof layerImpl.destroy === 'function') {
+                layerImpl.destroy();
+            }
+        },
         getPixelFromCoordinate : function(lonlat) {
             lonlat = this.normalizeLonLat(lonlat);
             var px = this._map.getViewPortPxFromLonLat(new OpenLayers.LonLat(lonlat.lon, lonlat.lat));
@@ -272,6 +281,47 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
         },
 
+        /**
+         * @method transformCoordinates
+         * Transforms coordinates from given projection to the maps projection.
+         * @param {Object} pLonlat object with lon and lat keys
+         * @param {String} srs projection for given lonlat params like "EPSG:4326"
+         * @return {Object} transformed coordinates as object with lon and lat keys
+         */
+        transformCoordinates: function (pLonlat, srs) {
+            if(!srs || this.getProjection() === srs) {
+                return pLonlat;
+            }
+            var isProjectionDefined = Proj4js.defs[srs];
+            if (!isProjectionDefined) {
+                throw 'SrsName not supported! Provide Proj4js.def for ' + srs;
+            }
+            var tmp = new OpenLayers.LonLat(pLonlat.lon, pLonlat.lat);
+            var transformed = tmp.transform(new OpenLayers.Projection(srs), this.getMap().getProjectionObject());
+
+            return {
+                lon : transformed.lon,
+                lat : transformed.lat
+            };
+        },
+        /**
+         * Brings map layer to top
+         * @method bringToTop
+         *
+         * @param {OpenLayers.Layer} layer The new topmost layer
+         * @param {Integer} buffer Add this buffer to z index. If it's undefined, using 1.
+         */
+        bringToTop: function(layer, buffer) {
+            if (!layer || !layer.getZIndex) {
+                return;
+            }
+            var layerZIndex = layer.getZIndex();
+            var zIndex = Math.max(this._map.Z_INDEX_BASE.Feature,layerZIndex);
+            buffer = buffer || 1;
+
+            layer.setZIndex(zIndex + buffer);
+            this.orderLayersByZIndex();
+        },
 /* --------- /Impl specific --------------------------------------> */
 
 
@@ -298,29 +348,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         },
 /* --------- /Impl specific - PRIVATE ----------------------------> */
 
-        /**
-         * @method transformCoordinates
-         * Transforms coordinates from given projection to the maps projection.
-         * @param {Object} pLonlat object with lon and lat keys
-         * @param {String} srs projection for given lonlat params like "EPSG:4326"
-         * @return {Object} transformed coordinates as object with lon and lat keys
-         */
-        transformCoordinates: function (pLonlat, srs) {
-            if(!srs || this.getProjection() === srs) {
-                return pLonlat;
-            }
-            var isProjectionDefined = Proj4js.defs[srs];
-            if (!isProjectionDefined) {
-                throw 'SrsName not supported! Provide Proj4js.def for ' + srs;
-            }
-            var tmp = new OpenLayers.LonLat(pLonlat.lon, pLonlat.lat);
-            var transformed = tmp.transform(new OpenLayers.Projection(srs), this.getMap().getProjectionObject());
-
-            return {
-                lon : transformed.lon,
-                lat : transformed.lat
-            };
-        },
 
         _addMapControlImpl: function (ctl) {
             this._map.addControl(ctl);
@@ -334,24 +361,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             this._map.setLayerIndex(layerImpl, index);
         },
 
-        /**
-         * Brings map layer to top
-         * @method bringToTop
-         *
-         * @param {OpenLayers.Layer} layer The new topmost layer
-         * @param {Integer} buffer Add this buffer to z index. If it's undefined, using 1.
-         */
-        bringToTop: function(layer, buffer) {
-            if (!layer || !layer.getZIndex) {
-                return;
-            }
-            var layerZIndex = layer.getZIndex();
-            var zIndex = Math.max(this._map.Z_INDEX_BASE.Feature,layerZIndex);
-            buffer = buffer || 1;
-
-            layer.setZIndex(zIndex + buffer);
-            this.orderLayersByZIndex();
-        },
 
         /**
          * @method orderLayersByZIndex

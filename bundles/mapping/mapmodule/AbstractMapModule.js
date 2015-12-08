@@ -512,6 +512,8 @@ Oskari.clazz.define(
 
 /* Impl specific - found in ol2 AND ol3 modules
 ------------------------------------------------------------------> */
+        addLayer: Oskari.AbstractFunc('addLayer'),
+        removeLayer: Oskari.AbstractFunc('removeLayer'),
         getPixelFromCoordinate: Oskari.AbstractFunc('getPixelFromCoordinate'),
         getMapCenter: Oskari.AbstractFunc('getMapCenter'),
         getMapZoom: Oskari.AbstractFunc('getMapZoom'),
@@ -553,6 +555,7 @@ Oskari.clazz.define(
          * @param {Boolean} isDrag true if the user is dragging the map to a new location currently (optional)
          */
         panMapByPixels: Oskari.AbstractFunc('panMapByPixels'),
+        bringToTop: Oskari.AbstractFunc('bringToTop'),
 /* --------- /Impl specific --------------------------------------> */
 
 
@@ -1274,39 +1277,6 @@ Oskari.clazz.define(
             return this.layerDefs;
         },
 
-        addLayer: function (layerImpl, layer, name, index) {
-            var ldef = {
-                name: name,
-                id: layer.getId(),
-                impl: layerImpl,
-                layer: layer
-            };
-            this.layerDefs.push(ldef);
-
-            this.layerDefsById[layer.getId()] = ldef;
-
-            this._addLayerImpl(layerImpl, index);
-        },
-
-        removeLayer: function (layerImpl, layer) {
-            this._removeLayerImpl(layerImpl);
-            // FIXME: layerDefsById is basically the same as in AbstractMapLayerPlugin - remove the other!!!!
-            delete this.layerDefsById[layer.getId()];
-
-            var newDefs = [],
-                n;
-
-            for (n = 0; n < this.layerDefs.length; n += 1) {
-                if (this.layerDefs[n].layer.getId() !== layer.getId()) {
-                    newDefs.push(this.layerDefs[n]);
-                    continue;
-                }
-                delete this.layerDefs[n];
-            }
-            this.layerDefs = newDefs;
-
-        },
-
         setLayerIndex: function (layerImpl, index) {
             var layerArr = this.getLayerDefs(),
                 layerIndex = this.getLayerIndex(layerImpl),
@@ -1634,8 +1604,6 @@ Oskari.clazz.define(
         orderLayersByZIndex: Oskari.AbstractFunc('orderLayersByZIndex'),
 
         setLayerIndex: Oskari.AbstractFunc('setLayerIndex'),
-
-        _addLayerImpl: Oskari.AbstractFunc('_addLayerImpl(layerImpl, index)'),
 
         _setLayerImplIndex: Oskari.AbstractFunc('_setLayerImplIndex(layerImpl,n)'),
 

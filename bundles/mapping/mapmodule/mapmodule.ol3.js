@@ -30,7 +30,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
     function (id, imageUrl, options, mapDivId) {
         this._dpi = 72;   //   25.4 / 0.28;  use OL2 dpi so scales are calculated the same way
-        this._extent = this.__boundsToArray(this._maxExtent);
     }, {
         /**
          * @method _initImpl
@@ -65,7 +64,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             });
 
             var projection = ol.proj.get(me.getProjection());
-            projection.setExtent(me._extent);
+            projection.setExtent(this.__boundsToArray(this.getMaxExtent()));
 
             map.setView(new ol.View({
                 extent: projection.getExtent(),
@@ -125,10 +124,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
 /* OL3 specific - check if this can be done in a common way 
 ------------------------------------------------------------------> */
-        getExtent: function() {
-            return this._extent;
-        },
-
         getInteractionInstance: function (interactionName) {
             var interactions = this.getMap().getInteractions().getArray();
             var interactionInstance = interactions.filter(function(interaction) {
@@ -136,11 +131,39 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             })[0];
             return interactionInstance;
         },
+
+        /**
+         * Transforms a bounds object with left,top,bottom and right properties
+         * to an OL3 array. Returns the parameter as is if those properties don't exist.
+         * @param  {Object | Array} bounds bounds object or OL3 array
+         * @return {Array}          Ol3 presentation of bounds
+         */
+        __boundsToArray : function(bounds) {
+            var extent = bounds || [];
+            if(bounds.left && bounds.top && bounds.right && bounds.bottom) {
+              extent = [
+                    bounds.left,
+                    bounds.bottom,
+                    bounds.right,
+                    bounds.top];
+            }
+            return extent;
+        },
+
 /*<------------- / OL3 specific ----------------------------------- */
 
 
 /* Impl specific - found in ol2 AND ol3 modules
 ------------------------------------------------------------------> */
+        addLayer: function(layerImpl) {
+            this.getMap().addLayer(layerImpl);
+        },
+        removeLayer : function(layerImpl) {
+            this.getMap().removeLayer(layerImpl);
+            if(typeof layerImpl.destroy === 'function') {
+                layerImpl.destroy();
+            }
+        },
         getPixelFromCoordinate : function(lonlat) {
             lonlat = this.normalizeLonLat(lonlat);
             var px = this._map.getPixelFromCoordinate([lonlat.lon, lonlat.lat]);
@@ -268,6 +291,37 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
         },
 
+        /**
+         * @method transformCoordinates
+         * Transforms coordinates from given projection to the maps projectino.
+         * @param {Object} pLonlat object with lon and lat keys
+         * @param {String} srs projection for given lonlat params like "EPSG:4326"
+         * @return {Object} transformed coordinates as object with lon and lat keys
+         */
+        transformCoordinates: function (pLonlat, srs) {
+            if(!srs || this.getProjection() === srs) {
+                return pLonlat;
+            }
+            // TODO: check that srs definition exists as in OL2
+            //var transformed = new ol.proj.fromLonLat([pLonlat.lon, pLonlat.lat], this.getProjection());
+            var transformed = ol.proj.transform([pLonlat.lon, pLonlat.lat], srs, this.getProjection());
+            return {
+              lon : transformed[0],
+              lat : transformed[1]
+            };
+        },
+        /**
+         * Brings map layer to top
+         * @method bringToTop
+         *
+         * @param {OpenLayers.Layer} layer The new topmost layer
+         */
+        bringToTop: function(layer) {
+            var map = this._map;
+            var list = map.getLayers();
+            list.remove(layer);
+            list.push(layer);
+        },
 /* --------- /Impl specific --------------------------------------> */
 
 
@@ -292,19 +346,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         },
 /* --------- /Impl specific - PRIVATE ----------------------------> */
 
-
-
-
-        _addLayerImpl: function(layerImpl) {
-            this._map.addLayer(layerImpl);
-        },
-
-        _removeLayerImpl: function(layerImpl) {
-            this._map.removeLayer(layerImpl);
-            if(typeof layerImpl.destroy === 'function') {
-                layerImpl.destroy();
-            }
-        },
 
         setLayerIndex: function(layerImpl, index) {
             var layerColl = this._map.getLayers();
@@ -353,109 +394,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
         },
 
-        /**
-         * @method transformCoordinates
-         * Transforms coordinates from given projection to the maps projectino.
-         * @param {Object} pLonlat object with lon and lat keys
-         * @param {String} srs projection for given lonlat params like "EPSG:4326"
-         * @return {Object} transformed coordinates as object with lon and lat keys
-         */
-        transformCoordinates: function (pLonlat, srs) {
-            if(!srs || this.getProjection() === srs) {
-                return pLonlat;
-            }
-            // TODO: check that srs definition exists as in OL2
-            //var transformed = new ol.proj.fromLonLat([pLonlat.lon, pLonlat.lat], this.getProjection());
-            var transformed = ol.proj.transform([pLonlat.lon, pLonlat.lat], srs, this.getProjection());
-            return {
-              lon : transformed[0],
-              lat : transformed[1]
-            };
-        },
-
-        /**
-         * Adds the layer to the map through the correct plugin for the layer's type.
-         *
-         * @method _afterMapLayerAddEvent
-         * @param  {Object} layer Oskari layer of any type registered to the mapmodule plugin
-         * @param  {Boolean} keepLayersOrder
-         * @param  {Boolean} isBaseMap
-         * @return {undefined}
-         */
-        _afterMapLayerAddEvent: function (event) {
-            var map = this.getMap(),
-                layer = event.getMapLayer(),
-                keepLayersOrder = event.getKeepLayersOrder(),
-                isBaseMap = event.isBasemap(),
-                layerPlugins = this.getLayerPlugins(),
-                layerFunctions = [],
-                i;
-
-            _.each(layerPlugins, function (plugin) {
-                //FIXME if (plugin && _.isFunction(plugin.addMapLayerToMap)) {
-                if (_.isFunction(plugin.addMapLayerToMap)) {
-                    var layerFunction = plugin.addMapLayerToMap(layer, keepLayersOrder, isBaseMap);
-                    if (_.isFunction(layerFunction)) {
-                        layerFunctions.push(layerFunction);
-                    }
-                }
-            });
-
-            // Execute each layer function
-            for (i = 0; i < layerFunctions.length; i += 1) {
-                layerFunctions[i].apply();
-            }
-        },
-
-        /**
-         * Removes all the css classes which respond to given regex from all elements
-         * and adds the given class to them.
-         *
-         * @method changeCssClasses
-         * @param {String} classToAdd the css class to add to all elements.
-         * @param {RegExp} removeClassRegex the regex to test against to determine which classes should be removec
-         * @param {Array[jQuery]} elements The elements where the classes should be changed.
-         */
-        changeCssClasses: function (classToAdd, removeClassRegex, elements) {
-            var i,
-                j,
-                el;
-
-            for (i = 0; i < elements.length; i += 1) {
-                el = elements[i];
-                // FIXME build the function outside the loop
-                el.removeClass(function (index, classes) {
-                    var removeThese = '',
-                        classNames = classes.split(' ');
-
-                    // Check if there are any old font classes.
-                    for (j = 0; j < classNames.length; j += 1) {
-                        if (removeClassRegex.test(classNames[j])) {
-                            removeThese += classNames[j] + ' ';
-                        }
-                    }
-
-                    // Return the class names to be removed.
-                    return removeThese;
-                });
-
-                // Add the new font as a CSS class.
-                el.addClass(classToAdd);
-            }
-        },
-
-        /**
-         * Brings map layer to top
-         * @method bringToTop
-         *
-         * @param {OpenLayers.Layer} layer The new topmost layer
-         */
-        bringToTop: function(layer) {
-            var map = this._map;
-            var list = map.getLayers();
-            list.remove(layer);
-            list.push(layer);
-        },
 
         /**
          * @method orderLayersByZIndex
@@ -465,26 +403,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             this._map.getLayers().getArray().sort(function(a, b){
                 return a.getZIndex()-b.getZIndex();
             });
-        },
-
-        /**
-         * Transforms a bounds object with left,top,bottom and right properties
-         * to an OL3 array. Returns the parameter as is if those properties don't exist.
-         * @param  {Object | Array} bounds bounds object or OL3 array
-         * @return {Array}          Ol3 presentation of bounds
-         */
-        __boundsToArray : function(bounds) {
-            var extent = bounds || [];
-            if(bounds.left && bounds.top && bounds.right && bounds.bottom) {
-              extent = [
-                    bounds.left,
-                    bounds.bottom,
-                    bounds.right,
-                    bounds.top];
-            }
-            return extent;
         }
-
     }, {
         /**
          * @property {String[]} protocol
