@@ -25,7 +25,10 @@ Added functions so internal references don't need to be called:
 
 ### mapping/mapmodule/plugin/vectorlayer
 
-Both ol2 and ol3 implementations of VectorLayerPlugin have been changed to allow define mouse over cursor for added feature (added cursor option handling).
+Both ol2 and ol3 implementations of VectorLayerPlugin have been added to following features:
+- allow define mouse over cursor for added feature (added cursor option handling). Add the wanted cursor to MapModulePlugin.AddFeaturesToMapRequest options, for example: {cursor: 'zoom-out'}
+- allow define features prio order. Highest number is showed on top and lowest to under. Add the wanted prio to MapModulePlugin.AddFeaturesToMapRequest options, for example: {prio:1}
+
 
 ### publisher2
 
