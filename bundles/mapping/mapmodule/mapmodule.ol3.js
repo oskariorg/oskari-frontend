@@ -190,24 +190,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         },
 /* --------- /Impl specific - PRIVATE ----------------------------> */
 
-        /**
-         * @method zoomToScale
-         * Pans the map to the given position.
-         * @param {float} scale the new scale
-         * @param {Boolean} closest find the zoom level that most closely fits the specified scale.
-         *   Note that this may result in a zoom that does not exactly contain the entire extent.  Default is false
-         * @param {Boolean} suppressEnd true to NOT send an event about the map move
-         *  (other components wont know that the map has moved, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         */
-        zoomToScale: function (scale, closest, suppressEnd) {
-            var zoom = this.getZoomForScale(scale, closest);
-            this._map.getView().setZoom(zoom);
-            this._updateDomainImpl();
-            if (suppressEnd !== true) {
-                this.notifyMoveEnd();
-            }
-        },
 
         /**
          * @method zoomToExtent
@@ -598,18 +580,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         },
 
 
-        /**
-         * Returns zoom level for any scale
-         * Find 1st the scale range of OL3 resolution scales of requested scale
-         * @param scale any scale
-         * @param {Boolean} closest  closest resolution for scale
-         * @returns {number}  zoom level ( OL3 scale range min or closest)
-         */
-        getZoomForScale: function (scale, closest) {
-            var resolution = this.calculateScaleResolution(scale),
-                zoom = this._options.resolutions.indexOf(resolution);
-            return  (zoom !== -1) ? zoom : 5;
-        },
 
         /**
          * @method adjustZoomLevel

@@ -307,6 +307,60 @@ Oskari.clazz.define(
                 height: height
             };
         },
+        /**
+         * @method zoomToScale
+         * Pans the map to the given position.
+         * @param {float} scale the new scale
+         * @param {Boolean} closest find the zoom level that most closely fits the specified scale.
+         *   Note that this may result in a zoom that does not exactly contain the entire extent.  Default is false
+         * @param {Boolean} suppressEnd true to NOT send an event about the map move
+         *  (other components wont know that the map has moved, only use when chaining moves and
+         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+         */
+        zoomToScale: function (scale, closest, suppressEnd) {
+            var zoom = this.getZoomForScale(scale, closest);
+            this.setZoomLevel(zoom, suppressEnd);
+        },
+        /**
+         * Returns zoom level for any scale
+         * Find 1st the scale range of OL3 resolution scales of requested scale
+         * @param scale any scale
+         * @param {Boolean} closest  closest resolution for scale
+         * @returns {number}  zoom level ( OL3 scale range min or closest)
+         */
+        getZoomForScale: function (scale, closest) {
+            var resolution = this.calculateScaleResolution(scale),
+                zoom = this.getResolutionArray().indexOf(resolution);
+            return  (zoom !== -1) ? zoom : 5;
+        },
+        /**
+         * @method calculateScaleResolution
+         * Calculate max resolution for the scale
+         * If scale is not defined return default
+         * @param {Number} scale
+         * @return {Number[]} calculated resolution
+         */
+        calculateScaleResolution: function (scale) {
+            var resIndex = -1,
+                defIndex = 5,
+                i;
+            if(scale) {
+                for (i = 1; i < this._mapScales.length; i += 1) {
+                    if ((scale > this._mapScales[i]) && (scale <= this._mapScales[i-1])) {
+                        // resolutions are in the same order as scales so just use them
+                        resIndex = i - 1;
+                        break;
+                    }
+                }
+                // Is scale out of OL3 scale ranges
+                if(resIndex === -1){
+                    resIndex = scale < this._mapScales[this._mapScales.length - 1] ?  this._mapScales.length - 1 : 0;
+                }
+                return this.getResolutionArray()[resIndex];
+            }
+
+            return this.getResolutionArray()[defIndex];
+        },
 /* --------------- /SHARED FUNCTIONS --------------- */
 
 /* Impl specific - found in ol2 AND ol3 modules
@@ -315,6 +369,15 @@ Oskari.clazz.define(
         getMapCenter: Oskari.AbstractFunc('getMapCenter'),
         getMapZoom: Oskari.AbstractFunc('getMapZoom'),
         getMapScale: Oskari.AbstractFunc('getMapScale'),
+        /**
+         * @method setZoomLevel
+         * Sets the maps zoom level to given absolute number
+         * @param {Number} newZoomLevel absolute zoom level (0-12)
+         * @param {Boolean} suppressEvent true to NOT send an event about the map move
+         *  (other components wont know that the map has moved, only use when chaining moves and
+         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+         */
+        setZoomLevel: Oskari.AbstractFunc('setZoomLevel'),
 /* --------- /Impl specific --------------------------------------> */
 
 
@@ -1219,34 +1282,6 @@ Oskari.clazz.define(
             return layerResolutions;
         },
         /**
-         * @method calculateScaleResolution
-         * Calculate max resolution for the scale
-         * If scale is not defined return default
-         * @param {Number} scale
-         * @return {Number[]} calculated resolution
-         */
-        calculateScaleResolution: function (scale) {
-            var resIndex = -1,
-                defIndex = 5,
-                i;
-            if(scale) {
-                for (i = 1; i < this._mapScales.length; i += 1) {
-                    if ((scale > this._mapScales[i]) && (scale <= this._mapScales[i-1])) {
-                        // resolutions are in the same order as scales so just use them
-                        resIndex = i - 1;
-                        break;
-                    }
-                }
-                // Is scale out of OL3 scale ranges
-                if(resIndex === -1){
-                    resIndex = scale < this._mapScales[this._mapScales.length - 1] ?  this._mapScales.length - 1 : 0;
-                }
-                return this._options.resolutions[resIndex];
-            }
-
-            return this._options.resolutions[defIndex];
-        },
-        /**
          * Returns state for mapmodule including plugins that have getState() function
          * @method getState
          * @return {Object} properties for each pluginName
@@ -1562,15 +1597,6 @@ Oskari.clazz.define(
          */
         zoomToExtent: Oskari.AbstractFunc('zoomToExtent'),
 
-        /**
-         * @method setZoomLevel
-         * Sets the maps zoom level to given absolute number
-         * @param {Number} newZoomLevel absolute zoom level (0-12)
-         * @param {Boolean} suppressEvent true to NOT send an event about the map move
-         *  (other components wont know that the map has moved, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         */
-        setZoomLevel: Oskari.AbstractFunc('setZoomLevel'),
 
         orderLayersByZIndex: Oskari.AbstractFunc('orderLayersByZIndex'),
 

@@ -208,25 +208,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 /* --------- /Impl specific - PRIVATE ----------------------------> */
 
         /**
-         * @method zoomToScale
-         * Pans the map to the given position.
-         * @param {float} scale the new scale
-         * @param {Boolean} closest find the zoom level that most closely fits the specified scale.
-         *   Note that this may result in a zoom that does not exactly contain the entire extent.  Default is false
-         * @param {Boolean} suppressEnd true to NOT send an event about the map move
-         *  (other components wont know that the map has moved, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         */
-        zoomToScale: function (scale, closest, suppressEnd) {
-            var isClosest = (closest === true);
-            this._map.zoomToScale(scale, isClosest);
-            this._updateDomainImpl();
-            if (suppressEnd !== true) {
-                this.notifyMoveEnd();
-            }
-        },
-
-        /**
          * @method zoomToExtent
          * Zooms the map to fit given bounds on the viewport
          * @param {OpenLayers.Bounds} bounds BoundingBox that should be visible on the viewport
