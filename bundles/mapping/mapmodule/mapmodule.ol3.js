@@ -63,15 +63,17 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 keyboardEventTarget: document,
                 target: this.getMapElementId()
             });
-            
+
             var projection = ol.proj.get(me.getProjection());
             projection.setExtent(me._extent);
 
             map.setView(new ol.View({
                 extent: projection.getExtent(),
                 projection: projection,
-                center: [383341, 6673843],
-                zoom: 5,
+                // actual startup location is set with MapMoveRequest later on
+                // still these need to be set to prevent errors
+                center: [0, 0],
+                zoom: 0,
                 resolutions: this.getResolutionArray()
             }));
 
@@ -99,7 +101,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 me._updateDomainImpl();
                 var sboxevt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat[0], lonlat[1], map.getView().getZoom(), false, me.getMapScale());
                 sandbox.notifyAll(sboxevt);
-
             });
 
             map.on('singleclick', function (evt) {

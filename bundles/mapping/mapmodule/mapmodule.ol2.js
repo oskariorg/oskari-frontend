@@ -75,18 +75,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var lonlat = new OpenLayers.LonLat(0, 0),
                 mapExtent = new OpenLayers.Bounds(0, 0, 10000000, 10000000);
             // FIXME use some cleaner check
-            if (this._options !== null &&
-                this._options !== undefined &&
-                this._options.maxExtent !== null &&
-                this._options.maxExtent !== undefined &&
-                this._options.maxExtent.left !== null &&
-                this._options.maxExtent.left !== undefined &&
-                this._options.maxExtent.bottom !== null &&
-                this._options.maxExtent.bottom !== undefined &&
-                this._options.maxExtent.right !== null &&
-                this._options.maxExtent.right !== undefined &&
-                this._options.maxExtent.top !== null &&
-                this._options.maxExtent.top !== undefined) {
+            var extent = this._maxExtent;
+            if (extent.left !== null && extent.left !== undefined &&
+                extent.bottom !== null && extent.bottom !== undefined &&
+                extent.right !== null && extent.right !== undefined &&
+                extent.top !== null && extent.top !== undefined) {
                 mapExtent = new OpenLayers.Bounds(this._options.maxExtent.left, this._options.maxExtent.bottom, this._options.maxExtent.right, this._options.maxExtent.top);
             }
             var map = new OpenLayers.Map({
