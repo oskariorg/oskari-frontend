@@ -187,26 +187,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         getMapScale: function () {
             return this._map.getScale();
         },
-/* --------- /Impl specific --------------------------------------> */
-
-
-/* Impl specific - PRIVATE
-------------------------------------------------------------------> */
-        _calculateScalesImpl: function (resolutions) {
-            for (var i = 0; i < resolutions.length; i += 1) {
-                var calculatedScale = OpenLayers.Util.getScaleFromResolution(
-                    resolutions[i],
-                    // always calculate to meters
-                    'm'
-                );
-                calculatedScale = calculatedScale * 10000;
-                calculatedScale = Math.round(calculatedScale);
-                calculatedScale = calculatedScale / 10000;
-                this._mapScales.push(calculatedScale);
-            }
-        },
-/* --------- /Impl specific - PRIVATE ----------------------------> */
-
         /**
          * @method zoomToExtent
          * Zooms the map to fit given bounds on the viewport
@@ -229,6 +209,26 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 this.notifyMoveEnd();
             }
         },
+/* --------- /Impl specific --------------------------------------> */
+
+
+/* Impl specific - PRIVATE
+------------------------------------------------------------------> */
+        _calculateScalesImpl: function (resolutions) {
+            for (var i = 0; i < resolutions.length; i += 1) {
+                var calculatedScale = OpenLayers.Util.getScaleFromResolution(
+                    resolutions[i],
+                    // always calculate to meters
+                    'm'
+                );
+                calculatedScale = calculatedScale * 10000;
+                calculatedScale = Math.round(calculatedScale);
+                calculatedScale = calculatedScale / 10000;
+                this._mapScales.push(calculatedScale);
+            }
+        },
+/* --------- /Impl specific - PRIVATE ----------------------------> */
+
 
         /**
          * @method moveMapToLonLat
@@ -330,14 +330,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
         },
 
-        /**
-         * @method zoomTo
-         * Sets the zoom level to given value
-         * @param {Number} zoomLevel the new zoom level
-         */
-        zoomTo: function (zoomLevel) {
-            this.setZoomLevel(zoomLevel, false);
-        },
 
 /* The next functions are not found in mapmodule.ol3. Are these necessary? If they are, add to ol3
 ----------------------------------------------------------------------------> */

@@ -308,6 +308,14 @@ Oskari.clazz.define(
             };
         },
         /**
+         * @method zoomTo
+         * Sets the zoom level to given value
+         * @param {Number} zoomLevel the new zoom level
+         */
+        zoomTo: function (zoomLevel) {
+            this.setZoomLevel(zoomLevel);
+        },
+        /**
          * @method zoomToScale
          * Pans the map to the given position.
          * @param {float} scale the new scale
@@ -378,6 +386,18 @@ Oskari.clazz.define(
          *     wanting to notify at end of the chain for performance reasons or similar) (optional)
          */
         setZoomLevel: Oskari.AbstractFunc('setZoomLevel'),
+        /**
+         * @method zoomToExtent
+         * Zooms the map to fit given bounds on the viewport
+         * @param {Object} bounds BoundingBox with left,top,bottom,right keys that should be visible on the viewport
+         * @param {Boolean} suppressStart true to NOT send an event about the map starting to move
+         *  (other components wont know that the map has started moving, only use when chaining moves and
+         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+         * @param {Boolean} suppressEnd true to NOT send an event about the map move
+         *  (other components wont know that the map has moved, only use when chaining moves and
+         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+         */
+        zoomToExtent: Oskari.AbstractFunc('zoomToExtent'),
 /* --------- /Impl specific --------------------------------------> */
 
 
@@ -714,14 +734,6 @@ Oskari.clazz.define(
          */
         zoomOut: function () {
             this.adjustZoomLevel(-1);
-        },
-        /**
-         * @method zoomTo
-         * Sets the zoom level to given value
-         * @param {Number} zoomLevel the new zoom level
-         */
-        zoomTo: function (zoomLevel) {
-            this.setZoomLevel(zoomLevel, false);
         },
 
         /**
@@ -1583,20 +1595,6 @@ Oskari.clazz.define(
          *     wanting to notify at end of the chain for performance reasons or similar) (optional)
          */
         centerMapByPixels: Oskari.AbstractFunc('centerMapByPixels'),
-
-        /**
-         * @method zoomToExtent
-         * Zooms the map to fit given bounds on the viewport
-         * @param {OpenLayers.Bounds} bounds BoundingBox that should be visible on the viewport
-         * @param {Boolean} suppressStart true to NOT send an event about the map starting to move
-         *  (other components wont know that the map has started moving, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         * @param {Boolean} suppressEnd true to NOT send an event about the map move
-         *  (other components wont know that the map has moved, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         */
-        zoomToExtent: Oskari.AbstractFunc('zoomToExtent'),
-
 
         orderLayersByZIndex: Oskari.AbstractFunc('orderLayersByZIndex'),
 
