@@ -335,12 +335,15 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
             return -1;
         },
+        _updateSizeImpl : function() {
+            this.getMap().updateSize();
+        },
 
         updateSize: function() {
-            this._map.updateSize();
+            this._updateSizeImpl();
             this.updateDomain();
 
-            var sandbox = this._sandbox,
+            var sandbox = this.getSandbox(),
                 mapVO = sandbox.getMap(),
                 width =  mapVO.getWidth(),
                 height = mapVO.getHeight();

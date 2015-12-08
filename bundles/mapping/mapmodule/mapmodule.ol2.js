@@ -473,30 +473,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             // if not in valid bounds, return original
             return this.getMapZoom();
         },
-
-        /**
-         * @method updateSize
-         * Notifies OpenLayers that the map size has changed and updates the size in sandbox map domain object.
-         */
-        updateSize: function () {
+        _updateSizeImpl : function() {
             this.getMap().updateSize();
-            this.updateDomain();
-
-            var sandbox = this.getSandbox(),
-                mapVO = sandbox.getMap(),
-                width =  mapVO.getWidth(),
-                height = mapVO.getHeight();
-
-
-            // send as an event forward
-            if(width && height) {
-              var evt = sandbox.getEventBuilder(
-                  'MapSizeChangedEvent'
-              )(width, height);
-              sandbox.notifyAll(evt);
-            }
         },
-
 
         /**
          * @method transformCoordinates

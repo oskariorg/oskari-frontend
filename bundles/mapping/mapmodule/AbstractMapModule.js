@@ -436,6 +436,23 @@ Oskari.clazz.define(
             mapVO.setBbox(this.getCurrentExtent());
             mapVO.setMaxExtent(this.getMaxExtent());
         },
+        updateSize: function() {
+            this._updateSizeImpl();
+            this.updateDomain();
+
+            var sandbox = this.getSandbox(),
+                mapVO = sandbox.getMap(),
+                width =  mapVO.getWidth(),
+                height = mapVO.getHeight();
+
+            // send as an event forward
+            if(width && height) {
+              var evt = sandbox.getEventBuilder(
+                  'MapSizeChangedEvent'
+              )(width, height);
+              sandbox.notifyAll(evt);
+            }
+        },
 /* --------------- /SHARED FUNCTIONS --------------- */
 
 /* Impl specific - found in ol2 AND ol3 modules
@@ -482,6 +499,7 @@ Oskari.clazz.define(
 /* Impl specific - PRIVATE
 ------------------------------------------------------------------> */
         _calculateScalesImpl: Oskari.AbstractFunc('_calculateScalesImpl(resolutions)'),
+        _updateSizeImpl: Oskari.AbstractFunc('_updateSizeImpl'),
 /* --------- /Impl specific - PRIVATE ----------------------------> */
 
 
