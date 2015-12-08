@@ -20,9 +20,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
      *      units : "m",
      *      maxExtent : {
      *          left : 0,
-     *          bottom : 10000000,
+     *          bottom : 0,
      *          right : 10000000,
-     *          top : 0
+     *          top : 10000000
      *      },
      *      srsName : "EPSG:3067"
      *  }
@@ -98,7 +98,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 sandbox.printDebug("sending AFTERMAPMOVE EVENT from map Event handler");
 
                 var lonlat = map.getView().getCenter();
-                me._updateDomainImpl();
+                me.updateDomain();
                 var sboxevt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat[0], lonlat[1], map.getView().getZoom(), false, me.getMapScale());
                 sandbox.notifyAll(sboxevt);
             });
@@ -161,6 +161,72 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         getMapZoom: function() {
             return this._map.getView().getZoom();
         },
+        
+        getSize: function() {
+            var size = this.getMap().getSize();
+            return {
+                width: size[0],
+                height: size[1]
+            };
+        },
+
+        /**
+         * @method zoomToExtent
+         * Zooms the map to fit given bounds on the viewport
+         * @param {OpenLayers.Bounds} bounds BoundingBox that should be visible on the viewport
+         * @param {Boolean} suppressStart true to NOT send an event about the map starting to move
+         *  (other components wont know that the map has started moving, only use when chaining moves and
+         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+         * @param {Boolean} suppressEnd true to NOT send an event about the map move
+         *  (other components wont know that the map has moved, only use when chaining moves and
+         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+         */
+        zoomToExtent: function (bounds, suppressStart, suppressEnd) {
+            var extent = this.__boundsToArray(bounds);
+            this._map.getView().fit(extent, this._map.getSize());
+            this.updateDomain();
+            // send note about map change
+            if (suppressStart !== true) {
+                this.notifyStartMove();
+            }
+            if (suppressEnd !== true) {
+                this.notifyMoveEnd();
+            }
+        },
+        /**
+         * @method centerMap
+         * Moves the map to the given position and zoomlevel.
+         * @param {Number[] | Object} lonlat coordinates to move the map to
+         * @param {Number} zoomLevel absolute zoomlevel to set the map to
+         * @param {Boolean} suppressEnd true to NOT send an event about the map move
+         *  (other components wont know that the map has moved, only use when chaining moves and
+         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+         */
+        centerMap: function (lonlat, zoom, suppressEnd) {
+            // TODO: we have isValidLonLat(); maybe use it here
+            lonlat = this.normalizeLonLat(lonlat);
+            this._map.getView().setCenter([lonlat.lon, lonlat.lat]);
+            this._map.getView().setZoom(zoom);
+            this.updateDomain();
+            if (suppressEnd !== true) {
+                this.notifyMoveEnd();
+            }
+        },
+        /**
+         * Get maps current extent.
+         * @method getCurrentExtent
+         * @return {Object} current extent
+         */
+        getCurrentExtent: function() {
+            var ol3 = this.getMap();
+            var extent = ol3.getView().calculateExtent(ol3.getSize());
+            return {
+                left: extent[0],
+                bottom: extent[1],
+                right: extent[2],
+                top: extent[3]
+            };
+        },
 
 /* --------- /Impl specific --------------------------------------> */
 
@@ -182,119 +248,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 /* --------- /Impl specific - PRIVATE ----------------------------> */
 
 
-        /**
-         * @method zoomToExtent
-         * Zooms the map to fit given bounds on the viewport
-         * @param {OpenLayers.Bounds} bounds BoundingBox that should be visible on the viewport
-         * @param {Boolean} suppressStart true to NOT send an event about the map starting to move
-         *  (other components wont know that the map has started moving, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         * @param {Boolean} suppressEnd true to NOT send an event about the map move
-         *  (other components wont know that the map has moved, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         */
-        zoomToExtent: function (bounds, suppressStart, suppressEnd) {
-            var extent = this.__boundsToArray(bounds);
-            this._map.getView().fit(extent, this._map.getSize());
-            this._updateDomainImpl();
-            // send note about map change
-            if (suppressStart !== true) {
-                this.notifyStartMove();
-            }
-            if (suppressEnd !== true) {
-                this.notifyMoveEnd();
-            }
-        },
 
-        /**
-         * @method moveMapToLonLat
-         * Moves the map to the given position.
-         * NOTE! Doesn't send an event if zoom level is not changed.
-         * Call notifyMoveEnd() afterwards to notify other components about changed state.
-         * @param {Number[] | Object} lonlat coordinates to move the map to
-         * @param {Number} zoomAdjust relative change to the zoom level f.ex -1 (optional)
-         * @param {Boolean} pIsDragging true if the user is dragging the map to a new location currently (optional)
-         */
-        moveMapToLonLat: function (lonlat, zoomAdjust, pIsDragging) {
-            // parse lonlat if it's given as an array instead of {lon : x, lat : y}
-            lonlat = this.normalizeLonLat(lonlat);
-            // should we spam events on dragmoves?
-            this._map.getView().setCenter([lonlat.lon, lonlat.lat]);
-
-            if (zoomAdjust) {
-                this.adjustZoomLevel(zoomAdjust, true);
-            }
-            this._updateDomainImpl();
-        },
-
-        /**
-         * @method _updateDomain
-         * @private
-         * Updates the sandbox map domain object with the current map properties.
-         * Ignores the call if map is in stealth mode.
-         */
-        _updateDomainImpl: function() {
-
-            if (this.getStealth()) {
-                // ignore if in "stealth mode"
-                return;
-            }
-            var sandbox = this._sandbox;
-            var mapVO = sandbox.getMap();
-            var lonlat = this.getMapCenter();
-            var zoom = this.getMapZoom();
-            mapVO.moveTo(lonlat.lon, lonlat.lat, zoom);
-
-            mapVO.setScale(this.getMapScale());
-
-            var size = this._map.getSize();
-            mapVO.setWidth(size[0]);
-            mapVO.setHeight(size[1]);
-            mapVO.setResolution(this._map.getView().getResolution());
-
-            var extent = this._map.getView().calculateExtent(this._map.getSize());
-
-            //var bbox = new ol.extent.boundingExtent([extent[0], extent[1]], [extent[2], extent[3]]);
-
-            mapVO.setExtent({
-                left: extent[0],
-                bottom: extent[1],
-                right: extent[2],
-                top: extent[3]
-            });
-
-            mapVO.setBbox({
-                left: extent[0],
-                bottom: extent[1],
-                right: extent[2],
-                top: extent[3]
-            });
-
-            var maxBbox = this._maxExtent;
-            //var maxExtentBounds = new ol.extent(maxBbox.left, maxBbox.bottom, maxBbox.right, maxBbox.top);
-            //mapVO.setMaxExtent(maxExtentBounds);
-
-        },
-
-        /**
-         * @method centerMap
-         * Moves the map to the given position and zoomlevel.
-         * @param {Number[] | Object} lonlat coordinates to move the map to
-         * @param {Number} zoomLevel absolute zoomlevel to set the map to
-         * @param {Boolean} suppressEnd true to NOT send an event about the map move
-         *  (other components wont know that the map has moved, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         */
-        centerMap: function (lonlat, zoom, suppressEnd) {
-            // TODO: we have isValidLonLat(); maybe use it here
-            lonlat = this.normalizeLonLat(lonlat);
-            this._map.getView().setCenter([lonlat[0], lonlat[1]]);
-            this._map.getView().setZoom(zoom);
-            this._updateDomainImpl();
-            if (suppressEnd !== true) {
-                this.notifyMoveEnd();
-            }
-        },
 
         /**
          * @method panMapByPixels
@@ -323,7 +277,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             this._map.beforeRender(pan);
             view.setCenter(newCenterCoords);
 
-            this._updateDomainImpl();
+            this.updateDomain();
             // send note about map change
             if (suppressStart !== true) {
                 this.notifyStartMove();
@@ -384,7 +338,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
         updateSize: function() {
             this._map.updateSize();
-            this._updateDomainImpl();
+            this.updateDomain();
 
             var sandbox = this._sandbox,
                 mapVO = sandbox.getMap(),
@@ -536,7 +490,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 newZoomLevel = this.getMapZoom();
             }
             this._map.getView().setZoom(newZoomLevel);
-            this._updateDomainImpl();
+            this.updateDomain();
             if (suppressEvent !== true) {
                 //send note about map change
                 this.notifyMoveEnd();
@@ -576,7 +530,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
             this.zoomTo(requestedZoomLevel);
             this._map.updateSize();
-            this._updateDomainImpl();
+            this.updateDomain();
             if (suppressEvent !== true) {
                 // send note about map change
                 this.notifyMoveEnd();

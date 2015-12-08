@@ -161,7 +161,8 @@ Oskari.clazz.define('Oskari.mapframework.domain.Map',
          *            bounding box
          */
         getBbox: function () {
-            return this._bbox;
+            // bbox should be removed since it's the same as extent
+            return this._bbox || this.getExtent();
         },
         /**
          * @method getBbox

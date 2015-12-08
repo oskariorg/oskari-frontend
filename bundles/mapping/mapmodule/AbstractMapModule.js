@@ -29,9 +29,9 @@ Oskari.clazz.define(
      *      resolutions : [2000, 1000, 500, 200, 100, 50, 20, 10, 4, 2, 1, 0.5, 0.25],
      *      maxExtent : {
      *          left : 0,
-     *          bottom : 10000000,
+     *          bottom : 0,
      *          right : 10000000,
-     *          top : 0
+     *          top : 10000000
      *      },
      srsName : "EPSG:3067"
      *  }
@@ -75,7 +75,12 @@ Oskari.clazz.define(
         // array of resolutions
         me._mapResolutions = me._options.resolutions;
         // props: left,bottom,right, top
-        me._maxExtent = me._options.maxExtent || {};
+        me._maxExtent = me._options.maxExtent || {
+            left : 0, 
+            bottom : 0, 
+            right: 10000000, 
+            top: 10000000
+        };
 
         me._sandbox = null;
         me._stealth = false;
@@ -291,21 +296,9 @@ Oskari.clazz.define(
             sandbox.getMap().setMoving(false);
 
             var lonlat = this.getMapCenter();
-            this._updateDomainImpl();
+            this.updateDomain();
             var evt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat.lon, lonlat.lat, this.getMapZoom(), false, this.getMapScale(), creator);
             sandbox.notifyAll(evt);
-        },
-        
-        getSize: function(){
-            var sandbox = this.getSandbox(),
-                mapVO = sandbox.getMap(),
-                width =  mapVO.getWidth(),
-                height = mapVO.getHeight();
-
-            return {
-                width: width,
-                height: height
-            };
         },
         /**
          * @method zoomTo
@@ -381,6 +374,68 @@ Oskari.clazz.define(
             var scales = this.getMapScales();
             return scales[this.getMapZoom()];
         },
+        /**
+         * @method moveMapToLonLat
+         * Moves the map to the given position.
+         * NOTE! Doesn't send an event if zoom level is not changed.
+         * Call notifyMoveEnd() afterwards to notify other components about changed state.
+         * @param {Number[] | Object} lonlat coordinates to move the map to
+         * @param {Number} zoomAdjust relative change to the zoom level f.ex -1 (optional)
+         * @param {Boolean} pIsDragging true if the user is dragging the map to a new location currently (optional)
+         */
+        moveMapToLonLat: function (lonlat, zoomAdjust, pIsDragging) {
+            var blnSilent = true;
+            var requestedZoomLevel = this.getMapZoom();
+            
+            if (zoomAdjust) {
+                requestedZoomLevel = this._getNewZoomLevel(zoomAdjust);
+                blnSilent = false;
+            }
+            this.centerMap(lonlat, requestedZoomLevel, blnSilent);
+        },
+        /**
+         * Get map max extent.
+         * @method getMaxExtent
+         * @return {Object} max extent
+         */
+        getMaxExtent: function(){
+            var bbox = this._maxExtent;
+            return {
+                bottom: bbox.bottom,
+                left: bbox.left,
+                right: bbox.right,
+                top: bbox.top
+            };
+        },
+        /**
+         * @method updateDomain
+         * Updates the sandbox map domain object with the current map properties.
+         * Ignores the call if map is in stealth mode.
+         */
+        updateDomain: function() {
+
+            if (this.getStealth()) {
+                // ignore if in "stealth mode"
+                return;
+            }
+            var sandbox = this.getSandbox();
+            var mapVO = sandbox.getMap();
+            var lonlat = this.getMapCenter();
+            var zoom = this.getMapZoom();
+            mapVO.moveTo(lonlat.lon, lonlat.lat, zoom);
+
+            mapVO.setScale(this.getMapScale());
+            var resolution = this.getResolutionArray()[zoom];
+            mapVO.setResolution(resolution);
+
+            var size = this.getSize();
+            mapVO.setWidth(size.width);
+            mapVO.setHeight(size.height);
+
+            mapVO.setExtent(this.getCurrentExtent());
+            mapVO.setBbox(this.getCurrentExtent());
+            mapVO.setMaxExtent(this.getMaxExtent());
+        },
 /* --------------- /SHARED FUNCTIONS --------------- */
 
 /* Impl specific - found in ol2 AND ol3 modules
@@ -388,6 +443,18 @@ Oskari.clazz.define(
         getPixelFromCoordinate: Oskari.AbstractFunc('getPixelFromCoordinate'),
         getMapCenter: Oskari.AbstractFunc('getMapCenter'),
         getMapZoom: Oskari.AbstractFunc('getMapZoom'),
+        getSize: Oskari.AbstractFunc('getSize'),
+        getCurrentExtent: Oskari.AbstractFunc('getCurrentExtent'),
+        /**
+         * @method centerMap
+         * Moves the map to the given position and zoomlevel.
+         * @param {OpenLayers.LonLat} lonlat coordinates to move the map to
+         * @param {Number} zoomLevel absolute zoomlevel to set the map to
+         * @param {Boolean} suppressEnd true to NOT send an event about the map move
+         *  (other components wont know that the map has moved, only use when chaining moves and
+         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+         */
+        centerMap: Oskari.AbstractFunc('centerMap'),
         /**
          * @method setZoomLevel
          * Sets the maps zoom level to given absolute number
@@ -1562,16 +1629,6 @@ Oskari.clazz.define(
          */
         zoomToScale: Oskari.AbstractFunc('zoomToScale'),
         /**
-         * @method centerMap
-         * Moves the map to the given position and zoomlevel.
-         * @param {OpenLayers.LonLat} lonlat coordinates to move the map to
-         * @param {Number} zoomLevel absolute zoomlevel to set the map to
-         * @param {Boolean} suppressEnd true to NOT send an event about the map move
-         *  (other components wont know that the map has moved, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         */
-        centerMap: Oskari.AbstractFunc('centerMap'),
-        /**
          * @method panMapByPixels
          * Pans the map by given amount of pixels.
          * @param {Number} pX amount of pixels to pan on x axis
@@ -1603,14 +1660,6 @@ Oskari.clazz.define(
         orderLayersByZIndex: Oskari.AbstractFunc('orderLayersByZIndex'),
 
         setLayerIndex: Oskari.AbstractFunc('setLayerIndex'),
-
-        /**
-         * @method _updateDomainImpl
-         * @private
-         * Updates the sandbox map domain object with the current map properties.
-         * Ignores the call if map is in stealth mode.
-         */
-        _updateDomainImpl: Oskari.AbstractFunc('_updateDomainImpl'),
 
         _addLayerImpl: Oskari.AbstractFunc('_addLayerImpl(layerImpl, index)'),
 
