@@ -16,8 +16,9 @@ Oskari.clazz.define(
             multipleSymbolizers: false,
             namedLayersAsArray: true
         });
-        this._style = OpenLayers.Util.applyDefaults({}, OpenLayers.Feature.Vector.style['default']);
+        
         this._layers = {};
+        this._features = {};
     }, {
         /**
          * @method register
@@ -222,12 +223,22 @@ Oskari.clazz.define(
                 olLayer,
                 layer,
                 mapLayerService = me._sandbox.getService('Oskari.mapframework.service.MapLayerService'),
-                featureInstance;
+                featureInstance,
+                isOlLayerAdded = true;
+
             if (!format) {
                 return;
             }
 
             if (geometry) {
+                // if there's no layerId provided -> Just use a generic vector layer for all.
+                if (!options.layerId) {
+                    options.layerId = 'VECTOR';
+                };
+
+                if(!me._features[options.layerId]) {
+                  me._features[options.layerId] = [];
+                }
                 var features = format.read(geometry);
                 //if there's no layerId provided -> Just use a generic vector layer for all.
                 if (!options.layerId) {
@@ -262,20 +273,18 @@ Oskari.clazz.define(
                     olLayer.setOpacity(opacity);
                     isOlLayerAdded = false;
                 }
+
                 if (options.clearPrevious === true) {
                     this._removeFeaturesByAttribute(olLayer);
                     olLayer.removeAllFeatures();
                     olLayer.refresh();
+                    me._features[options.layerId] = [];
                 }
 
-
-                if (options.featureStyle) {
-                    me.setDefaultStyle(options.featureStyle);
-                    for (i=0; i < features.length; i++) {
-                        featureInstance = features[i];
-                        featureInstance.style = me._style;
-                    }
-                }
+                for (i=0; i < features.length; i++) {
+                    featureInstance = features[i];
+                    featureInstance.style = me.getStyle(options.featureStyle);
+                }                
 
                 if(options.cursor){
                     for (i=0; i < features.length; i++) {
@@ -290,7 +299,31 @@ Oskari.clazz.define(
                     }
                 }
 
-                olLayer.addFeatures(features);
+                // prio handling
+                var prio = options.prio || 0;                
+                me._features[options.layerId].push({
+                  data: features,
+                  prio: prio
+                });
+
+                if(options.prio && !isNaN(options.prio)){
+                    this._removeFeaturesByAttribute(olLayer);
+                    olLayer.removeAllFeatures();
+                    olLayer.refresh();
+
+                    me._features[options.layerId].sort(function(a,b){
+                      return b.prio - a.prio;
+                    });
+                    
+                    _.forEach(me._features[options.layerId], function(featObj) {                      
+                        olLayer.addFeatures(featObj.data);
+                    });
+                } else {
+                    olLayer.addFeatures(featObj.data);
+                }
+
+
+
                 if(isOlLayerAdded === false) {
                     me._map.addLayer(olLayer);
                     me._map.setLayerIndex(
@@ -357,33 +390,35 @@ Oskari.clazz.define(
             }
         },
         /**
-         * @method setDefaultStyle
+         * @method getStyle
          *
          * @param {Object} styles. If not given, will set default styles
          */
-        setDefaultStyle : function(styles) {
+        getStyle : function(styles) {
             var me = this;
+            var style = OpenLayers.Util.applyDefaults({}, OpenLayers.Feature.Vector.style['default']);
             //overwriting default style if given
             if(styles) {
                 if(Oskari.util.keyExists(styles, 'fill.color')) {
-                    me._style.fillColor = styles.fill.color;
+                    style.fillColor = styles.fill.color;
                 }
                 if(Oskari.util.keyExists(styles, 'stroke.color')) {
-                    me._style.strokeColor = styles.stroke.color;
+                    style.strokeColor = styles.stroke.color;
                 }
                 if(Oskari.util.keyExists(styles, 'stroke.width')) {
-                    me._style.strokeWidth = styles.stroke.width;
+                    style.strokeWidth = styles.stroke.width;
                 }
                 if(Oskari.util.keyExists(styles, 'text.fill.color')) {
-                    me._style.fontColor = styles.text.fill.color;
+                    style.fontColor = styles.text.fill.color;
                 }
                 if(Oskari.util.keyExists(styles, 'text.stroke.color')) {
-                    me._style.labelOutlineColor = styles.text.stroke.color;
+                    style.labelOutlineColor = styles.text.stroke.color;
                 }
                 if(Oskari.util.keyExists(styles, 'text.stroke.width')) {
-                    me._style.getText().labelOutlineWidth = styles.text.stroke.width;
+                    style.getText().labelOutlineWidth = styles.text.stroke.width;
                 }
             }
+            return style;
         },
         /**
          * @method _createRequestHandlers

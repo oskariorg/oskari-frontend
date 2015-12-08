@@ -23,9 +23,9 @@ Oskari.clazz.define(
             textOutlineColor: 'rgba(255,255,255,1)',
             textColor: 'rgba(0,0,0,1)'
         };
-        this._style = {};
         this._layers = {};
         this._pointerMoveAdded = false;
+        this._features = {};
     }, {
         /**
          * @method register
@@ -275,24 +275,53 @@ Oskari.clazz.define(
                     }
                 });
 
-                if (options.featureStyle) {
-                   me.setDefaultStyle(options.featureStyle);
-                    _.forEach(features, function (feature) {
-                        feature.setStyle(me._style);
-                    });
+                var prio = options.prio || 0;
+
+                _.forEach(features, function (feature) {
+                    feature.setStyle(me.getStyle(options.featureStyle));
+                });                
+               
+                if(!me._features[options.layerId]) {
+                  me._features[options.layerId] = [];
                 }
 
                 //check if layer is already on map
                 if (me._layers[options.layerId]) {
-                    layer = me._layers[options.layerId];
+                    layer = me._layers[options.layerId];                    
+                    vectorSource = layer.getSource();
+
                     //layer is already on map
                     //clear old features if defined so
                     if (options.clearPrevious === true) {
                         this._removeFeaturesByAttribute(layer);
-                        layer.getSource().clear();
+                        vectorSource.clear();
+                        me._features[options.layerId] = [];
                     }
-                    vectorSource = layer.getSource();
-                    vectorSource.addFeatures(features);
+                    
+                    // prio handling                    
+                    me._features[options.layerId].push({
+                      data: features,
+                      prio: prio
+                    });
+
+                    if(options.prio && !isNaN(options.prio)){
+                        this._removeFeaturesByAttribute(layer);
+                        vectorSource.clear();
+
+                        me._features[options.layerId].sort(function(a,b){
+                          return b.prio - a.prio;
+                        });
+                        var zIndex = 0;
+                        _.forEach(me._features[options.layerId], function(featObj) {
+                          _.forEach(featObj.data, function (feature) {
+                              feature.getStyle().setZIndex(zIndex);
+                              zIndex++;
+                          });
+                          vectorSource.addFeatures(featObj.data);
+                        });
+                    } else {
+                      vectorSource.addFeatures(featObj.data);
+                    }
                 } else {
                     //let's create vector layer with features and add it to the map
                     vectorSource = new ol.source.Vector({
@@ -305,6 +334,10 @@ Oskari.clazz.define(
                         layer.setProperties(options.layerOptions);
                     }
 
+                    me._features[options.layerId].push({
+                      data: features,
+                      prio: prio
+                    });
 
 
                     me._layers[options.layerId] = layer;
@@ -442,14 +475,14 @@ Oskari.clazz.define(
             }
         },
         /**
-         * @method setDefaultStyle
+         * @method getStyle
          *
          * @param {Object} styles. If not given, will set default styles
          */
-        setDefaultStyle : function(styles) {
+        getStyle : function(styles) {
             var me = this;
             //create defaultStyle
-            me._style = new ol.style.Style({
+            var style = new ol.style.Style({
                 fill: new ol.style.Fill({
                   color: me._defaultStyle.fillColor
                 }),
@@ -478,33 +511,35 @@ Oskari.clazz.define(
             //overwriting default style if given
             if(styles) {
                 if(Oskari.util.keyExists(styles, 'fill.color')) {
-                    me._style.getFill().setColor(styles.fill.color);
+                    style.getFill().setColor(styles.fill.color);
                 }
                 if(Oskari.util.keyExists(styles, 'stroke.color')) {
-                    me._style.getStroke().setColor(styles.stroke.color);
+                    style.getStroke().setColor(styles.stroke.color);
                 }
                 if(Oskari.util.keyExists(styles, 'stroke.width')) {
-                    me._style.getStroke().setWidth(styles.stroke.width);
+                    style.getStroke().setWidth(styles.stroke.width);
                 }
                 if(Oskari.util.keyExists(styles, 'image.radius')) {
-                    me._style.getImage().radius = styles.image.radius;
+                    style.getImage().radius = styles.image.radius;
                 }
                 if(Oskari.util.keyExists(styles, 'image.fill.color')) {
-                    me._style.getImage().getFill().setColor(styles.image.fill.color);
+                    style.getImage().getFill().setColor(styles.image.fill.color);
                 }
                 if(Oskari.util.keyExists(styles, 'text.fill.color')) {
-                    me._style.getText().getFill().setColor(styles.text.fill.color);
+                    style.getText().getFill().setColor(styles.text.fill.color);
                 }
                 if(Oskari.util.keyExists(styles, 'text.scale')) {
-                    me._style.getText().setScale(styles.text.scale);
+                    style.getText().setScale(styles.text.scale);
                 }
                 if(Oskari.util.keyExists(styles, 'text.stroke.color')) {
-                    me._style.getText().getFill().setColor(styles.text.stroke.color);
+                    style.getText().getFill().setColor(styles.text.stroke.color);
                 }
                 if(Oskari.util.keyExists(styles, 'text.stroke.width')) {
-                    me._style.getText().getStroke().setWidth(styles.text.stroke.width);
+                    style.getText().getStroke().setWidth(styles.text.stroke.width);
                 }
             }
+
+            return style;
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
