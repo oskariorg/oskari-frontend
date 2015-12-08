@@ -154,14 +154,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 max: mapModule.getMaxZoomLevel(),
                 value: mapModule.getMapZoom(),
                 slide: function (event, ui) {
-                    me.getMapModule().zoomTo(ui.value);
+                    me.getMapModule().setZoomLevel(ui.value);
                 }
             });
 
             el.find('.pzbDiv-plus').bind('click', function (event) {
                 if (!me.inLayerToolsEditMode()) {
                     if (me._slider.slider('value') < mapModule.getMaxZoomLevel()) {
-                        me.getMapModule().zoomTo(
+                        me.getMapModule().setZoomLevel(
                             me._slider.slider('value') + 1
                         );
                     }
@@ -171,7 +171,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             el.find('.pzbDiv-minus').bind('click', function (event) {
                 if (!me.inLayerToolsEditMode()) {
                     if (me._slider.slider('value') > 0) {
-                        me.getMapModule().zoomTo(
+                        me.getMapModule().setZoomLevel(
                             me._slider.slider('value') - 1
                         );
                     }

@@ -263,64 +263,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         _updateSizeImpl : function() {
             this.getMap().updateSize();
         },
+        _setZoomLevelImpl : function(newZoomLevel) {
+            this._map.zoomTo(newZoomLevel);
+        },
 /* --------- /Impl specific - PRIVATE ----------------------------> */
 
 
-/* The next functions are not found in mapmodule.ol3. Are these necessary? If they are, add to ol3
-----------------------------------------------------------------------------> */
-
-        /**
-         * @method zoomIn
-         * Adjusts the zoom level by one
-         */
-        zoomIn: function () {
-            this.adjustZoomLevel(1);
-        },
-
-        /**
-         * @method zoomOut
-         * Adjusts the zoom level by minus one
-         */
-        zoomOut: function () {
-            this.adjustZoomLevel(-1);
-        },
-
-        /**
-         * @method panMapEast
-         * Pans the map toward east by 3/4 of the map width
-         */
-        panMapEast: function () {
-            var size = this._map.getSize();
-            this.panMapByPixels(0.75 * size.w, 0);
-        },
-
-        /**
-         * @method panMapWest
-         * Pans the map toward west by 3/4 of the map width
-         */
-        panMapWest: function () {
-            var size = this._map.getSize();
-            this.panMapByPixels(-0.75 * size.w, 0);
-        },
-
-        /**
-         * @method panMapNorth
-         * Pans the map toward north by 3/4 of the map height
-         */
-        panMapNorth: function () {
-            var size = this._map.getSize();
-            this.panMapByPixels(0, -0.75 * size.h);
-        },
-
-        /**
-         * @method panMapSouth
-         * Pans the map toward south by 3/4 of the map height
-         */
-        panMapSouth: function () {
-            var size = this._map.getSize();
-            this.panMapByPixels(0, 0.75 * size.h);
-        },
-/*<-----------------------------------------------------------------------------------*/
 
 
         /**
@@ -407,64 +355,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
         },
 
-        /**
-         * @method adjustZoomLevel
-         * Adjusts the maps zoom level by given relative number
-         * @param {Number} zoomAdjust relative change to the zoom level f.ex -1
-         * @param {Boolean} suppressEvent true to NOT send an event about the map move
-         *  (other components wont know that the map has moved, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         */
-        adjustZoomLevel: function (amount, suppressEvent) {
-            var requestedZoomLevel = this._getNewZoomLevel(amount);
 
-            this._map.zoomTo(requestedZoomLevel);
-            this._map.updateSize();
-            this.updateDomain();
-            if (suppressEvent !== true) {
-                // send note about map change
-                this.notifyMoveEnd();
-            }
-        },
-
-        /**
-         * @method setZoomLevel
-         * Sets the maps zoom level to given absolute number
-         * @param {Number} newZoomLevel absolute zoom level
-         * @param {Boolean} suppressEvent true to NOT send an event about the map move
-         *  (other components wont know that the map has moved, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         */
-        setZoomLevel: function (newZoomLevel, suppressEvent) {
-            if (newZoomLevel < 0 || newZoomLevel > this._map.getNumZoomLevels()) {
-                newZoomLevel = this.getMapZoom();
-            }
-            this._map.zoomTo(newZoomLevel);
-            this.updateDomain();
-            if (suppressEvent !== true) {
-                // send note about map change
-                this.notifyMoveEnd();
-            }
-        },
-
-        /**
-         * @method _getNewZoomLevel
-         * @private
-         * Does a sanity check on a zoomlevel adjustment to see if the adjusted zoomlevel is
-         * supported by the map (is between 0-12). Returns the adjusted zoom level if it is valid or
-         * current zoom level if the adjusted one is out of bounds.
-         * @return {Number} sanitized absolute zoom level
-         */
-        _getNewZoomLevel: function (adjustment) {
-            // TODO: check isNaN?
-            var requestedZoomLevel = this.getMapZoom() + adjustment;
-
-            if (requestedZoomLevel >= 0 && requestedZoomLevel <= this._map.getNumZoomLevels()) {
-                return requestedZoomLevel;
-            }
-            // if not in valid bounds, return original
-            return this.getMapZoom();
-        },
 
         /**
          * @method transformCoordinates

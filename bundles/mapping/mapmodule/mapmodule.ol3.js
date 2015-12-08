@@ -250,6 +250,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         _updateSizeImpl : function() {
             this.getMap().updateSize();
         },
+        _setZoomLevelImpl : function(newZoomLevel) {
+            this.getMap().getView().setZoom(newZoomLevel);
+        },
 /* --------- /Impl specific - PRIVATE ----------------------------> */
 
 
@@ -465,26 +468,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         },
 
         /**
-         * @method setZoomLevel
-         * Sets the maps zoom level to given absolute number
-         * @param {Number} newZoomLevel absolute zoom level
-         * @param {Boolean} suppressEvent true to NOT send an event about the map move
-         *  (other components wont know that the map has moved, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         */
-        setZoomLevel: function (newZoomLevel, suppressEvent) {
-            if (newZoomLevel < 0 || newZoomLevel > this.getMaxZoomLevel()) {
-                newZoomLevel = this.getMapZoom();
-            }
-            this._map.getView().setZoom(newZoomLevel);
-            this.updateDomain();
-            if (suppressEvent !== true) {
-                //send note about map change
-                this.notifyMoveEnd();
-            }
-        },
-
-        /**
          * Transforms a bounds object with left,top,bottom and right properties
          * to an OL3 array. Returns the parameter as is if those properties don't exist.
          * @param  {Object | Array} bounds bounds object or OL3 array
@@ -500,62 +483,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                     bounds.top];
             }
             return extent;
-        },
-
-
-
-        /**
-         * @method adjustZoomLevel
-         * Adjusts the maps zoom level by given relative number
-         * @param {Number} zoomAdjust relative change to the zoom level f.ex -1
-         * @param {Boolean} suppressEvent true to NOT send an event about the map move
-         *  (other components wont know that the map has moved, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         */
-        adjustZoomLevel: function (amount, suppressEvent) {
-            var requestedZoomLevel = this._getNewZoomLevel(amount);
-
-            this.zoomTo(requestedZoomLevel);
-            this._map.updateSize();
-            this.updateDomain();
-            if (suppressEvent !== true) {
-                // send note about map change
-                this.notifyMoveEnd();
-            }
-        },
-
-        /**
-         * @method _getNewZoomLevel
-         * @private
-         * Does a sanity check on a zoomlevel adjustment to see if the adjusted zoomlevel is
-         * supported by the map (is between 0-12). Returns the adjusted zoom level if it is valid or
-         * current zoom level if the adjusted one is out of bounds.
-         * @return {Number} sanitized absolute zoom level
-         */
-        _getNewZoomLevel: function(adjustment) {
-            // TODO: check isNaN?
-            var requestedZoomLevel = this._map.getView().getZoom() + adjustment;
-
-            if (requestedZoomLevel >= 0 && requestedZoomLevel <= this.getMaxZoomLevel()) {
-                return requestedZoomLevel;
-            }
-            // if not in valid bounds, return original
-            return this._map.getView().getZoom();
-        },
-
-        /**
-         * Get map max extent.
-         * @method getMaxExtent
-         * @return {Object} max extent
-         */
-        getMaxExtent: function(){
-            var bbox = this.getSandbox().getMap().getBbox();
-            return {
-                bottom: bbox.bottom,
-                left: bbox.left,
-                right: bbox.right,
-                top: bbox.top
-            };
         }
 
     }, {

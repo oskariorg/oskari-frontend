@@ -301,14 +301,6 @@ Oskari.clazz.define(
             sandbox.notifyAll(evt);
         },
         /**
-         * @method zoomTo
-         * Sets the zoom level to given value
-         * @param {Number} zoomLevel the new zoom level
-         */
-        zoomTo: function (zoomLevel) {
-            this.setZoomLevel(zoomLevel);
-        },
-        /**
          * @method zoomToScale
          * Pans the map to the given position.
          * @param {float} scale the new scale
@@ -467,6 +459,55 @@ Oskari.clazz.define(
             }
             return lonlat;
         },
+        /**
+         * @method _getNewZoomLevel
+         * @private
+         * Does a sanity check on a zoomlevel adjustment to see if the adjusted zoomlevel is
+         * supported by the map (is between 0-12). Returns the adjusted zoom level if it is valid or
+         * current zoom level if the adjusted one is out of bounds.
+         * @return {Number} sanitized absolute zoom level
+         */
+        _getNewZoomLevel: function (adjustment) {
+            // TODO: check isNaN?
+            var requestedZoomLevel = this.getMapZoom() + adjustment;
+
+            if (requestedZoomLevel >= 0 && requestedZoomLevel <= this.getMaxZoomLevel()) {
+                return requestedZoomLevel;
+            }
+            // if not in valid bounds, return original
+            return this.getMapZoom();
+        },
+        /**
+         * @method adjustZoomLevel
+         * Adjusts the maps zoom level by given relative number
+         * @param {Number} zoomAdjust relative change to the zoom level f.ex -1
+         * @param {Boolean} suppressEvent true to NOT send an event about the map move
+         *  (other components wont know that the map has moved, only use when chaining moves and
+         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+         */
+        adjustZoomLevel: function (amount, suppressEvent) {
+            var requestedZoomLevel = this._getNewZoomLevel(amount);
+            this.setZoomLevel(requestedZoomLevel, suppressEvent);
+        },
+        /**
+         * @method setZoomLevel
+         * Sets the maps zoom level to given absolute number
+         * @param {Number} newZoomLevel absolute zoom level
+         * @param {Boolean} suppressEvent true to NOT send an event about the map move
+         *  (other components wont know that the map has moved, only use when chaining moves and
+         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+         */
+        setZoomLevel: function (newZoomLevel, suppressEvent) {
+            if (newZoomLevel < 0 || newZoomLevel > this.getMaxZoomLevel()) {
+                newZoomLevel = this.getMapZoom();
+            }
+            this._setZoomLevelImpl(newZoomLevel);
+            this.updateDomain();
+            if (suppressEvent !== true) {
+                //send note about map change
+                this.notifyMoveEnd();
+            }
+        },
 /* --------------- /SHARED FUNCTIONS --------------- */
 
 /* Impl specific - found in ol2 AND ol3 modules
@@ -487,15 +528,6 @@ Oskari.clazz.define(
          */
         centerMap: Oskari.AbstractFunc('centerMap'),
         /**
-         * @method setZoomLevel
-         * Sets the maps zoom level to given absolute number
-         * @param {Number} newZoomLevel absolute zoom level (0-12)
-         * @param {Boolean} suppressEvent true to NOT send an event about the map move
-         *  (other components wont know that the map has moved, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         */
-        setZoomLevel: Oskari.AbstractFunc('setZoomLevel'),
-        /**
          * @method zoomToExtent
          * Zooms the map to fit given bounds on the viewport
          * @param {Object} bounds BoundingBox with left,top,bottom,right keys that should be visible on the viewport
@@ -507,6 +539,20 @@ Oskari.clazz.define(
          *     wanting to notify at end of the chain for performance reasons or similar) (optional)
          */
         zoomToExtent: Oskari.AbstractFunc('zoomToExtent'),
+        /**
+         * @method panMapByPixels
+         * Pans the map by given amount of pixels.
+         * @param {Number} pX amount of pixels to pan on x axis
+         * @param {Number} pY amount of pixels to pan on y axis
+         * @param {Boolean} suppressStart true to NOT send an event about the map starting to move
+         *  (other components wont know that the map has started moving, only use when chaining moves and
+         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+         * @param {Boolean} suppressEnd true to NOT send an event about the map move
+         *  (other components wont know that the map has moved, only use when chaining moves and
+         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+         * @param {Boolean} isDrag true if the user is dragging the map to a new location currently (optional)
+         */
+        panMapByPixels: Oskari.AbstractFunc('panMapByPixels'),
 /* --------- /Impl specific --------------------------------------> */
 
 
@@ -514,6 +560,7 @@ Oskari.clazz.define(
 ------------------------------------------------------------------> */
         _calculateScalesImpl: Oskari.AbstractFunc('_calculateScalesImpl(resolutions)'),
         _updateSizeImpl: Oskari.AbstractFunc('_updateSizeImpl'),
+        _setZoomLevelImpl: Oskari.AbstractFunc('_setZoomLevelImpl'),
 /* --------- /Impl specific - PRIVATE ----------------------------> */
 
 
@@ -829,21 +876,6 @@ Oskari.clazz.define(
         },
         getResolution: function () {
             return this.getResolutionArray()[this.getMapZoom()];
-        },
-
-        /**
-         * @method zoomIn
-         * Adjusts the zoom level by one
-         */
-        zoomIn: function () {
-            this.adjustZoomLevel(1);
-        },
-        /**
-         * @method zoomOut
-         * Adjusts the zoom level by minus one
-         */
-        zoomOut: function () {
-            this.adjustZoomLevel(-1);
         },
 
         /**
@@ -1614,31 +1646,6 @@ Oskari.clazz.define(
 
         /* IMPL specific */
 
-        /**
-         * @method zoomToScale
-         * Pans the map to the given position.
-         * @param {float} scale the new scale
-         * @param {Boolean} closest find the zoom level that most closely fits the specified scale.
-         *   Note that this may result in a zoom that does not exactly contain the entire extent.  Default is false
-         * @param {Boolean} suppressEnd true to NOT send an event about the map move
-         *  (other components wont know that the map has moved, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         */
-        zoomToScale: Oskari.AbstractFunc('zoomToScale'),
-        /**
-         * @method panMapByPixels
-         * Pans the map by given amount of pixels.
-         * @param {Number} pX amount of pixels to pan on x axis
-         * @param {Number} pY amount of pixels to pan on y axis
-         * @param {Boolean} suppressStart true to NOT send an event about the map starting to move
-         *  (other components wont know that the map has started moving, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         * @param {Boolean} suppressEnd true to NOT send an event about the map move
-         *  (other components wont know that the map has moved, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         * @param {Boolean} isDrag true if the user is dragging the map to a new location currently (optional)
-         */
-        panMapByPixels: Oskari.AbstractFunc('panMapByPixels'),
 
         /**
          * @method centerMapByPixels
@@ -1667,11 +1674,6 @@ Oskari.clazz.define(
         _setLayerImplVisible: Oskari.AbstractFunc('_setLayerImplVisible'),
 
         _setLayerImplOpacity: Oskari.AbstractFunc('_setLayerImplOpacity'),
-
-        adjustZoomLevel: Oskari.AbstractFunc('adjustZoomLevel(amount, suppressEvent)'),
-
-        notifyMoveEnd: function () {},
-
 
         _addMapControlImpl: Oskari.AbstractFunc('_addMapControlImpl(ctl)'),
 
