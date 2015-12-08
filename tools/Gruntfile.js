@@ -195,6 +195,18 @@ module.exports = function (grunt) {
             }
         },
         copy: {
+            nonminified: {
+                files: [{
+                    expand: true,
+                    src: '../bundles/statistics/statsgrid2/**/*.html',
+                    dest: 'Oskari/bundles'
+                },
+                {
+                    expand: true,
+                    src: '../bundles/statistics/statsgrid2/**/*.css',
+                    dest: 'Oskari/bundles'
+                }]
+            },
             stats: {
                 files: [{
                     src: '../bundles/statistics/statsgrid2/libs/promise-polyfill/Promise-Statics.js',
@@ -274,6 +286,8 @@ module.exports = function (grunt) {
     grunt.registerTask('default', ['karma:dev', 'compileAppSetupToStartupSequence', 'compileDev', 'karma:dev:run', 'watch']);
     grunt.registerTask('ci', ['compileAppSetupToStartupSequence', 'compileDev', 'karma:ci']);
     grunt.registerTask('minifyStats', ['clean:build', 'minifyPolymer', 'minifyPolymerCSS', 'copy:stats', 'vulcanize']);
+    grunt.registerTask('nonminifiedStats', ['clean:build', 'copy:nonminified', 'copy:stats', 'vulcanize']);
+    grunt.registerTask('devRelease', ['nonminifiedStats', 'releaseManual']);
     grunt.registerTask('release', ['minifyStats', 'releaseManual']);
     // Default task.
     //    grunt.registerTask('default', 'watch testacularServer:dev');
