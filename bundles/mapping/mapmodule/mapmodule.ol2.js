@@ -242,35 +242,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 top: bbox.top
             };
         },
-/* --------- /Impl specific --------------------------------------> */
-
-
-/* Impl specific - PRIVATE
-------------------------------------------------------------------> */
-        _calculateScalesImpl: function (resolutions) {
-            for (var i = 0; i < resolutions.length; i += 1) {
-                var calculatedScale = OpenLayers.Util.getScaleFromResolution(
-                    resolutions[i],
-                    // always calculate to meters
-                    'm'
-                );
-                calculatedScale = calculatedScale * 10000;
-                calculatedScale = Math.round(calculatedScale);
-                calculatedScale = calculatedScale / 10000;
-                this._mapScales.push(calculatedScale);
-            }
-        },
-        _updateSizeImpl : function() {
-            this.getMap().updateSize();
-        },
-        _setZoomLevelImpl : function(newZoomLevel) {
-            this._map.zoomTo(newZoomLevel);
-        },
-/* --------- /Impl specific - PRIVATE ----------------------------> */
-
-
-
-
         /**
          * @method panMapByPixels
          * Pans the map by given amount of pixels.
@@ -301,61 +272,31 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
         },
 
-        /**
-         * @method moveMapByPixels
-         * Moves the map by given amount of pixels.
-         * @param {Number} pX amount of pixels to move on x axis
-         * @param {Number} pY amount of pixels to move on y axis
-         * @param {Boolean} suppressStart true to NOT send an event about the map starting to move
-         *  (other components wont know that the map has started moving, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         * @param {Boolean} suppressEnd true to NOT send an event about the map move
-         *  (other components wont know that the map has moved, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         */
-        moveMapByPixels: function (pX, pY, suppressStart, suppressEnd) {
-            // usually by mouse
-            this._map.moveByPx(pX, pY);
-            this.updateDomain();
-            // send note about map change
-            if (suppressStart !== true) {
-                this.notifyStartMove();
-            }
-            if (suppressEnd !== true) {
-                this.notifyMoveEnd();
+/* --------- /Impl specific --------------------------------------> */
+
+
+/* Impl specific - PRIVATE
+------------------------------------------------------------------> */
+        _calculateScalesImpl: function (resolutions) {
+            for (var i = 0; i < resolutions.length; i += 1) {
+                var calculatedScale = OpenLayers.Util.getScaleFromResolution(
+                    resolutions[i],
+                    // always calculate to meters
+                    'm'
+                );
+                calculatedScale = calculatedScale * 10000;
+                calculatedScale = Math.round(calculatedScale);
+                calculatedScale = calculatedScale / 10000;
+                this._mapScales.push(calculatedScale);
             }
         },
-
-        /**
-         * @method centerMapByPixels
-         * Moves the map so the given pixel coordinates relative to the viewport is on the center of the view port.
-         * @param {Number} pX pixel coordinates on x axis
-         * @param {Number} pY pixel coordinates on y axis
-         * @param {Boolean} suppressStart true to NOT send an event about the map starting to move
-         *  (other components wont know that the map has started moving, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         * @param {Boolean} suppressEnd true to NOT send an event about the map move
-         *  (other components wont know that the map has moved, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         */
-        centerMapByPixels: function (pX, pY, suppressStart, suppressEnd) {
-            var newXY = new OpenLayers.Pixel(pX, pY),
-                newCenter = this._map.getLonLatFromViewPortPx(newXY);
-            // check that the coordinates are reasonable, otherwise its easy to
-            // scrollwheel the map out of view
-            if (!this.isValidLonLat(newCenter.lon, newCenter.lat)) {
-                // do nothing if not valid
-                return;
-            }
-            // send note about map change
-            if (suppressStart !== true) {
-                this.notifyStartMove();
-            }
-            this.centerMap(newCenter, this.getMapZoom(), suppressEnd);
-
+        _updateSizeImpl : function() {
+            this.getMap().updateSize();
         },
-
-
+        _setZoomLevelImpl : function(newZoomLevel) {
+            this._map.zoomTo(newZoomLevel);
+        },
+/* --------- /Impl specific - PRIVATE ----------------------------> */
 
         /**
          * @method transformCoordinates

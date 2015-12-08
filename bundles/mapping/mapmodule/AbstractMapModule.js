@@ -879,22 +879,6 @@ Oskari.clazz.define(
         },
 
         /**
-         * @method moveMapByPixels
-         * Moves the map by given amount of pixels.
-         * @param {Number} pX amount of pixels to move on x axis
-         * @param {Number} pY amount of pixels to move on y axis
-         * @param {Boolean} suppressStart true to NOT send an event about the map starting to move
-         *  (other components wont know that the map has started moving, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         * @param {Boolean} suppressEnd true to NOT send an event about the map move
-         *  (other components wont know that the map has moved, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         */
-        moveMapByPixels: function (pX, pY, suppressStart, suppressEnd) {
-            return this.panMapByPixels(pX, pY, suppressStart, suppressEnd);
-        },
-
-        /**
          * @method isValidLonLat
          * Checks that lat and lon are within bounds of the map extent
          * @param {Number} lon longitude to check
@@ -1646,20 +1630,6 @@ Oskari.clazz.define(
 
         /* IMPL specific */
 
-
-        /**
-         * @method centerMapByPixels
-         * Moves the map so the given pixel coordinates relative to the viewport is on the center of the view port.
-         * @param {Number} pX pixel coordinates on x axis
-         * @param {Number} pY pixel coordinates on y axis
-         * @param {Boolean} suppressStart true to NOT send an event about the map starting to move
-         *  (other components wont know that the map has started moving, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         * @param {Boolean} suppressEnd true to NOT send an event about the map move
-         *  (other components wont know that the map has moved, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         */
-        centerMapByPixels: Oskari.AbstractFunc('centerMapByPixels'),
 
         orderLayersByZIndex: Oskari.AbstractFunc('orderLayersByZIndex'),
 

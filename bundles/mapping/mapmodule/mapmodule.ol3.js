@@ -231,33 +231,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             };
         },
 
-/* --------- /Impl specific --------------------------------------> */
-
-
-/* Impl specific - PRIVATE
-------------------------------------------------------------------> */
-        _calculateScalesImpl: function(resolutions) {
-            var units = this.getMap().getView().getProjection().getUnits(),
-                mpu = ol.proj.METERS_PER_UNIT[units];
-
-            for (var i = 0; i < resolutions.length; ++i) {
-                var scale = resolutions[i] * mpu * 39.37 * this._dpi;
-                    scale = Math.round(scale);
-
-                this._mapScales.push(scale);
-            }
-        },
-        _updateSizeImpl : function() {
-            this.getMap().updateSize();
-        },
-        _setZoomLevelImpl : function(newZoomLevel) {
-            this.getMap().getView().setZoom(newZoomLevel);
-        },
-/* --------- /Impl specific - PRIVATE ----------------------------> */
-
-
-
-
         /**
          * @method panMapByPixels
          * Pans the map by given amount of pixels.
@@ -294,6 +267,33 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 this.notifyMoveEnd();
             }
         },
+
+/* --------- /Impl specific --------------------------------------> */
+
+
+/* Impl specific - PRIVATE
+------------------------------------------------------------------> */
+        _calculateScalesImpl: function(resolutions) {
+            var units = this.getMap().getView().getProjection().getUnits(),
+                mpu = ol.proj.METERS_PER_UNIT[units];
+
+            for (var i = 0; i < resolutions.length; ++i) {
+                var scale = resolutions[i] * mpu * 39.37 * this._dpi;
+                    scale = Math.round(scale);
+
+                this._mapScales.push(scale);
+            }
+        },
+        _updateSizeImpl : function() {
+            this.getMap().updateSize();
+        },
+        _setZoomLevelImpl : function(newZoomLevel) {
+            this.getMap().getView().setZoom(newZoomLevel);
+        },
+/* --------- /Impl specific - PRIVATE ----------------------------> */
+
+
+
 
         _addLayerImpl: function(layerImpl) {
             this._map.addLayer(layerImpl);

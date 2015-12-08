@@ -14,7 +14,7 @@ Renamed functions
 - _addClickControl() removed. Use _setupMapEvents() instead.
 - _getMapCenter() removed. Use getMapCenter() instead.
 - _updateDomainImpl() removed. Use updateDomain() instead.
-- panMapToLonLat() removed. Use centerMap() instead.
+- panMapToLonLat()/moveMapToLanLot() removed. Use centerMap() instead.
 - panMapEast()/panMapWest()/panMapNorth()/panMapSouth() removed. Use panMapByPixels() instead.
 - zoomIn()/zoomOut() removed. Use adjustZoomLevel() instead.
 - zoomTo() removed. Use setZoomLevel() instead.
@@ -29,7 +29,8 @@ Unused functions removed:
   - _getMapLayersByName()
   - getMapLayersByName()
   - getMapElDom()
-  - moveMapToLanLot()
+  - centerMapByPixels()
+  - moveMapByPixels()
 
 Added functions so internal references don't need to be called:
 - getMapElementId()
