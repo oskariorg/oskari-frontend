@@ -122,9 +122,42 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             this.getMap().render();
             return true;
         },
-        _getMapCenter: function() {
-            return this._map.getView().getCenter();
+
+/* OL3 specific - check if this can be done in a common way 
+------------------------------------------------------------------> */
+        getExtent: function() {
+            return this._extent;
         },
+
+        getInteractionInstance: function (interactionName) {
+            var interactions = this.getMap().getInteractions().getArray();
+            var interactionInstance = interactions.filter(function(interaction) {
+              return interaction instanceof interactionName;
+            })[0];
+            return interactionInstance;
+        },
+/*<------------- / OL3 specific ----------------------------------- */
+
+
+/* Impl specific - found in ol2 AND ol3 modules
+------------------------------------------------------------------> */
+        getPixelFromCoordinate : function(lonlat) {
+            lonlat = this.normalizeLonLat(lonlat);
+            var px = this._map.getPixelFromCoordinate([lonlat.lon, lonlat.lat]);
+            return {
+                x : px[0],
+                y : px[1]
+            };
+        },
+
+        getMapCenter: function() {
+            var center = this.getMap().getView().getCenter();
+            return {
+                lon : center[0],
+                lat : center[1]
+            };
+        },
+
         getMapZoom: function() {
             return this._map.getView().getZoom();
         },
@@ -138,32 +171,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var scale = resolution * mpu * 39.37 * this._dpi;
             return scale;
         },
+/* --------- /Impl specific --------------------------------------> */
 
-/* OL3 specific - check if this can be done in a common way 
+
+/* Impl specific - PRIVATE
 ------------------------------------------------------------------> */
-        getExtent: function() {
-            return this._extent;
-        },
-
-/*<--------------------------------------------------------------- */
-
-        getPixelFromCoordinate : function(lonlat) {
-            lonlat = this.normalizeLonLat(lonlat);
-            var px = this._map.getPixelFromCoordinate([lonlat.lon, lonlat.lat]);
-            return {
-                x : px[0],
-                y : px[1]
-            };
-        },
-        
-        getInteractionInstance: function (interactionName) {
-            var interactions = this.getMap().getInteractions().getArray();
-            var interactionInstance = interactions.filter(function(interaction) {
-              return interaction instanceof interactionName;
-            })[0];
-            return interactionInstance;
-        },
-
         _calculateScalesImpl: function(resolutions) {
             var units = this.getMap().getView().getProjection().getUnits(),
                 mpu = ol.proj.METERS_PER_UNIT[units];
@@ -176,6 +188,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
 
         },
+/* --------- /Impl specific - PRIVATE ----------------------------> */
 
         /**
          * @method zoomToScale
@@ -255,9 +268,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
             var sandbox = this._sandbox;
             var mapVO = sandbox.getMap();
-            var lonlat = this._getMapCenter();
+            var lonlat = this.getMapCenter();
             var zoom = this.getMapZoom();
-            mapVO.moveTo(lonlat[0], lonlat[1], zoom);
+            mapVO.moveTo(lonlat.lon, lonlat.lat, zoom);
 
             mapVO.setScale(this.getMapScale());
 
@@ -403,18 +416,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 }
             }
             return -1;
-        },
-        
-        getSize: function(){
-            var sandbox = this._sandbox,
-                mapVO = sandbox.getMap(),
-                width =  mapVO.getWidth(),
-                height = mapVO.getHeight();
-
-            return {
-                width: width,
-                height: height
-            };
         },
 
         updateSize: function() {
@@ -649,47 +650,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             return this._map.getView().getZoom();
         },
 
-        /**
-         * @method notifyStartMove
-         * Notify other components that the map has started moving. Sends a MapMoveStartEvent.
-         * Not sent always, preferrably track map movements by listening to AfterMapMoveEvent.
-         * Ignores the call if map is in stealth mode
-         */
-        notifyStartMove: function () {
-            if (this.getStealth()) {
-                // ignore if in "stealth mode"
-                return;
-            }
-            this.getSandbox().getMap().setMoving(true);
-            var centerX = this._getMapCenter()[0],
-                centerY = this._getMapCenter()[1],
-                evt = this.getSandbox().getEventBuilder('MapMoveStartEvent')(centerX, centerY);
-            this.getSandbox().notifyAll(evt);
-        },
-
-        /**
-         * @method notifyMoveEnd
-         * Notify other components that the map has moved. Sends a AfterMapMoveEvent and updates the
-         * sandbox map domain object with the current map properties.
-         * Ignores the call if map is in stealth mode. Plugins should use this to notify other components
-         * if they move the map through OpenLayers reference. All map movement methods implemented in mapmodule
-         * (this class) calls this automatically if not stated otherwise in API documentation.
-         * @param {String} creator
-         *        class identifier of object that sends event
-         */
-        notifyMoveEnd: function (creator) {
-            if (this.getStealth()) {
-                // ignore if in "stealth mode"
-                return;
-            }
-            var sandbox = this.getSandbox();
-            sandbox.getMap().setMoving(false);
-
-            var lonlat = this._getMapCenter();
-            this._updateDomainImpl();
-            var evt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat.lon, lonlat.lat, this.getMapZoom(), false, this.getMapScale(), creator);
-            sandbox.notifyAll(evt);
-        },
         /**
          * Get map max extent.
          * @method getMaxExtent

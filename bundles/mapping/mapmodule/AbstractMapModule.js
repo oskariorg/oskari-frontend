@@ -215,8 +215,8 @@ Oskari.clazz.define(
                 this.afterRearrangeSelectedMapLayerEvent(event);
             }
         },
-/** SHARED FUNCTIONS */
 
+/* ---------------- SHARED FUNCTIONS --------------- */
         /**
          * @method getMaxZoomLevel
          * Gets map max zoom level.
@@ -246,8 +246,6 @@ Oskari.clazz.define(
             }
             return mapDiv;
         },
-/** /SHARED FUNCTIONS */
-
         /**
          * @method getImageUrl
          * Returns a base url for plugins to show. Can be set in constructor and
@@ -257,6 +255,78 @@ Oskari.clazz.define(
         getImageUrl: function () {
             return this._imageUrl;
         },
+        /**
+         * @method notifyStartMove
+         * Notify other components that the map has started moving. Sends a MapMoveStartEvent.
+         * Not sent always, preferrably track map movements by listening to AfterMapMoveEvent.
+         * Ignores the call if map is in stealth mode
+         */
+        notifyStartMove: function () {
+            if (this.getStealth()) {
+                // ignore if in "stealth mode"
+                return;
+            }
+            this.getSandbox().getMap().setMoving(true);
+            var centerX = this.getMapCenter().lon,
+                centerY = this.getMapCenter().lat,
+                evt = this.getSandbox().getEventBuilder('MapMoveStartEvent')(centerX, centerY);
+            this.getSandbox().notifyAll(evt);
+        },
+        /**
+         * @method notifyMoveEnd
+         * Notify other components that the map has moved. Sends a AfterMapMoveEvent and updates the
+         * sandbox map domain object with the current map properties.
+         * Ignores the call if map is in stealth mode. Plugins should use this to notify other components
+         * if they move the map through OpenLayers reference. All map movement methods implemented in mapmodule
+         * (this class) calls this automatically if not stated otherwise in API documentation.
+         * @param {String} creator
+         *        class identifier of object that sends event
+         */
+        notifyMoveEnd: function (creator) {
+            if (this.getStealth()) {
+                // ignore if in "stealth mode"
+                return;
+            }
+            var sandbox = this.getSandbox();
+            sandbox.getMap().setMoving(false);
+
+            var lonlat = this.getMapCenter();
+            this._updateDomainImpl();
+            var evt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat.lon, lonlat.lat, this.getMapZoom(), false, this.getMapScale(), creator);
+            sandbox.notifyAll(evt);
+        },
+        
+        getSize: function(){
+            var sandbox = this.getSandbox(),
+                mapVO = sandbox.getMap(),
+                width =  mapVO.getWidth(),
+                height = mapVO.getHeight();
+
+            return {
+                width: width,
+                height: height
+            };
+        },
+/* --------------- /SHARED FUNCTIONS --------------- */
+
+/* Impl specific - found in ol2 AND ol3 modules
+------------------------------------------------------------------> */
+        getPixelFromCoordinate: Oskari.AbstractFunc('getPixelFromCoordinate'),
+        getMapCenter: Oskari.AbstractFunc('getMapCenter'),
+        getMapZoom: Oskari.AbstractFunc('getMapZoom'),
+        getMapScale: Oskari.AbstractFunc('getMapScale'),
+/* --------- /Impl specific --------------------------------------> */
+
+
+/* Impl specific - PRIVATE
+------------------------------------------------------------------> */
+        _calculateScalesImpl: Oskari.AbstractFunc('_calculateScalesImpl(resolutions)'),
+/* --------- /Impl specific - PRIVATE ----------------------------> */
+
+
+
+
+
         /**
          * @method getControls
          * Returns map controls - storage for controls by id. See getMapControl for getting single control.
@@ -1399,8 +1469,6 @@ Oskari.clazz.define(
 
         updateSize: Oskari.AbstractFunc('updateSize'),
 
-        getSize: Oskari.AbstractFunc('getSize'),
-
         /**
          * @method moveMapToLanLot
          * Moves the map to the given position. Alias for panMapToLonLat.
@@ -1504,8 +1572,6 @@ Oskari.clazz.define(
          */
         setZoomLevel: Oskari.AbstractFunc('setZoomLevel'),
 
-        getMapScale: Oskari.AbstractFunc('getMapScale'),
-
         orderLayersByZIndex: Oskari.AbstractFunc('orderLayersByZIndex'),
 
         setLayerIndex: Oskari.AbstractFunc('setLayerIndex'),
@@ -1532,7 +1598,6 @@ Oskari.clazz.define(
 
         notifyMoveEnd: function () {},
 
-        _calculateScalesImpl: Oskari.AbstractFunc('_calculateScalesImpl(resolutions)'),
 
         _addMapControlImpl: Oskari.AbstractFunc('_addMapControlImpl(ctl)'),
 

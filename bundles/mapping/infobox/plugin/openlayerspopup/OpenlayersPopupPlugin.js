@@ -398,11 +398,11 @@ Oskari.clazz.define(
         },
 
         _adaptPopupSize: function (olPopupId, isOld) {
-            var viewportSize = this.getMap().getSize(),
+            var size = this.getMapModule().getSize(),
                 popup = jQuery('#' + olPopupId),
                 left = parseFloat(popup.css('left')),
-                maxWidth = viewportSize[0] * 0.7,
-                maxHeight = viewportSize[1] * 0.7;
+                maxWidth = size.width * 0.7,
+                maxHeight = size.height * 0.7;
 
             // popup needs to move 10 pixels to the right
             // so that header arrow can be moved out of container(left).
@@ -466,10 +466,10 @@ Oskari.clazz.define(
          */
         _panMapToShowPopup: function (lonlat) {
             var me = this,
-                pixels = me.getMap().getPixelFromCoordinate(lonlat),
-                size = me.getMap().getSize(),
-                width = size[0],
-                height = size[1];
+                pixels = me.getMapModule().getPixelFromCoordinate(lonlat),
+                size = me.getMapModule().getSize(),
+                width = size.width,
+                height = size.height;
             // if infobox would be out of screen
             // -> move map to make infobox visible on screen
             var panx = 0,

@@ -12,6 +12,7 @@ Renamed functions
 - _calculateScalesFromResolutions() removed. Use _calculateScalesImpl() instead.
 - _createMap() and _createMapImpl() removed. Use createMap() instead. Also the function no longer has side-effects and returns the created map implementation.
 - _addClickControl() removed. Use _setupMapEvents() instead.
+- _getMapCenter() removed. Use getMapCenter() instead.
 
 Unused functions removed:
   - _ensureExists()
