@@ -7,7 +7,7 @@
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js">
 </script>
 
-<link rel="stylesheet" type="text/css" href="../css/icons.css" />
+<link rel="stylesheet" type="text/css" href="../../css/icons.css" />
 <style type="text/css">
 @media screen {
   body {
@@ -15,6 +15,11 @@
     padding: 0;
   }
   #mapdiv {
+  }
+    #maptools {
+    background-color: #333438;
+    position: absolute;
+    z-index: 2;
   }
   #contentMap {
     float:left;
@@ -29,14 +34,25 @@
   }
 }
 </style>
+
+
 <!-- ############# /css ################# -->
 </head>
 <body>
 
-<div id="contentMap">
-<div id="mapdiv"> </div>
+<nav id="maptools">
+<div id="loginbar">
 </div>
-
+<div id="menubar">
+</div>
+<div id="divider">
+</div>
+<div id="toolbar">
+</div>
+</nav>
+<div id="contentMap">
+<div id="mapdiv"></div>
+</div>
 
 <div id="eventMessages"> </div>
 <div id="formi">
@@ -54,7 +70,25 @@
 <input type="button" id="bgetdrawing" value="getdrawing"/>
 <input type="button" id="bstopdrawing" value="stopdrawing"/>
 
+<br><br>
+<textarea id="geomtextarea" name="geomtextarea">
+POLYGON((439343 6905482, 439943 6905482, 439343 6905982, 439343 6905482))
+</textarea>
+<br><input type="checkbox" id="shall_we_clear_layer_first"> Clear old vectors first?
+<br>
+<input type="button" id="bviewvectors" value="bviewvectors"/>
+<input type="button" id="beditvectors" value="beditvectors"/>
+<br><pre>
+Example (vectors to be copy pasted):
+POLYGON((459343 6905482, 459943 6905482, 459343 6905982, 459343 6905482))
+LINESTRING(459343 6905482, 459943 6905482, 459343 6905982, 459343 6905482)
+MULTIPOLYGON (((459400 6905400, 459200 6905450, 459450 6905300, 459400 6905400)),
+((459200 6905350, 459450 6905200, 459300 6905050, 459100 6905100, 459100 6905300, 459200 6905350),
+(459300 6905200, 459200 6905250, 459200 6905150, 459300 6905200)))
+Note : Clear all = empty texarea and checkbox checked.
+</pre>
 </div>
+
 
 <!-- ############# Javascript ################# -->
 
@@ -66,11 +100,6 @@
 <!--  OPENLAYERS -->
 <script type="text/javascript" 
 	src="../../../../packages/openlayers/startup.js">
-</script>
-
-<!--  LOG4JS -->
-<script type="text/javascript" 
-	src="../../../../libraries/log4js/log4js.js">
 </script>
 
 <!--  RIGHTJS (flyout)-->

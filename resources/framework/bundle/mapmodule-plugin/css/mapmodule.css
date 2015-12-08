@@ -103,7 +103,7 @@ div.mapplugins {
       margin-left: -10px; }
     div.mapplugins.bottom.left .mapplugin.logoplugin {
       clear: both;
-      margin-left: -10px; }
+     /* margin-left: -10px;*/ }
     div.mapplugins.bottom.left .mapplugin.indexmap, div.mapplugins.bottom.left .mapplugin.logoplugin, div.mapplugins.bottom.left .mapplugin.scalebar {
       float: left;
       display: inline-block; }

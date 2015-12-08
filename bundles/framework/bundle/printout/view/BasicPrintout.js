@@ -425,7 +425,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             var maplinkArgs = selections.maplinkArgs;
             var pageSizeArgs = "&pageSize=" + selections.pageSize;
             var previewScaleArgs = "&scaledWidth=200";
-            var url = urlBase + maplinkArgs + pageSizeArgs + previewScaleArgs;
+            var municipalityCode = "&municipalityCode=" + me._getURLParameter('municipality');
+            var url = urlBase + maplinkArgs + pageSizeArgs + previewScaleArgs + municipalityCode;
 
             this.previewContent.removeClass('preview-portrait');
             this.previewContent.removeClass('preview-landscape');
@@ -434,6 +435,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             var previewImgDiv = this.previewImgDiv,
                 previewSpan = this.previewSpan;
 
+            previewImgDiv.attr('src', '');
+            
             me.progressSpinner.start();
             window.setTimeout(function () {
                 previewImgDiv.imagesLoaded(function () {
@@ -579,9 +582,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
         _printMap: function (selections, features) {
             var me = this;
             var sandbox = this.instance.getSandbox();
-            var url = sandbox.getAjaxUrl();
-
-            var urlBase = this.backendConfiguration.formatProducers[selections.format];
+      			//var url = sandbox.getAjaxUrl();
+      
+      			var url = this.backendConfiguration.formatProducers[selections.format];
 
             var maplinkArgs = selections.maplinkArgs;
             var pageSizeArgs = "&pageSize=" + selections.pageSize;
@@ -600,8 +603,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             }
             var contentOptionArgs = contentOptions.join('');
             var formatArgs = "&format=" + selections.format;
+			
+			      var municipalityCode = "&municipalityCode=" + me._getURLParameter('municipality');
 
-            var parameters = maplinkArgs + '&action_route=GetPreview' + pageSizeArgs + pageTitleArgs + contentOptionArgs + formatArgs + saveFileArgs;
+            var parameters = maplinkArgs + '&action_route=GetPreview' + pageSizeArgs + pageTitleArgs + contentOptionArgs + formatArgs + saveFileArgs + municipalityCode;
             url = url + parameters;
 
             // We need to use the POST method if there's GeoJSON or tile data.
@@ -835,6 +840,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                 }
             );
         },
+		
+    		_getURLParameter: function (sParam)
+    		{
+    			var sPageURL = window.location.search.substring(1);
+    			var sURLVariables = sPageURL.split('&');
+    			for (var i = 0; i < sURLVariables.length; i++) 
+    			{
+    				var sParameterName = sURLVariables[i].split('=');
+    				if (sParameterName[0] == sParam) 
+    				{
+    					return sParameterName[1];
+    				}
+    			}
+    		},
+		
         /**
          * @method destroy
          * Destroyes/removes this view from the screen.

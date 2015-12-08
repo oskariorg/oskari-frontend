@@ -55,7 +55,8 @@ function(instance) {
         var drawPlugin = Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.plugin.DrawPlugin');
         mapModule.registerPlugin(drawPlugin);
         mapModule.startPlugin(drawPlugin);
-        this.drawPlugin = drawPlugin;
+        this.drawPlugin = drawPlugin;        
+        
         
         // register plugin for map (hover tooltip for my places)
         // TODO: start when a myplaces layer is added and stop when last is removed?
@@ -111,6 +112,13 @@ function(instance) {
          */
         'LupaPisteMyPlaces.FinishedDrawingEvent' : function(event) {
             this._handleFinishedDrawingEvent(event);
+        },
+        'LupaPisteMyPlaces.MyPlaceSelectedEvent' : function(event) {
+        	if (event.getPlace() != null) {
+	        	var sandbox = this.instance.sandbox;
+	        	var request = sandbox.getRequestBuilder('LupaPisteMyPlaces.EditPlaceRequest')(event.getPlace());
+	            sandbox.request(this.getName(), request);
+        	}
         }
     },
     /**
@@ -140,14 +148,36 @@ function(instance) {
         var loc = this.instance.getLocalization();
         this.form = Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.view.PlaceForm', this.instance);
         var categories = this.instance.getService().getAllCategories();
+        var drawing = this.drawPlugin.getDrawing();
+        var param = null;
+        if(drawing instanceof OpenLayers.Geometry.Polygon) {
+          param = {
+              place : {
+                  area : Math.round(drawing.getArea())
+              }
+          };
+          this.form.setValues(param);
+        }
+        if(drawing instanceof OpenLayers.Geometry.LineString) {
+            param = {
+                place : {
+                    length : Math.round(drawing.getLength())
+                }
+            };
+            this.form.setValues(param);
+        }
+        
         if(place) {
-            var param = {
+            param = {
                 place : {
                     id: place.getId(),
                     name : place.getName(),
                     link : place.getLink(),
                     desc : place.getDescription(),
-                    category : place.getCategoryID()
+                    category : place.getCategoryID(),
+                    area: place.getArea(),
+                    height : place.getHeight(),
+                    length : place.getLength()
                 }
             };
             this.form.setValues(param);
@@ -159,6 +189,21 @@ function(instance) {
             primaryButton: loc.buttons.save,
             actions : {}
         }];
+        
+        if(!(drawing instanceof OpenLayers.Geometry.Polygon)) {
+          for(var i = 0; i < content.length; ++i) {
+            var currentForm = content[i].html;
+            currentForm.find('input[name=area]').parent().css("display", "none");
+            currentForm.find('input[name=placewidth]').parent().css("display", "block");
+          }
+        }
+        if(!(drawing instanceof OpenLayers.Geometry.LineString)) {
+        	for (var i = 0; i < content.length; ++i) {
+        		var currentForm = content[i].html;
+        		currentForm.find('input[name=length]').parent().css("display", "none");
+        	}
+        }
+        
         // cancel button
         content[0].actions[loc.buttons.cancel] = function() {
             me._cleanupPopup();
@@ -169,7 +214,14 @@ function(instance) {
         // save button
         content[0].actions[loc.buttons.save] = function() {
             me._saveForm();
-        }; 
+        };
+        
+        if(place) {
+	        // delete button
+	        content[0].actions[loc.buttons.deleteButton] = function() {
+	            me._deletePlace();
+	        };
+        }
 
         var request = sandbox.getRequestBuilder('InfoBox.ShowInfoBoxRequest')(this.popupId, loc.placeform.title, content, location, true);
         sandbox.request(me.getName(), request);
@@ -200,6 +252,18 @@ function(instance) {
         {
             errors.push({name : 'desc' , error: loc.descIllegal});
         }
+        if(isNaN(values.place.height))
+        {
+        	errors.push({name : 'height' , error: loc.heightNotANumber});
+        }
+        if(isNaN(values.place.length))
+        {
+        	errors.push({name : 'length' , error: loc.lengthNotANumber});
+        }
+        if(values.place.width.length > 0 && (isNaN(values.place.width) || parseFloat(values.place.width) < 0))
+        {
+          errors.push({name : 'width' , error: loc.widthNotANumber});
+        }
         return errors;
     },
     _showValidationErrorMessage : function(errors) {
@@ -228,12 +292,18 @@ function(instance) {
         }
         var me = this;
         var formValues = this.form.getValues();
+        
+        if(typeof formValues.place.height !== 'undefined') {
+          formValues.place.height = formValues.place.height.replace(',', '.');
+        }
+        
         // validation
         var errors = this._validateForm(formValues);
         if(errors.length != 0) {
             this._showValidationErrorMessage(errors);
             return;
         }
+        
         // validation passed -> go save stuff
         // new category given -> save it first 
         if(formValues.category) {
@@ -293,35 +363,65 @@ function(instance) {
         place.setLink(values.link);
         place.setDescription(values.desc);
         place.setCategoryID(values.category);
+        place.setArea(values.area);
+        place.setHeight(values.height);
+        place.setLength(values.length);
         // fetch the latest geometry if edited after FinishedDrawingEvent
-        place.setGeometry(this.drawPlugin.getDrawing());
+        var drawnGeometry = this.drawPlugin.getDrawing();
+        place.setGeometry(drawnGeometry);
+        
+        //turn point/linestring to area if width given
+        if(values.width.length > 0 && !isNaN(values.width) && parseFloat(values.width) > 0) {
+          var jsts_parser = new jsts.io.OpenLayersParser();
+          var geom = jsts_parser.read(drawnGeometry);
+          var quadrantSegments = undefined;
+          var endCapStyle = (geom instanceof jsts.geom.Point) ? jsts.operation.buffer.BufferParameters.CAP_ROUND : jsts.operation.buffer.BufferParameters.CAP_FLAT;
+          var jsts_result_geom = geom.buffer(parseFloat(values.width)/2, quadrantSegments, endCapStyle);
+          var buffered = jsts_parser.write(jsts_result_geom);
+          place.setGeometry(buffered);
+          place.setLength('');
+          place.setArea(Math.round(buffered.getArea()));
+        }
         
         var sandbox = this.instance.sandbox;
         var serviceCallback = function(blnSuccess, model, blnNew) {
             if(blnSuccess) {
-                // add map layer to map (we could check if its already there but core will handle that)
-                var layerId = me.instance.getCategoryHandler()._getMapLayerId(place.getCategoryID());
-				var requestBuilder = sandbox.getRequestBuilder('AddMapLayerRequest');
-                var updateRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest')
+            	var map = sandbox.findRegisteredModuleInstance('MainMapModule').getMap();
+            	var lyr = map.getLayersByName("LupapisteVectors")[0];
+            	
+            	var feature = new OpenLayers.Feature.Vector();
+            	
+            	feature.geometry = place.getGeometry();
+            	feature.attributes['id'] = place.getId();
+            	feature.attributes['name'] = place.getName();
+            	feature.attributes['link'] = place.getLink();
+            	feature.attributes['desc'] = place.getDescription();
+            	feature.attributes['height'] = place.getHeight();
+            	feature.attributes['category'] = place.getCategoryID();
+            	feature.attributes['area'] = place.getArea();
+            	feature.attributes['length'] = place.getLength();
 
-                var request = requestBuilder(layerId, true);
-                sandbox.request(me, request);
+            	if(lyr.getFeaturesByAttribute("id", place.getId())) {
+            		lyr.removeFeatures(lyr.getFeaturesByAttribute("id", place.getId()));
+            	}
+            	
+            	lyr.addFeatures([feature]);
 
-                if(!blnNew) {
-                    // refresh map layer on map -> send update request
-                    var updateRequest = updateRequestBuilder(layerId, true);
-                    sandbox.request(me, updateRequest);
-                    // refresh old layer as well if category changed
-                    if(oldCategory != place.getCategoryID()) {
-                        layerId = me.instance.getCategoryHandler()._getMapLayerId(oldCategory);
-                        request = requestBuilder(layerId, true);
-                        sandbox.request(me, request);
-                    }
-                } else {
-                    var updateRequest = updateRequestBuilder(layerId, true);
-                    sandbox.request(me, updateRequest);                	
-                }
-                
+//              if(!blnNew) {
+//                  // refresh map layer on map -> send update request
+//                  var updateRequest = updateRequestBuilder(layerId, true);
+//                  sandbox.request(me, updateRequest);
+//                  // refresh old layer as well if category changed
+//                  if(oldCategory != place.getCategoryID()) {
+//                      layerId = me.instance.getCategoryHandler()._getMapLayerId(oldCategory);
+//                      request = requestBuilder(layerId, true);
+//                      sandbox.request(me, request);
+//                  }
+//              } else {
+//                  var updateRequest = updateRequestBuilder(layerId, true);
+//                  sandbox.request(me, updateRequest);                	
+//              }
+
                 me._cleanupPopup();
 
                 var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -329,7 +429,7 @@ function(instance) {
                 dialog.show(loc.title, loc.message);
                 dialog.fadeout();
                 // remove drawing
-                me.drawPlugin.stopDrawing();
+                me.drawPlugin.stopDrawing();                
             }
             else {
                 var loc = me.instance.getLocalization('notification')['error'];
@@ -357,7 +457,54 @@ function(instance) {
         this.form = undefined;
         sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
         this.instance.enableGfi(true);
+    },
+    
+    _deletePlace : function() {
+    	
+    	var formValues = this.form.getValues();
+    	
+    	var me = this;    	
+    	var sandbox = this.instance.sandbox;
+        var loc = me.instance.getLocalization('notification');
+    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+    	var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+    	okBtn.setTitle(loc.placeDelete.btnDelete);
+    	okBtn.addClass('primary');
+
+    	okBtn.setHandler(function() {
+			dialog.close();
+            var service = sandbox.getService('Oskari.lupapiste.bundle.myplaces2.service.MyPlacesService');
+            var callback = function(isSuccess, featureId) {
+
+            	if(isSuccess) {
+            		
+	            	var map = sandbox.findRegisteredModuleInstance('MainMapModule').getMap();
+	            	var layer = map.getLayersByName("LupapisteVectors")[0];
+	            	
+	        		if(layer) {    			
+	        			
+	        			var feature = layer.getFeaturesByAttribute("id", featureId)[0];	        			
+	        			layer.removeFeatures(feature);
+	        			
+	        			me._cleanupPopup();	        			
+	        			me.drawPlugin.stopDrawing();	        			
+	        		}
+
+                    dialog.show(loc.placeDelete.title, loc.placeDelete.success);
+                }
+                else {
+                    dialog.show(loc.placeDelete.title, loc.error.deletePlace);
+                }
+                dialog.fadeout();
+            };
+            service.deleteMyPlace(formValues.place.id, callback);
+    	});
+    	var cancelBtn = dialog.createCloseButton(loc.placeDelete.cancel);    
+        var confirmMsg = loc.placeDelete.confirm;
+    	dialog.show(loc.placeDelete.title, confirmMsg, [cancelBtn, okBtn]);
+    	dialog.makeModal();
     }
+    
 }, {
     /**
      * @property {String[]} protocol

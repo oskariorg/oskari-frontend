@@ -197,24 +197,35 @@ Oskari.clazz.define("Oskari.mapframework.bundle.userguide.UserGuideBundleInstanc
                 tagsTxt = this.getLocalization('help').tags;
             }
 
-            this.helper.getHelpArticle(
-                tagsTxt,
-                function (isSuccess, pContent) {
-                    var content = pContent;
-                    var errorTxt = 'error.generic';
-                    if (me.getLocalization('error') &&
-                            me.getLocalization('error').generic) {
-                        errorTxt = me.getLocalization('error').generic;
-                    }
-                    if (!isSuccess) {
-                        content = errorTxt;
-                    } else if (content[helpContentPart]) {
-                        content = content[helpContentPart];
-                    }
-                    me.plugins['Oskari.userinterface.Flyout'].setContent(content);
-                    me.isContentLoaded = true;
-                }
-            );
+            if (this.conf.displayLocalContent) {
+            	
+            	var content  = this.getLocalization('articles')[0].content;
+    	        me.plugins['Oskari.userinterface.Flyout'].setContent(content[helpContentPart]);
+    	        me.isContentLoaded = true;
+    	        
+            } else {
+            	
+            	this.helper.getHelpArticle(
+	                tagsTxt,
+	                function (isSuccess, pContent) {
+	                    var content = pContent;
+	                    var errorTxt = 'error.generic';
+	                    if (me.getLocalization('error') &&
+	                            me.getLocalization('error').generic) {
+	                        errorTxt = me.getLocalization('error').generic;
+	                    }
+	                    if (!isSuccess) {
+	                        content = errorTxt;
+	                    } else if (content[helpContentPart]) {
+	                        content = content[helpContentPart];
+	                    }
+	                    me.plugins['Oskari.userinterface.Flyout'].setContent(content);
+	                    me.isContentLoaded = true;
+	                }
+	            );
+            	
+            }
+        
         },
 
 

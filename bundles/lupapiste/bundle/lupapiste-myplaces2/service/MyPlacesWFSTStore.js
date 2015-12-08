@@ -64,7 +64,7 @@ function(url, uuid) {
      * initialised user uuid
      */
     getCategories : function(cb) {
-        var uuid = this.uuid;
+/*        var uuid = this.uuid;
         var uuidFilter = new OpenLayers.Filter.Comparison({
             type : OpenLayers.Filter.Comparison.EQUAL_TO,
             property : "uuid",
@@ -79,8 +79,22 @@ function(url, uuid) {
             callback : function(response) {
                 me._handleCategoriesResponse(response, cb);
             }
-        })
+        })*/
+    	
+    	var list = [];
+    	
+    	 var category = Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.model.MyPlacesCategory');
+         category.setId("123");
+         category.setDefault(true);
+         category.setName("Lupapiste");
 
+         category.setUUID("1234");
+
+         list.push(category);
+         
+         if (cb) {
+             cb(list);
+         }
     },
 
     /**
@@ -197,12 +211,12 @@ function(url, uuid) {
             }
             features.push(feat);
         }
-        p.commit(features, {
-            callback : function(response) {
-
-                me._handleCommitCategoriesResponse(response, list, callback);
-            }
-        });
+//        p.commit(features, {
+//            callback : function(response) {
+//
+//                me._handleCommitCategoriesResponse(response, list, callback);
+//            }
+//        });
 
     },
 
@@ -329,12 +343,12 @@ function(url, uuid) {
         var p = this.protocols['my_places'];
 
         var me = this;
-        p.read({
-            filter : uuidFilter,
-            callback : function(response) {
-                me._handleMyPlacesResponse(response, cb);
-            }
-        })
+//        p.read({
+//            filter : uuidFilter,
+//            callback : function(response) {
+//                me._handleMyPlacesResponse(response, cb);
+//            }
+//        })
 
     },
 
@@ -364,12 +378,15 @@ function(url, uuid) {
             place.setId(id);
             place.setName(featAtts['name']);
             place.setDescription(featAtts['place_desc']);
+            place.setHeight(featAtts['height'])
             place.setLink(featAtts['link']);
             place.setCategoryID(featAtts['category_id']);
             place.setCreateDate(featAtts['created']);
             place.setUpdateDate(featAtts['updated']);
             place.setGeometry(f.geometry);
             place.setUUID(uuid);
+            place.setArea(featAtts['area']);
+            place.setLength(featAtts['length']);
 
             list.push(place);
             //service._addMyPlace(place);
@@ -405,12 +422,12 @@ function(url, uuid) {
         });
 
         var me = this;
-        p.read({
-            filter : filter,
-            callback : function(response) {
-                me._handleMyPlacesResponse(response, cb);
-            }
-        })
+//        p.read({
+//            filter : filter,
+//            callback : function(response) {
+//                me._handleMyPlacesResponse(response, cb);
+//            }
+//        })
     },
 
     /**
@@ -432,6 +449,9 @@ function(url, uuid) {
                 'place_desc' : m.getDescription(),
                 'link' : m.getLink(),
                 'category_id' : m.getCategoryID(),
+                'height' : m.getHeight(),
+                'area' : m.getArea(),
+                'length' : m.getLength(),
                 'uuid' : uuid
             };
 
@@ -448,11 +468,12 @@ function(url, uuid) {
             features.push(feat);
         }
         var me = this;
-        p.commit(features, {
-            callback : function(response) {
-                me._handleCommitMyPlacesResponse(response, list, callback);
-            }
-        });
+        callback(true,list);
+//        p.commit(features, {
+//            callback : function(response) {
+//                me._handleCommitMyPlacesResponse(response, list, callback);
+//            }
+//        });
     },
 
     /**
@@ -530,11 +551,13 @@ function(url, uuid) {
         }
 
         var me = this;
-        p.commit(features, {
-            callback : function(response) {
-                me._handleDeleteMyPlacesResponse(response, list, callback);
-            }
-        });
+        
+        callback(true, list);
+//        p.commit(features, {
+//            callback : function(response) {
+//                me._handleDeleteMyPlacesResponse(response, list, callback);
+//            }
+//        });
     },
 
     /**

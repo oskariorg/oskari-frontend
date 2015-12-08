@@ -342,37 +342,39 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
          *            layer layer to check against
          */
         notifyLayerVisibilityChanged: function (layer) {
-            var scaleOk = layer.isVisible();
-            var geometryMatch = layer.isVisible();         // if layer is visible check actual values
+        var scaleOk = layer.isVisible();
+            var geometryMatch = layer.isVisible(); // if layer is visible check actual values
+        // if layer is visible check actual values
+        if(layer.isVisible()) {
+            scaleOk = this._isInScale(layer);
+            geometryMatch = this.isInGeometry(layer);
+        }
+        // setup openlayers visibility
+        // NOTE: DO NOT CHANGE visibility in internal layer object (it will
+        // change in UI also)
+        // this is for optimization purposes
+        var map = this.getMap();
+        var map = this.getMap();
 
-            if (layer.isVisible()) {
-                scaleOk = this._isInScale(layer);
-                geometryMatch = this.isInGeometry(layer);
-            }         // setup openlayers visibility
-                     // NOTE: DO NOT CHANGE visibility in internal layer object (it will
-                     // change in UI also)
-                     // this is for optimization purposes
+        var mapLayers = this.getMapModule().getOLMapLayers(layer.getId());
+        var mapLayer = mapLayers.length ? mapLayers[0] : null;
 
-            var map = this.getMap();
-
-            var mapLayers = this.getMapModule().getOLMapLayers(layer.getId());
-            var mapLayer = mapLayers.length ? mapLayers[0] : null;
-            if (scaleOk && geometryMatch && layer.isVisible()) {             // show non-baselayer if in scale, in geometry and layer visible
-
-                if (mapLayer && !mapLayer.getVisibility()) {
-                    mapLayer.setVisibility(true);
-                    mapLayer.display(true);
-                }
-            } else {             // otherwise hide non-baselayer
-
-                if (mapLayer && mapLayer.getVisibility()) {
-                    mapLayer.setVisibility(false);
-                    mapLayer.display(false);
-                }
-            }
-            var event = this._sandbox.getEventBuilder('MapLayerVisibilityChangedEvent')(layer, scaleOk, geometryMatch);
-            this._sandbox.notifyAll(event);
-        },
+        if(scaleOk && geometryMatch && layer.isVisible()) {
+          // show non-baselayer if in scale, in geometry and layer visible
+          if(mapLayer && !mapLayer.getVisibility()) {
+            mapLayer.setVisibility(true);
+            mapLayer.display(true);
+          }
+        } else {
+          // otherwise hide non-baselayer
+          if(mapLayer && mapLayer.getVisibility()) {
+            mapLayer.setVisibility(false);
+            mapLayer.display(false);
+          }
+        }
+        var event = this._sandbox.getEventBuilder('MapLayerVisibilityChangedEvent')(layer, scaleOk, geometryMatch);
+        this._sandbox.notifyAll(event);
+    },
         /**
          * @method _afterRearrangeSelectedMapLayerEvent
          * @private

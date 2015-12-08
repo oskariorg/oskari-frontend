@@ -23,13 +23,27 @@ Oskari.registerLocalization({
         "tooltip": "Tillägg linje",
         "new": "Tillägg en brytningspunkt på linjen genom att klicka på kartan. Sluta rita genom att dubbelklicka eller klicka på 'Sluta rita'.",
         "edit": "Editera linjen genom att klicka och dra brytningspunkterna.",
-        "save": "Lagra form"
+        "save": "Lagra form",
+        "noResult": "0 m"
       },
       "area": {
         "tooltip": "Tillägg område",
         "new": "Tillägg områdets hörnpunkter genom att klicka på kartan. Sluta rita genom att dubbelklicka eller klicka på 'Sluta rita'.",
         "edit": "Editera områdets form genom att klicka och dra brytningspunkterna på omkretslinjen.",
-        "save": "Lagra form"
+        "save": "Lagra form",
+        "noResult": "0 m²"
+      },
+      "circle": {
+          "tooltip": "Add circle",
+          "new": "Draw a circle by clicking the map and dragging. Stop drawing by releasing the mouse button.",
+          "edit": "Edit the shape of the circle by clicking and dragging the break points on its edge line.",
+          "save": "Save shape",
+      },
+      "ellipse": {
+          "tooltip": "Add ellipse",
+          "new": "Draw an ellipse by clicking the map and dragging. Stop drawing by releasing the mouse button.",
+          "edit": "Edit the shape of the ellipse by clicking and dragging the break points on its edge line.",
+          "save": "Save shape",
       }
     },
     "buttons": {
@@ -37,6 +51,7 @@ Oskari.registerLocalization({
       "cancel": "Tillbaka",
       "finish": "Sluta rita",
       "save": "Lagra",
+      "deleteButton": "Ta bort",
       "movePlaces": "Flytta objekt och ta bort",
       "deleteCategory": "Ta bort",
       "deleteCategoryAndPlaces": "Ta bort kategori inklusive objekt",
@@ -45,19 +60,35 @@ Oskari.registerLocalization({
     },
     "placeform": {
       "title": "Uppgifter om objektet",
-      "tooltip": "När du lägger ett objekt på kartan lagras det i dina objekt. Ge objektet ett namn och en beskrivning. Du kan välja vilket kartlager du vill lagra objektet på eller tillägga ett nytt kartlager genom att välja 'Ny nivå' från rullgardinsmenyn för kartlager.",
+      "tooltip": "När du lägger ett objekt på kartan lagras det i dina objekt. Ge objektet ett namn och en beskrivning.",
       "placename": {
-        "placeholder": "Namnge objektet"
+        "placeholder": "Namnge objektet",
+        "label" : ""
       },
       "placelink": {
         "placeholder": "Ge URL-address"
       },
       "placedesc": {
-        "placeholder": "Beskriv objektet"
+        "placeholder": "Beskriv objektet",
+        "label" : ""
       },
       "category": {
         "label": "Kartlager",
         "new": "Ny nivå..."
+      },
+      "placeheight": {
+      	"placeholder": "Ge en höjd eller djup",
+        "label" : ""
+      },
+      "placewidth": {
+        "placeholder": "Ge en bredd",
+        "label" : ""
+      },
+      "area": {
+        "label": "Areal (m2)"
+      },
+      "length": {
+          "label": "Längd (m)"
       }
     },
     "categoryform": {
@@ -95,6 +126,14 @@ Oskari.registerLocalization({
         "title": "Objektet har lagrats",
         "message": "Objektet finns i menyn Mina uppgifter"
       },
+      "placeDelete": {
+    	  "title": "Ta bort objekt",
+    	  "confirm": "Vill du ta bort detta objekt?",
+    	  "btnDelete": "Ta bort",
+    	  "btnCancel": "Tillbaka",
+    	  "success": "Objektet har tagits bort.",
+    	  "cancel": "Tillbaka"
+      },
       "categorySaved": {
         "title": "Kartlagret har lagrats",
         "message": "दndringar i kartlagret har lagrats"
@@ -117,6 +156,7 @@ Oskari.registerLocalization({
         "addCategory": "Kartlagret kunde inte lagras. Objektet har inte lagrats.",
         "editCategory": "Kartlagret kunde inte lagras.",
         "savePlace": "Objektet kunde inte lagras.",
+        "deletePlace": "Objektet kunde inte tas bort. Prova på nytt senare.",
         "title": "Fel!",
         "generic": "Systemfel. Försök på nytt senare.",
         "deleteCategory": "Fel i borttagningen!",
@@ -136,7 +176,10 @@ Oskari.registerLocalization({
       "lineColor": "Linjens färg är felaktig.",
       "areaLineSize": "Områdets konturlinje är utanför de tillåtna gränserna (0-50).",
       "areaLineColor": "Färgen på områdets omkretslinje är felaktig.",
-      "areaFillColor": "Områdets ifyllnadsfärg är felaktig."
+      "areaFillColor": "Områdets ifyllnadsfärg är felaktig.",
+      "heightNotANumber": "Den hojd/djup varde maste vara ett nummer.",
+      "lengthNotANumber": "Den längd varde maste vara ett nummer.",
+      "widthNotANumber": "Den bredd varde maste vara ett positivt nummer."
     }
   }
 });

@@ -431,8 +431,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
                 // TODO get layer from somewhere to see if it exists and to get its name...
                 layer = me._sandbox.findMapLayerFromAllAvailable(layerIds[i]);
                 if (layer) {
+                    var tooltip = layer.getDescription();
+                    if(typeof tooltip === 'undefined' || tooltip === null) {
+                      tooltip = layer.getName();
+                    }
                     listItem = me.layerSelectionTemplate.clone();
-                    listItem.attr("data-layerId", layerIds[i]).attr("title", layer.getName()).html(layer.getName());
+                    listItem.attr("data-layerId", layerIds[i]).attr("title", tooltip).html(layer.getName());
                     list.append(listItem);
                     listItem.bind('click', selectionUpdateHandler);
                 }

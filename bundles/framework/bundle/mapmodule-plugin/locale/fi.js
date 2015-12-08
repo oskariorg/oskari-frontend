@@ -21,7 +21,8 @@ Oskari.registerLocalization({
     "plugin": {
       "LogoPlugin": {
         "terms": "Käyttöehdot",
-        "dataSources": "Tietolähteet",
+        "termsLink": "https://www.lupapiste.fi/kayttoehdot",
+        "mapLinkBase": "http://www.paikkatietoikkuna.fi/web/fi/kartta?",
         "layersHeader": "Karttatasot",
         "indicatorsHeader": "Indikaattorit"
       },

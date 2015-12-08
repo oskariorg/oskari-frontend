@@ -87,11 +87,6 @@ Oskari.registerLocalization({
             },
             "content" : {
                 "options" : [{
-                    "id" : "pageLogo",
-                    "label" : "Lägg till Paikkatietoikkunas logo",
-                    "tooltip" : "Det är möjligt att gömma logon ifall det behövs",
-                        "checked" : "checked"
-                }, {
                     "id" : "pageScale",
                     "label" : "Lägg till skala till kartan",
                     "tooltip" : "Lägg till skala till kartan",

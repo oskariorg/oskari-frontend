@@ -2,7 +2,7 @@ Oskari.registerLocalization({
   "lang": "sv",
   "key": "LayerSelection",
   "value": {
-    "title": "Valda kartlager",
+    "title": "Kartlager",
     "desc": "",
     "layer": {
       "style": "Stil",

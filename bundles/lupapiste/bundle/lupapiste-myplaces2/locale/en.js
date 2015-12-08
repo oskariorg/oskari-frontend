@@ -23,13 +23,27 @@ Oskari.registerLocalization({
         "tooltip": "Add line",
         "new": "Add a break point on the line by clicking the map. Stop drawing by double clicking or by clicking 'Finish drawing'.",
         "edit": "Edit the line by clicking and dragging its break points.",
-        "save": "Save shape"
+        "save": "Save shape",
+        "noResult": "0 m"
       },
       "area": {
         "tooltip": "Add area",
         "new": "Add break points to your area polygon by clicking the map. Stop drawing by double clicking or by clicking 'Finish drawing'.",
         "edit": "Edit the shape of the area by clicking and dragging the break points on its edge line.",
-        "save": "Save shape"
+        "save": "Save shape",
+        "noResult": "0 m²"
+      },
+      "circle": {
+          "tooltip": "Add circle",
+          "new": "Draw a circle by clicking the map and dragging. Stop drawing by releasing the mouse button.",
+          "edit": "Edit the shape of the circle by clicking and dragging the break points on its edge line.",
+          "save": "Save shape",
+      },
+      "ellipse": {
+          "tooltip": "Add ellipse",
+          "new": "Draw an ellipse by clicking the map and dragging. Stop drawing by releasing the mouse button.",
+          "edit": "Edit the shape of the ellipse by clicking and dragging the break points on its edge line.",
+          "save": "Save shape",
       }
     },
     "buttons": {
@@ -37,6 +51,7 @@ Oskari.registerLocalization({
       "cancel": "Cancel",
       "finish": "Finish drawing",
       "save": "Save",
+      "deleteButton": "Delete",
       "movePlaces": "Move places and delete",
       "deleteCategory": "Delete",
       "deleteCategoryAndPlaces": "Delete category and places",
@@ -45,19 +60,35 @@ Oskari.registerLocalization({
     },
     "placeform": {
       "title": "Place data",
-      "tooltip": "A place put on the map will be saved in My places. Give the place a name and describe it. You can select the map layer where the place will be stored, or choose a new map layer by selecting 'New layer' in the map layer drop-down menu.",
+      "tooltip": "A place put on the map will be saved in My places. Give the place a name and describe it.",
       "placename": {
-        "placeholder": "Give the place a name"
+        "placeholder": "Give the place a name",
+        "label": "Place name"
       },
       "placelink": {
         "placeholder": "Give a URL"
       },
       "placedesc": {
-        "placeholder": "Describe the place"
+        "placeholder": "Describe the place",
+        "label": "Place description"
       },
       "category": {
         "label": "Map layer",
         "new": "New layer..."
+      },
+      "placeheight": {
+    	  "placeholder": "Give a height or depth",
+        "label": "Place height / depth in meters"
+      },
+      "placewidth": {
+        "placeholder": "Give a width",
+        "label": "Place width (turns feature to area)"
+      },
+      "area": {
+        "label": "Area (m2)"
+      },
+      "length": {
+          "label": "Length (m)"
       }
     },
     "categoryform": {
@@ -95,6 +126,14 @@ Oskari.registerLocalization({
         "title": "The place has been saved",
         "message": "The place can be found in the My data menu"
       },
+      "placeDelete": {
+    	  "title": "Delete place",
+    	  "confirm": "Do you want to delete this place?",
+    	  "btnDelete": "Delete",
+    	  "btnCancel": "Cancel",
+    	  "success": "The place has been deleted.",
+    	  "cancel": "Cancel"
+      },
       "categorySaved": {
         "title": "Map layer saved",
         "message": "Map layer edits saved"
@@ -117,6 +156,7 @@ Oskari.registerLocalization({
         "addCategory": "The map layer could not be saved. The place has not been saved.",
         "editCategory": "The map layer could not be saved.",
         "savePlace": "The place could not be saved.",
+        "deletePlace": "The place could not be deleted. Please try again later.",
         "title": "Error!",
         "generic": "System error. Please try again later.",
         "deleteCategory": "Error occurred while deleting!",
@@ -136,7 +176,10 @@ Oskari.registerLocalization({
       "lineColor": "Wrong line colour.",
       "areaLineSize": "The area edge size does not fit the limits (0-50).",
       "areaLineColor": "Wrong area edge line colour.",
-      "areaFillColor": "Wrong fill-in colour."
+      "areaFillColor": "Wrong fill-in colour.",
+      "heightNotANumber": "The height/depth value must be a number.",
+      "lengthNotANumber": "The length value must be a number.",
+      "widthNotANumber": "The width value must be a positive number."
     }
   }
 });

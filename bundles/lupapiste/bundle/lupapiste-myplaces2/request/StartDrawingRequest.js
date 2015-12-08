@@ -33,7 +33,9 @@ function(config) {
         point : 'point',
         line : 'line',
         area : 'area',
-        box : 'box'
+        box : 'box',
+        circle : 'circle',
+        ellipse : 'ellipse'
     },
 
     getDrawMode : function() {

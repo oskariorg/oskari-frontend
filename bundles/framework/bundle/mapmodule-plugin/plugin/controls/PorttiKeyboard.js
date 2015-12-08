@@ -8,7 +8,7 @@
  */
 
 OpenLayers.Control.PorttiKeyboard = OpenLayers.Class(OpenLayers.Control, {
-    autoActivate: true,
+    autoActivate : false,
     slideFactor: 50, // 75
     core: null,
     setup: function (mapmodule) {

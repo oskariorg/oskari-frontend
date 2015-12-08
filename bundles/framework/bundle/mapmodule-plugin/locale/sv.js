@@ -21,7 +21,8 @@ Oskari.registerLocalization({
     "plugin": {
       "LogoPlugin": {
         "terms": "Användningsvillkor",
-        "dataSources": "Datakällor",
+        "termsLink": "https://www.lupapiste.fi/kayttoehdot?lang=sv",
+        "mapLinkBase": "http://www.paikkatietoikkuna.fi/web/sv/kartfonstret?",
         "layersHeader": "Kartlager",
         "indicatorsHeader": "Indikator"
       },

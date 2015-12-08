@@ -20,7 +20,9 @@ Oskari.registerLocalization({
     },
     "plugin": {
       "LogoPlugin": {
-        "terms": "Nutzungsbedingungen"
+        "terms": "Nutzungsbedingungen",
+        "termsLink": "https://www.lupapiste.fi/kayttoehdot",
+        "mapLinkBase": "http://www.paikkatietoikkuna.fi/web/en/map-window?"
       },
        "DataSourcePlugin": {
         "link": "Datenquelle",

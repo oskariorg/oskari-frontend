@@ -968,7 +968,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
             for (i = 0; i < layerList.length; i++) {
                 layer = layerList[i];
-                if (layer.getId() + '' === id + '') {
+                if (layer && layer.getId() + '' === id + '') {
                     return layer;
                 }
 
@@ -976,11 +976,13 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             // didnt find layer from base level, try sublayers
             for (i = 0; i < layerList.length; i++) {
                 layer = layerList[i];
+            if(layer) {
                 // recurse to sublayers
                 subLayers = layer.getSubLayers();
                 subLayer = this.findMapLayer(id, subLayers);
                 if (subLayer !== null && subLayer !== undefined) {
                     return subLayer;
+              }
                 }
             }
 

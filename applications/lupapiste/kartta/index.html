@@ -1,80 +1,26 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>lupapiste demo</title>
-<!-- ############# css ################# -->
 
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js">
+<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.7.2.min.js">
 </script>
 
-<link rel="stylesheet" type="text/css" href="../css/icons.css" />
-<style type="text/css">
-@media screen {
-  body {
-    margin : 0;
-    padding: 0;
-  }
-  #mapdiv {
-  }
-  #contentMap {
-    float:left;
-  }
-  
-
-  #eventMessages {
-  	float: left;
-  }
-  #formi {
-  	float: left;
-  }
-}
-</style>
-<!-- ############# /css ################# -->
 </head>
 <body>
 
-<div id="contentMap">
-<div id="mapdiv"> </div>
-</div>
-
-
 <div id="eventMessages"> </div>
 <div id="formi">
-<input type="text" id="inputx" value="517620" />
-<input type="text" id="inputy" value="6874042"/>
+
 <div>
-<input type="button" id="button1" value="Lisaa markkeri"/>
-<input type="button" id="button2" value="Lisaa markkereita"/>
-<input type="button" id="piirra" value="osoita piste"/>
-Tyhjenn&auml; ennen lis&auml;yst&auml;: <input type="checkbox" id="checkbox1" /><br/>
-<input type="button" id="tyhjenna" value="poista pisteet"/>
+<input type="button" id="avaa" value="Open map (debug)"/>
+<input type="button" id="full" value="Open fullmap"/>
+Municipality: <input type="text" id="municipality" value="529"/>
 </div>
 </div>
 
 <!-- ############# Javascript ################# -->
-
-<!--  OSKARI -->
-<script type="text/javascript"
-	src="../../../bundles/bundle.js">
-</script>
-	
-<!--  OPENLAYERS -->
-<script type="text/javascript" 
-	src="../../../packages/openlayers/startup.js">
-</script>
-
-<!--  LOG4JS -->
-<script type="text/javascript" 
-	src="../../../libraries/log4js/log4js.js">
-</script>
-
-<!--  RIGHTJS (flyout)-->
-<script type="text/javascript" 
-	src="../../../libraries/rightjs/javascripts/right.js">
-</script>
-<script type="text/javascript" 
-	src="../../../libraries/rightjs/javascripts/right/slider.js">
-</script>
 
 <script type="text/javascript" src="hub.js">
 </script>

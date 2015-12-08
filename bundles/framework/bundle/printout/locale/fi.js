@@ -87,11 +87,6 @@ Oskari.registerLocalization({
             },
             "content" : {
                 "options" : [{
-                        "id" : "pageLogo",
-                        "label" : "Näytä paikkatietoikkunan logo",
-                        "tooltip" : "Voit halutessasi piilottaa logon",
-                        "checked" : "checked"
-                    },{
                         "id" : "pageScale",
                         "label" : "Näytä mittakaava",
                         "tooltip" : "Voit halutessasi lisätä karttaan mittakaavan",

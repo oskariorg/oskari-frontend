@@ -85,21 +85,25 @@ function(url, uuid, sandbox, defaultName, pInstance) {
      */
     _createDefaultCategory : function() {
     	var me = this;
-        var defaultCategory = Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.model.MyPlacesCategory');
-        defaultCategory.setName(me.defaultCategoryName);
-        if(!me.defaultCategoryName) {
-            // should not happen
-            defaultCategory.setName('My map layer');
-        }
-        defaultCategory.setLineWidth(2);
-        defaultCategory.setLineColor('cc9900');
-        defaultCategory.setAreaLineWidth(2);
-        defaultCategory.setAreaLineColor('cc9900');
-        defaultCategory.setAreaFillColor('ffdc00');
-        defaultCategory.setDotColor('cc9900');
-        defaultCategory.setDotSize(4);
-        defaultCategory.setDefault(true);
+//        var defaultCategory = Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.model.MyPlacesCategory');
+//        defaultCategory.setName(me.defaultCategoryName);
+//        if(!me.defaultCategoryName) {
+//            // should not happen
+//            defaultCategory.setName('My map layer');
+//        }
+//        defaultCategory.setLineWidth(2);
+//        defaultCategory.setLineColor('cc9900');
+//        defaultCategory.setAreaLineWidth(2);
+//        defaultCategory.setAreaLineColor('cc9900');
+//        defaultCategory.setAreaFillColor('ffdc00');
+//        defaultCategory.setDotColor('cc9900');
+//        defaultCategory.setDotSize(4);
+//        defaultCategory.setDefault(true);
         
+	   	var defaultCategory = Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.model.MyPlacesCategory');
+	   	defaultCategory.setDefault(true);
+	   	defaultCategory.setName("Lupapiste");
+	        
         var defaultCategoryCreationCallback = function() {
             // called if new user -> just created a default category for user
     
@@ -201,7 +205,7 @@ function(url, uuid, sandbox, defaultName, pInstance) {
      */
     parseDate : function(dateStr) {
 
-        if (!dateStr && dateStr.length < 10) {
+        if (!dateStr || dateStr.length < 10) {
             return [];
         }
         var year = dateStr.substring(0, 4);
@@ -385,6 +389,16 @@ function(url, uuid, sandbox, defaultName, pInstance) {
      * @param {Oskari.lupapiste.bundle.myplaces2.model.MyPlace} myplaceModel place to add
      */
     _addMyPlace : function(myplaceModel) {
+    	if(!myplaceModel.getId()) {
+    		var id = 0;
+    		for(var i = 0; i < this._placesList.length; ++i) {
+    			if(this._placesList[i].getId() > id) {
+    				id = this._placesList[i].getId();
+    			}
+    		}
+    		myplaceModel.setId(id+1);
+    	}
+    	
         this._placesList.push(myplaceModel);
     },
     /**
@@ -427,7 +441,11 @@ function(url, uuid, sandbox, defaultName, pInstance) {
         };
 
         this.wfstStore.deleteMyPlaces([placeId], callBackWrapper);
-
+        
+        var sandbox = Oskari.$('sandbox');
+        var eventBuilder = sandbox.getEventBuilder('Lupapiste.PlaceSaved');
+        var event = eventBuilder(me.getAllMyPlaces());
+        sandbox.notifyAll(event);
     },
 
     /**
@@ -540,6 +558,9 @@ function(url, uuid, sandbox, defaultName, pInstance) {
                     myplace.setCategoryID(myplaceModel.getCategoryID());
                     myplace.setGeometry(myplaceModel.getGeometry());
                     myplace.setUpdateDate(list[0].getUpdateDate());
+                    myplace.setArea(myplaceModel.getArea());
+                    myplace.setHeight(myplaceModel.getHeight());
+                    myplace.setLength(myplaceModel.getLength)
                 } else {
                     // couldn't load it -> failed to save it
                     success = false;
@@ -550,8 +571,36 @@ function(url, uuid, sandbox, defaultName, pInstance) {
         };
 
         this.wfstStore.commitMyPlaces([myplaceModel], callBackWrapper);
+        
+        var sandbox = Oskari.$('sandbox');
+        var eventBuilder = sandbox.getEventBuilder('Lupapiste.PlaceSaved');
+        var event = eventBuilder(me.getAllMyPlaces());
+        sandbox.notifyAll(event);
     },
+    saveMyPlaces: function (places, cb) {
+        var me = this;
 
+        var callback = function (success, list) {
+            if (success) {
+                for (ix in list) {
+                    var item = list[ix];
+                    me._addMyPlace(item);
+                }
+            }
+
+            me._notifyDataChanged();
+
+            if (_.isFunction(cb))
+                cb(success, list);            
+        };
+
+        this.wfstStore.commitMyPlaces(places, callback);
+
+        var sandbox = this._sandbox;
+        var eventBuilder = sandbox.getEventBuilder('Lupapiste.PlaceSaved');
+        var event = eventBuilder(me.getAllMyPlaces());
+        sandbox.notifyAll(event);
+    },
     /**
      * @method getAllMyPlaces
      * Returns all users my places
@@ -577,7 +626,7 @@ function(url, uuid, sandbox, defaultName, pInstance) {
         }
         var me = this;
         var ajaxUrl = this._sandbox.getAjaxUrl();
-        jQuery.ajax({
+/*        jQuery.ajax({
             type : "GET",
             dataType : 'json',
             beforeSend : function(x) {
@@ -605,7 +654,7 @@ function(url, uuid, sandbox, defaultName, pInstance) {
                     callback(false);
                 }
             }
-        });
+        });*/
     }
 }, {
     'protocol' : ['Oskari.mapframework.service.Service']

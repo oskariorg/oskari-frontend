@@ -56,7 +56,7 @@ jQuery(document).ready(function() {
 	//event demot
 	jQuery("#button1").click(function() {
 		//jQuery("#eventMessages").trigger("center",[parseInt(jQuery("#inputx").val(),10), parseInt(jQuery("#inputy").val(),10)]);
-		hub.send("documents-map", {
+		hub.send("oskari-center-map", {
 			clear : jQuery("#checkbox1").is(":checked"),
 			data : [{
 				id : new Date().getTime(),
@@ -75,7 +75,7 @@ jQuery(document).ready(function() {
 	});
 	jQuery("#button2").click(function() {
 		//jQuery("#eventMessages").trigger("center",[parseInt(jQuery("#inputx").val(),10), parseInt(jQuery("#inputy").val(),10)]);
-		hub.send("documents-map", {
+		hub.send("oskari-center-map", {
 			clear : jQuery("#checkbox1").is(":checked"),
 			data : [{
 				id : "11",
@@ -149,7 +149,7 @@ jQuery(document).ready(function() {
 		hub.send("map-clear-request");
 		return false;
 	});
-	hub.subscribe("map-initialized", function(e) {
+	hub.subscribe("oskari-map-initialized", function(e) {
 		jQuery("#eventMessages").html("map-initilized<br/>" + jQuery("#eventMessages").html())
 	});
 	hub.subscribe("inforequest-map-click", function(e) {

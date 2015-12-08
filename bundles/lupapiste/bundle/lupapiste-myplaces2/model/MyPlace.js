@@ -14,6 +14,9 @@ function() {
     this.link = undefined;
     this.createDate = undefined;
     this.updateDate = undefined; 
+    this.area = undefined;
+    this.height = undefined;
+    this.length = undefined;
 }, {
     /**
      * @method setId 
@@ -23,12 +26,27 @@ function() {
         this.id = value;
     },
     /**
-     * @method getId 
+     * @method getHeight
      * @return {Number}
      */
     getId : function() {
         return this.id;
+    },    
+    /**
+     * @method setHeight 
+     * @param {Number} value
+     */
+    setHeight : function(value) {
+    	this.height = value;
+    },    
+    /**
+     * @method getId 
+     * @return {Number}
+     */
+    getHeight : function(value) {
+    	return this.height;
     },
+    
     /**
      * @method setName 
      * @param {String} value
@@ -150,5 +168,27 @@ function() {
      */
     getUUID : function() {
         return this.uuid;
-    }
-});
+    },
+    
+    /**
+     * @method setLength 
+     * @param {Number} value
+     */
+    setLength : function(value) {
+    	this.length = value;
+    },    
+    /**
+     * @method getLength 
+     * @return {Number}
+     */
+    getLength : function(value) {
+    	return this.length;
+    },
+    
+    setArea : function(value) {
+      this.area = value;
+    },
+    getArea : function()
+ {
+      return this.area;
+ }});

@@ -21,19 +21,37 @@ function(instance) {
             '<div class="field">' + 
                 '<div class="help icon-info" ' + 
                 'title="' + loc.tooltip + '"></div>' + 
+                loc.placename.label + '<br/>' +
                 '<input type="text" name="placename" placeholder="' + loc.placename.placeholder + '"/>' +
             '</div>' +
-            '<div class="field">' + 
+            '<div class="field" style="visibility:hidden;display:none;">' + 
                 '<input type="text" name="placelink" placeholder="' + loc.placelink.placeholder + '"/>' +
             '</div>' +
-            '<div class="field">' +  
+            '<div class="field">' +
+                loc.placedesc.label + '<br/>' +
                 '<textarea name="placedesc" placeholder="' + loc.placedesc.placeholder + '">' +
                 '</textarea>' +
             '</div>' +
-            '<div class="field">' + 
+            '<div class="field" style="visibility:hidden;display:none;">' + 
                 '<label for="category">' + loc.category.label + '</label><br clear="all" />' +
                 '<select name="category" autofocus>' +
                 '</select>' +
+            '</div>' +
+            '<div class="field">' +
+              loc.placeheight.label + '<br/>' +
+              '<input type="text" name="placeheight" placeholder="' + loc.placeheight.placeholder + '"/>' +
+            '</div>' +
+            '<div class="field" style="display:none;">' +
+              loc.placewidth.label + '<br/>' +
+              '<input type="text" name="placewidth" placeholder="' + loc.placewidth.placeholder + '"/>' +
+            '</div>' + 
+            '<div class="field">' +
+                loc.area.label + '<br/>' +
+                '<input type="text" name="area" placeholder="" />' +  
+            '</div>' +
+            '<div class="field">' +
+            	loc.length.label + '<br/>' +
+            	'<input type="text" name="length" placeholder="" />' +  
             '</div>' +
         '</div>');
     this.templateOption = jQuery('<option></option>');
@@ -46,6 +64,8 @@ function(instance) {
      */
     getForm : function(categories) {
         var ui = this.template.clone();
+        ui.find('textarea[name=placedesc]').val('');
+        ui.find('textarea[name=placedesc]').text('');
         var loc = this.instance.getLocalization('placeform');
         // TODO: if a place is given for editing -> populate fields here
         // populate category options
@@ -61,7 +81,7 @@ function(instance) {
                 option.append(cat.getName());
                 option.attr('value', cat.getId());
                 // find another way if we want to keep selection between places
-                if(this.initialValues) {
+                if(this.initialValues && this.initialValues.place && this.initialValues.place.category) {
                     if(this.initialValues.place.category == cat.getId()) {
                         option.attr('selected', 'selected');
                     }
@@ -78,6 +98,9 @@ function(instance) {
             ui.find('input[name=placename]').attr('value', this.initialValues.place.name);
             ui.find('input[name=placelink]').attr('value', this.initialValues.place.link);
             ui.find('textarea[name=placedesc]').append(this.initialValues.place.desc);
+            ui.find('input[name=area]').attr('value', this.initialValues.place.area);
+            ui.find('input[name=length]').attr('value', this.initialValues.place.length);
+            ui.find('input[name=placeheight]').attr('value', this.initialValues.place.height);
         }
         return ui;
     },
@@ -104,12 +127,20 @@ function(instance) {
                 placeLink = placeLink.replace(">", '');
             }
             var placeDesc = onScreenForm.find('textarea[name=placedesc]').val();
+            var placeHeight = onScreenForm.find('input[name=placeheight]').val();
             var categorySelection = onScreenForm.find('select[name=category]').val();
+            var area = onScreenForm.find('input[name=area]').val();
+            var length = onScreenForm.find('input[name=length]').val();
+            var width = onScreenForm.find('input[name=placewidth]').val();
             values.place = {
                 name : placeName,
                 link : placeLink,
                 desc : placeDesc,
-                category : categorySelection
+                category : categorySelection,
+                area: area,
+                length: length,
+                height : placeHeight,
+                width : width
             };
             if(this.placeId) {
                 values.place.id = this.placeId;
@@ -137,7 +168,11 @@ function(instance) {
             onScreenForm.find('input[name=placelink]').val(data.place.link);
             onScreenForm.find('textarea[name=placedesc]').val(data.place.desc);
             onScreenForm.find('select[name=category]').val(data.place.category);
+            onScreenForm.find('input[name=area]').val(data.place.area);
+            onScreenForm.find('input[name=length]').val(data.place.length);
+            onScreenForm.find('input[name=placeHeight]').val(data.place.height);
         }
+
         
         this.initialValues = data;
     },

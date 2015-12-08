@@ -50,6 +50,10 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         }
 
 
+        if(pConfig['text']) {
+          button.append(pConfig['tooltip']);
+        }
+        
         // handling for state setting if the button was not yet on toolbar on setState
         if (me.selectedButton) {
             if (me.selectedButton.id === pId &&

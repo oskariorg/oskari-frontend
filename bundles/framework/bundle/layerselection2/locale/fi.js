@@ -2,7 +2,7 @@ Oskari.registerLocalization({
   "lang": "fi",
   "key": "LayerSelection",
   "value": {
-    "title": "Valitut tasot",
+    "title": "Karttatasot",
     "desc": "",
     "layer": {
       "style": "Tyyli",

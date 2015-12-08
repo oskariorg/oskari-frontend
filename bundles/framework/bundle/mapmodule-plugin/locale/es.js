@@ -24,7 +24,9 @@ Oskari.registerLocalization(
                 "terms": "Términos de uso",
                 "dataSources": "NOT TRANSLATED",
                 "layersHeader": "NOT TRANSLATED",
-                "indicatorsHeader": "NOT TRANSLATED"
+                "indicatorsHeader": "NOT TRANSLATED",
+        	"termsLink": "https://www.lupapiste.fi/kayttoehdot",
+        	"mapLinkBase": "http://www.paikkatietoikkuna.fi/web/en/map-window?"
             },
             "DataSourcePlugin": {
                 "link": "Fuente de datos",

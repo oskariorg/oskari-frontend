@@ -157,19 +157,19 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
 
             var sandboxName = (conf ? conf.sandbox : null) || 'sandbox';
             Oskari.setSandbox(sandboxName, sandbox);
-            jQuery.ajax({
-                type: 'POST',
-                url: conf.globalMapAjaxUrl + 'action_route=GetSupportedLocales',
-                timestamp: new Date().getTime(),
-
-                success: function (data) {
-                    Oskari.setSupportedLocales(data.supportedLocales);
-                    //console.log(blocale.getSupportedLocales());
-                },
-                error: function () {
-                    // TODO add error handling
-                }
-            });
+//            jQuery.ajax({
+//                type: 'POST',
+//                url: conf.globalMapAjaxUrl + 'action_route=GetSupportedLocales',
+//                timestamp: new Date().getTime(),
+//
+//                success: function (data) {
+//                    Oskari.setSupportedLocales(data.supportedLocales);
+//                    //console.log(blocale.getSupportedLocales());
+//                },
+//                error: function () {
+//                    // TODO add error handling
+//                }
+//            });
 
             // take map div ID from config if available
             if (conf) {
