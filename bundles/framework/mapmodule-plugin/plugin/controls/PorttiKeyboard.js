@@ -69,12 +69,12 @@ OpenLayers.Control.PorttiKeyboard = OpenLayers.Class(OpenLayers.Control, {
         case 35:
             // End. Same in all browsers.
             var size = this.mapmodule.getSize();
-            this.panMapByPixels(0.75 * size.width, 0);
+            this.mapmodule.panMapByPixels(0.75 * size.width, 0);
             break;
         case 36:
             // Home. Same in all browsers.
             var size = this.mapmodule.getSize();
-            this.panMapByPixels(-0.75 * size.width, 0);
+            this.mapmodule.panMapByPixels(-0.75 * size.width, 0);
             break;
         case 43:
             // +/= (ASCII), keypad + (ASCII, Opera)
