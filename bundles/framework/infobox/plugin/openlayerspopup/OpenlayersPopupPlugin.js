@@ -370,8 +370,8 @@ Oskari.clazz.define(
                 found,
                 notSameData = [];
 
-            for (j = 0, nLen = newData.length; j < nLen; j += 1) {            
-                found = false;                
+            for (j = 0, nLen = newData.length; j < nLen; j += 1) {
+                found = false;
                 for (i = 0, oLen = oldData.length; i < oLen; i += 1) {
                     if(newData[j].html === oldData[i].html && newData[j].layerId === oldData[i].layerId){
                         found = true;

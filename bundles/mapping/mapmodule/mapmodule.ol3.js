@@ -322,7 +322,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 this.notifyMoveEnd();
             }
         },
-        
+
         /**
          * @method zoomTo
          * Sets the zoom level to given value
@@ -331,7 +331,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         zoomTo: function (zoomLevel) {
             this.setZoomLevel(zoomLevel);
         },
-        
+
         /**
          * @method panMapByPixels
          * Pans the map by given amount of pixels.
