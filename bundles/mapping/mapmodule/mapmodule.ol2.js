@@ -75,18 +75,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var lonlat = new OpenLayers.LonLat(0, 0),
                 mapExtent = new OpenLayers.Bounds(0, 0, 10000000, 10000000);
             // FIXME use some cleaner check
-            if (this._options !== null &&
-                this._options !== undefined &&
-                this._options.maxExtent !== null &&
-                this._options.maxExtent !== undefined &&
-                this._options.maxExtent.left !== null &&
-                this._options.maxExtent.left !== undefined &&
-                this._options.maxExtent.bottom !== null &&
-                this._options.maxExtent.bottom !== undefined &&
-                this._options.maxExtent.right !== null &&
-                this._options.maxExtent.right !== undefined &&
-                this._options.maxExtent.top !== null &&
-                this._options.maxExtent.top !== undefined) {
+            var extent = this._maxExtent;
+            if (extent.left !== null && extent.left !== undefined &&
+                extent.bottom !== null && extent.bottom !== undefined &&
+                extent.right !== null && extent.right !== undefined &&
+                extent.top !== null && extent.top !== undefined) {
                 mapExtent = new OpenLayers.Bounds(this._options.maxExtent.left, this._options.maxExtent.bottom, this._options.maxExtent.right, this._options.maxExtent.top);
             }
             var map = new OpenLayers.Map({
@@ -148,6 +141,16 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             this.getMap().render(this.getMapElementId());
             return true;
         },
+
+
+
+
+
+
+
+
+
+
         _getMapCenter: function () {
             return this._map.getCenter();
         },
@@ -160,32 +163,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             return this._map.getScale();
         },
 
-/* Check if the next functions are necessary. Do they work?
-------------------------------------------------------------------> */
-        /**
-         * @method getMapViewPortDiv
-         * Returns a reference to the map viewport div for setting correct z-ordering of divs
-         * @return {HTMLDivElement}
-         */
-        getMapViewPortDiv: function () {
-            return this._map.viewPortDiv;
-        },
-
-        /**
-         * @method getMapLayersContainerDiv
-         * Returns a reference to the div containing the map layers for setting correct z-ordering of divs
-         * @return {HTMLDivElement}
-         */
-        getMapLayersContainerDiv: function () {
-            return this._map.layerContainerDiv;
-        },
-
-        _getMapLayersByName: function (layerName) {
-            return this._map.getLayersByName(layerName);
-        },
-
-
-/*<--------------------------------------------------------------- */
         getPixelFromCoordinate : function(lonlat) {
             lonlat = this.normalizeLonLat(lonlat);
             var px = this._map.getViewPortPxFromLonLat(new OpenLayers.LonLat(lonlat.lon, lonlat.lat));
@@ -193,17 +170,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 x : px.x,
                 y : px.y
             };
-        },
-
-        /**
-         * @method getMaxZoomLevel
-         * Gets map max zoom level.
-         *
-         * @return {Integer} map max zoom level
-        */
-        getMaxZoomLevel: function(){
-            // getNumZoomLevels returns OL map resolutions length, so need decreased by one (this return max OL zoom)
-            return this._map.getNumZoomLevels() - 1;
         },
 
         /**

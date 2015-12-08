@@ -443,7 +443,8 @@ Oskari.clazz.define(
         },
 
         _adaptPopupSize: function (olPopupId, isOld) {
-            var viewport = jQuery(this.getMapModule().getMapViewPortDiv()),
+            //viewport = jQuery(this.getMapModule().getMapViewPortDiv()),
+            var mapVO = this.getMapModule().getSandbox().getMap(),
                 popup = jQuery('#' + olPopupId),
                 left = parseFloat(popup.css('left'));
             // popup needs to move 10 pixels to the right
@@ -457,8 +458,8 @@ Oskari.clazz.define(
                 'margin-left': '-10px'
             });
             var header = popup.find('.popupHeader').css('width', '100%'),
-                maxWidth = viewport.width() * 0.7,
-                maxHeight = viewport.height() * 0.7,
+                maxWidth = mapVO.getWidth() * 0.7,
+                maxHeight = mapVO.getHeight() * 0.7,
                 content = popup.find('.popupContent').css({
                     'margin-left': '0',
                     'padding': '5px 20px 5px 20px',

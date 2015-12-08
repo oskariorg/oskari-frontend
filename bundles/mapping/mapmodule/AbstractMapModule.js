@@ -45,6 +45,7 @@ Oskari.clazz.define(
         // FIXME: use imageUrl || '/Oskari/bundles';
         // requires db update since currently uses /Oskari/resources
         me._imageUrl = '/Oskari/bundles';
+        // defaults
         me._options = {
             resolutions: [2000, 1000, 500, 200, 100, 50, 20, 10, 4, 2, 1, 0.5, 0.25],
             srsName : 'EPSG:3067',
@@ -214,6 +215,19 @@ Oskari.clazz.define(
                 this.afterRearrangeSelectedMapLayerEvent(event);
             }
         },
+/** SHARED FUNCTIONS */
+
+        /**
+         * @method getMaxZoomLevel
+         * Gets map max zoom level.
+         *
+         * @return {Integer} map max zoom level
+        */
+        getMaxZoomLevel: function(){
+            // getNumZoomLevels returns OL map resolutions length, so need decreased by one (this return max OL zoom)
+            return this.getResolutionArray().length - 1;
+        },
+
         /**
          * Returns a reference to the map implementation
          * @return {[type]} [description]
@@ -232,14 +246,7 @@ Oskari.clazz.define(
             }
             return mapDiv;
         },
-
-        /**
-         * @method getMapElDom
-         * Get DOM map element
-         */
-        getMapElDom: function () {
-            return this.getMapEl().get(0);
-        },
+/** /SHARED FUNCTIONS */
 
         /**
          * @method getImageUrl
