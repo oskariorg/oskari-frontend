@@ -1589,12 +1589,10 @@ Oskari = (function () {
             var importParentElement = document.head || document.body,
                 linkElement;
 
-            if (!_isPreloaded()) {
-                linkElement = document.createElement('link');
-                linkElement.rel = rel;
-                linkElement.href = href;
-                importParentElement.appendChild(linkElement);
-            }
+            linkElement = document.createElement('link');
+            linkElement.rel = rel;
+            linkElement.href = href;
+            importParentElement.appendChild(linkElement);
         },
 
         /**
@@ -1861,7 +1859,7 @@ Oskari = (function () {
          */
         _feedLinkLoader: function (biid, bundlePath, srcFiles) {
             var me = this;
-            if (srcFiles.links) {
+            if (!_isPreloaded() && srcFiles.links) {
                 srcFiles.links.forEach(function (src) {
                     var href = _buildPathForLoaderMode(src.href, bundlePath);
                     me._loadLink(src.rel, href);
@@ -1991,6 +1989,28 @@ Oskari = (function () {
                     );
             }
 
+            srcFiles = {
+                    count: 0,
+                    loaded: 0,
+                    files: [],
+                    css: {},
+                    links: []
+                };
+
+            srcs = me.sources[biid];
+            bundlePath = bundleDefinitionState.bundlePath;
+            me._handleSourceFiles(srcFiles, bundlePath, srcs);
+
+            if (_isPreloaded() && biid === "statsgrid2") {
+                // This is only used for the vulcanized Polymer bundles.
+                // In a perfect world we would get srcFiles.vulcanizedHtml information from packages/.../bundle.js
+                // but this is no such a world. So, for now, this is hardcoded here.
+                // me._loadLink(srcFiles.vulcanizedHtml.rel, srcFiles.vulcanizedHtml.href);
+                // From bundle.js:
+                //   "rel": "import",
+                //   "href": "/Oskari/bundles/statistics/statsgrid2/vulcanized.html"
+                me._loadLink("import", "/Oskari/bundles/statistics/statsgrid2/vulcanized.html");
+            }
             if (bundleDefinitionState.state !== 1) {
                 me.log('Pending DEFINITION at sources for ' + biid + ' to ' +
                     bundleDefinitionState.state + ' -> postponed'
@@ -1999,14 +2019,6 @@ Oskari = (function () {
             }
 
             me.log('STARTING load for sources ' + biid);
-
-            srcFiles = {
-                count: 0,
-                loaded: 0,
-                files: [],
-                css: {},
-                links: []
-            };
 
             callback = function () {
                 me.log('Finished loading ' + srcFiles.count + ' files for ' +
@@ -2018,11 +2030,6 @@ Oskari = (function () {
 
                 me.postChange(null, null, 'bundle_sources_loaded');
             };
-            bundlePath = bundleDefinitionState.bundlePath;
-
-            srcs = me.sources[biid];
-
-            me._handleSourceFiles(srcFiles, bundlePath, srcs);
 
             me._feedCSSLoader(
                 callback,
