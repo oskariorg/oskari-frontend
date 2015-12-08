@@ -206,6 +206,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             // TODO: we have isValidLonLat(); maybe use it here
             lonlat = this.normalizeLonLat(lonlat);
             this._map.getView().setCenter([lonlat.lon, lonlat.lat]);
+            if(zoom === null ||zoom === undefined) {
+                zoom = this.getMapZoom();
+            }
             this._map.getView().setZoom(zoom);
             this.updateDomain();
             if (suppressEnd !== true) {
@@ -243,7 +246,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
                 this._mapScales.push(scale);
             }
-
+        },
+        _updateSizeImpl : function() {
+            this.getMap().updateSize();
         },
 /* --------- /Impl specific - PRIVATE ----------------------------> */
 
@@ -334,27 +339,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 }
             }
             return -1;
-        },
-        _updateSizeImpl : function() {
-            this.getMap().updateSize();
-        },
-
-        updateSize: function() {
-            this._updateSizeImpl();
-            this.updateDomain();
-
-            var sandbox = this.getSandbox(),
-                mapVO = sandbox.getMap(),
-                width =  mapVO.getWidth(),
-                height = mapVO.getHeight();
-
-            // send as an event forward
-            if(width && height) {
-              var evt = sandbox.getEventBuilder(
-                  'MapSizeChangedEvent'
-              )(width, height);
-              sandbox.notifyAll(evt);
-            }
         },
 
         _addMapControlImpl: function(ctl) {

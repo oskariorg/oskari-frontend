@@ -453,6 +453,20 @@ Oskari.clazz.define(
               sandbox.notifyAll(evt);
             }
         },
+        /**
+         * Changes array to object
+         * @param  {Object | Number[]} lonlat [description]
+         * @return {Object}        [description]
+         */
+        normalizeLonLat : function(lonlat) {
+            if (_.isArray(lonlat)) {
+                return {
+                    lon : lonlat[0],
+                    lat : lonlat[1]
+                };
+            }
+            return lonlat;
+        },
 /* --------------- /SHARED FUNCTIONS --------------- */
 
 /* Impl specific - found in ol2 AND ol3 modules
@@ -1600,41 +1614,6 @@ Oskari.clazz.define(
 
         /* IMPL specific */
 
-        _crs2MapImpl: Oskari.AbstractFunc('_crs2MapImpl'),
-        _map2CrsImpl: Oskari.AbstractFunc('_map2CrsImpl'),
-
-        updateSize: Oskari.AbstractFunc('updateSize'),
-
-        /**
-         * @method moveMapToLanLot
-         * Moves the map to the given position. Alias for panMapToLonLat.
-         */
-        moveMapToLanLot: function () {
-            return this.panMapToLonLat.apply(this, arguments);
-        },
-        /**
-         * Changes array to object
-         * @param  {Object | Number[]} lonlat [description]
-         * @return {Object}        [description]
-         */
-        normalizeLonLat : function(lonlat) {
-            if (_.isArray(lonlat)) {
-                return {
-                    lon : lonlat[0],
-                    lat : lonlat[1]
-                };
-            }
-            return lonlat;
-        },
-        /**
-         * @method panMapToLonLat
-         * Pans the map to the given position.
-         * @param {OpenLayers.LonLat} lonlat coordinates to pan the map to
-         * @param {Boolean} suppressEnd true to NOT send an event about the map move
-         *  (other components wont know that the map has moved, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         */
-        panMapToLonLat: Oskari.AbstractFunc('moveMapToLanLot'),
         /**
          * @method zoomToScale
          * Pans the map to the given position.

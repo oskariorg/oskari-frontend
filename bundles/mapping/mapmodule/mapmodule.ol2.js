@@ -150,17 +150,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var event = evtBuilder(lonlat, evt.xy.x, evt.xy.y);
             sandbox.notifyAll(event);
         },
-        /**
-         * @method panMapToLonLat
-         * Pans the map to the given position.
-         * @param {Object} lonlat object with lon and lat keys as coordinates to move the map to
-         * @param {Boolean} suppressEnd true to NOT send an event about the map move
-         *  (other components wont know that the map has moved, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         */
-        panMapToLonLat: function (lonlat, suppressEnd) {
-            this.centerMap(lonlat, this.getMapZoom(), suppressEnd);
-        },
 /*<------------- / OL2 specific ----------------------------------- */
 
 
@@ -230,6 +219,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         centerMap: function (lonlat, zoom, suppressEnd) {
             // TODO: we have isValidLonLat(); maybe use it here
             lonlat = this.normalizeLonLat(lonlat);
+            if(zoom === null ||zoom === undefined) {
+                zoom = this.getMapZoom();
+            }
             this._map.setCenter(new OpenLayers.LonLat(lonlat.lon, lonlat.lat), zoom, false);
             this.updateDomain();
             if (suppressEnd !== true) {
@@ -267,6 +259,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 calculatedScale = calculatedScale / 10000;
                 this._mapScales.push(calculatedScale);
             }
+        },
+        _updateSizeImpl : function() {
+            this.getMap().updateSize();
         },
 /* --------- /Impl specific - PRIVATE ----------------------------> */
 
@@ -404,15 +399,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 // do nothing if not valid
                 return;
             }
-            this.moveMapToLanLot(newCenter);
-
             // send note about map change
             if (suppressStart !== true) {
                 this.notifyStartMove();
             }
-            if (suppressEnd !== true) {
-                this.notifyMoveEnd();
-            }
+            this.centerMap(newCenter, this.getMapZoom(), suppressEnd);
+
         },
 
         /**
@@ -472,9 +464,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
             // if not in valid bounds, return original
             return this.getMapZoom();
-        },
-        _updateSizeImpl : function() {
-            this.getMap().updateSize();
         },
 
         /**
