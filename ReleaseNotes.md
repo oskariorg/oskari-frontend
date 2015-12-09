@@ -11,7 +11,7 @@ Popup not show anymore dublicate info.
 Renamed functions
 - _calculateScalesFromResolutions() removed. Use _calculateScalesImpl() instead.
 - _createMap() and _createMapImpl() removed. Use createMap() instead. Also the function no longer has side-effects and returns the created map implementation.
-- _addClickControl() removed. Use _setupMapEvents() instead.
+- _addClickControl() renamed _setupMapEvents().
 - _getMapCenter() removed. Use getMapCenter() instead.
 - _updateDomainImpl() removed. Use updateDomain() instead.
 - panMapToLonLat()/moveMapToLanLot() removed. Use centerMap() instead.
@@ -31,11 +31,17 @@ Unused functions removed:
   - getMapElDom()
   - centerMapByPixels()
   - moveMapByPixels()
+  - _setLayerImplIndex()
+  - _removeLayerImpl()
+  - _setLayerImplVisible()
+  - _setLayerImplOpacity()
+  - getLayerDefs()
+  - getLayers()
+  - getLayersByName()
 
 Added functions so internal references don't need to be called:
 - getMapElementId()
 - getCurrentExtent()
-
 
 ### mapping/mapmodule/plugin/vectorlayer
 

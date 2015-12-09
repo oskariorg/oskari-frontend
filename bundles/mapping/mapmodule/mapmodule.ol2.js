@@ -51,7 +51,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 isBaseLayer: true,
                 displayInLayerSwitcher: false
             });
-            this._map.addLayer(base);
+            this.getMap().addLayer(base);
 
             // TODO remove this whenever we're ready to add the containers when needed
             this._addMapControlPluginContainers();
@@ -67,13 +67,14 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          */
         createMap: function () {
             var me = this;
-            var sandbox = this._sandbox;
+            var sandbox = this.getSandbox();
             // this is done BEFORE enhancement writes the values to map domain
             // object... so we will move the map to correct location
             // by making a MapMoveRequest in application startup
             var lonlat = new OpenLayers.LonLat(0, 0);
             // Defaults set in AbstarctMapModule
-            var extent = new OpenLayers.Bounds(this._maxExtent.left, this._maxExtent.bottom, this._maxExtent.right, this._maxExtent.top);
+            var maxExt = this.getMaxExtent();
+            var extent = new OpenLayers.Bounds(maxExt.left, maxExt.bottom, maxExt.right, maxExt.top);
             var map = new OpenLayers.Map({
                 controls: [],
                 units: this._options.units, //'m',
@@ -145,7 +146,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         __sendMapClickEvent : function(evt) {
             var sandbox = this.getSandbox();
             /* may be this should dispatch to mapmodule */
-            var lonlat = this._map.getLonLatFromViewPortPx(evt.xy);
+            var lonlat = this.getMap().getLonLatFromViewPortPx(evt.xy);
             var evtBuilder = sandbox.getEventBuilder('MapClickedEvent');
             var event = evtBuilder(lonlat, evt.xy.x, evt.xy.y);
             sandbox.notifyAll(event);
@@ -156,18 +157,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 /* Impl specific - found in ol2 AND ol3 modules
 ------------------------------------------------------------------> */
 
-        addLayer: function(layerImpl) {
-            this.getMap().addLayer(layerImpl);
-        },
-        removeLayer : function(layerImpl) {
-            this.getMap().removeLayer(layerImpl);
-            if(typeof layerImpl.destroy === 'function') {
-                layerImpl.destroy();
-            }
-        },
         getPixelFromCoordinate : function(lonlat) {
             lonlat = this.normalizeLonLat(lonlat);
-            var px = this._map.getViewPortPxFromLonLat(new OpenLayers.LonLat(lonlat.lon, lonlat.lat));
+            var px = this.getMap().getViewPortPxFromLonLat(new OpenLayers.LonLat(lonlat.lon, lonlat.lat));
             return {
                 x : px.x,
                 y : px.y
@@ -183,7 +175,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         },
 
         getMapZoom: function () {
-            return this._map.getZoom();
+            return this.getMap().getZoom();
         },
         
         getSize: function() {
@@ -205,7 +197,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          *     wanting to notify at end of the chain for performance reasons or similar) (optional)
          */
         zoomToExtent: function (bounds, suppressStart, suppressEnd) {
-            this._map.zoomToExtent(bounds);
+            this.getMap().zoomToExtent(bounds);
             this.updateDomain();
             // send note about map change
             if (suppressStart !== true) {
@@ -231,7 +223,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             if(zoom === null ||zoom === undefined) {
                 zoom = this.getMapZoom();
             }
-            this._map.setCenter(new OpenLayers.LonLat(lonlat.lon, lonlat.lat), zoom, false);
+            this.getMap().setCenter(new OpenLayers.LonLat(lonlat.lon, lonlat.lat), zoom, false);
             this.updateDomain();
             if (suppressEnd !== true) {
                 this.notifyMoveEnd();
@@ -266,7 +258,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          */
         panMapByPixels: function (pX, pY, suppressStart, suppressEnd, isDrag) {
             // usually programmatically for gfi centering
-            this._map.pan(pX, pY, {
+            this.getMap().pan(pX, pY, {
                 dragging: (isDrag ? true : false),
                 animate: false
             });
@@ -304,23 +296,15 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 lat : transformed.lat
             };
         },
-        /**
-         * Brings map layer to top
-         * @method bringToTop
-         *
-         * @param {OpenLayers.Layer} layer The new topmost layer
-         * @param {Integer} buffer Add this buffer to z index. If it's undefined, using 1.
-         */
-        bringToTop: function(layer, buffer) {
-            if (!layer || !layer.getZIndex) {
-                return;
-            }
-            var layerZIndex = layer.getZIndex();
-            var zIndex = Math.max(this._map.Z_INDEX_BASE.Feature,layerZIndex);
-            buffer = buffer || 1;
 
-            layer.setZIndex(zIndex + buffer);
-            this.orderLayersByZIndex();
+        /**
+         * @method orderLayersByZIndex
+         * Orders layers by Z-indexes.
+         */
+        orderLayersByZIndex: function() {
+            this.getMap().layers.sort(function(a, b){
+                return a.getZIndex()-b.getZIndex();
+            });
         },
 /* --------- /Impl specific --------------------------------------> */
 
@@ -344,33 +328,80 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             this.getMap().updateSize();
         },
         _setZoomLevelImpl : function(newZoomLevel) {
-            this._map.zoomTo(newZoomLevel);
+            this.getMap().zoomTo(newZoomLevel);
         },
 /* --------- /Impl specific - PRIVATE ----------------------------> */
 
 
-        _addMapControlImpl: function (ctl) {
-            this._map.addControl(ctl);
-        },
-
-        _removeMapControlImpl: function (ctl) {
-            this._map.removeControl(ctl);
-        },
-
-        setLayerIndex: function (layerImpl, index) {
-            this._map.setLayerIndex(layerImpl, index);
-        },
-
+/* Impl specific - found in ol2 AND ol3 modules BUT parameters and/or return value differ!!
+------------------------------------------------------------------> */
 
         /**
-         * @method orderLayersByZIndex
-         * Orders layers by Z-indexes.
+         * @param {OpenLayers.Layer} layer ol2 specific!
          */
-        orderLayersByZIndex: function() {
-            this._map.layers.sort(function(a, b){
-                return a.getZIndex()-b.getZIndex();
-            });
+        addLayer: function(layerImpl) {
+            if(!layerImpl) {
+                return;
+            }
+            this.getMap().addLayer(layerImpl);
         },
+        /**
+         * @param {OpenLayers.Layer} layer ol2 specific!
+         */
+        removeLayer : function(layerImpl) {
+            if(!layerImpl) {
+                return;
+            }
+            this.getMap().removeLayer(layerImpl);
+            if(typeof layerImpl.destroy === 'function') {
+                layerImpl.destroy();
+            }
+        },
+        /**
+         * Brings map layer to top
+         * @method bringToTop
+         *
+         * @param {OpenLayers.Layer} layer The new topmost layer
+         * @param {Integer} buffer Add this buffer to z index. If it's undefined, using 1.
+         */
+        bringToTop: function(layer, buffer) {
+            if (!layer || !layer.getZIndex) {
+                return;
+            }
+            var layerZIndex = layer.getZIndex();
+            var zIndex = Math.max(this.getMap().Z_INDEX_BASE.Feature,layerZIndex);
+            buffer = buffer || 1;
+
+            layer.setZIndex(zIndex + buffer);
+            this.orderLayersByZIndex();
+        },
+        /**
+         * @return {OpenLayers.Layer} layer ol2 specific!
+         */
+        getLayerIndex: function(layerImpl) {
+            return this.getMap().getLayerIndex(layerImpl);
+        },
+        /**
+         * @param {OpenLayers.Layer} layer ol2 specific!
+         */
+        setLayerIndex: function (layerImpl, index) {
+            this.getMap().setLayerIndex(layerImpl, index);
+        },
+
+        /**
+         * @param {OpenLayers.Control} control ol2 specific!
+         */
+        _addMapControlImpl: function (ctl) {
+            this.getMap().addControl(ctl);
+        },
+
+        /**
+         * @param {OpenLayers.Control} control ol2 specific!
+         */
+        _removeMapControlImpl: function (ctl) {
+            this.getMap().removeControl(ctl);
+        }
+/* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
 
     }, {
         /**

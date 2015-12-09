@@ -130,6 +130,16 @@ Oskari.clazz.define(
             return me._initImpl(me._sandbox, me._options, me._map);
         },
         /**
+         * @method _initImpl
+         * Init for implementation specific functionality.
+         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Map} map
+         * @return {Map}
+         */
+        _initImpl: function (sandbox, options, map) {
+            return map;
+        },
+        /**
          * @method createMap
          * Creates the Implementation specific Map object
          * @return {Map}
@@ -512,8 +522,6 @@ Oskari.clazz.define(
 
 /* Impl specific - found in ol2 AND ol3 modules
 ------------------------------------------------------------------> */
-        addLayer: Oskari.AbstractFunc('addLayer'),
-        removeLayer: Oskari.AbstractFunc('removeLayer'),
         getPixelFromCoordinate: Oskari.AbstractFunc('getPixelFromCoordinate'),
         getMapCenter: Oskari.AbstractFunc('getMapCenter'),
         getMapZoom: Oskari.AbstractFunc('getMapZoom'),
@@ -555,7 +563,7 @@ Oskari.clazz.define(
          * @param {Boolean} isDrag true if the user is dragging the map to a new location currently (optional)
          */
         panMapByPixels: Oskari.AbstractFunc('panMapByPixels'),
-        bringToTop: Oskari.AbstractFunc('bringToTop'),
+        orderLayersByZIndex: Oskari.AbstractFunc('orderLayersByZIndex'),
 /* --------- /Impl specific --------------------------------------> */
 
 
@@ -566,6 +574,17 @@ Oskari.clazz.define(
         _setZoomLevelImpl: Oskari.AbstractFunc('_setZoomLevelImpl'),
 /* --------- /Impl specific - PRIVATE ----------------------------> */
 
+
+/* Impl specific - found in ol2 AND ol3 modules BUT parameters and/or return value differ!!
+------------------------------------------------------------------> */
+        addLayer: Oskari.AbstractFunc('addLayer'),
+        removeLayer: Oskari.AbstractFunc('removeLayer'),
+        bringToTop: Oskari.AbstractFunc('bringToTop'),
+        getLayerIndex: Oskari.AbstractFunc('getLayerIndex'),
+        setLayerIndex: Oskari.AbstractFunc('setLayerIndex'),
+        _addMapControlImpl: Oskari.AbstractFunc('_addMapControlImpl(ctl)'),
+        _removeMapControlImpl: Oskari.AbstractFunc('_removeMapControlImpl(ctl)'),
+/* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
 
 
 
@@ -690,18 +709,6 @@ Oskari.clazz.define(
                 return this._localization[key];
             }
             return this._localization;
-        },
-
-
-        /**
-         * @method _initImpl
-         * Init for implementation specific functionality.
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         * @param {Map} map
-         * @return {Map}
-         */
-        _initImpl: function (sandbox, options, map) {
-            return map;
         },
 
         /**
@@ -1269,54 +1276,6 @@ Oskari.clazz.define(
             return results;
         },
 
-        getLayers: function () {
-            return this.layerDefs;
-        },
-
-        getLayerDefs: function () {
-            return this.layerDefs;
-        },
-
-        setLayerIndex: function (layerImpl, index) {
-            var layerArr = this.getLayerDefs(),
-                layerIndex = this.getLayerIndex(layerImpl),
-                newLayerArr = [],
-                prevDef = layerArr[layerIndex],
-                n;
-
-            for (n = 0; n < layerArr.length; n += 1) {
-                if (n === index && prevDef) {
-                    newLayerArr.push(prevDef);
-                    prevDef = null;
-                }
-                if (layerArr[n].impl !== layerImpl) {
-                    newLayerArr.push(layerArr[n]);
-                }
-            }
-            if (n === index && prevDef) {
-                newLayerArr.push(prevDef);
-            }
-
-            this.layerDefs = newLayerArr;
-            for (n = 0; n < layerArr.length; n += 1) {
-                this._setLayerImplIndex(layerArr[n].impl, n);
-            }
-
-        },
-
-        getLayerIndex: function (layerImpl) {
-            var layerArr = this.getLayerDefs(),
-                n;
-
-            for (n = 0; n < layerArr.length; n += 1) {
-                if (layerArr[n].impl === layerImpl) {
-                    return n;
-                }
-            }
-            return -1;
-
-        },
-
         /**
          * @method calculateLayerScales
          * Calculate a subset of maps scales array that matches the given boundaries.
@@ -1596,27 +1555,7 @@ Oskari.clazz.define(
             if (!keepContainerVisible && content.children().length === 0) {
                 container.css('display', 'none');
             }
-        },
-
-        /* IMPL specific */
-
-
-        orderLayersByZIndex: Oskari.AbstractFunc('orderLayersByZIndex'),
-
-        setLayerIndex: Oskari.AbstractFunc('setLayerIndex'),
-
-        _setLayerImplIndex: Oskari.AbstractFunc('_setLayerImplIndex(layerImpl,n)'),
-
-        _removeLayerImpl: Oskari.AbstractFunc('_removeLayerImpl(layerImpl)'),
-
-        _setLayerImplVisible: Oskari.AbstractFunc('_setLayerImplVisible'),
-
-        _setLayerImplOpacity: Oskari.AbstractFunc('_setLayerImplOpacity'),
-
-        _addMapControlImpl: Oskari.AbstractFunc('_addMapControlImpl(ctl)'),
-
-        _removeMapControlImpl: Oskari.AbstractFunc('_removeMapControlImpl(ctl)')
-
+        }
     }, {
         /**
          * @static @property {String[]} protocol

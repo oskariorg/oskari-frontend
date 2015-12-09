@@ -155,18 +155,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
 /* Impl specific - found in ol2 AND ol3 modules
 ------------------------------------------------------------------> */
-        addLayer: function(layerImpl) {
-            this.getMap().addLayer(layerImpl);
-        },
-        removeLayer : function(layerImpl) {
-            this.getMap().removeLayer(layerImpl);
-            if(typeof layerImpl.destroy === 'function') {
-                layerImpl.destroy();
-            }
-        },
         getPixelFromCoordinate : function(lonlat) {
             lonlat = this.normalizeLonLat(lonlat);
-            var px = this._map.getPixelFromCoordinate([lonlat.lon, lonlat.lat]);
+            var px = this.getMap().getPixelFromCoordinate([lonlat.lon, lonlat.lat]);
             return {
                 x : px[0],
                 y : px[1]
@@ -182,7 +173,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         },
 
         getMapZoom: function() {
-            return this._map.getView().getZoom();
+            return this.getMap().getView().getZoom();
         },
         
         getSize: function() {
@@ -206,7 +197,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          */
         zoomToExtent: function (bounds, suppressStart, suppressEnd) {
             var extent = this.__boundsToArray(bounds);
-            this._map.getView().fit(extent, this._map.getSize());
+            this.getMap().getView().fit(extent, this.getMap().getSize());
             this.updateDomain();
             // send note about map change
             if (suppressStart !== true) {
@@ -228,11 +219,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         centerMap: function (lonlat, zoom, suppressEnd) {
             // TODO: we have isValidLonLat(); maybe use it here
             lonlat = this.normalizeLonLat(lonlat);
-            this._map.getView().setCenter([lonlat.lon, lonlat.lat]);
+            this.getMap().getView().setCenter([lonlat.lon, lonlat.lat]);
             if(zoom === null ||zoom === undefined) {
                 zoom = this.getMapZoom();
             }
-            this._map.getView().setZoom(zoom);
+            this.getMap().getView().setZoom(zoom);
             this.updateDomain();
             if (suppressEnd !== true) {
                 this.notifyMoveEnd();
@@ -268,17 +259,17 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @param {Boolean} isDrag true if the user is dragging the map to a new location currently (optional)
          */
         panMapByPixels: function (pX, pY, suppressStart, suppressEnd, isDrag) {
-            var view = this._map.getView(),
+            var view = this.getMap().getView(),
                 centerCoords = view.getCenter();
-                centerPixels = this._map.getPixelFromCoordinate(centerCoords),
+                centerPixels = this.getMap().getPixelFromCoordinate(centerCoords),
                 newCenterPixels = [centerPixels[0] + pX, centerPixels[1] + pY],
-                newCenterCoords = this._map.getCoordinateFromPixel(newCenterPixels),
+                newCenterCoords = this.getMap().getCoordinateFromPixel(newCenterPixels),
                 pan = ol.animation.pan({
                     duration: 100,
                     source: (centerCoords)
                 });
 
-            this._map.beforeRender(pan);
+            this.getMap().beforeRender(pan);
             view.setCenter(newCenterCoords);
 
             this.updateDomain();
@@ -311,16 +302,13 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             };
         },
         /**
-         * Brings map layer to top
-         * @method bringToTop
-         *
-         * @param {OpenLayers.Layer} layer The new topmost layer
+         * @method orderLayersByZIndex
+         * Orders layers by Z-indexes.
          */
-        bringToTop: function(layer) {
-            var map = this._map;
-            var list = map.getLayers();
-            list.remove(layer);
-            list.push(layer);
+        orderLayersByZIndex: function() {
+            this.getMap().getLayers().getArray().sort(function(a, b){
+                return a.getZIndex()-b.getZIndex();
+            });
         },
 /* --------- /Impl specific --------------------------------------> */
 
@@ -346,9 +334,47 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         },
 /* --------- /Impl specific - PRIVATE ----------------------------> */
 
+/* Impl specific - found in ol2 AND ol3 modules BUT parameters and/or return value differ!!
+------------------------------------------------------------------> */
 
+        /**
+         * @param {ol.layer.Layer} layer ol3 specific!
+         */
+        addLayer: function(layerImpl) {
+            if(!layerImpl) {
+                return;
+            }
+            this.getMap().addLayer(layerImpl);
+        },
+        /**
+         * @param {ol.layer.Layer} layer ol3 specific!
+         */
+        removeLayer : function(layerImpl) {
+            if(!layerImpl) {
+                return;
+            }
+            this.getMap().removeLayer(layerImpl);
+            if(typeof layerImpl.destroy === 'function') {
+                layerImpl.destroy();
+            }
+        },
+        /**
+         * Brings map layer to top
+         * @method bringToTop
+         *
+         * @param {ol.layer.Layer} layer The new topmost layer
+         */
+        bringToTop: function(layer) {
+            var map = this.getMap();
+            var list = map.getLayers();
+            list.remove(layer);
+            list.push(layer);
+        },
+        /**
+         * @param {ol.layer.Layer} layer ol3 specific!
+         */
         setLayerIndex: function(layerImpl, index) {
-            var layerColl = this._map.getLayers();
+            var layerColl = this.getMap().getLayers();
             var layerIndex = this.getLayerIndex(layerImpl);
 
             /* find */
@@ -373,8 +399,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
         },
 
+        /**
+         * @param {ol.layer.Layer} layer ol3 specific!
+         */
         getLayerIndex: function(layerImpl) {
-            var layerColl = this._map.getLayers();
+            var layerColl = this.getMap().getLayers();
             var layerArr = layerColl.getArray();
 
             for (var n = 0; n < layerArr.length; n++) {
@@ -384,26 +413,19 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
             return -1;
         },
-
-        _addMapControlImpl: function(ctl) {
-            this._map.addControl(ctl);
-        },
-
-        _removeMapControlImpl: function(ctl) {
-            this._map.removeControl(ctl);
-
-        },
-
-
         /**
-         * @method orderLayersByZIndex
-         * Orders layers by Z-indexes.
+         * @param {ol.control.Control} layer ol3 specific!
          */
-        orderLayersByZIndex: function() {
-            this._map.getLayers().getArray().sort(function(a, b){
-                return a.getZIndex()-b.getZIndex();
-            });
+        _addMapControlImpl: function(ctl) {
+            this.getMap().addControl(ctl);
+        },
+        /**
+         * @param {ol.control.Control} layer ol3 specific!
+         */
+        _removeMapControlImpl: function(ctl) {
+            this.getMap().removeControl(ctl);
         }
+/* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
     }, {
         /**
          * @property {String[]} protocol
