@@ -1149,6 +1149,10 @@ Oskari.clazz.define(
                     _layer.getMaxScale(),
                     _layer.getMinScale()
                 ),
+                layerResolutions = this.getMapModule().calculateLayerResolutions(
+                    _layer.getMaxScale(),
+                    _layer.getMinScale()
+                ),
                 key,
                 me = this,
                 sandbox = me.getSandbox(),
@@ -1161,6 +1165,7 @@ Oskari.clazz.define(
                 },
                 defaultOptions = {
                     layerId: _layer.getId(),
+                    resolutions: layerResolutions,
                     scales: layerScales,
                     isBaseLayer: false,
                     displayInLayerSwitcher: true,

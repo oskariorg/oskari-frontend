@@ -23,9 +23,10 @@ Oskari.clazz.define(
             textOutlineColor: 'rgba(255,255,255,1)',
             textColor: 'rgba(0,0,0,1)'
         };
-        this._layers = {};
         this._pointerMoveAdded = false;
+        this._layers = {};
         this._features = {};
+        this._layerStyles = {};
     }, {
         /**
          * @method register
@@ -48,8 +49,44 @@ Oskari.clazz.define(
          *
          */
         _startPluginImpl: function () {
-            this.registerVectorFormats();
+            var me = this;
+            me.registerVectorFormats();
+            me._createConfiguredLayers();
         },
+
+        /**
+         * @method  @private _createConfiguredLayers Create configured layers an their styles
+         */
+        _createConfiguredLayers: function(){
+            var me = this,
+                conf = me.getConfig();
+            if(conf.layers) {
+                for(var i=0;i<conf.layers.length;i++) {
+                    var layer = conf.layers[i];
+                    var layerId = layer.id;
+                    var layerStyle = layer.style;
+
+                    if(!me._features[layerId]) {
+                        me._features[layerId] = [];
+                    }
+
+                    var opacity = 100;
+                    var vectorSource = new ol.source.Vector();
+                    var olLayer = new ol.layer.Vector({
+                      name: me._olLayerPrefix + layerId,
+                      id: layerId, 
+                      source: vectorSource});
+
+                    olLayer.setOpacity(opacity);
+
+                    me._map.addLayer(olLayer);
+                    me.raiseVectorLayer(olLayer);
+                    me._layers[layerId] = olLayer;
+                    me._layerStyles[layerId] = layerStyle;                    
+                }
+            }
+        },
+
         /**
         * @method _createEventHandlers
         * Create event handlers
@@ -278,13 +315,12 @@ Oskari.clazz.define(
                 var prio = options.prio || 0;
 
                 _.forEach(features, function (feature) {
-                    feature.setStyle(me.getStyle(options.featureStyle));
+                    feature.setStyle(me.getStyle(options));
                 });
 
                 if(!me._features[options.layerId]) {
                   me._features[options.layerId] = [];
                 }
-
                 //check if layer is already on map
                 if (me._layers[options.layerId]) {
                     layer = me._layers[options.layerId];
@@ -313,15 +349,17 @@ Oskari.clazz.define(
                         });
                         var zIndex = 0;
                         _.forEach(me._features[options.layerId], function(featObj) {
-                          _.forEach(featObj.data, function (feature) {
-                              feature.getStyle().setZIndex(zIndex);
-                              zIndex++;
-                          });
-                          vectorSource.addFeatures(featObj.data);
+                            _.forEach(featObj.data, function (feature) {
+                                feature.getStyle().setZIndex(zIndex);
+                                vectorSource.addFeature(feature);
+                                zIndex++;
+                            });
+                            
                         });
                     } else {
-                      vectorSource.addFeatures(featObj.data);
+                      vectorSource.addFeatures(features);
                     }
+                    me.raiseVectorLayer(layer);
                 } else {
                     //let's create vector layer with features and add it to the map
                     vectorSource = new ol.source.Vector({
@@ -477,10 +515,30 @@ Oskari.clazz.define(
         /**
          * @method getStyle
          *
-         * @param {Object} styles. If not given, will set default styles
+         * @param {Object} options. If option.featureStyle not given, will set default layer styles. If layer style not exist then use defaults.
+         * Wanted style object:
+         * {
+         *     fill: {
+         *         color: '#ff0000'
+         *     },
+         *     stroke: {
+         *         color: '#00ff00',
+         *         width: 3
+         *     },
+         *     text: {
+         *         fill: {
+         *             color: '#0000ff'
+         *         },
+         *         stroke: {
+         *             color: '#ff00ff',
+         *             width: 4
+         *         }
+         *     }
+         * }
          */
-        getStyle : function(styles) {
+        getStyle : function(options) {
             var me = this;
+
             //create defaultStyle
             var style = new ol.style.Style({
                 fill: new ol.style.Fill({
@@ -507,6 +565,7 @@ Oskari.clazz.define(
                      })
                   })
             });
+            var styles = options.featureStyle || me._layerStyles[options.layerId];
 
             //overwriting default style if given
             if(styles) {
