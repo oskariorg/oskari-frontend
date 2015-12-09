@@ -12,6 +12,12 @@ Renamed functions
 - _calculateScalesFromResolutions() removed. Use _calculateScalesImpl() instead.
 - _createMap() and _createMapImpl() removed. Use createMap() instead. Also the function no longer has side-effects and returns the created map implementation.
 - _addClickControl() removed. Use _setupMapEvents() instead.
+- _getMapCenter() removed. Use getMapCenter() instead.
+- _updateDomainImpl() removed. Use updateDomain() instead.
+- panMapToLonLat()/moveMapToLanLot() removed. Use centerMap() instead.
+- panMapEast()/panMapWest()/panMapNorth()/panMapSouth() removed. Use panMapByPixels() instead.
+- zoomIn()/zoomOut() removed. Use adjustZoomLevel() instead.
+- zoomTo() removed. Use setZoomLevel() instead.
 
 Unused functions removed:
   - _ensureExists()
@@ -23,9 +29,12 @@ Unused functions removed:
   - _getMapLayersByName()
   - getMapLayersByName()
   - getMapElDom()
+  - centerMapByPixels()
+  - moveMapByPixels()
 
 Added functions so internal references don't need to be called:
 - getMapElementId()
+- getCurrentExtent()
 
 
 ### mapping/mapmodule/plugin/vectorlayer

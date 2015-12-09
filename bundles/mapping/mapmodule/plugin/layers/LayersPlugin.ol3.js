@@ -123,9 +123,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
             return true;
         }
 
-        var viewBounds = this.getMapModule().getExtent();
-
-        if(geometries.intersectsExtent(viewBounds)) {
+        var viewBounds = this.getMapModule().getCurrentExtent();
+        var ol3Extent = [viewBounds.left, viewBounds.bottom, viewBounds.right, viewBounds.top];
+        if(geometries.intersectsExtent(ol3Extent)) {
             return true;
         }
         return false;

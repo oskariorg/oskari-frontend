@@ -45,7 +45,7 @@ div.mapplugin.layerselection {
       border-left: 10px solid transparent;
       border-right: 10px solid transparent;
       border-bottom: 10px solid #333438; }
-  div.mapplugin.layerselection div.layers, div.mapplugin.layerselection div.mapplugin.layerselection div.baselayers {
+  div.mapplugin.layerselection div.layers, div.mapplugin.layerselection div.baselayers {
     padding: 10px; }
   div.mapplugin.layerselection div.header {
     background-color: #3c3c3c;

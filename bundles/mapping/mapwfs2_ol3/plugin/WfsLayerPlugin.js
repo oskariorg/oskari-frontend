@@ -1044,7 +1044,7 @@ Oskari.clazz.define(
          */
         createTileGrid: function() {
             this._tileGrid = new ol.tilegrid.TileGrid({
-                extent: this.getMapModule().getExtent(),
+                extent: this.ol2ExtentOl3Transform(this.getMapModule().getMaxExtent()),
                 tileSize: this.getTileSize(),
                 resolutions : this.getMapModule().getResolutionArray()
             });
