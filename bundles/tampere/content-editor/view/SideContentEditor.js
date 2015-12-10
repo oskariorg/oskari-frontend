@@ -334,7 +334,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             var me = this;
             var featureData = me._getFeatureData();
             var requestData = {};
-            requestData.featureId = featureData[0].value;
+            requestData.featureId = (featureData.length > 0 ? featureData[0].value : null);
             featureData.splice(0, 1);
             requestData.featureFields = featureData;
             requestData.layerId = me.selectedLayerId;
