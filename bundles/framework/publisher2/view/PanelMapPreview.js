@@ -360,7 +360,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
 
             //initial mode selection if modify.
             if (pData && pData.metadata && pData.metadata.preview) {
-                
+
                 var selectedOptions = me.sizeOptions.filter(function (option) {
                     return (option.id === pData.metadata.preview);
                 });
@@ -467,7 +467,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
                 selectedOption = me.sizeOptions.filter(function (option) {
                     return option.selected;
                 })[0];
-            
+
             widthInput.setName('width');
             widthInput.setPlaceholder(me.loc.sizes.width);
             widthInput.setValue(selectedOption.width);
@@ -550,7 +550,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
                     error: this.loc.error.size
                 });
             }
-            return errors; 
+            return errors;
         },
 
         /**

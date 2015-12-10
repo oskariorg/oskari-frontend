@@ -776,8 +776,6 @@ Oskari.clazz.define(
                 tiles,
                 zoom;
 
-            //me.getIO().setMapSize(event.getWidth(), event.getHeight());
-
             // update tiles
             srs = map.getSrsName();
             bbox = map.getExtent();
@@ -786,8 +784,7 @@ Oskari.clazz.define(
 
             // update cache
             me.refreshCaches();
-            if(event.getLayerId()){
-
+            if(event.getLayerId()) {
                 layers.push(me.getSandbox().findMapLayerFromSelectedMapLayers(event.getLayerId()));
             }
             else {
@@ -798,24 +795,25 @@ Oskari.clazz.define(
                 if (layer.hasFeatureData() && layer.isManualRefresh() && layer.isVisible()) {
                     // clean features lists
                     layer.setActiveFeatures([]);
-                    if (grid !== null && grid !== undefined) {
-                        layerId = layer.getId();
-                        tiles = me.getNonCachedGrid(layerId, grid);
-                        me.getIO().setLocation(
-                            layerId,
-                            srs, [
-                                bbox.left,
-                                bbox.bottom,
-                                bbox.right,
-                                bbox.top
-                            ],
-                            zoom,
-                            grid,
-                            tiles,
-                            true
-                        );
-                        me._tilesLayer.redraw();
+                    if (grid === null || grid === undefined) {
+                        return;
                     }
+                    layerId = layer.getId();
+                    tiles = me.getNonCachedGrid(layerId, grid);
+                    me.getIO().setLocation(
+                        layerId,
+                        srs, [
+                            bbox.left,
+                            bbox.bottom,
+                            bbox.right,
+                            bbox.top
+                        ],
+                        zoom,
+                        grid,
+                        tiles,
+                        true
+                    );
+                    me._tilesLayer.redraw();
                 }
             });
         },
@@ -1149,6 +1147,10 @@ Oskari.clazz.define(
                     _layer.getMaxScale(),
                     _layer.getMinScale()
                 ),
+                layerResolutions = this.getMapModule().calculateLayerResolutions(
+                    _layer.getMaxScale(),
+                    _layer.getMinScale()
+                ),
                 key,
                 me = this,
                 sandbox = me.getSandbox(),
@@ -1161,6 +1163,7 @@ Oskari.clazz.define(
                 },
                 defaultOptions = {
                     layerId: _layer.getId(),
+                    resolutions: layerResolutions,
                     scales: layerScales,
                     isBaseLayer: false,
                     displayInLayerSwitcher: true,

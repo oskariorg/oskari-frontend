@@ -49,9 +49,10 @@ Oskari.clazz.define(
 
 
         me.tempVectorLayer = null;
-        me._layers = {};
         //a hash for layers that are in the middle of the loading process
         me._layersLoading = {};
+
+        me.__layersByName = {};
 
     }, {
         __layerPrefix: 'wfs_layer_',
@@ -457,29 +458,32 @@ Oskari.clazz.define(
             }
 
             for (i = 0; i < layers.length; i += 1) {
-                if (layers[i].hasFeatureData()) {
-                    // clean features lists
-                    layers[i].setActiveFeatures([]);
-                    if (grid !== null && grid !== undefined) {
-                        layerId = layers[i].getId();
-                        var ollayer = this._layers[layerId];
-                        tiles = ollayer.getSource().getNonCachedGrid(grid);
-                        //tiles = me.getNonCachedGrid(layerId, grid);
-                        me._layersLoading[layerId] = tiles.length;
-                        me.getIO().setLocation(
-                            layerId,
-                            srs, [
-                                bbox[0],
-                                bbox[1],
-                                bbox[2],
-                                bbox[3]
-                            ],
-                            zoom,
-                            grid,
-                            tiles
-                        );
-                    }
+                var layer = layers[i];
+                if (!layer.hasFeatureData()) {
+                    continue;
                 }
+                // clean features lists
+                layer.setActiveFeatures([]);
+                if (grid === null || grid === undefined) {
+                    continue;
+                }
+                layerId = layers[i].getId();
+                var ollayer = this.getOLMapLayer(layer);
+                tiles = ollayer.getSource().getNonCachedGrid(grid);
+                //tiles = me.getNonCachedGrid(layerId, grid);
+                me._layersLoading[layerId] = tiles.length;
+                me.getIO().setLocation(
+                    layerId,
+                    srs, [
+                        bbox[0],
+                        bbox[1],
+                        bbox[2],
+                        bbox[3]
+                    ],
+                    zoom,
+                    grid,
+                    tiles
+                );
             }
 
             // update zoomLevel and highlight pictures
@@ -514,17 +518,18 @@ Oskari.clazz.define(
             }
 
             layers.forEach(function (layer) {
-                if (layer.hasFeatureData()) {
-                    fids = me.WFSLayerService.getSelectedFeatureIds(layer.getId());
-                    me.removeHighlightImages(layer);
-                    if (me._highlighted) {
-                        me.getIO().highlightMapLayerFeatures(
-                            layer.getId(),
-                            fids,
-                            false,
-                            geomRequest
-                        );
-                    }
+                if (!layer.hasFeatureData()) {
+                    return;
+                }
+                fids = me.WFSLayerService.getSelectedFeatureIds(layer.getId());
+                me.removeHighlightImages(layer);
+                if (me._highlighted) {
+                    me.getIO().highlightMapLayerFeatures(
+                        layer.getId(),
+                        fids,
+                        false,
+                        geomRequest
+                    );
                 }
             });
         },
@@ -719,8 +724,7 @@ Oskari.clazz.define(
             if (event.getMapLayer().hasFeatureData()) {
                 // render "normal" layer with new style
                 var OLLayer = this.getOLMapLayer(
-                    event.getMapLayer(),
-                    this.__typeNormal
+                    event.getMapLayer()
                 );
                 OLLayer.redraw();
 
@@ -778,8 +782,6 @@ Oskari.clazz.define(
                 tiles,
                 zoom;
 
-            me.getIO().setMapSize(event.getWidth(), event.getHeight());
-
             // update tiles
             srs = map.getSrsName();
             bbox = map.getExtent();
@@ -801,7 +803,7 @@ Oskari.clazz.define(
                     layer.setActiveFeatures([]);
                     if (grid !== null && grid !== undefined) {
                         layerId = layer.getId();
-                        var ollayer = this._layers[layerId];
+                        var ollayer = this.getOLMapLayer(layerId);
                         tiles = ollayer.getSource().getNonCachedGrid(grid);
                         //tiles = me.getNonCachedGrid(layerId, grid);
                         me.getIO().setLocation(
@@ -827,54 +829,45 @@ Oskari.clazz.define(
          * @param {Object} event
          */
         mapSizeChangedHandler: function (event) {
-            var bbox,
-                grid,
-                layerId,
-                layers,
-                me = this,
-                map = me.getSandbox().getMap(),
-                srs,
-                tiles,
-                zoom;
-
-
+            var me = this;
             me.getIO().setMapSize(event.getWidth(), event.getHeight());
 
             // update tiles
-            srs = map.getSrsName();
-            bbox = map.getExtent();
-            zoom = map.getZoom();
+            var grid = me.getGrid();
+            if (grid === null || grid === undefined) {
+                return;
+            }
 
-            grid = me.getGrid();
-
-            layers = me.getSandbox().findAllSelectedMapLayers();
+            var map = me.getSandbox().getMap();
+            var srs = map.getSrsName();
+            var bbox = map.getExtent();
+            var zoom = map.getZoom();
+            var layers = me.getSandbox().findAllSelectedMapLayers();
 
             layers.forEach(function (layer) {
-                if (layer.hasFeatureData()) {
-                    // clean features lists
-                    layer.setActiveFeatures([]);
-                    if (grid !== null && grid !== undefined) {
-                        layerId = layer.getId();
-                        if(this._layers) {
-                            var ollayer = this._layers[layerId];
-                            tiles = ollayer.getSource().getNonCachedGrid(grid);
-                            //tiles = me.getNonCachedGrid(layerId, grid);
-                            me.getIO().setLocation(
-                                layerId,
-                                srs, [
-                                    bbox.left,
-                                    bbox.bottom,
-                                    bbox.right,
-                                    bbox.top
-                                ],
-                                zoom,
-                                grid,
-                                tiles
-                            );
-                        }
-                       // not in OL3 me._tilesLayer.redraw();
-                    }
+                if (!layer.hasFeatureData()) {
+                    return;
                 }
+                // clean features lists
+                layer.setActiveFeatures([]);
+                var ollayer = me.getOLMapLayer(layer);
+                if(!ollayer) {
+                    return;
+                }
+                var tiles = ollayer.getSource().getNonCachedGrid(grid);
+                //tiles = me.getNonCachedGrid(layerId, grid);
+                me.getIO().setLocation(
+                    layer.getId(),
+                    srs, [
+                        bbox.left,
+                        bbox.bottom,
+                        bbox.right,
+                        bbox.top
+                    ],
+                    zoom,
+                    grid,
+                    tiles
+                );
             });
         },
 
@@ -966,24 +959,9 @@ Oskari.clazz.define(
                 return;
             }
 
-            var me = this,
-                layerName,
-                layerPart = '(.*)',
-                map = me.getMap(),
-                removeLayers;
-
-            if (layer) {
-                layerPart = layer.getId();
-            }
-
-            layerName =  me.__layerPrefix + layerPart + '_' + me.__typeHighlight;
-
-
-            removeLayers = me.getMapModule().getLayersByName(layerName);
-
-            removeLayers.forEach(function (removeLayer) {
-                me.getMap().removeLayer(removeLayer);
-            });
+            var me = this;
+            var removeLayer = me.getOLMapLayer(layer, me.__typeHighlight);
+            me.getMapModule().removeLayer(removeLayer);
         },
 
         /**
@@ -992,10 +970,20 @@ Oskari.clazz.define(
          */
         removeMapLayerFromMap: function (layer) {
             var me = this,
-                removeLayer = this._layers[layer.getId()];
-            if (removeLayer) {
-                me.getMap().removeLayer(removeLayer);
-            }
+                layers = this.getOLMapLayers(layer) || [];
+
+            _.each(layers, function (ollayer) {
+                // clear references
+                var name = me.getLayerName(layer, me.__typeNormal);
+                me.__layersByName[name] = null;
+                delete me.__layersByName[name];
+                name = me.getLayerName(layer, me.__typeHighlight);
+                me.__layersByName[name] = null;
+                delete me.__layersByName[name];
+
+                // remove from map
+                me.getMapModule().removeLayer(ollayer);
+            });
         },
 
         /**
@@ -1007,18 +995,18 @@ Oskari.clazz.define(
                 return;
             }
 
-            var me = this,
-                layerPart = '',
-                wfsReqExp;
-
-            if (layer) {
-                layerPart = layer.getId();
+            var me = this;
+            var result = [];
+            var normallayer = me.getOLMapLayer(layer, this.__typeNormal);
+            if(normallayer) {
+                result.push(normallayer);
             }
-            wfsReqExp = new RegExp(
-                this.__layerPrefix + layerPart + '_(.*)',
-                'i'
-            );
-            return   me.getMapModule().getLayersByName(this.__layerPrefix + layerPart); //this.getMap().getLayersByName(wfsReqExp);
+            var highlightlayer = me.getOLMapLayer(layer, this.__typeHighlight);
+            if(highlightlayer) {
+                result.push(highlightlayer);
+            }
+
+            return result;
         },
 
         /**
@@ -1030,11 +1018,8 @@ Oskari.clazz.define(
             if (!layer || !layer.hasFeatureData()) {
                 return null;
             }
-
-            var layerName = this.__layerPrefix + layer.getId() + '_' + type,
-                wfsReqExp = new RegExp(layerName);
-
-            return me.getMapModule().getLayersByName(layerName)[0]; //this.getMap().getLayersByName(wfsReqExp)[0];
+            type = type || this.__typeNormal;
+            return this.layerByName(this.__layerPrefix + layer.getId() + '_' + type);
         },
         /**
          * @method createTileGrid
@@ -1044,7 +1029,7 @@ Oskari.clazz.define(
          */
         createTileGrid: function() {
             this._tileGrid = new ol.tilegrid.TileGrid({
-                extent: this.getMapModule().getExtent(),
+                extent: this.ol2ExtentOl3Transform(this.getMapModule().getMaxExtent()),
                 tileSize: this.getTileSize(),
                 resolutions : this.getMapModule().getResolutionArray()
             });
@@ -1395,7 +1380,7 @@ Oskari.clazz.define(
 
             openLayer.setOpacity(_layer.getOpacity() / 100);
             me.getMapModule().addLayer(openLayer, _layer, layerName);
-            me._layers[_layer.getId()] = openLayer;
+            me.layerByName(layerName, openLayer);
         },
         drawImageTile: function (layer, imageUrl, imageBbox, imageSize, layerType, boundaryTile, keepPrevious) {
             var args = [layer, imageUrl, imageBbox, imageSize, layerType, boundaryTile, keepPrevious];
@@ -1406,10 +1391,8 @@ Oskari.clazz.define(
                 layerName = me.__layerPrefix + layerId + '_' + layerType,
                 layerScales,
                 normalLayer,
-                normalLayerExp,
                 normalLayerIndex,
                 highlightLayer,
-                highlightLayerExp,
                 BBOX,
                 bboxKey,
                 dataForTileTemp,
@@ -1418,8 +1401,7 @@ Oskari.clazz.define(
                 boundsObj = imageBbox,
                 ols,
                 wfsMapImageLayer,
-                normalLayerExp = me.__layerPrefix + layerId + '_' + me.__typeNormal,
-                normalLayer = me.getMapModule().getLayersByName(normalLayerExp)[0];
+                normalLayer = me.getOLMapLayer(layer);
 
             /** Safety checks */
             if (!imageUrl || !boundsObj) {
@@ -1441,6 +1423,7 @@ Oskari.clazz.define(
                     title: layerName
                 })
                 wfsMapImageLayer.setOpacity(layer.getOpacity() / 100);
+                me.layerByName(layerName, wfsMapImageLayer);
                 me.getMapModule().addLayer(wfsMapImageLayer, layer, layerName);
                 wfsMapImageLayer.setVisibility(true);
                 // also for draw
@@ -1453,18 +1436,26 @@ Oskari.clazz.define(
                 }
 
                 // highlight picture on top of normal layer images
-                highlightLayerExp = me.__layerPrefix + layerId + '_' + me.__typeHighlight;
-                highlightLayer = me.getMapModule().getLayersByName(highlightLayerExp)[0]; // map.getLayersByName(highlightLayerExp);
+                highlightLayer = me.getOLMapLayer(layer, me.__typeHighlight);
 
-                if (normalLayer.length > 0 && highlightLayer.length > 0) {
-                    normalLayerIndex = map.getLayerIndex(normalLayer[normalLayer.length - 1]);
-                    map.setLayerIndex(highlightLayer[0],normalLayerIndex + 10);
+                if (normalLayer && highlightLayer) {
+                    normalLayerIndex = map.getLayerIndex(normalLayer);
+                    map.setLayerIndex(highlightLayer,normalLayerIndex + 10);
                 }
 
             } else { // "normal"
-                var ollayer = me._layers[layerId];
+                var ollayer = normalLayer;
                 ollayer.getSource().setupImageContent(boundsObj, imageUrl, ollayer, map, boundaryTile);
             }
+        },
+        getLayerName : function(layer, type) {
+            return this.__layerPrefix + layer.getId() + '_' + layerType;
+        },
+        layerByName : function(name, value) {
+            if(!value) {
+                return this.__layersByName[name];
+            }
+            this.__layersByName[name] = value;
         }
     }, {
         extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

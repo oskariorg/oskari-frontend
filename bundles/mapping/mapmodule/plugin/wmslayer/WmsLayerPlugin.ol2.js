@@ -7,8 +7,6 @@ Oskari.clazz.define(
 
     /**
      * @static @method create called automatically on construction
-     *
-     *
      */
     function () {
         var me = this;

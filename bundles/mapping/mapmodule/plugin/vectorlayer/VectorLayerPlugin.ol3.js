@@ -15,17 +15,34 @@ Oskari.clazz.define(
         this._nextVectorId = 0;
         this._nextFeatureId = 0;
         this._defaultStyle = {
-            fillColor: 'rgba(255,0,255,0.2)',
-            strokeColor: 'rgba(0,0,0,1)',
-            width: 2,
-            radius: 4,
-            textScale: 1.3,
-            textOutlineColor: 'rgba(255,255,255,1)',
-            textColor: 'rgba(0,0,0,1)'
+            fill : {
+                color : 'rgba(255,0,255,0.2)'
+            },
+            stroke : {
+                color : 'rgba(0,0,0,1)',
+                width : 2
+            },
+            image : {
+                radius: 4,
+                fill : {
+                    color : 'rgba(0,0,0,1)'
+                }
+            },
+            text : {
+                scale : 1.3,
+                fill : {
+                    color : 'rgba(0,0,0,1)'
+                },
+                stroke : {
+                    color : 'rgba(255,255,255,1)',
+                    width : 2
+                }
+            }
         };
-        this._style = {};
-        this._layers = {};
         this._pointerMoveAdded = false;
+        this._layers = {};
+        this._features = {};
+        this._layerStyles = {};
     }, {
         /**
          * @method register
@@ -48,8 +65,44 @@ Oskari.clazz.define(
          *
          */
         _startPluginImpl: function () {
-            this.registerVectorFormats();
+            var me = this;
+            me.registerVectorFormats();
+            me._createConfiguredLayers();
         },
+
+        /**
+         * @method  @private _createConfiguredLayers Create configured layers an their styles
+         */
+        _createConfiguredLayers: function(){
+            var me = this,
+                conf = me.getConfig();
+            if(conf.layers) {
+                for(var i=0;i<conf.layers.length;i++) {
+                    var layer = conf.layers[i];
+                    var layerId = layer.id;
+                    var layerStyle = layer.style;
+
+                    if(!me._features[layerId]) {
+                        me._features[layerId] = [];
+                    }
+
+                    var opacity = 100;
+                    var vectorSource = new ol.source.Vector();
+                    var olLayer = new ol.layer.Vector({
+                      name: me._olLayerPrefix + layerId,
+                      id: layerId, 
+                      source: vectorSource});
+
+                    olLayer.setOpacity(opacity);
+
+                    me._map.addLayer(olLayer);
+                    me.raiseVectorLayer(olLayer);
+                    me._layers[layerId] = olLayer;
+                    me._layerStyles[layerId] = layerStyle;                    
+                }
+            }
+        },
+
         /**
         * @method _createEventHandlers
         * Create event handlers
@@ -275,24 +328,54 @@ Oskari.clazz.define(
                     }
                 });
 
-                if (options.featureStyle) {
-                   me.setDefaultStyle(options.featureStyle);
-                    _.forEach(features, function (feature) {
-                        feature.setStyle(me._style);
-                    });
-                }
+                var prio = options.prio || 0;
 
+                _.forEach(features, function (feature) {
+                    feature.setStyle(me.getStyle(options));
+                });
+
+                if(!me._features[options.layerId]) {
+                  me._features[options.layerId] = [];
+                }
                 //check if layer is already on map
                 if (me._layers[options.layerId]) {
                     layer = me._layers[options.layerId];
+                    vectorSource = layer.getSource();
+
                     //layer is already on map
                     //clear old features if defined so
                     if (options.clearPrevious === true) {
                         this._removeFeaturesByAttribute(layer);
-                        layer.getSource().clear();
+                        vectorSource.clear();
+                        me._features[options.layerId] = [];
                     }
-                    vectorSource = layer.getSource();
-                    vectorSource.addFeatures(features);
+
+                    // prio handling
+                    me._features[options.layerId].push({
+                      data: features,
+                      prio: prio
+                    });
+
+                    if(options.prio && !isNaN(options.prio)){
+                        this._removeFeaturesByAttribute(layer);
+                        vectorSource.clear();
+
+                        me._features[options.layerId].sort(function(a,b){
+                          return b.prio - a.prio;
+                        });
+                        var zIndex = 0;
+                        _.forEach(me._features[options.layerId], function(featObj) {
+                            _.forEach(featObj.data, function (feature) {
+                                feature.getStyle().setZIndex(zIndex);
+                                vectorSource.addFeature(feature);
+                                zIndex++;
+                            });
+                            
+                        });
+                    } else {
+                      vectorSource.addFeatures(features);
+                    }
+                    me.raiseVectorLayer(layer);
                 } else {
                     //let's create vector layer with features and add it to the map
                     vectorSource = new ol.source.Vector({
@@ -305,6 +388,10 @@ Oskari.clazz.define(
                         layer.setProperties(options.layerOptions);
                     }
 
+                    me._features[options.layerId].push({
+                      data: features,
+                      prio: prio
+                    });
 
 
                     me._layers[options.layerId] = layer;
@@ -442,69 +529,36 @@ Oskari.clazz.define(
             }
         },
         /**
-         * @method setDefaultStyle
+         * @method getStyle
          *
-         * @param {Object} styles. If not given, will set default styles
+         * @param {Object} options. If option.featureStyle not given, will set default layer styles. If layer style not exist then use defaults.
+         * Wanted style object:
+         * {
+         *     fill: {
+         *         color: '#ff0000'
+         *     },
+         *     stroke: {
+         *         color: '#00ff00',
+         *         width: 3
+         *     },
+         *     text: {
+         *         fill: {
+         *             color: '#0000ff'
+         *         },
+         *         stroke: {
+         *             color: '#ff00ff',
+         *             width: 4
+         *         }
+         *     }
+         * }
          */
-        setDefaultStyle : function(styles) {
+        getStyle : function(options) {
             var me = this;
-            //create defaultStyle
-            me._style = new ol.style.Style({
-                fill: new ol.style.Fill({
-                  color: me._defaultStyle.fillColor
-                }),
-                stroke: new ol.style.Stroke({
-                  color: me._defaultStyle.strokeColor,
-                  width: me._defaultStyle.width
-                }),
-                image: new ol.style.Circle({
-                  radius: me._defaultStyle.radius,
-                  fill: new ol.style.Fill({
-                    color: me._defaultStyle.strokeColor
-                  })
-                }),
-                text: new ol.style.Text({
-                     scale: me._defaultStyle.textScale,
-                     fill: new ol.style.Fill({
-                       color: me._defaultStyle.textColor
-                     }),
-                     stroke: new ol.style.Stroke({
-                       color: me._defaultStyle.textOutlineColor,
-                       width: me._defaultStyle.width
-                     })
-                  })
-            });
+            var styles = options.featureStyle || me._layerStyles[options.layerId] ||{};
 
-            //overwriting default style if given
-            if(styles) {
-                if(Oskari.util.keyExists(styles, 'fill.color')) {
-                    me._style.getFill().setColor(styles.fill.color);
-                }
-                if(Oskari.util.keyExists(styles, 'stroke.color')) {
-                    me._style.getStroke().setColor(styles.stroke.color);
-                }
-                if(Oskari.util.keyExists(styles, 'stroke.width')) {
-                    me._style.getStroke().setWidth(styles.stroke.width);
-                }
-                if(Oskari.util.keyExists(styles, 'image.radius')) {
-                    me._style.getImage().radius = styles.image.radius;
-                }
-                if(Oskari.util.keyExists(styles, 'image.fill.color')) {
-                    me._style.getImage().getFill().setColor(styles.image.fill.color);
-                }
-                if(Oskari.util.keyExists(styles, 'text.fill.color')) {
-                    me._style.getText().getFill().setColor(styles.text.fill.color);
-                }
-                if(Oskari.util.keyExists(styles, 'text.scale')) {
-                    me._style.getText().setScale(styles.text.scale);
-                }
-                if(Oskari.util.keyExists(styles, 'text.stroke.color')) {
-                    me._style.getText().getFill().setColor(styles.text.stroke.color);
-                }
-                if(Oskari.util.keyExists(styles, 'text.stroke.width')) {
-                    me._style.getText().getStroke().setWidth(styles.text.stroke.width);
-                }
-            }
+            // overriding default style with feature/layer style
+            var styleDef = jQuery.extend({}, this._defaultStyle, styles);
+            return me.getMapModule().getStyle(styleDef);
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],

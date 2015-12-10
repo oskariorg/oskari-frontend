@@ -774,8 +774,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.plugin.HaravaQuestionsMap
             }
 
             if (centerLon !== null && centerLon !== undefined && centerLon !== '' && centerLat !== null && centerLat !== undefined && centerLat !== '') {
-                var centerPoint = new OpenLayers.LonLat(centerLon, centerLat);
-                mapModule.panMapToLonLat(centerPoint);
+                mapModule.centerMap({lon : centerLon, lat : centerLat });
             }
         },
         /**

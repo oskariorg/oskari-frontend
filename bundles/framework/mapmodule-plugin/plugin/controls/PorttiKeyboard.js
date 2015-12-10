@@ -58,23 +58,23 @@ OpenLayers.Control.PorttiKeyboard = OpenLayers.Class(OpenLayers.Control, {
             break;
         case 33:
             // Page Up. Same in all browsers.
-            this.mapmodule.notifyStartMove();
-            this.mapmodule.panMapNorth();
+            var size = this.mapmodule.getSize();
+            this.mapmodule.panMapByPixels(0, -0.75 * size.height);
             break;
         case 34:
             // Page Down. Same in all browsers.
-            this.mapmodule.notifyStartMove();
-            this.mapmodule.panMapSouth();
+            var size = this.mapmodule.getSize();
+            this.mapmodule.panMapByPixels(0, 0.75 * size.height);
             break;
         case 35:
             // End. Same in all browsers.
-            this.mapmodule.notifyStartMove();
-            this.mapmodule.panMapEast();
+            var size = this.mapmodule.getSize();
+            this.mapmodule.panMapByPixels(0.75 * size.width, 0);
             break;
         case 36:
             // Home. Same in all browsers.
-            this.mapmodule.notifyStartMove();
-            this.mapmodule.panMapWest();
+            var size = this.mapmodule.getSize();
+            this.mapmodule.panMapByPixels(-0.75 * size.width, 0);
             break;
         case 43:
             // +/= (ASCII), keypad + (ASCII, Opera)
@@ -84,7 +84,7 @@ OpenLayers.Control.PorttiKeyboard = OpenLayers.Class(OpenLayers.Control, {
             // +/= (IE)
         case 107:
             // keypad + (IE, Mozilla)
-            this.mapmodule.zoomIn();
+            this.mapmodule.adjustZoomLevel(1);
             break;
         case 45:
             // -/_ (ASCII, Opera), keypad - (ASCII, Opera)
@@ -94,7 +94,7 @@ OpenLayers.Control.PorttiKeyboard = OpenLayers.Class(OpenLayers.Control, {
             // -/_ (IE)
         case 95:
             // -/_ (some ASCII)
-            this.mapmodule.zoomOut();
+            this.mapmodule.adjustZoomLevel(-1);
             break;
             // F key.
         case 70:

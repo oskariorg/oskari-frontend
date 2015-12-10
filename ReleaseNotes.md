@@ -2,18 +2,83 @@
 
 ## 1.35
 
+### mapwfs2_ol3
+
+WFSRefreshManualLoadLayersEvent is now included in ol3 version as well and changing the size of the map no longer results in JS-error.
+
 ### infobox
 
 Popup not show anymore dublicate info.
 
-### mapping/mapmodule/mapmodule.ol2
+### Mapmodule consistency - POSSIBLE BREAKING CHANGES!
 
- - _calculateScalesFromResolutions function removed. Use _calculateScalesImpl instead
- - _ensureExists function removed as it is not used by anyone
+Renamed functions
+- _calculateScalesFromResolutions() removed. Use _calculateScalesImpl() instead.
+- _createMap() and _createMapImpl() removed. Use createMap() instead. Also the function no longer has side-effects and returns the created map implementation.
+- _addClickControl() renamed _setupMapEvents().
+- _getMapCenter() removed. Use getMapCenter() instead.
+- _updateDomainImpl() removed. Use updateDomain() instead.
+- panMapToLonLat()/moveMapToLanLot() removed. Use centerMap() instead.
+- panMapEast()/panMapWest()/panMapNorth()/panMapSouth() removed. Use panMapByPixels() instead.
+- zoomIn()/zoomOut() removed. Use adjustZoomLevel() instead.
+- zoomTo() removed. Use setZoomLevel() instead.
+
+Unused functions removed:
+  - _ensureExists()
+  - getProjectionObject()
+  - _createBaseLayer()
+  - getExtentArray()
+  - getMapViewPortDiv()
+  - getMapLayersContainerDiv()
+  - _getMapLayersByName()
+  - getMapLayersByName()
+  - getMapElDom()
+  - centerMapByPixels()
+  - moveMapByPixels()
+  - _setLayerImplIndex()
+  - _removeLayerImpl()
+  - _setLayerImplVisible()
+  - _setLayerImplOpacity()
+  - getLayerDefs()
+  - getLayers()
+  - getLayersByName()
+
+Added functions so internal references don't need to be called:
+- getMapElementId()
+- getCurrentExtent()
 
 ### mapping/mapmodule/plugin/vectorlayer
 
-Both ol2 and ol3 implementations of VectorLayerPlugin have been changed to allow define mouse over cursor for added feature (added cursor option handling).
+Both ol2 and ol3 implementations of VectorLayerPlugin have been added to following features:
+- allow define mouse over cursor for added feature (added cursor option handling). Add the wanted cursor to MapModulePlugin.AddFeaturesToMapRequest options, for example: {cursor: 'zoom-out'}
+- allow define features prio order. Highest number is showed on top and lowest to under. Add the wanted prio to MapModulePlugin.AddFeaturesToMapRequest options, for example: {prio:1}
+- allow define layers and their styles from config. Defined layer style is used when feature not contains own style. If layer or feature style is not defined then using default style. For example configuration:
+```javascript
+    "layers": [
+        {
+            "id": "EXAMPLE1",
+            "style": {
+                "fill": {
+                    "color": "#ff00ff"
+                },
+                "stroke": {
+                    "color": "#ff00ff",
+                    "width": 3
+                },
+                "text": {
+                    "fill": {
+                        "color": "#0000ff"
+                    },
+                    "stroke": {
+                        "color": "#ff00ff",
+                        "width": 4
+                    }
+                }
+            }
+        }
+    ]
+```
+
 
 ### publisher2
 

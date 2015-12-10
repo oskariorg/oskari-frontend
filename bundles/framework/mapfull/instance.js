@@ -15,7 +15,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
      */
     function () {
         this.__name = 'mapfull';
-        this.map = null;
         this.core = null;
         this.sandbox = null;
         this.mapmodule = null;
@@ -136,7 +135,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 );
 
             me.mapmodule = module;
-            var map = me.getSandbox().register(module);
+            me.getSandbox().register(module);
             // oskariui-left holds statsgrid and possibly other data stuff, size in config should include that as well as the map
             // set map size
             // call portlet with ?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=0&p_p_state=exclusive&p_p_mode=view&published=true
@@ -162,13 +161,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 );
             });
 
-
-
             module.start(me.getSandbox());
-
-            if (!me.nomaprender) {
-                map.render(me.mapDivId);
-            }
 
             me.adjustMapSize();
 
@@ -195,8 +188,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     }
                 }
             }
-
-            me.map = map;
         },
         /**
          * @method start

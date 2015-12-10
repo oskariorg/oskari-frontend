@@ -16,8 +16,10 @@ Oskari.clazz.define(
             multipleSymbolizers: false,
             namedLayersAsArray: true
         });
-        this._style = OpenLayers.Util.applyDefaults({}, OpenLayers.Feature.Vector.style['default']);
+
         this._layers = {};
+        this._features = {};
+        this._layerStyles = {};
     }, {
         /**
          * @method register
@@ -40,8 +42,49 @@ Oskari.clazz.define(
          *
          */
         _startPluginImpl: function () {
-            this.registerVectorFormats();
+            var me = this;
+            me.registerVectorFormats();
+            me._createConfiguredLayers();
         },
+
+        /**
+         * @method  @private _createConfiguredLayers Create configured layers an their styles
+         */
+        _createConfiguredLayers: function(){
+            var me = this,
+                conf = me.getConfig();
+            if(conf.layers) {
+                for(var i=0;i<conf.layers.length;i++) {
+                    var layer = conf.layers[i];
+                    var layerId = layer.id;
+                    var layerStyle = layer.style;
+
+                    if(!me._features[layerId]) {
+                        me._features[layerId] = [];
+                    }
+
+                    var opacity = 100;
+                    var olLayer = new OpenLayers.Layer.Vector(me._olLayerPrefix + layerId);
+                    olLayer.events.register('click', this, function(e) {
+                        // clicking on map, check if feature is hit
+                        if (e.target && e.target._featureId) {
+                            me.__featureClicked([olLayer.getFeatureById(e.target._featureId)], olLayer);
+                        }
+                        return true;
+                    });
+                    olLayer.setOpacity(opacity);
+
+                    me._map.addLayer(olLayer);
+                    me._map.setLayerIndex(
+                        olLayer,
+                        me._map.layers.length
+                    );
+                    me._layers[layerId] = olLayer;
+                    me._layerStyles[layerId] = layerStyle;                    
+                }
+            }
+        },
+
         /**
         * @method _createEventHandlers
         * Create event handlers
@@ -222,12 +265,22 @@ Oskari.clazz.define(
                 olLayer,
                 layer,
                 mapLayerService = me._sandbox.getService('Oskari.mapframework.service.MapLayerService'),
-                featureInstance;
+                featureInstance,
+                isOlLayerAdded = true;
+
             if (!format) {
                 return;
             }
 
             if (geometry) {
+                // if there's no layerId provided -> Just use a generic vector layer for all.
+                if (!options.layerId) {
+                    options.layerId = 'VECTOR';
+                };
+
+                if(!me._features[options.layerId]) {
+                  me._features[options.layerId] = [];
+                }
                 var features = format.read(geometry);
                 //if there's no layerId provided -> Just use a generic vector layer for all.
                 if (!options.layerId) {
@@ -262,19 +315,17 @@ Oskari.clazz.define(
                     olLayer.setOpacity(opacity);
                     isOlLayerAdded = false;
                 }
+
                 if (options.clearPrevious === true) {
                     this._removeFeaturesByAttribute(olLayer);
                     olLayer.removeAllFeatures();
                     olLayer.refresh();
+                    me._features[options.layerId] = [];
                 }
 
-
-                if (options.featureStyle) {
-                    me.setDefaultStyle(options.featureStyle);
-                    for (i=0; i < features.length; i++) {
-                        featureInstance = features[i];
-                        featureInstance.style = me._style;
-                    }
+                for (i=0; i < features.length; i++) {
+                    featureInstance = features[i];
+                    featureInstance.style = me.getStyle(options);
                 }
 
                 if(options.cursor){
@@ -290,7 +341,31 @@ Oskari.clazz.define(
                     }
                 }
 
-                olLayer.addFeatures(features);
+                // prio handling
+                var prio = options.prio || 0;
+                me._features[options.layerId].push({
+                  data: features,
+                  prio: prio
+                });
+
+                if(options.prio && !isNaN(options.prio)){
+                    this._removeFeaturesByAttribute(olLayer);
+                    olLayer.removeAllFeatures();
+                    olLayer.refresh();
+
+                    me._features[options.layerId].sort(function(a,b){
+                      return b.prio - a.prio;
+                    });
+
+                    _.forEach(me._features[options.layerId], function(featObj) {
+                        olLayer.addFeatures(featObj.data);
+                    });
+                } else {
+                    olLayer.addFeatures(features);
+                }
+
+
+
                 if(isOlLayerAdded === false) {
                     me._map.addLayer(olLayer);
                     me._map.setLayerIndex(
@@ -357,33 +432,56 @@ Oskari.clazz.define(
             }
         },
         /**
-         * @method setDefaultStyle
+         * @method getStyle
          *
-         * @param {Object} styles. If not given, will set default styles
+         * @param {Object} options. If option.featureStyle not given, will set default layer styles. If layer style not exist then use defaults.
+         * Wanted style object:
+         * {
+         *     fill: {
+         *         color: '#ff0000'
+         *     },
+         *     stroke: {
+         *         color: '#00ff00',
+         *         width: 3
+         *     },
+         *     text: {
+         *         fill: {
+         *             color: '#0000ff'
+         *         },
+         *         stroke: {
+         *             color: '#ff00ff',
+         *             width: 4
+         *         }
+         *     }
+         * }
          */
-        setDefaultStyle : function(styles) {
+        getStyle : function(options) {
             var me = this;
+            var style = OpenLayers.Util.applyDefaults({}, OpenLayers.Feature.Vector.style['default']);            
+            var styles = options.featureStyle || me._layerStyles[options.layerId];
+
             //overwriting default style if given
             if(styles) {
                 if(Oskari.util.keyExists(styles, 'fill.color')) {
-                    me._style.fillColor = styles.fill.color;
+                    style.fillColor = styles.fill.color;
                 }
                 if(Oskari.util.keyExists(styles, 'stroke.color')) {
-                    me._style.strokeColor = styles.stroke.color;
+                    style.strokeColor = styles.stroke.color;
                 }
                 if(Oskari.util.keyExists(styles, 'stroke.width')) {
-                    me._style.strokeWidth = styles.stroke.width;
+                    style.strokeWidth = styles.stroke.width;
                 }
                 if(Oskari.util.keyExists(styles, 'text.fill.color')) {
-                    me._style.fontColor = styles.text.fill.color;
+                    style.fontColor = styles.text.fill.color;
                 }
                 if(Oskari.util.keyExists(styles, 'text.stroke.color')) {
-                    me._style.labelOutlineColor = styles.text.stroke.color;
+                    style.labelOutlineColor = styles.text.stroke.color;
                 }
                 if(Oskari.util.keyExists(styles, 'text.stroke.width')) {
-                    me._style.getText().labelOutlineWidth = styles.text.stroke.width;
+                    style.labelOutlineWidth = styles.text.stroke.width;
                 }
             }
+            return style;
         },
         /**
          * @method _createRequestHandlers
