@@ -445,7 +445,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 if(styleDef.stroke.width) {
                     stroke.width = styleDef.stroke.width;
                 }
-                olStyle.fill = new ol.style.Stroke(stroke);
+                olStyle.stroke = new ol.style.Stroke(stroke);
             }
             if(styleDef.image) {
                 var image = {};
