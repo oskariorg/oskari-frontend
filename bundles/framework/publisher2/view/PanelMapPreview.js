@@ -58,16 +58,39 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
         };
     }, {
         /**
+         * @method onEvent
+         * @param {Oskari.mapframework.event.Event} event a Oskari event object
+         * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
+         */
+        onEvent: function (event) {
+            var handler = this.eventHandlers[event.getName()];
+            if (!handler) {
+                return;
+            }
+            return handler.apply(this, [event]);
+        },
+        /**
+         * @property {Object} eventHandlers
+         * @static
+         */
+        eventHandlers: {
+            MapSizeChangedEvent: function(){
+                //update map / container size but prevent a new mapsizechanged request from being sent 
+                this.updateMapSize();
+            }
+        },
+        getName: function() {
+            return "Oskari.mapframework.bundle.publisher2.view.PanelMapPreview";
+        },
+        /**
          * @public @method updateMapSize
          * Adjusts the map size according to publisher selection
-         *
          *
          */
         updateMapSize: function () {
             if(!this.panel) {
                 return;
             }
-
             var me = this,
                 size = me._getSelectedMapSize(),
                 customsize = me.panel.getContainer().find('.customsize'),
@@ -228,6 +251,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
         * Update map size
         */
         _updateMapModuleSize: function () {
+
+            //turn off event handlers in order to avoid consecutive calls to mapsizechanged
+            this._unregisterEventHandlers();
             var me = this,
                 reqBuilder = me.sandbox.getRequestBuilder(
                     'MapFull.MapSizeUpdateRequest'
@@ -237,6 +263,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
             }
 
             me._updateMapMode();
+
+            //turn event handlers back on.
+            this._registerEventHandlers();
         },
 
         /**
@@ -407,6 +436,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
 
             me.panel = panel;
             me.updateMapSize();
+
+            me._registerEventHandlers();
+        },
+        _registerEventHandlers: function() {
+            var me = this;
+            for (var p in me.eventHandlers) {
+                if (me.eventHandlers.hasOwnProperty(p)) {
+                    me.sandbox.registerForEventByName(me, p);
+                }
+            }
+        },
+        _unregisterEventHandlers: function() {
+            var me = this;
+            for (var p in me.eventHandlers) {
+                if (me.eventHandlers.hasOwnProperty(p)) {
+                    me.sandbox.unregisterFromEventByName(me, p);
+                }
+            }
         },
         _createCustomSizes: function(contentPanel) {
             var me = this,
@@ -521,6 +568,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
 
             mapElement.width('');
             mapElement.height(jQuery(window).height());
+
+            me._unregisterEventHandlers();
 
             // FIXME: timing issue?
             window.setTimeout(function(){
