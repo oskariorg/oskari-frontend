@@ -6,6 +6,14 @@
 
 WFSRefreshManualLoadLayersEvent is now included in ol3 version as well and changing the size of the map no longer results in JS-error.
 
+### drawtools/ol3 and VectorLayerPlugin
+
+Now use mapmodules getStyle() to parse the style JSON.
+
+### mapmodule - ControlsPlugin/ol3
+
+Now only handles DrawingEvents that have measuretool ids so drawing can be used for more things than measuring.
+
 ### infobox
 
 Popup not show anymore dublicate info.
@@ -46,6 +54,7 @@ Unused functions removed:
 Added functions so internal references don't need to be called:
 - getMapElementId()
 - getCurrentExtent()
+- getStyle() takes a json presentation of style and returns matching ol2/ol3 style object for plugins to use
 
 ### mapping/mapmodule/plugin/vectorlayer
 
