@@ -100,6 +100,10 @@ Fixed a bug in toolbar's allowed locations (drag & drop)
 
 Replaced mobile / desktop - preview size settings with predefined (fill, small etc.) iframe size settings.
 
+Fixed a bug in publisher resizing when windod is resized
+
+Fixed a bug with saving / showing published maps with light theme
+
 ## 1.34.1
 
 ### mapmodule/ol3

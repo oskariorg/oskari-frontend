@@ -202,11 +202,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 me.getService().addLayers();
                 me.getFlyout().close();
             }
-            // publishing mode should be sent to mapfull to disable resizing
-            requestBuilder = me.sandbox.getRequestBuilder('MapFull.MapResizeEnabledRequest');
-            if (requestBuilder) {
-                me.sandbox.request(me, requestBuilder(!blnEnabled));
-            }
         },
         /**
          * Resets Thematic maps UI and returns the stats layer if found
