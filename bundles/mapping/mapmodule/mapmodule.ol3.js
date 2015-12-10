@@ -122,7 +122,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             return true;
         },
 
-/* OL3 specific - check if this can be done in a common way 
+/* OL3 specific - check if this can be done in a common way
 ------------------------------------------------------------------> */
         getInteractionInstance: function (interactionName) {
             var interactions = this.getMap().getInteractions().getArray();
@@ -175,7 +175,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         getMapZoom: function() {
             return this.getMap().getView().getZoom();
         },
-        
+
         getSize: function() {
             var size = this.getMap().getSize();
             return {

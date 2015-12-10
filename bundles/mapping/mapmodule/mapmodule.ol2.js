@@ -136,7 +136,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         },
 
 
-/* OL2 specific - check if this can be done in a common way 
+/* OL2 specific - check if this can be done in a common way
 ------------------------------------------------------------------> */
         /**
          * Send map click event.
@@ -177,7 +177,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         getMapZoom: function () {
             return this.getMap().getZoom();
         },
-        
+
         getSize: function() {
             var size = this.getMap().getCurrentSize();
             return {

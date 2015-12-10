@@ -90,7 +90,7 @@ Oskari.clazz.define(
                     var vectorSource = new ol.source.Vector();
                     var olLayer = new ol.layer.Vector({
                       name: me._olLayerPrefix + layerId,
-                      id: layerId, 
+                      id: layerId,
                       source: vectorSource});
 
                     olLayer.setOpacity(opacity);
@@ -98,7 +98,7 @@ Oskari.clazz.define(
                     me._map.addLayer(olLayer);
                     me.raiseVectorLayer(olLayer);
                     me._layers[layerId] = olLayer;
-                    me._layerStyles[layerId] = layerStyle;                    
+                    me._layerStyles[layerId] = layerStyle;
                 }
             }
         },
@@ -370,7 +370,7 @@ Oskari.clazz.define(
                                 vectorSource.addFeature(feature);
                                 zIndex++;
                             });
-                            
+
                         });
                     } else {
                       vectorSource.addFeatures(features);

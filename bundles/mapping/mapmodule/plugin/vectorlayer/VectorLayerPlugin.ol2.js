@@ -80,7 +80,7 @@ Oskari.clazz.define(
                         me._map.layers.length
                     );
                     me._layers[layerId] = olLayer;
-                    me._layerStyles[layerId] = layerStyle;                    
+                    me._layerStyles[layerId] = layerStyle;
                 }
             }
         },
@@ -457,7 +457,7 @@ Oskari.clazz.define(
          */
         getStyle : function(options) {
             var me = this;
-            var style = OpenLayers.Util.applyDefaults({}, OpenLayers.Feature.Vector.style['default']);            
+            var style = OpenLayers.Util.applyDefaults({}, OpenLayers.Feature.Vector.style['default']);
             var styles = options.featureStyle || me._layerStyles[options.layerId];
 
             //overwriting default style if given

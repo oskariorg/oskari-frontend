@@ -75,7 +75,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
          */
         eventHandlers: {
             MapSizeChangedEvent: function(){
-                //update map / container size but prevent a new mapsizechanged request from being sent 
+                //update map / container size but prevent a new mapsizechanged request from being sent
                 this.updateMapSize();
             }
         },

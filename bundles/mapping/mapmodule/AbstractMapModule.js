@@ -76,9 +76,9 @@ Oskari.clazz.define(
         me._mapResolutions = me._options.resolutions;
         // props: left,bottom,right, top
         me._maxExtent = me._options.maxExtent || {
-            left : 0, 
-            bottom : 0, 
-            right: 10000000, 
+            left : 0,
+            bottom : 0,
+            right: 10000000,
             top: 10000000
         };
 
@@ -388,7 +388,7 @@ Oskari.clazz.define(
         moveMapToLonLat: function (lonlat, zoomAdjust, pIsDragging) {
             var blnSilent = true;
             var requestedZoomLevel = this.getMapZoom();
-            
+
             if (zoomAdjust) {
                 requestedZoomLevel = this._getNewZoomLevel(zoomAdjust);
                 blnSilent = false;
