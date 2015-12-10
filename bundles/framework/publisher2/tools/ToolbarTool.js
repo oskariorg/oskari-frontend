@@ -32,8 +32,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             'toolbarConfig': {
                 'toolbarId': 'PublisherToolbar',
                 'defaultToolbarContainer': '.publishedToolbarContent',
-                'hasContentContainer': true,
-                'classes': {}
+                'hasContentContainer': true
             },
             'publishedmyplaces2Config': {
                 'toolbarId': 'PublisherToolbar',
@@ -185,7 +184,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 if (me.publishedmyplaces2Config && me.publishedmyplaces2Config.layer) {
                     retValue.configuration.publishedmyplaces2 = { conf : me.publishedmyplaces2Config };
                 }
-
                 return retValue;
             } else {
                 return null;
@@ -303,8 +301,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                     me._presetDataConfig('toolbarConfig');
                 }
                 tool.__plugin.setToolbarContainer();
-                me.toolbarConfig.classes = tool.__plugin.getToolConfs();
-
                 var _addToolGroup = function (groupName, options, toolOption) {
                     var i,
                         ilen,
@@ -741,6 +737,29 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 }
             }
             return false;
+        },
+        stop: function() {
+            var me = this,
+                sandbox = me.__sandbox;
+            //send remove request per active button
+            if (me.toolbarConfig) {
+                for (i = 0, ilen = me.buttonGroups.length; i < ilen; i++) {
+                    buttonGroup = me.buttonGroups[i];
+                    for (toolName in buttonGroup.buttons) {
+                        if (me.toolbarConfig && me.toolbarConfig[buttonGroup.name] && me.toolbarConfig[buttonGroup.name][toolName] === true) {
+                            sandbox.postRequestByName(
+                                'Toolbar.RemoveToolButtonRequest', [toolName, buttonGroup.name, me.toolbarConfig.toolbarId]);
+                        }
+                    }
+                }
+            }
+
+            if(me.__plugin) {
+                if(me.__sandbox){
+                    me.__plugin.stopPlugin(me.__sandbox);
+                }
+                me.__mapmodule.unregisterPlugin(me.__plugin);
+            }
         }
 
     }, {
