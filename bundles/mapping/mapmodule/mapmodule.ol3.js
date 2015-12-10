@@ -472,10 +472,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 if(styleDef.text.stroke) {
                     var textStroke = {};
                     if(styleDef.text.stroke.color) {
-                        textStroke.color : styleDef.text.stroke.color;
+                        textStroke.color = styleDef.text.stroke.color;
                     }
                     if(styleDef.text.stroke.width) {
-                        textStroke.width : styleDef.text.stroke.width;
+                        textStroke.width = styleDef.text.stroke.width;
                     }
                     text.stroke = new ol.style.Stroke(textStroke);
                 }
