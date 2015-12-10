@@ -49,7 +49,6 @@ Oskari.clazz.define(
 
 
         me.tempVectorLayer = null;
-        me._layers = {};
         //a hash for layers that are in the middle of the loading process
         me._layersLoading = {};
 
@@ -459,29 +458,32 @@ Oskari.clazz.define(
             }
 
             for (i = 0; i < layers.length; i += 1) {
-                if (layers[i].hasFeatureData()) {
-                    // clean features lists
-                    layers[i].setActiveFeatures([]);
-                    if (grid !== null && grid !== undefined) {
-                        layerId = layers[i].getId();
-                        var ollayer = this._layers[layerId];
-                        tiles = ollayer.getSource().getNonCachedGrid(grid);
-                        //tiles = me.getNonCachedGrid(layerId, grid);
-                        me._layersLoading[layerId] = tiles.length;
-                        me.getIO().setLocation(
-                            layerId,
-                            srs, [
-                                bbox[0],
-                                bbox[1],
-                                bbox[2],
-                                bbox[3]
-                            ],
-                            zoom,
-                            grid,
-                            tiles
-                        );
-                    }
+                var layer = layers[i];
+                if (!layer.hasFeatureData()) {
+                    continue;
                 }
+                // clean features lists
+                layer.setActiveFeatures([]);
+                if (grid === null || grid === undefined) {
+                    continue;
+                }
+                layerId = layers[i].getId();
+                var ollayer = this.getOLMapLayer(layer);
+                tiles = ollayer.getSource().getNonCachedGrid(grid);
+                //tiles = me.getNonCachedGrid(layerId, grid);
+                me._layersLoading[layerId] = tiles.length;
+                me.getIO().setLocation(
+                    layerId,
+                    srs, [
+                        bbox[0],
+                        bbox[1],
+                        bbox[2],
+                        bbox[3]
+                    ],
+                    zoom,
+                    grid,
+                    tiles
+                );
             }
 
             // update zoomLevel and highlight pictures
@@ -516,17 +518,18 @@ Oskari.clazz.define(
             }
 
             layers.forEach(function (layer) {
-                if (layer.hasFeatureData()) {
-                    fids = me.WFSLayerService.getSelectedFeatureIds(layer.getId());
-                    me.removeHighlightImages(layer);
-                    if (me._highlighted) {
-                        me.getIO().highlightMapLayerFeatures(
-                            layer.getId(),
-                            fids,
-                            false,
-                            geomRequest
-                        );
-                    }
+                if (!layer.hasFeatureData()) {
+                    return;
+                }
+                fids = me.WFSLayerService.getSelectedFeatureIds(layer.getId());
+                me.removeHighlightImages(layer);
+                if (me._highlighted) {
+                    me.getIO().highlightMapLayerFeatures(
+                        layer.getId(),
+                        fids,
+                        false,
+                        geomRequest
+                    );
                 }
             });
         },
@@ -721,8 +724,7 @@ Oskari.clazz.define(
             if (event.getMapLayer().hasFeatureData()) {
                 // render "normal" layer with new style
                 var OLLayer = this.getOLMapLayer(
-                    event.getMapLayer(),
-                    this.__typeNormal
+                    event.getMapLayer()
                 );
                 OLLayer.redraw();
 
@@ -780,8 +782,6 @@ Oskari.clazz.define(
                 tiles,
                 zoom;
 
-            me.getIO().setMapSize(event.getWidth(), event.getHeight());
-
             // update tiles
             srs = map.getSrsName();
             bbox = map.getExtent();
@@ -803,7 +803,7 @@ Oskari.clazz.define(
                     layer.setActiveFeatures([]);
                     if (grid !== null && grid !== undefined) {
                         layerId = layer.getId();
-                        var ollayer = this._layers[layerId];
+                        var ollayer = this.getOLMapLayer(layerId);
                         tiles = ollayer.getSource().getNonCachedGrid(grid);
                         //tiles = me.getNonCachedGrid(layerId, grid);
                         me.getIO().setLocation(
@@ -829,54 +829,45 @@ Oskari.clazz.define(
          * @param {Object} event
          */
         mapSizeChangedHandler: function (event) {
-            var bbox,
-                grid,
-                layerId,
-                layers,
-                me = this,
-                map = me.getSandbox().getMap(),
-                srs,
-                tiles,
-                zoom;
-
-
+            var me = this;
             me.getIO().setMapSize(event.getWidth(), event.getHeight());
 
             // update tiles
-            srs = map.getSrsName();
-            bbox = map.getExtent();
-            zoom = map.getZoom();
+            var grid = me.getGrid();
+            if (grid === null || grid === undefined) {
+                return;
+            }
 
-            grid = me.getGrid();
-
-            layers = me.getSandbox().findAllSelectedMapLayers();
+            var map = me.getSandbox().getMap();
+            var srs = map.getSrsName();
+            var bbox = map.getExtent();
+            var zoom = map.getZoom();
+            var layers = me.getSandbox().findAllSelectedMapLayers();
 
             layers.forEach(function (layer) {
-                if (layer.hasFeatureData()) {
-                    // clean features lists
-                    layer.setActiveFeatures([]);
-                    if (grid !== null && grid !== undefined) {
-                        layerId = layer.getId();
-                        if(this._layers) {
-                            var ollayer = this._layers[layerId];
-                            tiles = ollayer.getSource().getNonCachedGrid(grid);
-                            //tiles = me.getNonCachedGrid(layerId, grid);
-                            me.getIO().setLocation(
-                                layerId,
-                                srs, [
-                                    bbox.left,
-                                    bbox.bottom,
-                                    bbox.right,
-                                    bbox.top
-                                ],
-                                zoom,
-                                grid,
-                                tiles
-                            );
-                        }
-                       // not in OL3 me._tilesLayer.redraw();
-                    }
+                if (!layer.hasFeatureData()) {
+                    return;
                 }
+                // clean features lists
+                layer.setActiveFeatures([]);
+                var ollayer = me.getOLMapLayer(layer);
+                if(!ollayer) {
+                    return;
+                }
+                var tiles = ollayer.getSource().getNonCachedGrid(grid);
+                //tiles = me.getNonCachedGrid(layerId, grid);
+                me.getIO().setLocation(
+                    layer.getId(),
+                    srs, [
+                        bbox.left,
+                        bbox.bottom,
+                        bbox.right,
+                        bbox.top
+                    ],
+                    zoom,
+                    grid,
+                    tiles
+                );
             });
         },
 
@@ -1027,6 +1018,7 @@ Oskari.clazz.define(
             if (!layer || !layer.hasFeatureData()) {
                 return null;
             }
+            type = type || this.__typeNormal;
             return this.layerByName(this.__layerPrefix + layer.getId() + '_' + type);
         },
         /**
@@ -1409,7 +1401,7 @@ Oskari.clazz.define(
                 boundsObj = imageBbox,
                 ols,
                 wfsMapImageLayer,
-                normalLayer = me.getOLMapLayer(layer, me.__typeNormal);
+                normalLayer = me.getOLMapLayer(layer);
 
             /** Safety checks */
             if (!imageUrl || !boundsObj) {

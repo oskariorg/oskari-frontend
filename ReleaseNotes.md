@@ -2,6 +2,10 @@
 
 ## 1.35
 
+### mapwfs2_ol3
+
+WFSRefreshManualLoadLayersEvent is now included in ol3 version as well and changing the size of the map no longer results in JS-error.
+
 ### infobox
 
 Popup not show anymore dublicate info.

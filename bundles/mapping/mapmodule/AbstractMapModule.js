@@ -584,6 +584,7 @@ Oskari.clazz.define(
         setLayerIndex: Oskari.AbstractFunc('setLayerIndex'),
         _addMapControlImpl: Oskari.AbstractFunc('_addMapControlImpl(ctl)'),
         _removeMapControlImpl: Oskari.AbstractFunc('_removeMapControlImpl(ctl)'),
+        getStyle: Oskari.AbstractFunc('getStyle'),
 /* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
 
 

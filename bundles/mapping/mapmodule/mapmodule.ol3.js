@@ -424,6 +424,40 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          */
         _removeMapControlImpl: function(ctl) {
             this.getMap().removeControl(ctl);
+        },
+        /**
+         * Creates style based on JSON
+         * @return {ol.style.Style} style ol3 specific!
+         */
+        getStyle : function(styleDef) {
+            // TODO: handle missing values!!
+            var style = new ol.style.Style({
+                fill: new ol.style.Fill({
+                  color: styleDef.fill.color
+                }),
+                stroke: new ol.style.Stroke({
+                  color: styleDef.stroke.color,
+                  width: styleDef.stroke.width
+                }),
+                image: new ol.style.Circle({
+                  radius: styleDef.image.radius,
+                  fill: new ol.style.Fill({
+                    color: styleDef.image.fill.color
+                  })
+                }),
+                text: new ol.style.Text({
+                     scale: styleDef.text.scale,
+                     fill: new ol.style.Fill({
+                       color: styleDef.text.stroke.color
+                     }),
+                     stroke: new ol.style.Stroke({
+                       color: styleDef.text.stroke.color,
+                       width: styleDef.text.stroke.width
+                     })
+                  })
+            });
+
+            return style;
         }
 /* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
     }, {
