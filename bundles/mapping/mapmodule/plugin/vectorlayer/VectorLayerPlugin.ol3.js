@@ -39,15 +39,6 @@ Oskari.clazz.define(
                 }
             }
         };
-        this._defaultStyle = {
-            fillColor: 'rgba(255,0,255,0.2)',
-            strokeColor: 'rgba(0,0,0,1)',
-            width: 2,
-            radius: 4,
-            textScale: 1.3,
-            textOutlineColor: 'rgba(255,255,255,1)',
-            textColor: 'rgba(0,0,0,1)'
-        };
         this._pointerMoveAdded = false;
         this._layers = {};
         this._features = {};

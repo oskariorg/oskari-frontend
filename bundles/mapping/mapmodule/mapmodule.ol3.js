@@ -430,34 +430,59 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {ol.style.Style} style ol3 specific!
          */
         getStyle : function(styleDef) {
-            // TODO: handle missing values!!
-            var style = new ol.style.Style({
-                fill: new ol.style.Fill({
+            styleDef = styleDef || {};
+            var olStyle = {};
+            if(Oskari.util.keyExists(styleDef, 'fill.color')) {
+                olStyle.fill = new ol.style.Fill({
                   color: styleDef.fill.color
-                }),
-                stroke: new ol.style.Stroke({
-                  color: styleDef.stroke.color,
-                  width: styleDef.stroke.width
-                }),
-                image: new ol.style.Circle({
-                  radius: styleDef.image.radius,
-                  fill: new ol.style.Fill({
-                    color: styleDef.image.fill.color
-                  })
-                }),
-                text: new ol.style.Text({
-                     scale: styleDef.text.scale,
-                     fill: new ol.style.Fill({
-                       color: styleDef.text.stroke.color
-                     }),
-                     stroke: new ol.style.Stroke({
-                       color: styleDef.text.stroke.color,
-                       width: styleDef.text.stroke.width
-                     })
-                  })
-            });
+                });
+            }
+            if(styleDef.stroke) {
+                var stroke = {};
+                if(styleDef.stroke.color) {
+                    stroke.color = styleDef.stroke.color;
+                }
+                if(styleDef.stroke.width) {
+                    stroke.width = styleDef.stroke.width;
+                }
+                olStyle.fill = new ol.style.Stroke(stroke);
+            }
+            if(styleDef.image) {
+                var image = {};
+                if(styleDef.image.radius) {
+                    image.radius = styleDef.image.radius;
+                }
+                if(Oskari.util.keyExists(styleDef.image, 'fill.color')) {
+                    image.fill = new ol.style.Fill({
+                        color: styleDef.image.fill.color
+                    });
+                }
+                olStyle.image = new ol.style.Circle(image);
+            }
+            if(styleDef.text) {
+                var text = {};
+                if(styleDef.text.scale) {
+                    text.scale = styleDef.text.scale;
+                }
+                if(Oskari.util.keyExists(styleDef.text, 'fill.color')) {
+                    text.fill = new ol.style.Fill({
+                        color: styleDef.text.fill.color
+                    });
+                }
+                if(styleDef.text.stroke) {
+                    var textStroke = {};
+                    if(styleDef.text.stroke.color) {
+                        textStroke.color : styleDef.text.stroke.color;
+                    }
+                    if(styleDef.text.stroke.width) {
+                        textStroke.width : styleDef.text.stroke.width;
+                    }
+                    text.stroke = new ol.style.Stroke(textStroke);
+                }
+                olStyle.text = new ol.style.Text(text);
+            }
 
-            return style;
+            return new ol.style.Style(olStyle);
         }
 /* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
     }, {
