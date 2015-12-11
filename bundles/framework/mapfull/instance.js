@@ -281,7 +281,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             var skipLocation = false;
             if (me.getMapModule().isPluginActivated('GeoLocationPlugin')) {
                 // get plugin
-                var plugin = me.getMapModule().getPluginInstance(
+                var plugin = me.getMapModule().getPluginInstances(
                     'GeoLocationPlugin'
                 );
                 skipLocation = plugin.hasSetLocation();

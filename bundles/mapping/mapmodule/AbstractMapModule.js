@@ -157,7 +157,7 @@ Oskari.clazz.define(
             sandbox.addRequestHandler('MapMoveRequest', this.requestHandlers.mapMoveRequestHandler);
             sandbox.addRequestHandler('ShowProgressSpinnerRequest', this.requestHandlers.showSpinnerRequestHandler);
 
-            this.startPlugins(sandbox);
+            this.startPlugins();
             this.updateCurrentState();
             this.started = this._startImpl();
         },
@@ -174,7 +174,7 @@ Oskari.clazz.define(
                 return;
             }
 
-            this.stopPlugins(sandbox);
+            this.stopPlugins();
             this.started = this._stopImpl();
         },
         /**
@@ -285,42 +285,6 @@ Oskari.clazz.define(
 
 /* ---------------- SHARED FUNCTIONS --------------- */
         /**
-         * @method getName
-         * @return {String} the name for the component
-         */
-        getName: function () {
-            return this._id + 'MapModule';
-        },
-        /**
-         * @method getSandbox
-         * Returns reference to Oskari sandbox
-         * @return {Oskari.mapframework.sandbox.Sandbox}
-         */
-        getSandbox: function () {
-            return this._sandbox;
-        },
-        /**
-         * @method getLocalization
-         * Returns JSON presentation of bundles localization data for current
-         * language.
-         * If key-parameter is not given, returns the whole localization data.
-         *
-         * @param {String} key (optional) if given, returns the value for key
-         * @param {Boolean} force (optional) true to force reload for localization data
-         * @return {String/Object} returns single localization string or
-         *      JSON object for complete data depending on localization
-         *      structure and if parameter key is given
-         */
-        getLocalization: function (key, force) {
-            if (!this._localization || force === true) {
-                this._localization = Oskari.getLocalization('MapModule');
-            }
-            if (key) {
-                return this._localization[key];
-            }
-            return this._localization;
-        },
-        /**
          * Returns the id where map is rendered.
          * @return {String} DOMElement id like 'mapdiv'
          */
@@ -379,6 +343,7 @@ Oskari.clazz.define(
         getProjection: function () {
             return this._projectionCode;
         },
+/* --------------- MAP ZOOM ------------------------ */
         /**
          * @method getScaleArray
          * @return {Number[]} calculated mapscales
@@ -539,7 +504,9 @@ Oskari.clazz.define(
             }
             return this.getResolutionArray()[resIndex];
         },
+/* --------------- /MAP ZOOM ------------------------ */
 
+/* --------------- MAP LOCATION ------------------------ */
         /**
          * @method moveMapToLonLat
          * Moves the map to the given position.
@@ -591,6 +558,9 @@ Oskari.clazz.define(
             }
             return lonlat;
         },
+/* --------------- /MAP LOCATION ------------------------ */
+
+/* --------------- MAP STATE ------------------------ */
         /**
          * @method notifyStartMove
          * Notify other components that the map has started moving. Sends a MapMoveStartEvent.
@@ -664,7 +634,86 @@ Oskari.clazz.define(
               sandbox.notifyAll(evt);
             }
         },
+        /**
+         * @method updateCurrentState
+         * Setup layers from selected layers
+         * This is needed if map layers are added before mapmodule/plugins are started.
+         * Should be called only on startup, preferrably not even then
+         * (workaround for timing issues).
+         * If layers are already in map, this adds them twice and they cannot be
+         * removed anymore by removemaplayerrequest (it should be sent twice but ui doesn't
+         * offer that).
+         */
+        updateCurrentState: function () {
 
+            var me = this,
+                sandbox = me._sandbox,
+                layers = sandbox.findAllSelectedMapLayers(),
+                lps = this.getLayerPlugins(),
+                layersPlugin,
+                p;
+
+            for (p in lps) {
+                if (lps.hasOwnProperty(p)) {
+                    layersPlugin = lps[p];
+
+                    sandbox.printDebug('preselecting ' + p);
+                    layersPlugin.preselectLayers(layers);
+                }
+            }
+        },
+        /**
+         * Returns state for mapmodule including plugins that have getState() function
+         * @method getState
+         * @return {Object} properties for each pluginName
+         */
+        getState : function() {
+            var state = {
+                    plugins: {}
+                },
+                pluginName;
+
+            for (pluginName in this._pluginInstances) {
+                if (this._pluginInstances.hasOwnProperty(pluginName) && this._pluginInstances[pluginName].getState) {
+                    state.plugins[pluginName] = this._pluginInstances[pluginName].getState();
+                }
+            }
+            return state;
+        },
+        /**
+         * Returns state for mapmodule including plugins that have getStateParameters() function
+         * @method getStateParameters
+         * @return {String} link parameters for map state
+         */
+        getStateParameters: function () {
+            var params = '',
+                pluginName;
+
+            for (pluginName in this._pluginInstances) {
+                if (this._pluginInstances.hasOwnProperty(pluginName) && this._pluginInstances[pluginName].getStateParameters) {
+                    params = params + this._pluginInstances[pluginName].getStateParameters();
+                }
+            }
+            return params;
+        },
+        /**
+         * Sets state for mapmodule including plugins that have setState() function
+         * NOTE! Not used for now
+         * @method setState
+         * @param {Object} properties for each pluginName
+         */
+        setState : function(state) {
+            var pluginName;
+
+            for (pluginName in this._pluginInstances) {
+                if (this._pluginInstances.hasOwnProperty(pluginName) && state[pluginName] && this._pluginInstances[pluginName].setState) {
+                    this._pluginInstances[pluginName].setState(state[pluginName]);
+                }
+            }
+        },
+/* --------------- /MAP STATE ------------------------ */
+
+/* --------------- CONTROLS ------------------------ */
         /**
          * @method getControls
          * Returns map controls - storage for controls by id. See getMapControl for getting single control.
@@ -706,6 +755,9 @@ Oskari.clazz.define(
             this._removeMapControlImpl(ctl);
             delete this._controls[id];
         },
+/* --------------- /CONTROLS ----------------------- */
+
+/* --------------- PLUGINS ------------------------ */
         /**
          * @method setLayerPlugin
          * Adds a plugin to the map that is responsible for rendering maplayers on the map.
@@ -746,19 +798,14 @@ Oskari.clazz.define(
         /**
          * @method getPluginInstances
          * Returns object containing plugins that have been registered to the map.
-         * @return {Object} contains plugin ids as keys and plugin objects as values
+         * @param {String} pluginName name of the plugin to get (optional)
+         * @return {Object} contains plugin ids as keys and plugin objects as values or single plugin if param was given
          */
-        getPluginInstances: function () {
+        getPluginInstances: function (pluginName) {
+            if(pluginName) {
+                return this._pluginInstances[this.getName() + pluginName]
+            }
             return this._pluginInstances;
-        },
-        /**
-         * @method getPluginInstance
-         * Returns plugin with given name if it registered on the map
-         * @param {String} pluginName name of the plugin to get
-         * @return {Oskari.mapframework.ui.module.common.mapmodule.Plugin}
-         */
-        getPluginInstance: function (pluginName) {
-            return this._pluginInstances[this.getName() + pluginName];
         },
         /**
          * @method isPluginActivated
@@ -767,7 +814,7 @@ Oskari.clazz.define(
          * @return {Boolean} true if a plugin with given name is registered to the map
          */
         isPluginActivated: function (pluginName) {
-            var plugin = this._pluginInstances[this.getName() + pluginName];
+            var plugin = this.getPluginInstances(pluginName);
             if (plugin) {
                 return true;
             }
@@ -818,9 +865,7 @@ Oskari.clazz.define(
             var sandbox = this.getSandbox(),
                 pluginName = plugin.getName();
 
-            sandbox.printDebug(
-                '[' + this.getName() + ']' + ' Starting ' + pluginName
-            );
+            sandbox.printDebug('[' + this.getName() + ']' + ' Starting ' + pluginName);
             plugin.startPlugin(sandbox);
         },
         /**
@@ -832,25 +877,18 @@ Oskari.clazz.define(
             var sandbox = this.getSandbox(),
                 pluginName = plugin.getName();
 
-            sandbox.printDebug(
-                '[' + this.getName() + ']' + ' Starting ' + pluginName
-            );
+            sandbox.printDebug('[' + this.getName() + ']' + ' Starting ' + pluginName);
             plugin.stopPlugin(sandbox);
         },
         /**
          * @method startPlugin
          * Starts all registered plugins (see getPluginInstances() and registerPlugin()) by
          * calling its startPlugin() method.
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
          */
-        startPlugins: function (sandbox) {
-            var pluginName;
-            for (pluginName in this._pluginInstances) {
+        startPlugins: function () {
+            for (var pluginName in this._pluginInstances) {
                 if (this._pluginInstances.hasOwnProperty(pluginName)) {
-                    sandbox.printDebug(
-                        '[' + this.getName() + ']' + ' Starting ' + pluginName
-                    );
-                    this._pluginInstances[pluginName].startPlugin(sandbox);
+                    this.startPlugin(this._pluginInstances[pluginName]);
                 }
             }
         },
@@ -858,63 +896,56 @@ Oskari.clazz.define(
          * @method stopPlugins
          * Stops all registered plugins (see getPluginInstances() and registerPlugin()) by
          * calling its stopPlugin() method.
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
          */
-        stopPlugins: function (sandbox) {
-            var pluginName;
-            for (pluginName in this._pluginInstances) {
+        stopPlugins: function () {
+            for (var pluginName in this._pluginInstances) {
                 if (this._pluginInstances.hasOwnProperty(pluginName)) {
-                    sandbox.printDebug(
-                        '[' + this.getName() + ']' + ' Starting ' + pluginName
-                    );
-                    this._pluginInstances[pluginName].stopPlugin(sandbox);
+                    this.stopPlugin(this._pluginInstances[pluginName]);
                 }
             }
         },
+
+
+/* --------------- /PLUGINS ------------------------ */
+
+/* --------------- BUNDLE BOILERPLATE ------------------------ */
 
         /**
-         * Formats the measurement of the geometry.
-         * Returns a string with the measurement and
-         * an appropriate unit (m/km or m²/km²)
-         * or an empty string for point.
-         *
-         * @public @method formatMeasurementResult
-         *
-         * @param  {OpenLayers.Geometry} geometry
-         * @param  {String} drawMode
-         * @return {String}
-         *
+         * @method getName
+         * @return {String} the name for the component
          */
-        formatMeasurementResult: function(geometry, drawMode) {
-            var measurement,
-                unit;
-
-            if (drawMode === 'area') {
-                measurement = (Math.round(100 * geometry.getGeodesicArea(this._projectionCode)) / 100);
-                unit = ' m²';
-                // 1 000 000 m² === 1 km²
-                if (measurement >= 1000000) {
-                    measurement = (Math.round(measurement) / 1000000);
-                    unit = ' km²';
-                }
-            } else if (drawMode === 'line') {
-                measurement = (Math.round(100 * geometry.getGeodesicLength(this._projectionCode)) / 100);
-                unit = ' m';
-                // 1 000 m === 1 km
-                if (measurement >= 1000) {
-                    measurement = (Math.round(measurement) / 1000);
-                    unit = ' km';
-                }
-            } else {
-                return '';
-            }
-            return measurement.toFixed(3).replace(
-                '.',
-                Oskari.getDecimalSeparator()
-            ) + unit;
+        getName: function () {
+            return this._id + 'MapModule';
         },
-
-
+        /**
+         * @method getSandbox
+         * Returns reference to Oskari sandbox
+         * @return {Oskari.mapframework.sandbox.Sandbox}
+         */
+        getSandbox: function () {
+            return this._sandbox;
+        },
+        /**
+         * @method getLocalization
+         * Returns JSON presentation of bundles localization data for current
+         * language.
+         * If key-parameter is not given, returns the whole localization data.
+         *
+         * @param {String} key (optional) if given, returns the value for key
+         * @param {Boolean} force (optional) true to force reload for localization data
+         * @return {String/Object} returns single localization string or
+         *      JSON object for complete data depending on localization
+         *      structure and if parameter key is given
+         */
+        getLocalization: function (key, force) {
+            if (!this._localization || force === true) {
+                this._localization = Oskari.getLocalization('MapModule');
+            }
+            if (key) {
+                return this._localization[key];
+            }
+            return this._localization;
+        },
         /**
          * @method onEvent
          * @param {Oskari.mapframework.event.Event} event a Oskari event object
@@ -929,6 +960,17 @@ Oskari.clazz.define(
 
             return handler.apply(this, [event]);
         },
+/* --------------- /BUNDLE BOILERPLATE ------------------------ */
+
+
+
+/* --------------- PUBLISHER ------------------------ */
+        isInLayerToolsEditMode: function () {
+            return this._isInLayerToolsEditMode;
+        },
+/* --------------- /PUBLISHER ------------------------ */
+
+/* --------------- PLUGIN CONTAINERS ------------------------ */
         /**
          * Removes all the css classes which respond to given regex from all elements
          * and adds the given class to them.
@@ -968,121 +1010,6 @@ Oskari.clazz.define(
                 el.addClass(classToAdd);
             }
         },
-        /**
-         * Adds the layer to the map through the correct plugin for the layer's type.
-         *
-         * @method afterMapLayerAddEvent
-         * @param  {Object} layer Oskari layer of any type registered to the mapmodule plugin
-         * @param  {Boolean} keepLayersOrder
-         * @param  {Boolean} isBaseMap
-         * @return {undefined}
-         */
-        afterMapLayerAddEvent: function (event) {
-            var map = this.getMap(),
-                layer = event.getMapLayer(),
-                keepLayersOrder = event.getKeepLayersOrder(),
-                isBaseMap = event.isBasemap(),
-                layerPlugins = this.getLayerPlugins(),
-                layerFunctions = [],
-                i;
-
-            _.each(layerPlugins, function (plugin) {
-                //FIXME if (plugin && _.isFunction(plugin.addMapLayerToMap)) {
-                if (_.isFunction(plugin.addMapLayerToMap)) {
-                    var layerFunction = plugin.addMapLayerToMap(layer, keepLayersOrder, isBaseMap);
-                    if (_.isFunction(layerFunction)) {
-                        layerFunctions.push(layerFunction);
-                    }
-                }
-            });
-
-            // Execute each layer function
-            for (i = 0; i < layerFunctions.length; i += 1) {
-                layerFunctions[i].apply();
-            }
-        },
-
-
-        isInLayerToolsEditMode: function () {
-            return this._isInLayerToolsEditMode;
-        },
-
-        /**
-         * @method afterRearrangeSelectedMapLayerEvent
-         * @private
-         * Handles AfterRearrangeSelectedMapLayerEvent.
-         * Changes the layer order in Openlayers to match the selected layers list in
-         * Oskari.
-         *
-         * @param
-         * {Oskari.mapframework.event.common.AfterRearrangeSelectedMapLayerEvent}
-         *            event
-         */
-        afterRearrangeSelectedMapLayerEvent: function (event) {
-            var layers = this.getSandbox().findAllSelectedMapLayers(),
-                layerIndex = 0;
-
-            var i,
-                ilen,
-                j,
-                jlen,
-                olLayers;
-
-            for (i = 0, ilen = layers.length; i < ilen; i += 1) {
-                if (layers[i] !== null && layers[i] !== undefined) {
-                    olLayers =
-                        this.getOLMapLayers(layers[i].getId());
-                    for (j = 0, jlen = olLayers.length; j < jlen; j += 1) {
-                        this.setLayerIndex(olLayers[j], layerIndex);
-                        layerIndex += 1;
-                    }
-                }
-            }
-            this.orderLayersByZIndex();
-        },
-
-        /**
-         * @method getOLMapLayers
-         * Returns references to OpenLayers layer objects for requested layer or null if layer is not added to map.
-         * Internally calls getOLMapLayers() on all registered layersplugins.
-         * @param {String} layerId
-         * @return {OpenLayers.Layer[]}
-         */
-        getOLMapLayers: function (layerId) {
-            var me = this,
-                sandbox = me._sandbox,
-                layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
-            if (!layer) {
-                // not found
-                return null;
-            }
-            var lps = this.getLayerPlugins(),
-                p,
-                layersPlugin,
-                layerList,
-                results = [];
-            // let the actual layerplugins find the layer since the name depends on
-            // type
-            for (p in lps) {
-                if (lps.hasOwnProperty(p)) {
-                    layersPlugin = lps[p];
-                    if (!layersPlugin) {
-                        me.getSandbox().printWarn(
-                            'LayerPlugins has no entry for "' + p + '"'
-                        );
-                    }
-                    // find the actual openlayers layers (can be many)
-                    layerList = layersPlugin ? layersPlugin.getOLMapLayers(layer): null;
-                    if (layerList) {
-                        // if found -> add to results
-                        // otherwise continue looping
-                        results = results.concat(layerList);
-                    }
-                }
-            }
-            return results;
-        },
-
         /**
          * Sets the style to be used on plugins and asks all the active plugins that support changing style to change their style accordingly.
          *
@@ -1149,149 +1076,6 @@ Oskari.clazz.define(
                 return me._options.style.colourScheme;
             } else {
                 return null;
-            }
-        },
-        /**
-         * @method updateCurrentState
-         * Setup layers from selected layers
-         * This is needed if map layers are added before mapmodule/plugins are started.
-         * Should be called only on startup, preferrably not even then
-         * (workaround for timing issues).
-         * If layers are already in map, this adds them twice and they cannot be
-         * removed anymore by removemaplayerrequest (it should be sent twice but ui doesn't
-         * offer that).
-         */
-        updateCurrentState: function () {
-
-            var me = this,
-                sandbox = me._sandbox,
-                layers = sandbox.findAllSelectedMapLayers(),
-                lps = this.getLayerPlugins(),
-                layersPlugin,
-                p;
-
-            for (p in lps) {
-                if (lps.hasOwnProperty(p)) {
-                    layersPlugin = lps[p];
-
-                    sandbox.printDebug('preselecting ' + p);
-                    layersPlugin.preselectLayers(layers);
-                }
-            }
-        },
-
-        /**
-         * @method calculateLayerScales
-         * Calculate a subset of maps scales array that matches the given boundaries.
-         * If boundaries are not defined, returns all possible scales.
-         * @param {Number} maxScale maximum scale boundary (optional)
-         * @param {Number} minScale minimum scale boundary (optional)
-         * @return {Number[]} calculated mapscales that are within given bounds
-         */
-        calculateLayerMinMaxResolutions: function (maxScale, minScale) {
-            var minScaleZoom,
-                maxScaleZoom,
-                i;
-
-            for (i = 0; i < this._mapScales.length; i += 1) {
-                if ((!minScale || minScale >= this._mapScales[i]) && (!maxScale || maxScale <= this._mapScales[i])) {
-                    if (minScaleZoom === undefined) {
-                        minScaleZoom = i;
-                    }
-                    maxScaleZoom = i;
-                }
-            }
-            return {
-                min: minScaleZoom,
-                max: maxScaleZoom
-            };
-        },
-        /**
-         * @method calculateLayerScales
-         * Calculate a subset of maps scales array that matches the given boundaries.
-         * If boundaries are not defined, returns all possible scales.
-         * @param {Number} maxScale maximum scale boundary (optional)
-         * @param {Number} minScale minimum scale boundary (optional)
-         * @return {Number[]} calculated mapscales that are within given bounds
-         */
-        calculateLayerScales: function (maxScale, minScale) {
-            var layerScales = [],
-                i;
-
-            for (i = 0; i < this._mapScales.length; i += 1) {
-                if ((!minScale || minScale >= this._mapScales[i]) && (!maxScale || maxScale <= this._mapScales[i])) {
-                    layerScales.push(this._mapScales[i]);
-                }
-            }
-            return layerScales;
-        },
-        /**
-         * @method calculateLayerResolutions
-         * Calculate a subset of maps resolutions array that matches the given boundaries.
-         * If boundaries are not defined, returns all possible resolutions.
-         * @param {Number} maxScale maximum scale boundary (optional)
-         * @param {Number} minScale minimum scale boundary (optional)
-         * @return {Number[]} calculated resolutions that are within given bounds
-         */
-        calculateLayerResolutions: function (maxScale, minScale) {
-            var layerResolutions = [],
-                i;
-
-            for (i = 0; i < this._mapScales.length; i += 1) {
-                if ((!minScale || minScale >= this._mapScales[i]) && (!maxScale || maxScale <= this._mapScales[i])) {
-                    // resolutions are in the same order as scales so just use them
-                    layerResolutions.push(this._options.resolutions[i]);
-                }
-            }
-            return layerResolutions;
-        },
-        /**
-         * Returns state for mapmodule including plugins that have getState() function
-         * @method getState
-         * @return {Object} properties for each pluginName
-         */
-        getState : function() {
-            var state = {
-                    plugins: {}
-                },
-                pluginName;
-
-            for (pluginName in this._pluginInstances) {
-                if (this._pluginInstances.hasOwnProperty(pluginName) && this._pluginInstances[pluginName].getState) {
-                    state.plugins[pluginName] = this._pluginInstances[pluginName].getState();
-                }
-            }
-            return state;
-        },
-        /**
-         * Returns state for mapmodule including plugins that have getStateParameters() function
-         * @method getStateParameters
-         * @return {String} link parameters for map state
-         */
-        getStateParameters: function () {
-            var params = '',
-                pluginName;
-
-            for (pluginName in this._pluginInstances) {
-                if (this._pluginInstances.hasOwnProperty(pluginName) && this._pluginInstances[pluginName].getStateParameters) {
-                    params = params + this._pluginInstances[pluginName].getStateParameters();
-                }
-            }
-            return params;
-        },
-        /**
-         * Sets state for mapmodule including plugins that have setState() function
-         * NOTE! Not used for now
-         * @method setState
-         * @param {Object} properties for each pluginName
-         */
-        setState : function(state) {
-            var pluginName;
-
-            for (pluginName in this._pluginInstances) {
-                if (this._pluginInstances.hasOwnProperty(pluginName) && state[pluginName] && this._pluginInstances[pluginName].setState) {
-                    this._pluginInstances[pluginName].setState(state[pluginName]);
-                }
             }
         },
         _getContainerWithClasses: function (containerClasses) {
@@ -1459,6 +1243,224 @@ Oskari.clazz.define(
             if (!keepContainerVisible && content.children().length === 0) {
                 container.css('display', 'none');
             }
+        },
+/* --------------- /PLUGIN CONTAINERS ------------------------ */
+
+        /**
+         * Formats the measurement of the geometry.
+         * Returns a string with the measurement and
+         * an appropriate unit (m/km or m²/km²)
+         * or an empty string for point.
+         *
+         * @public @method formatMeasurementResult
+         *
+         * @param  {OpenLayers.Geometry} geometry
+         * @param  {String} drawMode
+         * @return {String}
+         *
+         */
+        formatMeasurementResult: function(geometry, drawMode) {
+            var measurement,
+                unit;
+
+            if (drawMode === 'area') {
+                measurement = (Math.round(100 * geometry.getGeodesicArea(this._projectionCode)) / 100);
+                unit = ' m²';
+                // 1 000 000 m² === 1 km²
+                if (measurement >= 1000000) {
+                    measurement = (Math.round(measurement) / 1000000);
+                    unit = ' km²';
+                }
+            } else if (drawMode === 'line') {
+                measurement = (Math.round(100 * geometry.getGeodesicLength(this._projectionCode)) / 100);
+                unit = ' m';
+                // 1 000 m === 1 km
+                if (measurement >= 1000) {
+                    measurement = (Math.round(measurement) / 1000);
+                    unit = ' km';
+                }
+            } else {
+                return '';
+            }
+            return measurement.toFixed(3).replace(
+                '.',
+                Oskari.getDecimalSeparator()
+            ) + unit;
+        },
+        /**
+         * @method getOLMapLayers
+         * Returns references to OpenLayers layer objects for requested layer or null if layer is not added to map.
+         * Internally calls getOLMapLayers() on all registered layersplugins.
+         * @param {String} layerId
+         * @return {OpenLayers.Layer[]}
+         */
+        getOLMapLayers: function (layerId) {
+            var me = this,
+                sandbox = me._sandbox,
+                layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
+            if (!layer) {
+                // not found
+                return null;
+            }
+            var lps = this.getLayerPlugins(),
+                p,
+                layersPlugin,
+                layerList,
+                results = [];
+            // let the actual layerplugins find the layer since the name depends on
+            // type
+            for (p in lps) {
+                if (lps.hasOwnProperty(p)) {
+                    layersPlugin = lps[p];
+                    if (!layersPlugin) {
+                        me.getSandbox().printWarn(
+                            'LayerPlugins has no entry for "' + p + '"'
+                        );
+                    }
+                    // find the actual openlayers layers (can be many)
+                    layerList = layersPlugin ? layersPlugin.getOLMapLayers(layer): null;
+                    if (layerList) {
+                        // if found -> add to results
+                        // otherwise continue looping
+                        results = results.concat(layerList);
+                    }
+                }
+            }
+            return results;
+        },
+        /**
+         * Adds the layer to the map through the correct plugin for the layer's type.
+         *
+         * @method afterMapLayerAddEvent
+         * @param  {Object} layer Oskari layer of any type registered to the mapmodule plugin
+         * @param  {Boolean} keepLayersOrder
+         * @param  {Boolean} isBaseMap
+         * @return {undefined}
+         */
+        afterMapLayerAddEvent: function (event) {
+            var map = this.getMap(),
+                layer = event.getMapLayer(),
+                keepLayersOrder = event.getKeepLayersOrder(),
+                isBaseMap = event.isBasemap(),
+                layerPlugins = this.getLayerPlugins(),
+                layerFunctions = [],
+                i;
+
+            _.each(layerPlugins, function (plugin) {
+                //FIXME if (plugin && _.isFunction(plugin.addMapLayerToMap)) {
+                if (_.isFunction(plugin.addMapLayerToMap)) {
+                    var layerFunction = plugin.addMapLayerToMap(layer, keepLayersOrder, isBaseMap);
+                    if (_.isFunction(layerFunction)) {
+                        layerFunctions.push(layerFunction);
+                    }
+                }
+            });
+
+            // Execute each layer function
+            for (i = 0; i < layerFunctions.length; i += 1) {
+                layerFunctions[i].apply();
+            }
+        },
+
+
+        /**
+         * @method afterRearrangeSelectedMapLayerEvent
+         * @private
+         * Handles AfterRearrangeSelectedMapLayerEvent.
+         * Changes the layer order in Openlayers to match the selected layers list in
+         * Oskari.
+         *
+         * @param
+         * {Oskari.mapframework.event.common.AfterRearrangeSelectedMapLayerEvent}
+         *            event
+         */
+        afterRearrangeSelectedMapLayerEvent: function (event) {
+            var layers = this.getSandbox().findAllSelectedMapLayers(),
+                layerIndex = 0;
+
+            var i,
+                ilen,
+                j,
+                jlen,
+                olLayers;
+
+            for (i = 0, ilen = layers.length; i < ilen; i += 1) {
+                if (layers[i] !== null && layers[i] !== undefined) {
+                    olLayers =
+                        this.getOLMapLayers(layers[i].getId());
+                    for (j = 0, jlen = olLayers.length; j < jlen; j += 1) {
+                        this.setLayerIndex(olLayers[j], layerIndex);
+                        layerIndex += 1;
+                    }
+                }
+            }
+            this.orderLayersByZIndex();
+        },
+
+        /**
+         * @method calculateLayerScales
+         * Calculate a subset of maps scales array that matches the given boundaries.
+         * If boundaries are not defined, returns all possible scales.
+         * @param {Number} maxScale maximum scale boundary (optional)
+         * @param {Number} minScale minimum scale boundary (optional)
+         * @return {Number[]} calculated mapscales that are within given bounds
+         */
+        calculateLayerMinMaxResolutions: function (maxScale, minScale) {
+            var minScaleZoom,
+                maxScaleZoom,
+                i;
+
+            for (i = 0; i < this._mapScales.length; i += 1) {
+                if ((!minScale || minScale >= this._mapScales[i]) && (!maxScale || maxScale <= this._mapScales[i])) {
+                    if (minScaleZoom === undefined) {
+                        minScaleZoom = i;
+                    }
+                    maxScaleZoom = i;
+                }
+            }
+            return {
+                min: minScaleZoom,
+                max: maxScaleZoom
+            };
+        },
+        /**
+         * @method calculateLayerScales
+         * Calculate a subset of maps scales array that matches the given boundaries.
+         * If boundaries are not defined, returns all possible scales.
+         * @param {Number} maxScale maximum scale boundary (optional)
+         * @param {Number} minScale minimum scale boundary (optional)
+         * @return {Number[]} calculated mapscales that are within given bounds
+         */
+        calculateLayerScales: function (maxScale, minScale) {
+            var layerScales = [],
+                i;
+
+            for (i = 0; i < this._mapScales.length; i += 1) {
+                if ((!minScale || minScale >= this._mapScales[i]) && (!maxScale || maxScale <= this._mapScales[i])) {
+                    layerScales.push(this._mapScales[i]);
+                }
+            }
+            return layerScales;
+        },
+        /**
+         * @method calculateLayerResolutions
+         * Calculate a subset of maps resolutions array that matches the given boundaries.
+         * If boundaries are not defined, returns all possible resolutions.
+         * @param {Number} maxScale maximum scale boundary (optional)
+         * @param {Number} minScale minimum scale boundary (optional)
+         * @return {Number[]} calculated resolutions that are within given bounds
+         */
+        calculateLayerResolutions: function (maxScale, minScale) {
+            var layerResolutions = [],
+                i;
+
+            for (i = 0; i < this._mapScales.length; i += 1) {
+                if ((!minScale || minScale >= this._mapScales[i]) && (!maxScale || maxScale <= this._mapScales[i])) {
+                    // resolutions are in the same order as scales so just use them
+                    layerResolutions.push(this._options.resolutions[i]);
+                }
+            }
+            return layerResolutions;
         }
     }, {
         /**

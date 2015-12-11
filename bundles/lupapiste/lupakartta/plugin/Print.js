@@ -49,7 +49,7 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.lupakartta.plugin.PrintPlugin', fun
             var sandbox = Oskari.$('sandbox');
             sandbox.printDebug("[Oskari.lupapiste.bundle.lupakartta.plugin.PrintPlugin] map-print");
             var mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
-            var printPlugin = mapmodule.getPluginInstance('lupakartta.PrintPlugin');
+            var printPlugin = mapmodule.getPluginInstances('lupakartta.PrintPlugin');
             printPlugin._printer.print();
         });
     },

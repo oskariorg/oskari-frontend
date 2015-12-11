@@ -33,6 +33,7 @@ Renamed functions
 - getLayerPlugin() removed. Use getLayerPlugins(id) with id parameter to fetch reference to single plugin.
 - getMapScales() renamed getScaleArray() to be consistent with getResolution()/getResolutionArray().
 - calculateScaleResolution() renamed getResolutionForScale().
+- getPluginInstance() removed. Use getPluginInstances(pluginName) with pluginName parameter to fetch reference to single plugin.
 
 Unused functions removed:
   - _ensureExists()
@@ -56,6 +57,7 @@ Unused functions removed:
   - getZoomForScale()
   - getStealth()
   - setStealth()
+  - notifyAll()
 
 Added functions so internal references don't need to be called:
 - getMapElementId()
