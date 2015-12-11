@@ -78,6 +78,11 @@ div.admin-layerselector {
         overflow: auto;
     }
 
+    .add-layer-record.capabilities .add-layer-input-link-area {
+        max-height: 250px;
+        overflow: auto;
+    }
+
     .capabilities {
 
         ul {
@@ -408,6 +413,7 @@ div.admin-layerselector {
     }
 
     .add-layer-input-area,
+    .add-layer-input-link-area,
     .add-layer-button-area,
     .add-class-input-area,
     .add-class-button-area {

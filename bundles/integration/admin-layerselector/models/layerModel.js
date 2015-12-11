@@ -326,7 +326,10 @@ if (!Function.prototype.bind) {
                 var currentStyleName = this.getCurrentStyle().getName();
 
                 if (capabilitiesBlock) {
-                    if(currentStyleName && capabilitiesBlock.styles) {
+                    if(adminBlock) {
+                        return adminBlock.legendImage;
+                    }
+              /*      if(currentStyleName && capabilitiesBlock.styles) {
                         var selectedStyle = jQuery.grep(capabilitiesBlock.styles ||[], function(style){
                             return style.name === currentStyleName;
                         });
@@ -334,10 +337,31 @@ if (!Function.prototype.bind) {
                         if(selectedStyle.length>0) {
                             return selectedStyle[0].legend;
                         }
+                    } */
+
+                }
+
+                return ''; //this.getCurrentStyle().getLegend();
+            },
+            /**
+             * Returns style legend url
+             * @returns {String} legend url
+             */
+            getStyleLegendUrl: function () {
+                var capabilitiesBlock = this.getCapabilities();
+                var currentStyleName = this.getCurrentStyle().getName();
+
+                if (capabilitiesBlock) {
+                    if (currentStyleName && capabilitiesBlock.styles) {
+                        var selectedStyle = jQuery.grep(capabilitiesBlock.styles || [], function (style) {
+                            return style.name === currentStyleName;
+                        });
+
+                        if (selectedStyle.length > 0) {
+                            return selectedStyle[0].legend;
+                        }
                     }
-                    if(adminBlock) {
-                        return adminBlock.legendImage;
-                    }
+
                 }
 
                 return ''; //this.getCurrentStyle().getLegend();

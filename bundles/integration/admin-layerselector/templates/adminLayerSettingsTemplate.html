@@ -225,10 +225,28 @@
         </div>
         <div class="add-layer-input-area">
             <div class="input-controls">
-                <textarea rows="3" cols="50" id="add-layer-legendImage" class="add-layer-input long"><% if(model) { %><%= model.getLegendUrl() %><% } %></textarea>
+                <textarea rows="3" cols="50" id="add-layer-legendImage" class="add-layer-input long" placeholder="<%= instance.getLocalization('admin').legendImagePlaceholder %>"><% if(model) { %><%= model.getLegendUrl() %><% } %></textarea>
             </div>
         </div>
     </div>
+
+    <% if(model.getStyles().length > 0) { %>
+    <div class="add-layer-record">
+        <div class="add-layer-label-link-area">
+            <label for="add-layer-style" class="add-layer-label" title="<%= instance.getLocalization('admin').legendUrlDesc %>"><%= instance.getLocalization('admin').legendUrl %></label>
+        </div>
+        <div class="add-layer-input-link-area">
+            <select id="add-layer-legendUrl" class="admin-layer-legendUrl">
+                <% for(var i = 0; i < model.getStyles().length; i++) { %>
+                <% model.selectStyle(model.getStyles()[i].getName()); %>
+                <option value="<%=model.getStyleLegendUrl() %>"
+                ><%= model.getStyleLegendUrl() %></option>
+                <% } %>
+                <option value="" selected><%= instance.getLocalization('admin').noServiceLegendUrl %></option>
+            </select>
+        </div>
+    </div>
+    <% } %>
 
 <% if(footer) { %> 
 <%= footer({
