@@ -49,14 +49,14 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         button.attr('title', pConfig.tooltip);
         button.attr('id', 'oskari_toolbar_' + pGroup + '_' + pId);
 
-        
+
         if (Oskari.util.keyExists(me.conf, 'style.toolStyle')) {
-            //if style explicitly provided, add that as well 
+            //if style explicitly provided, add that as well
             var style = me.conf.style.toolStyle.indexOf('light') > -1 ? '-light': '-dark';
             button.addClass(pConfig.iconCls);
             button.addClass(pConfig.iconCls + style);
         } else if (me.conf.classes && me.conf.classes[pGroup] && me.conf.classes[pGroup][pId]) {
-            ///TODO: this is the "old" way of handling stuff (as seen on the old realiable publisher1). 
+            ///TODO: this is the "old" way of handling stuff (as seen on the old realiable publisher1).
             //Remove, once we've migrated stuff into using the new way (=style info as part of the toolbar's config).
             button.addClass(me.conf.classes[pGroup][pId].iconCls);
         } else {

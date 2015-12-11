@@ -37,9 +37,9 @@ Oskari.clazz.define(
      *  }
      */
     function (id, imageUrl, options, mapDivId) {
-        var me = this,
-            key;
+        var me = this;
 
+        // Id will be a prefix for getName()
         me._id = id;
         me._mapDivId = mapDivId;
         // FIXME: use imageUrl || '/Oskari/bundles';
@@ -52,47 +52,45 @@ Oskari.clazz.define(
             units : 'm'
         };
         if (options) {
-            for (key in options) {
+            for (var key in options) {
                 if (options.hasOwnProperty(key)) {
                     me._options[key] = options[key];
                 }
             }
         }
 
-        me._controls = {};
-        me._layerPlugins = {};
-
-        /** @static @property {String} _projectionCode SRS projection code, defaults
-         * to 'EPSG:3067' */
-        me._projection = null;
+        // SRS projection code, defaults to 'EPSG:3067'
         me._projectionCode = me._options.srsName;
-        me._supportedFormats = {};
 
+        // reference to the map-engine instance (e.g. ol2/ol3 map)
         me._map = null;
 
-        // _mapScales are calculated in _calculateScalesImpl based on resolutions in options
-        me._mapScales = [];
         // array of resolutions
         me._mapResolutions = me._options.resolutions;
+        // _mapScales are calculated in _calculateScalesImpl based on resolutions in options
+        me._mapScales = [];
+
         // props: left,bottom,right, top
         me._maxExtent = me._options.maxExtent || {
-            left : 0, 
-            bottom : 0, 
-            right: 10000000, 
+            left : 0,
+            bottom : 0,
+            right: 10000000,
             top: 10000000
         };
 
         me._sandbox = null;
+        // don't send events etc - this should be removed 
         me._stealth = false;
 
+        // reference to map-engine controls
+        me._controls = {};
+        // reference to plugins
         me._pluginInstances = {};
+        // another reference to plugins (only layerhandling ones)
+        me._layerPlugins = {};
 
         // mapcontrols assumes this to be present before init or start
         me._localization = null;
-
-        /* array of { id: <id>, name: <name>, layer: layer, impl: layerImpl } */
-        me.layerDefs = [];
-        me.layerDefsById = {};
     }, {
         /**
          * @method init
@@ -127,34 +125,9 @@ Oskari.clazz.define(
             // -> calculate scales array for backward compatibility
             me._calculateScalesImpl(me._mapResolutions);
 
+            // TODO remove this whenever we're ready to add the containers when needed
+            this._addMapControlPluginContainers();
             return me._initImpl(me._sandbox, me._options, me._map);
-        },
-        /**
-         * @method _initImpl
-         * Init for implementation specific functionality.
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         * @param {Map} map
-         * @return {Map}
-         */
-        _initImpl: function (sandbox, options, map) {
-            return map;
-        },
-        /**
-         * @method createMap
-         * Creates the Implementation specific Map object
-         * @return {Map}
-         */
-        createMap: Oskari.AbstractFunc('createMap'),
-        /**
-         * @method getMap
-         * Returns a reference to the actual OpenLayers implementation
-         * @return {OpenLayers.Map}
-         */
-        getMap: function () {
-            return this._map;
-        },
-        getMapElementId : function() {
-            return this._mapDivId;
         },
         /**
          * @method start
@@ -193,9 +166,6 @@ Oskari.clazz.define(
             this.started = this._startImpl();
         },
 
-        _startImpl: function () {
-            return true;
-        },
         /**
          * @method stop
          * implements BundleInstance protocol stop method
@@ -211,10 +181,6 @@ Oskari.clazz.define(
             this.stopPlugins(sandbox);
             this.started = this._stopImpl();
         },
-        _stopImpl: function () {
-            return false;
-        },
-
         /**
          * @property eventHandlers
          * @static
@@ -231,7 +197,108 @@ Oskari.clazz.define(
             }
         },
 
+/* Impl specific - found in ol2 AND ol3 modules
+------------------------------------------------------------------> */
+        /**
+         * @method createMap
+         * Creates the Implementation specific Map object
+         * @return {Map}
+         */
+        createMap: Oskari.AbstractFunc('createMap'),
+        getPixelFromCoordinate: Oskari.AbstractFunc('getPixelFromCoordinate'),
+        getMapCenter: Oskari.AbstractFunc('getMapCenter'),
+        getMapZoom: Oskari.AbstractFunc('getMapZoom'),
+        getSize: Oskari.AbstractFunc('getSize'),
+        getCurrentExtent: Oskari.AbstractFunc('getCurrentExtent'),
+        /**
+         * @method centerMap
+         * Moves the map to the given position and zoomlevel.
+         * @param {OpenLayers.LonLat} lonlat coordinates to move the map to
+         * @param {Number} zoomLevel absolute zoomlevel to set the map to
+         * @param {Boolean} suppressEnd true to NOT send an event about the map move
+         *  (other components wont know that the map has moved, only use when chaining moves and
+         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+         */
+        centerMap: Oskari.AbstractFunc('centerMap'),
+        /**
+         * @method zoomToExtent
+         * Zooms the map to fit given bounds on the viewport
+         * @param {Object} bounds BoundingBox with left,top,bottom,right keys that should be visible on the viewport
+         * @param {Boolean} suppressStart true to NOT send an event about the map starting to move
+         *  (other components wont know that the map has started moving, only use when chaining moves and
+         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+         * @param {Boolean} suppressEnd true to NOT send an event about the map move
+         *  (other components wont know that the map has moved, only use when chaining moves and
+         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+         */
+        zoomToExtent: Oskari.AbstractFunc('zoomToExtent'),
+        /**
+         * @method panMapByPixels
+         * Pans the map by given amount of pixels.
+         * @param {Number} pX amount of pixels to pan on x axis
+         * @param {Number} pY amount of pixels to pan on y axis
+         * @param {Boolean} suppressStart true to NOT send an event about the map starting to move
+         *  (other components wont know that the map has started moving, only use when chaining moves and
+         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+         * @param {Boolean} suppressEnd true to NOT send an event about the map move
+         *  (other components wont know that the map has moved, only use when chaining moves and
+         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+         * @param {Boolean} isDrag true if the user is dragging the map to a new location currently (optional)
+         */
+        panMapByPixels: Oskari.AbstractFunc('panMapByPixels'),
+        orderLayersByZIndex: Oskari.AbstractFunc('orderLayersByZIndex'),
+/* --------- /Impl specific --------------------------------------> */
+
+
+/* Impl specific - PRIVATE
+------------------------------------------------------------------> */
+        /**
+         * @method _initImpl
+         * Init for implementation specific functionality.
+         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Map} map
+         * @return {Map}
+         */
+        _initImpl: function (sandbox, options, map) {
+            return map;
+        },
+        _startImpl: function () {
+            return true;
+        },
+        _stopImpl: function () {
+            return false;
+        },
+        _calculateScalesImpl: Oskari.AbstractFunc('_calculateScalesImpl(resolutions)'),
+        _updateSizeImpl: Oskari.AbstractFunc('_updateSizeImpl'),
+        _setZoomLevelImpl: Oskari.AbstractFunc('_setZoomLevelImpl'),
+/* --------- /Impl specific - PRIVATE ----------------------------> */
+
+
+/* Impl specific - found in ol2 AND ol3 modules BUT parameters and/or return value differ!!
+------------------------------------------------------------------> */
+        addLayer: Oskari.AbstractFunc('addLayer'),
+        removeLayer: Oskari.AbstractFunc('removeLayer'),
+        bringToTop: Oskari.AbstractFunc('bringToTop'),
+        getLayerIndex: Oskari.AbstractFunc('getLayerIndex'),
+        setLayerIndex: Oskari.AbstractFunc('setLayerIndex'),
+        _addMapControlImpl: Oskari.AbstractFunc('_addMapControlImpl(ctl)'),
+        _removeMapControlImpl: Oskari.AbstractFunc('_removeMapControlImpl(ctl)'),
+        getStyle: Oskari.AbstractFunc('getStyle'),
+/* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
+
+
 /* ---------------- SHARED FUNCTIONS --------------- */
+        /**
+         * @method getMap
+         * Returns a reference to the actual OpenLayers implementation
+         * @return {OpenLayers.Map}
+         */
+        getMap: function () {
+            return this._map;
+        },
+        getMapElementId : function() {
+            return this._mapDivId;
+        },
         /**
          * @method getMaxZoomLevel
          * Gets map max zoom level.
@@ -328,10 +395,9 @@ Oskari.clazz.define(
          * Returns zoom level for any scale
          * Find 1st the scale range of OL3 resolution scales of requested scale
          * @param scale any scale
-         * @param {Boolean} closest  closest resolution for scale
          * @returns {number}  zoom level ( OL3 scale range min or closest)
          */
-        getZoomForScale: function (scale, closest) {
+        getZoomForScale: function (scale) {
             var resolution = this.calculateScaleResolution(scale),
                 zoom = this.getResolutionArray().indexOf(resolution);
             return  (zoom !== -1) ? zoom : 5;
@@ -383,12 +449,11 @@ Oskari.clazz.define(
          * Call notifyMoveEnd() afterwards to notify other components about changed state.
          * @param {Number[] | Object} lonlat coordinates to move the map to
          * @param {Number} zoomAdjust relative change to the zoom level f.ex -1 (optional)
-         * @param {Boolean} pIsDragging true if the user is dragging the map to a new location currently (optional)
          */
-        moveMapToLonLat: function (lonlat, zoomAdjust, pIsDragging) {
+        moveMapToLonLat: function (lonlat, zoomAdjust) {
             var blnSilent = true;
             var requestedZoomLevel = this.getMapZoom();
-            
+
             if (zoomAdjust) {
                 requestedZoomLevel = this._getNewZoomLevel(zoomAdjust);
                 blnSilent = false;
@@ -518,77 +583,6 @@ Oskari.clazz.define(
                 this.notifyMoveEnd();
             }
         },
-/* --------------- /SHARED FUNCTIONS --------------- */
-
-/* Impl specific - found in ol2 AND ol3 modules
-------------------------------------------------------------------> */
-        getPixelFromCoordinate: Oskari.AbstractFunc('getPixelFromCoordinate'),
-        getMapCenter: Oskari.AbstractFunc('getMapCenter'),
-        getMapZoom: Oskari.AbstractFunc('getMapZoom'),
-        getSize: Oskari.AbstractFunc('getSize'),
-        getCurrentExtent: Oskari.AbstractFunc('getCurrentExtent'),
-        /**
-         * @method centerMap
-         * Moves the map to the given position and zoomlevel.
-         * @param {OpenLayers.LonLat} lonlat coordinates to move the map to
-         * @param {Number} zoomLevel absolute zoomlevel to set the map to
-         * @param {Boolean} suppressEnd true to NOT send an event about the map move
-         *  (other components wont know that the map has moved, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         */
-        centerMap: Oskari.AbstractFunc('centerMap'),
-        /**
-         * @method zoomToExtent
-         * Zooms the map to fit given bounds on the viewport
-         * @param {Object} bounds BoundingBox with left,top,bottom,right keys that should be visible on the viewport
-         * @param {Boolean} suppressStart true to NOT send an event about the map starting to move
-         *  (other components wont know that the map has started moving, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         * @param {Boolean} suppressEnd true to NOT send an event about the map move
-         *  (other components wont know that the map has moved, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         */
-        zoomToExtent: Oskari.AbstractFunc('zoomToExtent'),
-        /**
-         * @method panMapByPixels
-         * Pans the map by given amount of pixels.
-         * @param {Number} pX amount of pixels to pan on x axis
-         * @param {Number} pY amount of pixels to pan on y axis
-         * @param {Boolean} suppressStart true to NOT send an event about the map starting to move
-         *  (other components wont know that the map has started moving, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         * @param {Boolean} suppressEnd true to NOT send an event about the map move
-         *  (other components wont know that the map has moved, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         * @param {Boolean} isDrag true if the user is dragging the map to a new location currently (optional)
-         */
-        panMapByPixels: Oskari.AbstractFunc('panMapByPixels'),
-        orderLayersByZIndex: Oskari.AbstractFunc('orderLayersByZIndex'),
-/* --------- /Impl specific --------------------------------------> */
-
-
-/* Impl specific - PRIVATE
-------------------------------------------------------------------> */
-        _calculateScalesImpl: Oskari.AbstractFunc('_calculateScalesImpl(resolutions)'),
-        _updateSizeImpl: Oskari.AbstractFunc('_updateSizeImpl'),
-        _setZoomLevelImpl: Oskari.AbstractFunc('_setZoomLevelImpl'),
-/* --------- /Impl specific - PRIVATE ----------------------------> */
-
-
-/* Impl specific - found in ol2 AND ol3 modules BUT parameters and/or return value differ!!
-------------------------------------------------------------------> */
-        addLayer: Oskari.AbstractFunc('addLayer'),
-        removeLayer: Oskari.AbstractFunc('removeLayer'),
-        bringToTop: Oskari.AbstractFunc('bringToTop'),
-        getLayerIndex: Oskari.AbstractFunc('getLayerIndex'),
-        setLayerIndex: Oskari.AbstractFunc('setLayerIndex'),
-        _addMapControlImpl: Oskari.AbstractFunc('_addMapControlImpl(ctl)'),
-        _removeMapControlImpl: Oskari.AbstractFunc('_removeMapControlImpl(ctl)'),
-        getStyle: Oskari.AbstractFunc('getStyle'),
-/* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
-
-
-
 
         /**
          * @method getControls
@@ -1253,28 +1247,6 @@ Oskari.clazz.define(
                     layersPlugin.preselectLayers(layers);
                 }
             }
-        },
-
-        /*
-         * moved here to make generalization easier
-         */
-        getLayersByName: function (name) {
-            var results = [],
-                layerDefs = this.layerDefs,
-                l,
-                ldef;
-
-            for (l = 0; l < layerDefs.length; l += 1) {
-
-                ldef = layerDefs[l];
-
-                if (ldef.name.indexOf(name) !== -1) {
-                    results.push(ldef.impl);
-                }
-
-            }
-
-            return results;
         },
 
         /**

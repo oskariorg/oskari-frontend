@@ -6,6 +6,14 @@
 
 WFSRefreshManualLoadLayersEvent is now included in ol3 version as well and changing the size of the map no longer results in JS-error.
 
+### drawtools/ol3 and VectorLayerPlugin
+
+Now use mapmodules getStyle() to parse the style JSON.
+
+### mapmodule - ControlsPlugin/ol3
+
+Now only handles DrawingEvents that have measuretool ids so drawing can be used for more things than measuring.
+
 ### infobox
 
 Popup not show anymore dublicate info.
@@ -46,37 +54,41 @@ Unused functions removed:
 Added functions so internal references don't need to be called:
 - getMapElementId()
 - getCurrentExtent()
+- getStyle() takes a json presentation of style and returns matching ol2/ol3 style object for plugins to use
 
 ### mapping/mapmodule/plugin/vectorlayer
 
 Both ol2 and ol3 implementations of VectorLayerPlugin have been added to following features:
+- allow define minScale to feature, this is checked only if zoomTo option is used. For example: {minScale: 1451336}
 - allow define mouse over cursor for added feature (added cursor option handling). Add the wanted cursor to MapModulePlugin.AddFeaturesToMapRequest options, for example: {cursor: 'zoom-out'}
 - allow define features prio order. Highest number is showed on top and lowest to under. Add the wanted prio to MapModulePlugin.AddFeaturesToMapRequest options, for example: {prio:1}
 - allow define layers and their styles from config. Defined layer style is used when feature not contains own style. If layer or feature style is not defined then using default style. For example configuration:
 ```javascript
-    "layers": [
-        {
-            "id": "EXAMPLE1",
-            "style": {
-                "fill": {
-                    "color": "#ff00ff"
-                },
-                "stroke": {
-                    "color": "#ff00ff",
-                    "width": 3
-                },
-                "text": {
+    {
+        "layers": [
+            {
+                "id": "EXAMPLE1",
+                "style": {
                     "fill": {
-                        "color": "#0000ff"
+                        "color": "#ff00ff"
                     },
                     "stroke": {
                         "color": "#ff00ff",
-                        "width": 4
+                        "width": 3
+                    },
+                    "text": {
+                        "fill": {
+                            "color": "#0000ff"
+                        },
+                        "stroke": {
+                            "color": "#ff00ff",
+                            "width": 4
+                        }
                     }
                 }
             }
-        }
-    ]
+        ]
+    }
 ```
 
 NOTE! Some implementation specific (ol2 vs. ol3) differences might occur. For instance, OpenLayers2 has only one fill color for all kinds of geometries whereas in ol3 separate fill can be defined for points and areas.

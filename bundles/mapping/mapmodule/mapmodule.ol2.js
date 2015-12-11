@@ -53,8 +53,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             });
             this.getMap().addLayer(base);
 
-            // TODO remove this whenever we're ready to add the containers when needed
-            this._addMapControlPluginContainers();
             return map;
         },
 
@@ -136,7 +134,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         },
 
 
-/* OL2 specific - check if this can be done in a common way 
+/* OL2 specific - check if this can be done in a common way
 ------------------------------------------------------------------> */
         /**
          * Send map click event.
@@ -177,7 +175,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         getMapZoom: function () {
             return this.getMap().getZoom();
         },
-        
+
         getSize: function() {
             var size = this.getMap().getCurrentSize();
             return {

@@ -52,7 +52,12 @@ Oskari.clazz.define(
                 * @param {Oskari.mapframework.bundle.toolbar.event.ToolSelectedEvent} event
                 */
                 'DrawingEvent': function (event) {
-                    var   me = this,
+
+                    if(event.getId() !== 'measureline' || event.getId() !== 'measurearea') {
+                        // this isn't about measurements, stop processing it
+                        return;
+                    }
+                    var me = this,
                         measureValue,
                         data = event.getData(),
                         finished = event.getIsFinished(),
@@ -69,13 +74,10 @@ Oskari.clazz.define(
                     } else if (data.shape === 'Polygon') {
                          measureValue = data.area;
                     }
-
-                    me.getSandbox().request(
-                        me,
-                        me.getSandbox().getRequestBuilder(
-                            'ShowMapMeasurementRequest'
-                        )(measureValue, finished, geoJson, geomMimeType)
-                    );
+                    var reqBuilder = me.getSandbox().getRequestBuilder('ShowMapMeasurementRequest');
+                    if(reqBuilder) {
+                        me.getSandbox().request(me, reqBuilder(measureValue, finished, geoJson, geomMimeType));
+                    }
                 },
                 /**
                  * @method Toolbar.ToolSelectedEvent

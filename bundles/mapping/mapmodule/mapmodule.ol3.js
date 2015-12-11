@@ -38,8 +38,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {OpenLayers.Map}
          */
         _initImpl: function (sandbox, options, map) {
-            // TODO remove this whenever we're ready to add the containers when needed
-            this._addMapControlPluginContainers();
             // css references use olMap as selectors so we need to add it
             this.getMapEl().addClass('olMap');
             return map;
@@ -122,7 +120,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             return true;
         },
 
-/* OL3 specific - check if this can be done in a common way 
+/* OL3 specific - check if this can be done in a common way
 ------------------------------------------------------------------> */
         getInteractionInstance: function (interactionName) {
             var interactions = this.getMap().getInteractions().getArray();
@@ -175,7 +173,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         getMapZoom: function() {
             return this.getMap().getView().getZoom();
         },
-        
+
         getSize: function() {
             var size = this.getMap().getSize();
             return {
@@ -459,31 +457,44 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 }
                 olStyle.image = new ol.style.Circle(image);
             }
-            if(styleDef.text) {
-                var text = {};
-                if(styleDef.text.scale) {
-                    text.scale = styleDef.text.scale;
-                }
-                if(Oskari.util.keyExists(styleDef.text, 'fill.color')) {
-                    text.fill = new ol.style.Fill({
-                        color: styleDef.text.fill.color
-                    });
-                }
-                if(styleDef.text.stroke) {
-                    var textStroke = {};
-                    if(styleDef.text.stroke.color) {
-                        textStroke.color = styleDef.text.stroke.color;
-                    }
-                    if(styleDef.text.stroke.width) {
-                        textStroke.width = styleDef.text.stroke.width;
-                    }
-                    text.stroke = new ol.style.Stroke(textStroke);
-                }
+            var textStyle = this.__getTextStyle(styleDef.text);
+            if(textStyle) {
                 olStyle.text = new ol.style.Text(text);
             }
 
             return new ol.style.Style(olStyle);
+        },
+        /**
+         * Parses JSON and returns matching ol.style.Text
+         * @param  {Object} textStyleJSON text style definition
+         * @return {ol.style.Text} parsed style or undefined if no param is given
+         */
+        __getTextStyle : function(textStyleJSON) {
+            if(!textStyleJSON) {
+                return;
+            }
+            var text = {};
+            if(textStyleJSON.scale) {
+                text.scale = textStyleJSON.scale;
+            }
+            if(Oskari.util.keyExists(textStyleJSON, 'fill.color')) {
+                text.fill = new ol.style.Fill({
+                    color: textStyleJSON.fill.color
+                });
+            }
+            if(textStyleJSON.stroke) {
+                var textStroke = {};
+                if(textStyleJSON.stroke.color) {
+                    textStroke.color = textStyleJSON.stroke.color;
+                }
+                if(textStyleJSON.stroke.width) {
+                    textStroke.width = textStyleJSON.stroke.width;
+                }
+                text.stroke = new ol.style.Stroke(textStroke);
+            }
+            return new ol.style.Text(text);
         }
+
 /* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
     }, {
         /**

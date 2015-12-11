@@ -105,7 +105,7 @@ Oskari.clazz.define(
                         me._map.layers.length
                     );
                     me._layers[layerId] = olLayer;
-                    me._layerStyles[layerId] = layerStyle;                    
+                    me._layerStyles[layerId] = layerStyle;
                 }
             }
         },
@@ -313,7 +313,7 @@ Oskari.clazz.define(
                 }
                 if (options.attributes && options.attributes !== null) {
                     if(features instanceof Array && geometryType === 'GeoJSON'){
-                        //Remark: It is preferred to use GeoJSON properties for attributes
+                        // Remark: It is preferred to use GeoJSON properties for attributes
                         // There could be many features in GeoJson and now attributes are set only for 1st feature
                         features[0].attributes = options.attributes;
                     } else {
@@ -390,7 +390,6 @@ Oskari.clazz.define(
                 }
 
 
-
                 if(isOlLayerAdded === false) {
                     me._map.addLayer(olLayer);
                     me._map.setLayerIndex(
@@ -453,6 +452,14 @@ Oskari.clazz.define(
 
                     mapmoveRequest = me._sandbox.getRequestBuilder('MapMoveRequest')(center.x, center.y, bounds, false);
                     me._sandbox.request(me, mapmoveRequest);
+
+                    // Check scale if defined so. Scale decreases when the map is zoomed in. Scale increases when the map is zoomed out.
+                    if(options.minScale) {
+                        var currentScale = this.getMapModule().getMapScale();
+                        if(currentScale<options.minScale) {
+                            this.getMapModule().zoomToScale(options.minScale, true);
+                        }
+                    }                    
                 }
             }
         },
