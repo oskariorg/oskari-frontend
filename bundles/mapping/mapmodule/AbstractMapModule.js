@@ -42,9 +42,7 @@ Oskari.clazz.define(
 
         me._id = id;
         me._mapDivId = mapDivId;
-        // FIXME: use imageUrl || '/Oskari/bundles';
-        // requires db update since currently uses /Oskari/resources
-        me._imageUrl = '/Oskari/bundles';
+        me._imageUrl = imageUrl || '/Oskari/bundles';
         // defaults
         me._options = {
             resolutions: [2000, 1000, 500, 200, 100, 50, 20, 10, 4, 2, 1, 0.5, 0.25],
