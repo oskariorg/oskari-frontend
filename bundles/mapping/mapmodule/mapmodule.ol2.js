@@ -398,6 +398,58 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          */
         _removeMapControlImpl: function (ctl) {
             this.getMap().removeControl(ctl);
+        },
+        /**
+         * Creates style based on JSON
+         * @return {OpenLayers.Style} style ol2 specific!
+         */
+        getStyle : function(styleDef) {
+            styleDef = styleDef || {};
+            //create a blank style with default values 
+            var olStyle = new OpenLayers.Style();
+            if(Oskari.util.keyExists(styleDef, 'fill.color')) {
+                olStyle.fill = true;
+                olStyle.fillColor = styleDef.fill.color;
+            }
+
+            if(styleDef.stroke) {
+                var stroke = {};
+                if(styleDef.stroke.color) {
+                    olStyle.strokeColor = styleDef.stroke.color;
+                }
+                if(styleDef.stroke.width) {
+                    olStyle.strokeWidth = styleDef.stroke.width;
+                }
+            }
+
+            if (styleDef.image) {
+                if(styleDef.image.radius) {
+                    olStyle.pointRadius = styleDef.image.radius;
+                }
+                //currently only supporting circle
+                olStyle.graphicName = "circle";
+            }
+            if(styleDef.text) {
+                /*
+                TODO: figure out ol2 equivalent to this... "normal" font size * scale?
+                if(styleDef.text.scale) {
+                    olStyle.scale = styleDef.text.scale;
+                }
+                */
+                if(Oskari.util.keyExists(styleDef.text, 'fill.color')) {
+                    olStyle.fontColor = styleDef.text.fill.color;
+                }
+                if(styleDef.text.stroke) {
+                    if(styleDef.text.stroke.color) {
+                        olStyle.labelOutlineColor = styleDef.text.stroke.color;
+                    }
+                    if(styleDef.text.stroke.width) {
+                        olStyle.labelOutlineWidth = styleDef.text.stroke.width;
+                    }
+                }
+            }
+
+            return olStyle;
         }
 /* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
 
