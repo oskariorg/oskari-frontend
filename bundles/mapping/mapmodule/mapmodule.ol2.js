@@ -149,6 +149,47 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var event = evtBuilder(lonlat, evt.xy.x, evt.xy.y);
             sandbox.notifyAll(event);
         },
+        /**
+         * Formats the measurement of the geometry.
+         * Returns a string with the measurement and
+         * an appropriate unit (m/km or m²/km²)
+         * or an empty string for point.
+         *
+         * @public @method formatMeasurementResult
+         *
+         * @param  {OpenLayers.Geometry} geometry
+         * @param  {String} drawMode
+         * @return {String}
+         *
+         */
+        formatMeasurementResult: function(geometry, drawMode) {
+            var measurement,
+                unit;
+
+            if (drawMode === 'area') {
+                measurement = (Math.round(100 * geometry.getGeodesicArea(this._projectionCode)) / 100);
+                unit = ' m²';
+                // 1 000 000 m² === 1 km²
+                if (measurement >= 1000000) {
+                    measurement = (Math.round(measurement) / 1000000);
+                    unit = ' km²';
+                }
+            } else if (drawMode === 'line') {
+                measurement = (Math.round(100 * geometry.getGeodesicLength(this._projectionCode)) / 100);
+                unit = ' m';
+                // 1 000 m === 1 km
+                if (measurement >= 1000) {
+                    measurement = (Math.round(measurement) / 1000);
+                    unit = ' km';
+                }
+            } else {
+                return '';
+            }
+            return measurement.toFixed(3).replace(
+                '.',
+                Oskari.getDecimalSeparator()
+            ) + unit;
+        },
 /*<------------- / OL2 specific ----------------------------------- */
 
 

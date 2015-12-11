@@ -343,6 +343,60 @@ Oskari.clazz.define(
         getProjection: function () {
             return this._projectionCode;
         },
+/* --------------- MAP LOCATION ------------------------ */
+        /**
+         * @method moveMapToLonLat
+         * Moves the map to the given position.
+         * NOTE! Doesn't send an event if zoom level is not changed.
+         * Call notifyMoveEnd() afterwards to notify other components about changed state.
+         * @param {Number[] | Object} lonlat coordinates to move the map to
+         * @param {Number} zoomAdjust relative change to the zoom level f.ex -1 (optional)
+         */
+        moveMapToLonLat: function (lonlat, zoomAdjust) {
+            var blnSilent = true;
+            var requestedZoomLevel = this.getMapZoom();
+
+            if (zoomAdjust) {
+                requestedZoomLevel = this.getNewZoomLevel(zoomAdjust);
+                blnSilent = false;
+            }
+            this.centerMap(lonlat, requestedZoomLevel, blnSilent);
+        },
+        /**
+         * @method isValidLonLat
+         * Checks that lat and lon are within bounds of the map extent
+         * @param {Number} lon longitude to check
+         * @param {Number} lat latitude to check
+         * @return {Boolean} true if coordinates are inside boundaries
+         */
+        isValidLonLat: function (lon, lat) {
+            var maxExtent = this.getMaxExtent();
+
+            if(isNaN(lon) || isNaN(lat)) {
+                return false;
+            } else if(lon < maxExtent.left || lon > maxExtent.right || lat < maxExtent.bottom || lat > maxExtent.top) {
+                return false;
+            } else {
+                return true;
+            }
+        },
+
+        /**
+         * Changes array to object
+         * @param  {Object | Number[]} lonlat [description]
+         * @return {Object}        [description]
+         */
+        normalizeLonLat : function(lonlat) {
+            if (_.isArray(lonlat)) {
+                return {
+                    lon : lonlat[0],
+                    lat : lonlat[1]
+                };
+            }
+            return lonlat;
+        },
+/* --------------- /MAP LOCATION ------------------------ */
+
 /* --------------- MAP ZOOM ------------------------ */
         /**
          * @method getScaleArray
@@ -504,93 +558,49 @@ Oskari.clazz.define(
             }
             return this.getResolutionArray()[resIndex];
         },
+        /**
+         * @method calculateLayerScales
+         * Calculate a subset of maps scales array that matches the given boundaries.
+         * If boundaries are not defined, returns all possible scales.
+         * @param {Number} maxScale maximum scale boundary (optional)
+         * @param {Number} minScale minimum scale boundary (optional)
+         * @return {Number[]} calculated mapscales that are within given bounds
+         */
+        calculateLayerScales: function (maxScale, minScale) {
+            var layerScales = [],
+                mapScales = this.getScaleArray();
+
+            for (var i = 0; i < mapScales.length; i += 1) {
+                if ((!minScale || minScale >= mapScales[i]) && (!maxScale || maxScale <= mapScales[i])) {
+                    layerScales.push(mapScales[i]);
+                }
+            }
+            return layerScales;
+        },
+        /**
+         * @method calculateLayerResolutions
+         * Calculate a subset of maps resolutions array that matches the given boundaries.
+         * If boundaries are not defined, returns all possible resolutions.
+         * @param {Number} maxScale maximum scale boundary (optional)
+         * @param {Number} minScale minimum scale boundary (optional)
+         * @return {Number[]} calculated resolutions that are within given bounds
+         */
+        calculateLayerResolutions: function (maxScale, minScale) {
+            var layerResolutions = [],
+                mapScales = this.getScaleArray(),
+                mapResolutions = this.getResolutionArray();
+
+            for (var i = 0; i < mapScales.length; i += 1) {
+                if ((!minScale || minScale >= mapScales[i]) && (!maxScale || maxScale <= mapScales[i])) {
+                    // resolutions are in the same order as scales so just use them
+                    layerResolutions.push(mapResolutions[i]);
+                }
+            }
+            return layerResolutions;
+        },
 /* --------------- /MAP ZOOM ------------------------ */
 
-/* --------------- MAP LOCATION ------------------------ */
-        /**
-         * @method moveMapToLonLat
-         * Moves the map to the given position.
-         * NOTE! Doesn't send an event if zoom level is not changed.
-         * Call notifyMoveEnd() afterwards to notify other components about changed state.
-         * @param {Number[] | Object} lonlat coordinates to move the map to
-         * @param {Number} zoomAdjust relative change to the zoom level f.ex -1 (optional)
-         */
-        moveMapToLonLat: function (lonlat, zoomAdjust) {
-            var blnSilent = true;
-            var requestedZoomLevel = this.getMapZoom();
-
-            if (zoomAdjust) {
-                requestedZoomLevel = this.getNewZoomLevel(zoomAdjust);
-                blnSilent = false;
-            }
-            this.centerMap(lonlat, requestedZoomLevel, blnSilent);
-        },
-        /**
-         * @method isValidLonLat
-         * Checks that lat and lon are within bounds of the map extent
-         * @param {Number} lon longitude to check
-         * @param {Number} lat latitude to check
-         * @return {Boolean} true if coordinates are inside boundaries
-         */
-        isValidLonLat: function (lon, lat) {
-            var maxExtent = this.getMaxExtent();
-
-            if(isNaN(lon) || isNaN(lat)) {
-                return false;
-            } else if(lon < maxExtent.left || lon > maxExtent.right || lat < maxExtent.bottom || lat > maxExtent.top) {
-                return false;
-            } else {
-                return true;
-            }
-        },
-
-        /**
-         * Changes array to object
-         * @param  {Object | Number[]} lonlat [description]
-         * @return {Object}        [description]
-         */
-        normalizeLonLat : function(lonlat) {
-            if (_.isArray(lonlat)) {
-                return {
-                    lon : lonlat[0],
-                    lat : lonlat[1]
-                };
-            }
-            return lonlat;
-        },
-/* --------------- /MAP LOCATION ------------------------ */
-
 /* --------------- MAP STATE ------------------------ */
-        /**
-         * @method notifyStartMove
-         * Notify other components that the map has started moving. Sends a MapMoveStartEvent.
-         * Not sent always, preferrably track map movements by listening to AfterMapMoveEvent.
-         */
-        notifyStartMove: function () {
-            this.getSandbox().getMap().setMoving(true);
-            var centerX = this.getMapCenter().lon,
-                centerY = this.getMapCenter().lat,
-                evt = this.getSandbox().getEventBuilder('MapMoveStartEvent')(centerX, centerY);
-            this.getSandbox().notifyAll(evt);
-        },
-        /**
-         * @method notifyMoveEnd
-         * Notify other components that the map has moved. Sends a AfterMapMoveEvent and updates the
-         * sandbox map domain object with the current map properties.
-         * if they move the map through OpenLayers reference. All map movement methods implemented in mapmodule
-         * (this class) calls this automatically if not stated otherwise in API documentation.
-         * @param {String} creator
-         *        class identifier of object that sends event
-         */
-        notifyMoveEnd: function (creator) {
-            var sandbox = this.getSandbox();
-            sandbox.getMap().setMoving(false);
-
-            var lonlat = this.getMapCenter();
-            this.updateDomain();
-            var evt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat.lon, lonlat.lat, this.getMapZoom(), false, this.getMapScale(), creator);
-            sandbox.notifyAll(evt);
-        },
 
         /**
          * @method updateDomain
@@ -710,6 +720,36 @@ Oskari.clazz.define(
                     this._pluginInstances[pluginName].setState(state[pluginName]);
                 }
             }
+        },
+        /**
+         * @method notifyStartMove
+         * Notify other components that the map has started moving. Sends a MapMoveStartEvent.
+         * Not sent always, preferrably track map movements by listening to AfterMapMoveEvent.
+         */
+        notifyStartMove: function () {
+            this.getSandbox().getMap().setMoving(true);
+            var centerX = this.getMapCenter().lon,
+                centerY = this.getMapCenter().lat,
+                evt = this.getSandbox().getEventBuilder('MapMoveStartEvent')(centerX, centerY);
+            this.getSandbox().notifyAll(evt);
+        },
+        /**
+         * @method notifyMoveEnd
+         * Notify other components that the map has moved. Sends a AfterMapMoveEvent and updates the
+         * sandbox map domain object with the current map properties.
+         * if they move the map through OpenLayers reference. All map movement methods implemented in mapmodule
+         * (this class) calls this automatically if not stated otherwise in API documentation.
+         * @param {String} creator
+         *        class identifier of object that sends event
+         */
+        notifyMoveEnd: function (creator) {
+            var sandbox = this.getSandbox();
+            sandbox.getMap().setMoving(false);
+
+            var lonlat = this.getMapCenter();
+            this.updateDomain();
+            var evt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat.lon, lonlat.lat, this.getMapZoom(), false, this.getMapScale(), creator);
+            sandbox.notifyAll(evt);
         },
 /* --------------- /MAP STATE ------------------------ */
 
@@ -1246,47 +1286,7 @@ Oskari.clazz.define(
         },
 /* --------------- /PLUGIN CONTAINERS ------------------------ */
 
-        /**
-         * Formats the measurement of the geometry.
-         * Returns a string with the measurement and
-         * an appropriate unit (m/km or m²/km²)
-         * or an empty string for point.
-         *
-         * @public @method formatMeasurementResult
-         *
-         * @param  {OpenLayers.Geometry} geometry
-         * @param  {String} drawMode
-         * @return {String}
-         *
-         */
-        formatMeasurementResult: function(geometry, drawMode) {
-            var measurement,
-                unit;
-
-            if (drawMode === 'area') {
-                measurement = (Math.round(100 * geometry.getGeodesicArea(this._projectionCode)) / 100);
-                unit = ' m²';
-                // 1 000 000 m² === 1 km²
-                if (measurement >= 1000000) {
-                    measurement = (Math.round(measurement) / 1000000);
-                    unit = ' km²';
-                }
-            } else if (drawMode === 'line') {
-                measurement = (Math.round(100 * geometry.getGeodesicLength(this._projectionCode)) / 100);
-                unit = ' m';
-                // 1 000 m === 1 km
-                if (measurement >= 1000) {
-                    measurement = (Math.round(measurement) / 1000);
-                    unit = ' km';
-                }
-            } else {
-                return '';
-            }
-            return measurement.toFixed(3).replace(
-                '.',
-                Oskari.getDecimalSeparator()
-            ) + unit;
-        },
+/* --------------- MAP LAYERS ------------------------ */
         /**
          * @method getOLMapLayers
          * Returns references to OpenLayers layer objects for requested layer or null if layer is not added to map.
@@ -1395,73 +1395,8 @@ Oskari.clazz.define(
                 }
             }
             this.orderLayersByZIndex();
-        },
-
-        /**
-         * @method calculateLayerScales
-         * Calculate a subset of maps scales array that matches the given boundaries.
-         * If boundaries are not defined, returns all possible scales.
-         * @param {Number} maxScale maximum scale boundary (optional)
-         * @param {Number} minScale minimum scale boundary (optional)
-         * @return {Number[]} calculated mapscales that are within given bounds
-         */
-        calculateLayerMinMaxResolutions: function (maxScale, minScale) {
-            var minScaleZoom,
-                maxScaleZoom,
-                i;
-
-            for (i = 0; i < this._mapScales.length; i += 1) {
-                if ((!minScale || minScale >= this._mapScales[i]) && (!maxScale || maxScale <= this._mapScales[i])) {
-                    if (minScaleZoom === undefined) {
-                        minScaleZoom = i;
-                    }
-                    maxScaleZoom = i;
-                }
-            }
-            return {
-                min: minScaleZoom,
-                max: maxScaleZoom
-            };
-        },
-        /**
-         * @method calculateLayerScales
-         * Calculate a subset of maps scales array that matches the given boundaries.
-         * If boundaries are not defined, returns all possible scales.
-         * @param {Number} maxScale maximum scale boundary (optional)
-         * @param {Number} minScale minimum scale boundary (optional)
-         * @return {Number[]} calculated mapscales that are within given bounds
-         */
-        calculateLayerScales: function (maxScale, minScale) {
-            var layerScales = [],
-                i;
-
-            for (i = 0; i < this._mapScales.length; i += 1) {
-                if ((!minScale || minScale >= this._mapScales[i]) && (!maxScale || maxScale <= this._mapScales[i])) {
-                    layerScales.push(this._mapScales[i]);
-                }
-            }
-            return layerScales;
-        },
-        /**
-         * @method calculateLayerResolutions
-         * Calculate a subset of maps resolutions array that matches the given boundaries.
-         * If boundaries are not defined, returns all possible resolutions.
-         * @param {Number} maxScale maximum scale boundary (optional)
-         * @param {Number} minScale minimum scale boundary (optional)
-         * @return {Number[]} calculated resolutions that are within given bounds
-         */
-        calculateLayerResolutions: function (maxScale, minScale) {
-            var layerResolutions = [],
-                i;
-
-            for (i = 0; i < this._mapScales.length; i += 1) {
-                if ((!minScale || minScale >= this._mapScales[i]) && (!maxScale || maxScale <= this._mapScales[i])) {
-                    // resolutions are in the same order as scales so just use them
-                    layerResolutions.push(this._options.resolutions[i]);
-                }
-            }
-            return layerResolutions;
         }
+/* --------------- /MAP LAYERS ------------------------ */
     }, {
         /**
          * @static @property {String[]} protocol

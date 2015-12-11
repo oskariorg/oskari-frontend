@@ -58,6 +58,7 @@ Unused functions removed:
   - getStealth()
   - setStealth()
   - notifyAll()
+  - calculateLayerMinMaxResolutions()
 
 Added functions so internal references don't need to be called:
 - getMapElementId()
