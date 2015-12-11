@@ -46,13 +46,11 @@ div.content-editor div.tool-options {
   div.content-editor div.tool-options .tool-option-settings {
     padding-left: 27px;
     padding-top: 5px; }
-div.content-editor div.tool label, div.content-editor div.data label {
+div.content-editor div.tool label, div.content-editor div.data label, div.content-editor div.tool input, div.content-editor div.data input {
   margin-right: 10px; }
-div.content-editor div.tool input, div.content-editor div.data input {
-  margin-right: 10px; }
-  div.content-editor div.tool input[type="button"], div.content-editor div.data input[type="button"] {
-    margin-top: 5px;
-    margin-bottom: 5px; }
+div.content-editor div.tool input[type="button"], div.content-editor div.data input[type="button"] {
+  margin-top: 5px;
+  margin-bottom: 5px; }
 div.content-editor > div.content {
   overflow: auto;
   height: 89%; }
@@ -114,34 +112,31 @@ div.content-editor ul.selectedLayersList {
   div.content-editor ul.selectedLayersList span {
     position: absolute;
     margin-left: -1.3em; }
-
 div.content-editor .toolrow {
-	border-top: 0;
-}
-
+  border-top: 0; }
 div.content-editor .content > div {
-	margin-bottom: 20px;
-}
-
-div.content-editor div.form div.field input, div.field select {
+  margin-bottom: 20px; }
+div.content-editor div.form div.field input {
   width: 100%;
-  width: 80%0/;
+  /*width: 80%0/;*/
   /* unquote for libsass bug */
   background-color: #FFF; }
-
-/* Buttons */
+div.field select {
+  width: 100%;
+  /*width: 80%0/;*/
+  /* unquote for libsass bug */
+  background-color: #FFF; }
 div.content-editor div.buttons, div.publisher div.startview div.buttons {
   text-align: center;
   margin-top: 10px; }
-  div.content-editor div.buttons input, div.publisher div.startview div.buttons input {
-    margin: 5px 2px; }
+div.content-editor div.buttons input, div.publisher div.startview div.buttons input {
+  margin: 5px 2px; }
 
-.content-editor-buttons
-{
-	text-align: right;
-}
+/* Buttons */
+.content-editor-buttons {
+  text-align: right; }
+  .content-editor-buttons.hide {
+    display: none; }
 
-.content-editor-buttons.hide, .content-draw-tools.hide
-{
-	display: none;
-}
+.content-draw-tools.hide {
+  display: none; }

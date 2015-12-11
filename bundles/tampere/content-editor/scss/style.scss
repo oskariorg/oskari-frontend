@@ -1,361 +1,214 @@
 #contentMap {
-
-    &.mapPublishMode {
-
-        > #mapdiv,
-        > div.row-fluid {
-            position: relative;
-            left: 212px
-        }
-
+  &.mapContentEditorMode > {
+    #mapdiv, div.row-fluid {
+      position: relative;
+      left: 212px;
     }
-
-    div.basic_publisher {
-        background : #FFF;
-        position : absolute;
-        height: 100%;
-        top: 0;
-        left: 0;
-        /* sidebar has 3, we want to open it on top of this */
-        z-index : 2;
-        width : 382px;
-
-        div.content {
-            padding : 10px;
-        }
-
+  }
+  div.content-editor {
+    background: #FFF;
+    position: absolute;
+    height: 100%;
+    top: 0;
+    left: 0;
+    /* sidebar has 3, we want to open it on top of this */
+    z-index: 2;
+    width: 382px;
+    div.content {
+      padding: 10px;
     }
-
+  }
 }
 
-div.codesnippet {
-    word-wrap: break-word;
-    border-style: dashed;
-    border-width: 1px;
-    padding: 5px;
-    max-height: 200px;
-    overflow: auto;
-}
-
-div.notLoggedIn {
-    padding: 10px;
-}
-
-div.basic_publisher {
-
-    // Temp, change inputs to TextInput and get rid of this
+div {
+  &.content-editor {
     input[type=text] {
-        width: 260px;
+      width: 260px;
     }
-
     .disabled-button {
-        opacity: 0.8;
+      opacity: 0.8;
     }
-
     div#publisher-layout-colours input[name=publisher-colour] {
-        width: 125px;
+      width: 125px;
     }
-
     p#publisher-selected-colour {
-        display: inline;
+      display: inline;
     }
-
     button#publisher-colours {
-        float: right;
+      float: right;
     }
-
     .customsize {
-
-        &:disabled {
-            // This is just to fade the * between width & height a bit...
-            color: #DDD;
+      &:disabled {
+        color: #DDD;
+      }
+      label {
+        clear: none;
+        display: inline-block;
+        width: 60px;
+        &:first-of-type {
+          margin-right: 3px;
         }
-
-        label {
-            clear: none;
-            display: inline-block;
-            width: 60px;
-
-            &:first-of-type {
-                margin-right: 3px;
-            }
-
-            &:last-of-type {
-                margin-left: 3px;
-            }
-
-            input {
-                width: 100%;
-
-                &.error {
-                    border: 1px solid red;
-                }
-
-            }
-
+        &:last-of-type {
+          margin-left: 3px;
         }
-
-    }
-
-    div.icon-info {
-        float: right;
-    }
-
-    div.tool {
-      margin: 5px;
-    }
-
-    div.tool-options {
-        padding-left: 23px;
-
-        .tool-option-settings {
-            padding-left: 27px;
-            padding-top: 5px;
-        }
-
-    }
-
-    div.tool,
-    div.data {
-
-        label {
-            margin-right: 10px;
-        }
-
         input {
-            margin-right: 10px;
-
-            &[type="button"] {
-                margin-top: 5px;
-                margin-bottom: 5px;
-            }
-
+          width: 100%;
+          &.error {
+            border: 1px solid red;
+          }
         }
-
+      }
     }
-
-    > div.content {
+    div {
+      &.icon-info {
+        float: right;
+      }
+      &.tool {
+        margin: 5px;
+      }
+      &.tool-options {
+        padding-left: 23px;
+        .tool-option-settings {
+          padding-left: 27px;
+          padding-top: 5px;
+        }
+      }
+      &.tool label, &.data label, &.tool input, &.data input {
+        margin-right: 10px;
+      }
+      &.tool input[type="button"], &.data input[type="button"] {
+        margin-top: 5px;
+        margin-bottom: 5px;
+      }
+    }
+    > div {
+      &.content {
         overflow: auto;
         height: 89%;
-    }
-
-    > div.header {
+      }
+      &.header {
         background-color: #FDF8D9;
         padding: 5px 10px;
-
         div.icon-close {
-            float: right;
+          float: right;
         }
-
+      }
     }
-
     .layer.selected {
-        border: 1pt solid #c0d0e0;
-        margin: 0 5px 5px 0;
-        height: unquote("70px\9"); /*IE9 */ 
-
-        &.out-of-scale,
-        &.out-of-content,
-        &.hidden {
-            color: #909090;
+      border: 1pt solid #c0d0e0;
+      margin: 0 5px 5px 0;
+      height: 70px9;
+      /*IE9 */
+      &.out-of-scale, &.out-of-content, &.hidden {
+        color: #909090;
+      }
+      div {
+        &.layer-info {
+          background-color: #FFF;
+          padding: 5px;
+          div {
+            &.layer-title {
+              display: inline;
+              h4 {
+                padding: 0;
+              }
+            }
+            &.layer-tool-remove {
+              float: right;
+            }
+          }
         }
-
-        div.layer-info {
-            background-color: #FFF;
-            padding: 5px;
-      
-            div.layer-title {
-                display: inline;
-
-                h4 {
-                    padding: 0;
+        &.layer-tools {
+          background-color: #f3f3f3;
+          padding: 7px;
+          div {
+            &.layout-slider {
+              width: 140px;
+              display: inline-block;
+              margin-right: 16px;
+            }
+            &.left-tools {
+              display: inline-block;
+              div {
+                &.layer-visibility {
+                  padding-right: 5px;
+                  display: inline-block;
                 }
+                &.layer-opacity {
+                  display: inline-block;
+                  background-image: url('../../../layerselection2/resources/images/opacity_slider.png');
+                  background-repeat: no-repeat;
+                  input.opacity {
+                    padding: 1px;
+                    width: 25px;
+                  }
+                }
+              }
             }
-
-            div.layer-tool-remove {
-                float: right;
+            &.right-tools {
+              padding-top: 5px;
+              float: right;
+              div {
+                float: left;
+                margin-right: 5px;
+                &.layer-rights, &.object-data {
+                  padding-top: 2px;
+                }
+              }
             }
+          }
         }
-
-        div.layer-tools {
-            background-color: #f3f3f3;
-            padding: 7px;
-
-            div.layout-slider {
-                width: 140px;
-                display: inline-block;
-                margin-right: 16px;
-            }
-
-            div.left-tools {
-                display: inline-block;
-
-                div.layer-visibility {
-                    padding-right: 5px;
-                    display: inline-block;
-                }
-
-                div.layer-opacity {
-                    display: inline-block;
-                    background-image: url('../../../layerselection2/resources/images/opacity_slider.png');
-                    background-repeat: no-repeat;    
-
-                    input.opacity {
-                        padding: 1px;
-                        width: 25px;
-                    }
-
-                }
-
-            }
-
-            div.right-tools {
-                padding-top: 5px;
-                float: right;
-
-                div {
-                    float: left;
-                    margin-right: 5px;
-          
-                    &.layer-rights,
-                    &.object-data {
-                        padding-top: 2px;
-                    }
-
-                }
-
-            }
-
-        }
-
+      }
     }
-  
     ul.selectedLayersList {
-        height: 100%;
-        width: 100%;
-        overflow: auto;
-        list-style-type: none;
-        padding: 0;
-        margin: 5px 0 0;
-
-        span {
-            position: absolute;
-            margin-left: -1.3em;
-        }
-
+      height: 100%;
+      width: 100%;
+      overflow: auto;
+      list-style-type: none;
+      padding: 0;
+      margin: 5px 0 0;
+      span {
+        position: absolute;
+        margin-left: -1.3em;
+      }
     }
-
-}
-
-div.publisher {
-
-    div.startview {
-
-        div.content {
-            margin-top: 5px;
-        }
-
-        div.error ul li {
-            color: red;
-        }
-
-        div.icon-info {
-            float: right;
-        }
-
-        div.layerlist {
-            border : 1px solid;
-            padding : 10px;
-
-            h4 {
-                line-height: 15px;
-                padding-bottom: 5px;
-            }
-
-        }
-
-        div.tou {
-            margin: 15px 0;
-        }
-
-        ul {
-            list-style: disc inside none;
-            padding : 5px;
-        }
-
+    .toolrow {
+      border-top: 0;
     }
-
-}
-
-div.basic_publisher div.form div.field input,
-div.field select {
-    width : 100%;
-    width: unquote("80%\0/"); /* unquote for libsass bug */
+    .content > div {
+      margin-bottom: 20px;
+    }
+    div.form div.field input {
+      width: 100%;
+      /*width: 80%0/;*/
+      /* unquote for libsass bug */
+      background-color: #FFF;
+    }
+  }
+  &.field select {
+    width: 100%;
+    /*width: 80%0/;*/
+    /* unquote for libsass bug */
     background-color: #FFF;
+  }
+  &.content-editor div.buttons, &.publisher div.startview div.buttons {
+    text-align: center;
+    margin-top: 10px;
+  }
+  &.content-editor div.buttons input, &.publisher div.startview div.buttons input {
+    margin: 5px 2px;
+  }
 }
 
 /* Buttons */
-div.basic_publisher,
-div.publisher div.startview {
 
-    div.buttons {
-        text-align : center;
-        margin-top : 10px;
-
-        input {
-            margin: 5px 2px;
-        }
-
-    }
-
+.content-editor-buttons {
+  text-align: right;
+  &.hide {
+    display: none;
+  }
 }
 
-div#publisher-colour-inputs {
-    margin-bottom: 15px;
-}
-
-div#publisher-custom-colours {
-    padding: 10px 20px;
-
-    div#publisher-custom-colours-bg,
-    div#publisher-custom-colours-title,
-    div#publisher-custom-colours-header,
-    div#publisher-custom-colours-iconcls {
-        margin-bottom: 12px;
-    }
-
-    div.rgbInput {
-        padding: 5px;
-        border: 1px solid black;
-
-        input[type="text"] {
-            margin: 0 8px;
-            width: 30px;
-        }
-
-    }
-
-}
-/* I don't think this is needed anymore?
-.maincontainer {
-
-    ul.selectedLayersList {
-        margin-left: 0px;
-
-        li {
-            list-style: none;
-        }
-
-    }
-
-    .block {
-        display: block;
-    }
-
-}
-*/
-
-
-#editModeBtn {
-    margin: 0;
+.content-draw-tools.hide {
+  display: none;
 }

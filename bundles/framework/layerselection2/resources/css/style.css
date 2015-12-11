@@ -16,16 +16,22 @@ div.layerselection2 .layer.selected {
       background-repeat: no-repeat; }
     div.layerselection2 .layer.selected div.layer-info div.layer-title {
       cursor: move;
-      display: inline;}
+      display: inline; }
       div.layerselection2 .layer.selected div.layer-info div.layer-title h4 {
         font: 14pt Arial, sans-serif;
-        padding: 0;}
-      div.layerselection2 .layer.selected div.layer-info div.layer-tool-refresh {
-        float: right;
-        cursor: default;
-        margin-right: 10px}
+        padding: 0; }
+    div.layerselection2 .layer.selected div.layer-info div.layer-tool-refresh {
+      float: right;
+      cursor: default;
+      margin-right: 10px; }
     div.layerselection2 .layer.selected div.layer-info div.layer-tool-remove {
       float: right; }
+    div.layerselection2 .layer.selected div.layer-info .content-editor-button {
+      float: right;
+      line-height: 7px;
+      margin-right: 20px; }
+    div.layerselection2 .layer.selected div.layer-info h4 {
+      display: inline; }
   div.layerselection2 .layer.selected div.layer-tools {
     background-color: #f3f3f3;
     padding: 7px; }
@@ -69,15 +75,6 @@ div.layerselection2 ul.selectedLayersList {
   div.layerselection2 ul.selectedLayersList span {
     position: absolute;
     margin-left: -1.3em; }
-  div.layerselection2 div.layer-info h4 {
-  	display: inline;
-  }
-  
-  div.layerselection2 div.layer-info .content-editor-button {
-  	float:right;
-  	line-height: 7px;
-  	margin-right: 20px;
-  }
 
 div.analyse-filter-popup-content div.filter-option {
   padding-bottom: 10px; }
@@ -113,4 +110,3 @@ div.analyse-filter-popup-content div.filter-option {
     width: 65px; }
   div.analyse-filter-popup-content div.filter-option select.operator {
     width: 210px; }
-  

@@ -561,6 +561,22 @@
                     }
                 }
             }
-        }
+        }, {
+			"title" : "Content editor",
+			"fi" : "content-editor",
+			"sv" : "content-editor",
+			"en" : "content-editor",
+			"bundlename" : "content-editor",
+			"bundleinstancename" : "content-editor",
+			"metadata" : {
+				"Import-Bundle" : {
+					"content-editor" : {
+						"bundlePath" : "../../../packages/tampere/bundle/"
+					}
+				},
+				"Require-Bundle-Instance" : []
+			},
+			"instanceProps" : {}
+		}
     ]
 }
