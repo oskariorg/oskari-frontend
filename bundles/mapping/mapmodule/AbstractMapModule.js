@@ -289,9 +289,24 @@ Oskari.clazz.define(
 
 /* ---------------- SHARED FUNCTIONS --------------- */
         /**
+         * @method getName
+         * @return {String} the name for the component
+         */
+        getName: function () {
+            return this._id + 'MapModule';
+        },
+        /**
+         * @method getSandbox
+         * Returns reference to Oskari sandbox
+         * @return {Oskari.mapframework.sandbox.Sandbox}
+         */
+        getSandbox: function () {
+            return this._sandbox;
+        },
+        /**
          * @method getMap
-         * Returns a reference to the actual OpenLayers implementation
-         * @return {OpenLayers.Map}
+         * Returns a reference to the map implementation
+         * @return {OpenLayers.Map|ol.Map}
          */
         getMap: function () {
             return this._map;
@@ -305,24 +320,17 @@ Oskari.clazz.define(
          *
          * @return {Integer} map max zoom level
         */
-        getMaxZoomLevel: function(){
+        getMaxZoomLevel: function() {
             // getNumZoomLevels returns OL map resolutions length, so need decreased by one (this return max OL zoom)
             return this.getResolutionArray().length - 1;
         },
 
         /**
-         * Returns a reference to the map implementation
-         * @return {[type]} [description]
-         */
-        getMap : function() {
-            return this._map;
-        },
-        /**
          * @method getMapEl
          * Get jQuery map element
          */
         getMapEl: function () {
-            var mapDiv = jQuery('#' + this._mapDivId);
+            var mapDiv = jQuery('#' + this.getMapElementId());
             if (!mapDiv.length) {
                 this.getSandbox().printWarn('mapDiv not found with #' + this._mapDivId);
             }
@@ -432,16 +440,23 @@ Oskari.clazz.define(
         },
 
         /**
-         * @method getMapScales
+         * @method getScaleArray
          * @return {Number[]} calculated mapscales
          */
-        getMapScales: function () {
+        getScaleArray: function () {
             return this._mapScales;
         },
         getMapScale: function () {
-            var scales = this.getMapScales();
+            var scales = this.getMapScaleArray();
             return scales[this.getMapZoom()];
         },
+        getResolutionArray: function () {
+            return this._mapResolutions;
+        },
+        getResolution: function () {
+            return this.getResolutionArray()[this.getMapZoom()];
+        },
+
         /**
          * @method moveMapToLonLat
          * Moves the map to the given position.
@@ -627,9 +642,9 @@ Oskari.clazz.define(
         },
         /**
          * @method setLayerPlugin
-         * Adds a plugin to the map that is responsible for rendering maplayers on the map. Other types of
-         * plugins doesn't need to be registered like this.
-         * Saves a reference so the plugin so it can be accessed with getLayerPlugins/getLayerPlugin.
+         * Adds a plugin to the map that is responsible for rendering maplayers on the map.
+         * Other types of plugins doesn't need to be registered like this.
+         * Saves a reference so the plugin so it can be accessed with getLayerPlugins.
          *
          * The plugin handling rendering a layer is responsible for calling this method and registering
          * itself as a layersplugin.
@@ -650,40 +665,18 @@ Oskari.clazz.define(
             }
         },
         /**
-         * @method getLayerPlugin
-         * Returns a single map layer plugin that matches the given id
-         * See getLayerPlugins for getting all plugins.
-         * See setLayerPlugin for more about layerplugins.
-         * @return {Oskari.mapframework.ui.module.common.mapmodule.Plugin} plugin matching the id or undefined if not found
-         */
-        getLayerPlugin: function (id) {
-            return this._layerPlugins[id];
-        },
-        /**
-         * @method getControls
+         * @method getLayerPlugins
          * Returns plugins that have been registered as layer plugins. See setLayerPlugin for more about layerplugins.
-         * See getLayerPlugin for getting single plugin.
-         * @return {Object} contains plugin ids keys and plugin objects as values
+         * @param {String} id optional plugin id to return just the matching plugin
+         * @return {Object} contains plugin ids keys and plugin objects as values or single plugin if param is given
          */
-        getLayerPlugins: function () {
+        getLayerPlugins: function (id) {
+            if(id) {
+                return this._layerPlugins[id];
+            }
             return this._layerPlugins;
         },
 
-        /**
-         * @method getName
-         * @return {String} the name for the component
-         */
-        getName: function () {
-            return this._id + 'MapModule';
-        },
-        /**
-         * @method getSandbox
-         * Returns reference to Oskari sandbox
-         * @return {Oskari.mapframework.sandbox.Sandbox}
-         */
-        getSandbox: function () {
-            return this._sandbox;
-        },
         /**
          * @method getLocalization
          * Returns JSON presentation of bundles localization data for current
@@ -876,13 +869,6 @@ Oskari.clazz.define(
         getProjection: function () {
             return this._projectionCode;
         },
-        getResolutionArray: function () {
-            return this._mapResolutions;
-        },
-        getResolution: function () {
-            return this.getResolutionArray()[this.getMapZoom()];
-        },
-
         /**
          * @method isValidLonLat
          * Checks that lat and lon are within bounds of the map extent
