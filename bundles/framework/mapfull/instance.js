@@ -202,12 +202,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          */
         start: function () {
             var me = this,
-                conf = me.conf,
+                conf = me.conf || {},
                 core = Oskari.clazz.create('Oskari.mapframework.core.Core'),
                 sandbox = core.getSandbox(),
-                sandboxName = (conf ? conf.sandbox : null) || 'sandbox';
+                sandboxName = conf.sandbox || 'sandbox';
 
-            // FIXME this doesn't check if conf exists?
             me._handleProjectionDefs(conf.projectionDefs);
             me.core = core;
             me.sandbox = sandbox;
@@ -229,13 +228,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             });
 
             // take map div ID from config if available
-            if (conf) {
-                if (conf.mapElement) {
-                    me.mapDivId = conf.mapElement;
-                }
-                if (conf.mapContainer) {
-                    me.contentMapDivId = conf.mapContainer;
-                }
+            if (conf.mapElement) {
+                me.mapDivId = conf.mapElement;
+            }
+            if (conf.mapContainer) {
+                me.contentMapDivId = conf.mapContainer;
             }
 
             // Init user

@@ -34,7 +34,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
             id: 'medium',
             width: 700,
             height: 525,
-            selected: true // default option
+            // default option
+            selected: true
         }, {
             id: 'large',
             width: 1240,
@@ -492,16 +493,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
 
         },
         /**
-         * Gets the label text for a size option. It changes based on grid visibility.
-         *
-         * @method _getSizeLabel
-         * @private
-         */
-        _getSizeLabel: function (label, option) {
-            return (label + ' (' + option.width + ' x ' + option.height + 'px)');
-        },
-
-        /**
          * Returns the UI panel and populates it with the data that we want to show the user.
          *
          * @method getPanel
@@ -526,11 +517,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
         getValues: function () {
             var me = this,
                 values = {},
-                selected = me._getSelectedMapSize();
+                selected = me._getSelectedMapSize(),
                 size = isNaN(parseInt(selected.width)) || isNaN(parseInt(selected.height)) ? undefined : {
                     width: selected.width,
                     height: selected.height
-                }
+                };
 
             values = {
                 metadata: {

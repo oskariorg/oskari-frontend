@@ -1449,7 +1449,8 @@ Oskari.clazz.define(
             }
         },
         getLayerName : function(layer, type) {
-            return this.__layerPrefix + layer.getId() + '_' + layerType;
+            type = type || this.__typeNormal;
+            return this.__layerPrefix + layer.getId() + '_' + type;
         },
         layerByName : function(name, value) {
             if(!value) {

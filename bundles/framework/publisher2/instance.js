@@ -140,8 +140,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
          */
         setPublishMode: function (blnEnabled, deniedLayers, data) {
             var me = this,
-                map = jQuery('#contentMap'),
-                requestBuilder;
+                map = jQuery('#contentMap');
 
             var statsLayer = this._resetStatsUI();
             if (blnEnabled) {

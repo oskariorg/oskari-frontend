@@ -198,7 +198,7 @@ Oskari.clazz.define(
             var srs = this.plugin.getSandbox().getMap().getSrsName(),
                 bbox = this.plugin.getSandbox().getMap().getExtent(),
                 zoom = this.plugin.getSandbox().getMap().getZoom(),
-                mapScales = this.plugin.getMapModule().getMapScales();
+                mapScales = this.plugin.getMapModule().getScaleArray();
 
             var message = {
                 session: this.session.session,

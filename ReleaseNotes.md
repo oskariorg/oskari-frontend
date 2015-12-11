@@ -30,6 +30,8 @@ Renamed functions
 - panMapEast()/panMapWest()/panMapNorth()/panMapSouth() removed. Use panMapByPixels() instead.
 - zoomIn()/zoomOut() removed. Use adjustZoomLevel() instead.
 - zoomTo() removed. Use setZoomLevel() instead.
+- getLayerPlugin() removed. Use getLayerPlugins(id) with id parameter to fetch reference to single plugin.
+- getMapScales() renamed getScaleArray() to be consistent with getResolution()/getResolutionArray().
 
 Unused functions removed:
   - _ensureExists()
@@ -91,6 +93,23 @@ Both ol2 and ol3 implementations of VectorLayerPlugin have been added to followi
     }
 ```
 
+NOTE! Some implementation specific (ol2 vs. ol3) differences might occur. For instance, OpenLayers2 has only one fill color for all kinds of geometries whereas in ol3 separate fill can be defined for points and areas.
+
+```javascript
+            "style": {
+                //ol2 all-around fillcolor, ol3 just polygons
+                "fill": {
+                    "color": "#ff00ff"
+                },
+                //in ol2 this fill not used, ol3 uses for filling points 
+                image : {
+                    radius: 4,
+                    fill : {
+                        color : 'rgba(0,255,0,1)'
+                    }
+                }
+              }
+```
 
 ### publisher2
 
