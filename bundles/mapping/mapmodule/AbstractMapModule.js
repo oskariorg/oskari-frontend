@@ -394,20 +394,20 @@ Oskari.clazz.define(
          *     wanting to notify at end of the chain for performance reasons or similar) (optional)
          */
         zoomToScale: function (scale, closest, suppressEnd) {
-            var resolution = this.calculateScaleResolution(scale);
+            var resolution = this.getResolutionForScale(scale);
             var zoom = this.getResolutionArray().indexOf(resolution);
             if(zoom !== -1) {
                 this.setZoomLevel(zoom, suppressEnd);
             }
         },
         /**
-         * @method calculateScaleResolution
+         * @method getResolutionForScale
          * Calculate max resolution for the scale
-         * If scale is not defined return default
+         * If scale is not defined return -1
          * @param {Number} scale
          * @return {Number[]} calculated resolution
          */
-        calculateScaleResolution: function (scale) {
+        getResolutionForScale: function (scale) {
             if(!scale && scale !== 0) {
                 return -1;
             }
