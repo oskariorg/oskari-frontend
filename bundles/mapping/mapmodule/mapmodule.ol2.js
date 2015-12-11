@@ -446,7 +446,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          */
         getStyle : function(styleDef) {
             styleDef = styleDef || {};
-            //create a blank style with default values 
+            //create a blank style with default values
             var olStyle = new OpenLayers.Style();
             if(Oskari.util.keyExists(styleDef, 'fill.color')) {
                 olStyle.fill = true;

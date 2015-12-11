@@ -459,7 +459,7 @@ Oskari.clazz.define(
                         if(currentScale<options.minScale) {
                             this.getMapModule().zoomToScale(options.minScale, true);
                         }
-                    }                    
+                    }
                 }
             }
         },
