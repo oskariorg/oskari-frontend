@@ -97,7 +97,7 @@ Oskari.clazz.define(
                         layerImpl.setMinResolution(this.getMapModule().calculateScaleResolution(_layer.getMaxScale()));
                 }
                 // No definition, if scale is greater than max resolution scale
-                if (_layer.getMinScale()  && _layer.getMinScale() !== -1 && (_layer.getMinScale() < this.getMapModule().getMapScales()[0] )) {
+                if (_layer.getMinScale()  && _layer.getMinScale() !== -1 && (_layer.getMinScale() < this.getMapModule().getScaleArray()[0] )) {
                     layerImpl.setMaxResolution(this.getMapModule().calculateScaleResolution(_layer.getMinScale()));
                 }
                 this.mapModule.addLayer(layerImpl, _layer, layerIdPrefix + _layer.getId());

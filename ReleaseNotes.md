@@ -30,6 +30,8 @@ Renamed functions
 - panMapEast()/panMapWest()/panMapNorth()/panMapSouth() removed. Use panMapByPixels() instead.
 - zoomIn()/zoomOut() removed. Use adjustZoomLevel() instead.
 - zoomTo() removed. Use setZoomLevel() instead.
+- getLayerPlugin() removed. Use getLayerPlugins(id) with id parameter to fetch reference to single plugin.
+- getMapScales() renamed getScaleArray() to be consistent with getResolution()/getResolutionArray().
 
 Unused functions removed:
   - _ensureExists()
