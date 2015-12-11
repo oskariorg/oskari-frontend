@@ -77,8 +77,6 @@ Oskari.clazz.define(
         };
 
         me._sandbox = null;
-        // don't send events etc - this should be removed 
-        me._stealth = false;
 
         // reference to map-engine controls
         me._controls = {};
@@ -302,30 +300,37 @@ Oskari.clazz.define(
             return this._sandbox;
         },
         /**
-         * @method getMap
-         * Returns a reference to the map implementation
-         * @return {OpenLayers.Map|ol.Map}
+         * @method getLocalization
+         * Returns JSON presentation of bundles localization data for current
+         * language.
+         * If key-parameter is not given, returns the whole localization data.
+         *
+         * @param {String} key (optional) if given, returns the value for key
+         * @param {Boolean} force (optional) true to force reload for localization data
+         * @return {String/Object} returns single localization string or
+         *      JSON object for complete data depending on localization
+         *      structure and if parameter key is given
          */
-        getMap: function () {
-            return this._map;
-        },
-        getMapElementId : function() {
-            return this._mapDivId;
+        getLocalization: function (key, force) {
+            if (!this._localization || force === true) {
+                this._localization = Oskari.getLocalization('MapModule');
+            }
+            if (key) {
+                return this._localization[key];
+            }
+            return this._localization;
         },
         /**
-         * @method getMaxZoomLevel
-         * Gets map max zoom level.
-         *
-         * @return {Integer} map max zoom level
-        */
-        getMaxZoomLevel: function() {
-            // getNumZoomLevels returns OL map resolutions length, so need decreased by one (this return max OL zoom)
-            return this.getResolutionArray().length - 1;
+         * Returns the id where map is rendered.
+         * @return {String} DOMElement id like 'mapdiv'
+         */
+        getMapElementId : function() {
+            return this._mapDivId;
         },
 
         /**
          * @method getMapEl
-         * Get jQuery map element
+         * Get jQuery reference to map element
          */
         getMapEl: function () {
             var mapDiv = jQuery('#' + this.getMapElementId());
@@ -333,6 +338,14 @@ Oskari.clazz.define(
                 this.getSandbox().printWarn('mapDiv not found with #' + this._mapDivId);
             }
             return mapDiv;
+        },
+        /**
+         * @method getMap
+         * Returns a reference to the map implementation
+         * @return {OpenLayers.Map|ol.Map}
+         */
+        getMap: function () {
+            return this._map;
         },
         /**
          * @method getImageUrl
@@ -344,44 +357,142 @@ Oskari.clazz.define(
             return this._imageUrl;
         },
         /**
-         * @method notifyStartMove
-         * Notify other components that the map has started moving. Sends a MapMoveStartEvent.
-         * Not sent always, preferrably track map movements by listening to AfterMapMoveEvent.
-         * Ignores the call if map is in stealth mode
+         * Get map max extent.
+         * @method getMaxExtent
+         * @return {Object} max extent
          */
-        notifyStartMove: function () {
-            if (this.getStealth()) {
-                // ignore if in "stealth mode"
-                return;
-            }
-            this.getSandbox().getMap().setMoving(true);
-            var centerX = this.getMapCenter().lon,
-                centerY = this.getMapCenter().lat,
-                evt = this.getSandbox().getEventBuilder('MapMoveStartEvent')(centerX, centerY);
-            this.getSandbox().notifyAll(evt);
+        getMaxExtent: function(){
+            var bbox = this._maxExtent;
+            return {
+                bottom: bbox.bottom,
+                left: bbox.left,
+                right: bbox.right,
+                top: bbox.top
+            };
         },
         /**
-         * @method notifyMoveEnd
-         * Notify other components that the map has moved. Sends a AfterMapMoveEvent and updates the
-         * sandbox map domain object with the current map properties.
-         * Ignores the call if map is in stealth mode. Plugins should use this to notify other components
-         * if they move the map through OpenLayers reference. All map movement methods implemented in mapmodule
-         * (this class) calls this automatically if not stated otherwise in API documentation.
-         * @param {String} creator
-         *        class identifier of object that sends event
+         * @method getProjection
+         * Returns the SRS projection code for the map.
+         * Currently always 'EPSG:3067'
+         * @return {String}
          */
-        notifyMoveEnd: function (creator) {
-            if (this.getStealth()) {
-                // ignore if in "stealth mode"
-                return;
-            }
-            var sandbox = this.getSandbox();
-            sandbox.getMap().setMoving(false);
+        getProjection: function () {
+            return this._projectionCode;
+        },
+        /**
+         * @method getScaleArray
+         * @return {Number[]} calculated mapscales
+         */
+        getScaleArray: function () {
+            return this._mapScales;
+        },
+        getMapScale: function () {
+            var scales = this.getScaleArray();
+            return scales[this.getMapZoom()];
+        },
+        getResolutionArray: function () {
+            return this._mapResolutions;
+        },
+        getResolution: function () {
+            return this.getResolutionArray()[this.getMapZoom()];
+        },
+        /**
+         * @method getMaxZoomLevel
+         * Gets map max zoom level.
+         *
+         * @return {Integer} map max zoom level
+        */
+        getMaxZoomLevel: function() {
+            // getNumZoomLevels returns OL map resolutions length, so need decreased by one (this return max OL zoom)
+            return this.getResolutionArray().length - 1;
+        },
+        /**
+         * @method getNewZoomLevel
+         * @private
+         * Does a sanity check on a zoomlevel adjustment to see if the adjusted zoomlevel is
+         * supported by the map (is between 0-12). Returns the adjusted zoom level if it is valid or
+         * current zoom level if the adjusted one is out of bounds.
+         * @return {Number} sanitized absolute zoom level
+         */
+        getNewZoomLevel: function (adjustment) {
+            // TODO: check isNaN?
+            var requestedZoomLevel = this.getMapZoom() + adjustment;
 
-            var lonlat = this.getMapCenter();
+            if (requestedZoomLevel >= 0 && requestedZoomLevel <= this.getMaxZoomLevel()) {
+                return requestedZoomLevel;
+            }
+            // if not in valid bounds, return original
+            return this.getMapZoom();
+        },
+        /**
+         * @method getClosestZoomLevel
+         * Calculate closest zoom level given the given boundaries.
+         * If map is zoomed too close -> returns the closest zoom level level possible within given bounds
+         * If map is zoomed too far out -> returns the furthest zoom level possible within given bounds
+         * If the boundaries are within current zoomlevel or undefined, returns the current zoomLevel
+         * @param {Number} maxScale maximum scale boundary (optional)
+         * @param {Number} minScale minimum scale boundary (optional)
+         * @return {Number} zoomLevel (0-12)
+         */
+        getClosestZoomLevel: function (maxScale, minScale) {
+            var zoomLevel = this.getMapZoom();
+            // FIXME: shouldn't we check appropriate level if even one is defined? '||' should be '&&'?
+            if (!minScale || !maxScale) {
+                return zoomLevel;
+            }
+
+            var scale = this.getMapScale(),
+                scaleList = this.getScaleArray(),
+                i;
+
+            if (scale < minScale) {
+                // zoom out
+                //for(i = this._mapScales.length; i > zoomLevel; i--) {
+                for (i = zoomLevel; i > 0; i -= 1) {
+                    if (scaleList[i] >= minScale) {
+                        return i;
+                    }
+                }
+            } else if (scale > maxScale) {
+                // zoom in
+                for (i = zoomLevel; i < scaleList.length; i += 1) {
+                    if (scaleList[i] <= maxScale) {
+                        return i;
+                    }
+                }
+            }
+            return zoomLevel;
+        },
+        /**
+         * @method adjustZoomLevel
+         * Adjusts the maps zoom level by given relative number
+         * @param {Number} zoomAdjust relative change to the zoom level f.ex -1
+         * @param {Boolean} suppressEvent true to NOT send an event about the map move
+         *  (other components wont know that the map has moved, only use when chaining moves and
+         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+         */
+        adjustZoomLevel: function (amount, suppressEvent) {
+            var requestedZoomLevel = this.getNewZoomLevel(amount);
+            this.setZoomLevel(requestedZoomLevel, suppressEvent);
+        },
+        /**
+         * @method setZoomLevel
+         * Sets the maps zoom level to given absolute number
+         * @param {Number} newZoomLevel absolute zoom level
+         * @param {Boolean} suppressEvent true to NOT send an event about the map move
+         *  (other components wont know that the map has moved, only use when chaining moves and
+         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+         */
+        setZoomLevel: function (newZoomLevel, suppressEvent) {
+            if (newZoomLevel < 0 || newZoomLevel > this.getMaxZoomLevel()) {
+                newZoomLevel = this.getMapZoom();
+            }
+            this._setZoomLevelImpl(newZoomLevel);
             this.updateDomain();
-            var evt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat.lon, lonlat.lat, this.getMapZoom(), false, this.getMapScale(), creator);
-            sandbox.notifyAll(evt);
+            if (suppressEvent !== true) {
+                //send note about map change
+                this.notifyMoveEnd();
+            }
         },
         /**
          * @method zoomToScale
@@ -430,24 +541,6 @@ Oskari.clazz.define(
         },
 
         /**
-         * @method getScaleArray
-         * @return {Number[]} calculated mapscales
-         */
-        getScaleArray: function () {
-            return this._mapScales;
-        },
-        getMapScale: function () {
-            var scales = this.getScaleArray();
-            return scales[this.getMapZoom()];
-        },
-        getResolutionArray: function () {
-            return this._mapResolutions;
-        },
-        getResolution: function () {
-            return this.getResolutionArray()[this.getMapZoom()];
-        },
-
-        /**
          * @method moveMapToLonLat
          * Moves the map to the given position.
          * NOTE! Doesn't send an event if zoom level is not changed.
@@ -460,36 +553,80 @@ Oskari.clazz.define(
             var requestedZoomLevel = this.getMapZoom();
 
             if (zoomAdjust) {
-                requestedZoomLevel = this._getNewZoomLevel(zoomAdjust);
+                requestedZoomLevel = this.getNewZoomLevel(zoomAdjust);
                 blnSilent = false;
             }
             this.centerMap(lonlat, requestedZoomLevel, blnSilent);
         },
         /**
-         * Get map max extent.
-         * @method getMaxExtent
-         * @return {Object} max extent
+         * @method isValidLonLat
+         * Checks that lat and lon are within bounds of the map extent
+         * @param {Number} lon longitude to check
+         * @param {Number} lat latitude to check
+         * @return {Boolean} true if coordinates are inside boundaries
          */
-        getMaxExtent: function(){
-            var bbox = this._maxExtent;
-            return {
-                bottom: bbox.bottom,
-                left: bbox.left,
-                right: bbox.right,
-                top: bbox.top
-            };
+        isValidLonLat: function (lon, lat) {
+            var maxExtent = this.getMaxExtent();
+
+            if(isNaN(lon) || isNaN(lat)) {
+                return false;
+            } else if(lon < maxExtent.left || lon > maxExtent.right || lat < maxExtent.bottom || lat > maxExtent.top) {
+                return false;
+            } else {
+                return true;
+            }
         },
+
+        /**
+         * Changes array to object
+         * @param  {Object | Number[]} lonlat [description]
+         * @return {Object}        [description]
+         */
+        normalizeLonLat : function(lonlat) {
+            if (_.isArray(lonlat)) {
+                return {
+                    lon : lonlat[0],
+                    lat : lonlat[1]
+                };
+            }
+            return lonlat;
+        },
+        /**
+         * @method notifyStartMove
+         * Notify other components that the map has started moving. Sends a MapMoveStartEvent.
+         * Not sent always, preferrably track map movements by listening to AfterMapMoveEvent.
+         */
+        notifyStartMove: function () {
+            this.getSandbox().getMap().setMoving(true);
+            var centerX = this.getMapCenter().lon,
+                centerY = this.getMapCenter().lat,
+                evt = this.getSandbox().getEventBuilder('MapMoveStartEvent')(centerX, centerY);
+            this.getSandbox().notifyAll(evt);
+        },
+        /**
+         * @method notifyMoveEnd
+         * Notify other components that the map has moved. Sends a AfterMapMoveEvent and updates the
+         * sandbox map domain object with the current map properties.
+         * if they move the map through OpenLayers reference. All map movement methods implemented in mapmodule
+         * (this class) calls this automatically if not stated otherwise in API documentation.
+         * @param {String} creator
+         *        class identifier of object that sends event
+         */
+        notifyMoveEnd: function (creator) {
+            var sandbox = this.getSandbox();
+            sandbox.getMap().setMoving(false);
+
+            var lonlat = this.getMapCenter();
+            this.updateDomain();
+            var evt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat.lon, lonlat.lat, this.getMapZoom(), false, this.getMapScale(), creator);
+            sandbox.notifyAll(evt);
+        },
+
         /**
          * @method updateDomain
          * Updates the sandbox map domain object with the current map properties.
-         * Ignores the call if map is in stealth mode.
          */
         updateDomain: function() {
-
-            if (this.getStealth()) {
-                // ignore if in "stealth mode"
-                return;
-            }
             var sandbox = this.getSandbox();
             var mapVO = sandbox.getMap();
             var lonlat = this.getMapCenter();
@@ -508,6 +645,10 @@ Oskari.clazz.define(
             mapVO.setBbox(this.getCurrentExtent());
             mapVO.setMaxExtent(this.getMaxExtent());
         },
+        /**
+         * @method updateSize
+         * Signal map-engine that DOMElement size has changed and trigger a MapSizeChangedEvent
+         */
         updateSize: function() {
             this._updateSizeImpl();
             this.updateDomain();
@@ -519,73 +660,8 @@ Oskari.clazz.define(
 
             // send as an event forward
             if(width && height) {
-              var evt = sandbox.getEventBuilder(
-                  'MapSizeChangedEvent'
-              )(width, height);
+              var evt = sandbox.getEventBuilder('MapSizeChangedEvent')(width, height);
               sandbox.notifyAll(evt);
-            }
-        },
-        /**
-         * Changes array to object
-         * @param  {Object | Number[]} lonlat [description]
-         * @return {Object}        [description]
-         */
-        normalizeLonLat : function(lonlat) {
-            if (_.isArray(lonlat)) {
-                return {
-                    lon : lonlat[0],
-                    lat : lonlat[1]
-                };
-            }
-            return lonlat;
-        },
-        /**
-         * @method _getNewZoomLevel
-         * @private
-         * Does a sanity check on a zoomlevel adjustment to see if the adjusted zoomlevel is
-         * supported by the map (is between 0-12). Returns the adjusted zoom level if it is valid or
-         * current zoom level if the adjusted one is out of bounds.
-         * @return {Number} sanitized absolute zoom level
-         */
-        _getNewZoomLevel: function (adjustment) {
-            // TODO: check isNaN?
-            var requestedZoomLevel = this.getMapZoom() + adjustment;
-
-            if (requestedZoomLevel >= 0 && requestedZoomLevel <= this.getMaxZoomLevel()) {
-                return requestedZoomLevel;
-            }
-            // if not in valid bounds, return original
-            return this.getMapZoom();
-        },
-        /**
-         * @method adjustZoomLevel
-         * Adjusts the maps zoom level by given relative number
-         * @param {Number} zoomAdjust relative change to the zoom level f.ex -1
-         * @param {Boolean} suppressEvent true to NOT send an event about the map move
-         *  (other components wont know that the map has moved, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         */
-        adjustZoomLevel: function (amount, suppressEvent) {
-            var requestedZoomLevel = this._getNewZoomLevel(amount);
-            this.setZoomLevel(requestedZoomLevel, suppressEvent);
-        },
-        /**
-         * @method setZoomLevel
-         * Sets the maps zoom level to given absolute number
-         * @param {Number} newZoomLevel absolute zoom level
-         * @param {Boolean} suppressEvent true to NOT send an event about the map move
-         *  (other components wont know that the map has moved, only use when chaining moves and
-         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-         */
-        setZoomLevel: function (newZoomLevel, suppressEvent) {
-            if (newZoomLevel < 0 || newZoomLevel > this.getMaxZoomLevel()) {
-                newZoomLevel = this.getMapZoom();
-            }
-            this._setZoomLevelImpl(newZoomLevel);
-            this.updateDomain();
-            if (suppressEvent !== true) {
-                //send note about map change
-                this.notifyMoveEnd();
             }
         },
 
@@ -665,28 +741,6 @@ Oskari.clazz.define(
                 return this._layerPlugins[id];
             }
             return this._layerPlugins;
-        },
-
-        /**
-         * @method getLocalization
-         * Returns JSON presentation of bundles localization data for current
-         * language.
-         * If key-parameter is not given, returns the whole localization data.
-         *
-         * @param {String} key (optional) if given, returns the value for key
-         * @param {Boolean} force (optional) true to force reload for localization data
-         * @return {String/Object} returns single localization string or
-         *      JSON object for complete data depending on localization
-         *      structure and if parameter key is given
-         */
-        getLocalization: function (key, force) {
-            if (!this._localization || force === true) {
-                this._localization = Oskari.getLocalization('MapModule');
-            }
-            if (key) {
-                return this._localization[key];
-            }
-            return this._localization;
         },
 
         /**
@@ -816,105 +870,6 @@ Oskari.clazz.define(
                     this._pluginInstances[pluginName].stopPlugin(sandbox);
                 }
             }
-        },
-        /**
-         * @method getStealth
-         * Returns boolean true if map is in "stealth mode". Stealth mode means that the map doesn't send events
-         * and doesn't update the map domain object in sandbox
-         * @return {Boolean}
-         */
-        getStealth: function () {
-            return this._stealth;
-        },
-        /**
-         * @method setStealth
-         * Enables/disables the maps "stealth mode". Stealth mode means that the map doesn't send events
-         * and doesn't update the map domain object in sandbox
-         * @param {Boolean} bln true to enable stealth mode
-         */
-        setStealth: function (bln) {
-            this._stealth = !!bln;
-        },
-        /**
-         * @method notifyAll
-         * Calls sandbox.notifyAll with the parameters if stealth mode is not enabled
-         * @param {Oskari.mapframework.event.Event} event - event to send
-         * @param {Boolean} retainEvent true to not send event but only print debug which modules are listening, usually left undefined (optional)
-         */
-        notifyAll: function (event, retainEvent) {
-            // propably not called anymore?
-            if (this.getStealth()) {
-                return;
-            }
-
-            this.getSandbox().notifyAll(event, retainEvent);
-        },
-
-        /**
-         * @method getProjection
-         * Returns the SRS projection code for the map.
-         * Currently always 'EPSG:3067'
-         * @return {String}
-         */
-        getProjection: function () {
-            return this._projectionCode;
-        },
-        /**
-         * @method isValidLonLat
-         * Checks that lat and lon are within bounds of the map extent
-         * @param {Number} lon longitude to check
-         * @param {Number} lat latitude to check
-         * @return {Boolean} true if coordinates are inside boundaries
-         */
-        isValidLonLat: function (lon, lat) {
-            var maxExtent = this.getMaxExtent();
-
-            if(isNaN(lon) || isNaN(lat)) {
-                return false;
-            } else if(lon < maxExtent.left || lon > maxExtent.right || lat < maxExtent.bottom || lat > maxExtent.top) {
-                return false;
-            } else {
-                return true;
-            }
-        },
-
-        /**
-         * @method getClosestZoomLevel
-         * Calculate closest zoom level given the given boundaries.
-         * If map is zoomed too close -> returns the closest zoom level level possible within given bounds
-         * If map is zoomed too far out -> returns the furthest zoom level possible within given bounds
-         * If the boundaries are within current zoomlevel or undefined, returns the current zoomLevel
-         * @param {Number} maxScale maximum scale boundary (optional)
-         * @param {Number} minScale minimum scale boundary (optional)
-         * @return {Number} zoomLevel (0-12)
-         */
-        getClosestZoomLevel: function (maxScale, minScale) {
-            var zoomLevel = this.getMapZoom();
-            // FIXME: shouldn't we check appropriate level if even one is defined? '||' should be '&&'?
-            if (!minScale || !maxScale) {
-                return zoomLevel;
-            }
-
-            var scale = this.getMapScale(),
-                i;
-
-            if (scale < minScale) {
-                // zoom out
-                //for(i = this._mapScales.length; i > zoomLevel; i--) {
-                for (i = zoomLevel; i > 0; i -= 1) {
-                    if (this._mapScales[i] >= minScale) {
-                        return i;
-                    }
-                }
-            } else if (scale > maxScale) {
-                // zoom in
-                for (i = zoomLevel; i < this._mapScales.length; i += 1) {
-                    if (this._mapScales[i] <= maxScale) {
-                        return i;
-                    }
-                }
-            }
-            return zoomLevel;
         },
 
         /**

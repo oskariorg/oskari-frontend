@@ -54,6 +54,8 @@ Unused functions removed:
   - getLayers()
   - getLayersByName()
   - getZoomForScale()
+  - getStealth()
+  - setStealth()
 
 Added functions so internal references don't need to be called:
 - getMapElementId()
