@@ -396,19 +396,11 @@ Oskari.clazz.define(
          *     wanting to notify at end of the chain for performance reasons or similar) (optional)
          */
         zoomToScale: function (scale, closest, suppressEnd) {
-            var zoom = this.getZoomForScale(scale, closest);
-            this.setZoomLevel(zoom, suppressEnd);
-        },
-        /**
-         * Returns zoom level for any scale
-         * Find 1st the scale range of OL3 resolution scales of requested scale
-         * @param scale any scale
-         * @returns {number}  zoom level ( OL3 scale range min or closest)
-         */
-        getZoomForScale: function (scale) {
-            var resolution = this.calculateScaleResolution(scale),
-                zoom = this.getResolutionArray().indexOf(resolution);
-            return  (zoom !== -1) ? zoom : 5;
+            var resolution = this.calculateScaleResolution(scale);
+            var zoom = this.getResolutionArray().indexOf(resolution);
+            if(zoom !== -1) {
+                this.setZoomLevel(zoom, suppressEnd);
+            }
         },
         /**
          * @method calculateScaleResolution
@@ -418,25 +410,25 @@ Oskari.clazz.define(
          * @return {Number[]} calculated resolution
          */
         calculateScaleResolution: function (scale) {
+            if(!scale && scale !== 0) {
+                return -1;
+            }
             var resIndex = -1,
                 defIndex = 5,
+                scaleList = this.getScaleArray(),
                 i;
-            if(scale) {
-                for (i = 1; i < this._mapScales.length; i += 1) {
-                    if ((scale > this._mapScales[i]) && (scale <= this._mapScales[i-1])) {
-                        // resolutions are in the same order as scales so just use them
-                        resIndex = i - 1;
-                        break;
-                    }
+            for (i = 1; i < scaleList.length; i += 1) {
+                if ((scale > scaleList[i]) && (scale <= scaleList[i-1])) {
+                    // resolutions are in the same order as scales so just use them
+                    resIndex = i - 1;
+                    break;
                 }
-                // Is scale out of OL3 scale ranges
-                if(resIndex === -1){
-                    resIndex = scale < this._mapScales[this._mapScales.length - 1] ?  this._mapScales.length - 1 : 0;
-                }
-                return this.getResolutionArray()[resIndex];
             }
-
-            return this.getResolutionArray()[defIndex];
+            // Is scale out of scale ranges
+            if(resIndex === -1){
+                resIndex = scale < scaleList[scaleList.length - 1] ? scaleList.length - 1 : 0;
+            }
+            return this.getResolutionArray()[resIndex];
         },
 
         /**
@@ -447,7 +439,7 @@ Oskari.clazz.define(
             return this._mapScales;
         },
         getMapScale: function () {
-            var scales = this.getMapScaleArray();
+            var scales = this.getScaleArray();
             return scales[this.getMapZoom()];
         },
         getResolutionArray: function () {
