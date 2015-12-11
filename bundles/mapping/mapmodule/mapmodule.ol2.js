@@ -53,8 +53,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             });
             this.getMap().addLayer(base);
 
-            // TODO remove this whenever we're ready to add the containers when needed
-            this._addMapControlPluginContainers();
             return map;
         },
 

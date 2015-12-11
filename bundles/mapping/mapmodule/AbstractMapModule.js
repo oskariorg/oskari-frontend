@@ -125,6 +125,8 @@ Oskari.clazz.define(
             // -> calculate scales array for backward compatibility
             me._calculateScalesImpl(me._mapResolutions);
 
+            // TODO remove this whenever we're ready to add the containers when needed
+            this._addMapControlPluginContainers();
             return me._initImpl(me._sandbox, me._options, me._map);
         },
         /**
@@ -581,8 +583,6 @@ Oskari.clazz.define(
                 this.notifyMoveEnd();
             }
         },
-/* --------------- /SHARED FUNCTIONS --------------- */
-
 
         /**
          * @method getControls

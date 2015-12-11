@@ -38,8 +38,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {OpenLayers.Map}
          */
         _initImpl: function (sandbox, options, map) {
-            // TODO remove this whenever we're ready to add the containers when needed
-            this._addMapControlPluginContainers();
             // css references use olMap as selectors so we need to add it
             this.getMapEl().addClass('olMap');
             return map;
@@ -466,6 +464,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
             return new ol.style.Style(olStyle);
         },
+        /**
+         * Parses JSON and returns matching ol.style.Text
+         * @param  {Object} textStyleJSON text style definition
+         * @return {ol.style.Text} parsed style or undefined if no param is given
+         */
         __getTextStyle : function(textStyleJSON) {
             if(!textStyleJSON) {
                 return;
