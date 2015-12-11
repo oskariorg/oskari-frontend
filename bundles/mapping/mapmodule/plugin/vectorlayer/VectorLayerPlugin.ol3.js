@@ -414,6 +414,14 @@ Oskari.clazz.define(
                 if (options.centerTo === true) {
                     var extent = vectorSource.getExtent();
                     me.getMapModule().zoomToExtent(extent);
+
+                    // Check scale if defined so. Scale decreases when the map is zoomed in. Scale increases when the map is zoomed out.
+                    if(options.minScale) {
+                        var currentScale = this.getMapModule().getMapScale();
+                        if(currentScale<options.minScale) {
+                            this.getMapModule().zoomToScale(options.minScale, true);
+                        }
+                    }
                 }
             }
         },

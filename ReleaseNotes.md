@@ -59,33 +59,36 @@ Added functions so internal references don't need to be called:
 ### mapping/mapmodule/plugin/vectorlayer
 
 Both ol2 and ol3 implementations of VectorLayerPlugin have been added to following features:
+- allow define minScale to feature, this is checked only if zoomTo option is used. For example: {minScale: 1451336}
 - allow define mouse over cursor for added feature (added cursor option handling). Add the wanted cursor to MapModulePlugin.AddFeaturesToMapRequest options, for example: {cursor: 'zoom-out'}
 - allow define features prio order. Highest number is showed on top and lowest to under. Add the wanted prio to MapModulePlugin.AddFeaturesToMapRequest options, for example: {prio:1}
 - allow define layers and their styles from config. Defined layer style is used when feature not contains own style. If layer or feature style is not defined then using default style. For example configuration:
 ```javascript
-    "layers": [
-        {
-            "id": "EXAMPLE1",
-            "style": {
-                "fill": {
-                    "color": "#ff00ff"
-                },
-                "stroke": {
-                    "color": "#ff00ff",
-                    "width": 3
-                },
-                "text": {
+    {
+        "layers": [
+            {
+                "id": "EXAMPLE1",
+                "style": {
                     "fill": {
-                        "color": "#0000ff"
+                        "color": "#ff00ff"
                     },
                     "stroke": {
                         "color": "#ff00ff",
-                        "width": 4
+                        "width": 3
+                    },
+                    "text": {
+                        "fill": {
+                            "color": "#0000ff"
+                        },
+                        "stroke": {
+                            "color": "#ff00ff",
+                            "width": 4
+                        }
                     }
                 }
             }
-        }
-    ]
+        ]
+    }
 ```
 
 
