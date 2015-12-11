@@ -130,6 +130,11 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             me._storedData = {};//me.__instance.publisher.data || null;
             if (me.__instance.publisher.data) {
                 var data = me.__instance.publisher.data;
+
+                //TODO: there shouldn't be a toolbar in the config at all when there wasn't one when we were saving.
+                //this is what screws up toggling on the default buttons on the toolbar, when modifying a published map that didn't have
+                //toolbar in the first place   
+
                 if (data && data.configuration && data.configuration.toolbar) {
                     me._storedData.toolbarConfig = _.cloneDeep(data.configuration.toolbar.conf);
                     if (me._hasActiveTools()) {
@@ -294,6 +299,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 toolButton,
                 isChecked;
             if (enabled) {
+                //it might be that a light scheme has been selected prior to adding this tool on the map. 
+                //And since no event gets sent in that occasion, we gotta sniff it out manually when enabling the tool to get the toolbar buttons' styling correct
+                me.updateToolbarButtonStyles();
+
                 tool._isPluginStarted = true;
 
                 // toolbar (bundle) needs to be notified
@@ -326,7 +335,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                             toolButton.selectTool = jQuery(me.templates.toolOption).clone();
                             toolButton.selectTool.find('label')
                                 .attr('for', 'tool-opt-' + toolName).append(me.__loc.toolbarToolNames[toolName]);
-
                             if (!me.toolbarConfig[groupName]) {
                                 toolButton.selectTool.find('input').attr('checked', 'checked');
                             } else if (me.toolbarConfig[groupName] && me.toolbarConfig[groupName][toolName] === undefined) {
@@ -334,7 +342,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                             } else if (me.toolbarConfig[groupName][toolName]) {
                                 toolButton.selectTool.find('input').attr('checked', 'checked');
                             }
-
                             _toggleToolOption(toolName, buttonGroup.name, toolButton, 'toolbarConfig', toolButton.selectTool.find('input'))();
 
                             //toggle toolbar tool. i.e. send requests
@@ -436,6 +443,28 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                     _removeOptions('.tool-option-setting', me._toggleToolOption);
 
                     tool._isPluginStarted = false;
+                }
+            }
+
+        },
+        /**
+         * Make sure that the toolbar buttons have the correct dark/light - setting as their iconCls...
+         */
+        updateToolbarButtonStyles: function() {
+            var me = this,
+                style = me.__mapmodule.getToolStyle(),
+                suffix = (style && style.length > 0 && style.indexOf('light') > -1) ? 'light' : 'dark';
+            if (!style || !style.length) {
+                return;
+            }
+
+            for (var i = 0; i < me.buttonGroups.length; i++) {
+                for (var buttonKey in me.buttonGroups[i].buttons) {
+                    var button = me.buttonGroups[i].buttons[buttonKey];
+                    button.iconCls = button.iconCls.replace('dark','');
+                    button.iconCls = button.iconCls.replace('light','');
+                    button.iconCls += suffix;
+                    console.log(buttonKey+' '+button.iconCls);
                 }
             }
 
