@@ -454,7 +454,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
 
             if(styleDef.stroke) {
-                var stroke = {};
                 if(styleDef.stroke.color) {
                     olStyle.strokeColor = styleDef.stroke.color;
                 }

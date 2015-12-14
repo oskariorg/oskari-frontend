@@ -542,7 +542,6 @@ Oskari.clazz.define(
                 return -1;
             }
             var resIndex = -1,
-                defIndex = 5,
                 scaleList = this.getScaleArray(),
                 i;
             for (i = 1; i < scaleList.length; i += 1) {
@@ -843,7 +842,7 @@ Oskari.clazz.define(
          */
         getPluginInstances: function (pluginName) {
             if(pluginName) {
-                return this._pluginInstances[this.getName() + pluginName]
+                return this._pluginInstances[this.getName() + pluginName];
             }
             return this._pluginInstances;
         },
