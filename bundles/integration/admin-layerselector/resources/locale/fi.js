@@ -142,7 +142,7 @@ Oskari.registerLocalization(
             "legendImage": "Oletuskarttaselite",
             "legendImageDesc": "URL-osoite karttaselitteelle, joka näytetään tyyleillä, joilla ei palvelussa ole määritelty karttaselitettä",
             "legendImagePlaceholder": "URL-osoite karttaselitteelle, joka näytetään tyyleillä, joilla ei palvelussa ole määritelty karttaselitettä",
-            "legendUrl": "Tuo karttaselite tyyliltä",
+            "legendUrl": "Tuo oletuskarttaselite tyyliltä",
             "legendUrlDesc": "Valitse oletuskarttaselite tarvittaessa tason selitteistä",
             "noServiceLegendUrl":"Ei tuoda tyylien selitteistä",
             "gfiContent": "Kohdetietoikkunan lisäsisältö",

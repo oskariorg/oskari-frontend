@@ -357,6 +357,33 @@ if (!Function.prototype.bind) {
 
                 return ''; //this.getCurrentStyle().getLegend();
             },
+            /**
+             * Returns style legend urls
+             * @returns {String} legend url
+             */
+            getStyleLegendUrls: function () {
+                var capabilitiesBlock = this.getCapabilities(),
+                    styleName,
+                    legends = [];
+
+                if (capabilitiesBlock && this.getStyles()) {
+                    for (i = 0; i < this.getStyles().length; i += 1) {
+                        var styleName = this.getStyles()[i].getName();
+
+                        if (styleName && capabilitiesBlock.styles) {
+                            var selectedStyle = jQuery.grep(capabilitiesBlock.styles || [], function (style) {
+                                return style.name === styleName;
+                            });
+
+                            if (selectedStyle.length > 0) {
+                                legends.push( selectedStyle[0].legend);
+                            }
+                        }
+                    }
+                }
+
+                return legends;
+            },
 
             /**
              * Returns defined language codes or default language if not set
