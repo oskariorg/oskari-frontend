@@ -173,6 +173,7 @@
         </div>
     </div>
 
+    <% if(model.getStyles().length > 0) { %>
     <div class="add-layer-record">
         <div class="add-layer-label-area">
             <label for="add-layer-style" class="add-layer-label" title="<%= instance.getLocalization('admin').styleDesc %>"><%= instance.getLocalization('admin').style %></label>
@@ -194,6 +195,7 @@
             <% } %>
         </div>
     </div>
+    <% } %>
 
     <div class="add-layer-record">
         <div class="add-layer-label-area">
@@ -232,15 +234,16 @@
 
     <% if(model.getStyles().length > 0) { %>
     <div class="add-layer-record">
-        <div class="add-layer-label-link-area">
+        <div class="add-layer-label-area">
             <label for="add-layer-style" class="add-layer-label" title="<%= instance.getLocalization('admin').legendUrlDesc %>"><%= instance.getLocalization('admin').legendUrl %></label>
         </div>
-        <div class="add-layer-input-link-area">
+        <div class="add-layer-input-area">
             <select id="add-layer-legendUrl" class="admin-layer-legendUrl">
                 <% for(var i = 0; i < model.getStyles().length; i++) { %>
-                <% model.selectStyle(model.getStyles()[i].getName()); %>
-                <option value="<%=model.getStyleLegendUrl() %>"
-                ><%= model.getStyleLegendUrl() %></option>
+                  <% if(model.getStyleLegendUrl(model.getStyles()[i].getName()) !== '') { %>
+                   <option value="<%= model.getStyleLegendUrl(model.getStyles()[i].getName()) %>"
+                   ><%= model.getStyles()[i].getName() %></option>
+                  <% } %>
                 <% } %>
                 <option value="" selected><%= instance.getLocalization('admin').noServiceLegendUrl %></option>
             </select>
