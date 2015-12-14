@@ -919,10 +919,20 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             this.clickCoords = coords;
         },
         _highlighGeometries: function (featuresIds, layer, keepPrevious) {
-            var eventBuilder = this.sandbox.getEventBuilder("WFSFeaturesSelectedEvent");
-            if(eventBuilder) {
-                var event = eventBuilder(featuresIds, layer, true);
-                this.sandbox.notifyAll(event);
+            var isCorrect = true;
+            for (var i = 0; i < featuresIds.length; i++) {
+                if (featuresIds[i] === undefined) {
+                    isCorrect = false;
+                    break;
+                }
+            }
+
+            if (isCorrect) {
+                var eventBuilder = this.sandbox.getEventBuilder("WFSFeaturesSelectedEvent");
+                if(eventBuilder) {
+                    var event = eventBuilder(featuresIds, layer, true);
+                    this.sandbox.notifyAll(event);
+                }
             }
         }
     }, {
