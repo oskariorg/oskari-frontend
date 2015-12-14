@@ -41,6 +41,7 @@ Oskari.clazz.define(
                 me.template[p] = jQuery(me.__templates[p]);
             }
         }
+        var resultHandler = null;
     }, {
 
         /**
@@ -338,6 +339,20 @@ Oskari.clazz.define(
             });
         },
 
+        addInfoResultHandler: function(callback){
+            var me = this;
+            me.resultHandler = callback;
+        },
+
+        _createRequestHandlers: function () {
+            return {
+                'GetInfoPlugin.ResultHandlerRequest': Oskari.clazz.create(
+                    'Oskari.mapframework.mapmodule.getinfoplugin.request.ResultHandlerRequestHandler',
+                    this
+                )
+            };
+        },
+
         /**
          * Formats the given data and sends a request to show infobox.
          *
@@ -346,12 +361,15 @@ Oskari.clazz.define(
          * @param  {Object} data
          */
         _handleInfoResult: function (data) {
-            var content = [],
+            var me = this,
+                content = [],
                 contentData = {},
                 fragments = [],
                 colourScheme,
-                font;
-
+                font,
+                differentLayout = false;
+            
+            
             if (data.via === 'ajax') {
                 fragments = this._parseGfiResponse(data);
             } else {
@@ -365,7 +383,23 @@ Oskari.clazz.define(
                 content.push(contentData);
             }
 
-            this._showGfiInfo(content, data.lonlat);
+            if(me.resultHandler && typeof me.resultHandler == 'function') {
+                var colourScheme, font;
+                if (_.isObject(this._config)) {
+                   colourScheme = this._config.colourScheme;
+                   font = this._config.font;
+                }
+
+                differentLayout = me.resultHandler(data, me.formatters, {
+                    content: content,
+                    lonlat: data.lonlat,
+                    colourScheme: colourScheme,
+                    font: font,
+                    title: this._loc.title
+                });
+            } else {
+                this._showGfiInfo(content, data.lonlat);
+            }
         },
 
         /**

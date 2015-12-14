@@ -98,6 +98,51 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
             var reqAccHandler = Oskari.clazz.create('Oskari.mapframework.bundle.selected-featuredata.request.AddAccordionRequestHandler', me.sandbox, this.plugins['Oskari.userinterface.Flyout']);
             sandbox.addRequestHandler('SelectedFeatureData.AddAccordionRequest', reqAccHandler);
 
+            var reqGetInfoResultHandler = sandbox.getRequestBuilder('GetInfoPlugin.ResultHandlerRequest')(me.resultHandler);
+            sandbox.request(me, reqGetInfoResultHandler);
+
+        },
+        resultHandler: function(data, formatters, params){
+            var me = this;
+
+            // show infobox
+            var reqBuilder = this.getSandbox().getRequestBuilder(
+                    'InfoBox.ShowInfoBoxRequest'
+                ),
+                request,
+                colourScheme,
+                font;
+
+            if (_.isObject(params)) {
+                colourScheme = params.colourScheme;
+                font = params.font;
+            }
+
+            if (reqBuilder) {
+                request = reqBuilder(
+                    this.infoboxId,
+                    params.title,
+                    params.content,
+                    params.lonlat,
+                    true,
+                    colourScheme,
+                    font
+                );
+
+                var def = {
+                    name : 'selected-featuredata',
+                    iconCls: 'icon-selected-featuredata',
+                    tooltip: 'Tooltip teksti',
+                    callback : function(data, formatters) {
+                        // show flyout
+                    }
+                };
+
+                request.addAdditionalTool(def);
+                this.getSandbox().request(this, request);
+            }
+            
+            return false;
         },
         /**
          * @method init

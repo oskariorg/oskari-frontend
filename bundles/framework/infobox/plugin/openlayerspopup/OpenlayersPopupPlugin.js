@@ -120,7 +120,7 @@ Oskari.clazz.define(
          * }
          * }]
          */
-        popup: function (id, title, contentData, lonlat, colourScheme, font) {
+        popup: function (id, title, contentData, lonlat, colourScheme, font, additionalTools) {
             if (_.isEmpty(contentData)) {
                 return;
             }
@@ -137,16 +137,16 @@ Oskari.clazz.define(
                 currPopup.contentData = contentData;
             }
 
-            me._renderPopup(id, contentData, title, lonlat, colourScheme, font, refresh);
+            me._renderPopup(id, contentData, title, lonlat, colourScheme, font, refresh, additionalTools);
         },
 
         /**
          * @method _renderPopup
          */
-        _renderPopup: function (id, contentData, title, lonlat, colourScheme, font, refresh) {
+        _renderPopup: function (id, contentData, title, lonlat, colourScheme, font, refresh, additionalTools) {
             var me = this,
                 contentDiv = me._renderContentData(id, contentData),
-                popupContent = me._renderPopupContent(id, title, contentDiv),
+                popupContent = me._renderPopupContent(id, title, contentDiv, additionalTools),
                 popup;
 
             if (refresh) {
@@ -219,7 +219,7 @@ Oskari.clazz.define(
          * @param  {jQuery} contentDiv
          * @return {String}
          */
-        _renderPopupContent: function (id, title, contentDiv) {
+        _renderPopupContent: function (id, title, contentDiv, additionalTools) {
             var arrow = this._arrow.clone(),
                 header = this._header.clone(),
                 headerWrapper = this._headerWrapper.clone(),
@@ -228,6 +228,10 @@ Oskari.clazz.define(
 
             closeButton.attr('id', 'oskari_' + id + '_headerCloseButton');
             header.append(title);
+
+            debugger;
+            //FIXME add icons
+
             headerWrapper.append(header);
             headerWrapper.append(closeButton);
             resultHtml = arrow.outerHTML() +
