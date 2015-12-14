@@ -405,7 +405,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                             var visibilityRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest');
                             var request = visibilityRequestBuilder(me.layerId, true);
                             me.sandbox.request(me.instance.getName(), request);
-                        }, 5000);
+                        }, 500);
                         me.closeDialog();
                     });
                     me.showMessage(me.loc.featureUpdate.header, me.loc.featureUpdate.success, [okButton]);
