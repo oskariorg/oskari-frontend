@@ -179,7 +179,6 @@
             <label for="add-layer-style" class="add-layer-label" title="<%= instance.getLocalization('admin').styleDesc %>"><%= instance.getLocalization('admin').style %></label>
         </div>
         <div class="add-layer-input-area">
-            <% if(model.getStyles().length > 1) { %>
             <select id="add-layer-style" class="admin-layer-style">
                  <% for(var i = 0; i < model.getStyles().length; i++) { %>
                 <option value="<%= model.getStyles()[i].getName() %>"
@@ -189,10 +188,6 @@
                      ><%= model.getStyles()[i].getTitle() %></option>
                 <% } %>
             </select>
-            <% } else if(model.getCurrentStyle().getTitle()) { %>
-                <input type="text" id="add-layer-style" class="add-layer-input long" value="<%= model.getCurrentStyle().getName() %>" />
-                <div class="icon-close"></div>
-            <% } %>
         </div>
     </div>
     <% } %>
