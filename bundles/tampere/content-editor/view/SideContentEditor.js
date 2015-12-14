@@ -275,6 +275,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             });
         },
         getFieldsTypes: function () {
+            debugger;
             var me = this;
             jQuery.ajax({
                 type : 'GET',
@@ -709,16 +710,16 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                         valInput = $(this.templates.tableInput);
                         switch (this.fieldsTypes[key])
                         {
-                            case 'string':
+                            case 'xsd:string':
                                 valInput.prop('type', 'text');
                                 break;
-                            case 'numeric':
+                            case 'xsd:numeric':
                                 valInput.prop('type', 'number');
                                 break;
-                            case 'decimal':
+                            case 'xsd:double':
                                 valInput.prop('type', 'number').prop('step', 0.01);
                                 break;
-                            case 'date':
+                            case 'xsd:date':
                                 valInput.prop('type', 'date');
                                 break;
                         }
