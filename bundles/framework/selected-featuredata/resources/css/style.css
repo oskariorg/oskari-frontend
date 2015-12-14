@@ -1,0 +1,99 @@
+﻿.admin-channels > input {
+	clear: both;
+	float: right;
+	margin-right: 6px;
+	margin-bottom: 8px;
+}
+.admin-channels div.icon-close {
+	display: inline-block;
+	left: -25px;
+	margin-right: -15px;
+	margin-left: 0;
+	position: relative;
+	top: 3px;
+}
+.admin-channels .accordion {
+	background-color: #F3F3F3;
+	border: 1pt solid #999;
+	clear: both;
+	display: block;
+	list-style-type: none;
+}
+.admin-channels .accordion:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+.admin-channels .accordion .accordion-header h3 {
+	font-size: 16px;
+	line-height: 40px;
+	float: left;
+	padding: 0 0 0 10px;
+}
+.admin-channels .accordion .accordion-header input {
+	float: right;
+	margin: 5px 5px 5px 0;
+}
+.admin-channels form {
+	margin-bottom: 2em;
+}
+.admin-channels form fieldset {
+	border: none;
+	clear: both;
+	padding: 10px;
+}
+.admin-channels .no-span-text{
+	margin-left: 14em;
+}
+
+.admin-channels .default-checkbox{
+	margin-bottom: 4px;
+}
+
+.admin-channels .isaddress-checkbox{
+	margin-bottom: 4px;
+}
+
+.admin-channels .btn--center{
+	margin-left: 14em;
+}
+
+.admin-channels form fieldset:nth-of-type(2) input:last-child {
+	float: right;
+}
+.admin-channels form label {
+	clear: both;
+	display: block;
+	margin-bottom: 8px;
+}
+.admin-channels form label:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+.admin-channels form label span {
+	display: block;
+	float: left;
+	width: 14em;
+	line-height: 34px;
+}
+.admin-channels form label input {
+	display: block;
+	float: left;
+	width: 14em;
+}
+.admin-channels form label select {
+	display: block;
+	float: left;
+	width: 14em;
+}
+
+.admin-channels div.hidden, input.hidden{
+	display: none;
+}
+
+.admin-channels div.remove--param{
+	left: 6px;
+	top: 11px;
+}
+
