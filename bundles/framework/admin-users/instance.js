@@ -251,9 +251,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
                 url: ajaxUrl + 'action_route=ManageRoles',
                 lang: Oskari.getLang(),
                 timestamp: new Date().getTime(),
-                //lisää alempaan funktioon virheilmoitus, jos rooleja ei saatu ladattua
                 error: function () {
-                    //laita tähän error message
+                    alert("Failed to get roles (ManageRoles), perhaps oskari-control-admin is not available?");
                     callback();
                 },
                 success: function (result) {
