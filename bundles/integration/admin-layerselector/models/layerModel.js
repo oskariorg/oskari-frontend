@@ -323,15 +323,12 @@ if (!Function.prototype.bind) {
             getLegendUrl: function() {
                 var adminBlock = this.getAdmin();
                 var capabilitiesBlock = this.getCapabilities();
-                var currentStyleName = this.getCurrentStyle().getName();
 
-                if (capabilitiesBlock) {
-                    if(adminBlock) {
+                if (capabilitiesBlock && adminBlock) {
                         return adminBlock.legendImage;
-                    }
                 }
 
-                return ''; //this.getCurrentStyle().getLegend();
+                return '';
             },
             /**
              * Returns style legend url
@@ -342,8 +339,7 @@ if (!Function.prototype.bind) {
                 var capabilitiesBlock = this.getCapabilities();
 
 
-                if (capabilitiesBlock) {
-                    if (styleName && capabilitiesBlock.styles) {
+                if (capabilitiesBlock && styleName && capabilitiesBlock.styles) {
                         var selectedStyle = jQuery.grep(capabilitiesBlock.styles || [], function (style) {
                             return style.name === styleName;
                         });
@@ -351,11 +347,9 @@ if (!Function.prototype.bind) {
                         if (selectedStyle.length > 0) {
                             return selectedStyle[0].legend;
                         }
-                    }
-
                 }
 
-                return ''; //this.getCurrentStyle().getLegend();
+                return '';
             },
             /**
              * Returns style legend urls
@@ -368,7 +362,7 @@ if (!Function.prototype.bind) {
 
                 if (capabilitiesBlock && this.getStyles()) {
                     for (i = 0; i < this.getStyles().length; i += 1) {
-                        var styleName = this.getStyles()[i].getName();
+                        styleName = this.getStyles()[i].getName();
 
                         if (styleName && capabilitiesBlock.styles) {
                             var selectedStyle = jQuery.grep(capabilitiesBlock.styles || [], function (style) {
