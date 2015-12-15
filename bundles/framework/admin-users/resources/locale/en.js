@@ -25,7 +25,8 @@ Oskari.registerLocalization(
                 "confirm_delete": "Are you sure you wish to delete user {user}?",
                 "delete_failed": "The user could not be deleted.",
                 "fetch_failed": "Users could not be fetched.",
-                "save_failed": "Updates could not be saved.",
+                "save_failed": "User could not be saved.",
+                "save_failed_message": "Please check at username is unique and try again.",
                 "noMatch": "No results matched",
                 "selectRole": "Select role"
             },

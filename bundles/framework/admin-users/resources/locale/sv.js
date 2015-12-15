@@ -26,6 +26,7 @@ Oskari.registerLocalization(
                 "delete_failed": "Kunde inte tas bort.",
                 "fetch_failed": "Sökning användare misslyckades.",
                 "save_failed": "Lagring misslyckades.",
+                "save_failed_message": "Please check at username is unique and try again.",
                 "noMatch": "Inga sökresultat.",
                 "selectRole": "Välj en roll."
             },
