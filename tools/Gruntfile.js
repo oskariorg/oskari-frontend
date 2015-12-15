@@ -135,6 +135,12 @@ module.exports = function (grunt) {
                 src: ['../bundles/*/*/']
             }
         },
+        genL10nEmptyExcelsLog: {
+            target: {
+                expand: true,
+                src: ['../bundles/*/*/']
+            }
+        },
         compress: {
             zip: {
                 options: {
