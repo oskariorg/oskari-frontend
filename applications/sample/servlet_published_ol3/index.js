@@ -1,7 +1,7 @@
 jQuery(document).ready(function() {
 
     //TODO: remove the ugly ol3 hack once we have a way to build a working ol3... -debug
-    jQuery.getScript("/Oskari/libraries/ol3/ol-v3.11.2-debug-oskari.js", function() {
+    jQuery.getScript("/Oskari/libraries/ol3/ol-v3.11.2-oskari.js", function() {
         var getAppSetupParams = {};
 
         // populate getappsetup url with possible control parameters
