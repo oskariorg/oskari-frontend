@@ -38,7 +38,9 @@ Oskari.registerLocalization(
                 "doSave_failed": "Error by saving new role"
             }
         },
-        "save": "save"
+        "save": "save",
+        "failed_to_get_roles_title": "Failed to get roles",
+        "failed_to_get_roles_message": "Failed to get roles (ManageRoles), perhaps oskari-control-admin is not available?"
     }
 }
 );

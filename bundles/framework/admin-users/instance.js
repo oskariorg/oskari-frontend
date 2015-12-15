@@ -95,6 +95,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
                 //Let's extend UI after we have the role data
                 var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(me);
                 sandbox.request(me, request);
+            }, function(){
+                var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                    btn = dialog.createCloseButton('Ok'),
+                    request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(me);
+                sandbox.request(me, request);
+
+                btn.addClass('primary');
+                dialog.show(me._localization.failed_to_get_roles_title, me._localization.failed_to_get_roles_message, [btn]);
             });
 
             //sandbox.registerAsStateful(this.mediator.bundleId, this);
@@ -240,20 +248,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
             return this.getLocalization('desc');
         },
         /**
-         * @method getRoles
          * Role list
+         * @method getRoles
+         * 
+         * @param {Function} callback success callback
+         * @param {Function} errCallback error callback
          */
-        getRoles: function (callback) {
+        getRoles: function (callback, errCallback) {
             var me = this;
-            // FIXME don't use global variables (use getAjaxUrl or smthn)
+            
             jQuery.ajax({
                 type: 'GET',
-                url: ajaxUrl + 'action_route=ManageRoles',
+                url: me.sandbox.getAjaxUrl() + 'action_route=ManageRoles',
                 lang: Oskari.getLang(),
                 timestamp: new Date().getTime(),
                 error: function () {
-                    alert("Failed to get roles (ManageRoles), perhaps oskari-control-admin is not available?");
-                    callback();
+                    me.storedRoles = [];
+                    errCallback();
                 },
                 success: function (result) {
                     me.storedRoles = result.rolelist || [];

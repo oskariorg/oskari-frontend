@@ -38,7 +38,9 @@ Oskari.registerLocalization(
                 "doSave_failed": "Lagring av en ny roll misslyckades."
             }
         },
-        "save": "Lagra"
+        "save": "Lagra",
+        "failed_to_get_roles_title": "Failed to get roles",
+        "failed_to_get_roles_message": "Failed to get roles (ManageRoles), perhaps oskari-control-admin is not available?"
     }
 }
 );

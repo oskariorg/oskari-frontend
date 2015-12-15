@@ -38,7 +38,9 @@ Oskari.registerLocalization(
                 "doSave_failed": "Roolin tallennus epäonnistui."
             }
         },
-        "save": "tallenna"
+        "save": "tallenna",
+        "failed_to_get_roles_title": "Roolien haku epäonnistui",
+        "failed_to_get_roles_message": "Roolien haku epäonnistui, tarkista oskari-control-admin saatavuus."
     }
 }
 );
