@@ -20,6 +20,31 @@ Oskari.clazz.define(
         this._layers = {};
         this._features = {};
         this._layerStyles = {};
+        this._defaultStyle = {
+            fill : {
+                color : 'rgba(255,0,255,0.2)'
+            },
+            stroke : {
+                color : 'rgba(0,0,0,1)',
+                width : 2
+            },
+            image : {
+                radius: 4,
+                fill : {
+                    color : 'rgba(0,0,0,1)'
+                }
+            },
+            text : {
+                scale : 1.3,
+                fill : {
+                    color : 'rgba(0,0,0,1)'
+                },
+                stroke : {
+                    color : 'rgba(255,255,255,1)',
+                    width : 2
+                }
+            }
+        };
     }, {
         /**
          * @method register
@@ -80,7 +105,7 @@ Oskari.clazz.define(
                         me._map.layers.length
                     );
                     me._layers[layerId] = olLayer;
-                    me._layerStyles[layerId] = layerStyle;                    
+                    me._layerStyles[layerId] = layerStyle;
                 }
             }
         },
@@ -288,7 +313,7 @@ Oskari.clazz.define(
                 }
                 if (options.attributes && options.attributes !== null) {
                     if(features instanceof Array && geometryType === 'GeoJSON'){
-                        //Remark: It is preferred to use GeoJSON properties for attributes
+                        // Remark: It is preferred to use GeoJSON properties for attributes
                         // There could be many features in GeoJson and now attributes are set only for 1st feature
                         features[0].attributes = options.attributes;
                     } else {
@@ -365,7 +390,6 @@ Oskari.clazz.define(
                 }
 
 
-
                 if(isOlLayerAdded === false) {
                     me._map.addLayer(olLayer);
                     me._map.setLayerIndex(
@@ -428,6 +452,14 @@ Oskari.clazz.define(
 
                     mapmoveRequest = me._sandbox.getRequestBuilder('MapMoveRequest')(center.x, center.y, bounds, false);
                     me._sandbox.request(me, mapmoveRequest);
+
+                    // Check scale if defined so. Scale decreases when the map is zoomed in. Scale increases when the map is zoomed out.
+                    if(options.minScale) {
+                        var currentScale = this.getMapModule().getMapScale();
+                        if(currentScale<options.minScale) {
+                            this.getMapModule().zoomToScale(options.minScale, true);
+                        }
+                    }
                 }
             }
         },
@@ -457,31 +489,11 @@ Oskari.clazz.define(
          */
         getStyle : function(options) {
             var me = this;
-            var style = OpenLayers.Util.applyDefaults({}, OpenLayers.Feature.Vector.style['default']);            
             var styles = options.featureStyle || me._layerStyles[options.layerId];
 
-            //overwriting default style if given
-            if(styles) {
-                if(Oskari.util.keyExists(styles, 'fill.color')) {
-                    style.fillColor = styles.fill.color;
-                }
-                if(Oskari.util.keyExists(styles, 'stroke.color')) {
-                    style.strokeColor = styles.stroke.color;
-                }
-                if(Oskari.util.keyExists(styles, 'stroke.width')) {
-                    style.strokeWidth = styles.stroke.width;
-                }
-                if(Oskari.util.keyExists(styles, 'text.fill.color')) {
-                    style.fontColor = styles.text.fill.color;
-                }
-                if(Oskari.util.keyExists(styles, 'text.stroke.color')) {
-                    style.labelOutlineColor = styles.text.stroke.color;
-                }
-                if(Oskari.util.keyExists(styles, 'text.stroke.width')) {
-                    style.labelOutlineWidth = styles.text.stroke.width;
-                }
-            }
-            return style;
+            // overriding default style with feature/layer style
+            var styleDef = jQuery.extend({}, this._defaultStyle, styles);
+            return me.getMapModule().getStyle(styleDef);
         },
         /**
          * @method _createRequestHandlers

@@ -2,6 +2,18 @@
 
 ## 1.35
 
+### mapwfs2_ol3
+
+WFSRefreshManualLoadLayersEvent is now included in ol3 version as well and changing the size of the map no longer results in JS-error.
+
+### drawtools/ol3 and VectorLayerPlugin
+
+Now use mapmodules getStyle() to parse the style JSON.
+
+### mapmodule - ControlsPlugin/ol3
+
+Now only handles DrawingEvents that have measuretool ids so drawing can be used for more things than measuring.
+
 ### infobox
 
 Popup not show anymore dublicate info.
@@ -11,13 +23,17 @@ Popup not show anymore dublicate info.
 Renamed functions
 - _calculateScalesFromResolutions() removed. Use _calculateScalesImpl() instead.
 - _createMap() and _createMapImpl() removed. Use createMap() instead. Also the function no longer has side-effects and returns the created map implementation.
-- _addClickControl() removed. Use _setupMapEvents() instead.
+- _addClickControl() renamed _setupMapEvents().
 - _getMapCenter() removed. Use getMapCenter() instead.
 - _updateDomainImpl() removed. Use updateDomain() instead.
 - panMapToLonLat()/moveMapToLanLot() removed. Use centerMap() instead.
 - panMapEast()/panMapWest()/panMapNorth()/panMapSouth() removed. Use panMapByPixels() instead.
 - zoomIn()/zoomOut() removed. Use adjustZoomLevel() instead.
 - zoomTo() removed. Use setZoomLevel() instead.
+- getLayerPlugin() removed. Use getLayerPlugins(id) with id parameter to fetch reference to single plugin.
+- getMapScales() renamed getScaleArray() to be consistent with getResolution()/getResolutionArray().
+- calculateScaleResolution() renamed getResolutionForScale().
+- getPluginInstance() removed. Use getPluginInstances(pluginName) with pluginName parameter to fetch reference to single plugin.
 
 Unused functions removed:
   - _ensureExists()
@@ -31,44 +47,76 @@ Unused functions removed:
   - getMapElDom()
   - centerMapByPixels()
   - moveMapByPixels()
+  - _setLayerImplIndex()
+  - _removeLayerImpl()
+  - _setLayerImplVisible()
+  - _setLayerImplOpacity()
+  - getLayerDefs()
+  - getLayers()
+  - getLayersByName()
+  - getZoomForScale()
+  - getStealth()
+  - setStealth()
+  - notifyAll()
+  - calculateLayerMinMaxResolutions()
 
 Added functions so internal references don't need to be called:
 - getMapElementId()
 - getCurrentExtent()
-
+- getStyle() takes a json presentation of style and returns matching ol2/ol3 style object for plugins to use
 
 ### mapping/mapmodule/plugin/vectorlayer
 
 Both ol2 and ol3 implementations of VectorLayerPlugin have been added to following features:
+- allow define minScale to feature, this is checked only if zoomTo option is used. For example: {minScale: 1451336}
 - allow define mouse over cursor for added feature (added cursor option handling). Add the wanted cursor to MapModulePlugin.AddFeaturesToMapRequest options, for example: {cursor: 'zoom-out'}
 - allow define features prio order. Highest number is showed on top and lowest to under. Add the wanted prio to MapModulePlugin.AddFeaturesToMapRequest options, for example: {prio:1}
 - allow define layers and their styles from config. Defined layer style is used when feature not contains own style. If layer or feature style is not defined then using default style. For example configuration:
 ```javascript
-    "layers": [
-        {
-            "id": "EXAMPLE1",
-            "style": {
-                "fill": {
-                    "color": "#ff00ff"
-                },
-                "stroke": {
-                    "color": "#ff00ff",
-                    "width": 3
-                },
-                "text": {
+    {
+        "layers": [
+            {
+                "id": "EXAMPLE1",
+                "style": {
                     "fill": {
-                        "color": "#0000ff"
+                        "color": "#ff00ff"
                     },
                     "stroke": {
                         "color": "#ff00ff",
-                        "width": 4
+                        "width": 3
+                    },
+                    "text": {
+                        "fill": {
+                            "color": "#0000ff"
+                        },
+                        "stroke": {
+                            "color": "#ff00ff",
+                            "width": 4
+                        }
                     }
                 }
             }
-        }
-    ]
+        ]
+    }
 ```
 
+NOTE! Some implementation specific (ol2 vs. ol3) differences might occur. For instance, OpenLayers2 has only one fill color for all kinds of geometries whereas in ol3 separate fill can be defined for points and areas.
+
+```javascript
+            "style": {
+                //ol2 all-around fillcolor, ol3 just polygons
+                "fill": {
+                    "color": "#ff00ff"
+                },
+                //in ol2 this fill not used, ol3 uses for filling points 
+                image : {
+                    radius: 4,
+                    fill : {
+                        color : 'rgba(0,255,0,1)'
+                    }
+                }
+              }
+```
 
 ### publisher2
 
@@ -80,6 +128,10 @@ Bugfixes when disabling / enabling statsgrid or classification in publisher
 Fixed a bug in toolbar's allowed locations (drag & drop)
 
 Replaced mobile / desktop - preview size settings with predefined (fill, small etc.) iframe size settings.
+
+Fixed a bug in publisher resizing when windod is resized
+
+Fixed a bug with saving / showing published maps with light theme
 
 ## 1.34.1
 

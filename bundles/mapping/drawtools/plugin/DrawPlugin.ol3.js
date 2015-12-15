@@ -16,15 +16,30 @@ Oskari.clazz.define(
         this._bufferedFeatureLayerId = 'BufferedFeatureLayer';
 
         this._defaultStyle = {
-    		fillColor: 'rgba(255,0,255,0.2)',
-    		strokeColor: 'rgba(0,0,0,1)',
-    		width: 2,
-    		radius: 4,
-    		textScale: 1.3,
-    		textOutlineColor: 'rgba(255,255,255,1)',
-    		textColor: 'rgba(0,0,0,1)',
-    		lineDash: [5]
-    	};
+            fill : {
+                color : 'rgba(255,0,255,0.2)'
+            },
+            stroke : {
+                color : 'rgba(0,0,0,1)',
+                width : 2
+            },
+            image : {
+                radius: 4,
+                fill : {
+                    color : 'rgba(0,0,0,1)'
+                }
+            },
+            text : {
+                scale : 1.3,
+                fill : {
+                    color : 'rgba(0,0,0,1)'
+                },
+                stroke : {
+                    color : 'rgba(255,255,255,1)',
+                    width : 2
+                }
+            }
+        };
         this._styleTypes = ['draw', 'modify', 'intersect'];
         this._styles = {};
   	   	this._drawLayers = {};
@@ -38,69 +53,14 @@ Oskari.clazz.define(
          */
         setDefaultStyle : function(styles) {
         	var me = this;
+            styles = styles || {};
         	//setting defaultStyles
-        	_.each(me._styleTypes, function (s) {
-      			me._styles[s] = new ol.style.Style({
-	           	    fill: new ol.style.Fill({
-	           	      color: me._defaultStyle.fillColor
-	           	    }),
-	           	    stroke: new ol.style.Stroke({
-	           	      color: me._defaultStyle.strokeColor,
-	           	      width: me._defaultStyle.width
-	           	    }),
-	           	    image: new ol.style.Circle({
-	           	      radius: me._defaultStyle.radius,
-	           	      fill: new ol.style.Fill({
-	           	        color: me._defaultStyle.strokeColor
-	           	      })
-	           	    }),
-		           	text: new ol.style.Text({
-		                 scale: me._defaultStyle.textScale,
-		                 fill: new ol.style.Fill({
-		                   color: me._defaultStyle.textColor
-		                 }),
-		                 stroke: new ol.style.Stroke({
-		                   color: me._defaultStyle.textOutlineColor,
-		                   width: me._defaultStyle.width
-		                 })
-		              })
-      			});
+        	_.each(me._styleTypes, function (type) {
+                // overriding default style configured style
+                var styleForType = styles[type] || {};
+                var styleDef = jQuery.extend({}, me._defaultStyle, styleForType);
+                me._styles[type] = me.getMapModule().getStyle(styleDef);
       		});
-        	//overwriting default styles if given
-        	if(styles) {
-        		_.each(styles, function (style, styleType) {
-        			if(Oskari.util.keyExists(style, 'fill.color')) {
-            			me._styles[styleType].getFill().setColor(style.fill.color);
-        			}
-		        	if(Oskari.util.keyExists(style, 'stroke.color')) {
-			    		me._styles[styleType].getStroke().setColor(style.stroke.color);
-		        	}
-		        	if(Oskari.util.keyExists(style, 'stroke.width')) {
-			    		me._styles[styleType].getStroke().setWidth(style.stroke.width);
-		        	}
-//		        	if(me.hasNestedObj(style, 'stroke.lineDash')) {
-//			    		me._styles[styleType].getStroke().setLineDash(style.stroke.lineDash);
-//		        	}
-		        	if(Oskari.util.keyExists(style, 'image.radius')) {
-			    		me._styles[styleType].getImage().radius = style.image.radius;
-		        	}
-		        	if(Oskari.util.keyExists(style, 'image.fill.color')) {
-			    		me._styles[styleType].getImage().getFill().setColor(style.image.fill.color);
-		        	}
-		        	if(Oskari.util.keyExists(style, 'text.fill.color')) {
-			    		me._styles[styleType].getText().getFill().setColor(style.text.fill.color);
-		        	}
-		        	if(Oskari.util.keyExists(style, 'text.scale')) {
-			    		me._styles[styleType].getText().setScale(style.text.scale);
-		        	}
-		        	if(Oskari.util.keyExists(style, 'text.stroke.color')) {
-			    		me._styles[styleType].getText().getFill().setColor(style.text.stroke.color);
-		        	}
-		        	if(Oskari.util.keyExists(style, 'text.stroke.width')) {
-			    		me._styles[styleType].getText().getStroke().setWidth(style.text.stroke.width);
-		        	}
-        		});
-        	}
         },
         /**
          * @method draw
@@ -125,6 +85,7 @@ Oskari.clazz.define(
             // if options.buffer is defined -> use it for dot and line and prevent dragging to create buffer
             // TODO : start draw control
             // use default style if options don't include custom style
+
         	var me = this;
         	me._shape = shape;
         	me._buffer = options.buffer;
@@ -230,7 +191,6 @@ Oskari.clazz.define(
             	isFinished = options.isFinished;
             }
             var event = me._sandbox.getEventBuilder('DrawingEvent')(id, geojson, data, isFinished);
-//            console.log(geojson);
 
             me._sandbox.notifyAll(event);
         },
@@ -245,7 +205,7 @@ Oskari.clazz.define(
         	var vector = new ol.layer.Vector({
           	  id: layerId,
           	  source: new ol.source.Vector({features: new ol.Collection()}),
-          	  style: me._styles['draw']
+              style: me._styles['draw']
           	});
           	me._map.addLayer(vector);
           	me._drawLayers[layerId] = vector;

@@ -45,7 +45,7 @@ define([
                 'click .admin-remove-group': 'removeLayerCollection',
                 'click .add-layer-record.capabilities li': 'handleCapabilitiesSelection',
                 'change .admin-interface-version': 'handleInterfaceVersionChange',
-                'change .admin-layer-style': 'handleLayerStyleChange',
+                'change .admin-layer-legendUrl': 'handleLayerLegendUrlChange',
                 'click .layer-capabilities.icon-info' : 'showCapabilitiesPopup'
             },
             showCapabilitiesPopup : function() {
@@ -356,19 +356,17 @@ define([
 
             },
             /**
-             * Handle layer style change
+             * Handle layer style legend Url change
              *
-             * @method handleLayerStyleChange
+             * @method handleLayerLegendUrlChange
              */
-            handleLayerStyleChange: function (e) {
+            handleLayerLegendUrlChange: function (e) {
                 e.stopPropagation();
                 var element = jQuery(e.currentTarget),
                     form = element.parents('.admin-add-layer'),
-                    cur_style_name = form.find('#add-layer-style').val();
-                this.model.selectStyle(cur_style_name);
-                form.find('#add-layer-legendImage').val(this.model.getLegendUrl());
+                    cur_legendUrl = form.find('#add-layer-legendUrl').val();
+                form.find('#add-layer-legendImage').val(cur_legendUrl);
             },
-
             /**
              * Remove layer
              *

@@ -51,7 +51,7 @@ module.exports = function (grunt) {
         },
         release: {
             options: {
-                configs: '../applications/sample/servlet/minifierAppSetup.json',
+                configs: '../applications/sample/servlet/minifierAppSetup.json,../applications/sample/servlet_published_ol3/minifierAppSetup.json',
                 defaultIconDirectoryPath: '../applications/default/icons/'
             }
         },

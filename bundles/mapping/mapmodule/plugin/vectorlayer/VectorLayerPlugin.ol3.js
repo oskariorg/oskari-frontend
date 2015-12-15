@@ -15,13 +15,29 @@ Oskari.clazz.define(
         this._nextVectorId = 0;
         this._nextFeatureId = 0;
         this._defaultStyle = {
-            fillColor: 'rgba(255,0,255,0.2)',
-            strokeColor: 'rgba(0,0,0,1)',
-            width: 2,
-            radius: 4,
-            textScale: 1.3,
-            textOutlineColor: 'rgba(255,255,255,1)',
-            textColor: 'rgba(0,0,0,1)'
+            fill : {
+                color : 'rgba(255,0,255,0.2)'
+            },
+            stroke : {
+                color : 'rgba(0,0,0,1)',
+                width : 2
+            },
+            image : {
+                radius: 4,
+                fill : {
+                    color : 'rgba(0,0,0,1)'
+                }
+            },
+            text : {
+                scale : 1.3,
+                fill : {
+                    color : 'rgba(0,0,0,1)'
+                },
+                stroke : {
+                    color : 'rgba(255,255,255,1)',
+                    width : 2
+                }
+            }
         };
         this._pointerMoveAdded = false;
         this._layers = {};
@@ -74,7 +90,7 @@ Oskari.clazz.define(
                     var vectorSource = new ol.source.Vector();
                     var olLayer = new ol.layer.Vector({
                       name: me._olLayerPrefix + layerId,
-                      id: layerId, 
+                      id: layerId,
                       source: vectorSource});
 
                     olLayer.setOpacity(opacity);
@@ -82,7 +98,7 @@ Oskari.clazz.define(
                     me._map.addLayer(olLayer);
                     me.raiseVectorLayer(olLayer);
                     me._layers[layerId] = olLayer;
-                    me._layerStyles[layerId] = layerStyle;                    
+                    me._layerStyles[layerId] = layerStyle;
                 }
             }
         },
@@ -354,7 +370,7 @@ Oskari.clazz.define(
                                 vectorSource.addFeature(feature);
                                 zIndex++;
                             });
-                            
+
                         });
                     } else {
                       vectorSource.addFeatures(features);
@@ -398,6 +414,14 @@ Oskari.clazz.define(
                 if (options.centerTo === true) {
                     var extent = vectorSource.getExtent();
                     me.getMapModule().zoomToExtent(extent);
+
+                    // Check scale if defined so. Scale decreases when the map is zoomed in. Scale increases when the map is zoomed out.
+                    if(options.minScale) {
+                        var currentScale = this.getMapModule().getMapScale();
+                        if(currentScale<options.minScale) {
+                            this.getMapModule().zoomToScale(options.minScale, true);
+                        }
+                    }
                 }
             }
         },
@@ -538,67 +562,11 @@ Oskari.clazz.define(
          */
         getStyle : function(options) {
             var me = this;
+            var styles = options.featureStyle || me._layerStyles[options.layerId] ||{};
 
-            //create defaultStyle
-            var style = new ol.style.Style({
-                fill: new ol.style.Fill({
-                  color: me._defaultStyle.fillColor
-                }),
-                stroke: new ol.style.Stroke({
-                  color: me._defaultStyle.strokeColor,
-                  width: me._defaultStyle.width
-                }),
-                image: new ol.style.Circle({
-                  radius: me._defaultStyle.radius,
-                  fill: new ol.style.Fill({
-                    color: me._defaultStyle.strokeColor
-                  })
-                }),
-                text: new ol.style.Text({
-                     scale: me._defaultStyle.textScale,
-                     fill: new ol.style.Fill({
-                       color: me._defaultStyle.textColor
-                     }),
-                     stroke: new ol.style.Stroke({
-                       color: me._defaultStyle.textOutlineColor,
-                       width: me._defaultStyle.width
-                     })
-                  })
-            });
-            var styles = options.featureStyle || me._layerStyles[options.layerId];
-
-            //overwriting default style if given
-            if(styles) {
-                if(Oskari.util.keyExists(styles, 'fill.color')) {
-                    style.getFill().setColor(styles.fill.color);
-                }
-                if(Oskari.util.keyExists(styles, 'stroke.color')) {
-                    style.getStroke().setColor(styles.stroke.color);
-                }
-                if(Oskari.util.keyExists(styles, 'stroke.width')) {
-                    style.getStroke().setWidth(styles.stroke.width);
-                }
-                if(Oskari.util.keyExists(styles, 'image.radius')) {
-                    style.getImage().radius = styles.image.radius;
-                }
-                if(Oskari.util.keyExists(styles, 'image.fill.color')) {
-                    style.getImage().getFill().setColor(styles.image.fill.color);
-                }
-                if(Oskari.util.keyExists(styles, 'text.fill.color')) {
-                    style.getText().getFill().setColor(styles.text.fill.color);
-                }
-                if(Oskari.util.keyExists(styles, 'text.scale')) {
-                    style.getText().setScale(styles.text.scale);
-                }
-                if(Oskari.util.keyExists(styles, 'text.stroke.color')) {
-                    style.getText().getFill().setColor(styles.text.stroke.color);
-                }
-                if(Oskari.util.keyExists(styles, 'text.stroke.width')) {
-                    style.getText().getStroke().setWidth(styles.text.stroke.width);
-                }
-            }
-
-            return style;
+            // overriding default style with feature/layer style
+            var styleDef = jQuery.extend({}, this._defaultStyle, styles);
+            return me.getMapModule().getStyle(styleDef);
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],

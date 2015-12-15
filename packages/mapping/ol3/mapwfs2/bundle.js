@@ -66,6 +66,9 @@ function() {
             "src" : "../../../../bundles/mapping/mapwfs2_ol3/event/WFSFeatureGeometriesEvent.js"
         },{
             "type" : "text/javascript",
+            "src" : "../../../../bundles/mapping/mapwfs2_ol3/event/WFSRefreshManualLoadLayersEvent.js"
+        },{
+            "type" : "text/javascript",
             "src" : "../../../../bundles/mapping/mapwfs2_ol3/event/WFSImageEvent.js"
         }, {
             "type" : "text/javascript",
