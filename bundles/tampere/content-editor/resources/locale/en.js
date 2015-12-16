@@ -21,6 +21,10 @@ Oskari.registerLocalization(
                 "header": "Feature update",
                 "success": "Feature properties updated successfully",
                 "error": "Error occured during feature properties update"
+            },
+            "unsavedChanges": {
+                "title": "Unsaved changes",
+                "text": "There are some unsaved changes. Please select below action to perform."
             }
         }
     }

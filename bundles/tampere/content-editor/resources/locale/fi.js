@@ -21,6 +21,10 @@ Oskari.registerLocalization(
                 "header": "Kohde päivitetty",
                 "success": "Kohteen päivittäminen onnistui",
                 "error": "Kohteen päivittäminen epäonnistui"
+            },
+            "unsavedChanges": {
+                "title": "Unsaved changesFi",
+                "text": "There are some unsaved changes. Please select below action to perform.Fi"
             }
         }
     }

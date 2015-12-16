@@ -134,9 +134,17 @@ div.content-editor div.buttons input, div.publisher div.startview div.buttons in
 
 /* Buttons */
 .content-editor-buttons {
+  margin-bottom: 40px;
   text-align: right; }
   .content-editor-buttons.hide {
     display: none; }
 
 .content-draw-tools.hide {
   display: none; }
+
+.content-draw-tools {
+  float: left; }
+
+.properties-container {
+  clear: both;
+}

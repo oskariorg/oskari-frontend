@@ -203,6 +203,7 @@ div {
 /* Buttons */
 
 .content-editor-buttons {
+  margin-bottom: 40px;
   text-align: right;
   &.hide {
     display: none;
@@ -211,4 +212,12 @@ div {
 
 .content-draw-tools.hide {
   display: none;
+}
+
+.content-draw-tools {
+  float: left;
+}
+
+.properties-container {
+  clear: both;
 }
