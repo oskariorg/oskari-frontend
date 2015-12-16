@@ -29,10 +29,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
 				"src" : "../../../../bundles/framework/selected-featuredata/Flyout.js"
 			},
 			{
-				"type" : "text/javascript",
-				"src" : "../../../../bundles/framework/selected-featuredata/Tile.js"
-			},
-			{
 	            "type": "text/javascript",
 	            "src": "../../../../bundles/framework/selected-featuredata/event/TabChangedEvent.js"
 	        },

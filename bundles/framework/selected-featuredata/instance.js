@@ -126,10 +126,19 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
                 iconCls: 'icon-selected-featuredata',
                 tooltip: 'Tooltip teksti',
                 styles: 'position: absolute; top: 12px; right: 23px; width: 20px; height: 20px; background: red;',
-                callback : function(data, formatters) {
+                params: {
+                    content: content,
+                    data:data,
+                    formatters:formatters,
+                    params:params
+                },
+                callback : function(params) {
+                   
                     console.log("Tulee kylla joo o");
-                    console.dir(data);
-                   //me.plugins['Oskari.userinterface.Flyout'].createUI();
+                    console.dir(params);
+                    
+                    var bundleInstance = Oskari.app.getBundleInstanceByName('selected-featuredata');
+                    Oskari.getSandbox().requestByName(bundleInstance, 'userinterface.UpdateExtensionRequest', [bundleInstance, 'detach']);
                 }
             };
 
@@ -227,7 +236,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
          */
         startExtension: function () {
           	this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.mapframework.bundle.selected-featuredata.Flyout', this);
-            this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.mapframework.bundle.selected-featuredata.Tile', this);
         },
         /**
          * @method stopExtension

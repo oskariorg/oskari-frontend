@@ -223,11 +223,11 @@ Oskari.clazz.define(
          * @return {String}
          */
         _renderPopupContent: function (id, title, contentDiv, additionalTools) {
-            var arrow = this._arrow.clone(),
+            var me = this,
+                arrow = this._arrow.clone(),
                 header = this._header.clone(),
                 headerWrapper = this._headerWrapper.clone(),
                 closeButton = this._headerCloseButton.clone(),
-                additionalButton = this._headerAdditionalButton.clone(),
                 resultHtml;
 
             closeButton.attr('id', 'oskari_' + id + '_headerCloseButton');
@@ -238,6 +238,7 @@ Oskari.clazz.define(
 
             //FIXME add icons
                jQuery.each( additionalTools, function( index, key ){
+                    var additionalButton = me._headerAdditionalButton.clone();
                     console.info(index);
                     console.dir(key);
                     additionalButton.attr({
@@ -337,7 +338,7 @@ Oskari.clazz.define(
                         jQuery.each( additionalTools, function( index, key ){
                             if (link.hasClass(key.iconCls)) {
                                 me.close(id);
-                                key.callback();
+                                key.callback(key.params);
                             }
                         });
                     }
