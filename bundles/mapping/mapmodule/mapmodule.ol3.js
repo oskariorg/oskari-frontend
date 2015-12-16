@@ -459,7 +459,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
             var textStyle = this.__getTextStyle(styleDef.text);
             if(textStyle) {
-                olStyle.text = new ol.style.Text(text);
+                olStyle.text = new ol.style.Text(textStyle);
             }
 
             return new ol.style.Style(olStyle);
