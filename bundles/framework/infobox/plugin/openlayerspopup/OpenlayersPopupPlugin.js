@@ -77,6 +77,9 @@ Oskari.clazz.define(
             me._headerCloseButton = jQuery(
                 '<div class="olPopupCloseBox icon-close-white" style="position: absolute; top: 12px;"></div>'
             );
+            me._headerAdditionalButton = jQuery(
+                '<div class="icon-close-white"></div>'
+            );
             me._contentDiv = jQuery('<div class="popupContent"></div>');
             me._contentWrapper = jQuery('<div class="contentWrapper"></div>');
             me._actionLink = jQuery(
@@ -185,7 +188,7 @@ Oskari.clazz.define(
             }
 
             me._panMapToShowPopup(lonlat);
-            me._setClickEvent(id, popup, contentData);
+            me._setClickEvent(id, popup, contentData, additionalTools);
 
             popup.setBackgroundColor('transparent');
             jQuery(popup.div).css('overflow', 'visible');
@@ -224,16 +227,27 @@ Oskari.clazz.define(
                 header = this._header.clone(),
                 headerWrapper = this._headerWrapper.clone(),
                 closeButton = this._headerCloseButton.clone(),
+                additionalButton = this._headerAdditionalButton.clone(),
                 resultHtml;
 
             closeButton.attr('id', 'oskari_' + id + '_headerCloseButton');
             header.append(title);
 
-            debugger;
-            //FIXME add icons
-
             headerWrapper.append(header);
             headerWrapper.append(closeButton);
+
+            //FIXME add icons
+               jQuery.each( additionalTools, function( index, key ){
+                    console.info(index);
+                    console.dir(key);
+                    additionalButton.attr({
+                        'id': key.name,
+                        'class': key.iconCls,
+                        'style': key.styles
+                    });
+                    headerWrapper.append(additionalButton);
+                });
+
             resultHtml = arrow.outerHTML() +
                 headerWrapper.outerHTML() +
                 contentDiv.outerHTML();
@@ -294,7 +308,7 @@ Oskari.clazz.define(
             }, me._contentDiv.clone());
         },
 
-        _setClickEvent: function (id, popup, contentData) {
+        _setClickEvent: function (id, popup, contentData, additionalTools) {
             var me = this;
             // override
             popup.events.un({
@@ -308,7 +322,7 @@ Oskari.clazz.define(
 
                     if (link.hasClass('olPopupCloseBox')) { // Close button
                         me.close(id);
-                    } else { // Action links
+                    }else { // Action links
                         var i = link.attr('contentdata'),
                             text = link.attr('value');
                         if (!text) {
@@ -318,6 +332,16 @@ Oskari.clazz.define(
                             contentData[i].actions[text]();
                         }
                     }
+
+                    if(additionalTools.length > 0){
+                        jQuery.each( additionalTools, function( index, key ){
+                            if (link.hasClass(key.iconCls)) {
+                                me.close(id);
+                                key.callback();
+                            }
+                        });
+                    }
+
                     evt.stopPropagation();
                 },
                 scope: popup

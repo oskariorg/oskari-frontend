@@ -102,47 +102,40 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
             sandbox.request(me, reqGetInfoResultHandler);
 
         },
-        resultHandler: function(data, formatters, params){
+        resultHandler: function(content, data, formatters, params){
             var me = this;
-
             // show infobox
             var reqBuilder = this.getSandbox().getRequestBuilder(
-                    'InfoBox.ShowInfoBoxRequest'
-                ),
-                request,
-                colourScheme,
-                font;
+            'InfoBox.ShowInfoBoxRequest'
+            ),
+            request;
 
-            if (_.isObject(params)) {
-                colourScheme = params.colourScheme;
-                font = params.font;
-            }
-
-            if (reqBuilder) {
-                request = reqBuilder(
-                    this.infoboxId,
+                if (reqBuilder) {
+                    request = reqBuilder(
+                    params.infoboxId,
                     params.title,
-                    params.content,
-                    params.lonlat,
+                    content,
+                    data.lonlat,
                     true,
-                    colourScheme,
-                    font
+                    params.colourScheme,
+                    params.font
                 );
 
-                var def = {
-                    name : 'selected-featuredata',
-                    iconCls: 'icon-selected-featuredata',
-                    tooltip: 'Tooltip teksti',
-                    callback : function(data, formatters) {
-                        // show flyout
-                    }
-                };
+            var def = {
+                name : 'selected-featuredata-btn',
+                iconCls: 'icon-selected-featuredata',
+                tooltip: 'Tooltip teksti',
+                styles: 'position: absolute; top: 12px; right: 23px; width: 20px; height: 20px; background: red;',
+                callback : function(data, formatters) {
+                    console.log("Tulee kylla joo o");
+                    console.dir(data);
+                   //me.plugins['Oskari.userinterface.Flyout'].createUI();
+                }
+            };
 
                 request.addAdditionalTool(def);
                 this.getSandbox().request(this, request);
             }
-            
-            return false;
         },
         /**
          * @method init
@@ -181,7 +174,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
         eventHandlers: {
             /**
              * @method userinterface.ExtensionUpdatedEvent
-             * Fetch channel when flyout is opened
+             * Fetch when flyout is opened
              */
             'userinterface.ExtensionUpdatedEvent': function (event) {
                 var me = this,
