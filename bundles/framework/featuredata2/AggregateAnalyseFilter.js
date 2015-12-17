@@ -161,7 +161,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.aggregateAnalyseFil
                 error: function (jqXHR, textStatus, errorThrown) {
                     var error = me._getErrorText(jqXHR, textStatus, errorThrown);
                     me._openPopup(
-                        loc.filter.aggregateAnalysis.getAggregateAnalysisFailed,
+                        loc.filter.aggregateAnalysisFilter.getAggregateAnalysisFailed,
                         error
                     );
                 }
@@ -177,23 +177,30 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.aggregateAnalyseFil
         handleResult: function (data) {
             var me = this,
                 index = 1,
+                options = [],
                 loc = me.instance.getLocalization('layer');
 
             if (me.selectReadyButton) {
                 me.content.find('.oskari-filter-with-aggregateAnalysis').remove();
                 me.selectReadyButton = undefined;
             }
-            me.indicatorData = data.analysisdata[0];
-            var datasets = _.keys(me.indicatorData);
-            var options = _.map(datasets, function(dataset) {
-                var values = {
-                    title : dataset,
-                    value : dataset
-                };
-                return values;
+            me.indicatorData = data.analysisdata;
+            
+            me.indicatorData.forEach(function(indicatorItem) {
+
+                var datasets = _.keys(indicatorItem);
+
+                    var values = {
+                        title: datasets[0],
+                        value: datasets[0]
+                    };
+
+                options.push(values);
             });
             options.unshift({title: loc.filter.aggregateAnalysisFilter.selectIndicator});
             var updateValues = {options: options};
+
+
             me.selectValues[index] = updateValues;
             var ilen = index + 1;
             while (ilen < me.selectValues.length) {
@@ -210,9 +217,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.aggregateAnalyseFil
         parseLastSelect: function (keyValue) {
             var me = this,
                 index = 2,
-                loc = me.instance.getLocalization('layer');
-            var datasets = me.indicatorData[keyValue];
-            var options = [];
+                loc = me.instance.getLocalization('layer'),
+                options = [],
+                datasets = _.find(me.indicatorData, function(obj) {
+                    return obj.hasOwnProperty(keyValue)
+                })[keyValue];
+
             for(var key in datasets) {
                 if(datasets.hasOwnProperty(key)){
                     options.push({

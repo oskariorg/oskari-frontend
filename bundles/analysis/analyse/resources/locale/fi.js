@@ -475,6 +475,20 @@ Oskari.registerLocalization(
                 "title": "Virhe",
                 "generic": "Järjestelmässä tapahtui virhe."
             }
+        },
+        "layer": {
+            "filter": {
+                "aggregateAnalysisFilter": {
+                    "addAggregateFilter": "Käytä tunnuslukua",
+                    "aggregateValueSelectTitle": "Valitse käytettävät tunnusluvut",
+                    "selectAggregateAnalyse": "Valitse analyysitaso",
+                    "selectIndicator": "Valitse ominaisuustieto",
+                    "selectReadyButton": "Sulje",
+                    "getAggregateAnalysisFailed": "Tunnuslukujen haku epäonnistui.",
+                    "noAggregateAnalysisPopupTitle": "Kyseiselle tasolle ei ole laskettu tunnuslukuja.",
+                    "noAggregateAnalysisPopupContent": "Kyseiselle tasolle ei ole laskettu tunnuslukuja. Voit laskea tunnusluvut haluamallesi aineistolle Analyysi-toiminnon avulla. Tämän jälkeen tunnusluvut ovat käytettävissä suodatuksessa."
+                }
+            }
         }
     }
 }

@@ -3010,18 +3010,34 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 prevJson,
                 selectedLayer,
                 isLayerSelected,
-                editDialog = Oskari.clazz.create(
-                    'Oskari.userinterface.component.FilterDialog',
-                    me.loc
-                ),
+
                 // From 'oskari_analyse_layer_{id}' to '{id}'
                 layerId = analyse_layer_id.replace((this.id_prefix + 'layer_'), ''),
                 layer = this.instance.mapLayerService.findMapLayer(layerId);
+
+            var fixedOptions = {
+                addLinkToAggregateValues: true,
+                loc: me.instance.getLocalization('layer')
+            };
+            me.filterDialog = Oskari.clazz.create(
+                'Oskari.userinterface.component.FilterDialog',
+                me.loc,
+                fixedOptions
+            );
+            me.aggregateAnalyseFilter = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.featuredata2.aggregateAnalyseFilter',
+                me.instance,
+                me.loc,
+                me.filterDialog
+            );
+
+
             filterIcon.unbind('click');
             filterIcon.bind('click', function () {
                 var selectedFeatures = me.WFSLayerService.getSelectedFeatureIds(layer.getId()),
                     boolSelectedFeatures = (selectedFeatures !== undefined && selectedFeatures.length > 0),
                     boolSelectedGeometry = (me.contentPanel.selectedGeometry !== null);
+
 
                 if (!me._filterPopups[layer.getId()]) {
                     prevJson = me.getFilterJson(layer.getId());
@@ -3033,21 +3049,24 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         layer["_isLayerSelected"] = false;
                     }
 
-                    editDialog.createFilterDialog(layer, prevJson, null, boolSelectedFeatures, boolSelectedGeometry);
+                    me.filterDialog.createFilterDialog(layer, prevJson, function() {
+                        me.instance.analyseService._returnAnalysisOfTypeAggregate(_.bind(me.aggregateAnalyseFilter.addAggregateFilterFunctionality, me));
+                    }, boolSelectedFeatures, boolSelectedGeometry);
+
                     me._filterPopups[layer.getId()] = true;
                     me._userSetFilter[layer.getId()] = true;
                     // If there's already filter values for current layer, populate the dialog with them.
                     if (prevJson && !jQuery.isEmptyObject(prevJson)) {
-                        editDialog.setCloseButtonHandler(function () {
+                        me.filterDialog.setCloseButtonHandler(function () {
                             me._filterPopups[layerId] = null;
                         });
-                        editDialog.setClearButtonHandler(function () {
+                        me.filterDialog.setClearButtonHandler(function () {
                             // Removes the filter for the layer
                             me.removeFilterJson(layer.getId());
                         });
-                        editDialog.setUpdateButtonHandler(function () {
+                        me.filterDialog.setUpdateButtonHandler(function () {
                             // Get the filter values from the dialog
-                            var filterJson = editDialog.getFilterValues();
+                            var filterJson = me.filterDialog.getFilterValues();
                             me.setFilterJson(layer.getId(), filterJson);
                             layer.setFilterJson(filterJson);
                             // Update filter icon
