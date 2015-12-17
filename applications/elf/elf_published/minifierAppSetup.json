@@ -1,26 +1,17 @@
 {
     "startupSequence": [
     {
-        "instanceProps": {},
-        "title": "ELF language overrides",
-        "bundleinstancename": "elf-lang-overrides",
         "bundlename": "elf-lang-overrides",
         "metadata": {
             "Import-Bundle": {
                 "elf-lang-overrides": {
                     "bundlePath": "../../../packages/elf/bundle/"
                 }
-            },
-            "Require-Bundle-Instance": []
+            }
         }
     },
     {
-        "title": "OpenLayers",
-        "fi": "OpenLayers",
-        "sv": "?",
-        "en": "OpenLayers",
         "bundlename": "openlayers-default-theme",
-        "bundleinstancename": "openlayers-default-theme",
         "metadata": {
             "Import-Bundle": {
                 "openlayers-default-theme": {
@@ -29,17 +20,10 @@
                 "openlayers-full-map": {
                     "bundlePath": "../../../packages/openlayers/bundle/"
                 }
-            },
-            "Require-Bundle-Instance": []
-        },
-        "instanceProps": {}
+            }
+        }
     }, {
-        "title": "Map",
-        "fi": "Map",
-        "sv": "?",
-        "en": "Map",
         "bundlename": "mapfull",
-        "bundleinstancename": "mapfull",
         "metadata": {
             "Import-Bundle": {
                 "mapwmts": {
@@ -48,10 +32,31 @@
                 "mapwfs2": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 },
-                "mapstats": {
+                "maparcgis": {
+                    "bundlePath": "../../../packages/arcgis/bundle/"
+                },
+                "mapmyplaces": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 },
-                "mapanalysis": {
+                "mapuserlayers": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "mapmodule-plugin": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },     
+                "mapfull": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "oskariui": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "ui-components": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "core-base": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "request-base": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 },
                 "service-base": {
@@ -62,26 +67,8 @@
                 },
                 "request-map-layer": {
                     "bundlePath": "../../../packages/framework/bundle/"
-                },
-                "mapmodule-plugin": {
-                    "bundlePath": "../../../packages/framework/bundle/"
-                },               
+                },          
                 "event-base": {
-                    "bundlePath": "../../../packages/framework/bundle/"
-                },
-                "mapfull": {
-                    "bundlePath": "../../../packages/framework/bundle/"
-                },
-                "core-base": {
-                    "bundlePath": "../../../packages/framework/bundle/"
-                },
-                "maparcgis": {
-                    "bundlePath": "../../../packages/arcgis/bundle/"
-                },
-                "oskariui": {
-                    "bundlePath": "../../../packages/framework/bundle/"
-                },
-                "request-base": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 },
                 "domain": {
@@ -104,74 +91,37 @@
                 },
                 "event-map": {
                     "bundlePath": "../../../packages/framework/bundle/"
-                },
-                "ui-components": {
-                    "bundlePath": "../../../packages/framework/bundle/"
-                },
-                "mapmyplaces": {
-                    "bundlePath": "../../../packages/framework/bundle/"
-                },
-                "mapuserlayers": {
-                    "bundlePath": "../../../packages/framework/bundle/"
                 }
-            },
-            "Require-Bundle-Instance": []
-        },
-        "instanceProps": {}
+            }
+        }
     }, {
-        "title": "Oskari DIV Manazer",
-        "fi": "Oskari DIV Manazer",
-        "sv": "Oskari DIV Manazer",
-        "en": "Oskari DIV Manazer",
         "bundlename": "divmanazer",
-        "bundleinstancename": "divmanazer",
         "metadata": {
             "Import-Bundle": {
                 "divmanazer": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 }
-            },
-            "Require-Bundle-Instance": []
-        },
-        "instanceProps": {}
+            }
+        }
     }, {
-        "title": "InfoBox",
-        "fi": "infobox",
-        "sv": "?",
-        "en": "?",
         "bundlename": "infobox",
-        "bundleinstancename": "infobox",
         "metadata": {
             "Import-Bundle": {
                 "infobox": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 }
-            },
-            "Require-Bundle-Instance": []
-        },
-        "instanceProps": {}
+            }
+        }
     }, {
-        "title": "PostProcessor",
-        "fi": "PostProcessor",
-        "sv": "PostProcessor",
-        "en": "PostProcessor",
         "bundlename": "postprocessor",
-        "bundleinstancename": "postprocessor",
         "metadata": {
             "Import-Bundle": {
                 "postprocessor": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 }
-            },
-            "Require-Bundle-Instance": []
-        },
-        "instanceProps": {}
+            }
+        }
     }, {
-        "title": "Published Grid",
-        "bundleinstancename": "publishedgrid",
-        "fi": "publishedgrid",
-        "sv": "publishedgrid",
-        "en": "publishedgrid",
         "bundlename": "publishedgrid",
         "metadata": {
             "Import-Bundle": {
@@ -181,79 +131,47 @@
                 "geostats": {
                     "bundlePath": "../../../packages/libraries/bundle/"
                 }
-            },
-            "Require-Bundle-Instance": []
-        },
-        "instanceProps": {}
+            }
+        }
     }, {
-        "title": "Toolbar",
-        "bundleinstancename": "toolbar",
-        "fi": "toolbar",
-        "sv": "?",
-        "en": "?",
         "bundlename": "toolbar",
         "metadata": {
             "Import-Bundle": {
                 "toolbar": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 }
-            },
-            "Require-Bundle-Instance": []
-        },
-        "instanceProps": {}
+            }
+        }
     }, {
-        "title" : "publishedstatehandler",
-        "fi" : "publishedstatehandler",
-        "sv" : "publishedstatehandler",
-        "en" : "publishedstatehandler",
         "bundlename" : "publishedstatehandler",
-        "bundleinstancename" : "publishedstatehandler",
         "metadata" : {
             "Import-Bundle" : {
                 "publishedstatehandler" : {
                     "bundlePath" : "../../../packages/framework/bundle/"
                 }
-            },
-            "Require-Bundle-Instance" : []
-        },
-        "instanceProps" : {}
+            }
+        }
     },
     {
-        "title" : "Publishedmyplaces2",
-        "fi" : "publishedmyplaces2",
-        "sv" : "publishedmyplaces2",
-        "en" : "publishedmyplaces2",
         "bundlename" : "publishedmyplaces2",
-        "bundleinstancename" : "publishedmyplaces2",
         "metadata" : {
             "Import-Bundle" : {
                 "publishedmyplaces2" : {
                     "bundlePath" : "../../../packages/framework/bundle/"
                 }
-            },
-            "Require-Bundle-Instance" : []
-        },
-        "instanceProps" : {}
+            }
+        }
     }, {
-        "title": "Featuredata",
-        "fi": "Kohdetiedot",
-        "sv": "?",
-        "en": "?",
         "bundlename": "featuredata2",
-        "bundleinstancename": "featuredata2",
         "metadata": {
             "Import-Bundle": {
                 "featuredata2": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 }
-            },
-            "Require-Bundle-Instance": []
-        },
-        "instanceProps": {}
+            }
+        }
     }, {
-        "title": "Remote procedure call",
         "bundlename": "rpc",
-        "bundleinstancename": "rpc",
         "metadata": {
             "Import-Bundle": {
                 "rpc": {
@@ -261,7 +179,5 @@
                 }
             }
         }
-    }
-
-    ]
+    }]
 }
