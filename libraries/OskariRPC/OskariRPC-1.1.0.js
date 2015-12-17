@@ -39,12 +39,6 @@
             var ready = false;
             var readyCallbacks = [];
             var isDebug = false;
-            var defaultErrorHandler = function() {
-                if(isDebug && window.console && window.console.log) {
-                    console.log('Error', arguments);
-                }
-                throw new Error('RPC call failed!');
-            };
             var RPC_API = {};
 
             /**
@@ -60,6 +54,11 @@
                 if(window.console && window.console.log) {
                     window.console.log.apply(window.console, arguments);
                 }
+            };
+            
+            var defaultErrorHandler = function() {
+                RPC_API.log('Error', arguments);
+                throw new Error('RPC call failed!');
             };
             
             RPC_API.isReady = function() {
