@@ -15,9 +15,9 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             // Remove stuff from head etc. that we don't need/want
             parsedHTML.find('link, meta, script, style, title').remove();
             // let's not return a bunch of empty html
-            if (jQuery.trim(parsedHTML.html()) === '') {
+            /*if (jQuery.trim(parsedHTML.html()) === '') {
                 return null;
-            }
+            }*/
             // Add getinforesult class etc. so the table is styled properly
             parsedHTML.find('table').addClass('getinforesult_table');
             // FIXME this is unnecessary, we can do this with a css selector.
@@ -311,7 +311,10 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                 response.append(table);
             }
         } else if (me.formatters.isHTML(datum.content)) {
-            var parsedHTML = me.formatters.html(datum.content);            
+            var parsedHTML = me.formatters.html(datum.content);
+            if (jQuery.trim(parsedHTML.html()) === '') {
+                return null;
+            } 
             response.append(parsedHTML.html());
         } else {
             response.append(datum.content);

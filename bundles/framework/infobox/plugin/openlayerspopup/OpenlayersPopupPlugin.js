@@ -236,11 +236,9 @@ Oskari.clazz.define(
             headerWrapper.append(header);
             headerWrapper.append(closeButton);
 
-            //FIXME add icons
+            //add additional btns
                jQuery.each( additionalTools, function( index, key ){
                     var additionalButton = me._headerAdditionalButton.clone();
-                    console.info(index);
-                    console.dir(key);
                     additionalButton.attr({
                         'id': key.name,
                         'class': key.iconCls,

@@ -18,12 +18,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
         this.sandbox = instance.getSandbox();
         this.container = null;
         this.state = {};
-        this.addTabBtn = null;
-        this.addAccBtn = null;
         this._localization = this.instance.getLocalization('flyout');
         this.tabsContainer = Oskari.clazz.create(
             'Oskari.userinterface.component.TabContainer'
         );
+        this._accordions = {};
     }, {
         /**
          * @method getName
@@ -52,6 +51,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
             }
         },
         /**
+         * [isFlyoutVisible checks if layout is visible]
+         * @return {Boolean} [true/false]
+         */
+        isFlyoutVisible: function(){
+            return jQuery(this.container).is(':visible');
+        },
+        /**
+         * [clearContainer removes all elements from container]
+         */
+        clearContainer: function(){
+            var me = this;
+            jQuery(me.container).empty();
+            this._accordions = [];
+            this.tabsContainer = null;
+            this.tabsContainer = Oskari.clazz.create(
+            'Oskari.userinterface.component.TabContainer'
+            );
+        },
+        /**
         * @public @method startPlugin
         * Interface method implementation, assigns the HTML templates
         * that will be used to create the UI
@@ -59,61 +77,32 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
         *
         */
         startPlugin: function () {
-            this.createUI();
+
         },
         /* App specific methods */
-        createUI: function () {
+        createUI: function (params) {
+            var me = this,
+            data = params[0],
+            layer = me.sandbox.findMapLayerFromAllAvailable(data.layerId),
+            tabContent = jQuery('<div></div>');
 
-           if(this.addTabBtn && this.addAccBtn){
-                return;
+            if(jQuery('.selected_featuredata_tabcontent_'+layer.getId()).length == 0){
+                tabContent.attr('class','selected_featuredata_tabcontent_'+layer.getId());
+                me.addTab(data, tabContent, layer);
+                me.addAccordion(data.html, tabContent, layer.getId());
+            }else{
+                me.addAccordion(data.html, tabContent, layer.getId());
             }
 
-            var me = this;
-            this.addTabBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            this.addAccBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-
-            // Test for adding tab
-            this.addTabBtn.addClass('primary');
-            this.addTabBtn.setTitle('AddTab');
-            this.addTabBtn.setHandler(function() {
-                var title = 'Testi',
-                content = '',
-                priority = 1,
-                id = 'id_on_1',
-                reqName = 'SelectedFeatureData.AddTabRequest',
-                reqBuilder = me.sandbox.getRequestBuilder(reqName),
-                req = reqBuilder(title, content, priority, id);
-
-            me.sandbox.request(me.instance, req);
-            });
-
-            this.addTabBtn.insertTo(me.container);
-
-            // Test for adding tab
-            this.addAccBtn.addClass('primary');
-            this.addAccBtn.setTitle('AddAcc');
-            this.addAccBtn.setHandler(function() {
-                var title = 'Test Accordion',
-                content = '<h5>SISÄLTÖÄ</h5>',
-                visible = true,
-                tabid = 'id_on_1',
-                id = 'id_on_2',
-                reqName = 'SelectedFeatureData.AddAccordionRequest',
-                reqBuilder = me.sandbox.getRequestBuilder(reqName),
-                req = reqBuilder(title, content, visible, id, tabid);
-
-            me.sandbox.request(me.instance, req);
-            });
-
-            this.addAccBtn.insertTo(me.container);
         },
         /**
          * [addTab adds tab]
          * @param {[object]} item [contains all data tab needs]
          */
-        addTab: function (item) {
+        addTab: function (data, tabContent, layer) {
             var me = this,
                 flyout = jQuery(me.container);
+
             // Change into tab mode if not already
             if (me.tabsContainer.panels.length === 0) {
                 me.tabsContainer.insertTo(flyout);
@@ -122,62 +111,50 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
             var panel = Oskari.clazz.create(
                 'Oskari.userinterface.component.TabPanel'
             );
-            panel.setTitle(item.title, item.id);
-            panel.setId(item.id);
-            panel.setContent(item.content);
-            panel.setPriority(item.priority);
-            console.dir(panel);
+            panel.setTitle(layer.getName(), layer.getId());
+            panel.setContent(tabContent);
+            panel.setPriority(1);
             me.tabsContainer.addPanel(panel);
+            me.tabsContainer.insertTo(flyout);
+            
         },
         /**
          * [addAccordion add accordion into certain tab]
          * @param {[Object]} panelData [description]
          * @param {[String]} tabid [description]
          */
-        addAccordion: function (panelData){
+        addAccordion: function (accPanelData, tabContent, layerId){
             var me =  this,
-            accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
-            container = jQuery(panelData.tabid),
-            panel = null;
+            panel = null,
+            number = 1;
 
               panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-              panel.setTitle(panelData.title);
-              panel.setContent(panelData.content);
-              panel.setContent(panelData.id);
-              panel.setVisible(panelData.isVisible);
-
+              panel.setContent(accPanelData);
+              panel.setId('selected_featuredata_accpanel_'+layerId);
+              panel.setVisible(true);
               //panelData.isOpen ? panel.open() : panel.close();
 
-              accordion.addPanel(panel);
+            if(!me._accordions[layerId]){
+                // create new accordions
+                var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
+                me._accordions[layerId] = accordion;
+                panel.setTitle(me._getLocalization('accordion-title') +' '+ number);
+                me._accordions[layerId].addPanel(panel);
 
-            accordion.insertTo(container);
+                me._accordions[layerId].insertTo(tabContent);
+            }else{
+                // just insert new panel to existing accordion
+                number = number + me._accordions[layerId].panels.length;
+                panel.setTitle(me._getLocalization('accordion-title') +' '+ number);
+                me._accordions[layerId].addPanel(panel);
+            }     
 
         },
         getEventHandlers: function () {
-/*            var list = {};
-            _.each(this.tabs, function (tabDef) {
-                var p;
-                if (tabDef.instance.eventHandlers) {
-                    for (p in tabDef.instance.eventHandlers) {
-                        if (tabDef.instance.eventHandlers.hasOwnProperty(p)) {
-                            list[p] = true;
-                        }
-                    }
-                }
-            });
-            return list;*/
+
         },
         onEvent: function (event) {
-/*            _.each(this.tabs, function (tabDef) {
-                if (tabDef.instance.eventHandlers) {
-                    var handler = tabDef.instance.eventHandlers[event.getName()];
-                    if (!handler) {
-                        return;
-                    }
-                    handler.apply(tabDef.instance, [event]);
 
-                }
-            });*/
         },
         /**
          * @method _getLocalization
