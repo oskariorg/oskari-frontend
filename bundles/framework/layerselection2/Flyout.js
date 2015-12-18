@@ -803,10 +803,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                             me.instance.sandbox.notifyAll(evt);
                         });
 
-                        me.aggregateAnalyseFilter = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.aggregateAnalyseFilter', me.instance, me.instance.getLocalization('layer'), me.filterDialog);
-
                         if (me.service) {
-                            me.filterDialog.createFilterDialog(layer, prevJson, function() {
+                            me.aggregateAnalyseFilter = Oskari.clazz.create('Oskari.analysis.bundle.analyse.aggregateAnalyseFilter', me.instance, me.instance.getLocalization('layer'), me.filterDialog);
+
+                            me.filterDialog.createFilterDialog(layer, prevJson, function () {
                                 me.service._returnAnalysisOfTypeAggregate(_.bind(me.aggregateAnalyseFilter.addAggregateFilterFunctionality, me));
                             });
                         } else {

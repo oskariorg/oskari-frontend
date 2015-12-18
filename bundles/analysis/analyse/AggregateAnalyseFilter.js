@@ -1,9 +1,9 @@
 /**
- * @class Oskari.mapframework.bundle.featuredata2.AggregateAnalyseFilter
+ * @class Oskari.analysis.bundle.analyse.AggregateAnalyseFilter
  *
  * Adds to the filterDialog the possibility to filter with aggregate analyse values
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.aggregateAnalyseFilter",
+Oskari.clazz.define("Oskari.analysis.bundle.analyse.aggregateAnalyseFilter",
 
     /**
      * @method create called automatically on construction

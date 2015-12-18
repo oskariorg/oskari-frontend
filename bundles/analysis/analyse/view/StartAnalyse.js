@@ -3025,7 +3025,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 fixedOptions
             );
             me.aggregateAnalyseFilter = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.featuredata2.aggregateAnalyseFilter',
+                'Oskari.analysis.bundle.analyse.aggregateAnalyseFilter',
                 me.instance,
                 me.loc,
                 me.filterDialog
