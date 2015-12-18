@@ -109,7 +109,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
             var flyout = bundleInstance.plugins['Oskari.userinterface.Flyout'];
             
             if(flyout.isFlyoutVisible() && content.length > 0){
-                    flyout.createUI(content);
+                console.dir(data);
+                    flyout.createUI(content, data);
             }else{
 
                 var reqBuilder = this.getSandbox().getRequestBuilder(
@@ -140,8 +141,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
                         params:params
                     },
                     callback : function(params) {
-                       
-                        flyout.createUI(params.content);
+                        console.dir(params);
+                        flyout.createUI(params.content, params.data);
                         
                         var bundleInstance = Oskari.app.getBundleInstanceByName('selected-featuredata');
                         Oskari.getSandbox().requestByName(bundleInstance, 'userinterface.UpdateExtensionRequest', [bundleInstance, 'detach']);
@@ -201,7 +202,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
                     return;
                 }
                 if (event.getViewState() == 'close') {
-                     this.plugins['Oskari.userinterface.Flyout'].clearContainer();
+                     this.plugins['Oskari.userinterface.Flyout'].clearFlyout();
                 }
                 if (doOpen) {
                     //this.plugins['Oskari.userinterface.Flyout'].createUI();
@@ -211,7 +212,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
                             this.sandbox.registerForEventByName(this, p);
                         }
                     }
-
                 }
             }
         },

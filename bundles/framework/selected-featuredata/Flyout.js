@@ -58,16 +58,34 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
             return jQuery(this.container).is(':visible');
         },
         /**
-         * [clearContainer removes all elements from container]
+         * [clearFlyout removes all elements from container]
          */
-        clearContainer: function(){
+        clearFlyout: function(){
             var me = this;
             jQuery(me.container).empty();
             this._accordions = [];
             this.tabsContainer = null;
             this.tabsContainer = Oskari.clazz.create(
-            'Oskari.userinterface.component.TabContainer'
+                'Oskari.userinterface.component.TabContainer'
             );
+            me.removeAllMarkers();
+        },
+        /**
+         * [compareAccodionPanelHtml checks if html already in accordion panel]
+         * @return {[Boolean]} [true/false]
+         */
+        compareAccodionPanelHtml: function(newHtml, tabContent){
+            var me = this,
+            output = true;
+
+            tabContent.find('.accordion_panel>.content>div').each(function(){
+                var oldHtml = jQuery(this);
+                if(oldHtml.html() == newHtml.html()){
+                    output = false;
+                }
+            });
+
+            return output;
         },
         /**
         * @public @method startPlugin
@@ -80,18 +98,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
 
         },
         /* App specific methods */
-        createUI: function (params) {
+        createUI: function (params, mapobject) {
             var me = this,
             data = params[0],
             layer = me.sandbox.findMapLayerFromAllAvailable(data.layerId),
+            tabId = 'selected_featuredata_tab_'+layer.getId();
+            tabName = layer.getName(),
             tabContent = jQuery('<div></div>');
 
+            //check if certain layer has tab allready
             if(jQuery('.selected_featuredata_tabcontent_'+layer.getId()).length == 0){
                 tabContent.attr('class','selected_featuredata_tabcontent_'+layer.getId());
-                me.addTab(data, tabContent, layer);
-                me.addAccordion(data.html, tabContent, layer.getId());
+                me.addTab(data, tabContent, tabId, tabName);
+                me.addAccordion(data.html, tabContent, layer.getId(), tabId, mapobject);
             }else{
-                me.addAccordion(data.html, tabContent, layer.getId());
+                tabContent = jQuery('.selected_featuredata_tabcontent_'+layer.getId());
+                if(me.compareAccodionPanelHtml(data.html, tabContent)){
+                    me.addAccordion(data.html, tabContent, layer.getId(), tabId, mapobject);
+                }
             }
 
         },
@@ -99,7 +123,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
          * [addTab adds tab]
          * @param {[object]} item [contains all data tab needs]
          */
-        addTab: function (data, tabContent, layer) {
+        addTab: function (data, tabContent, tabId, tabName) {
             var me = this,
                 flyout = jQuery(me.container);
 
@@ -111,26 +135,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
             var panel = Oskari.clazz.create(
                 'Oskari.userinterface.component.TabPanel'
             );
-            panel.setTitle(layer.getName(), layer.getId());
+            panel.setTitle(tabName, tabId);
             panel.setContent(tabContent);
             panel.setPriority(1);
             me.tabsContainer.addPanel(panel);
-            me.tabsContainer.insertTo(flyout);
-            
         },
         /**
          * [addAccordion add accordion into certain tab]
          * @param {[Object]} panelData [description]
          * @param {[String]} tabid [description]
          */
-        addAccordion: function (accPanelData, tabContent, layerId){
+        addAccordion: function (accPanelData, tabContent, layerId, tabId, mapobject){
             var me =  this,
             panel = null,
-            number = 1;
+            number = 1,
+            panelId = 'selected_featuredata_accpanel_';
 
+              //initialize panel component
               panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
               panel.setContent(accPanelData);
-              panel.setId('selected_featuredata_accpanel_'+layerId);
               panel.setVisible(true);
               //panelData.isOpen ? panel.open() : panel.close();
 
@@ -139,6 +162,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
                 var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
                 me._accordions[layerId] = accordion;
                 panel.setTitle(me._getLocalization('accordion-title') +' '+ number);
+                panelId = panelId + layerId + '_' + number;
+                panel.setId(panelId);
                 me._accordions[layerId].addPanel(panel);
 
                 me._accordions[layerId].insertTo(tabContent);
@@ -146,9 +171,102 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
                 // just insert new panel to existing accordion
                 number = number + me._accordions[layerId].panels.length;
                 panel.setTitle(me._getLocalization('accordion-title') +' '+ number);
+                panelId = panelId + layerId + '_' + number;
+                panel.setId(panelId);
                 me._accordions[layerId].addPanel(panel);
-            }     
+            }
 
+            jQuery("#"+panelId).append(me.createCloseIconForAcc(panel, tabId, tabContent));
+            jQuery("#"+panelId).append(me.createWmsMarker(mapobject));
+            
+
+        },
+        /**
+         * [createWmsMarker creates link for wms marker]
+         * @param  {[object]} mapobject [description]
+         */
+        createWmsMarker: function(mapobject){
+            var me = this;
+            return jQuery('<div />', {
+                "class": 'selected_featuredata_accpanel_close',
+                "text": "testi",
+                click: function(e){
+                    e.preventDefault();
+                    me.removeAllMarkers();
+                    me.showWmsMarker(mapobject.lonlat.lon, mapobject.lonlat.lat);
+                    me.moveMapRequest(mapobject.lonlat.lon, mapobject.lonlat.lat);
+                }});
+        },
+        /**
+         * [moveMapRequest move map to given x and y]
+         * @param  {[number]} x [lon]
+         * @param  {[number]} y [lat]
+         */
+        moveMapRequest: function(x, y){
+            var me = this;
+            var mapmoveRequest = me.sandbox.getRequestBuilder('MapMoveRequest')(x, y, null, false);
+            me.sandbox.request(me.instance, mapmoveRequest);
+        },
+        /**
+         * [createCloseIconForAcc adds close btn for every accordionpanel]
+         * @param  {[panel]} panel   [accordionpanel]
+         * @param  {[layerId]} layerId [layerId]
+         */
+        createCloseIconForAcc: function(panel, tabId, tabContent){
+            var me = this;
+            return jQuery('<div />', {
+                "class": 'icon-close selected_featuredata_accpanel_close',
+                click: function(e){
+                    e.preventDefault();
+                    me.removeAcc(panel, tabId, tabContent);
+                }});
+        },
+        /**
+         * [removeAcc click event handler removing certain accordionPanel and handle last one]
+         * @param  {[type]} parent  [description]
+         * @param  {[type]} layerId [description]
+         * @return {[type]}         [description]
+         */
+        removeAcc: function(panel, tabId, tabContent){
+            var me = this;
+
+            panel.destroy();
+
+            if(tabContent.find('.accordion_panel>.content').length == 0){
+                me.clearFlyout();
+                //FIXME
+                //jQuery(tabContent).parent().remove();
+                //jQuery("#"+tabId).remove();
+            }
+
+        },
+        showWmsMarker: function(x,y){
+            var sb = Oskari.getSandbox();
+            var reqBuilder = sb.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
+            if (reqBuilder) {
+                var data = {
+                    x: x,
+                    y: y,
+                    color: "ff0000",
+                    msg : '',
+                    shape: 3,
+                    size: 3
+                };
+                var request = reqBuilder(data);
+                sb.request('MainMapModule', request);
+            }
+        },
+        /**
+         * [removeAllMarkers deletes markers from map]
+         */
+        removeAllMarkers: function(){
+            var me = this,
+            sb = Oskari.getSandbox();
+
+            var reqBuilder = sb.getRequestBuilder('MapModulePlugin.RemoveMarkersRequest');
+            if (reqBuilder) {
+                sb.request('MainMapModule', reqBuilder());
+            }
         },
         getEventHandlers: function () {
 
