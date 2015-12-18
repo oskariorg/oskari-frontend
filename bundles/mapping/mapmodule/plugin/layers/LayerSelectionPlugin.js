@@ -22,6 +22,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
 
         me.initialSetup = true;
         me.templates = {};
+        me._mobileDefs = {
+            width: 500
+        };
+        me.isMobile = false;
     }, {
         /**
          * @private @method _initImpl
@@ -66,7 +70,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 '</div>'
             );
         },
+        /**
+         * @method  @private _handleMapSizeChanges handle map size changes
+         * @param  {Object} size {width:100, height:200}
+         * @param {Object} el jQuery element
+         */
+        _handleMapSizeChanges: function(size, el){
+            var me = this,
+                div = el || this.getElement();
+            
+            if(size.width < me._mobileDefs.width) {
+                me.isMobile = true;
 
+            } else {
+                me.isMobile = false;
+            }
+        },
         /**
          * @method _createEventHandlers
          * Create eventhandlers.
@@ -124,6 +143,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     if (event._creator !== this.getName()) {
                         this.sortLayers();
                     }
+                },
+                MapSizeChangedEvent: function (evt) {
+                    this._handleMapSizeChanges({width:evt.getWidth(), height:evt.getHeight()});
                 }
             };
         },
@@ -488,12 +510,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * Programmatically opens the plugins interface as if user had clicked it open
          */
         openSelection: function () {
-            var icon = this.getElement().find('div.header div.header-icon'),
-                content;
+            var me = this,
+                div = this.getElement(),
+                icon = div.find('div.header div.header-icon'),
+                content = div.find('div.content'),
+                header = div.find('div.header'),
+                mapmodule = me.getMapModule();
+                size = mapmodule.getSize();
 
             icon.removeClass('icon-arrow-white-right');
             icon.addClass('icon-arrow-white-down');
-            this.getElement().find('div.content').show();
+            content.show();
+
+            div.css('height', (0.95 * size.height) + 'px');
+            if(me.isMobile){
+                content.addClass('mobile');
+                header.addClass('mobile');
+            } else {
+                content.removeClass('mobile');
+                header.removeClass('mobile');
+            }
         },
 
         /**
@@ -503,11 +539,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         closeSelection: function (el) {
             var element = el || this.getElement(),
                 icon = element.find('div.header div.header-icon'),
-                content;
+                content = element.find('div.content'),
+                header = element.find('div.header');
 
             icon.removeClass('icon-arrow-white-down');
             icon.addClass('icon-arrow-white-right');
-            element.find('div.content').hide();
+            content.hide();
+            content.removeClass('mobile');
+            header.removeClass('mobile');
         },
 
         /**
@@ -578,7 +617,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         refresh: function () {
             var me = this,
                 conf = me.getConfig(),
-                element = me.getElement();
+                element = me.getElement(),
+                mapModule = me.getMapModule();
             if (conf) {
                 if (conf.toolStyle) {
                     me.changeToolStyle(conf.toolStyle, element);
@@ -603,6 +643,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     me.changeColourScheme(conf.colourScheme, element);
                 }
             }
+            me._handleMapSizeChanges(mapModule.getSize(), element);
         },
 
         /**

@@ -5,7 +5,14 @@ div.mapplugin.layerselection {
   max-width: 200px;
   z-index: 100000000 !important; }
   div.mapplugin.layerselection div.content {
-    background-color: white; }
+    background-color: white;
+    overflow: auto;
+    max-height: 95%; }
+    div.mapplugin.layerselection div.content.mobile {
+      position: fixed;
+      top: 36px;
+      left: 0;
+      width: 100%; }
     div.mapplugin.layerselection div.content div.content-header {
       /* This is some sort of a theme color... leave it be */
       background-color: #333438;
@@ -35,7 +42,7 @@ div.mapplugin.layerselection {
       div.mapplugin.layerselection div.content div.layer span {
         display: block;
         margin-left: 30px;
-        word-break: break-all; }
+        word-break: break-word; }
     div.mapplugin.layerselection div.content div.styled-header-arrow {
       width: 0px;
       height: 0px;
@@ -57,6 +64,11 @@ div.mapplugin.layerselection {
       display: inline-block;
       margin-right: 4px;
       vertical-align: middle; }
+    div.mapplugin.layerselection div.header.mobile {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%; }
   div.mapplugin.layerselection div.header:hover {
     color: #ff9100; }
   div.mapplugin.layerselection div.layerselection-styled-content {
@@ -133,3 +145,5 @@ div.mapplugin.layerselection {
 
 .mapplugins.left div.mapplugin.layerselection div.published-styled-layerselector-content div.styled-header-arrow {
   margin-left: 12px !important; }
+
+/*# sourceMappingURL=layersselection.css.map */

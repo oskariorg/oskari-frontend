@@ -7,6 +7,15 @@ div.mapplugin.layerselection {
 
   div.content {
     background-color: white; 
+    overflow: auto;
+    max-height: 95%;
+
+    &.mobile {
+      position:fixed;
+      top:36px;
+      left:0;
+      width:100%;
+    }
 
     div.content-header {
       /* This is some sort of a theme color... leave it be */
@@ -47,7 +56,7 @@ div.mapplugin.layerselection {
       span {
         display: block;
         margin-left: 30px;
-        word-break: break-all; 
+        word-break: break-word; 
       }
     }
 
@@ -77,6 +86,13 @@ div.mapplugin.layerselection {
       display: inline-block;
       margin-right: 4px;
       vertical-align: middle; 
+    }
+
+    &.mobile {
+      position:fixed;
+      top:0;
+      left:0;
+      width:100%;
     }
   }
 
