@@ -1,0 +1,268 @@
+<link rel="import" href="libs/polymer/polymer.html">
+<link href="libs/paper-scroll-header-panel/paper-scroll-header-panel.html" rel="import">
+
+<dom-module id="oskari-userindicator">
+
+  <template>
+    <div id="userIndicatorCont" style="min-height: 100%;">
+      <form class="add-indicator" id="add-indicator" style="min-height: 100%;" on-keydown="stopWindowEvents" on-keyup="stopWindowEvents">
+        <h2>[[locale.addDataTitle]]</h2>
+        <fieldset class="form-meta">
+          <legend>[[locale.baseInfoTitle]]</legend>
+          <label for="indicator_title">[[locale.addDataMetaTitle]]</label>
+          <input type="text" id="indicator_title" placeholder="[[locale.addDataMetaTitlePH]]" required />
+          <label for="indicator_sources">[[locale.addDataMetaSources]]</label>
+          <input type="text" id="indicator_sources" placeholder="[[locale.addDataMetaSourcesPH]]" required />
+          <label for="indicator_description">[[locale.addDataMetaDescription]]</label>
+          <input type="text" id="indicator_description" placeholder="[[locale.addDataMetaDescriptionPH]]" required />
+          <label for="indicator_year">[[locale.addDataMetaYear]]</label>
+          <input type="text" id="indicator_year" placeholder="[[locale.addDataMetaYear]]" required />
+          <label for="indicator_publicity">[[locale.addDataMetaPublicity]]</label>
+          <input type="checkbox" id="indicator_publicity" placeholder="[[locale.addDataMetaTitlePH]]" />
+        </fieldset>
+        <fieldset class="form-import">
+          <legend>[[locale.addDataTitle]]</legend>
+          <label for="indicator_reference-layer">[[locale.addDataMetaReferenceLayer]]</label>
+          <select id="selectRegionCategory" style="width: 300px;" value="{{selectedLayer::change}}">
+            <template is="dom-repeat" items="[[getLayerInfoAsArray(layerInfo)]]">
+              <option value="{{item.val}}">{{item.text}}</option>
+            </template>
+          </select>
+          <label for="indicator_text-import">[[locale.dataRows]]</label>
+          <textarea class="import-textarea" id="indicator_text-import"
+            placeholder="[[locale.importDataDescription]]"></textarea>
+          <button type="button" class="start-import primary" title=""
+            on-click="startImport">[[locale.importDataButton]]</button>
+          <!-- We need the empty title so the tooltip will show up... --> 
+          <button type="button" class="clear-import" title=""
+            on-click="clearImport">[[locale.clearImportDataButton]]</button>
+        </fieldset>
+        <hr/>
+        <fieldset class="form-regions statsgrid-table">
+          <!-- FIXME: 300 px ok for all browsers? Should probably calculate this. -->
+          <paper-scroll-header-panel class="statsgrid-table" style="min-height: 200px; height: 320px;">
+            <legend>
+              [[getLayerName(locale, selectedLayer)]]
+            </legend>
+            <ul class="regions">
+              <template is="dom-repeat" items="{{regionItems}}" as="regionItem">
+                <li class="region-row">
+                  <label class="region-row" for="[[regionItem.key]]">[[regionItem.text]]</label>
+                  <input id="[[regionItem.key]]" type="text" value="{{regionItem.value::change}}"
+                    placeholder="[[locale.municipalityPlaceHolder]]" />
+                </li>
+              </template>
+            </ul>
+          </paper-scroll-header-panel>
+        </fieldset>
+        <fieldset class="form-submit">
+          <button type="button" class="cancel-form-button" on-click="cancelForm">[[locale.formCancel]]</button>
+          <button type="button" class="submit-form-button primary" title="" on-click="submitForm">[[locale.formSubmit]]</button>
+          <button type="button" class="clear-form-button" on-click="clearForm">[[locale.formEmpty]]</button>
+        </fieldset>
+      </form>
+    </div>
+    <content></content>
+  </template>
+
+  <script>
+    Polymer({
+      "is": "oskari-userindicator",
+      "properties": {
+          "ajaxUrl": String,
+          "locale": Object,
+          "language": String,
+          "user": Object,
+          "sources": {
+              "type": Object,
+              "notify": true
+          },
+          "selectedLayer": {
+              "type": String,
+              "value": "oskari:kunnat2013",
+              "notify": true
+          },
+          "layerInfo": {
+              "type": Object,
+              "notify": true
+          },
+          "regionInfo": {
+              "type": Object,
+              "notify": true
+          },
+          "regionItems": {
+              "type": Object,
+              "notify": true
+          },
+          "showUserIndicatorView": {
+              "type": Boolean,
+              "value": false,
+              "notify": true
+          }
+      },
+      "observers": [
+          "getRegionItems(regionInfo)"
+      ],
+      "getLayerName": function(locale, layerKey) {
+          return this.localize(this.locale.regionCategories, layerKey);
+      },
+      "getRegionItems": function(regionInfo) {
+          var me = this;
+          me.set("regionItems", Object.keys(regionInfo).map(function (regionKey) {
+              return {
+                  key: regionKey,
+                  text: regionInfo[regionKey].name
+              };
+          }));
+      },
+      "startImport": function() {
+          var me = this;
+          //update form regions / municipalities
+          var updateValue = function (name, value) {
+              var row;
+              //if code instead of name...
+              if (/^\d+$/.test(name)) {
+                  // add prefix zeros to the code if needed (in case of municipality)
+                  if (me.selectedLayer === "oskari:kunnat2013") {
+                      if (name.length === 1) {
+                          name = '00' + name;
+                      }
+                      if (name.length === 2) {
+                          name = '0' + name;
+                      }
+                  }
+                  var found = false;
+                  me.regionItems.forEach(function(regionItem, index) {
+                      if (regionItem.key === name) {
+                          me.set("regionItems." + index + ".value", value);
+                          found = true;
+                      }
+                  });
+                  return found;
+              } else {
+                  var found = false;
+                  me.regionItems.forEach(function(regionItem, index) {
+                      var regionName = me.regionInfo[regionItem.key].name;
+                      if (regionName === name) {
+                          me.set("regionItems." + index + ".value", value);
+                          found = true;
+                      }
+                  });
+                  return found;
+              }
+              return false;
+          };
+          var lines = this.$["indicator_text-import"].value.match(/[^\r\n]+/g),
+              updated = 0,
+              unrecognized = [];
+          //loop through all the lines and parse municipalities (name or code)
+          _.each(lines, function (line) {
+              // separator can be tabulator, comma or colon
+              var matches = line.match(/([^\t:,]+) *[\t:,]+ *(.*)/);
+              if (matches && matches.length === 3) {
+                  var region = matches[1];
+                  value = (matches[2] || '').replace(',', '.').replace(/\s/g, '');
+                  // update municipality values
+                  if (updateValue(jQuery.trim(region), jQuery.trim(value))) {
+                      updated += 1;
+                  } else if (value && value.length > 0) {
+                      unrecognized.push({
+                          region: region,
+                          value: value
+                      });
+                  }
+              }
+          });
+          
+          // alert user of unrecognized lines
+          var unrecognizedInfo = '';
+
+          if (unrecognized.length > 0) {
+              unrecognizedInfo = me.locale.parsedDataUnrecognized + ': ' + unrecognized.length;
+          }
+          // TODO: Tell user about how many regions were imported
+      },
+      "clearImport": function() {
+          this.$["indicator_text-import"].value = "";
+      },
+      "cancelForm": function() {
+          this.set("showUserIndicatorView", false);
+      },
+      "submitForm": function() {
+          /*
+          An example message:
+          {
+            title:{"fi":"c"}
+            source:{"fi":"c"}
+            description:{"fi":"c"}
+            year:2015
+            published:true
+            category:"oskari:nuts1"
+            data:[{"region":"727","primary value":"4"},{"region":"728","primary value":"5"}]
+          }
+          */
+          var title = {};
+          var source = {};
+          var description = {};
+          title[this.language] = this.$.indicator_title.value;
+          source[this.language] = this.$.indicator_sources.value;
+          description[this.language] = this.$.indicator_description.value;
+          var rows = this.regionItems.map(function (regionItem) {
+              return {
+                  "region": regionItem.key,
+                  "primary value": regionItem.value
+              };
+          });
+          var formData = "title=" + encodeURIComponent(JSON.stringify(title)) + "&" +
+            "source=" + encodeURIComponent(JSON.stringify(source)) + "&" +
+            "description=" + encodeURIComponent(JSON.stringify(description)) + "&" +
+            "year=" + encodeURIComponent(this.$.indicator_year.value) + "&" +
+            "published=" + encodeURIComponent(this.$.indicator_publicity.value) + "&" +
+            "category="+ encodeURIComponent(this.selectedLayer) + "&" +
+            "data=" + encodeURIComponent(JSON.stringify(rows));
+          $.ajax({
+              // For old jQuery.
+              type: "POST",
+              url: this.ajaxUrl + "?action_route=SaveUserIndicator",
+              data: formData,
+              success: function(response) {
+                  // TODO: We should automatically add the added indicator here to the grid.
+              }
+          });
+          this.set("showUserIndicatorView", false);
+      },
+      "clearForm": function() {
+          var me = this;
+          this.$.indicator_title.value = "";
+          this.$.indicator_sources.value = "";
+          this.$.indicator_description.value = "";
+          this.$.indicator_year.value = "";
+          this.$.indicator_publicity.value = false;
+          this.regionItems.forEach(function (regionItem, index) {
+              me.set("regionItems." + index + ".value", "");
+          });
+      },
+      "localize": function(prefix, key) {
+          return prefix[key] || key;
+      },
+      "getLayerInfoAsArray": function(layerInfo) {
+          // FIXME: This is duplicated to oskari-statsgrid. Store layerinfo as array and pass it instead.
+          var me = this,
+              array = [];
+          Object.keys(layerInfo).forEach(function(layerName) {
+              array.push({
+                  "key": layerName,
+                  "text": me.localize(me.locale.regionCategories, layerName)
+              });
+          });
+          return array;
+      },
+      /**
+       * This stops for example the F key from propagating to the OpenLayers map fullscreen toggle.
+       */
+      "stopWindowEvents": function(e) {
+          e.stopPropagation();
+      }
+    });
+  </script>
+</dom-module>

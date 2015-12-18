@@ -1,0 +1,210 @@
+<link rel="import"
+      href="libs/polymer/polymer.html">
+<link href="libs/paper-dialog/paper-dialog.html" rel="import">
+
+<dom-module id="oskari-filter-on-value-dialog">
+
+  <template>
+    <paper-dialog id="oskari-filter-on-value-dialog" class="popup" on-keydown="stopWindowEvents" on-keyup="stopWindowEvents">
+      <p class="filter-desc">[[locale.indicatorFilterDesc]]</p>
+      <div class="filter-row">
+        <div class="filter-label">[[locale.filterIndicator]]</div>
+        <div class="filter-value">[[label]]</div>
+      </div>
+      <div class="filter-row">
+        <div class="filter-label">[[locale.filterCondition]]</div>
+        <div class="filter-value">
+          <div>
+            <select class="filter-select" value="{{filterCondition::change}}">
+              <template is="dom-repeat" items="[[filterConditions]]" as="filterCondition">
+                <option value="[[filterCondition.value]]">[[filterCondition.text]]</option>
+              </template>
+            </select>
+            <div class="filter-inputs-container">
+              <input type="text" class="filter-input filter-input1" value="{{input1::change}}"/>
+              <div hidden="[[!isRange(filterCondition)]]">
+                <span class="filter-between">-</span>
+                <input type="text" class="filter-input filter-input2" value="{{input2::change}}"/>
+              </div>
+          </div>
+        </div>
+      </div>
+      <button type="button" on-tap="cancel">[[locale.buttons.cancel]]</button>
+      <button type="button" class="primary" on-tap="filter">[[locale.buttons.filter]]</button>
+      
+      <content></content>
+    </paper-dialog>
+  </template>
+
+  <script>
+    Polymer({
+      is: "oskari-filter-on-value-dialog",
+      properties: {
+          "filterCondition": {
+              "type": String,
+              "notify": true,
+              "value": ""
+          },
+          "input1": {
+              "type": String,
+              "notify": true,
+              "value": ""
+          },
+          "input2": {
+              "type": String,
+              "notify": true,
+              "value": ""
+          },
+          "rows": {
+              "type": Array,
+              "notify": true
+          },
+          "columnId": String,
+          "columnIndex": Number,
+          "locale": Object
+      },
+      "filterConditions": {
+          "type": Object,
+          "notify": true
+      },
+      "observers": [
+          "localeReady(locale)"
+      ],
+      "cancel": function() {
+          this.$["oskari-filter-on-value-dialog"].close();
+          this.onClose();
+      },
+      "isRange": function(filterCondition) {
+          return filterCondition == "...";
+      },
+      "filter": function() {
+          var me = this;
+          this.rows.forEach(function(row, index) {
+              if (row.selected) {
+                  var value = row.data[me.columnIndex];
+                  if (value === null || value === undefined) {
+                      me.set("rows." + index + ".selected", false);
+                  }
+                  switch (me.filterCondition) {
+                  case '>':
+                      if (value <= me.input1) {
+                          me.set("rows." + index + ".selected", false);
+                      }
+                      break;
+                  case '>=':
+                      if (value < me.input1) {
+                          me.set("rows." + index + ".selected", false);
+                      }
+                      break;
+                  case '=':
+                      if (value !== me.input1) {
+                          me.set("rows." + index + ".selected", false);
+                      }
+                      break;
+                  case '<=':
+                      if (value > me.input1) {
+                          me.set("rows." + index + ".selected", false);
+                      }
+                      break;
+                  case '<':
+                      if (value >= me.input1) {
+                          me.set("rows." + index + ".selected", false);
+                      }
+                      break;
+                  case '...':
+                      if (me.input1 >= value || value >= me.input2) {
+                          me.set("rows." + index + ".selected", false);
+                      }
+                      break;
+                  }
+              }
+          });
+          this.$["oskari-filter-on-value-dialog"].close();
+          this.onClose();
+      },
+      "localeReady": function(locale) {
+          this.set("filterConditions", [
+              {
+                  value: "",
+                  text: locale.filterSelectCondition
+              },
+              {
+                  value: ">",
+                  text: locale.filterGT
+              },
+              {
+                  value: ">=",
+                  text: locale.filterGTOE
+              },
+              {
+                  value: "=",
+                  text: locale.filterE
+              },
+              {
+                  value: "<=",
+                  text: locale.filterLTOE
+              },
+              {
+                  value: "<",
+                  text: locale.filterLT
+              },
+              {
+                  value: "...",
+                  text: locale.filterBetween
+              }
+          ]);
+      },
+      /**
+       * This stops for example the F key from propagating to the OpenLayers map fullscreen toggle.
+       */
+      "stopWindowEvents": function(e) {
+          e.stopPropagation();
+      },
+      "ready": function() {
+          this.$["oskari-filter-on-value-dialog"].toggle();
+      }
+    /*
+    filterColumn
+    REGION:
+        regionIds,
+        key,
+        regionCatOption,
+        regionCatLoc;
+
+    filterBtn.setHandler(function (e) {
+        regionIds = content.find('div.filter-region-select select').val();
+        // me._state.filterRegion = regionIds;
+        me.filterColumnByRegion(column, regionIds);
+        headerMenuPlugin.hide();
+        me._destroyPopup('filterByRegionPopup');
+    });
+
+    // Show the region category select
+    // Create an empty option first
+    regionCatOption = jQuery(me.templates.filterOption).clone();
+    regionCatLoc = me._locale.regionCatPlaceholder;
+    regionCatOption.val('').text(regionCatLoc);
+    regionCat.find('select').append(regionCatOption);
+
+    for (key in me.regionCategories) {
+        if (me.regionCategories.hasOwnProperty(key)) {
+            regionCatOption = jQuery(me.templates.filterOption).clone();
+            regionCatLoc = me._locale.regionCategories[key];
+            regionCatOption.val(key).text(regionCatLoc);
+            regionCat.find('select').append(regionCatOption);
+        }
+    }
+    regionCatCont.find('.filter-label').text(
+        me._locale.selectRegionCategory
+    );
+    regionCatCont.find('.filter-value').append(regionCat);
+    content.find('.filter-container').append(regionCatCont);
+    regionCat.change(function (e) {
+        me._createFilterByRegionSelect(content, e.target.value);
+    });
+		   */
+    });
+  </script>
+
+</dom-module>
+

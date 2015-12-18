@@ -42,6 +42,7 @@ Oskari.registerLocalization({
         "addColumn": "Hae aineisto",
         "removeColumn": "Poista",
         "indicators": "Indikaattori",
+        "layers": "Taso",
         "cannotDisplayIndicator": "Indikaattorilla ei ole arvoja valitsemallasi aluejaolla, joten sitä ei voida näyttää taulukossa.",
         "availableRegions": " Arvot löytyvät seuraaville aluejaoille: ",
         "year": "Vuosi",
@@ -113,6 +114,14 @@ Oskari.registerLocalization({
                 "min": "Pienin indikaattorissa esiintyvä arvo",
                 "std": "Indikaattorin keskihajonta",
                 "sum": "Indikaattorin arvot yhteensä"
+            },
+            "plugins": {
+                "fi.nls.oskari.control.statistics.plugins.sotka.plugin_name": "SotkaNET",
+                "USER": "Omat indikaattorit"
+            },
+            "selector": {
+                "year": "Vuosi",
+                "sex": "Sukupuoli"
             }
         },
         "noIndicatorData": "Indikaattoria ei voi tarkastella tässä aluejaossa",
@@ -141,22 +150,38 @@ Oskari.registerLocalization({
         "filter": "Suodata",
         "filterByValue": "Arvoilla",
         "filterByRegion": "Alueilla",
+        "selectorPlaceholders": {
+            "year": "Valitse vuosi",
+            "sex": "Valitse sukupuoli"
+        },
+        "selectors": {
+            "year": "Vuosi",
+            "sex": "Sukupuoli"
+        },
+        "selectorValues": {
+            "sex": {
+                "male": "miehet",
+                "female": "naiset",
+                "total": "yhteensä"
+            }
+        },
+        "regionCategories": {
+            "oskari:kunnat2013": "Kunta",
+            "oskari:avi": "Aluehallintovirasto",
+            "oskari:maakunta": "Maakunta",
+            "oskari:erva-alueet": "Sairaanhoitopiirien erityisvastuualueet",
+            "oskari:nuts1": "Manner-Suomi ja Ahvenanmaa",
+            "oskari:sairaanhoitopiiri": "Sairaanhoitopiiri",
+            "oskari:seutukunta": "Seutukunta",
+            "oskari:ely": "ELY"
+        },
+        "regionCategoriesTitle": "Region categories",
 
         "selectRegionCategory": "Aluejako:",
         "regionCatPlaceholder": "Valitse aluejako",
         "selectRegion": "Alue:",
         "chosenRegionText": "Valitse alueita",
         "noRegionFound": "Aluetta ei löytynyt",
-        "regionCategories": {
-            "title": "Aluejaot",
-            "KUNTA": "Kunta",
-            "ALUEHALLINTOVIRASTO": "Aluehallintovirasto",
-            "MAAKUNTA": "Maakunta",
-            "NUTS1": "Manner-Suomi ja Ahvenanmaa",
-            "SAIRAANHOITOPIIRI": "Sairaanhoitopiiri",
-            "SEUTUKUNTA": "Seutukunta",
-            "SUURALUE": "Suuralue"
-        },
         "baseInfoTitle": "Tunnistetiedot",
         "dataTitle": "Aineisto",
         "addDataButton": "Lisää uusi",
@@ -183,11 +208,12 @@ Oskari.registerLocalization({
         "clearImportDataButton": "Tyhjennä aineistorivit",
         "importDataButton": "Lisää",
         "popupTitle": "Tuo arvot",
-        "importDataDescription": "Voit tuoda kunta - arvo -pareja kopioimalla ne tekstikenttään. \nJokainen kunta omalle rivilleen ja erottimeksi käy tabulaattori, kaksoispiste ja pilkku. \nEsimerkki 1: Alajärvi, 1234 \nEsimerkki 2: 009   2100",
+        "importDataDescription": "Voit tuoda alue - arvo -pareja kopioimalla ne tekstikenttään. \nJokainen alue omalle rivilleen ja erottimeksi käy tabulaattori, kaksoispiste ja pilkku. \nEsimerkki 1: Alajärvi, 1234 \nEsimerkki 2: 009   2100",
         "failedSubmit": "Lisää indikaattorin metatiedot: ",
         "connectionProblem": "Dataa ei voitu tallentaa yhteysongelman takia.",
         "parsedDataInfo": "Tuotuja alueita oli yhteensä",
         "parsedDataUnrecognized": "Tunnistamattomia alueita",
-        "loginToSaveIndicator": "Kirjaudu ensin sisään jos haluat tallentaa aineiston."
+        "loginToSaveIndicator": "Kirjaudu ensin sisään jos haluat tallentaa aineiston.",
+        "ownIndicators": "Omat indikaattorit"
     }
 });

@@ -109,10 +109,12 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.UserSelectionsService',
 
         /**
          * @method isIndicatorSelected
-         * @param {Object} indicatorSelection Indicator selection
-         * @return {Boolean} Whether the given indicator selection is already selected
+         * @param {Object} dataSource Data source selection
+         * @param {Object} indicator Indicator selection
+         * @param {Object} selections Indicator selector selections
+         * @return {Boolean} Whether the given indicator selection is already selected. Used for add-remove button state.
          */
-        isIndicatorSelected: function (indicatorSelection) {
+        isIndicatorSelected: function (dataSource, indicator, selections) {
             // TODO implement.
             // Return true if given user selection is already added to the grid...
             return false;

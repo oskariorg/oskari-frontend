@@ -1,7 +1,9 @@
 div.myplacesimport div.file-import label {
   display: block; }
+
 div.myplacesimport div.icon-info {
   float: right;
   cursor: pointer; }
+
 div.myplacesimport div.info {
   padding-bottom: 2px; }

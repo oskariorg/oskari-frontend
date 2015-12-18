@@ -74,9 +74,7 @@ div.olPopup {
   margin: 0;
   padding: 0;
   overflow: auto;
-  /*\0/ !important*/
   height: 400px;
-  /*\0/ !important*/
   z-index: 16000; }
 
 div.olPopupContent {

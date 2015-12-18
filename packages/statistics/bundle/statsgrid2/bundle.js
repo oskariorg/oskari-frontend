@@ -25,6 +25,9 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
         "protocol": ["Oskari.bundle.Bundle", "Oskari.mapframework.bundle.extension.ExtensionBundle"],
         "source": {
             "scripts": [{
+                "type" : "text/javascript",
+                "src" : "../../../../libraries/webcomponentsjs/webcomponents-lite.min.js"
+            }, {
                 // MODIFIED IN STATSGRID2!!!!!
                 "type": "text/javascript",
                 "src": "../../../../bundles/statistics/statsgrid2/instance.js"
@@ -33,22 +36,22 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
                 "src": "../../../../bundles/statistics/statsgrid2/view/MainPanel.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/statsgrid2/view/IndicatorSelector.js"
+                "src": "../../../../bundles/statistics/statsgrid2/domain/IndicatorMetadata.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/statsgrid2/view/Grid.js"
+                "src": "../../../../bundles/statistics/statsgrid2/domain/IndicatorsMetadata.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/statsgrid2/view/GridHelper.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/statistics/statsgrid2/domain/DataSource.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/statistics/statsgrid2/domain/Indicator.js"
+                "src": "../../../../bundles/statistics/statsgrid2/domain/LocalizedString.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/statistics/statsgrid2/domain/RegionCategory.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/statistics/statsgrid2/domain/SourceMetadata.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/statistics/statsgrid2/domain/SourcesMetadata.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/statistics/statsgrid2/service/StatisticsService.js"
@@ -79,14 +82,8 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
                 "type": "text/javascript",
                 "src": "../../../../bundles/statistics/statsgrid2/StatsToolbar.js"
             }, {
-                "type" : "text/javascript",
-                "src" : "../../../../bundles/statistics/statsgrid2/AddOwnIndicatorForm.js"
-            }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/statistics/statsgrid2/plugin/ManageClassificationPlugin.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/statistics/statsgrid2/plugin/ManageStatsPlugin.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/statistics/statsgrid2/event/StatsDataChangedEvent.js"
@@ -219,7 +216,17 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
                 "lang": "en",
                 "type": "text/javascript",
                 "src": "../../../../bundles/statistics/statsgrid2/resources/locale/en.js"
-            }]
+            }],
+            "links": [{
+                "rel": "import",
+                "href": "/Oskari/bundles/statistics/statsgrid2/oskari-statsview.html"
+            }],
+            "vulcanizedHtml": {
+                // In the future when the whole application uses Polymer we can vulcanize the whole app
+                // instead of using these dynamically coded partial imports.
+                "rel": "import",
+                "href": "/Oskari/bundles/statistics/statsgrid2/vulcanized.html"
+            }
         },
         "bundle": {
             "manifest": {

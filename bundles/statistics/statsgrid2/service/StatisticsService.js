@@ -16,9 +16,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
         this.sandbox = sandbox;
         this.cache = {};
 
-        this.__dataSources = [];
+        // This object contains all the data source indicator metadata keyed by the plugin name.
+        this.__indicatorsMetadata = {};
         this.__regionCategories = [];
-        this.__indicators = {};
         this.cacheSize = 0;
         this.callbackQueue = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.CallbackQueue');
     }, {
@@ -42,17 +42,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
         init: function () {
 
         },
-        addDataSource : function(data) {
-            var ds = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.domain.DataSource', data);
-            this.__dataSources.push(ds);
-        },
         getDataSources : function(callback) {
             if(!callback) {
                 this.sandbox.printWarn('Provide callback for StatisticsService.getDataSources()');
                 return;
             }
-            if(this.__dataSources.length > 0) {
-                callback(this.__dataSources);
+            if(this.__indicatorsMetadata.length > 0) {
+                callback(this.__indicatorsMetadata);
                 return;
             }
             var queueName = 'getDataSources';
@@ -60,87 +56,58 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
                 // already handling the request, all callbacks will be called when done
                 return;
             }
+
             var me = this,
-                url = Oskari.getSandbox().getAjaxUrl() + "action_route=StatisticalDatasources";
+                url = Oskari.getSandbox().getAjaxUrl() + "action_route=GetIndicatorsMetadata";
             jQuery.ajax({
                 type: "GET",
                 dataType: 'json',
                 url: url,
-                success: function (pResp) {
-                    if(!pResp || pResp.error) {
+                success: function (indicatorsMetadata) {
+                    if(!indicatorsMetadata || indicatorsMetadata.error) {
                         callback();
                         return;
                     }
 
-                    _.each(pResp.dataSources || [], function(item) {
-                        me.addDataSource(item);
-                    });
-                    me.callbackQueue.notifyCallbacks(queueName, [me.__dataSources]);
+                    if (indicatorsMetadata) {
+                        /*
+                         * The response schema contains plugin classnames as keys to objects with information about the indicators.
+                         * "fi.nls.oskari.control.statistics.plugins.sotka.SotkaStatisticalDatasourcePlugin": {
+                         *   "indicators": {
+                         *     "1411":{
+                         *       "source": {...},
+                         *       "selectors": {...},
+                         *       "description": {...},
+                         *       "layers":[
+                         *         // FIXME: Localize the layerIds for the dropdown.
+                         *         {"layerVersion":"1","type":"FLOAT","layerId":"Kunta"},
+                         *         ...
+                         *       ],
+                         *       "name": {...}
+                         *     }, ...
+                         *   },
+                         *   "localizationKey":"fi.nls.oskari.control.statistics.plugins.sotka.plugin_name"
+                         * }
+                         */
+                        me.__indicatorsMetadata = Oskari.clazz.create(
+                                'Oskari.statistics.bundle.statsgrid.domain.SourcesMetadata',
+                                indicatorsMetadata);
+                    }
+                    me.callbackQueue.notifyCallbacks(queueName, [me.__indicatorsMetadata]);
                 },
                 error: function (jqXHR, textStatus) {
                     me.callbackQueue.notifyCallbacks(queueName);
                 }
             });
         },
-        getDataSource : function(id) {
-            if(!id) {
-                this.sandbox.printWarn('StatisticsService.getDataSource() with no id, returning null');
-                return null;
-            }
-            var ds =  _.find(this.__dataSources, function(item) {
-                // normalize to strings
-                return '' + item.getId() === '' + id;
-            });
-
-            if(!ds) {
-                this.sandbox.printWarn('Datasource with id ' + id + ' not found');
-            }
-            return ds;
-        },
-        getIndicatorMetadata : function(datasource, id, callback) {
-            if(!datasource || !id) {
-                this.sandbox.printWarn('StatisticsService.getIndicatorMetadata() with no datasource or id, returning null');
-                callback();
-                return;
-            }
-            var indicator =  this._findIndicator(datasource, id);
-            if(indicator.getMetadata()) {
-                callback(indicator);
-                return;
-            }
-            var queueName = this.callbackQueue.getQueueName('getIndicatorMetadata', arguments);
-            if(!this.callbackQueue.addCallbackToQueue(queueName, callback)) {
-                // already handling the request, all callbacks will be called when done
-                return;
-            }
-            var me = this,
-                url = this.getDataSource(datasource).getIndicatorMetadataUrl(id);
-            jQuery.ajax({
-                type: "GET",
-                dataType: 'json',
-                url: url,
-                success: function (pResp) {
-                    if(!pResp || pResp.error) {
-                        callback();
-                        return;
-                    }
-                    indicator.setMetadata(pResp);
-                    me.callbackQueue.notifyCallbacks(queueName, [indicator]);
-                },
-                error: function (jqXHR, textStatus) {
-                    me.callbackQueue.notifyCallbacks(queueName);
-                }
-            });
-        },
-        getIndicatorValue : function(datasource, id, options, callback) {
-            if(!datasource || !id) {
+        getIndicatorValue : function(datasourceId, indicatorId, selectors, layerId, callback) {
+            if(!datasourceId || !indicatorId || !selectors|| !layerId) {
                 this.sandbox.printWarn('StatisticsService.getIndicatorValue() with no datasource or id, returning null');
                 callback();
                 return;
             }
-            var indicator =  this._findIndicator(datasource, id);
             var me = this,
-                url = this.getDataSource(datasource).getIndicatorValuesUrl(id);
+                url = Oskari.getSandbox().getAjaxUrl() + "action_route=GetIndicatorData";
 
             var queueName = this.callbackQueue.getQueueName('getIndicatorValue', arguments);
             if(!this.callbackQueue.addCallbackToQueue(queueName, callback)) {
@@ -151,7 +118,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
                 type: "GET",
                 dataType: 'json',
                 data : {
-                    options : JSON.stringify(options)
+                    plugin_id : datasourceId,
+                    indicator_id : indicatorId,
+                    layer_id: layerId,
+                    selectors : JSON.stringify(selectors)
                 },
                 url: url,
                 success: function (pResp) {
@@ -166,44 +136,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
                 }
             });
         },
-        getIndicators : function(datasourceId, callback) {
-            if(!callback || !datasourceId) {
-                this.sandbox.printWarn('Provide datasourceId and callback for StatisticsService.getIndicators()');
-                return;
-            }
-            // return cached if available
-            if(this.__indicators[datasourceId]) {
-                callback(this.__indicators[datasourceId]);
-                return;
-            }
-            // get indicators from backend
-            var ds = this.getDataSource(datasourceId);
-            if(!ds) {
-                callback();
-                return;
-            }
-            var me = this,
-                url = ds.getIndicatorListUrl();
-
-            var queueName = this.callbackQueue.getQueueName('getIndicators', arguments);
-            if(!this.callbackQueue.addCallbackToQueue(queueName, callback)) {
-                // already handling the request, all callbacks will be called when done
-                return;
-            }
-            jQuery.ajax({
-                type: "GET",
-                dataType: 'json',
-                url: url,
-                success: function (pResp) {
-                    me.__handleIndicatorsResponse(pResp, datasourceId, function() {
-                        me.callbackQueue.notifyCallbacks(queueName, arguments);
-                    });
-                },
-                error: function (jqXHR, textStatus) {
-                    me.callbackQueue.notifyCallbacks(queueName);
-                }
-            });
-        },
         __handleIndicatorsResponse : function(response, datasourceId, callback) {
             var parsed = [];
             _.each(response, function(data) {
@@ -211,51 +143,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
                 parsed.push(indicator);
 
             });
-            this.__indicators[datasourceId] = parsed;
             callback(parsed);
-        },
-        getRegionCategories : function(callback) {
-            if(!callback) {
-                this.sandbox.printWarn('Provide callback for StatisticsService.getRegionCategories()');
-                return;
-            }
-            // return cached if available
-            if(this.__regionCategories.length > 0) {
-                callback(this.__regionCategories);
-                return;
-            }
-            var me = this,
-                url = Oskari.getSandbox().getAjaxUrl() + "action_route=StatisticalIndicatorRegionCategories";
-
-            var queueName = this.callbackQueue.getQueueName('getRegionCategories');
-            if(!this.callbackQueue.addCallbackToQueue(queueName, callback)) {
-                // already handling the request, all callbacks will be called when done
-                return;
-            }
-            jQuery.ajax({
-                type: "GET",
-                dataType: 'json',
-                url: url,
-                success: function (pResp) {
-                    if(!pResp || pResp.error) {
-                        callback();
-                        return;
-                    }
-                    me.__handleRegionCategoriesResponse(pResp);
-                    me.callbackQueue.notifyCallbacks(queueName, [me.__regionCategories]);
-                },
-                error: function (jqXHR, textStatus) {
-                    me.callbackQueue.notifyCallbacks(queueName);
-                }
-            });
-        },
-        __handleRegionCategoriesResponse : function(response) {
-            var parsed = [];
-            _.each(response, function(data) {
-                var category = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.domain.RegionCategory', data);
-                parsed.push(category);
-            });
-            this.__regionCategories = parsed;
         },
         getRegions : function(categoryId, callback) {
             if(!categoryId) {
@@ -294,24 +182,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
                     me.callbackQueue.notifyCallbacks(queueName);
                 }
             });
-        },
-        /**
-         * Find indicator, expects indicators to be loaded into this.__indicators[datasource]
-         * @param  {[type]} datasource [description]
-         * @param  {[type]} id         [description]
-         * @return {[type]}            [description]
-         */
-        _findIndicator : function(datasource, id) {
-
-            var indicator = _.find(this.__indicators[datasource], function(item) {
-                // normalize to strings
-                return '' + item.getId() === '' + id;
-            });
-
-            if(!indicator) {
-                this.sandbox.printWarn('Indicator with id ' + id + ' not found');
-            }
-            return indicator;
         },
 
         /**

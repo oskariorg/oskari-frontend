@@ -43,7 +43,7 @@
     padding: 4px;
     background-color: #80F0A0;
     cursor: pointer; }
-  .statsgrid .municipal-grid {
+  .statsgrid .region-grid {
     width: 100%;
     height: 80%; }
 
@@ -73,9 +73,9 @@
   border: 1px solid #999;
   background: #fcfcfc;
   padding: 2px;
-  -webkit-box-shadow: 2px 2px 2px #c0c0c0;
-  -moz-box-shadow: 2px 2px 2px #c0c0c0;
-  box-shadow: 2px 2px 2px #c0c0c0;
+  -webkit-box-shadow: 2px 2px 2px silver;
+  -moz-box-shadow: 2px 2px 2px silver;
+  box-shadow: 2px 2px 2px silver;
   min-width: 100px;
   z-index: 20; }
   .slick-header-menu .slick-header-menuitem {
@@ -104,28 +104,34 @@
   background-color: yellow; }
 
 /* Filter popup */
-.divmanazerpopup .filter-row {
+.popup .filter-row {
   clear: both;
   padding-top: 10px; }
-.divmanazerpopup .filter-label {
+
+.popup .filter-label {
   float: left;
   width: 100px;
   /* FIXME use an h3 here or something... */
   font-weight: bold; }
-.divmanazerpopup .filter-value {
+
+.popup .filter-value {
   float: left;
   margin-left: 10px; }
-.divmanazerpopup .filter-container:after {
+
+.popup .filter-container:after {
   content: "";
   display: table;
   clear: both; }
-.divmanazerpopup .filter-select {
+
+.popup .filter-select {
   width: 195px; }
-.divmanazerpopup .filter-input {
+
+.popup .filter-input {
   width: 70px;
   float: left;
   margin-top: 10px; }
-.divmanazerpopup .filter-between {
+
+.popup .filter-between {
   display: none;
   float: left;
   margin: 20px 10px;
@@ -134,11 +140,11 @@
 
 div.filter-region-select select {
   width: 350px; }
+
 div.filter-region-select ul {
   margin: 0 !important; }
 
 .statsgrid-remove-indicator {
-  position: absolute;
   top: 5px;
   right: 5px;
   width: 16px !important;
@@ -156,6 +162,7 @@ div.filter-region-select ul {
 
 form.add-indicator h2 {
   margin-left: 10px; }
+
 form.add-indicator fieldset {
   border: 0;
   margin: 0;
@@ -181,9 +188,11 @@ form.add-indicator fieldset {
     width: 100%;
     margin-bottom: 5px;
     clear: both; }
+
 form.add-indicator hr {
   border: solid 1px black;
   margin: 0 0 10px; }
+
 form.add-indicator .municipalities {
   position: absolute;
   bottom: 40px;
@@ -196,6 +205,7 @@ form.add-indicator .municipalities {
     display: inline-block;
     padding-left: 10px;
     width: 150px; }
+
 form.add-indicator .form-submit {
   height: 40px;
   position: absolute;
@@ -233,3 +243,17 @@ form.statsgrid2_indicator_selector {
       form.statsgrid2_indicator_selector .indicator-cont label .chzn-container .chzn-single, form.statsgrid2_indicator_selector .parameters-cont label .chzn-container .chzn-single {
         height: 34px;
         line-height: 35px; }
+
+.grid-header-menubutton {
+  width: 16px;
+  height: 16px;
+  background-image: url("/Oskari/libraries/slickgrid/images/down.gif");
+  background-position: 50% 50%;
+  right: 3px;
+  bottom: 3px;
+  padding: 2px;
+  cursor: pointer;
+  display: inline-block;
+  background-color: #ddd;
+  border: 1px solid #a5a5a5;
+  border-radius: 15px; }

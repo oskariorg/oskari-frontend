@@ -59,6 +59,7 @@ div.analyse-filter-popup-content div.filter-option {
 
 div.oskariTabs .tabsHeader ul li a {
   display: inline-block; }
+
 div.oskariTabs .tabsHeader ul li .union-filter {
   display: inline-block;
   margin-right: 10px; }
@@ -90,7 +91,7 @@ div.mapplugins .mappluginsContainer .mappluginsContent div.featuredataplugin.map
   color: red; }
 
 div.mapplugins .mappluginsContainer .mappluginsContent div.featuredataplugin.mapplugin.loading {
-  background: url("../images/ajax-loader.gif") no-repeat 0 0/cover; }
+  background: url("../images/ajax-loader.gif") no-repeat 0 0/"cover"; }
 
 div.oskari-flyoutcontent.featuredata ul.tabsItem li a.loading {
   color: #939393; }

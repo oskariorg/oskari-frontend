@@ -72,7 +72,7 @@
         cursor: pointer;
     }
 
-    .municipal-grid {
+    .region-grid {
         width: 100%;
         height: 80%;
     }
@@ -146,7 +146,7 @@
 }
 
 /* Filter popup */
-.divmanazerpopup {
+.popup {
 
     .filter-row {
         clear: both;
@@ -204,7 +204,6 @@ div.filter-region-select {
 }
 
 .statsgrid-remove-indicator {
-    position: absolute;
     top: 5px;
     right: 5px;
     width: 16px !important;
@@ -356,5 +355,19 @@ form.statsgrid2_indicator_selector {
         }
 
     }
+}
 
+.grid-header-menubutton {
+  width: 16px;
+  height: 16px;
+  background-image: url("/Oskari/libraries/slickgrid/images/down.gif");
+  background-position: 50% 50%;
+  right: 3px;
+  bottom: 3px;
+  padding: 2px;
+  cursor: pointer;
+  display: inline-block;
+  background-color: #ddd;
+  border: 1px solid #a5a5a5;
+  border-radius: 15px;
 }

@@ -8,59 +8,34 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.MainPanel',
     /**
      * @static constructor function
      */
-    function (instance) {
-		this.indicatorSelector = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector', instance.getLocalization(), instance.getService(), instance.getUserSelections());
-		this.grid = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.view.Grid', instance.getLocalization(), instance.getService(), instance.getUserSelections());
+    function (instance, localization, sandbox) {
+        this.localization = localization;
+        this.sandbox = sandbox;
     },
     {
-    	"__templates" : {
-            'gridWrapper' : '<div id="municipalGrid" class="municipal-grid"></div>'
-    	},
 	    render : function(container, instance) {
-            // FIXME: this is called each time mode is activated?
+            var elementWrapper = document.createElement("oskari-statsview"),
+              rawUrl = Oskari.getSandbox().getAjaxUrl(),
+              // Removing the tailing question mark.
+              url = rawUrl.substring(0, rawUrl.length - 1);
             this.container = container;
-	    	this.indicatorSelector.render(container);
-
-            var gridContainer = jQuery(this.__templates.gridWrapper);
-            this.grid.render(gridContainer);
-            container.append(gridContainer);
-
-            //window resize!
-            // TODO: mapfull already checks resizing, maybe add an oskari event for it that can be used here?
-            var me = this,
-                resizeGridTimer;
-            jQuery(window).resize(function () {
-                clearTimeout(resizeGridTimer);
-                resizeGridTimer = setTimeout(function () {
-                    me.__fixGridHeight(container);
-                    me.grid.handleContainerResized();
-                }, 100);
-            });
+            this.element = elementWrapper;
+            container.empty();
+            elementWrapper.ajaxUrl = url;
+            elementWrapper.locale = this.localization;
+            elementWrapper.language = Oskari.getLang();
+            elementWrapper.user = this.sandbox.getUser();
+            elementWrapper.sandbox = this.sandbox;
+            Polymer.dom(container[0]).appendChild(elementWrapper);
 	    },
         getContainer : function() {
             return this.container;
         },
+        "sendTooltipData": function(feature) {
+            return this.element.sendTooltipData(feature);
+        },
         handleSizeChanged : function() {
-            this.grid.handleContainerResized();
-        },
-        resetColumnSizes : function() {
-            this.grid.autosizeColumns();
-        },
-        /**
-         * Sets the height of the grid container and notifies grid of it
-         * @method __fixGridHeight
-         */
-        __fixGridHeight: function (container) {
-            // FIXME: maybe get references for sub-containers instead of find()
-            var container = this.getContainer(),
-                gridDiv = container.find('#municipalGrid'),
-                selectorsCont = container.find('.selectors-container'),
-                selectorsHeight = 0;
-            if (selectorsCont.length > 0) {
-                selectorsHeight = selectorsCont.outerHeight();
-            }
-            gridDiv.height(container.height() - selectorsHeight);
+            // TODO
         }
-
     }
 );

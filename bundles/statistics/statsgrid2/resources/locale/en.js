@@ -33,15 +33,10 @@ Oskari.registerLocalization({
                 "indicatorDeleteError": "Error occurred whilst removing an indicator. Please try again later"
             }
         },
-        "gender": "Gender",
-        "genders": {
-            "male": "men",
-            "female": "women",
-            "total": "total"
-        },
         "addColumn": "Get data",
         "removeColumn": "Remove",
         "indicators": "Indicator",
+        "layers": "Layer",
         "cannotDisplayIndicator": "The indicator does not have values on the selected region category so it cannot be displayed in the grid.",
         "availableRegions": " The following region categories have values on the indicator: ",
         "year": "Year",
@@ -114,6 +109,14 @@ Oskari.registerLocalization({
                 "min": "Smallest value of the indicator",
                 "std": "Standard deviation of the indicator",
                 "sum": "The total sum of the indicator values"
+            },
+            "plugins": {
+                "fi.nls.oskari.control.statistics.plugins.sotka.plugin_name": "SotkaNET",
+                "fi.nls.oskari.control.statistics.plugins.user.plugin_name": "Your indicators"
+            },
+            "selector": {
+                "year": "Year",
+                "sex": "Sex"
             }
         },
         "noIndicatorData": "Can not display indicator with selected region category",
@@ -142,24 +145,40 @@ Oskari.registerLocalization({
         "filter": "Filter",
         "filterByValue": "By value",
         "filterByRegion": "By region",
+        "selectorPlaceholders": {
+            "year": "Choose a year",
+            "sex": "Choose a sex"
+        },
+        "selectors": {
+            "year": "Year",
+            "sex": "Sex"
+        },
+        "selectorValues": {
+            "sex": {
+                "male": "male",
+                "female": "female",
+                "total": "total"
+            }
+        },
+        "regionCategories": {
+            "oskari:kunnat2013": "Municipality",
+            "oskari:avi": "Regional administrative agency",
+            "oskari:ely": "ELY",
+            "oskari:maakunta": "Province",
+            "oskari:erva-alueet": "Hospital special responsibility district",
+            "oskari:nuts1": "Mainland Finland and the Åland Islands",
+            "oskari:sairaanhoitopiiri": "Hospital district",
+            "oskari:seutukunta": "Subregion"
+        },
+        "regionCategoriesTitle": "Region categories",
 
         "selectRegionCategory": "Region categories:",
         "regionCatPlaceholder": "Choose a region category",
         "selectRegion": "Regions:",
         "chosenRegionText": "Choose regions",
         "noRegionFound": "Region not found",
-        "regionCategories": {
-            "title": "Region categories",
-            "KUNTA": "Kunta",
-            "ALUEHALLINTOVIRASTO": "Aluehallintovirasto",
-            "MAAKUNTA": "Maakunta",
-            "NUTS1": "Manner-Suomi ja Ahvenanmaa",
-            "SAIRAANHOITOPIIRI": "Sairaanhoitopiiri",
-            "SEUTUKUNTA": "Seutukunta",
-            "SUURALUE": "Suuralue"
-        },
         "addDataButton": "Add indicator",
-        "addDataTitle": "NOT TRANSLATED",
+        "addDataTitle": "Add new indicator",
         "openImportDialogTip": "Import data from clipboard",
         "openImportDataButton": "Import data",
         "addDataMetaTitle": "Title",
@@ -173,20 +192,20 @@ Oskari.registerLocalization({
         "addDataMetaYearPH": "Year",
         "addDataMetaPublicity": "Publishable",
         "municipalityHeader": "Municipalities",
-        "dataRows": "NOT TRANSLATED",
+        "dataRows": "Data rows",
         "municipalityPlaceHolder": "Give value",
-        "formEmpty": "NOT TRANSLATED",
+        "formEmpty": "Reset",
         "formCancel": "Cancel",
         "formSubmit": "Submit",
         "cancelButton": "Cancel",
-        "clearImportDataButton": "NOT TRANSLATED",
+        "clearImportDataButton": "Reset",
         "importDataButton": "Add",
         "popupTitle": "Import data",
-        "importDataDescription": "You can bring region value duples by copying them to the textarea. \nPlace every municipality to their own row. You can separate the values with tabulator, colon or comma. \nExample 1: Alajärvi, 1234 \nExample 2: 009    2100",
+        "importDataDescription": "You can bring region value tuples by copying them to the textarea. \nPlace every region to their own row. You can separate the values with tabulator, colon or comma. \nExample 1: Alajärvi, 1234 \nExample 2: 009    2100",
         "failedSubmit": "Add indicator's metadata: ",
         "connectionProblem": "We could not save the data due to connection problems",
         "parsedDataInfo": "Imported regions count",
         "parsedDataUnrecognized": "Unrecognized regions count",
-        "loginToSaveIndicator": "NOT TRANSLATED"
+        "loginToSaveIndicator": "Log in if you want to save your indicators"
     }
 });

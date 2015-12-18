@@ -738,7 +738,7 @@ Oskari.clazz.define(
                 mapLayer.mergeNewParams({
                     VIS_ID: params.VIS_ID,
                     VIS_NAME: params.VIS_NAME,
-                    VIS_ATTR: params.VIS_ATTR,
+                    VIS_ATTR: params.VIS_ATTR, // This must be the name of the attribute that has the values.
                     VIS_CLASSES: params.VIS_CLASSES,
                     VIS_COLORS: params.VIS_COLORS,
                     LAYERS: params.VIS_NAME

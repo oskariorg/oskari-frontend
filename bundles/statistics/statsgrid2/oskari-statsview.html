@@ -1,0 +1,32 @@
+<link rel="import"
+      href="libs/polymer/polymer.html">
+
+<link href="oskari-indicatorselector.html" rel="import">
+<link href="oskari-statsgrid.html" rel="import">
+
+<dom-module id="oskari-statsview">
+
+  <template>
+      <oskari-indicatorselector locale="[[locale]]" language="[[language]]" ajax-url="[[ajaxUrl]]"
+        user="[[user]]" sandbox="{{sandbox}}" id="indicatorselector"></oskari-indicatorselector>
+      <content></content>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+      is: "oskari-statsview",
+      properties: {
+          "locale": Object,
+          "language": String,
+          "ajaxUrl": String,
+          "user": Object
+      },
+      "sendTooltipData": function(feature) {
+          return this.$.indicatorselector.sendTooltipData(feature);
+      }
+    });
+  </script>
+
+</dom-module>
+

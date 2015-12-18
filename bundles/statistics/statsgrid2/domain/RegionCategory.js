@@ -1,9 +1,9 @@
 /**
- * Model for region category
+ * Model for region category, i.e. a layer
  *
  *
  *   {
- *      "id" : 1,
+ *      "id" : "Kunta",
  *      "locale" : {
  *          "fi" : "Kunta"
  *      }

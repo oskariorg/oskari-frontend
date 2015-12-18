@@ -11,11 +11,11 @@
 }
 
 /* SASS removes whitespace that calc requires, so unquote() whatever calculation you pass to this */
-@mixin calcProperty($property, $calculation) { 
-    #{$property}: -moz-calc($calculation);
-    #{$property}: -webkit-calc($calculation);
-    #{$property}: -o-calc($calculation);
-    #{$property}: calc($calculation);
+@mixin calcProperty($property,$calculation) {
+    #{$property}: -moz-calc(#{$calculation});
+    #{$property}: -webkit-calc(#{$calculation});
+    #{$property}: -o-calc(#{$calculation});
+    #{$property}: calc(#{$calculation});
 }
 
 div.notLoggedIn {

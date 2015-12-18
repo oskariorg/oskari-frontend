@@ -1,6 +1,7 @@
 div.layerselector2 div.layer-filter {
   margin: 10px;
   color: #949494; }
+
 div.layerselector2 div.filter {
   border: 1px solid #a4a4a4;
   padding: 10px;
@@ -8,8 +9,10 @@ div.layerselector2 div.filter {
   cursor: pointer;
   margin-bottom: 5px;
   margin-left: -1px; }
+
 div.layerselector2 div.accordion div.accordion_panel div.content {
   padding: 0; }
+
 div.layerselector2 div.layer {
   padding: 6px 10px 6px 40px;
   background-color: #ffffff;
@@ -61,6 +64,7 @@ div.layerselector2 div.layer {
   div.layerselector2 div.layer div.backendstatus-unknown {
     height: 20px !important;
     margin-bottom: 2px; }
+
 div.layerselector2 div.layerGroup {
   background-color: #f3f3f3;
   border: 1px solid #c0d0d0;
@@ -75,6 +79,7 @@ div.layerselector2 div.layerGroup {
   div.layerselector2 div.layerGroup div.groupHeader {
     display: inline-block;
     padding: 8px 10px 8px 12px; }
+
 div.layerselector2 div.tab-content {
   padding: 0; }
   div.layerselector2 div.tab-content div.oskarifield {

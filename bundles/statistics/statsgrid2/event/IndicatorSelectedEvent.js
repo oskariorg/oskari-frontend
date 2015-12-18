@@ -9,10 +9,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.event.IndicatorSelectedE
      * @static
      */
 
-    function (datasourceId, indicatorId, options) {
+    function (indicator, datasourceId, indicatorId, selectors) {
+        this.indicator = indicator;
         this.indicatorId = indicatorId;
         this.datasourceId = datasourceId;
-        this.options = options;
+        this.selectors = selectors;
     }, {
         /**
          * Returns event name
@@ -21,6 +22,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.event.IndicatorSelectedE
          */
         getName: function () {
             return 'StatsGrid.IndicatorSelectedEvent';
+        },
+        /**
+         * @method getIndicator
+         * @return {Indicator} indicator
+         */
+        getIndicator: function () {
+            return this.indicator;
         },
         /**
          * @method getIndicatorId
@@ -41,13 +49,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.event.IndicatorSelectedE
          * @method getOptions
          * @return {Object} selections from user when adding the indicator
          */
-        getOptions: function () {
-            return this.options;
+        getSelectors: function () {
+            return this.selectors;
         },
         /**
          * Returns unique id for the indicator selections.
          * The same indicator can be added multiple times with different options so datasource and indicatorId alone can't be used
-         * to diffentiate an added indicator.
+         * to differentiate an added indicator.
          * This should only be used for client side implementation and should not be parsed by user
          * (use other getters to get actual data about selections)
          * @method getKey
@@ -56,7 +64,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.event.IndicatorSelectedE
         getKey: function() {
             var separator = '||',
                 key = this.getDatasourceId() + separator + this.getIndicatorId(),
-                opts = this.getOptions();
+                opts = this.getSelectors();
             if(opts) {
                 key = key + separator + JSON.stringify(opts);
             }
