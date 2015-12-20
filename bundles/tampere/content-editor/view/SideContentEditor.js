@@ -372,13 +372,16 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             var me = this;
             var featureData = me._getFeatureData();
             var requestData = {};
-            requestData.featureId = (featureData.length > 0 ? featureData[0].value : null);
+            requestData.featureId = (me.operationMode == "edit" && featureData.length > 0 ? featureData[0].value : null);
             featureData.splice(0, 1);
             requestData.featureFields = featureData;
             requestData.layerId = me.selectedLayerId;
             requestData.geometries = {};
             requestData.geometries.data = [];
-            me._fillLayerGeometries(requestData.geometries.data);
+            if (me.operationMode == "edit") {
+                me._fillLayerGeometries(requestData.geometries.data);
+            }
+
             if (geometries != null)
             {
                 if (geometries.id.indexOf("OpenLayers_Geometry_MultiPoint_") == 0) {
@@ -433,7 +436,11 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 },
                 data : {'featureData':JSON.stringify(requestData)},
                 url : url,
-                success : function(app) {
+                success : function(response) {
+                    if (me.operationMode == "create") {
+                        me.currentData.features[0][0] = response.fid;
+                    }
+                    me._handleInfoResult(me.currentData);
                     var evt = me.sandbox.getEventBuilder('AfterChangeMapLayerStyleEvent')(me._getLayerById(me.layerId));
                     me.sandbox.notifyAll(evt);
                     me.sendStopDrawRequest(true);
@@ -548,10 +555,10 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
 
             var highlightFeaturesIds = [];
             for (var i = 0; i < data.features.length; i++) {
-                if (editableFeatureFid === undefined || data.features[i][0] == editableFeatureFid)
+                if ((editableFeatureFid === undefined || data.features[i][0] == editableFeatureFid) && (data.features[i] != ""))
                 highlightFeaturesIds.push(data.features[i][0].split('.')[1]);
             }
-            
+
             this._highlighGeometries(highlightFeaturesIds, layer, true);
 
             var isVisibleLayer = false;
@@ -751,6 +758,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                                 valInput.prop('type', 'number');
                                 break;
                             case 'xsd:double':
+                            case 'xsd:decimal':
                                 valInput.prop('type', 'number').prop('step', 0.01);
                                 break;
                             case 'xsd:date':
@@ -781,12 +789,21 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             } else {
                 me.sendRequest(null);
             }
+            me.featureDuringEdit = false;
+            me._storeFormData();
         },
         _cancelFeature: function () {
             var me = this;
             me.drawingActive = false;
             me.sendStopDrawRequest(true);
-            me._handleInfoResult(me.currentData, (me.operationMode == "create" ? true : false));
+            $(".properties-container").empty();
+            me.featureDuringEdit = false;
+        },
+        _storeFormData: function () {
+            var me = this;
+            $(".getinforesult_table tr input").each(function (index) {
+                me.currentData.features[0][index+1] = $(this).val();
+            });
         },
         /**
          * Wraps the html feature fragments into a container.
