@@ -7,23 +7,12 @@ Oskari.registerLocalization(
         "desc": "",
         "userFeedback": {
             "userFeedback": "User feedback",
-            "subject": "Subject",
-            "subjectPlaceholder": "Type a descriptive title for your feedback.",
             "ratingScore": "Rating score",
             "ratingJustification": "Rating justification"
         },
         "feedbackList": {
             "tabTitle": "Feedback",
             "average": "Average rating"
-        },
-        "targetSpecification": {
-            "targetSpecification": "Target specification",
-            "targetIdentification": "Target identification",
-            "targetCode": "Target code",
-            "targetCodeNotDefined": "The target code is not defined.",
-            "targetCodespace": "Target codespace",
-            "primaryTargetCodeSpaceNotDefined": "The target codespace is not defined.",
-            "natureOfTarget": "Target nature"
         },
         "userInformation": {
             "userInformation": "User information",

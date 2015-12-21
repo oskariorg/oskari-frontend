@@ -8,11 +8,7 @@ Oskari.registerLocalization(
         "tool": {
             "tooltip": "Click a point on the map. As a result you will get coordinates in the point and the nearest address."
         },
-        "resultsTitle": "Search results",
-        "grid": {
-            "address": "Address",
-            "coordinates": "Coordinates"
-        }
+        "resultsTitle": "Search results"
     }
 }
 );
