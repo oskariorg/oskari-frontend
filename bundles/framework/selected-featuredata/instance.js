@@ -141,7 +141,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
                         params:params
                     },
                     callback : function(params) {
-                        console.dir(params);
+
                         flyout.createUI(params.content, params.data);
                         
                         var bundleInstance = Oskari.app.getBundleInstanceByName('selected-featuredata');
