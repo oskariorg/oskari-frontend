@@ -109,7 +109,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
             var flyout = bundleInstance.plugins['Oskari.userinterface.Flyout'];
             
             if(flyout.isFlyoutVisible() && content.length > 0){
-                console.dir(data);
                     flyout.createUI(content, data);
             }else{
 
@@ -133,7 +132,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
                     name : 'selected-featuredata-btn',
                     iconCls: 'icon-selected-featuredata',
                     tooltip: 'Tooltip teksti',
-                    styles: 'position: absolute; top: 12px; right: 23px; width: 20px; height: 20px; background: red;',
+                    styles: 'position: absolute; top: 12px; right: 23px; width: 20px; height: 20px; border: 1px solid #FFFFFF;',
                     params: {
                         content: content,
                         data:data,

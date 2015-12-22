@@ -103,29 +103,36 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
             var me = this,
             data = params[0],
             layer = me.sandbox.findMapLayerFromAllAvailable(data.layerId),
-            tabId = 'selected_featuredata_tab_'+layer.getId();
             tabName = layer.getName(),
             tabContent = jQuery('<div></div>');
 
             //check if certain layer has tab allready
             if(jQuery('.selected_featuredata_tabcontent_'+layer.getId()).length == 0){
                 tabContent.attr('class','selected_featuredata_tabcontent_'+layer.getId());
-                me.addTab(data, tabContent, tabId, tabName);
-                me.addAccordion(data.html, tabContent, layer.getId(), tabId, mapobject);
+                me.addTab(data, tabContent, tabName, layer.getId());
+                me.addAccordion(data.html, tabContent, layer.getId(), mapobject);
             }else{
                 tabContent = jQuery('.selected_featuredata_tabcontent_'+layer.getId());
                 if(me.compareAccodionPanelHtml(data.html, tabContent)){
-                    me.addAccordion(data.html, tabContent, layer.getId(), tabId, mapobject);
+                    me.addAccordion(data.html, tabContent, layer.getId(), mapobject);
                 }
             }
+
+/*            jQuery(".selected-featuredata").parents(".oskari-flyoutcontentcontainer").prev().find(".oskari-flyout-title").click(function(e){
+                me.sandbox.postRequestByName(
+                   'userinterface.UpdateExtensionRequest',
+                   [me.instance, 'minimize']
+               );
+            });*/
 
         },
         /**
          * [addTab adds tab]
          * @param {[object]} item [contains all data tab needs]
          */
-        addTab: function (data, tabContent, tabId, tabName) {
+        addTab: function (data, tabContent, tabName, layerId) {
             var me = this,
+                tabId = 'selected_featuredata_tab_'+layerId,
                 flyout = jQuery(me.container);
 
             // Change into tab mode if not already
@@ -137,6 +144,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
                 'Oskari.userinterface.component.TabPanel'
             );
             panel.setTitle(tabName, tabId);
+            panel.setId(layerId);
             panel.setContent(tabContent);
             panel.setPriority(1);
             me.tabsContainer.addPanel(panel);
@@ -146,15 +154,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
          * @param {[Object]} panelData [description]
          * @param {[String]} tabid [description]
          */
-        addAccordion: function (accPanelData, tabContent, layerId, tabId, mapobject){
+        addAccordion: function (accPanelData, tabContent, layerId, mapobject){
             var me =  this,
             panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel'),
             number = 1,
             panelId = 'selected_featuredata_accpanel_',
-            linkShowOnMap = me.createLinkShowOnMap(mapobject),
-            fullHtml = accPanelData.append(linkShowOnMap),
-            iconCloseAcc = me.createCloseIconForAcc(panel, tabId, tabContent);
-            console.info(linkShowOnMap.html());
+            linkShowOnMap = me.createLinkShowOnMap(mapobject);
+            fullHtml = accPanelData.append(linkShowOnMap);
+
               //initialize panel component
               panel.setContent(fullHtml);
               panel.setVisible(true);
@@ -163,7 +170,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
                 // create new accordions
                 var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
                 me._accordions[layerId] = accordion;
-                panel.setTitle(me._getLocalization('accordion-title') +' '+ number + iconCloseAcc);
+                panel.setTitle(me._getLocalization('accordion-title') +' '+ number);
                 panelId = panelId + layerId + '_' + number;
                 panel.setId(panelId);
                 me._accordions[layerId].addPanel(panel);
@@ -172,43 +179,63 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
             }else{
                 // just insert new panel to existing accordion
                 number = number + me._accordions[layerId].panels.length;
-                panel.setTitle(me._getLocalization('accordion-title') +' '+ number +iconCloseAcc);
+                panel.setTitle(me._getLocalization('accordion-title') +' '+ number);
                 panelId = panelId + layerId + '_' + number;
                 panel.setId(panelId);
                 me._accordions[layerId].addPanel(panel);
             }
+
+            jQuery("#"+panelId).append(me.createCloseIconForAcc(panel, layerId, tabContent));
         },
         /**
          * [createCloseIconForAcc adds close btn for every accordionpanel]
          * @param  {[panel]} panel   [accordionpanel]
          * @param  {[layerId]} layerId [layerId]
+         * @param  {[tabContent]} tabContent [tabContent]
          */
-        createCloseIconForAcc: function(panel, tabId, tabContent){
+        createCloseIconForAcc: function(panel, layerId, tabContent){
             var me = this;
-            return jQuery('<span />', {
+            return jQuery('<div />', {
                 "class": 'icon-close selected_featuredata_accpanel_close',
-                "text": "",
                 click: function(e){
                     e.preventDefault();
-                    me.removeAcc(panel, tabId, tabContent);
+                    me.removeAcc(panel, layerId, tabContent);
                 }});
         },
         /**
          * [removeAcc click event handler removing certain accordionPanel and handle last one]
-         * @param  {[type]} parent  [description]
-         * @param  {[type]} layerId [description]
-         * @return {[type]}         [description]
+         * @param  {[panel]} panel  [panel]
+         * @param  {[layerId]} layerId [layerId]
+         * @param  {[tabContent]} tabContent [tabContent]
          */
-        removeAcc: function(panel, tabId, tabContent){
-            var me = this;
+        removeAcc: function(panel, layerId, tabContent){
+            var me = this,
+            tabsItem = jQuery(tabContent).parents(".selected-featuredata").find(".tabsItem");
 
             panel.destroy();
 
             if(tabContent.find('.accordion_panel>.content').length == 0){
+                 me.removeAllMarkersAndHighlights();
+                
+                jQuery.each(me.tabsContainer.panels, function(index, tabpanel){
+                    if(typeof(tabpanel) != "undefined"){
+                    if(tabpanel.id == layerId){
+                        tabpanel.destroy();
+                        me.tabsContainer.panels.splice(jQuery.inArray(tabpanel, me.tabsContainer.panels),1);
+                    }
+                    }
+                });
+
+                delete me._accordions[layerId];
+                tabsItem.find("li:first a").trigger("click");
+            }
+
+            if(tabsItem.children().length == 0){
                 me.clearFlyout();
-                //FIXME
-                //jQuery(tabContent).parent().remove();
-                //jQuery("#"+tabId).remove();
+                me.sandbox.postRequestByName(
+                   'userinterface.UpdateExtensionRequest',
+                   [me.instance, 'close']
+               );
             }
 
         },
