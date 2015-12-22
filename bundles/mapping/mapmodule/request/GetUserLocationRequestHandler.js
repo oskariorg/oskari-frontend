@@ -8,6 +8,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.GetUserLocatio
 }, {
     handleRequest: function (core, request) {
         this.sandbox.printDebug('[Oskari.mapframework.bundle.mapmodule.request.GetUserLocationRequestHandler] Get user location');
+        var mapmodule = this.mapmodule;
         var cb = undefined;
         // if request.getCenterMap() is truthy: also move map
         if(request.getCenterMap()) {
@@ -21,7 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.GetUserLocatio
         	};
         }
         // call the getUserLocation() function to trigger an event with or without the cb
-        this.mapmodule.getUserLocation(cb);
+        mapmodule.getUserLocation(cb);
     }
 }, {
     protocol: ['Oskari.mapframework.core.RequestHandler']
