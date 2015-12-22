@@ -1,10 +1,10 @@
 /**
- * @class Oskari.mapframework.bundle.search.service.SearchService
+ * @class Oskari.service.search.SearchService
  *
  * Requests for a search to be made with the given query and provides
  * callbacks
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.search.service.SearchService',
+Oskari.clazz.define('Oskari.service.search.SearchService',
 
 /**
  * @method create called automatically on construction
@@ -19,7 +19,7 @@ function (searchUrl) {
     this._searchUrl = searchUrl;
 }, {
     /** @static @property __qname fully qualified name for service */
-    __qname : "Oskari.mapframework.bundle.search.service.SearchService",
+    __qname : "Oskari.service.SearchService",
     /**
      * @method getQName
      * @return {String} fully qualified name for service
@@ -52,11 +52,6 @@ function (searchUrl) {
         jQuery.ajax({
             dataType : "json",
             type : "POST",
-            beforeSend: function(x) {
-                if (x && x.overrideMimeType) {
-                    x.overrideMimeType("application/json");
-                }
-            },
             url : this._searchUrl,
             data : {
                 "searchKey" : searchString,
@@ -69,7 +64,7 @@ function (searchUrl) {
     },
         getSearchResult: function (params) {
             var me = this;
-            success = function (response) {
+            var success = function (response) {
                 var success = true,
                     requestParameters = params,
                     result = response;
@@ -77,7 +72,7 @@ function (searchUrl) {
                 var evt = Oskari.getSandbox().getEventBuilder('SearchResultEvent')(success, requestParameters, result);
                 Oskari.getSandbox().notifyAll(evt);
             };
-            error = function (response) {
+            var error = function (response) {
                 var success = false,
                     requestParameters = params,
                     result = response;
@@ -97,5 +92,3 @@ function (searchUrl) {
      */
     'protocol' : ['Oskari.mapframework.service.Service']
 });
-
-/* Inheritance */

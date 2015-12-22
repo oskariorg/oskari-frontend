@@ -151,7 +151,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
             }
 
             me.service = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.search.service.SearchService',
+                'Oskari.service.search.SearchService',
                 ajaxUrl
             );
 

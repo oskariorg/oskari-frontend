@@ -126,7 +126,7 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/mapping/mapmodule/plugin/search/SearchPlugin.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/search/service/searchservice.js"
+                    "src": "../../../../bundles/service/search/searchservice.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/framework/search/event/SearchResultEvent.js"

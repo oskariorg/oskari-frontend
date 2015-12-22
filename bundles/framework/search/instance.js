@@ -126,7 +126,7 @@ Oskari.clazz.define(
             }
 
             var servName =
-                'Oskari.mapframework.bundle.search.service.SearchService';
+                'Oskari.service.search.SearchService';
             this.service = Oskari.clazz.create(servName, ajaxUrl);
 
             sandbox.register(me);

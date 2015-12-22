@@ -2,6 +2,11 @@
 
 ## 1.35
 
+## search/search service
+
+Oskari.mapframework.bundle.search.service.SearchService is now Oskari.service.search.SearchService.
+The file has been moved from bundles/framework/search/service to bundles/service/search.
+
 ### mapmodule/user location
 
 getUserLocation() has been added to mapmodule. It takes a callback which will receive lon and lat params with user location or no params if location query was denied/unsuccessful.

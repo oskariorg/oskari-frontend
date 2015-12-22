@@ -134,7 +134,7 @@ Oskari.clazz.define(
             }
 
             me.service = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.search.service.SearchService',
+                'Oskari.service.search.SearchService',
                 ajaxUrl
             );
             searchRequestHandler = Oskari.clazz.create('Oskari.mapframework.bundle.search.request.SearchRequestHandler', me.service);

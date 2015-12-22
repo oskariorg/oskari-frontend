@@ -23,7 +23,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.search.SearchBundle", function (
 
         "scripts": [{
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/search/service/searchservice.js"
+            "src": "../../../../bundles/service/search/searchservice.js"
         }, {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/search/instance.js"
