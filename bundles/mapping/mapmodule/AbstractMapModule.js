@@ -151,11 +151,13 @@ Oskari.clazz.define(
             this.requestHandlers = {
                 mapLayerUpdateHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapLayerUpdateRequestHandler', sandbox, this),
                 mapMoveRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapMoveRequestHandler', sandbox, this),
-                showSpinnerRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.ShowProgressSpinnerRequestHandler', sandbox, this)
+                showSpinnerRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.ShowProgressSpinnerRequestHandler', sandbox, this),
+                userLocationRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.GetUserLocationRequestHandler', sandbox, this)
             };
             sandbox.addRequestHandler('MapModulePlugin.MapLayerUpdateRequest', this.requestHandlers.mapLayerUpdateHandler);
             sandbox.addRequestHandler('MapMoveRequest', this.requestHandlers.mapMoveRequestHandler);
             sandbox.addRequestHandler('ShowProgressSpinnerRequest', this.requestHandlers.showSpinnerRequestHandler);
+            sandbox.addRequestHandler('MyLocationPlugin.GetUserLocationRequest', this.requestHandlers.userLocationRequestHandler);
 
             this.startPlugins();
             this.updateCurrentState();
@@ -394,6 +396,59 @@ Oskari.clazz.define(
                 };
             }
             return lonlat;
+        },
+        /**
+         * Tries to get the user location. Signals with an UserLocationEvent and callback with lon and lat params
+         * when successfully got the location or without params as error indicator.
+         * @param  {Function} callback function that is called with lon, lat as params on happy case
+         * @param  {Object}   options  options for navigator.geolocation.getCurrentPosition()
+         */
+        getUserLocation : function(callback, options) {
+            var me = this;
+            var sandbox = me.getSandbox();
+            var evtBuilder =  sandbox.getEventBuilder('UserLocationEvent');
+            // normalize opts with defaults
+            var opts = options || {};
+            if(!opts.hasOwnProperty('maximumAge')) {
+                // accept an hour long cached position
+                opts.maximumAge = 3600000;
+            }
+            if(!opts.hasOwnProperty('timeout')) {
+                // timeout after 6 seconds
+                opts.timeout = 6000;
+            }
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function (position) {
+                        var lat = position.coords.latitude,
+                            lon = position.coords.longitude;
+                        // transform coordinates from browser projection to current
+                        var lonlat = me.transformCoordinates({ lon: lon, lat: lat }, 'EPSG:4326');
+                        sandbox.notifyAll(evtBuilder(lonlat.lon, lonlat.lat));
+                        // notify callback
+                        if(typeof callback === 'function') {
+                            callback(lonlat.lon, lonlat.lat);
+                        }
+                    },
+                    function (errors) {
+                        // if users just ignores/closes the browser dialog
+                        // -> error handler won't be called in most browsers
+                        sandbox.printWarn('Error getting user location', errors);
+                        // notify callback and event without lonlat to signal failure
+                        sandbox.notifyAll(evtBuilder());
+                        if(typeof callback === 'function') {
+                            callback();
+                        }
+                    }, opts
+                );
+            } else if (typeof window.geoip_latitude === 'function' &&
+                typeof window.geoip_longitude === 'function') {
+                // if available, use http://dev.maxmind.com/geoip/javascript
+                if(typeof callback === 'function') {
+                    callback(geoip_longitude(), geoip_latitude());
+                }
+            }
         },
 /* --------------- /MAP LOCATION ------------------------ */
 

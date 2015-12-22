@@ -2,6 +2,14 @@
 
 ## 1.35
 
+### mapmodule/user location
+
+getUserLocation() has been added to mapmodule. It takes a callback which will receive lon and lat params with user location or no params if location query was denied/unsuccessful.
+
+GeoLocationPlugin and MyLocationPlugin has been modified to use the new function.
+
+MyLocationPlugin.GetUserLocationRequest is now handled by the mapmodule so it's no longer needed to have MyLocationPlugin as part of the setup to get the user location.
+
 ### admin-users
 
 Fixed user search when one or many of these user data values  is not defined: 
@@ -71,6 +79,7 @@ Added functions so internal references don't need to be called:
 - getMapElementId()
 - getCurrentExtent()
 - getStyle() takes a json presentation of style and returns matching ol2/ol3 style object for plugins to use
+- getUserLocation() takes a callback which will receive lon and lat params with user location or no params if location query was denied.
 
 ### mapping/mapmodule/plugin/vectorlayer
 
