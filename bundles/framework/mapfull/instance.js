@@ -452,8 +452,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             var services = [];
             var sb = this.getSandbox();
             var mapLayerService = Oskari.clazz.create('Oskari.mapframework.service.MapLayerService', sb);
+            var searchService = Oskari.clazz.create('Oskari.service.search.SearchService', sb);
 
             services.push(mapLayerService);
+            services.push(searchService);
 
             // DisableDevelopmentModeEnhancement
             if (conf.disableDevelopmentMode === 'true') {

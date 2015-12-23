@@ -16,6 +16,11 @@ SearchService uses this to check if one has already been registered to sandbox a
 MapLayerService now takes sandbox and url as constructor arguments (previously url then sandbox). Url is now optional and will default to 
 sandbox.getAjaxUrl('GetMapLayers') + '&lang=' + Oskari.getLang().
 
+## mapfull
+
+Now initializes the search service so it's available to be used by requests even if there's no UI for it. 
+This is something that will most propably be moved out of mapfull in Oskari2 with view migration provided to enable the same functionality.
+
 ## search/search service
 
 `Oskari.mapframework.bundle.search.service.SearchService` is now `Oskari.service.search.SearchService`.
