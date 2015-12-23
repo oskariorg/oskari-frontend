@@ -2,6 +2,11 @@
 
 ## 1.35
 
+## core
+
+Oskari.clazz.create() now checks if a constructor returned value of a class instance to be used instead of normal processing. This might cause issues with inheritance so use with caution.
+SearchService uses this to check if one has already been registered to sandbox and returns the registered instance instead of self if so.
+
 ## search/search service
 
 Oskari.mapframework.bundle.search.service.SearchService is now Oskari.service.search.SearchService.
