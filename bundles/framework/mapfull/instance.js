@@ -448,13 +448,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          *
          */
         _createServices: function (conf) {
-            var me = this,
-                services = [], // create services that are available in this application
-                mapLayerService = Oskari.clazz.create(
-                    'Oskari.mapframework.service.MapLayerService',
-                    conf.globalMapAjaxUrl + 'action_route=GetMapLayers&lang=' + Oskari.getLang(),
-                    me.core.getSandbox()
-                );
+            // create initial services that are available in this application
+            var services = [];
+            var sb = this.getSandbox();
+            var mapLayerService = Oskari.clazz.create('Oskari.mapframework.service.MapLayerService', sb);
 
             services.push(mapLayerService);
 

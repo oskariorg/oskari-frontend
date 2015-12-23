@@ -11,6 +11,11 @@ SearchService uses this to check if one has already been registered to sandbox a
 
 `getAjaxUrl()` now takes an optional route params so code like `sb.getAjaxUrl() + 'action_route=MyRoute'` can now be replaced with `sb.getAjaxUrl('MyRoute')`
 
+## core/maplayerservice
+
+MapLayerService now takes sandbox and url as constructor arguments (previously url then sandbox). Url is now optional and will default to 
+sandbox.getAjaxUrl('GetMapLayers') + '&lang=' + Oskari.getLang().
+
 ## search/search service
 
 `Oskari.mapframework.bundle.search.service.SearchService` is now `Oskari.service.search.SearchService`.
