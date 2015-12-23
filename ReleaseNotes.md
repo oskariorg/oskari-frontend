@@ -36,6 +36,7 @@ SearchService will now trigger SearchResultEvent whenever search is done.
 ## search bundle
 
 The Search bundle was restructured so the default search ui is now separated file/class and flyout handles the tabbing and default UI if tabbing is not needed.
+The bundles default UI now handles the UI side of search and uses SearchRequest and SearchResultEvent to make the searches.
 
 ### mapmodule/user location
 

@@ -213,6 +213,14 @@ Oskari.clazz.define(
                 if (event.getViewState() !== 'close') {
                     plugin.focus();
                 }
+            },
+            'SearchResultEvent' : function(event)  {
+                var plugin = this.plugins['Oskari.userinterface.Flyout'];
+                var params = event.getRequestParameters();
+                if(typeof params === 'object') {
+                    params = params.searchKey;
+                }
+                plugin.handleSearchResult(event.getSuccess(), event.getResult(), params);
             }
         },
 

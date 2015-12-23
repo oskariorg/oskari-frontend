@@ -196,7 +196,9 @@ Oskari.clazz.define(
             panel.setPriority(item.priority);
             me.tabsContainer.addPanel(panel);
         },
-
+        handleSearchResult: function (isSuccess, result, searchedFor) {
+            this.getDefaultUI().handleSearchResult(isSuccess, result, searchedFor);
+        },
         addSearchResultAction: function (action) {
             this.getDefaultUI().addSearchResultAction(action);
         },

@@ -183,28 +183,36 @@ Oskari.clazz.define(
                 return;
             }
 
-            me.instance.service.doSearch(searchKey,
-                function (data) {
-                    field.setEnabled(true);
-                    button.setEnabled(true);
-                    me._renderResults(data, searchKey);
-                },
-                function (data) {
-                    field.setEnabled(true);
-                    button.setEnabled(true);
+            var reqBuilder = me.getSandbox().getRequestBuilder('SearchRequest');
+            if(reqBuilder) {
+                me.getSandbox().request(this.instance, reqBuilder(searchKey));
+            }
+        },
+        handleSearchResult : function(isSuccess, result, searchedFor) {
+            var me = this;
+            var field = this.getField();
+            var button = this.getButton();
+            if(isSuccess) {
+                // happy case
+                field.setEnabled(true);
+                button.setEnabled(true);
+                me._renderResults(result, searchedFor);
+                return;
+            }
+            // error handling
+            field.setEnabled(true);
+            button.setEnabled(true);
 
-                    var errorKey = data ? data.responseText : null,
-                        msg = me.instance.getLocalization(
-                            'searchservice_search_not_found_anything_text');
+            var errorKey = result ? result.responseText : null,
+                msg = me.instance.getLocalization('searchservice_search_not_found_anything_text');
 
-                    if (errorKey) {
-                        if (typeof me.instance.getLocalization(errorKey) === 'string') {
-                            msg = me.instance.getLocalization(errorKey);
-                        }
-                    }
+            if (errorKey) {
+                if (typeof me.instance.getLocalization(errorKey) === 'string') {
+                    msg = me.instance.getLocalization(errorKey);
+                }
+            }
 
-                    me._showError(msg);
-                });
+            me._showError(msg);
         },
 
         focus: function () {
