@@ -129,14 +129,11 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/service/search/searchservice.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/search/event/SearchResultEvent.js"
+                    "src": "../../../../bundles/service/search/event/SearchResultEvent.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/search/request/SearchRequest.js"
-                },{
-                    "type": "text/javascript",
-                    "src": "../../../../bundles/framework/search/request/SearchRequestHandler.js"
-                },{
+                    "src": "../../../../bundles/service/search/request/SearchRequest.js"
+                }, {
                     "type": "text/css",
                     "src": "../../../../bundles/mapping/mapmodule/resources/css/search.css"
                 },

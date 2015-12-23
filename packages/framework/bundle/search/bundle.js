@@ -23,9 +23,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.search.SearchBundle", function (
 
         "scripts": [{
             "type": "text/javascript",
-            "src": "../../../../bundles/service/search/searchservice.js"
-        }, {
-            "type": "text/javascript",
             "src": "../../../../bundles/framework/search/instance.js"
         }, {
             "type": "text/javascript",
@@ -37,9 +34,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.search.SearchBundle", function (
             "type": "text/javascript",
             "src": "../../../../bundles/framework/search/event/TabChangedEvent.js"
         },  {
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/search/event/SearchResultEvent.js"
-        },{
             "type": "text/javascript",
             "src": "../../../../bundles/framework/search/request/AddTabRequest.js"
         }, {
@@ -56,10 +50,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.search.SearchBundle", function (
             "src": "../../../../bundles/framework/search/request/SearchResultActionRequestHandler.js"
         },  {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/search/request/SearchRequest.js"
+            "src": "../../../../bundles/service/search/searchservice.js"
+        }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/service/search/event/SearchResultEvent.js"
         },{
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/search/request/SearchRequestHandler.js"
+            "src": "../../../../bundles/service/search/request/SearchRequest.js"
         },{
             "type": "text/css",
             "src": "../../../../bundles/framework/search/resources/css/style.css"

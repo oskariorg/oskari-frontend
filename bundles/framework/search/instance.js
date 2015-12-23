@@ -125,9 +125,8 @@ Oskari.clazz.define(
                 this.safeChars = true;
             }
 
-            var servName =
-                'Oskari.service.search.SearchService';
-            this.service = Oskari.clazz.create(servName, ajaxUrl);
+            var servName = 'Oskari.service.search.SearchService';
+            this.service = Oskari.clazz.create(servName, ajaxUrl, sandbox);
 
             sandbox.register(me);
             var p;
@@ -156,7 +155,6 @@ Oskari.clazz.define(
                 addSearchResultActionRequestHandler: Oskari.clazz.create(
                     'Oskari.mapframework.bundle.search.request.SearchResultActionRequestHandler',
                     sandbox, this.plugins['Oskari.userinterface.Flyout']),
-                searchRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.search.request.SearchRequestHandler', this.service)
             };
             sandbox.addRequestHandler(
                 'Search.AddTabRequest',
@@ -167,9 +165,6 @@ Oskari.clazz.define(
             sandbox.addRequestHandler(
                 'Search.RemoveSearchResultActionRequest',
                 this.requestHandlers.addSearchResultActionRequestHandler);
-            sandbox.addRequestHandler(
-                'SearchRequest',
-                this.requestHandlers.searchRequestHandler);
         },
 
         /**

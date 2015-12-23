@@ -133,14 +133,7 @@ Oskari.clazz.define(
                 ajaxUrl = me.getSandbox().getAjaxUrl() + 'action_route=GetSearchResult';
             }
 
-            me.service = Oskari.clazz.create(
-                'Oskari.service.search.SearchService',
-                ajaxUrl
-            );
-            searchRequestHandler = Oskari.clazz.create('Oskari.mapframework.bundle.search.request.SearchRequestHandler', me.service);
-            me.getSandbox().addRequestHandler(
-                'SearchRequest',
-                searchRequestHandler);
+            me.service = Oskari.clazz.create('Oskari.service.search.SearchService', ajaxUrl, me.getSandbox());
         },
 
         _setLayerToolsEditModeImpl: function() {

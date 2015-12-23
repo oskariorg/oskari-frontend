@@ -6,89 +6,103 @@
  */
 Oskari.clazz.define('Oskari.service.search.SearchService',
 
-/**
- * @method create called automatically on construction
- * @static
- *
- * @param {String}
- *            searchUrl ajax URL to actual search implementation
- */
-function (searchUrl) {
-
-    /* searchUrl url that will give us results */
-    this._searchUrl = searchUrl;
-}, {
-    /** @static @property __qname fully qualified name for service */
-    __qname : "Oskari.service.SearchService",
     /**
-     * @method getQName
-     * @return {String} fully qualified name for service
-     */
-    getQName : function() { return this.__qname;
-    },
-    /** @static @property __name service name */
-    __name : "SearchService",
-    /**
-     * @method getName
-     * @return {String} service name
-     */
-    getName : function() {
-        return this.__name;
-    },
-    /**
-     * @method doSearch
+     * @method create called automatically on construction
+     * @static
      *
-     * Makes the actual ajax call to search service implementation
-	 * @param {String}
-	 *            searchString the query to search with
-	 * @param {Function}
-	 *            onSuccess callback method for successful search
-	 * @param {Function}
-	 *            onComplete callback method for search completion
+     * @param {String}
+     *            searchUrl ajax URL to actual search implementation (optional)
+     * @param {Oskari.mapframework.sandbox.Sandbox}
+     *            sandbox sandbox to handle requests/events (optional)
      */
-    doSearch : function(searchString, onSuccess, onError) {
-        var lang = Oskari.getLang(),
-            epsg = Oskari.getSandbox().getMap().getSrsName();
-        jQuery.ajax({
-            dataType : "json",
-            type : "POST",
-            url : this._searchUrl,
-            data : {
-                "searchKey" : searchString,
-                "Language" : lang,
-                "epsg" : epsg
-            },
-            error : onError,
-            success : onSuccess
-        });
-    },
-        getSearchResult: function (params) {
+    function(searchUrl, sandbox) {
+        this._searchUrl = searchUrl;
+        this.sandbox = sandbox;
+        if(sandbox) {
+            var service = sandbox.getService(this.getQName());
+            if(service) {
+                // already registered
+                return service;
+            }
+            // else setup this instance
+            sandbox.addRequestHandler('SearchRequest', this);
+            sandbox.registerService(this);
+        }
+    }, {
+        /** @static @property __qname fully qualified name for service */
+        __qname: "Oskari.service.SearchService",
+        /**
+         * @method getQName
+         * @return {String} fully qualified name for service
+         */
+        getQName: function() {
+            return this.__qname;
+        },
+        /** @static @property __name service name */
+        __name: "SearchService",
+        /**
+         * @method getName
+         * @return {String} service name
+         */
+        getName: function() {
+            return this.__name;
+        },
+        /**
+         * @method handleRequest
+         * Gets search results from the service
+         * @param {Oskari.mapframework.core.Core} core
+         *      reference to the application core (reference sandbox core.getSandbox())
+         * @param {Oskari.mapframework.bundle.search.request.SearchRequest} request
+         *      request to handle
+         */
+        handleRequest : function(core, request) {
+            this.getSearchResult(request.getSearchParams());
+        },
+        /**
+         * @method doSearch
+         *
+         * Makes the actual ajax call to search service implementation
+         * @param {String}
+         *            searchString the query to search with
+         * @param {Function}
+         *            onSuccess callback method for successful search
+         * @param {Function}
+         *            onComplete callback method for search completion
+         */
+        doSearch: function(searchString, onSuccess, onError) {
+            var lang = Oskari.getLang(),
+                epsg = Oskari.getSandbox().getMap().getSrsName();
+            jQuery.ajax({
+                dataType: "json",
+                type: "POST",
+                url: this._searchUrl,
+                data: {
+                    "searchKey": searchString,
+                    "Language": lang,
+                    "epsg": epsg
+                },
+                error: onError,
+                success: onSuccess
+            });
+        },
+        getSearchResult: function(params) {
             var me = this;
-            var success = function (response) {
-                var success = true,
-                    requestParameters = params,
-                    result = response;
-
-                var evt = Oskari.getSandbox().getEventBuilder('SearchResultEvent')(success, requestParameters, result);
-                Oskari.getSandbox().notifyAll(evt);
+            var sb = Oskari.getSandbox();
+            var evtBuilder = sb.getEventBuilder('SearchResultEvent');
+            var success = function(response) {
+                sb.notifyAll(evtBuilder(true, params, response));
             };
-            var error = function (response) {
-                var success = false,
-                    requestParameters = params,
-                    result = response;
-
-                var evt = Oskari.getSandbox().getEventBuilder('SearchResultEvent')(success, requestParameters, result);
-                Oskari.getSandbox().notifyAll(evt);
+            var error = function(response) {
+                sb.notifyAll(evtBuilder(false, params, response));
             };
 
             me.doSearch(params.searchKey, success, error);
         }
-},
-
-{
-    /**
-     * @property {String[]} protocol array of superclasses as {String}
-     * @static
-     */
-    'protocol' : ['Oskari.mapframework.service.Service']
-});
+    },
+    {
+        /**
+         * @property {String[]} protocol array of superclasses as {String}
+         * @static
+         */
+        'protocol': ['Oskari.mapframework.service.Service', 'Oskari.mapframework.core.RequestHandler']
+    });

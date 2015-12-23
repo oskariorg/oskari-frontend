@@ -10,7 +10,11 @@ SearchService uses this to check if one has already been registered to sandbox a
 ## search/search service
 
 Oskari.mapframework.bundle.search.service.SearchService is now Oskari.service.search.SearchService.
-The file has been moved from bundles/framework/search/service to bundles/service/search.
+The files for the SearchService, SearchRequest, SearchResultEvent has been moved from bundles/framework/search/service to bundles/service/search.
+The SearchService now handles SearchRequests.
+The SearchService now takes an optional sandbox argument. If given it checks if another SearchService has been registered to sandbox and returns
+it if so. If not it registers self and starts handling SearchRequests. 
+This means that all bundles creating SearchServices use the same instance if they give the sandbox argument.
 
 ### mapmodule/user location
 
