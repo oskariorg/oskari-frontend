@@ -4,13 +4,17 @@
 
 ## core
 
-Oskari.clazz.create() now checks if a constructor returned value of a class instance to be used instead of normal processing. This might cause issues with inheritance so use with caution.
+`Oskari.clazz.create()` now checks if a constructor returned value of a class instance to be used instead of normal processing. This might cause issues with inheritance so use with caution.
 SearchService uses this to check if one has already been registered to sandbox and returns the registered instance instead of self if so.
+
+## sandbox
+
+`getAjaxUrl()` now takes an optional route params so code like `sb.getAjaxUrl() + 'action_route=MyRoute'` can now be replaced with `sb.getAjaxUrl('MyRoute')`
 
 ## search/search service
 
-Oskari.mapframework.bundle.search.service.SearchService is now Oskari.service.search.SearchService.
-The files for the SearchService, SearchRequest, SearchResultEvent has been moved from bundles/framework/search/service to bundles/service/search.
+`Oskari.mapframework.bundle.search.service.SearchService` is now `Oskari.service.search.SearchService`.
+The files for the `SearchService`, `SearchRequest`, `SearchResultEvent` has been moved from bundles/framework/search/service to bundles/service/search.
 The SearchService now handles SearchRequests.
 The SearchService now takes an optional sandbox argument. If given it checks if another SearchService has been registered to sandbox and returns
 it if so. If not it registers self and starts handling SearchRequests. 
