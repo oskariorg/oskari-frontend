@@ -19,6 +19,8 @@ The SearchService now handles SearchRequests.
 The SearchService now takes an optional sandbox argument. If given it checks if another SearchService has been registered to sandbox and returns
 it if so. If not it registers self and starts handling SearchRequests. 
 This means that all bundles creating SearchServices use the same instance if they give the sandbox argument.
+SearchService now defaults ajaxUrl to sandbox.getAjaxUrl('GetSearchResult') if sandbox is given and searchUrl is not.
+SearchService will now trigger SearchResultEvent whenever search is done.
 
 ### mapmodule/user location
 

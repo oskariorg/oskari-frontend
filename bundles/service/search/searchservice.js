@@ -25,6 +25,9 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
                 return service;
             }
             // else setup this instance
+            if(!searchUrl) {
+                this._searchUrl = sandbox.getAjaxUrl('GetSearchResult');
+            }
             sandbox.addRequestHandler('SearchRequest', this);
             sandbox.registerService(this);
         }
@@ -56,7 +59,7 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
          *      request to handle
          */
         handleRequest : function(core, request) {
-            this.getSearchResult(request.getSearchParams());
+            this.doSearch(request.getSearchParams());
         },
         /**
          * @method doSearch
@@ -70,8 +73,10 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
          *            onComplete callback method for search completion
          */
         doSearch: function(searchString, onSuccess, onError) {
-            var lang = Oskari.getLang(),
-                epsg = Oskari.getSandbox().getMap().getSrsName();
+            var lang = Oskari.getLang();
+            var sb = Oskari.getSandbox();
+            var epsg = Oskari.getSandbox().getMap().getSrsName();
+            var evtBuilder = sb.getEventBuilder('SearchResultEvent');
             jQuery.ajax({
                 dataType: "json",
                 type: "POST",
@@ -81,22 +86,19 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
                     "Language": lang,
                     "epsg": epsg
                 },
-                error: onError,
-                success: onSuccess
+                error: function(response) {
+                    sb.notifyAll(evtBuilder(false, searchString, response));
+                    if(typeof onError === 'function') {
+                        onError(response);
+                    }
+                },
+                success: function(response) {
+                    sb.notifyAll(evtBuilder(true, searchString, response));
+                    if(typeof onSuccess === 'function') {
+                        onSuccess(response);
+                    }
+                }
             });
-        },
-        getSearchResult: function(params) {
-            var me = this;
-            var sb = Oskari.getSandbox();
-            var evtBuilder = sb.getEventBuilder('SearchResultEvent');
-            var success = function(response) {
-                sb.notifyAll(evtBuilder(true, params, response));
-            };
-            var error = function(response) {
-                sb.notifyAll(evtBuilder(false, params, response));
-            };
-
-            me.doSearch(params.searchKey, success, error);
         }
     },
     {

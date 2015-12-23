@@ -126,14 +126,8 @@ Oskari.clazz.define(
                 }
             }
 
-            var conf = me.getConfig();
-            if (conf && conf.url) {
-                ajaxUrl = conf.url;
-            } else {
-                ajaxUrl = me.getSandbox().getAjaxUrl() + 'action_route=GetSearchResult';
-            }
-
-            me.service = Oskari.clazz.create('Oskari.service.search.SearchService', ajaxUrl, me.getSandbox());
+            me.service = Oskari.clazz.create(
+                'Oskari.service.search.SearchService', me.getConfig().url, me.getSandbox());
         },
 
         _setLayerToolsEditModeImpl: function() {
@@ -336,23 +330,6 @@ Oskari.clazz.define(
                     me._enableSearch();
                 };
             me.service.doSearch(searchText, searchCallback, onErrorCallback);
-        },
-        /**
-         * @private @method _doSearch2
-         * Execute search via SearchRequest and SearchResultEvent
-         *
-         *
-         */
-        _doSearch2: function() {
-            var me = this,
-                params = {};
-
-                params.searchKey = me.getElement().find('input[type=text]').val();
-                params.epsg = me.getSandbox().getMap().getSrsName();
-
-            me.getSandbox().postRequestByName('SearchRequest', [params]);
-
-
         },
 
         _setMarker: function(result) {

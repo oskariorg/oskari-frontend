@@ -95,20 +95,13 @@ Oskari.clazz.define(
 
             me.started = true;
 
-            var conf = this.conf,
+            var conf = this.conf || {},
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
                 sandbox = Oskari.getSandbox(sandboxName);
 
             me.sandbox = sandbox;
 
             this.localization = Oskari.getLocalization(this.getName());
-
-            var ajaxUrl = null;
-            if (this.conf && this.conf.url) {
-                ajaxUrl = this.conf.url;
-            } else {
-                ajaxUrl = sandbox.getAjaxUrl() + 'action_route=GetSearchResult';
-            }
 
             // Default tab priority
             if (this.conf && typeof this.conf.priority === 'number') {
@@ -126,7 +119,7 @@ Oskari.clazz.define(
             }
 
             var servName = 'Oskari.service.search.SearchService';
-            this.service = Oskari.clazz.create(servName, ajaxUrl, sandbox);
+            this.service = Oskari.clazz.create(servName, conf.url, sandbox);
 
             sandbox.register(me);
             var p;
