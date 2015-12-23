@@ -144,16 +144,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
 
             if (me.instance.conf && me.instance.conf.url) {
                 ajaxUrl = me.instance.conf.url;
-            } else {
-                ajaxUrl =
-                    me.getSandbox().getAjaxUrl() +
-                    'action_route=GetSearchResult';
             }
 
-            me.service = Oskari.clazz.create(
-                'Oskari.service.search.SearchService',
-                ajaxUrl
-            );
+            me.service = Oskari.clazz.create('Oskari.service.search.SearchService', me.getSandbox(), ajaxUrl);
 
             contents.eq(1).find('strong').html(me.locale.routingService);
 
