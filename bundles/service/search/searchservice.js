@@ -86,16 +86,16 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
                     "Language": lang,
                     "epsg": epsg
                 },
-                error: function(response) {
-                    sb.notifyAll(evtBuilder(false, searchString, response));
-                    if(typeof onError === 'function') {
-                        onError(response);
-                    }
-                },
                 success: function(response) {
                     sb.notifyAll(evtBuilder(true, searchString, response));
                     if(typeof onSuccess === 'function') {
                         onSuccess(response);
+                    }
+                },
+                error: function(response) {
+                    sb.notifyAll(evtBuilder(false, searchString, response));
+                    if(typeof onError === 'function') {
+                        onError(response);
                     }
                 }
             });
