@@ -10,12 +10,12 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
      * @method create called automatically on construction
      * @static
      *
-     * @param {String}
-     *            searchUrl ajax URL to actual search implementation (optional)
      * @param {Oskari.mapframework.sandbox.Sandbox}
      *            sandbox sandbox to handle requests/events (optional)
+     * @param {String}
+     *            searchUrl ajax URL to actual search implementation (optional)
      */
-    function(searchUrl, sandbox) {
+    function(sandbox, searchUrl) {
         this._searchUrl = searchUrl;
         this.sandbox = sandbox;
         if(sandbox) {

@@ -119,7 +119,7 @@ Oskari.clazz.define(
             }
 
             var servName = 'Oskari.service.search.SearchService';
-            this.service = Oskari.clazz.create(servName, conf.url, sandbox);
+            this.service = Oskari.clazz.create(servName, sandbox, conf.url);
 
             sandbox.register(me);
             var p;

@@ -127,7 +127,7 @@ Oskari.clazz.define(
             }
 
             me.service = Oskari.clazz.create(
-                'Oskari.service.search.SearchService', me.getConfig().url, me.getSandbox());
+                'Oskari.service.search.SearchService', me.getSandbox(), me.getConfig().url);
         },
 
         _setLayerToolsEditModeImpl: function() {
