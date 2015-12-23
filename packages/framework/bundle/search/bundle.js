@@ -29,6 +29,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.search.SearchBundle", function (
             "src": "../../../../bundles/framework/search/Flyout.js"
         }, {
             "type": "text/javascript",
+            "src": "../../../../bundles/framework/search/view/DefaultSearchView.js"
+        }, {
+            "type": "text/javascript",
             "src": "../../../../bundles/framework/search/Tile.js"
         }, {
             "type": "text/javascript",

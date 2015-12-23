@@ -133,7 +133,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
 
                 //TODO: there shouldn't be a toolbar in the config at all when there wasn't one when we were saving.
                 //this is what screws up toggling on the default buttons on the toolbar, when modifying a published map that didn't have
-                //toolbar in the first place   
+                //toolbar in the first place
 
                 if (data && data.configuration && data.configuration.toolbar) {
                     me._storedData.toolbarConfig = _.cloneDeep(data.configuration.toolbar.conf);
@@ -299,7 +299,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 toolButton,
                 isChecked;
             if (enabled) {
-                //it might be that a light scheme has been selected prior to adding this tool on the map. 
+                //it might be that a light scheme has been selected prior to adding this tool on the map.
                 //And since no event gets sent in that occasion, we gotta sniff it out manually when enabling the tool to get the toolbar buttons' styling correct
                 me.updateToolbarButtonStyles();
 

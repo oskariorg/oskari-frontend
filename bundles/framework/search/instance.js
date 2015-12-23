@@ -319,13 +319,6 @@ Oskari.clazz.define(
          */
         getState: function () {
             return this.plugins['Oskari.userinterface.Flyout'].getState();
-            /*
-        var state = {
-
-        };
-
-        return state;
-          */
         }
     }, {
         /**

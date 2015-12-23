@@ -33,6 +33,10 @@ Url defaults to sandbox.getAjaxUrl('GetSearchResult') if sandbox is given and ur
 This means that all bundles creating SearchServices use the same instance if they give the sandbox argument.
 SearchService will now trigger SearchResultEvent whenever search is done.
 
+## search bundle
+
+The Search bundle was restructured so the default search ui is now separated file/class and flyout handles the tabbing and default UI if tabbing is not needed.
+
 ### mapmodule/user location
 
 getUserLocation() has been added to mapmodule. It takes a callback which will receive lon and lat params with user location or no params if location query was denied/unsuccessful.

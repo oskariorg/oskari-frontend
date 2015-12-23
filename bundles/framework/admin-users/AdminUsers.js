@@ -437,7 +437,7 @@ Oskari.clazz.define(
             event.preventDefault(); // We don't want the form to submit
             var frm = jQuery(event.target);
             if (me._formIsValid(frm, me)) {
-                
+
                 jQuery.ajax({
                     type: frm.attr('method'),
                     url: me.sandbox.getAjaxUrl() + me.instance.conf.restUrl,
