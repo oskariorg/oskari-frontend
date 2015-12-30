@@ -1843,6 +1843,35 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
                 me.differenceOptions = options;
                 me.differenceLayer = null;
+
+                //spatial join mode: normal/aggregate
+                me._addTitle(extraParams, loc.mode, loc.modeTooltip);
+                var modeToolContainer = me.template.radioToolOption.clone();
+                modeToolContainer.find('input').attr({'name':'spatial_join_mode', 'value': 'oskari_analyse_normal'}).prop('checked', true);
+                modeToolContainer.find('label span').append(loc.normalMode);
+                modeToolContainer.change(function () {
+                    _.forEach(extraParams.find('input[name=analyse-layer1-field-property]'), function (input) {
+                        input.setAttribute('type','checkbox');
+                    });
+                    contentPanel.find('#oskari_analyse_intersect')[0].disabled = false;
+                });
+                extraParams.append(modeToolContainer);
+
+                var modeToolContainer2 = me.template.radioToolOption.clone();
+                modeToolContainer2.find('input').attr({'name': 'spatial_join_mode', 'value': 'oskari_analyse_aggregate'});
+                modeToolContainer2.find('label span').append(loc.aggregateMode);
+                modeToolContainer2.change(function () {
+                    _.forEach(extraParams.find('input[name=analyse-layer1-field-property]'), function (input) {
+                        input.setAttribute('type','radio');
+                        input.disabled = false;
+                    });
+                    limitSelection(false);
+                    extraParams.find('input[name=analyse-layer1-field-property]')[0].checked = true;
+                    contentPanel.find('#oskari_analyse_intersect')[0].disabled = true;
+                    contentPanel.find('#oskari_analyse_contains')[0].checked = true;
+                });
+                extraParams.append(modeToolContainer2);
+                
                 // First layer is selected outside this panel, so no selection to be done here
                 me._addTitle(extraParams, loc.firstLayer, loc.firstLayerTooltip);
                 extraParams.append(
@@ -1927,34 +1956,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         'checked': (option.selected ? 'checked' : undefined)
                     }).change(closureMagic(option));
                 }
-
-                //spatial join mode: normal/aggregate
-                me._addTitle(extraParams, loc.mode, loc.modeTooltip);
-                var modeToolContainer = me.template.radioToolOption.clone();
-                modeToolContainer.find('input').attr({'name':'spatial_join_mode', 'value': 'oskari_analyse_normal'}).prop('checked', true);
-                modeToolContainer.find('label span').append(loc.normalMode);
-                modeToolContainer.change(function () {
-                    _.forEach(extraParams.find('input[name=analyse-layer1-field-property]'), function (input) {
-                        input.setAttribute('type','checkbox');
-                    });
-                    contentPanel.find('#oskari_analyse_intersect')[0].disabled = false;
-                });
-                extraParams.append(modeToolContainer);
-
-                var modeToolContainer2 = me.template.radioToolOption.clone();
-                modeToolContainer2.find('input').attr({'name': 'spatial_join_mode', 'value': 'oskari_analyse_aggregate'});
-                modeToolContainer2.find('label span').append(loc.aggregateMode);
-                modeToolContainer2.change(function () {
-                    _.forEach(extraParams.find('input[name=analyse-layer1-field-property]'), function (input) {
-                        input.setAttribute('type','radio');
-                        input.disabled = false;
-                    });
-                    limitSelection(false);
-                    extraParams.find('input[name=analyse-layer1-field-property]')[0].checked = true;
-                    contentPanel.find('#oskari_analyse_intersect')[0].disabled = true;
-                    contentPanel.find('#oskari_analyse_contains')[0].checked = true;
-                });
-                extraParams.append(modeToolContainer2);
 
                 // Second layer field selection
                 me._addTitle(extraParams, me.loc.params.label, loc.secondLayerFieldTooltip);
