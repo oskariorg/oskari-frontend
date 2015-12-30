@@ -5,3 +5,12 @@
 	float: right;
 	margin: 10px;
 }
+.icon-minimize{
+	display: inline-block;
+}
+.oskari-minimized{
+	display: block;
+}
+.oskari-minimized .selected-featuredata{
+	display: none;
+}

@@ -16,7 +16,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
     function (instance) {
         this.instance = instance;
         this.sandbox = instance.getSandbox();
+        this.parent = null;
         this.container = null;
+        this.minimizeBtn = null;
+        this.restoreBtn = null;
         this.state = {};
         this._localization = this.instance.getLocalization('flyout');
         this.tabsContainer = Oskari.clazz.create(
@@ -47,6 +50,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
          */
         setEl: function (el, width, height) {
             this.container = el[0];
+            this.parent = jQuery(this.container).parents('.oskari-flyout');
+            this.minimizeBtn = this.parent.find('.oskari-flyouttool-minimize');
+            this.restoreBtn = this.parent.find('.oskari-flyouttool-restore');
+            this.minimizeBtn.addClass('icon-minimize');
+            this.restoreBtn.addClass('icon-restore');
             if (!jQuery(this.container).hasClass('selected-featuredata')) {
                 jQuery(this.container).addClass('selected-featuredata');
             }
@@ -56,7 +64,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
          * @return {Boolean} [true/false]
          */
         isFlyoutVisible: function(){
-            return jQuery(this.container).is(':visible');
+            if(this.parent.hasClass('oskari-minimized')){
+                return true;
+            }else{
+                return jQuery(this.container).is(':visible');
+            }
         },
         /**
          * [clearFlyout removes all elements from container]
