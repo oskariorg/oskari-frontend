@@ -292,8 +292,7 @@ Oskari.clazz.define(
 	    			return geometry;
 	    		 }
     	    }
-	        me.overwritingFinishDrawing();
-
+	        
 	    	me._draw = new ol.interaction.Draw({
     		  features: me._drawLayers[layerId].getSource().getFeaturesCollection(),
     	      type: geometryType,
@@ -301,6 +300,9 @@ Oskari.clazz.define(
     	      geometryFunction:  geometryFunction,
     	      maxPoints: maxPoints
 	    	});
+	    	
+	        me.overwritingFinishDrawing();
+
 			me._draw.validGeometry = true;
 	        me._map.addInteraction(me._draw);	        
 	        
@@ -326,7 +328,8 @@ Oskari.clazz.define(
 				if(options.allowMultipleDrawing === 'single') {
 					me.clearDrawing();
 				}
-	        	me.createDrawingTooltip(id, me._tooltipClassForMeasure);	        	
+				var tooltipClass = me._tooltipClassForMeasure + ' ' + me._shape;
+	        	me.createDrawingTooltip(id, tooltipClass);	        	
 			});
 		},
 		 /**
@@ -357,9 +360,11 @@ Oskari.clazz.define(
 			if(!options.allowSelfIntersection && me._sketch) {
 				var invalid = me.isValidJstsGeometry(lines);
 				if(invalid) {
+//					console.log("invalid geometry");
 		    		me._sketch.setStyle(me._styles['intersect']); 	    	
 	    			me._draw.validGeometry = false;
 	    		} else {
+//					console.log("valid geometry");
 	    			if(me._sketch) {
 	    				if(me._mode === 'draw') {
 		    				me._sketch.setStyle(me._styles['draw']);
@@ -373,14 +378,13 @@ Oskari.clazz.define(
 		},	
 		/**
 		 * Overwriting OpenLayers method
-    	 * Stop drawing and add the sketch feature to the target layer.
+    	 * Stop drawing and add the sketch feature to the target layer. Drawing will be stopped only if the geometry is valid
     	 * The {@link ol.interaction.DrawEventType.DRAWEND} event is dispatched before
     	 * inserting the feature.
     	 * @api
     	 */
 		overwritingFinishDrawing: function() {
-			ol.interaction.Draw.prototype.finishDrawing = function() {
-				  //drawing will be finished only if geometry is valid
+			this._draw.finishDrawing = function() {				  
 		    	  if(this.validGeometry) {
 		    		  var sketchFeature = this.abortDrawing_();
 		    		  goog.asserts.assert(!goog.isNull(sketchFeature),
@@ -553,7 +557,7 @@ Oskari.clazz.define(
             				me.drawBufferedGeometry(evt.feature.getGeometry(), options.buffer);
         				}
         			} else if (shape === "Polygon") {
-//        				me.checkIntersection(me._sketch.getGeometry(), options);        				
+        				me.checkIntersection(me._sketch.getGeometry(), options);        				
         			}
         			me.sendDrawingEvent(me._id, options);
 				});
