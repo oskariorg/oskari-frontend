@@ -92,12 +92,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
 		 	var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(me);
                 sandbox.request(me, request);
 
-            var reqTabHandler = Oskari.clazz.create('Oskari.mapframework.bundle.selected-featuredata.request.AddTabRequestHandler', me.sandbox, this.plugins['Oskari.userinterface.Flyout']);
-            sandbox.addRequestHandler('SelectedFeatureData.AddTabRequest', reqTabHandler);
-
-            var reqAccHandler = Oskari.clazz.create('Oskari.mapframework.bundle.selected-featuredata.request.AddAccordionRequestHandler', me.sandbox, this.plugins['Oskari.userinterface.Flyout']);
-            sandbox.addRequestHandler('SelectedFeatureData.AddAccordionRequest', reqAccHandler);
-
             var reqGetInfoResultHandler = sandbox.getRequestBuilder('GetInfoPlugin.ResultHandlerRequest')(me.resultHandler);
             sandbox.request(me, reqGetInfoResultHandler);
 

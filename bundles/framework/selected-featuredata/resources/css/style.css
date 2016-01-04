@@ -14,3 +14,6 @@
 .oskari-minimized .selected-featuredata{
 	display: none;
 }
+.oskari-minimized .oskari-flyouttools{
+	margin-left: 10px;
+}

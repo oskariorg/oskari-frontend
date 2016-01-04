@@ -29,37 +29,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
 				"src" : "../../../../bundles/framework/selected-featuredata/Flyout.js"
 			},
 			{
-	            "type": "text/javascript",
-	            "src": "../../../../bundles/framework/selected-featuredata/event/TabChangedEvent.js"
-	        },
-	        {
-	            "type": "text/javascript",
-	            "src": "../../../../bundles/framework/selected-featuredata/request/AddTabRequest.js"
-	        },
-	        {
-	            "type": "text/javascript",
-	            "src": "../../../../bundles/framework/selected-featuredata/request/AddTabRequestHandler.js"
-	        },
-	        {
-	            "type": "text/javascript",
-	            "src": "../../../../bundles/framework/selected-featuredata/request/AddAccordionRequest.js"
-	        },
-	        {
-	            "type": "text/javascript",
-	            "src": "../../../../bundles/framework/selected-featuredata/request/AddAccordionRequestHandler.js"
-	        },
-			{
 				"type" : "text/css",
 				"src" : "../../../../bundles/framework/selected-featuredata/resources/css/style.css"
-			}, 
-			{
-	            "src" : "../../../../libraries/chosen/chosen.jquery.js",
-	            "type" : "text/javascript"
-       		},
-       		{
-	            "src" : "../../../../libraries/chosen/chosen.css",
-	            "type" : "text/css"
-        	}],
+			}],
 
         	"locales": [{
 				"lang" : "fi",
