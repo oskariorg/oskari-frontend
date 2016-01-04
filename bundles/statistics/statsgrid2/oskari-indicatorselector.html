@@ -175,6 +175,21 @@
       "indicatorChanged": function(indicatorId) {
           var me = this;
           this.indicatorSelected = indicatorId !== undefined && indicatorId !== null && indicatorId !== "undefined";
+          $.ajax({
+            url: me.ajaxUrl,
+            data: {
+                "action_route": "GetIndicatorSelectorMetadata",
+                "plugin_id": me.datasourceId,
+                "indicator_id": indicatorId
+            },
+            dataType: 'json',
+            success: function(results) {
+                me.set("indicator", results);
+                me.sources[me.datasourceId].indicators[me.indicatorId] = results;
+                me.set("selectors", me.indicator.selectors);
+                me.getSelectors(me.sources, me.datasourceId, me.indicatorId);
+            }
+        });
       },
       "onAddUserIndicator": function() {
           var me = this;
