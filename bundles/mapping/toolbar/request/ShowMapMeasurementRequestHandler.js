@@ -73,9 +73,9 @@ Oskari.clazz.define(
                         var toolbarRequest = me._toolbar.getSandbox().getRequestBuilder('Toolbar.SelectToolButtonRequest')();
                         me._toolbar.getSandbox().request(me._toolbar, toolbarRequest);
                         //enable gfi
-                        if (me.gfiReqBuilder) {
-                            me.sandbox.request(me._toolbar, me.gfiReqBuilder(true));
-                        }
+//                        if (me.gfiReqBuilder) {
+//                            me.sandbox.request(me._toolbar, me.gfiReqBuilder(true));
+//                        }
 
                         me._dialog.close(true);
                     });
@@ -111,9 +111,9 @@ Oskari.clazz.define(
                     me._toolbar.getSandbox().request(me._toolbar, toolbarRequest);
                     me._hideResultsInPlugin(true);
                     //enable gfi
-                    if (me.gfiReqBuilder) {
-                        me.sandbox.request(me._toolbar, me.gfiReqBuilder(true));
-                    }
+//                    if (me.gfiReqBuilder) {
+//                        me.sandbox.request(me._toolbar, me.gfiReqBuilder(true));
+//                    }
                 });
 
                 // store data for later reuse
