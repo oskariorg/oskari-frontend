@@ -6,7 +6,7 @@
 
 DrawingEvent now returns JSON-data as JSON-object.
 'showMeasure' parameter is renamed to 'showMeasureOnMap' (if true - measure result will be displayed on map near feature. Default is false.)
-New parameter is added to plugin: 'allowSelfIntersection'. (if true - user will see popup with warning text, that self-intersection is not allowed. Default is true.))
+New parameter is added to plugin: 'noticeSelfIntersection'. (if true - user will see warning text if polygon has self-intersection. Features will be not sended to the event before polygon is valid. Default is true.))
 
 ## core
 
