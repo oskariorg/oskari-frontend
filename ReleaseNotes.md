@@ -2,6 +2,12 @@
 
 ## 1.35
 
+### drawtools/ol3
+
+DrawingEvent now returns JSON-data as JSON-object.
+'showMeasure' parameter is renamed to 'showMeasureOnMap' (if true - measure result will be displayed on map near feature. Default is false.)
+New parameter is added to plugin: 'allowSelfIntersection'. (if true - user will see popup with warning text, that self-intersection is not allowed. Default is true.))
+
 ## core
 
 `Oskari.clazz.create()` now checks if a constructor returned value of a class instance to be used instead of normal processing. This might cause issues with inheritance so use with caution.
