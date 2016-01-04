@@ -250,13 +250,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
         /**
          * Role list
          * @method getRoles
-         * 
+         *
          * @param {Function} callback success callback
          * @param {Function} errCallback error callback
          */
         getRoles: function (callback, errCallback) {
             var me = this;
-            
+
             jQuery.ajax({
                 type: 'GET',
                 url: me.sandbox.getAjaxUrl() + 'action_route=ManageRoles',

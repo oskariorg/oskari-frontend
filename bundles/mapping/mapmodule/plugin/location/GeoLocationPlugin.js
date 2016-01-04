@@ -48,43 +48,16 @@ Oskari.clazz.define(
          *
          */
         _setupLocation: function () {
-            var me = this,
-                sandbox = me.getSandbox(),
-                callback = function (lon, lat) {
-                    // transform coordinates from browser projection to current
-                    var lonlat = me.getMapModule().transformCoordinates({ lon: lon, lat: lat }, 'EPSG:4326')
-                    me.getMapModule().centerMap(lonlat, 6);
-                    me._locationIsSet = true;
-                    var locationEvent = sandbox.getEventBuilder('UserLocationEvent')(lonlat.lon, lonlat.lat);
-                    sandbox.notifyAll(locationEvent);
-                };
-
-            if (navigator.geolocation) {
-                // if users just ignores/closes the browser dialog
-                // -> error handler won't be called in most browsers
-                navigator.geolocation.getCurrentPosition(
-                    function (position) {
-                        var lat = position.coords.latitude,
-                            lon = position.coords.longitude;
-                        callback(lon, lat);
-                    },
-                    function (errors) {
-                        //ignored
-                    },
-                    {
-                        // accept and hour long cached position
-                        maximumAge: 3600000,
-                        // timeout after 6 seconds
-                        timeout: 6000
-                    }
-                );
-            } else if (typeof window.geoip_latitude === 'function' &&
-                typeof window.geoip_longitude === 'function') {
-                // if available, use http://dev.maxmind.com/geoip/javascript
-                var lat = geoip_latitude(),
-                    lon = geoip_longitude();
-                callback(lon, lat);
-            }
+            var me = this;
+            var mapmodule = this.getMapModule();
+            mapmodule.getUserLocation(function(lon, lat) {
+                if(!lon || !lat) {
+                    // error getting location
+                    return;
+                }
+                mapmodule.centerMap({ lon: lon, lat : lat }, 6);
+                me._locationIsSet = true;
+            });
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],

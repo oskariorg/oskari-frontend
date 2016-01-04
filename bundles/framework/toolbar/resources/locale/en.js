@@ -9,9 +9,6 @@ Oskari.registerLocalization(
                 "ok": "OK",
                 "title": "Link to Map View"
             },
-            "print": {
-                "tooltip": "Print the map view."
-            },
             "history": {
                 "reset": "Move to the default map view.",
                 "back": "Move to the previous map view.",

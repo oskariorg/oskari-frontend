@@ -9,10 +9,6 @@ Oskari.registerLocalization(
                 "title": "Error",
                 "message": "The licence information could not be fetched."
             },
-            "failedGetLicenseInformation": {
-                "title": "Error",
-                "message": "The licence server could not be connected."
-            },
             "cannotGetLicensePrice": {
                 "title": "Error",
                 "message": "The licence price could not be fetched."
@@ -53,13 +49,6 @@ Oskari.registerLocalization(
                 "details": "Fill the licence information. The required data are marked with an asterisk (*). Press Next to see a licence summary and price. Press Previous to select another licence model. Press Close to stop the licence order.",
                 "summary": "Read licence conditions and accept them by pressing Conclude. Press Previous to edit licence information. Press Close to stop the licence order.",
                 "orderDetails": "Read the licence information above. Press Deactivate licence to stop the licence order. Press Close to close the window."
-            },
-            "concludeSuccessTitle": "Licence Concluded",
-            "conclude": {
-                "title": "Licence Information",
-                "productid": "Product",
-                "licenseid": "Licence",
-                "validto": "Valid to"
             },
             "deactivateConfirm": {
                 "title": "License Deactivation",

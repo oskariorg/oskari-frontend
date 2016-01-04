@@ -39,6 +39,13 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
         this._colorRegExp = /^([A-Fa-f0-9]{6})$/;
     }, {
 
+        /**
+         * @method focus
+         * Focuses the component.
+         */
+        focus: function () {
+            this._field.find('input').focus();
+        },
         destroy: function () {
             if (this._field) {
                 this._field.remove();

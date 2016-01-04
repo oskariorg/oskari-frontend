@@ -11,15 +11,15 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
      * @method create called automatically on construction
      * @static
      *
-     * @param {String}
-     *            mapLayerUrl ajax URL for map layer operations (not used atm)
      * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
      *          reference to application sandbox
+     * @param {String}
+     *            mapLayerUrl ajax URL for map layer operations (not used atm)
      */
 
-    function (mapLayerUrl, sandbox) {
+    function (sandbox, mapLayerUrl) {
 
-        this._mapLayerUrl = mapLayerUrl;
+        this._mapLayerUrl = mapLayerUrl || sandbox.getAjaxUrl('GetMapLayers') + '&lang=' + Oskari.getLang();
         this._sandbox = sandbox;
         this._allLayersAjaxLoaded = false;
         this._loadedLayersList = [];

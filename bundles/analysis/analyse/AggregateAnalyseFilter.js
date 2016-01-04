@@ -185,7 +185,7 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.aggregateAnalyseFilter",
                 me.selectReadyButton = undefined;
             }
             me.indicatorData = data.analysisdata;
-            
+
             me.indicatorData.forEach(function(indicatorItem) {
 
                 var datasets = _.keys(indicatorItem);
