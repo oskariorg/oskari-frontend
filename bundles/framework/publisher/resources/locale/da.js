@@ -119,7 +119,7 @@ Oskari.registerLocalization(
             "layerlist_title": "Integrerbare kortlag",
             "layerlist_empty": "De valgte kortlag kan ikke integreres. Menuen \"Valgte kortlag\" viser om et kort kan integreres eller ej.",
             "layerlist_denied": "Kan ikke integreres",
-            "denied_tooltip": "Udbydere af disse kortdata har ikke givet tilladelse til at publicere disse materialer på andre hjemmesider. Kontrollér publiceringsrettigheder i menuen \"Valgte kortlag\" før integrering."
+            "denied_tooltip": "Udbydere af disse kortdata har ikke givet tilladelse til at publicere disse materialer på andre hjemmesider. Kontrollér publiceringsrettigheder i menuen \"Valgte kortlag\" før integrering.",
             "buttons": {
                 "continue": "Fortsæt",
                 "continueAndAccept": "Acceptér brugsbestemmelser og fortsæt",
