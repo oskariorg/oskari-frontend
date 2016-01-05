@@ -43,7 +43,7 @@
     "grunt-contrib-copy": "0.4.1",
     "grunt-contrib-requirejs": "0.4.1",
     "grunt-contrib-watch": "0.4.4",
-    "grunt-karma": "0.8.2",
+    "grunt-karma": "latest",
     "grunt-lib-contrib": "0.6.1",
     "grunt-sass": "0.6.0",
     "jshint": "2.1.3",
