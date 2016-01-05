@@ -129,8 +129,8 @@ Oskari.clazz.define(
             var me = this,
                 layerId = _.last(layer.getId().split('_')),
                 imgUrl = (layer.getLayerUrls()[0] + layerId).replace(/&amp;/g, '&'),
-                minResolution = this.getMapModule().calculateResolution(layer.getMinScale()),
-                maxResolution = this.getMapModule().calculateResolution(layer.getMaxScale()),
+                minResolution = this.getMapModule().getResolutionForScale(layer.getMinScale()),
+                maxResolution = this.getMapModule().getResolutionForScale(layer.getMaxScale()),
                 sandbox = this.getSandbox(),
                 wms = {
                     'URL': imgUrl,
