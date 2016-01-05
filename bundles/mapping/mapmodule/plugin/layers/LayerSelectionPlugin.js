@@ -85,7 +85,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         _handleMapSizeChanges: function(size, el){
             var me = this,
                 div = el || this.getElement();
-            
+
             if(size.width < me._mobileDefs.width) {
                 me.isMobile = true;
 
@@ -545,7 +545,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
 
             if(toolStyle && !me.isMobile) {
                 layersContent.css('height', (0.75 * size.height) + 'px');
-            } 
+            }
             // use default
             else {
                 layersContent.css('height', (0.85 * size.height) + 'px');

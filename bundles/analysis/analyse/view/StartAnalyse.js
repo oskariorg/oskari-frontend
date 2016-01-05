@@ -1871,7 +1871,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     contentPanel.find('#oskari_analyse_contains')[0].checked = true;
                 });
                 extraParams.append(modeToolContainer2);
-                
+
                 // First layer is selected outside this panel, so no selection to be done here
                 me._addTitle(extraParams, loc.firstLayer, loc.firstLayerTooltip);
                 extraParams.append(
