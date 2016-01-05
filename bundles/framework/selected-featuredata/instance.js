@@ -92,12 +92,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
 		 	var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(me);
                 sandbox.request(me, request);
 
-            var reqTabHandler = Oskari.clazz.create('Oskari.mapframework.bundle.selected-featuredata.request.AddTabRequestHandler', me.sandbox, this.plugins['Oskari.userinterface.Flyout']);
-            sandbox.addRequestHandler('SelectedFeatureData.AddTabRequest', reqTabHandler);
-
-            var reqAccHandler = Oskari.clazz.create('Oskari.mapframework.bundle.selected-featuredata.request.AddAccordionRequestHandler', me.sandbox, this.plugins['Oskari.userinterface.Flyout']);
-            sandbox.addRequestHandler('SelectedFeatureData.AddAccordionRequest', reqAccHandler);
-
             var reqGetInfoResultHandler = sandbox.getRequestBuilder('GetInfoPlugin.ResultHandlerRequest')(me.resultHandler);
             sandbox.request(me, reqGetInfoResultHandler);
 
@@ -105,45 +99,52 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
         resultHandler: function(content, data, formatters, params){
             var me = this;
             // show infobox
-            var reqBuilder = this.getSandbox().getRequestBuilder(
-            'InfoBox.ShowInfoBoxRequest'
-            ),
-            request;
+            var bundleInstance = Oskari.app.getBundleInstanceByName('selected-featuredata');
+            var flyout = bundleInstance.plugins['Oskari.userinterface.Flyout'];
+            
+            if(flyout.isFlyoutVisible() && content.length > 0){
+                    flyout.createUI(content, data);
+            }else{
 
-                if (reqBuilder) {
-                    request = reqBuilder(
-                    params.infoboxId,
-                    params.title,
-                    content,
-                    data.lonlat,
-                    true,
-                    params.colourScheme,
-                    params.font
-                );
+                var reqBuilder = this.getSandbox().getRequestBuilder(
+                'InfoBox.ShowInfoBoxRequest'
+                ),
+                request;
 
-            var def = {
-                name : 'selected-featuredata-btn',
-                iconCls: 'icon-selected-featuredata',
-                tooltip: 'Tooltip teksti',
-                styles: 'position: absolute; top: 12px; right: 23px; width: 20px; height: 20px; background: red;',
-                params: {
-                    content: content,
-                    data:data,
-                    formatters:formatters,
-                    params:params
-                },
-                callback : function(params) {
-                   
-                    console.log("Tulee kylla joo o");
-                    console.dir(params);
-                    
-                    var bundleInstance = Oskari.app.getBundleInstanceByName('selected-featuredata');
-                    Oskari.getSandbox().requestByName(bundleInstance, 'userinterface.UpdateExtensionRequest', [bundleInstance, 'detach']);
+                    if (reqBuilder) {
+                        request = reqBuilder(
+                        params.infoboxId,
+                        params.title,
+                        content,
+                        data.lonlat,
+                        true,
+                        params.colourScheme,
+                        params.font
+                    );
+
+                var def = {
+                    name : 'selected-featuredata-btn',
+                    iconCls: 'icon-selected-featuredata',
+                    tooltip: 'Tooltip teksti',
+                    styles: 'position: absolute; top: 12px; right: 23px; width: 20px; height: 20px; border: 1px solid #FFFFFF;',
+                    params: {
+                        content: content,
+                        data:data,
+                        formatters:formatters,
+                        params:params
+                    },
+                    callback : function(params) {
+
+                        flyout.createUI(params.content, params.data);
+                        
+                        var bundleInstance = Oskari.app.getBundleInstanceByName('selected-featuredata');
+                        Oskari.getSandbox().requestByName(bundleInstance, 'userinterface.UpdateExtensionRequest', [bundleInstance, 'detach']);
+                    }
+                };
+
+                    request.addAdditionalTool(def);
+                    this.getSandbox().request(this, request);
                 }
-            };
-
-                request.addAdditionalTool(def);
-                this.getSandbox().request(this, request);
             }
         },
         /**
@@ -193,15 +194,17 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
                     // not me -> do nothing
                     return;
                 }
+                if (event.getViewState() == 'close') {
+                     this.plugins['Oskari.userinterface.Flyout'].clearFlyout();
+                }
                 if (doOpen) {
-                    this.plugins['Oskari.userinterface.Flyout'].createUI();
+                    //this.plugins['Oskari.userinterface.Flyout'].createUI();
                     // flyouts eventHandlers are registered
                     for (p in this.plugins['Oskari.userinterface.Flyout'].getEventHandlers()) {
                         if (!this.eventHandlers[p]) {
                             this.sandbox.registerForEventByName(this, p);
                         }
                     }
-
                 }
             }
         },

@@ -505,16 +505,6 @@
 		    },
 		    "instanceProps" : {}
 		}, {
-		    "bundlename" : "routesearch",
-		    "bundleinstancename" : "routesearch",
-		    "metadata" : {
-		        "Import-Bundle" : {
-		            "routesearch" : {
-		                "bundlePath" : "../../../packages/framework/bundle/"
-		            }
-		        }
-		    }
-		}, {
 		    "bundlename" : "admin",
 		    "bundleinstancename" : "admin",
 		    "metadata" : {
@@ -584,6 +574,24 @@
                 },
                 "Require-Bundle-Instance" : []
 	        }
+		}, {
+		"instanceProps": {
+			
+		},
+		"title": "SelectedFeaturedata",
+		"fi": "selected-featuredata",
+		"bundleinstancename": "selected-featuredata",
+		"sv": "selected-featuredata",
+		"en": "selected-featuredata",
+		"bundlename": "selected-featuredata",
+		"metadata": {
+			"Import-Bundle": {
+				"selected-featuredata": {
+					"bundlePath": "../../../packages/framework/bundle/"
+				}
+			},
+			"Require-Bundle-Instance": []
 		}
+	}
 	]
 }
