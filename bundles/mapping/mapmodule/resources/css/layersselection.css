@@ -11,6 +11,8 @@ div.mapplugin.layerselection {
       overflow: auto;
       width: 100%;
       background-color: #fff; }
+      div.mapplugin.layerselection div.content div.layers-content div.baselayers {
+        display: none; }
     div.mapplugin.layerselection div.content.mobile {
       position: fixed;
       top: 36px;

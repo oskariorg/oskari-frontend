@@ -46,7 +46,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 '    <div class="layers-content">' +
                 '        <div class="baselayers"></div>' +
                 '        <div class="layers"></div>' +
-
                 '    </div>' +
                 '  </div>' +
                 '</div>');
@@ -341,6 +340,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             var baseLayersDiv = me.getElement().find(
                 'div.content div.baselayers'
             );
+
             // add text if first selection available
             if (baseLayersDiv.find('div.layer').length === 0) {
                 var pluginLoc = me.getMapModule().getLocalization('plugin'),
@@ -351,6 +351,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 baseLayersDiv.parent().find('.baseLayerHeader').remove();
                 baseLayersDiv.before(header);
                 input.attr('checked', 'checked');
+                baseLayersDiv.show();
             }
             baseLayersDiv.append(div);
             me.layerRefs[layer.getId()] = div;
@@ -392,6 +393,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     'div.content div.baseLayerHeader'
                 );
                 baselayerHeader.remove();
+                baseLayersDiv.hide();
             } else {
                 this.sortLayers();
                 var checked = baseLayers.find('input:checked');

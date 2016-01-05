@@ -13,6 +13,10 @@ div.mapplugin.layerselection {
       overflow: auto;
       width:100%;
       background-color: #fff;
+
+      div.baselayers {
+        display: none;
+      } 
     }
 
     &.mobile {
