@@ -44,8 +44,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 '  </div>' +
                 '  <div class="content">' +
                 '    <div class="layers-content">' +
-                '        <div class="layers"></div>' +
                 '        <div class="baselayers"></div>' +
+                '        <div class="layers"></div>' +
+
                 '    </div>' +
                 '  </div>' +
                 '</div>');
@@ -60,6 +61,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             );
             me.templates.baseLayerHeader = jQuery(
                 '<div class="baseLayerHeader"></div>'
+            );
+
+            me.templates.layerHeader = jQuery(
+                '<div class="layerHeader"></div>'
             );
 
             me.templates.headerArrow = jQuery(
@@ -196,6 +201,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             if (this.layerRefs[layer.getId()]) {
                 return;
             }
+
             var me = this,
                 element = el || this.getElement(),
                 content = element.find('div.content'),
@@ -217,6 +223,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             div.find('span').before(input);
             this.layerRefs[layer.getId()] = div;
             layersDiv.append(div);
+
+            if (layersDiv.find('.layer').length > 0) {
+                var pluginLoc = me.getMapModule().getLocalization('plugin'),
+                    myLoc = pluginLoc[me._name],
+                    header = me.templates.layerHeader.clone();
+
+                header.append(myLoc.chooseOtherLayers);
+                layersDiv.parent().find('.layerHeader').remove();
+                layersDiv.before(header);
+            }
         },
 
         /**
