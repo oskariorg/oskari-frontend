@@ -465,13 +465,13 @@ Oskari.clazz.define(
                     me._area = output;
                 }
                 if(me._options.showMeasureOnMap) {
-	                me._map.getOverlays().forEach(function (o) {
-	                  if(o.id === me._sketch.getId()) {
-	                      var ii = jQuery('div.' + me._tooltipClassForMeasure + "." + me._sketch.getId());
-	                      ii.html(output);
-	                      o.setPosition(tooltipCoord);
-	                  }
-	                });
+                    me._map.getOverlays().forEach(function (o) {
+                      if(o.id === me._sketch.getId()) {
+                          var ii = jQuery('div.' + me._tooltipClassForMeasure + "." + me._sketch.getId());
+                          ii.html(output);
+                          o.setPosition(tooltipCoord);
+                      }
+                    });
                 }
              }
         },
