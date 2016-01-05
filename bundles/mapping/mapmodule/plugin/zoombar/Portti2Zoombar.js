@@ -245,6 +245,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
         /**
          * @method  @private _handleMapSizeChanges handle map size changes
          * @param  {Object} size {width:100, height:200}
+         * @param {Object} el jQuery element
          */
         _handleMapSizeChanges: function(size, el){
             var me = this,
