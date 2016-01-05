@@ -527,12 +527,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             icon.addClass('icon-arrow-white-down');
             content.show();
 
-            // FIXME different styles
-            // layersContent.css('height', (0.95 * size.height) + 'px');
-            console.log('Tool style: ' + toolStyle);
-            console.log('width: ' + size.width);
-            console.log('height: ' + size.height);
-            console.log('inner height:' + jQuery('body').innerHeight());
             if(toolStyle && !me.isMobile) {
                 layersContent.css('height', (0.75 * size.height) + 'px');
             } 
