@@ -97,7 +97,7 @@ Renamed functions
 - zoomTo() removed. Use setZoomLevel() instead.
 - getLayerPlugin() removed. Use getLayerPlugins(id) with id parameter to fetch reference to single plugin.
 - getMapScales() renamed getScaleArray() to be consistent with getResolution()/getResolutionArray().
-- calculateScaleResolution() renamed getResolutionForScale().
+- calculateResolution() and calculateScaleResolution() renamed getResolutionForScale().
 - getPluginInstance() removed. Use getPluginInstances(pluginName) with pluginName parameter to fetch reference to single plugin.
 
 Unused functions removed:

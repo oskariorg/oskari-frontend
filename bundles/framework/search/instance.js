@@ -147,7 +147,7 @@ Oskari.clazz.define(
                     sandbox, this.plugins['Oskari.userinterface.Flyout']),
                 addSearchResultActionRequestHandler: Oskari.clazz.create(
                     'Oskari.mapframework.bundle.search.request.SearchResultActionRequestHandler',
-                    sandbox, this.plugins['Oskari.userinterface.Flyout']),
+                    sandbox, this.plugins['Oskari.userinterface.Flyout'])
             };
             sandbox.addRequestHandler(
                 'Search.AddTabRequest',
