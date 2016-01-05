@@ -2,6 +2,12 @@
 
 ## 1.35
 
+### mapmodule - LayerSelectionPlugin
+
+Now LayerSelectionPlugin handle small screen (width is smaller than 500px) so at layer(s) selection component use full screen.
+
+*Improved UI* First displayed in the background map selection and then the other.
+
 ### drawtools/ol3
 
 DrawingEvent now returns JSON-data as JSON-object.
