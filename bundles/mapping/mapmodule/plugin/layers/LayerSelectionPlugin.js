@@ -43,8 +43,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 '    <div class="header-icon icon-arrow-white-right"></div>' +
                 '  </div>' +
                 '  <div class="content">' +
-                '    <div class="layers"></div>' +
-                '    <div class="baselayers"></div>' +
+                '    <div class="layers-content">' +
+                '        <div class="layers"></div>' +
+                '        <div class="baselayers"></div>' +
+                '    </div>' +
                 '  </div>' +
                 '</div>');
             //same as in main, only used when returning from some other layout to default (publisher)
@@ -511,18 +513,35 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          */
         openSelection: function () {
             var me = this,
+                conf = me.getConfig(),
                 div = this.getElement(),
                 icon = div.find('div.header div.header-icon'),
                 content = div.find('div.content'),
+                layersContent = div.find('.layers-content'),
                 header = div.find('div.header'),
                 mapmodule = me.getMapModule();
-                size = mapmodule.getSize();
+                size = mapmodule.getSize(),
+                toolStyle = conf.toolStyle || me.getToolStyleFromMapModule();
 
             icon.removeClass('icon-arrow-white-right');
             icon.addClass('icon-arrow-white-down');
             content.show();
 
-            div.css('height', (0.95 * size.height) + 'px');
+            // FIXME different styles
+            // layersContent.css('height', (0.95 * size.height) + 'px');
+            console.log('Tool style: ' + toolStyle);
+            console.log('width: ' + size.width);
+            console.log('height: ' + size.height);
+            console.log('inner height:' + jQuery('body').innerHeight());
+            if(toolStyle && !me.isMobile) {
+                layersContent.css('height', (0.75 * size.height) + 'px');
+            } 
+            // use default
+            else {
+                layersContent.css('height', (0.85 * size.height) + 'px');
+            }
+
+
             if(me.isMobile){
                 content.addClass('mobile');
                 header.addClass('mobile');

@@ -6,8 +6,11 @@ div.mapplugin.layerselection {
   z-index: 100000000 !important; }
   div.mapplugin.layerselection div.content {
     background-color: white;
-    overflow: auto;
     max-height: 95%; }
+    div.mapplugin.layerselection div.content div.layers-content {
+      overflow: auto;
+      width: 100%;
+      background-color: #fff; }
     div.mapplugin.layerselection div.content.mobile {
       position: fixed;
       top: 36px;
@@ -73,7 +76,7 @@ div.mapplugin.layerselection {
     color: #ff9100; }
   div.mapplugin.layerselection div.layerselection-styled-content {
     width: 200px;
-    border: 1px solid #333438; }
+    /*border: 1px solid #333438; */ }
   div.mapplugin.layerselection .oskari-publisher-layers-rounded-dark, div.mapplugin.layerselection .oskari-publisher-layers-rounded-light {
     -webkit-border-radius: 15px;
     -moz-border-radius: 15px;
@@ -134,7 +137,7 @@ div.mapplugin.layerselection {
   float: right !important; }
 
 .published-styled-layerselector-content {
-  position: absolute !important;
+  position: absolute;
   top: 44px !important;
   right: 0px !important; }
 
@@ -142,6 +145,8 @@ div.mapplugin.layerselection {
 .mapplugins.left div.mapplugin.layerselection div.published-styled-layerselector-content {
   left: 0px !important;
   right: auto !important; }
+  .mapplugins.left div.mapplugin.layerselection div.published-styled-layerselector-content.mobile {
+    top: 0 !important; }
 
 .mapplugins.left div.mapplugin.layerselection div.published-styled-layerselector-content div.styled-header-arrow {
   margin-left: 12px !important; }
