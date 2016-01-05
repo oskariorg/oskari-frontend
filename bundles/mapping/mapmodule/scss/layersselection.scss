@@ -3,7 +3,7 @@ div.mapplugin.layerselection {
   height: 37px;
   overflow: visible;
   max-width: 200px;
-  z-index: 100000000 !important; 
+  z-index: 100000000000000 !important; 
 
   div.content {
     background-color: white; 
@@ -107,7 +107,9 @@ div.mapplugin.layerselection {
 
   div.layerselection-styled-content {
       width: 200px;
-      /*border: 1px solid #333438; */
+      div.styled-header-arrow {
+        margin-left: 10px;
+      }
   }
 
   .oskari-publisher-layers-rounded-dark, .oskari-publisher-layers-rounded-light {
@@ -186,7 +188,10 @@ div.mapplugin.layerselection {
 .published-styled-layerselector-content {
   position: absolute;
   top: 44px !important;
-  right: 0px !important; 
+  right: 0px !important;
+  &.mobile {
+    top: 0 !important;
+  }
 }
 
 /* Hacketyhack, we need to keep the popup on screen */
