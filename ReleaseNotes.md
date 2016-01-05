@@ -59,6 +59,8 @@ Fixed user search when one or many of these user data values  is not defined:
 - firstname
 - last name
 
+Fixed error handling when cannot get roles from backend.
+
 ### mapwfs2_ol3
 
 WFSRefreshManualLoadLayersEvent is now included in ol3 version as well and changing the size of the map no longer results in JS-error.

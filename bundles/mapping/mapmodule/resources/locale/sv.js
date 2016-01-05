@@ -38,7 +38,8 @@ Oskari.registerLocalization(
             },
             "LayerSelectionPlugin": {
                 "title": "Kartlager",
-                "chooseDefaultBaseLayer": "Välj bakgrundskarta"
+                "chooseDefaultBaseLayer": "Välj bakgrundskarta",
+                "chooseOtherLayers": "Välj andra kartlager"
             },
             "SearchPlugin": {
                 "placeholder": "Sök plats/adress",
