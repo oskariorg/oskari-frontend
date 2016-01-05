@@ -17,6 +17,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
         this.instance = instance;
         this.sandbox = instance.getSandbox();
         this.parent = null;
+        this.elParent = null;
         this.container = null;
         this.minimizeBtn = null;
         this.restoreBtn = null;
@@ -50,11 +51,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
          */
         setEl: function (el, width, height) {
             this.container = el[0];
-            this.parent = jQuery(this.container).parents('.oskari-flyout');
-            this.minimizeBtn = this.parent.find('.oskari-flyouttool-minimize');
-            this.restoreBtn = this.parent.find('.oskari-flyouttool-restore');
-            this.minimizeBtn.addClass('icon-minimize');
-            this.restoreBtn.addClass('icon-restore');
+
             if (!jQuery(this.container).hasClass('selected-featuredata')) {
                 jQuery(this.container).addClass('selected-featuredata');
             }
@@ -108,7 +105,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
         *
         */
         startPlugin: function () {
+            var me = this;
+            //Set class to flyout parent
+            me.elParent = jQuery(me.container).parents('.oskari-flyout');
+            jQuery(me.elParent).addClass('selected-featuredata-flyout');
 
+            //Set minimize flyout button
+            me.parent = jQuery(me.container).parents('.oskari-flyout');
+            me.minimizeBtn = me.parent.find('.oskari-flyouttool-minimize');
+            me.restoreBtn = me.parent.find('.oskari-flyouttool-restore');
+            me.minimizeBtn.addClass('icon-minimize');
+            me.restoreBtn.addClass('icon-restore');
         },
         /* App specific methods */
         createUI: function (params, mapobject) {
@@ -129,13 +136,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
                     me.addAccordion(data.html, tabContent, layer.getId(), mapobject);
                 }
             }
-
-/*            jQuery(".selected-featuredata").parents(".oskari-flyoutcontentcontainer").prev().find(".oskari-flyout-title").click(function(e){
-                me.sandbox.postRequestByName(
-                   'userinterface.UpdateExtensionRequest',
-                   [me.instance, 'minimize']
-               );
-            });*/
 
         },
         /**

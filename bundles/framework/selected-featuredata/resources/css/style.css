@@ -8,7 +8,7 @@
 .icon-minimize{
 	display: inline-block;
 }
-.oskari-minimized{
+.selected-featuredata-flyout.oskari-minimized{
 	display: block;
 }
 .oskari-minimized .selected-featuredata{
