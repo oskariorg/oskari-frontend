@@ -599,6 +599,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 contentData.featureId = data.features[0][0];
                 content.push(contentData);
                 $(".properties-container").empty().append(contentData.html);
+                $(".datepicker").datepicker({'dateFormat': "yy-mm-dd"});
             }
         },
         /**
@@ -762,7 +763,8 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                                 valInput.prop('type', 'number').prop('step', 0.01);
                                 break;
                             case 'xsd:date':
-                                valInput.prop('type', 'date');
+                                valInput.prop('type', 'text');
+                                valInput.addClass('datepicker');
                                 break;
                             case 'xsd:string':
                             default:
