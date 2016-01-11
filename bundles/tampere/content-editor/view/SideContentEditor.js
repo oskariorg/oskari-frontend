@@ -830,7 +830,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     var contentWrapper = $(me.templates.wrapper),
                         headerWrapper = $(me.templates.header),
                         titleWrapper = $(me.templates.headerTitle),
-                        editButtonWrapper = $(me.templates.wrapper);
+                        actionButtonWrapper = $(me.templates.wrapper);
 
                     titleWrapper.append(fragmentTitle);
                     titleWrapper.attr('title', fragmentTitle);
@@ -867,6 +867,24 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     }
 
                     if (fragment.fid != editableFeatureFid && me.operationMode != "create") {
+                        var deleteButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                        deleteButton.setTitle(me.loc.buttons.deleteFeature);
+                        deleteButton.setHandler(function () {
+                            var saveButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                            saveButton.setTitle(me.loc.buttons.save);
+                            saveButton.setPrimary(true);
+                            saveButton.setHandler(function () {
+                                me.closeDialog();
+                                me._deleteFeature(fragment.fid);
+                            });
+                            var cancelButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                            cancelButton.setTitle(me.loc.buttons.cancel);
+                            cancelButton.setHandler(function () {
+                                me.closeDialog();
+                            });
+                            me.showMessage(me.loc.deleteFeature.title, me.loc.deleteFeature.text, [saveButton, cancelButton], true);
+                        });
+
                         var editButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
                         editButton.setTitle(me.loc.buttons.editFeature);
                         editButton.setHandler(function () {
@@ -878,9 +896,10 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                             }
                         });
 
-                        editButton.insertTo(editButtonWrapper);
-                        editButtonWrapper.addClass('content-editor-buttons');
-                        contentWrapper.append(editButtonWrapper);
+                        editButton.insertTo(actionButtonWrapper);
+                        deleteButton.insertTo(actionButtonWrapper);
+                        actionButtonWrapper.addClass('content-editor-buttons');
+                        contentWrapper.append(actionButtonWrapper);
                     }
                     else {
                         contentWrapper.addClass('edit-feature');
@@ -1037,6 +1056,45 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     }
                 }
             }
+        },
+        _deleteFeature: function (fid) {
+            var me = this;
+            var requestData = {};
+            requestData.layerId = me.selectedLayerId;
+            requestData.featureId = fid;
+
+            var okButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            okButton.setTitle(me.loc.buttons.ok);
+
+            jQuery.ajax({
+                type : 'POST',
+                dataType : 'json',
+                beforeSend : function(x) {
+                    if(x && x.overrideMimeType) {
+                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                    }
+                },
+                data : {'featureData':JSON.stringify(requestData)},
+                url : ajaxUrl + 'action_route=DeleteFeature',
+                success : function(response) {
+                    $(".properties-container").empty();
+                    okButton.setHandler(function () {
+                        setTimeout(function() {
+                            var visibilityRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest');
+                            var request = visibilityRequestBuilder(me.selectedLayerId, true);
+                            me.sandbox.request(me.instance.getName(), request);
+                        }, 1000);
+                        me.closeDialog();
+                    });
+                    me.showMessage(me.loc.featureUpdate.header, me.loc.featureUpdate.success, [okButton]);
+                },
+                error: function (error) {
+                    okButton.setHandler(function () {
+                        me.closeDialog();
+                    });
+                    me.showMessage(me.loc.featureUpdate.header, me.loc.featureUpdate.error, [okButton]);
+                }
+            });
         }
     }, {
         /**

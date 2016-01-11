@@ -15,7 +15,8 @@ Oskari.registerLocalization(
                 "cancel": "Cancel",
                 "ok": "Ok",
                 "addFeature": "Add feature",
-                "editFeature": "Edit feature"
+                "editFeature": "Edit feature",
+                "deleteFeature": "Delete feature"
             },
             "featureUpdate": {
                 "header": "Feature update",
@@ -25,6 +26,10 @@ Oskari.registerLocalization(
             "unsavedChanges": {
                 "title": "Unsaved changes",
                 "text": "There are some unsaved changes. Please select below action to perform."
+            },
+            "deleteFeature": {
+                "title": "Delete feature",
+                "text": "Are you sure you want to delete feature?"
             }
         }
     }

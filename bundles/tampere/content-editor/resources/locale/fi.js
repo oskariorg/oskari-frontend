@@ -15,7 +15,8 @@ Oskari.registerLocalization(
                 "cancel": "Peruuta",
                 "ok": "Ok",
                 "addFeature": "Lisää kohde",
-                "editFeature": "Muokkaa kohdetta"
+                "editFeature": "Muokkaa kohdetta",
+                "deleteFeature": "Poistaa kohdetta"
             },
             "featureUpdate": {
                 "header": "Kohde päivitetty",
@@ -25,6 +26,10 @@ Oskari.registerLocalization(
             "unsavedChanges": {
                 "title": "Unsaved changesFi",
                 "text": "There are some unsaved changes. Please select below action to perform.Fi"
+            },
+            "deleteFeature": {
+                "title": "Delete featureFi",
+                "text": "Are you sure you want to delete feature?Fi"
             }
         }
     }
