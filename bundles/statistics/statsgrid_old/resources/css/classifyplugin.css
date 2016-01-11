@@ -1,22 +1,22 @@
+div.mapplugins.bottom.right {
+  z-index: 15001 !important; }
+
 .manageClassificationPlugin {
+  background-color: #FFF;
   z-index: 1000000 !important;
   max-width: 240px;
-  background-color: white !important;
-  color: black !important;
   padding: 0px;
   text-align: left;
-  font: 12px/100% Arial, sans-serif;
-  position: absolute;
-  bottom: 5px;
-  right: 5px; }
-  .manageClassificationPlugin .content select {
-    /* TODO moz-only? */
-    background: -moz-linear-gradient(center top, #fefefe, #e3e3e3) repeat scroll 0 0 transparent;
-    border: 1px solid #B7B7B7;
-    border-radius: 4px;
-    color: #878787;
-    padding: 0px;
-    margin: 4px; }
+  /* If there's a sane reason to keep the absolute positioning, write it here
+	position: absolute;
+	bottom: 8px;
+	right: 10px;
+	*/ }
+  .manageClassificationPlugin .content {
+    font-size: 12px; }
+    .manageClassificationPlugin .content select {
+      padding: 0px;
+      margin: 4px; }
   .manageClassificationPlugin div#pop-up_06052013 {
     /* HOVER colortable details */
     display: none;
@@ -29,13 +29,21 @@
     font-size: 90%; }
   .manageClassificationPlugin div.classCount {
     float: left;
-    background-color: white !important;
+    background-color: #FFF;
     padding: 0px;
     margin: 2px; }
   .manageClassificationPlugin div.classheader {
-    color: white;
-    background-color: black !important;
-    padding: 4px; }
+    background-color: #3c3c3c;
+    color: #FFF;
+    cursor: pointer;
+    padding: 4px 8px;
+    text-align: left; }
+    .manageClassificationPlugin div.classheader:hover {
+      color: #ff9100; }
+    .manageClassificationPlugin div.classheader .header-icon {
+      display: inline-block;
+      margin-right: 4px;
+      vertical-align: middle; }
   .manageClassificationPlugin div.classifications {
     margin: 4px;
     min-width: 168px; }
@@ -43,7 +51,7 @@
       margin: 4px; }
   .manageClassificationPlugin div.content {
     color: black;
-    background-color: white !important; }
+    background-color: white; }
     .manageClassificationPlugin div.content label {
       float: left;
       width: 80px;
@@ -67,6 +75,8 @@
   .manageClassificationPlugin .manualBreaks .icon-info {
     float: left;
     margin-top: 6px; }
+  .manageClassificationPlugin .classification-guide {
+    padding-left: 5px; }
   .manageClassificationPlugin .ui-corner-all,
   .manageClassificationPlugin .ui-corner-bottom,
   .manageClassificationPlugin .ui-corner-right,
@@ -149,6 +159,3 @@ table.colo_table1 div {
   display: inline-block;
   height: 15px;
   width: 5px; }
-
-.manageClassificationPlugin .classification-guide {
-  padding-left: 5px; }

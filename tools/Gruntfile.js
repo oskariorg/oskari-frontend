@@ -89,7 +89,7 @@ module.exports = function (grunt) {
             options: {
                 force: true
             },
-            build: ['../build', 'Oskari', '../bundles/statistics/statsgrid2/vulcanized.html'],
+            build: ['../build', 'Oskari', '../bundles/statistics/statsgrid/vulcanized.html'],
             dist: ['../dist']
         },
         oskaridoc: {
@@ -204,23 +204,23 @@ module.exports = function (grunt) {
             nonminified: {
                 files: [{
                     expand: true,
-                    src: '../bundles/statistics/statsgrid2/**/*.html',
+                    src: '../bundles/statistics/statsgrid/**/*.html',
                     dest: 'Oskari/bundles'
                 },
                 {
                     expand: true,
-                    src: '../bundles/statistics/statsgrid2/**/*.css',
+                    src: '../bundles/statistics/statsgrid/**/*.css',
                     dest: 'Oskari/bundles'
                 }]
             },
             stats: {
                 files: [{
-                    src: '../bundles/statistics/statsgrid2/libs/promise-polyfill/Promise-Statics.js',
-                    dest: 'Oskari/bundles/statistics/statsgrid2/libs/promise-polyfill/Promise-Statics.js'
+                    src: '../bundles/statistics/statsgrid/libs/promise-polyfill/Promise-Statics.js',
+                    dest: 'Oskari/bundles/statistics/statsgrid/libs/promise-polyfill/Promise-Statics.js'
                 },
                 {
-                    src: '../bundles/statistics/statsgrid2/libs/promise-polyfill/Promise.js',
-                    dest: 'Oskari/bundles/statistics/statsgrid2/libs/promise-polyfill/Promise.js'
+                    src: '../bundles/statistics/statsgrid/libs/promise-polyfill/Promise.js',
+                    dest: 'Oskari/bundles/statistics/statsgrid/libs/promise-polyfill/Promise.js'
                 },
                 // The requirejs should come from the root project.
                 /*{
@@ -228,8 +228,8 @@ module.exports = function (grunt) {
                     dest: 'Oskari/libraries/requirejs/require-2.1.15.js'
                 },*/
                 {
-                    src: '../bundles/statistics/statsgrid2/libs/web-animations-js/web-animations-next-lite.min.js',
-                    dest: 'Oskari/bundles/statistics/statsgrid2/libs/web-animations-js/web-animations-next-lite.min.js'
+                    src: '../bundles/statistics/statsgrid/libs/web-animations-js/web-animations-next-lite.min.js',
+                    dest: 'Oskari/bundles/statistics/statsgrid/libs/web-animations-js/web-animations-next-lite.min.js'
                 }
                 ]
             }
@@ -239,7 +239,7 @@ module.exports = function (grunt) {
             files: [{
                 expand: true,
                 cwd: '../',
-                src: ['bundles/statistics/statsgrid2/**/*.html'],
+                src: ['bundles/statistics/statsgrid/**/*.html'],
                 dest: 'Oskari/'
             }]
         }
@@ -249,7 +249,7 @@ module.exports = function (grunt) {
             files: [{
                 expand: true,
                 cwd: '../',
-                src: ['bundles/statistics/statsgrid2/**/*.css'],
+                src: ['bundles/statistics/statsgrid/**/*.css'],
                 dest: 'Oskari/'
             }]
         }
@@ -265,8 +265,8 @@ module.exports = function (grunt) {
             },
             files: {
                 // Where index.html includes bower_components imports 
-                '../bundles/statistics/statsgrid2/vulcanized.html':
-                    'Oskari/bundles/statistics/statsgrid2/oskari-statsview.html'
+                '../bundles/statistics/statsgrid/vulcanized.html':
+                    'Oskari/bundles/statistics/statsgrid/oskari-statsview.html'
             }
         }
         }
@@ -289,7 +289,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-vulcanize');
 
     // Default task(s).
-    grunt.registerTask('default', ['karma:dev', 'compileAppSetupToStartupSequence', 'compileDev', 'karma:dev:run', 'watch']);
+    grunt.registerTask('default', ['karma:dev', 'compileAppSetupToStartupSequence', 'compileDev']);
     grunt.registerTask('ci', ['compileAppSetupToStartupSequence', 'compileDev', 'karma:ci']);
     grunt.registerTask('minifyStats', ['clean:build', 'minifyPolymer', 'minifyPolymerCSS', 'copy:stats', 'vulcanize']);
     grunt.registerTask('nonminifiedStats', ['clean:build', 'copy:nonminified', 'copy:stats', 'vulcanize']);
@@ -441,13 +441,15 @@ module.exports = function (grunt) {
 
             grunt.config.set('compile.' + appName + '.options', {
                 appSetupFile: config,
-                dest: dest
+                dest: dest,
+                concat: true
             });
             grunt.config.set('compileAppCSS.' + appName + '.options', {
                 appName: appName,
                 appSetupFile: config,
                 dest: dest,
-                imageDest: imageDest
+                imageDest: imageDest,
+                concat: true
             });
             grunt.config.set('sprite.' + appName + '.options', options);
 
@@ -597,7 +599,7 @@ module.exports = function (grunt) {
 
 
         if (this.data && this.data.options) {
-            grunt.log.writeln('Minifying...');
+            grunt.log.writeln('Minifying... ' + appName);
             grunt.config.set('minifyAppCSS.' + appName + '.options', {
                 appName: appName,
                 appSetupFile: this.data.options.appSetupFile,

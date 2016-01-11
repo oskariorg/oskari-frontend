@@ -11,6 +11,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.UserIndicatorsService',
      * @static
      *
      */
+
     function (instance) {
         this.instance = instance;
         this.sandbox = instance.sandbox;
@@ -40,11 +41,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.UserIndicatorsService',
 
         getUserIndicator: function (indicatorId, successCb, errorCb) {
             var url = this.sandbox.getAjaxUrl() +
-                'action_route=GetUserIndicators&id=' + indicatorId,
+                    'action_route=GetUserIndicators&id=' + indicatorId,
                 normalizeIndicator = this._normalizeIndicator,
                 successWrapper = function (indicator) {
                     successCb(normalizeIndicator(indicator));
-                };
+                }
             this._get(url, successWrapper, errorCb);
         },
 

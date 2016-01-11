@@ -24,7 +24,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.request.TooltipContentRe
          */
         handleRequest: function (core, request) {
             if (request.getName() === 'StatsGrid.TooltipContentRequest') {
-                this.instance.sendTooltipData(request.getFeature());
+                this.instance.gridPlugin.sendTooltipData(request.getFeature());
             }
         }
     }, {

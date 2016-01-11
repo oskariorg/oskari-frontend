@@ -43,69 +43,9 @@
     padding: 4px;
     background-color: #80F0A0;
     cursor: pointer; }
-  .statsgrid .indicator-cont .icon-info {
-    display: inline-block;
-    margin: 0 0 5px 5px; }
-  .statsgrid .municipal-grid {
+  .statsgrid .region-grid {
     width: 100%;
     height: 80%; }
-  .statsgrid .data-source-select {
-    margin-top: 5px; }
-    .statsgrid .data-source-select .new-indicator-cont input {
-      margin-left: 10px; }
-    .statsgrid .data-source-select .selector-cont {
-      clear: left;
-      float: left; }
-  .statsgrid .parameters-cont {
-    min-height: 115px;
-    margin-bottom: 20px; }
-    .statsgrid .parameters-cont button {
-      margin: 8px 0 10px 8px; }
-    .statsgrid .parameters-cont .cannot-display-indicator {
-      margin-left: 10px; }
-  .statsgrid .selector-cont {
-    clear: both;
-    /* Make chosen fit in a bit better */
-    /* TODO move this to either chosen override css or forms.css */ }
-    .statsgrid .selector-cont label {
-      display: inline-block;
-      width: 80px;
-      padding: 10px;
-      vertical-align: top; }
-    .statsgrid .selector-cont select.indi {
-      width: 200px; }
-    .statsgrid .selector-cont select.parameter {
-      width: 100px; }
-    .statsgrid .selector-cont .chzn-container-single .chzn-single {
-      height: 34px;
-      line-height: 35px; }
-      .statsgrid .selector-cont .chzn-container-single .chzn-single div b {
-        background-position: 0px 8px; }
-    .statsgrid .selector-cont .chzn-container-single .chzn-single-with-drop div b {
-      background-position: -16px 8px; }
-    .statsgrid .selector-cont .chzn-container-single .chzn-single, .statsgrid .selector-cont .chzn-container-single .chzn-single-with-drop {
-      background: -webkit-gradient(linear, left top, left bottom, from(#fefefe), to(#e3e3e3));
-      background: -moz-linear-gradient(top, #fefefe, #e3e3e3);
-      background: -ms-linear-gradient(top, #fefefe, #e3e3e3);
-      /* For some reason sass didn't like this in one line... */
-      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fefefe', endColorstr='#e3e3e3');
-      background: linear-gradient(top, #fefefe, #e3e3e3); }
-  .statsgrid .selectors-container {
-    position: relative;
-    min-width: 470px;
-    min-height: 157px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box; }
-    .statsgrid .selectors-container .indisel {
-      display: inline-block; }
-    .statsgrid .selectors-container .new-indicator-cont {
-      float: left;
-      margin-top: 8px;
-      padding-left: 10px; }
-      .statsgrid .selectors-container .new-indicator-cont input {
-        float: right;
-        margin: 0px; }
 
 .statsgrid-csv-button {
   position: absolute;
@@ -119,8 +59,7 @@
 .statsgrid-totals-label {
   font-weight: bold; }
 
-.statsgrid-show-total-selects label,
-.statsgrid-show-row-selects label {
+.statsgrid-show-total-selects label, .statsgrid-show-row-selects label {
   margin-left: 5px; }
 
 .statsgrid-show-row-selects {
@@ -138,13 +77,9 @@
   -moz-box-shadow: 2px 2px 2px silver;
   box-shadow: 2px 2px 2px silver;
   min-width: 100px;
-  z-index: 20;
-  max-height: 40%;
-  overflow-y: auto; }
-  .slick-header-menu .slick-header-menuitem a, .slick-header-menu .slick-header-menuitem li, .slick-header-menu .slick-header-menuitem div {
-    display: block;
-    padding: 2px 4px; }
-  .slick-header-menu .slick-header-menuitem a, .slick-header-menu .slick-header-menuitem li {
+  z-index: 20; }
+  .slick-header-menu .slick-header-menuitem {
+    padding: 2px 4px;
     border: 1px solid transparent;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
@@ -154,7 +89,7 @@
     -webkit-background-clip: padding-box;
     -moz-background-clip: padding-box;
     background-clip: padding-box; }
-    .slick-header-menu .slick-header-menuitem a:hover, .slick-header-menu .slick-header-menuitem li:hover {
+    .slick-header-menu .slick-header-menuitem:hover {
       border-color: silver;
       background: white; }
 
@@ -169,34 +104,34 @@
   background-color: yellow; }
 
 /* Filter popup */
-.divmanazerpopup .filter-row {
+.popup .filter-row {
   clear: both;
   padding-top: 10px; }
 
-.divmanazerpopup .filter-label {
+.popup .filter-label {
   float: left;
   width: 100px;
   /* FIXME use an h3 here or something... */
   font-weight: bold; }
 
-.divmanazerpopup .filter-value {
+.popup .filter-value {
   float: left;
   margin-left: 10px; }
 
-.divmanazerpopup .filter-container:after {
+.popup .filter-container:after {
   content: "";
   display: table;
   clear: both; }
 
-.divmanazerpopup .filter-select {
+.popup .filter-select {
   width: 195px; }
 
-.divmanazerpopup .filter-input {
+.popup .filter-input {
   width: 70px;
   float: left;
   margin-top: 10px; }
 
-.divmanazerpopup .filter-between {
+.popup .filter-between {
   display: none;
   float: left;
   margin: 20px 10px;
@@ -210,7 +145,6 @@ div.filter-region-select ul {
   margin: 0 !important; }
 
 .statsgrid-remove-indicator {
-  position: absolute;
   top: 5px;
   right: 5px;
   width: 16px !important;
@@ -262,7 +196,7 @@ form.add-indicator hr {
 form.add-indicator .municipalities {
   position: absolute;
   bottom: 40px;
-  top: 585px;
+  top: 510px;
   left: -10px;
   width: 100%;
   overflow: auto;
@@ -270,8 +204,7 @@ form.add-indicator .municipalities {
   form.add-indicator .municipalities .municipality-row label {
     display: inline-block;
     padding-left: 10px;
-    width: 150px;
-    font-weight: bold; }
+    width: 150px; }
 
 form.add-indicator .form-submit {
   height: 40px;
@@ -289,3 +222,38 @@ form.add-indicator .form-submit {
 .indicator-name-link {
   color: #0085d1;
   cursor: pointer; }
+
+/* New styles */
+form.statsgrid2_indicator_selector {
+  /* FIXME this should be in the container */
+  padding: 20px; }
+  form.statsgrid2_indicator_selector .indicator-cont, form.statsgrid2_indicator_selector .parameters-cont {
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 12px;
+    /* Remove these once the generic form css is in use */ }
+    form.statsgrid2_indicator_selector .indicator-cont label, form.statsgrid2_indicator_selector .parameters-cont label {
+      /* FIXME move this to a chozen override css file */ }
+      form.statsgrid2_indicator_selector .indicator-cont label span .icon-info, form.statsgrid2_indicator_selector .parameters-cont label span .icon-info {
+        float: right; }
+      form.statsgrid2_indicator_selector .indicator-cont label select, form.statsgrid2_indicator_selector .indicator-cont label .chzn-container, form.statsgrid2_indicator_selector .parameters-cont label select, form.statsgrid2_indicator_selector .parameters-cont label .chzn-container {
+        display: block;
+        margin-top: 6px;
+        margin-bottom: 12px; }
+      form.statsgrid2_indicator_selector .indicator-cont label .chzn-container .chzn-single, form.statsgrid2_indicator_selector .parameters-cont label .chzn-container .chzn-single {
+        height: 34px;
+        line-height: 35px; }
+
+.grid-header-menubutton {
+  width: 16px;
+  height: 16px;
+  background-image: url("/Oskari/libraries/slickgrid/images/down.gif");
+  background-position: 50% 50%;
+  right: 3px;
+  bottom: 3px;
+  padding: 2px;
+  cursor: pointer;
+  display: inline-block;
+  background-color: #ddd;
+  border: 1px solid #a5a5a5;
+  border-radius: 15px; }

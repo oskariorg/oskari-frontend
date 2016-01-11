@@ -30,9 +30,6 @@ function() {
             "src" : "../../../../bundles/statistics/statsgrid/plugin/ManageClassificationPlugin.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/statistics/statsgrid/plugin/ManageStatsPlugin.js"
-        }, {
-            "type" : "text/javascript",
             "src" : "../../../../bundles/statistics/statsgrid/event/StatsDataChangedEvent.js"
         }, {
             "type" : "text/javascript",

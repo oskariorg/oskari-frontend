@@ -63,7 +63,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                 ) {
                     me._layer = layer;
                     // Notify the grid plugin of the changed layer.
-                    //me.instance.gridPlugin.setLayer(me._layer);
+                    me.instance.gridPlugin.setLayer(me._layer);
                     // Save the changed layer to the state.
                     me.instance.state.layerId = me._layer.getId();
                     me._layer.setOpacity(100);
@@ -81,7 +81,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                     }
                     if (me._layer) {
                         // Notify the grid plugin of the changed layer.
-                        //me.instance.gridPlugin.setLayer(me._layer);
+                        me.instance.gridPlugin.setLayer(me._layer);
                         // Save the changed layer to the state.
                         me.instance.state.layerId = me._layer.getId();
                         me._layer.setOpacity(100);
@@ -98,8 +98,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
 
                     if (isShown) {
                         // Create the indicators selection and the grid.
-                        me.instance.getMainPanel().render(me.getEl());
-                        //me.instance.gridPlugin.createStatsOut(me.getEl());
+                        me.instance.gridPlugin.createStatsOut(me.getEl());
                     }
 
                     // Notify other components of the mode change.
@@ -150,11 +149,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                 /** ENTER The Mode */
                 // Hide base layers, store hidden layers to state so we can show them on exit
                 layers = me.instance.sandbox.findAllSelectedMapLayers();
-                me.instance.state.hiddenLayers = [];
+                me.hiddenLayers = [];
                 for (i = 0; i < layers.length; i++) {
                     layer = layers[i];
                     if (layer && me._layer && layer.getId() !== me._layer.getId() && layer.isVisible()) {
-                        me.instance.state.hiddenLayers.push(layer);
+                        me.hiddenLayers.push(layer);
                         request = visibilityRequestBuilder(layer.getId(), false);
                         sandbox.request(me.instance.getName(), request);
                     }
@@ -173,17 +172,20 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                 elCenter.removeClass('span12');
                 elCenter.width((100 - leftWidth) + '%');
                 // remove toolbar's height
-                mapModule.getMapEl().height(jQuery(window).height() - jQuery('#contentMap').find('.oskariui-menutoolbar').height());
+                var height = jQuery(window).height() - jQuery('#contentMap').find('.oskariui-menutoolbar').height();
+                mapModule.getMapEl().height(height);
                 //window resize is handled in mapfull - instance.js
                 elLeft.empty();
+                elLeft.show();
                 elLeft.removeClass('oskari-closed');
                 elLeft.width(leftWidth + '%');
+                elLeft.height(height);
                 elLeft.resizable({
                     minWidth: 450,
                     handles: "e",
                     resize: function (event, ui) {
                         elCenter.width(jQuery('.row-fluid').width() - elLeft.width());
-                        me.instance.getMainPanel().handleSizeChanged();
+                        me.instance.gridPlugin.grid.resizeCanvas();
                     },
                     stop: function (event, ui) {
                         var difference = ui.size.width - ui.originalSize.width,
@@ -191,16 +193,16 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                         slickHeader.width(slickHeader.width() + difference);
 
                         map.updateSize();
+                        me.instance.gridPlugin.autosizeColumns();
                     }
                 });
 
                 /** a hack to notify openlayers of map size change */
                 map.updateSize();
-
             } else {
                 /** EXIT The Mode */
                 // Make hidden layers visible
-                layers = me.instance.state.hiddenLayers;
+                layers = me.hiddenLayers;
                 if (layers) {
                     for (i = 0; i < layers.length; i++) {
                         layer = layers[i];
@@ -213,8 +215,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                 // remove stats layer if we added it and there's no active indicators
                 // this breaks published stats...
                 //me.instance.gridPlugin.resetLayer();
-
-                me.instance.state.hiddenLayers = [];
+                me.hiddenLayers = [];
                 me.instance.gridPlugin.destroyPopups(); // This is ugly, whose responsibility should this be?
                 jQuery('#contentMap').removeClass('statsgrid-contentMap');
                 jQuery('.oskariui-mode-content').removeClass('statsgrid-mode');

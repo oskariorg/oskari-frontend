@@ -17,7 +17,7 @@ if (!String.prototype.endsWith) {
  *
  * Oskari
  *
- * A set of metdhods to support loosely coupled classes and instances for the
+ * A set of methods to support loosely coupled classes and instances for the
  * mapframework
  *
  * @to-do - class instance checks against class metadata - protocol
@@ -2007,15 +2007,15 @@ Oskari = (function () {
             bundlePath = bundleDefinitionState.bundlePath;
             me._handleSourceFiles(srcFiles, bundlePath, srcs);
 
-            if (_isPreloaded() && biid === "statsgrid2") {
+            if (_isPreloaded() && biid === "statsgrid") {
                 // This is only used for the vulcanized Polymer bundles.
                 // In a perfect world we would get srcFiles.vulcanizedHtml information from packages/.../bundle.js
                 // but this is no such a world. So, for now, this is hardcoded here.
                 // me._loadLink(srcFiles.vulcanizedHtml.rel, srcFiles.vulcanizedHtml.href);
                 // From bundle.js:
                 //   "rel": "import",
-                //   "href": "/Oskari/bundles/statistics/statsgrid2/vulcanized.html"
-                me._loadLink("import", "/Oskari/bundles/statistics/statsgrid2/vulcanized.html");
+                //   "href": "/Oskari/bundles/statistics/statsgrid/vulcanized.html"
+                me._loadLink("import", "/Oskari/bundles/statistics/statsgrid/vulcanized.html");
             }
             if (bundleDefinitionState.state !== 1) {
                 me.log('Pending DEFINITION at sources for ' + biid + ' to ' +

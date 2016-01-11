@@ -93,14 +93,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
                 'state': me.state,
                 'layer': statsLayer
             };
-            var gridPlugin = Oskari.clazz.create(
-                'Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin',
-                gridConf,
-                locale
-            );
-            mapModule.registerPlugin(gridPlugin);
-            mapModule.startPlugin(gridPlugin);
-            me.gridPlugin = gridPlugin;
 
             //if classification not explicitly allowed, don't allow it.
             //This will however also change the behaviour of existing published maps where classification has previously been allwed.

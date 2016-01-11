@@ -1,31 +1,26 @@
-div.mapplugins.bottom.right {
-	z-index:15001!important;
-}
-
 .manageClassificationPlugin {
-	background-color: #FFF;
 	z-index: 1000000 !important;
-    // Can't be smaller as stuff overflows in IE
 	max-width: 240px;
+	background-color: white !important;
+	color: black !important;
 	padding: 0px;
 	text-align: left;
-	/* If there's a sane reason to keep the absolute positioning, write it here
+	font: 12px/100% Arial, sans-serif;
 	position: absolute;
-	bottom: 8px;
-	right: 10px;
-	*/
-
-	.content {
-		font-size: 12px;
-
-		select {
-			padding: 0px;
-			margin: 4px;
-		}
-
-	}
+	bottom: 5px;
+	right: 5px;
 	
-	// FIXME WTH is this random id?
+	.content select {
+		/* TODO moz-only? */
+		background: -moz-linear-gradient(center top, #fefefe, #e3e3e3) repeat scroll 0 0 transparent;
+		border: 1px solid #B7B7B7;
+		border-radius: 4px;
+		color: #878787;
+		padding: 0px;
+		margin: 4px;
+	}
+
+	// FIXME WTH is this random id? Explain here.
 	div#pop-up_06052013 {
 		/* HOVER colortable details */
 		display: none;
@@ -40,28 +35,15 @@ div.mapplugins.bottom.right {
 	
 	div.classCount {
 		float: left;
-		background-color: #FFF;
+		background-color: white !important;
 		padding: 0px;
 		margin: 2px;
 	}
 	
 	div.classheader {
-		background-color: #3c3c3c;
-		color: #FFF;
-		cursor: pointer;
-		padding: 4px 8px;
-		text-align: left;
-
-		&:hover {
-			color: #ff9100;
-		}
-
-		.header-icon {
-			display: inline-block;
-			margin-right: 4px;
-			vertical-align: middle;
-		}
-
+		color: white;
+		background-color: black !important;
+		padding: 4px;
 	}
 	
 	div.classifications {
@@ -75,7 +57,7 @@ div.mapplugins.bottom.right {
 	
 	div.content {
 		color: black;
-		background-color: white;
+		background-color: white !important;
 
 		label {
 			float: left;
@@ -115,10 +97,6 @@ div.mapplugins.bottom.right {
 			margin-top: 6px;
 		}
 		
-	}
-
-	.classification-guide {
-	 	padding-left: 5px;
 	}
 	
 	.ui-corner-all,
@@ -235,5 +213,7 @@ table.colo_table1 {
 		height: 15px;
 		width: 5px;
 	}
-
+}
+.manageClassificationPlugin .classification-guide {
+  padding-left: 5px;
 }

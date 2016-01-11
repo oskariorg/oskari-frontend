@@ -28,7 +28,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.request.DataSourceReques
                     name = request.getDataSourceName(),
                     data = request.getData();
 
-                this.plugin.addDataSource(id, name, data);
+                if (this.plugin) {
+                    this.plugin.addDataSource(id, name, data);
+                }
             }
         }
     }, {

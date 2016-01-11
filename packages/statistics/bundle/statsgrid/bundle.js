@@ -14,7 +14,10 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
     }, {
         "create": function () {
             return Oskari.clazz.create("Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance",
-                'statsgrid');
+                'StatsGrid', 
+                null, 
+                "Oskari.statistics.bundle.statsgrid.Tile", 
+                "Oskari.statistics.bundle.statsgrid.StatsView");
         },
         "update": function (manager, bundle, bi, info) {
         }
@@ -22,29 +25,65 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
         "protocol": ["Oskari.bundle.Bundle", "Oskari.mapframework.bundle.extension.ExtensionBundle"],
         "source": {
             "scripts": [{
+                "type" : "text/javascript",
+                "src" : "../../../../libraries/webcomponentsjs/webcomponents-lite.min.js"
+            }, {
+                // MODIFIED IN STATSGRID!!!!!
                 "type": "text/javascript",
                 "src": "../../../../bundles/statistics/statsgrid/instance.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/statsgrid/Tile.js"
+                "src": "../../../../bundles/statistics/statsgrid/view/MainPanel.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/statsgrid/StatsView.js"
+                "src": "../../../../bundles/statistics/statsgrid/domain/IndicatorMetadata.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/statistics/statsgrid/domain/IndicatorsMetadata.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/statistics/statsgrid/domain/LocalizedString.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/statistics/statsgrid/domain/RegionCategory.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/statistics/statsgrid/domain/SourceMetadata.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/statistics/statsgrid/domain/SourcesMetadata.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/statistics/statsgrid/service/StatisticsService.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/statistics/statsgrid/service/CallbackQueue.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/statistics/statsgrid/service/UserSelectionsService.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/statistics/statsgrid/GridModeView.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/statsgrid/StatsToolbar.js"
+                "src": "../../../../bundles/statistics/statsgrid/event/IndicatorSelectedEvent.js"
             }, {
-                "type" : "text/javascript",
-                "src" : "../../../../bundles/statistics/statsgrid/AddOwnIndicatorForm.js"
+                "type": "text/javascript",
+                "src": "../../../../bundles/statistics/statsgrid/Tile.js"
+            }, {
+                "type": "text/css",
+                "src": "../../../../bundles/statistics/statsgrid/resources/css/indicatorselector.css"
+
+                // /MODIFIED IN STATSGRID!!!!!
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/statistics/statsgrid/StatsView.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/statistics/statsgrid/StatsToolbar.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/statistics/statsgrid/plugin/ManageClassificationPlugin.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/statistics/statsgrid/plugin/ManageStatsPlugin.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/statistics/statsgrid/event/StatsDataChangedEvent.js"
@@ -87,9 +126,6 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/statistics/statsgrid/request/DataSourceRequestHandler.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/statistics/statsgrid/service/StatisticsService.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/statistics/statsgrid/service/UserIndicatorsService.js"
@@ -177,18 +213,20 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
                 "type": "text/javascript",
                 "src": "../../../../bundles/statistics/statsgrid/resources/locale/fi.js"
             }, {
-                "lang": "sv",
-                "type": "text/javascript",
-                "src": "../../../../bundles/statistics/statsgrid/resources/locale/sv.js"
-            }, {
                 "lang": "en",
                 "type": "text/javascript",
                 "src": "../../../../bundles/statistics/statsgrid/resources/locale/en.js"
-            }, {
-                "lang": "es",
-                "type": "text/javascript",
-                "src": "../../../../bundles/statistics/statsgrid/resources/locale/es.js"
-            }]
+            }],
+            "links": [{
+                "rel": "import",
+                "href": "/Oskari/bundles/statistics/statsgrid/oskari-statsview.html"
+            }],
+            "vulcanizedHtml": {
+                // In the future when the whole application uses Polymer we can vulcanize the whole app
+                // instead of using these dynamically coded partial imports.
+                "rel": "import",
+                "href": "/Oskari/bundles/statistics/statsgrid/vulcanized.html"
+            }
         },
         "bundle": {
             "manifest": {

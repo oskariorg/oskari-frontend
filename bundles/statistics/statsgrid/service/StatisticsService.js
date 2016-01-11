@@ -12,11 +12,15 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
      *
      */
 
-    function (instance) {
-        this.instance = instance;
-        this.sandbox = instance.sandbox;
+    function (sandbox) {
+        this.sandbox = sandbox;
         this.cache = {};
+
+        // This object contains all the data source indicator metadata keyed by the plugin name.
+        this.__indicatorsMetadata = {};
+        this.__regionCategories = [];
         this.cacheSize = 0;
+        this.callbackQueue = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.CallbackQueue');
     }, {
         __name: "StatsGrid.StatisticsService",
         __qname: "Oskari.statistics.bundle.statsgrid.StatisticsService",
@@ -28,13 +32,156 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
         getName: function () {
             return this.__name;
         },
-
+        getSandbox: function () {
+            return this.sandbox;
+        },
         /**
          * @method init
          * Initializes the service
          */
         init: function () {
 
+        },
+        getDataSources : function(callback) {
+            if(!callback) {
+                this.sandbox.printWarn('Provide callback for StatisticsService.getDataSources()');
+                return;
+            }
+            if(this.__indicatorsMetadata.length > 0) {
+                callback(this.__indicatorsMetadata);
+                return;
+            }
+            var queueName = 'getDataSources';
+            if(!this.callbackQueue.addCallbackToQueue(queueName, callback)) {
+                // already handling the request, all callbacks will be called when done
+                return;
+            }
+
+            var me = this,
+                url = Oskari.getSandbox().getAjaxUrl() + "action_route=GetIndicatorsMetadata";
+            jQuery.ajax({
+                type: "GET",
+                dataType: 'json',
+                url: url,
+                success: function (indicatorsMetadata) {
+                    if(!indicatorsMetadata || indicatorsMetadata.error) {
+                        callback();
+                        return;
+                    }
+
+                    if (indicatorsMetadata) {
+                        /*
+                         * The response schema contains plugin classnames as keys to objects with information about the indicators.
+                         * "fi.nls.oskari.control.statistics.plugins.sotka.SotkaStatisticalDatasourcePlugin": {
+                         *   "indicators": {
+                         *     "1411":{
+                         *       "source": {...},
+                         *       "selectors": {...},
+                         *       "description": {...},
+                         *       "layers":[
+                         *         // FIXME: Localize the layerIds for the dropdown.
+                         *         {"layerVersion":"1","type":"FLOAT","layerId":"Kunta"},
+                         *         ...
+                         *       ],
+                         *       "name": {...}
+                         *     }, ...
+                         *   },
+                         *   "localizationKey":"fi.nls.oskari.control.statistics.plugins.sotka.plugin_name"
+                         * }
+                         */
+                        me.__indicatorsMetadata = Oskari.clazz.create(
+                                'Oskari.statistics.bundle.statsgrid.domain.SourcesMetadata',
+                                indicatorsMetadata);
+                    }
+                    me.callbackQueue.notifyCallbacks(queueName, [me.__indicatorsMetadata]);
+                },
+                error: function (jqXHR, textStatus) {
+                    me.callbackQueue.notifyCallbacks(queueName);
+                }
+            });
+        },
+        getIndicatorValue : function(datasourceId, indicatorId, selectors, layerId, callback) {
+            if(!datasourceId || !indicatorId || !selectors|| !layerId) {
+                this.sandbox.printWarn('StatisticsService.getIndicatorValue() with no datasource or id, returning null');
+                callback();
+                return;
+            }
+            var me = this,
+                url = Oskari.getSandbox().getAjaxUrl() + "action_route=GetIndicatorData";
+
+            var queueName = this.callbackQueue.getQueueName('getIndicatorValue', arguments);
+            if(!this.callbackQueue.addCallbackToQueue(queueName, callback)) {
+                // already handling the request, all callbacks will be called when done
+                return;
+            }
+            jQuery.ajax({
+                type: "GET",
+                dataType: 'json',
+                data : {
+                    plugin_id : datasourceId,
+                    indicator_id : indicatorId,
+                    layer_id: layerId,
+                    selectors : JSON.stringify(selectors)
+                },
+                url: url,
+                success: function (pResp) {
+                    if(!pResp || pResp.error) {
+                        callback();
+                        return;
+                    }
+                    me.callbackQueue.notifyCallbacks(queueName, [pResp]);
+                },
+                error: function (jqXHR, textStatus) {
+                    me.callbackQueue.notifyCallbacks(queueName);
+                }
+            });
+        },
+        __handleIndicatorsResponse : function(response, datasourceId, callback) {
+            var parsed = [];
+            _.each(response, function(data) {
+                var indicator = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.domain.Indicator', data);
+                parsed.push(indicator);
+
+            });
+            callback(parsed);
+        },
+        getRegions : function(categoryId, callback) {
+            if(!categoryId) {
+                this.sandbox.printWarn('StatisticsService.getIndicatorMetadata() with no categoryId, returning null');
+                callback();
+                return;
+            }
+            var category = _.find(this.__regionCategories, function(item) {
+                // normalize to strings
+                return '' + item.getId() === '' + categoryId;
+            });
+            if(category.getRegions().length > 0) {
+                callback(category);
+                return;
+            }
+            var queueName = this.callbackQueue.getQueueName('getRegions', arguments);
+            if(!this.callbackQueue.addCallbackToQueue(queueName, callback)) {
+                // already handling the request, all callbacks will be called when done
+                return;
+            }
+            var me = this,
+                url = Oskari.getSandbox().getAjaxUrl() + "action_route=StatisticalIndicatorRegions&id=" + categoryId;
+            jQuery.ajax({
+                type: "GET",
+                dataType: 'json',
+                url: url,
+                success: function (pResp) {
+                    if(!pResp || pResp.error) {
+                        callback();
+                        return;
+                    }
+                    category.setRegions(pResp);
+                    me.callbackQueue.notifyCallbacks(queueName, [category]);
+                },
+                error: function (jqXHR, textStatus) {
+                    me.callbackQueue.notifyCallbacks(queueName);
+                }
+            });
         },
 
         /**
@@ -162,11 +309,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
             jQuery.ajax({
                 type: "GET",
                 dataType: 'json',
-                beforeSend: function (x) {
-                    if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
-                    }
-                },
                 url: url,
                 success: function (pResp) {
                     me._cacheStatsData(url, pResp);
