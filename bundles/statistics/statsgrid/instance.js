@@ -76,11 +76,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             mapModule.startPlugin(classifyPlugin);
             this.classifyPlugin = classifyPlugin;
 
-            var dataSourceRequestHandler = Oskari.clazz.create(
-                'Oskari.statistics.bundle.statsgrid.request.DataSourceRequestHandler',
-                this.gridPlugin);
-            sandbox.addRequestHandler('StatsGrid.AddDataSourceRequest', dataSourceRequestHandler);
-
             if (sandbox.getUser().isLoggedIn()) {
                 var userIndicatorsTab = Oskari.clazz.create(
                     'Oskari.statistics.bundle.statsgrid.UserIndicatorsTab',
@@ -191,17 +186,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             }
 
             if (view.isVisible) {
-                // AH-1110 ugly hack, we have to wait until ManageStatsPlugin has initialized
-                // If we set the state as below and then prepareMode(true), slickgrid breaks with no visible error
-                window.setTimeout(
-                    function () {
-                        me.gridPlugin.changeGridRegion(indicator.category);
-                        me.gridPlugin.addIndicatorDataToGrid(
-                            null, indicator.id, indicator.gender, indicator.year, indicator.data, indicator.meta
-                        );
-                        me.gridPlugin.addIndicatorMeta(indicator);
-                    }, 1000
-                );
+              // FIXME: What is the point of this here?
             } else {
                 // show the view.
                 state.layerId = indicator.layerId || state.layerId;
@@ -371,7 +356,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
          * @return {Object/null} returns the open indicators of the grid plugin, or null if no grid plugin
          */
         "getGridIndicators": function () {
-            return (this.gridPlugin ? this.gridPlugin.indicatorsMeta : null);
+            // FIXME: Implement
+            return null;
         },
 
         /**

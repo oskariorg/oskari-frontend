@@ -623,7 +623,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             }
 
             if (me.gridPlugin) {
-                me.gridPlugin.setGridHeight();
+                me.gridPlugin.handleSizeChanged();
             }
             // notify map module that size has changed
             me._updateMapModuleSize();
@@ -1615,12 +1615,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 me.classifyPlugin.stopPlugin(me.instance.sandbox);
             }
 
-            // stop our grid plugin
-            if (me.gridPlugin) {
-                mapModule.unregisterPlugin(me.gridPlugin);
-                me.gridPlugin.stopPlugin(me.instance.sandbox);
-            }
-
             // resume normal plugins
             for (i = 0; i < me.normalMapPlugins.length; i += 1) {
                 plugin = me.normalMapPlugins[i];
@@ -1749,14 +1743,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                     'layer': layer,
                     'state': statsGridState
                 };
-                var gridPlugin = Oskari.clazz.create(
-                    'Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin',
-                    gridConf,
-                    locale
-                );
-                me.mapModule.registerPlugin(gridPlugin);
-                me.mapModule.startPlugin(gridPlugin);
-                me.gridPlugin = gridPlugin;
+                me.gridPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.view.MainPanel',
+                    me,
+                    me.getLocalization(),
+                    me.getSandbox());
 
                 // Register classification plugin to the map.
                 gridConf.state.allowClassification = false;
@@ -1774,8 +1764,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 elLeft.html(me.statsContainer);
 
                 // Initialize the grid
-                me.gridPlugin.createStatsOut(me.statsContainer);
-
+                me.gridPlugin.render(me.statsContainer);
             }
         },
 

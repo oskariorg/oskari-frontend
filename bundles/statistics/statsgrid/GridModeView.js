@@ -215,7 +215,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                 //me.instance.gridPlugin.resetLayer();
 
                 me.instance.state.hiddenLayers = [];
-                me.instance.gridPlugin.destroyPopups(); // This is ugly, whose responsibility should this be?
                 jQuery('#contentMap').removeClass('statsgrid-contentMap');
                 jQuery('.oskariui-mode-content').removeClass('statsgrid-mode');
 

@@ -45,9 +45,12 @@ function() {
 
             me.__tool = {
 
-                id: 'Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin',
+                id: 'Oskari.statistics.bundle.statsgrid.view.MainPanel',
                 title: 'grid',
                 config: {
+                    'localization': Oskari.loc(),
+                    'sandbox': me.__sandbox,
+                    // FIXME: Are the next useful in the published grid?
                     'published': true,
                     'layer': layer,
                     'state': statsGridState
@@ -104,21 +107,17 @@ function() {
                 me.__sandbox.request(me.__instance, request);
             }
             me.__sandbox.registerService(me.statsService);
-            me.__plugin = Oskari.clazz.create(tool.id, tool.config, Oskari.getLocalization('StatsGrid'));
-            me.__mapmodule.registerPlugin(me.__plugin);
+            me.__plugin = Oskari.clazz.create(tool.id, tool.config.localization, tool.config.sandbox);
             me.statsContainer = jQuery(me.templates.publishedGridTemplate);
         }
 
         if(enabled === true) {
             elLeft = jQuery('.oskariui-left');
             elLeft.html(me.statsContainer);
-            me.__plugin.startPlugin(me.__sandbox);
-            me.__plugin.createStatsOut(me.statsContainer);
+            
+            me.__plugin.render(me.statsContainer, me);
             me.__started = true;
         } else {
-            if (me.__started === true) {
-                me.__plugin.stopPlugin(me.__sandbox);
-            }
             jQuery('.publishedgrid').remove();
         }
 
