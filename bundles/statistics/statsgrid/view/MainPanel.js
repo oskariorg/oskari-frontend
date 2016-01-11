@@ -13,6 +13,20 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.MainPanel',
         this.sandbox = sandbox;
     },
     {
+      startPlugin: function(sandbox) {
+      },
+      stopPlugin: function() {
+      },
+      getName: function() {
+        return "Oskari.statistics.bundle.statsgrid.view.MainPanel";
+      },
+      unregister: function() {
+      },
+      setMapModule: function(mapModule) {
+      },
+      getSandbox: function() {
+        return this.sandbox;
+      },
 	    render : function(container, instance) {
             var elementWrapper = document.createElement("oskari-statsview"),
               rawUrl = Oskari.getSandbox().getAjaxUrl(),
