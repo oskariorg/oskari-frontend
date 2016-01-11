@@ -48,7 +48,7 @@ function() {
                 id: 'Oskari.statistics.bundle.statsgrid.view.MainPanel',
                 title: 'grid',
                 config: {
-                    'localization': Oskari.loc(),
+                    'localization': Oskari.getLocalization('StatsGrid'),
                     'sandbox': me.__sandbox,
                     // FIXME: Are the next useful in the published grid?
                     'published': true,
@@ -107,7 +107,7 @@ function() {
                 me.__sandbox.request(me.__instance, request);
             }
             me.__sandbox.registerService(me.statsService);
-            me.__plugin = Oskari.clazz.create(tool.id, tool.config.localization, tool.config.sandbox);
+            me.__plugin = Oskari.clazz.create(tool.id, me, tool.config.localization, tool.config.sandbox);
             me.statsContainer = jQuery(me.templates.publishedGridTemplate);
         }
 
