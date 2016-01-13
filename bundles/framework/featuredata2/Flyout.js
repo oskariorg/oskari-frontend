@@ -899,9 +899,6 @@ Oskari.clazz.define(
             if (message) {
                 //insert header text into dom before tabcontent (=always visible when content scrolling)
                 jQuery(panel.html).before(footer.html(message));
-
-                //adjust the panel's tabcontent height with margin accordingly (avoid extra scrollbars)
-//                var headerHeight = footer.outerHeight(true);
             }
 
         }
