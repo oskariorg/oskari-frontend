@@ -42,7 +42,7 @@ Oskari.clazz.define(
         }
     }, {
         __templates: {
-            wrapper : '<div></div>'
+            wrapper : '<div class="gridMessageContainer" style="margin-top:30px; margin-left: 10px;"></div>'
         },
         /**
          * @method getName
@@ -588,8 +588,8 @@ Oskari.clazz.define(
                     this._enableResize();
                 }
 
-                // Extra footer message under grid
-                this._appendFooter(flyout, locales, layer);
+                // Extra header message on top of grid
+                this._appendHeaderMessage(panel, locales, layer);
 
             }
         },
@@ -857,21 +857,21 @@ Oskari.clazz.define(
             }
         },
         /**
-         * Add footer text under tab data grid, if analysislayer
-         * - Not the best solution, but ..
+         * Add message text over tab data grid, if analysislayer
          * @private
-         * @param  {jQuery} flyout
+         * @param  {Oskari.userinterface.component.TabPanel} panel
          * @param  {Array} locales localized field names
          * @param  {String} layer  Oskari layer
          */
-        _appendFooter: function (flyout, locales, layer) {
+        _appendHeaderMessage: function (panel, locales, layer) {
             var footer = this.template.wrapper.clone(),
                 sandbox = this.instance.getSandbox(),
                 inputid,
                 inputlayer,
                 loc = this.instance.getLocalization('gridFooter'),
                 message;
-
+            //clean up the old headermessage in case there was one
+            jQuery(panel.html).parent().find('div.gridMessageContainer').remove();
             if (!loc || !layer || layer.getLayerType().toUpperCase() !== 'ANALYSIS') {
                 return;
             }
@@ -886,6 +886,8 @@ Oskari.clazz.define(
                             _.forEach(locales, function (field) {
                                 if (field === loc.aggregateColumnField){
                                     message = loc.noDataMessage + ' (' + inputlayer.getWpsLayerParams().no_data + ').';
+                                } else if (field === loc.differenceColumnField) {
+                                    message += ' '+loc.differenceMessage + ' -111111111.';
                                 }
                             });
                         }
@@ -894,9 +896,12 @@ Oskari.clazz.define(
                 }
             }
 
-
             if (message) {
-                flyout.find('div.tab-content').append(footer.html(message));
+                //insert header text into dom before tabcontent (=always visible when content scrolling)
+                jQuery(panel.html).before(footer.html(message));
+
+                //adjust the panel's tabcontent height with margin accordingly (avoid extra scrollbars)
+//                var headerHeight = footer.outerHeight(true);
             }
 
         }
