@@ -316,7 +316,6 @@ Oskari.clazz.define(
                  * @param {Object} event
                  */
                 MapLayerVisibilityChangedEvent: function (event) {
-
                     me.mapLayerVisibilityChangedHandler(event);
                     if (event.getMapLayer().hasFeatureData() && me.getConfig() && me.getConfig().deferSetLocation) {
                         me.getSandbox().printDebug(
@@ -479,9 +478,6 @@ Oskari.clazz.define(
             // update zoomLevel and highlight pictures
             // must be updated also in map move, because of hili in bordertiles
             me.zoomLevel = zoom;
-            srs = map.getSrsName();
-            bbox = map.getExtent();
-            zoom = map.getZoom();
 
             // if no connection or the layer is not registered, get highlight with URL
             for (x = 0; x < me.activeHighlightLayers.length; x += 1) {
@@ -495,12 +491,7 @@ Oskari.clazz.define(
                     );
                     me.getHighlightImage(
                         me.activeHighlightLayers[x],
-                        srs, [
-                            bbox.left,
-                            bbox.bottom,
-                            bbox.right,
-                            bbox.top
-                        ],
+                        srs, bbox,
                         zoom,
                         fids
                     );
@@ -730,10 +721,11 @@ Oskari.clazz.define(
          * @param {Object} event
          */
         mapLayerVisibilityChangedHandler: function (event) {
-            if (event.getMapLayer().hasFeatureData()) {
+            var layer = event.getMapLayer();
+            if (layer.hasFeatureData()) {
                 this.getIO().setMapLayerVisibility(
-                    event.getMapLayer().getId(),
-                    event.getMapLayer().isVisible()
+                    layer.getId(),
+                    layer.isVisible()
                 );
             }
         },
