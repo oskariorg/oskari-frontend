@@ -151,8 +151,8 @@ module.exports = function (grunt) {
                 files: [
                     // Copy all files under the application template folder
                     {
-                        cwd: './oskari_application_template/',
-                        src: '**',
+                        cwd: 'oskari_application_template/',
+                        src: '**/*',
                         dest: '/',
                         expand: true
                     },
@@ -165,9 +165,10 @@ module.exports = function (grunt) {
                     }, {
                         src: '../bundles/bundle.js',
                         dest: '/',
-                    }, {
-                        src: '../packages/openlayers/startup.js',
-                        dest: '/',
+                    // The following does not exist.
+                    // }, {
+                    //     src: '../packages/openlayers/startup.js',
+                    //     dest: '/',
                     }
                 ]
             },
@@ -295,21 +296,19 @@ module.exports = function (grunt) {
     grunt.registerTask('nonminifiedStats', ['clean:build', 'copy:nonminified', 'copy:stats', 'vulcanize']);
     grunt.registerTask('devRelease', 'Release build without minification',
         function (version, configs, defaultIconDirectoryPath, copyResourcesToApplications, skipDocumentation) {
-            grunt.task.run(
-                'nonminifiedStats:' + (version || '') + ':' + (configs || '') + ':' +
+            var nonMinifiedTaskStr = 'nonminifiedStats:' + (version || '') + ':' + (configs || '') + ':' +
                     (defaultIconDirectoryPath || '') + ':' + (copyResourcesToApplications || '') + ':' + (skipDocumentation || ''),
-                'releaseManual:' + (version || '') + ':' + (configs || '') + ':' +
-                    (defaultIconDirectoryPath || '') + ':' + (copyResourcesToApplications || '') + ':' + (skipDocumentation || '')
-                );
+                releaseManualTaskStr = 'releaseManual:' + (version || '') + ':' + (configs || '') + ':' +
+                    (defaultIconDirectoryPath || '') + ':' + (copyResourcesToApplications || '') + ':' + (skipDocumentation || '');
+            grunt.task.run(nonMinifiedTaskStr, releaseManualTaskStr);
     });
     grunt.registerTask('release', 'Release build',
         function (version, configs, defaultIconDirectoryPath, copyResourcesToApplications, skipDocumentation) {
-            grunt.task.run(
-                'minifyStats:' + (version || '') + ':' + (configs || '') + ':' +
+            var minifyStatsTaskStr = 'minifyStats:' + (version || '') + ':' + (configs || '') + ':' +
                     (defaultIconDirectoryPath || '') + ':' + (copyResourcesToApplications || '') + ':' + (skipDocumentation || ''),
-                'releaseManual:' + (version || '') + ':' + (configs || '') + ':' +
-                    (defaultIconDirectoryPath || '') + ':' + (copyResourcesToApplications || '') + ':' + (skipDocumentation || '')
-                );
+                releaseManualTaskStr = 'releaseManual:' + (version || '') + ':' + (configs || '') + ':' +
+                    (defaultIconDirectoryPath || '') + ':' + (copyResourcesToApplications || '') + ':' + (skipDocumentation || '');
+            grunt.task.run(minifyStatsTaskStr, releaseManualTaskStr);
     });
 
     // Default task.
