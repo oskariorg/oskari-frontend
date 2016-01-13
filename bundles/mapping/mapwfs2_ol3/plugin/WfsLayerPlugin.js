@@ -49,8 +49,6 @@ Oskari.clazz.define(
 
 
         me.tempVectorLayer = null;
-        //a hash for layers that are in the middle of the loading process
-        me._layersLoading = {};
 
         me.__layersByName = {};
 
@@ -420,7 +418,24 @@ Oskari.clazz.define(
         getVisualizationForm: function () {
             return this._visualizationForm;
         },
+        /**
+         * Returns the requested layer IF it's one of the selected layers on map.
+         * If params is undefined, returns all selected layers.
+         * @param  {String} reqLayerId optional id
+         * @return {Oskari.mapframework.domain.AbstractLayer}  layers array
+         */
+        _getLayers : function(reqLayerId) {
+            var sb = this.getSandbox();
 
+            if(!reqLayerId) {
+                return sb.findAllSelectedMapLayers();
+            }
+            var layer = sb.findMapLayerFromSelectedMapLayers(reqLayerId);
+            if(layer) {
+                return [layer];
+            }
+            return [];
+        },
         /**
          * @method mapMoveHandler
          */
@@ -435,56 +450,31 @@ Oskari.clazz.define(
                 grid,
                 fids,
                 layerId,
-                layers = [],
+                layers = this._getLayers(),
                 i,
                 tiles,
                 x;
 
             // clean tiles for printing
             me._printTiles = {};
-            // Update layer tile grid
 
             // update location
             grid = this.getGrid();
-
-            if(reqLayerId) {
-                var layer = sandbox.findMapLayerFromSelectedMapLayers(reqLayerId);
-                if(layer) {
-                    layers.push(layer);
-                }
-            }
-            else {
-                layers = sandbox.findAllSelectedMapLayers();
-            }
-
-            for (i = 0; i < layers.length; i += 1) {
-                var layer = layers[i];
-                if (!layer.hasFeatureData()) {
-                    continue;
+            layers.forEach(function (layer) {
+                if (!layer.hasFeatureData() || !layer.isVisible()) {
+                    return;
                 }
                 // clean features lists
                 layer.setActiveFeatures([]);
                 if (grid === null || grid === undefined) {
-                    continue;
+                    return;
                 }
-                layerId = layers[i].getId();
-                var ollayer = this.getOLMapLayer(layer);
+                var ollayer = me.getOLMapLayer(layer);
                 tiles = ollayer.getSource().getNonCachedGrid(grid);
-                //tiles = me.getNonCachedGrid(layerId, grid);
-                me._layersLoading[layerId] = tiles.length;
-                me.getIO().setLocation(
-                    layerId,
-                    srs, [
-                        bbox[0],
-                        bbox[1],
-                        bbox[2],
-                        bbox[3]
-                    ],
-                    zoom,
-                    grid,
-                    tiles
+                me.getIO().setLocation(layer.getId(),
+                    srs, bbox, zoom, grid, tiles
                 );
-            }
+            });
 
             // update zoomLevel and highlight pictures
             // must be updated also in map move, because of hili in bordertiles

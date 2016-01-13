@@ -226,7 +226,8 @@ Oskari.clazz.define(
                     return;
                 }
                 message.layers[layer.getId() + ''] = {
-                    styleName: layer.getCurrentStyle().getName()
+                    styleName: layer.getCurrentStyle().getName(),
+                    visible : layer.isVisible()
                 };
             });
             this.__initInProgress = true;

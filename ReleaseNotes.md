@@ -70,6 +70,7 @@ Fixed error handling when cannot get roles from backend.
 ### mapwfs2_ol3
 
 WFSRefreshManualLoadLayersEvent is now included in ol3 version as well and changing the size of the map no longer results in JS-error.
+Layer visibility information is now included in init-message to enable disabling queries to services that are visible to user.
 
 ### drawtools/ol3 and VectorLayerPlugin
 
