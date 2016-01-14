@@ -95,7 +95,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
             };
             me.mainPanel = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.view.MainPanel', this,
                 locale,
-                sandbox);
+                sandbox, true);
 
             //if classification not explicitly allowed, don't allow it.
             //This will however also change the behaviour of existing published maps where classification has previously been allwed.

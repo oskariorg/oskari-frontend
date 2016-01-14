@@ -8,9 +8,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.MainPanel',
     /**
      * @static constructor function
      */
-    function (instance, localization, sandbox) {
+    function (instance, localization, sandbox, embedded) {
         this.localization = localization;
         this.sandbox = sandbox;
+        this.embedded = embedded;
     },
     {
       startPlugin: function(sandbox) {
@@ -40,6 +41,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.MainPanel',
             elementWrapper.language = Oskari.getLang();
             elementWrapper.user = this.sandbox.getUser();
             elementWrapper.sandbox = this.sandbox;
+            elementWrapper.embedded = this.embedded;
             Polymer.dom(container[0]).appendChild(elementWrapper);
 	    },
         getContainer : function() {
