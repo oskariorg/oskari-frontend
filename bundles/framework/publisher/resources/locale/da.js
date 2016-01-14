@@ -27,17 +27,8 @@ Oskari.registerLocalization(
             },
             "name": {
                 "label": "Kortets navn",
-                "placeholder": "NOT TRANSLATED",
+                "placeholder": "",
                 "tooltip": "Giv dit kort et beskrivende navn. Vær opmærksom på brugergrænsefladens sprog."
-            },
-            "language": {
-                "label": "Sprog",
-                "options": {
-                    "fi": "Finsk",
-                    "sv": "Svensk",
-                    "en": "Engelsk"
-                },
-                "tooltip": "Vælg sprog for kortgrænseflade og kortdata"
             },
             "size": {
                 "label": "Størrelse",
@@ -53,8 +44,8 @@ Oskari.registerLocalization(
                 "ControlsPlugin": "Pannorering til",
                 "SearchPlugin": "Søgning efter adresse og stednavn",
                 "GetInfoPlugin": "Forespørgselsværktøj for steddata",
-                "PublisherToolbarPlugin": "NOT TRANSLATED",
-                "selectDrawLayer": "NOT TRANSLATED"
+                "PublisherToolbarPlugin": "",
+                "selectDrawLayer": ""
             },
             "layers": {
                 "label": "Kortlag",
@@ -62,13 +53,13 @@ Oskari.registerLocalization(
                 "useAsDefaultLayer": "Brug som standardlag"
             },
             "myplaces": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "sizes": {
                 "small": "Small",
                 "medium": "Medium",
                 "large": "Large",
-                "fill": "NOT TRANSLATED",
+                "fill": "",
                 "custom": "Brugerdefineret størrelse",
                 "width": "Bredde",
                 "height": "Højde",
@@ -90,8 +81,7 @@ Oskari.registerLocalization(
             "layerselection": {
                 "label": "Vis kortlag i menu",
                 "info": "Vælg baggrundskort. Du kan indstille standardbaggrundskort i kortvisningsvinduet.",
-                "tooltip": "Baggrundskortet vises som det nederste lag på kortet. Når du vælger kortlag, der skal bruges som nederste lag, bliver der kun vist ét lag ad gangen, og du kan vælge mellem dem. Du kan indstille standardbaggrundskort i forhåndsvisningen af kortet.",
-                "promote": "Vis antenne billeder?"
+                "tooltip": "Baggrundskortet vises som det nederste lag på kortet. Når du vælger kortlag, der skal bruges som nederste lag, bliver der kun vist ét lag ad gangen, og du kan vælge mellem dem. Du kan indstille standardbaggrundskort i forhåndsvisningen af kortet."
             },
             "preview": "Forhåndsvisning af det kort, der skal integreres",
             "location": "Placering og zoomniveau",
@@ -132,12 +122,7 @@ Oskari.registerLocalization(
                 "accept": "Acceptér"
             }
         },
-        "layer": {
-            "rights": {
-                "can_be_published_map_user": {
-                }
-            }
-        },
+        "layer": {},
         "layerFilter": {
             "buttons": {
                 "publishable": "Publishable"

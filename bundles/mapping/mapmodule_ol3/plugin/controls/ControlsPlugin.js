@@ -52,8 +52,7 @@ Oskari.clazz.define(
                 * @param {Oskari.mapframework.bundle.toolbar.event.ToolSelectedEvent} event
                 */
                 'DrawingEvent': function (event) {
-
-                    if(event.getId() !== 'measureline' || event.getId() !== 'measurearea') {
+                    if(event.getId() !== 'measureline' && event.getId() !== 'measurearea') {
                         // this isn't about measurements, stop processing it
                         return;
                     }

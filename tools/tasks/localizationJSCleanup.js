@@ -1,7 +1,7 @@
 /*
  * Clean up dirty localisation files (empty values, "NOT TRANSLATED", value same as in template.)
+ * Also removes keys that do not exist in the template locale
  */
-
 module.exports = function(grunt) {
 
 
@@ -144,6 +144,43 @@ module.exports = function(grunt) {
             return;
         };
 
+
+        /**
+         * Removes keys that don't exist templateJSON from JSONToCompare -> clean up deprecated keys
+         */
+
+        this.removeUnusedKeys = function(templateJSON, JSONToCompare, path, level) {
+            if (level === 0) {
+                for (var key in JSONToCompare) {
+                    if (!templateJSON[key]) {
+                        grunt.log.warn("Localization for bundle "+key+" missing from template.");
+                        continue;
+                    } else {
+                        this.removeUnusedKeysRecursive(templateJSON[key].localization.value, JSONToCompare[key].localization.value, path, key, level);
+                    }
+                }
+            }
+        };
+
+        this.removeUnusedKeysRecursive = function(templateJSON, JSONToCompare, path, bundle, level) {
+            var logkey = "";
+            if (level === 0) {
+                path = "";
+            }
+            for (var key in JSONToCompare) {
+                logkey = path && path.length ? path+"."+key : key;
+
+                if (!templateJSON.hasOwnProperty(key) || templateJSON[key] === undefined || templateJSON[key] === null) {
+                    //key doesn't exist in template -> remove from the localization
+                    grunt.log.warn("Key does not exist in template: "+bundle+" - "+logkey);
+                    delete JSONToCompare[key];
+                } else if (JSONToCompare[key].constructor === Object) {
+                    this.removeUnusedKeysRecursive(templateJSON[key], JSONToCompare[key], logkey, bundle, level + 1);
+                }
+            }
+            return;
+        };
+
         //stores the info of which keys to write into which file 
         var hash = {};
         this.files.forEach(function(file) {
@@ -175,7 +212,6 @@ module.exports = function(grunt) {
         	}
         });
 
-        //do stuff for stuff and to stuff
         grunt.log.writeln("\r\nCleaning generic translations and checking whitespace-only values...");
         for (var key in hash) {
         	//first clean out stoopid stuff. That's the "not translated" stuff and white space trimming etc.
@@ -204,7 +240,13 @@ module.exports = function(grunt) {
 
         		var target = hash[lang];
 	      		grunt.log.writeln("\r\nProcessing file "+targetFilename);
+                grunt.log.writeln("\r\nRemoving keys with no translation... ");
+
         		this.removeTemplateLanguageValues(template[sourceFilename], target[targetFilename], null, 0);
+
+                //remove the keys that don't exist in the template
+                grunt.log.writeln("\r\nRemoving keys that do not exist in the template... ");
+                this.removeUnusedKeys(template[sourceFilename], target[targetFilename], null, 0);
         	}
         }
 
@@ -213,15 +255,14 @@ module.exports = function(grunt) {
         	for (var filename in hash[lang]) {
         		var data = '';
 	            for (var localizationKey in hash[lang][filename]) {
+                        //console.log("Writing to disc: "+filename+" "+lang+"\r\n\r\n"+JSON.stringify(hash[lang][filename][localizationKey].localization, null, this.jsonFormatterIndent));
 	                    data += hash[lang][filename][localizationKey].prefix+
 	                            JSON.stringify(hash[lang][filename][localizationKey].localization, null, this.jsonFormatterIndent)+
 	                            hash[lang][filename][localizationKey].suffix;
 	            }
-
 	            this.writeToDisc(filename, data);
         	}
         }
-
         return;
 	});
 }

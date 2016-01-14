@@ -22,6 +22,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
 
         me.initialSetup = true;
         me.templates = {};
+        me._mobileDefs = {
+            width: 500
+        };
+        me.isMobile = false;
     }, {
         /**
          * @private @method _initImpl
@@ -39,8 +43,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 '    <div class="header-icon icon-arrow-white-right"></div>' +
                 '  </div>' +
                 '  <div class="content">' +
-                '    <div class="layers"></div>' +
-                '    <div class="baselayers"></div>' +
+                '    <div class="layers-content">' +
+                '        <div class="baselayers"></div>' +
+                '        <div class="layers"></div>' +
+                '    </div>' +
                 '  </div>' +
                 '</div>');
             //same as in main, only used when returning from some other layout to default (publisher)
@@ -56,6 +62,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 '<div class="baseLayerHeader"></div>'
             );
 
+            me.templates.layerHeader = jQuery(
+                '<div class="layerHeader"></div>'
+            );
+
             me.templates.headerArrow = jQuery(
                 '<div class="styled-header-arrow"></div>'
             );
@@ -66,7 +76,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 '</div>'
             );
         },
+        /**
+         * @method  @private _handleMapSizeChanges handle map size changes
+         * @param  {Object} size {width:100, height:200}
+         * @param {Object} el jQuery element
+         */
+        _handleMapSizeChanges: function(size, el){
+            var me = this,
+                div = el || this.getElement();
 
+            if(size.width < me._mobileDefs.width) {
+                me.isMobile = true;
+
+            } else {
+                me.isMobile = false;
+            }
+        },
         /**
          * @method _createEventHandlers
          * Create eventhandlers.
@@ -124,6 +149,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     if (event._creator !== this.getName()) {
                         this.sortLayers();
                     }
+                },
+                MapSizeChangedEvent: function (evt) {
+                    this._handleMapSizeChanges({width:evt.getWidth(), height:evt.getHeight()});
                 }
             };
         },
@@ -172,6 +200,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             if (this.layerRefs[layer.getId()]) {
                 return;
             }
+
             var me = this,
                 element = el || this.getElement(),
                 content = element.find('div.content'),
@@ -193,6 +222,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             div.find('span').before(input);
             this.layerRefs[layer.getId()] = div;
             layersDiv.append(div);
+
+            if (layersDiv.find('.layer').length > 0) {
+                var pluginLoc = me.getMapModule().getLocalization('plugin'),
+                    myLoc = pluginLoc[me._name],
+                    header = me.templates.layerHeader.clone();
+
+                header.append(myLoc.chooseOtherLayers);
+                layersDiv.parent().find('.layerHeader').remove();
+                layersDiv.before(header);
+            }
         },
 
         /**
@@ -301,6 +340,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             var baseLayersDiv = me.getElement().find(
                 'div.content div.baselayers'
             );
+
             // add text if first selection available
             if (baseLayersDiv.find('div.layer').length === 0) {
                 var pluginLoc = me.getMapModule().getLocalization('plugin'),
@@ -311,6 +351,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 baseLayersDiv.parent().find('.baseLayerHeader').remove();
                 baseLayersDiv.before(header);
                 input.attr('checked', 'checked');
+                baseLayersDiv.show();
             }
             baseLayersDiv.append(div);
             me.layerRefs[layer.getId()] = div;
@@ -352,6 +393,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     'div.content div.baseLayerHeader'
                 );
                 baselayerHeader.remove();
+                baseLayersDiv.hide();
             } else {
                 this.sortLayers();
                 var checked = baseLayers.find('input:checked');
@@ -488,12 +530,37 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * Programmatically opens the plugins interface as if user had clicked it open
          */
         openSelection: function () {
-            var icon = this.getElement().find('div.header div.header-icon'),
-                content;
+            var me = this,
+                conf = me.getConfig(),
+                div = this.getElement(),
+                icon = div.find('div.header div.header-icon'),
+                content = div.find('div.content'),
+                layersContent = div.find('.layers-content'),
+                header = div.find('div.header'),
+                mapmodule = me.getMapModule();
+                size = mapmodule.getSize(),
+                toolStyle = conf.toolStyle || me.getToolStyleFromMapModule();
 
             icon.removeClass('icon-arrow-white-right');
             icon.addClass('icon-arrow-white-down');
-            this.getElement().find('div.content').show();
+            content.show();
+
+            if(toolStyle && !me.isMobile) {
+                layersContent.css('height', (0.75 * size.height) + 'px');
+            }
+            // use default
+            else {
+                layersContent.css('height', (0.85 * size.height) + 'px');
+            }
+
+
+            if(me.isMobile){
+                content.addClass('mobile');
+                header.addClass('mobile');
+            } else {
+                content.removeClass('mobile');
+                header.removeClass('mobile');
+            }
         },
 
         /**
@@ -503,11 +570,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         closeSelection: function (el) {
             var element = el || this.getElement(),
                 icon = element.find('div.header div.header-icon'),
-                content;
+                content = element.find('div.content'),
+                header = element.find('div.header');
 
             icon.removeClass('icon-arrow-white-down');
             icon.addClass('icon-arrow-white-right');
-            element.find('div.content').hide();
+            content.hide();
+            content.removeClass('mobile');
+            header.removeClass('mobile');
         },
 
         /**
@@ -578,7 +648,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         refresh: function () {
             var me = this,
                 conf = me.getConfig(),
-                element = me.getElement();
+                element = me.getElement(),
+                mapModule = me.getMapModule();
             if (conf) {
                 if (conf.toolStyle) {
                     me.changeToolStyle(conf.toolStyle, element);
@@ -603,6 +674,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     me.changeColourScheme(conf.colourScheme, element);
                 }
             }
+            me._handleMapSizeChanges(mapModule.getSize(), element);
         },
 
         /**

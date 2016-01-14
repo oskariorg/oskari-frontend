@@ -3,10 +3,28 @@ div.mapplugin.layerselection {
   height: 37px;
   overflow: visible;
   max-width: 200px;
-  z-index: 100000000 !important; 
+  z-index: 100000000000000 !important; 
 
   div.content {
     background-color: white; 
+    max-height: 95%;
+
+    div.layers-content {
+      overflow: auto;
+      width:100%;
+      background-color: #fff;
+
+      div.baselayers {
+        display: none;
+      } 
+    }
+
+    &.mobile {
+      position:fixed;
+      top:36px;
+      left:0;
+      width:100%;
+    }
 
     div.content-header {
       /* This is some sort of a theme color... leave it be */
@@ -29,7 +47,7 @@ div.mapplugin.layerselection {
       }
     }
 
-    div.baseLayerHeader {
+    div.baseLayerHeader, div.layerHeader {
       background-color: #E6E6E6;
       padding: 10px;
       text-align: left; 
@@ -47,7 +65,7 @@ div.mapplugin.layerselection {
       span {
         display: block;
         margin-left: 30px;
-        word-break: break-all; 
+        word-break: break-word; 
       }
     }
 
@@ -78,6 +96,13 @@ div.mapplugin.layerselection {
       margin-right: 4px;
       vertical-align: middle; 
     }
+
+    &.mobile {
+      position:fixed;
+      top:0;
+      left:0;
+      width:100%;
+    }
   }
 
   div.header:hover {
@@ -86,7 +111,9 @@ div.mapplugin.layerselection {
 
   div.layerselection-styled-content {
       width: 200px;
-      border: 1px solid #333438; 
+      div.styled-header-arrow {
+        margin-left: 10px;
+      }
   }
 
   .oskari-publisher-layers-rounded-dark, .oskari-publisher-layers-rounded-light {
@@ -163,15 +190,21 @@ div.mapplugin.layerselection {
 }
 
 .published-styled-layerselector-content {
-  position: absolute !important;
+  position: absolute;
   top: 44px !important;
-  right: 0px !important; 
+  right: 0px !important;
+  &.mobile {
+    top: 0 !important;
+  }
 }
 
 /* Hacketyhack, we need to keep the popup on screen */
 .mapplugins.left div.mapplugin.layerselection div.published-styled-layerselector-content {
   left: 0px !important;
   right: auto !important; 
+  &.mobile {
+    top: 0 !important;
+  }
 }
 
 .mapplugins.left div.mapplugin.layerselection div.published-styled-layerselector-content div.styled-header-arrow {

@@ -472,28 +472,33 @@ Oskari.clazz.define(
             }
 
             for (i = 0; i < layers.length; i += 1) {
-                if (layers[i].hasFeatureData() && layers[i].isVisible()) {
-                    // clean features lists
-                    layers[i].setActiveFeatures([]);
-                    if (grid !== null && grid !== undefined) {
-                        layerId = layers[i].getId();
-                        tiles = me.getNonCachedGrid(layerId, grid);
-                        me.getIO().setLocation(
-                            layerId,
-                            srs, [
-                                bbox.left,
-                                bbox.bottom,
-                                bbox.right,
-                                bbox.top
-                            ],
-                            zoom,
-                            grid,
-                            tiles
-                        );
-                        me._tilesLayer.redraw();
-
-                    }
+                var layer = layers[i];
+                if (!layer.hasFeatureData()) {
+                    continue;
                 }
+                if (!layer.hasFeatureData() || !layer.isVisible()) {
+                    continue;
+                }
+                // clean features lists
+                layers[i].setActiveFeatures([]);
+                if (grid === null || grid === undefined) {
+                    continue;
+                }
+                layerId = layers[i].getId();
+                tiles = me.getNonCachedGrid(layerId, grid);
+                me.getIO().setLocation(
+                    layerId,
+                    srs, [
+                        bbox.left,
+                        bbox.bottom,
+                        bbox.right,
+                        bbox.top
+                    ],
+                    zoom,
+                    grid,
+                    tiles
+                );
+                me._tilesLayer.redraw();
             }
 
             // update zoomLevel and highlight pictures

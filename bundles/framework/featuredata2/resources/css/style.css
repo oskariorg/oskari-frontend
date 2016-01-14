@@ -21,6 +21,8 @@
     display: block; }
   .featuredata div.icon-funnel {
     cursor: pointer; }
+  .featuredata div.gridMessageContainer {
+    margin: 30px 10px 10px 10px; }
 
 div.analyse-filter-popup-content div.filter-option {
   padding-bottom: 10px; }

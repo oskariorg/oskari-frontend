@@ -2,32 +2,40 @@
 
 ## 1.35
 
-### drawtools/ol3
+### mapmodule - LayerSelectionPlugin
 
-DrawingEvent now returns JSON-data as JSON-object.
+Now LayerSelectionPlugin handle small screen (width is smaller than 500px) so at layer(s) selection component use full screen.
+
+*Improved UI* First displayed in the background map selection and then the other.
+
+### drawtools/ol3  - POSSIBLE BREAKING CHANGES!
+
+DrawingEvent now returns drawed geometry as GeoJSON-object (before it's returns geometry as stringified GeoJSON-object). 
+
 'showMeasure' parameter is renamed to 'showMeasureOnMap' (if true - measure result will be displayed on map near feature. Default is false.)
-New parameter is added to plugin: 'allowSelfIntersection'. (if true - user will see popup with warning text, that self-intersection is not allowed. Default is true.))
 
-## core
+New parameter is added to plugin: 'noticeSelfIntersection'. (if true - user will see warning text if polygon has self-intersection. Features will be not sended to the event before polygon is valid. Default is true.))
+
+### core
 
 `Oskari.clazz.create()` now checks if a constructor returned value of a class instance to be used instead of normal processing. This might cause issues with inheritance so use with caution.
 SearchService uses this to check if one has already been registered to sandbox and returns the registered instance instead of self if so.
 
-## sandbox
+### sandbox
 
 `getAjaxUrl()` now takes an optional route params so code like `sb.getAjaxUrl() + 'action_route=MyRoute'` can now be replaced with `sb.getAjaxUrl('MyRoute')`
 
-## core/maplayerservice
+### core/maplayerservice
 
 MapLayerService now takes sandbox and url as constructor arguments (previously url then sandbox). Url is now optional and will default to 
 sandbox.getAjaxUrl('GetMapLayers') + '&lang=' + Oskari.getLang().
 
-## mapfull
+### mapfull
 
 Now initializes the search service so it's available to be used by requests even if there's no UI for it. 
 This is something that will most propably be moved out of mapfull in Oskari2 with view migration provided to enable the same functionality.
 
-## search/search service
+### search/search service
 
 `Oskari.mapframework.bundle.search.service.SearchService` is now `Oskari.service.search.SearchService`.
 The files for the `SearchService`, `SearchRequest`, `SearchResultEvent` has been moved from bundles/framework/search/service to bundles/service/search.
@@ -39,7 +47,7 @@ Url defaults to sandbox.getAjaxUrl('GetSearchResult') if sandbox is given and ur
 This means that all bundles creating SearchServices use the same instance if they give the sandbox argument.
 SearchService will now trigger SearchResultEvent whenever search is done.
 
-## search bundle
+### search bundle
 
 The Search bundle was restructured so the default search ui is now separated file/class and flyout handles the tabbing and default UI if tabbing is not needed.
 The bundles default UI now handles the UI side of search and uses SearchRequest and SearchResultEvent to make the searches.
@@ -59,9 +67,12 @@ Fixed user search when one or many of these user data values  is not defined:
 - firstname
 - last name
 
+Fixed error handling when cannot get roles from backend.
+
 ### mapwfs2_ol3
 
 WFSRefreshManualLoadLayersEvent is now included in ol3 version as well and changing the size of the map no longer results in JS-error.
+Layer visibility information is now included in init-message to enable disabling queries to services that are visible to user.
 
 ### drawtools/ol3 and VectorLayerPlugin
 
@@ -89,7 +100,7 @@ Renamed functions
 - zoomTo() removed. Use setZoomLevel() instead.
 - getLayerPlugin() removed. Use getLayerPlugins(id) with id parameter to fetch reference to single plugin.
 - getMapScales() renamed getScaleArray() to be consistent with getResolution()/getResolutionArray().
-- calculateScaleResolution() renamed getResolutionForScale().
+- calculateResolution() and calculateScaleResolution() renamed getResolutionForScale().
 - getPluginInstance() removed. Use getPluginInstances(pluginName) with pluginName parameter to fetch reference to single plugin.
 
 Unused functions removed:
