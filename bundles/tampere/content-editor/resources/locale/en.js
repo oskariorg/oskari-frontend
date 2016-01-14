@@ -45,6 +45,14 @@ Oskari.registerLocalization(
             "deleteFeature": {
                 "title": "Delete feature",
                 "text": "Are you sure you want to delete feature?"
+            },
+            "formValidationError": {
+                "title": "Form validation error",
+                "text": "Please correct selected field values"
+            },
+            "formValidationNumberError": {
+                "title": "Number validation error",
+                "text": "Please put correct number value"
             }
         }
     }

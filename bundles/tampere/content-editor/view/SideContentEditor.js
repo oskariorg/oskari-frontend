@@ -412,7 +412,8 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     if (me.operationMode == "create") {
                         me.currentData.features[0][0] = response.fid;
                     }
-                    me._handleInfoResult(me.currentData);
+                    //me._handleInfoResult(me.currentData);
+                    me._clearFeaturesList();
                     var evt = me.sandbox.getEventBuilder('AfterChangeMapLayerStyleEvent')(me._getLayerById(me.layerId));
                     me.sandbox.notifyAll(evt);
                     me.sendStopDrawRequest(true);
@@ -631,7 +632,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 contentData.featureId = data.features[0][0];
                 content.push(contentData);
                 $(".properties-container").empty().append(contentData.html);
-                $(".datepicker").datepicker({'dateFormat': "yy-mm-dd"});
+                $(".datepicker").datepicker({'dateFormat': "yy-mm-dd", 'changeMonth': true, 'changeYear': true, 'showButtonPanel': true}).attr('readonly', 'readonly');
             }
         },
         /**
@@ -789,10 +790,44 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                         {
                             case 'xsd:numeric':
                                 valInput.prop('type', 'number');
+                                valInput.on('blur', function (event) {
+                                    if ($.isNumeric($(this).val()) == false) {
+                                        $(this).addClass('field-invalid');
+
+                                        var okButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                                        okButton.setTitle(me.loc.buttons.ok);
+                                        okButton.setHandler(function () {
+                                            me.closeDialog();
+                                        });
+                                        me.showMessage(me.loc.formValidationNumberError.title, me.loc.formValidationNumberError.text, [okButton]);
+                                    }
+                                });
+                                valInput.on('keyup', function (event) {
+                                    if ($.isNumeric($(this).val())) {
+                                        $(this).removeClass('field-invalid');
+                                    }
+                                });
                                 break;
                             case 'xsd:double':
                             case 'xsd:decimal':
                                 valInput.prop('type', 'number').prop('step', 0.01);
+                                valInput.on('blur', function (event) {
+                                    if ($.isNumeric($(this).val()) == false) {
+                                        $(this).addClass('field-invalid');
+
+                                        var okButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                                        okButton.setTitle(me.loc.buttons.ok);
+                                        okButton.setHandler(function () {
+                                            me.closeDialog();
+                                        });
+                                        me.showMessage(me.loc.formValidationNumberError.title, me.loc.formValidationNumberError.text, [okButton]);
+                                    }
+                                });
+                                valInput.on('keyup', function (event) {
+                                    if ($.isNumeric($(this).val())) {
+                                        $(this).removeClass('field-invalid');
+                                    }
+                                });
                                 break;
                             case 'xsd:date':
                                 valInput.prop('type', 'text');
@@ -817,20 +852,29 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         },
         _saveFeature: function () {
             var me = this;
-            if (me.drawingActive == true) {
-                me.drawingActive = false;
-                me.sendStopDrawRequest();
+            if (me._formIsValid()) {
+                if (me.drawingActive == true) {
+                    me.drawingActive = false;
+                    me.sendStopDrawRequest();
+                } else {
+                    me.prepareRequest(null);
+                }
+                me.featureDuringEdit = false;
+                me._storeFormData();
             } else {
-                me.prepareRequest(null);
+                var okButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                okButton.setTitle(me.loc.buttons.ok);
+                okButton.setHandler(function () {
+                    me.closeDialog();
+                });
+                me.showMessage(me.loc.formValidationError.title, me.loc.formValidationError.text, [okButton], true);
             }
-            me.featureDuringEdit = false;
-            me._storeFormData();
         },
         _cancelFeature: function () {
             var me = this;
             me.drawingActive = false;
             me.sendStopDrawRequest(true);
-            $(".properties-container").empty();
+            me._clearFeaturesList();
             me.featureDuringEdit = false;
         },
         _storeFormData: function () {
@@ -1122,7 +1166,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 data : {'featureData':JSON.stringify(requestData)},
                 url : ajaxUrl + 'action_route=DeleteFeature',
                 success : function(response) {
-                    $(".properties-container").empty();
+                    me._clearFeaturesList();
                     okButton.setHandler(function () {
                         setTimeout(function() {
                             var visibilityRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest');
@@ -1179,6 +1223,15 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 $("#delete-dialog").parent().parent().css('height', 'auto').css('padding-bottom', '30px');
             }
             me.operationMode = "edit";
+        },
+        _clearFeaturesList: function () {
+            $(".properties-container").empty();
+        },
+        _formIsValid: function () {
+            if ($(".properties-container input.field-invalid").length > 0) {
+                return false;
+            }
+            return true;
         }
     }, {
         /**

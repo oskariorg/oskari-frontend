@@ -152,3 +152,7 @@ div.content-editor div.buttons input, div.publisher div.startview div.buttons in
 #delete-dialog {
   margin-bottom: 30px;
 }
+
+.field-invalid {
+  border: 1px solid red !important;
+}
