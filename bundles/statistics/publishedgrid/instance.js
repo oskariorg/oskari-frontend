@@ -93,6 +93,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
                 'state': me.state,
                 'layer': statsLayer
             };
+            me.mainPanel = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.view.MainPanel', this,
+                locale,
+                sandbox);
 
             //if classification not explicitly allowed, don't allow it.
             //This will however also change the behaviour of existing published maps where classification has previously been allwed.
@@ -125,9 +128,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
         },
 
         setState: function (state) {
-            if (state) {
-                this.gridPlugin.loadStateIndicators(state, this.container);
-            }
+          // This is unnecessary here.
         },
 
         getState: function () {
@@ -249,7 +250,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
                 me._createShowHideButton(me.container);
             }
             // Initialize the grid
-            me.gridPlugin.createStatsOut(me.container);
+            me.mainPanel.render(me.container);
             me._adjustDataContainer();
         },
 
@@ -279,7 +280,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
          * @return {Object/null} returns the open indicators of the grid plugin, or null if no grid plugin
          */
         getGridIndicators: function () {
-            return (this.gridPlugin ? this.gridPlugin.indicatorsMeta : null);
+          // FIXME: Implement or remove
+          return null;
         },
 
         /**

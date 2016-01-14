@@ -356,7 +356,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
          * @return {Object/null} returns the open indicators of the grid plugin, or null if no grid plugin
          */
         "getGridIndicators": function () {
-            // FIXME: Implement
+            // FIXME: Implement or remove
             return null;
         },
 
