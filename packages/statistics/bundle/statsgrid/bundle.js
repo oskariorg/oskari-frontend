@@ -54,10 +54,10 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
                 "src": "../../../../bundles/statistics/statsgrid/domain/SourcesMetadata.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/statsgrid/service/StatisticsService.js"
+                "src": "../../../../bundles/statistics/statsgrid/service/CallbackQueue.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/statsgrid/service/CallbackQueue.js"
+                "src": "../../../../bundles/statistics/statsgrid/service/StatisticsService.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/statistics/statsgrid/service/UserSelectionsService.js"

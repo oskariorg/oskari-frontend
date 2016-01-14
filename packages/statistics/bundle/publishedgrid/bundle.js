@@ -24,7 +24,13 @@ function() {
 
         "scripts" : [{
             "type" : "text/javascript",
+            "src" : "../../../../libraries/webcomponentsjs/webcomponents-lite.min.js"
+        }, {
+            "type" : "text/javascript",
             "src" : "../../../../bundles/statistics/publishedgrid/instance.js"
+        }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/statistics/statsgrid/view/MainPanel.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/statistics/statsgrid/plugin/ManageClassificationPlugin.js"
@@ -34,6 +40,9 @@ function() {
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/statistics/statsgrid/event/IndicatorsEvent.js"
+        }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/statistics/statsgrid/service/CallbackQueue.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/statistics/statsgrid/service/StatisticsService.js"
@@ -143,6 +152,10 @@ function() {
             "lang" : "en",
             "type" : "text/javascript",
             "src" : "../../../../bundles/statistics/statsgrid/resources/locale/en.js"
+        }],
+        "links": [{
+          "rel": "import",
+          "href": "/Oskari/bundles/statistics/statsgrid/oskari-statsview.html"
         }]
     },
     "bundle" : {
