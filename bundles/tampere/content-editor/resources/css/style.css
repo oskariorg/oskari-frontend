@@ -148,3 +148,7 @@ div.content-editor div.buttons input, div.publisher div.startview div.buttons in
 .properties-container {
   clear: both;
 }
+
+#delete-dialog {
+  margin-bottom: 30px;
+}

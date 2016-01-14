@@ -60,7 +60,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
          * @method start
          * Implements BundleInstance protocol start method
          */
-        start: function () {
+        start: function () {            
             var me = this,
                 conf = me.conf,
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
@@ -147,7 +147,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
         		}
             },
             'DrawPlugin.FinishedDrawingEvent': function (evt) {
-                this.sideContentEditor.sendRequest(evt.getDrawing());
+                this.sideContentEditor.prepareRequest(evt.getDrawing());
             },
             WFSFeatureGeometriesEvent: function (evt) 
             {
