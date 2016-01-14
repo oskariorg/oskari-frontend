@@ -384,17 +384,21 @@ Oskari.clazz.define(
         },
 
         /**
-         * Changes array to object
+         * Changes array to object and use Number values
+         * OL3 fails, if string type lon, lat values
          * @param  {Object | Number[]} lonlat [description]
          * @return {Object}        [description]
          */
         normalizeLonLat : function(lonlat) {
             if (_.isArray(lonlat)) {
                 return {
-                    lon : lonlat[0],
-                    lat : lonlat[1]
+                    lon : Number(lonlat[0]),
+                    lat : Number(lonlat[1])
                 };
             }
+            lonlat.lon = Number(lonlat.lon);
+            lonlat.lat = Number(lonlat.lat);
+
             return lonlat;
         },
         /**
