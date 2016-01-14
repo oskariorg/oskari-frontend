@@ -472,11 +472,7 @@ Oskari.clazz.define(
             }
 
             for (i = 0; i < layers.length; i += 1) {
-                var layer = layers[i];
-                if (!layer.hasFeatureData()) {
-                    continue;
-                }
-                if (!layer.hasFeatureData() || !layer.isVisible()) {
+                if (!layers[i].hasFeatureData() || !layers[i].isVisible()) {
                     continue;
                 }
                 // clean features lists

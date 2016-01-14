@@ -448,9 +448,7 @@ Oskari.clazz.define(
                 geomRequest = false,
                 grid,
                 fids,
-                layerId,
                 layers = this._getLayers(),
-                i,
                 tiles,
                 x;
 
