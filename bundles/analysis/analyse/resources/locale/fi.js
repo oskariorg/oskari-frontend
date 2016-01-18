@@ -193,7 +193,8 @@ Oskari.registerLocalization(
                     }
                 ],
                 "attribute": "Valitse ominaisuustieto",
-                "footer": "Tietosuojatut kohteet eivät ole mukana laskennassa."
+                "footer": "Tietosuojatut kohteet eivät ole mukana laskennassa.",
+                "aggregateAdditionalInfo":"Huom! Olet valinnut tekstiä sisältäviä ominaisuustietoja. Niille voi laskea ainoastaan kohteiden lukumäärän. Jos kohteiden lukumäärä ei ole valittuna, tekstiä sisältäviä ominaisuustietoja ei oteta mukaan analyysin lopputulokseen."
             },
             "buffer_size": {
                 "label": "Vyöhykkeen koko",

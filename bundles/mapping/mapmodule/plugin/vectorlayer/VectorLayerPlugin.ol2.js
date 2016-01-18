@@ -291,7 +291,8 @@ Oskari.clazz.define(
                 layer,
                 mapLayerService = me._sandbox.getService('Oskari.mapframework.service.MapLayerService'),
                 featureInstance,
-                isOlLayerAdded = true;
+                isOlLayerAdded = true,
+                styleMap = new OpenLayers.StyleMap();
 
             if (!format) {
                 return;
@@ -348,9 +349,11 @@ Oskari.clazz.define(
                     me._features[options.layerId] = [];
                 }
 
+                //set feature styles. For attribute dependent styles (=label text from property) we gotta use styleMap
                 for (i=0; i < features.length; i++) {
                     featureInstance = features[i];
-                    featureInstance.style = me.getStyle(options);
+                    styleMap.styles["default"] = new OpenLayers.Style(me.getStyle(options));
+                    featureInstance.style = styleMap.createSymbolizer(featureInstance, "default");
                 }
 
                 if(options.cursor){
