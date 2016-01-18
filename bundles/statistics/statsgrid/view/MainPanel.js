@@ -34,10 +34,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.MainPanel',
 	    render: function(container, instance) {
 	      var me = this;
         // Waiting for the HTML imports to resolve properly first.
-	      // FIXME: This is a dirty hack, but for some reason link element load event does not fire, because of an exotic way of loading scripts dynamically.
-	      //        In debugger, the link element is added before this is executed here, but not loaded. Adding onload handler works if done sooner than in here,
-	      //        for example in publishedmap instance.js.
-	      setTimeout(function() {
+	      var link = document.querySelector('link[rel=import]');
+	      jQuery(link).load(
+	        function() {
           var elementWrapper = new StatsView(), // oskari-statsview
           rawUrl = Oskari.getSandbox().getAjaxUrl(),
           // Removing the tailing question mark.
@@ -59,7 +58,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.MainPanel',
             elementWrapper.layerId = me.state.layerId; // For example: 9
           }
           Polymer.dom(container[0]).appendChild(elementWrapper);
-	      }, 200);
+	      });
 	    },
         getContainer : function() {
             return this.container;
