@@ -295,12 +295,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     me.instance.setAnalyseMode(false);
                 }
             );
-
-
             contentDiv.append(me.template.analysisAdditionalInfo)
             contentDiv.append(me._getButtons());
-
-            //prööt
 
             var inputs = me.mainPanel.find('input[type=text]');
             inputs.focus(function () {
