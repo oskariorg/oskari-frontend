@@ -13,7 +13,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
     function () {
         this.state = {
             indicators: [],
-            layerId: null
+            layerId: null,
+            // Increment this whenever statsgrid has non-backward compatible changes related to embedded maps.
+            // Also implement handling to publishedgrid.
+            version: 2
         };
     }, {
         "getMainPanel" : function() {

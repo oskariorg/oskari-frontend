@@ -1,5 +1,6 @@
 <link href="libs/polymer/polymer.html" rel="import">
 <!-- TODO: If you start using the libs here in other bundles as well, they must be moved to a shared location. -->
+<link href="libs/iron-ajax/iron-ajax.html" rel="import">
 <link href="libs/iron-collapse/iron-collapse.html" rel="import">
 <link href="libs/paper-menu/paper-menu.html" rel="import">
 <link href="libs/paper-scroll-header-panel/paper-scroll-header-panel.html" rel="import">
@@ -49,6 +50,7 @@
           "ajaxUrl": String,
           "locale": Object,
           "language": String,
+          "embedded": Boolean,
           "sandbox": {
               "type": Object,
               "notify": true
@@ -118,8 +120,13 @@
           "selectedLayerChanged(ajaxUrl, selectedLayer)",
           "selectedIndicatorsChanged(ajaxUrl, selectedIndicators.splices)",
           "sortChanged(sortColumnIdx, sortDirection)",
-          "selectedIndicatorChanged(selectedIndicatorKey, cache)"
+          "selectedIndicatorChanged(selectedIndicatorKey, cache)",
+          "debug(layerInfo)",
+          "debug(ajaxUrl)"
       ],
+      "debug": function(object) {
+          console.log(JSON.stringify(object));
+      },
       "sendTooltipData": function(feature) {
           var featureAttributes = feature.attributes,
               regionCode = featureAttributes[this.layerInfo[this.selectedLayer].idTag],
@@ -494,7 +501,7 @@
           }
           this.sortColumnIdx = idx;
       },
-      "ready": function() {
+      "attached": function() {
           this.cache = {};
           this.dialogs = [];
       }

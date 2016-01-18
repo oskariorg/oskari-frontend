@@ -7,11 +7,14 @@
 Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.MainPanel',
     /**
      * @static constructor function
+     * The parameters embedded, state and statslayer are used to set initial state when showing a saved embedded map.
      */
-    function (instance, localization, sandbox, embedded) {
+    function (instance, localization, sandbox, embedded, state, statslayer) {
         this.localization = localization;
         this.sandbox = sandbox;
         this.embedded = embedded;
+        this.state = state;
+        this.statslayer = statslayer;
     },
     {
       startPlugin: function(sandbox) {
@@ -28,21 +31,35 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.MainPanel',
       getSandbox: function() {
         return this.sandbox;
       },
-	    render : function(container, instance) {
-            var elementWrapper = document.createElement("oskari-statsview"),
-              rawUrl = Oskari.getSandbox().getAjaxUrl(),
-              // Removing the tailing question mark.
-              url = rawUrl.substring(0, rawUrl.length - 1);
-            this.container = container;
-            this.element = elementWrapper;
-            container.empty();
-            elementWrapper.ajaxUrl = url;
-            elementWrapper.locale = this.localization;
-            elementWrapper.language = Oskari.getLang();
-            elementWrapper.user = this.sandbox.getUser();
-            elementWrapper.sandbox = this.sandbox;
-            elementWrapper.embedded = this.embedded;
-            Polymer.dom(container[0]).appendChild(elementWrapper);
+	    render: function(container, instance) {
+	      var me = this;
+        // Waiting for the HTML imports to resolve properly first.
+	      // FIXME: This is a dirty hack, but for some reason link element load event does not fire, because of an exotic way of loading scripts dynamically.
+	      //        In debugger, the link element is added before this is executed here, but not loaded. Adding onload handler works if done sooner than in here,
+	      //        for example in publishedmap instance.js.
+	      setTimeout(function() {
+          var elementWrapper = new StatsView(), // oskari-statsview
+          rawUrl = Oskari.getSandbox().getAjaxUrl(),
+          // Removing the tailing question mark.
+          url = rawUrl.substring(0, rawUrl.length - 1);
+          me.container = container;
+          me.element = elementWrapper;
+          container.empty();
+          elementWrapper.ajaxUrl = url;
+          elementWrapper.locale = me.localization;
+          elementWrapper.language = Oskari.getLang();
+          elementWrapper.user = me.sandbox.getUser();
+          elementWrapper.sandbox = me.sandbox;
+          // FIXME: Handle these in the element.
+          // FIXME: Where can we get the indicators?
+          elementWrapper.embedded = me.embedded; // True when in embedded mode. Hides the indicator selector.
+          if (me.embedded) {
+            elementWrapper.selectedLayer = me.statslayer._layerName; // For example: oskari:kunnat2013
+            // Not used yet, the layer is fetched based on the name.
+            elementWrapper.layerId = me.state.layerId; // For example: 9
+          }
+          Polymer.dom(container[0]).appendChild(elementWrapper);
+	      }, 200);
 	    },
         getContainer : function() {
             return this.container;

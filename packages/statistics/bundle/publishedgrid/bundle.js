@@ -154,8 +154,8 @@ function() {
             "src" : "../../../../bundles/statistics/statsgrid/resources/locale/en.js"
         }],
         "links": [{
-          "rel": "import",
-          "href": "/Oskari/bundles/statistics/statsgrid/oskari-statsview.html"
+            "rel": "import",
+            "href": "/Oskari/bundles/statistics/statsgrid/oskari-statsview.html"
         }]
     },
     "bundle" : {

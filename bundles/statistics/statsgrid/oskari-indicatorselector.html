@@ -24,7 +24,7 @@
       last-response="{{userIndicators}}"
       debounce-duration="300"
       id="userIndicatorsAjax"></iron-ajax>
-    <div hidden$="[[showUserIndicatorView]]">
+    <div hidden$="{{hideIndicatorSelector(embedded, showUserIndicatorView)}}">
       <form class="statsgrid2_indicator_selector">
         <div>
           <label for="datasource-selector">{{locale.tab.grid.organization}}</label>
@@ -61,7 +61,7 @@
         sources="{{sources}}" selected-indicators="{{selectedIndicators}}" selected-layer="{{selectedLayer}}"
         layer-info="{{layerInfo}}" region-info="{{regionInfo}}" user-indicators="[[userIndicators]]"
         selector-selected-indicator-key="{{selectorSelectedIndicatorKey}}" sandbox="{{sandbox}}"
-        hidden$="[[!showGrid]]" id="statsgrid""></oskari-statsgrid>
+        hidden$="[[!showGrid]]" id="statsgrid" embedded="[[embedded]]"></oskari-statsgrid>
     </div>
     <div hidden$="[[!showUserIndicatorView]]">
       <oskari-userindicator ajax-url="[[ajaxUrl]]"
@@ -81,6 +81,10 @@
           "locale": Object,
           "language": String,
           "user": Object,
+          "embedded": {
+            "type": Boolean,
+            "notify": true
+          },
           "sources": {
               "type": Object,
               "notify": true
@@ -144,8 +148,15 @@
           "getSelectors(sources, datasourceId, indicatorId)",
           "selectedIndicatorsChanged(ajaxUrl, selectedIndicators.splices)",
           "selectorsChanged(selectorItems.splices)",
-          "selectorsChanged(selectors)"
+          "selectorsChanged(selectors)",
+          "debug(ajaxUrl)"
       ],
+      "attached": function() {
+        console.log("Embedded: " + this.embedded);
+      },
+      "debug": function(object) {
+          console.log(JSON.stringify(object));
+      },
       "sendTooltipData": function(feature) {
           return this.$.statsgrid.sendTooltipData(feature);
       },
@@ -164,6 +175,9 @@
                   me.set("allSelectorsSelected", false);
               }
           });
+      },
+      "hideIndicatorSelector": function(embedded, showUserIndicatorView) {
+        return embedded || showUserIndicatorView;
       },
       "onSelectorsChanged": function(event) {
           this.selectorsChanged(this.sources, this.datasourceId, this.indicatorId);
