@@ -232,7 +232,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 '</div>',
             difference: '<div class="analyse_difference_cont"></div>',
             footer: '<div class="analyse_param_footer"></div>',
-            wrapper: '<div class="analyse-result-popup-content"></div>'
+            wrapper: '<div class="analyse-result-popup-content"></div>',
+            analysisAdditionalInfo: '<div class="analysis_additional_info"></div>'
         },
 
         /**
@@ -294,6 +295,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     me.instance.setAnalyseMode(false);
                 }
             );
+            contentDiv.append(me.template.analysisAdditionalInfo)
             contentDiv.append(me._getButtons());
 
             var inputs = me.mainPanel.find('input[type=text]');
@@ -630,7 +632,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             if (!selectedLayer) {
                 return;
             }
-
             var featureListElement,
                 featureListList = featureList.find('ul'),
                 layerFields = me._getLayerServiceFields(selectedLayer);
@@ -665,19 +666,68 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          *
          */
         _preselectProperties: function (propertyList) {
-            var maxNumOfFields = this.max_analyse_layer_fields;
+            var me = this,
+                maxNumOfFields = me.max_analyse_layer_fields,
+                method = me._getSelectedMethod();
+
+            if (method === me.id_prefix + "aggregate") {
+                me._preselectPropertiesAggregate(propertyList);
+            } else {
+                propertyList
+                    .find('input[name=analyse-feature-property]')
+                    .each(function (index) {
+                        if (index < maxNumOfFields) {
+                            jQuery(this).prop('checked', true);
+                        } else {
+                            jQuery(this).prop('disabled', true);
+                        }
+                    });
+            }
+        },
+
+        /**
+         * @private method _preselectPropertiesAggregate
+         * Properties preselection for aggregate method. 
+         * -By default only select numeric fields.
+         * -Add infotext, if text type fields are selected
+         */
+        _preselectPropertiesAggregate: function(propertyList) {
+            var me = this,
+                     maxNumOfFields = me.max_analyse_layer_fields,
+                     count = 0;
 
             propertyList
                 .find('input[name=analyse-feature-property]')
-                .each(function (index) {
-                    if (index < maxNumOfFields) {
+                .each(function (index, input) {
+                    var field = jQuery(input).val();
+                    if (count < maxNumOfFields && me._isNumericField(field)) {
                         jQuery(this).prop('checked', true);
-                    } else {
+                        count++;
+                    } else if (index >= maxNumOfFields) {
                         jQuery(this).prop('disabled', true);
                     }
-                });
-        },
 
+
+                    jQuery(input).on('change', function(event) {
+                        var checked = propertyList.find('li input:checked'),
+                            fieldSelectionInfo = me.mainPanel.find('div.analysis_additional_info'),
+                            textFields = false;
+                        checked.each(function(index, element) {
+                            var field = jQuery(element).val();
+                            if (!me._isNumericField(field)) {
+                                textFields = true;
+                                return false;
+                            }
+                        });
+
+                        if (checked && checked.length && textFields) {
+                            fieldSelectionInfo.html(me.loc.aggregate.aggregateAdditionalInfo);
+                        } else {
+                            fieldSelectionInfo.html('');
+                        }
+                    });
+            });
+        },
         /**
          * @private @method _checkPropertyList
          * Checks if the number of checked properties is over
@@ -2375,12 +2425,20 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          */
         refreshExtraParameters: function () {
             var me = this,
-                container = me.mainPanel,
-                selectedMethod = container.find('input[name=method]:checked').val();
-
+                     selectedMethod = me._getSelectedMethod();
             me._modifyExtraParameters(selectedMethod);
         },
 
+        /**
+         * @private @method _getSelectedMethod
+         * Convenience method for getting the analysis method currently selected.
+         */
+        _getSelectedMethod: function() {
+            var me = this,
+                container = me.mainPanel,
+                selectedMethod = container.find('input[name=method]:checked').val();
+            return selectedMethod;
+        },
         /**
          * @private @method _gatherSelections
          * Gathers analyse selections and returns them as JSON object
@@ -2390,10 +2448,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          */
         _gatherSelections: function () {
             var me = this,
-                container = me.mainPanel;
-
-            // Get the name of the method
-            var selectedMethod = container.find('input[name=method]:checked').val(),
+                container = me.mainPanel,
+                selectedMethod = me._getSelectedMethod(),
                 methodName = selectedMethod && selectedMethod.replace(me.id_prefix, ''),
                 layer = me._getSelectedMapLayer();
 
