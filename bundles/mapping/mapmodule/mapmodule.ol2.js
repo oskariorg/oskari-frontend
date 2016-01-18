@@ -497,7 +497,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 }
             }
             return olStyle;
-        },
+        }
 /* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
 
     }, {
