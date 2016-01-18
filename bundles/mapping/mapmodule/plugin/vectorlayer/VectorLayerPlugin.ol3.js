@@ -331,11 +331,7 @@ Oskari.clazz.define(
                 var prio = options.prio || 0;
 
                 _.forEach(features, function (feature) {
-                    var style = me.getStyle(options);
-                    if (options && options.featureStyle) {
-                        me._setFeatureSpecificStyles(style, options.featureStyle, feature);
-                    }
-                    feature.setStyle(style);
+                    me.setupFeatureStyle(options, feature);
                 });
 
                 if(!me._features[options.layerId]) {
@@ -429,16 +425,6 @@ Oskari.clazz.define(
                 }
             }
         },
-        /**
-         * Sets the style specific to feature (= labeling by a property etc.)
-         */
-        _setFeatureSpecificStyles: function(style, options, feature) {
-            if (options.text && options.text.labelProperty) {
-                var label = feature.get(options.text.labelProperty) ? feature.get(options.text.labelProperty) : '';
-                style.getText().setText(label);
-            }
-        },
-
         /**
          * Raises the marker layer above the other layers
          *
@@ -548,6 +534,16 @@ Oskari.clazz.define(
                     layer.addFeatures(features);
                 }
             }
+        },
+        setupFeatureStyle: function(options, feature) {
+            var style = this.getStyle(options);
+            //set up property-based labeling
+            if (Oskari.util.keyExists(options, 'featureStyle.text.labelProperty') && style.getText()) {
+                var label = feature.get(options.featureStyle.text.labelProperty) ? feature.get(options.featureStyle.text.labelProperty) : '';
+                style.getText().setText(label);
+            }
+            feature.setStyle(style);
+
         },
         /**
          * @method getStyle
