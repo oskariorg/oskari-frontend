@@ -1359,6 +1359,7 @@ Oskari.clazz.define(
             var openLayer = new ol.layer.Tile({
                 source: tileSrc
             });
+            openLayer.setVisible(_layer.isVisible());
 
             openLayer.setOpacity(_layer.getOpacity() / 100);
             me.getMapModule().addLayer(openLayer, _layer, layerName);
