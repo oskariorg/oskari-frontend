@@ -193,7 +193,8 @@ Oskari.registerLocalization(
                     }
                 ],
                 "attribute": "Välj en attribut",
-                "footer": "Skyddade objekt tas inte med i beräkning."
+                "footer": "Skyddade objekt tas inte med i beräkning.",
+                "aggregateAdditionalInfo":"Huom! Olet valinnut tekstiä sisältäviä ominaisuustietoja. Niille voi laskea ainoastaan kohteiden lukumäärän. Jos kohteiden lukumäärä ei ole valittuna, tekstiä sisältäviä ominaisuustietoja ei oteta mukaan analyysin lopputulokseen."
             },
             "buffer_size": {
                 "label": "Zon storlek",
