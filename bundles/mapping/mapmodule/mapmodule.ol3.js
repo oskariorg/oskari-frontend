@@ -426,7 +426,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
         /**
          * Creates style based on JSON
-         * @return {ol.style.StyleFunction} stylefunction ol3 specific!
+         * @return {ol.style.Style} style ol3 specific!
          */
         getStyle: function(styleDef) {
             var me = this;
@@ -459,21 +459,14 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 }
                 olStyle.image = new ol.style.Circle(image);
             }
-
-            //by returning a stylefunction instead of a style we can style individual features based on feature properties (=labeling etc.)
-            var styleFunction = function(resolution) {
-                if (styleDef && styleDef.text && !styleDef.labelText && styleDef.text.labelProperty) {
-                    styleDef.text.labelText = this.get(styleDef.text.labelProperty);
-                } 
+            if (styleDef.text) {
                 var textStyle = me.__getTextStyle(styleDef.text);
                 if (textStyle) {
                     olStyle.text = textStyle;
                 }
-                var featureStyle = new ol.style.Style(olStyle);
-                return [featureStyle];
             }
 
-            return styleFunction;
+            return new ol.style.Style(olStyle);
         },
         /**
          * Parses JSON and returns matching ol.style.Text

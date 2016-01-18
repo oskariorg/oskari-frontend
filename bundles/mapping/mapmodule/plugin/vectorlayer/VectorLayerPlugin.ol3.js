@@ -331,7 +331,11 @@ Oskari.clazz.define(
                 var prio = options.prio || 0;
 
                 _.forEach(features, function (feature) {
-                    feature.setStyle(me.getStyle(options));
+                    var style = me.getStyle(options);
+                    if (options && options.featureStyle) {
+                        me._setFeatureSpecificStyles(style, options.featureStyle, feature);
+                    }
+                    feature.setStyle(style);
                 });
 
                 if(!me._features[options.layerId]) {
@@ -366,18 +370,9 @@ Oskari.clazz.define(
                         var zIndex = 0;
                         _.forEach(me._features[options.layerId], function(featObj) {
                             _.forEach(featObj.data, function (feature) {
-                                var style = feature.getStyle(); 
-                                var styles; 
-                                if (_.isFunction(style)) {
-                                    var styles = style.apply();
-                                    if (styles && styles.length) {
-                                        style = styles[0];
-                                    }
-                                }
-
-                                style.setZIndex(zIndex)
+                                feature.getStyle().setZIndex(zIndex);
                                 vectorSource.addFeature(feature);
-                                zIndex++;
+                                zIndex++;                              
                             });
 
                         });
@@ -432,6 +427,15 @@ Oskari.clazz.define(
                         }
                     }
                 }
+            }
+        },
+        /**
+         * Sets the style specific to feature (= labeling by a property etc.)
+         */
+        _setFeatureSpecificStyles: function(style, options, feature) {
+            if (options.text && options.text.labelProperty) {
+                var label = feature.get(options.text.labelProperty) ? feature.get(options.text.labelProperty) : '';
+                style.getText().setText(label);
             }
         },
 
