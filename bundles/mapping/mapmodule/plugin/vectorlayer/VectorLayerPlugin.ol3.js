@@ -366,7 +366,16 @@ Oskari.clazz.define(
                         var zIndex = 0;
                         _.forEach(me._features[options.layerId], function(featObj) {
                             _.forEach(featObj.data, function (feature) {
-                                feature.getStyle().setZIndex(zIndex);
+                                var style = feature.getStyle(); 
+                                var styles; 
+                                if (_.isFunction(style)) {
+                                    var styles = style.apply();
+                                    if (styles && styles.length) {
+                                        style = styles[0];
+                                    }
+                                }
+
+                                style.setZIndex(zIndex)
                                 vectorSource.addFeature(feature);
                                 zIndex++;
                             });
