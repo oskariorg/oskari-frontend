@@ -194,7 +194,7 @@ Oskari.registerLocalization(
                 ],
                 "attribute": "Select attribute",
                 "footer": "Authorised features are not included in the analysis.",
-                "aggregateAdditionalInfo":"Huom! Olet valinnut tekstiä sisältäviä ominaisuustietoja. Niille voi laskea ainoastaan kohteiden lukumäärän. Jos kohteiden lukumäärä ei ole valittuna, tekstiä sisältäviä ominaisuustietoja ei oteta mukaan analyysin lopputulokseen."
+                "aggregateAdditionalInfo":"Note! You have selected one or more attributes containing textual data. Only the feature count can be calculated for them. If the feature count is not selected, textual attribute data are not included in the analysis result."
             },
             "buffer_size": {
                 "label": "Buffer size",

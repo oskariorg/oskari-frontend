@@ -368,7 +368,7 @@ Oskari.clazz.define(
                             _.forEach(featObj.data, function (feature) {
                                 feature.getStyle().setZIndex(zIndex);
                                 vectorSource.addFeature(feature);
-                                zIndex++;                              
+                                zIndex++;
                             });
 
                         });

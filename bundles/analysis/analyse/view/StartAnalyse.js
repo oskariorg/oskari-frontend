@@ -295,7 +295,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     me.instance.setAnalyseMode(false);
                 }
             );
-            contentDiv.append(me.template.analysisAdditionalInfo)
+            contentDiv.append(me.template.analysisAdditionalInfo);
             contentDiv.append(me._getButtons());
 
             var inputs = me.mainPanel.find('input[type=text]');
@@ -687,7 +687,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
         /**
          * @private method _preselectPropertiesAggregate
-         * Properties preselection for aggregate method. 
+         * Properties preselection for aggregate method.
          * -By default only select numeric fields.
          * -Add infotext, if text type fields are selected
          */
