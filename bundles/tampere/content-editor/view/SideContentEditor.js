@@ -290,6 +290,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 }
             });
             var addFeatureButtonContainer = $("<div />");
+
             addFeatureButton.insertTo(addFeatureButtonContainer);
             content.find('.content').append(addFeatureButtonContainer);
             me._addDrawTools(content);
@@ -427,6 +428,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                         me.closeDialog();
                     });
                     me.showMessage(dialog.header, dialog.success, [okButton]);
+                    me.clickedGeometryNumber = null;
                 },
                 error: function (error) {
                     okButton.setHandler(function () {
@@ -1148,6 +1150,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         },
         _deleteFeature: function (fid) {
             var me = this;
+
             var requestData = {};
             requestData.layerId = me.selectedLayerId;
             requestData.featureId = fid;
