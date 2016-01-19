@@ -29,7 +29,13 @@ Oskari.registerLocalization(
             "selectValue": "Valitse tunniste"
         },
         "save": "Tallenna",
-        "selectRole": "Rooli"
+        "selectRole": "Rooli",
+        "columns": {
+            "execute": "ExecuteFi",
+            "download": "DownloadFi",
+            "view_layer": "ViewFi",
+            "publish": "PublishFi"
+        }
     }
 }
 );

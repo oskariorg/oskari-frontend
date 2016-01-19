@@ -257,6 +257,8 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 service = this.instance.getSandbox().getService('Oskari.mapframework.service.MapLayerService'),
                 headerRow = me._templates.row.clone();
 
+            me.columnsLoc = this.instance._localization.columns;
+
             // Create headers
             var thCell = me._templates.cellTh.clone();
             thCell.html("name");
@@ -264,7 +266,11 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
             
             jQuery.each(layerRightsJSON[0].permissions, function(index, header) {
                 var thCell = me._templates.cellTh.clone();
-                thCell.html(header.name);
+                var headerName = me.columnsLoc[header.id.toLowerCase()];
+                if (headerName === undefined) {
+                    headerName = header.name;
+                }
+                thCell.html(headerName);
                 headerRow.append(thCell);
             });
             thead.append(headerRow);
