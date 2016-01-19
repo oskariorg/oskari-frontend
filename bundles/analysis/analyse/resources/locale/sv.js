@@ -160,7 +160,7 @@ Oskari.registerLocalization(
                 "options": [
                     {
                         "id": "oskari_analyse_Count",
-                        "label": "Objekt antal",
+                        "label": "Antal objekt",
                         "selected": true
                     },
                     {
@@ -194,7 +194,7 @@ Oskari.registerLocalization(
                 ],
                 "attribute": "Välj en attribut",
                 "footer": "Skyddade objekt tas inte med i beräkning.",
-                "aggregateAdditionalInfo":"Obs! Du har valt attribut data som innehåller text. Endast objekt antal kan beräknas för dem. Om objekt antal inte har valts, textlig attributdata tas inte med i analysresultatet."
+                "aggregateAdditionalInfo":"Obs! Du har valt attribut data som innehåller text. Endast antal objekt kan beräknas för dem. Om antal objekt inte har valts, textlig attributdata tas inte med i analysresultatet."
             },
             "buffer_size": {
                 "label": "Zon storlek",
