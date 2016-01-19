@@ -423,11 +423,13 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         _removeMapControlImpl: function(ctl) {
             this.getMap().removeControl(ctl);
         },
+
         /**
          * Creates style based on JSON
          * @return {ol.style.Style} style ol3 specific!
          */
-        getStyle : function(styleDef) {
+        getStyle: function(styleDef) {
+            var me = this;
             styleDef = styleDef || {};
             var olStyle = {};
             if(Oskari.util.keyExists(styleDef, 'fill.color')) {
@@ -436,34 +438,55 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 });
             }
             if(styleDef.stroke) {
-                var stroke = {};
-                if(styleDef.stroke.color) {
-                    stroke.color = styleDef.stroke.color;
-                }
-                if(styleDef.stroke.width) {
-                    stroke.width = styleDef.stroke.width;
-                }
-                olStyle.stroke = new ol.style.Stroke(stroke);
+            	olStyle.stroke = me.__getStrokeStyle(styleDef);
             }
             if(styleDef.image) {
-                var image = {};
-                if(styleDef.image.radius) {
-                    image.radius = styleDef.image.radius;
-                }
-                if(Oskari.util.keyExists(styleDef.image, 'fill.color')) {
-                    image.fill = new ol.style.Fill({
-                        color: styleDef.image.fill.color
-                    });
-                }
-                olStyle.image = new ol.style.Circle(image);
+                olStyle.image = me.__getImageStyle(styleDef)
             }
-            var textStyle = this.__getTextStyle(styleDef.text);
-            if(textStyle) {
-                olStyle.text = new ol.style.Text(textStyle);
+            if (styleDef.text) {
+                var textStyle = me.__getTextStyle(styleDef.text);
+                if (textStyle) {
+                    olStyle.text = textStyle;
+                }
             }
-
             return new ol.style.Style(olStyle);
         },
+        /**
+         * Parses stroke style from json
+         * @method __getStrokeStyle
+         * @param {Object} style json
+         * @return {ol.style.Stroke}
+         */
+        __getStrokeStyle: function(styleDef) {
+            var stroke = {};
+            if(styleDef.stroke.color) {
+                stroke.color = styleDef.stroke.color;
+            }
+            if(styleDef.stroke.width) {
+                stroke.width = styleDef.stroke.width;
+            }
+
+            return new ol.style.Stroke(stroke); 
+        },
+        /**
+         * Parses image style from json
+         * @method __getImageStyle
+         * @param {Object} style json
+         * @return {ol.style.Circle}
+         */
+        __getImageStyle: function(styleDef) {
+            var image = {};
+            if(styleDef.image.radius) {
+                image.radius = styleDef.image.radius;
+            }
+            if(Oskari.util.keyExists(styleDef.image, 'fill.color')) {
+                image.fill = new ol.style.Fill({
+                    color: styleDef.image.fill.color
+                });
+            }
+            return new ol.style.Circle(image);
+        },
+
         /**
          * Parses JSON and returns matching ol.style.Text
          * @param  {Object} textStyleJSON text style definition
@@ -492,6 +515,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 }
                 text.stroke = new ol.style.Stroke(textStroke);
             }
+
+            if (textStyleJSON.labelText) {
+                text.text = textStyleJSON.labelText;
+            }
+
             return new ol.style.Text(text);
         }
 

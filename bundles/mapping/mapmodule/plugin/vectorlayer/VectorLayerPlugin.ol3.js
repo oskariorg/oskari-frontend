@@ -331,7 +331,7 @@ Oskari.clazz.define(
                 var prio = options.prio || 0;
 
                 _.forEach(features, function (feature) {
-                    feature.setStyle(me.getStyle(options));
+                    me.setupFeatureStyle(options, feature);
                 });
 
                 if(!me._features[options.layerId]) {
@@ -425,7 +425,6 @@ Oskari.clazz.define(
                 }
             }
         },
-
         /**
          * Raises the marker layer above the other layers
          *
@@ -535,6 +534,16 @@ Oskari.clazz.define(
                     layer.addFeatures(features);
                 }
             }
+        },
+        setupFeatureStyle: function(options, feature) {
+            var style = this.getStyle(options);
+            //set up property-based labeling
+            if (Oskari.util.keyExists(options, 'featureStyle.text.labelProperty') && style.getText()) {
+                var label = feature.get(options.featureStyle.text.labelProperty) ? feature.get(options.featureStyle.text.labelProperty) : '';
+                style.getText().setText(label);
+            }
+            feature.setStyle(style);
+
         },
         /**
          * @method getStyle

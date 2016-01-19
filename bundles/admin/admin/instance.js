@@ -9,7 +9,6 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.GenericAdminBundleInstance",
      * @method create called automatically on construction
      * @static
      */
-
     function () {
         this._dialog = null;
     }, {
