@@ -489,7 +489,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 }
 
                 //label
-                var styleOptions = null;
                 if (styleDef.text.labelText) {
                     olStyle.label = styleDef.text.labelText;
                 } else if (styleDef.text.labelProperty) {
