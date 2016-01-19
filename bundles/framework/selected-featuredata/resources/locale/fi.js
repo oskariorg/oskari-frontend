@@ -10,7 +10,9 @@
 		"flyout": {
             "title": "Valitut kohdetiedot",
             "accordion-title" : "Kohde",
-            "accordion-show-onmap" : "Näytä kartalla"
+            "accordion-show-onmap" : "Näytä kartalla",
+            "tabs_pick_many" : "Poimi useita",
+            "tabs_pick_one" : "Poimi kerran"
         }
 	}
 });

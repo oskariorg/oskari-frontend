@@ -1,5 +1,19 @@
 ﻿.icon-selected-featuredata{
 	cursor: pointer;
+	background: url("../images/icon-selected-featuredata-valk.png");
+	position: absolute; 
+	top: 12px; 
+	right: 23px; 
+	width: 20px; 
+	height: 20px;
+}
+.selected_featuredata_howmany_show{
+    margin: 0px 0 10px 0px;
+    float: left;
+}
+.selected_featuredata_accpanel_showonmap{
+	float: right;
+	margin-top: 7px;
 }
 .selected_featuredata_accpanel_close{
 	float: right;
