@@ -2500,7 +2500,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             // Bbox
             selections.bbox = me.instance.getSandbox().getMap().getBbox();
 
-
             // Override style - :TODO make UI for this and get override from there
             if (defaults.method === 'difference') {
                 selections.override_sld = 'sld_muutos_n1';
@@ -2654,7 +2653,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         featuresA1: featuresA1,
                         featuresB1: featuresB1,
                         operator: spatialOperator,
-                        no_data: me._getNoDataValue()
+                        no_data: me._getNoDataValue(),
+                        locale: me.loc.spatial_join.backend_locale
                     }
                 }
             };
