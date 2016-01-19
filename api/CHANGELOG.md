@@ -1,7 +1,7 @@
 # Oskari API changelog
 
-This document describes changes to the public API from Oskari perspective (requests, events, conf/state, services). RPC-developers can check if the request/event API has changed
-when the service provider gives notice about Oskari version being upgraded. Oskari bundle/core-developers can check for changes in the bundle dependencies.
+This document describes changes to the public API from Oskari frontend perspective (requests, events, conf/state, services). RPC-developers can check if the request/event API has changed
+when the service provider gives notice about Oskari version being upgraded. Oskari bundle/core-developers can check for changes in the bundles they depend on.
 
 ## 1.35
 
