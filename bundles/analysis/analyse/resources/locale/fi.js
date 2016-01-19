@@ -281,7 +281,32 @@ Oskari.registerLocalization(
                 "mode": "Analyysimenetelmän tyyppi",
                 "modeTooltip": "Valitse haluatko käyttää yhdistämisessä tunnuslukuja.",
                 "normalMode": "Yhdistäminen sijainnin perusteella",
-                "aggregateMode": "Tunnuslukujen laskenta"
+                "aggregateMode": "Tunnuslukujen laskenta",
+                "backend_locale": [
+                    {
+                        "id": "count",
+                        "label": "Kohteiden lukumäärä"
+                    },
+                    {
+                        "id": "sum",
+                        "label": "Summa"
+                    },
+                    {
+                        "id": "min",
+                        "label": "Pienin arvo"
+                    },
+                    {
+                        "id": "max",
+                        "label": "Suurin arvo"
+                    },
+                    {
+                        "id": "avg",
+                        "label": "Keskiarvo"
+                    },
+                    {
+                        "id": "stddev",
+                        "label": "Keskihajonta"
+                    }]
             },
             "params": {
                 "label": "Mukaan otettavat ominaisuustiedot",

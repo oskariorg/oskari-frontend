@@ -281,7 +281,33 @@ Oskari.registerLocalization(
                 "mode": "Välj metodstyp",
                 "modeTooltip": "Välj om du vill använda statistiska mått i analys.",
                 "normalMode": "Normal spatial join",
-                "aggregateMode": "Statistiska mått"
+                "aggregateMode": "Statistiska mått",
+                "backend_locale": [
+                    {
+                        "id": "count",
+                        "label": "Objekt antal"
+                    },
+                    {
+                        "id": "sum",
+                        "label": "Summa"
+                    },
+                    {
+                        "id": "min",
+                        "label": "Minsta värde"
+                    },
+                    {
+                        "id": "max",
+                        "label": "Största värde"
+                    },
+                    {
+                        "id": "avg",
+                        "label": "Medelvärde"
+                    },
+                    {
+                        "id": "stddev",
+                        "label": "Standardavvikelse"
+                    }
+                ]
             },
             "params": {
                 "label": "Resultat attribut",

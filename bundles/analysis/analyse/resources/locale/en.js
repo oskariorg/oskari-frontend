@@ -281,7 +281,33 @@ Oskari.registerLocalization(
                 "mode": "Spatial join mode",
                 "modeTooltip": "Select if you want to use descriptive statististic in the spatial join.",
                 "normalMode": "Normal spatial join",
-                "aggregateMode": "Aggregate descritpive statistic"
+                "aggregateMode": "Aggregate descritpive statistic",
+                "backend_locale": [
+                    {
+                        "id": "count",
+                        "label": "Feature count"
+                    },
+                    {
+                        "id": "sum",
+                        "label": "Sum"
+                    },
+                    {
+                        "id": "min",
+                        "label": "Minimum"
+                    },
+                    {
+                        "id": "max",
+                        "label": "Maximum"
+                    },
+                    {
+                        "id": "avg",
+                        "label": "Average"
+                    },
+                    {
+                        "id": "stddev",
+                        "label": "Standard deviation"
+                    }
+                ]
             },
             "params": {
                 "label": "Attributes in the result",
