@@ -103,6 +103,9 @@
       "observers": [
           "getRegionItems(regionInfo)"
       ],
+      "ready": function() {
+        console.log("userindicator ready.");
+      },
       "getLayerName": function(locale, layerKey) {
           return this.localize(this.locale.regionCategories, layerKey);
       },

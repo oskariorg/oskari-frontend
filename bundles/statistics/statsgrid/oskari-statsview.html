@@ -1,5 +1,6 @@
 <link rel="import"
       href="libs/polymer/polymer.html">
+<link href="requirejs.html" rel="import">
 
 <link href="oskari-indicatorselector.html" rel="import">
 <link href="oskari-statsgrid.html" rel="import">
@@ -30,6 +31,9 @@
       },
       "sendTooltipData": function(feature) {
           return this.$.indicatorselector.sendTooltipData(feature);
+      },
+      "ready": function() {
+        console.log("statsview ready.");
       },
       "attached": function() {
           console.log("ajaxUrl: " + this.ajaxUrl);

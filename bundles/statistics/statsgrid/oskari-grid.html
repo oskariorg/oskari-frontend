@@ -65,6 +65,9 @@
           "sorting": Boolean,
           "deleting": Boolean
       },
+      "ready": function() {
+        console.log("grid ready.");
+      },
       "allSelectedChanged": function() {
           var me = this;
           if (me.rows) {

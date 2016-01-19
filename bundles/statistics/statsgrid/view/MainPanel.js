@@ -33,10 +33,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.MainPanel',
       },
 	    render: function(container, instance) {
 	      var me = this;
-        // Waiting for the HTML imports to resolve properly first.
-	      var link = document.querySelector('link[rel=import]');
-	      jQuery(link).load(
-	        function() {
+        var doRender = function() {
           var elementWrapper = new StatsView(), // oskari-statsview
           rawUrl = Oskari.getSandbox().getAjaxUrl(),
           // Removing the tailing question mark.
@@ -58,7 +55,21 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.MainPanel',
             elementWrapper.layerId = me.state.layerId; // For example: 9
           }
           Polymer.dom(container[0]).appendChild(elementWrapper);
-	      });
+        };
+        // The next does not work, because the load might have been fired already.
+        //  var link = document.querySelector('link[rel=import]');
+        //  jQuery(link).load(doRender);
+        // For cross-browser compatibility, we must poll...
+        var pollIfImportLoaded = function() {
+         // For some reason the load event is not fired if the element is loaded already here.
+         if (typeof(StatsView) != "undefined") {
+           doRender();
+         } else {
+           // Waiting for the HTML imports to resolve properly first.
+           setTimeout(pollIfImportLoaded, 500);
+         }
+       };
+       pollIfImportLoaded();
 	    },
         getContainer : function() {
             return this.container;
