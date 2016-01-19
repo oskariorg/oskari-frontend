@@ -117,7 +117,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
              * An example me.state constructed based on an old Oskari URL.
              * "{"colors":{"index":0,"set":"seq"},
              * "cmode":"","numberOfClasses":5,
-             * "indicators":[{"id":4,"gender":"total","year":"2014"},{"id":4,"gender":"total","year":"2014"}],
+             * "indicators":[{"id":4,"gender":"total","year":"2014"}],
              * "layerId":9,
              * "filterInput":[],"filterRegion":[],
              * "currentColumn":"indicator42014total",
@@ -151,6 +151,26 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
              * 444,445,448,449,451,452]}"
              * 
              */
+            // We need to put me.selectedIndicators something like this:
+            // "[{"datasourceId":"fi.nls.oskari.control.statistics.plugins.sotka.SotkaStatisticalDatasourcePlugin",
+            // "indicatorId":"4","selectors":[{"selectorId":"sex","value":"total"},{"selectorId":"year","value":"2014"}],
+            // "id":"fi.nls.oskari.control.statistics.plugins.sotka.SotkaStatisticalDatasourcePlugin:4:oskari:kunnat2013:{\"sex\":\"total\",\"year\":\"2014\"}"}]"
+            me.state.selectedIndicators = me.state.indicators.map(function(indicator) {
+                return {
+                    "datasourceId":"fi.nls.oskari.control.statistics.plugins.sotka.SotkaStatisticalDatasourcePlugin",
+                    "indicatorId": "" + indicator.id,
+                    "selectors": [{
+                      "selectorId":"sex",
+                      "value": indicator.gender
+                    },{
+                      "selectorId":"year",
+                      "value": indicator.year
+                    }],
+                    // This last one is probably not used anywhere, but filling it up just in case for symmetry.
+                    "id": "fi.nls.oskari.control.statistics.plugins.sotka.SotkaStatisticalDatasourcePlugin:" + indicator.id + ":" + statsLayer._layerName +
+                      ":" + '{\"sex\":\"' + indicator.gender + '\",\"year\":\"' + indicator.year + '\"}'
+                };
+            });
             
             /*
              * An example statsLayer constructed based on old Oskari URL:

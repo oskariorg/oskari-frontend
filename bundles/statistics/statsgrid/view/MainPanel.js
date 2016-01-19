@@ -31,6 +31,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.MainPanel',
       getSandbox: function() {
         return this.sandbox;
       },
+      // FIXME: Move everything from the original state generation to here. Start using this one.
+      getState: function() {
+        var me = this;
+        return {
+          "selectedIndicators": me.element.selectedIndicators
+        };
+      },
 	    render: function(container, instance) {
 	      var me = this;
         var doRender = function() {
@@ -46,13 +53,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.MainPanel',
           elementWrapper.language = Oskari.getLang();
           elementWrapper.user = me.sandbox.getUser();
           elementWrapper.sandbox = me.sandbox;
-          // FIXME: Handle these in the element.
-          // FIXME: Where can we get the indicators?
           elementWrapper.embedded = me.embedded; // True when in embedded mode. Hides the indicator selector.
           if (me.embedded) {
+            elementWrapper.selectedIndicators = me.state.selectedIndicators;
             elementWrapper.selectedLayer = me.statslayer._layerName; // For example: oskari:kunnat2013
-            // Not used yet, the layer is fetched based on the name.
+            // Not used at least yet, the layer is fetched based on the name.
             elementWrapper.layerId = me.state.layerId; // For example: 9
+            elementWrapper.showGrid = true;
           }
           Polymer.dom(container[0]).appendChild(elementWrapper);
         };
@@ -61,7 +68,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.MainPanel',
         //  jQuery(link).load(doRender);
         // For cross-browser compatibility, we must poll...
         var pollIfImportLoaded = function() {
-         // For some reason the load event is not fired if the element is loaded already here.
          if (typeof(StatsView) != "undefined") {
            doRender();
          } else {

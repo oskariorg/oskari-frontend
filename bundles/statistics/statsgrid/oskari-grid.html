@@ -61,12 +61,27 @@
               "notify": true,
               "value": true
           },
+          "selectedIndicators": {
+            "type": Array,
+            "notify": true
+          },
+          "ajaxUrl": {
+            "type": String,
+            "notify": true
+          },
           "filtering": Boolean,
           "sorting": Boolean,
-          "deleting": Boolean
+          "deleting": Boolean,
+          "observers": [
+            "debug(ajaxUrl)",
+            "debug(selectedIndicators)"
+          ],
       },
-      "ready": function() {
-        console.log("grid ready.");
+      "debug": function(object) {
+        console.log(JSON.stringify(object));
+      },
+      "attached": function() {
+        console.log("grid attached: " + this.layerInfo + ", " + this.regionInfo + ", " + this.selectedIndicators + ", " + this.ajaxUrl);
       },
       "allSelectedChanged": function() {
           var me = this;

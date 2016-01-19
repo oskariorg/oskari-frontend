@@ -57,12 +57,13 @@
         <button type="button" on-click="onAddIndicatorToGrid" hidden$="[[!indicatorSelected]]"
           disabled$="[[!allSelectorsSelected]]">{{locale.addColumn}}</button>
       </form>
-      <oskari-statsgrid locale="[[locale]]" language="[[language]]" ajax-url="[[ajaxUrl]]"
-        sources="{{sources}}" selected-indicators="{{selectedIndicators}}" selected-layer="{{selectedLayer}}"
-        layer-info="{{layerInfo}}" region-info="{{regionInfo}}" user-indicators="[[userIndicators]]"
-        selector-selected-indicator-key="{{selectorSelectedIndicatorKey}}" sandbox="{{sandbox}}"
-        hidden$="[[!showGrid]]" id="statsgrid" embedded="[[embedded]]"></oskari-statsgrid>
     </div>
+    <oskari-statsgrid locale="[[locale]]" language="[[language]]" ajax-url="[[ajaxUrl]]"
+      sources="{{sources}}" selected-indicators="{{selectedIndicators}}" selected-layer="{{selectedLayer}}"
+      layer-info="{{layerInfo}}" region-info="{{regionInfo}}" user-indicators="[[userIndicators]]"
+      selector-selected-indicator-key="{{selectorSelectedIndicatorKey}}" sandbox="{{sandbox}}"
+      hidden$="[[hideGrid]]"
+      id="statsgrid" embedded="[[embedded]]"></oskari-statsgrid>
     <div hidden$="[[!showUserIndicatorView]]">
       <oskari-userindicator ajax-url="[[ajaxUrl]]"
         locale="[[locale]]" language="[[language]]" user="[[user]]"
@@ -83,7 +84,8 @@
           "user": Object,
           "embedded": {
             "type": Boolean,
-            "notify": true
+            "notify": true,
+            "value": false
           },
           "sources": {
               "type": Object,
@@ -131,7 +133,7 @@
               "value": false,
               "notify": true
           },
-          "showGrid": {
+          "hideGrid": {
               "type": Boolean,
               "notify": true,
               "value": false
@@ -147,15 +149,19 @@
           "indicatorChanged(indicatorId)",
           "getSelectors(sources, datasourceId, indicatorId)",
           "selectedIndicatorsChanged(ajaxUrl, selectedIndicators.splices)",
+          "evaluateHideGrid(showUserIndicatorView, selectedIndicators.splices)",
+          "evaluateHideGrid(showUserIndicatorView, selectedIndicators)",
           "selectorsChanged(selectorItems.splices)",
           "selectorsChanged(selectors)",
-          "debug(ajaxUrl)"
+          "debug(ajaxUrl)",
+          "debug(selectedIndicators)"
       ],
       "ready": function() {
         console.log("indicatorselector ready.");
       },
       "attached": function() {
         console.log("Embedded: " + this.embedded);
+        console.log("showGrid: " + this.showGrid + ": " + this.selectedIndicators.length + ", " + this.showUserIndicatorView);
       },
       "debug": function(object) {
           console.log(JSON.stringify(object));
@@ -181,6 +187,10 @@
       },
       "hideIndicatorSelector": function(embedded, showUserIndicatorView) {
         return embedded || showUserIndicatorView;
+      },
+      "evaluateHideGrid": function(showUserIndicatorView, selectedIndicatorsSplices) {
+          this.hideGrid = !(!this.showUserIndicatorView && !!this.selectedIndicators
+              && this.selectedIndicators.length > 0);
       },
       "onSelectorsChanged": function(event) {
           this.selectorsChanged(this.sources, this.datasourceId, this.indicatorId);
