@@ -634,7 +634,9 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 contentData.featureId = data.features[0][0];
                 content.push(contentData);
                 $(".properties-container").empty().append(contentData.html);
+                me._setDatepickerLanguage();
                 $(".datepicker").datepicker({'dateFormat': "yy-mm-dd", 'changeMonth': true, 'changeYear': true, 'showButtonPanel': true}).attr('readonly', 'readonly');
+                
             }
         },
         /**
@@ -1235,6 +1237,21 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 return false;
             }
             return true;
+        },
+        _setDatepickerLanguage: function () {
+            var lang = null;
+            if (navigator.language.indexOf('fi') > -1) {
+                lang = "fi-FI";
+            } else {
+                lang = "en-GB";
+            }
+
+            $.datepicker.setDefaults(
+                  $.extend(
+                    {'dateFormat':'yy-mm-dd'},
+                    $.datepicker.regional[lang]
+                  )
+                );
         }
     }, {
         /**
