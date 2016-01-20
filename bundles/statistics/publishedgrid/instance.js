@@ -59,7 +59,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
             // Used in both plugins below.
             var statsService = Oskari.clazz.create(
                 'Oskari.statistics.bundle.statsgrid.StatisticsService',
-                me
+                me.sandbox
             );
             sandbox.registerService(statsService);
             me.statsService = statsService;
