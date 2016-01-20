@@ -155,6 +155,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
             // "[{"datasourceId":"fi.nls.oskari.control.statistics.plugins.sotka.SotkaStatisticalDatasourcePlugin",
             // "indicatorId":"4","selectors":[{"selectorId":"sex","value":"total"},{"selectorId":"year","value":"2014"}],
             // "id":"fi.nls.oskari.control.statistics.plugins.sotka.SotkaStatisticalDatasourcePlugin:4:oskari:kunnat2013:{\"sex\":\"total\",\"year\":\"2014\"}"}]"
+            
             me.state.selectedIndicators = me.state.indicators.map(function(indicator) {
                 return {
                     "datasourceId":"fi.nls.oskari.control.statistics.plugins.sotka.SotkaStatisticalDatasourcePlugin",

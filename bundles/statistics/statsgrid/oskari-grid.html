@@ -80,9 +80,6 @@
       "debug": function(object) {
         console.log(JSON.stringify(object));
       },
-      "attached": function() {
-        console.log("grid attached: " + this.layerInfo + ", " + this.regionInfo + ", " + this.selectedIndicators + ", " + this.ajaxUrl);
-      },
       "allSelectedChanged": function() {
           var me = this;
           if (me.rows) {

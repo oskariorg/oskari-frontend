@@ -121,15 +121,8 @@
           "selectedIndicatorsChanged(ajaxUrl, selectedIndicators.splices)",
           "sortChanged(sortColumnIdx, sortDirection)",
           "selectedIndicatorChanged(selectedIndicatorKey, cache)",
-          "debug(layerInfo)",
-          "debug(ajaxUrl)"
+          "updateSelectedIndicators(sources)"
       ],
-      "ready": function() {
-        console.log("statsgrid ready.");
-      },
-      "debug": function(object) {
-          console.log(JSON.stringify(object));
-      },
       "sendTooltipData": function(feature) {
           var featureAttributes = feature.attributes,
               regionCode = featureAttributes[this.layerInfo[this.selectedLayer].idTag],
@@ -503,6 +496,11 @@
               this.sortDirection = "asc";
           }
           this.sortColumnIdx = idx;
+      },
+      "updateSelectedIndicators": function(sources) {
+        if (sources) {
+          this.selectedIndicatorsChanged(this.ajaxUrl, this.selectedIndicators);
+        }
       },
       "attached": function() {
           this.cache = {};
