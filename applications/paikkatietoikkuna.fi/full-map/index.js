@@ -73,29 +73,7 @@ jQuery(document).ready(function () {
     }
 
     function start(appSetup, appConfig, cb) {
-        // HACK
-        appConfig['timeseries']  = {
-            conf: {},
-            state: {}
-        };
-        appSetup.startupSequence.push({
-            bundleinstancename: 'timeseries',
-            bundlename: 'timeseries',
-            en: 'timeseries',
-            fi: 'timeseries',
-            sv: 'timeseries',
-            title: 'timeseries',
-            metadata: {
-                'Import-Bundle': {
-                    'timeseries' :{
-                        bundlePath: '/Oskari/packages/framework/bundle/'
-                    }
-                }
-            },
-            instanceProps: {}
-        });
-        console.log(appSetup);
-        // HACK ENDS
+
         var app = Oskari.app;
         app.setApplicationSetup(appSetup);
         app.setConfiguration(appConfig);
