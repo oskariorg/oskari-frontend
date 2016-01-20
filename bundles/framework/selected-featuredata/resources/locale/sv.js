@@ -12,7 +12,8 @@
             "accordion-title" : "Kohde",
             "accordion-show-onmap" : "Näytä kartalla",
             "tabs_pick_many" : "Poimi useita",
-            "tabs_pick_one" : "Poimi kerran"
+            "tabs_pick_one" : "Poimi kerran",
+            "show_all_on_map" : "Näytä kaikki kohteet kartalla"
         }
     }
 });

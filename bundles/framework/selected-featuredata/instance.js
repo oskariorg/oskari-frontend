@@ -125,7 +125,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
                 var def = {
                     name : 'selected-featuredata-btn',
                     iconCls: 'icon-selected-featuredata',
-                    tooltip: 'Tooltip teksti',
+                    tooltip: '',
                     styles: '',
                     params: {
                         content: content,

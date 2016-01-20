@@ -139,7 +139,7 @@ Oskari.clazz.define(
                     currPopup.contentData.slice(), contentData.slice());
                 currPopup.contentData = contentData;
             }
-
+           
             me._renderPopup(id, contentData, title, lonlat, colourScheme, font, refresh);
         },
 

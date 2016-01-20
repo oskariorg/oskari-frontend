@@ -26,8 +26,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
         this.tabsContainer = Oskari.clazz.create(
             'Oskari.userinterface.component.TabContainer'
         );
+        this._tabs = {};
         this._accordions = {};
         this._panels = {};
+        this._array = [];
         this.wfsMapIdList = [];
     }, {
         /**
@@ -83,6 +85,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
             me.removeAllMarkersAndHighlights();
         },
         /**
+         * [clearFlyout removes tab elements from container]
+         */
+        clearTabsLayout: function(){
+            var me = this;
+            jQuery(me.container).find('.oskariTabs').empty();
+            this._accordions = [];
+            this._panels = [];
+            this.tabsContainer = null;
+            this.tabsContainer = Oskari.clazz.create(
+                'Oskari.userinterface.component.TabContainer'
+            );
+            me.removeAllMarkersAndHighlights();
+        },
+        /**
          * [compareAccodionPanelHtml checks if html already in accordion panel]
          * @return {[Boolean]} [true/false]
          */
@@ -112,8 +128,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
             me.elParent = jQuery(me.container).parents('.oskari-flyout');
             jQuery(me.elParent).addClass('selected-featuredata-flyout');
 
-            jQuery(me.container).append(me.createShowManyOrOneLink());
-
             //Set minimize flyout button
             me.parent = jQuery(me.container).parents('.oskari-flyout');
             me.minimizeBtn = me.parent.find('.oskari-flyouttool-minimize');
@@ -142,7 +156,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
                         mea.attr("data-many", "many");
                         mea.text(me._getLocalization('tabs_pick_one'));
                     }
-                    //e.preventDefault();
+                    e.preventDefault();
                 }});
         },
         /* App specific methods */
@@ -151,7 +165,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
             data = params[0],
             layer = me.sandbox.findMapLayerFromAllAvailable(data.layerId),
             tabName = layer.getName(),
-            tabContent = jQuery('<div></div>');
+            tabContent = jQuery('<div></div>'),
+            howManyShowLink = jQuery(me.container).find('.selected_featuredata_howmany_show');
+
+            if(howManyShowLink.length == 0){
+                jQuery(me.container).append(me.createShowManyOrOneLink());
+            }
 
             //restore flyout if oskari-minimized
             if(this.parent.hasClass('oskari-minimized')){
@@ -161,8 +180,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
                );
             }
 
-            if(jQuery(".selected_featuredata_howmany_show").attr("data-many") === "one"){
-                me.clearFlyout();
+            if(howManyShowLink.attr("data-many") === "one"){
+                me.clearTabsLayout();
             }
 
             me.removeAllMarkersAndHighlights();
@@ -178,7 +197,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
                     me.addAccordion(data.html, tabContent, layer.getId(), mapobject);
                 }
             }
-
+          
         },
         /**
          * [addTab adds tab]
@@ -197,6 +216,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
             var panel = Oskari.clazz.create(
                 'Oskari.userinterface.component.TabPanel'
             );
+            me._tabs[layerId] = panel;
             panel.setTitle(tabName, tabId);
             panel.setId(layerId);
             panel.setContent(tabContent);
@@ -213,7 +233,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
             panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel'),
             number = 1,
             panelId = 'selected_featuredata_accpanel_',
-            fullHtml = accPanelData;
+            fullHtml = accPanelData,
+            features = mapobject.features[0];
 
               //initialize panel component
               panel.setContent(fullHtml);
@@ -231,6 +252,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
 
                 me._accordions[layerId].addPanel(panel);
                 me._accordions[layerId].insertTo(tabContent);
+                tabContent.prepend(me.createLinkShowTabOnMap(tabContent));
             }else{
                 // just insert new panel to existing accordion
                 number = number + me._accordions[layerId].panels.length;
@@ -251,6 +273,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
 
             jQuery("#"+panelId).append(me.createCloseIconForAcc(panel, layerId, tabContent));
             jQuery("#"+panelId).append(me.createLinkShowOnMap(mapobject));
+
+
+            if((typeof(features.type) !== 'undefined')){
+               //WMS
+               jQuery("#"+panelId).attr("data-type", "WMS");
+               jQuery("#"+panelId).attr("data-x", mapobject.lonlat.lon);
+               jQuery("#"+panelId).attr("data-y", mapobject.lonlat.lat);
+            }else{
+                //WFS
+                jQuery("#"+panelId).attr("data-type", "WFS");
+                jQuery("#"+panelId).attr("data-featureid", features[0]);
+            }
         },
         /**
          * [createCloseIconForAcc adds close btn for every accordionpanel]
@@ -330,6 +364,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
                     return false;
                 }});
         },
+         /**
+         * [createLinkShowTabOnMap shows all on map that are inside tab]
+         */
+        createLinkShowTabOnMap: function(tabContent){
+            var me = this;
+            return jQuery('<a />', {
+                "href": "JavaScript:void(0);",
+                "class": 'selected_featuredata_show_all_on_map',
+                "text": me._getLocalization('show_all_on_map'),
+                click: function(e){
+
+                    var header = tabContent.find(".accordion_panel .header");
+                    jQuery(header).each(function() {
+                        me.showWmsMarker(jQuery(this).data("x"), jQuery(this).data("y"));
+                    });
+
+                    if(header.data("type") == "WFS"){
+
+                    }else{
+
+                    }
+
+                    return false;
+                }});
+        },
         /**
          * [highlightWFSFeature highlight wfs object on map]
          * @param  {[String]} layerId   [Oskari layerId]
@@ -357,6 +416,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
                 me.wfsMapIdList.push(layerId);
                 var event = builder(featureIdList, layer, true);
                 me.sandbox.notifyAll(event);
+
+                /*var mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
+                var _map = mapModule.getMap();*/
         },
         /**
          * [moveMapRequest move map to given x and y]
@@ -374,6 +436,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
          * @param  {[String]} y [lat]
          */
         showWmsMarker: function(x,y){
+            var me = this;
             var sb = Oskari.getSandbox();
             var reqBuilder = sb.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
             if (reqBuilder) {
@@ -388,6 +451,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
                 var request = reqBuilder(data);
                 sb.request('MainMapModule', request);
             }
+
+/*           var mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
+           var _map = mapModule.getMap();
+           var layer = _map.getLayersByName("Markers");
+           _map.zoomToExtent(layer[0].getDataExtent());*/
+
         },
         /**
          * [removeAllMarkersAndHighlights deletes markers and highlights from map]

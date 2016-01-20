@@ -11,6 +11,10 @@
     margin: 0px 0 10px 0px;
     float: left;
 }
+.selected_featuredata_show_all_on_map{
+	float: right;
+	margin: 0px 0 10px 0px;
+}
 .selected_featuredata_accpanel_showonmap{
 	float: right;
 	margin-top: 7px;
