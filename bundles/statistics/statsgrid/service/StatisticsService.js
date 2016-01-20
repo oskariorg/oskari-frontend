@@ -12,8 +12,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
      *
      */
 
-    function (sandbox) {
-        this.sandbox = sandbox;
+    function (container) {
+        this.sandbox = container.sandbox;
         this.cache = {};
 
         // This object contains all the data source indicator metadata keyed by the plugin name.

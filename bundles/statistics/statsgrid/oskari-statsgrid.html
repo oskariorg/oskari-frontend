@@ -36,7 +36,7 @@
       </iron-collapse>
       <paper-scroll-header-panel style="height: 500px;">
         <oskari-grid id="indicator-data-grid" rows="{{rows}}" headers="[[rowHeaders]]" selection="1"
-          on-sort="onSort" on-filter="onFilter" on-delete="onDelete" filtering sorting deleting />
+          on-sort="onSort" on-filter="onFilter" on-delete="onDelete" filtering sorting deleting="{{!embedded}}" />
       </paper-scroll-header-panel>
       <content></content>
     </div>
@@ -120,7 +120,7 @@
           "selectedLayerChanged(ajaxUrl, selectedLayer)",
           "selectedIndicatorsChanged(ajaxUrl, selectedIndicators.splices)",
           "sortChanged(sortColumnIdx, sortDirection)",
-          "selectedIndicatorChanged(selectedIndicatorKey, cache)",
+          "selectedIndicatorChanged(selectedIndicatorKey, cache, rowHeaders)",
           "updateSelectedIndicators(sources)"
       ],
       "sendTooltipData": function(feature) {
@@ -160,7 +160,7 @@
               },
               vis_name = me.selectedLayer,
               vis_attr = me.layerInfo[me.selectedLayer].idTag,
-              vis_codes = Object.keys(indicatorValues),
+              vis_codes = indicatorValues && Object.keys(indicatorValues) || [],
               col_values = vis_codes.map(function(regionKey) {
                   return indicatorValues[regionKey];
               });
@@ -212,19 +212,24 @@
       },
       "selectedIndicatorChanged": function(indicatorKey) {
           var me = this,
-              indicatorHeader;
+              indicatorHeader,
+              i = 0,
+              index;
           me.rowHeaders.forEach(function (header) {
               if (header.id === indicatorKey) {
                   indicatorHeader = header;
+                  index = i;
               }
+              i = i + 1;
           });
           if (!indicatorHeader) {
               return;
           }
-          me.selectedIndicator = {
+          me.set("selectedIndicator", {
               header: indicatorHeader,
               data: me.cache[indicatorHeader.id]
-          };
+          });
+          this.showIndicatorOnMap(indicatorHeader.id, index, indicatorHeader);
       },
       "toggleStats": function() {
           this.$.statscollapse.toggle();
@@ -456,8 +461,10 @@
           });
           this.set("statsrows", summaryRows);
           this.set("rows", newRows);
-          if (me.selectedIndicators.length === 1) {
+          if (me.selectedIndicators.length === 1 || (me.embedded && me.selectedIndicators.length > 0)) {
               // If this is the first added indicator, or the only indicator left, we will update the map.
+              // We will also update the map if we are in embedded mode, because we can fetch several indicators at once, and the first
+              // indicator check will in that case fail.
               var theOnlyIndicator = me.selectedIndicators[0];
               me.showIndicatorOnMap(theOnlyIndicator.id, 1, this.rowHeaders[1]);
           }
@@ -503,8 +510,14 @@
         }
       },
       "attached": function() {
+          var me = this;
           this.cache = {};
           this.dialogs = [];
+          if (this.embedded && this.selectedIndicators && this.selectedIndicators.length > 0) {
+            var indicatorKey = this.selectedIndicators[0].id;
+            this.set("selectedIndicator", this.selectedIndicators[0]);
+            this.set("selectedIndicatorKey", indicatorKey);
+          }
       }
     };
   });

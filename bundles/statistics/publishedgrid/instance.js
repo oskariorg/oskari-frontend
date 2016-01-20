@@ -167,7 +167,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
                       "selectorId":"year",
                       "value": indicator.year
                     }],
-                    // This last one is probably not used anywhere, but filling it up just in case for symmetry.
+                    // Cache key
                     "id": "fi.nls.oskari.control.statistics.plugins.sotka.SotkaStatisticalDatasourcePlugin:" + indicator.id + ":" + statsLayer._layerName +
                       ":" + '{\"sex\":\"' + indicator.gender + '\",\"year\":\"' + indicator.year + '\"}'
                 };
