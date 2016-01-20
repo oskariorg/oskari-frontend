@@ -227,6 +227,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
          * [addAccordion add accordion into certain tab]
          * @param {[Object]} panelData [description]
          * @param {[String]} tabid [description]
+         * @param {[Integer]} layerId [description]
+         * @param {[Object]} mapobject [description]
          */
         addAccordion: function (accPanelData, tabContent, layerId, mapobject){
             var me =  this,
@@ -252,7 +254,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
 
                 me._accordions[layerId].addPanel(panel);
                 me._accordions[layerId].insertTo(tabContent);
-                tabContent.prepend(me.createLinkShowTabOnMap(tabContent));
+                tabContent.prepend(me.createLinkShowTabOnMap(tabContent, layerId));
             }else{
                 // just insert new panel to existing accordion
                 number = number + me._accordions[layerId].panels.length;
@@ -271,19 +273,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
                 me._accordions[layerId].addPanel(panel);
             }
 
-            jQuery("#"+panelId).append(me.createCloseIconForAcc(panel, layerId, tabContent));
-            jQuery("#"+panelId).append(me.createLinkShowOnMap(mapobject));
+            //Add needed data for panelWrapper like links and datas
+            var panelWrapper = jQuery("#"+panelId);
+            panelWrapper.append(me.createCloseIconForAcc(panel, layerId, tabContent));
+            panelWrapper.append(me.createLinkShowOnMap(mapobject));
 
 
             if((typeof(features.type) !== 'undefined')){
                //WMS
-               jQuery("#"+panelId).attr("data-type", "WMS");
-               jQuery("#"+panelId).attr("data-x", mapobject.lonlat.lon);
-               jQuery("#"+panelId).attr("data-y", mapobject.lonlat.lat);
+                panelWrapper.attr("data-type", "WMS");
+                panelWrapper.attr("data-x", mapobject.lonlat.lon);
+                panelWrapper.attr("data-y", mapobject.lonlat.lat);
             }else{
                 //WFS
-                jQuery("#"+panelId).attr("data-type", "WFS");
-                jQuery("#"+panelId).attr("data-featureid", features[0]);
+                panelWrapper.attr("data-type", "WFS");
+                panelWrapper.attr("data-featureid", features[0]);
             }
         },
         /**
@@ -367,7 +371,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
          /**
          * [createLinkShowTabOnMap shows all on map that are inside tab]
          */
-        createLinkShowTabOnMap: function(tabContent){
+        createLinkShowTabOnMap: function(tabContent, layerId){
             var me = this;
             return jQuery('<a />', {
                 "href": "JavaScript:void(0);",
@@ -375,15 +379,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
                 "text": me._getLocalization('show_all_on_map'),
                 click: function(e){
 
+                    me.removeAllMarkersAndHighlights();
+
+                    var wfs = false;
+                    var featureIds = [];
+
                     var header = tabContent.find(".accordion_panel .header");
                     jQuery(header).each(function() {
-                        me.showWmsMarker(jQuery(this).data("x"), jQuery(this).data("y"));
+                        var el = jQuery(this);
+                        if(el.data("type") == "WFS"){
+                            wfs = true;
+                            featureIds.push(el.data("featureid"));
+                        }else{
+                            me.showWmsMarker(el.data("x"), el.data("y"));
+                        }
                     });
 
-                    if(header.data("type") == "WFS"){
-
-                    }else{
-
+                    if(wfs){
+                        me.highlightWFSFeature(layerId, featureIds);
                     }
 
                     return false;
