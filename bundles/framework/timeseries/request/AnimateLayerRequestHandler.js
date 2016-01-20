@@ -9,7 +9,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.request.AnimateLayerR
      * @param {Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleInstance} instance
      *          reference to timeseries instance
      */
-    function (playbackModule, sandbox) {
+    function (playbackModule) {
         this._playbackModule = playbackModule;
     }, {
         /**
@@ -27,7 +27,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.request.AnimateLayerR
                 layerId = request.getLayerId(),
                 autoPlay = request.getAutoPlay();
 
-            if(me._playbackModule && times && layerId) {            
+            if(me._playbackModule && times && layerId) {
                 me._playbackModule.showSlider(layerId, times, autoPlay);
             }
 

@@ -45,7 +45,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
          * implements BundleInstance protocol update method - does nothing atm
          */
         update: function () {
-            var me = this;
         },
         /**
          * @method getLocalization
@@ -93,14 +92,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
                 }
             }
 
-            
-
             sandbox.addRequestHandler('Timeseries.AnimateLayerRequest', this.requestHandlers.animateLayerRequest);
-
 
             // FIXME remove this, only testing!!!
             setTimeout(function(){
-                var animateRequestBuilder = me.sandbox.getRequestBuilder('Timeseries.AnimateLayerRequest'), 
+                var animateRequestBuilder = me.sandbox.getRequestBuilder('Timeseries.AnimateLayerRequest'),
                         animateRequest;
                 if(animateRequestBuilder){
                     var times = {
@@ -137,8 +133,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             };
         },
         /**
-         * @method update
-         * implements BundleInstance protocol update method - does nothing atm
+         * @method stop
+         * implements BundleInstance protocol stop method
          */
         stop: function () {
             var me = this;

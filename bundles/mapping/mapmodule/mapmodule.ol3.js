@@ -466,7 +466,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 stroke.width = styleDef.stroke.width;
             }
 
-            return new ol.style.Stroke(stroke); 
+            return new ol.style.Stroke(stroke);
         },
         /**
          * Parses image style from json
