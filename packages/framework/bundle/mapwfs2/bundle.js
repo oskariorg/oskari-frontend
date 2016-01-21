@@ -45,16 +45,16 @@ function() {
             "src" : "../../../../bundles/framework/mapwfs2/event/WFSStatusChangedEvent.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/plugin/QueuedTilesGrid.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/plugin/QueuedTilesGrid.ol2.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/plugin/QueuedTilesStrategy.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/plugin/QueuedTilesStrategy.ol2.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/plugin/TileCache.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/plugin/TileCache.ol2.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/plugin/WfsLayerPlugin.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/plugin/WfsLayerPlugin.ol2.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/mapwfs2/event/WFSFeatureEvent.js"
@@ -87,10 +87,10 @@ function() {
             "src" : "../../../../bundles/framework/mapwfs2/request/ActivateHighlightRequestHandler.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/domain/QueuedTile.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/domain/QueuedTile.ol2.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/domain/TileQueue.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/domain/TileQueue.ol2.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/mapping/mapwfs2/domain/WFSLayer.js"

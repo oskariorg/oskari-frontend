@@ -1438,6 +1438,15 @@ Oskari.clazz.define(
                 return this.__layersByName[name];
             }
             this.__layersByName[name] = value;
+        },
+        /*
+         * @method deleteTileCache
+         *
+         * @param layerId
+         * @param styleName
+         */
+        deleteTileCache: function (layerId, styleName) {
+            // TODO: force reload of tiles - required for custom style change
         }
     }, {
         extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

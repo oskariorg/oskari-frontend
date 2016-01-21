@@ -45,16 +45,7 @@ function() {
             "src" : "../../../../bundles/mapping/mapwfs2/event/WFSStatusChangedEvent.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/mapping/mapwfs2/plugin/QueuedTilesGrid.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/mapping/mapwfs2/plugin/QueuedTilesStrategy.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/mapping/mapwfs2/plugin/TileCache.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/mapping/mapwfs2/plugin/WfsLayerPlugin.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/plugin/WfsLayerPlugin.ol3.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/mapping/mapwfs2/event/WFSFeatureEvent.js"
@@ -85,12 +76,6 @@ function() {
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/mapping/mapwfs2/request/ActivateHighlightRequestHandler.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/mapping/mapwfs2/domain/QueuedTile.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/mapping/mapwfs2/domain/TileQueue.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/mapping/mapwfs2/domain/WFSLayer.js"
