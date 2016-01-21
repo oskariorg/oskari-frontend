@@ -1241,7 +1241,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         _setDatepickerLanguage: function () {
             var lang = null;
             if (navigator.language.indexOf('fi') > -1) {
-                lang = "fi-FI";
+                lang = "fi";
             } else {
                 lang = "en-GB";
             }
