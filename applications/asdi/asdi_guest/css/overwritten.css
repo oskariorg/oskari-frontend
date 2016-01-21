@@ -145,3 +145,39 @@ table {
     display: none;
 }
 
+div.mapplugin.timeseries .oskari-timeslider {
+    background-color: #93bbda !important;
+}
+
+.mapplugin-timeseries-popup .content {
+    background-color: #93bbda !important;
+}
+
+.mapplugin-timeseries-popup .arrow {
+    border-bottom: 15px solid #93bbda !important;
+}
+
+div.mapplugin.timeseries div.playback-button button {
+    background-color: #93bbda !important;
+}
+
+
+div.mapplugin.timeseries .oskari-timeslider .interval-line-highlight {
+    color: #3c3c3c !important;
+}
+
+div.mapplugin.timeseries div.playback-button button.play:after {
+    border-color: transparent transparent transparent #3c3c3c !important;
+}
+
+.mapplugin-timeseries-popup .content {
+    color: #3c3c3c !important;
+}
+
+div.mapplugin.timeseries div.playback-button button.pause:after {
+    background: #3c3c3c !important;
+}
+
+div.mapplugin.timeseries div.playback-button button.pause:before {
+    background: #3c3c3c !important;
+}

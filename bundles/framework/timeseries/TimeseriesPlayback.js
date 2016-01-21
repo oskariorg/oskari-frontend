@@ -37,8 +37,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
             intervalCount: 0
         };
 
-        this._animationSpeedMs = 1000;
-        this._layerUpdateTimeMs = 500;
+        this._animationSpeedMs = 2000;
+        this._layerUpdateTimeMs = 100;
         this._timers = {
             popupPosition: null,
             slideInterval: null,
@@ -245,7 +245,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
                         date: newDate.format('DD.MM.YYYY')
                     });
                     me._checkDifferentDates(newDate);
-                    me._checkHours(newDate, i+1);
+                    me._checkHours(newDate, i);
                 }
                 // Add last values
                 me._playbackSlider.differentDates.push({
@@ -482,7 +482,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
             var timeSeriesPopup = me._control.filter('.mapplugin-timeseries-popup');
             var pixelsPerTimeSerie = sliderWidth / (me._playbackSlider.times.length-1);
             var index = parseInt(position.x/pixelsPerTimeSerie);
-            if(!isNaN(index) && index >= 0 && index < me._playbackSlider.times.length) {
+            var prevIndex = timeSeriesPopup.attr(me._TIMESERIES_INDEX);
+            if(!isNaN(index) && index >= 0 && index < me._playbackSlider.times.length && prevIndex != index) {
                 timeSeriesPopup.attr(me._TIMESERIES_INDEX, index);
                 me._calculatePopupPosition();
             }
