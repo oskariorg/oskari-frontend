@@ -93,7 +93,7 @@ function() {
             "src" : "../../../../bundles/framework/mapwfs2/domain/TileQueue.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/domain/WFSLayer.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/domain/WFSLayer.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/mapping/mapwfs2/domain/WfsLayerModelBuilder.js"
