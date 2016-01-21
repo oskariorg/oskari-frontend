@@ -1,7 +1,7 @@
 /**
  * @class Oskari.statistics.bundle.statsgrid.View
  *
- * Sample extension bundle definition which inherits most functionalty
+ * Sample extension bundle definition which inherits most functionality
  * from DefaultView class.
  *
  */

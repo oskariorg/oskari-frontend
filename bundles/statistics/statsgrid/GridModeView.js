@@ -1,7 +1,7 @@
 /**
  * @class Oskari.statistics.bundle.statsgrid.GridModeView
  *
- * Sample extension bundle definition which inherits most functionalty
+ * Sample extension bundle definition which inherits most functionality
  * from DefaultView class.
  *
  */
@@ -132,7 +132,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
             var me = this,
                 sandbox = me.instance.getSandbox();
 
-            me.toolbar.show(isShown);
+            if (me.toolbar) {
+                me.toolbar.show(isShown);
+            }
 
             var mapModule = me.instance.getSandbox().findRegisteredModuleInstance('MainMapModule'),
                 map = mapModule.getMap(),

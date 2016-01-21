@@ -68,6 +68,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
                 'Oskari.statistics.bundle.statsgrid.request.TooltipContentRequestHandler',
                 me
             );
+
             sandbox.addRequestHandler(
                 'StatsGrid.TooltipContentRequest',
                 tooltipRequestHandler
@@ -100,102 +101,78 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
             // Set or make sure the following data is set correctly to the grid:
             //   sources="[[sources]]" selected-layer="{{selectedLayer}}"
             //   layer-info="[[layerInfo]]" region-info="[[regionInfo]]"
-            // Register grid plugin to the map.
             
+            // Because old state can only come from embedded maps, we will handle migration here.
+            // Otherwise we would migrate in all the respective plugins and components with state.
             if (!me.state.version) {
               // The old Oskari will not include the version info.
               // The only sources allowed are SotkaNET and user indicators.
               // The only selectors allowed are gender and year.
               // Only certain statistical region maps are allowed.
+              /*
+               * An example me.state constructed based on an old Oskari URL.
+               * "{"colors":{"index":0,"set":"seq"},
+               * "cmode":"","numberOfClasses":5,
+               * "indicators":[{"id":4,"gender":"total","year":"2014"}],
+               * "layerId":9,
+               * "filterInput":[],"filterRegion":[],
+               * "currentColumn":"indicator42014total",
+               * "filterMethod":"","manualBreaksInput":"","gridShown":true,"methodId":"1",
+               * "municipalities":[732,2,4,5,9,11,12,13,15,18,19,20,21,22,23,24,25,26,27,28,29,30,32,33,34,35,
+               * ...
+               * 444,445,448,449,451,452]}"
+               * 
+               */
+              // We need to put me.selectedIndicators something like this:
+              // "[{"datasourceId":"fi.nls.oskari.control.statistics.plugins.sotka.SotkaStatisticalDatasourcePlugin",
+              // "indicatorId":"4","selectors":[{"selectorId":"sex","value":"total"},{"selectorId":"year","value":"2014"}],
+              // "id":"fi.nls.oskari.control.statistics.plugins.sotka.SotkaStatisticalDatasourcePlugin:4:oskari:kunnat2013:{\"sex\":\"total\",\"year\":\"2014\"}"}]"
+              
+              me.state.selectedIndicators = me.state.indicators.map(function(indicator) {
+                  return {
+                      "datasourceId":"fi.nls.oskari.control.statistics.plugins.sotka.SotkaStatisticalDatasourcePlugin",
+                      "indicatorId": "" + indicator.id,
+                      "selectors": [{
+                        "selectorId":"sex",
+                        "value": indicator.gender
+                      },{
+                        "selectorId":"year",
+                        "value": indicator.year
+                      }],
+                      // Cache key
+                      "id": "fi.nls.oskari.control.statistics.plugins.sotka.SotkaStatisticalDatasourcePlugin:" + indicator.id + ":" + statsLayer._layerName +
+                        ":" + '{\"sex\":\"' + indicator.gender + '\",\"year\":\"' + indicator.year + '\"}'
+                  };
+              });
+              
+              /*
+               * An example statsLayer constructed based on old Oskari URL:
+               * 
+               * "{"_id":9,
+               * "_name":{"fi":"kunnat2013","sv":"kunnat2013","en":"kunnat2013","es":"kunnat2013"},
+               * "_description":{"fi":"","sv":"","en":"","es":""},
+               * "_type":"NORMAL_LAYER","_layerType":"STATS","_params":{},"_options":{},"_attributes":{},
+               * "_metaType":null,"_maxScale":1,"_minScale":15000000,"_visible":true,"_opacity":100,
+               * "_isSticky":null,"_inspireName":"Others","_organizationName":"Demo layers","_orderNumber":null,
+               * "_subLayers":[],"_styles":[],"_currentStyle":null,"_legendImage":"","_featureInfoEnabled":null,
+               * "_queryable":false,"_queryFormat":null,"_permissions":{"edit":true,"download":
+               * "download_permission_ok","publish":"publication_permission_ok"},"_geometry":[],
+               * "_geometryWKT":null,"_tools":[{"_name":"table_icon","_title":"Thematic maps",
+               * "_tooltip":"Go to thematic maps","_iconCls":null}],"_backendStatus":null,"_featureData":false,
+               * "_layerUrls":["/action?id=9&action_route=GetLayerTile"],
+               * "_layerName":"oskari:kunnat2013","_baseLayerId":-1,"_realtime":false,"_refreshRate":0,
+               * "_version":"1.1.0","_srs_name":"EPSG:3067","_admin":{"username":"admin","inspireId":37,
+               * "organizationId":1,"capabilities":{},"password":"geoserver",
+               * "url":"http://localhost:8080/geoserver/oskari/wfs"},"_gfiContent":null,
+               * "_created":"2015-12-03T13:07:00.000Z","admin":{"username":"admin","inspireId":37,
+               * "organizationId":1,"capabilities":{},"password":"geoserver",
+               * "url":"http://localhost:8080/geoserver/oskari/wfs"}}"
+               */
             } else if (me.state.version == 2) {
               // Current version.
             } else {
               console.log("Warning! This embedded URL has been generated by a newer Oskari. Update the Oskari deployment.");
             }
-            
-            /*
-             * An example me.state constructed based on an old Oskari URL.
-             * "{"colors":{"index":0,"set":"seq"},
-             * "cmode":"","numberOfClasses":5,
-             * "indicators":[{"id":4,"gender":"total","year":"2014"}],
-             * "layerId":9,
-             * "filterInput":[],"filterRegion":[],
-             * "currentColumn":"indicator42014total",
-             * "filterMethod":"","manualBreaksInput":"","gridShown":true,"methodId":"1",
-             * "municipalities":[732,2,4,5,9,11,12,13,15,18,19,20,21,22,23,24,25,26,27,28,29,30,32,33,34,35,
-             * 36,37,38,39,43,44,45,46,48,49,50,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,68,69,70,72,73,
-             * 74,75,76,77,78,80,82,83,84,85,87,88,91,92,93,94,95,97,99,100,101,102,103,107,108,110,111,112,
-             * 113,114,115,116,117,118,119,121,122,126,127,793,132,133,135,136,138,139,141,142,143,144,145,
-             * 148,150,151,152,153,154,156,157,160,161,163,164,166,167,171,173,174,175,176,177,178,179,181,
-             * 182,183,184,186,187,188,191,192,193,195,196,197,198,200,201,202,204,206,207,208,209,210,212,
-             * 213,214,216,217,219,220,221,223,224,226,228,231,232,233,234,235,237,238,239,795,241,242,243,
-             * 244,247,248,250,252,253,255,257,258,259,260,261,263,264,265,266,794,268,269,271,272,273,274,
-             * 278,280,282,283,284,285,288,290,291,292,293,294,295,296,297,300,301,302,303,304,305,306,307,
-             * 310,311,312,313,314,316,796,317,318,319,320,321,323,325,327,328,330,331,334,336,338,339,340,
-             * 797,342,343,344,346,347,348,349,350,798,351,352,353,354,355,356,357,358,359,360,361,363,368,
-             * 369,370,371,373,374,375,376,378,379,381,382,383,384,385,387,388,389,392,393,394,397,398,399,
-             * 400,402,403,404,405,406,408,410,413,414,417,420,421,422,423,425,427,430,431,432,435,854,444,
-             * 445,448,449,451,452,732,2,4,5,9,11,12,13,15,18,19,20,21,22,23,24,25,26,27,28,29,30,32,33,34,
-             * 35,36,37,38,39,43,44,45,46,48,49,50,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,68,69,70,72,
-             * 73,74,75,76,77,78,80,82,83,84,85,87,88,91,92,93,94,95,97,99,100,101,102,103,107,108,110,111,
-             * 112,113,114,115,116,117,118,119,121,122,126,127,793,132,133,135,136,138,139,141,142,143,144,
-             * 145,148,150,151,152,153,154,156,157,160,161,163,164,166,167,171,173,174,175,176,177,178,179,
-             * 181,182,183,184,186,187,188,191,192,193,195,196,197,198,200,201,202,204,206,207,208,209,210,
-             * 212,213,214,216,217,219,220,221,223,224,226,228,231,232,233,234,235,237,238,239,795,241,242,
-             * 243,244,247,248,250,252,253,255,257,258,259,260,261,263,264,265,266,794,268,269,271,272,273,
-             * 274,278,280,282,283,284,285,288,290,291,292,293,294,295,296,297,300,301,302,303,304,305,306,
-             * 307,310,311,312,313,314,316,796,317,318,319,320,321,323,325,327,328,330,331,334,336,338,339,
-             * 340,797,342,343,344,346,347,348,349,350,798,351,352,353,354,355,356,357,358,359,360,361,363,
-             * 368,369,370,371,373,374,375,376,378,379,381,382,383,384,385,387,388,389,392,393,394,397,398,
-             * 399,400,402,403,404,405,406,408,410,413,414,417,420,421,422,423,425,427,430,431,432,435,854,
-             * 444,445,448,449,451,452]}"
-             * 
-             */
-            // We need to put me.selectedIndicators something like this:
-            // "[{"datasourceId":"fi.nls.oskari.control.statistics.plugins.sotka.SotkaStatisticalDatasourcePlugin",
-            // "indicatorId":"4","selectors":[{"selectorId":"sex","value":"total"},{"selectorId":"year","value":"2014"}],
-            // "id":"fi.nls.oskari.control.statistics.plugins.sotka.SotkaStatisticalDatasourcePlugin:4:oskari:kunnat2013:{\"sex\":\"total\",\"year\":\"2014\"}"}]"
-            
-            me.state.selectedIndicators = me.state.indicators.map(function(indicator) {
-                return {
-                    "datasourceId":"fi.nls.oskari.control.statistics.plugins.sotka.SotkaStatisticalDatasourcePlugin",
-                    "indicatorId": "" + indicator.id,
-                    "selectors": [{
-                      "selectorId":"sex",
-                      "value": indicator.gender
-                    },{
-                      "selectorId":"year",
-                      "value": indicator.year
-                    }],
-                    // Cache key
-                    "id": "fi.nls.oskari.control.statistics.plugins.sotka.SotkaStatisticalDatasourcePlugin:" + indicator.id + ":" + statsLayer._layerName +
-                      ":" + '{\"sex\":\"' + indicator.gender + '\",\"year\":\"' + indicator.year + '\"}'
-                };
-            });
-            
-            /*
-             * An example statsLayer constructed based on old Oskari URL:
-             * 
-             * "{"_id":9,
-             * "_name":{"fi":"kunnat2013","sv":"kunnat2013","en":"kunnat2013","es":"kunnat2013"},
-             * "_description":{"fi":"","sv":"","en":"","es":""},
-             * "_type":"NORMAL_LAYER","_layerType":"STATS","_params":{},"_options":{},"_attributes":{},
-             * "_metaType":null,"_maxScale":1,"_minScale":15000000,"_visible":true,"_opacity":100,
-             * "_isSticky":null,"_inspireName":"Others","_organizationName":"Demo layers","_orderNumber":null,
-             * "_subLayers":[],"_styles":[],"_currentStyle":null,"_legendImage":"","_featureInfoEnabled":null,
-             * "_queryable":false,"_queryFormat":null,"_permissions":{"edit":true,"download":
-             * "download_permission_ok","publish":"publication_permission_ok"},"_geometry":[],
-             * "_geometryWKT":null,"_tools":[{"_name":"table_icon","_title":"Thematic maps",
-             * "_tooltip":"Go to thematic maps","_iconCls":null}],"_backendStatus":null,"_featureData":false,
-             * "_layerUrls":["/action?id=9&action_route=GetLayerTile"],
-             * "_layerName":"oskari:kunnat2013","_baseLayerId":-1,"_realtime":false,"_refreshRate":0,
-             * "_version":"1.1.0","_srs_name":"EPSG:3067","_admin":{"username":"admin","inspireId":37,
-             * "organizationId":1,"capabilities":{},"password":"geoserver",
-             * "url":"http://localhost:8080/geoserver/oskari/wfs"},"_gfiContent":null,
-             * "_created":"2015-12-03T13:07:00.000Z","admin":{"username":"admin","inspireId":37,
-             * "organizationId":1,"capabilities":{},"password":"geoserver",
-             * "url":"http://localhost:8080/geoserver/oskari/wfs"}}"
-             */
             
             var gridConf = {
                 'published': true,
@@ -230,6 +207,14 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
                 // A sort of a hack to enable the hover and select controls in a published map.
                 statsLayerPlugin._modeVisible = true;
             }
+
+            // We need to notify the grid of the current state
+            // so it can load the right indicators.
+            //this.gridPlugin.setState(this.state);
+            this.classifyPlugin.setState(this.state);
+            // Reset the classify plugin
+            this.classifyPlugin.resetUI(this.state);
+
             me.createUI();
         },
 
@@ -339,16 +324,22 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
 
             return ret;
         },
-
+        "getMainPanel" : function() {
+            var me = this;
+            if(!this.__mainPanel) {
+                this.__mainPanel = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.view.MainPanel', this,
+                    me.locale,
+                    me.sandbox, true, me.state, me.statsLayer);
+            }
+            return this.__mainPanel;
+        },
         /**
          * @method createUI
          * Creates the UI based on the given state (what indicators to use and so on).
          */
         createUI: function () {
             var me = this;
-            me.mainPanel = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.view.MainPanel', this,
-                me.locale,
-                me.sandbox, true, me.state, me.statsLayer);
+            me.mainPanel = me.getMainPanel();
 
             // Makes some room in the DOM for the grid.
             me._toggleGrid(me.state.gridShown);
@@ -361,6 +352,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
             // Initialize the grid
             me.mainPanel.render(me.container);
             me._adjustDataContainer();
+            me.sendTooltipData = function(feature) {
+                me.mainPanel.sendTooltipData(feature);
+            };
         },
 
         /**

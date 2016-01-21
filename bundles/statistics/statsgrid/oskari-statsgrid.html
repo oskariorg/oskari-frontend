@@ -511,13 +511,15 @@
       },
       "attached": function() {
           var me = this;
-          this.cache = {};
-          this.dialogs = [];
           if (this.embedded && this.selectedIndicators && this.selectedIndicators.length > 0) {
             var indicatorKey = this.selectedIndicators[0].id;
             this.set("selectedIndicator", this.selectedIndicators[0]);
             this.set("selectedIndicatorKey", indicatorKey);
           }
+      },
+      "ready": function() {
+          this.cache = {};
+          this.dialogs = [];
       }
     };
   });
