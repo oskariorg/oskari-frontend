@@ -75,16 +75,16 @@ function() {
             "src" : "../../../../bundles/mapping/mapwfs2/event/WFSPropertiesEvent.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/request/ShowOwnStyleRequest.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/request/ShowOwnStyleRequest.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/request/ShowOwnStyleRequestHandler.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/request/ShowOwnStyleRequestHandler.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/request/ActivateHighlightRequest.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/request/ActivateHighlightRequest.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/request/ActivateHighlightRequestHandler.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/request/ActivateHighlightRequestHandler.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/mapping/mapwfs2/domain/QueuedTile.ol2.js"
