@@ -1008,15 +1008,19 @@ Oskari.clazz.define(
          *
          */
         createTileGrid: function() {
+            var tileSize = this.getTileSize();
             this._tileGrid = new ol.tilegrid.TileGrid({
                 extent: this.ol2ExtentOl3Transform(this.getMapModule().getMaxExtent()),
-                tileSize: this.getTileSize(),
+                tileSize: [tileSize.width, tileSize.height],
                 resolutions : this.getMapModule().getResolutionArray()
             });
         },
 
         getTileSize: function () {
-            return [256, 256];
+            return {
+                width : 256,
+                height : 256
+            };
         },
         getGrid: function () {
             var me = this,

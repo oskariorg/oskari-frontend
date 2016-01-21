@@ -30,16 +30,16 @@ function() {
             "src" : "../../../../libraries/jquery/plugins/jquery.cookie.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/service/Connection.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/service/Connection.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/service/Mediator.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/service/Mediator.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/service/StatusHandler.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/service/StatusHandler.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/service/WFSLayerService.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/service/WFSLayerService.js"
         },{
             "type" : "text/javascript",
             "src" : "../../../../bundles/mapping/mapwfs2/event/WFSStatusChangedEvent.js"

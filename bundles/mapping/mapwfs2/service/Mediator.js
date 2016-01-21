@@ -140,6 +140,7 @@ Oskari.clazz.define(
             }
         },
         sendMessage : function(channel, message) {
+
             var isInit = (channel === '/service/wfs/init');
             // connected flag is not setup when init is called so ignore it.
             if (isInit || (this.connection.isConnected() && !this.__initInProgress)) {
@@ -193,10 +194,12 @@ Oskari.clazz.define(
             }
             // TODO: get rid of ROUTEID by improving the apikey functionality in server side
             this.session.route = jQuery.cookie('ROUTEID') || '';
+
             var srs = this.plugin.getSandbox().getMap().getSrsName(),
-                bbox = this.plugin.ol2ExtentOl3Transform(this.plugin.getSandbox().getMap().getExtent()),
+                bbox = this.plugin.getSandbox().getMap().getExtent(),
                 zoom = this.plugin.getSandbox().getMap().getZoom(),
                 mapScales = this.plugin.getMapModule().getScaleArray();
+
             var message = {
                 session: this.session.session,
                 route: this.session.route,
@@ -205,11 +208,11 @@ Oskari.clazz.define(
                 browserVersion: this.session.browserVersion,
                 location: {
                     srs: srs,
-                    bbox: [bbox[0], bbox[1], bbox[2], bbox[3]],
+                    bbox: [bbox.left, bbox.bottom, bbox.right, bbox.top],
                     zoom: zoom
                 },
                 grid: this.plugin.getGrid() || {},
-                tileSize: {"width" : this.plugin.getTileSize()[0],"height":this.plugin.getTileSize()[0]} || {},
+                tileSize: this.plugin.getTileSize() || {},
                 mapSize: {
                     width: self.plugin.getSandbox().getMap().getWidth(),
                     height: self.plugin.getSandbox().getMap().getHeight()
@@ -592,14 +595,15 @@ Oskari.clazz.category(
          *
          * sends message to /service/wfs/setLocation
          */
-        setLocation: function (layerId, srs, bbox, zoom, grid, tiles) {
+        setLocation: function (layerId, srs, bbox, zoom, grid, tiles, manualRefesh) {
             this.sendMessage('/service/wfs/setLocation', {
                 'layerId': layerId,
                 'srs': srs,
                 'bbox': bbox,
                 'zoom': zoom,
                 'grid': grid,
-                'tiles': tiles
+                'tiles': tiles,
+                'manualRefresh': manualRefesh
             });
         },
 

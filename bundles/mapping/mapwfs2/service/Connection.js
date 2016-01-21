@@ -30,10 +30,7 @@ Oskari.clazz.define(
             me.config.lazy = true;
         }
         me._lazy = me.config.lazy;
-        me._disconnectTime = me.config.disconnectTime || 30000;
-        me._backoffIncrement = me.config.backoffIncrement || 1000;
-        me._maxBackoff = me.config.maxBackoff || 60000;
-        me._maxNetworkDelay = me.config.maxNetworkDelay || 10000;
+        me._DISCONNECT_CHECK_FREQUENCY = me.config.disconnectTime || 30000;
 
         me.browser = {};
         me.getBrowser();
@@ -46,11 +43,11 @@ Oskari.clazz.define(
             url: me.cometURL,
             //logLevel : "debug",
             // if connection can't be established add this time to waiting time before trying again (ms)
-            backoffIncrement: me._backoffIncrement,
+            backoffIncrement: me.config.backoffIncrement || 1000,
             // maximum time of backoff (not incremented after reaching) (ms)
-            maxBackoff: me._maxBackoff,
+            maxBackoff: me.config.maxBackoff || 60000,
             // max request time before considering that the request failed (ms)
-            maxNetworkDelay: me._maxNetworkDelay
+            maxNetworkDelay: me.config.maxNetworkDelay || 10000
         });
 
         me.cometd.addListener(
@@ -80,7 +77,7 @@ Oskari.clazz.define(
          * @method connect
          */
         connect: function () {
-            if(!this._connected && !this._handshakeInProcess ){
+            if(!this._connected && !this._handshakeInProcess) {
                 this._handshakeInProcess = true;
                 this.cometd.handshake();
             }
@@ -147,7 +144,7 @@ Oskari.clazz.define(
                         function () {
                             me.disconnect();
                         },
-                        me._disconnectTime
+                        me._DISCONNECT_CHECK_FREQUENCY
                     );
                 } else {
                     if (me._disconnectTimer) {
