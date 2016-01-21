@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSFeaturesSelecte
  */
 function(wfsFeatureIds, mapLayer, keepCollection) {
     this._wfsFeatureIds = wfsFeatureIds;
-    this._keepCollection = keepCollection;
+    this._keepCollection = !!keepCollection;
     this._mapLayer = mapLayer;
 }, {
     /** @static @property __name event name */
@@ -41,10 +41,7 @@ function(wfsFeatureIds, mapLayer, keepCollection) {
      * @return {Boolean} true if this should append previous selection
      */
     isKeepSelection : function() {
-        if(this._keepCollection) {
-            return this._keepCollection;
-        }
-        return false;
+        return this._keepCollection;
     },
     /**
      * @method getMapLayer

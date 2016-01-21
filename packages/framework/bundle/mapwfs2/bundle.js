@@ -42,7 +42,7 @@ function() {
             "src" : "../../../../bundles/framework/mapwfs2/service/WFSLayerService.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/event/WFSStatusChangedEvent.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/event/WFSStatusChangedEvent.js"
         },{
             "type" : "text/javascript",
             "src" : "../../../../bundles/mapping/mapwfs2/plugin/QueuedTilesGrid.ol2.js"
@@ -57,22 +57,22 @@ function() {
             "src" : "../../../../bundles/mapping/mapwfs2/plugin/WfsLayerPlugin.ol2.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/event/WFSFeatureEvent.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/event/WFSFeatureEvent.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/event/WFSFeaturesSelectedEvent.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/event/WFSFeaturesSelectedEvent.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/event/WFSFeatureGeometriesEvent.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/event/WFSFeatureGeometriesEvent.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/event/WFSRefreshManualLoadLayersEvent.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/event/WFSRefreshManualLoadLayersEvent.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/event/WFSImageEvent.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/event/WFSImageEvent.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/event/WFSPropertiesEvent.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/event/WFSPropertiesEvent.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/mapwfs2/request/ShowOwnStyleRequest.js"
