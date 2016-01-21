@@ -298,7 +298,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
             var me = this;
             me._control.find('.playback-button .pause').hide();
             me._control.find('.playback-button .play').show();
-            clearInterval(me._timers.slideInterval);
+            me._stopTimers();
         },
         /**
          * @method  @private _setSliderHandlers set button handlers
@@ -519,5 +519,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
             y = evt.pageY-elementTop;
 
             return {x:x, y:y};
+        },
+        /**
+         * @method  @private_stopTimers stop timers
+         */
+        _stopTimers: function(){
+            var me = this;
+            clearInterval(me._timers.slideInterval);
+            clearTimeout(me._timers.popupPosition);
+            clearTimeout(me._timers.updatemap);
         }
 });
