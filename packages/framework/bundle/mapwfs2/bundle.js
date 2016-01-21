@@ -96,7 +96,7 @@ function() {
             "src" : "../../../../bundles/framework/mapwfs2/domain/WFSLayer.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/domain/WfsLayerModelBuilder.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/domain/WfsLayerModelBuilder.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/divmanazer/component/VisualizationForm.js"
