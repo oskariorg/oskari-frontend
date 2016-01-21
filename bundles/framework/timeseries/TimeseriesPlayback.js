@@ -47,6 +47,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
         this._isDragging = false;
         this._isPopupMove = false;
         this._selectedLayerId = null;
+        this._dimensionName = null;
     }, {
 
         __templates: {
@@ -73,16 +74,23 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
          * @param {String|Integer} layerId layer id to animate
          * @param {Object|Array} times times object {start:null,end:null,interval:null} or array
          * @param {Boolean} autoPlay if true, start playing other false
+         * @param {String} dimensionName dimension name
+         * @param {String} units units format
          */
-        showSlider: function (layerId, times, autoPlay) {
+        showSlider: function (layerId, times, autoPlay, dimensionName, units) {
             var me = this;
             var layer = me.sandbox.findMapLayerFromSelectedMapLayers(layerId);
 
-            if(times===null || layerId === null || !layer || (Array.isArray(times) && times.length===0)) {
+            var isLayer = (layerId && layer) ? true : false;
+            var isTimes = (times || (Array.isArray(times) && times.length>0)) ? true : false;
+
+            // Supported only now ISO8601 units format
+            if(!isLayer && !isTimes && !dimensionName && 'ISO8601' !== units) {
                 return;
             }
 
             me._selectedLayerId = layerId;
+            me._dimensionName = dimensionName;
 
             if(me._control === null) {
                 me._control = this.template.control.clone();
@@ -377,9 +385,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
             var me = this;
             var updateRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest'),
                     updateRequest;
-                updateRequest = updateRequestBuilder(me._selectedLayerId, true, {
-                    'TIME': time
-                });
+                var params = {};
+                params[me._dimensionName] = time;
+                updateRequest = updateRequestBuilder(me._selectedLayerId, true, params);
                 me.sandbox.request(me.instance, updateRequest);
         },
         /**

@@ -5,18 +5,23 @@
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.request.AnimateLayerRequest',
+Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.request.AnimateLayerRequest',    
     /**
      * @method create called automatically on construction
      * @static
-     *
-     * @param {Object} viewData
-     *            View Data object which will be used to prepopulate map data in publish mode
+     * 
+     * @param  {Integer|String} layerId     layer id
+     * @param  {Object|Array} times         times
+     * @param  {Boolean} autoPlay           is autoplay
+     * @param  {String} dimensionName       dimension name
+     * @param  {String} units               units
      */
-    function (layerId, times, autoPlay) {
+    function (layerId, times, autoPlay, dimensionName, units) {
         this._layerId = layerId;
         this._times = times;
         this._autoPlay = autoPlay;
+        this._dimensionName = dimensionName;
+        this._units = units;
     }, {
         /** @static @property __name request name */
         __name: 'Timeseries.AnimateLayerRequest',
@@ -47,7 +52,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.request.AnimateLayerR
          */
         getAutoPlay: function () {
             return this._autoPlay;
+        },
+        /**
+         * @method  getDimensionName
+         * @return {String} dimension name
+         */
+        getDimensionName: function() {
+            return this._dimensionName;
+        },
+        /**
+         * @method  getUnits
+         * @return {String} units
+         */
+        getUnits: function(){
+            return this._units;
         }
+
     }, {
         /**
          * @property {String[]} protocol array of superclasses as {String}

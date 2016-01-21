@@ -25,10 +25,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.request.AnimateLayerR
             var me = this,
                 times = request.getTimes(),
                 layerId = request.getLayerId(),
-                autoPlay = request.getAutoPlay();
+                autoPlay = request.getAutoPlay(),
+                dimensionName = request.getDimensionName(),
+                units = request.getUnits();
 
-            if(me._playbackModule && times && layerId) {
-                me._playbackModule.showSlider(layerId, times, autoPlay);
+            // Currently only supported ISO8601 formatted dimensions
+            var isTimeDimension = (dimensionName && units === 'ISO8601') ? true: false;
+
+            if(me._playbackModule && times && layerId && isTimeDimension) {
+                me._playbackModule.showSlider(layerId, times, autoPlay, dimensionName, units);
             }
 
         }
