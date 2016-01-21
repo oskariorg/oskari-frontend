@@ -7,6 +7,8 @@ Oskari.registerLocalization(
         "desc": "",
         "default-style": "Default style",
         "own-style": "Own style",
+        "refresh": "Refresh",
+        "refresh_title": "Refresh data products not rendering automatically on the map.",
         "tile": {
             "title": "Data Products (WFS) Management"
         },
@@ -22,6 +24,10 @@ Oskari.registerLocalization(
             "wfs_configuring_layer_failed": "Settings for the data product {layer} could not be configured.",
             "wfs_request_failed": "The data product {layer} request could not be completed.",
             "features_parsing_failed": "Feature data on the data product {layer} could not be retrieved."
+        },
+        "information": {
+            "title": "Feature Data Rendering",
+            "info": "Some of data products are not rendered automatically. <br/><br/> Pleace select an area on the map and click the Refresh button. <br/><br/> Click Feature data to see feature data on the data product."
         },
         "button": {
             "cancel": "Cancel",

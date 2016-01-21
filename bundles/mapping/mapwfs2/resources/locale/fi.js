@@ -7,6 +7,8 @@ Oskari.registerLocalization(
         "desc": "",
         "default-style": "Oletustyyli",
         "own-style": "Oma tyyli",
+        "refresh": "Päivitä",
+        "refresh_title": "Päivitä vektoritasot, jotka eivät päivity automaattisesti kartalla.",
         "tile": {
             "title": "Vektoritasojen (WFS) yläpito"
         },
@@ -22,6 +24,10 @@ Oskari.registerLocalization(
             "wfs_configuring_layer_failed": "Vektoritason {layer} asetusten muuttaminen epäonnistui.",
             "wfs_request_failed": "Vektoritasolle {layer} tehty kysely epäonnistui.",
             "features_parsing_failed": "Vektoritason {layer} kohdetietojen kysely epäonnistui."
+        },
+        "information": {
+            "title": "Kohdetietojen esittäminen",
+            "info": "Osa valituista vektoritasoista (WFS) ei päivity automaattisesti. Zbr/><br/> Valitse haluamasi alue kartalta ja klikkaa Päivitä-painiketta kartalla.<br/><br/>Klikkaa Kohdetiedot nähdäksesi tason kohdetiedot."
         },
         "button": {
             "cancel": "Peruuta",

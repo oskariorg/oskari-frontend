@@ -94,6 +94,9 @@ function() {
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/divmanazer/component/visualization-form/AreaForm.js"
+        },{
+            "type": "text/css",
+            "src": "../../../../bundles/mapping/mapwfs2/resources/css/style.css"
         }],
         "locales" : [{
             "lang" : "en",
