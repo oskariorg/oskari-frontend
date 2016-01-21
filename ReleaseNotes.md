@@ -2,6 +2,14 @@
 
 ## 1.35
 
+### RPC
+
+New request included in defaults "MapModulePlugin.ZoomToFeaturesRequest".
+
+### mapping/mapmodule/plugin/vectorlayer
+
+New request added 'MapModulePlugin.ZoomToFeaturesRequest' that zooms to extent of all or specific features on the specified layers. The request is by default enabled in rpc.
+
 ### mapmodule - LayerSelectionPlugin
 
 Now LayerSelectionPlugin handle small screen (width is smaller than 500px) so at layer(s) selection component use full screen.
