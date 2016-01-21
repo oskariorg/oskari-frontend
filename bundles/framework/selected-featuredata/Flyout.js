@@ -168,6 +168,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
             tabContent = jQuery('<div></div>'),
             howManyShowLink = jQuery(me.container).find('.selected_featuredata_howmany_show');
 
+            //Show many or one link created only once
             if(howManyShowLink.length == 0){
                 jQuery(me.container).append(me.createShowManyOrOneLink());
             }
@@ -288,6 +289,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
                 //WFS
                 panelWrapper.attr("data-type", "WFS");
                 panelWrapper.attr("data-featureid", features[0]);
+                panelWrapper.attr("data-x", mapobject.lonlat.lon);
+                panelWrapper.attr("data-y", mapobject.lonlat.lat);
             }
         },
         /**
@@ -381,27 +384,52 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
 
                     me.removeAllMarkersAndHighlights();
 
-                    var wfs = false;
-                    var featureIds = [];
+                    var wfs = false,
+                    featureIds = [],
+                    wfsvectors = new OpenLayers.Layer.Vector("fakeVectorLayer"),
+                    mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule'),
+                    _map = mapModule.getMap();
 
+                    //loop accordion headers
                     var header = tabContent.find(".accordion_panel .header");
                     jQuery(header).each(function() {
                         var el = jQuery(this);
                         if(el.data("type") == "WFS"){
                             wfs = true;
                             featureIds.push(el.data("featureid"));
+                            var point = new OpenLayers.Geometry.Point(el.data("x"),el.data("y"));
+                            wfsvectors.addFeatures([new OpenLayers.Feature.Vector(point)]);
                         }else{
                             me.showWmsMarker(el.data("x"), el.data("y"));
                         }
                     });
 
+                    //handle the right zooming
                     if(wfs){
+                        me.zoomMapToCertainExtent(wfsvectors.getDataExtent());
                         me.highlightWFSFeature(layerId, featureIds);
+                    }else{
+                        var layer = _map.getLayersByName("Markers");
+                        me.zoomMapToCertainExtent(layer[0].getDataExtent());
                     }
 
                     return false;
                 }});
         },
+        /**
+         * [zoomMapToCertainExtent zooms map to extent and minus 1 zoom back]
+         * @param  {[Object]} dataextent [extent]
+         */
+        zoomMapToCertainExtent: function(dataextent){
+                var me = this,
+                mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule'),
+                _map = mapModule.getMap(),
+                newZoom = 0;
+
+                _map.zoomToExtent(dataextent);
+                newZoom = _map.getZoom() - 1;
+                _map.zoomTo(newZoom);
+        },  
         /**
          * [highlightWFSFeature highlight wfs object on map]
          * @param  {[String]} layerId   [Oskari layerId]
@@ -429,9 +457,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
                 me.wfsMapIdList.push(layerId);
                 var event = builder(featureIdList, layer, true);
                 me.sandbox.notifyAll(event);
-
-                /*var mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
-                var _map = mapModule.getMap();*/
         },
         /**
          * [moveMapRequest move map to given x and y]
@@ -464,11 +489,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
                 var request = reqBuilder(data);
                 sb.request('MainMapModule', request);
             }
-
-/*           var mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
-           var _map = mapModule.getMap();
-           var layer = _map.getLayersByName("Markers");
-           _map.zoomToExtent(layer[0].getDataExtent());*/
 
         },
         /**
