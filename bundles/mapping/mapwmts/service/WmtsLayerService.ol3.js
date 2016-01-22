@@ -77,7 +77,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
                 success : function(response) {
                     var responseXml = response;
 
-                    // Fixed IE9 issue when getting capabilities XML. 
+                    // Fixed IE9 issue when getting capabilities XML.
                     // If IE9 then response capabilities XML is in reposne.xml
                     if(response.xml){
                         responseXml = response.xml;

@@ -8,7 +8,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.ZoomToFeatures
      * @method create called automatically on construction
      * @static
      *
-     * @param {Object} layer 
+     * @param {Object} layer
      * @param {Object} options additional options
      */
     function (layer, options) {
@@ -33,7 +33,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.ZoomToFeatures
         },
         /**
          * @method getOptions
-         * @return {Object} options 
+         * @return {Object} options
          */
         getOptions: function(){
             return this._options;
