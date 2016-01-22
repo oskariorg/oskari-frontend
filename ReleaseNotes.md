@@ -83,10 +83,15 @@ Fixed user search when one or many of these user data values  is not defined:
 
 Fixed error handling when cannot get roles from backend.
 
-### mapwfs2_ol3
+### mapwfs2
+
+Folder mapping/mapwfs2_ol3 has been renamed to mapping/mapwfs2.
+Code from framework/mapwfs2 has been moved to mapping/mapwfs2 and all Openlayers2 specific files have been renamed to have .ol2.js-postfix. 
+Lots of duplicate code has been removed.
 
 WFSRefreshManualLoadLayersEvent is now included in ol3 version as well and changing the size of the map no longer results in JS-error.
 Layer visibility information is now included in init-message to enable disabling queries to services that are visible to user.
+This fixes an issue where initially hidden WFS-layer was shown to the user. Now the layer is correctly hidden and any queries to the service are prevented while it's hidden.
 
 ### drawtools/ol3 and VectorLayerPlugin
 
