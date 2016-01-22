@@ -98,11 +98,34 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
         },
         resultHandler: function(content, data, formatters, params){
             var me = this;
+            var id = "showSelectedFeatureData";
             // show infobox
             var bundleInstance = Oskari.app.getBundleInstanceByName('selected-featuredata');
             var flyout = bundleInstance.plugins['Oskari.userinterface.Flyout'];
             
             if(flyout.isFlyoutVisible() && content.length > 0){
+                //console.dir(content);
+                //console.dir(data);
+                
+                  flyout._contents[id] = {
+                            contentData: content,
+                            lonlat: data.lonlat
+                        };
+                
+                 var currPopup = flyout._contents[id],
+                    refresh = (currPopup &&
+                    currPopup.lonlat.lon === data.lonlat.lon &&
+                    currPopup.lonlat.lat === data.lonlat.lat);
+
+                if (refresh) {
+                    console.dir(currPopup.contentData);
+                    console.dir(content);
+                    content = flyout._getChangedContentData(
+                        currPopup.contentData.slice(), content.slice());
+                    currPopup.contentData = content;
+                }
+                    //console.dir(content);
+
                     flyout.createUI(content, data);
             }else{
 

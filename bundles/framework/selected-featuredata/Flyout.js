@@ -30,6 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
         this._accordions = {};
         this._panels = {};
         this._array = [];
+        this._contents = {};
         this.wfsMapIdList = [];
     }, {
         /**
@@ -98,6 +99,39 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
             );
             me.removeAllMarkersAndHighlights();
         },
+         /**
+         * Merges the given new data to the old data.
+         * If there's a fragment with the same layerId in both,
+         * the new one replaces it.
+         *
+         * @method _getChangedContentData
+         * @private
+         * @param  {Object[]} oldData
+         * @param  {Object[]} newData
+         * @return {Object[]}
+         */
+        _getChangedContentData: function (oldData, newData) {
+            var retData,
+                i,
+                j,
+                nLen,
+                oLen;
+
+            for (i = 0, oLen = oldData.length; i < oLen; i += 1) {
+                for (j = 0, nLen = newData.length; j < nLen; j += 1) {
+                    if (newData[j].layerId &&
+                        newData[j].layerId === oldData[i].layerId) {
+                        oldData[i] = newData[j];
+                        newData.splice(j, 1);
+                        break;
+                    }
+                }
+            }
+
+            retData = oldData.concat(newData);
+
+            return retData;
+        },
         /**
          * [compareAccodionPanelHtml checks if html already in accordion panel]
          * @return {[Boolean]} [true/false]
@@ -137,7 +171,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
         },
          /**
          * [createShowManyOrOneLink adds link that modifies how many panels should show]
-         * @return  {[a tag]}
+         * @return  {[a link]}
          */
         createShowManyOrOneLink: function(){
             var me = this;
@@ -159,7 +193,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
                     e.preventDefault();
                 }});
         },
-        /* App specific methods */
+        /**
+         * [createUI fires UI building from ResultHandler (instance.js)]
+         * @param  {[Object]} params    [params]
+         * @param  {[Object]} mapobject [mapobject]
+         */
         createUI: function (params, mapobject) {
             var me = this,
             data = params[0],
@@ -181,6 +219,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
                );
             }
 
+            //if show many or one accordions is clicked
             if(howManyShowLink.attr("data-many") === "one"){
                 me.clearTabsLayout();
             }
@@ -202,7 +241,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
         },
         /**
          * [addTab adds tab]
-         * @param {[object]} item [contains all data tab needs]
+         * @param {[Object]} data       [data]
+         * @param {[Object]} tabContent [tabContent]
+         * @param {[String]} tabName    [tabName]
+         * @param {[Integer]} layerId    [layerId]
          */
         addTab: function (data, tabContent, tabName, layerId) {
             var me = this,
@@ -255,6 +297,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
 
                 me._accordions[layerId].addPanel(panel);
                 me._accordions[layerId].insertTo(tabContent);
+                //add link show all features on map
                 tabContent.prepend(me.createLinkShowTabOnMap(tabContent, layerId));
             }else{
                 // just insert new panel to existing accordion
@@ -371,8 +414,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
                     return false;
                 }});
         },
-         /**
-         * [createLinkShowTabOnMap shows all on map that are inside tab]
+        /**
+        * [createLinkShowTabOnMap shows all on map that are inside tab]
+         * @param  {[Object]} tabContent [tabContent]
+         * @param  {[integer]} layerId    [layerId]
+         * @return {[jQuery object]}            [a link]
          */
         createLinkShowTabOnMap: function(tabContent, layerId){
             var me = this;
