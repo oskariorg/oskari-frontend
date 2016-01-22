@@ -8,7 +8,9 @@ New request included in defaults "MapModulePlugin.ZoomToFeaturesRequest".
 
 ### mapping/mapmodule/plugin/vectorlayer
 
-New request added 'MapModulePlugin.ZoomToFeaturesRequest' that zooms to extent of all or specific features on the specified layers. The request is by default enabled in rpc.
+New request added 'MapModulePlugin.ZoomToFeaturesRequest' that zooms to extent of all or specific features on the specified layers (only for ol3).
+
+Added functionality to provide a label text to vector features with the style object. See [api/CHANGELOG.md](api/CHANGELOG.md) for details (ol2 and ol3).
 
 ### mapmodule - LayerSelectionPlugin
 
