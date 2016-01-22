@@ -2,40 +2,13 @@
 
 ## 1.35
 
-### mapmodule - VectorLayerPlugin (ol2 and ol3)
+### RPC
 
-Functionality to provide a label text to vector features with the style object. Either a static text or dynamic labeling by a property of the feature supported.
+New request included in defaults "MapModulePlugin.ZoomToFeaturesRequest".
 
-Two ways of providing a label: 
-```javascript
-    {
-        "layers": [
-            {
-                "id": "EXAMPLE1",
-                "style": {
-                    "fill": {
-                        "color": "#ff00ff"
-                    },
-                    "stroke": {
-                        "color": "#ff00ff",
-                        "width": 3
-                    },
-                    "text": {
-                        "fill": {
-                            "color": "#0000ff"
-                        },
-                        "stroke": {
-                            "color": "#ff00ff",
-                            "width": 4
-                        },
-                        "labelText": "Static text", //OR
-                        "labelProperty":"feature_property"
-                    }
-                }
-            }
-        ]
-    }
-```
+### mapping/mapmodule/plugin/vectorlayer
+
+New request added 'MapModulePlugin.ZoomToFeaturesRequest' that zooms to extent of all or specific features on the specified layers. The request is by default enabled in rpc.
 
 ### mapmodule - LayerSelectionPlugin
 
