@@ -75,7 +75,15 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
                 type : "GET",
                 url : getCapsUrl,
                 success : function(response) {
-                    var caps = format.read(response);
+                    var responseXml = response;
+
+                    // Fixed IE9 issue when getting capabilities XML. 
+                    // If IE9 then response capabilities XML is in reposne.xml
+                    if(response.xml){
+                        responseXml = response.xml;
+                    }
+
+                    var caps = format.read(responseXml);
                     me.setCapabilities(url, caps);
                     me.__handleCallbacksForLayerUrl(url);
                 },
