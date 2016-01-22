@@ -2,40 +2,19 @@
 
 ## 1.35
 
-### mapmodule - VectorLayerPlugin (ol2 and ol3)
+### mapping/mapwmts_ol3
 
-Functionality to provide a label text to vector features with the style object. Either a static text or dynamic labeling by a property of the feature supported.
+Fixed WmtsLayerService IE 9 capabilities formatting.
 
-Two ways of providing a label: 
-```javascript
-    {
-        "layers": [
-            {
-                "id": "EXAMPLE1",
-                "style": {
-                    "fill": {
-                        "color": "#ff00ff"
-                    },
-                    "stroke": {
-                        "color": "#ff00ff",
-                        "width": 3
-                    },
-                    "text": {
-                        "fill": {
-                            "color": "#0000ff"
-                        },
-                        "stroke": {
-                            "color": "#ff00ff",
-                            "width": 4
-                        },
-                        "labelText": "Static text", //OR
-                        "labelProperty":"feature_property"
-                    }
-                }
-            }
-        ]
-    }
-```
+### RPC
+
+New request included in defaults "MapModulePlugin.ZoomToFeaturesRequest".
+
+### mapping/mapmodule/plugin/vectorlayer
+
+New request added 'MapModulePlugin.ZoomToFeaturesRequest' that zooms to extent of all or specific features on the specified layers (only for ol3).
+
+Added functionality to provide a label text to vector features with the style object. See [api/CHANGELOG.md](api/CHANGELOG.md) for details (ol2 and ol3).
 
 ### mapmodule - LayerSelectionPlugin
 

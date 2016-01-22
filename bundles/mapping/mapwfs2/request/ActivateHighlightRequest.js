@@ -11,11 +11,11 @@ Oskari.clazz
      * @method create called automatically on construction
      * @static
      *
-     * @param {String}
+     * @param {Boolean}
      *            enabled Truth value of WFS highlight activation
      */
         function(enabled) {
-            this._enabled = enabled;
+            this._enabled = !!enabled;
 
     }, {
         /** @static @property __name request name */

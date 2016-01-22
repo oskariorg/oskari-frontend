@@ -325,6 +325,8 @@ Oskari.clazz.define(
                     if (!feature.getId()) {
                         var id = 'F' + me._nextFeatureId++;
                         feature.setId(id);
+                        //setting id using set(key, value) to make id-property asking by get('id') possible
+                        feature.set("id",  id);
                     }
                 });
 
@@ -452,6 +454,11 @@ Oskari.clazz.define(
                     'Oskari.mapframework.bundle.mapmodule.request.RemoveFeaturesFromMapRequestHandler',
                     sandbox,
                     me
+                ),
+                'MapModulePlugin.ZoomToFeaturesRequest': Oskari.clazz.create(
+                    'Oskari.mapframework.bundle.mapmodule.request.ZoomToFeaturesRequestHandler',
+                    sandbox,
+                    me
                 )
             };
         },
@@ -576,6 +583,121 @@ Oskari.clazz.define(
             // overriding default style with feature/layer style
             var styleDef = jQuery.extend({}, this._defaultStyle, styles);
             return me.getMapModule().getStyle(styleDef);
+        },
+        /**
+         * @method zoomToFeatures
+         *  - zooms to features
+         * @param {Object} layer
+         * @param {Object} options
+         */
+        zoomToFeatures: function(layer, options) {
+            var me = this,
+                layers = me.getLayersForZooming(layer);
+                features = me.getFeaturesMatchingQuery(layers, options);
+            if(!_.isEmpty(features)) {
+                var vector = new ol.source.Vector({
+                    features: features
+                });
+                var extent = vector.getExtent();
+                extent = me.getBufferedExtent(extent, 35);
+                me.getMapModule().zoomToExtent(extent);
+            }
+            me.sendZoomFeatureEvent(features);
+        },
+        /**
+         * @method getBufferedExtent
+         * -  returns buffered extent
+         * @param {ol.Extent} extent
+         * @param {Number} percentage
+         */
+        getBufferedExtent: function(extent, percentage) {
+            var me = this,
+                line = new ol.geom.LineString([[extent[0], extent[1]], [extent[2], extent[3]]]),
+                buffer = line.getLength()*percentage/100,
+                geometry = ol.geom.Polygon.fromExtent(extent),
+                reader = new jsts.io.WKTReader(),
+                wktFormat = new ol.format.WKT(),
+                wktFormatString = wktFormat.writeGeometry(geometry),
+                input = reader.read(wktFormatString),
+                bufferGeometry = input.buffer(buffer),
+                parser = new jsts.io.olParser();
+            bufferGeometry.CLASS_NAME = "jsts.geom.Polygon";
+            bufferGeometry = parser.write(bufferGeometry);
+            return bufferGeometry.getExtent();
+        },
+        /**
+         * @method sendZoomFeatureEvent
+         *  - sends FeatureEvent with the zoom operation
+         * @param {Array} features
+         */
+        sendZoomFeatureEvent: function(features) {
+            var me = this,
+                featureEvent = me._sandbox.getEventBuilder('FeatureEvent')().setOpZoom();
+            if(!_.isEmpty(features)) {
+                var formatter = me._supportedFormats['GeoJSON'];
+                _.each(features, function (feature) {
+                    var geojson = formatter.writeFeaturesObject([feature]);
+                    featureEvent.addFeature(feature.getId(), geojson, feature.layerId);
+                });
+            }
+            me._sandbox.notifyAll(featureEvent);
+        },
+        /**
+         * @method getFeaturesMatchingQuery
+         *  - gets features for zooming request
+         * @param {Array} layers
+         * @param {Object} featureQuery and object like { "id" : [123, "myvalue"] }
+         */
+        getFeaturesMatchingQuery: function(layers, featureQuery) {
+            var me = this,
+                features = [];
+            _.each(layers, function(layerId) {
+                if(!me._layers[layerId]) {
+                    // invalid layerId
+                    return;
+                }
+                var sourceFeatures = me._layers[layerId].getSource().getFeatures();
+                if(_.isEmpty(featureQuery)) {
+                    // no query requirements, add all features in layer
+                    features = features.concat(sourceFeatures);
+                    return;
+                }
+                _.each(sourceFeatures, function (feature) {
+                    feature.layerId = layerId;
+                    _.each(featureQuery, function(allowedValues, requestedProperty) {
+                        var featureValue = feature.get(requestedProperty);
+                        if(!featureValue) {
+                            // feature doesn't have the property, don't include it
+                            return;
+                        }
+                        _.each(allowedValues, function(value) {
+                            if(featureValue === value) {
+                                features.push(feature);
+                            }
+                        });
+                    });
+                });
+            });
+            return features;
+        },
+        /**
+         * @method getLayersForZooming
+         *  - gets layers for zooming request
+         * @param {Object} layer
+         */
+        getLayersForZooming: function(layer) {
+            var me = this,
+                layers = [];
+            if(_.isEmpty(layer)) {
+                _.each(me._layers, function(key, value) {
+                    layers.push(value);
+                });
+            } else {
+                _.each(layer.layer, function(key, value) {
+                    layers.push(key);
+                });
+            }
+            return layers;
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],

@@ -5,11 +5,11 @@
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.request.AnimateLayerRequest',    
+Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.request.AnimateLayerRequest',
     /**
      * @method create called automatically on construction
      * @static
-     * 
+     *
      * @param  {Integer|String} layerId     layer id
      * @param  {Object|Array} times         times
      * @param  {Boolean} autoPlay           is autoplay

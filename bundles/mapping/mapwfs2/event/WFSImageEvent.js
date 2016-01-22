@@ -9,7 +9,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSImageEvent',
  * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
  * @param {String} url
  * @param {Number[]} bbox
+ * @param {Object} size
  * @param {String} post fix
+ * @param {Boolean} boundaryTile
  * @param {Boolean} keep previous
  */
 function(layer, imageUrl, bbox, size, layerType, boundaryTile, keepPrevious) {
@@ -18,8 +20,8 @@ function(layer, imageUrl, bbox, size, layerType, boundaryTile, keepPrevious) {
     this._bbox = bbox;
     this._size = size;
     this._layerType = layerType;
-    this._boundaryTile = boundaryTile;
-    this._keepPrevious = keepPrevious;
+    this._boundaryTile = !!boundaryTile;
+    this._keepPrevious = !!keepPrevious;
 }, {
     /** @static @property __name event name */
     __name : "WFSImageEvent",
