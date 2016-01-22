@@ -94,12 +94,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
 
             if(me._control === null) {
                 me._control = this.template.control.clone();
+                //only set the event handlers the first time the control is created.
+                me._setSliderHandlers();
                 jQuery(me.mapmodule.getMapEl()).append(me._control);
             }
 
             me._resetPlaybackSliderVariables();
             me._calculateIntervals(times);
-            me._setSliderHandlers();
             me._control.filter('.mapplugin-timeseries-popup').attr(me._TIMESERIES_INDEX, 0);
             me._calculatePopupPosition();
             me._addDayLines();
@@ -118,7 +119,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
             if(me._control) {
                 me._stopPlayback();
                 me._control.remove();
+                me._control = null;
                 me._resetPlaybackSliderVariables();
+                me._selectedLayerId = null;
             }
 
         },
@@ -287,6 +290,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
             var me = this;
             me._control.find('.playback-button .play').hide();
             me._control.find('.playback-button .pause').show();
+            clearInterval(me._timers.slideInterval);
             me._timers.slideInterval = setInterval(function(){
                 me._goNext();
             }, me._animationSpeedMs);
@@ -307,6 +311,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
             var me = this;
 
             // Play button
+            var playbuttons = me._control.find('.playback-button .play');
             me._control.find('.playback-button .play').click(function(evt){
                 evt.preventDefault();
                 me._startPlayback();
@@ -528,5 +533,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
             clearInterval(me._timers.slideInterval);
             clearTimeout(me._timers.popupPosition);
             clearTimeout(me._timers.updatemap);
+        },
+        getControl: function() {
+            return this._control;
+        },
+        getSelectedLayerId: function() {
+            return this._selectedLayerId;
         }
 });
