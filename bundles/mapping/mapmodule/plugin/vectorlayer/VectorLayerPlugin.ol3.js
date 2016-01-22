@@ -593,7 +593,7 @@ Oskari.clazz.define(
         zoomToFeatures: function(layer, options) {
             var me = this,
                 layers = me.getLayersForZooming(layer);
-                features = me.getFeaturesForZooming(layers, options);
+                features = me.getFeaturesMatchingQuery(layers, options);
             if(!_.isEmpty(features)) {
                 var vector = new ol.source.Vector({
                     features: features
@@ -643,12 +643,12 @@ Oskari.clazz.define(
             me._sandbox.notifyAll(featureEvent);
         },
         /**
-         * @method getFeaturesForZooming
+         * @method getFeaturesMatchingQuery
          *  - gets features for zooming request
          * @param {Array} layers
          * @param {Object} featureQuery and object like { "id" : [123, "myvalue"] }
          */
-        getFeaturesForZooming: function(layers, featureQuery) {
+        getFeaturesMatchingQuery: function(layers, featureQuery) {
             var me = this,
                 features = [];
             _.each(layers, function(layerId) {
