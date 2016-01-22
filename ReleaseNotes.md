@@ -2,6 +2,10 @@
 
 ## 1.35
 
+### mapping/mapwmts_ol3
+
+Fixed WmtsLayerService IE 9 capabilities formatting.
+
 ### mapmodule - VectorLayerPlugin (ol2 and ol3)
 
 Functionality to provide a label text to vector features with the style object. Either a static text or dynamic labeling by a property of the feature supported.
