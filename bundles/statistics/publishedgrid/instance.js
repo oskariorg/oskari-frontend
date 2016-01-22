@@ -181,7 +181,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
             };
 
             //if classification not explicitly allowed, don't allow it.
-            //This will however also change the behaviour of existing published maps where classification has previously been allwed.
+            //This will however also change the behaviour of existing published maps where classification has previously been allowed.
             //Those maps need to be manually updated in order to get the classifying back in action.
             var state = me.getState();
             if (!me.conf || (me.conf && !me.conf.allowClassification)) {
@@ -229,7 +229,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
         /**
          * Get state parameters.
          * Returns string with statsgrid state. State value keys are before the '-' separator and
-         * the indiators are after the '-' separator. The indicators are further separated by ',' and
+         * the indicators are after the '-' separator. The indicators are further separated by ',' and
          * both state values and indicator values are separated by '+'.
          * Note that we're returning the state even when there's no view.
          *

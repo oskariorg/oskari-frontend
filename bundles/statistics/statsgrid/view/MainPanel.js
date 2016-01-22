@@ -31,11 +31,12 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.MainPanel',
       getSandbox: function() {
         return this.sandbox;
       },
-      // FIXME: Move everything from the original state generation to here. Start using this one.
       getState: function() {
         var me = this;
         return {
-          "selectedIndicators": me.element.selectedIndicators
+          "version": 2,
+          "selectedIndicators": me.element && me.element.selectedIndicators || [],
+          "layerId": me.element && me.element.layerId || null
         };
       },
 	    render: function(container, instance) {

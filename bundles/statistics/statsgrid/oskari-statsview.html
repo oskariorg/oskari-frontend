@@ -9,8 +9,8 @@
 
   <template>
       <oskari-indicatorselector locale="[[locale]]" language="[[language]]" ajax-url="[[ajaxUrl]]"
-        user="[[user]]" sandbox="{{sandbox}}" id="indicatorselector" selected-layer="[[selectedLayer]]"
-        embedded="[[embedded]]" selected-indicators="[[selectedIndicators]]" show-grid="[[showGrid]]"></oskari-indicatorselector>
+        user="[[user]]" sandbox="{{sandbox}}" id="indicatorselector" selected-layer="{{selectedLayer}}"
+        embedded="[[embedded]]" selected-indicators="{{selectedIndicators}}" show-grid="[[showGrid]]"></oskari-indicatorselector>
       <content></content>
     </div>
   </template>
@@ -23,9 +23,17 @@
           "language": String,
           "ajaxUrl": String,
           "user": Object,
-          "selectedLayer": String,
+          "selectedLayer": {
+            "type": String,
+            "value": "oskari:kunnat2013",
+            "notify": true
+          },
           "embedded": {
             "type": Boolean,
+            "notify": true
+          },
+          "selectedIndicators": {
+            "type": Array,
             "notify": true
           }
       },
