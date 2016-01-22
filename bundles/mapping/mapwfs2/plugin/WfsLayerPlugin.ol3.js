@@ -670,7 +670,7 @@ Oskari.clazz.define(
             var lonlat = event.getLonLat(),
                 keepPrevious = event.getParams().ctrlKeyDown;
 
-            var point =  new ol.geom.Point([lonlat.lon, lonlat.lat]);
+            var point = new ol.geom.Point([lonlat.lon, lonlat.lat]);
             var geojson = new ol.format.GeoJSON(this.getMap().getView().getProjection());
             var pixelTolerance = 15;
             var json = {
