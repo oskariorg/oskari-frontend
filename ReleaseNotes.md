@@ -2,6 +2,10 @@
 
 ## 1.35
 
+### mapping/mapwmts_ol3
+
+Fixed WmtsLayerService IE 9 capabilities formatting.
+
 ### RPC
 
 New request included in defaults "MapModulePlugin.ZoomToFeaturesRequest".
