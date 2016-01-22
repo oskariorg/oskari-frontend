@@ -454,6 +454,11 @@ Oskari.clazz.define(
                     'Oskari.mapframework.bundle.mapmodule.request.RemoveFeaturesFromMapRequestHandler',
                     sandbox,
                     me
+                ),
+                'MapModulePlugin.ZoomToFeaturesRequest': Oskari.clazz.create(
+                    'Oskari.mapframework.bundle.mapmodule.request.ZoomToFeaturesRequestHandler',
+                    sandbox,
+                    me
                 )
             };
         },
