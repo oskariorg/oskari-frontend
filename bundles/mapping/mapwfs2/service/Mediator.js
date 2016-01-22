@@ -312,15 +312,12 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
         var sandbox = this.plugin.getSandbox(),
             me = this,
             layer = sandbox.findMapLayerFromSelectedMapLayers(data.data.layerId),
-            topWFSLayerId = me.WFSLayerService.getTopWFSLayer(),
-            analysisWFSLayerId = me.WFSLayerService.getAnalysisWFSLayerId(),
             selectionMode = data.data.keepPrevious,
-            featureIds = [],
-            selectFeatures;
+            featureIds = [];
 
         if (data.data.features !== 'empty') {
-            for (i = 0; i < data.data.features.length; i += 1) {
-                featureIds.push(data.data.features[i][0]);
+            data.data.features.forEach(featureData) {
+                featureIds.push(featureData[0]);
             }
         }
 
@@ -331,16 +328,12 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
 
         // handle CTRL click (selection) and normal click (getInfo) differently
         if (selectionMode) {
-            selectFeatures = true;
 
-            if (analysisWFSLayerId && layer._id !== analysisWFSLayerId) {
-                return;
-            } else if (topWFSLayerId && layer._id !== topWFSLayerId) {
+            if (!this.__isSelectionLayer(layer.getId())) {
                 return;
             }
-
-            me.WFSLayerService.setWFSFeaturesSelections(layer._id, featureIds);
-            var event = sandbox.getEventBuilder('WFSFeaturesSelectedEvent')(me.WFSLayerService.getSelectedFeatureIds(layer._id), layer, selectFeatures);
+            me.WFSLayerService.setWFSFeaturesSelections(layer.getId(), featureIds);
+            var event = sandbox.getEventBuilder('WFSFeaturesSelectedEvent')(me.WFSLayerService.getSelectedFeatureIds(layer.getId()), layer, true);
             sandbox.notifyAll(event);
         } else {
             // FIXME: pass coordinates from server in response, but not like this
@@ -349,6 +342,15 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             var infoEvent = sandbox.getEventBuilder('GetInfoResultEvent')(data.data);
             sandbox.notifyAll(infoEvent);
         }
+    },
+    __isSelectionLayer : function(layerId) {
+        var topWFSLayerId = this.WFSLayerService.getTopWFSLayer();
+        var analysisWFSLayerId = this.WFSLayerService.getAnalysisWFSLayerId();
+
+        if(analysisWFSLayerId && layerId === analysisWFSLayerId) {
+            return true;
+        }
+        return topWFSLayerId && layerId === topWFSLayerId;
     },
     /**
      * @method getWFSFeatureGeometries
