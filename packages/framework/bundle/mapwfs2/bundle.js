@@ -30,73 +30,73 @@ function() {
             "src" : "../../../../libraries/jquery/plugins/jquery.cookie.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/service/Connection.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/service/Connection.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/service/Mediator.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/service/Mediator.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/service/StatusHandler.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/service/StatusHandler.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/service/WFSLayerService.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/service/WFSLayerService.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/event/WFSStatusChangedEvent.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/event/WFSStatusChangedEvent.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/plugin/QueuedTilesGrid.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/plugin/QueuedTilesGrid.ol2.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/plugin/QueuedTilesStrategy.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/plugin/QueuedTilesStrategy.ol2.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/plugin/TileCache.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/plugin/TileCache.ol2.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/plugin/WfsLayerPlugin.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/plugin/WfsLayerPlugin.ol2.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/event/WFSFeatureEvent.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/event/WFSFeatureEvent.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/event/WFSFeaturesSelectedEvent.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/event/WFSFeaturesSelectedEvent.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/event/WFSFeatureGeometriesEvent.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/event/WFSFeatureGeometriesEvent.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/event/WFSRefreshManualLoadLayersEvent.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/event/WFSRefreshManualLoadLayersEvent.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/event/WFSImageEvent.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/event/WFSImageEvent.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/event/WFSPropertiesEvent.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/event/WFSPropertiesEvent.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/request/ShowOwnStyleRequest.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/request/ShowOwnStyleRequest.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/request/ShowOwnStyleRequestHandler.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/request/ShowOwnStyleRequestHandler.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/request/ActivateHighlightRequest.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/request/ActivateHighlightRequest.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/request/ActivateHighlightRequestHandler.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/request/ActivateHighlightRequestHandler.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/domain/QueuedTile.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/domain/QueuedTile.ol2.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/domain/TileQueue.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/domain/TileQueue.ol2.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/domain/WFSLayer.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/domain/WFSLayer.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/domain/WfsLayerModelBuilder.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/domain/WfsLayerModelBuilder.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/divmanazer/component/VisualizationForm.js"
@@ -111,64 +111,64 @@ function() {
             "src" : "../../../../bundles/framework/divmanazer/component/visualization-form/AreaForm.js"
         },{
             "type": "text/css",
-            "src": "../../../../bundles/framework/mapwfs2/resources/css/style.css"
+            "src": "../../../../bundles/mapping/mapwfs2/resources/css/style.css"
         }],
         "locales" : [{
             "lang" : "en",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/resources/locale/en.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/en.js"
         }, {
             "lang" : "es",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/resources/locale/es.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/es.js"
         }, {
             "lang" : "et",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/resources/locale/et.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/et.js"
         }, {
             "lang" : "fi",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/resources/locale/fi.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/fi.js"
         }, {
             "lang" : "fr",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/resources/locale/fr.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/fr.js"
         }, {
             "lang" : "is",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/resources/locale/is.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/is.js"
         }, {
             "lang" : "it",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/resources/locale/it.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/it.js"
         }, {
             "lang" : "sv",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/resources/locale/sv.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/sv.js"
         }, {
             "lang" : "nb",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/resources/locale/nb.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/nb.js"
         }, {
             "lang" : "nl",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/resources/locale/nl.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/nl.js"
         }, {
             "lang" : "nn",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/resources/locale/nn.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/nn.js"
         }, {
             "lang" : "sl",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/resources/locale/sl.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/sl.js"
         }, {
             "lang" : "de",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/resources/locale/de.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/de.js"
         }, {
             "lang" : "cs",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapwfs2/resources/locale/cs.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/cs.js"
         }]
     },
     "bundle" : {

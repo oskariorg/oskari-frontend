@@ -392,7 +392,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             selectFeatures = true,
             topWFSLayer = this.WFSLayerService.getTopWFSLayer(),
             analysisWFSLayer = this.WFSLayerService.getAnalysisWFSLayerId(),
-            i,
+            hasNoFeatures = data.data.features === 'empty',
             makeNewSelection = false;
 
         //if user has not used Ctrl during selection, make totally new selection
@@ -411,20 +411,21 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             }
 
         } else {
-            if (data.data.features === 'empty') {
+            if (hasNoFeatures) {
                 me.WFSLayerService.emptyAllWFSFeatureSelections();
             }
         }
 
-        if (data.data.features !== 'empty') {
-            for (i = 0; i < data.data.features.length; i += 1) {
-                featureIds.push(data.data.features[i][0]);
-            }
+        if (!hasNoFeatures) {
+            data.data.features.forEach(function(feat) {
+                featureIds.push(feat[0]);
+
+            });
         }
 
-        if (data.data.features !== 'empty') {
+        if (!hasNoFeatures) {
             me.WFSLayerService.setWFSFeaturesSelections(layer._id, featureIds, makeNewSelection);
-        } else if (makeNewSelection = true) {
+        } else if (makeNewSelection) {
             me.WFSLayerService.emptyWFSFeatureSelections(layer);
         }
 
@@ -671,11 +672,6 @@ Oskari.clazz.category(
          * sends message to /service/wfs/setMapClick
          */
         setMapClick: function (lonlat, keepPrevious, geomRequest) {
-            var me = this,
-                sandbox = this.plugin.getSandbox(),
-                map = sandbox.getMap(),
-                srs = map.getSrsName();
-
             // TODO: save coordinates???
             this.lonlat = lonlat;
             this.sendMessage('/service/wfs/setMapClick', {
@@ -687,25 +683,6 @@ Oskari.clazz.category(
                 'keepPrevious': keepPrevious,
                 'geomRequest': geomRequest
             });
-
-            /**
-            if(keepPrevious !== null && keepPrevious === false) {
-                me.setFilter({
-                    "type":"FeatureCollection",
-                    "features":[
-                    {
-                        "type":"Feature",
-                        "properties":{},
-                        "geometry":{
-                            "type":
-                            "Point",
-                            "coordinates":[lonlat.lon,lonlat.lat]
-                        }
-                    }],
-                    "crs":{"type":"name","properties":{"name":srs}}}
-                );
-            }
-            */
         },
 
         /**
