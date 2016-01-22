@@ -268,27 +268,6 @@ Oskari.clazz.define(
             },
             useState : function(state) {
                 this.sandbox.useState(state);
-            },
-            getFeatures: function(layerId) {
-                var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
-                var plugin = null;
-                //vittaus vecLayPlug
-                //func, joka palauttaa kaikki featuret 1. olemassa olevien layerien nimet 2. palauttaa tietylle layerille sen layerin featuret
-                //jos true:
-                var features = {};
-                if(!plugin) {
-                	return features;
-                }
-                var layers = plugin.getLayerIds();
-                layers.forEach(function(id) {
-                    if(layerId === true) {
-                    	features[id] = plugin.getLayerFeatures(id);
-                    }
-                    else {
-                    	features[id] = [];
-                    }
-                });
-                return features;
             }
         },
 
