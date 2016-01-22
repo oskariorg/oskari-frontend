@@ -24,7 +24,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
         _initImpl: function () {
             // register domain builder
             var layerModelBuilder,
-                mapLayerService = this.getSandbox().getService(
+                mapLayerService = this.getSandbox().getService( 
                     'Oskari.mapframework.service.MapLayerService'
                 );
 
