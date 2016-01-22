@@ -169,7 +169,8 @@ Oskari.clazz.define(
                     'ChangeMapLayerOpacityRequest',
                     'MyLocationPlugin.GetUserLocationRequest',
                     'DrawTools.StartDrawingRequest',
-                    'DrawTools.StopDrawingRequest'];
+                    'DrawTools.StopDrawingRequest',
+                    'MapModulePlugin.ZoomToFeaturesRequest'];
             }
             me._allowedFunctions = this.__arrayToObject(allowedFunctions);
             // try to get event/request builder for each of these to see that they really are supported!!

@@ -108,7 +108,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
                         interval: 'PT5M',
                     };
                     */
-                   
+
                    // Show from 4 day beforo to current time
                    var times = {
                         start: moment().subtract(5, 'days').toISOString(),
