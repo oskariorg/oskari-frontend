@@ -193,7 +193,8 @@ Oskari.registerLocalization(
                     }
                 ],
                 "attribute": "Select attribute",
-                "footer": "Authorised features are not included in the analysis."
+                "footer": "Authorised features are not included in the analysis.",
+                "aggregateAdditionalInfo":"Note! You have selected one or more attributes containing textual data. Only the feature count can be calculated for them. If the feature count is not selected, textual attribute data are not included in the analysis result."
             },
             "buffer_size": {
                 "label": "Buffer size",
@@ -280,7 +281,33 @@ Oskari.registerLocalization(
                 "mode": "Spatial join mode",
                 "modeTooltip": "Select if you want to use descriptive statististic in the spatial join.",
                 "normalMode": "Normal spatial join",
-                "aggregateMode": "Aggregate descritpive statistic"
+                "aggregateMode": "Aggregate descritpive statistic",
+                "backend_locale": [
+                    {
+                        "id": "count",
+                        "label": "Feature count"
+                    },
+                    {
+                        "id": "sum",
+                        "label": "Sum"
+                    },
+                    {
+                        "id": "min",
+                        "label": "Minimum"
+                    },
+                    {
+                        "id": "max",
+                        "label": "Maximum"
+                    },
+                    {
+                        "id": "avg",
+                        "label": "Average"
+                    },
+                    {
+                        "id": "stddev",
+                        "label": "Standard deviation"
+                    }
+                ]
             },
             "params": {
                 "label": "Attributes in the result",
