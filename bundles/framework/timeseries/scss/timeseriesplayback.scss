@@ -12,8 +12,6 @@ div.mapplugin.timeseries {
   left: 46px;
   z-index:100000;
   position:absolute;
-  -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=90)"; // IE8
-  filter: alpha(opacity=90); // IE 5-7
   opacity: 0.9;
 
   div.playback-button {
