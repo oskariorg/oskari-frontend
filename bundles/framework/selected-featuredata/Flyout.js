@@ -32,6 +32,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
         this._array = [];
         this._contents = {};
         this.wfsMapIdList = [];
+        this.isMany = false;
     }, {
         /**
          * @method getName
@@ -186,9 +187,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
                     if(mea.attr("data-many") === "many"){
                         mea.attr("data-many", "one");
                         mea.text(me._getLocalization('tabs_pick_many'));
+                        me.isMany = false;
                     }else{
                         mea.attr("data-many", "many");
                         mea.text(me._getLocalization('tabs_pick_one'));
+                        me.isMany = true;
                     }
                     e.preventDefault();
                 }});
