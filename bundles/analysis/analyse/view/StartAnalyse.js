@@ -295,7 +295,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     me.instance.setAnalyseMode(false);
                 }
             );
-            contentDiv.append(me.template.analysisAdditionalInfo);
+            contentDiv.append(me.template.analysisAdditionalInfo.clone());
             contentDiv.append(me._getButtons());
 
             var inputs = me.mainPanel.find('input[type=text]');
@@ -2800,6 +2800,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     }
 
                 }
+
+                //clean the "additional info" div
+                me.mainPanel.find('div.analysis_additional_info').html('');
 
                 // Send the data for analysis to the backend
                 me.instance.sandbox.postRequestByName('ShowProgressSpinnerRequest',[true]);
