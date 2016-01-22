@@ -646,30 +646,37 @@ Oskari.clazz.define(
          * @method getFeaturesForZooming
          *  - gets features for zooming request
          * @param {Array} layers
-         * @param {Object} options
+         * @param {Object} featureQuery and object like { "id" : [123, "myvalue"] }
          */
-        getFeaturesForZooming: function(layers, options) {
+        getFeaturesForZooming: function(layers, featureQuery) {
             var me = this,
                 features = [];
-            _.each(layers, function(layerId, key) {
-                if(me._layers[layerId]) {
-                    me._layers[layerId].getSource().getFeatures().forEach(function (feature) {
-                        feature.layerId = layerId;
-                        if(_.isEmpty(options)) {
-                            features.push(feature);
-                        } else {
-                            _.each(options, function(o, key) {
-                                if(feature.get(key)) {
-                                    _.each(o, function(value, k) {
-                                        if(feature.get(key)===value) {
-                                            features.push(feature);
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                    });
+            _.each(layers, function(layerId) {
+                if(!me._layers[layerId]) {
+                    // invalid layerId
+                    return;
                 }
+                var sourceFeatures = me._layers[layerId].getSource().getFeatures();
+                if(_.isEmpty(featureQuery)) {
+                    // no query requirements, add all features in layer
+                    features = features.concat(sourceFeatures);
+                    return;
+                }
+                _.each(sourceFeatures, function (feature) {
+                    feature.layerId = layerId;
+                    _.each(featureQuery, function(allowedValues, requestedProperty) {
+                        var featureValue = feature.get(requestedProperty);
+                        if(!featureValue) {
+                            // feature doesn't have the property, don't include it
+                            return;
+                        }
+                        _.each(allowedValues, function(value) {
+                            if(featureValue === value) {
+                                features.push(feature);
+                            }
+                        });
+                    });
+                });
             });
             return features;
         },
