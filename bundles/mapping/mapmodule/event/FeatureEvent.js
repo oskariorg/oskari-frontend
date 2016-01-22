@@ -15,7 +15,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.event.FeatureEvent',
         op : {
             'add' : 'add',
             'remove' : 'remove',
-            'click' : 'click'
+            'click' : 'click',
+            'zoom': 'zoom'
         },
         setOpAdd : function() {
             this._operation = this.op.add;
@@ -27,6 +28,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.event.FeatureEvent',
         },
         setOpClick : function() {
             this._operation = this.op.click;
+            return this;
+        },
+        setOpZoom : function() {
+            this._operation = this.op.zoom;
             return this;
         },
         getName: function () {
