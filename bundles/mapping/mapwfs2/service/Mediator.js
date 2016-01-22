@@ -315,12 +315,6 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             selectionMode = data.data.keepPrevious,
             featureIds = [];
 
-        if (data.data.features !== 'empty') {
-            data.data.features.forEach(featureData) {
-                featureIds.push(featureData[0]);
-            }
-        }
-
         /*Ugly -> instead try to figure out _why_ the first click in the selection tool ends up in here*/
         if (this.WFSLayerService && this.WFSLayerService.isSelectionToolsActive()) {
             return;
@@ -331,6 +325,11 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
 
             if (!this.__isSelectionLayer(layer.getId())) {
                 return;
+            }
+            if (data.data.features !== 'empty') {
+                data.data.features.forEach(function(featureData) {
+                    featureIds.push(featureData[0]);
+                });
             }
             me.WFSLayerService.setWFSFeaturesSelections(layer.getId(), featureIds);
             var event = sandbox.getEventBuilder('WFSFeaturesSelectedEvent')(me.WFSLayerService.getSelectedFeatureIds(layer.getId()), layer, true);
@@ -394,19 +393,16 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             selectFeatures = true,
             topWFSLayer = this.WFSLayerService.getTopWFSLayer(),
             analysisWFSLayer = this.WFSLayerService.getAnalysisWFSLayerId(),
-            hasNoFeatures = data.data.features === 'empty',
-            makeNewSelection = false;
+            hasNoFeatures = data.data.features === 'empty';
 
         //if user has not used Ctrl during selection, make totally new selection
-        if (!data.data.keepPrevious) {
-            makeNewSelection = true;
-        }
+        var makeNewSelection = !data.data.keepPrevious;
 
         if (!me.WFSLayerService.isSelectFromAllLayers()) {
-            if (analysisWFSLayer && layer._id !== analysisWFSLayer) {
+            if (analysisWFSLayer && layer.getId() !== analysisWFSLayer) {
                 return;
-            } else if (!analysisWFSLayer && layer._id !== topWFSLayer) {
-                if (me.WFSLayerService.getSelectedFeatureIds(layer._id) !== 'empty') {
+            } else if (!analysisWFSLayer && layer.getId() !== topWFSLayer) {
+                if (me.WFSLayerService.getSelectedFeatureIds(layer.getId()) !== 'empty') {
                     me.WFSLayerService.emptyWFSFeatureSelections(layer);
                 }
                 return;
@@ -421,17 +417,16 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
         if (!hasNoFeatures) {
             data.data.features.forEach(function(feat) {
                 featureIds.push(feat[0]);
-
             });
         }
 
         if (!hasNoFeatures) {
-            me.WFSLayerService.setWFSFeaturesSelections(layer._id, featureIds, makeNewSelection);
+            me.WFSLayerService.setWFSFeaturesSelections(layer.getId(), featureIds, makeNewSelection);
         } else if (makeNewSelection) {
             me.WFSLayerService.emptyWFSFeatureSelections(layer);
         }
 
-        var event = this.plugin.getSandbox().getEventBuilder('WFSFeaturesSelectedEvent')(me.WFSLayerService.getSelectedFeatureIds(layer._id), layer, selectFeatures);
+        var event = this.plugin.getSandbox().getEventBuilder('WFSFeaturesSelectedEvent')(me.WFSLayerService.getSelectedFeatureIds(layer.getId()), layer, selectFeatures);
         this.plugin.getSandbox().notifyAll(event);
     },
 

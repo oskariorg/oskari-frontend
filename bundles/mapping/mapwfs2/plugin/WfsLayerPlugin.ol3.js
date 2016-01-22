@@ -141,7 +141,6 @@ Oskari.clazz.define(
          */
         _createControlElement: function () {
             var me = this,
-                sandbox = me.getSandbox(),
                 el = jQuery('<div class="mapplugin mapwfs2plugin">' +
                 '<a href="JavaScript: void(0);"></a>' +
                 '</div>');
@@ -856,12 +855,8 @@ Oskari.clazz.define(
          * @param {Object} event
          */
         setFilterHandler: function (event) {
-            var WFSLayerService = this.WFSLayerService,
-                layers = this.getSandbox().findAllSelectedMapLayers(),
-                keepPrevious = this.getSandbox().isCtrlKeyDown(),
-                geoJson = event.getGeoJson();
-
-            this.getIO().setFilter(geoJson, keepPrevious);
+            var keepPrevious = this.getSandbox().isCtrlKeyDown();
+            this.getIO().setFilter(event.getGeoJson(), keepPrevious);
         },
 
         /**
@@ -1041,7 +1036,8 @@ Oskari.clazz.define(
                 minY: tileRangeExtentArray[1],
                 maxX: tileRangeExtentArray[2],
                 maxY: tileRangeExtentArray[3]
-            }
+            };
+
             for (var iy = tileRangeExtent.minY; iy <= tileRangeExtent.maxY; iy++) {
                 var colidx = 0;
                 for (var ix = tileRangeExtent.minX; ix <= tileRangeExtent.maxX; ix++) {
@@ -1056,26 +1052,6 @@ Oskari.clazz.define(
             grid.columns = colidx;
             return grid;
         },
-        /**
-         * Checks at tile is ok.
-         * @method _isTile
-         * @private
-         *
-         * @param {Object} tile
-         *
-         * @return {Boolean} is tile ok
-         */
-         _isTile: function(tile){
-            if (tile.bounds[0] === NaN)
-                return false;
-            if (tile.bounds[1] === NaN)
-                return false;
-            if (tile.bounds[2] === NaN)
-                return false;
-            if (tile.bounds[3] === NaN)
-                return false;
-            return true;
-         },
 
         /*
          * @method getPrintTiles
@@ -1329,10 +1305,6 @@ Oskari.clazz.define(
             var me = this;
             var layerName =
                 this.__layerPrefix + _layer.getId() + '_' + layerType,
-                layerScales = this.getMapModule().calculateLayerScales(
-                    _layer.getMaxScale(),
-                    _layer.getMinScale()
-                ),
                 key,
                 layerParams = _layer.getParams(),
                 layerOptions = _layer.getOptions();
@@ -1349,8 +1321,6 @@ Oskari.clazz.define(
                 }
             }
             var projection = ol.proj.get(me.getMapModule().getProjection());
-            var projectionExtent = projection.getExtent();
-            var me = this;
 
             //var tileSrc = new ol.source.TileImage({
             var tileSrc = new ol.source.OskariAsyncTileImage({
@@ -1368,21 +1338,14 @@ Oskari.clazz.define(
             me.layerByName(layerName, openLayer);
         },
         drawImageTile: function (layer, imageUrl, imageBbox, imageSize, layerType, boundaryTile, keepPrevious) {
-            var args = [layer, imageUrl, imageBbox, imageSize, layerType, boundaryTile, keepPrevious];
             var me = this,
                 map = me.getMap(),
                 layerId = layer.getId(),
                 layerIndex = null,
                 layerName = me.__layerPrefix + layerId + '_' + layerType,
                 layerScales,
-                normalLayer,
                 normalLayerIndex,
                 highlightLayer,
-                BBOX,
-                bboxKey,
-                dataForTileTemp,
-                style,
-                tileToUpdate,
                 boundsObj = imageBbox,
                 ols,
                 wfsMapImageLayer,
@@ -1406,7 +1369,7 @@ Oskari.clazz.define(
 
                     }),
                     title: layerName
-                })
+                });
                 wfsMapImageLayer.setOpacity(layer.getOpacity() / 100);
                 me.layerByName(layerName, wfsMapImageLayer);
                 me.getMapModule().addLayer(wfsMapImageLayer, layer, layerName);

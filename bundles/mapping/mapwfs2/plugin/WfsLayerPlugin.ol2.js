@@ -160,7 +160,6 @@ Oskari.clazz.define(
          */
         _createControlElement: function () {
             var me = this,
-                sandbox = me.getSandbox(),
                 el = jQuery('<div class="mapplugin mapwfs2plugin">' +
                 '<a href="JavaScript: void(0);"></a>' +
                 '</div>');
@@ -876,14 +875,8 @@ Oskari.clazz.define(
          * @param {Object} event
          */
         setFilterHandler: function (event) {
-            var WFSLayerService = this.WFSLayerService,
-                layers = this.getSandbox().findAllSelectedMapLayers(),
-                keepPrevious = this.getSandbox().isCtrlKeyDown(),
-                geoJson = event.getGeoJson();
-
-            this.getIO().setFilter(geoJson, keepPrevious);
-
-
+            var keepPrevious = this.getSandbox().isCtrlKeyDown();
+            this.getIO().setFilter(event.getGeoJson(), keepPrevious);
         },
 
         /**
@@ -1070,7 +1063,9 @@ Oskari.clazz.define(
                 wfsMapImageLayer;
 
             /** Safety checks */
-            if (!imageUrl || !boundsObj) return;
+            if (!imageUrl || !boundsObj) {
+                return;
+            }
 
             if (layerType === me.__typeHighlight) {
                 ols = new OpenLayers.Size(imageSize.width,imageSize.height);
@@ -1127,7 +1122,9 @@ Oskari.clazz.define(
                     me._tileDataTemp.mput(layerId,style,bboxKey,imageUrl);
                 }
                 // QUEUES updates!
-                if (tileToUpdate) tileToUpdate.draw();
+                if (tileToUpdate) {
+                    tileToUpdate.draw();
+                }
             }
         },
 
@@ -1175,13 +1172,11 @@ Oskari.clazz.define(
                     getURL: function (bounds, theTile) {
                         bounds = this.adjustBounds(bounds);
 
-                        var BBOX = bounds.toArray(false),
-                            bboxKey = this._plugin.bboxkeyStrip(BBOX);
-                            layer = this._plugin.getSandbox().findMapLayerFromSelectedMapLayers(
-                                this.layerId
-                            ),
-                            style = layer.getCurrentStyle().getName(),
-                            dataForTile = this._plugin._tileData.mget(
+                        var BBOX = bounds.toArray(false);
+                        var bboxKey = this._plugin.bboxkeyStrip(BBOX);
+                        var layer = this._plugin.getSandbox().findMapLayerFromSelectedMapLayers(this.layerId);
+                        var style = layer.getCurrentStyle().getName();
+                        var dataForTile = this._plugin._tileData.mget(
                                 this.layerId,
                                 style,
                                 bboxKey
@@ -1275,7 +1270,6 @@ Oskari.clazz.define(
                         this._plugin._tiles[tile.id] = tile;
 
                         var BBOX = bounds.toArray(false),
-                            me = this,
                             bboxKey = this._plugin.bboxkeyStrip(BBOX);
 
                         this._plugin._tilesToUpdate.mput(
@@ -1446,16 +1440,14 @@ Oskari.clazz.define(
          *
          * @return {Boolean} is tile ok
          */
-         _isTile: function(tile){
-            if (typeof tile.bounds.left === 'undefined')
-                return false;
-            if (typeof tile.bounds.bottom === 'undefined')
-                return false;
-            if (typeof tile.bounds.right === 'undefined')
-                return false;
-            if (typeof tile.bounds.top === 'undefined')
-                return false;
-            return true;
+         _isTile: function(tile) {
+            var b = tile.bounds;
+            // true if none of these is undefined
+            return !(
+                typeof b.left === 'undefined' ||
+                typeof b.bottom === 'undefined' ||
+                typeof b.right === 'undefined' ||
+                typeof b.top === 'undefined');
          },
 
         /*
@@ -1746,7 +1738,9 @@ Oskari.clazz.define(
          */
         bboxkeyStrip: function (bbox) {
             var stripbox = [];
-            if (!bbox) return;
+            if (!bbox) {
+                return;
+            }
             for (var i = bbox.length; i--;) {
                 stripbox[i] = bbox[i].toPrecision(13);
             }
