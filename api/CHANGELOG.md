@@ -3,6 +3,8 @@
 This document describes changes to the public API from Oskari frontend perspective (requests, events, conf/state, services). RPC-developers can check if the request/event API has changed
 when the service provider gives notice about Oskari version being upgraded. Oskari bundle/core-developers can check for changes in the bundles they depend on.
 
+Each addition is tagged with [add], [mod] or [rem] telling if it's a new feature, modifies the current functionality or if something has been removed. [rpc] tag indicates that the change affects RPC API.
+
 ## 1.35
 
 ### RPC
@@ -77,3 +79,14 @@ Values of geojson and data.bufferedGeoJson are now proper JSON structures instea
 ## 1.34
 
 Initial api version
+
+---------------------
+The file structure is
+
+## Oskari version
+
+### Affected bundle/API definition
+
+#### [tags] API functionality that changes
+
+Description about the API change
