@@ -222,11 +222,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
                );
             }
 
-            //if show many or one accordions is clicked
-            if(howManyShowLink.attr("data-many") === "one"){
-                me.clearTabsLayout();
-            }
-
             me.removeAllMarkersAndHighlights();
 
             //check if certain layer has tab allready
