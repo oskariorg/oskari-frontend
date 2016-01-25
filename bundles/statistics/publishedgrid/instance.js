@@ -129,7 +129,38 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
               // "id":"fi.nls.oskari.control.statistics.plugins.sotka.SotkaStatisticalDatasourcePlugin:4:oskari:kunnat2013:{\"sex\":\"total\",\"year\":\"2014\"}"}]"
               
               me.state.selectedIndicators = me.state.indicators.map(function(indicator) {
-                  return {
+                  if (indicator.ownIndicator) {
+                    const indicatorValues = {};
+                    indicator.data.forEach(function(indicatorRegionValue) {
+                        var regionCode = indicatorRegionValue.region;
+                        while (regionCode.length < 3) {
+                            regionCode = "0" + regionCode;
+                        };
+                        // Note: This assumes period as the decimal separator, as per Javascript syntax.
+                        indicatorValues[regionCode] = Number(indicatorRegionValue["primary value"]);
+                    });
+                    return {
+                      // We need to add the data here because the other users do not have access to that user's private indicators.
+                      "indicatorValues": indicatorValues,
+                      "datasourceId":"fi.nls.oskari.control.statistics.plugins.user.UserIndicatorsStatisticalDatasourcePlugin",
+                      "indicatorId": "" + indicator.id,
+                      "selectors": [{
+                        "selectorId":"sex",
+                        "value": indicator.gender
+                      },{
+                        "selectorId":"year",
+                        "value": indicator.year
+                      }],
+                      // These are localized.
+                      "title": indicator.title,
+                      "organizaton": indicator.organization,
+                      "description": indicator.description,
+                      // Cache key
+                      "id": "fi.nls.oskari.control.statistics.plugins.user.UserIndicatorsStatisticalDatasourcePlugin:" + indicator.id + ":" + statsLayer._layerName +
+                        ":" + '{\"sex\":\"' + indicator.gender + '\",\"year\":\"' + indicator.year + '\"}'
+                    };
+                  } else {
+                    return {
                       "datasourceId":"fi.nls.oskari.control.statistics.plugins.sotka.SotkaStatisticalDatasourcePlugin",
                       "indicatorId": "" + indicator.id,
                       "selectors": [{
@@ -142,7 +173,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
                       // Cache key
                       "id": "fi.nls.oskari.control.statistics.plugins.sotka.SotkaStatisticalDatasourcePlugin:" + indicator.id + ":" + statsLayer._layerName +
                         ":" + '{\"sex\":\"' + indicator.gender + '\",\"year\":\"' + indicator.year + '\"}'
-                  };
+                    };
+                  }
               });
               
               /*

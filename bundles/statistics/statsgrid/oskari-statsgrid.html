@@ -308,6 +308,18 @@
                           return selector.value;
                       }).join("/");
                   indicator.id = cacheKey;
+                  if (indicator.indicatorValues) {
+                    // This is a published indicator in an embedded view with inlined data.
+                    return {
+                      id: cacheKey,
+                      indicatorId: indicator.indicatorId,
+                      title: indicator.title[me.language]
+                        + ((selectorsAsString.length > 0) ? "/" : "") + selectorsAsString,
+                      sort: true,
+                      filter: true,
+                      delete: true
+                    }
+                  }
                   return {
                       id: cacheKey,
                       indicatorId: indicator.indicatorId,
@@ -325,6 +337,11 @@
                       me.selectedLayer, selectorsString);
               if (me.cache[cacheKey]) {
                   me.handleResponse(me.cache[cacheKey]);
+                  return;
+              } else if (indicator.indicatorValues) {
+                  // This is a published indicator in an embedded view with inlined data.
+                  me.cache[cacheKey] = indicator.indicatorValues;
+                  return;
               }
               $.ajax({
                   url: me.ajaxUrl,
@@ -453,10 +470,11 @@
               
               row = {
                   selected: true,
-                  data: [me.regionInfo[regionKey].localizedName]
+                  data: ((me.regionInfo[regionKey]) && [me.regionInfo[regionKey].localizedName] || ["Lakkautettu kunta"])
                       .concat(me.selectedIndicators.map(function(indicator) {
                           return indicatorValues[indicator.id];
-              }))};
+                  }))
+              };
               return row;
           });
           this.set("statsrows", summaryRows);
