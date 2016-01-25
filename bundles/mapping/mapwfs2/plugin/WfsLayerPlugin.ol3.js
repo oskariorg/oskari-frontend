@@ -22,7 +22,6 @@ Oskari.clazz.define(
         me._io = null;
 
         // state
-        me.zoomLevel = null;
         me._isWFSOpen = 0;
 
         // Manual refresh ui location
@@ -444,18 +443,13 @@ Oskari.clazz.define(
                 srs = map.getSrsName(),
                 bbox = me.ol2ExtentOl3Transform(map.getExtent()),
                 zoom = map.getZoom(),
-                geomRequest = false,
-                grid,
-                fids,
-                layers = this._getLayers(),
-                tiles,
-                x;
+                layers = this._getLayers();
 
             // clean tiles for printing
             me._printTiles = {};
 
             // update location
-            grid = this.getGrid();
+            var grid = this.getGrid();
             layers.forEach(function (layer) {
                 if (!layer.hasFeatureData() || !layer.isVisible()) {
                     return;
@@ -466,48 +460,35 @@ Oskari.clazz.define(
                     return;
                 }
                 var ollayer = me.getOLMapLayer(layer);
-                tiles = ollayer.getSource().getNonCachedGrid(grid);
+                var tiles = ollayer.getSource().getNonCachedGrid(grid);
                 me.getIO().setLocation(layer.getId(),
                     srs, bbox, zoom, grid, tiles
                 );
             });
 
-            // update zoomLevel and highlight pictures
+            // update highlight pictures
             // must be updated also in map move, because of hili in bordertiles
-            me.zoomLevel = zoom;
 
             // if no connection or the layer is not registered, get highlight with URL
-            for (x = 0; x < me.activeHighlightLayers.length; x += 1) {
+            me.activeHighlightLayers.forEach(function (layer) {
                 if (me.getConnection().isLazy() &&
-                    (!me.getConnection().isConnected() ||
-                        !sandbox.findMapLayerFromSelectedMapLayers(me.activeHighlightLayers[x].getId()))) {
+                    (!me.getConnection().isConnected() || !sandbox.findMapLayerFromSelectedMapLayers(layer.getId()))) {
 
-                    fids = me.activeHighlightLayers[x].getClickedFeatureIds();
-                    me.removeHighlightImages(
-                        me.activeHighlightLayers[x]
-                    );
-                    me.getHighlightImage(
-                        me.activeHighlightLayers[x],
-                        srs, bbox,
-                        zoom,
-                        fids
-                    );
+                    var fids = layer.getClickedFeatureIds();
+                    me.removeHighlightImages(layer);
+                    me.getHighlightImage(layer, srs, bbox, zoom, fids);
                 }
-            }
+
+            });
 
             layers.forEach(function (layer) {
                 if (!layer.hasFeatureData()) {
                     return;
                 }
-                fids = me.WFSLayerService.getSelectedFeatureIds(layer.getId());
+                var fids = me.WFSLayerService.getSelectedFeatureIds(layer.getId());
                 me.removeHighlightImages(layer);
                 if (me._highlighted) {
-                    me.getIO().highlightMapLayerFeatures(
-                        layer.getId(),
-                        fids,
-                        false,
-                        geomRequest
-                    );
+                    me.getIO().highlightMapLayerFeatures(layer.getId(),fids);
                 }
             });
         },

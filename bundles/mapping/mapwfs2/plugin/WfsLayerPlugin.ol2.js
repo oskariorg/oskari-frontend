@@ -23,7 +23,6 @@ Oskari.clazz.define(
 
         // state
         me.tileSize = null;
-        me.zoomLevel = null;
         me._isWFSOpen = 0;
 
         // Manual refresh ui location
@@ -498,8 +497,6 @@ Oskari.clazz.define(
 
             // update zoomLevel and highlight pictures
             // must be updated also in map move, because of hili in bordertiles
-            me.zoomLevel = zoom;
-
             srs = map.getSrsName();
             bbox = map.getExtent();
             zoom = map.getZoom();

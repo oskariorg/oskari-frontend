@@ -576,8 +576,8 @@ Oskari.clazz.category(
                 this.sendMessage('/service/wfs/highlightFeatures', {
                     'layerId': id,
                     'featureIds': featureIds,
-                    'keepPrevious': keepPrevious,
-                    'geomRequest': geomRequest
+                    'keepPrevious': !!keepPrevious,
+                    'geomRequest': !!geomRequest
                 });
             }
         },
