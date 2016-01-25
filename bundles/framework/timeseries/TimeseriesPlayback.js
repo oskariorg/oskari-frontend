@@ -311,7 +311,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
             var me = this;
 
             // Play button
-            var playbuttons = me._control.find('.playback-button .play');
             me._control.find('.playback-button .play').click(function(evt){
                 evt.preventDefault();
                 me._startPlayback();

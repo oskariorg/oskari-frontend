@@ -611,8 +611,7 @@ Oskari.clazz.define(
          * @param {Number} percentage
          */
         getBufferedExtent: function(extent, percentage) {
-            var me = this,
-                line = new ol.geom.LineString([[extent[0], extent[1]], [extent[2], extent[3]]]),
+            var line = new ol.geom.LineString([[extent[0], extent[1]], [extent[2], extent[3]]]),
                 buffer = line.getLength()*percentage/100,
                 geometry = ol.geom.Polygon.fromExtent(extent),
                 reader = new jsts.io.WKTReader(),

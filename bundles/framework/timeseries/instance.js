@@ -91,7 +91,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
                     sandbox.registerForEventByName(me, p);
                 }
             }
-            //because of timing issues, the eventhandlers may or may not be initialised by the time a time series layer is added -> 
+            //because of timing issues, the eventhandlers may or may not be initialised by the time a time series layer is added ->
             //so check this out manually the first time around and set the eventhandlers only after.
             me._checkIfTimeseriesLayersExist();
         },
@@ -117,7 +117,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
                 layerId = layer.getId();
 
             //set the initial state, don't start playing yet.
-            this.play(layerId, times, false, 'TIME', 'ISO8601');
+            me.play(layerId, times, false, 'TIME', 'ISO8601');
         },
         /**
          * @method stop
