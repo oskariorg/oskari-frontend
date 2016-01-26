@@ -351,7 +351,8 @@
           this.push('selectedIndicators', {
               datasourceId: this.datasourceId,
               indicatorId: this.indicatorId,
-              selectors: values
+              selectors: values,
+              public: this.sources[this.datasourceId].indicators[this.indicatorId].public
           });
           this.selectorSelectedIndicatorKey = this.getIndicatorKey(this.datasourceId, this.indicatorId,
               this.selectedLayer, this.getSelectorsKey());
