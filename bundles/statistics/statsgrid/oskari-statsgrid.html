@@ -118,7 +118,7 @@
       },
       "observers": [
           "selectedLayerChanged(ajaxUrl, selectedLayer)",
-          "selectedIndicatorsChanged(ajaxUrl, selectedIndicators.splices)",
+          "selectedIndicatorsChanged(ajaxUrl, selectedIndicators.splices, sources)",
           "sortChanged(sortColumnIdx, sortDirection)",
           "selectedIndicatorChanged(selectedIndicatorKey, cache, rowHeaders)",
           "updateSelectedIndicators(sources)"
@@ -291,7 +291,7 @@
               }
           });
       },
-      "selectedIndicatorsChanged": function(ajaxUrl, splices) {
+      "selectedIndicatorsChanged": function(ajaxUrl, splices, sources) {
           var me = this,
             indicators = me.selectedIndicators;
           this.set("rowHeaders", [{

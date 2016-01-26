@@ -114,7 +114,20 @@ function() {
         if(enabled === true) {
             elLeft = jQuery('.oskariui-left');
             elLeft.html(me.statsContainer);
-            
+            var selectedLayers = me.__sandbox.findAllSelectedMapLayers();
+            var statsLayer = null;
+            for (i = 0; i < selectedLayers.length; i += 1) {
+                layer = selectedLayers[i];
+                if (layer.getLayerType() === 'stats') {
+                    request = me.__sandbox.getRequestBuilder('StatsGrid.StatsGridRequest')(false, layer);
+                    me.__sandbox.request("Publisher2", request);
+                    statsLayer = layer;
+                    break;
+                }
+            }
+            me.__plugin.embedded = true;
+            me.__plugin.state = this._getState();
+            me.__plugin.statslayer = statsLayer;
             me.__plugin.render(me.statsContainer, me);
             me.__started = true;
         } else {
@@ -148,7 +161,7 @@ function() {
      * @return {Object} filtered state
      */
     _filterIndicators: function (statsGridState) {
-        statsGridState.indicators = _.filter(statsGridState.selectedIndicators, function (indicator) {
+        statsGridState.selectedIndicators = _.filter(statsGridState.selectedIndicators, function (indicator) {
             var ownIndicator = indicator.datasourceId == "fi.nls.oskari.control.statistics.plugins.user.UserIndicatorsStatisticalDatasourcePlugin";
             return (
                 // indicators
@@ -187,7 +200,7 @@ function() {
             statsGridState.gridShown = me.state.enabled;
             // Grid state is not in sandbox, if no touch to grid in view edit mode
             // TODO improve state management in statsgrid
-            if(!('currentColumn' in statsGrid.state) && me.__tool) {
+            if(!('selectedIndicators' in statsGrid.state) && me.__tool) {
                 statsGridState = me.__tool.config.state;
             }
             return me._filterIndicators(_.clone(statsGridState, true));

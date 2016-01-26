@@ -36,24 +36,6 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
                 "src": "../../../../bundles/statistics/statsgrid/view/MainPanel.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/statsgrid/domain/IndicatorMetadata.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/statistics/statsgrid/domain/IndicatorsMetadata.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/statistics/statsgrid/domain/LocalizedString.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/statistics/statsgrid/domain/RegionCategory.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/statistics/statsgrid/domain/SourceMetadata.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/statistics/statsgrid/domain/SourcesMetadata.js"
-            }, {
-                "type": "text/javascript",
                 "src": "../../../../bundles/statistics/statsgrid/service/CallbackQueue.js"
             }, {
                 "type": "text/javascript",
@@ -123,9 +105,6 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/statistics/statsgrid/request/AddDataSourceRequest.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/statistics/statsgrid/service/UserIndicatorsService.js"
             }, {
                 "type": "text/css",
                 "src": "../../../../bundles/statistics/statsgrid/resources/css/style.css"

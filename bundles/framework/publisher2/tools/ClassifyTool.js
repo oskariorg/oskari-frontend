@@ -150,7 +150,7 @@ function() {
      * @return {Object} filtered state
      */
     _filterIndicators: function (statsGridState) {
-        statsGridState.indicators = _.filter(statsGridState.selectedIndicators, function (indicator) {
+        statsGridState.selectedIndicators = _.filter(statsGridState.selectedIndicators, function (indicator) {
             const ownIndicator = indicator.datasourceId == "fi.nls.oskari.control.statistics.plugins.user.UserIndicatorsStatisticalDatasourcePlugin";
             return (
                 // indicators

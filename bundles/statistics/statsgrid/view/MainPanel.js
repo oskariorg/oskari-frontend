@@ -49,12 +49,12 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.MainPanel',
           me.container = container;
           me.element = elementWrapper;
           container.empty();
-          elementWrapper.ajaxUrl = url;
           elementWrapper.locale = me.localization;
           elementWrapper.language = Oskari.getLang();
           elementWrapper.user = me.sandbox.getUser();
           elementWrapper.sandbox = me.sandbox;
           elementWrapper.embedded = me.embedded; // True when in embedded mode. Hides the indicator selector.
+          elementWrapper.ajaxUrl = url;
           if (me.embedded) {
             elementWrapper.selectedIndicators = me.state.selectedIndicators;
             elementWrapper.selectedLayer = me.statslayer._layerName; // For example: oskari:kunnat2013

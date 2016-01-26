@@ -58,12 +58,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                 mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
             this.mapModule = mapModule;
 
-            // Handles user indicators
-            var userIndicatorsService = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.UserIndicatorsService', me);
-            sandbox.registerService(userIndicatorsService);
-            userIndicatorsService.init();
-            this.userIndicatorsService = userIndicatorsService;
-
             var statsService = Oskari.clazz.create(
                 'Oskari.statistics.bundle.statsgrid.StatisticsService',
                 me.sandbox
@@ -155,15 +149,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                 return true;
             }
             return false;
-        },
-        /**
-         * Returns the user indicators service.
-         *
-         * @method getUserIndicatorsService
-         * @return {Oskari.statistics.bundle.statsgrid.UserIndicatorsService}
-         */
-        "getUserIndicatorsService": function () {
-            return this.userIndicatorsService;
         },
         /**
          * @method addUserIndicator
