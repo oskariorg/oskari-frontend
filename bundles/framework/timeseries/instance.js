@@ -201,6 +201,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
                         !(me._modules.playback.getSelectedLayerId()) ||
                          (me._modules.playback.getSelectedLayerId() && me._modules.playback.getSelectedLayerId() !== layers[i].getId())) {
                             me.initTimeseries(layers[i]);
+                            break;
                     }
                     //time series layer found -> nothing more to do.
                     return;
