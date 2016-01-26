@@ -160,11 +160,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
 
             if (statsGrid &&
                 statsGrid.state &&
-                statsGrid.state.indicators !== null &&
-                statsGrid.state.indicators !== undefined) {
+                statsGrid.state.selectedIndicators !== null &&
+                statsGrid.state.selectedIndicators !== undefined) {
 
                 //indicators + municipality (name & code)
-                columns = statsGrid.state.indicators.length + 2;
+                columns = statsGrid.state.selectedIndicators.length + 2;
                 //slickgrid column width is 80 by default
                 width = columns * 80;
             }

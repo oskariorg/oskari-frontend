@@ -38,6 +38,7 @@ function(data) {
     	if(!this.data) {
     		return;
     	}
+    	// FIXME: Is this used anywhere?
 		return Oskari.clazz.create(
 	            'Oskari.statistics.bundle.statsgrid.domain.IndicatorsMetadata',
 	            this.data.indicators);

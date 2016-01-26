@@ -641,11 +641,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
 
             if (statsGrid &&
                 statsGrid.state &&
-                statsGrid.state.indicators !== null &&
-                statsGrid.state.indicators !== undefined) {
+                statsGrid.state.selectedIndicators !== null &&
+                statsGrid.state.selectedIndicators !== undefined) {
 
                 //indicators + municipality (name & code)
-                columns = statsGrid.state.indicators.length + 2;
+                columns = statsGrid.state.selectedIndicators.length + 2;
                 //slickgrid column width is 80 by default
                 width = columns * 80;
             }
@@ -1777,12 +1777,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
          * @return {Object} filtered state
          */
         _filterIndicators: function (statsGridState) {
-            statsGridState.indicators = _.filter(statsGridState.indicators, function (indicator) {
+            statsGridState.selectedIndicators = _.filter(statsGridState.selectedIndicators, function (indicator) {
+                const ownIndicator = indicator.datasourceId == "fi.nls.oskari.control.statistics.plugins.user.UserIndicatorsStatisticalDatasourcePlugin";
                 return (
                     // indicators
-                    (!indicator.ownIndicator) ||
+                    (!ownIndicator) ||
                     // own indicators
-                    (indicator.ownIndicator && indicator.public)
+                    (ownIndicator && indicator.public)
                 );
             });
             return statsGridState;

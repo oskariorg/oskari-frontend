@@ -148,12 +148,13 @@ function() {
      * @return {Object} filtered state
      */
     _filterIndicators: function (statsGridState) {
-        statsGridState.indicators = _.filter(statsGridState.indicators, function (indicator) {
+        statsGridState.indicators = _.filter(statsGridState.selectedIndicators, function (indicator) {
+            var ownIndicator = indicator.datasourceId == "fi.nls.oskari.control.statistics.plugins.user.UserIndicatorsStatisticalDatasourcePlugin";
             return (
                 // indicators
-                (!indicator.ownIndicator) ||
+                (!ownIndicator) ||
                 // own indicators
-                (indicator.ownIndicator && indicator.public)
+                (ownIndicator && indicator.public)
             );
         });
         return statsGridState;

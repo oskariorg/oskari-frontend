@@ -79,14 +79,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             mapModule.startPlugin(classifyPlugin);
             this.classifyPlugin = classifyPlugin;
 
-            if (sandbox.getUser().isLoggedIn()) {
-                var userIndicatorsTab = Oskari.clazz.create(
-                    'Oskari.statistics.bundle.statsgrid.UserIndicatorsTab',
-                    this, locale.tab
-                );
-                this.userIndicatorsTab = userIndicatorsTab;
-            }
-
             this.setState(this.state);
             this._enableTile(true);
         },
@@ -178,12 +170,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
          * @param {Object} indicator
          */
         "addUserIndicator": function (indicator) {
+            // FIXME: Is this used anywhere?
             var me = this,
                 view = me.getView(),
                 state = me.getState();
 
-            state.indicators = state.indicators || [];
-            state.indicators.push(indicator);
+            state.selectedIndicators = state.selectedIndicators || [];
+            state.selectedIndicators.push(indicator);
             if (!view.isVisible) {
                 view.prepareMode(true, null, true);
             }
@@ -240,7 +233,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
         /**
          * Get state parameters.
          * Returns string with statsgrid state. State value keys are before the '-' separator and
-         * the indiators are after the '-' separator. The indicators are further separated by ',' and
+         * the indicators are after the '-' separator. The indicators are further separated by ',' and
          * both state values and indicator values are separated by '+'.
          *
          * @method getStateParameters
@@ -280,8 +273,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                     'allowClassification'
                 ],
                 colorKeys = ['set', 'index', 'flipped'],
-                indicators = state.indicators || [],
+                indicators = state.selectedIndicators || [],
                 value;
+
             // Note! keys needs to be handled in the backend as well.
             // Therefore the key order is important as well as actual values.
             // 'classificationMode' can be an empty string but it must be the
@@ -300,16 +294,21 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             }
 
             // handle indicators separately
-            for (i = 0, ilen = indicators.length, ilast = ilen - 1; i < ilen; i++) {
-                if (indicators[i].id === null || indicators[i].id === undefined) {
-                    indicators[i].id = indicators[i].indicator;
-                }
+            for (i = 0, len = indicators.length, last = len - 1; i < len; i += 1) {
                 indicatorValues += indicators[i].id;
                 indicatorValues += valueSeparator;
-                indicatorValues += indicators[i].year;
+                var first = true;
+                indicators[i].selectors.forEach(function(selector) {
+                  if (!first) {
+                    indicatorValues += valueSeparator;
+                  }
+                  indicatorValues += selector.name;
+                  indicatorValues += valueSeparator;
+                  indicatorValues += selector.value;
+                  first = false;
+                });
                 indicatorValues += valueSeparator;
-                indicatorValues += indicators[i].gender;
-                if (i !== ilast) {
+                if (i !== last) {
                     indicatorValues += indicatorSeparator;
                 }
             }
