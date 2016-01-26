@@ -411,8 +411,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
             var top = timeSliderPosition.top + 10;
             var prevLeft = timeSliderPosition.left;
 
-            console.log(me._playbackSlider.differentDates);
-
             for(var i=0;i<me._playbackSlider.differentDates.length;i++) {
                 var currentDate = me._playbackSlider.differentDates[i];
                 var dayLine = me.template.intervalLineHighlight.clone();
