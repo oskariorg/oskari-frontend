@@ -44,7 +44,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
             slideInterval: null,
             updatemap: null
         };
-        this._isDragging = false;
         this._isPopupMove = false;
         this._selectedLayerId = null;
         this._dimensionName = null;
@@ -322,16 +321,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
 
 
             // Slider click
-            me._control.find('.oskari-timeslider').mousedown(function() {
-                me._isDragging = false;
-            }).mousemove(function() {
-                me._isDragging = true;
-            }).mouseup(function(e) {
-                var wasDragging = me._isDragging;
-                me._isDragging = false;
-                if (!wasDragging) {
-                    me._moveSlider(e);
-                }
+            me._control.find('.oskari-timeslider').mouseup(function(e) {
+                me._moveSlider(e);
             });
 
             // Slider popup drag
