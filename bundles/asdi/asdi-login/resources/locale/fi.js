@@ -3,7 +3,7 @@ Oskari.registerLocalization(
     "lang": "fi",
     "key": "asdi-login",
     "value": {
-        "title": "Login",
+        "title": "Kirjaudu",
         "desc": "ASDI Login",
         "flyout": {
 	        "title": "Login",
