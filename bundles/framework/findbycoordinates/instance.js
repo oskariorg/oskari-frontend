@@ -18,6 +18,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
         this.searchUrl = undefined;
     }, {
         __name : 'findbycoordinates',
+        __templates : {
+            item : _.template('<h3>${ name }</h3>' +
+                   '<h3>${ info }</h3>' +
+                   '<p>${ lat }, ${ lon }</p>')
+        },
         getName : function () {
             return this.__name;
         },
@@ -164,8 +169,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                 lat: lonlat.lat
             }, function (response) {
                 if (response) {
-                    me.resultClicked(_.first(response.locations));
+                    me.handleResponse(response.locations);
                 }
+                this.stopTool();
+                this.selectDefaultTool();
             }, function () {
                 me.getSandbox().printWarn(
                     'ReverseGeoCode search failed',
@@ -180,40 +187,36 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
          * @method resultClicked
          * @param  {Object} result
          */
-        resultClicked: function (result) {
-            if (!result) return;
+        handleResponse: function (results) {
+            if (!results || !results.length) {
+                return;
+            }
 
-            var loc = this.getLocalization(),
+            var me = this,
+                loc = this.getLocalization(),
                 sandbox = this.getSandbox(),
-                zoomLevel = sandbox.getMap().getZoom(),
-                srsName = sandbox.getMap().getSrsName(),
-                lonlat = new OpenLayers.LonLat(result.lon, result.lat),
                 popupId = "findbycoordinates-search-result",
-                moveReqBuilder = sandbox
-                    .getRequestBuilder('MapMoveRequest'),
-                infoBoxReqBuilder = sandbox
-                    .getRequestBuilder('InfoBox.ShowInfoBoxRequest'),
-                moveReq,
-                infoBoxReq,
-                infoBoxContent;
+                lonlat =  {
+                    lon: result[0].lon,
+                    lat: result[0].lat
+                };
+            var moveReqBuilder = sandbox.getRequestBuilder('MapMoveRequest');
+            var infoBoxReqBuilder = sandbox.getRequestBuilder('InfoBox.ShowInfoBoxRequest');
 
             if (moveReqBuilder) {
-                moveReq = moveReqBuilder(
-                    result.lon, result.lat, zoomLevel, false, srsName);
-                sandbox.request(this, moveReq);
+                sandbox.request(this, moveReqBuilder(
+                    lonlat.lon, lonlat.lat, sandbox.getMap().getZoom(),
+                    false, sandbox.getMap().getSrsName()));
             }
             if (infoBoxReqBuilder) {
-                infoBoxContent = {
-                    html: this.__getInfoBoxHtml(result),
-                    actions: {}
-                };
-                infoBoxReq = infoBoxReqBuilder(
+                var contents = [];
+                results.forEach(function(result) {
+                    contents.push(me.__getInfoBoxHtml(result));
+                });
+                sandbox.request(this, infoBoxReqBuilder(
                     popupId, loc.resultsTitle,
-                    [infoBoxContent], lonlat, true);
-                sandbox.request(this, infoBoxReq);
+                    contents, lonlat, true));
             }
-            this.stopTool();
-            this.selectDefaultTool();
         },
         /**
          * Returns the content for the infobox.
@@ -224,10 +227,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
          * @return {String}
          */
         __getInfoBoxHtml: function (result) {
-            var template = '<h3><%= name %></h3>' +
-                            '<h3><%= village %></h3>' +
-                            '<p><%= lat %>, <%= lon %></p>';
-            return _.template(template, result);
+            var data = {
+                name : result.name,
+                info : result.village || result.type || "",
+                lon : result.lon,
+                lat : result.lat
+            };
+            return this.templates.item(data);
         }
     }, {
         "extend" : ["Oskari.userinterface.extension.DefaultExtension"]
