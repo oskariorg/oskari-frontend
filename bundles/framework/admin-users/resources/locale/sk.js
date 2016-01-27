@@ -16,6 +16,7 @@ Oskari.registerLocalization(
                 "lastName": "Last name",
                 "user": "User name",
                 "pass": "Password",
+                "email": "E-mail",
                 "pass_retype": "Retype password",
                 "addRole": "Select role(s)",
                 "password_mismatch": "Passwords don't match.",
