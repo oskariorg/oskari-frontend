@@ -462,6 +462,16 @@
 					}
 				}
 			}
-		}
+		}, {
+            "title": "Timeseries",
+            "bundlename": "timeseries",
+            "metadata": {
+                "Import-Bundle": {
+                    "timeseries": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }
 	]
 }

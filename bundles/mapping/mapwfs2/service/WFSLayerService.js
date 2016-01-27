@@ -141,7 +141,6 @@ Oskari.clazz.define(
          */
         setWFSFeaturesSelections: function (layerId, featureIds, makeNewSelection) {
             var me = this,
-                newFeatureIds,
                 existingFeatureSelections;
 
             if (makeNewSelection) {

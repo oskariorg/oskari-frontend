@@ -592,7 +592,11 @@ Oskari.clazz.define(
          */
         zoomToFeatures: function(layer, options) {
             var me = this,
+<<<<<<< HEAD
                 layers = me.getLayerIds(layer);
+=======
+                layers = me.getLayersForZooming(layer);
+>>>>>>> 2650790ab2e440f3d6adf72bda2b5140b6da7634
                 features = me.getFeaturesMatchingQuery(layers, options);
             if(!_.isEmpty(features)) {
                 var vector = new ol.source.Vector({
@@ -612,8 +616,12 @@ Oskari.clazz.define(
          * @return {ol.Extent} extent
          */
         getBufferedExtent: function(extent, percentage) {
+<<<<<<< HEAD
             var me = this,
                 line = new ol.geom.LineString([[extent[0], extent[1]], [extent[2], extent[3]]]),
+=======
+            var line = new ol.geom.LineString([[extent[0], extent[1]], [extent[2], extent[3]]]),
+>>>>>>> 2650790ab2e440f3d6adf72bda2b5140b6da7634
                 buffer = line.getLength()*percentage/100,
                 geometry = ol.geom.Polygon.fromExtent(extent),
                 reader = new jsts.io.WKTReader(),

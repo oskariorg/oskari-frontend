@@ -312,17 +312,8 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
         var sandbox = this.plugin.getSandbox(),
             me = this,
             layer = sandbox.findMapLayerFromSelectedMapLayers(data.data.layerId),
-            topWFSLayerId = me.WFSLayerService.getTopWFSLayer(),
-            analysisWFSLayerId = me.WFSLayerService.getAnalysisWFSLayerId(),
             selectionMode = data.data.keepPrevious,
-            featureIds = [],
-            selectFeatures;
-
-        if (data.data.features !== 'empty') {
-            for (i = 0; i < data.data.features.length; i += 1) {
-                featureIds.push(data.data.features[i][0]);
-            }
-        }
+            featureIds = [];
 
         /*Ugly -> instead try to figure out _why_ the first click in the selection tool ends up in here*/
         if (this.WFSLayerService && this.WFSLayerService.isSelectionToolsActive()) {
@@ -331,16 +322,17 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
 
         // handle CTRL click (selection) and normal click (getInfo) differently
         if (selectionMode) {
-            selectFeatures = true;
 
-            if (analysisWFSLayerId && layer._id !== analysisWFSLayerId) {
-                return;
-            } else if (topWFSLayerId && layer._id !== topWFSLayerId) {
+            if (!this.__isSelectionLayer(layer.getId())) {
                 return;
             }
-
-            me.WFSLayerService.setWFSFeaturesSelections(layer._id, featureIds);
-            var event = sandbox.getEventBuilder('WFSFeaturesSelectedEvent')(me.WFSLayerService.getSelectedFeatureIds(layer._id), layer, selectFeatures);
+            if (data.data.features !== 'empty') {
+                data.data.features.forEach(function(featureData) {
+                    featureIds.push(featureData[0]);
+                });
+            }
+            me.WFSLayerService.setWFSFeaturesSelections(layer.getId(), featureIds);
+            var event = sandbox.getEventBuilder('WFSFeaturesSelectedEvent')(me.WFSLayerService.getSelectedFeatureIds(layer.getId()), layer, true);
             sandbox.notifyAll(event);
         } else {
             // FIXME: pass coordinates from server in response, but not like this
@@ -349,6 +341,15 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             var infoEvent = sandbox.getEventBuilder('GetInfoResultEvent')(data.data);
             sandbox.notifyAll(infoEvent);
         }
+    },
+    __isSelectionLayer : function(layerId) {
+        var topWFSLayerId = this.WFSLayerService.getTopWFSLayer();
+        var analysisWFSLayerId = this.WFSLayerService.getAnalysisWFSLayerId();
+
+        if(analysisWFSLayerId && layerId === analysisWFSLayerId) {
+            return true;
+        }
+        return topWFSLayerId && layerId === topWFSLayerId;
     },
     /**
      * @method getWFSFeatureGeometries
@@ -392,43 +393,40 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             selectFeatures = true,
             topWFSLayer = this.WFSLayerService.getTopWFSLayer(),
             analysisWFSLayer = this.WFSLayerService.getAnalysisWFSLayerId(),
-            i,
-            makeNewSelection = false;
+            hasNoFeatures = data.data.features === 'empty';
 
         //if user has not used Ctrl during selection, make totally new selection
-        if (!data.data.keepPrevious) {
-            makeNewSelection = true;
-        }
+        var makeNewSelection = !data.data.keepPrevious;
 
         if (!me.WFSLayerService.isSelectFromAllLayers()) {
-            if (analysisWFSLayer && layer._id !== analysisWFSLayer) {
+            if (analysisWFSLayer && layer.getId() !== analysisWFSLayer) {
                 return;
-            } else if (!analysisWFSLayer && layer._id !== topWFSLayer) {
-                if (me.WFSLayerService.getSelectedFeatureIds(layer._id) !== 'empty') {
+            } else if (!analysisWFSLayer && layer.getId() !== topWFSLayer) {
+                if (me.WFSLayerService.getSelectedFeatureIds(layer.getId()) !== 'empty') {
                     me.WFSLayerService.emptyWFSFeatureSelections(layer);
                 }
                 return;
             }
 
         } else {
-            if (data.data.features === 'empty') {
+            if (hasNoFeatures) {
                 me.WFSLayerService.emptyAllWFSFeatureSelections();
             }
         }
 
-        if (data.data.features !== 'empty') {
-            for (i = 0; i < data.data.features.length; i += 1) {
-                featureIds.push(data.data.features[i][0]);
-            }
+        if (!hasNoFeatures) {
+            data.data.features.forEach(function(feat) {
+                featureIds.push(feat[0]);
+            });
         }
 
-        if (data.data.features !== 'empty') {
-            me.WFSLayerService.setWFSFeaturesSelections(layer._id, featureIds, makeNewSelection);
-        } else if (makeNewSelection = true) {
+        if (!hasNoFeatures) {
+            me.WFSLayerService.setWFSFeaturesSelections(layer.getId(), featureIds, makeNewSelection);
+        } else if (makeNewSelection) {
             me.WFSLayerService.emptyWFSFeatureSelections(layer);
         }
 
-        var event = this.plugin.getSandbox().getEventBuilder('WFSFeaturesSelectedEvent')(me.WFSLayerService.getSelectedFeatureIds(layer._id), layer, selectFeatures);
+        var event = this.plugin.getSandbox().getEventBuilder('WFSFeaturesSelectedEvent')(me.WFSLayerService.getSelectedFeatureIds(layer.getId()), layer, selectFeatures);
         this.plugin.getSandbox().notifyAll(event);
     },
 
@@ -578,8 +576,8 @@ Oskari.clazz.category(
                 this.sendMessage('/service/wfs/highlightFeatures', {
                     'layerId': id,
                     'featureIds': featureIds,
-                    'keepPrevious': keepPrevious,
-                    'geomRequest': geomRequest
+                    'keepPrevious': !!keepPrevious,
+                    'geomRequest': !!geomRequest
                 });
             }
         },
@@ -671,11 +669,6 @@ Oskari.clazz.category(
          * sends message to /service/wfs/setMapClick
          */
         setMapClick: function (lonlat, keepPrevious, geomRequest) {
-            var me = this,
-                sandbox = this.plugin.getSandbox(),
-                map = sandbox.getMap(),
-                srs = map.getSrsName();
-
             // TODO: save coordinates???
             this.lonlat = lonlat;
             this.sendMessage('/service/wfs/setMapClick', {

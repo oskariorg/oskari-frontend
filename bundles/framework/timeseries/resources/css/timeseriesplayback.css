@@ -5,8 +5,6 @@ div.mapplugin.timeseries {
   left: 46px;
   z-index: 100000;
   position: absolute;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=90)";
-  filter: alpha(opacity=90);
   opacity: 0.9; }
   div.mapplugin.timeseries div.playback-button {
     margin-top: 10px;
@@ -105,8 +103,6 @@ div.mapplugin.timeseries {
   top: 60px;
   cursor: pointer;
   z-index: 100000;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=90)";
-  filter: alpha(opacity=90);
   opacity: 0.9;
   display: none; }
   .mapplugin-timeseries-popup .arrow {
@@ -118,10 +114,13 @@ div.mapplugin.timeseries {
     margin: auto; }
   .mapplugin-timeseries-popup .content {
     background-color: #333438;
-    width: 60px;
-    height: 26px;
+    width: 80px;
+    height: 36px;
     color: #ffde00;
     text-align: center;
     padding-top: 7px;
     font-weight: normal;
-    font-size: 16px; }
+    font-size: 12px;
+    line-height: 15px; }
+
+/*# sourceMappingURL=timeseriesplayback.css.map */

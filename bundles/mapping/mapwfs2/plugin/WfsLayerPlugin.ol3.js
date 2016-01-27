@@ -22,7 +22,6 @@ Oskari.clazz.define(
         me._io = null;
 
         // state
-        me.zoomLevel = null;
         me._isWFSOpen = 0;
 
         // Manual refresh ui location
@@ -141,7 +140,6 @@ Oskari.clazz.define(
          */
         _createControlElement: function () {
             var me = this,
-                sandbox = me.getSandbox(),
                 el = jQuery('<div class="mapplugin mapwfs2plugin">' +
                 '<a href="JavaScript: void(0);"></a>' +
                 '</div>');
@@ -445,18 +443,13 @@ Oskari.clazz.define(
                 srs = map.getSrsName(),
                 bbox = me.ol2ExtentOl3Transform(map.getExtent()),
                 zoom = map.getZoom(),
-                geomRequest = false,
-                grid,
-                fids,
-                layers = this._getLayers(),
-                tiles,
-                x;
+                layers = this._getLayers();
 
             // clean tiles for printing
             me._printTiles = {};
 
             // update location
-            grid = this.getGrid();
+            var grid = this.getGrid();
             layers.forEach(function (layer) {
                 if (!layer.hasFeatureData() || !layer.isVisible()) {
                     return;
@@ -467,48 +460,35 @@ Oskari.clazz.define(
                     return;
                 }
                 var ollayer = me.getOLMapLayer(layer);
-                tiles = ollayer.getSource().getNonCachedGrid(grid);
+                var tiles = ollayer.getSource().getNonCachedGrid(grid);
                 me.getIO().setLocation(layer.getId(),
                     srs, bbox, zoom, grid, tiles
                 );
             });
 
-            // update zoomLevel and highlight pictures
+            // update highlight pictures
             // must be updated also in map move, because of hili in bordertiles
-            me.zoomLevel = zoom;
 
             // if no connection or the layer is not registered, get highlight with URL
-            for (x = 0; x < me.activeHighlightLayers.length; x += 1) {
+            me.activeHighlightLayers.forEach(function (layer) {
                 if (me.getConnection().isLazy() &&
-                    (!me.getConnection().isConnected() ||
-                        !sandbox.findMapLayerFromSelectedMapLayers(me.activeHighlightLayers[x].getId()))) {
+                    (!me.getConnection().isConnected() || !sandbox.findMapLayerFromSelectedMapLayers(layer.getId()))) {
 
-                    fids = me.activeHighlightLayers[x].getClickedFeatureIds();
-                    me.removeHighlightImages(
-                        me.activeHighlightLayers[x]
-                    );
-                    me.getHighlightImage(
-                        me.activeHighlightLayers[x],
-                        srs, bbox,
-                        zoom,
-                        fids
-                    );
+                    var fids = layer.getClickedFeatureIds();
+                    me.removeHighlightImages(layer);
+                    me.getHighlightImage(layer, srs, bbox, zoom, fids);
                 }
-            }
+
+            });
 
             layers.forEach(function (layer) {
                 if (!layer.hasFeatureData()) {
                     return;
                 }
-                fids = me.WFSLayerService.getSelectedFeatureIds(layer.getId());
+                var fids = me.WFSLayerService.getSelectedFeatureIds(layer.getId());
                 me.removeHighlightImages(layer);
                 if (me._highlighted) {
-                    me.getIO().highlightMapLayerFeatures(
-                        layer.getId(),
-                        fids,
-                        false,
-                        geomRequest
-                    );
+                    me.getIO().highlightMapLayerFeatures(layer.getId(),fids);
                 }
             });
         },
@@ -671,7 +651,7 @@ Oskari.clazz.define(
             var lonlat = event.getLonLat(),
                 keepPrevious = event.getParams().ctrlKeyDown;
 
-            var point =  new ol.geom.Point([lonlat.lon, lonlat.lat]);
+            var point = new ol.geom.Point([lonlat.lon, lonlat.lat]);
             var geojson = new ol.format.GeoJSON(this.getMap().getView().getProjection());
             var pixelTolerance = 15;
             var json = {
@@ -856,12 +836,8 @@ Oskari.clazz.define(
          * @param {Object} event
          */
         setFilterHandler: function (event) {
-            var WFSLayerService = this.WFSLayerService,
-                layers = this.getSandbox().findAllSelectedMapLayers(),
-                keepPrevious = this.getSandbox().isCtrlKeyDown(),
-                geoJson = event.getGeoJson();
-
-            this.getIO().setFilter(geoJson, keepPrevious);
+            var keepPrevious = this.getSandbox().isCtrlKeyDown();
+            this.getIO().setFilter(event.getGeoJson(), keepPrevious);
         },
 
         /**
@@ -1041,7 +1017,8 @@ Oskari.clazz.define(
                 minY: tileRangeExtentArray[1],
                 maxX: tileRangeExtentArray[2],
                 maxY: tileRangeExtentArray[3]
-            }
+            };
+
             for (var iy = tileRangeExtent.minY; iy <= tileRangeExtent.maxY; iy++) {
                 var colidx = 0;
                 for (var ix = tileRangeExtent.minX; ix <= tileRangeExtent.maxX; ix++) {
@@ -1056,26 +1033,6 @@ Oskari.clazz.define(
             grid.columns = colidx;
             return grid;
         },
-        /**
-         * Checks at tile is ok.
-         * @method _isTile
-         * @private
-         *
-         * @param {Object} tile
-         *
-         * @return {Boolean} is tile ok
-         */
-         _isTile: function(tile){
-            if (tile.bounds[0] === NaN)
-                return false;
-            if (tile.bounds[1] === NaN)
-                return false;
-            if (tile.bounds[2] === NaN)
-                return false;
-            if (tile.bounds[3] === NaN)
-                return false;
-            return true;
-         },
 
         /*
          * @method getPrintTiles
@@ -1329,10 +1286,6 @@ Oskari.clazz.define(
             var me = this;
             var layerName =
                 this.__layerPrefix + _layer.getId() + '_' + layerType,
-                layerScales = this.getMapModule().calculateLayerScales(
-                    _layer.getMaxScale(),
-                    _layer.getMinScale()
-                ),
                 key,
                 layerParams = _layer.getParams(),
                 layerOptions = _layer.getOptions();
@@ -1349,8 +1302,6 @@ Oskari.clazz.define(
                 }
             }
             var projection = ol.proj.get(me.getMapModule().getProjection());
-            var projectionExtent = projection.getExtent();
-            var me = this;
 
             //var tileSrc = new ol.source.TileImage({
             var tileSrc = new ol.source.OskariAsyncTileImage({
@@ -1368,21 +1319,14 @@ Oskari.clazz.define(
             me.layerByName(layerName, openLayer);
         },
         drawImageTile: function (layer, imageUrl, imageBbox, imageSize, layerType, boundaryTile, keepPrevious) {
-            var args = [layer, imageUrl, imageBbox, imageSize, layerType, boundaryTile, keepPrevious];
             var me = this,
                 map = me.getMap(),
                 layerId = layer.getId(),
                 layerIndex = null,
                 layerName = me.__layerPrefix + layerId + '_' + layerType,
                 layerScales,
-                normalLayer,
                 normalLayerIndex,
                 highlightLayer,
-                BBOX,
-                bboxKey,
-                dataForTileTemp,
-                style,
-                tileToUpdate,
                 boundsObj = imageBbox,
                 ols,
                 wfsMapImageLayer,
@@ -1406,7 +1350,7 @@ Oskari.clazz.define(
 
                     }),
                     title: layerName
-                })
+                });
                 wfsMapImageLayer.setOpacity(layer.getOpacity() / 100);
                 me.layerByName(layerName, wfsMapImageLayer);
                 me.getMapModule().addLayer(wfsMapImageLayer, layer, layerName);

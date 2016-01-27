@@ -44,7 +44,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
             slideInterval: null,
             updatemap: null
         };
-        this._isDragging = false;
         this._isPopupMove = false;
         this._selectedLayerId = null;
         this._dimensionName = null;
@@ -94,12 +93,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
 
             if(me._control === null) {
                 me._control = this.template.control.clone();
+                //only set the event handlers the first time the control is created.
+                me._setSliderHandlers();
                 jQuery(me.mapmodule.getMapEl()).append(me._control);
             }
 
             me._resetPlaybackSliderVariables();
             me._calculateIntervals(times);
-            me._setSliderHandlers();
             me._control.filter('.mapplugin-timeseries-popup').attr(me._TIMESERIES_INDEX, 0);
             me._calculatePopupPosition();
             me._addDayLines();
@@ -118,7 +118,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
             if(me._control) {
                 me._stopPlayback();
                 me._control.remove();
+                me._control = null;
                 me._resetPlaybackSliderVariables();
+                me._selectedLayerId = null;
             }
 
         },
@@ -207,24 +209,22 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
                             value: newDate.toISOString(),
                             date: newDate.format('DD.MM.YYYY')
                         });
-                        me._checkDifferentDates(newDate);
                         me._checkHours(newDate, me._playbackSlider.intervalCount);
-                    } else {
-                        me._playbackSlider.differentDates.push({
-                            date: newDate.format('DD.MM.YYYY'),
-                            intervals: me._playbackSlider.currentDateIntervals
-                        });
-
-                        me._checkDifferentDates(newDate);
+                    } else {                        
                         loop = false;
                     }
 
+                    me._checkDifferentDates(newDate);
+
+                    // If loop coun is over than 1000 then stop it
                     if(me._playbackSlider.intervalCount>1000) {
                         loop = false;
                     }
                 }
 
-                if(me._playbackSlider.differentDates.length === 0){
+                // Fix different dates if different dates length is 0 or last data is different as current date
+                if(me._playbackSlider.differentDates.length === 0 || 
+                    me._playbackSlider.currentDate !== me._playbackSlider.differentDates[me._playbackSlider.differentDates.length-1].date) {
                     me._playbackSlider.differentDates.push({
                         date: me._playbackSlider.currentDate,
                         intervals: me._playbackSlider.currentDateIntervals
@@ -287,6 +287,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
             var me = this;
             me._control.find('.playback-button .play').hide();
             me._control.find('.playback-button .pause').show();
+            clearInterval(me._timers.slideInterval);
             me._timers.slideInterval = setInterval(function(){
                 me._goNext();
             }, me._animationSpeedMs);
@@ -320,16 +321,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
 
 
             // Slider click
-            me._control.find('.oskari-timeslider').mousedown(function() {
-                me._isDragging = false;
-            }).mousemove(function() {
-                me._isDragging = true;
-            }).mouseup(function(e) {
-                var wasDragging = me._isDragging;
-                me._isDragging = false;
-                if (!wasDragging) {
-                    me._moveSlider(e);
-                }
+            me._control.find('.oskari-timeslider').mouseup(function(e) {
+                me._moveSlider(e);
             });
 
             // Slider popup drag
@@ -361,7 +354,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
                 return;
             }
             popup.hide();
-            popup.find('.content').html(me._playbackSlider.times[popupIndex].time);
+            popup.find('.content').html('<div>' + me._playbackSlider.times[popupIndex].time + '</div><div>' + me._playbackSlider.times[popupIndex].date + '</div>');
 
             var leftPopup = (sliderWidth / (me._playbackSlider.times.length - 1)) * (popupIndex) + timeSliderPosition.left - popup.width()/2 + me._control.find('.playback-button button').width() +1;
 
@@ -408,6 +401,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
 
             var top = timeSliderPosition.top + 10;
             var prevLeft = timeSliderPosition.left;
+            var labelPadding = 5;
 
             for(var i=0;i<me._playbackSlider.differentDates.length;i++) {
                 var currentDate = me._playbackSlider.differentDates[i];
@@ -422,6 +416,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
                 timeSlider.append(dayLine);
                 var topPosition = top + sliderHeight - dayLine.height();
                 dayLine.css('top', topPosition + 'px');
+
+                if(label.width() + labelPadding > pixelsPerTimeSerie) {
+                    jQuery('.interval-line-highlight').remove();
+                    break;
+                }
             }
         },
         /**
@@ -449,9 +448,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
 
             for(var i=0;i<me._playbackSlider.hours.length;i++) {
                 var currentHour = me._playbackSlider.hours[i];
-                if(currentHour.value === '00:00') {
+                /*if(currentHour.value === '00:00') {
                     continue;
-                }
+                }*/
                 var intervals = currentHour.intervals;
                 var left = (intervals * pixelsPerTimeSerie + sliderLeft);
                 var intervalLine = me.template.intervalLine.clone();
@@ -466,7 +465,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
                 intervalLine.css('top', topPosition + 'px');
 
                 if(label.width() + labelPadding > pixelsPerHourSerie) {
-                    label.remove();
+                    jQuery('.interval-line').find('.label').remove();
                 }
             }
         },
@@ -528,5 +527,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
             clearInterval(me._timers.slideInterval);
             clearTimeout(me._timers.popupPosition);
             clearTimeout(me._timers.updatemap);
+        },
+        getControl: function() {
+            return this._control;
+        },
+        getSelectedLayerId: function() {
+            return this._selectedLayerId;
         }
 });
