@@ -157,13 +157,14 @@ div.mapplugin.timeseries {
 
   .content {
     background-color: $sliderBackgroundColor;
-    width: 60px;
-    height:26px;
+    width: 80px;
+    height:36px;
     color: $highlightColor;
     text-align:center;
     padding-top:7px;
     font-weight:normal;
-    font-size: 16px;
+    font-size: 12px;
+    line-height: 15px;
   }
 
   display:none;
