@@ -39,6 +39,7 @@ Oskari.registerLocalization({
             "female": "naiset",
             "total": "yhteensä"
         },
+        "defunctRegion": "Lakkautettu alue",
         "addColumn": "Hae aineisto",
         "removeColumn": "Poista",
         "indicators": "Indikaattori",

@@ -470,7 +470,8 @@
               
               row = {
                   selected: true,
-                  data: ((me.regionInfo[regionKey]) && [me.regionInfo[regionKey].localizedName] || ["Lakkautettu kunta"])
+                  data: ((me.regionInfo[regionKey]) && [me.regionInfo[regionKey].localizedName] ||
+                        [me.localize(me.locale, "defunctRegion") + " (" + regionKey + ")"])
                       .concat(me.selectedIndicators.map(function(indicator) {
                           return indicatorValues[indicator.id];
                   }))

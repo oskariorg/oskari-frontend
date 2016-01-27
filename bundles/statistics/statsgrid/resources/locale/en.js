@@ -33,6 +33,13 @@ Oskari.registerLocalization({
                 "indicatorDeleteError": "Error occurred whilst removing an indicator. Please try again later"
             }
         },
+        "sex": "Sex",
+        "genders": {
+            "male": "male",
+            "female": "female",
+            "total": "total"
+        },
+        "defunctRegion": "Defunct region",
         "addColumn": "Get data",
         "removeColumn": "Remove",
         "indicators": "Indicator",
