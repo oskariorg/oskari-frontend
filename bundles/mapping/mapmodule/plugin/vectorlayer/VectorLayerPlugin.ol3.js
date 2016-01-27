@@ -586,112 +586,134 @@ Oskari.clazz.define(
         },
         /**
          * @method zoomToFeatures
-         *  - zooms to features         
-         * @param {Object} layer  
-         * @param {Object} options 
+         *  - zooms to features
+         * @param {Object} layer
+         * @param {Object} options
          */
-        zoomToFeatures: function(layer, options) {        	
-        	var me = this,        	
-        		layers = me.getLayersForZooming(layer);     	 
-        		features = me.getFeaturesForZooming(layers, options);
-        	if(!_.isEmpty(features)) {        		
-        		var vector = new ol.source.Vector({
+        zoomToFeatures: function(layer, options) {
+            var me = this,
+                layers = me.getLayerIds(layer);
+                features = me.getFeaturesMatchingQuery(layers, options);
+            if(!_.isEmpty(features)) {
+                var vector = new ol.source.Vector({
                     features: features
-                });        		
-            	var extent = vector.getExtent();
-            	extent = me.getBufferedExtent(extent, 35);          	
+                });
+                var extent = vector.getExtent();
+                extent = me.getBufferedExtent(extent, 35);
                 me.getMapModule().zoomToExtent(extent);
-        	}
-        	me.sendZoomFeatureEvent(features);
+            }
+            me.sendZoomFeatureEvent(features);
         },
         /**
          * @method getBufferedExtent
-         * -  returns buffered extent
+         * -  gets buffered extent
          * @param {ol.Extent} extent
          * @param {Number} percentage
+         * @return {ol.Extent} extent
          */
         getBufferedExtent: function(extent, percentage) {
             var me = this,
-        		line = new ol.geom.LineString([[extent[0], extent[1]], [extent[2], extent[3]]]),
-        		buffer = line.getLength()*percentage/100,
-        		geometry = ol.geom.Polygon.fromExtent(extent),       	
-        		reader = new jsts.io.WKTReader(),
-        		wktFormat = new ol.format.WKT(),
-        		wktFormatString = wktFormat.writeGeometry(geometry),
-        		input = reader.read(wktFormatString),
-        		bufferGeometry = input.buffer(buffer),
-        		parser = new jsts.io.olParser();
+                line = new ol.geom.LineString([[extent[0], extent[1]], [extent[2], extent[3]]]),
+                buffer = line.getLength()*percentage/100,
+                geometry = ol.geom.Polygon.fromExtent(extent),
+                reader = new jsts.io.WKTReader(),
+                wktFormat = new ol.format.WKT(),
+                wktFormatString = wktFormat.writeGeometry(geometry),
+                input = reader.read(wktFormatString),
+                bufferGeometry = input.buffer(buffer),
+                parser = new jsts.io.olParser();
             bufferGeometry.CLASS_NAME = "jsts.geom.Polygon";
-            bufferGeometry = parser.write(bufferGeometry);           
+            bufferGeometry = parser.write(bufferGeometry);
             return bufferGeometry.getExtent();
         },
         /**
          * @method sendZoomFeatureEvent
-         *  - sends FeatureEvent with the zoom operation        
-         * @param {Array} features  
+         *  - sends FeatureEvent with the zoom operation
+         * @param {Array} features
          */
         sendZoomFeatureEvent: function(features) {
-        	var me = this,
-        		featureEvent = me._sandbox.getEventBuilder('FeatureEvent')().setOpZoom();
-        	if(!_.isEmpty(features)) {               
+            var me = this,
+                featureEvent = me._sandbox.getEventBuilder('FeatureEvent')().setOpZoom();
+            if(!_.isEmpty(features)) {
                 var formatter = me._supportedFormats['GeoJSON'];
                 _.each(features, function (feature) {
                     var geojson = formatter.writeFeaturesObject([feature]);
                     featureEvent.addFeature(feature.getId(), geojson, feature.layerId);
                 });
-        	}   
+            }
             me._sandbox.notifyAll(featureEvent);
         },
         /**
-         * @method getFeaturesForZooming
-         *  - gets features for zooming request        
-         * @param {Array} layers  
-         * @param {Object} options 
+         * @method getFeaturesMatchingQuery
+         *  - gets features matching query
+         * @param {Array} layers, object like {layer: ['layer1', 'layer2']}
+         * @param {Object} featureQuery and object like { "id" : [123, "myvalue"] }
          */
-        getFeaturesForZooming: function(layers, options) {
-        	var me = this,
-        		features = [];
-        	_.each(layers, function(layerId, key) {
-        		if(me._layers[layerId]) {
-	        		me._layers[layerId].getSource().getFeatures().forEach(function (feature) {
-            			feature.layerId = layerId;
-	            		if(_.isEmpty(options)) {
-	            			features.push(feature);
-	            		} else {
-		        			_.each(options, function(o, key) {
-		            			if(feature.get(key)) {
-		                    		_.each(o, function(value, k) {
-		                    			if(feature.get(key)===value) {
-		                        			features.push(feature);
-		                    			}
-		                    		});
-		                    	}        		
-		            		}); 
-	            		}
-	                });
-        		}
-        	});
-        	return features;
+        getFeaturesMatchingQuery: function(layers, featureQuery) {
+            var me = this,
+                features = [];
+            _.each(layers, function(layerId) {
+                if(!me._layers[layerId]) {
+                    // invalid layerId
+                    return;
+                }
+                var sourceFeatures = me._layers[layerId].getSource().getFeatures();
+                if(_.isEmpty(featureQuery)) {
+                    // no query requirements, add all features in layer
+                    features = features.concat(sourceFeatures);
+                    return;
+                }
+                _.each(sourceFeatures, function (feature) {
+                    feature.layerId = layerId;
+                    _.each(featureQuery, function(allowedValues, requestedProperty) {
+                        var featureValue = feature.get(requestedProperty);
+                        if(!featureValue) {
+                            // feature doesn't have the property, don't include it
+                            return;
+                        }
+                        _.each(allowedValues, function(value) {
+                            if(featureValue === value) {
+                                features.push(feature);
+                            }
+                        });
+                    });
+                });
+            });
+            return features;
         },
         /**
-         * @method getLayersForZooming
-         *  - gets layers for zooming request        
-         * @param {Object} layer  
+         * @method getLayerIds
+         *  - 
+         * @param {Object} layerIds
+         * @return {Array} layres
          */
-        getLayersForZooming: function(layer) {
-        	var me = this,
-        		layers = [];
-        	if(_.isEmpty(layer)) {
-        		_.each(me._layers, function(key, value) {
-        			layers.push(value);  
-                });        		 
-        	} else {
-        		_.each(layer.layer, function(key, value) {
-        			layers.push(key);  
-                });   
-        	} 
-        	return layers;
-        }
+        getLayerIds: function(layerIds) {
+            var me = this,
+                layers = [];
+            if(_.isEmpty(layerIds)) {
+                _.each(me._layers, function(key, value) {
+                    layers.push(value);
+                });
+            } else {
+                _.each(layerIds.layer, function(key, value) {
+                    layers.push(key);
+                });
+            }
+            return layers;
+        },
+        /**
+         * @method getLayerFeatures
+         *  - gets layer's features as geojson object
+         * @param {String} id
+         * @return {Object} geojson
+         */
+        getLayerFeatures: function(id) {
+        	var me = this;
+        	var features = me._layers[id].getSource();
+        	var formatter = me._supportedFormats['GeoJSON'];
+            var geojson = formatter.writeFeaturesObject(features);
+            return geojson;
+        }       
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
         /**
@@ -703,4 +725,3 @@ Oskari.clazz.define(
         ]
     }
 );
-
