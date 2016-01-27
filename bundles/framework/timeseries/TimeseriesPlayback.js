@@ -354,7 +354,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
                 return;
             }
             popup.hide();
-            popup.find('.content').html(me._playbackSlider.times[popupIndex].time);
+            popup.find('.content').html('<div>' + me._playbackSlider.times[popupIndex].time + '</div><div>' + me._playbackSlider.times[popupIndex].date + '</div>');
 
             var leftPopup = (sliderWidth / (me._playbackSlider.times.length - 1)) * (popupIndex) + timeSliderPosition.left - popup.width()/2 + me._control.find('.playback-button button').width() +1;
 
@@ -401,6 +401,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
 
             var top = timeSliderPosition.top + 10;
             var prevLeft = timeSliderPosition.left;
+            var labelPadding = 5;
 
             for(var i=0;i<me._playbackSlider.differentDates.length;i++) {
                 var currentDate = me._playbackSlider.differentDates[i];
@@ -415,6 +416,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
                 timeSlider.append(dayLine);
                 var topPosition = top + sliderHeight - dayLine.height();
                 dayLine.css('top', topPosition + 'px');
+
+                if(label.width() + labelPadding > pixelsPerTimeSerie) {
+                    jQuery('.interval-line-highlight').remove();
+                    break;
+                }
             }
         },
         /**
@@ -442,9 +448,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
 
             for(var i=0;i<me._playbackSlider.hours.length;i++) {
                 var currentHour = me._playbackSlider.hours[i];
-                if(currentHour.value === '00:00') {
+                /*if(currentHour.value === '00:00') {
                     continue;
-                }
+                }*/
                 var intervals = currentHour.intervals;
                 var left = (intervals * pixelsPerTimeSerie + sliderLeft);
                 var intervalLine = me.template.intervalLine.clone();
@@ -459,7 +465,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
                 intervalLine.css('top', topPosition + 'px');
 
                 if(label.width() + labelPadding > pixelsPerHourSerie) {
-                    label.remove();
+                    jQuery('.interval-line').find('.label').remove();
                 }
             }
         },
