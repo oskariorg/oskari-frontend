@@ -592,7 +592,7 @@ Oskari.clazz.define(
          */
         zoomToFeatures: function(layer, options) {
             var me = this,
-                layers = me.getLayersForZooming(layer);
+                layers = me.getLayerIds(layer);
                 features = me.getFeaturesMatchingQuery(layers, options);
             if(!_.isEmpty(features)) {
                 var vector = new ol.source.Vector({
@@ -606,12 +606,14 @@ Oskari.clazz.define(
         },
         /**
          * @method getBufferedExtent
-         * -  returns buffered extent
+         * -  gets buffered extent
          * @param {ol.Extent} extent
          * @param {Number} percentage
+         * @return {ol.Extent} extent
          */
         getBufferedExtent: function(extent, percentage) {
-            var line = new ol.geom.LineString([[extent[0], extent[1]], [extent[2], extent[3]]]),
+            var me = this,
+                line = new ol.geom.LineString([[extent[0], extent[1]], [extent[2], extent[3]]]),
                 buffer = line.getLength()*percentage/100,
                 geometry = ol.geom.Polygon.fromExtent(extent),
                 reader = new jsts.io.WKTReader(),
@@ -643,8 +645,8 @@ Oskari.clazz.define(
         },
         /**
          * @method getFeaturesMatchingQuery
-         *  - gets features for zooming request
-         * @param {Array} layers
+         *  - gets features matching query
+         * @param {Array} layers, object like {layer: ['layer1', 'layer2']}
          * @param {Object} featureQuery and object like { "id" : [123, "myvalue"] }
          */
         getFeaturesMatchingQuery: function(layers, featureQuery) {
@@ -680,24 +682,38 @@ Oskari.clazz.define(
             return features;
         },
         /**
-         * @method getLayersForZooming
-         *  - gets layers for zooming request
-         * @param {Object} layer
+         * @method getLayerIds
+         *  - 
+         * @param {Object} layerIds
+         * @return {Array} layres
          */
-        getLayersForZooming: function(layer) {
+        getLayerIds: function(layerIds) {
             var me = this,
                 layers = [];
-            if(_.isEmpty(layer)) {
+            if(_.isEmpty(layerIds)) {
                 _.each(me._layers, function(key, value) {
                     layers.push(value);
                 });
             } else {
-                _.each(layer.layer, function(key, value) {
+                _.each(layerIds.layer, function(key, value) {
                     layers.push(key);
                 });
             }
             return layers;
-        }
+        },
+        /**
+         * @method getLayerFeatures
+         *  - gets layer's features as geojson object
+         * @param {String} id
+         * @return {Object} geojson
+         */
+        getLayerFeatures: function(id) {
+        	var me = this;
+        	var features = me._layers[id].getSource();
+        	var formatter = me._supportedFormats['GeoJSON'];
+            var geojson = formatter.writeFeaturesObject(features);
+            return geojson;
+        }       
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
         /**
@@ -709,4 +725,3 @@ Oskari.clazz.define(
         ]
     }
 );
-

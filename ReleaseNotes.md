@@ -8,6 +8,8 @@ Fixed WmtsLayerService IE 9 capabilities formatting.
 
 ### RPC
 
+New function added getFeatures(). See bundle documentation for details.
+
 New request included in defaults "MapModulePlugin.ZoomToFeaturesRequest".
 
 ### mapping/mapmodule/plugin/vectorlayer
