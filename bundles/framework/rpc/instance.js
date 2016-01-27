@@ -285,7 +285,6 @@ Oskari.clazz.define(
                     	features[id] = [];
                     }
                 });
-                console.log(features);
                 return features;
             }
         },
