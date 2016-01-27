@@ -6,7 +6,7 @@ Oskari.registerLocalization(
         "title": "Kirjaudu",
         "desc": "ASDI Login",
         "flyout": {
-	        "title": "Login",
+	        "title": "Kirjaudu",
 	        "username":"Username",
 	        "password":"Password",
 	        "login":"Kirjaudu",
