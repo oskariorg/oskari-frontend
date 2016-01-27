@@ -2,6 +2,10 @@
 
 ## 1.35
 
+### framework/admin-users
+
+Added user email to editable.
+
 ### mapping/mapwmts_ol3
 
 Fixed WmtsLayerService IE 9 capabilities formatting.
