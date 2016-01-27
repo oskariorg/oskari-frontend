@@ -9,9 +9,13 @@ Each addition is tagged with [add], [mod] or [rem] telling if it's a new feature
 
 ### RPC
 
+#### [add] [rpc] New function
+
+getFeatures(layerId) that gets features as geojson object grouped by layer if layerId===true. If layerId not given, will return array of layerIds. 
+
 #### [mod] [rpc] New default request
 
-MapModulePlugin.ZoomToFeaturesRequest is a now allowed by default.
+MapModulePlugin.ZoomToFeaturesRequest is now allowed by default.
 
 ### mapmodule - vectorlayerplugin
 
