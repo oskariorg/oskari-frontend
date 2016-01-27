@@ -16,6 +16,7 @@ Oskari.registerLocalization(
                 "lastName": "Efternamn",
                 "user": "Användarsnamn",
                 "pass": "Lösenord",
+                "email": "E-postadress",
                 "pass_retype": "Skriv igen ditt lösenord",
                 "addRole": "Välj rol(ler)",
                 "password_mismatch": "Lösenord är inte lika.",

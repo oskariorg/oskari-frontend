@@ -2,11 +2,17 @@
 
 ## 1.35
 
+### framework/admin-users
+
+Added user email to editable.
+
 ### mapping/mapwmts_ol3
 
 Fixed WmtsLayerService IE 9 capabilities formatting.
 
 ### RPC
+
+New function added getFeatures(). See bundle documentation for details.
 
 New request included in defaults "MapModulePlugin.ZoomToFeaturesRequest".
 
