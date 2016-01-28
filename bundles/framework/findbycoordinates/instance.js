@@ -195,11 +195,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
             var me = this,
                 loc = this.getLocalization(),
                 sandbox = this.getSandbox(),
-                popupId = "findbycoordinates-search-result",
-                lonlat =  {
-                    lon: result[0].lon,
-                    lat: result[0].lat
-                };
+                popupId = "findbycoordinates-search-result";
+            // get the location from first. This is error prone since locations may differ a bit
+            // Maybe find another way of doing this like a generic popup with markers for each location?
+            var lonlat =  {
+                lon: results[0].lon,
+                lat: results[0].lat
+            };
             var moveReqBuilder = sandbox.getRequestBuilder('MapMoveRequest');
             var infoBoxReqBuilder = sandbox.getRequestBuilder('InfoBox.ShowInfoBoxRequest');
 
