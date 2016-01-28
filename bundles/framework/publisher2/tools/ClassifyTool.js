@@ -167,10 +167,9 @@ function() {
          *
          */
         _getState: function () {
-            var me = this,
-                statsGrid = me.__sandbox.getStatefulComponents().statsgrid,
-                statsGridState = statsGrid.state;
-            return me._filterIndicators(_.clone(statsGridState, true));
+            return {
+                classifyShown:  this.state.enabled
+            };
         }
 }, {
     'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],

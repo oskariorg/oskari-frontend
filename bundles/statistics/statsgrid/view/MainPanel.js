@@ -31,7 +31,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.MainPanel',
       getSandbox: function() {
         return this.sandbox;
       },
-      getState: function() {
+      // Named like this to prevent the state from going to mapfull state.
+      _getState: function() {
         var me = this;
         return {
           "version": 2,

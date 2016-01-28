@@ -20,6 +20,7 @@
       is: "oskari-statsview",
       properties: {
           "locale": Object,
+          "layerId": String,
           "language": String,
           "ajaxUrl": String,
           "user": Object,
@@ -39,6 +40,9 @@
       },
       "sendTooltipData": function(feature) {
           return this.$.indicatorselector.sendTooltipData(feature);
+      },
+      "attached": function() {
+          console.log("Attached.");
       }
     });
   </script>

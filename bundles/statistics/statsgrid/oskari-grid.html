@@ -71,14 +71,7 @@
           },
           "filtering": Boolean,
           "sorting": Boolean,
-          "deleting": Boolean,
-          "observers": [
-            "debug(ajaxUrl)",
-            "debug(selectedIndicators)"
-          ],
-      },
-      "debug": function(object) {
-        console.log(JSON.stringify(object));
+          "deleting": Boolean
       },
       "allSelectedChanged": function() {
           var me = this;

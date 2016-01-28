@@ -337,6 +337,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             };
         },
         /**
+         * @private @method _filterIndicators
+         * Filters out user's indicators which aren't allowed to be published.
+         *
+         * @param  {Object} statsGridState
+         *
+         * @return {Object} filtered state
+         */
+        _filterIndicators: function (statsGridState) {
+            statsGridState.selectedIndicators = _.filter(statsGridState.selectedIndicators, function (indicator) {
+                var ownIndicator = indicator.datasourceId == "fi.nls.oskari.control.statistics.plugins.user.UserIndicatorsStatisticalDatasourcePlugin";
+                return (
+                    // indicators
+                    (!ownIndicator) ||
+                    // own indicators
+                    (ownIndicator && indicator.public)
+                );
+            });
+            return statsGridState;
+        },
+        /**
         * Gather selections.
         * @method _gatherSelections
         * @private
@@ -354,6 +374,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             var mapFullState = sandbox.getStatefulComponents().mapfull.getState();
             selections.configuration.mapfull = {
                 state: mapFullState
+            };
+            var me = this,
+                statsGrid = sandbox.getStatefulComponents().statsgrid,
+                statsGridState = statsGrid._getState();
+            // Filtering indicators here in the publishing step, because for
+            // the private state they are allowed.
+            statsGridState = me._filterIndicators(_.clone(statsGridState, true));
+            statsGridState.embedded = true;
+            statsGridState.layerId = layer._id;
+            selections.configuration.publishedgrid = {
+                state: statsGridState
             };
 
             jQuery.each(me.panels, function(index, panel){

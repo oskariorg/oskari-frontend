@@ -118,7 +118,7 @@
       },
       "observers": [
           "selectedLayerChanged(ajaxUrl, selectedLayer)",
-          "selectedIndicatorsChanged(ajaxUrl, selectedIndicators.splices, sources)",
+          "selectedIndicatorsChanged(ajaxUrl, selectedIndicators.splices, sources, selectedIndicators)",
           "sortChanged(sortColumnIdx, sortDirection)",
           "selectedIndicatorChanged(selectedIndicatorKey, cache, rowHeaders)",
           "updateSelectedIndicators(sources)"
@@ -156,7 +156,7 @@
               indicatorValues = me.cache[cacheKey],
               cur_col = {
                   // TODO: This is a legacy code workaround. Now unnecessary, but the classification plugin wants it.
-                  field: "indicator: " + header.title
+                  field: "indicator: " + (header && header.title || header)
               },
               vis_name = me.selectedLayer,
               vis_attr = me.layerInfo[me.selectedLayer].idTag,
@@ -291,9 +291,9 @@
               }
           });
       },
-      "selectedIndicatorsChanged": function(ajaxUrl, splices, sources) {
+      "selectedIndicatorsChanged": function(ajaxUrl, splices, sources, selectedIndicators) {
           var me = this,
-            indicators = me.selectedIndicators;
+              indicators = selectedIndicators || [];
           this.set("rowHeaders", [{
               title: me.localize(me.locale.regionCategories, me.selectedLayer),
               sort: true,

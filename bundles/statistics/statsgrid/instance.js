@@ -67,7 +67,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                 
             // Register classification plugin for map.
             var classifyPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin', {
-                'state': me.getState()
+                'state': me._getState()
             }, locale);
             mapModule.registerPlugin(classifyPlugin);
             mapModule.startPlugin(classifyPlugin);
@@ -158,7 +158,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             // FIXME: Is this used anywhere?
             var me = this,
                 view = me.getView(),
-                state = me.getState();
+                state = me._getState();
 
             state.selectedIndicators = state.selectedIndicators || [];
             state.selectedIndicators.push(indicator);
@@ -208,10 +208,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                 view.prepareMode(true, layer, false);
             }
         },
-        "getState": function () {
+        "_getState": function () {
             // Including the main panel state into this. The main panel state contains all the indicator stuff.
             // The main panel is used without this statsgrid instance in embedded views, so the view state should be stored there.
-            jQuery.extend(this.state, this.getMainPanel().getState());
+            jQuery.extend(this.state, this.getMainPanel()._getState());
             return this.state;
         },
 
