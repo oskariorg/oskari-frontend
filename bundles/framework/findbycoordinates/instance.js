@@ -235,7 +235,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                 lon : result.lon,
                 lat : result.lat
             };
-            return this.templates.item(data);
+            return this.__templates.item(data);
         }
     }, {
         "extend" : ["Oskari.userinterface.extension.DefaultExtension"]
