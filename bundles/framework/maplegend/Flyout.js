@@ -223,16 +223,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                 return null;
             }
 
-            if(me._legendImagesNotLoaded[legendUrl]) {
-                me._checkNoLegendText();
-                return null;
-            }
 
             var legendDiv = me.templateLayerLegend.clone(),
                 imgDiv = legendDiv.find('img'),
                 img = new Image();
 
             legendDiv.prepend(layer.getCurrentStyle().getTitle() + '<br />');
+
+            if(me._legendImagesNotLoaded[legendUrl]) {
+                me._checkNoLegendText(legendDiv, layer);
+                // return null;
+            }
 
             imagesAdded[legendUrl] = true;
 
@@ -242,9 +243,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                 me._checkNoLegendText();
             };
 
-            img.onerror = function () {
+            img.onerror = function (test) {
                 img.onerror = null;
-                legendDiv.parent().parent().parent().remove();
+                //legendDiv.parent().parent().parent().remove();
                 me._legendImagesNotLoaded[legendUrl] = true;
                 me._checkNoLegendText();
             };
@@ -258,13 +259,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
         * @method _checkNoLegendText
         * @private
         */
-        _checkNoLegendText: function(){
+        _checkNoLegendText: function(legendDiv, layer){
             var me = this,
                 noLegendText = this.instance.getLocalization('noLegendsText'),
+                invalidLegendUrl = this.instance.getLocalization('invalidLegendUrl'),
                 legendDivs = jQuery('.oskari-flyoutcontent.maplegend').find('.accordion_panel'),
                 noLegendContainer = me.templateNoLegend.clone();
 
-            jQuery('.no-maplegend').remove();
+
+                if (legendDiv && layer) {
+                    var legendUrl = layer.getLegendImage ? layer.getLegendImage() : null;
+                    if(legendUrl){
+                        noLegendContainer.html(invalidLegendUrl)
+                        console.log(invalidLegendUrl + ": " + legendUrl);
+                    }
+
+                    legendDiv.append(noLegendContainer);
+
+
+                }
 
             if(legendDivs.length === 0) {
                 noLegendContainer.html(noLegendText);
