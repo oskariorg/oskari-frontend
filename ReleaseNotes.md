@@ -2,6 +2,10 @@
 
 ## 1.35
 
+### framework/findbycoordinates
+
+Now displays multiple results if available.
+
 ### framework/admin-users
 
 Added user email to editable.
