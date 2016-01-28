@@ -171,14 +171,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                 if (response) {
                     me.handleResponse(response.locations);
                 }
-                this.stopTool();
-                this.selectDefaultTool();
+                me.stopTool();
+                me.selectDefaultTool();
             }, function () {
                 me.getSandbox().printWarn(
                     'ReverseGeoCode search failed',
                     [].slice.call(arguments));
-                this.stopTool();
-                this.selectDefaultTool();
+                me.stopTool();
+                me.selectDefaultTool();
             });
         },
         /**
@@ -215,6 +215,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                 results.forEach(function(result) {
                     contents.push(me.__getInfoBoxHtml(result));
                 });
+                contents.sort(function(a,b ) {
+                    return a.prio < b.prio
+                });
                 sandbox.request(this, infoBoxReqBuilder(
                     popupId, loc.resultsTitle,
                     contents, lonlat, true));
@@ -235,7 +238,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                 lon : result.lon,
                 lat : result.lat
             };
-            return this.__templates.item(data);
+            return {
+                // use higher priority for ones with "village" info more than ones that don't
+                // this way "nice-to-know" features like "what 3 words" are at the bottom
+                prio : (result.village) ? 1 : -1,
+                html : this.__templates.item(data)
+            };
         }
     }, {
         "extend" : ["Oskari.userinterface.extension.DefaultExtension"]
