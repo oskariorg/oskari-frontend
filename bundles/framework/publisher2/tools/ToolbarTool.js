@@ -464,7 +464,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                     button.iconCls = button.iconCls.replace('dark','');
                     button.iconCls = button.iconCls.replace('light','');
                     button.iconCls += suffix;
-                    console.log(buttonKey+' '+button.iconCls);
                 }
             }
 

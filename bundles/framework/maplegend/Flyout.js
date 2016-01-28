@@ -267,17 +267,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                 noLegendContainer = me.templateNoLegend.clone();
 
 
-                if (legendDiv && layer) {
-                    var legendUrl = layer.getLegendImage ? layer.getLegendImage() : null;
-                    if(legendUrl){
-                        noLegendContainer.html(invalidLegendUrl)
+            if (legendDiv && layer) {
+                var legendUrl = layer.getLegendImage ? layer.getLegendImage() : null;
+                if(legendUrl){
+                    noLegendContainer.html(invalidLegendUrl);
+                    if(window.console !== undefined) {
                         console.log(invalidLegendUrl + ": " + legendUrl);
                     }
-
-                    legendDiv.append(noLegendContainer);
-
-
                 }
+                legendDiv.append(noLegendContainer);
+            }
 
             if(legendDivs.length === 0) {
                 noLegendContainer.html(noLegendText);

@@ -111,7 +111,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                     }
                     me._layers[layer.getId()] = wmtsLayer;
             }, function() {
-                console.log("Error loading capabilitiesXML");
+//                console.log("Error loading capabilitiesXML");
             });
 
         },
