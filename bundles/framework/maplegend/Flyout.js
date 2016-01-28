@@ -231,7 +231,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
             legendDiv.prepend(layer.getCurrentStyle().getTitle() + '<br />');
 
             if(me._legendImagesNotLoaded[legendUrl]) {
-                me._checkNoLegendText(legendDiv, layer);
+                me._checkNoLegendText();
+                // return null;
             }
 
             imagesAdded[legendUrl] = true;
@@ -244,8 +245,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
 
             img.onerror = function () {
                 img.onerror = null;
+                //Show legend invalid info for the layer
                 me._legendImagesNotLoaded[legendUrl] = true;
-                me._checkNoLegendText();
+                me._checkNoLegendText(legendDiv, layer);
             };
 
             img.src = legendUrl;
@@ -274,11 +276,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                     }
                 }
                 legendDiv.append(noLegendContainer);
-            }
-
-            if(legendDivs.length === 0) {
-                noLegendContainer.html(noLegendText);
-                jQuery('.oskari-flyoutcontent.maplegend').append(noLegendContainer);
             }
 
         }
