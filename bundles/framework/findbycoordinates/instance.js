@@ -216,7 +216,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                     contents.push(me.__getInfoBoxHtml(result));
                 });
                 contents.sort(function(a,b ) {
-                    return a.prio < b.prio
+                    return a.prio < b.prio;
                 });
                 sandbox.request(this, infoBoxReqBuilder(
                     popupId, loc.resultsTitle,

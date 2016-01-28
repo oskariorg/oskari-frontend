@@ -271,18 +271,18 @@ Oskari.clazz.define(
             },
             getFeatures: function(layerId) {
                 var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule'),
-                	plugin = mapModule.getLayerPlugins(['vectorlayer']),
-                	features = {};
+                    plugin = mapModule.getLayerPlugins(['vectorlayer']),
+                    features = {};
                 if(!plugin) {
-                	return features;
+                    return features;
                 }
                 var layers = plugin.getLayerIds();
                 layers.forEach(function(id) {
                     if(layerId === true) {
-                    	features[id] = plugin.getLayerFeatures(id);
+                        features[id] = plugin.getLayerFeatures(id);
                     }
                     else {
-                    	features[id] = [];
+                        features[id] = [];
                     }
                 });
                 return features;

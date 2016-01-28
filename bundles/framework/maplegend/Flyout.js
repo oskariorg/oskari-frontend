@@ -232,7 +232,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
 
             if(me._legendImagesNotLoaded[legendUrl]) {
                 me._checkNoLegendText(legendDiv, layer);
-                // return null;
             }
 
             imagesAdded[legendUrl] = true;
@@ -243,9 +242,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                 me._checkNoLegendText();
             };
 
-            img.onerror = function (test) {
+            img.onerror = function () {
                 img.onerror = null;
-                //legendDiv.parent().parent().parent().remove();
                 me._legendImagesNotLoaded[legendUrl] = true;
                 me._checkNoLegendText();
             };

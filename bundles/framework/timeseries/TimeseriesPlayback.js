@@ -210,7 +210,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
                             date: newDate.format('DD.MM.YYYY')
                         });
                         me._checkHours(newDate, me._playbackSlider.intervalCount);
-                    } else {                        
+                    } else {
                         loop = false;
                     }
 
@@ -223,7 +223,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
                 }
 
                 // Fix different dates if different dates length is 0 or last data is different as current date
-                if(me._playbackSlider.differentDates.length === 0 || 
+                if(me._playbackSlider.differentDates.length === 0 ||
                     me._playbackSlider.currentDate !== me._playbackSlider.differentDates[me._playbackSlider.differentDates.length-1].date) {
                     me._playbackSlider.differentDates.push({
                         date: me._playbackSlider.currentDate,
