@@ -64,7 +64,7 @@ Oskari.clazz.define('Oskari.asdi.login.Flyout',
                 shade = me._templates.backgroundShade.clone(),
                 flyoutContainer = me.getEl().parent().parent(),
                 shadeZIndex = parseInt(flyoutContainer.css('z-index')) - 1;
-                containerWidth = jQuery(flyoutContainer).width(),
+            var containerWidth = jQuery(flyoutContainer).width(),
                 containerHeight = jQuery(flyoutContainer).height(),
                 windowWidth = jQuery(window).width(),
                 windowHeight = jQuery(window).height();
@@ -85,5 +85,5 @@ Oskari.clazz.define('Oskari.asdi.login.Flyout',
         }
     }, {
         'extend': ['Oskari.userinterface.extension.DefaultFlyout']
-	}
+    }
 );

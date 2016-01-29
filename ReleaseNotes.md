@@ -2,6 +2,14 @@
 
 ## 1.35
 
+### core
+
+Oskari.VERSION can now be used to detect the frontend version number.
+
+### framework/findbycoordinates
+
+Now displays multiple results if available.
+
 ### framework/admin-users
 
 Added user email to editable.
@@ -15,6 +23,8 @@ Fixed WmtsLayerService IE 9 capabilities formatting.
 New function added getFeatures(). See bundle documentation for details.
 
 New request included in defaults "MapModulePlugin.ZoomToFeaturesRequest".
+
+New function added getInfo(clientVersion). See bundle documentation for details.
 
 ### mapping/mapmodule/plugin/vectorlayer
 

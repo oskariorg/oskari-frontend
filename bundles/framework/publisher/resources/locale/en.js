@@ -30,6 +30,15 @@ Oskari.registerLocalization(
                 "placeholder": "Map name",
                 "tooltip": "Type a map name. Please note the language used on the map."
             },
+            "language": {
+                "label": "Language",
+                "options": {
+                    "fi": "Finnish",
+                    "sv": "Swedish",
+                    "en": "English"
+                },
+                "tooltip": "Select a languge to be used on the map. It affects the user interface and text on the map."
+            },
             "size": {
                 "label": "Map size",
                 "tooltip": "Select a map size. The width must be at least 30 pixels and the height at least 20 pixels. Use a dot as a decimal separator. Check updates in the map preview."

@@ -10,7 +10,6 @@ Oskari.clazz.define(
     'Oskari.mapframework.bundle.rpc.RemoteProcedureCallInstance',
     function () {
         this._channel = null;
-        this._localization = {};
         this.eventHandlers = {};
         this.requestHandlers = {};
     },
@@ -27,7 +26,12 @@ Oskari.clazz.define(
         getSandbox: function () {
             return this.sandbox;
         },
-
+        isClientSupported : function(clientVer) {
+            if(!clientVer) {
+                return false;
+            }
+            return clientVer.indexOf("1.1.") === 0 || clientVer.indexOf("1.2.") === 0;
+        },
         /**
          * @public @method start
          * BundleInstance protocol method
@@ -221,6 +225,14 @@ Oskari.clazz.define(
             getSupportedRequests : function() {
                 return this._allowedRequests;
             },
+            getInfo : function(clientVersion) {
+                var sbMap = this.sandbox.getMap();
+                return {
+                    version : Oskari.VERSION,
+                    clientSupported : this.isClientSupported(clientVersion),
+                    srs  : sbMap.getSrsName()
+                };
+            },
             getAllLayers : function() {
                 var mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
                 var layers = mapLayerService.getAllLayers();
@@ -271,18 +283,18 @@ Oskari.clazz.define(
             },
             getFeatures: function(layerId) {
                 var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule'),
-                	plugin = mapModule.getLayerPlugins(['vectorlayer']),
-                	features = {};
+                    plugin = mapModule.getLayerPlugins(['vectorlayer']),
+                    features = {};
                 if(!plugin) {
-                	return features;
+                    return features;
                 }
                 var layers = plugin.getLayerIds();
                 layers.forEach(function(id) {
                     if(layerId === true) {
-                    	features[id] = plugin.getLayerFeatures(id);
+                        features[id] = plugin.getLayerFeatures(id);
                     }
                     else {
-                    	features[id] = [];
+                        features[id] = [];
                     }
                 });
                 return features;

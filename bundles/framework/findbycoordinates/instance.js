@@ -171,14 +171,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                 if (response) {
                     me.handleResponse(response.locations);
                 }
-                this.stopTool();
-                this.selectDefaultTool();
+                me.stopTool();
+                me.selectDefaultTool();
             }, function () {
                 me.getSandbox().printWarn(
                     'ReverseGeoCode search failed',
                     [].slice.call(arguments));
-                this.stopTool();
-                this.selectDefaultTool();
+                me.stopTool();
+                me.selectDefaultTool();
             });
         },
         /**
@@ -195,11 +195,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
             var me = this,
                 loc = this.getLocalization(),
                 sandbox = this.getSandbox(),
-                popupId = "findbycoordinates-search-result",
-                lonlat =  {
-                    lon: result[0].lon,
-                    lat: result[0].lat
-                };
+                popupId = "findbycoordinates-search-result";
+            // get the location from first. This is error prone since locations may differ a bit
+            // Maybe find another way of doing this like a generic popup with markers for each location?
+            var lonlat =  {
+                lon: results[0].lon,
+                lat: results[0].lat
+            };
             var moveReqBuilder = sandbox.getRequestBuilder('MapMoveRequest');
             var infoBoxReqBuilder = sandbox.getRequestBuilder('InfoBox.ShowInfoBoxRequest');
 
@@ -212,6 +214,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                 var contents = [];
                 results.forEach(function(result) {
                     contents.push(me.__getInfoBoxHtml(result));
+                });
+                contents.sort(function(a,b ) {
+                    return a.prio < b.prio;
                 });
                 sandbox.request(this, infoBoxReqBuilder(
                     popupId, loc.resultsTitle,
@@ -233,7 +238,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                 lon : result.lon,
                 lat : result.lat
             };
-            return this.templates.item(data);
+            return {
+                // use higher priority for ones with "village" info more than ones that don't
+                // this way "nice-to-know" features like "what 3 words" are at the bottom
+                prio : (result.village) ? 1 : -1,
+                html : this.__templates.item(data)
+            };
         }
     }, {
         "extend" : ["Oskari.userinterface.extension.DefaultExtension"]
