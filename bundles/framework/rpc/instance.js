@@ -30,7 +30,7 @@ Oskari.clazz.define(
             if(!clientVer) {
                 return false;
             }
-            return clientVer.indexOf("1.2.") === 0;
+            return clientVer.indexOf("2.0.") === 0;
         },
         /**
          * @public @method start

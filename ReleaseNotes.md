@@ -24,9 +24,9 @@ Fixed WmtsLayerService IE 9 capabilities formatting.
 
 ### RPC
 
-JSChannel-dependency updated. This requires new RPC-client to work (version 1.2.0).
-
 Removed libraries/OskariRPC/*. The client now has it's own repository here: https://github.com/nls-oskari/rpc-client
+
+JSChannel-dependency updated. This requires new RPC-client to work (version 2.0.0).
 
 New function added getFeatures(). See bundle documentation for details.
 
