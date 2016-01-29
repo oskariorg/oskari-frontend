@@ -10,7 +10,7 @@ Oskari.registerLocalization(
         },
         "flyout": {
             "title": "Dataset Import",
-            "description": "Upload a dataset from your computer as a zipped file. The dataset has to be in one of the followinf file formats: <br/>\r\nShapefile (*.shp, *.shx, *dbf, *prj) <br/>\r\nGPS-siirtotiedosto (*.gpx) <br/>\r\nMapInfo (*.mif, *mid) <br/>\r\nGoogle Map (*.kml, *.kmz) <br/>\r\nPlease check that all the files are in the correct coordinate reference system.",
+            "description": "Upload a dataset from your computer as a zipped file. The dataset has to be in one of the following file formats: <br/>\r\nShapefile (*.shp, *.shx, *dbf, *prj) <br/>\r\nGPS file (*.gpx) <br/>\r\nMapInfo (*.mif, *mid) <br/>\r\nGoogle Map (*.kml, *.kmz) <br/>\r\nPlease check that all the files are in the correct coordinate reference system.",
             "help": "Upload a dataset from your computer as a zipped file. Please check that all the files are in the correct file format and coordinate reference system.",
             "actions": {
                 "cancel": "Cancel",
