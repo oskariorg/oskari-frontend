@@ -293,7 +293,7 @@
       },
       "selectedIndicatorsChanged": function(ajaxUrl, splices, sources, selectedIndicators) {
           var me = this,
-              indicators = selectedIndicators || [];
+              indicators = this.selectedIndicators || [];
           this.set("rowHeaders", [{
               title: me.localize(me.locale.regionCategories, me.selectedLayer),
               sort: true,

@@ -18,7 +18,7 @@ Oskari.clazz.define(
             sandbox: 'sandbox',
             stateful: true,
             tileClazz: 'Oskari.statistics.bundle.statsgrid.Tile',
-            viewClazz: 'Oskari.statistics.bundle.statsgrid.StatsView'
+            viewClazz: null
         };
         this.state = {
             indicators: [],

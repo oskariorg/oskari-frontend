@@ -94,7 +94,6 @@ function() {
             tool = me.getTool(),
             statsLayer = me._getStatsLayer(),
             request,
-            elLeft,
             statsContainer,
             statsGrid = me.__sandbox.getStatefulComponents().statsgrid,
             statsGridState = statsGrid.state;
@@ -116,12 +115,14 @@ function() {
             }
             me.__sandbox.registerService(me.statsService);
             me.__plugin = Oskari.clazz.create(tool.id, me, tool.config.localization, tool.config.sandbox);
+        }
+        if(!me.statsContainer) {
+            var elLeft = jQuery('.oskariui-left');
             me.statsContainer = jQuery(me.templates.publishedGridTemplate);
+            elLeft.html(me.statsContainer);
         }
 
         if(enabled === true) {
-            elLeft = jQuery('.oskariui-left');
-            elLeft.html(me.statsContainer);
             var selectedLayers = me.__sandbox.findAllSelectedMapLayers();
             var statsLayer = null;
             for (i = 0; i < selectedLayers.length; i += 1) {
@@ -139,7 +140,7 @@ function() {
             me.__plugin.render(me.statsContainer, me);
             me.__started = true;
         } else {
-            jQuery('.publishedgrid').empty();
+            me.statsContainer.empty();
         }
 
         if (enabled) {
