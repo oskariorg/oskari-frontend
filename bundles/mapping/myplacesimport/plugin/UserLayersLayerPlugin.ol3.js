@@ -304,7 +304,6 @@ Oskari.clazz.define(
             var olLayers = this.getOLMapLayers(layer);
 
             _.each(olLayers, function(ol) {
-                console.log("setting visible "+layer.getName()+" "+layer.isVisible());
                 ol.setVisible(layer.isVisible());
             });
         }
