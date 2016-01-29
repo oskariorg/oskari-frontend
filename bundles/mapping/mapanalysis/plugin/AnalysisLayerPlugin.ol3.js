@@ -209,8 +209,9 @@ Oskari.clazz.define(
                 sandbox = this.getSandbox(),
                 openLayerId = 'layer_' + layer.getId(),
                 imgUrl = layer.getWpsUrl() + layer.getWpsLayerId(),
-                minResolution = this.getMapModule().getResolutionForScale(layer.getMinScale()),
-                maxResolution = this.getMapModule().getResolutionForScale(layer.getMaxScale()),
+                //minresolution === maxscale and vice versa...
+                minResolution = this.getMapModule().getResolutionForScale(layer.getMaxScale()),
+                maxResolution = this.getMapModule().getResolutionForScale(layer.getMinScale()),
                 wms = {
                     'URL': imgUrl,
                     'LAYERS': layer.getWpsName(),

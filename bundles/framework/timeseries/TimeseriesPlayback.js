@@ -343,6 +343,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
          */
         _calculatePopupPosition: function(){
             var me = this;
+            if(!me._control) {
+                return;
+            }
             var popup = me._control.filter('.mapplugin-timeseries-popup');
 
             var timeSlider = me._control.find('.oskari-timeslider');

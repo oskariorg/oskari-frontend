@@ -261,9 +261,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
         */
         _checkNoLegendText: function(legendDiv, layer){
             var me = this,
-                noLegendText = this.instance.getLocalization('noLegendsText'),
                 invalidLegendUrl = this.instance.getLocalization('invalidLegendUrl'),
-                legendDivs = jQuery('.oskari-flyoutcontent.maplegend').find('.accordion_panel'),
                 noLegendContainer = me.templateNoLegend.clone();
 
 
