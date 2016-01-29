@@ -6,6 +6,10 @@
 
 Oskari.VERSION can now be used to detect the frontend version number.
 
+### published map (ol3)
+
+Fixed analysislayer's and userlayer's visibility issue in published map 
+
 ### framework/findbycoordinates
 
 Now displays multiple results if available.
