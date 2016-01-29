@@ -20,6 +20,8 @@ Fixed WmtsLayerService IE 9 capabilities formatting.
 
 ### RPC
 
+JSChannel-dependency updated. This requires new RPC-client to work.
+
 New function added getFeatures(). See bundle documentation for details.
 
 New request included in defaults "MapModulePlugin.ZoomToFeaturesRequest".

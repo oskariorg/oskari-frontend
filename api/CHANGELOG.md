@@ -9,6 +9,10 @@ Each addition is tagged with [add], [mod] or [rem] telling if it's a new feature
 
 ### RPC
 
+### [mod] [rpc] New rpc-client version
+
+The JSChannel dependency has been updated. The old version is not compatible with the new one so rpc-client needs to be updated to 1.2.0.
+
 #### [add] [rpc] New functions
 
 getFeatures(layerId) that gets features as geojson object grouped by layer if layerId===true. If layerId not given, will return array of layerIds.
