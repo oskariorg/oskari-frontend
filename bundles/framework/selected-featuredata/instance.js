@@ -96,6 +96,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
             sandbox.request(me, reqGetInfoResultHandler);
 
         },
+        /**
+         * [resultHandler handles requests from infobox when "Go big" is pressed]
+         * @param  {[Object]} content    [content html]
+         * @param  {[Object]} data       [data map]
+         * @param  {[Object]} formatters [formatters]
+         * @param  {[Object]} params     [params]
+         */
         resultHandler: function(content, data, formatters, params){
             var me = this;
             // show infobox
@@ -198,7 +205,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
                      this.plugins['Oskari.userinterface.Flyout'].clearFlyout();
                 }
                 if (doOpen) {
-                    //this.plugins['Oskari.userinterface.Flyout'].createUI();
                     // flyouts eventHandlers are registered
                     for (p in this.plugins['Oskari.userinterface.Flyout'].getEventHandlers()) {
                         if (!this.eventHandlers[p]) {
@@ -208,10 +214,22 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
                 }
             },
             'MapClickedEvent': function (event){
-                            //if show many or one accordions is clicked
-            if(jQuery('.selected_featuredata_howmany_show').attr("data-many") === "one"){
-                this.plugins['Oskari.userinterface.Flyout'].clearTabsLayout();
-            }
+                //if show many or one accordions is clicked
+                if(jQuery('.selected_featuredata_howmany_show').attr("data-many") === "one"){
+                    this.plugins['Oskari.userinterface.Flyout'].clearTabsLayout();
+                }
+            },
+            'AfterMapLayerRemoveEvent': function(event) {
+                //get layer that was removed from layers
+                var layer = event.getMapLayer(),
+                layerId = layer.getId();
+                this.plugins['Oskari.userinterface.Flyout'].layerRemovedOrAddedFromMapMergeTabs(layerId, true);
+            },
+            'AfterMapLayerAddEvent': function(event) {
+                //get layer that was added to layers
+                var layer = event.getMapLayer(),
+                layerId = layer.getId();
+                this.plugins['Oskari.userinterface.Flyout'].layerRemovedOrAddedFromMapMergeTabs(layerId, false);
             }
         },
 
