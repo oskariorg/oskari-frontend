@@ -155,8 +155,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
                 me.addAccordion(data.html, tabContent, layer.getId(), mapobject);
             }else{
                 tabContent = jQuery('.selected_featuredata_tabcontent_'+layer.getId());
-                if(me.compareAccodionPanelHtml(data.html, tabContent)){
+                var compare = me.compareAccodionPanelHtml(data.html, tabContent);
+                if(compare.add){
                     me.addAccordion(data.html, tabContent, layer.getId(), mapobject);
+                }else{
+
+                    for (var i in me._panels) {
+                        if(i.indexOf(layer.getId()) >= 0){
+                            me._panels[i].close();
+                        }
+                    }
+                    me._panels[compare.id].open();
                 }
             }
           
@@ -241,7 +250,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
             }
 
             //Add needed data for panelWrapper like links and datas
-            var panelWrapper = jQuery("#"+panelId);
+            var panelWrapper = panel.getContainer().find('.header');
             panelWrapper.append(me.createCloseIconForAcc(panel, layerId, tabContent));
             panelWrapper.append(me.createLinkShowOnMap(mapobject));
 
@@ -260,50 +269,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
             }
         },
         /**
-         * Merges the given new data to the old data.
-         * If there's a fragment with the same layerId in both,
-         * the new one replaces it.
-         *
-         * @method _getChangedContentData
-         * @private
-         * @param  {Object[]} oldData
-         * @param  {Object[]} newData
-         * @return {Object[]}
-         */
-        _getChangedContentData: function (oldData, newData) {
-            var retData,
-                i,
-                j,
-                nLen,
-                oLen;
-
-            for (i = 0, oLen = oldData.length; i < oLen; i += 1) {
-                for (j = 0, nLen = newData.length; j < nLen; j += 1) {
-                    if (newData[j].layerId &&
-                        newData[j].layerId === oldData[i].layerId) {
-                        oldData[i] = newData[j];
-                        newData.splice(j, 1);
-                        break;
-                    }
-                }
-            }
-
-            retData = oldData.concat(newData);
-
-            return retData;
-        },
-        /**
          * [compareAccodionPanelHtml checks if html already in accordion panel]
          * @return {[Boolean]} [true/false]
          */
         compareAccodionPanelHtml: function(newHtml, tabContent){
             var me = this,
-            output = true;
+            output = {
+                add: true,
+                id: null
+            };
 
             tabContent.find('.accordion_panel>.content>div').each(function(){
                 var oldHtml = jQuery(this);
                 if(oldHtml.html() == newHtml.html()){
-                    output = false;
+                    output.id = oldHtml.parents('.accordion_panel').find('.header').attr('id');
+                    output.add = false;
                 }
             });
 
