@@ -104,10 +104,10 @@ function() {
 
         me.state.enabled = enabled;
 
-        if(!me.__plugin && enabled) {
+        if(!me.__plugin) {
             me.statsService = Oskari.clazz.create(
                 'Oskari.statistics.bundle.statsgrid.StatisticsService',
-                me.__instance
+                me.__instance.sandbox
             );
             if(statsLayer){
                 request = me.__sandbox.getRequestBuilder('StatsGrid.StatsGridRequest')(false, statsLayer);
@@ -116,24 +116,14 @@ function() {
             me.__sandbox.registerService(me.statsService);
             me.__plugin = Oskari.clazz.create(tool.id, me, tool.config.localization, tool.config.sandbox);
         }
-        if(!me.statsContainer) {
+        me.statsContainer = jQuery('.publishedgrid');
+        if(me.statsContainer.length == 0) {
             var elLeft = jQuery('.oskariui-left');
             me.statsContainer = jQuery(me.templates.publishedGridTemplate);
             elLeft.html(me.statsContainer);
         }
 
         if(enabled === true) {
-            var selectedLayers = me.__sandbox.findAllSelectedMapLayers();
-            var statsLayer = null;
-            for (i = 0; i < selectedLayers.length; i += 1) {
-                layer = selectedLayers[i];
-                if (layer.getLayerType() === 'stats') {
-                    request = me.__sandbox.getRequestBuilder('StatsGrid.StatsGridRequest')(false, layer);
-                    me.__sandbox.request("Publisher2", request);
-                    statsLayer = layer;
-                    break;
-                }
-            }
             me.__plugin.embedded = true;
             me.__plugin.state = statsGridState;
             me.__plugin.statslayer = statsLayer;
