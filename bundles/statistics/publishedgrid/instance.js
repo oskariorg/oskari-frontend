@@ -40,6 +40,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
             var locale = Oskari.getLocalization('StatsGrid'),
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
                 sandbox = Oskari.getSandbox(sandboxName);
+            jQuery("#contentMap")[0].style.setProperty("margin-left", "0px", "important");
 
             me.sandbox = sandbox;
             me.locale = locale;
