@@ -121,7 +121,7 @@
           "selectedIndicatorsChanged(ajaxUrl, selectedIndicators.splices, sources, selectedIndicators)",
           "sortChanged(sortColumnIdx, sortDirection)",
           "updateSelectedIndicators(sources)",
-          "selectedIndicatorChanged(selectedIndicatorKey, cache, sources, rowHeaders)"
+          "selectedIndicatorChanged(selectedIndicatorKey, cache)"
       ],
       "sendTooltipData": function(feature) {
           var featureAttributes = feature.attributes,
@@ -164,7 +164,7 @@
               col_values = vis_codes.map(function(regionKey) {
                   return indicatorValues[regionKey];
               });
-          me.selectedIndicatorKey = cacheKey;
+          me.set("selectedIndicatorKey", cacheKey);
           if (eventBuilder) {
               // CUR_COL:"indicator..." , VIS_NAME: "ows:kunnat2013", VIS_ATTR: "kuntakoodi", VIS_CODES: munArray, COL_VALUES: statArray
               var data = {
@@ -485,7 +485,7 @@
               // We will also update the map if we are in embedded mode, because we can fetch several indicators at once, and the first
               // indicator check will in that case fail.
               var theOnlyIndicator = me.selectedIndicators[0];
-              me.showIndicatorOnMap(theOnlyIndicator.id, 1, this.rowHeaders[1]);
+              me.selectedIndicatorChanged(theOnlyIndicator.id);
           }
       },
       "getCacheKey": function(datasourceId, indicatorId, selectedLayer, selectorsString) {
