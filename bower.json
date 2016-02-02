@@ -35,6 +35,7 @@
     "paper-scroll-header-panel": "PolymerElements/paper-scroll-header-panel#~1.0.10",
     "paper-menu-button": "PolymerElements/paper-menu-button#~1.0.3",
     "paper-menu": "PolymerElements/paper-menu#~1.1.1",
-    "paper-dialog": "PolymerElements/paper-dialog#~1.0.2"
+    "paper-dialog": "PolymerElements/paper-dialog#~1.0.2",
+    "StickyTableHeaders": "~0.1.19"
   }
 }

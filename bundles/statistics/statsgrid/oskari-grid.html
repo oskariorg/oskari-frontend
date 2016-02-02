@@ -4,7 +4,7 @@
 <dom-module id="oskari-grid">
 
   <template>
-    <table class="oskari-grid">
+    <table class="oskari-grid" id="oskariGrid">
       <thead>
         <tr>
           <template is="dom-if" if="[[selection]]">
@@ -122,6 +122,9 @@
           if (this.filtering) {
             this.fire("onFilter", {index: event.target.index, header: event.target.header});
           }
+      },
+      "attached": function() {
+          $('oskariGrid').stickyTableHeaders();
       }
     });
   </script>

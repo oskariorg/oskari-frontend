@@ -582,7 +582,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
 
                 //indicators + municipality (name & code)
                 columns = this.state.selectedIndicators.length + 2;
-                //slickgrid column width is 80 by default
+                //grid column width is 80 by default
                 width = columns * 80;
             }
             // Width + scroll bar width, but 400 at most.
