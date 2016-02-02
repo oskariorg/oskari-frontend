@@ -7,6 +7,7 @@
 <link href="libs/paper-scroll-header-panel/paper-scroll-header-panel.html" rel="import">
 <link href="oskari-filter-on-value-dialog.html" rel="import">
 <link href="oskari-grid.html" rel="import">
+<link href="oskari-spinner.html" rel="import">
 
 <dom-module id="oskari-statsgrid">
 
@@ -21,8 +22,10 @@
       handle-as="json"
       last-response="{{layerInfo}}"
       debounce-duration="300"
-      id="layerInfoAjax"></iron-ajax>
+      id="layerInfoAjax"
+      on-error="ajaxError"></iron-ajax>
     <div>
+      <oskari-spinner visible="[[showSpinner]]" spinnerId="indicatorDataSpinner" />
       <label for="selectRegionCategory">{{locale.selectRegionCategory}}</label>
       <select id="selectRegionCategory" style="width: 300px;" value="{{selectedLayer::change}}">
         <template is="dom-repeat" items="[[getLayerInfoAsArray(layerInfo)]]">
@@ -109,6 +112,11 @@
           "selectedIndicator": {
               "type": Object,
               "notify": true
+          },
+          "showSpinner": {
+            "type": Boolean,
+            "notify": true,
+            "value": false
           }
       },
       "listeners": {
@@ -123,6 +131,11 @@
           "updateSelectedIndicators(sources)",
           "selectedIndicatorChanged(selectedIndicatorKey, cache)"
       ],
+      "ajaxError": function(e) {
+        var me = this;
+        console.log("Error: " + e);
+        window.alert(me._locale.connectionError + ": " + e);
+      },
       "sendTooltipData": function(feature) {
           var featureAttributes = feature.attributes,
               regionCode = featureAttributes[this.layerInfo[this.selectedLayer].idTag],
@@ -288,6 +301,10 @@
                       me.regionInfo[regionKey].localizedName =
                           me.localize(me.locale.regionCategories, me.regionInfo[regionKey].name);
                   });
+              },
+              error: function(jqXHR, textStatus, errorThrown) {
+                console.log("Error: " + textStatus + ", " + errorThrown);
+                window.alert(me._locale.connectionError + ": " + textStatus + ", " + errorThrown);
               }
           });
       },
@@ -330,6 +347,7 @@
                       delete: true
                   }
           })));
+          var ajaxCallMade = false;
           indicators.forEach(function(indicator) {
               var selectors = me.toSelectorsParameter(indicator.selectors),
                   selectorsString = JSON.stringify(selectors),
@@ -343,6 +361,7 @@
                   me.cache[cacheKey] = indicator.indicatorValues;
                   return;
               }
+              ajaxCallMade = true;
               $.ajax({
                   url: me.ajaxUrl,
                   data: {
@@ -354,11 +373,20 @@
                   },
                   dataType: 'json',
                   success: function(results) {
+                      me.showSpinner = false;
                       me.cache[cacheKey] = results;
                       me.handleResponse(me.cache[cacheKey]);
+                  },
+                  error: function(jqXHR, textStatus, errorThrown) {
+                    console.log("Error: " + textStatus + ", " + errorThrown);
+                    window.alert(me._locale.connectionError + ": " + textStatus + ", " + errorThrown);
+                    me.showSpinner = false;
                   }
               });
           });
+          if (ajaxCallMade) {
+              me.showSpinner = true;
+          }
       },
       "getRegionInfoParams": function(selectedLayer) {
           var res = {

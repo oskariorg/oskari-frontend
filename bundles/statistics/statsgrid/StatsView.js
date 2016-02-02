@@ -190,6 +190,7 @@ function() {
             elLeft.empty();
             elLeft.removeClass('oskari-closed');
             elLeft.width(leftWidth + '%');
+            elLeft.css('min-width', '450px');
             elLeft.resizable({
                 minWidth: 450,
                 handles: "e",

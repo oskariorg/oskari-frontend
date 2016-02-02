@@ -4,6 +4,7 @@
 <link href="libs/promise-polyfill/promise-polyfill.html" rel="import">
 <link href="libs/iron-ajax/iron-ajax.html" rel="import">
 <link href="oskari-userindicator.html" rel="import">
+<link href="oskari-spinner.html" rel="import">
 
 <dom-module id="oskari-indicatorselector">
 
@@ -15,7 +16,9 @@
       handle-as="json"
       last-response="{{sources}}"
       debounce-duration="300"
-      id="indicatorsAjax"></iron-ajax>
+      id="indicatorsAjax"
+      on-response="hideSpinner"
+      on-error="ajaxError"></iron-ajax>
     <iron-ajax
       auto
       url="{{ajaxUrl}}"
@@ -23,7 +26,9 @@
       handle-as="json"
       last-response="{{userIndicators}}"
       debounce-duration="300"
-      id="userIndicatorsAjax"></iron-ajax>
+      id="userIndicatorsAjax"
+      on-error="ajaxError"></iron-ajax>
+    <oskari-spinner visible="[[showSpinner]]" spinner-id="indicatorsMetadataSpinner" />
     <div hidden$="{{hideIndicatorSelector(embedded, showUserIndicatorView)}}">
       <form class="statsgrid2_indicator_selector">
         <div>
@@ -142,6 +147,11 @@
               "type": String,
               "notify": true
           },
+          "showSpinner": {
+            "type": Boolean,
+            "notify": true,
+            "value": true
+          },
           "dialog": Object
       },
       "observers": [
@@ -154,6 +164,14 @@
           "selectorsChanged(selectorItems.splices)",
           "selectorsChanged(selectors)"
       ],
+      "ajaxError": function(e) {
+          var me = this;
+          console.log("Error: " + e);
+          window.alert(me._locale.connectionError + ": " + e);
+      },
+      "hideSpinner": function(e, response) {
+          this.showSpinner = false;
+      },
       "sendTooltipData": function(feature) {
           return this.$.statsgrid.sendTooltipData(feature);
       },

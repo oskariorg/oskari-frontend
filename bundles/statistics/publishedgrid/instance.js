@@ -432,6 +432,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
 
             elCenter.toggleClass('span12', !show);
             elLeft.toggleClass('oskari-closed', !show);
+            if (show) {
+              elLeft.css('min-width', '450px');
+            } else {
+              elLeft.css('min-width', '0px');
+            }
 
             if (show) {
                 elLeft.html(me.container);
