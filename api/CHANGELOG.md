@@ -11,7 +11,7 @@ Each addition is tagged with [add], [mod] or [rem] telling if it's a new feature
 
 ### [mod] [rpc] New rpc-client version
 
-The JSChannel dependency has been updated. The old version is not compatible with the new one so rpc-client needs to be updated to 1.2.0.
+The JSChannel dependency has been updated. The old version is not compatible with the new one so rpc-client needs to be updated to 2.0.0.
 
 #### [add] [rpc] New functions
 
