@@ -213,6 +213,7 @@ Oskari.registerLocalization({
         "connectionProblem": "We could not save the data due to connection problems",
         "parsedDataInfo": "Imported regions count",
         "parsedDataUnrecognized": "Unrecognized regions count",
-        "loginToSaveIndicator": "Log in if you want to save your indicators"
+        "loginToSaveIndicator": "Log in if you want to save your indicators",
+        "connectionError": "Connection error!"
     }
 });

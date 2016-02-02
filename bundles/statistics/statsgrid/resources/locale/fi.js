@@ -215,6 +215,7 @@ Oskari.registerLocalization({
         "parsedDataInfo": "Tuotuja alueita oli yhteensä",
         "parsedDataUnrecognized": "Tunnistamattomia alueita",
         "loginToSaveIndicator": "Kirjaudu ensin sisään jos haluat tallentaa aineiston.",
-        "ownIndicators": "Omat indikaattorit"
+        "ownIndicators": "Omat indikaattorit",
+        "connectionError": "Yhteysvirhe!"
     }
 });

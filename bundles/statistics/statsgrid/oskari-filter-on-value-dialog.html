@@ -166,46 +166,6 @@
       "ready": function() {
           this.$["oskari-filter-on-value-dialog"].toggle();
       }
-    /*
-    filterColumn
-    REGION:
-        regionIds,
-        key,
-        regionCatOption,
-        regionCatLoc;
-
-    filterBtn.setHandler(function (e) {
-        regionIds = content.find('div.filter-region-select select').val();
-        // me._state.filterRegion = regionIds;
-        me.filterColumnByRegion(column, regionIds);
-        headerMenuPlugin.hide();
-        me._destroyPopup('filterByRegionPopup');
-    });
-
-    // Show the region category select
-    // Create an empty option first
-    regionCatOption = jQuery(me.templates.filterOption).clone();
-    regionCatLoc = me._locale.regionCatPlaceholder;
-    regionCatOption.val('').text(regionCatLoc);
-    regionCat.find('select').append(regionCatOption);
-
-    for (key in me.regionCategories) {
-        if (me.regionCategories.hasOwnProperty(key)) {
-            regionCatOption = jQuery(me.templates.filterOption).clone();
-            regionCatLoc = me._locale.regionCategories[key];
-            regionCatOption.val(key).text(regionCatLoc);
-            regionCat.find('select').append(regionCatOption);
-        }
-    }
-    regionCatCont.find('.filter-label').text(
-        me._locale.selectRegionCategory
-    );
-    regionCatCont.find('.filter-value').append(regionCat);
-    content.find('.filter-container').append(regionCatCont);
-    regionCat.change(function (e) {
-        me._createFilterByRegionSelect(content, e.target.value);
-    });
-		   */
     });
   </script>
 

@@ -167,7 +167,7 @@
       "ajaxError": function(e) {
           var me = this;
           console.log("Error: " + e);
-          window.alert(me._locale.connectionError + ": " + e);
+          window.alert(me.locale.connectionError + ": " + e);
       },
       "hideSpinner": function(e, response) {
           this.showSpinner = false;
@@ -241,8 +241,8 @@
                   me.createIndicatorForm(container);
               });
               dialog.show(
-                  me._locale.addDataTitle,
-                  me._locale.loginToSaveIndicator, [okBtn]
+                  me.locale.addDataTitle,
+                  me.locale.loginToSaveIndicator, [okBtn]
               );
           }
       },

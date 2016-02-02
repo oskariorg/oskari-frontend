@@ -134,7 +134,7 @@
       "ajaxError": function(e) {
         var me = this;
         console.log("Error: " + e);
-        window.alert(me._locale.connectionError + ": " + e);
+        window.alert(me.locale.connectionError + ": " + e);
       },
       "sendTooltipData": function(feature) {
           var featureAttributes = feature.attributes,
@@ -304,7 +304,7 @@
               },
               error: function(jqXHR, textStatus, errorThrown) {
                 console.log("Error: " + textStatus + ", " + errorThrown);
-                window.alert(me._locale.connectionError + ": " + textStatus + ", " + errorThrown);
+                window.alert(me.locale.connectionError + ": " + textStatus);
               }
           });
       },
@@ -379,7 +379,7 @@
                   },
                   error: function(jqXHR, textStatus, errorThrown) {
                     console.log("Error: " + textStatus + ", " + errorThrown);
-                    window.alert(me._locale.connectionError + ": " + textStatus + ", " + errorThrown);
+                    window.alert(me.locale.connectionError + ": " + textStatus);
                     me.showSpinner = false;
                   }
               });
