@@ -148,7 +148,6 @@ Oskari.registerLocalization(
         },
         "gridFooter": {
             "aggregateColumnField": "Antal",
-            "differenceColumnField": "Muutos_t2-t1",
             "differenceMessage": "Förändrade data skyddade objekt har markerats med värde ",
             "noDataMessage": "Antal = Antal utan skyddad objekt",
             "noDataCommonMessage": "Antal = Antal utan skyddad objekt"

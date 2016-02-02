@@ -148,7 +148,6 @@ Oskari.registerLocalization(
         },
         "gridFooter": {
             "aggregateColumnField": "Kohteiden_lukumäärä",
-            "differenceColumnField": "Muutos_t2-t1",
             "differenceMessage": "Tietosuojattujen kohteiden muutos esitetään arvolla ",
             "noDataMessage": "Kohteiden_lukumäärä = Laskennassa käytettävien tilastointiyksiköiden tai -alueiden lukumäärä, tietosuojatut kohteet eivät sisälly laskentaan arvolla",
             "noDataCommonMessage": "Aineisto sisältää tietosuojattuja ominaisuustietoja, jotka eivät sisälly tunnuslukujen laskentaan"
