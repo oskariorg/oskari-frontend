@@ -250,7 +250,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
             }
 
             //Add needed data for panelWrapper like links and datas
-            var panelWrapper = panel.getContainer().find('.header');
+            var panelWrapper = panel.getContainer().parents('.accordion_panel').find('.header');
             panelWrapper.append(me.createCloseIconForAcc(panel, layerId, tabContent));
             panelWrapper.append(me.createLinkShowOnMap(mapobject));
 
