@@ -2,6 +2,10 @@
 
 ## 1.35
 
+### divmanazer/grid
+
+Fixed grid header style when column class name contains span word.
+
 ### core
 
 Oskari.VERSION can now be used to detect the frontend version number.
