@@ -67,39 +67,8 @@
   border-top: solid 1px black;
   padding-top: 5px; }
 
-/**
- * Style the drop-down menu here since the plugin stylesheet mostly contains structural CSS.
- */
-.slick-header-menu {
-  border: 1px solid #999;
-  background: #fcfcfc;
-  padding: 2px;
-  -webkit-box-shadow: 2px 2px 2px silver;
-  -moz-box-shadow: 2px 2px 2px silver;
-  box-shadow: 2px 2px 2px silver;
-  min-width: 100px;
-  z-index: 20; }
-  .slick-header-menu .slick-header-menuitem {
-    padding: 2px 4px;
-    border: 1px solid transparent;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    -o-border-radius: 3px;
-    -ms-border-radius: 3px;
-    border-radius: 3px;
-    -webkit-background-clip: padding-box;
-    -moz-background-clip: padding-box;
-    background-clip: padding-box; }
-    .slick-header-menu .slick-header-menuitem:hover {
-      border-color: silver;
-      background: white; }
-
-.slick-header-menuitem-disabled {
-  border-color: transparent !important;
-  background: inherit !important; }
-
 .icon-help {
-  background-image: url(/Oskari/libraries/slickgrid/images/help.png); }
+  background-image: url(/Oskari/bundles/statistics/statsgrid/resources/images/help.png); }
 
 .statsgrid-highlight-row {
   background-color: yellow; }
@@ -248,7 +217,7 @@ form.statsgrid2_indicator_selector {
 .grid-header-menubutton {
   width: 16px;
   height: 16px;
-  background-image: url("/Oskari/libraries/slickgrid/images/down.gif");
+  background-image: url("/Oskari/bundles/statistics/statsgrid/resources/images/down.gif");
   background-position: 50% 50%;
   right: 3px;
   bottom: 3px;

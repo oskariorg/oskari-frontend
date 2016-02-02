@@ -231,6 +231,10 @@ module.exports = function (grunt) {
                 {
                     src: '../bundles/statistics/statsgrid/libs/web-animations-js/web-animations-next-lite.min.js',
                     dest: 'Oskari/bundles/statistics/statsgrid/libs/web-animations-js/web-animations-next-lite.min.js'
+                },
+                {
+                    src: '../bundles/statistics/statsgrid/libs/spinner/spin.min.js',
+                    dest: 'Oskari/bundles/statistics/statsgrid/libs/spinner/spin.min.js'
                 }
                 ]
             }
@@ -265,9 +269,10 @@ module.exports = function (grunt) {
                 excludes: ["Oskari/libraries/requirejs/require-2.1.15.js"]
             },
             files: {
-                // Where index.html includes bower_components imports 
-                '../bundles/statistics/statsgrid/vulcanized.html':
+                '../bundles/statistics/statsgrid/vulcanized.html': [
+                    'Oskari/bundles/statistics/statsgrid/requireJsLibs.html',
                     'Oskari/bundles/statistics/statsgrid/oskari-statsview.html'
+                ]
             }
         }
         }
