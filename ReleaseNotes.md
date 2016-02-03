@@ -2,6 +2,14 @@
 
 ## 1.35
 
+### coordinatetool
+
+Added funtionality to change the projection the map is displayed in, when the application supports multiple projections.
+
+### divmanazer/grid
+
+Fixed grid header style when column class name contains span word.
+
 ### core
 
 Oskari.VERSION can now be used to detect the frontend version number.

@@ -883,10 +883,11 @@ Oskari.clazz.define(
                     if (inputlayer.getWpsLayerParams().no_data) {
                         message = loc.noDataCommonMessage + ' (' + inputlayer.getWpsLayerParams().no_data + ').';
                         if(locales){
+                            //TODO: better management for recognasing private data messages
                             _.forEach(locales, function (field) {
                                 if (field === loc.aggregateColumnField){
                                     message = loc.noDataMessage + ' (' + inputlayer.getWpsLayerParams().no_data + ').';
-                                } else if (field === loc.differenceColumnField) {
+                                } else if (field ===  'Muutos_t2-t1') {
                                     message += ' '+loc.differenceMessage + ' -111111111.';
                                 }
                             });
