@@ -261,7 +261,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             me._popup = popup;
             me._latInput = popupContent.find('.lat-input');
             me._lonInput = popupContent.find('.lon-input');
-            
+
             if (me._config && me._config.supportedProjections) {
                 me._initProjectionChange();
             }
@@ -272,7 +272,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             return el;
         },
         _initProjectionChange: function() {
-            var me = this, 
+            var me = this,
                 keys = _.keys(me._config.supportedProjections);
             if (keys && keys.length > 1) {
                 me._popup.find('.projectionchange-placeholder').append(me._templates.projectionSelect.clone());
@@ -290,12 +290,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
 
                 me._popup.find('.projection-change-button-ok').unbind('click');
                 me._popup.find('.projection-change-button-ok').bind('click', function() {
-                    me._changeProjection(me._projectionSelect.val());                    
+                    me._changeProjection(me._projectionSelect.val());
                 });
 
                 me._popup.find('.projection-change-button-cancel').unbind('click');
                 me._popup.find('.projection-change-button-cancel').bind('click', function() {
-                    me._toggleProjectionSelectionConfirmation(false);                    
+                    me._toggleProjectionSelectionConfirmation(false);
                 });
 
                 //set default value
@@ -303,7 +303,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             }
         },
         /**
-         * Generates the options for the projection change select based on config, or hides control if no options 
+         * Generates the options for the projection change select based on config, or hides control if no options
          * @method @private _populateProjectionSelect
          * @param {Object} popupContent
          */
@@ -336,7 +336,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         _resetProjectionSelect: function() {
             var me = this,
             currentProjection = me._mapModule.getProjection();
-            
+
             //select the option with projection text
             jQuery(this._projectionSelect).find('option').filter(function() {
                 return jQuery(this).text() === currentProjection;
