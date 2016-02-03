@@ -18,13 +18,13 @@ Oskari.clazz.define(
         "source": {
             "scripts": [{
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/myplacesimport/domain/UserLayer.js"
+                "src": "../../../../bundles/mapping/mapuserlayers/domain/UserLayer.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/myplacesimport/domain/UserLayerModelBuilder.js"
+                "src": "../../../../bundles/mapping/mapuserlayers/domain/UserLayerModelBuilder.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/myplacesimport/plugin/UserLayersLayerPlugin.ol3.js"
+                "src": "../../../../bundles/mapping/mapuserlayers/plugin/UserLayersLayerPlugin.ol3.js"
             }],
 
             "locales": [{
