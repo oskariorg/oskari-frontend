@@ -33,12 +33,8 @@
         </template>
       </select>
       
-      <button on-click="toggleStats">Statistics</button>
-      <iron-collapse id="statscollapse">
-        <oskari-grid id="indicator-statistics-grid" rows="[[statsrows]]" headers="[[rowHeaders]]" />
-      </iron-collapse>
       <paper-scroll-header-panel style="height: 500px;">
-        <oskari-grid id="indicator-data-grid" rows="{{rows}}" headers="[[rowHeaders]]" selection="1"
+        <oskari-grid id="indicator-data-grid" statsrows="[[statsrows]]" rows="{{rows}}" headers="[[rowHeaders]]" selection="1"
           on-sort="onSort" on-filter="onFilter" on-delete="onDelete" filtering sorting deleting="{{!embedded}}" />
       </paper-scroll-header-panel>
       <content></content>
@@ -243,9 +239,6 @@
               data: me.cache[indicatorHeader.id]
           });
           this.showIndicatorOnMap(indicatorHeader.id, index, indicatorHeader);
-      },
-      "toggleStats": function() {
-          this.$.statscollapse.toggle();
       },
       "filterOnValue": function(index) {
           var me = this;

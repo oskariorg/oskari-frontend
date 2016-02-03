@@ -31,6 +31,26 @@
         </tr>
       </thead>
       <tbody>
+        <tr>
+          <td colspan$="[[numcols]]">
+            <button on-click="toggleStats">Statistics</button>
+          </td>
+        </tr>
+        <tr><td colspan$="[[numcols]]">
+          <iron-collapse id="statscollapse">
+            <table>
+              <template is="dom-repeat" items="{{statsrows}}" as="statsrow" id="statsRowsTemplate">
+                <tr>
+                  <template is="dom-repeat" items="[[statsrow.data]]" as="datum">
+                    <td>
+                      <span>[[datum]]</span>
+                    </td>
+                  </template>
+                </tr>
+              </template>
+            </table>
+          </iron-collapse>
+        </td></tr>
         <template is="dom-repeat" items="{{rows}}" as="row" id="rowsTemplate">
           <tr>
             <template is="dom-if" if="[[selection]]">
@@ -56,6 +76,18 @@
               "type": Array,
               "notify": true
           },
+          "headers": {
+              "type": Array,
+              "notify": true
+          },
+          "numcols": {
+              "type": Number,
+              "notify": true
+          },
+          "statsrows": {
+              "type": Array,
+              "notify": true
+          },
           "allSelected": {
               "type": Boolean,
               "notify": true,
@@ -72,6 +104,12 @@
           "filtering": Boolean,
           "sorting": Boolean,
           "deleting": Boolean
+      },
+      "observers": [
+                    "headersChanged(headers)",
+                    ],
+      "toggleStats": function() {
+          this.$.statscollapse.toggle();
       },
       "allSelectedChanged": function() {
           var me = this;
@@ -101,12 +139,16 @@
           });
           this.$.rowsTemplate.render();
       },
+      "headersChanged": function(headers) {
+          this.numcols = this.headers.length + 1;
+      },
       /**
        * This is just used for sorting and filtering.
        */
       "refresh": function() {
           this.$.headersTemplate.render();
           this.$.rowsTemplate.render();
+          $('oskariGrid').stickyTableHeaders();
       },
       "onSort": function(event) {
           if (this.sorting) {
