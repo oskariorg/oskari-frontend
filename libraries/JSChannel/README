@@ -1,2 +1,4 @@
-Line 557 has a fix from https://github.com/hapyak/jschannel/commit/e8ada0b59ff240ddfad2808d1e00ed8ac0cf38e3
-Hopefully it'll be merged in the next release of JSChannel (if one will ever come out).
+JSChannel.js from https://github.com/yochannah/jschannel.git
+Latest commit: f2bcb860911d36ccbc3fabd4a09f7074dd9f289e
+
+This is the same one that rpc-client uses (as of version 1.2.0): https://github.com/nls-oskari/rpc-client

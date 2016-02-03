@@ -2,6 +2,10 @@
 
 ## 1.35
 
+### divmanazer/grid
+
+Fixed grid header style when column class name contains span word.
+
 ### core
 
 Oskari.VERSION can now be used to detect the frontend version number.
@@ -23,6 +27,10 @@ Added user email to editable.
 Fixed WmtsLayerService IE 9 capabilities formatting.
 
 ### RPC
+
+Removed libraries/OskariRPC/*. The client now has it's own repository here: https://github.com/nls-oskari/rpc-client
+
+JSChannel-dependency updated. This requires new RPC-client to work (version 2.0.0).
 
 New function added getFeatures(). See bundle documentation for details.
 
