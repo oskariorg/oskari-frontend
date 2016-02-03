@@ -30,15 +30,15 @@ Oskari.clazz.define(
             "locales": [{
                 "lang": "fi",
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/myplacesimport/resources/locale/fi.js"
+                "src": "../../../../bundles/framework/myplacesimport/resources/locale/fi.js"
             }, {
                 "lang": "sv",
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/myplacesimport/resources/locale/sv.js"
+                "src": "../../../../bundles/framework/myplacesimport/resources/locale/sv.js"
             }, {
                 "lang": "en",
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/myplacesimport/resources/locale/en.js"
+                "src": "../../../../bundles/framework/myplacesimport/resources/locale/en.js"
             }]
         },
         "bundle": {
