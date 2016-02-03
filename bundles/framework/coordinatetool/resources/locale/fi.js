@@ -29,6 +29,15 @@ Oskari.registerLocalization(
                 "button": "OK",
                 "title": "Virhe",
                 "message": "Koordinaatit ovat virheellisiä. Tarkista ne ja yritä uudelleen."
+            },
+            "projectionChange": {
+                "header": "Vaihda projektiota",
+                "projection":"Projektio",
+                "confirmationMessage": "Vaihtamalla projektiota sovellus palaa alkutilaan ja kaikki avatut tasot suljetaan. Haluatko jatkaa?",
+                "buttons": {
+                    "ok": "OK",
+                    "cancel": "Peruuta"
+                }
             }
         }
     }
