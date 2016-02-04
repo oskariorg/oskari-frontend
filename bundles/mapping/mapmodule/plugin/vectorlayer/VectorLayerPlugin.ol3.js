@@ -709,7 +709,7 @@ Oskari.clazz.define(
          */
         getLayerFeatures: function(id) {
         	var me = this;
-        	var features = me._layers[id].getSource();
+        	var features = me._layers[id].getSource().getFeatures();
         	var formatter = me._supportedFormats['GeoJSON'];
             var geojson = formatter.writeFeaturesObject(features);
             return geojson;
