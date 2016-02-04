@@ -29,6 +29,15 @@ Oskari.registerLocalization(
                 "button": "OK",
                 "title": "Kontrollsummevärden",
                 "message": "Kontrollera koordinatvärdena för fälten"
+            },
+            "projectionChange": {
+                "header": "Change projection",
+                "projection":"Projection",
+                "confirmationMessage": "Changing the projection will return the application to it's initial state and all opened maplayers will be removed. Do you wish to continue?",
+                "buttons": {
+                    "ok": "OK",
+                    "cancel": "Avbryt"
+                }
             }
         }
     }
