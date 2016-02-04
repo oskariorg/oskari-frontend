@@ -83,6 +83,7 @@ Oskari.clazz.define(
                 this.getLayerTypeIdentifier(),
                 this
             );
+            return this._registerImpl();
         },
 
         /**
@@ -97,80 +98,8 @@ Oskari.clazz.define(
                 this.getLayerTypeIdentifier(),
                 null
             );
+            return this._unregisterImpl();
         },
-
-        /**
-         * @method init
-         * Interface method for the module protocol.
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        init: function (sandbox) {
-            this._initImpl(sandbox);
-        },
-        _initImpl: function (sandbox) {
-            // no-op
-        },
-
-        /**
-         * @method startPlugin
-         * Interface method for the plugin protocol.
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        startPlugin: function (sandbox) {
-            var p;
-
-            this._sandbox = sandbox;
-
-            sandbox.register(this);
-            for (p in this.eventHandlers) {
-                if (this.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.registerForEventByName(this, p);
-                }
-            }
-        },
-
-        /**
-         * @method stopPlugin
-         * Interface method for the plugin protocol
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        stopPlugin: function (sandbox) {
-            var p;
-
-            for (p in this.eventHandlers) {
-                if (this.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.unregisterFromEventByName(this, p);
-                }
-            }
-
-            sandbox.unregister(this);
-
-            this._sandbox = null;
-        },
-
-        /**
-         * @method start
-         * Interface method for the module protocol
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        start: function (sandbox) {},
-
-        /**
-         * @method stop
-         * Interface method for the module protocol
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        stop: function (sandbox) {},
 
         /**
          * @property {Object} eventHandlers
@@ -191,7 +120,11 @@ Oskari.clazz.define(
                     return;
                 }
 
-                this._afterMapLayerAddEvent(event);
+                this.addMapLayerToMap(
+                    event.getMapLayer(),
+                    event.getKeepLayersOrder(),
+                    event.isBasemap()
+                );
             },
 
             AfterMapLayerRemoveEvent: function (event) {
@@ -199,7 +132,7 @@ Oskari.clazz.define(
                 if (!this.isLayerSupported(layer)) {
                     return;
                 }
-                this._afterMapLayerRemoveEvent(event);
+                this.removeMapLayerFromMap(event.getMapLayer());
             },
 
             AfterChangeMapLayerOpacityEvent: function (event) {
@@ -220,16 +153,6 @@ Oskari.clazz.define(
         },
 
         /**
-         * @method onEvent
-         * Event is handled forwarded to correct #eventHandlers if found or discarded
-         * if not.
-         * @param {Oskari.mapframework.event.Event} event a Oskari event object
-         */
-        onEvent: function (event) {
-            return this.eventHandlers[event.getName()].apply(this, [event]);
-        },
-
-        /**
          * @method preselectLayers
          * Adds given layers to map if of type WMS
          * @param {Oskari.mapframework.domain.AbstractLayer[]} layers
@@ -246,35 +169,9 @@ Oskari.clazz.define(
                 }
 
                 sandbox.printDebug('preselecting ' + layer.getId());
-                this._addMapLayerToMap(layer, true, layer.isBaseLayer());
+                // TODO: check that maplayer isn't on map yet
+                this.addMapLayerToMap(layer, true, layer.isBaseLayer());
             }
-        },
-
-        /**
-         * Handle _afterMapLayerAddEvent
-         * @private
-         * @param {Oskari.mapframework.event.common.AfterMapLayerAddEvent}
-         *            event
-         */
-        _afterMapLayerAddEvent: function (event) {
-            this._addMapLayerToMap(
-                event.getMapLayer(),
-                event.getKeepLayersOrder(),
-                event.isBasemap()
-            );
-        },
-
-        /**
-         * @method _afterMapLayerRemoveEvent
-         * Handle AfterMapLayerRemoveEvent
-         * @private
-         * @param {Oskari.mapframework.event.common.AfterMapLayerRemoveEvent}
-         *            event
-         */
-        _afterMapLayerRemoveEvent: function (event) {
-            var layer = event.getMapLayer();
-
-            this._removeMapLayerFromMap(layer);
         },
 
         /**
@@ -284,6 +181,7 @@ Oskari.clazz.define(
          */
         setOLMapLayers: function (layerId, layers) {
             if(!layers) {
+                this._layerImplRefs[layerId] = null;
                 delete this._layerImplRefs[layerId];
             }
             else {
@@ -338,24 +236,23 @@ Oskari.clazz.define(
         },
 
         /**
-         * @method _addMapLayerToMap
+         * @method addMapLayerToMap
          * @private
          * Adds a single WMS layer to this map
          * @param {Oskari.mapframework.domain.WmsLayer} layer
          * @param {Boolean} keepLayerOnTop
          * @param {Boolean} isBaseMap
          */
-        _addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
-
+        addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
+            this.getSandbox().printDebug('TODO: addMapLayerToMap() not implemented on ' + this.getName());
         },
 
         /**
-         * @method _afterMapLayerRemoveEvent
+         * @method removeMapLayerFromMap
          * Removes the layer from the map
-         * @private
-         * @param {Oskari.mapframework.domain.WmsLayer} layer
+         * @param {Oskari.mapframework.domain.AbstractLayer} layer
          */
-        _removeMapLayerFromMap: function (layer) {
+        removeMapLayerFromMap: function (layer) {
             var olLayers = this.getOLMapLayers(layer);
 
             if (!olLayers || olLayers.length === 0) {
@@ -411,7 +308,9 @@ Oskari.clazz.define(
         _updateLayer : function(layer) {
             this.getSandbox().printDebug('TODO: update layer on map');
         }
+
     }, {
+        extend : ["Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin"],
         /**
          * @property {String[]} protocol array of superclasses as {String}
          * @static
