@@ -145,7 +145,7 @@ Oskari.clazz.define(
 
             var olLayers = this.getOLMapLayers(layer);
             _.each(olLayers, function(ol) {
-                ol.setVisible(layer.isVisible());
+                ol.setVisibility(layer.isVisible());
             });
         }
     }, {
