@@ -100,17 +100,11 @@ Oskari.clazz.define(
                 if (_layer.getMinScale()  && _layer.getMinScale() !== -1 && (_layer.getMinScale() < this.getMapModule().getScaleArray()[0] )) {
                     layerImpl.setMaxResolution(this.getMapModule().getResolutionForScale(_layer.getMinScale()));
                 }
-                this.mapModule.addLayer(layerImpl, _layer, layerIdPrefix + _layer.getId());
+                this.mapModule.addLayer(layerImpl,!keepLayerOnTop);
                 // gather references to layers
                 olLayers.push(layerImpl);
 
                 this._sandbox.printDebug("#!#! CREATED ol.layer.TileLayer for " + _layer.getId());
-                if (keepLayerOnTop) {
-                    // This might not be completely correct. We assume keepLayerOnTop means put this layer at the bottom as a faked baselayer.
-                    this.mapModule.setLayerIndex(layerImpl, me.getMapModule().getMap().getLayers().getArray().length);
-                } else {
-                    this.mapModule.setLayerIndex(layerImpl, 0);
-                }
             }
             // store reference to layers
             this.setOLMapLayers(layer.getId(), olLayers);
