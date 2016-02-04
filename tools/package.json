@@ -69,7 +69,8 @@
     "build-elf" : "./node_modules/.bin/grunt release:elf:../applications/elf/elf_guest/minifierAppSetup.json,../applications/elf/elf_published/minifierAppSetup.json",
     "build-ol3" : "./node_modules/.bin/grunt buildOskariOL3",
     "trim": "./node_modules/.bin/grunt trimtrailingspaces",
-    "lint": "./node_modules/.bin/jshint ../bundles"
+    "lint": "./node_modules/.bin/jshint ../bundles",
+    "genExcels" : "./node_modules/.bin/grunt genL10nExcels"
   },
   "devDependencies": {
     "karma" : "0.12.31",

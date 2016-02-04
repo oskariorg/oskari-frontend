@@ -9,9 +9,23 @@ Each addition is tagged with [add], [mod] or [rem] telling if it's a new feature
 
 ### RPC
 
-#### [add] [rpc] New function
+### [mod] [rpc] New rpc-client version
 
-getFeatures(layerId) that gets features as geojson object grouped by layer if layerId===true. If layerId not given, will return array of layerIds. 
+The JSChannel dependency has been updated. The old version is not compatible with the new one so rpc-client needs to be updated to 2.0.0.
+
+#### [add] [rpc] New functions
+
+getFeatures(layerId) that gets features as geojson object grouped by layer if layerId===true. If layerId not given, will return array of layerIds.
+
+getInfo(clientVersion) returns generic information about the Oskari instance:
+
+```javascript
+    {
+        "version" : "1.35.0",
+        "clientSupported" : true,
+        "srs" : "EPSG:4326"
+    }
+```
 
 #### [mod] [rpc] New default request
 

@@ -2,15 +2,45 @@
 
 ## 1.35
 
+### coordinatetool
+
+Added funtionality to change the projection the map is displayed in, when the application supports multiple projections.
+
+### divmanazer/grid
+
+Fixed grid header style when column class name contains span word.
+
+### core
+
+Oskari.VERSION can now be used to detect the frontend version number.
+
+### published map (ol3)
+
+Fixed analysislayer's and userlayer's visibility issue in published map 
+
+### framework/findbycoordinates
+
+Now displays multiple results if available.
+
+### framework/admin-users
+
+Added user email to editable.
+
 ### mapping/mapwmts_ol3
 
 Fixed WmtsLayerService IE 9 capabilities formatting.
 
 ### RPC
 
+Removed libraries/OskariRPC/*. The client now has it's own repository here: https://github.com/nls-oskari/rpc-client
+
+JSChannel-dependency updated. This requires new RPC-client to work (version 2.0.0).
+
 New function added getFeatures(). See bundle documentation for details.
 
 New request included in defaults "MapModulePlugin.ZoomToFeaturesRequest".
+
+New function added getInfo(clientVersion). See bundle documentation for details.
 
 ### mapping/mapmodule/plugin/vectorlayer
 

@@ -653,6 +653,9 @@ Oskari.clazz.define(
          */
         reportDrawingEvents : function() {
             var me = this;
+            if(window.console === undefined) {
+                return;
+            }
 
             if(me._draw) {
                 me._draw.on('drawstart', function() {

@@ -129,8 +129,9 @@ Oskari.clazz.define(
             var me = this,
                 layerId = _.last(layer.getId().split('_')),
                 imgUrl = (layer.getLayerUrls()[0] + layerId).replace(/&amp;/g, '&'),
-                minResolution = this.getMapModule().getResolutionForScale(layer.getMinScale()),
-                maxResolution = this.getMapModule().getResolutionForScale(layer.getMaxScale()),
+                //minresolution === maxscale and vice versa...
+                minResolution = this.getMapModule().getResolutionForScale(layer.getMaxScale()),
+                maxResolution = this.getMapModule().getResolutionForScale(layer.getMinScale()),
                 sandbox = this.getSandbox(),
                 wms = {
                     'URL': imgUrl,
@@ -150,7 +151,6 @@ Oskari.clazz.define(
                     visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
                     opacity: layer.getOpacity() / 100
                 });
-
             this.getMapModule().addLayer(openlayer, layer, layer.getName());
 
             this._layers[layer.getId()] = openlayer;

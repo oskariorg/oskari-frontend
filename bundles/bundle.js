@@ -45,6 +45,9 @@ if (!String.prototype.endsWith) {
  *
  */
 Oskari = (function () {
+
+    var oskariVersion = "1.35.0";
+
     var isDebug = false,
         isConsole = window.console && window.console.debug,
         logMsg = function (msg) {
@@ -2842,6 +2845,7 @@ D         * @param {Object} classInfo ClassInfo
         app: fcd,
         /* */
         clazz: cs,
+        VERSION : oskariVersion,
 
         /**
          * @public @method Oskari.$
