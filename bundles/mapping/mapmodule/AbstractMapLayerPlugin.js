@@ -114,18 +114,6 @@ Oskari.clazz.define(
                     this._updateLayer(layer);
                 }
             },
-            AfterMapLayerAddEvent: function (event) {
-                var layer = event.getMapLayer();
-                if (!this.isLayerSupported(layer)) {
-                    return;
-                }
-
-                this.addMapLayerToMap(
-                    event.getMapLayer(),
-                    event.getKeepLayersOrder(),
-                    event.isBasemap()
-                );
-            },
 
             AfterMapLayerRemoveEvent: function (event) {
                 var layer = event.getMapLayer();
