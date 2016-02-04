@@ -15,6 +15,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
         this._instance = config.instance;
         this._index = 8;
         this._name = 'FeaturedataPlugin';
+        this._mapStatusChanged = true;
     }, {
         /**
          * @method _createControlElement
@@ -39,14 +40,35 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             return el;
         },
 
+        /**
+         * @method  @public mapStatusChanged map status changed
+         * @param  {Boolean} changed is map status changed
+         */
+        mapStatusChanged: function(changed){
+            var me = this,
+                statusChanged = changed || true;
+            me._mapStatusChanged = statusChanged;
+        },
+
+        getMapStatusChanged: function() {
+            var me = this;
+            return me._mapStatusChanged;
+        },
+
         _bindLinkClick: function (link) {
             var me = this,
                 linkElement = link || me.getElement().find('a'),
                 sandbox = me.getSandbox();
+
             linkElement.bind('click', function () {
-                sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me._instance, 'detach']);
-                var event = sandbox.getEventBuilder('WFSRefreshManualLoadLayersEvent')();
-                sandbox.notifyAll(event);
+                if(me._mapStatusChanged) {
+                    sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me._instance, 'detach']);
+                    var event = sandbox.getEventBuilder('WFSRefreshManualLoadLayersEvent')();
+                    sandbox.notifyAll(event);
+                    me._mapStatusChanged = false;
+                } else {
+                    sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me._instance, 'detach']);
+                }
                 return false;
             });
         },

@@ -616,9 +616,6 @@ define([
                     data.gfiType = form.find('#add-layer-responsetype').val();
                     data.params = form.find('#add-layer-selectedtime').val();
                 }
-                else if(data.layerType === 'wmtslayer') {
-                    data.matrixSetId = form.find('#add-layer-matrixSetId').val();
-                }
                 else if(data.layerType === 'wfslayer') {
                     admin = me.model.getAdmin();
                     // in insert all wfs properties are behind passthrough
@@ -816,7 +813,8 @@ define([
                     layerType = form.find('#add-layer-layertype').val(),
                     user = form.find('#add-layer-username').val(),
                     pw =  form.find('#add-layer-password').val(),
-                    version =  form.find('#add-layer-interface-version').val();
+                    version =  form.find('#add-layer-interface-version').val(),
+                    crs = me.instance.getSandbox().getMap().getSrsName();
 
                 me.model.set({
                     '_layerUrls': [serviceURL]
@@ -838,7 +836,8 @@ define([
                         type : layerType,
                         user: user,
                         pw: pw,
-                        version: version
+                        version: version,
+                        crs: crs
                     },
                     url: baseUrl + 'action_route=GetWSCapabilities',
                     success: function (resp) {

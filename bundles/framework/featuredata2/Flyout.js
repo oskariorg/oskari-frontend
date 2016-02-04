@@ -762,7 +762,7 @@ Oskari.clazz.define(
          * @param {Boolean} isEnabled
          *
          */
-        setEnabled: function (isEnabled) {
+        setEnabled: function (isEnabled, clearContent) {
             if (this.active === isEnabled) {
                 return;
             }
@@ -792,12 +792,6 @@ Oskari.clazz.define(
                     request = dimReqBuilder(this.selectedTab.layer.getId());
                     sandbox.request(this.instance.getName(), request);
                 }
-                // clear panels
-                for (var panel in this.layers) {
-                    if (panel.getContainer) {
-                        panel.getContainer().empty();
-                    }
-                }
             }
             // enabled
             else {
@@ -809,8 +803,17 @@ Oskari.clazz.define(
                     request = hlReqBuilder(this.selectedTab.layer.getId());
                     sandbox.request(this.instance.getName(), request);
 
-                    // update data
-                    this.updateGrid();
+                    if(clearContent) {
+                        // clear panels
+                        for (var panel in this.layers) {
+                            if (panel.getContainer) {
+                                panel.getContainer().empty();
+                            }
+                        }
+
+                        // update data
+                        this.updateGrid();
+                    }
                 }
             }
         },
