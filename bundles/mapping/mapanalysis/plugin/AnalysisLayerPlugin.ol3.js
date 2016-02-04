@@ -11,16 +11,13 @@ Oskari.clazz.define(
 
     function () {
         var me = this;
-
-        me._clazz =
-            'Oskari.mapframework.bundle.mapanalysis.plugin.AnalysisLayerPlugin';
-
         me.ajaxUrl = null;
         if (me._config && me._config.ajaxUrl) {
             me.ajaxUrl = me._config.ajaxUrl;
         }
     }, {
         __name : 'AnalysisLayerPlugin',
+        _clazz : 'Oskari.mapframework.bundle.mapanalysis.plugin.AnalysisLayerPlugin',
         /** @static @property layerType type of layers this plugin handles */
         layertype : 'analysislayer',
 
@@ -76,7 +73,7 @@ Oskari.clazz.define(
                  * @param {Object} event
                  */
                 MapLayerVisibilityChangedEvent: function (event) {
-                    me._mapLayerVisibilityChangeEvent(event);
+                    me._mapLayerVisibilityChangeEvent(event.getMapLayer());
                 }
             };
         },
@@ -133,13 +130,10 @@ Oskari.clazz.define(
          * @private
          * @param {Oskari.mapframework.event.common.MapLayerVisibilityChangedEvent}
          */
-        _mapLayerVisibilityChangeEvent: function (evt) {
-            var layer = evt.getMapLayer();
-
+        _mapLayerVisibilityChangeEvent: function (layer) {
             if (!this.isLayerSupported(layer)) {
                 return;
             }
-
             var olLayers = this.getOLMapLayers(layer);
 
             _.each(olLayers, function(ol) {
