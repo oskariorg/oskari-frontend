@@ -151,7 +151,7 @@ Oskari.clazz.define(
                     visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
                     opacity: layer.getOpacity() / 100
                 });
-            this.getMapModule().addLayer(openlayer, layer, layer.getName());
+            this.getMapModule().addLayer(openlayer, !keepLayerOnTop);
 
             this._layers[layer.getId()] = openlayer;
 
@@ -159,12 +159,6 @@ Oskari.clazz.define(
                 '#!#! CREATED OPENLAYER.LAYER.WMS for UserLayer ' +
                 layer.getId()
             );
-
-            if (keepLayerOnTop) {
-                me.getMapModule().setLayerIndex(openlayer, me.getMap().getLayers().getArray().length);
-            } else {
-                me.getMapModule().setLayerIndex(openlayer, 0);
-            }
 
             this.handleBounds(layer);
         },
