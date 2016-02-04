@@ -20,7 +20,7 @@ Oskari.clazz.define(
         },
 
         /**
-         * @method _addMapLayerToMap
+         * @method addMapLayerToMap
          * @private
          * Adds a single WMS layer to this map
          * @param {Oskari.mapframework.domain.WmsLayer} layer
