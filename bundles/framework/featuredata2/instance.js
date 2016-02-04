@@ -251,6 +251,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          */
         eventHandlers: {
             'WFSStatusChangedEvent': function (event) {
+                var me = this;
                 if(event.getLayerId() === undefined) {
                     return;
                 }
@@ -269,6 +270,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                     delete this.__loadingStatus['' + event.getLayerId()];
                     this.plugins['Oskari.userinterface.Flyout'].showLoadingIndicator(event.getLayerId(), false);
                     this.plugins['Oskari.userinterface.Flyout'].showErrorIndicator(event.getLayerId(), false);
+
                     if (layer) {
                         this.plugins['Oskari.userinterface.Flyout'].updateData(layer);
                     }
@@ -292,17 +294,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 }
                 // setup error indicator based on error statuses
                 this.plugin.showErrorIndicator(status.error.length > 0);
-
-                // TODO: For debugging, remove when stable
-                if(Oskari.__debugWFS === true) {
-                    console.log('WFSStatusChanged', event, status);
-                }
             },
             'MapLayerEvent': function (event) {
                 if(event.getOperation() !== 'add')  {
                     // only handle add layer
                     return;
                 }
+
                 if(event.getLayerId()) {
                     this.__addTool(event.getLayerId());
                 }
@@ -400,6 +398,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 var evt = me.sandbox.getEventBuilder("WFSSetFilter")(features);
                 me.sandbox.notifyAll(evt);
 
+            },
+
+            'AfterMapMoveEvent': function() {
+                var me = this;
+                me.plugin.mapStatusChanged();
             }
         },
 
