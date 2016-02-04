@@ -14,34 +14,18 @@ Oskari.clazz.define(
 
         me._clazz =
             'Oskari.mapframework.bundle.mapanalysis.plugin.AnalysisLayerPlugin';
-        me._name = 'AnalysisLayerPlugin';
 
-        me.wfsLayerPlugin = null;
-        me._supportedFormats = {};
-        this._layers = {};
         me.ajaxUrl = null;
         if (me._config && me._config.ajaxUrl) {
             me.ajaxUrl = me._config.ajaxUrl;
         }
     }, {
-        /** @static @property _layerType type of layers this plugin handles */
-        _layerType: 'ANALYSIS',
+        __name : 'AnalysisLayerPlugin',
+        /** @static @property layerType type of layers this plugin handles */
+        layertype : 'analysislayer',
 
-        /**
-         * @method register
-         * Interface method for the plugin protocol.
-         * Registers self as a layerPlugin to mapmodule with mapmodule.setLayerPlugin()
-         */
-        register: function () {
-            this.getMapModule().setLayerPlugin('analysislayer', this);
-        },
-        /**
-         * @method unregister
-         * Interface method for the plugin protocol
-         * Unregisters self from mapmodules layerPlugins
-         */
-        unregister: function () {
-            this.getMapModule().setLayerPlugin('analysislayer', null);
+        getLayerTypeSelector : function() {
+            return 'ANALYSIS';
         },
 
         /**
@@ -52,29 +36,22 @@ Oskari.clazz.define(
          */
         _initImpl: function () {
             // register domain builder
-            var layerModelBuilder,
-                mapLayerService = this.getSandbox().getService(
+            var mapLayerService = this.getSandbox().getService(
                     'Oskari.mapframework.service.MapLayerService'
                 );
 
-            if (mapLayerService) {
-                mapLayerService.registerLayerModel(
-                    'analysislayer',
-                    'Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer'
-                );
-                layerModelBuilder = Oskari.clazz.create(
-                    'Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayerModelBuilder',
-                    this.getSandbox()
-                );
-                mapLayerService.registerLayerModelBuilder(
-                    'analysislayer',
-                    layerModelBuilder
-                );
+            if (!mapLayerService) {
+                return;
             }
 
-            this.wfsLayerPlugin = this.getSandbox().findRegisteredModuleInstance(
-                'MainMapModuleWfsLayerPlugin'
+            mapLayerService.registerLayerModel(this.layertype,
+                'Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer');
+
+            var layerModelBuilder = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayerModelBuilder',
+                this.getSandbox()
             );
+            mapLayerService.registerLayerModelBuilder(this.layertype, layerModelBuilder);
         },
 
         /**
@@ -95,103 +72,14 @@ Oskari.clazz.define(
 
             return {
                 /**
-                 * @method AfterMapMoveEvent
-                 * @param {Object} event
-                 */
-                AfterMapMoveEvent: function (event) {
-                    // tk  me.wfsLayerPlugin.mapMoveHandler();
-                },
-
-                /**
-                 * @method WFSFeaturesSelectedEvent
-                 * @param {Object} event
-                 */
-                WFSFeaturesSelectedEvent: function (event) {
-                    // tk  me.wfsLayerPlugin.featuresSelectedHandler(event);
-                },
-
-                /**
-                 * @method MapClickedEvent
-                 * @param {Object} event
-                 */
-                MapClickedEvent: function (event) {
-                    // tk me.wfsLayerPlugin.mapClickedHandler(event);
-                },
-
-                /**
-                 * @method GetInfoResultEvent
-                 * @param {Object} event
-                 */
-                GetInfoResultEvent: function (event) {
-                    // tk me.wfsLayerPlugin.getInfoResultHandler(event);
-                },
-
-                /**
-                 * @method AfterChangeMapLayerStyleEvent
-                 * @param {Object} event
-                 */
-                AfterChangeMapLayerStyleEvent: function (event) {
-                    // tk  me.wfsLayerPlugin.changeMapLayerStyleHandler(event);
-                },
-
-                /**
                  * @method MapLayerVisibilityChangedEvent
                  * @param {Object} event
                  */
                 MapLayerVisibilityChangedEvent: function (event) {
                     me._mapLayerVisibilityChangeEvent(event);
-                },
-                /**
-                 * @method MapSizeChangedEvent
-                 * @param {Object} event
-                 */
-                MapSizeChangedEvent: function (event) {
-                    // tk me.wfsLayerPlugin.mapSizeChangedHandler(event);
-                },
-
-                /**
-                 * @method WFSSetFilter
-                 * @param {Object} event
-                 */
-                WFSSetFilter: function (event) {
-                    // tk me.wfsLayerPlugin.setFilterHandler(event);
-                },
-                AfterMapLayerRemoveEvent: function (event) {
-                    me._afterMapLayerRemoveEvent(event);
-                    // tk  me.wfsLayerPlugin.mapLayerRemoveHandler(event);
-                },
-                AfterChangeMapLayerOpacityEvent: function (event) {
-                    me._afterChangeMapLayerOpacityEvent(event);
-                    //me.wfsLayerPlugin.afterChangeMapLayerOpacityEvent(event);
                 }
             };
         },
-
-        /**
-         * @method preselectLayers
-         * Adds given analysis layers to map if of type WFS
-         * @param {Oskari.mapframework.domain.WfsLayer[]} layers
-         */
-        preselectLayers: function (layers) {
-            var sandbox = this.getSandbox(),
-                i,
-                layer,
-                layerId;
-
-            for (i = 0; i < layers.length; i += 1) {
-                layer = layers[i];
-                layerId = layer.getId();
-
-                if (!layer.isLayerOfType(this._layerType)) {
-                    continue;
-                }
-
-                sandbox.printDebug('preselecting ' + layerId);
-                this.addMapLayerToMap(layer, true, layer.isBaseLayer());
-            }
-
-        },
-
         /**
          * Adds a single Analysis layer to this map
          *
@@ -201,10 +89,6 @@ Oskari.clazz.define(
          * @param {Boolean} isBaseMap
          */
         addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
-            if (!layer.isLayerOfType(this._layerType)) {
-                return;
-            }
-
             var me = this,
                 sandbox = this.getSandbox(),
                 openLayerId = 'layer_' + layer.getId(),
@@ -234,7 +118,8 @@ Oskari.clazz.define(
 
             this.getMapModule().addLayer(openlayer, layer, layer.getName());
 
-            this._layers[layer.getId()] = openlayer;
+            // store reference to layers
+            this.setOLMapLayers(layer.getId(), openlayer);
 
             me.getSandbox().printDebug(
                 '#!#! CREATED OPENLAYER.LAYER.WMS for AnalysisLayer ' +
@@ -249,68 +134,6 @@ Oskari.clazz.define(
         },
 
         /**
-         * @method _afterMapLayerRemoveEvent
-         * Handle AfterMapLayerRemoveEvent
-         * @private
-         * @param {Oskari.mapframework.event.common.AfterMapLayerRemoveEvent}
-         *            event
-         */
-        _afterMapLayerRemoveEvent: function (event) {
-            var layer = event.getMapLayer();
-            if (!layer.isLayerOfType(this._layerType)) {
-                return;
-            }
-            this._removeMapLayerFromMap(layer);
-        },
-
-        /**
-         * @method _afterMapLayerRemoveEvent
-         * Removes the layer from the map
-         * @private
-         * @param {Oskari.mapframework.domain.WmsLayer} layer
-         */
-        _removeMapLayerFromMap: function (layer) {
-            if (!layer.isLayerOfType('ANALYSIS') || !this._layers[layer.getId()]) {
-                return;
-            }
-            var analysisLayer = this._layers[layer.getId()];
-            this.getMapModule().removeLayer(analysisLayer, layer);
-            delete this._layers[layer.getId()];
-        },
-
-        /**
-         * @method getOLMapLayers
-         * Returns references to OpenLayers layer objects for requested layer or null if layer is not added to map.
-         * @param {Oskari.mapframework.domain.WfsLayer} layer
-         * @return {OpenLayers.Layer[]}
-         */
-        getOLMapLayers: function (layer) {
-            if (!layer.isLayerOfType(this._layerType)) {
-                return null;
-            }
-            if(!this._layers[layer.getId()]) {
-                return null;
-            }
-            // only single layer/id, wrap it in an array
-            return [this._layers[layer.getId()]];
-        },
-
-        /**
-         * @method _afterChangeMapLayerOpacityEvent
-         * Handle AfterChangeMapLayerOpacityEvent
-         * @private
-         * @param {Oskari.mapframework.event.common.AfterChangeMapLayerOpacityEvent}
-         *            event
-         */
-        _afterChangeMapLayerOpacityEvent: function (event) {
-            var layer = event.getMapLayer();
-            var olLayers = this.getOLMapLayers(layer);
-            _.each(olLayers, function(ol) {
-                ol.setOpacity(layer.getOpacity() / 100);
-            });
-        },
-
-        /**
          * @method _mapLayerVisibilityChangedEvent
          * Handle MapLayerVisibilityChangedEvent
          * @private
@@ -319,7 +142,7 @@ Oskari.clazz.define(
         _mapLayerVisibilityChangeEvent: function (evt) {
             var layer = evt.getMapLayer();
 
-            if (!layer.isLayerOfType(this._layerType)) {
+            if (!this.isLayerSupported(layer)) {
                 return;
             }
 
@@ -330,7 +153,7 @@ Oskari.clazz.define(
             });
         }
     }, {
-        'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
+        "extend" : ["Oskari.mapping.mapmodule.AbstractMapLayerPlugin"],
         /**
          * @static @property {string[]} protocol array of superclasses
          */
