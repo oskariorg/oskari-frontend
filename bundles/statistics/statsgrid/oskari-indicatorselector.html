@@ -19,6 +19,7 @@
       id="indicatorsAjax"
       on-response="hideSpinner"
       on-error="ajaxError"></iron-ajax>
+    <template is="dom-if" if="{{user._loggedIn}}">
     <iron-ajax
       auto
       url="{{ajaxUrl}}"
@@ -28,6 +29,7 @@
       debounce-duration="300"
       id="userIndicatorsAjax"
       on-error="ajaxError"></iron-ajax>
+    </template>
     <oskari-spinner visible="[[showSpinner]]" spinner-id="indicatorsMetadataSpinner" />
     <div hidden$="{{hideIndicatorSelector(embedded, showUserIndicatorView)}}">
       <form class="statsgrid2_indicator_selector">
@@ -166,8 +168,8 @@
       ],
       "ajaxError": function(e) {
           var me = this;
-          console.log("Error: " + e);
-          window.alert(me.locale.connectionError + ": " + e);
+          console.log("Error: " + e && e.detail && e.detail.error || '');
+          window.alert(me.locale.connectionError + ": " + e && e.detail && e.detail.error || '');
       },
       "hideSpinner": function(e, response) {
           this.showSpinner = false;
