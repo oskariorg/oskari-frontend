@@ -70,7 +70,7 @@ Oskari.clazz.define(
                         id: oskariLayer.getId(),
                         styles: oskariLayer.getCurrentStyle().getName(),
                         format: 'image/png',
-                        version : oskariLayer.getVersion()
+                        version : oskariLayer.getVersion() || '1.1.0'
                     },
                     defaultOptions = {
                         layerId: oskariLayer.getLayerName(),

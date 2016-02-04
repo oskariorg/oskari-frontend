@@ -63,7 +63,7 @@ Oskari.clazz.define(
                         'ID': _layer.getId(),
                         'STYLES': _layer.getCurrentStyle().getName(),
                         'FORMAT': 'image/png',
-                        'VERSION' : _layer.getVersion()
+                        'VERSION' : _layer.getVersion() || '1.3.0'
                     },
                     layerParams = _layer.getParams() || {},
                     layerOptions = _layer.getOptions() || {};
