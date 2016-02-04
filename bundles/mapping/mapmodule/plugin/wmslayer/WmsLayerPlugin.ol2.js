@@ -127,19 +127,16 @@ Oskari.clazz.define(
          *            event
          */
         _afterChangeMapLayerStyleEvent: function (event) {
-            if (event.getMapLayer().isLayerOfType('WMS')) {
-                var layer = event.getMapLayer();
-
-                // Change selected layer style to defined style
-                if (!layer.isBaseLayer()) {
-                    var styledLayer = this.getMap().getLayersByName('layer_' + layer.getId());
-                    if (styledLayer !== null && styledLayer !== undefined) {
-                        styledLayer[0].mergeNewParams({
-                            styles: layer.getCurrentStyle().getName()
-                        });
-                    }
-                }
+            var layer = event.getMapLayer();
+            var layerList = this.getOLMapLayers(layer);
+            if(!layerList) {
+                return;
             }
+            layerList.forEach(function(openlayer) {
+                openlayer.mergeNewParams({
+                    styles: layer.getCurrentStyle().getName()
+                });
+            });
         },
 
         /**

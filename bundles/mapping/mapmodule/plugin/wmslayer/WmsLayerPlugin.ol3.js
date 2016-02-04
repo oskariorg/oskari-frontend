@@ -19,6 +19,13 @@ Oskari.clazz.define(
             return 'WMS';
         },
 
+        _createEventHandlers: function () {
+            return {
+                AfterChangeMapLayerStyleEvent: function (event) {
+                    this._afterChangeMapLayerStyleEvent(event);
+                }
+            };
+        },
         /**
          * @method addMapLayerToMap
          * @private
@@ -110,13 +117,6 @@ Oskari.clazz.define(
             this.setOLMapLayers(layer.getId(), olLayers);
         },
 
-        _createEventHandlers: function () {
-            return {
-                AfterChangeMapLayerStyleEvent: function (event) {
-                    this._afterChangeMapLayerStyleEvent(event);
-                }
-            };
-        },
         /**
          * Handle AfterChangeMapLayerStyleEvent
          * @private
@@ -125,16 +125,15 @@ Oskari.clazz.define(
          */
         _afterChangeMapLayerStyleEvent : function(event) {
             var layer = event.getMapLayer();
-
-            // Change selected layer style to defined style
-            if (!layer.isBaseLayer()) {
-                var styledLayer = this._layers[layer.getId()];
-                if (styledLayer != null) {
-                    styledLayer.getSource().updateParams({
-                        styles : layer.getCurrentStyle().getName()
-                    });
-                }
+            var layerList = this.getOLMapLayers(layer);
+            if(!layerList) {
+                return;
             }
+            layerList.forEach(function(openlayer) {
+                openlayer.getSource().updateParams({
+                    styles : layer.getCurrentStyle().getName()
+                });
+            });
         }
     }, {
         /**
