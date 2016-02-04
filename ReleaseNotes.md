@@ -18,13 +18,19 @@ Oskari.VERSION can now be used to detect the frontend version number.
 
 Fixed analysislayer's and userlayer's visibility issue in published map 
 
-### framework/findbycoordinates
-
-Now displays multiple results if available.
 
 ### framework/admin-users
 
 Added user email to editable.
+
+### framework/findbycoordinates
+
+Now displays multiple results if available.
+
+## framework/featuredata2
+
+Now featuredata2 flyout not updated when opened again if map is not moved / zoomed.
+
 
 ### mapping/mapwmts_ol3
 
