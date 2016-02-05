@@ -74,6 +74,17 @@ Oskari.clazz.define(
                         // disabled, do nothing
                         return;
                     }
+
+                    // remove old popup
+                    var reqBuilder = this.getSandbox().getRequestBuilder(
+                            'InfoBox.HideInfoBoxRequest'
+                        ),
+                        request;
+                    if(reqBuilder) {
+                        request = reqBuilder(this.infoboxId);
+                        this.getSandbox().request(this, request);
+                    }
+
                     this.clickLocation = {
                         lonlat: evt.getLonLat()
                     };
@@ -413,7 +424,7 @@ Oskari.clazz.define(
                     this._loc.title,
                     content,
                     lonlat,
-                    true,
+                    false,
                     colourScheme,
                     font
                 );

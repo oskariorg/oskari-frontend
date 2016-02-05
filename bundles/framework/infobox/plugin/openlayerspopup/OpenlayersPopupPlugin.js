@@ -661,12 +661,8 @@ Oskari.clazz.define(
                 for (pid in this._popups) {
                     if (this._popups.hasOwnProperty(pid)) {
                         popup = this._popups[pid];
-                        if (!position ||
-                            position.lon !== popup.lonlat.lon ||
-                            position.lat !== popup.lonlat.lat) {
-                            popup.popup.destroy();
-                            delete this._popups[pid];
-                        }
+                        popup.popup.destroy();
+                        delete this._popups[pid];
                     }
                 }
                 return;

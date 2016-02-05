@@ -2,6 +2,10 @@
 
 ## 1.35
 
+### infobox
+
+Fixed InfoBox.ShowInfoBoxRequest handling. Now all popups with no popup id really deleted if hidePrevious param is setted to true.
+
 ### coordinatetool
 
 Added funtionality to change the projection the map is displayed in, when the application supports multiple projections.
