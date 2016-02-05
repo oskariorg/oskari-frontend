@@ -70,7 +70,7 @@ div.mapplugin.timeseries {
           left: -24px; }
       div.mapplugin.timeseries .oskari-timeslider .interval-line-highlight .line {
         width: 1px;
-        border-left: 1px solid #fff;
+        border-left: 1px solid white;
         height: 12px;
         position: absolute;
         bottom: 0; }
@@ -83,12 +83,12 @@ div.mapplugin.timeseries {
         font-size: 12px;
         position: absolute;
         top: 16px;
-        color: #fff; }
+        color: white; }
         div.mapplugin.timeseries .oskari-timeslider .interval-line .label.center {
           left: -14px; }
       div.mapplugin.timeseries .oskari-timeslider .interval-line .line {
         width: 1px;
-        border-left: 1px solid #fff;
+        border-left: 1px solid white;
         height: 8px;
         position: absolute;
         bottom: 0; }
@@ -122,5 +122,3 @@ div.mapplugin.timeseries {
     font-weight: normal;
     font-size: 12px;
     line-height: 15px; }
-
-/*# sourceMappingURL=timeseriesplayback.css.map */
