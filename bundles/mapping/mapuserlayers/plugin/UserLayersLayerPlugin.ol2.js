@@ -10,109 +10,52 @@ Oskari.clazz.define(
      *
      */
     function () {
-        var me = this;
-
-        me._clazz =
-            'Oskari.mapframework.bundle.myplacesimport.plugin.UserLayersLayerPlugin';
-        me._name = 'UserLayersLayerPlugin';
-        me._supportedFormats = {};
-        this._layers = {};
     }, {
-        /** @static @property _layerType type of layers this plugin handles */
-        _layerType: 'USERLAYER',
+        __name : 'UserLayersLayerPlugin',
+        _clazz : 'Oskari.mapframework.bundle.myplacesimport.plugin.UserLayersLayerPlugin',
+        /** @static @property layerType type of layers this plugin handles */
+        layertype : 'userlayer',
 
-        /**
-         * Interface method for the plugin protocol.
-         * Registers self as a layerPlugin to mapmodule with mapmodule.setLayerPlugin()
-         *
-         * @method register
-         */
-        register: function () {
-            this.getMapModule().setLayerPlugin('userlayer', this);
+        getLayerTypeSelector : function() {
+            return this.layertype;
         },
-
         /**
-         * Interface method for the plugin protocol
-         * Unregisters self from mapmodules layerPlugins
-         *
-         * @method unregister
-         */
-        unregister: function () {
-            this.getMapModule().setLayerPlugin('userlayer', null);
-        },
-
-        /**
+         * @private @method _initImpl
          * Interface method for the module protocol.
          *
-         * @method init
+         *
          */
         _initImpl: function () {
-            var layerModelBuilder,
-                mapLayerService = this.getSandbox().getService(
+            // register domain builder
+            var mapLayerService = this.getSandbox().getService(
                     'Oskari.mapframework.service.MapLayerService'
                 );
 
-            // register domain builder
-            if (mapLayerService) {
-                mapLayerService.registerLayerModel(
-                    'userlayer',
-                    'Oskari.mapframework.bundle.myplacesimport.domain.UserLayer'
-                );
-                layerModelBuilder = Oskari.clazz.create(
-                    'Oskari.mapframework.bundle.myplacesimport.domain.UserLayerModelBuilder',
-                    this.getSandbox()
-                );
-                mapLayerService.registerLayerModelBuilder(
-                    'userlayer',
-                    layerModelBuilder
-                );
+            if (!mapLayerService) {
+                return;
             }
+
+            mapLayerService.registerLayerModel(this.layertype,
+                'Oskari.mapframework.bundle.myplacesimport.domain.UserLayer');
+
+            var layerModelBuilder = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.myplacesimport.domain.UserLayerModelBuilder',
+                this.getSandbox()
+            );
+            mapLayerService.registerLayerModelBuilder(this.layertype, layerModelBuilder);
         },
+
 
         _createEventHandlers: function () {
             var me = this;
 
             return {
                 'MapLayerVisibilityChangedEvent': function (event) {
-                    var layer = event.getMapLayer();
-                    if (layer.isLayerOfType(me._layerType)) {
-                        me._changeMapLayerVisibility(layer);
-                    }
-                },
-                'AfterMapLayerRemoveEvent': function (event) {
-                    var layer = event.getMapLayer();
-                    if (layer.isLayerOfType(me._layerType)) {
-                        me._removeMapLayerFromMap(layer);
-                    }
-                },
-                'AfterChangeMapLayerOpacityEvent': function (event) {
-                    var layer = event.getMapLayer();
-                    if (layer.isLayerOfType(me._layerType)) {
-                        me._changeMapLayerOpacity(layer);
-                    }
+                    me._changeMapLayerVisibility(event.getMapLayer());
                 }
             };
         },
 
-        /**
-         * Adds given user layers to map if of type 'userlayer'
-         *
-         * @method preselectLayers
-         * @param {Oskari.mapframework.domain.WfsLayer[]} layers
-         */
-        preselectLayers: function (layers) {
-            var me = this,
-                sandbox = this.getSandbox();
-
-            _.chain(layers)
-                .filter(function (layer) {
-                    return layer.isLayerOfType(me._layerType);
-                })
-                .each(function (layer) {
-                    sandbox.printDebug('preselecting ' + layer.getId());
-                    me.addMapLayerToMap(layer, true, layer.isBaseLayer());
-                });
-        },
         /**
          * Adds a single user layer to the map
          *
@@ -122,9 +65,6 @@ Oskari.clazz.define(
          * @param {Boolean} isBaseMap
          */
         addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
-            if (!layer.isLayerOfType(this._layerType)) {
-                return;
-            }
             var openLayerId = 'layer_' + layer.getId(),
                 layerId = _.last(layer.getId().split('_')),
                 imgUrl = (layer.getLayerUrls()[0] + layerId).replace(/&amp;/g, '&'),
@@ -149,19 +89,14 @@ Oskari.clazz.define(
 
 
             openLayer.opacity = layer.getOpacity() / 100;
-            this.getMap().addLayer(openLayer);
+            this.getMapModule().addLayer(openLayer, !keepLayerOnTop);
+            // store reference to layers
+            this.setOLMapLayers(layer.getId(), openLayer);
+
             this.getSandbox().printDebug(
                 '#!#! CREATED OPENLAYER.LAYER.WMS for UserLayer ' +
                 layer.getId()
             );
-
-            this._layers[layer.getId()] = openLayer;
-
-            if (keepLayerOnTop) {
-                this.getMapModule().bringToTop(openLayer);
-            } else {
-                this.getMap().setLayerIndex(openLayer, 0);
-            }
 
             this.handleBounds(layer);
         },
@@ -243,77 +178,24 @@ Oskari.clazz.define(
         },
 
         /**
-         * Removes the OpenLayers layer from the map
-         *
-         * @method _removeMapLayerFromMap
-         * @private
-         * @param {Oskari.mapframework.bundle.myplacesimport.domain.UserLayer} layer
-         */
-        _removeMapLayerFromMap: function (layer) {
-            this._modifyOL(layer, function (oLayer) {
-                // This should free all memory
-                oLayer.destroy();
-            });
-        },
-
-        /**
-         * Changes the OpenLayers layer opacity.
-         *
-         * @method _changeMapLayerOpacity
-         * @private
-         * @param {Oskari.mapframework.bundle.myplacesimport.domain.UserLayer} layer
-         */
-        _changeMapLayerOpacity: function (layer) {
-            this._modifyOL(layer, function (oLayer) {
-                oLayer.setOpacity(layer.getOpacity() / 100);
-            });
-        },
-
-        /**
-         * Changes the OpenLayers layer visibility.
-         *
          * @method _changeMapLayerVisibility
+         * Handle MapLayerVisibilityChangedEvent
          * @private
-         * @param {Oskari.mapframework.bundle.myplacesimport.domain.UserLayer}
+         * @param {Oskari.mapframework.event.common.MapLayerVisibilityChangedEvent}
          */
         _changeMapLayerVisibility: function (layer) {
-            this._modifyOL(layer, function (oLayer) {
-                oLayer.setVisibility(layer.isVisible());
+            if (!this.isLayerSupported(layer)) {
+                return;
+            }
+
+            var olLayers = this.getOLMapLayers(layer);
+            _.each(olLayers, function(ol) {
+                ol.setVisibility(layer.isVisible());
             });
-        },
-
-        /**
-         * Executes a callback on an OpenLayers layer if it's found on the map.
-         *
-         * @method _modifyOL
-         * @private
-         * @param {Oskari.mapframework.bundle.myplacesimport.domain.UserLayer} layer
-         * @param {Function} cb
-         */
-        _modifyOL: function (layer, cb) {
-            var oLayer = this.getOLMapLayers(layer);
-            if (oLayer && oLayer.length && oLayer[0] !== null && oLayer[0] !== undefined) {
-                cb(oLayer[0]);
-            }
-        },
-
-        /**
-         * Returns references to OpenLayers layer objects for requested layer
-         * or null if layer is not added to map.
-         *
-         * @method getOLMapLayers
-         * @param {Oskari.mapframework.bundle.myplacesimport.domain.UserLayer} layer
-         * @return {OpenLayers.Layer[]}
-         */
-        getOLMapLayers: function (layer) {
-            // only single layer/id, wrap it in an array
-            if(!this._layers[layer.getId()]) {
-                return null;
-            }
-            return [this._layers[layer.getId()]];
         }
+
     }, {
-        'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
+        'extend': ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin'],
         /**
          * @static @property {string[]} protocol array of superclasses
          */

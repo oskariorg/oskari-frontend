@@ -377,12 +377,16 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
         /**
          * @param {OpenLayers.Layer} layer ol2 specific!
+         * @param {Boolean} toBottom if false or missing adds the layer to the top, if true adds it to the bottom of the layer stack
          */
-        addLayer: function(layerImpl) {
+        addLayer: function(layerImpl, toBottom) {
             if(!layerImpl) {
                 return;
             }
             this.getMap().addLayer(layerImpl);
+            if(toBottom === true) {
+                this.setLayerIndex(layerImpl, 0);
+            }
         },
         /**
          * @param {OpenLayers.Layer} layer ol2 specific!

@@ -191,6 +191,8 @@ Added functions so internal references don't need to be called:
 - getStyle() takes a json presentation of style and returns matching ol2/ol3 style object for plugins to use
 - getUserLocation() takes a callback which will receive lon and lat params with user location or no params if location query was denied.
 
+addLayer() function now takes a second parameter. If not given or false adds the layer on top of the layer stack, if true adds the layer to the bottom of the stack.
+
 ### mapping/mapmodule/plugin/vectorlayer
 
 Both ol2 and ol3 implementations of VectorLayerPlugin have been added to following features:
