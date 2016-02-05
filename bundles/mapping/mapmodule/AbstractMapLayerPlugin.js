@@ -101,11 +101,20 @@ Oskari.clazz.define(
             return this._unregisterImpl();
         },
 
+        _createEventHandlers: function () {
+            var handlers = jQuery.extend(true, {}, this.mapLayerEventHandlers);
+            return jQuery.extend(true, handlers, this._createPluginEventHandlers());
+        },
+
+        _createPluginEventHandlers: function () {
+            return {};
+        },
+
         /**
-         * @property {Object} eventHandlers
+         * @property {Object} mapLayerEventHandlers
          * @static
          */
-        eventHandlers: {
+        mapLayerEventHandlers: {
             MapLayerEvent: function(event) {
                 var op = event.getOperation(),
                     layer = this.getSandbox().findMapLayerFromSelectedMapLayers(event.getLayerId());
@@ -146,7 +155,7 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.domain.AbstractLayer[]} layers
          */
         preselectLayers: function (layers) {
-            var sandbox = this.getSandbox,
+            var sandbox = this.getSandbox(),
                 layer;
 
             for (var i = 0; i < layers.length; i += 1) {
@@ -286,7 +295,7 @@ Oskari.clazz.define(
          *            event
          */
         _afterChangeMapLayerStyleEvent: function (event) {
-
+            this.getSandbox().printDebug('TODO: handle layer style chance');
         },
         /**
          * Update the layer on map if style etc was changed when administrating layers

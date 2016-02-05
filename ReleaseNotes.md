@@ -193,6 +193,8 @@ Added functions so internal references don't need to be called:
 
 addLayer() function now takes a second parameter. If not given or false adds the layer on top of the layer stack, if true adds the layer to the bottom of the stack.
 
+Userlayer, analysislayer, wmslayer plugins for both ol2 and ol3 have been updated to take advantage of the AbstractMapLayerPlugin baseclass provided by mapmodule.
+
 ### mapping/mapmodule/plugin/vectorlayer
 
 Both ol2 and ol3 implementations of VectorLayerPlugin have been added to following features:

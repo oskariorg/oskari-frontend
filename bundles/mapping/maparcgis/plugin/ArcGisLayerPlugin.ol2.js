@@ -165,16 +165,8 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
 
                 openLayer.opacity = layer.getOpacity() / 100;
                 openLayer.setVisibility(layer.isInScale(sandbox.getMap().getScale()) && layer.isVisible());
-                me.getMap().addLayer(openLayer);
+                me.getMapModule().addLayer(openLayer, !keepLayerOnTop);
 
-                if (keepLayerOnTop) {
-                    me.getMap().setLayerIndex(
-                        openLayer,
-                        me.getMap().layers.length
-                    );
-                } else {
-                    me.getMap().setLayerIndex(openLayer, 0);
-                }
             });
 
             me.getSandbox().printDebug(
@@ -213,16 +205,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                 openLayer.opacity = layer.getOpacity() / 100;
                 openLayer.setVisibility(layer.isInScale(sandbox.getMap().getScale()) && layer.isVisible());
 
-                me.getMap().addLayer(openLayer);
-
-                if (keepLayerOnTop) {
-                    me.getMap().setLayerIndex(
-                        openLayer,
-                        me.getMap().layers.length
-                    );
-                } else {
-                    me.getMap().setLayerIndex(openLayer, 0);
-                }
+                me.getMap().addLayer(openLayer, !keepLayerOnTop);
 
                 // Set queryable
                 layer.setQueryable(true);

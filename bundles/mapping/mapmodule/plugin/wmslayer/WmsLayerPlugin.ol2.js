@@ -19,16 +19,8 @@ Oskari.clazz.define(
             return 'WMS';
         },
 
-        _createEventHandlers: function () {
+        _createPluginEventHandlers: function () {
             return {
-                MapLayerEvent: function(event) {
-                    var op = event.getOperation(),
-                        layer = this.getSandbox().findMapLayerFromSelectedMapLayers(event.getLayerId());
-
-                    if (op === 'update' && layer && layer.isLayerOfType('WMS')) {
-                        this._updateLayer(layer);
-                    }
-                },
                 AfterChangeMapLayerStyleEvent: function (event) {
                     this._afterChangeMapLayerStyleEvent(event);
                 }
