@@ -22,8 +22,6 @@ Oskari.clazz.define(
         /**
          * @private @method _initImpl
          * Interface method for the module protocol.
-         *
-         *
          */
         _initImpl: function () {
             // register domain builder
@@ -43,16 +41,6 @@ Oskari.clazz.define(
                 this.getSandbox()
             );
             mapLayerService.registerLayerModelBuilder(this.layertype, layerModelBuilder);
-        },
-
-        _createEventHandlers: function () {
-            var me = this;
-
-            return {
-                'MapLayerVisibilityChangedEvent': function (event) {
-                    me._changeMapLayerVisibility(event.getMapLayer());
-                }
-            };
         },
 
         /**
@@ -176,25 +164,7 @@ Oskari.clazz.define(
                     // 'Bad WKT';
                 }
             }
-        },
-
-        /**
-         * @method _mapLayerVisibilityChangedEvent
-         * Handle MapLayerVisibilityChangedEvent
-         * @private
-         * @param {OL 3 layer}
-         */
-        _changeMapLayerVisibility: function (layer) {
-            if (!this.isLayerSupported(layer)) {
-                return;
-            }
-            var olLayers = this.getOLMapLayers(layer);
-
-            _.each(olLayers, function(ol) {
-                ol.setVisible(layer.isVisible());
-            });
         }
-
     }, {
         'extend': ["Oskari.mapping.mapmodule.AbstractMapLayerPlugin"],
         /**

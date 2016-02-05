@@ -1404,10 +1404,8 @@ Oskari.clazz.define(
                 layerFunctions = [];
 
             _.each(layerPlugins, function (plugin) {
+                // true if either plugin doesn't have the function or says the layer is supported.
                 var isSupported = !_.isFunction(plugin.isLayerSupported) || plugin.isLayerSupported(layer);
-                if(!isSupported) {
-                    //debugger;
-                }
                 if (_.isFunction(plugin.addMapLayerToMap) && isSupported) {
                     var layerFunction = plugin.addMapLayerToMap(layer, keepLayersOrder, isBaseMap);
                     if (_.isFunction(layerFunction)) {

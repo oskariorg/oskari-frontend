@@ -28,8 +28,6 @@ Oskari.clazz.define(
         /**
          * @private @method _initImpl
          * Interface method for the module protocol.
-         *
-         *
          */
         _initImpl: function () {
             // register domain builder
@@ -54,8 +52,6 @@ Oskari.clazz.define(
         /**
          * @private @method _startPluginImpl
          * Interface method for the plugin protocol.
-         *
-         *
          */
         _startPluginImpl: function () {
             if (!this.ajaxUrl) {
@@ -64,19 +60,6 @@ Oskari.clazz.define(
             }
         },
 
-        _createEventHandlers: function () {
-            var me = this;
-
-            return {
-                /**
-                 * @method MapLayerVisibilityChangedEvent
-                 * @param {Object} event
-                 */
-                MapLayerVisibilityChangedEvent: function (event) {
-                    me._mapLayerVisibilityChangeEvent(event.getMapLayer());
-                }
-            };
-        },
         /**
          * Adds a single Analysis layer to this map
          *
@@ -122,23 +105,6 @@ Oskari.clazz.define(
                 '#!#! CREATED OPENLAYER.LAYER.WMS for AnalysisLayer ' +
                 layer.getId()
             );
-        },
-
-        /**
-         * @method _mapLayerVisibilityChangedEvent
-         * Handle MapLayerVisibilityChangedEvent
-         * @private
-         * @param {Oskari.mapframework.event.common.MapLayerVisibilityChangedEvent}
-         */
-        _mapLayerVisibilityChangeEvent: function (layer) {
-            if (!this.isLayerSupported(layer)) {
-                return;
-            }
-            var olLayers = this.getOLMapLayers(layer);
-
-            _.each(olLayers, function(ol) {
-                ol.setVisible(layer.isVisible());
-            });
         }
     }, {
         "extend" : ["Oskari.mapping.mapmodule.AbstractMapLayerPlugin"],

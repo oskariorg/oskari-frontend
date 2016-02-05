@@ -344,6 +344,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 return;
             }
             this.getMap().addLayer(layerImpl);
+            // check for boolean true instead of truthy value since some calls might send layer name as second parameter/functionality has changed
             if(toBottom === true) {
                 this.setLayerIndex(layerImpl, 0);
             }

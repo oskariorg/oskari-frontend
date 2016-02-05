@@ -70,7 +70,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
             '</div>',
             emptyDiv: '<div><br/></div>',
             result: '<div class="result"></div>',
-            checkboxes: '<input type="checkbox" name="addresses" value="bar">Addresses<br>'
+            checkboxes: '<input type="checkbox" name="addresses" value="bar" checked>Addresses<br><input type="checkbox" name="geographical_names" checked>Geographical Names<br>'
         },
         /**
          * @method getTitle
@@ -226,6 +226,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
             values.term = this.searchInput.getValue();
             values.region = this.regionInput.getValue();
             values.addresses = jQuery(container).find('input[name=addresses]')[0].checked;
+            values.geographical_names = jQuery(container).find('input[name=geographical_names]')[0].checked;
             if (container.find('#countries').val()) {
             values.country = container
                 .find('#countries').attr('country');
