@@ -39,8 +39,7 @@ Oskari.clazz.define(
                 return;
             }
 
-            var me=this,
-                layers = [],
+            var layers = [],
                 olLayers = [],
                 layerIdPrefix = 'layer_';
             // insert layer or sublayers into array to handle them identically
