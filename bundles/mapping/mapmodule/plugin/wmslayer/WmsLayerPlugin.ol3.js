@@ -19,7 +19,7 @@ Oskari.clazz.define(
             return 'WMS';
         },
 
-        _createPluginEventHandlers: function () {: function () {
+        _createPluginEventHandlers: function () {
             return {
                 AfterChangeMapLayerStyleEvent: function (event) {
                     this._afterChangeMapLayerStyleEvent(event);
