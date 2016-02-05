@@ -46,7 +46,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
          */
         mapStatusChanged: function(changed){
             var me = this,
-                statusChanged = changed || true;
+                statusChanged = changed;
             me._mapStatusChanged = statusChanged;
         },
 

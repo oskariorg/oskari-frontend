@@ -251,7 +251,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          */
         eventHandlers: {
             'WFSStatusChangedEvent': function (event) {
-                var me = this;
                 if(event.getLayerId() === undefined) {
                     return;
                 }

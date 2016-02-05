@@ -783,37 +783,33 @@ Oskari.clazz.define(
             }
 
             // disabled
-            if (!this.active) {
-                if (this.selectedTab) {
-                    // dim possible highlighted layer
-                    var dimReqBuilder = sandbox.getRequestBuilder(
-                        'DimMapLayerRequest'
-                    );
-                    request = dimReqBuilder(this.selectedTab.layer.getId());
-                    sandbox.request(this.instance.getName(), request);
-                }
+            if (!this.active &&this.selectedTab) {
+                // dim possible highlighted layer
+                var dimReqBuilder = sandbox.getRequestBuilder(
+                    'DimMapLayerRequest'
+                );
+                request = dimReqBuilder(this.selectedTab.layer.getId());
+                sandbox.request(this.instance.getName(), request);
             }
             // enabled
-            else {
-                if (this.selectedTab) {
-                    // highlight layer if any
-                    var hlReqBuilder = sandbox.getRequestBuilder(
-                        'HighlightMapLayerRequest'
-                    );
-                    request = hlReqBuilder(this.selectedTab.layer.getId());
-                    sandbox.request(this.instance.getName(), request);
+            else if (this.selectedTab) {
+                // highlight layer if any
+                var hlReqBuilder = sandbox.getRequestBuilder(
+                    'HighlightMapLayerRequest'
+                );
+                request = hlReqBuilder(this.selectedTab.layer.getId());
+                sandbox.request(this.instance.getName(), request);
 
-                    if(clearContent) {
-                        // clear panels
-                        for (var panel in this.layers) {
-                            if (panel.getContainer) {
-                                panel.getContainer().empty();
-                            }
+                if(clearContent) {
+                    // clear panels
+                    for (var panel in this.layers) {
+                        if (panel.getContainer) {
+                            panel.getContainer().empty();
                         }
-
-                        // update data
-                        this.updateGrid();
                     }
+
+                    // update data
+                    this.updateGrid();
                 }
             }
         },
