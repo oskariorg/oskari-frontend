@@ -2,6 +2,9 @@
 
 ## 1.35
 
+### See Oskari/api/CHANGELOG for following changes:
+- RPC getAllLayers function now returns also minZoom and maxZoom if those are defined for layer.
+
 ### infobox
 
 Fixed InfoBox.ShowInfoBoxRequest handling. Now all popups with no popup id really deleted if hidePrevious param is setted to true.

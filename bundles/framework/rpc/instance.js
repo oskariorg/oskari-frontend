@@ -234,15 +234,32 @@ Oskari.clazz.define(
                 };
             },
             getAllLayers : function() {
-                var mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+                var me = this;
+                var mapLayerService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService');
                 var layers = mapLayerService.getAllLayers();
+                mapModule = me.sandbox.findRegisteredModuleInstance("MainMapModule");
+                mapResolutions = mapModule.getResolutionArray();
                 return layers.map(function (layer) {
-                    return {
-                        id: layer.getId(),
-                        opacity: layer.getOpacity(),
-                        visible: layer.isVisible(),
-                        name : layer.getName()
-                    };
+                    if (layer.getMaxScale() && layer.getMinScale()) {
+                        var layerResolutions = mapModule.calculateLayerResolutions(layer.getMaxScale(), layer.getMinScale());
+                        var minZoomLevel = mapResolutions.indexOf(layerResolutions[0]);
+                        var maxZoomLevel = mapResolutions.indexOf(layerResolutions[layerResolutions.length - 1]);
+                        return {
+                            id: layer.getId(),
+                            opacity: layer.getOpacity(),
+                            visible: layer.isVisible(),
+                            name : layer.getName(),
+                            minZoom: minZoomLevel,
+                            maxZoom: maxZoomLevel
+                        };
+                    } else {
+                        return {
+                            id: layer.getId(),
+                            opacity: layer.getOpacity(),
+                            visible: layer.isVisible(),
+                            name : layer.getName()
+                        };
+                    }
                 });
             },
             getMapBbox : function() {
