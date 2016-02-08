@@ -356,7 +356,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             if (window.location.pathname && window.location.pathname.length) {
                 url += window.location.pathname;
             }
-            url += "?uuid="+uuid;
+            url += "?uuid="+uuid+"&noSavedState=true";
 
             window.location.href = url;
         },
