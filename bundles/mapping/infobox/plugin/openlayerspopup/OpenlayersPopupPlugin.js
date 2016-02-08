@@ -612,7 +612,7 @@ Oskari.clazz.define(
          * @param {String} id
          *      id for popup that we want to close (optional - if not given, closes all popups)
          */
-        close: function (id, position) {
+        close: function (id) {
             // destroys all if id not given
             // deletes reference to the same id will work next time also
             var pid,
@@ -620,7 +620,7 @@ Oskari.clazz.define(
             if (!id) {
                 for (pid in this._popups) {
                     if (this._popups.hasOwnProperty(pid)) {
-                        popup = this._popups[pid];                    
+                        popup = this._popups[pid];
                         popup.popup.setPosition(undefined);  //destroy();
                         delete this._popups[pid];
                     }
