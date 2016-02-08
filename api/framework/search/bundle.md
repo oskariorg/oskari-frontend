@@ -1,5 +1,10 @@
 # Search
 
+This should document the basic search functionality (no ui - just request, event and service. ui/search should have the screenshot)
+
+
+--------------------
+
 <table class="table">
   <tr>
     <td>ID</td><td>search</td>

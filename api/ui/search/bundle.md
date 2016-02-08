@@ -1,0 +1,1 @@
+This should describe UI for search implementation located in framework/search
