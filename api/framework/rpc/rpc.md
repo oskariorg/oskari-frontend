@@ -320,6 +320,19 @@ This can be used to detect if the Oskari version has been updated without notifi
         }
        channel.log('GetInfo: ', data);
     });
+    
+#### getAllLayers()
+
+Returns all the layers available on map. If layer has minimum zoom level and maximum zoom level defined, returns also those.
+    
+    {
+        id: layerId,
+        opacity: layerOpacity,
+        visible: layerVisibility,
+        name : layerName,
+        minZoom: minZoomLevel,
+        maxZoom: maxZoomLevel 
+    }
 
 #### getFeatures(layerId)
 

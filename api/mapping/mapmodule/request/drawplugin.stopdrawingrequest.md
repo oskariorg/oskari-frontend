@@ -1,0 +1,1 @@
+# DrawPlugin.StopDrawingRequest
