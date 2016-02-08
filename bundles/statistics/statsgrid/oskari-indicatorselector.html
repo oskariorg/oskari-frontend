@@ -30,8 +30,9 @@
       id="userIndicatorsAjax"
       on-error="ajaxError"></iron-ajax>
     </template>
-    <oskari-spinner visible="[[showSpinner]]" spinner-id="indicatorsMetadataSpinner" />
-    <div hidden$="{{hideIndicatorSelector(embedded, showUserIndicatorView)}}">
+    <oskari-spinner visible="[[showSpinner]]" spinner-id="indicatorsMetadataSpinner">
+    </oskari-spinner>
+    <div hidden$="{{hideIndicatorSelector(embedded, showUserIndicatorView)}}" id="indicatorSelectorDiv">
       <form class="statsgrid2_indicator_selector">
         <div>
           <label for="datasource-selector">{{locale.tab.grid.organization}}</label>
@@ -71,7 +72,7 @@
       selector-selected-indicator-key="{{selectorSelectedIndicatorKey}}" sandbox="{{sandbox}}"
       hidden$="[[hideGrid]]"
       id="statsgrid" embedded="[[embedded]]"></oskari-statsgrid>
-    <div hidden$="[[!showUserIndicatorView]]">
+    <div hidden$="[[!showUserIndicatorView]]" id="userindicatordiv">
       <oskari-userindicator ajax-url="[[ajaxUrl]]"
         locale="[[locale]]" language="[[language]]" user="[[user]]"
         sources="[[sources]]" selected-layer="{{selectedLayer}}"
@@ -376,6 +377,10 @@
           });
           this.selectorSelectedIndicatorKey = this.getIndicatorKey(this.datasourceId, this.indicatorId,
               this.selectedLayer, this.getSelectorsKey());
+      },
+      "attached": function() {
+          jQuery('#statsgrid').height(jQuery(window).height() - jQuery('#indicatorSelectorDiv').height()); 
+          jQuery('#userindicatordiv').height(jQuery(window).height() - jQuery('#indicatorSelectorDiv').height()); 
       }
     });
   </script>

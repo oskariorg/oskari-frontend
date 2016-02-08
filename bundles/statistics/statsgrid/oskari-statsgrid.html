@@ -24,16 +24,18 @@
       debounce-duration="300"
       id="layerInfoAjax"
       on-error="ajaxError"></iron-ajax>
-    <div>
-      <oskari-spinner visible="[[showSpinner]]" spinnerId="indicatorDataSpinner" />
-      <label for="selectRegionCategory">{{locale.selectRegionCategory}}</label>
-      <select id="selectRegionCategory" style="width: 300px;" value="{{selectedLayer::change}}">
-        <template is="dom-repeat" items="[[getLayerInfoAsArray(layerInfo)]]">
-          <option value="{{item.val}}">{{item.text}}</option>
-        </template>
-      </select>
-      
-      <paper-scroll-header-panel style="height: 500px;">
+    <div id="oskari-stats-data-grid">
+      <oskari-spinner visible="[[showSpinner]]" spinnerId="indicatorDataSpinner">
+      </oskari-spinner>
+      <div id="region-category-selector">
+        <label for="selectRegionCategory">{{locale.selectRegionCategory}}</label>
+        <select id="selectRegionCategory" style="width: 300px;" value="{{selectedLayer::change}}">
+          <template is="dom-repeat" items="[[getLayerInfoAsArray(layerInfo)]]">
+            <option value="{{item.val}}">{{item.text}}</option>
+          </template>
+        </select>
+      </div>
+      <paper-scroll-header-panel id="oskari-grid-panel">
         <oskari-grid id="indicator-data-grid" statsrows="[[statsrows]]" rows="{{rows}}" headers="[[rowHeaders]]" selection="1"
           on-sort="onSort" on-filter="onFilter" on-delete="onDelete" filtering sorting deleting="{{!embedded}}" />
       </paper-scroll-header-panel>
@@ -239,6 +241,7 @@
               data: me.cache[indicatorHeader.id]
           });
           this.showIndicatorOnMap(indicatorHeader.id, index, indicatorHeader);
+          this.updateSize();
       },
       "filterOnValue": function(index) {
           var me = this;
@@ -549,6 +552,18 @@
           this.selectedIndicatorsChanged(this.ajaxUrl, this.selectedIndicators);
         }
       },
+      "updateSize": function() {
+          var windowHeight = jQuery(window).height();
+          var catSelHeight = jQuery('#region-category-selector').height();
+          var indSelHeight = jQuery('#indicatorSelectorDiv').height();
+          console.log("Heights: " + windowHeight + " - " + catSelHeight + " - " + indSelHeight);
+          jQuery('#oskariGrid').height( windowHeight - catSelHeight
+        		  - indSelHeight);
+          jQuery('#oskari-grid-panel').height(windowHeight - catSelHeight
+        		  - indSelHeight);
+          jQuery('#oskari-stats-data-grid').height(windowHeight
+        		  - indSelHeight);
+      },
       "attached": function() {
           var me = this;
           if (this.embedded && this.selectedIndicators && this.selectedIndicators.length > 0) {
@@ -556,6 +571,7 @@
             this.set("selectedIndicator", this.selectedIndicators[0]);
             this.set("selectedIndicatorKey", indicatorKey);
           }
+          this.updateSize();
       },
       "ready": function() {
           this.cache = {};
