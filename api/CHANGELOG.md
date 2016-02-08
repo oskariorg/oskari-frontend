@@ -9,7 +9,22 @@ Each addition is tagged with [add], [mod] or [rem] telling if it's a new feature
 
 ### RPC
 
-### [mod] [rpc] New rpc-client version
+#### [mod] [rpc] getAllLayers function modified
+
+GetAllLayers now returns also minimum zoom level and maximum zoom level for the layer if layer has them defined.
+
+```javascript
+    {
+        id: layerId,
+        opacity: layerOpacity,
+        visible: layerVisibility,
+        name : layerName,
+        minZoom: minZoomLevel,
+        maxZoom: maxZoomLevel
+    };
+```
+
+#### [mod] [rpc] New rpc-client version
 
 The JSChannel dependency has been updated. The old version is not compatible with the new one so rpc-client needs to be updated to 2.0.0.
 
