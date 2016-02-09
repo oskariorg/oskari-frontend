@@ -35,10 +35,8 @@
           </template>
         </select>
       </div>
-      <paper-scroll-header-panel id="oskari-grid-panel">
-        <oskari-grid id="indicator-data-grid" statsrows="[[statsrows]]" rows="{{rows}}" headers="[[rowHeaders]]" selection="1"
-          on-sort="onSort" on-filter="onFilter" on-delete="onDelete" filtering sorting deleting="{{!embedded}}" />
-      </paper-scroll-header-panel>
+      <oskari-grid id="indicator-data-grid" statsrows="[[statsrows]]" rows="{{rows}}" headers="[[rowHeaders]]" selection="1"
+        on-sort="onSort" on-filter="onFilter" on-delete="onDelete" filtering sorting deleting="{{!embedded}}" />
       <content></content>
     </div>
   </template>

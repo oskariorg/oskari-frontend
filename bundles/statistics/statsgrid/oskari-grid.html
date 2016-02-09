@@ -4,9 +4,9 @@
 <dom-module id="oskari-grid">
 
   <template>
-    <table class="oskari-grid" id="oskariGrid">
-      <thead>
-        <tr>
+    <table class="oskari-grid oskari-grid-width" id="oskariGrid" style="margin: 0px; overflow-x: scroll; display: block;">
+      <thead class="oskari-grid-width" id="oskari-grid-header" style="">
+        <tr class="oskari-grid-width">
           <template is="dom-if" if="[[selection]]">
             <th><input type="checkbox" checked="{{allSelected::change}}" on-change="allSelectedChanged"
                 id="allSelectedCheckbox"></input></th>
@@ -30,15 +30,15 @@
           </template>
         </tr>
       </thead>
-      <tbody>
-        <tr>
-          <td colspan$="[[numcols]]">
+      <tbody class="oskari-grid-width" id="statisticsContainer" style="">
+        <tr class="oskari-grid-width">
+          <td colspan$="[[numcols]]" style="width: 100%;">
             <button on-click="toggleStats">Statistics</button>
           </td>
         </tr>
-        <tr><td colspan$="[[numcols]]">
+        <tr class="oskari-grid-width"><td colspan$="[[numcols]]" style="padding: 0px;">
           <iron-collapse id="statscollapse">
-            <table>
+            <table id="oskari-grid-statistics" class="oskari-grid-width">
               <template is="dom-repeat" items="{{statsrows}}" as="statsrow" id="statsRowsTemplate">
                 <tr>
                   <template is="dom-repeat" items="[[statsrow.data]]" as="datum">
@@ -51,10 +51,12 @@
             </table>
           </iron-collapse>
         </td></tr>
+      </tbody>
+      <tbody class="oskari-grid-width" id="oskari-grid-body" style="overflow-y: scroll; display: block;">
         <template is="dom-repeat" items="{{rows}}" as="row" id="rowsTemplate">
-          <tr>
+          <tr class="oskari-grid-width">
             <template is="dom-if" if="[[selection]]">
-              <td><input type="checkbox" checked="{{row.selected::change}}" on-change="selectionsChanged"></input></td>
+              <td style="width: 41px;"><input type="checkbox" checked="{{row.selected::change}}" on-change="selectionsChanged"></input></td>
             </template>
             <template is="dom-repeat" items="[[row.data]]" as="datum">
               <td>
@@ -141,6 +143,7 @@
       },
       "headersChanged": function(headers) {
           this.numcols = this.headers.length + 1;
+          this.resize();
       },
       /**
        * This is just used for sorting and filtering.
@@ -148,7 +151,7 @@
       "refresh": function() {
           this.$.headersTemplate.render();
           this.$.rowsTemplate.render();
-          $('oskariGrid').stickyTableHeaders();
+          this.resize();
       },
       "onSort": function(event) {
           if (this.sorting) {
@@ -165,8 +168,49 @@
             this.fire("onFilter", {index: event.target.index, header: event.target.header});
           }
       },
+      "resize": function() {
+          var statsHeight = jQuery('#statisticsContainer').height();
+          var indicatorSelectorHeight = jQuery('#indicatorSelectorDiv').height();
+    	  var headerHeight = jQuery('#oskari-grid-header').height();
+    	  var regionSelectorHeight = jQuery('#region-category-selector').height();
+    	  var totalHeight = jQuery('.statsgrid_100').height() - 10;
+    	  var bodyWidth = jQuery('.statsgrid_100').width() - 10;
+    	  
+    	  var gridHeight = totalHeight - indicatorSelectorHeight - regionSelectorHeight;
+    	  var bodyHeight = gridHeight - statsHeight - headerHeight - 20;
+    	  console.log("indicatorSelectorHeight: " + indicatorSelectorHeight);
+    	  console.log("regionSelectorHeight: " + regionSelectorHeight);
+    	  console.log("bodyWidth: " + bodyWidth);
+    	  console.log("gridHeight: " + gridHeight);
+    	  console.log("bodyHeight: " + bodyHeight);
+    	  jQuery('#oskariGrid').height(gridHeight);
+    	  jQuery('.oskari-grid-width').width(bodyWidth);
+    	  jQuery('#oskari-grid-body').height(bodyHeight);
+    	  var colWidthNum = 200;
+    	  var colWidth = colWidthNum + 'px';
+    	  ['checkbox'].concat(this.headers).forEach(function(header, headerIndex) {
+    	    // The indexing starts at 1, and the first header column is actually nth-child(3) because of the template.
+    	    var index = (headerIndex == 0)?(headerIndex + 1):(headerIndex + 2);
+    	    console.log(index);
+    	    jQuery('thead#oskari-grid-header th:nth-child(' + index + ')').css('min-width', colWidth);
+    	    jQuery('thead#oskari-grid-header th:nth-child(' + index + ')').css('width', colWidth);
+    	    jQuery('tbody#oskari-grid-body td:nth-child(' + index + ')').css('min-width', colWidth);
+    	    jQuery('tbody#oskari-grid-body td:nth-child(' + index + ')').css('width', colWidth);
+    	  });
+          jQuery('#statisticsContainer').css('min-width', (colWidthNum * (1 + this.headers.length)) + "px");
+          jQuery('#statisticsContainer').css('width', (colWidthNum * (1 + this.headers.length)) + "px");
+    	  this.headers.forEach(function(header, headerIndex) {
+    	    // The indexing starts at 1.
+    	    // There is no checkbox column here.
+    	    var index = headerIndex + 1;
+    	    jQuery('#oskari-grid-statistics td:nth-child(' + index + ')').css('min-width', colWidth);
+    	    jQuery('#oskari-grid-statistics td:nth-child(' + index + ')').css('width', colWidth);
+    	  });
+      },
+      "ready": function() {
+      },
       "attached": function() {
-          $('oskariGrid').stickyTableHeaders();
+    	  this.resize();
       }
     });
   </script>
