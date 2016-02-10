@@ -46,7 +46,7 @@
             </legend>
             <ul class="regions">
               <template is="dom-repeat" items="{{regionItems}}" as="regionItem">
-                <li class="region-row">
+                <li class="region-row" style="list-style-type: none;">
                   <label class="region-row" for="[[regionItem.key]]">[[regionItem.text]]</label>
                   <input id="[[regionItem.key]]" type="text" value="{{regionItem.value::change}}"
                     placeholder="[[locale.municipalityPlaceHolder]]" />
@@ -57,7 +57,7 @@
         </fieldset>
         <fieldset class="form-submit">
           <button type="button" class="cancel-form-button" on-click="cancelForm">[[locale.formCancel]]</button>
-          <button type="button" class="submit-form-button primary" title="" on-click="submitForm">[[locale.formSubmit]]</button>
+          <button type="button" class="submit-form-button primary" title="" on-click="submitForm" disabled$="[[!user._loggedIn]]">[[locale.formSaveIndicator]]</button>
           <button type="button" class="clear-form-button" on-click="clearForm">[[locale.formEmpty]]</button>
         </fieldset>
       </form>
