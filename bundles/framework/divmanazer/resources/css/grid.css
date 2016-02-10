@@ -84,7 +84,7 @@ table.oskari-grid td, table.oskari-grid th {
   overflow: hidden;
   border: 1px solid #E6E6E6;
   text-overflow: ellipsis;
-  padding: 0px;}
+  padding: 0px; }
   table.oskari-grid td.hidden, table.oskari-grid th.hidden {
     display: none; }
 
