@@ -393,10 +393,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 'EPSG:4326': '+title=WGS 84 +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs'
             };
 
+            epsgConfs = _.keys(defs);
+            _.forEach(epsgConfs, function (conf) {
+                if (!_.has(defaultDefs, conf)) {
+                    defaultDefs[conf] = defs[conf];
+                }
+            });
             // OL3 uses proj4
             if(window.proj4) {
                 // ensure static projections are defined
-                jQuery.each(defs || defaultDefs, function(srs, defs) {
+                jQuery.each(defaultDefs, function(srs, defs) {
                     window.proj4.defs(srs, defs);
                 });
             }
@@ -406,7 +412,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     window.Proj4js = {};
                 }
                 // ensure static projections are defined
-                Proj4js.defs = defs || defaultDefs;
+                Proj4js.defs = defaultDefs;
             }
         },
 
