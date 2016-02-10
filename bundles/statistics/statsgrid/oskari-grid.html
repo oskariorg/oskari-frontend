@@ -253,7 +253,11 @@
       "ready": function() {
       },
       "attached": function() {
+          var me = this;
     	  this.resize();
+    	  $(window).bind('resize', function(e) {
+    	    me.resize();
+    	  });
       }
     });
   </script>
