@@ -30,8 +30,8 @@
           </template>
         </tr>
       </thead>
-      <tbody class="oskari-grid-width" id="statisticsContainer" style="padding: 0px; border: 0px;">
-        <tr class="oskari-grid-width">
+      <tbody class="oskari-grid-width" style="padding: 0px; border: 0px;">
+        <tr class="oskari-grid-width" id="statisticsContainer">
           <td colspan$="[[numcols]]" class="oskari-grid-width">
             <button on-click="toggleStats">Statistics</button>
           </td>
@@ -176,7 +176,7 @@
           // table layout, which makes sure that the table cells resize based on horizontal and vertical content
           // in neighboring cells.
           var statsHeight = jQuery('#statisticsContainer').height();
-          if (this.$.statscollapse) {
+          if (this.$.statscollapse.opened) {
             // We have to add this height manually, because it takes time for the statisticsContainer to expand.
             var margin = 20;
             statsHeight += jQuery('#oskari-grid-statistics').height() + margin;
