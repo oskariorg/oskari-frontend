@@ -4,7 +4,7 @@
 <dom-module id="oskari-grid">
 
   <template>
-    <table class="oskari-grid oskari-grid-width" id="oskariGrid" style="margin: 0px; overflow-x: scroll; display: block;">
+    <table class="oskari-grid" id="oskariGrid" style="margin: 0px; overflow-x: scroll; display: block; max-width: 450px;">
       <thead class="oskari-grid-width" id="oskari-grid-header" style="">
         <tr class="oskari-grid-width">
           <template is="dom-if" if="[[selection]]">
@@ -30,17 +30,17 @@
           </template>
         </tr>
       </thead>
-      <tbody class="oskari-grid-width" id="statisticsContainer" style="">
+      <tbody class="oskari-grid-width" id="statisticsContainer" style="padding: 0px; border: 0px;">
         <tr class="oskari-grid-width">
-          <td colspan$="[[numcols]]" style="width: 100%;">
+          <td colspan$="[[numcols]]" class="oskari-grid-width">
             <button on-click="toggleStats">Statistics</button>
           </td>
         </tr>
-        <tr class="oskari-grid-width"><td colspan$="[[numcols]]" style="padding: 0px;">
+        <tr class="oskari-grid-width"><td colspan$="[[numcols]]" class="oskari-grid-width" style="padding: 0px; border: 0px;">
           <iron-collapse id="statscollapse">
-            <table id="oskari-grid-statistics" class="oskari-grid-width">
+            <table id="oskari-grid-statistics" class="oskari-grid-width" style="display: block;">
               <template is="dom-repeat" items="{{statsrows}}" as="statsrow" id="statsRowsTemplate">
-                <tr>
+                <tr class="oskari-grid-width">
                   <template is="dom-repeat" items="[[statsrow.data]]" as="datum">
                     <td>
                       <span>[[datum]]</span>
@@ -52,7 +52,7 @@
           </iron-collapse>
         </td></tr>
       </tbody>
-      <tbody class="oskari-grid-width" id="oskari-grid-body" style="overflow-y: scroll; display: block;">
+      <tbody class="oskari-grid-width" id="oskari-grid-body" style="display: block; overflow-y: scroll; overflow-x: hidden;">
         <template is="dom-repeat" items="{{rows}}" as="row" id="rowsTemplate">
           <tr class="oskari-grid-width">
             <template is="dom-if" if="[[selection]]">
@@ -112,6 +112,7 @@
                     ],
       "toggleStats": function() {
           this.$.statscollapse.toggle();
+    	  this.resize();
       },
       "allSelectedChanged": function() {
           var me = this;
@@ -140,10 +141,11 @@
               me.set("rows." + index + ".selected", row.selected);
           });
           this.$.rowsTemplate.render();
+          setTimeout(this.resize.bind(this), 10);
       },
       "headersChanged": function(headers) {
           this.numcols = this.headers.length + 1;
-          this.resize();
+          setTimeout(this.resize.bind(this), 10);
       },
       /**
        * This is just used for sorting and filtering.
@@ -169,7 +171,16 @@
           }
       },
       "resize": function() {
+          // There is no clean and elegant way of making HTML5 table header float with x and y scrollbars.
+          // The cleanest de facto solution is to define the table display as "block", breaking the standard
+          // table layout, which makes sure that the table cells resize based on horizontal and vertical content
+          // in neighboring cells.
           var statsHeight = jQuery('#statisticsContainer').height();
+          if (this.$.statscollapse) {
+            // We have to add this height manually, because it takes time for the statisticsContainer to expand.
+            var margin = 20;
+            statsHeight += jQuery('#oskari-grid-statistics').height() + margin;
+          }
           var indicatorSelectorHeight = jQuery('#indicatorSelectorDiv').height();
     	  var headerHeight = jQuery('#oskari-grid-header').height();
     	  var regionSelectorHeight = jQuery('#region-category-selector').height();
@@ -184,27 +195,59 @@
     	  console.log("gridHeight: " + gridHeight);
     	  console.log("bodyHeight: " + bodyHeight);
     	  jQuery('#oskariGrid').height(gridHeight);
-    	  jQuery('.oskari-grid-width').width(bodyWidth);
     	  jQuery('#oskari-grid-body').height(bodyHeight);
-    	  var colWidthNum = 200;
+    	  var colWidthNum = 120;
+    	  var checkboxColWidthNum = 40;
     	  var colWidth = colWidthNum + 'px';
+    	  var checkboxColWidth = checkboxColWidthNum + 'px';
+    	  var gridWidthNum = 0;
+    	  var lastColIndex = this.headers.length;
     	  ['checkbox'].concat(this.headers).forEach(function(header, headerIndex) {
     	    // The indexing starts at 1, and the first header column is actually nth-child(3) because of the template.
+    	    var thisColWidthNum = colWidthNum;
+    	    if (headerIndex == 0) {
+    	      thisColWidthNum = checkboxColWidthNum;
+    	    }
+    	    var thisColWidth = thisColWidthNum + 'px';
+            gridWidthNum += thisColWidthNum;
     	    var index = (headerIndex == 0)?(headerIndex + 1):(headerIndex + 2);
     	    console.log(index);
-    	    jQuery('thead#oskari-grid-header th:nth-child(' + index + ')').css('min-width', colWidth);
-    	    jQuery('thead#oskari-grid-header th:nth-child(' + index + ')').css('width', colWidth);
-    	    jQuery('tbody#oskari-grid-body td:nth-child(' + index + ')').css('min-width', colWidth);
-    	    jQuery('tbody#oskari-grid-body td:nth-child(' + index + ')').css('width', colWidth);
+    	    
+            jQuery('thead#oskari-grid-header th:nth-child(' + index + ')').css('max-width', thisColWidth);
+            jQuery('thead#oskari-grid-header th:nth-child(' + index + ')').css('min-width', thisColWidth);
+            jQuery('thead#oskari-grid-header th:nth-child(' + index + ')').css('width', thisColWidth);
+    	    if (headerIndex == lastColIndex) {
+    	      // We will only set a bit of flex for the last column to make space for the scrollbar.
+    	      var lastColMinWidth = (thisColWidthNum - 20) + 'px';
+    	      var lastColStdWidth = (thisColWidthNum - 15) + 'px';
+              jQuery('tbody#oskari-grid-body td:nth-child(' + index + ')').css('max-width', thisColWidth);
+              jQuery('tbody#oskari-grid-body td:nth-child(' + index + ')').css('min-width', lastColMinWidth);
+              jQuery('tbody#oskari-grid-body td:nth-child(' + index + ')').css('width', lastColStdWidth);
+    	    } else {
+              jQuery('tbody#oskari-grid-body td:nth-child(' + index + ')').css('max-width', thisColWidth);
+              jQuery('tbody#oskari-grid-body td:nth-child(' + index + ')').css('min-width', thisColWidth);
+              jQuery('tbody#oskari-grid-body td:nth-child(' + index + ')').css('width', thisColWidth);
+    	    }
     	  });
-          jQuery('#statisticsContainer').css('min-width', (colWidthNum * (1 + this.headers.length)) + "px");
-          jQuery('#statisticsContainer').css('width', (colWidthNum * (1 + this.headers.length)) + "px");
+    	  var gridWidth = gridWidthNum + "px";
+          jQuery('#statisticsContainer').css('max-width', gridWidth);
+          jQuery('#statisticsContainer').css('min-width', gridWidth);
+          jQuery('#statisticsContainer').css('width', gridWidth);
+    	  jQuery('.oskari-grid-width').css('max-width', gridWidth);
+    	  jQuery('.oskari-grid-width').css('min-width', gridWidth);
+    	  jQuery('.oskari-grid-width').css('width', gridWidth);
     	  this.headers.forEach(function(header, headerIndex) {
     	    // The indexing starts at 1.
-    	    // There is no checkbox column here.
     	    var index = headerIndex + 1;
-    	    jQuery('#oskari-grid-statistics td:nth-child(' + index + ')').css('min-width', colWidth);
-    	    jQuery('#oskari-grid-statistics td:nth-child(' + index + ')').css('width', colWidth);
+    	    var statsColWidth = colWidth;
+    	    // The first column should span the checkbox and the municipality columns.
+    	    if (headerIndex == 0) {
+    	      var paddingAndBorder = 1;
+    	      statsColWidth = (colWidthNum + checkboxColWidthNum + paddingAndBorder) + 'px';
+    	    }
+    	    jQuery('#oskari-grid-statistics td:nth-child(' + index + ')').css('max-width', statsColWidth);
+    	    jQuery('#oskari-grid-statistics td:nth-child(' + index + ')').css('min-width', statsColWidth);
+    	    jQuery('#oskari-grid-statistics td:nth-child(' + index + ')').css('width', statsColWidth);
     	  });
       },
       "ready": function() {

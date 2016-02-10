@@ -78,21 +78,18 @@ input.csvExportButton {
 input.excelExportButton {
   margin: 3px 10px 2px 5px; }
 
-table.oskari-grid td {
-  padding: 5px; }
-
 table.oskari-grid td, table.oskari-grid th {
   min-height: 28px;
   max-width: 110px;
   overflow: hidden;
   border: 1px solid #E6E6E6;
   text-overflow: ellipsis;
-  padding-left: 10px;
-  padding-right: 10px; }
+  padding: 0px;}
   table.oskari-grid td.hidden, table.oskari-grid th.hidden {
     display: none; }
 
 table.oskari-grid th {
+  padding: 0px;
   background-color: #F3F3F3; }
   table.oskari-grid th a {
     color: inherit;

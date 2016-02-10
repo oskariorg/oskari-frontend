@@ -101,18 +101,13 @@ input.excelExportButton {
 
 table.oskari-grid {
 
-    td {
-        padding: 5px;
-    }
-
     td, th {
         min-height: 28px;
         max-width: 110px;
         overflow: hidden;
         border: 1px solid #E6E6E6;
         text-overflow: ellipsis;
-        padding-left: 10px;
-        padding-right: 10px;
+        padding: 0px;
 
         &.hidden {
           display: none;
@@ -120,6 +115,7 @@ table.oskari-grid {
     }
 
     th {
+        padding: 0px;
         background-color: #F3F3F3;
 
         a {
