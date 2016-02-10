@@ -189,11 +189,6 @@
     	  
     	  var gridHeight = totalHeight - indicatorSelectorHeight - regionSelectorHeight;
     	  var bodyHeight = gridHeight - statsHeight - headerHeight - 20;
-    	  console.log("indicatorSelectorHeight: " + indicatorSelectorHeight);
-    	  console.log("regionSelectorHeight: " + regionSelectorHeight);
-    	  console.log("bodyWidth: " + bodyWidth);
-    	  console.log("gridHeight: " + gridHeight);
-    	  console.log("bodyHeight: " + bodyHeight);
     	  jQuery('#oskariGrid').height(gridHeight);
     	  jQuery('#oskari-grid-body').height(bodyHeight);
     	  var colWidthNum = 120;
@@ -211,7 +206,6 @@
     	    var thisColWidth = thisColWidthNum + 'px';
             gridWidthNum += thisColWidthNum;
     	    var index = (headerIndex == 0)?(headerIndex + 1):(headerIndex + 2);
-    	    console.log(index);
     	    
             jQuery('thead#oskari-grid-header th:nth-child(' + index + ')').css('max-width', thisColWidth);
             jQuery('thead#oskari-grid-header th:nth-child(' + index + ')').css('min-width', thisColWidth);
