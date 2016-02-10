@@ -126,7 +126,11 @@ Oskari.clazz.define(
                 );
             return {
                 'MapModulePlugin.GetFeatureInfoRequest': handler,
-                'MapModulePlugin.GetFeatureInfoActivationRequest': handler
+                'MapModulePlugin.GetFeatureInfoActivationRequest': handler,
+                'GetInfoPlugin.ResultHandlerRequest': Oskari.clazz.create(
+                    'Oskari.mapframework.mapmodule.getinfoplugin.request.ResultHandlerRequestHandler',
+                    this
+                )
             };
         },
 
@@ -341,15 +345,6 @@ Oskari.clazz.define(
         addInfoResultHandler: function(callback){
             var me = this;
             me._showGfiInfo = callback;
-        },
-
-        _createRequestHandlers: function () {
-            return {
-                'GetInfoPlugin.ResultHandlerRequest': Oskari.clazz.create(
-                    'Oskari.mapframework.mapmodule.getinfoplugin.request.ResultHandlerRequestHandler',
-                    this
-                )
-            };
         },
 
         /**

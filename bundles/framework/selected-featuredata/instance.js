@@ -106,6 +106,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
         resultHandler: function(content, data, formatters, params){
             var me = this;
             // show infobox
+
             var bundleInstance = Oskari.app.getBundleInstanceByName('selected-featuredata');
             var flyout = bundleInstance.plugins['Oskari.userinterface.Flyout'];
             

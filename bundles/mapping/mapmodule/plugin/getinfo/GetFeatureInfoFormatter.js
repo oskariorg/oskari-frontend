@@ -34,7 +34,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
          */
         myplace: function(place){
             var me = this,
-                content = jQuerry('<div class="myplaces_place">' + '<h3 class="myplaces_header"></h3>' + '<p class="myplaces_desc"></p>' + '<a class="myplaces_imglink" target="_blank"><img class="myplaces_img"></img></a>' + '<br><a class="myplaces_link" target="_blank"></a>' + '</div>'),
+                content = jQuery('<div class="myplaces_place">' + '<h3 class="myplaces_header"></h3>' + '<p class="myplaces_desc"></p>' + '<a class="myplaces_imglink" target="_blank"><img class="myplaces_img"></img></a>' + '<br><a class="myplaces_link" target="_blank"></a>' + '</div>'),
                 desc = content.find('p.myplaces_desc'),
                 img = content.find('a.myplaces_imglink'),
                 link = content.find('a.myplaces_link');
@@ -252,7 +252,6 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             if (datum.layerId && typeof datum.layerId === 'string' && datum.layerId.match('myplaces_')) {
                 return _.foldl(datum.content.parsed.places, function (div, place) {
                     div.append(me.formatters.myplace(place));
-
                     return div;
                 }, jQuery('<div></div>'));
             }
@@ -332,6 +331,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
      * @method _formatWFSFeaturesForInfoBox
      */
     _formatWFSFeaturesForInfoBox: function (data) {
+        debugger;
         var me = this,
             layer = this._sandbox.findMapLayerFromSelectedMapLayers(data.layerId),
             isMyPlace = layer.isLayerOfType('myplaces'),
