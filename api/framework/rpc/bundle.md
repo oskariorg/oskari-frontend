@@ -300,7 +300,7 @@ to send parameters to the function. The parameters to send should be sent as an 
 
 If the first parameter is is a function, it's treated as the success callback.
 
-#### getInfo(clientVersion)
+**getInfo(clientVersion)**
 
 Returns generic information about the Oskari instance:
 
@@ -321,7 +321,7 @@ This can be used to detect if the Oskari version has been updated without notifi
        channel.log('GetInfo: ', data);
     });
     
-#### getAllLayers()
+**getAllLayers()**
 
 Returns all the layers available on map. If layer has minimum zoom level and maximum zoom level defined, returns also those.
     
@@ -334,7 +334,130 @@ Returns all the layers available on map. If layer has minimum zoom level and max
         maxZoom: maxZoomLevel 
     }
 
-#### getFeatures(layerId)
+**getMapPosition()**
+
+Returns information about map position:
+
+    {
+        "centerX": 401696,
+        "centerY": 6724032,
+        "zoom": 4,
+        "scale": 362834,
+        "srsName": "EPSG:3067"
+    }
+
+**getSupportedEvents()**
+
+Returns event that are supported by rpc functionality.
+
+    {
+        "AfterMapMoveEvent": true,
+        "MapClickedEvent": true,
+        "AfterAddMarkerEvent": true,
+        "MarkerClickEvent": true,
+        "RouteResultEvent": true,
+        "SearchResultEvent": true,
+        "UserLocationEvent": true,
+        "DrawingEvent": true,
+        "FeatureEvent": true
+    }
+
+**getSupportedFunctions()**
+
+Returns functions that are supported by rpc functionality.
+
+    {
+        "getSupportedEvents": true,
+        "getSupportedFunctions": true,
+        "getSupportedRequests": true,
+        "getInfo": true,
+        "getAllLayers": true,
+        "getMapBbox": true,
+        "getMapPosition": true,
+        "getZoomRange": true,
+        "resetState": true,
+        "getCurrentState": true,
+        "useState": true,
+        "getFeatures": true
+    }
+
+**getSupportedRequests()**
+
+Returns requests that are supported  by rpc functionality
+
+    {
+        "InfoBox.ShowInfoBoxRequest": true,
+        "MapModulePlugin.AddMarkerRequest": true,
+        "MapModulePlugin.AddFeaturesToMapRequest": true,
+        "MapModulePlugin.RemoveFeaturesFromMapRequest": true,
+        "MapModulePlugin.GetFeatureInfoRequest": true,
+        "MapModulePlugin.MapLayerVisibilityRequest": true,
+        "MapModulePlugin.RemoveMarkersRequest": true,
+        "MapMoveRequest": true,
+        "ShowProgressSpinnerRequest": true,
+        "GetRouteRequest": true,
+        "SearchRequest": true,
+        "ChangeMapLayerOpacityRequest": true,
+        "MyLocationPlugin.GetUserLocationRequest": true,
+        "DrawTools.StartDrawingRequest": true,
+        "DrawTools.StopDrawingRequest": true,
+        "MapModulePlugin.ZoomToFeaturesRequest": true
+    }
+
+**getZoomRange()**
+
+Returns information about map zoom range.
+
+    {
+        "min": 0,
+        "max": 13,
+        "current": 4
+    }
+
+**resetState()**
+
+Resets the saved map state. State means i.a. map positions and selected layers and their properties.
+
+**getCurrentState()**
+
+Returns the state of the map.
+
+    {
+        "mapfull": {
+            "state": {
+                "north": 6751897.3481153,
+                "east": 411650.70779123,
+                "zoom": 2,
+                "srs": "EPSG:3067",
+                "selectedLayers": [
+                    {
+                        "id": "base_35",
+                        "opacity": 100,
+                        "style": "default"
+                    },
+                    {
+                        "id": 454,
+                        "opacity": 43,
+                        "style": "aluevaki_base"
+                    }
+                ],
+                "plugins": {
+                    "MainMapModuleMarkersPlugin": {
+                        "markers": []
+                    }
+                }
+            }
+        },
+        "toolbar": {
+            "state": {}
+        }
+    }
+
+**useState()**
+
+Loads a saved map state.
+
+**getFeatures(layerId)**
 
 Function gets features as geojson object grouped by layer if the value of given parameter is true. If parameter is not given, will return array of layerIds. 
 For example in RPC-client you can:
