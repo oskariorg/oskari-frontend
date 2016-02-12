@@ -352,6 +352,16 @@
                     }
                 }
             }
+        }, {
+            "title": "ASDI login",
+            "bundlename": "asdi-login",
+            "metadata": {
+                "Import-Bundle": {
+                    "asdi-login": {
+                        "bundlePath": "../../../packages/asdi/bundle/"
+                    }
+                }
+            }
         }
 
     ]
