@@ -184,13 +184,8 @@
               },
               // Oskari.mapframework.domain.WmsLayer
               // layertype STATS
-                  layer;
-              _.forEach(me.sandbox.findAllSelectedMapLayers(), function (oneLayer) {
-                  if (oneLayer.getLayerName() === me.selectedLayer) {
-                      layer = oneLayer;
-                  }
-              });
-              var event = eventBuilder(layer, data);
+                  layer = me.sandbox.findMapLayerFromAllAvailable(null, me.selectedLayer),
+                  event = eventBuilder(layer, data);
               me.sandbox.notifyAll(event);
           }
       },
@@ -301,7 +296,10 @@
                 window.alert(me.locale.connectionError + ": " + textStatus);
               }
           });
-          // FIXME: This should select the layer shown on the map also.
+          var statsLayer = me.sandbox.findMapLayerFromAllAvailable(null, layer);
+          if (statsLayer) {
+            statsLayer.setVisible(true);
+          }
       },
       "selectedIndicatorsChanged": function() {
           var me = this,

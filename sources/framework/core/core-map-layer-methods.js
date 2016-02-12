@@ -74,20 +74,29 @@ Oskari.clazz.category(
          * Finds map layer from all available. Uses
          * Oskari.mapframework.service.MapLayerService.
          *
-         * @param {String} id ID of the layer to get
+         * @param {String} id of the layer to get. If id is null, name is used to search the layer.
+         * @param {String} name of the layer to get. Only used if id = null.
          *
          * @return {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object}
          * Layer domain object if found matching id or null if not found
          */
-        findMapLayerFromAllAvailable: function (id) {
+        findMapLayerFromAllAvailable: function (id, name) {
             var mapLayerService = this.getService(
                     'Oskari.mapframework.service.MapLayerService'
                 ),
-                layer = mapLayerService.findMapLayer(id);
+                layer,
+                selector = 'no selector';
+            if (id) {
+              layer = mapLayerService.findMapLayer(id);
+              selector = 'id "' + id + '"';
+            } else if (name) {
+              layer = mapLayerService.findMapLayerByName(name);
+              selector = 'name "' + name + '"';
+            }
 
             if (layer === null || layer === undefined) {
-                this.printDebug('Cannot find map layer with id "' + id +
-                    '" from all available. ' +
+                this.printDebug('Cannot find map layer with ' + selector +
+                    ' from all available. ' +
                     'Check that current user has VIEW permissions to that layer.');
             }
             return layer;
