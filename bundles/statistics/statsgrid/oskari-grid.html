@@ -109,6 +109,7 @@
       },
       "observers": [
                     "headersChanged(headers)",
+                    "rowsChanged(rows)"
                     ],
       "toggleStats": function() {
           this.$.statscollapse.toggle();
@@ -141,11 +142,15 @@
               me.set("rows." + index + ".selected", row.selected);
           });
           this.$.rowsTemplate.render();
-          setTimeout(this.resize.bind(this), 10);
+          setTimeout(this.resize.bind(this), 100);
       },
-      "headersChanged": function(headers) {
+      "headersChanged": function() {
           this.numcols = this.headers.length + 1;
-          setTimeout(this.resize.bind(this), 10);
+          setTimeout(this.resize.bind(this), 100);
+      },
+      "rowsChanged": function() {
+          this.numcols = this.headers.length + 1;
+          setTimeout(this.resize.bind(this), 100);
       },
       /**
        * This is just used for sorting and filtering.

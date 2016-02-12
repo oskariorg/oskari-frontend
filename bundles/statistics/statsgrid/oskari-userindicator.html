@@ -100,10 +100,15 @@
           }
       },
       "observers": [
-          "getRegionItems(regionInfo)"
+          "getRegionItems(regionInfo)",
+          "show(showUserIndicatorView)"
       ],
       "getLayerName": function(locale, layerKey) {
           return this.localize(this.locale.regionCategories, layerKey);
+      },
+      "show": function() {
+        // This is needed to initialize the native dropdown to the correct value.
+        this.$.selectRegionCategory.value = this.selectedLayer;
       },
       "getRegionItems": function(regionInfo) {
           var me = this;
@@ -246,15 +251,15 @@
       },
       "getLayerInfoAsArray": function(layerInfo) {
           // FIXME: This is duplicated to oskari-statsgrid. Store layerinfo as array and pass it instead.
-          var me = this,
-              array = [];
-          Object.keys(layerInfo).forEach(function(layerName) {
-              array.push({
-                  "key": layerName,
-                  "text": me.localize(me.locale.regionCategories, layerName)
-              });
+        var me = this,
+        array = [];
+        Object.keys(layerInfo).forEach(function(layerName) {
+          array.push({
+            "val": layerName,
+            "text": me.localize(me.locale.regionCategories, layerName)
           });
-          return array;
+        });
+        return array;
       },
       /**
        * This stops for example the F key from propagating to the OpenLayers map fullscreen toggle.

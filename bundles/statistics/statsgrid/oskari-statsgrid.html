@@ -301,6 +301,7 @@
                 window.alert(me.locale.connectionError + ": " + textStatus);
               }
           });
+          // FIXME: This should select the layer shown on the map also.
       },
       "selectedIndicatorsChanged": function() {
           var me = this,
@@ -511,8 +512,6 @@
               var theOnlyIndicator = me.selectedIndicators[0];
               me.selectedIndicatorChanged(theOnlyIndicator.id);
           }
-          // A setTimeout trick here to make the array resize after everything has updated.
-          setTimeout(this.updateSize, 10);
       },
       "getCacheKey": function(datasourceId, indicatorId, selectedLayer, selectorsString) {
           return datasourceId + ":" + indicatorId + ":" + selectedLayer + ":" + selectorsString;
