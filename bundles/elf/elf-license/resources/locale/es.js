@@ -42,7 +42,12 @@ Oskari.registerLocalization(
         },
         "dialog": {
             "licenseTitle": "detalles de la licencia",
-            "licenseModelsTitle": "modelos de licencia",
+            "licenseModelDescriptionsTitle": "General descriptions of ELF license models:",
+            "licenseModelDescriptions": {
+                "evaluation": "Evaluation Licence – This licence enables you to access ELF products and services for the purpose of evaluating its suitability only. It is a time limited licence.",
+                "developer": "Developer Licence – This licence enables you to access ELF products and services for the purpose of developing new products and services that include the data licensed by ELF. It is a time limited licence."
+            },
+            "licenseModelsTitle": "Modelos de licencia:",
             "noRightToAnyLicenseModels": "no tiene permisos para ninguna licencia",
             "loginShort": "acceda para ver los modelos de licencia",
             "licenseSummaryTitle": "resumen de la licencia",

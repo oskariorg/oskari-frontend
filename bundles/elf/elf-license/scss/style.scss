@@ -44,6 +44,21 @@ div.elf_license_dialog {
 			margin-top: 6px;
 		}
 
+		div.elf_license_dialog_descriptions_title {
+			margin-top:10px;
+		}
+
+		ul.elf_license_dialog_descriptions {
+			padding-left:20px;
+			margin: 0;
+			li.description {				
+				margin: 4px 0;
+				list-style-type: square;
+				list-style-position: outside;
+				width:90%;
+			}
+		}
+
 		div.elf_license_dialog_licensemodels {
 			max-height: $maxHeight;
 			overflow: auto;
