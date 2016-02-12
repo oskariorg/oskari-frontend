@@ -341,7 +341,9 @@ Oskari.clazz.define(
                         });
                     }
 
-                    evt.stopPropagation();
+                    if(!link.is('a') || link.parents('.getinforesult_table').length) {
+                        evt.stopPropagation();
+                    }
                 },
                 scope: popup
             });
