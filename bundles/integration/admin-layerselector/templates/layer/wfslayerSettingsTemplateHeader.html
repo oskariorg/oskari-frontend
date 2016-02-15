@@ -54,7 +54,7 @@
 <% if(capabilities) { %>
     <div class="add-layer-record capabilities">
         <div class="add-layer-label-area">
-            <label class="add-layer-label"><%= instance.getLocalization('admin').capabilitiesLabel %></label>
+            <label class="add-layer-label"><%= instance.getLocalization('admin').capabilitiesLabel + ' ' + model.getSrs_name() %></label>
         </div>
         <div class="add-layer-input-area">
             <div class="input-controls">
