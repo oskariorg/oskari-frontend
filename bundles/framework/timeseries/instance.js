@@ -125,16 +125,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
          */
         stop: function () {
             var me = this;
-            me.sandbox = null;
             me.started = false;
             if(me._modules.playback) {
                 me._modules.playback.removeSlider();
             }
             for (var p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.unregisterFromEventByName(me, p);
+                    me.sandbox.unregisterFromEventByName(me, p);
                 }
             }
+            me.sandbox = null;
         },
         /**
          * @method play
