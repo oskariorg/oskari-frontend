@@ -290,11 +290,11 @@
                 "Require-Bundle-Instance": []
             }
       }, {
-            "bundleinstancename": "publisher",
-            "bundlename": "publisher",
+            "bundleinstancename": "publisher2",
+            "bundlename": "publisher2",
             "metadata": {
                 "Import-Bundle": {
-                    "publisher": {
+                    "publisher2": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     }
                 }
