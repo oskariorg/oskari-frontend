@@ -191,37 +191,40 @@ div.mapplugin.timeseries div.playback-button button.pause:before {
  * Use the light icons as defaults
  */
 .tool-history-back {
-    background-position: -3350px 0px !important;
+    background-position: -3382px 0px !important;
 }
 
 .tool-history-forward {
-    background-position: -3414px 0px !important;
+    background-position: -3446px 0px !important;
 }
 
 .tool-measure-area {
-    background-position: -3478px 0px !important;
+    background-position: -3510px 0px !important;
 }
 
 .tool-measure-line {
-    background-position: -3542px 0px !important;
+    background-position: -3574px 0px !important;
 }
 
 .tool-reset {
-    background-position: -2488px 0px !important;
+    background-position: -2520px 0px !important;
 }
 
 .tool-save-view {
-    background-position: -2552px 0px !important;
+    background-position: -2584px 0px !important;
 }
 
 .tool-zoombox {
-    background-position: -3606px 0px !important;
+    background-position: -3638px 0px !important;
 }
 
 .upload-material {
-    background-position: -2648px 0px !important;
+    background-position: -2680px 0px !important;
 }
 
+.tool-link {
+    background-position: -2328px 0px !important;
+}
 
 /**
  * login flyout
