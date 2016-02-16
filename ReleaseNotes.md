@@ -2,6 +2,10 @@
 
 ## 1.35
 
+### elf/elf-license
+
+Added license general descriptions.
+
 ### See Oskari/api/CHANGELOG for following changes:
 - RPC getAllLayers function now returns also minZoom and maxZoom if those are defined for layer.
 
