@@ -58,7 +58,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.MainPanel',
           elementWrapper.ajaxUrl = url;
           if (me.embedded) {
             elementWrapper.selectedIndicators = me.state.selectedIndicators;
-            elementWrapper.selectedLayer = me.statslayer._layerName; // For example: oskari:kunnat2013
+            elementWrapper.selectedLayer = me.statslayer._layerId; // For example: 9
             // Not used at least yet, the layer is fetched based on the name.
             elementWrapper.layerId = me.state.layerId; // For example: 9
             elementWrapper.showGrid = true;
