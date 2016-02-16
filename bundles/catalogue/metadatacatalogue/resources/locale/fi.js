@@ -53,7 +53,12 @@ Oskari.registerLocalization(
             "remove": "Poista hakutuloksista",
             "rating": "Arviointi"
         },
-        "licenseText": "Hae lisenssi"
+        "licenseText": "Hae lisenssi",
+        "identificationCode": {
+            "creation": "luonti",
+            "publication": "julkaisu",
+            "revision": "päivitys"
+        }
     }
 }
 );
