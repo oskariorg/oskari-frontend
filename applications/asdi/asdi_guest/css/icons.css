@@ -910,7 +910,7 @@
     background-position: -2296px 0px !important;
 }
 
-.tool-link {
+.tool-link-light {
     width: 32px;
     height: 32px;
     background-image: url('../icons/icons.png') !important;
@@ -918,7 +918,7 @@
     background-position: -2328px 0px !important;
 }
 
-.tool-measure-area {
+.tool-link {
     width: 32px;
     height: 32px;
     background-image: url('../icons/icons.png') !important;
@@ -926,7 +926,7 @@
     background-position: -2360px 0px !important;
 }
 
-.tool-measure-line {
+.tool-measure-area {
     width: 32px;
     height: 32px;
     background-image: url('../icons/icons.png') !important;
@@ -934,7 +934,7 @@
     background-position: -2392px 0px !important;
 }
 
-.tool-pan {
+.tool-measure-line {
     width: 32px;
     height: 32px;
     background-image: url('../icons/icons.png') !important;
@@ -942,7 +942,7 @@
     background-position: -2424px 0px !important;
 }
 
-.tool-print {
+.tool-pan {
     width: 32px;
     height: 32px;
     background-image: url('../icons/icons.png') !important;
@@ -950,7 +950,7 @@
     background-position: -2456px 0px !important;
 }
 
-.tool-reset-light {
+.tool-print {
     width: 32px;
     height: 32px;
     background-image: url('../icons/icons.png') !important;
@@ -958,7 +958,7 @@
     background-position: -2488px 0px !important;
 }
 
-.tool-reset {
+.tool-reset-light {
     width: 32px;
     height: 32px;
     background-image: url('../icons/icons.png') !important;
@@ -966,7 +966,7 @@
     background-position: -2520px 0px !important;
 }
 
-.tool-save-view-light {
+.tool-reset {
     width: 32px;
     height: 32px;
     background-image: url('../icons/icons.png') !important;
@@ -974,7 +974,7 @@
     background-position: -2552px 0px !important;
 }
 
-.tool-save-view {
+.tool-save-view-light {
     width: 32px;
     height: 32px;
     background-image: url('../icons/icons.png') !important;
@@ -982,7 +982,7 @@
     background-position: -2584px 0px !important;
 }
 
-.tool-zoombox {
+.tool-save-view {
     width: 32px;
     height: 32px;
     background-image: url('../icons/icons.png') !important;
@@ -990,12 +990,20 @@
     background-position: -2616px 0px !important;
 }
 
+.tool-zoombox {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2648px 0px !important;
+}
+
 .upload-material-light {
     width: 28px;
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2648px 0px !important;
+    background-position: -2680px 0px !important;
 }
 
 .upload-material {
@@ -1003,7 +1011,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2676px 0px !important;
+    background-position: -2708px 0px !important;
 }
 
 .menu-3d-dark {
@@ -1011,7 +1019,7 @@
     height: 35px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2704px 0px !important;
+    background-position: -2736px 0px !important;
 }
 
 .menu-3d-light {
@@ -1019,7 +1027,7 @@
     height: 35px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2739px 0px !important;
+    background-position: -2771px 0px !important;
 }
 
 .menu-rounded-dark {
@@ -1027,7 +1035,7 @@
     height: 36px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2774px 0px !important;
+    background-position: -2806px 0px !important;
 }
 
 .menu-rounded-light {
@@ -1035,7 +1043,7 @@
     height: 36px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2810px 0px !important;
+    background-position: -2842px 0px !important;
 }
 
 .menu-sharp-dark {
@@ -1043,7 +1051,7 @@
     height: 35px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2846px 0px !important;
+    background-position: -2878px 0px !important;
 }
 
 .menu-sharp-light {
@@ -1051,7 +1059,7 @@
     height: 35px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2881px 0px !important;
+    background-position: -2913px 0px !important;
 }
 
 .mylocation-3d-dark {
@@ -1059,7 +1067,7 @@
     height: 35px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2916px 0px !important;
+    background-position: -2948px 0px !important;
 }
 
 .mylocation-3d-light {
@@ -1067,7 +1075,7 @@
     height: 35px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2951px 0px !important;
+    background-position: -2983px 0px !important;
 }
 
 .mylocation-rounded-dark {
@@ -1075,7 +1083,7 @@
     height: 35px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2986px 0px !important;
+    background-position: -3018px 0px !important;
 }
 
 .mylocation-rounded-light {
@@ -1083,7 +1091,7 @@
     height: 35px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3021px 0px !important;
+    background-position: -3053px 0px !important;
 }
 
 .mylocation-sharp-dark {
@@ -1091,7 +1099,7 @@
     height: 35px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3056px 0px !important;
+    background-position: -3088px 0px !important;
 }
 
 .mylocation-sharp-light {
@@ -1099,7 +1107,7 @@
     height: 35px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3091px 0px !important;
+    background-position: -3123px 0px !important;
 }
 
 .myplaces-draw-area-dark {
@@ -1107,7 +1115,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3126px 0px !important;
+    background-position: -3158px 0px !important;
 }
 
 .myplaces-draw-area-light {
@@ -1115,7 +1123,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3158px 0px !important;
+    background-position: -3190px 0px !important;
 }
 
 .myplaces-draw-line-dark {
@@ -1123,7 +1131,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3190px 0px !important;
+    background-position: -3222px 0px !important;
 }
 
 .myplaces-draw-line-light {
@@ -1131,7 +1139,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3222px 0px !important;
+    background-position: -3254px 0px !important;
 }
 
 .myplaces-draw-point-dark {
@@ -1139,7 +1147,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3254px 0px !important;
+    background-position: -3286px 0px !important;
 }
 
 .myplaces-draw-point-light {
@@ -1147,7 +1155,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3286px 0px !important;
+    background-position: -3318px 0px !important;
 }
 
 .tool-history-back-dark {
@@ -1155,7 +1163,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3318px 0px !important;
+    background-position: -3350px 0px !important;
 }
 
 .tool-history-back-light {
@@ -1163,7 +1171,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3350px 0px !important;
+    background-position: -3382px 0px !important;
 }
 
 .tool-history-forward-dark {
@@ -1171,7 +1179,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3382px 0px !important;
+    background-position: -3414px 0px !important;
 }
 
 .tool-history-forward-light {
@@ -1179,7 +1187,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3414px 0px !important;
+    background-position: -3446px 0px !important;
 }
 
 .tool-measure-area-dark {
@@ -1187,7 +1195,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3446px 0px !important;
+    background-position: -3478px 0px !important;
 }
 
 .tool-measure-area-light {
@@ -1195,7 +1203,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3478px 0px !important;
+    background-position: -3510px 0px !important;
 }
 
 .tool-measure-line-dark {
@@ -1203,7 +1211,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3510px 0px !important;
+    background-position: -3542px 0px !important;
 }
 
 .tool-measure-line-light {
@@ -1211,7 +1219,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3542px 0px !important;
+    background-position: -3574px 0px !important;
 }
 
 .tool-zoombox-dark {
@@ -1219,7 +1227,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3574px 0px !important;
+    background-position: -3606px 0px !important;
 }
 
 .tool-zoombox-light {
@@ -1227,6 +1235,6 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3606px 0px !important;
+    background-position: -3638px 0px !important;
 }
 

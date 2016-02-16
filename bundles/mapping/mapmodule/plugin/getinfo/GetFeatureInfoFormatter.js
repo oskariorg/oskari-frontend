@@ -405,6 +405,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             row = null,
             keyColumn = null,
             valColumn = null,
+            arrayObject = {},
             key,
             value,
             vType,
@@ -449,11 +450,23 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                     // format array
                     if (jQuery.isArray(value)) {
                         valueDiv = this.template.wrapper.clone();
-                        for (i = 0; i < value.length; i += 1) {
-                            innerTable = this._json2html(value[i]);
-                            valueDiv.append(innerTable);
+                        if(value.length > 0){
+                            if ((typeof value[0]).toLowerCase() === 'object'){
+                                for (i = 0; i < value.length; i += 1) {
+                                    innerTable = this._json2html(value[i]);
+                                    valueDiv.append(innerTable);
+                                }
+                                valpres = valueDiv;
+
+                            } else {
+                                // Create object for array values
+                                for (i = 0; i < value.length; i += 1) {
+                                    arrayObject[key+'.'+i] =  value[i];
+                                }
+                                valpres = this._json2html(arrayObject);
+                            }
                         }
-                        valpres = valueDiv;
+
                     } else {
                         valpres = this._json2html(value);
                     }
