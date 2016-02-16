@@ -300,6 +300,16 @@
                 }
             }
         }, {
+            "bundleinstancename": "maplegend",
+            "bundlename": "maplegend",
+            "metadata": {
+                "Import-Bundle": {
+                    "maplegend": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
             "bundleinstancename": "admin-layerselector",
             "bundlename": "admin-layerselector",
             "metadata": {
