@@ -2,6 +2,10 @@
 
 ## 1.35
 
+### catalogue/metadatagatalogue
+
+Added data identification date and type to metadata search results.
+
 ### elf/elf-license
 
 Added license general descriptions.

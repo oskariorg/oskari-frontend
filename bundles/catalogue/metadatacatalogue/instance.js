@@ -921,6 +921,19 @@ Oskari.clazz.define(
                     if ((row.organization) && (row.organization.length > 0)) {
                         titleText = titleText + ', ' + row.organization;
                     }
+
+                    // Include identi
+                    var identification = row.identification;
+                    var isIdentificationCode = (identification && identification.code && identification.code.length>0) ? true : false;
+                    var isIdentificationDate = (identification && identification.date && identification.date.length>0) ? true : false;
+                    if(isIdentificationCode && isIdentificationDate) {
+                        var locIdentificationCode = me.getLocalization('identificationCode')[identification.code];
+                        if(!locIdentificationCode) {
+                            locIdentificationCode = identification.code;
+                        }
+
+                        titleText = titleText + ' (' + locIdentificationCode + ':' + identification.date + ')';
+                    }
                     // Add title
                     jQuery(cells[0]).append(titleText);
                     jQuery(cells[0]).addClass(me.resultHeaders[0].prop);

@@ -20,7 +20,7 @@ The toolbar bundle provides a common interface for other bundles to add and mani
 
 ## Screenshot
 
-![screenshot](/images/bundles/toolbar.png)
+![screenshot](toolbar.png)
 
 ## Bundle configuration
 

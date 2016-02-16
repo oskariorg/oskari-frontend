@@ -53,7 +53,12 @@ Oskari.registerLocalization(
             "remove": "NOT TRANSLATED",
             "rating": "NOT TRANSLATED"
         },
-        "licenseText": "NOT TRANSLATED"
+        "licenseText": "NOT TRANSLATED",
+        "identificationCode": {
+            "creation": "creation",
+            "publication": "publication",
+            "revision": "revision"
+        }
     }
 }
 );
