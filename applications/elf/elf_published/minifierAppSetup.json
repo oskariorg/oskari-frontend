@@ -1,135 +1,84 @@
 {
     "startupSequence": [
-    {
-        "bundlename": "elf-lang-overrides",
-        "metadata": {
-            "Import-Bundle": {
-                "elf-lang-overrides": {
-                    "bundlePath": "../../../packages/elf/bundle/"
+        {
+            "bundlename": "elf-lang-overrides",
+            "metadata": {
+                "Import-Bundle": {
+                    "elf-lang-overrides": {
+                        "bundlePath": "../../../packages/elf/bundle/"
+                    }
                 }
             }
-        }
-    },
-    {
-        "bundlename": "openlayers-default-theme",
-        "metadata": {
-            "Import-Bundle": {
-                "openlayers-default-theme": {
-                    "bundlePath": "../../../packages/openlayers/bundle/"
-                },
-                "openlayers-full-map": {
-                    "bundlePath": "../../../packages/openlayers/bundle/"
-                }
-            }
-        }
-    }, {
+        },
+        {
         "bundlename": "mapfull",
         "metadata": {
-            "Import-Bundle": {
-                "mapwmts": {
-                    "bundlePath": "../../../packages/framework/bundle/"
+            "Import-Bundle" : {
+                "mapmodule" : {
+                    "bundlePath" : "../../../packages/mapping/ol3/"
                 },
-                "mapwfs2": {
-                    "bundlePath": "../../../packages/framework/bundle/"
+                "mapwmts" : {
+                    "bundlePath" : "../../../packages/mapping/ol3/"
+                },
+                "mapwfs2" : {
+                    "bundlePath" : "../../../packages/mapping/ol3/"
                 },
                 "maparcgis": {
-                    "bundlePath": "../../../packages/arcgis/bundle/"
+                    "bundlePath": "../../../packages/mapping/ol3/"
+                },
+                "mapuserlayers" : {
+                    "bundlePath" : "../../../packages/mapping/ol3/"
                 },
                 "mapmyplaces": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 },
-                "mapuserlayers": {
-                    "bundlePath": "../../../packages/framework/bundle/"
+                "core-base" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
                 },
-                "mapmodule-plugin": {
-                    "bundlePath": "../../../packages/framework/bundle/"
-                },     
-                "mapfull": {
-                    "bundlePath": "../../../packages/framework/bundle/"
+                "core-map" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
                 },
-                "oskariui": {
-                    "bundlePath": "../../../packages/framework/bundle/"
+                "sandbox-base" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
+                },
+                "sandbox-map" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
+                },
+                "event-base" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
+                },
+                "event-map" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
+                },
+                "event-map-layer" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
+                },
+                "request-base" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
+                },
+                "request-map" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
+                },
+                "request-map-layer" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
+                },
+                "service-base" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
+                },
+                "service-map" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
+                },
+                "domain" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
+                },
+                "oskariui" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
+                },
+                "mapfull" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
                 },
                 "ui-components": {
                     "bundlePath": "../../../packages/framework/bundle/"
-                },
-                "core-base": {
-                    "bundlePath": "../../../packages/framework/bundle/"
-                },
-                "request-base": {
-                    "bundlePath": "../../../packages/framework/bundle/"
-                },
-                "service-base": {
-                    "bundlePath": "../../../packages/framework/bundle/"
-                },
-                "event-map-layer": {
-                    "bundlePath": "../../../packages/framework/bundle/"
-                },
-                "request-map-layer": {
-                    "bundlePath": "../../../packages/framework/bundle/"
-                },          
-                "event-base": {
-                    "bundlePath": "../../../packages/framework/bundle/"
-                },
-                "domain": {
-                    "bundlePath": "../../../packages/framework/bundle/"
-                },
-                "core-map": {
-                    "bundlePath": "../../../packages/framework/bundle/"
-                },
-                "request-map": {
-                    "bundlePath": "../../../packages/framework/bundle/"
-                },
-                "sandbox-base": {
-                    "bundlePath": "../../../packages/framework/bundle/"
-                },
-                "service-map": {
-                    "bundlePath": "../../../packages/framework/bundle/"
-                },
-                "sandbox-map": {
-                    "bundlePath": "../../../packages/framework/bundle/"
-                },
-                "event-map": {
-                    "bundlePath": "../../../packages/framework/bundle/"
-                }
-            }
-        }
-    }, {
-        "bundlename": "divmanazer",
-        "metadata": {
-            "Import-Bundle": {
-                "divmanazer": {
-                    "bundlePath": "../../../packages/framework/bundle/"
-                }
-            }
-        }
-    }, {
-        "bundlename": "infobox",
-        "metadata": {
-            "Import-Bundle": {
-                "infobox": {
-                    "bundlePath": "../../../packages/framework/bundle/"
-                }
-            }
-        }
-    }, {
-        "bundlename": "postprocessor",
-        "metadata": {
-            "Import-Bundle": {
-                "postprocessor": {
-                    "bundlePath": "../../../packages/framework/bundle/"
-                }
-            }
-        }
-    }, {
-        "bundlename": "publishedgrid",
-        "metadata": {
-            "Import-Bundle": {
-                "publishedgrid": {
-                    "bundlePath": "../../../packages/statistics/bundle/"
-                },
-                "geostats": {
-                    "bundlePath": "../../../packages/libraries/bundle/"
                 }
             }
         }
@@ -138,7 +87,7 @@
         "metadata": {
             "Import-Bundle": {
                 "toolbar": {
-                    "bundlePath": "../../../packages/framework/bundle/"
+                    "bundlePath": "../../../packages/mapping/ol3/"
                 }
             }
         }
@@ -153,11 +102,11 @@
         }
     },
     {
-        "bundlename" : "publishedmyplaces2",
-        "metadata" : {
-            "Import-Bundle" : {
-                "publishedmyplaces2" : {
-                    "bundlePath" : "../../../packages/framework/bundle/"
+        "bundlename": "divmanazer",
+        "metadata": {
+            "Import-Bundle": {
+                "divmanazer": {
+                    "bundlePath": "../../../packages/framework/bundle/"
                 }
             }
         }
@@ -170,12 +119,33 @@
                 }
             }
         }
+    },{
+        "bundlename" : "infobox",
+        "bundleinstancename" : "infobox",
+        "metadata" : {
+            "Import-Bundle" : {
+                "infobox" : {
+                    "bundlePath" : "../../../packages/mapping/ol3/"
+                }
+            }
+        }
     }, {
-        "bundlename": "rpc",
-        "metadata": {
-            "Import-Bundle": {
-                "rpc": {
-                    "bundlePath": "../../../packages/framework/bundle/"
+        "bundlename" : "drawtools",
+        "bundleinstancename" : "drawtools",
+        "metadata" : {
+            "Import-Bundle" : {
+                "drawtools" : {
+                    "bundlePath" : "../../../packages/mapping/ol3/"
+                }
+            }
+        }
+    }, {
+        "bundlename" : "rpc",
+        "bundleinstancename" : "rpc",
+        "metadata" : {
+            "Import-Bundle" : {
+                "rpc" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
                 }
             }
         }
