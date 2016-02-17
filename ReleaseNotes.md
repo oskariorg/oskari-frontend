@@ -17,7 +17,7 @@ Added license general descriptions.
 
 Fixed InfoBox.ShowInfoBoxRequest handling. Now all popups with no popup id really deleted if hidePrevious param is setted to true.
 
-New event added "InfoboxActionEvent".
+Added new "InfoboxActionEvent" that notifies which link/button is clicked in the infobox.
 
 ### coordinatetool
 
