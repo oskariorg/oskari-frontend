@@ -66,6 +66,8 @@ New function added getInfo(clientVersion). See bundle documentation for details.
 
 New event included in defaults "InfoboxActionEvent".
 
+New event included in defaults "InfoBox.InfoBoxEvent".
+
 New request included in defaults 'InfoBox.HideInfoBoxRequest'.
 
 ### mapping/mapmodule/plugin/vectorlayer

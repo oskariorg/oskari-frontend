@@ -13,6 +13,8 @@ Each addition is tagged with [add], [mod] or [rem] telling if it's a new feature
 
 InfoboxActionEvent is now allowed by default.
 
+InfoBox.InfoBoxEvent is now allowed by default.
+
 #### [add] [rpc] New event
 
 InfoboxActionEvent is used to notify which link/button is clicked in the infobox.
