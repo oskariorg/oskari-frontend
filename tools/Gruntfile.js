@@ -612,11 +612,12 @@ module.exports = function (grunt) {
                 matcherSize = TO_MATCH.length + 1;
             var value = [];
             _.each(list, function(dep) {
-                var actual =  dep.path || '';
+                // resourcesPath is the one we find the first CSS-reference for the bundle
+                var actual =  dep.resourcesPath || '';
                 var index = actual.toLowerCase().indexOf(TO_MATCH);
                 if(index !== -1) {
-                    //console.log(actual.substring(index + matcherSize));
                     var imagePath = actual + path.sep + 'resources' + path.sep + 'images';
+                    console.log(imagePath);
                     if(fs.existsSync(imagePath)) {
                         value.push(imagePath);
                     }
@@ -628,6 +629,7 @@ module.exports = function (grunt) {
         // gather css files from bundles' minifierAppSetups
         grunt.log.writeln('Getting files from processedAppSetups');
         for (i = 0; i < processedAppSetup.length; i += 1) {
+            //console.log(JSON.stringify(processedAppSetup[i], null, 3));
             imageDirs = imageDirs.concat(getResourcePaths(processedAppSetup[i].dependencies));
             pasFiles = parser.getFilesForComponent(processedAppSetup[i], 'css');
             cssfiles = cssfiles.concat(pasFiles);
