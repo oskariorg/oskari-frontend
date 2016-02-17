@@ -54,7 +54,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 '   </div>' +
                 '   <div class="margintop"><input type="checkbox" id="mousecoordinates"></input><label class="mousecoordinates-label" for="mousecoordinates"></label></div>' +
                 '   <div class="actions">'+
-                '       <input class="coordinate-tool-centermap oskari-button oskari-formcomponent primary primary" type="submit">'+
+                '       <input class="coordinate-tool-centermap oskari-button oskari-formcomponent primary primary" type="button">'+
                 '   </div>' +
                 '   <div class="clear"></div>'+
                 '   <div class="projectionchange-placeholder margintop"></div>'+
