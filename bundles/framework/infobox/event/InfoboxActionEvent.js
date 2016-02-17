@@ -1,19 +1,19 @@
 /**
- * @class Oskari.mapframework.bundle.infobox.event.InfoBoxEvent
+ * @class Oskari.mapframework.bundle.infobox.event.InfoboxActionEvent
  *
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.infobox.event.InfoBoxEvent',
+Oskari.clazz.define('Oskari.mapframework.bundle.infobox.event.InfoboxActionEvent',
 /**
  * @method create called automatically on construction
  * @static
  */
-function(_popupId, _popupOpen, _contentId) {
-    this._popupId = _popupId;
-    this._isOpen = _popupOpen;
-    this._contentId = _contentId;
+function(id, action, params) {
+    this._id = id;
+    this._action = action;
+    this._params = params;
 }, {
     /** @static @property __name event name */
-    __name : "InfoBox.InfoBoxEvent",
+    __name : "InfoboxActionEvent",
     /**
      * @method getName
      * @return {String} the name for the event
@@ -22,13 +22,13 @@ function(_popupId, _popupOpen, _contentId) {
         return this.__name;
     },
     getId : function() {
-        return this._popupId;
+        return this._id;
     },
-    isOpen : function() {
-        return this._isOpen;
+    getAction : function() {
+        return this._action;
     },
-    getContentId : function() {
-        return this._contentId;
+    getActionParams : function() {
+        return this._params;
     },
     /**
      * Serialization for RPC
@@ -36,9 +36,9 @@ function(_popupId, _popupOpen, _contentId) {
      */
     getParams: function () {
         return {
-        	id: this._popupId,
-        	isOpen: this._isOpen,
-        	contentId: this._contentId
+        	id: this._id,
+        	action: this._action,
+        	params: this._params
         };
     }
 }, {

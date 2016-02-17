@@ -127,7 +127,6 @@ Oskari.clazz.define(
             if (_.isEmpty(contentData)) {
                 return;
             }
-
             var me = this,
                 currPopup = me._popups[id],
                 refresh = (currPopup &&
@@ -246,7 +245,6 @@ Oskari.clazz.define(
          */
         _renderContentData: function (id, contentData) {
             var me = this;
-
             return _.foldl(contentData, function (contentDiv, datum, index) {
                 var useButtons = (datum.useButtons === true),
                     primaryButton = datum.primaryButton,
@@ -271,7 +269,7 @@ Oskari.clazz.define(
                             });
                             if (key == primaryButton) {
                                 btn.addClass('primary');
-                            }
+                            }                            
                         } else {
                             actionLink = me._actionLink.clone();
                             link = actionLink.find('a');
@@ -303,7 +301,13 @@ Oskari.clazz.define(
                         text = link.html();
                     }
                     if (contentData[i] && contentData[i].actions && contentData[i].actions[text]) {
-                        contentData[i].actions[text]();
+                        if(typeof key !== 'function') { 
+                        	var sandbox = me.getMapModule().getSandbox();
+                        	var event = sandbox.getEventBuilder('InfoboxActionEvent')(id, text, contentData[i].actions[text]);
+                        	sandbox.notifyAll(event);
+                        } else {
+                            contentData[i].actions[text]();
+                        }
                     }
                 }
             }
@@ -612,17 +616,24 @@ Oskari.clazz.define(
          * @param {String} id
          *      id for popup that we want to close (optional - if not given, closes all popups)
          */
-        close: function (id) {
+        close: function (id, position) {
             // destroys all if id not given
             // deletes reference to the same id will work next time also
             var pid,
-                popup;
+                popup,
+            	sandbox = this.getMapModule().getSandbox();
             if (!id) {
                 for (pid in this._popups) {
                     if (this._popups.hasOwnProperty(pid)) {
                         popup = this._popups[pid];
-                        popup.popup.setPosition(undefined);  //destroy();
-                        delete this._popups[pid];
+                        if (!position ||
+                            position.lon !== popup.lonlat.lon ||
+                            position.lat !== popup.lonlat.lat) {
+                            popup.popup.setPosition(undefined);  //destroy();
+                            delete this._popups[pid];
+                            var event = sandbox.getEventBuilder('InfoBox.InfoBoxEvent')(pid, false);
+                        	sandbox.notifyAll(event);
+                        }
                     }
                 }
                 return;
@@ -633,6 +644,8 @@ Oskari.clazz.define(
                     this.getMapModule().getMap().removeOverlay(this._popups[id].popup);
                 }
                 delete this._popups[id];
+                var event = sandbox.getEventBuilder('InfoBox.InfoBoxEvent')(id, false);
+            	sandbox.notifyAll(event);
             }
             // else notify popup not found?
         },
