@@ -54,7 +54,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 '   </div>' +
                 '   <div class="margintop"><input type="checkbox" id="mousecoordinates"></input><label class="mousecoordinates-label" for="mousecoordinates"></label></div>' +
                 '   <div class="actions">'+
-                '       <input class="coordinate-tool-centermap oskari-button oskari-formcomponent primary primary" type="button">'+
+                '       <input class="coordinate-tool-centermap oskari-button oskari-formcomponent primary primary" type="submit">'+
                 '   </div>' +
                 '   <div class="clear"></div>'+
                 '   <div class="projectionchange-placeholder margintop"></div>'+
@@ -219,7 +219,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 crsText = loc.crs[crs] || crsDefaultText.replace('{crs}', crs);
 
             // Set locales
-            popup.find('.coordinate-tool-centermap').val(loc.popup.searchButton);
+            var submit = popup.find('.coordinate-tool-centermap');
+            popupContent.find('.coordinate-tool-centermap').val(loc.popup.searchButton);
             popup.find('.popupHeader').html(loc.popup.title);
             popupContent.find('.coordinatetool__popup__content').html(loc.popup.info);
             popupContent.find('.srs').html(crsText);
