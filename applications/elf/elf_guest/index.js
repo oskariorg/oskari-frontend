@@ -27,7 +27,6 @@ jQuery(document).ready(function() {
     function start(appSetup, appConfig, cb) {
         var app = Oskari.app;
         app.setApplicationSetup(appSetup);
-
         // TODO: move to DB!
         appConfig.userguide.conf = {
             "flyoutClazz": "Oskari.mapframework.bundle.userguide.SimpleFlyout"
