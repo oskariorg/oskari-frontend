@@ -143,7 +143,7 @@ Oskari.clazz.define(
 
             if (allowedEvents === null || allowedEvents === undefined) {
                 allowedEvents = ['AfterMapMoveEvent', 'MapClickedEvent', 'AfterAddMarkerEvent', 'MarkerClickEvent',
-                'RouteResultEvent','SearchResultEvent', 'UserLocationEvent', 'DrawingEvent', "FeatureEvent"];
+                'RouteResultEvent','SearchResultEvent', 'UserLocationEvent', 'DrawingEvent', "FeatureEvent", 'InfoboxActionEvent', 'InfoBox.InfoBoxEvent'];
             }
 
             if (allowedFunctions === null || allowedFunctions === undefined) {
@@ -160,6 +160,7 @@ Oskari.clazz.define(
 
             if (allowedRequests === null || allowedRequests === undefined) {
                 allowedRequests = ['InfoBox.ShowInfoBoxRequest',
+                    'InfoBox.HideInfoBoxRequest',
                     'MapModulePlugin.AddMarkerRequest',
                     'MapModulePlugin.AddFeaturesToMapRequest',
                     'MapModulePlugin.RemoveFeaturesFromMapRequest',
