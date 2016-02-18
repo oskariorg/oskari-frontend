@@ -9,6 +9,16 @@ Each addition is tagged with [add], [mod] or [rem] telling if it's a new feature
 
 ### RPC
 
+#### [mod] [rpc] New default event
+
+InfoboxActionEvent is now allowed by default.
+
+InfoBox.InfoBoxEvent is now allowed by default.
+
+#### [add] [rpc] New event
+
+InfoboxActionEvent is used to notify which link/button is clicked in the infobox.
+
 #### [mod] [rpc] getAllLayers function modified
 
 GetAllLayers now returns also minimum zoom level and maximum zoom level for the layer if layer has them defined.
@@ -45,6 +55,8 @@ getInfo(clientVersion) returns generic information about the Oskari instance:
 #### [mod] [rpc] New default request
 
 MapModulePlugin.ZoomToFeaturesRequest is now allowed by default.
+
+InfoBox.HideInfoBoxRequest is now allowed by default.
 
 ### mapmodule - vectorlayerplugin
 

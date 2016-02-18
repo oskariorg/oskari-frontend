@@ -53,7 +53,12 @@ Oskari.registerLocalization(
             "remove": "Bort från sökresultaten",
             "rating": "Beskattning"
         },
-        "licenseText": "Sök licens"
+        "licenseText": "Sök licens",
+        "identificationCode": {
+            "creation": "skapandedatum",
+            "publication": "publiceringsdatum",
+            "revision": "datum för senaste revidering"
+        }
     }
 }
 );

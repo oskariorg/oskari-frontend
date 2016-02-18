@@ -83,16 +83,14 @@ Parameters for options-object:
   <td> showMeasureOnMap </td><td> Boolean </td><td> Use this parameter for displaying measurement result on line or polygon.<br> true - if measure result should be displayed on drawing feature.</td><td> false</td>
 </tr>
 <tr>
-  <td> noticeSelfIntersection </td><td> Boolean </td><td> true - user will see warning text if polygon has self-intersection. <br> false - warning text will be not showed. </td><td> true</td>
+  <td> selfIntersection </td><td> Boolean </td><td> true - user will see warning text if polygon has self-intersection. <br> false - polygon's itself intersection will be not checked. </td><td> true</td>
 </tr>
 <tr>
   <td> geojson </td><td> String</td> <td> Geojson for editing. If not given, will activate draw/modify control according to given shape.</td><td> null</td>
 </tr>
 </table>
 
-
 ## Examples
-
 
 ```javascript
 var sb = Oskari.getSandbox();

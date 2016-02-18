@@ -219,7 +219,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 crsText = loc.crs[crs] || crsDefaultText.replace('{crs}', crs);
 
             // Set locales
-            popup.find('.coordinate-tool-centermap').val(loc.popup.searchButton);
+            var submit = popup.find('.coordinate-tool-centermap');
+            popupContent.find('.coordinate-tool-centermap').val(loc.popup.searchButton);
             popup.find('.popupHeader').html(loc.popup.title);
             popupContent.find('.coordinatetool__popup__content').html(loc.popup.info);
             popupContent.find('.srs').html(crsText);

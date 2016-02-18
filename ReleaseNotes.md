@@ -2,6 +2,14 @@
 
 ## 1.35
 
+### elf/metadataflyout
+
+*New bundle!* ELF metadataflyout bundle overrides catalogue/metadataflyout functionalities.
+
+### catalogue/metadatagatalogue
+
+Added data identification date and type to metadata search results.
+
 ### elf/elf-license
 
 Added license general descriptions.
@@ -12,6 +20,8 @@ Added license general descriptions.
 ### infobox
 
 Fixed InfoBox.ShowInfoBoxRequest handling. Now all popups with no popup id really deleted if hidePrevious param is setted to true.
+
+Added new "InfoboxActionEvent" that notifies which link/button is clicked in the infobox.
 
 ### coordinatetool
 
@@ -28,7 +38,6 @@ Oskari.VERSION can now be used to detect the frontend version number.
 ### published map (ol3)
 
 Fixed analysislayer's and userlayer's visibility issue in published map 
-
 
 ### framework/admin-users
 
@@ -59,6 +68,12 @@ New request included in defaults "MapModulePlugin.ZoomToFeaturesRequest".
 
 New function added getInfo(clientVersion). See bundle documentation for details.
 
+New event included in defaults "InfoboxActionEvent".
+
+New event included in defaults "InfoBox.InfoBoxEvent".
+
+New request included in defaults 'InfoBox.HideInfoBoxRequest'.
+
 ### mapping/mapmodule/plugin/vectorlayer
 
 New request added 'MapModulePlugin.ZoomToFeaturesRequest' that zooms to extent of all or specific features on the specified layers (only for ol3).
@@ -77,7 +92,7 @@ DrawingEvent now returns drawed geometry as GeoJSON-object (before it's returns 
 
 'showMeasure' parameter is renamed to 'showMeasureOnMap' (if true - measure result will be displayed on map near feature. Default is false.)
 
-New parameter is added to plugin: 'noticeSelfIntersection'. (if true - user will see warning text if polygon has self-intersection. Features will be not sended to the event before polygon is valid. Default is true.))
+New parameter is added to plugin: 'selfIntersection'. (if true - user will see warning text if polygon has self-intersection. Default is true.))
 
 ### core
 
