@@ -230,7 +230,7 @@
             "metadata": {
                 "Import-Bundle": {
                     "metadataflyout": {
-                        "bundlePath": "../../../packages/catalogue/bundle/"
+                        "bundlePath": "../../../packages/elf/bundle/"
                     }
                 }
             }
