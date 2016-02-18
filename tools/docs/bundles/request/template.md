@@ -2,6 +2,12 @@
 
 [Tell here shortly where is the request used. For example "Allows the user to draw on the map."]
 
+## Use cases
+
+[List of use cases, for example:]
+- measure line
+- measure area
+
 ## Description
 
 [Technical side. What the request really does. For example "Activates draw control on map."]
@@ -43,10 +49,13 @@ sb.postRequestByName('DrawTools.StartDrawingRequest', ['measure', 'LineString'],
 	showMeasureOnMap: true
 });
 ```
-## Request handler
+## Implementing bundle
 
-**[Name of the request handler]** [Some explanation if needed]
+[generated]
 
-## Related events
+## Related api
 
-**[Name of the event].** [Some explanation]
+[List of related requests and events, for example:]
+
+- StopDrawingRequest
+- DrawingEvent

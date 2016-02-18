@@ -32,6 +32,15 @@ Parameters for [Name]-object:
 </tr>
 </table>
 
+## RPC
+
+[When event occurs? f. e. Event occurs after a route search has been completed.]
+
+<pre class="event-code-block">
+<code>
+[Copy paste here what event returns (same as in RPC example page)]
+</code>
+</pre>
 ## Event methods
 
 ###[Method]
