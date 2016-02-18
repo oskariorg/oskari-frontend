@@ -1,4 +1,4 @@
-# [Name of the request]
+# [Name of the request] [RPC] <-- add this tag if request works with RPC
 
 [Tell here shortly where is the request used. For example "Allows the user to draw on the map."]
 

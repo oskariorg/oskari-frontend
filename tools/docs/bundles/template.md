@@ -19,37 +19,92 @@
 
 [Screenshot if possible]
 
-## Parameters
+## Bundle configuration
 
-[List here the parameters that need to (or can be) given to the event]
-(* means the parameter is required)
+[Configuration and information which configurations are needed. For example:]
+
+No configuration is required, but it can be used to adapt infobox size according to its content. If not set, infobox size will be 300px x 400px.
+
+```javascript
+{
+  "adaptable" : true
+}
+```
+
+## Bundle state
+
+[Example:]
+```javascript
+state : {
+  popups : [
+    {
+      id : <popup id>,
+      title :  <popup title>,
+      data :  <data as given in Oskari.mapframework.bundle.infobox.request.ShowInfoBoxRequest.getContent()>,
+      lonlat : <OpenLayers.LonLat as location for the popup>
+    }
+  ]
+}
+```
+
+## Requests the bundle handles
 
 <table class="table">
-<tr>
-  <th> Name</th><th> Type</th><th> Description</th><th> Default value</th>
-</tr>
-<tr>
-  <td> [Parameter name]</td><td> [Parameter type, f.e. "String"]</td><td> [Description, f. e. "Identifier for request"]</td><td> </td>
-</tr>
+  <tr>
+    <th>Request</th><th>How does the bundle react</th>
+  </tr>
+  <tr>
+    <td> `[request name]` </td><td> [For example: Infobox is opened on given location and with given content based on request data]</td>
+  </tr>
 </table>
 
-[If some of the parameters are objects, list their parameters next:]
-Parameters for [Name]-object:
+## Requests the bundle sends out
 
+[Example:]
 <table class="table">
 <tr>
-  <th> Name</th><th> Type</th><th> Description</th><th> Default value</th>
+  <th> Request </th>
+  <th> Where/why it's used</th>
 </tr>
 <tr>
-  <td> [Parameter name]</td><td> [Parameter type, f.e. "String"]</td><td> [Description, f. e. "Identifier for request"]</td><td> </td>
+  <td> `Publisher.PublishMapEditorRequest` </td>
+  <td> When an embedded maps 'Edit' link is clicked to activate the publisher bundle </td>
 </tr>
+<tr>
+  <td> `userinterface.UpdateExtensionRequest` </td>
+  <td> When an embedded maps 'Edit' link is clicked to close the personaldata flyout </td>
+</tr>
+
+## Events the bundle listens to
+
+[Example:]
+<table class="table">
+  <tr>
+    <th>Event</th><th>Why/when</th>
+  </tr>
+  <tr>
+    <td> MapLayerEvent </td><td> Adds heatmap tool to layer</td>
+  </tr>
+  <tr>
+    <td> AfterMapLayerRemoveEvent </td><td>Removes layer from the map</td>
+  </tr>
+  <tr>
+    <td> AfterChangeMapLayerOpacityEvent </td><td>Changes map layer opacity</td>
+  </tr>
 </table>
 
-## Event methods
+## Events the bundle sends out
 
-###[Method]
-[Description what does it return]
+[Example:]
+<table class="table">
+  <tr>
+    <th> Event </th><th> When it is triggered/what it tells other components</th>
+  </tr>
+  <tr>
+    <td> DrawFilterPlugin.FinishedDrawFilteringEvent </td><td> Sent when geometry editing is finished </td>
+  </tr>
+</table>
 
-## Examples
+This bundle doesn't send out any events.
 
-[Give here examples of the use of the request. First small description and then code example]
+## Dependencies

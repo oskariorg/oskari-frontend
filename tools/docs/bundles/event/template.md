@@ -39,4 +39,4 @@ Parameters for [Name]-object:
 
 ## Examples
 
-[Give here examples of the use of the request. First small description and then code example]
+[Give here examples of the use of the event. First small description and then code example]
