@@ -2,6 +2,10 @@
 
 ## 1.35
 
+### elf/metadataflyout
+
+*New bundle!* ELF metadataflyout bundle overrides catalogue/metadataflyout functionalities.
+
 ### catalogue/metadatagatalogue
 
 Added data identification date and type to metadata search results.
