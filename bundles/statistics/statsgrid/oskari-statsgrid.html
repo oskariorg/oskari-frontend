@@ -166,7 +166,8 @@
                   // TODO: This is a legacy code workaround. Now unnecessary, but the classification plugin wants it.
                   field: "indicator: " + (header && header.title || header)
               },
-              vis_name = me.selectedLayer,
+              layer = me.sandbox.findMapLayerFromAllAvailable(me.selectedLayer),
+              vis_name = layer.getLayerName(),
               vis_attr = me.layerInfo[me.selectedLayer].idTag,
               vis_codes = indicatorValues && Object.keys(indicatorValues) || [],
               col_values = vis_codes.map(function(regionKey) {
@@ -184,7 +185,6 @@
               },
               // Oskari.mapframework.domain.WmsLayer
               // layertype STATS
-                  layer = me.sandbox.findMapLayerFromAllAvailable(null, me.selectedLayer),
                   event = eventBuilder(layer, data);
               me.sandbox.notifyAll(event);
           }
@@ -270,9 +270,12 @@
           var me = this,
               array = [];
           Object.keys(layerInfo).forEach(function(layerId) {
+              var layer = me.sandbox.findMapLayerFromAllAvailable(layerId),
+                  layerName = layer.getLayerName();
+
               array.push({
                   "val": layerId,
-                  "text": me.localize(me.locale.regionCategories, layerId)
+                  "text": me.localize(me.locale.regionCategories, layerName)
               });
           });
           return array;

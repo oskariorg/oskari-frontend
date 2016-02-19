@@ -120,7 +120,9 @@
           }));
       },
       "startImport": function() {
-          var me = this;
+          var me = this,
+            layer = me.sandbox.findMapLayerFromAllAvailable(me.selectedLayer),
+            layerName = layer.getLayerName();
           //update form regions / municipalities
           var updateValue = function (name, value) {
               var row;
@@ -128,14 +130,14 @@
               if (/^\d+$/.test(name)) {
                   // add prefix zeros to the code if needed (in case of municipality)
                   // FIXME: Test if we need kuntakoodis here some other way.
-                  /*if (me.selectedLayer === "oskari:kunnat2013") {
+                  if (layerName === "oskari:kunnat2013") {
                       if (name.length === 1) {
                           name = '00' + name;
                       }
                       if (name.length === 2) {
                           name = '0' + name;
                       }
-                  }*/
+                  }
                   var found = false;
                   me.regionItems.forEach(function(regionItem, index) {
                       if (regionItem.key === name) {
