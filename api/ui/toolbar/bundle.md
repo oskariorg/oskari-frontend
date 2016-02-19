@@ -1,13 +1,6 @@
-# Toolbar
+# toolbar
 
-<table class="table">
-  <tr>
-    <td>ID</td><td>toolbar</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance.html)</td>
-  </tr>
-</table>
+Generic and extensible toolbar implementation
 
 ## Description
 

@@ -1,13 +1,6 @@
-# Layer Selector
+# admin-layerselector
 
-<table class="table">
-  <tr>
-    <td>ID</td><td>admin-layerselector</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.integration.bundle.admin.layerselector.View.html)</td>
-  </tr>
-</table>
+Provides admin tools for managing maplayer configurations
 
 ## Description
 

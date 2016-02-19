@@ -1,13 +1,6 @@
-# Generic Admin
+# admin
 
-<table class="table">
-  <tr>
-    <td>ID</td><td>`admin`</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link here](/api/latest/classes/link/here)</td>
-  </tr>
-</table>
+Provides generic admin ui which other admin bundles can hook to.
 
 ## Description
 

@@ -1,13 +1,4 @@
-# Geometry Editor
-
-<table class="table">
-  <tr>
-    <td>ID</td><td>geometryeditor</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.ui.module.common.geometryeditor.html)</td>
-  </tr>
-</table>
+# geometryeditor
 
 ## Description
 
@@ -15,7 +6,7 @@ The bundle provides tools for geometry editing. Currently supported functionalit
 
 ## Screenshot
 
-![screenshot](/images/bundles/geometryeditor.png)
+![screenshot](geometryeditor.png)
 
 ## Bundle configuration
 

@@ -1,13 +1,4 @@
-# Admin Users
-
-<table class="table">
-  <tr>
-    <td>ID</td><td>admin-users</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link here](/api/latest/classes/Oskari.mapframework.bundle.admin-users.AdminUsersBundleInstance.html)</td>
-  </tr>
-</table>
+# admin-users
 
 ## Description
 

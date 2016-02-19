@@ -1,13 +1,4 @@
-# Metadata
-
-<table class="table">
-  <tr>
-    <td>ID</td><td>metadata</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.metadata.MetadataSearchInstance.html)</td>
-  </tr>
-</table>
+# metadata
 
 ## Description
 
@@ -19,7 +10,7 @@
 
 ## Screenshot
 
-![screenshot](/images/bundles/metadata.png)
+![screenshot](images/metadata.png)
 
 ## Bundle configuration
 

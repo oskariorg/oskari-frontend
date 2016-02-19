@@ -4,9 +4,6 @@
   <tr>
     <td>ID</td><td>search-from-channels</td>
   </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.tampere.bundle.searchfromchannels.SearchFromChannelsBundleInstance.html)</td>
-  </tr>
 </table>
 
 ## Description
@@ -16,7 +13,7 @@ In additional options user can select a channel which to search.
 
 ## Screenshot
 
-![screenshot](/images/bundles/searchfromchannels.png)
+![screenshot](searchfromchannels.png)
 
 
 ## Bundle configuration

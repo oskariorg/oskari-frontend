@@ -35,7 +35,7 @@ A full example can be found [here](https://github.com/nls-oskari/oskari/blob/mas
 
 ## Screenshot
 
-![screenshot](/images/bundles/divmanazer.png)
+![screenshot](divmanazer.png)
 
 ## Bundle configuration
 

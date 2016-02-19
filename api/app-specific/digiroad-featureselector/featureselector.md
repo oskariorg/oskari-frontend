@@ -4,9 +4,6 @@
   <tr>
     <td>ID</td><td>digiroad-featureselector</td>
   </tr>
-  <tr>
-    <td>API</td><td>[link here](/api/latest/classes/docs/oskari/api/Oskari.digiroad.bundle.featureselector.FeatureSelectorBundleInstance)</td>
-  </tr>
 </table>
 
 ## Description
@@ -23,7 +20,7 @@ The bundle includes its own version of VectorLayerPlugin, which adds two OpenLay
 
 ## Screenshot
 
-![screenshot](/images/bundles/digiroad-featureselector.png)
+![screenshot](digiroad-featureselector.png)
 
 ## Bundle configuration
 

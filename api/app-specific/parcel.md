@@ -4,9 +4,6 @@
   <tr>
     <td>ID</td><td>parcel</td>
   </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.parcel.DrawingToolInstance.html)</td>
-  </tr>
 </table>
 
 ## Description
@@ -15,7 +12,7 @@ This bundle listens for events that provide feature ID (fid) for parcels or regi
 
 ## Screenshot
 
-![screenshot](/images/bundles/parcel.png)
+![screenshot](parcel.png)
 
 ## Bundle configuration
 

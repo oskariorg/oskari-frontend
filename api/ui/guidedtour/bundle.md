@@ -1,13 +1,4 @@
-# Guided Tour
-
-<table class="table">
-  <tr>
-    <td>ID</td><td>guidedtour</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.guidedtour.GuidedTourBundleInstance.html)</td>
-  </tr>
-</table>
+# guidedtour
 
 ## Description
 
@@ -15,7 +6,7 @@ Shows a dialog on startup to instruct user on map functionalities in paikkatieto
 
 ## Screenshot
 
-![screenshot](/images/bundles/guidedtour.png)
+![screenshot](guidedtour.png)
 
 ## Bundle configuration
 

@@ -1,14 +1,5 @@
 # routingUI
 
-<table class="table">
-  <tr>
-    <td>ID</td><td>routingUI</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstance.html)</td>
-  </tr>
-</table>
-
 ## Description
 
 This bundle provides UI for routing. In this bundle user can select start and end points of route and then search route of between these points. Finally results are showed on the popup.
@@ -16,7 +7,7 @@ This bundle provides UI for routing. In this bundle user can select start and en
 
 ## Screenshot
 
-![screenshot](/images/bundles/routingui.png)
+![screenshot](routingui.png)
 
 
 ## Bundle configuration

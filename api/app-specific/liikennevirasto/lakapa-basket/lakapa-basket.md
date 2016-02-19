@@ -4,9 +4,6 @@
   <tr>
     <td>ID</td><td>LakapaBasketBundle</td>
   </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.liikennevirasto.bundle.lakapa.BasketBundleInstance.html)</td>
-  </tr>
 </table>
 
 ## Description
@@ -15,8 +12,8 @@ This bundle provides a basket tool. Users can add or remove downloadable packets
 
 ## Screenshot
 
-![screenshot](/images/bundles/lakapabasket1.png)
-![screenshot](/images/bundles/lakapabasket2.png)
+![screenshot](lakapabasket1.png)
+![screenshot](lakapabasket2.png)
 
 
 ## Bundle configuration

@@ -9,7 +9,7 @@ A GridModel is a simple data container that keeps track of key fields and provid
 
 ## Screenshot
 
-![screenshot](/images/bundles/grid.png)
+![screenshot](grid.png)
 
 ## Usage
 

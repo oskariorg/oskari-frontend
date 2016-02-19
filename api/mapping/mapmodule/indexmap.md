@@ -1,22 +1,16 @@
 # Index Map
 
-<table class="table">
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin.html)</td>
-  </tr>
-</table>
-
 ## Description
 
 This plugin adds an indexmap for the map it is registered to.
 
 ## Screenshot
 
-![closed](/images/bundles/indexmap_closed.png)
+![closed](images/indexmap_closed.png)
 
 Closed
 
-![open](/images/bundles/indexmap_open.png)
+![open](images/indexmap_open.png)
 
 Open
 

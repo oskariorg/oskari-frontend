@@ -4,9 +4,6 @@
   <tr>
     <td>ID</td><td>catalogue.bundle.metadataflyout</td>
   </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.liikennevirasto.bundle.metadataflyout.MetadataFlyoutBundleInstance.html)</td>
-  </tr>
 </table>
 
 ## Description
@@ -15,7 +12,7 @@ This bundle provides a metadata tool. Users can see layer metadata.
 
 ## Screenshot
 
-![screenshot](/images/bundles/lakapametadataflyout.png)
+![screenshot](lakapametadataflyout.png)
 
 
 ## Bundle configuration

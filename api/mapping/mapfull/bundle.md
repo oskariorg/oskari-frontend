@@ -1,13 +1,4 @@
-# Map Full
-
-<table class="table">
-  <tr>
-    <td>ID</td><td>mapfull</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.mapfull.MapFullBundleInstance.html)</td>
-  </tr>
-</table>
+# mapfull
 
 ## Description
 
@@ -17,7 +8,7 @@ The bundle doesn't create the "mapdiv" element but assumes it exists on the page
 
 ## Screenshot
 
-![screenshot](/images/bundles/mapfull.png)
+![screenshot](mapfull.png)
 
 Mapfull using mapmodule-plugin bundle to show map view with some plugins (scalebar, zoombar, wmslayer, panbuttons etc).
 SrsName projection can be configured if defined in projectionDefs.

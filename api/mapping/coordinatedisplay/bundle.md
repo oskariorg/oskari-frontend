@@ -1,13 +1,4 @@
-# Coordinate Display
-
-<table class="table">
-  <tr>
-    <td>ID</td><td>coordinatedisplay</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.coordinatedisplay.CoordinateDisplayBundleInstance.html)</td>
-  </tr>
-</table>
+# coordinatedisplay
 
 ## Description
 
@@ -15,7 +6,7 @@ This bundle provides a plugin (Oskari.mapframework.bundle.coordinatedisplay.plug
 
 ## Screenshot
 
-![screenshot](/images/bundles/coordinatedisplay.png)
+![screenshot](coordinatedisplay.png)
 
 
 ## Bundle configuration

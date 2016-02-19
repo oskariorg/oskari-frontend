@@ -1,15 +1,9 @@
-# Layer Selection
+# layerselection
 
-<table class="table">
-  <tr>
-    <td>ID</td><td>layerselection2</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.layerselection2.LayerSelectionBundleInstance.html)</td>
-  </tr>
-</table>
+Provides an UI to show which layers are currently on the map.
 
 ## Description
+
 The bundle presents listing for currently selected maplayers. For each maplayer the user can change the opacity, hide/show the maplayer and remove it from map. 
 If a maplayer is not visible in current map scale/location, the user sees a message about it and a link to move the map to location where there is content on the maplayer. 
 If the layer can be published the layer has a text telling the user about it. The user can change the order of maplayers by dragging them into different order. 
@@ -22,7 +16,7 @@ Possible layer tools (wfs grid, statslayer mode) are listed in layer containers.
 
 ## Screenshot
 
-![screenshot](/images/bundles/layerselection2.png)
+![screenshot](layerselection2.png)
 
 ## Bundle configuration
 

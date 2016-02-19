@@ -1,18 +1,12 @@
 # Layer Selection Plugin
 
-<table class="table">
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin.html)</td>
-  </tr>
-</table>
-
 ## Description
 
 This plugin provides a maplayer selection "dropdown" on top of the map.
 
 ## Screenshot
 
-![open](/images/bundles/layerselection_open.png)
+![open](images/layerselection_open.png)
 
 ## Bundle configuration
 
