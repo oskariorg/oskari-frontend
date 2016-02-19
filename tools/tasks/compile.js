@@ -32,23 +32,35 @@ module.exports = function(grunt) {
         //TODO: make configurable
         this.templateLanguage = "en";
 
+        var _ = require('lodash');
+        _.defaultsDeep = require('lodash.defaultsdeep');
+
         // Hackhack, easy way to read/load the localization files
         var Oskari = {
             localizations: {
             },
             registerLocalization: function (localization, boolParam) {
-                if (!this.localizations[localization.lang]) {
-                    this.localizations[localization.lang] = {};
-                }
-                this.localizations[localization.lang][localization.key] = {
+                var localizationObj = {
                     localization: localization,
                     prefix: 'Oskari.registerLocalization('    
-                }
+                };
+
                 var suffix = '),'
                 if (boolParam !== undefined && boolParam !== null) {
                     suffix = ', '+boolParam.toString()+'),';
                 }
-                this.localizations[localization.lang][localization.key].suffix = suffix;
+                localizationObj.suffix = suffix;
+
+                if (!this.localizations[localization.lang]) {
+                    this.localizations[localization.lang] = {};
+                }
+                
+               if(boolParam !== undefined && boolParam !== null && boolParam === true) {                    
+                    //this.localizations[localization.lang][localization.key] = localizationObj;
+                    this.localizations[localization.lang][localization.key] = _.defaultsDeep({}, localizationObj, this.localizations[localization.lang][localization.key]);
+                } else {
+                    this.localizations[localization.lang][localization.key] = _.defaultsDeep({}, this.localizations[localization.lang][localization.key], localizationObj);
+                }
             }
         };
         // internal minify i18n files function
