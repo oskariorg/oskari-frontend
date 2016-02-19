@@ -322,7 +322,7 @@ Oskari.clazz.define(
                     features[0].setProperties(options.attributes);
                 }
                 _.forEach(features, function (feature) {
-                    if (!feature.getId()) {
+                    if (!feature.getId() && !feature.get('id')) {
                         var id = 'F' + me._nextFeatureId++;
                         feature.setId(id);
                         //setting id using set(key, value) to make id-property asking by get('id') possible
@@ -614,8 +614,11 @@ Oskari.clazz.define(
         getBufferedExtent: function(extent, percentage) {
             var me = this,
                 line = new ol.geom.LineString([[extent[0], extent[1]], [extent[2], extent[3]]]),
-                buffer = line.getLength()*percentage/100,
-                geometry = ol.geom.Polygon.fromExtent(extent),
+                buffer = line.getLength()*percentage/100;
+            if(buffer===0) {
+            	return extent;
+            }
+            var geometry = ol.geom.Polygon.fromExtent(extent),
                 reader = new jsts.io.WKTReader(),
                 wktFormat = new ol.format.WKT(),
                 wktFormatString = wktFormat.writeGeometry(geometry),
