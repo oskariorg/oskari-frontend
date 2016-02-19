@@ -75,8 +75,29 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
 
             this.setState(this.state);
             this._enableTile(true);
+            // request available -> personal data has been loaded before this bundle
+            if(sandbox.getRequestBuilder('PersonalData.AddTabRequest')) {
+                this.__addIndicatorTab();
+            }
+        },
+        "__addIndicatorTab": function() {
+          if(this.userIndicatorsTab) {
+              return;
+          }
+          var locale = this.getLocalization();
+          if (this.sandbox.getUser().isLoggedIn()) {
+              var userIndicatorsTab = Oskari.clazz.create(
+                  'Oskari.statistics.bundle.statsgrid.UserIndicatorsTab',
+                  this, locale.tab
+              );
+              this.userIndicatorsTab = userIndicatorsTab;
+          }
         },
         "eventHandlers": {
+            'Personaldata.PersonaldataLoadedEvent': function () {
+                // personal data has been loaded after this bundle
+                this.__addIndicatorTab();
+            },
             /**
              * @method userinterface.ExtensionUpdatedEvent
              */
