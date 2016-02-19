@@ -4,9 +4,6 @@
   <tr>
     <td>ID</td><td>Lakapa-Layer-Selector</td>
   </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.liikennevirasto.bundle.lakapa.layerselector2.LayerSelectorBundleInstance.html)</td>
-  </tr>
 </table>
 
 ## Description
@@ -15,7 +12,7 @@ This bundle provides a layer selector tool.
 
 ## Screenshot
 
-![screenshot](/images/bundles/lakapalayerselector.png)
+![screenshot](lakapalayerselector.png)
 
 
 ## Bundle configuration

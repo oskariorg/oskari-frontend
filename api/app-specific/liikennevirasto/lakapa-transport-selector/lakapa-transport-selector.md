@@ -4,9 +4,6 @@
   <tr>
     <td>ID</td><td>LakapaTransportSelector</td>
   </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.liikennevirasto.bundle.lakapa.TransportSelectorBundleInstance.html)</td>
-  </tr>
 </table>
 
 ## Description
@@ -15,7 +12,7 @@ This bundle provides a transport selector menu and tranport layer showing/hiding
 
 ## Screenshot
 
-![screenshot](/images/bundles/lakapatransportselector.png)
+![screenshot](lakapatransportselector.png)
 
 ## Bundle configuration
 

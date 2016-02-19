@@ -4,9 +4,6 @@
   <tr>
     <td>ID</td><td>AdminWfsSearchChannelBundle</td>
   </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.tampere.bundle.tampere.AdminWfsSearchChannelBundleInstance.html)</td>
-  </tr>
 </table>
 
 ## Description
@@ -15,7 +12,7 @@ This bundle provides a new admin tool to define WFS search channels. Admin user 
 
 ## Screenshot
 
-![screenshot](/images/bundles/admin-wfs-search-channel.png)
+![screenshot](admin-wfs-search-channel.png)
 
 
 ## Bundle configuration
