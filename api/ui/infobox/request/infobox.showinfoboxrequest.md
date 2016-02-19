@@ -1,1 +1,1 @@
-# InfoBox.ShowInfoBoxRequest
+# InfoBox.ShowInfoBoxRequest [rpc]

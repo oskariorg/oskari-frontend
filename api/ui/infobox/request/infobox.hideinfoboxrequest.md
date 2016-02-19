@@ -1,1 +1,1 @@
-# InfoBox.HideInfoBoxRequest
+# InfoBox.HideInfoBoxRequest [rpc]

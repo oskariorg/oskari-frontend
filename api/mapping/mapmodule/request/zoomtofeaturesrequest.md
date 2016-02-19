@@ -1,6 +1,6 @@
-# ZoomToFeaturesRequest
+# ZoomToFeaturesRequest [rpc]
 
-This request is used to zoom to the extent of all or specific features on the specified layers. If layer(s) not giving, will zoom to all features on the layers, that were created by the VectorLayerPlugin 
+This request is used to zoom to the extent of all or specific features on the specified layers. If layer(s) not giving, will zoom to all features on the layers, that were created by the VectorLayerPlugin
 
 ## Parameters
 

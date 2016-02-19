@@ -1,4 +1,4 @@
-# FeatureEvent
+# FeatureEvent [rpc]
 
 Used to notify about add, remove and click events for features.
 
