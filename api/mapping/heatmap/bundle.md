@@ -1,10 +1,4 @@
-# Heatmap
-
-<table class="table">
-  <tr>
-    <td>ID</td><td>heatmap</td>
-  </tr>
-</table>
+# heatmap
 
 ## Description
 
@@ -22,7 +16,7 @@ SelectedLayers bundle will show heatmap-enabled layers with an additional "Heatm
 
 ## Screenshot
 
-![screenshot](/images/bundles/heatmap.png)
+![screenshot](heatmap.png)
 
 ## Bundle configuration
 

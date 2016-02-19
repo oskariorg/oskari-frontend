@@ -10,7 +10,7 @@ The popup component is defined in divmanazer bundle and provides basic popup fun
 
 ## Screenshot
 
-![screenshot](/images/bundles/popup.png)
+![screenshot](popup.png)
 
 ## How to use
 

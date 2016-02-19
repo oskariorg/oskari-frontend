@@ -1,11 +1,5 @@
 # Controls
 
-<table class="table">
-  <tr>
-    <td>API</td><td>[link here](/api/latest/classes/Oskari.mapframework.mapmodule.ControlsPlugin.html)</td>
-  </tr>
-</table>
-
 ## Description
 
 ControlsPlugin adds zoombox, measure, keyboard and mouse controls to the map.

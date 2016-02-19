@@ -6,7 +6,7 @@ The button component is defined in divmanazer bundle and provides a generic butt
 
 ## Screenshot
 
-![screenshot](/images/bundles/button.png)
+![screenshot](button.png)
 
 ## How to use
 

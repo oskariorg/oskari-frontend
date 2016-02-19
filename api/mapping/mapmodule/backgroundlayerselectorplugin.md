@@ -1,11 +1,5 @@
 # Background Layer Selection Plugin
 
-<table class="table">
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayerSelectionPlugin.html)</td>
-  </tr>
-</table>
-
 ## Description
 
 This plugin provides a background maplayer selection "dropdown" on top of the map.
@@ -14,15 +8,15 @@ This plugin provides a background maplayer selection "dropdown" on top of the ma
 
 ## Closed
 
-![closed](/images/bundles/backgroundlayerselection_closed.png)
+![closed](images/backgroundlayerselection_closed.png)
 
 ## Open
 
-![open](/images/bundles/backgroundlayerselection_open.png)
+![open](images/backgroundlayerselection_open.png)
 
 ## List
 
-![list](/images/bundles/backgroundlayerselection_list.png)
+![list](images/backgroundlayerselection_list.png)
 
 ## Bundle configuration
 

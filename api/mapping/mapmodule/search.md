@@ -1,17 +1,8 @@
 # Search
 
-<table class="table">
-  <tr>
-    <td>API</td><td>[link here](/api/latest/classes/Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin.html)</td>
-  </tr>
-</table>
-
 ## Description
 
-''Creates a search field for places in published maps.''
-
-
-## Screenshot
+Creates a search field for places in published maps.
 
 ## Bundle configuration
 

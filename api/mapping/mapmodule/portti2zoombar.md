@@ -1,11 +1,5 @@
 # Portti2 Zoombar
 
-<table class="table">
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar.html)</td>
-  </tr>
-</table>
-
 ## Description
 
 The plugin offers the user a zoom control for the map. Gets the initial zoom level from the map it is registered to when started.
@@ -16,7 +10,7 @@ The plugin offers the user a zoom control for the map. Gets the initial zoom lev
 
 ## Screenshot
 
-![screenshot](/images/bundles/zoombar.png)
+![screenshot](images/zoombar.png)
 
 ## Bundle configuration
 

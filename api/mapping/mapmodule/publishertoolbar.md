@@ -1,11 +1,5 @@
 # PublishedToolbar Plugin
 
-<table class="table">
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin.html)</td>
-  </tr>
-</table>
-
 ## Description
 
 This is a plugin to bring toolbar functionality to published maps. It provides a container for the toolbar bundle to add itself into and available buttons allowing publishable maps to be configured to include only the wanted tools. The toolbar bundle handles most requests, except "Toolbar.ToolContainerRequest", which are handled by publishertoolbar.

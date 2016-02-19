@@ -1,13 +1,4 @@
-# My Places
-
-<table class="table">
-  <tr>
-    <td>ID</td><td>myplaces2</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link here](/api/latest/classes/Oskari.mapframework.bundle.myplaces2.MyPlacesBundleInstance.html)</td>
-  </tr>
-</table>
+# myplaces
 
 ## Description
 

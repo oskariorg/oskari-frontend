@@ -1,17 +1,8 @@
 # routingService
 
-<table class="table">
-  <tr>
-    <td>ID</td><td>routingService</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.routingService.RoutingServiceBundleInstance.html)</td>
-  </tr>
-</table>
-
 ## Description
 
-This bundle provides a service which listen ``GetRouteRequest`` request. When request has made the service send ajax call to Oskari backend and waiting to response. When response come then service sends ``RouteResultEvent``.
+Provides a service which listen ``GetRouteRequest`` request. When request has made the service send ajax call to Oskari backend and waiting to response. When response come then service sends ``RouteResultEvent``.
 
 
 ## Bundle configuration

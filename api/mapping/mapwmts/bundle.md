@@ -1,14 +1,5 @@
 # Map WMTS
 
-<table class="table">
-  <tr>
-    <td>ID</td><td>bundle identifier</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link here](/api/latest/classes/Oskari.mapframework.bundle.MapWmtsBundleInstance.html</td>
-  </tr>
-</table>
-
 ## Description
 
 ''Describe what the bundle does.''

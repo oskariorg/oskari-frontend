@@ -1,13 +1,4 @@
-# Feature Data 2
-
-<table class="table">
-  <tr>
-    <td>ID</td><td>featuredata2</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.featuredata2.FeatureDataBundleInstance.html)</td>
-  </tr>
-</table>
+# featuredata
 
 ## Description
 
@@ -15,7 +6,7 @@ The Bundle provides a grid view for WFS object data.
 
 ## Screenshot
 
-![screenshot](/images/bundles/featuredata.png)
+![screenshot](featuredata.png)
 
 ## Bundle configuration
 
