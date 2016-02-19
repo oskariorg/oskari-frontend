@@ -153,12 +153,12 @@ Polymer({
                     };
                   });
                   var formData = "title=" + encodeURIComponent(JSON.stringify(title)) + "&" +
-                  "source=" + encodeURIComponent(JSON.stringify(source)) + "&" +
-                  "description=" + encodeURIComponent(JSON.stringify(description)) + "&" +
-                  "year=" + encodeURIComponent(this.$.indicator_year.value) + "&" +
-                  "published=" + encodeURIComponent(this.$.indicator_publicity.value) + "&" +
-                  "category="+ encodeURIComponent(this.selectedLayer) + "&" +
-                  "data=" + encodeURIComponent(JSON.stringify(rows));
+                    "source=" + encodeURIComponent(JSON.stringify(source)) + "&" +
+                    "description=" + encodeURIComponent(JSON.stringify(description)) + "&" +
+                    "year=" + encodeURIComponent(this.$.indicator_year.value) + "&" +
+                    "published=" + encodeURIComponent(this.$.indicator_publicity.value) + "&" +
+                    "category="+ encodeURIComponent(this.selectedLayer) + "&" +
+                    "data=" + encodeURIComponent(JSON.stringify(rows));
                   $.ajax({
                     // For old jQuery.
                     type: "POST",
