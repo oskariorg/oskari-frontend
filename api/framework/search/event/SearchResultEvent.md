@@ -1,4 +1,4 @@
-# SearchResultEvent
+# SearchResultEvent [rpc]
 
 Used to notify the ``SearchRequest`` is received a reply from search.
 

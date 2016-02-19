@@ -1,4 +1,4 @@
-# UserLocationEvent
+# UserLocationEvent [rpc]
 
 Used to notify the ``GetUserLocationRequest`` is received a user geolocation.
 

@@ -1,4 +1,4 @@
-# RouteResultEvent
+# RouteResultEvent [rpc]
 
 Notifies that route has been got successfully from the service. Includes information about the route.
 

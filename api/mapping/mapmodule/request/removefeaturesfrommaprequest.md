@@ -1,4 +1,4 @@
-# RemoveFeaturesFromMapRequest
+# RemoveFeaturesFromMapRequest [rpc]
 
 Removes all or specific vector features from the specified layer or all features from all layers. 
 

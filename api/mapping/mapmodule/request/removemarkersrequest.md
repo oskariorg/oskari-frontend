@@ -1,4 +1,4 @@
-# RemoveMarkersRequest
+# RemoveMarkersRequest [rpc]
 
 Markers can be removed from the map by sending a RemoveMarkersRequest. The request can include an ID for removing a single marker
  or when no ID is provided all markers are cleared. 

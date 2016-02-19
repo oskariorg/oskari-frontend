@@ -1,4 +1,4 @@
-# StopDrawingRequest
+# StopDrawingRequest [rpc]
 
 If the user is allowed to draw on the map this request can be used to complete the drawing and/or clear the drawing from the map.
 

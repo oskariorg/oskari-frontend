@@ -1,4 +1,4 @@
-# AddMarkerRequest
+# AddMarkerRequest [rpc]
 
 Markers can be added to the map by sending an AddMarkerRequest. The request must contain the marker coordinates as well as 
 optional parameters, which are color, msg, shape, and size. The shape can be replaced by iconUrl and then the icon is used 
