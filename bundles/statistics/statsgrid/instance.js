@@ -65,6 +65,15 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             sandbox.registerService(statsService);
             me.statsService = statsService;
                 
+            // Handles user indicators
+            var userIndicatorsService = Oskari.clazz.create(
+                'Oskari.statistics.bundle.statsgrid.UserIndicatorsService',
+                me
+            );
+            sandbox.registerService(userIndicatorsService);
+            userIndicatorsService.init();
+            me.userIndicatorsService = userIndicatorsService;
+            
             // Register classification plugin for map.
             var classifyPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin', {
                 'state': me._getState()
@@ -172,11 +181,20 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             return false;
         },
         /**
+         * Returns the user indicators service.
+         *
+         * @method getUserIndicatorsService
+         * @return {Oskari.statistics.bundle.statsgrid.UserIndicatorsService}
+         */
+        getUserIndicatorsService: function () {
+            return this.userIndicatorsService;
+        },
+        /**
          * @method addUserIndicator
          * @param {Object} indicator
          */
         "addUserIndicator": function (indicator) {
-            // FIXME: Is this used anywhere?
+            // This is used in the user indicators tab in personal data panel.
             var me = this,
                 view = me.getView(),
                 state = me._getState();
