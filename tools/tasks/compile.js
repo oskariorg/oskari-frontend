@@ -55,8 +55,7 @@ module.exports = function(grunt) {
                     this.localizations[localization.lang] = {};
                 }
                 
-               if(boolParam !== undefined && boolParam !== null && boolParam === true) {                    
-                    //this.localizations[localization.lang][localization.key] = localizationObj;
+               if(boolParam !== undefined && boolParam !== null && boolParam === true) {
                     this.localizations[localization.lang][localization.key] = _.defaultsDeep({}, localizationObj, this.localizations[localization.lang][localization.key]);
                 } else {
                     this.localizations[localization.lang][localization.key] = _.defaultsDeep({}, this.localizations[localization.lang][localization.key], localizationObj);
