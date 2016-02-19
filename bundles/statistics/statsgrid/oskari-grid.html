@@ -142,6 +142,7 @@
               me.set("rows." + index + ".selected", row.selected);
           });
           this.$.rowsTemplate.render();
+          this.fire("onSelectionsChanged", {});
           setTimeout(this.resize.bind(this), 100);
       },
       "headersChanged": function() {

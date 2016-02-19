@@ -36,7 +36,8 @@
         </select>
       </div>
       <oskari-grid id="indicator-data-grid" statsrows="[[statsrows]]" rows="{{rows}}" headers="[[rowHeaders]]" selection="1"
-        on-sort="onSort" on-filter="onFilter" on-delete="onDelete" filtering sorting deleting="{{!embedded}}" />
+        on-sort="onSort" on-filter="onFilter" on-delete="onDelete" on-selections-changed="updateStatistics"
+        filtering sorting deleting="{{!embedded}}" />
       <content></content>
     </div>
   </template>
@@ -117,7 +118,8 @@
       "listeners": {
           "onSort": "onSort",
           "onDelete": "onDelete",
-          "onFilter": "onFilter"
+          "onFilter": "onFilter",
+          "onSelectionsChanged": "updateStatistics"
       },
       "observers": [
           "selectedLayerChanged(ajaxUrl, selectedLayer)",
@@ -200,6 +202,7 @@
               // This also selects the indicator into the map.
               this.showIndicatorOnMap(header.id, index, header);
           }
+          this.updateStatistics();
       },
       "onDelete": function(event) {
           var id = event.target.id,
@@ -306,11 +309,13 @@
       },
       "selectedIndicatorsChanged": function() {
           var me = this,
-              indicators = this.selectedIndicators || [];
+              indicators = this.selectedIndicators || [],
+              layer = me.sandbox.findMapLayerFromAllAvailable(me.selectedLayer),
+              layerName = layer.getLayerName();
           // This is needed to initialize the native dropdown to the correct value.
           this.$.selectRegionCategory.value = this.selectedLayer;
           this.set("rowHeaders", [{
-              title: me.localize(me.locale.regionCategories, me.selectedLayer),
+              title: me.localize(me.locale.regionCategories, layerName),
               sort: true,
               filter: true
           }].concat(
@@ -434,6 +439,53 @@
               index = event.target.index - 1;
           this.deleteIndicator(index);
       },
+      "updateStatistics": function() {
+        var me = this,
+          // For average, min, max, etc.
+          summaryIds = ["min", "max", "avg", "mde", "mdn", "std", "sum"],
+          regionSelected = {};
+        me.rows.forEach(function (row) {
+          if (row.selected) {
+            regionSelected[row.regionKey] = true;
+          }
+        });
+
+        var
+        // An array of {'min': value, 'max': value, ...} objects in the order of selectedIndicators.
+        summariesForIndicators = me.selectedIndicators.map(function(indicator) {
+            // In ES6 we should definitely use "const" here.
+            var cacheKey = indicator.id,
+                indicatorValues = me.cache[cacheKey],
+                values = indicatorValues && Object.keys(indicatorValues).map(function(regionKey) {
+                    return {regionKey: regionKey, value: indicatorValues[regionKey]};
+                }).filter(function(regionValue) {
+                    return regionSelected[regionValue.regionKey];
+                }).map(function(regionValue) {
+                    return regionValue.value;
+                }) || [],
+                // In ES6 we could use { [summaryFunction]: ... }
+                summary = {},
+                definedValues = values.filter(me.isDefined);
+            // FIXME: Filter based on selected value
+            if (definedValues && values.length > 0) {
+                summaryIds.forEach(function(summaryFunction) {
+                    summary[summaryFunction] = me.summarize[summaryFunction](definedValues);
+                });
+            }
+            return summary;
+        }),
+        summaryRows = summaryIds.map(function(summaryFunction) {
+            return {
+                selected: true,
+                data: [me.locale.statistic[summaryFunction]].concat(
+                        summariesForIndicators.map(function(summaryValuesForIndicator) {
+                    return summaryValuesForIndicator[summaryFunction];
+                }))
+            };
+        });
+
+        this.set("statsrows", summaryRows);
+      },
       "handleResponse": function(response) {
           var me = this;
           if (!me.selectedIndicators.every(function(indicator) {
@@ -444,37 +496,7 @@
               return;
           }
           var
-              regionKeyedValues = {},
-              // For average, min, max, etc.
-              summaryIds = ["min", "max", "avg", "mde", "mdn", "std", "sum"],
-              // An array of {'min': value, 'max': value, ...} objects in the order of selectedIndicators.
-              summariesForIndicators = me.selectedIndicators.map(function(indicator) {
-                  // In ES6 we should definitely use "const" here.
-                  var cacheKey = indicator.id,
-                      indicatorValues = me.cache[cacheKey],
-                      values = indicatorValues && Object.keys(indicatorValues).map(function(regionKey) {
-                          return indicatorValues[regionKey];
-                      }) || [],
-                      // In ES6 we could use { [summaryFunction]: ... }
-                      summary = {},
-                      definedValues = values.filter(me.isDefined);
-                  // FIXME: Filter based on selected value
-                  if (definedValues && values.length > 0) {
-                      summaryIds.forEach(function(summaryFunction) {
-                          summary[summaryFunction] = me.summarize[summaryFunction](definedValues);
-                      });
-                  }
-                  return summary;
-              }),
-              summaryRows = summaryIds.map(function(summaryFunction) {
-                  return {
-                      selected: true,
-                      data: [me.locale.statistic[summaryFunction]].concat(
-                              summariesForIndicators.map(function(summaryValuesForIndicator) {
-                          return summaryValuesForIndicator[summaryFunction];
-                      }))
-                  };
-              });
+              regionKeyedValues = {};
 
           // Transposing the array keyed by indicators in cache to being keyed by regions.
           me.selectedIndicators.forEach(function(indicator) {
@@ -500,12 +522,14 @@
                         [me.localize(me.locale, "defunctRegion") + " (" + regionKey + ")"])
                       .concat(me.selectedIndicators.map(function(indicator) {
                           return indicatorValues[indicator.id];
-                  }))
+                  })),
+                  regionKey: regionKey
               };
               return row;
           });
-          this.set("statsrows", summaryRows);
           this.set("rows", newRows);
+
+          me.updateStatistics();
           if (me.selectedIndicators.length === 1 || (me.embedded && me.selectedIndicators.length > 0)) {
               // If this is the first added indicator, or the only indicator left, we will update the map.
               // We will also update the map if we are in embedded mode, because we can fetch several indicators at once, and the first
