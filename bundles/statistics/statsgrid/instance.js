@@ -254,8 +254,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
         "_getState": function () {
             // Including the main panel state into this. The main panel state contains all the indicator stuff.
             // The main panel is used without this statsgrid instance in embedded views, so the view state should be stored there.
-            jQuery.extend(this.state, this.getMainPanel()._getState());
-            return this.state;
+            return jQuery.extend({}, this.state, this.getMainPanel()._getState());
         },
 
         /**
@@ -287,8 +286,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                 statsgridState = "statsgrid=",
                 valueSeparator = "+",
                 indicatorSeparator = ",",
-                stateValues = null,
-                indicatorValues = null,
+                stateValues = "",
+                indicatorValues = "",
                 colorsValues = null,
                 colors = state.colors || {},
                 keys = [

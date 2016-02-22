@@ -37,7 +37,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.MainPanel',
         return {
           "version": 2,
           "selectedIndicators": me.element && me.element.selectedIndicators || [],
-          "layerId": me.element && me.element.layerId || null
+          "layerId": me.element && me.element.selectedLayer || null
         };
       },
 	    render: function(container, instance) {
