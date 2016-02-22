@@ -590,7 +590,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          */
         getState: function () {
             // get applications current state
-            var map = this.getSandbox().getMap(),
+            var me = this,
+                map = this.getSandbox().getMap(),
                 selectedLayers = this.getSandbox().findAllSelectedMapLayers(),
                 mapmodule = this.getMapModule(),
                 i,

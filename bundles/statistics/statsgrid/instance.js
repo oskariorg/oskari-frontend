@@ -245,6 +245,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                 }
                 // view._layer isn't set if we call this without a layer...
                 view.prepareMode(true, layer, false);
+                
+                if (state.selectedIndicators && me.__mainPanel && me.__mainPanel.element) {
+                    me.__mainPanel.element.selectedIndicators = state.selectedIndicators;
+                }
             }
         },
         "_getState": function () {
@@ -266,7 +270,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
         "getStateParameters": function () {
             var me = this,
                 view = me.getView(),
-                state = me.state;
+                state = me._getState();
 
             // If there's no view or it's not visible, nothing to do here!
             if (!view || !view.isVisible) {
