@@ -1,6 +1,6 @@
 # admin
 
-Provides generic admin ui which other admin bundles can hook to.
+Generic admin ui which other admin bundles can hook to.
 
 ## Description
 
