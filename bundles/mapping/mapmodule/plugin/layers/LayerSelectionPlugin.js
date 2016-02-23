@@ -547,11 +547,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
 
             // use default
             if(!me.isMobile) {
-                layersContent.css('height', 'none');
+                layersContent.css('height', '');
                 layersContent.css('max-height', (0.85 * size.height) + 'px');
             }
             else {
-                layersContent.css('max-height', 'none');
+                layersContent.css('max-height', '');
                 layersContent.css('height', size.height + 'px');
             }
 
