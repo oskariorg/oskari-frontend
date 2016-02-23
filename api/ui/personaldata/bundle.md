@@ -1,13 +1,6 @@
-# Personal Data
+# personaldata
 
-<table class="table">
-  <tr>
-    <td>ID</td><td>`personaldata`</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link here](/api/latest/classes/Oskari.mapframework.bundle.personaldata.PersonalDataBundleInstance.html)</td>
-  </tr>
-</table>
+Provides generic functionality to show user-specific information.
 
 ## Description
 
@@ -15,7 +8,7 @@ The bundle lists user's account information and saved data in the application.
 Currently lists account info, saved map views and embedded maps.
 Other bundles can request to list data related to their domain (eg. my places, user indicators) here.
 
-![Personal data](/images/bundles/personaldata.png)
+![Personal data](personaldata.png)
 
 *Here shown with tabs added by `myplaces`, `statistics/statsgrid`, `analysis/analyse` and `myplacesimport` bundles*
 

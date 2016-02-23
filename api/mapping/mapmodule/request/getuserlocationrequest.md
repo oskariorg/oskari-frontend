@@ -1,4 +1,4 @@
-# GetUserLocationRequest
+# GetUserLocationRequest [rpc]
 
 This request is used to get user geolocation.
 

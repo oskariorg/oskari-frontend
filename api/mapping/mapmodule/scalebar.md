@@ -1,18 +1,12 @@
 # Scale Bar
 
-<table class="table">
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin.html)</td>
-  </tr>
-</table>
-
-##Description
+## Description
 
 The plugin adds a scale bar to the map it is registered to.
 
 ## Screenshot
 
-![screenshot](/images/bundles/scalebar.png)
+![screenshot](images/scalebar.png)
 
 ## Bundle configuration
 

@@ -8,8 +8,8 @@ A TabContainer renders TabPanels as selectable tabs whereas a TabDropdownContain
 
 ## Screenshot
 
-![screenshot](/images/bundles/tabcontainer.png)
-![screenshot](/images/bundles/tabdropdowncontainer.png)
+![screenshot](tabcontainer.png)
+![screenshot](tabdropdowncontainer.png)
 
 ## Usage
 

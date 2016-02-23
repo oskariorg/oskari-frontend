@@ -1,13 +1,6 @@
 # Map Publisher 2
 
-<table class="table">
-  <tr>
-    <td>ID</td><td>publisher2</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/classes/Oskari.mapframework.bundle.publisher.PublisherBundleInstance.html)</td>
-  </tr>
-</table>
+Allows creation of embedded maps
 
 ## Description
 
@@ -33,10 +26,10 @@ publisher settings.
 ## Screenshot
 
 ### Start publishing
-![start](/images/bundles/publisher_start.png)
+![start](publisher_start.png)
 
 ### Map publishing
-![map](/images/bundles/publisher_map.png)
+![map](publisher_map.png)
 
 ## Bundle configuration
 

@@ -4,9 +4,6 @@
   <tr>
     <td>ID</td><td>parcelinfo</td>
   </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.parcelinfo.ParcelInfoInstance.html)</td>
-  </tr>
 </table>
 
 ## Description
@@ -15,7 +12,7 @@ This bundle shows the name, area, and length information about the selected feat
 
 ## Screenshot
 
-![screenshot](/images/bundles/parcelinfo.png)
+![screenshot](parcelinfo.png)
 
 ## Bundle configuration
 

@@ -1,11 +1,5 @@
 # Geo Location
 
-<table class="table">
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.mapmodule.plugin.GeoLocationPlugin.html)</td>
-  </tr>
-</table>
-
 ## Description
 
 The plugin tries to locate the user with HTML5 GeoLocation or if that is not available, checks if the javascript methods provided by http://dev.maxmind.com/geoip/javascript are present and uses them if available. If location is successfully determined, centers the map on the location and zoom level 6. The HTML5 geolocation is parametrized to allow for max. one hour cached result and a timeout of 6 seconds.

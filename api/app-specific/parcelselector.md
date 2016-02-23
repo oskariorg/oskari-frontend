@@ -4,9 +4,6 @@
   <tr>
     <td>ID</td><td>parcelselector</td>
   </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.parcelselector.ParcelSelectorInstance.html)</td>
-  </tr>
 </table>
 
 ## Description
@@ -15,7 +12,7 @@ This bundle shows Tile in UI to open Flyout that asks for a parcel FID that is u
 
 ## Screenshot
 
-![screenshot](/images/bundles/parcelselector.png)
+![screenshot](parcelselector.png)
 
 ## Bundle configuration
 

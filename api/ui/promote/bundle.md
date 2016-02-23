@@ -1,13 +1,6 @@
-# Promote
+# promote
 
-<table class="table">
-  <tr>
-    <td>ID</td><td>promote</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.promote.PromoteBundleInstance.html)</td>
-  </tr>
-</table>
+Used as a placeholder for functionalities that require login.
 
 ## Description
 

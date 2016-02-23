@@ -1,4 +1,4 @@
-# AddFeaturesToMapRequest
+# AddFeaturesToMapRequest [rpc]
 
 Vector features can be added on the map by AddFeaturesToMapRequest. The request must contain the geometries of the features. Optionally, also additional control options such as features' style can be provided in a JSON-object.
 

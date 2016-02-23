@@ -1,13 +1,4 @@
-# My Places Import
-
-<table class="table">
-  <tr>
-    <td>ID</td><td>myplacesimport</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link here](/api/latest/classes/Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBundleInstance.html)</td>
-  </tr>
-</table>
+# myplacesimport
 
 ## Description
 

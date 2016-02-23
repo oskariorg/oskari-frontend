@@ -1,3 +1,3 @@
-# MapClickedEvent
+# MapClickedEvent [rpc]
 
-Event is sent when the map is clicked so bundles can react to it.
+Event is sent when the map is clicked

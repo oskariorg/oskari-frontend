@@ -23,7 +23,7 @@ Each data column has a menu from where the user can filter the values in the gri
 
 ## Screenshot
 
-![Statsgrid](/images/bundles/statsgrid.png)
+![Statsgrid](statsgrid.png)
 
 ## TODO
 

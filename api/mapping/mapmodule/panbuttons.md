@@ -1,11 +1,5 @@
 # Pan Buttons
 
-<table class="table">
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.mapmodule.plugin.PanButtons.html)</td>
-  </tr>
-</table>
-
 ## Description
 
 The plugin offers the user a move my by pan buttons
@@ -16,7 +10,7 @@ The plugin offers the user a move my by pan buttons
 
 ## Screenshot
 
-![screenshot](/images/bundles/panbuttons.png)
+![screenshot](images/panbuttons.png)
 
 ## Bundle configuration
 

@@ -1,13 +1,6 @@
-# Layer Selector
+# layerselector
 
-<table class="table">
-  <tr>
-    <td>ID</td><td>layerselector2</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.layerselector2.LayerSelectorBundleInstance.html)</td>
-  </tr>
-</table>
+Provides an UI to show which layers are available for the user.
 
 ## Description
 
@@ -19,7 +12,7 @@ The bundle offers the user a listing for all the maplayers available in Oskari. 
 
 ## Screenshot
 
-![screenshot](/images/bundles/layerselector2.png)
+![screenshot](layerselector2.png)
 
 ## Bundle configuration
 

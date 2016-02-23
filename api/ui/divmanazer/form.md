@@ -10,7 +10,7 @@ events like keypresses and focus changes.
 
 ## Screenshot
 
-![screenshot](/images/bundles/form.png)
+![screenshot](form.png)
 
 ## Usage
 

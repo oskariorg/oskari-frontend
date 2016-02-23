@@ -1,11 +1,5 @@
 # Layers Plugin
 
-<table class="table">
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin.html)</td>
-  </tr>
-</table>
-
 ## Description
 
 This is a plugin to bring more functionality for the mapmodules map implementation. It provides handling for rearranging layer order and controlling layer visibility. Provides information to other bundles if a layer becomes visible/invisible (out of scale/out of content geometry) and request handlers to move map to location/scale based on layer content. Also optimizes openlayers maplayers visibility setting if it detects that content is not in the viewport.

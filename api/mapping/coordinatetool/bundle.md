@@ -1,13 +1,4 @@
-# Coordinate Display
-
-<table class="table">
-  <tr>
-    <td>ID</td><td>coordinatetool</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.coordinatetool.CoordinateToolBundleInstance.html)</td>
-  </tr>
-</table>
+# coordinatetool
 
 ## Description
 
@@ -19,7 +10,7 @@ This bundle provides a plugin (Oskari.mapframework.bundle.coordinatetool.plugin.
 
 ## Screenshot
 
-![screenshot](/images/bundles/coordinatetool.png)
+![screenshot](coordinatetool.png)
 
 
 ## Bundle configuration
@@ -76,8 +67,6 @@ This bundle doesn't handle any requests.
     <td>`Publisher2.ColourSchemeChangedEvent`</td><td>Updates the UI colour schema from event.</td>
   </tr>
 
-
-  
 </table>
 
 ## Events the bundle sends out

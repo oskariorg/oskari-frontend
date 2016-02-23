@@ -1,13 +1,4 @@
-# MetadataCatalogue
-
-<table class="table">
-  <tr>
-    <td>ID</td><td>`metadatacatalogue`</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link here](/api/latest/classes/Oskari.mapframework.bundle.metadatacatalogue.MetadataCatalogueBundleInstance.html)</td>
-  </tr>
-</table>
+# metadatacatalogue
 
 ## Description
 

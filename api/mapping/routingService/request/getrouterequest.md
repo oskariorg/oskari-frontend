@@ -1,4 +1,4 @@
-# GetRouteRequest
+# GetRouteRequest [rpc]
 
 This request is used to get route plan between two points.
 

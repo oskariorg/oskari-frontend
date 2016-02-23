@@ -1,13 +1,4 @@
-# Analyse
-
-<table class="table">
-  <tr>
-    <td>ID</td><td>`analyse`</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link here](/api/latest/classes/link/here)</td>
-  </tr>
-</table>
+# analyse
 
 ## Description
 
@@ -15,7 +6,7 @@ Bundle manages analyse parameter and data setups, requests analyse execute actio
 
 ## Screenshot
 
-![screenshot](/images/bundles/analyse.png)
+![screenshot](analyse.png)
 
 ## Bundle configuration
 
@@ -99,9 +90,6 @@ state : {
 
 
 ## Events the bundle sends out 
-
-### 
-
 
 ## Dependencies
 

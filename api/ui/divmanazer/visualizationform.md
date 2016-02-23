@@ -6,7 +6,7 @@ Creates ui and functionality to define geometry visualizations for eg. my places
 
 ## Screenshot
 
-![Form](/images/bundles/visualization-form_2.png)
+![Form](visualization-form_1.png)
 
 ## Usage
 
