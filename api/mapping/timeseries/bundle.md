@@ -1,22 +1,12 @@
 # Timeseries
 
-<table class="table">
-  <tr>
-    <td>ID</td><td>timeseries</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleInstance.html)</td>
-  </tr>
-</table>
-
 ## Description
 
 Bundle creates timeseries playback module to over map when layer supports time dimensions.
 
-
 ## Screenshot
 
-![screenshot](/images/bundles/timeseries.png)
+![screenshot](timeseries.png)
 
 ## Bundle configuration
 

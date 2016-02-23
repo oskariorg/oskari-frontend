@@ -1,17 +1,8 @@
 # Vector Layer Plugin
 
-<table class="table">
-  <tr>
-    <td>API</td><td>[link here](/api/latest/classes/Oskari.mapframework.mapmodule.VectorLayerPlugin.html)</td>
-  </tr>
-</table>
-
 ## Description
 
 ''Provides functionality to draw vector layers on the map.''
-
-
-## Screenshot
 
 ## Bundle configuration
 

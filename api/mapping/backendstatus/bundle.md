@@ -1,17 +1,12 @@
-# Backend Status
-
-<table class="table">
-  <tr>
-    <td>ID</td><td>backendstatus</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.backendstatus.BackendStatusBundleInstance.html)</td>
-  </tr>
-</table>
+# backendstatus
 
 ## Description
 
 Polls a backend system for map layers monitoring statuses and informs interested parties via an event.
+
+## Screenshot
+
+![screenshot](backendstatus.png)
 
 ## Bundle configuration
 
@@ -78,7 +73,3 @@ This bundle doesn't send out any requests.
     <td>User interface</td>
   </tr>
 </table>
-
-OR
-
-This bundle doesn't have any dependencies.

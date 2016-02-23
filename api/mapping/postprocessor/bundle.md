@@ -1,21 +1,6 @@
-# Post Processor
+# postprocessor
 
-<table class="table">
-  <tr>
-    <td>ID</td><td>postprocessor</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.postprocessor.PostProcessorBundleInstance.html)</td>
-  </tr>
-</table>
-
-## Description
-
-''Describe what the bundle does.''
-
-## TODO
-
-* ''List any planned features''
+Moves the map viewport to location defined in config and requests a highlight for featureId (also from config).
 
 ## Bundle configuration
 
@@ -25,19 +10,7 @@ config : {
 }
 ```
 
-OR
-
-No configuration is required.
-
 ## Bundle state
-
-```javascript
-state : {
-  test : 2
-}
-```
-
-OR
 
 No statehandling has been implemented.
 

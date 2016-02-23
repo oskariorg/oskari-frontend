@@ -1,4 +1,4 @@
-# StartDrawingRequest [RPC]
+# StartDrawingRequest [rpc]
 
 Allows the user to draw on the map.
 

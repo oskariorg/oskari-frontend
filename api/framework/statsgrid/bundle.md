@@ -1,13 +1,6 @@
-# StatsGrid
+# statsgrid
 
-<table class="table">
-  <tr>
-    <td>ID</td><td>statsgrid</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link here](/api/latest/classes/link/here)</td>
-  </tr>
-</table>
+Statistics data display.
 
 ## Description
 
@@ -23,7 +16,7 @@ Each data column has a menu from where the user can filter the values in the gri
 
 ## Screenshot
 
-![Statsgrid](/images/bundles/statsgrid.png)
+![Statsgrid](statsgrid.png)
 
 ## TODO
 

@@ -59,7 +59,8 @@
     "wrench": "1.5.1",
     "xml2js": "latest",
     "yuidocjs": "0.3.45",
-    "fs-extra": "~0.18.4"
+    "fs-extra": "~0.18.4",
+    "lodash.defaultsdeep": "latest"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

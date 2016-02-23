@@ -1,18 +1,8 @@
 # Map Stats
 
-<table class="table">
-  <tr>
-    <td>ID</td><td>mapstats</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.mapstats.MapStatsBundleInstance.html)</td>
-  </tr>
-</table>
-
 ## Description
 
 Adds support for statistics layers. The StatsLayerPlugin needs to be registered for the map in order to visualize statistics.
-
 
 ## TODO
 

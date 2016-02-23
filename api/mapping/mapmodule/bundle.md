@@ -1,17 +1,8 @@
-# Map Module
-
-<table class="table">
-  <tr>
-    <td>ID</td><td>mapmodule</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.ui.module.common.MapModule.html)</td>
-  </tr>
-</table>
+# mapmodule
 
 ## Description
 
-Provides abstraction for map implementation (Openlayers) and provides a plugin mechanism to add additional functionality to map.
+Provides abstraction for map implementation (Openlayers 2/3) and provides a plugin mechanism to add additional functionality to map.
 
 ## TODO
 

@@ -4,9 +4,6 @@
   <tr>
     <td>ID</td><td>`elf-lang-overrides`</td>
   </tr>
-  <tr>
-    <td>API</td><td></td>
-  </tr>
 </table>
 
 ## Description

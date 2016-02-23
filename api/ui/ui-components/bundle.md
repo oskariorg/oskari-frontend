@@ -1,13 +1,4 @@
-# UI components
-
-<table class="table">
-  <tr>
-    <td>ID</td><td>ui-components</td>
-  </tr>
-  <tr>
-    <td>API</td><td>No API doc. See under divmanazer</td>
-  </tr>
-</table>
+# ui-components
 
 ## Description
 

@@ -1,18 +1,12 @@
 # WFS Layer Plugin
 
-<table class="table">
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin.html)</td>
-  </tr>
-</table>
-
 ## Description
 
 WfsLayerPlugin does event handling and passes needed parameters from events to Mediator's functions that handle cometd messaging for WFS layers.
 
 ## Screenshot
 
-![screenshot](/images/bundles/wfslayer.png)
+![screenshot](images/wfslayer.png)
 
 ## Bundle configuration
 

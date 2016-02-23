@@ -1,11 +1,5 @@
 # Markers Plugin
 
-<table class="table">
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.mapmodule.MarkersPlugin.html)</td>
-  </tr>
-</table>
-
 ## Description
 
 The plugin offers Marker functionality for the map. Adding, removing markers and event when a marker has been added or clicked.
@@ -17,7 +11,7 @@ Also adds a button to toolbar for adding markers.
 
 ## Screenshot
 
-![screenshot](/images/bundles/mapmodule-markerplugin.png)
+![screenshot](images/mapmodule-markerplugin.png)
 
 ## Plugin configuration
 

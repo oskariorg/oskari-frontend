@@ -10,10 +10,9 @@
 
 Renders a pop-up that contains a list of data providers based on selected layers.
 
-
 ## Screenshot
 
-![screenshot](/images/bundles/datasource.png)
+![screenshot](images/datasource.png)
 
 ## Bundle configuration
 

@@ -4,9 +4,6 @@
   <tr>
     <td>ID</td><td>StartupInfoBundle</td>
   </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.liikennevirasto.bundle.lakapa.StartupInfoBundleInstance.html)</td>
-  </tr>
 </table>
 
 ## Description
@@ -15,7 +12,7 @@ This bundle provides a user start up info.
 
 ## Screenshot
 
-![screenshot](/images/bundles/lakapastartupinfo.png)
+![screenshot](lakapastartupinfo.png)
 
 
 ## Bundle configuration

@@ -4,9 +4,6 @@
   <tr>
     <td>ID</td><td>`elf-geolocator`</td>
   </tr>
-  <tr>
-    <td>API</td><td></td>
-  </tr>
 </table>
 
 ## Description
@@ -15,7 +12,7 @@ Creates a service and a user interface for ELF Geolocator search API. Creates an
 
 ## Screenshot
 
-![screenshot](/images/bundles/elf-geolocator.png)
+![screenshot](elf-geolocator.png)
 
 ## Bundle configuration
 

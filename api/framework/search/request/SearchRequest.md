@@ -1,4 +1,4 @@
-# SearchRequest
+# SearchRequest [rpc]
 
 This request is used to get search result of requested search key.
 

@@ -1,13 +1,4 @@
-# Info Box
-
-<table class="table">
-  <tr>
-    <td>ID</td><td>`infobox`</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.infobox.InfoBoxBundleInstance.html)</td>
-  </tr>
-</table>
+# infobox
 
 ## Description
 
@@ -15,7 +6,7 @@ Provides functionality for other bundles to show an infobox on the map. For exam
 
 ## Screenshot
 
-![screenshot](/images/bundles/infobox.png)
+![screenshot](infobox.png)
 
 ## Bundle configuration
 
