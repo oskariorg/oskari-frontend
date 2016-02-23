@@ -34,10 +34,20 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.MainPanel',
       // Named like this to prevent the state from going to mapfull state.
       _getState: function() {
         var me = this;
+        var selectedIndicators = me.element && me.element.selectedIndicators || [];
+        var selectedColumn = "";
+        if (me.element && me.element.selectedIndicatorKey) {
+          selectedColumn = selectedIndicators.indexOf(me.element.selectedIndicatorKey);
+        }
+        if (selectedColumn < 0) {
+          // - characters are poison for the URL parsing...
+          selectedColumn = "";
+        }
         return {
           "version": 2,
-          "selectedIndicators": me.element && me.element.selectedIndicators || [],
-          "layerId": me.element && me.element.selectedLayer || null
+          "selectedIndicators": selectedIndicators,
+          "layerId": me.element && me.element.selectedLayer || null,
+          "currentColumn": selectedColumn
         };
       },
 	    render: function(container, instance) {
@@ -58,6 +68,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.MainPanel',
           elementWrapper.ajaxUrl = url;
           if (me.embedded) {
             elementWrapper.selectedIndicators = me.state.selectedIndicators;
+            elementWrapper.selectedIndicator = me.state.selectedIndicators[me.state.currentColumn];
             elementWrapper.selectedLayer = me.state.layerId; // For example: 9
             // Not used at least yet, the layer is fetched based on the name.
             elementWrapper.layerId = me.state.layerId; // For example: 9

@@ -293,11 +293,15 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                 keys = [
                     'layerId',
                     'currentColumn',
+                    // Old notation: indicator42014total means SotkaIndicator number 4, year 2014, both sexes.
+                    //               indicator10892015total means User Indicator number 1089, year 2015, both sexes.
+                    // This is pretty much unparseable, so we will use indicator values instead.
                     'methodId',
                     'numberOfClasses',
                     'classificationMode',
                     'manualBreaksInput',
-                    'allowClassification'
+                    'allowClassification',
+                    'version'
                 ],
                 colorKeys = ['set', 'index', 'flipped'],
                 indicators = state.selectedIndicators || [],
@@ -323,20 +327,12 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             // handle indicators separately
             for (i = 0, len = indicators.length, last = len - 1; i < len; i += 1) {
                 indicatorValues += indicators[i].id;
-                indicatorValues += valueSeparator;
-                var first = true;
-                indicators[i].selectors.forEach(function(selector) {
-                  if (!first) {
-                    indicatorValues += valueSeparator;
-                  }
-                  indicatorValues += selector.name;
-                  indicatorValues += valueSeparator;
-                  indicatorValues += selector.value;
-                  first = false;
-                });
-                indicatorValues += valueSeparator;
+                // In the old system this was for example 4, meaning the Sotka indicator number 4,
+                // requiring the next parameters also to interpret it: +2014+total
+                // In the new system this is: fi.nls.oskari.control.statistics.plugins.sotka.SotkaStatisticalDatasourcePlugin:167:11:{%22sex%22:%22female%22,%22year%22:%221992%22}
+                // Note: We will need to use a parsing rule to determine whether the link is from the old system or from the new.
                 if (i !== last) {
-                    indicatorValues += indicatorSeparator;
+                    indicatorValues += valueSeparator;
                 }
             }
 
