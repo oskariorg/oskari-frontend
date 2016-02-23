@@ -59,7 +59,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '        </div>' +
                     '    <% }); %>' +
 
-                    '    <h1>' + this.locale.abstract + '</h1>' +
 
                     '    <% if (identification.abstractText.length) { %>' +
                     '        <h2><%= identification.type === "data" ? locale.heading.abstractTextData : locale.heading.abstractTextService %></h2>' +
@@ -72,28 +71,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '        <h2>' + this.locale.heading.metadataDateStamp + '</h2>' +
                     '        <p><%- metadataDateStamp %></p>' +
                     '    <% } %>' +
-                    '</article>'+
-                    '<article>' +
-                    '    <% _.forEach(identification.browseGraphics, function (graphic) { %>' +
-                    '        <div class="browseGraphic">' +
-                    '            <img src="<%- graphic.fileName %>" />' +
-                    '        </div>' +
-                    '    <% }); %>' +
-
-                    '    <h1>' + this.locale.jhs +'</h1>' +
-
-                    '    <% if (identification.abstractText.length) { %>' +
-                    '        <h2><%= identification.type === "data" ? locale.heading.abstractTextData : locale.heading.abstractTextService %></h2>' +
-                    '        <% _.forEach(identification.abstractText, function (paragraph) { %>' +
-                    '            <p><%= paragraph %></p>' +
-                    '        <% }); %>' +
-                    '    <% } %>' +
-
-                    '    <% if (metadataDateStamp.length) { %>' +
-                    '        <h2>' + this.locale.heading.metadataDateStamp + '</h2>' +
-                    '        <p><%- metadataDateStamp %></p>' +
-                    '    <% } %>' +
-
+                    
                     '    <% if (onlineResources.length) { %>' +
                     '        <h2>' + this.locale.heading.onlineResource + '</h2>' +
                     '        <ul>' +
@@ -233,108 +211,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '        <% }); %>' +
                     '        </ul>' +
                     '    <% } %>' +
-                    '</article>'+
-                    '<article>' +
-                    '    <% _.forEach(identification.browseGraphics, function (graphic) { %>' +
-                    '        <div class="browseGraphic">' +
-                    '            <img src="<%- graphic.fileName %>" />' +
-                    '        </div>' +
-                    '    <% }); %>' +
-
-                    '    <h1>' + this.locale.inspire + '</h1>' +
-
-                    '    <% if (identification.abstractText.length) { %>' +
-                    '        <h2><%= identification.type === "data" ? locale.heading.abstractTextData : locale.heading.abstractTextService %></h2>' +
-                    '        <% _.forEach(identification.abstractText, function (paragraph) { %>' +
-                    '            <p><%= paragraph %></p>' +
-                    '        <% }); %>' +
-                    '    <% } %>' +
-
-                    '    <% if (metadataDateStamp.length) { %>' +
-                    '        <h2>' + this.locale.heading.metadataDateStamp + '</h2>' +
-                    '        <p><%- metadataDateStamp %></p>' +
-                    '    <% } %>' +
-
-                    '    <% if (onlineResources.length) { %>' +
-                    '        <h2>' + this.locale.heading.onlineResource + '</h2>' +
-                    '        <ul>' +
-                    '        <% _.forEach(onlineResources, function (onlineResource) { %>' +
-                    '            <% if (onlineResource.url.length) { %>' +
-                    '                <li><a href="<%= onlineResource.url %>"><%= onlineResource.name && onlineResource.name.length ? onlineResource.name : onlineResource.url %></a></li>' +
-                    '            <% } %>' +
-                    '        <% }); %>' +
-                    '        </ul>' +
-                    '    <% } %>' +
-
-                    '    <% if (identification.languages.length) { %>' +
-                    '        <h2>' + this.locale.heading.resourceLanguage + '</h2>' +
-                    '        <ul>' +
-                    '        <% _.forEach(identification.languages, function (language) { %>' +
-                    '             <li><%= locale.languages[language] || language %></li>' +
-                    '        <% }); %>' +
-                    '        </ul>' +
-                    '    <% } %>' +
-
-                    '    <% if (identification.topicCategories.length) { %>' +
-                    '        <h2>' + this.locale.heading.topicCategory + '</h2>' +
-                    '        <ul>' +
-                    '        <% _.forEach(identification.topicCategories, function (topicCategory) { %>' +
-                    '            <li title="<%= (locale.codeLists["gmd:MD_TopicCategoryCode"][topicCategory] || {description: topicCategory}).description %>"><%= (locale.codeLists["gmd:MD_TopicCategoryCode"][topicCategory] || {label: topicCategory}).label %></li>' +
-                    '        <% }); %>' +
-                    '        </ul>' +
-                    '    <% } %>' +
-
-                    '    <% if (identification.temporalExtents.length) { %>' +
-                    '        <h2>' + this.locale.heading.temporalExtent + '</h2>' +
-                    '        <ul>' +
-                    '        <% _.forEach(identification.temporalExtents, function (temporalExtent) { %>' +
-                    '            <li><%= temporalExtent.begin %> - <%= temporalExtent.end %></li>' +
-                    '        <% }); %>' +
-                    '        </ul>' +
-                    '    <% } %>' +
-
-                    '    <% if (dataQualities.some(function (dq) {return dq.lineageStatement.length})) { %>' +
-                    '        <h2>' + this.locale.heading.lineageStatement + '</h2>' +
-                    '        <% _.forEach(dataQualities, function (dataQuality) { %>' +
-                    '            <% _.forEach(dataQuality.lineageStatement, function (paragraph) { %>' +
-                    '                <p><%= paragraph %></p>' +
-                    '            <% }); %>' +
-                    '        <% }); %>' +
-                    '    <% } %>' +
-
-                    '    <% if (identification.spatialResolutions.length) { %>' +
-                    '        <h2>' + this.locale.heading.spatialResolution + '</h2>' +
-                    '        <ul>' +
-                    '        <% _.forEach(identification.spatialResolutions, function (resolution) { %>' +
-                    '            <li>1: <%- resolution %></li>' +
-                    '        <% }); %>' +
-                    '        </ul>' +
-                    '    <% } %>' +
-
-                    '    <% if (identification.responsibleParties.length) { %>' +
-                    '        <h2>' + this.locale.heading.responsibleParty + '</h2>' +
-                    '        <ul>' +
-                    '        <% _.forEach(identification.responsibleParties, function (responsibleParty) { %>' +
-                    '            <li><%- responsibleParty.organisationName %></li>' +
-                    '            <% if (responsibleParty.electronicMailAddresses.length) { %>' +
-                    '                <ul>' +
-                    '                <% _.forEach(responsibleParty.electronicMailAddresses, function (electronicMailAddress) { %>' +
-                    '                    <li><%- electronicMailAddress %></li>' +
-                    '                <% }); %>' +
-                    '                </ul>' +
-                    '            <% } %>' +
-                    '        </li>' +
-                    '        <% }); %>' +
-                    '        </ul>' +
-                    '    <% } %>' +
-
-                    '    <% if (identification.citation.date.date.length) { %>' +
-                    '        <h2>' + this.locale.heading.citationDate + '</h2>' +
-                    '        <p title="<%= (locale.codeLists["gmd:CI_DateTypeCode"][identification.citation.date.dateType] || {description: identification.citation.date.dateType}).description %>"><%- identification.citation.date.date %> (<%=' +
-                    '        (locale.codeLists["gmd:CI_DateTypeCode"][identification.citation.date.dateType] || {label: identification.citation.date.dateType}).label' +
-                    '        %>)</p>' +
-                    '    <% } %>' +
-
+                    
                     '    <% if (scopeCodes.length) { %>' +
                     '        <h2>' + this.locale.heading.scopeCode + '</h2>' +
                     '        <ul>' +
@@ -357,7 +234,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '        <h2>' + this.locale.heading.operatesOn + '</h2>' +
                     '        <ul>' +
                     '        <% _.forEach(identification.operatesOn, function (uuid) { %>' +
-                    // TODO I think these used to be links...
                     '            <li><%- uuid %></li>' +
                     '        <% }); %>' +
                     '        </ul>' +
