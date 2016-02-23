@@ -545,12 +545,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             icon.addClass('icon-arrow-white-down');
             content.show();
 
-            if(toolStyle && !me.isMobile) {
-                layersContent.css('height', (0.75 * size.height) + 'px');
-            }
             // use default
+            if(toolStyle && !me.isMobile) {
+                layersContent.css('height', 'none');
+                layersContent.css('max-height', (0.85 * size.height) + 'px');
+            }
             else {
-                layersContent.css('height', (0.85 * size.height) + 'px');
+                layersContent.css('max-height', 'none');
+                layersContent.css('height', size.height + 'px');
             }
 
 
