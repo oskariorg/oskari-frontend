@@ -136,16 +136,6 @@ Default values has no tools selected and can be used to reset the tools state co
 
 Preset values allow typically used tools to be selected as a result of activating another tool setting. E.g. selecting draw tools also selects all types of draw tools.
 
-## Requests the bundle handles
-<table class="table">
-<tr>
-  <th> Request </th><th> Where/why it's used</th>
-</tr>
-<tr>
-  <td> publisher.PublishMapEditorRequest </td><td>Enables users to modify the publish maps</td>
-</tr>
-</table>
-
 ## Requests the bundle sends out
 <table class="table">
 <tr>
@@ -194,17 +184,6 @@ Preset values allow typically used tools to be selected as a result of activatin
   </tr>
   <tr>
     <td> Publisher.MapPublishedEvent </td><td> Publisher views send this event so personaldata can refresh its listing. Publisher instance also listens the event to show user HTML code for embedding the map to a page.</td>
-  </tr>
-</table>
-
-## Events the bundle sends out
-
-<table class="table">
-  <tr>
-    <th> Event </th><th> When it is triggered/what it tells other components</th>
-  </tr>
-  <tr>
-    <td> Publisher.MapPublishedEvent </td><td> Sends when the server returns a valid response that the map has been published.</td>
   </tr>
 </table>
 

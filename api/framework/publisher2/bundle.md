@@ -129,19 +129,6 @@ The publisher provides some default tools:
 - my location
 - controls (moving map by dragging/keyboard)
 
-## Bundle state
-
-No statehandling has been implemented.
-
-## Requests the bundle handles
-<table class="table">
-<tr>
-  <th> Request </th><th> Where/why it's used</th>
-</tr>
-<tr>
-  <td> publisher.PublishMapEditorRequest </td><td>Enables users open the publisher with existing published map to modify it</td>
-</tr>
-</table>
 
 ## Requests the bundle sends out
 <table class="table">
@@ -191,16 +178,6 @@ No statehandling has been implemented.
   </tr>
 </table>
 
-## Events the bundle sends out
-
-<table class="table">
-  <tr>
-    <th> Event </th><th> When it is triggered/what it tells other components</th>
-  </tr>
-  <tr>
-    <td> Publisher.MapPublishedEvent </td><td> Sends when the server returns a valid response that the map has been published.</td>
-  </tr>
-</table>
 
 ## Dependencies
 

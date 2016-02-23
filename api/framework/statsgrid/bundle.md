@@ -1,13 +1,6 @@
-# StatsGrid
+# statsgrid
 
-<table class="table">
-  <tr>
-    <td>ID</td><td>statsgrid</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link here](/api/latest/classes/link/here)</td>
-  </tr>
-</table>
+Statistics data display.
 
 ## Description
 

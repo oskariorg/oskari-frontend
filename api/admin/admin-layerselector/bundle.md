@@ -1,6 +1,6 @@
 # admin-layerselector
 
-Provides admin tools for managing maplayer configurations
+Admin tools for managing maplayer configurations
 
 ## Description
 
