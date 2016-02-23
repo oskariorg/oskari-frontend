@@ -1,14 +1,5 @@
 # RPC
 
-<table class="table">
-  <tr>
-    <td>ID</td><td>rpc</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.rpc.RemoteProcedureCallInstance.html)</td>
-  </tr>
-</table>
-
 ## Description
 
 Provides RPC functionality, i.e. a published map can be controlled from the parent document.
@@ -608,7 +599,7 @@ This bundle doesn't send any events.
     <th> Dependency </th><th> Linked from </th><th> Purpose</th>
   </tr>
   <tr>
-    <td> [JSChannel](https://github.com/mozilla/jschannel) </td>
+    <td> [JSChannel](https://github.com/nls-oskari/jschannel) </td>
     <td> RPC bundle </td>
     <td> Used at both ends of the pipe for the RPC communication.</td>
   </tr>
