@@ -348,6 +348,27 @@
                     }
                 }
             }
+        },
+        {
+            "bundlename" : "backendstatus",
+            "bundleinstancename" : "backendstatus",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "backendstatus" : {
+                        "bundlePath" : "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename" : "printout",
+            "bundleinstancename" : "printout",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "printout" : {
+                        "bundlePath" : "../../../packages/framework/bundle/"
+                    }
+                }
+            }
         }
     ]
 }
