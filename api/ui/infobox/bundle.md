@@ -33,32 +33,6 @@ state : {
 }
 ```
 
-## Requests the bundle handles
-
-<table class="table">
-  <tr>
-    <th>Request</th><th>How does the bundle react</th>
-  </tr>
-  <tr>
-    <td> `InfoBox.ShowInfoBoxRequest` </td><td> Infobox is opened on given location and with given content based on request data</td>
-  </tr>
-  <tr>
-    <td> `InfoBox.HideInfoBoxRequest` </td><td> Infobox is removed - single box if id is given or all if not specified</td>
-  </tr>
-</table>
-
-## Requests the bundle sends out
-
-This bundle doesn't send out any requests.
-
-## Events the bundle listens to
-
-This bundle doesn't listen to any events.
-
-## Events the bundle sends out
-
-This bundle doesn't send out any events.
-
 ## Dependencies
 
 <table class="table">
