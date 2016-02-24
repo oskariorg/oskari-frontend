@@ -198,9 +198,7 @@ Oskari.clazz.define(
 
             // handle state
             var state = me.getState();
-            if(state && state.meta_uuid) {
-                me.scheduleShowMetadata([{uuid: state.meta_uuid}]);
-            } else if (state && state.allMetadata){
+            if (state && state.allMetadata){
                 me.scheduleShowMetadata(state.allMetadata);
             }
 
