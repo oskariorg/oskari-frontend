@@ -45,6 +45,7 @@ Oskari.clazz
             this._hidePrevious = (hidePrevious == true);
             this._colourScheme = colourScheme;
             this._font = font;
+            this._additionalTools = [];
         }, {
             /** @static @property __name request name */
             __name: "InfoBox.ShowInfoBoxRequest",
@@ -111,6 +112,12 @@ Oskari.clazz
              */
             getFont: function () {
                 return this._font;
+            },
+            addAdditionalTool: function(toolDefs) {
+                this._additionalTools.push(toolDefs);
+            },
+            getAdditionalTools: function(){
+                return this._additionalTools;
             }
         }, {
             /**

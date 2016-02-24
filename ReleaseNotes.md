@@ -2772,4 +2772,3 @@ bundles/framework/bundle/mapmodule-plugin/request/MapLayerUpdateRequestHandler.j
 ## Release notes 1.0
 
 Initial versio for new Oskari
-
