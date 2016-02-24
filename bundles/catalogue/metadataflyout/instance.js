@@ -198,9 +198,7 @@ Oskari.clazz.define(
 
             // handle state
             var state = me.getState();
-            if (state && state.allMetadata){
-                me.scheduleShowMetadata(state.allMetadata);
-            }
+            me.setState(state);
 
         },
 
@@ -263,7 +261,8 @@ Oskari.clazz.define(
                     // not me -> do nothing
                     return;
                 }
-                if (event.getViewState() == 'close') {
+                var viewState = event.getViewState();
+                if (viewState == 'close') {
                     this.state = {};
                 }
             }
@@ -403,6 +402,9 @@ Oskari.clazz.define(
          */
         setState: function (state) {
             this.state = state;
+            if (state && state.current){
+                this.scheduleShowMetadata(state.current);
+            }
         },
 
         /**
