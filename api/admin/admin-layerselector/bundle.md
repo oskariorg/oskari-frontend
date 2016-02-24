@@ -9,9 +9,6 @@ The bundle offers admin a listing for all the maplayers available in Oskari. The
 ## TODO
 
 * Add Inspire Themes (needs backend work)
-* Handle capabilities query as far as possible in the backend
-** There is too many exceptions etc. for clientside code to handle.
-* GetMapLayers action route should return also empty organizations and classes
 * Modal dialog when user is removing organization or layer
 * Backend should return json if user is removing organization
 * Backend should return error if user is removing organization which contains layer
@@ -19,32 +16,14 @@ The bundle offers admin a listing for all the maplayers available in Oskari. The
 * Backend should be configured to handle admin bundles based on user role
 * Filter mechanism is not ready yet
 * Add Organization & add Inspire theme needs some further work on layerSelector2 bundle
-* When adding layer we should return also inspireName
-* WFS layers...
 
 ## Screenshot
 
-![screenshot](/images/bundles/admin-layerselector.png)
+![screenshot](admin-layerselector.png)
 
 ## Bundle configuration
 
-User needs to be admin to get this bundle (handled by oskari-server)
-
-
-## Requests the bundle handles
-
-This bundle doesn't handle any requests.
-
-## Requests the bundle sends out
-
-<table class="table">
-  <tr>
-    <th> Request </th><th> Where/why it's used</th>
-  </tr>
-  <tr>
-    <td> AddMapLayerRequest </td><td> Sent out when user checks the layer checkbox</td>
-  </tr>
-</table>
+Frontend has no configuration, but the bundle is usually configured to be shown only to admin users. Configuration is done in oskari-server using oskari-ext.properties.
 
 ## Events the bundle listens to
 
@@ -54,17 +33,6 @@ This bundle doesn't handle any requests.
   </tr>
   <tr>
     <td> MapLayerEvent </td><td> Updates the UI with data from MapLayerService - if operation is 'add' (adds the maplayer), 'remove' (removes the maplayer) or 'update' (updates layers name)</td>
-  </tr>
-</table>
-
-## Events the bundle sends out
-
-<table class="table">
-  <tr>
-    <th> Event </th><th> When it happens</th>
-  </tr>
-  <tr>
-    <td> MapLayerEvent </td><td> If admin creates a new layer or updates / removes old one - if operation is 'add' (adds the maplayer), 'remove' (removes the maplayer) or 'update' (updates layers name)</td>
   </tr>
 </table>
 
@@ -78,11 +46,6 @@ This bundle doesn't handle any requests.
     <td> [jQuery](http://api.jquery.com/) </td>
     <td> Linked in portal theme </td>
     <td> Used to create the component UI from begin to end</td>
-  </tr>
-  <tr>
-    <td> [RightJS tooltips](http://rightjs.org/ui/tooltips/) </td>
-    <td> https://github.com/nls-oskari/oskari/blob/master/libraries/rightjs/javascripts/right/tooltips.js </td>
-    <td> RightJS UI component for showing tooltips - used to show tooltips on layer icons</td>
   </tr>
   <tr>
     <td> [Oskari divmanazer](/documentation/bundles/framework/divmanazer) </td>

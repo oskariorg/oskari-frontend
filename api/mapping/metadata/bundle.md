@@ -1,28 +1,10 @@
 # metadata
 
-## Description
-
-*Describe what the bundle does.*
-
-## TODO
-
-- *List any planned features*
+Deprecated. Provides UI to make selection on map.
 
 ## Screenshot
 
-![screenshot](images/metadata.png)
-
-## Bundle configuration
-
-No configuration is required.
-
-## Bundle state
-
-No statehandling has been implemented.
-
-## Requests the bundle handles
-
-This bundle doesn't handle any requests.
+![screenshot](metadata.png)
 
 ## Requests the bundle sends out
 
@@ -49,17 +31,6 @@ This bundle doesn't handle any requests.
   </tr>
   <tr>
     <td> Metadata.MapSelectionEvent </td><td> Requests toolbar to select default tool</td>
-  </tr>
-</table>
-
-## Events the bundle sends out
-
-<table class="table">
-  <tr>
-    <th>Event</th><th>Why/when</th>
-  </tr>
-  <tr>
-    <td> Metadata.MapSelectionEvent </td><td> Notifies that an area has been selected. The event includes the selected geometry.</td>
   </tr>
 </table>
 
