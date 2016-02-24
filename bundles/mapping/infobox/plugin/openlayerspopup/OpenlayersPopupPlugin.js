@@ -269,7 +269,7 @@ Oskari.clazz.define(
                             });
                             if (key == primaryButton) {
                                 btn.addClass('primary');
-                            }                            
+                            }
                         } else {
                             actionLink = me._actionLink.clone();
                             link = actionLink.find('a');
@@ -309,6 +309,9 @@ Oskari.clazz.define(
                             contentData[i].actions[text]();
                         }
                     }
+                }
+                if(!link.is('a') || link.parents('.getinforesult_table').length) {
+                    evt.stopPropagation();
                 }
             }
         },
