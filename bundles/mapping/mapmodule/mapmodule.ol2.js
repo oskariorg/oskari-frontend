@@ -509,27 +509,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
         },
 
-
-        /**
-         * @method isValidLonLat
-         * Checks that latitude is between 8 200 000 <> 6 250 000 and
-         * that longitude is between 0 <> 1 350 000
-         * @param {Number} lon longitude to check
-         * @param {Number} lat latitude to check
-         * @return {Boolean} true if coordinates are in said boundaries
-         */
-        isValidLonLat: function (lon, lat) {
-            var isOk = true;
-            if (lat < 6250000 || lat > 8200000) {
-                isOk = false;
-                return isOk;
-            }
-            if (lon < 0 || lon > 1350000) {
-                isOk = false;
-            }
-            return isOk;
-        },
-
         /**
          * @method zoomToExtent
          * Zooms the map to fit given bounds on the viewport

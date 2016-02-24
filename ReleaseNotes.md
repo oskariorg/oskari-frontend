@@ -1,5 +1,53 @@
 # Release Notes
 
+## 1.34.1
+
+### mapmodule/ol3
+
+Fixed scale calculation on ol3 mapmodule to match the ol2 version. Layers are now visible on same zoom levels on both implementations (layer min/maxscale limits).
+
+### Proj4js/proj4 handling
+
+Fixed Proj4js/proj4 handling to work OL3. Deleted packages/openlayers/startup.js file because it is not needed anymore.
+
+### mapping/mapmodule/plugin/getinfo
+
+Fixed my places layer title.
+
+### mapping/myplacesimport - UserLayersLayerPlugin.ol3
+
+Opacity is now set correctly when layer is added to map.
+Layers are loaded as a singletile to speed up the loading.
+
+### mapping/mapanalyse - AnalysisLayerPlugin.ol3
+
+Opacity is now set correctly when layer is added to map.
+Layers are loaded as a singletile to speed up the loading.
+
+### mapping/mapwfs_ol3 - WfsLayerPlugin for ol3
+
+Opacity is now set correctly for highlighted features.
+
+### mapping/mapwmts
+
+Visibility is now set to Wmts layer.
+
+### infobox
+
+Only prevent event-propagation if target is not a link. Event-propagation is stopped so map doesn't get click events 
+when clicking the info-box. However without this fix links on infobox don't work.
+
+### publisher2
+
+Default tools in map publishing are now defined in PublishMapEditorRequestHandler and those default values are used if the PublishMapEditorRequest doesn't include any data about published map to edit.
+
+Tools check themselves if they should be enabled when editing published map. Function isEnabled() can be used to ask this from tools.
+
+### indexmap
+
+Indexmap is now shown above the icon to avoid the problem with indexmap on the left to be rendered behind the icon.
+
+
 ## 1.34
 
 ### mapmodule-plugin/zoombar

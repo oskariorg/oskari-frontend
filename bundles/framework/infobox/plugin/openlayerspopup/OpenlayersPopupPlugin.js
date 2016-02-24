@@ -277,7 +277,7 @@ Oskari.clazz.define(
 
                 contentWrapper.append(datum.html);
 
-	            contentWrapper.attr('id', 'oskari_' + id + '_contentWrapper');
+                contentWrapper.attr('id', 'oskari_' + id + '_contentWrapper');
 
                 for (key in datum.actions) {
                     if (datum.actions.hasOwnProperty(key)) {
