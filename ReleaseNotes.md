@@ -2,6 +2,10 @@
 
 ## 1.35
 
+### catalogue/metadataflyout
+
+Metadataflyout is now stateful.
+
 ### myplaces2
 
 Myplaces adds own measuretools only if configured so:

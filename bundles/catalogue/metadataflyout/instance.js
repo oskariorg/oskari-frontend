@@ -123,6 +123,7 @@ Oskari.clazz.define(
          *
          */
         start: function () {
+            var me = this;
             if (this.started) {
                 return;
             }
@@ -192,10 +193,16 @@ Oskari.clazz.define(
                 sandbox.addRequestHandler(key, this._requestHandlers[key])
             }
 
-
-
             /* stateful */
             sandbox.registerAsStateful(this.mediator.bundleId, this);
+
+            // handle state
+            var state = me.getState();
+            if(state && state.meta_uuid) {
+                me.scheduleShowMetadata([{uuid: state.meta_uuid}]);
+            } else if (state && state.allMetadata){
+                me.scheduleShowMetadata(state.allMetadata);
+            }
 
         },
 
@@ -245,6 +252,22 @@ Oskari.clazz.define(
              */
             AfterMapMoveEvent: function (event) {
                 /* this might react when map moved */
+            },
+            /**
+             * @method userinterface.ExtensionUpdatedEvent
+             * Fetch when flyout is opened
+             */
+            'userinterface.ExtensionUpdatedEvent': function (event) {
+                var me = this,
+                    doOpen = event.getViewState() !== 'close',
+                    p;
+                if (event.getExtension().getName() !== me.getName()) {
+                    // not me -> do nothing
+                    return;
+                }
+                if (event.getViewState() == 'close') {
+                    this.state = {};
+                }
             }
         },
 
@@ -381,7 +404,7 @@ Oskari.clazz.define(
          * @param {Object} state bundle state as JSON
          */
         setState: function (state) {
-            this.plugins['Oskari.userinterface.Flyout'].setContentState(state);
+            this.state = state;
         },
 
         /**
@@ -389,9 +412,7 @@ Oskari.clazz.define(
          * @return {Object} bundle state as JSON
          */
         getState: function () {
-            return this.plugins[
-                'Oskari.userinterface.Flyout'
-            ].getContentState();
+            return this.state;
         }
     }, {
         protocol: [
