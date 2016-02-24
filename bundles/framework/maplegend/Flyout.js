@@ -145,6 +145,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                 }
             }
 
+            // If no legend images at all, inform the user
+            me._informNoLegendImages();
+
         },
 
         /**
@@ -274,6 +277,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                     }
                 }
                 legendDiv.append(noLegendContainer);
+            }
+
+        },
+        _informNoLegendImages: function(){
+            var me = this,
+                noLegendText = this.instance.getLocalization('noLegendsText'),
+                legendDivs = jQuery('.oskari-flyoutcontent.maplegend').find('.accordion_panel'),
+                noLegendContainer = me.templateNoLegend.clone();
+
+            if(legendDivs !== null  && legendDivs.length === 0){
+                noLegendContainer.html(noLegendText);
+                jQuery('.oskari-flyoutcontent.maplegend').append(noLegendContainer);
             }
 
         }
