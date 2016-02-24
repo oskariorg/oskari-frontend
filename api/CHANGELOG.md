@@ -36,7 +36,9 @@ GetAllLayers now returns also minimum zoom level and maximum zoom level for the 
 
 #### [mod] [rpc] New rpc-client version
 
-The JSChannel dependency has been updated. The old version is not compatible with the new one so rpc-client needs to be updated to 2.0.0.
+The JSChannel dependency has been updated. The old version is not compatible with the new one so rpc-client needs to be updated to 2.0.1.
+
+This fix error when sending more than one paramaeter with null values.
 
 #### [add] [rpc] New functions
 

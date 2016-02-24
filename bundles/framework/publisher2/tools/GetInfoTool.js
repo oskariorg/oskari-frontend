@@ -91,9 +91,11 @@ function() {
         if (data && data.configuration && data.configuration.mapfull && data.configuration.mapfull.conf && data.configuration.mapfull.conf.plugins) {
             var tool = this.getTool();
             _.each(data.configuration.mapfull.conf.plugins, function(plugin) {
-                if (tool.id === plugin.id && plugin.config && plugin.config.colourScheme) {
-                    me.values.colourScheme = plugin.config.colourScheme;
-                    me._sendColourSchemeChangedEvent(me.values.colourScheme);
+                if (tool.id === plugin.id) {
+                    if(plugin.config && plugin.config.colourScheme) {
+                        me.values.colourScheme = plugin.config.colourScheme;
+                        me._sendColourSchemeChangedEvent(me.values.colourScheme);
+                    }
                     me.setEnabled(true);
                 }
             });
