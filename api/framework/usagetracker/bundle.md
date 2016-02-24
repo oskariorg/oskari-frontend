@@ -1,13 +1,6 @@
-# UsageTracker
+# usagetracker
 
-<table class="table">
-  <tr>
-    <td>ID</td><td>usagetracker</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.usagetracker.UsageTrackerBundleInstance.html)</td>
-  </tr>
-</table>
+Pings the server when any of the configured events occur.
 
 ## Description
 
@@ -25,21 +18,9 @@ A configurable event-based usage tracker. When Events fire, the currect state is
 }
 ```
 
-## Requests the bundle handles
-
-This bundle doesn't handle any requests.
-
-## Requests the bundle sends out
-
-This bundle doesn't send out any requests.
-
 ## Events the bundle listens to
 
 This bundle listen to all configured events. No events by default.
-
-## Events the bundle sends out
-
-This bundle doesn't send out any events.
 
 ## Dependencies
 

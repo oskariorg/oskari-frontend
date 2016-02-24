@@ -19,22 +19,6 @@ Setting hideMetadataXMLLink to true will hide metadata XML link (ISO 19139 XML -
 
 Setting hideMetaDataPrintLink to true will hide print link.
 
-
-## Bundle state
-
-No state is required.
-
-## Requests the bundle handles
-
-<table class="table">
-  <tr>
-    <th>Request</th><th>How does the bundle react</th>
-  </tr>
-  <tr>
-    <td>`AddSearchResultActionRequest`</td><td>Shows action element in metadata search results list</td>
-  </tr>
-</table>
-
 ## Requests the bundle sends out
 
 <table class="table">

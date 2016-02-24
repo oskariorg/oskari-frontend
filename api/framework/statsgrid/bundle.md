@@ -63,26 +63,6 @@ state : {
 }
 ```
 
-## Requests the bundle handles
-
-<table class="table">
-  <tr>
-    <th>Request</th><th>How does the bundle react</th>
-  </tr>
-  <tr>
-    <td>StatsGrid.StatsGridRequest</td>
-    <td>Enables/disables the statistics mode depending on the params.</td>
-  </tr>
-  <tr>
-    <td>StatsGrid.TooltipContentRequest</td>
-    <td>Sends tooltip info for currently hovered region.</td>
-  </tr>
-  <tr>
-      <td>StatsGrid.AddDataSourceRequest</td>
-      <td>Adds a new data source to statsgrid</td>
-  </tr>
-</table>
-
 ## Requests the bundle sends out
 
 <table class="table">
@@ -176,50 +156,6 @@ state : {
     <td>Highlights the given feature in the grid.</td>
   </tr>
 </table>
-
-## Events the bundle sends out
-
-### StatisticsService
-
-<table class="table">
-  <tr>
-    <th>Event</th><th>Why/when</th>
-  </tr>
-  <tr>
-    <td>MapStats.StatsVisualizationChangeEvent</td>
-    <td>After new data has been fetched from the sotkanet service so it can be classified</td>
-  </tr>
-  <tr>
-    <td>MapStats.StatsVisualizationChangeEvent</td>
-    <td>After the data has been classified so it can be visualized on the map</td>
-  </tr>
-</table>
-
-### ManageStatsPlugin
-
-<table class="table">
-  <tr>
-    <th>Event</th><th>Why/when</th>
-  </tr>
-  <tr>
-    <td>MapStats.HoverTooltipContentEvent</td>
-    <td>When the TooltipContentRequest is handled to send the tooltip info to the mapstats bundle.</td>
-  </tr>
-</table>
-
-### StatsToolbar
-
-<table class="table">
-  <tr>
-    <td>StatsGrid.SelectHilightsModeEvent</td>
-    <td>Activates mode (isSelectHilightedMode)</td>
-  </tr>
-  <tr>
-    <td>StatsGrid.ClearHilightsEvent</td>
-    <td>Deactivates mode (isSelectHilightedMode)</td>
-  </tr>
-</table>
-
 
 ## Dependencies
 

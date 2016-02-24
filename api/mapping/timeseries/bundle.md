@@ -8,22 +8,6 @@ Bundle creates timeseries playback module to over map when layer supports time d
 
 ![screenshot](timeseries.png)
 
-## Bundle configuration
-
-No configuration is required.
-
-## Bundle state
-
-No statehandling has been implemented.
-
-## Requests the bundle handles
-
-This bundle doesn't handle any requests.
-
-## Requests the bundle sends out
-
-This bundle doesn't send out any requests.
-
 ## Events the bundle listens to
 
 <table class="table">
@@ -43,10 +27,6 @@ This bundle doesn't send out any requests.
     <td> AfterMapLayerRemoveEvent </td><td> Checks playback slider visibility. </td>
   </tr>
 </table>
-
-## Events the bundle sends out
-
-This bundle doesn't send out any events.
 
 ## Dependencies
 

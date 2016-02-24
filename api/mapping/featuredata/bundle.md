@@ -23,14 +23,6 @@ Setting selectionTools to true will add a new button to toolbar that opens a sel
 
 Setting disableExport to true will remove Export button from the feature data grid and thereby will disable exporting of feature data.
 
-## Bundle state
-
-No statehandling has been implemented.
-
-## Requests the bundle handles
-
-This bundle doesn't handle any requests.
-
 ## Requests the bundle sends out
 
 <table class="table">
@@ -84,23 +76,6 @@ This bundle doesn't handle any requests.
 <tr>
   <td> WFSStatusChangedEvent </td><td> Shows a loading/error indicator on UI based on WFS process status changes.</td>
 </tr>
-</table>
-
-## Events the bundle sends out
-
-<table class="table">
-  <tr>
-    <th> Event </th><th> When it is triggered/what it tells other components</th>
-  </tr>
-  <tr>
-    <td> WFSFeaturesSelectedEvent </td><td> Sent when a selection is made on the grid to notify other components that a feature has been selected</td>
-  </tr>
-  <tr>
-    <td> AddedFeatureEvent </td><td> Sent when a selection feature has been added</td>
-  </tr>
-  <tr>
-    <td> FinishedDrawingEvent </td><td> Sent when a selection has been finished drawing</td>
-  </tr>
 </table>
 
 ## Dependencies
