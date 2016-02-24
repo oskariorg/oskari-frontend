@@ -310,8 +310,6 @@ Oskari.clazz.define(
                         }
                     }
                 }
-                // this will not work if we have links with onclick handlers (myplaces - new layer link for example)
-                evt.stopPropagation();
             }
         },
 
