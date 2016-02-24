@@ -310,9 +310,8 @@ Oskari.clazz.define(
                         }
                     }
                 }
-                if(!(link.is('a') && link.hasClass('functional')) || link.parents('.getinforesult_table').length) {
-                    evt.stopPropagation();
-                }
+                // this will not work if we have links with onclick handlers (myplaces - new layer link for example)
+                evt.stopPropagation();
             }
         },
 
