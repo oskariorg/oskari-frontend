@@ -2,6 +2,12 @@
 
 ## 1.35
 
+### myplaces2
+
+Myplaces adds own measuretools only if configured so:
+
+{measureTools:true}
+
 ### elf/metadataflyout
 
 *New bundle!* ELF metadataflyout bundle overrides catalogue/metadataflyout functionalities.
