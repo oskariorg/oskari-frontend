@@ -31,7 +31,7 @@ Oskari.registerLocalization(
         "save": "Tallenna",
         "selectRole": "Rooli",
         "columns": {
-            "execute": "ExecuteFi",
+            "execute": "Suorittaa",
             "download": "Latausoikeus",
             "view_layer": "Katseluoikeus",
             "publish": "Julkaisuoikeus",
