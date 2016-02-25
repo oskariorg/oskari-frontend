@@ -1239,7 +1239,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             return true;
         },
         _setDatepickerLanguage: function () {
-            debugger;
             var storedLanguage = $.cookie('oskari.language');
             var lang = null;
             if (storedLanguage == null) {
