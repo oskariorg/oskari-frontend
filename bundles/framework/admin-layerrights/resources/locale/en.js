@@ -34,7 +34,8 @@ Oskari.registerLocalization(
             "execute": "Execute",
             "download": "Download",
             "view_layer": "View",
-            "publish": "Publish"
+            "publish": "Publish",
+            "publish_view": "Publish view"
         }
     }
 }

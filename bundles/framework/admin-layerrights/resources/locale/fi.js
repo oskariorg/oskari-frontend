@@ -32,9 +32,10 @@ Oskari.registerLocalization(
         "selectRole": "Rooli",
         "columns": {
             "execute": "ExecuteFi",
-            "download": "DownloadFi",
-            "view_layer": "ViewFi",
-            "publish": "PublishFi"
+            "download": "Latausoikeus",
+            "view_layer": "Katseluoikeus",
+            "publish": "Julkaisuoikeus",
+            "publish_view": "Katseluoikeus upotetussa kartassa"
         }
     }
 }

@@ -1239,11 +1239,24 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             return true;
         },
         _setDatepickerLanguage: function () {
+            debugger;
+            var storedLanguage = $.cookie('oskari.language');
             var lang = null;
-            if (navigator.language.indexOf('fi') > -1) {
-                lang = "fi";
+            if (storedLanguage == null) {
+                var supportedLanguages = Oskari.getSupportedLanguages();
+                var lang = "en-GB";
+                for (var i = 0; i < supportedLanguages.length; i++) {
+                    if (supportedLanguages[i].indexOf("en") > -1) {
+                        break;
+                    }
+
+                    if (supportedLanguages[i].indexOf("fi") > -1) {
+                        lang = "fi";
+                        break;
+                    }
+                }
             } else {
-                lang = "en-GB";
+                lang = storedLanguage;
             }
 
             $.datepicker.setDefaults(
