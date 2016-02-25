@@ -1260,8 +1260,9 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
 
             $.datepicker.setDefaults(
                   $.extend(
-                    {'dateFormat':'yy-mm-dd'},
-                    $.datepicker.regional[lang]
+                    {},
+                    $.datepicker.regional[lang],
+                    {'dateFormat':'yy-mm-dd'}
                   )
                 );
         }
