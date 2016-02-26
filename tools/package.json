@@ -51,7 +51,7 @@
     "karma-junit-reporter": "0.3.7",
     "karma-mocha": "0.2.0",
     "lodash": "3.10.1",
-    "markx": "https://github.com/keskival/markx.git",
+    "markx": "git+https://github.com/keskival/markx.git",
     "node-fs-extra": "latest",
     "uglify-js": "2.5.0",
     "uglifycss": "0.0.18",
