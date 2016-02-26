@@ -272,6 +272,8 @@ Polymer.require(["/Oskari/libraries/mathjs/math.2.4.1.min.js"], function(math) {
       if (statsLayer) {
           // Moving this layer to the top.
           me.sandbox.postRequestByName('RearrangeSelectedMapLayerRequest', [statsLayer.getId(), -1]);
+          // Highlighting this layer to enable mouse interaction.
+          me.sandbox.postRequestByName('HighlightMapLayerRequest', [statsLayer.getId()]);
       }
     },
     "selectedIndicatorsChanged": function() {
