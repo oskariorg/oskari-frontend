@@ -215,7 +215,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.UserIndicatorsTab',
                 service = instance.getUserIndicatorsService();
 
             service.getUserIndicator(indicatorId, function (indicator) {
-                indicator.id = ('user_' + indicator.id);
                 instance.addUserIndicator(indicator);
             }, function () {
                 // error :(

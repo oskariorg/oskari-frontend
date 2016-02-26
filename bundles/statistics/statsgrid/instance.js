@@ -194,26 +194,29 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
          * @method addUserIndicator
          * @param {Object} indicator
          */
-        "addUserIndicator": function (indicator) {
+        "addUserIndicator": function (userIndicator) {
             // This is used in the user indicators tab in personal data panel.
             var me = this,
                 view = me.getView(),
                 state = me._getState();
 
             state.selectedIndicators = state.selectedIndicators || [];
+            
+            var indicator = {
+              datasourceId: 'fi.nls.oskari.control.statistics.plugins.user.UserIndicatorsStatisticalDatasourcePlugin',
+              indicatorId: userIndicator.id,
+              selectors: []
+            };
+            
             state.selectedIndicators.push(indicator);
             if (!view.isVisible) {
                 view.prepareMode(true, null, true);
-            }
-
-            if (view.isVisible) {
-              // FIXME: What is the point of this here?
-            } else {
                 // show the view.
                 state.layerId = indicator.layerId || state.layerId;
                 state.regionCategory = indicator.category;
                 me.setState(state);
             }
+            me.getMainPanel().render(view.getEl());
         },
         /**
          * Sets the map state to one specified in the parameter. State is bundle specific, check the
