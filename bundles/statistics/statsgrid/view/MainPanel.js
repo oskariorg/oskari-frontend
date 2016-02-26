@@ -86,6 +86,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.MainPanel',
                 })
               };
             });
+            if (me.state.currentColumn && me.state.indicators[me.state.currentColumn]) {
+              elementWrapper.selectedIndicatorKey = me.state.indicators[me.state.currentColumn].indicator;
+            }
           }
           if (me.state && me.state.selectedIndicators) {
             elementWrapper.selectedIndicators = me.state.selectedIndicators;
