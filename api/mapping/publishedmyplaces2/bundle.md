@@ -83,10 +83,6 @@ Adding external graphics in DrawPlugin.js:
 Note! Changing metaType may result in unexpected behavior
 * wmsUrl is the base url which returns images (myplaces category id is added to the end automatically/layer)
 
-## Bundle state
-
-No statehandling has been implemented.
-
 ## Requests the bundle handles
 
 <table class="table">
@@ -115,10 +111,6 @@ No statehandling has been implemented.
   </tr>
 </table>
 
-## Events the bundle listens to
-
-This bundle doesn't listen to any events.
-
 ## Events the bundle sends out
 
 <table class="table">
@@ -132,18 +124,3 @@ This bundle doesn't listen to any events.
     <td> DrawPlugin.FinishedDrawingEvent </td><td> Sent when a drawing has been finished</td>
   </tr>
 </table>
-
-## Dependencies
-
-<table class="table">
-  <tr>
-    <th>Dependency</th><th>Linked from</th><th>Purpose</th>
-  </tr>
-  <tr>
-    <td>[Library name](#link)</td><td>src where its linked from</td><td>*why/where we need this dependency*</td>
-  </tr>
-</table>
-
-OR
-
-This bundle doesn't have any dependencies.

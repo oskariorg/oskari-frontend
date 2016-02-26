@@ -1,4 +1,4 @@
-# WFS Layer Plugin
+# mapwfs2
 
 ## Description
 
@@ -6,7 +6,7 @@ WfsLayerPlugin does event handling and passes needed parameters from events to M
 
 ## Screenshot
 
-![screenshot](images/wfslayer.png)
+![screenshot](wfslayer.png)
 
 ## Bundle configuration
 
@@ -72,18 +72,6 @@ This plugin doesn't handle any requests.
   <tr>
     <td>  WFSRefreshManualLoadLayersEvent </td><td> Refresh wfs-layers, which are flagged to be rendered on demand (manual-refresh) </td>
    </tr>
-</table>
-
-## Events the plugin sends out
-
-<table class="table">
-  <tr>
-    <th>Event</th><th>Why/when</th>
-  </tr>
-  <tr>
-    <td>WFSStatusChangedEvent</td>
-    <td>When WFS backend processing is requested or completes. Also indicates possible errors on processing.</td>
-  </tr>
 </table>
 
 ## Dependencies

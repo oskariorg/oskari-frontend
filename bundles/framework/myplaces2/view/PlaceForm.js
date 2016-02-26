@@ -44,7 +44,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
             '  </div>' +
             '  <div class="field" id="newLayerForm">' +
             '    <label for="category">' +
-            '      <a href="#" class="newLayerLink">' + loc.category.newLayer + '</a>' + " " + loc.category.choose +
+            '      <a href="#" class="newLayerLink functional">' + loc.category.newLayer + '</a>' + " " + loc.category.choose +
             '    </label>' +
             '    <br clear="all" />' +
             '    <select name="category"></select>' +

@@ -1,5 +1,7 @@
 # admin-users
 
+User administration UI
+
 ## Description
 
 User account admin interface for creating, deleting and modifying users.

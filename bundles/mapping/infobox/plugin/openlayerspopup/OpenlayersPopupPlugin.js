@@ -269,7 +269,7 @@ Oskari.clazz.define(
                             });
                             if (key == primaryButton) {
                                 btn.addClass('primary');
-                            }                            
+                            }
                         } else {
                             actionLink = me._actionLink.clone();
                             link = actionLink.find('a');

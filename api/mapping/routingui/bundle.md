@@ -9,19 +9,6 @@ This bundle provides UI for routing. In this bundle user can select start and en
 
 ![screenshot](routingui.png)
 
-
-## Bundle configuration
-
-No configuration is required. 
-
-## Bundle state
-
-No statehandling has been implemented.
-
-## Requests the bundle handles
-
-This bundle doesn't handle any requests.
-
 ## Requests the bundle sends out
 
 <table class="table">
@@ -58,10 +45,6 @@ This bundle doesn't handle any requests.
     <td>`RouteResultEvent`</td><td>Updates the route plans to the UI.</td>
   </tr>  
 </table>
-
-## Events the bundle sends out
-
-This bundle doesn't send any events.
 
 ## Dependencies
 

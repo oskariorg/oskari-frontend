@@ -24,20 +24,6 @@ Configuration is available for print preview service urls and legend styling par
                     "charsInrow" : 32         (Max length of title row without line break)
                     ...
 
-## Bundle state
-
-No statehandling has been implemented.
-
-## Requests the bundle handles
-
-<table class="table">
-  <tr>
-    <th>Request</th><th>How does the bundle react</th>
-  </tr>
-  <tr>
-    <td>PrintMapRequest</td><td>Prints map when requested</td>
-  </tr>
-</table>
 
 ## Requests the bundle sends out
 
@@ -78,10 +64,6 @@ No statehandling has been implemented.
     <td>PrintWithoutUIEvent</td>Print pdf/png with predefined params without UI</td>
   </tr>
 </table>
-
-## Events the bundle sends out
-
-This bundle doesn't send out any events.
 
 ## Plugins
 

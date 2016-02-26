@@ -8,6 +8,18 @@ Fixed map layer opacity change in published maps when resetting map state to pub
 
 ## 1.35
 
+### catalogue/metadataflyout
+
+Metadataflyout is now stateful.
+
+### myplaces2
+
+Myplaces adds own measuretools only if configured so:
+
+    {
+      measureTools:true
+    }
+
 ### elf/metadataflyout
 
 *New bundle!* ELF metadataflyout bundle overrides catalogue/metadataflyout functionalities.
@@ -28,6 +40,10 @@ Added license general descriptions.
 Fixed InfoBox.ShowInfoBoxRequest handling. Now all popups with no popup id really deleted if hidePrevious param is setted to true.
 
 Added new "InfoboxActionEvent" that notifies which link/button is clicked in the infobox.
+
+Link handling improvements on Openlayers 2 version. Links in infobox should no longer propagate to map to trigger new GFI requests.
+If you need to bind a clickhandler for an infobox element use a-tag with class "functional" and stop propagation on the clickhandler itself.
+The functional-class is a sign that event propagation should NOT be stopped <a class="functional"></a>.
 
 ### coordinatetool
 

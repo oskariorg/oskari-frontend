@@ -25,16 +25,6 @@ state : {
 }
 ```
 
-## Requests the bundle handles
-
-<table class="table">
-  <tr>
-    <th>Request</th><th>How does the bundle react</th>
-  </tr>
-  <tr>
-    <td>`analyse.AnalyseRequest`</td><td>*NOT IMPLEMENTED YET*</td>
-  </tr>
-</table>
 
 ## Requests the bundle sends out
 
@@ -86,10 +76,6 @@ state : {
     <td>Refreshes the data panel</td>
   </tr>
 </table>
-
-
-
-## Events the bundle sends out 
 
 ## Dependencies
 
