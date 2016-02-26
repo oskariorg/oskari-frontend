@@ -265,19 +265,13 @@ Polymer.require(["/Oskari/libraries/mathjs/math.2.4.1.min.js"], function(math) {
       if (!statsLayer) {
           statsLayer = me.sandbox.findMapLayerFromAllAvailable(layer);
           if (statsLayer) {
-              // add layer to selection if it's available
+              // add layer to selection if it's available but not yet added.
               me.sandbox.postRequestByName('AddMapLayerRequest', [statsLayer.getId(), false, statsLayer.isBaseLayer()]);
           }
       }
-      // Hiding the rest of the stats layers:
-      var allLayers = me.sandbox.findAllSelectedMapLayers() || [];
-      allLayers.forEach(function(layer) {
-          if (layer.getId() != statsLayer.getId() && layer.getLayerType() == "stats") {
-              me.sandbox.postRequestByName('ChangeMapLayerOpacityRequest', [layer.getId(), 0]);
-          }
-      });
       if (statsLayer) {
-          me.sandbox.postRequestByName('ChangeMapLayerOpacityRequest', [statsLayer.getId(), 100]);
+          // Moving this layer to the top.
+          me.sandbox.postRequestByName('RearrangeSelectedMapLayerRequest', [statsLayer.getId(), -1]);
       }
     },
     "selectedIndicatorsChanged": function() {

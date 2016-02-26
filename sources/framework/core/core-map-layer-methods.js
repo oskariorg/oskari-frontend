@@ -293,6 +293,10 @@ Oskari.clazz.category(
                     lastHandledIndex = 0,
                     i,
                     layer;
+                // -1 is for the last position.
+                if (requestToPosition < 0) {
+                    requestToPosition = this._selectedLayers.length + requestToPosition;
+                }
 
                 // loop through layers so that we have enough elements before new position
                 for (i = 0; itemsAdded < requestToPosition; i += 1) {
