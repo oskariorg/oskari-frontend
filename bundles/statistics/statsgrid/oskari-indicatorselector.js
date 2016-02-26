@@ -81,7 +81,7 @@ Polymer({
                 "datasourceChanged(datasourceId)",
                 "indicatorChanged(indicatorId)",
                 "getSelectors(sources, datasourceId, indicatorId)",
-                "selectedIndicatorsChanged(ajaxUrl, selectedIndicators.splices)",
+                "selectedIndicatorsChanged(ajaxUrl, selectedIndicators.splices, sources)",
                 "evaluateHideGrid(showUserIndicatorView, selectedIndicators.splices)",
                 "evaluateHideGrid(showUserIndicatorView, selectedIndicators)",
                 "selectorsChanged(selectorItems.splices)",

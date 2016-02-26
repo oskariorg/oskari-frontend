@@ -24,6 +24,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                 this.__mainPanel = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.view.MainPanel', this,
                         this.getLocalization(),
                         this.getSandbox());
+                this.__mainPanel.state = this.state;
             }
             return this.__mainPanel;
 
@@ -236,7 +237,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             // Reset the classify plugin
             this.classifyPlugin.resetUI(this.state);
 
-            if (state.isActive) {
+            if (me.state.isActive) {
                 var view = this.getView(),
                     layerId = this.state.layerId,
                     layer = null;
@@ -244,30 +245,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                 if (layerId !== null && layerId !== undefined) {
                     layer = this.sandbox.getService('Oskari.mapframework.service.MapLayerService').findMapLayer(layerId);
                 }
+                
                 // view._layer isn't set if we call this without a layer...
                 view.prepareMode(true, layer, false);
 
-                if (me.state && me.state.indicators && !me.state.selectedIndicators) {
-                  // These come from parsing the link parameters.
-                  // They are indicator keys of the form:
-                  // fi.nls.oskari.control.statistics.plugins.sotka.SotkaStatisticalDatasourcePlugin:74:11:{"year":"1992"}
-                  me.state.selectedIndicators = me.state.indicators.map(function(key) {
-                    var selectorSeparation = key.indicator.split(":{");
-                    var indicatorSeparation = selectorSeparation[0].split(".");
-                    var datasourceId = indicatorSeparation[0];
-                    var indicatorId = indicatorSeparation[1];
-                    var layerId = indicatorSeparation[2];
-                    var selector = "{" + selectorSeparation[1];
-                    return {
-                      datasourceId: datasourceId,
-                      indicatorId: indicatorId,
-                      selectors: JSON.parse(selector)
-                    };
-                  });
-                }
-                
-                if (state.selectedIndicators && me.__mainPanel && me.__mainPanel.element) {
-                    me.__mainPanel.element.selectedIndicators = state.selectedIndicators;
+                if (me.state.selectedIndicators && me.__mainPanel && me.__mainPanel.element) {
+                    me.__mainPanel.state = me.state;
+                    me.__mainPanel.element.selectedIndicators = me.state.selectedIndicators;
                 }
             }
         },
