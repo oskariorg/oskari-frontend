@@ -261,9 +261,23 @@ Polymer.require(["/Oskari/libraries/mathjs/math.2.4.1.min.js"], function(math) {
           window.alert(me.locale.connectionError + ": " + textStatus);
         }
       });
-      var statsLayer = me.sandbox.findMapLayerFromAllAvailable(null, layer);
+      var statsLayer = me.sandbox.findMapLayerFromSelectedMapLayers(layer);
+      if (!statsLayer) {
+          statsLayer = me.sandbox.findMapLayerFromAllAvailable(layer);
+          if (statsLayer) {
+              // add layer to selection if it's available
+              me.sandbox.postRequestByName('AddMapLayerRequest', [statsLayer.getId(), false, statsLayer.isBaseLayer()]);
+          }
+      }
+      // Hiding the rest of the stats layers:
+      var allLayers = me.sandbox.findAllSelectedMapLayers() || [];
+      allLayers.forEach(function(layer) {
+          if (layer.getId() != statsLayer.getId() && layer.getLayerType() == "stats") {
+              me.sandbox.postRequestByName('ChangeMapLayerOpacityRequest', [layer.getId(), 0]);
+          }
+      });
       if (statsLayer) {
-        statsLayer.setVisible(true);
+          me.sandbox.postRequestByName('ChangeMapLayerOpacityRequest', [statsLayer.getId(), 100]);
       }
     },
     "selectedIndicatorsChanged": function() {
