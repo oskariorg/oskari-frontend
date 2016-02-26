@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.36
+
+### mapfull
+
+Fixed map layer opacity change in published maps when resetting map state to published state.
+
 ## 1.35
 
 ### elf/metadataflyout
