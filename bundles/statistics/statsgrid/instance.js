@@ -223,6 +223,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
          * @param {Boolean} ignoreLocation true to NOT set map location based on state
          */
         "setState": function (state, ignoreLocation) {
+            var me = this;
             this.state = jQuery.extend({}, {
                 indicators: [],
                 layerId: null
@@ -245,6 +246,25 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                 }
                 // view._layer isn't set if we call this without a layer...
                 view.prepareMode(true, layer, false);
+
+                if (me.state && me.state.indicators && !me.state.selectedIndicators) {
+                  // These come from parsing the link parameters.
+                  // They are indicator keys of the form:
+                  // fi.nls.oskari.control.statistics.plugins.sotka.SotkaStatisticalDatasourcePlugin:74:11:{"year":"1992"}
+                  me.state.selectedIndicators = me.state.indicators.map(function(key) {
+                    var selectorSeparation = key.indicator.split(":{");
+                    var indicatorSeparation = selectorSeparation[0].split(".");
+                    var datasourceId = indicatorSeparation[0];
+                    var indicatorId = indicatorSeparation[1];
+                    var layerId = indicatorSeparation[2];
+                    var selector = "{" + selectorSeparation[1];
+                    return {
+                      datasourceId: datasourceId,
+                      indicatorId: indicatorId,
+                      selectors: JSON.parse(selector)
+                    };
+                  });
+                }
                 
                 if (state.selectedIndicators && me.__mainPanel && me.__mainPanel.element) {
                     me.__mainPanel.element.selectedIndicators = state.selectedIndicators;

@@ -66,24 +66,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.MainPanel',
           elementWrapper.sandbox = me.sandbox;
           elementWrapper.embedded = me.embedded; // True when in embedded mode. Hides the indicator selector.
           elementWrapper.ajaxUrl = url;
-          if (me.state && me.state.indicators && !me.state.selectedIndicators) {
-            // These come from parsing the link parameters.
-            // They are indicator keys of the form:
-            // fi.nls.oskari.control.statistics.plugins.sotka.SotkaStatisticalDatasourcePlugin:74:11:{"year":"1992"}
-            me.state.selectedIndicators = me.state.indicators.map(function(key) {
-              var selectorSeparation = key.split(":{");
-              var indicatorSeparation = selectorSeparation.split(".");
-              var datasourceId = indicatorSeparation[0];
-              var indicatorId = indicatorSeparation[1];
-              var layerId = indicatorSeparation[2];
-              var selector = "{" + selectorSeparation[1];
-              return {
-                datasourceId: datasourceId,
-                indicatorId: indicatorId,
-                selectors: JSON.parse(selector)
-              };
-            });
-          }
           if (me.embedded) {
             elementWrapper.selectedIndicators = me.state.selectedIndicators;
             elementWrapper.selectedIndicator = me.state.selectedIndicators[me.state.currentColumn];
