@@ -22,9 +22,6 @@ Oskari.clazz.define("Oskari.tampere.bundle.content-editor.ContentEditorBundle", 
 
         "scripts": [{
             "type": "text/javascript",
-            "src": "../../../../bundles/tampere/content-editor/datepicker-en-GB.js"
-        }, {
-            "type": "text/javascript",
             "src": "../../../../bundles/tampere/content-editor/instance.js"     
         }, {
             "type": "text/javascript",
@@ -35,6 +32,12 @@ Oskari.clazz.define("Oskari.tampere.bundle.content-editor.ContentEditorBundle", 
         }, {
             "type": "text/javascript",
             "src": "../../../../bundles/tampere/content-editor/request/ShowContentEditorRequestHandler.js"
+        }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/tampere/content-editor/datepicker-fi.js"
+        }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/tampere/content-editor/datepicker-en-GB.js"
         }, {
             "type": "text/css",
             "src": "../../../../bundles/tampere/content-editor/resources/css/style.css"
