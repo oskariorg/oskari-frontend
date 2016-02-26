@@ -23,14 +23,6 @@ The default search UI can be disable through config.
 }
 ```
 
-## Bundle state
-
-No statehandling has been implemented for the bundle.
-
-## Requests the bundle handles
-
-This bundle doesn't handles any requests.
-
 ## Requests the bundle sends out
 
 <table class="table">
@@ -50,14 +42,6 @@ This bundle doesn't handles any requests.
     <td> MapModulePlugin.RemoveMarkerRequest </td><td> When the search keyword is removed, any markers on the map are removed.</td>
   </tr>
 </table>
-
-## Events the bundle listens to
-
-This bundle doesn't listen to any events.
-
-## Events the bundle sends out
-
-This bundle doesn't send any events.
 
 ## Dependencies
 

@@ -68,26 +68,6 @@ conf = {
 };
 ```
 
-## Bundle state
-
-No statehandling has been implemented.
-
-## Requests the bundle handles
-
-This bundle doesn't handle any requests.
-
-## Requests the bundle sends out
-
-This bundle doesn't send out any requests.
-
-## Events the bundle listens to
-
-This bundle doesn't listen to any events.
-
-## Events the bundle sends out
-
-This bundle doesn't send out any events.
-
 ## Dependencies
 
 <table class="table">

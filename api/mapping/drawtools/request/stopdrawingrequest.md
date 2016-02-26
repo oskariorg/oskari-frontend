@@ -1,5 +1,14 @@
 # StopDrawingRequest [rpc]
 
+Used to complete or clear the drawing.
+
+## Use cases
+
+- complete drawing
+- clear drawing
+
+## Description
+
 If the user is allowed to draw on the map this request can be used to complete the drawing and/or clear the drawing from the map.
 
 ## Parameters
@@ -18,12 +27,6 @@ If the user is allowed to draw on the map this request can be used to complete t
 </tr>
 </table>
 
-For example:
-```javascript
- var sb = Oskari.getSandbox();
- sb.postRequestByName('DrawTools.StopDrawingRequest', ['bufferedLineSelection', true]);
-```
-
 ## Examples
 
 Complete a draw for 'measure' functionality and keep the drawing on the map:
@@ -40,3 +43,10 @@ var sb = Oskari.getSandbox();
 sb.postRequestByName('DrawTools.StopDrawingRequest', ['myplaces', true]);
 ```
 Again, this expects that drawing has been started for id 'myplaces' and will result in an 'DrawingEvent' where id is 'myplaces' with the drawn shape as geojson available in event.getGeoJson().
+
+## Related api
+
+[List of related requests and events, for example:]
+
+- StartDrawingRequest
+- DrawingEvent

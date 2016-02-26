@@ -49,9 +49,6 @@ sb.postRequestByName('DrawTools.StartDrawingRequest', ['measure', 'LineString'],
 	showMeasureOnMap: true
 });
 ```
-## Implementing bundle
-
-[generated]
 
 ## Related api
 
