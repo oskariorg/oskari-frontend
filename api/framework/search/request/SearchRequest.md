@@ -1,10 +1,10 @@
 # SearchRequest [RPC]
 
-Get search result of requested search key
+Make a search query
 
 ## Use cases
 
-- Search for a place and center map to it
+- Make a generic search to get location results
 
 ## Description
 
@@ -23,26 +23,16 @@ Requests search results (addresses, locations) by given params. After the search
   <th> Name</th><th> Type</th><th> Description</th><th> Default value</th>
 </tr>
 <tr>
-  <td>* searchKey</td><td> String </td><td> address or location to be searched</td><td> </td>
-</tr>
-<tr>
-  <td> epsg </td><td> String </td><td> Coordinate system, foe example "EPSG:3067"</td><td> </td>
+  <td>* query</td><td> String </td><td> address or location to be searched</td><td> </td>
 </tr>
 </table>
 
 ## Examples
 
-Get search result:
+Get search result in an RPC application:
 ```javascript
- var data = {
-            "searchKey": document.getElementById("inputSearch").value,
-            "epsg": "EPSG:3067"
-        };
-        channel.postRequest(
-            'SearchRequest',
-            [
-                data
-            ],
+  var query = "Finland";
+  channel.postRequest('SearchRequest', [ query ],
 ```
 
 ## Related api

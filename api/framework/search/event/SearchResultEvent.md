@@ -1,6 +1,6 @@
 # SearchResultEvent [rpc]
 
-Used to notify the ``SearchRequest`` is received a reply from search.
+Response to ``SearchRequest`` with the searchresult.
 
 # Event methods
 
@@ -14,41 +14,109 @@ Get search success status. If it's true, search is done and even if no items are
 
 ## getResult
 
-
-Get search result items. totalCount is between 0 - 200
-e.g.
-``
-result: Object
-locations: Array[8]
-0: Object
-id: 0
-lat: "7277772.598"
-lon: "447834.33"
-name: "Kylm�aho"
-rank: 50
-type: "Talo"
-village: "Ii"
-zoomScale: 2800
-__proto__: Object
-1: Object
-2: Object
-3: Object
-4: Object
-5: Object
-6: Object
-7: Object
-length: 8
-__proto__: Array[0]
-methods: Array[3]
-totalCount: 8
-``
+Search result e.g.
+```json
+{
+    "totalCount": 4,
+    "locations": [
+      {
+        "id": 0,
+        "rank": 10,
+        "lon": "389828.281",
+        "village": "Vantaa",
+        "name": "Vantaa",
+        "zoomScale": 56650,
+        "type": "Municipality, urban area",
+        "lat": "6686279.347"
+      },
+      {
+        "id": 1,
+        "rank": 30,
+        "lon": "383183.648",
+        "village": "Hausjärvi",
+        "name": "Vantaa",
+        "zoomScale": 11300,
+        "type": "Village, district or neighbourhood",
+        "lat": "6733424.84"
+      },
+      {
+        "id": 2,
+        "rank": 50,
+        "lon": "387139.034",
+        "village": "Helsinki",
+        "name": "Vantaa",
+        "zoomScale": 5650,
+        "type": "Watercourse",
+        "lat": "6683063.213"
+      },
+      {
+        "id": 3,
+        "rank": 50,
+        "lon": "383746.169",
+        "village": "Nurmijärvi",
+        "name": "Vantaa",
+        "zoomScale": 2800,
+        "type": "House",
+        "lat": "6708499.96"
+      }
+    ]
+}
+```
 
 ## getRequestParameters
 
-Get request parameters. 
-- searchKey and epsg values
-- e.g {"searchKey": "Helsinki", "epsg":"EPSG:3067"
+The query that was used in search e.g "Vantaa"
 
-## getParams
+## getParams (RPC response)
 
-all event data.
+```json
+{
+  "success": true,
+  "result": {
+    "totalCount": 4,
+    "locations": [
+      {
+        "id": 0,
+        "rank": 10,
+        "lon": "389828.281",
+        "village": "Vantaa",
+        "name": "Vantaa",
+        "zoomScale": 56650,
+        "type": "Municipality, urban area",
+        "lat": "6686279.347"
+      },
+      {
+        "id": 1,
+        "rank": 30,
+        "lon": "383183.648",
+        "village": "Hausjärvi",
+        "name": "Vantaa",
+        "zoomScale": 11300,
+        "type": "Village, district or neighbourhood",
+        "lat": "6733424.84"
+      },
+      {
+        "id": 2,
+        "rank": 50,
+        "lon": "387139.034",
+        "village": "Helsinki",
+        "name": "Vantaa",
+        "zoomScale": 5650,
+        "type": "Watercourse",
+        "lat": "6683063.213"
+      },
+      {
+        "id": 3,
+        "rank": 50,
+        "lon": "383746.169",
+        "village": "Nurmijärvi",
+        "name": "Vantaa",
+        "zoomScale": 2800,
+        "type": "House",
+        "lat": "6708499.96"
+      }
+    ]
+  },
+  "requestParameters": "Vantaa"
+}
+```
