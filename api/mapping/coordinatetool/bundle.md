@@ -25,14 +25,6 @@ No configuration is required, but there is one possible configuration:
 
 Setting roundToDecimals to wanted number will coordinates rounded by wanted decimal plates. 
 
-## Bundle state
-
-No statehandling has been implemented.
-
-## Requests the bundle handles
-
-This bundle doesn't handle any requests.
-
 ## Requests the bundle sends out
 
 <table class="table">
@@ -68,10 +60,6 @@ This bundle doesn't handle any requests.
   </tr>
 
 </table>
-
-## Events the bundle sends out
-
-This bundle doesn't send any events.
 
 ## Dependencies
 

@@ -82,10 +82,6 @@ Adding external graphics in DrawPlugin.js:
 Note! Changing metaType may result in unexpected behavior
 * wmsUrl is the base url which returns images (myplaces category id is added to the end automatically/layer)
 
-## Bundle state
-
-No statehandling has been implemented.
-
 ## Requests the bundle handles
 
 <table class="table">

@@ -33,30 +33,6 @@ Configuration is optional:
 changeInfoUrl should point to an url where the user can change his/her profile information.
 The bundle will show a link to the configured page if the URL is configured.
 
-## Bundle state
-
-No statehandling has been implemented.
-
-## Requests the bundle handles
-
-<table class="table">
-  <tr>
-    <th>Request</th><th>How does the bundle react</th>
-  </tr>
-  <tr>
-    <td>`PersonalData.AddTabRequest`</td><td>*Adds tab to Flyout Tab container*</td>
-  </tr>
-</table>
-
-```javascript
-var title = "Tab Title";
-var content = jQuery("<div>Lorem ipsum</div>");
-var first = true;
-var reqName = 'PersonalData.AddTabRequest';
-var reqBuilder = sandbox.getRequestBuilder(reqName);
-var req = reqBuilder(title, content, first);
-```
-
 ## Requests the bundle sends out
 
 <table class="table">
@@ -100,11 +76,6 @@ var req = reqBuilder(title, content, first);
     <td> `Publisher.MapPublishedEvent` </td><td> Refreshes the embedded maps listing </td>
   </tr>
 </table>
-
-
-## Events the bundle sends out
-
-This bundle doesn't send out any events.
 
 ## Dependencies
 
