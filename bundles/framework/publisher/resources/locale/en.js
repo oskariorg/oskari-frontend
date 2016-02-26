@@ -167,21 +167,20 @@ Oskari.registerLocalization(
             "layerselection": {
                 "label": "Show map layer menu on the map",
                 "info": "Select map layers to be shown as background layers. You can select a default backgound map layer in the map preview.",
-                "tooltip": "The background layer is shown at the bottom layer on the map. If you select several background maps, only one of them can be visible at a time. User can select a background layer in the user interface. Please select a default background map in the map preview.",
-                "promote": "Do you want to show also orthophotos on the map?"
+                "tooltip": "The background layer is shown at the bottom layer on the map. If you select several background maps, only one of them can be visible at a time. User can select a background layer in the user interface. Please select a default background map in the map preview."
             },
             "preview": "Map preview",
             "location": "Location and zoom level",
             "zoomlevel": "Zoom level",
             "help": "Help",
             "error": {
-                "title": "Virhe",
+                "title": "Error",
                 "size": "The map size is invalid. Width must be at least 30 pixels and height at least 20 pixels. Use a point as a decimal separator.",
                 "domain": "The website is required. Please type an address and try again.",
                 "domainStart": "The website is invalid. Please type an address without http or www prefixes and try again.",
                 "name": "The map name is required. Plese type a name and try again.",
                 "nohelp": "The user guide is not available.",
-                "saveFailed": "NOT TRANSLATED",
+                "saveFailed": "The map couldn't be saved. Please try again later.",
                 "nameIllegalCharacters": "The map name contains illegal characters. Allowed characters are letters (a-z, A-Z, å, ä, ö, Å, Ä, Ö), numbers (0-9), spaces and hyphens (-). Please correct the name and try again.",
                 "domainIllegalCharacters": "The website address contains illegal characters. Allowed characters are letters (a-z, A-Z, å, ä, ö, Å, Ä, Ö), numbers (0-9) and special characters (-, _, ., !, ~, *, ' and ()). Please correct the address and try again."
             }
@@ -189,9 +188,7 @@ Oskari.registerLocalization(
         "NotLoggedView": {
             "text": "Welcome to publish embedded map on your website. Please log in or register first.",
             "signup": "Log in",
-            "signupUrl": "/web/fi/login",
-            "register": "Register",
-            "registerUrl": "/web/fi/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "register": "Register"
         },
         "StartView": {
             "text": "Welcome to publish embedded map on your website.",
@@ -217,13 +214,7 @@ Oskari.registerLocalization(
             "show": "Show",
             "hide": "Hide",
             "hidden": "The map layer is temporarily hidden.",
-            "selectAsBaselayer": "Background map layer",
-            "rights": {
-                "can_be_published_map_user": {
-                    "label": "Publishable",
-                    "tooltip": "The map layer is publishable in embedded maps. The weekly user amount can be limited."
-                }
-            }
+            "selectAsBaselayer": "Background map layer"
         },
         "layerFilter": {
             "buttons": {

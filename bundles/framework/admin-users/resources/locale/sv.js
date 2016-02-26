@@ -16,6 +16,7 @@ Oskari.registerLocalization(
                 "lastName": "Efternamn",
                 "user": "Användarsnamn",
                 "pass": "Lösenord",
+                "email": "E-postadress",
                 "pass_retype": "Skriv igen ditt lösenord",
                 "addRole": "Välj rol(ler)",
                 "password_mismatch": "Lösenord är inte lika.",
@@ -26,6 +27,7 @@ Oskari.registerLocalization(
                 "delete_failed": "Kunde inte tas bort.",
                 "fetch_failed": "Sökning användare misslyckades.",
                 "save_failed": "Lagring misslyckades.",
+                "save_failed_message": "Please check at username is unique and try again.",
                 "noMatch": "Inga sökresultat.",
                 "selectRole": "Välj en roll."
             },
@@ -37,7 +39,9 @@ Oskari.registerLocalization(
                 "doSave_failed": "Lagring av en ny roll misslyckades."
             }
         },
-        "save": "Lagra"
+        "save": "Lagra",
+        "failed_to_get_roles_title": "Failed to get roles",
+        "failed_to_get_roles_message": "Failed to get roles (ManageRoles), perhaps oskari-control-admin is not available?"
     }
 }
 );

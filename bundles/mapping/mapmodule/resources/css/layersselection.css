@@ -3,9 +3,21 @@ div.mapplugin.layerselection {
   height: 37px;
   overflow: visible;
   max-width: 200px;
-  z-index: 100000000 !important; }
+  z-index: 100000000000000 !important; }
   div.mapplugin.layerselection div.content {
-    background-color: white; }
+    background-color: white;
+    max-height: 95%; }
+    div.mapplugin.layerselection div.content div.layers-content {
+      overflow: auto;
+      width: 100%;
+      background-color: #fff; }
+      div.mapplugin.layerselection div.content div.layers-content div.baselayers {
+        display: none; }
+    div.mapplugin.layerselection div.content.mobile {
+      position: fixed;
+      top: 36px;
+      left: 0;
+      width: 100%; }
     div.mapplugin.layerselection div.content div.content-header {
       /* This is some sort of a theme color... leave it be */
       background-color: #333438;
@@ -21,7 +33,7 @@ div.mapplugin.layerselection {
         display: inline-block;
         float: left;
         padding: 5px; }
-    div.mapplugin.layerselection div.content div.baseLayerHeader {
+    div.mapplugin.layerselection div.content div.baseLayerHeader, div.mapplugin.layerselection div.content div.layerHeader {
       background-color: #E6E6E6;
       padding: 10px;
       text-align: left; }
@@ -35,7 +47,7 @@ div.mapplugin.layerselection {
       div.mapplugin.layerselection div.content div.layer span {
         display: block;
         margin-left: 30px;
-        word-break: break-all; }
+        word-break: break-word; }
     div.mapplugin.layerselection div.content div.styled-header-arrow {
       width: 0px;
       height: 0px;
@@ -45,7 +57,7 @@ div.mapplugin.layerselection {
       border-left: 10px solid transparent;
       border-right: 10px solid transparent;
       border-bottom: 10px solid #333438; }
-  div.mapplugin.layerselection div.layers, div.mapplugin.layerselection div.mapplugin.layerselection div.baselayers {
+  div.mapplugin.layerselection div.layers, div.mapplugin.layerselection div.baselayers {
     padding: 10px; }
   div.mapplugin.layerselection div.header {
     background-color: #3c3c3c;
@@ -57,11 +69,17 @@ div.mapplugin.layerselection {
       display: inline-block;
       margin-right: 4px;
       vertical-align: middle; }
+    div.mapplugin.layerselection div.header.mobile {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%; }
   div.mapplugin.layerselection div.header:hover {
     color: #ff9100; }
   div.mapplugin.layerselection div.layerselection-styled-content {
-    width: 200px;
-    border: 1px solid #333438; }
+    width: 200px; }
+    div.mapplugin.layerselection div.layerselection-styled-content div.styled-header-arrow {
+      margin-left: 10px; }
   div.mapplugin.layerselection .oskari-publisher-layers-rounded-dark, div.mapplugin.layerselection .oskari-publisher-layers-rounded-light {
     -webkit-border-radius: 15px;
     -moz-border-radius: 15px;
@@ -122,14 +140,18 @@ div.mapplugin.layerselection {
   float: right !important; }
 
 .published-styled-layerselector-content {
-  position: absolute !important;
+  position: absolute;
   top: 44px !important;
   right: 0px !important; }
+  .published-styled-layerselector-content.mobile {
+    top: 0 !important; }
 
 /* Hacketyhack, we need to keep the popup on screen */
 .mapplugins.left div.mapplugin.layerselection div.published-styled-layerselector-content {
   left: 0px !important;
   right: auto !important; }
+  .mapplugins.left div.mapplugin.layerselection div.published-styled-layerselector-content.mobile {
+    top: 0 !important; }
 
 .mapplugins.left div.mapplugin.layerselection div.published-styled-layerselector-content div.styled-header-arrow {
   margin-left: 12px !important; }

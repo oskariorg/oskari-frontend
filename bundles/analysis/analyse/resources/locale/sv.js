@@ -160,7 +160,7 @@ Oskari.registerLocalization(
                 "options": [
                     {
                         "id": "oskari_analyse_Count",
-                        "label": "Objekt antal",
+                        "label": "Antal objekt",
                         "selected": true
                     },
                     {
@@ -193,7 +193,8 @@ Oskari.registerLocalization(
                     }
                 ],
                 "attribute": "Välj en attribut",
-                "footer": "Skyddade objekt tas inte med i beräkning."
+                "footer": "Skyddade objekt tas inte med i beräkning.",
+                "aggregateAdditionalInfo":"Obs! Du har valt attribut data som innehåller text. Endast antal objekt kan beräknas för dem. Om antal objekt inte har valts, textlig attributdata tas inte med i analysresultatet."
             },
             "buffer_size": {
                 "label": "Zon storlek",
@@ -280,7 +281,33 @@ Oskari.registerLocalization(
                 "mode": "Välj metodstyp",
                 "modeTooltip": "Välj om du vill använda statistiska mått i analys.",
                 "normalMode": "Normal spatial join",
-                "aggregateMode": "Statistiska mått"
+                "aggregateMode": "Statistiska mått",
+                "backend_locale": [
+                    {
+                        "id": "count",
+                        "label": "Objekt antal"
+                    },
+                    {
+                        "id": "sum",
+                        "label": "Summa"
+                    },
+                    {
+                        "id": "min",
+                        "label": "Minsta värde"
+                    },
+                    {
+                        "id": "max",
+                        "label": "Största värde"
+                    },
+                    {
+                        "id": "avg",
+                        "label": "Medelvärde"
+                    },
+                    {
+                        "id": "stddev",
+                        "label": "Standardavvikelse"
+                    }
+                ]
             },
             "params": {
                 "label": "Resultat attribut",
@@ -474,6 +501,20 @@ Oskari.registerLocalization(
             "error": {
                 "title": "Fel!",
                 "generic": "Systemfel skedde. Analys kunde inte avgöras."
+            }
+        },
+        "layer": {
+            "filter": {
+                "aggregateAnalysisFilter": {
+                    "addAggregateFilter": "Välj det sammanlagda värdet",
+                    "aggregateValueSelectTitle": "Använd det sammanlagda värdet i filtret",
+                    "selectAggregateAnalyse": "Välj den sammanlagda analysen",
+                    "selectIndicator": "Välj indikatorn",
+                    "selectReadyButton": "Färdig",
+                    "getAggregateAnalysisFailed": "De aggregerade uppgifterna kunde inte hittas.",
+                    "noAggregateAnalysisPopupTitle": "Den sammanlagda analysen hittade inte.",
+                    "noAggregateAnalysisPopupContent": "Du har inte gjort en sammanlagd analys. Du kan skapa dina egna aggregerade uppgifter från analysfunktion och sedan använda värdena i filtrering."
+                }
             }
         }
     }

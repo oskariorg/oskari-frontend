@@ -61,7 +61,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
                     me._markTouAccepted();
                 }
 
-                var layers = me.service.getLayersWithoutPublishRights();
                 var publishMapEditorRequestBuilder = me.instance.sandbox.getRequestBuilder(
                     'Publisher.PublishMapEditorRequest'
                 );

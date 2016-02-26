@@ -1,37 +1,29 @@
 #startingPointInput {
   width: 400px;
-  margin: 5px; 
-}
+  margin: 5px; }
 
 #finishingPointInput {
   width: 400px;
-  margin: 5px; 
-}
+  margin: 5px; }
 
 .route-instructions {
-	margin-top: 12px;
-}
+  margin-top: 12px; }
 
 .itinerary__title {
-	float: left;
-	width: 120px;
-}
+  float: left;
+  width: 120px; }
 
 .itinerary__content {
-	float: left;
-}
+  float: left; }
 
 .itinerary__clear {
-	clear: both;
-}
+  clear: both; }
 
 div.route-instructions div.instructions {
-	max-height: 250px;
-	overflow: auto;
-	padding: 10px;
-}
+  max-height: 250px;
+  overflow: auto;
+  padding: 10px; }
 
 div.itinerary div.actions {
-	margin: 0;
-	text-align: right;
-}
+  margin: 0;
+  text-align: right; }

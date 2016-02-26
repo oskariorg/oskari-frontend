@@ -94,8 +94,7 @@ Oskari.clazz.define(
                 //Add index map control - remove old one
                 if (me._indexMap.getCollapsed()) {
                     // get/Set only base layer to index map
-                    var layer = me._getLayers();
-                    var tt = me.getElement()[0];
+                    var layer = me._getBaseLayer();
                     if (layer) {
                         var controlOptions = {
                             target: me._indElement[0],
@@ -158,9 +157,18 @@ Oskari.clazz.define(
                 this._bindIcon(icon);
             }
         },
-        _getLayers: function () {
-            if (this._indexMap) {
-                return this._map.getLayers().item(0);
+        /**
+         * Get 1st visible bottom layer
+         * @returns {*}
+         * @private
+         */
+        _getBaseLayer: function () {
+            var layer = null;
+            for (var i = 0; i < this._map.getLayers().getLength(); i += 1) {
+                layer = this._map.getLayers().item(i);
+                if(layer.getVisible()){
+                    return layer;
+                }
             }
             return null;
         }

@@ -290,11 +290,21 @@
                 "Require-Bundle-Instance": []
             }
       }, {
-            "bundleinstancename": "publisher",
-            "bundlename": "publisher",
+            "bundleinstancename": "publisher2",
+            "bundlename": "publisher2",
             "metadata": {
                 "Import-Bundle": {
-                    "publisher": {
+                    "publisher2": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundleinstancename": "maplegend",
+            "bundlename": "maplegend",
+            "metadata": {
+                "Import-Bundle": {
+                    "maplegend": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     }
                 }
@@ -339,6 +349,26 @@
                 "Import-Bundle" : {
                     "admin" : {
                         "bundlePath" : "../../../packages/admin/bundle/"
+                    }
+                }
+            }
+        }, {
+            "title": "Timeseries",
+            "bundlename": "timeseries",
+            "metadata": {
+                "Import-Bundle": {
+                    "timeseries": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
+            "title": "ASDI login",
+            "bundlename": "asdi-login",
+            "metadata": {
+                "Import-Bundle": {
+                    "asdi-login": {
+                        "bundlePath": "../../../packages/asdi/bundle/"
                     }
                 }
             }

@@ -232,7 +232,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 '</div>',
             difference: '<div class="analyse_difference_cont"></div>',
             footer: '<div class="analyse_param_footer"></div>',
-            wrapper: '<div class="analyse-result-popup-content"></div>'
+            wrapper: '<div class="analyse-result-popup-content"></div>',
+            analysisAdditionalInfo: '<div class="analysis_additional_info"></div>'
         },
 
         /**
@@ -294,6 +295,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     me.instance.setAnalyseMode(false);
                 }
             );
+            contentDiv.append(me.template.analysisAdditionalInfo.clone());
             contentDiv.append(me._getButtons());
 
             var inputs = me.mainPanel.find('input[type=text]');
@@ -630,7 +632,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             if (!selectedLayer) {
                 return;
             }
-
             var featureListElement,
                 featureListList = featureList.find('ul'),
                 layerFields = me._getLayerServiceFields(selectedLayer);
@@ -665,19 +666,68 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          *
          */
         _preselectProperties: function (propertyList) {
-            var maxNumOfFields = this.max_analyse_layer_fields;
+            var me = this,
+                maxNumOfFields = me.max_analyse_layer_fields,
+                method = me._getSelectedMethod();
+
+            if (method === me.id_prefix + "aggregate") {
+                me._preselectPropertiesAggregate(propertyList);
+            } else {
+                propertyList
+                    .find('input[name=analyse-feature-property]')
+                    .each(function (index) {
+                        if (index < maxNumOfFields) {
+                            jQuery(this).prop('checked', true);
+                        } else {
+                            jQuery(this).prop('disabled', true);
+                        }
+                    });
+            }
+        },
+
+        /**
+         * @private method _preselectPropertiesAggregate
+         * Properties preselection for aggregate method.
+         * -By default only select numeric fields.
+         * -Add infotext, if text type fields are selected
+         */
+        _preselectPropertiesAggregate: function(propertyList) {
+            var me = this,
+                     maxNumOfFields = me.max_analyse_layer_fields,
+                     count = 0;
 
             propertyList
                 .find('input[name=analyse-feature-property]')
-                .each(function (index) {
-                    if (index < maxNumOfFields) {
+                .each(function (index, input) {
+                    var field = jQuery(input).val();
+                    if (count < maxNumOfFields && me._isNumericField(field)) {
                         jQuery(this).prop('checked', true);
-                    } else {
+                        count++;
+                    } else if (index >= maxNumOfFields) {
                         jQuery(this).prop('disabled', true);
                     }
-                });
-        },
 
+
+                    jQuery(input).on('change', function(event) {
+                        var checked = propertyList.find('li input:checked'),
+                            fieldSelectionInfo = me.mainPanel.find('div.analysis_additional_info'),
+                            textFields = false;
+                        checked.each(function(index, element) {
+                            var field = jQuery(element).val();
+                            if (!me._isNumericField(field)) {
+                                textFields = true;
+                                return false;
+                            }
+                        });
+
+                        if (checked && checked.length && textFields) {
+                            fieldSelectionInfo.html(me.loc.aggregate.aggregateAdditionalInfo);
+                        } else {
+                            fieldSelectionInfo.html('');
+                        }
+                    });
+            });
+        },
         /**
          * @private @method _checkPropertyList
          * Checks if the number of checked properties is over
@@ -1843,6 +1893,35 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
                 me.differenceOptions = options;
                 me.differenceLayer = null;
+
+                //spatial join mode: normal/aggregate
+                me._addTitle(extraParams, loc.mode, loc.modeTooltip);
+                var modeToolContainer = me.template.radioToolOption.clone();
+                modeToolContainer.find('input').attr({'name':'spatial_join_mode', 'value': 'oskari_analyse_normal'}).prop('checked', true);
+                modeToolContainer.find('label span').append(loc.normalMode);
+                modeToolContainer.change(function () {
+                    _.forEach(extraParams.find('input[name=analyse-layer1-field-property]'), function (input) {
+                        input.setAttribute('type','checkbox');
+                    });
+                    contentPanel.find('#oskari_analyse_intersect')[0].disabled = false;
+                });
+                extraParams.append(modeToolContainer);
+
+                var modeToolContainer2 = me.template.radioToolOption.clone();
+                modeToolContainer2.find('input').attr({'name': 'spatial_join_mode', 'value': 'oskari_analyse_aggregate'});
+                modeToolContainer2.find('label span').append(loc.aggregateMode);
+                modeToolContainer2.change(function () {
+                    _.forEach(extraParams.find('input[name=analyse-layer1-field-property]'), function (input) {
+                        input.setAttribute('type','radio');
+                        input.disabled = false;
+                    });
+                    limitSelection(false);
+                    extraParams.find('input[name=analyse-layer1-field-property]')[0].checked = true;
+                    contentPanel.find('#oskari_analyse_intersect')[0].disabled = true;
+                    contentPanel.find('#oskari_analyse_contains')[0].checked = true;
+                });
+                extraParams.append(modeToolContainer2);
+
                 // First layer is selected outside this panel, so no selection to be done here
                 me._addTitle(extraParams, loc.firstLayer, loc.firstLayerTooltip);
                 extraParams.append(
@@ -1927,34 +2006,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         'checked': (option.selected ? 'checked' : undefined)
                     }).change(closureMagic(option));
                 }
-
-                //spatial join mode: normal/aggregate
-                me._addTitle(extraParams, loc.mode, loc.modeTooltip);
-                var modeToolContainer = me.template.radioToolOption.clone();
-                modeToolContainer.find('input').attr({'name':'spatial_join_mode', 'value': 'oskari_analyse_normal'}).prop('checked', true);
-                modeToolContainer.find('label span').append(loc.normalMode);
-                modeToolContainer.change(function () {
-                    _.forEach(extraParams.find('input[name=analyse-layer1-field-property]'), function (input) {
-                        input.setAttribute('type','checkbox');
-                    });
-                    contentPanel.find('#oskari_analyse_intersect')[0].disabled = false;
-                });
-                extraParams.append(modeToolContainer);
-
-                var modeToolContainer2 = me.template.radioToolOption.clone();
-                modeToolContainer2.find('input').attr({'name': 'spatial_join_mode', 'value': 'oskari_analyse_aggregate'});
-                modeToolContainer2.find('label span').append(loc.aggregateMode);
-                modeToolContainer2.change(function () {
-                    _.forEach(extraParams.find('input[name=analyse-layer1-field-property]'), function (input) {
-                        input.setAttribute('type','radio');
-                        input.disabled = false;
-                    });
-                    limitSelection(false);
-                    extraParams.find('input[name=analyse-layer1-field-property]')[0].checked = true;
-                    contentPanel.find('#oskari_analyse_intersect')[0].disabled = true;
-                    contentPanel.find('#oskari_analyse_contains')[0].checked = true;
-                });
-                extraParams.append(modeToolContainer2);
 
                 // Second layer field selection
                 me._addTitle(extraParams, me.loc.params.label, loc.secondLayerFieldTooltip);
@@ -2374,12 +2425,20 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          */
         refreshExtraParameters: function () {
             var me = this,
-                container = me.mainPanel,
-                selectedMethod = container.find('input[name=method]:checked').val();
-
+                     selectedMethod = me._getSelectedMethod();
             me._modifyExtraParameters(selectedMethod);
         },
 
+        /**
+         * @private @method _getSelectedMethod
+         * Convenience method for getting the analysis method currently selected.
+         */
+        _getSelectedMethod: function() {
+            var me = this,
+                container = me.mainPanel,
+                selectedMethod = container.find('input[name=method]:checked').val();
+            return selectedMethod;
+        },
         /**
          * @private @method _gatherSelections
          * Gathers analyse selections and returns them as JSON object
@@ -2389,10 +2448,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          */
         _gatherSelections: function () {
             var me = this,
-                container = me.mainPanel;
-
-            // Get the name of the method
-            var selectedMethod = container.find('input[name=method]:checked').val(),
+                container = me.mainPanel,
+                selectedMethod = me._getSelectedMethod(),
                 methodName = selectedMethod && selectedMethod.replace(me.id_prefix, ''),
                 layer = me._getSelectedMapLayer();
 
@@ -2442,7 +2499,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             selections.style = me.getStyleValues();
             // Bbox
             selections.bbox = me.instance.getSandbox().getMap().getBbox();
-
 
             // Override style - :TODO make UI for this and get override from there
             if (defaults.method === 'difference') {
@@ -2597,7 +2653,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         featuresA1: featuresA1,
                         featuresB1: featuresB1,
                         operator: spatialOperator,
-                        no_data: me._getNoDataValue()
+                        no_data: me._getNoDataValue(),
+                        locale: me.loc.spatial_join.backend_locale
                     }
                 }
             };
@@ -2743,6 +2800,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     }
 
                 }
+
+                //clean the "additional info" div
+                me.mainPanel.find('div.analysis_additional_info').html('');
 
                 // Send the data for analysis to the backend
                 me.instance.sandbox.postRequestByName('ShowProgressSpinnerRequest',[true]);
@@ -3010,18 +3070,34 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 prevJson,
                 selectedLayer,
                 isLayerSelected,
-                editDialog = Oskari.clazz.create(
-                    'Oskari.userinterface.component.FilterDialog',
-                    me.loc
-                ),
+
                 // From 'oskari_analyse_layer_{id}' to '{id}'
                 layerId = analyse_layer_id.replace((this.id_prefix + 'layer_'), ''),
                 layer = this.instance.mapLayerService.findMapLayer(layerId);
+
+            var fixedOptions = {
+                addLinkToAggregateValues: true,
+                loc: me.instance.getLocalization('layer')
+            };
+            me.filterDialog = Oskari.clazz.create(
+                'Oskari.userinterface.component.FilterDialog',
+                me.loc,
+                fixedOptions
+            );
+            me.aggregateAnalyseFilter = Oskari.clazz.create(
+                'Oskari.analysis.bundle.analyse.aggregateAnalyseFilter',
+                me.instance,
+                me.loc,
+                me.filterDialog
+            );
+
+
             filterIcon.unbind('click');
             filterIcon.bind('click', function () {
                 var selectedFeatures = me.WFSLayerService.getSelectedFeatureIds(layer.getId()),
                     boolSelectedFeatures = (selectedFeatures !== undefined && selectedFeatures.length > 0),
                     boolSelectedGeometry = (me.contentPanel.selectedGeometry !== null);
+
 
                 if (!me._filterPopups[layer.getId()]) {
                     prevJson = me.getFilterJson(layer.getId());
@@ -3033,21 +3109,24 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         layer["_isLayerSelected"] = false;
                     }
 
-                    editDialog.createFilterDialog(layer, prevJson, null, boolSelectedFeatures, boolSelectedGeometry);
+                    me.filterDialog.createFilterDialog(layer, prevJson, function() {
+                        me.instance.analyseService._returnAnalysisOfTypeAggregate(_.bind(me.aggregateAnalyseFilter.addAggregateFilterFunctionality, me));
+                    }, boolSelectedFeatures, boolSelectedGeometry);
+
                     me._filterPopups[layer.getId()] = true;
                     me._userSetFilter[layer.getId()] = true;
                     // If there's already filter values for current layer, populate the dialog with them.
                     if (prevJson && !jQuery.isEmptyObject(prevJson)) {
-                        editDialog.setCloseButtonHandler(function () {
+                        me.filterDialog.setCloseButtonHandler(function () {
                             me._filterPopups[layerId] = null;
                         });
-                        editDialog.setClearButtonHandler(function () {
+                        me.filterDialog.setClearButtonHandler(function () {
                             // Removes the filter for the layer
                             me.removeFilterJson(layer.getId());
                         });
-                        editDialog.setUpdateButtonHandler(function () {
+                        me.filterDialog.setUpdateButtonHandler(function () {
                             // Get the filter values from the dialog
-                            var filterJson = editDialog.getFilterValues();
+                            var filterJson = me.filterDialog.getFilterValues();
                             me.setFilterJson(layer.getId(), filterJson);
                             layer.setFilterJson(filterJson);
                             // Update filter icon

@@ -46,15 +46,6 @@ Oskari.clazz.define(
             return el;
         },
 
-        _createRequestHandlers: function () {
-            return {
-                'MyLocationPlugin.GetUserLocationRequest': Oskari.clazz.create(
-                    'Oskari.mapframework.bundle.mapmodule.request.GetUserLocationRequestHandler',
-                    this
-                )
-            };
-        },
-
         /**
          * @private @method _setLayerToolsEditModeImpl
          *
@@ -115,64 +106,20 @@ Oskari.clazz.define(
         },
 
         /**
-         * @method  @public getUserLocation
-         */
-        getUserLocation: function(centerMap){
-            var me = this;
-            me._setupLocation(centerMap);
-        },
-
-        /**
          * @private @method _setupLocation
          * Tries to get the geolocation from browser and move the map to the
          * location
          *
-         * @param {Boolean} centerMap centermap to location
          */
-        _setupLocation: function (centerMap) {
-            var me = this,
-                sandbox = me.getSandbox(),
-                callback = function (lon, lat) {
-                    // transform coordinates from browser projection to current
-                    var mapModule = me.getMapModule(),
-                        lonlat = mapModule.transformCoordinates({ lon : lon, lat : lat}, 'EPSG:4326'),
-                        zoomAdjust = mapModule.getMaxZoomLevel() - mapModule.getMapZoom();
-
-                    if(typeof centerMap === 'undefined' || centerMap === true){
-                        mapModule.moveMapToLonLat(lonlat, zoomAdjust);
-                    }
-                    var locationEvent = sandbox.getEventBuilder('UserLocationEvent')(lonlat.lon, lonlat.lat);
-                    sandbox.notifyAll(locationEvent);
-                };
-
-            if (navigator.geolocation) {
-                // if users just ignores/closes the browser dialog
-                // -> error handler won't be called in most browsers
-                navigator.geolocation.getCurrentPosition(
-                    function (position) {
-                        var lat = position.coords.latitude,
-                            lon = position.coords.longitude;
-
-                        callback(lon, lat);
-                    },
-                    function (errors) {
-                        //ignored
-                    },
-                    {
-                        // accept and hour long cached position
-                        maximumAge: 3600000,
-                        // timeout after 6 seconds
-                        timeout: 6000
-                    }
-                );
-            } else if (typeof window.geoip_latitude === 'function' &&
-                typeof window.geoip_longitude === 'function') {
-                // if available, use http://dev.maxmind.com/geoip/javascript
-                var lat = window.geoip_latitude(),
-                    lon = window.geoip_longitude();
-
-                callback(lon, lat);
-            }
+        _setupLocation: function () {
+            var mapmodule = this.getMapModule();
+            mapmodule.getUserLocation(function (lon, lat) {
+                if(!lon || !lat) {
+                    // error getting location
+                    return;
+                }
+                mapmodule.centerMap({ lon: lon, lat : lat }, 6);
+            });
         }
     }, {
         extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

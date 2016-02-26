@@ -45,6 +45,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             '</div>');
 
         me.normalMapPlugins = [];
+        //additional bundles (=not map plugins) that were stopped when entering publisher
+        me.stoppedBundles = [];
 
         if (data) {
             if (data.lang) {
@@ -201,9 +203,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 );
 
             // initialize form (restore data when editing)
-            form.init(me.data, function(value) {
-                me.setMode(value);
-            });
+            form.init(me.data, function(value) {});
 
             return form;
         },
@@ -222,9 +222,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
 
 
             // initialize form (restore data when editing)
-            form.init(me.data, function(value) {
-                me.setMode(value);
-            });
+            form.init(me.data, function(value) {});
 
             return form;
         },
@@ -242,9 +240,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 );
 
             // initialize form (restore data when editing)
-            form.init(me.data, function(value) {
-                me.setMode(value);
-            });
+            form.init(me.data, function(value) {});
 
             return form;
         },
@@ -262,25 +258,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
 
 
             // initialize form (restore data when editing)
-            form.init(me.data, function(value) {
-                me.setMode(value);
-            });
+            form.init(me.data, function(value) {});
 
             return form;
         },
 
-        /**
-         * @method setMode
-         * @param {String} mode the mode
-         */
-        setMode: function (mode) {
-            var me = this;
-            jQuery.each(me.panels, function(index, panel){
-                if(typeof panel.setMode === 'function') {
-                    panel.setMode(mode);
-                }
-            });
-        },
         setPluginLanguage : function(lang) {
             var me = this;
             if (lang === null || lang === undefined) {
@@ -329,7 +311,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             var allTools = [];
             // group tools per tool-group
             _.each(definedTools, function(ignored, toolname) {
-                // TODO: document localization requirements!
                 var tool = Oskari.clazz.create(toolname, sandbox, mapmodule, me.loc, me.instance, me.getHandlers());
                 if(tool.isDisplayed() === true && tool.isShownInToolsPanel()) {
                     var group = tool.getGroup();
@@ -346,7 +327,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             // create panel for each tool group
             var panels = [];
             _.each(grouping, function(tools, group) {
-                // TODO: document localization requirements!
                 var panel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                     group, tools, sandbox, me.loc, me.instance
                 );
@@ -502,9 +482,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                         okBtn = dialog.createCloseButton(me.loc.buttons.ok);
                     dialog.show(me.loc.error.title, me.loc.error.saveFailed, [okBtn]);
                 };
-            if (selections.size) {
-                totalWidth = selections.size.width + 'px';
-                totalHeight = selections.size.height + 'px';
+            if (selections.metadata.size) {
+                totalWidth = selections.metadata.size.width + 'px';
+                totalHeight = selections.metadata.size.height + 'px';
             }
             // make the ajax call
             jQuery.ajax({
@@ -579,6 +559,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                     me.normalMapPlugins.push(plugin);
                 }
             });
+
+            //hide timeseries as well in case it was visible. (not yet supported in published maps)
+            var timeSeriesBundle = me.instance.sandbox.findRegisteredModuleInstance('timeseries');
+            if (timeSeriesBundle && timeSeriesBundle.started) {
+                timeSeriesBundle.stop();
+                me.stoppedBundles.push(timeSeriesBundle);
+            }
         },
 
         /**
@@ -605,6 +592,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 }
                 if(plugin.refresh) {
                     plugin.refresh();
+                }
+            }
+
+            //restart the stopped bundles that are not map plugins
+            for (var j = 0; j < me.stoppedBundles.length; j++) {
+                if (me.stoppedBundles[j].start && typeof me.stoppedBundles[j].start === 'function') {
+                    me.stoppedBundles[j].start();
                 }
             }
             // reset listing

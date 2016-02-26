@@ -5,7 +5,8 @@ Oskari.registerLocalization(
     "value": {
         "title": "Map Legends",
         "desc": "",
-        "noLegendsText": "No map legends available"
+        "noLegendsText": "No map legends available",
+        "invalidLegendUrl": "Map legend not available"
     }
 }
 );

@@ -19,8 +19,15 @@ Oskari.clazz.define(
             return 'WMS';
         },
 
+        _createPluginEventHandlers: function () {
+            return {
+                AfterChangeMapLayerStyleEvent: function (event) {
+                    this._afterChangeMapLayerStyleEvent(event);
+                }
+            };
+        },
         /**
-         * @method _addMapLayerToMap
+         * @method addMapLayerToMap
          * @private
          * Adds a single WMS layer to this map
          * @param {Oskari.mapframework.domain.WmsLayer} layer
@@ -32,8 +39,7 @@ Oskari.clazz.define(
                 return;
             }
 
-            var me=this,
-                layers = [],
+            var layers = [],
                 olLayers = [],
                 layerIdPrefix = 'layer_';
             // insert layer or sublayers into array to handle them identically
@@ -56,7 +62,7 @@ Oskari.clazz.define(
                         'ID': _layer.getId(),
                         'STYLES': _layer.getCurrentStyle().getName(),
                         'FORMAT': 'image/png',
-                        'VERSION' : _layer.getVersion()
+                        'VERSION' : _layer.getVersion() || '1.3.0'
                     },
                     layerParams = _layer.getParams() || {},
                     layerOptions = _layer.getOptions() || {};
@@ -94,37 +100,22 @@ Oskari.clazz.define(
                 }
                 // Set min max Resolutions
                 if (_layer.getMaxScale() && _layer.getMaxScale() !== -1 ) {
-                        layerImpl.setMinResolution(this.getMapModule().calculateScaleResolution(_layer.getMaxScale()));
+                    layerImpl.setMinResolution(this.getMapModule().getResolutionForScale(_layer.getMaxScale()));
                 }
-                if (_layer.getMinScale()  && _layer.getMinScale() !== -1 ) {
-                    // No definition, if scale is greater than max resolution scale
-                    if (_layer.getMinScale() < this.getMapModule().getMapScales()[0] ) {
-                        layerImpl.setMaxResolution(this.getMapModule().calculateScaleResolution(_layer.getMinScale()));
-                    }
+                // No definition, if scale is greater than max resolution scale
+                if (_layer.getMinScale()  && _layer.getMinScale() !== -1 && (_layer.getMinScale() < this.getMapModule().getScaleArray()[0] )) {
+                    layerImpl.setMaxResolution(this.getMapModule().getResolutionForScale(_layer.getMinScale()));
                 }
-                this.mapModule.addLayer(layerImpl, _layer, layerIdPrefix + _layer.getId());
+                this.mapModule.addLayer(layerImpl,!keepLayerOnTop);
                 // gather references to layers
                 olLayers.push(layerImpl);
 
                 this._sandbox.printDebug("#!#! CREATED ol.layer.TileLayer for " + _layer.getId());
-                if (keepLayerOnTop) {
-                    // This might not be completely correct. We assume keepLayerOnTop means put this layer at the bottom as a faked baselayer.
-                    this.mapModule.setLayerIndex(layerImpl, me.getMapModule().getMap().getLayers().getArray().length);
-                } else {
-                    this.mapModule.setLayerIndex(layerImpl, 0);
-                }
             }
             // store reference to layers
             this.setOLMapLayers(layer.getId(), olLayers);
         },
 
-        _createEventHandlers: function () {
-            return {
-                AfterChangeMapLayerStyleEvent: function (event) {
-                    this._afterChangeMapLayerStyleEvent(event);
-                }
-            };
-        },
         /**
          * Handle AfterChangeMapLayerStyleEvent
          * @private
@@ -133,16 +124,15 @@ Oskari.clazz.define(
          */
         _afterChangeMapLayerStyleEvent : function(event) {
             var layer = event.getMapLayer();
-
-            // Change selected layer style to defined style
-            if (!layer.isBaseLayer()) {
-                var styledLayer = this._layers[layer.getId()];
-                if (styledLayer != null) {
-                    styledLayer.getSource().updateParams({
-                        styles : layer.getCurrentStyle().getName()
-                    });
-                }
+            var layerList = this.getOLMapLayers(layer);
+            if(!layerList) {
+                return;
             }
+            layerList.forEach(function(openlayer) {
+                openlayer.getSource().updateParams({
+                    styles : layer.getCurrentStyle().getName()
+                });
+            });
         }
     }, {
         /**

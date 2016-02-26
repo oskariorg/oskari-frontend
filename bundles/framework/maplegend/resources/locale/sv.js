@@ -4,6 +4,7 @@ Oskari.registerLocalization({
   "value": {
     	"title": "Förklaringar",
     	"desc": "",
-    	"noLegendsText": "Inga kartförklaringar tillgängliga"
+    	"noLegendsText": "Inga kartförklaringar tillgängliga",
+        "invalidLegendUrl": "kartförklaringen är inte tillgängliga"
   }
 });

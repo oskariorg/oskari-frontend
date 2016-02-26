@@ -15,7 +15,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
      */
     function () {
         this.__name = 'mapfull';
-        this.map = null;
         this.core = null;
         this.sandbox = null;
         this.mapmodule = null;
@@ -136,7 +135,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 );
 
             me.mapmodule = module;
-            var map = me.getSandbox().register(module);
+            me.getSandbox().register(module);
             // oskariui-left holds statsgrid and possibly other data stuff, size in config should include that as well as the map
             // set map size
             // call portlet with ?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=0&p_p_state=exclusive&p_p_mode=view&published=true
@@ -162,16 +161,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 );
             });
 
-            
-
             module.start(me.getSandbox());
 
-            if (!me.nomaprender) {
-                map.render(me.mapDivId);
-            }
-
             me.adjustMapSize();
-            
+
             // startup plugins
             if (me.conf.plugins) {
                 var plugins = this.conf.plugins,
@@ -195,8 +188,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     }
                 }
             }
-
-            me.map = map;
         },
         /**
          * @method start
@@ -211,12 +202,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          */
         start: function () {
             var me = this,
-                conf = me.conf,
+                conf = me.conf || {},
                 core = Oskari.clazz.create('Oskari.mapframework.core.Core'),
                 sandbox = core.getSandbox(),
-                sandboxName = (conf ? conf.sandbox : null) || 'sandbox';
+                sandboxName = conf.sandbox || 'sandbox';
 
-            // FIXME this doesn't check if conf exists?
             me._handleProjectionDefs(conf.projectionDefs);
             me.core = core;
             me.sandbox = sandbox;
@@ -238,13 +228,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             });
 
             // take map div ID from config if available
-            if (conf) {
-                if (conf.mapElement) {
-                    me.mapDivId = conf.mapElement;
-                }
-                if (conf.mapContainer) {
-                    me.contentMapDivId = conf.mapContainer;
-                }
+            if (conf.mapElement) {
+                me.mapDivId = conf.mapElement;
+            }
+            if (conf.mapContainer) {
+                me.contentMapDivId = conf.mapContainer;
             }
 
             // Init user
@@ -293,7 +281,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             var skipLocation = false;
             if (me.getMapModule().isPluginActivated('GeoLocationPlugin')) {
                 // get plugin
-                var plugin = me.getMapModule().getPluginInstance(
+                var plugin = me.getMapModule().getPluginInstances(
                     'GeoLocationPlugin'
                 );
                 skipLocation = plugin.hasSetLocation();
@@ -405,21 +393,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 'EPSG:4326': '+title=WGS 84 +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs'
             };
 
+            epsgConfs = _.keys(defs);
+            _.forEach(epsgConfs, function (conf) {
+                if (!_.has(defaultDefs, conf)) {
+                    defaultDefs[conf] = defs[conf];
+                }
+            });
             // OL3 uses proj4
             if(window.proj4) {
                 // ensure static projections are defined
-                jQuery.each(defs || defaultDefs, function(srs, defs) {
+                jQuery.each(defaultDefs, function(srs, defs) {
                     window.proj4.defs(srs, defs);
                 });
-            } 
+            }
             // OL2 uses Proj4js
             else {
                 if(!Proj4js) {
                     window.Proj4js = {};
                 }
                 // ensure static projections are defined
-                Proj4js.defs = defs || defaultDefs;
-            }            
+                Proj4js.defs = defaultDefs;
+            }
         },
 
         /**
@@ -460,15 +454,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          *
          */
         _createServices: function (conf) {
-            var me = this,
-                services = [], // create services that are available in this application
-                mapLayerService = Oskari.clazz.create(
-                    'Oskari.mapframework.service.MapLayerService',
-                    conf.globalMapAjaxUrl + 'action_route=GetMapLayers&lang=' + Oskari.getLang(),
-                    me.core.getSandbox()
-                );
+            // create initial services that are available in this application
+            var services = [];
+            var sb = this.getSandbox();
+            var mapLayerService = Oskari.clazz.create('Oskari.mapframework.service.MapLayerService', sb);
+            var searchService = Oskari.clazz.create('Oskari.service.search.SearchService', sb);
 
             services.push(mapLayerService);
+            services.push(searchService);
 
             // DisableDevelopmentModeEnhancement
             if (conf.disableDevelopmentMode === 'true') {
@@ -520,7 +513,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
 
             // map location needs to be set before layers are added
             // otherwise f.ex. wfs layers break on add
-            if (state.east && ignoreLocation !== true) {
+            if (state.hasOwnProperty('east') && ignoreLocation !== true) {
                 me.getSandbox().getMap().moveTo(
                     state.east,
                     state.north,

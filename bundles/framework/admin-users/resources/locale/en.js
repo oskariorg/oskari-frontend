@@ -16,6 +16,7 @@ Oskari.registerLocalization(
                 "lastName": "Last name",
                 "user": "Username",
                 "pass": "Password",
+                "email": "E-mail",
                 "pass_retype": "Retype password",
                 "addRole": "Select role(s)",
                 "password_mismatch": "Passwords don't match.",
@@ -25,7 +26,8 @@ Oskari.registerLocalization(
                 "confirm_delete": "Are you sure you wish to delete user {user}?",
                 "delete_failed": "The user could not be deleted.",
                 "fetch_failed": "Users could not be fetched.",
-                "save_failed": "Updates could not be saved.",
+                "save_failed": "User could not be saved.",
+                "save_failed_message": "Please check at username is unique and try again.",
                 "noMatch": "No results matched",
                 "selectRole": "Select role"
             },
@@ -37,7 +39,9 @@ Oskari.registerLocalization(
                 "doSave_failed": "The new role could not be saved."
             }
         },
-        "save": "save"
+        "save": "save",
+        "failed_to_get_roles_title": "Failed to get roles",
+        "failed_to_get_roles_message": "Failed to get roles (ManageRoles), perhaps oskari-control-admin is not available?"
     }
 }
 );

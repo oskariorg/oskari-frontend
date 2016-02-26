@@ -9,10 +9,6 @@ Oskari.registerLocalization(
                 "title": "Error",
                 "message": "The licence information could not be fetched."
             },
-            "failedGetLicenseInformation": {
-                "title": "Error",
-                "message": "The licence server could not be connected."
-            },
             "cannotGetLicensePrice": {
                 "title": "Error",
                 "message": "The licence price could not be fetched."
@@ -42,7 +38,12 @@ Oskari.registerLocalization(
         },
         "dialog": {
             "licenseTitle": "Licence information",
-            "licenseModelsTitle": "Licence models",
+            "licenseModelDescriptionsTitle": "General descriptions of ELF license models:",
+            "licenseModelDescriptions": {
+                "evaluation": "Evaluation Licence – This licence enables you to access ELF products and services for the purpose of evaluating its suitability only. It is a time limited licence.",
+                "developer": "Developer Licence – This licence enables you to access ELF products and services for the purpose of developing new products and services that include the data licensed by ELF. It is a time limited licence."
+            },
+            "licenseModelsTitle": "Licence models:",
             "noRightToAnyLicenseModels": "You do not have rights to view any licence models.",
             "loginShort": "Log in to show licence models.",
             "licenseSummaryTitle": "Licence Summary",
@@ -53,13 +54,6 @@ Oskari.registerLocalization(
                 "details": "Fill the licence information. The required data are marked with an asterisk (*). Press Next to see a licence summary and price. Press Previous to select another licence model. Press Close to stop the licence order.",
                 "summary": "Read licence conditions and accept them by pressing Conclude. Press Previous to edit licence information. Press Close to stop the licence order.",
                 "orderDetails": "Read the licence information above. Press Deactivate licence to stop the licence order. Press Close to close the window."
-            },
-            "concludeSuccessTitle": "Licence Concluded",
-            "conclude": {
-                "title": "Licence Information",
-                "productid": "Product",
-                "licenseid": "Licence",
-                "validto": "Valid to"
             },
             "deactivateConfirm": {
                 "title": "License Deactivation",

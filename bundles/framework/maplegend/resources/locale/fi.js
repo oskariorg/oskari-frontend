@@ -5,7 +5,8 @@ Oskari.registerLocalization(
     "value": {
         "title": "Karttaselitteet",
         "desc": "",
-        "noLegendsText": "Karttaselitteitä ei ole saatavilla avoinna oleville karttatasoille."
+        "noLegendsText": "Karttaselitteitä ei ole saatavilla avoinna oleville karttatasoille.",
+        "invalidLegendUrl": "Karttaselitettä ei voi näyttää"
     }
 }
 );

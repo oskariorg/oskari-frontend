@@ -145,6 +145,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                 }
             }
 
+            // If no legend images at all, inform the user
+            me._informNoLegendImages();
+
         },
 
         /**
@@ -223,16 +226,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                 return null;
             }
 
-            if(me._legendImagesNotLoaded[legendUrl]) {
-                me._checkNoLegendText();
-                return null;
-            }
 
             var legendDiv = me.templateLayerLegend.clone(),
                 imgDiv = legendDiv.find('img'),
                 img = new Image();
 
             legendDiv.prepend(layer.getCurrentStyle().getTitle() + '<br />');
+
+            if(me._legendImagesNotLoaded[legendUrl]) {
+                me._checkNoLegendText();
+                // return null;
+            }
 
             imagesAdded[legendUrl] = true;
 
@@ -244,9 +248,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
 
             img.onerror = function () {
                 img.onerror = null;
-                legendDiv.parent().parent().parent().remove();
+                //Show legend invalid info for the layer
                 me._legendImagesNotLoaded[legendUrl] = true;
-                me._checkNoLegendText();
+                me._checkNoLegendText(legendDiv, layer);
             };
 
             img.src = legendUrl;
@@ -258,15 +262,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
         * @method _checkNoLegendText
         * @private
         */
-        _checkNoLegendText: function(){
+        _checkNoLegendText: function(legendDiv, layer){
+            var me = this,
+                invalidLegendUrl = this.instance.getLocalization('invalidLegendUrl'),
+                noLegendContainer = me.templateNoLegend.clone();
+
+
+            if (legendDiv && layer) {
+                var legendUrl = layer.getLegendImage ? layer.getLegendImage() : null;
+                if(legendUrl){
+                    noLegendContainer.html(invalidLegendUrl);
+                    if(window.console !== undefined) {
+                        console.log(invalidLegendUrl + ": " + legendUrl);
+                    }
+                }
+                legendDiv.append(noLegendContainer);
+            }
+
+        },
+        _informNoLegendImages: function(){
             var me = this,
                 noLegendText = this.instance.getLocalization('noLegendsText'),
                 legendDivs = jQuery('.oskari-flyoutcontent.maplegend').find('.accordion_panel'),
                 noLegendContainer = me.templateNoLegend.clone();
 
-            jQuery('.no-maplegend').remove();
-
-            if(legendDivs.length === 0) {
+            if(legendDivs !== null  && legendDivs.length === 0){
                 noLegendContainer.html(noLegendText);
                 jQuery('.oskari-flyoutcontent.maplegend').append(noLegendContainer);
             }

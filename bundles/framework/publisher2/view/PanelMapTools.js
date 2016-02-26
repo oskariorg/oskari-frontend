@@ -241,12 +241,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             _.each(me.tools, function(tool){
                 if(tool.isDisplayedInMode(mode) === true){
                     cont.find('#tool-' + tool.getTool().id).attr('disabled', 'disabled');
+                    cont.find('#tool-' + tool.getTool().id).removeAttr('checked');
                 } else {
                     cont.find('#tool-' + tool.getTool().id).removeAttr('disabled');
-                }
-
-                if(typeof tool.setMode === 'function'){
-                    tool.setMode(mode);
                 }
             });
         },

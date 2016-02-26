@@ -1,5 +1,310 @@
 # Release Notes
 
+## 1.35
+
+### catalogue/metadataflyout
+
+Metadataflyout is now stateful.
+
+### myplaces2
+
+Myplaces adds own measuretools only if configured so:
+
+    {
+      measureTools:true
+    }
+
+### elf/metadataflyout
+
+*New bundle!* ELF metadataflyout bundle overrides catalogue/metadataflyout functionalities.
+
+### catalogue/metadatagatalogue
+
+Added data identification date and type to metadata search results.
+
+### elf/elf-license
+
+Added license general descriptions.
+
+### See Oskari/api/CHANGELOG for following changes:
+- RPC getAllLayers function now returns also minZoom and maxZoom if those are defined for layer.
+
+### infobox
+
+Fixed InfoBox.ShowInfoBoxRequest handling. Now all popups with no popup id really deleted if hidePrevious param is setted to true.
+
+Added new "InfoboxActionEvent" that notifies which link/button is clicked in the infobox.
+
+Link handling improvements on Openlayers 2 version. Links in infobox should no longer propagate to map to trigger new GFI requests.
+If you need to bind a clickhandler for an infobox element use a-tag with class "functional" and stop propagation on the clickhandler itself.
+The functional-class is a sign that event propagation should NOT be stopped <a class="functional"></a>.
+
+### coordinatetool
+
+Added funtionality to change the projection the map is displayed in, when the application supports multiple projections.
+
+### divmanazer/grid
+
+Fixed grid header style when column class name contains span word.
+
+### core
+
+Oskari.VERSION can now be used to detect the frontend version number.
+
+### published map (ol3)
+
+Fixed analysislayer's and userlayer's visibility issue in published map 
+
+### framework/admin-users
+
+Added user email to editable.
+
+### framework/findbycoordinates
+
+Now displays multiple results if available.
+
+## framework/featuredata2
+
+Now featuredata2 flyout not updated when opened again if map is not moved / zoomed.
+
+
+### mapping/mapwmts_ol3
+
+Fixed WmtsLayerService IE 9 capabilities formatting.
+
+### RPC
+
+Removed libraries/OskariRPC/*. The client now has it's own repository here: https://github.com/nls-oskari/rpc-client
+
+JSChannel-dependency updated. This requires new RPC-client to work (version 2.0.0).
+
+New function added getFeatures(). See bundle documentation for details.
+
+New request included in defaults "MapModulePlugin.ZoomToFeaturesRequest".
+
+New function added getInfo(clientVersion). See bundle documentation for details.
+
+New event included in defaults "InfoboxActionEvent".
+
+New event included in defaults "InfoBox.InfoBoxEvent".
+
+New request included in defaults 'InfoBox.HideInfoBoxRequest'.
+
+### mapping/mapmodule/plugin/vectorlayer
+
+New request added 'MapModulePlugin.ZoomToFeaturesRequest' that zooms to extent of all or specific features on the specified layers (only for ol3).
+
+Added functionality to provide a label text to vector features with the style object. See [api/CHANGELOG.md](api/CHANGELOG.md) for details (ol2 and ol3).
+
+### mapmodule - LayerSelectionPlugin
+
+Now LayerSelectionPlugin handle small screen (width is smaller than 500px) so at layer(s) selection component use full screen.
+
+*Improved UI* First displayed in the background map selection and then the other.
+
+### drawtools/ol3  - POSSIBLE BREAKING CHANGES!
+
+DrawingEvent now returns drawed geometry as GeoJSON-object (before it's returns geometry as stringified GeoJSON-object). 
+
+'showMeasure' parameter is renamed to 'showMeasureOnMap' (if true - measure result will be displayed on map near feature. Default is false.)
+
+New parameter is added to plugin: 'selfIntersection'. (if true - user will see warning text if polygon has self-intersection. Default is true.))
+
+### core
+
+`Oskari.clazz.create()` now checks if a constructor returned value of a class instance to be used instead of normal processing. This might cause issues with inheritance so use with caution.
+SearchService uses this to check if one has already been registered to sandbox and returns the registered instance instead of self if so.
+
+### sandbox
+
+`getAjaxUrl()` now takes an optional route params so code like `sb.getAjaxUrl() + 'action_route=MyRoute'` can now be replaced with `sb.getAjaxUrl('MyRoute')`
+
+### core/maplayerservice
+
+MapLayerService now takes sandbox and url as constructor arguments (previously url then sandbox). Url is now optional and will default to 
+sandbox.getAjaxUrl('GetMapLayers') + '&lang=' + Oskari.getLang().
+
+### mapfull
+
+Now initializes the search service so it's available to be used by requests even if there's no UI for it. 
+This is something that will most propably be moved out of mapfull in Oskari2 with view migration provided to enable the same functionality.
+
+### search/search service
+
+`Oskari.mapframework.bundle.search.service.SearchService` is now `Oskari.service.search.SearchService`.
+The files for the `SearchService`, `SearchRequest`, `SearchResultEvent` has been moved from bundles/framework/search/service to bundles/service/search.
+The SearchService now handles SearchRequests.
+The SearchService now takes an optional sandbox argument. If given it checks if another SearchService has been registered to sandbox and returns
+it if so. If not it registers self and starts handling SearchRequests. 
+The searchUrl can now be given as an optional second parameter. Previously it was the only parameter. 
+Url defaults to sandbox.getAjaxUrl('GetSearchResult') if sandbox is given and url is not.
+This means that all bundles creating SearchServices use the same instance if they give the sandbox argument.
+SearchService will now trigger SearchResultEvent whenever search is done.
+
+### search bundle
+
+The Search bundle was restructured so the default search ui is now separated file/class and flyout handles the tabbing and default UI if tabbing is not needed.
+The bundles default UI now handles the UI side of search and uses SearchRequest and SearchResultEvent to make the searches.
+
+### mapmodule/user location
+
+getUserLocation() has been added to mapmodule. It takes a callback which will receive lon and lat params with user location or no params if location query was denied/unsuccessful.
+
+GeoLocationPlugin and MyLocationPlugin has been modified to use the new function.
+
+MyLocationPlugin.GetUserLocationRequest is now handled by the mapmodule so it's no longer needed to have MyLocationPlugin as part of the setup to get the user location.
+
+### admin-users
+
+Fixed user search when one or many of these user data values  is not defined: 
+- user name
+- firstname
+- last name
+
+Fixed error handling when cannot get roles from backend.
+
+### mapwfs2
+
+Folder mapping/mapwfs2_ol3 has been renamed to mapping/mapwfs2.
+Code from framework/mapwfs2 has been moved to mapping/mapwfs2 and all Openlayers2 specific files have been renamed to have .ol2.js-postfix. 
+Lots of duplicate code has been removed.
+
+WFSRefreshManualLoadLayersEvent is now included in ol3 version as well and changing the size of the map no longer results in JS-error.
+Layer visibility information is now included in init-message to enable disabling queries to services that are visible to user.
+This fixes an issue where initially hidden WFS-layer was shown to the user. Now the layer is correctly hidden and any queries to the service are prevented while it's hidden.
+
+### drawtools/ol3 and VectorLayerPlugin
+
+Now use mapmodules getStyle() to parse the style JSON.
+
+### mapmodule - ControlsPlugin/ol3
+
+Now only handles DrawingEvents that have measuretool ids so drawing can be used for more things than measuring.
+
+### infobox
+
+Popup not show anymore dublicate info.
+
+### Mapmodule consistency - POSSIBLE BREAKING CHANGES!
+
+Renamed functions
+- _calculateScalesFromResolutions() removed. Use _calculateScalesImpl() instead.
+- _createMap() and _createMapImpl() removed. Use createMap() instead. Also the function no longer has side-effects and returns the created map implementation.
+- _addClickControl() renamed _setupMapEvents().
+- _getMapCenter() removed. Use getMapCenter() instead.
+- _updateDomainImpl() removed. Use updateDomain() instead.
+- panMapToLonLat()/moveMapToLanLot() removed. Use centerMap() instead.
+- panMapEast()/panMapWest()/panMapNorth()/panMapSouth() removed. Use panMapByPixels() instead.
+- zoomIn()/zoomOut() removed. Use adjustZoomLevel() instead.
+- zoomTo() removed. Use setZoomLevel() instead.
+- getLayerPlugin() removed. Use getLayerPlugins(id) with id parameter to fetch reference to single plugin.
+- getMapScales() renamed getScaleArray() to be consistent with getResolution()/getResolutionArray().
+- calculateResolution() and calculateScaleResolution() renamed getResolutionForScale().
+- getPluginInstance() removed. Use getPluginInstances(pluginName) with pluginName parameter to fetch reference to single plugin.
+
+Unused functions removed:
+  - _ensureExists()
+  - getProjectionObject()
+  - _createBaseLayer()
+  - getExtentArray()
+  - getMapViewPortDiv()
+  - getMapLayersContainerDiv()
+  - _getMapLayersByName()
+  - getMapLayersByName()
+  - getMapElDom()
+  - centerMapByPixels()
+  - moveMapByPixels()
+  - _setLayerImplIndex()
+  - _removeLayerImpl()
+  - _setLayerImplVisible()
+  - _setLayerImplOpacity()
+  - getLayerDefs()
+  - getLayers()
+  - getLayersByName()
+  - getZoomForScale()
+  - getStealth()
+  - setStealth()
+  - notifyAll()
+  - calculateLayerMinMaxResolutions()
+
+Added functions so internal references don't need to be called:
+- getMapElementId()
+- getCurrentExtent()
+- getStyle() takes a json presentation of style and returns matching ol2/ol3 style object for plugins to use
+- getUserLocation() takes a callback which will receive lon and lat params with user location or no params if location query was denied.
+
+addLayer() function now takes a second parameter. If not given or false adds the layer on top of the layer stack, if true adds the layer to the bottom of the stack.
+
+Userlayer, analysislayer, wmslayer plugins for both ol2 and ol3 have been updated to take advantage of the AbstractMapLayerPlugin baseclass provided by mapmodule.
+
+### mapping/mapmodule/plugin/vectorlayer
+
+Both ol2 and ol3 implementations of VectorLayerPlugin have been added to following features:
+- allow define minScale to feature, this is checked only if zoomTo option is used. For example: {minScale: 1451336}
+- allow define mouse over cursor for added feature (added cursor option handling). Add the wanted cursor to MapModulePlugin.AddFeaturesToMapRequest options, for example: {cursor: 'zoom-out'}
+- allow define features prio order. Highest number is showed on top and lowest to under. Add the wanted prio to MapModulePlugin.AddFeaturesToMapRequest options, for example: {prio:1}
+- allow define layers and their styles from config. Defined layer style is used when feature not contains own style. If layer or feature style is not defined then using default style. For example configuration:
+```javascript
+    {
+        "layers": [
+            {
+                "id": "EXAMPLE1",
+                "style": {
+                    "fill": {
+                        "color": "#ff00ff"
+                    },
+                    "stroke": {
+                        "color": "#ff00ff",
+                        "width": 3
+                    },
+                    "text": {
+                        "fill": {
+                            "color": "#0000ff"
+                        },
+                        "stroke": {
+                            "color": "#ff00ff",
+                            "width": 4
+                        }
+                    }
+                }
+            }
+        ]
+    }
+```
+
+NOTE! Some implementation specific (ol2 vs. ol3) differences might occur. For instance, OpenLayers2 has only one fill color for all kinds of geometries whereas in ol3 separate fill can be defined for points and areas.
+
+```javascript
+            "style": {
+                //ol2 all-around fillcolor, ol3 just polygons
+                "fill": {
+                    "color": "#ff00ff"
+                },
+                //in ol2 this fill not used, ol3 uses for filling points 
+                image : {
+                    radius: 4,
+                    fill : {
+                        color : 'rgba(0,255,0,1)'
+                    }
+                }
+              }
+```
+
+### publisher2
+
+Removed unneccary code:
+- setMode functions, because plugin tool handles allready own visibility/style when using mobile or desktop size map
+
+Bugfixes when disabling / enabling statsgrid or classification in publisher
+
+Fixed a bug in toolbar's allowed locations (drag & drop)
+
+Replaced mobile / desktop - preview size settings with predefined (fill, small etc.) iframe size settings.
+
+Fixed a bug in publisher resizing when windod is resized
+
+Fixed a bug with saving / showing published maps with light theme
+
 ## 1.34.1
 
 ### mapmodule/ol3

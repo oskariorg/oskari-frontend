@@ -117,34 +117,37 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
 
             // request toolbar to add buttons
             var reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
-            for (tool in this.buttons) {
-                if (this.buttons.hasOwnProperty(tool)) {
-                    sandbox.request(this, reqBuilder(tool, this.buttonGroup, this.buttons[tool]));
 
-                    // for logged-in-user: add line & area buttons
-                    if (sandbox.getUser().isLoggedIn()) {
-                        var loc = me.instance.getLocalization();
-                        if (tool === 'line') {
-                            measureTool = jQuery.extend(true, {}, this.buttons[tool]);
-                            measureTool.callback = function () {
-                                me.startNewDrawing({
-                                    drawMode: 'measureline'
-                                });
-                            };
-                            measureTool.iconCls = 'tool-measure-line';
-                            measureTool.tooltip = loc.tools.measureline.tooltip;
-                            sandbox.request(this, reqBuilder(tool, this.measureButtonGroup, measureTool));
-                        }
-                        if (tool === 'area') {
-                            measureTool = jQuery.extend(true, {}, this.buttons[tool]);
-                            measureTool.callback = function () {
-                                me.startNewDrawing({
-                                    drawMode: 'measurearea'
-                                });
-                            };
-                            measureTool.iconCls = 'tool-measure-area';
-                            measureTool.tooltip = loc.tools.measurearea.tooltip;
-                            sandbox.request(this, reqBuilder(tool, this.measureButtonGroup, measureTool));
+            if (me.instance.conf.measureTools) {
+                for (tool in this.buttons) {
+                    if (this.buttons.hasOwnProperty(tool)) {
+                        sandbox.request(this, reqBuilder(tool, this.buttonGroup, this.buttons[tool]));
+
+                        // for logged-in-user: add line & area buttons
+                        if (sandbox.getUser().isLoggedIn()) {
+                            var loc = me.instance.getLocalization();
+                            if (tool === 'line') {
+                                measureTool = jQuery.extend(true, {}, this.buttons[tool]);
+                                measureTool.callback = function () {
+                                    me.startNewDrawing({
+                                        drawMode: 'measureline'
+                                    });
+                                };
+                                measureTool.iconCls = 'tool-measure-line';
+                                measureTool.tooltip = loc.tools.measureline.tooltip;
+                                sandbox.request(this, reqBuilder(tool, this.measureButtonGroup, measureTool));
+                            }
+                            if (tool === 'area') {
+                                measureTool = jQuery.extend(true, {}, this.buttons[tool]);
+                                measureTool.callback = function () {
+                                    me.startNewDrawing({
+                                        drawMode: 'measurearea'
+                                    });
+                                };
+                                measureTool.iconCls = 'tool-measure-area';
+                                measureTool.tooltip = loc.tools.measurearea.tooltip;
+                                sandbox.request(this, reqBuilder(tool, this.measureButtonGroup, measureTool));
+                            }
                         }
                     }
                 }

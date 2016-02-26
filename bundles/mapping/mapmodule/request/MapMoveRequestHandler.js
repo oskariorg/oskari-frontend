@@ -47,7 +47,7 @@ Oskari.clazz.define(
                 } else if (zoom.scale) {
                     this.mapModule.zoomToScale(zoom.scale);
                 } else {
-                    this.mapModule.zoomTo(zoom);
+                    this.mapModule.setZoomLevel(zoom);
                 }
             }
 

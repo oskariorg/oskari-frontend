@@ -323,24 +323,60 @@ if (!Function.prototype.bind) {
             getLegendUrl: function() {
                 var adminBlock = this.getAdmin();
                 var capabilitiesBlock = this.getCapabilities();
-                var currentStyleName = this.getCurrentStyle().getName();
 
-                if (capabilitiesBlock) {
-                    if(currentStyleName && capabilitiesBlock.styles) {
-                        var selectedStyle = jQuery.grep(capabilitiesBlock.styles ||[], function(style){
-                            return style.name === currentStyleName;
+                if (capabilitiesBlock && adminBlock) {
+                        return adminBlock.legendImage;
+                }
+
+                return '';
+            },
+            /**
+             * Returns style legend url
+             * @param styleName  style name
+             * @returns {String} legend url
+             */
+            getStyleLegendUrl: function (styleName) {
+                var capabilitiesBlock = this.getCapabilities();
+
+
+                if (capabilitiesBlock && styleName && capabilitiesBlock.styles) {
+                        var selectedStyle = jQuery.grep(capabilitiesBlock.styles || [], function (style) {
+                            return style.name === styleName;
                         });
 
-                        if(selectedStyle.length>0) {
+                        if (selectedStyle.length > 0) {
                             return selectedStyle[0].legend;
                         }
-                    }
-                    if(adminBlock) {
-                        return adminBlock.legendImage;
+                }
+
+                return '';
+            },
+            /**
+             * Returns style legend urls
+             * @returns {String} legend url
+             */
+            getStyleLegendUrls: function () {
+                var capabilitiesBlock = this.getCapabilities(),
+                    styleName,
+                    legends = [];
+
+                if (capabilitiesBlock && this.getStyles()) {
+                    for (i = 0; i < this.getStyles().length; i += 1) {
+                        styleName = this.getStyles()[i].getName();
+
+                        if (styleName && capabilitiesBlock.styles) {
+                            var selectedStyle = jQuery.grep(capabilitiesBlock.styles || [], function (style) {
+                                return style.name === styleName;
+                            });
+
+                            if (selectedStyle.length > 0) {
+                                legends.push( selectedStyle[0].legend);
+                            }
+                        }
                     }
                 }
 
-                return ''; //this.getCurrentStyle().getLegend();
+                return legends;
             },
 
             /**

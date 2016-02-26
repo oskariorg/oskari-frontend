@@ -101,6 +101,10 @@ input.excelExportButton {
 
 table.oskari-grid {
 
+    [class*="span"] {
+      float: none;
+    }
+
     td {
         padding: 5px;
     }

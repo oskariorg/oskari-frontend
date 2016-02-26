@@ -117,15 +117,9 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
             layer.setQueryable(true);
             openlayer.opacity = layer.getOpacity() / 100;
 
-            me.getMap().addLayer(openlayer);
+            me.getMapModule().addLayer(openlayer, !keepLayerOnTop);
             // store reference to layers
             this.setOLMapLayers(layer.getId(), openlayer);
-
-            if (keepLayerOnTop) {
-                me.getMapModule().setLayerIndex(openlayer, me.getMap().getLayers().getArray().length);
-            } else {
-                me.getMapModule().setLayerIndex(openlayer, 0);
-            }
 
             me.getSandbox().printDebug(
                 '#!#! CREATED ' + layerType + ' for ArcGisLayer ' +

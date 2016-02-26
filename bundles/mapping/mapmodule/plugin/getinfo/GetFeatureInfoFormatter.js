@@ -7,9 +7,9 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         span: '<span></span>',
         header: '<div class="getinforesult_header"><div class="icon-bubble-left"></div>',
         headerTitle: '<div class="getinforesult_header_title"></div>',
-        myPlacesWrapper: '<div class="myplaces_place">' + 
+        myPlacesWrapper: '<div class="myplaces_place">' +
             '<div class="getinforesult_header"><div class="icon-bubble-left"></div><div class="getinforesult_header_title myplaces_header"></div></div>' +
-            '<p class="myplaces_desc"></p>' + 
+            '<p class="myplaces_desc"></p>' +
             '<a class="myplaces_imglink" target="_blank"><img class="myplaces_img"></img></a>' + '<br><a class="myplaces_link" target="_blank"></a>' + '</div>',
         linkOutside: '<a target="_blank"></a>'
     },
@@ -349,7 +349,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             img = content.find('a.myplaces_imglink'),
             link = content.find('a.myplaces_link');
 
-        
+
         content.find('div.myplaces_header').html(place.name);
         content.find('div.myplaces_header').attr('title', place.name);
 
@@ -405,6 +405,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             row = null,
             keyColumn = null,
             valColumn = null,
+            arrayObject = {},
             key,
             value,
             vType,
@@ -449,11 +450,23 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                     // format array
                     if (jQuery.isArray(value)) {
                         valueDiv = this.template.wrapper.clone();
-                        for (i = 0; i < value.length; i += 1) {
-                            innerTable = this._json2html(value[i]);
-                            valueDiv.append(innerTable);
+                        if(value.length > 0){
+                            if ((typeof value[0]).toLowerCase() === 'object'){
+                                for (i = 0; i < value.length; i += 1) {
+                                    innerTable = this._json2html(value[i]);
+                                    valueDiv.append(innerTable);
+                                }
+                                valpres = valueDiv;
+
+                            } else {
+                                // Create object for array values
+                                for (i = 0; i < value.length; i += 1) {
+                                    arrayObject[key+'.'+i] =  value[i];
+                                }
+                                valpres = this._json2html(arrayObject);
+                            }
                         }
-                        valpres = valueDiv;
+
                     } else {
                         valpres = this._json2html(value);
                     }

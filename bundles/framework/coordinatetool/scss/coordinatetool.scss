@@ -11,7 +11,6 @@ div.mapplugin.coordinatetool {
 
 div.coordinatetool__popup {
     width: 280px;
-    height:340px;
     display:none;
     z-index:15000;
     background-color: #ffffff;
@@ -20,10 +19,6 @@ div.coordinatetool__popup {
       position: absolute;
       top: 8px;
       right: 5px;
-    }
-
-    div.content {
-      height: 215px;
     }
 
     div.actions {
@@ -55,20 +50,30 @@ div.coordinatetool__popup {
       .margintop {
           margin-top: 10px;
       }
+
+      .coordinatetool-divider {
+        margin-bottom: 5px;
+        height: 1px;
+        border-top: 1px solid #DDDDDD;
+      }
+
+      .coordinatetool-projection-change-header {
+        font-style: italic;
+      }
     }
 }
 
 .coordinate-label {
-  width: 56px;
+  width: 70px;
   padding-top: 7px;
 }
 
 div.mapplugin.coordinatetool {
     &.toolstyle-default{
-        background-image: url('../images/coordinates-style1-dark.png') !important;  
+        background-image: url('../images/coordinates-style1-dark.png');  
         
         .active{
-            background-image: url('../images/coordinates-style1-dark-active.png') !important;
+            background-image: url('../images/coordinates-style1-dark-active.png');
         }
     }
 

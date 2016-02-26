@@ -16,6 +16,7 @@ Oskari.registerLocalization(
                 "lastName": "Sukunimi",
                 "user": "Nimimerkki",
                 "pass": "Salasana",
+                "email": "Sähköposti",
                 "pass_retype": "Salasana uudestaan",
                 "addRole": "Valitse rooli(t)",
                 "password_mismatch": "Salasanat eivät täsmää.",
@@ -26,6 +27,7 @@ Oskari.registerLocalization(
                 "delete_failed": "Käyttäjän poistaminen epäonnistui.",
                 "fetch_failed": "Käyttäjien tietoja ei voitu hakea.",
                 "save_failed": "Tallennus epäonnistui.",
+                "save_failed_message": "Tarkista, että nimimerkki on yksilöllinen. Kokeile tämän jälkeen uudelleen.",
                 "noMatch": "Ei hakutuloksia.",
                 "selectRole": "Valitse rooli"
             },
@@ -37,7 +39,9 @@ Oskari.registerLocalization(
                 "doSave_failed": "Roolin tallennus epäonnistui."
             }
         },
-        "save": "tallenna"
+        "save": "tallenna",
+        "failed_to_get_roles_title": "Roolien haku epäonnistui",
+        "failed_to_get_roles_message": "Roolien haku epäonnistui, tarkista oskari-control-admin saatavuus."
     }
 }
 );

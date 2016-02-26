@@ -126,17 +126,14 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/mapping/mapmodule/plugin/search/SearchPlugin.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/search/service/searchservice.js"
+                    "src": "../../../../bundles/service/search/searchservice.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/search/event/SearchResultEvent.js"
+                    "src": "../../../../bundles/service/search/event/SearchResultEvent.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/search/request/SearchRequest.js"
-                },{
-                    "type": "text/javascript",
-                    "src": "../../../../bundles/framework/search/request/SearchRequestHandler.js"
-                },{
+                    "src": "../../../../bundles/service/search/request/SearchRequest.js"
+                }, {
                     "type": "text/css",
                     "src": "../../../../bundles/mapping/mapmodule/resources/css/search.css"
                 },
@@ -294,6 +291,13 @@ Oskari.clazz.define(
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/plugin/vectorlayer/request/RemoveFeaturesFromMapRequestHandler.js"
                 },
+                {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/vectorlayer/request/ZoomToFeaturesRequest.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/vectorlayer/request/ZoomToFeaturesRequestHandler.js"
+                },
                 /**
                  * GeoLocation plugin
                  */
@@ -338,10 +342,10 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/mapping/mapmodule/resources/css/mylocation.css"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapmodule/plugin/mylocation/request/GetUserLocationRequest.js"
+                    "src": "../../../../bundles/mapping/mapmodule/request/GetUserLocationRequest.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapmodule/plugin/mylocation/request/GetUserLocationRequestHandler.js"
+                    "src": "../../../../bundles/mapping/mapmodule/request/GetUserLocationRequestHandler.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/event/UserLocationEvent.js"

@@ -3,19 +3,16 @@ div.olMap {
   div.olMap.cursor-crosshair {
     cursor: crosshair; }
 
-
 .ol-dragzoom {
   border-style: dashed;
   border-color: red;
   border-width: 3px;
-  background-color: rgba(255,255,255,0.4);
-}
+  background-color: rgba(255, 255, 255, 0.4); }
 
 div.mapplugins {
   pointer-events: none;
   position: absolute;
-  text-align: center;
-  z-index: 15000; }
+  text-align: center; }
   div.mapplugins .mappluginsContainer {
     margin: 0;
     padding: 0; }
@@ -35,8 +32,8 @@ div.mapplugins {
         background-color: rgba(255, 0, 0, 0.3); }
     div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin {
       /* Note that this must also have a position for IE11:
-                 * https://coderwall.com/p/s8pjpg
-                 */
+       * https://coderwall.com/p/s8pjpg
+       */
       pointer-events: auto;
       position: relative;
       margin: 0 auto;
@@ -121,7 +118,7 @@ div.mapplugins {
     div.mapplugins.left.center {
       height: 100%;
       /* Side centers aren't used ATM
-            display: table;*/
+      display: table;*/
       display: none !important; }
       div.mapplugins.left.center .mappluginsContainer {
         display: table-cell;
@@ -136,7 +133,7 @@ div.mapplugins {
     div.mapplugins.right.center {
       height: 100%;
       /* Side centers aren't used ATM
-            display: table;*/
+      display: table;*/
       display: none !important; }
       div.mapplugins.right.center .mappluginsContainer {
         display: table-cell;
@@ -154,3 +151,5 @@ div.mapplugins {
 
 .oskari-publisher-font-georgia {
   font-family: Georgia, serif !important; }
+
+/*# sourceMappingURL=mapmodule.ol3.css.map */

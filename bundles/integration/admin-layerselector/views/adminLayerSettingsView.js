@@ -45,7 +45,7 @@ define([
                 'click .admin-remove-group': 'removeLayerCollection',
                 'click .add-layer-record.capabilities li': 'handleCapabilitiesSelection',
                 'change .admin-interface-version': 'handleInterfaceVersionChange',
-                'change .admin-layer-style': 'handleLayerStyleChange',
+                'change .admin-layer-legendUrl': 'handleLayerLegendUrlChange',
                 'click .layer-capabilities.icon-info' : 'showCapabilitiesPopup'
             },
             showCapabilitiesPopup : function() {
@@ -69,6 +69,7 @@ define([
              */
             initialize: function () {
                 var me = this;
+
                 this.instance = this.options.instance;
                 // for new layers/sublayers, model is always null at this point
                 // if we get baseLayerId -> this is a sublayer
@@ -194,6 +195,7 @@ define([
 
             createLayerForm: function (layerType) {
                 var me = this,
+                    sandbox = Oskari.getSandbox(),
                     lcId,
                     layerGroups,
                     urlInput,
@@ -206,6 +208,10 @@ define([
                     me.model = this._createNewModel(layerType);
                     this.listenTo(this.model, 'change', this.render);
                 }
+                if ((me.model.getSrs_name() === null || me.model.getSrs_name() === undefined) && sandbox.getMap()) {
+                    me.model.setSrs_name(sandbox.getMap().getSrsName());
+                }
+
                 // make sure we have correct layer type (from model)
                 layerType = me.model.getLayerType() + 'layer';
                 if(!this.__isSupportedLayerType(layerType)) {
@@ -356,19 +362,17 @@ define([
 
             },
             /**
-             * Handle layer style change
+             * Handle layer style legend Url change
              *
-             * @method handleLayerStyleChange
+             * @method handleLayerLegendUrlChange
              */
-            handleLayerStyleChange: function (e) {
+            handleLayerLegendUrlChange: function (e) {
                 e.stopPropagation();
                 var element = jQuery(e.currentTarget),
                     form = element.parents('.admin-add-layer'),
-                    cur_style_name = form.find('#add-layer-style').val();
-                this.model.selectStyle(cur_style_name);
-                form.find('#add-layer-legendImage').val(this.model.getLegendUrl());
+                    cur_legendUrl = form.find('#add-layer-legendUrl').val();
+                form.find('#add-layer-legendImage').val(cur_legendUrl);
             },
-
             /**
              * Remove layer
              *
@@ -618,9 +622,6 @@ define([
                     data.gfiType = form.find('#add-layer-responsetype').val();
                     data.params = form.find('#add-layer-selectedtime').val();
                 }
-                else if(data.layerType === 'wmtslayer') {
-                    data.matrixSetId = form.find('#add-layer-matrixSetId').val();
-                }
                 else if(data.layerType === 'wfslayer') {
                     admin = me.model.getAdmin();
                     // in insert all wfs properties are behind passthrough
@@ -818,7 +819,8 @@ define([
                     layerType = form.find('#add-layer-layertype').val(),
                     user = form.find('#add-layer-username').val(),
                     pw =  form.find('#add-layer-password').val(),
-                    version =  form.find('#add-layer-interface-version').val();
+                    version =  form.find('#add-layer-interface-version').val(),
+                    crs = me.instance.getSandbox().getMap().getSrsName();
 
                 me.model.set({
                     '_layerUrls': [serviceURL]
@@ -840,7 +842,8 @@ define([
                         type : layerType,
                         user: user,
                         pw: pw,
-                        version: version
+                        version: version,
+                        crs: crs
                     },
                     url: baseUrl + 'action_route=GetWSCapabilities',
                     success: function (resp) {

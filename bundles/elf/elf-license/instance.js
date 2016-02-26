@@ -21,6 +21,8 @@ function () {
             '   <div class="elf_license_dialog_name"></div>' +
             '   <div class="elf_license_dialog_license_data">' +
             '      <div class="elf_license_dialog_description"></div>' +
+            '      <div class="elf_license_dialog_descriptions_title"></div>' +
+            '      <ul class="elf_license_dialog_descriptions"></ul>' +
             '      <div class="elf_license_dialog_licensemodels_title"></div>' +
             '      <div class="elf_license_dialog_licensemodels">' +
             '      </div>' +
@@ -579,6 +581,8 @@ function () {
             dialogContent = me._templates.licenseDialog.clone(),
             models = dialogContent.find('.elf_license_dialog_licensemodels'),
             title = dialogContent.find('.elf_license_dialog_licensemodels_title'),
+            licenseDescriptions = dialogContent.find('.elf_license_dialog_descriptions'),
+            licenseDescriptionsTitle = dialogContent.find('.elf_license_dialog_descriptions_title'),
             metadataTitle = '',
             cancelBtn = me._dialog.createCloseButton(this._locale.buttons.close);
 
@@ -605,6 +609,21 @@ function () {
         // If  founded models then shows them
         if(data.licenseModels.length > 0)  {
             title.html(me._locale.dialog.licenseModelsTitle);
+            var description = jQuery('<li class="description"></li>');
+            var localeDescription = me._locale.dialog.licenseModelDescriptions;
+            for(var i in localeDescription) {
+                if(localeDescription.hasOwnProperty(i)) {
+                    var d = description.clone();
+                    var text = me._locale.dialog.licenseModelDescriptions[i];
+                    d.html(text);
+                    licenseDescriptions.append(d);
+                }
+            }
+            if(licenseDescriptions.find('.description').length>0) {
+                licenseDescriptionsTitle.html(me._locale.dialog.licenseModelDescriptionsTitle);
+            } else {
+                licenseDescriptions.remove();
+            }
             dialogContent.find('.help').html(me._locale.dialog.help.info);
             jQuery.each(data.licenseModels, function(index, model){
                 var modelEl = me._templates.licenseModel.clone();
@@ -620,6 +639,8 @@ function () {
         // If not found then shows message
         else {
             title.addClass('text');
+            licenseDescriptions.remove();
+            licenseDescriptionsTitle.remove();
             // If user has already logged in  then shows at no right to anyone license
             if (me._sandbox.getUser().isLoggedIn()) {
                 title.html(me._locale.dialog.noRightToAnyLicenseModels);
@@ -639,12 +660,38 @@ function () {
         me._dialog.show(me._locale.dialog.licenseTitle + ' - ' + metadataTitle, dialogContent, [me.prevBtn, cancelBtn, me.nextBtn]);
         me._dialog.makeModal();
 
+        me._fixModelsHeight(dialogContent, models);
+
         me._progressSpinner.insertTo(jQuery('.elf_license_dialog'));
 
         // If there is only one licensemodel then open it
         if(data.licenseModels.length === 1) {
             me._showLicenseParams(data.licenseModels[0], data);
         }
+    },
+    /**
+     * @method  @private _fixModelsHeight fix models height
+     * @param  {Object} dialogContent jQuery object for dialogContent div
+     * @param  {Object} models jQuery object for models div
+     */
+    _fixModelsHeight: function(dialogContent, models){
+        if(!models || !dialogContent) {
+            return;
+        }
+        // Calculate models max height
+        var calculatedMaxHeight = dialogContent.find('.elf_license_dialog_license_data').height();
+        var c0 = dialogContent.find('.elf_license_dialog_description');
+        var c1 = dialogContent.find('.elf_license_dialog_descriptions_title');
+        var c2 = dialogContent.find('.elf_license_dialog_descriptions');
+        var c3 = dialogContent.find('.elf_license_dialog_licensemodels_title');
+        var c4 = dialogContent.find('.help');
+        calculatedMaxHeight = calculatedMaxHeight - c0.height() - parseInt(c0.css('margin-top'), 10);
+        calculatedMaxHeight = calculatedMaxHeight - c1.height() - parseInt(c1.css('margin-top'), 10);
+        calculatedMaxHeight = calculatedMaxHeight - c2.height() - parseInt(c2.css('margin-top'), 10);
+        calculatedMaxHeight = calculatedMaxHeight - c3.height() - parseInt(c3.css('margin-top'), 10);
+        calculatedMaxHeight = calculatedMaxHeight - c4.height() - parseInt(c4.css('margin-top'), 10);
+
+        models.css('max-height', calculatedMaxHeight + 'px')
     },
     /**
      * Go back

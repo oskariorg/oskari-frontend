@@ -95,20 +95,13 @@ Oskari.clazz.define(
 
             me.started = true;
 
-            var conf = this.conf,
+            var conf = this.conf || {},
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
                 sandbox = Oskari.getSandbox(sandboxName);
 
             me.sandbox = sandbox;
 
             this.localization = Oskari.getLocalization(this.getName());
-
-            var ajaxUrl = null;
-            if (this.conf && this.conf.url) {
-                ajaxUrl = this.conf.url;
-            } else {
-                ajaxUrl = sandbox.getAjaxUrl() + 'action_route=GetSearchResult';
-            }
 
             // Default tab priority
             if (this.conf && typeof this.conf.priority === 'number') {
@@ -125,9 +118,8 @@ Oskari.clazz.define(
                 this.safeChars = true;
             }
 
-            var servName =
-                'Oskari.mapframework.bundle.search.service.SearchService';
-            this.service = Oskari.clazz.create(servName, ajaxUrl);
+            var servName = 'Oskari.service.search.SearchService';
+            this.service = Oskari.clazz.create(servName, sandbox, conf.url);
 
             sandbox.register(me);
             var p;
@@ -155,8 +147,7 @@ Oskari.clazz.define(
                     sandbox, this.plugins['Oskari.userinterface.Flyout']),
                 addSearchResultActionRequestHandler: Oskari.clazz.create(
                     'Oskari.mapframework.bundle.search.request.SearchResultActionRequestHandler',
-                    sandbox, this.plugins['Oskari.userinterface.Flyout']),
-                searchRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.search.request.SearchRequestHandler', this.service)
+                    sandbox, this.plugins['Oskari.userinterface.Flyout'])
             };
             sandbox.addRequestHandler(
                 'Search.AddTabRequest',
@@ -167,9 +158,6 @@ Oskari.clazz.define(
             sandbox.addRequestHandler(
                 'Search.RemoveSearchResultActionRequest',
                 this.requestHandlers.addSearchResultActionRequestHandler);
-            sandbox.addRequestHandler(
-                'SearchRequest',
-                this.requestHandlers.searchRequestHandler);
         },
 
         /**
@@ -225,6 +213,14 @@ Oskari.clazz.define(
                 if (event.getViewState() !== 'close') {
                     plugin.focus();
                 }
+            },
+            'SearchResultEvent' : function(event)  {
+                var plugin = this.plugins['Oskari.userinterface.Flyout'];
+                var params = event.getRequestParameters();
+                if(typeof params === 'object') {
+                    params = params.searchKey;
+                }
+                plugin.handleSearchResult(event.getSuccess(), event.getResult(), params);
             }
         },
 
@@ -331,13 +327,6 @@ Oskari.clazz.define(
          */
         getState: function () {
             return this.plugins['Oskari.userinterface.Flyout'].getState();
-            /*
-        var state = {
-
-        };
-
-        return state;
-          */
         }
     }, {
         /**

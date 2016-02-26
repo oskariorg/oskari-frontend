@@ -16,8 +16,35 @@ Oskari.clazz.define(
             multipleSymbolizers: false,
             namedLayersAsArray: true
         });
-        this._style = OpenLayers.Util.applyDefaults({}, OpenLayers.Feature.Vector.style['default']);
+
         this._layers = {};
+        this._features = {};
+        this._layerStyles = {};
+        this._defaultStyle = {
+            fill : {
+                color : 'rgba(255,0,255,0.2)'
+            },
+            stroke : {
+                color : 'rgba(0,0,0,1)',
+                width : 2
+            },
+            image : {
+                radius: 4,
+                fill : {
+                    color : 'rgba(0,0,0,1)'
+                }
+            },
+            text : {
+                scale : 1.3,
+                fill : {
+                    color : 'rgba(0,0,0,1)'
+                },
+                stroke : {
+                    color : 'rgba(255,255,255,1)',
+                    width : 2
+                }
+            }
+        };
     }, {
         /**
          * @method register
@@ -40,8 +67,49 @@ Oskari.clazz.define(
          *
          */
         _startPluginImpl: function () {
-            this.registerVectorFormats();
+            var me = this;
+            me.registerVectorFormats();
+            me._createConfiguredLayers();
         },
+
+        /**
+         * @method  @private _createConfiguredLayers Create configured layers an their styles
+         */
+        _createConfiguredLayers: function(){
+            var me = this,
+                conf = me.getConfig();
+            if(conf.layers) {
+                for(var i=0;i<conf.layers.length;i++) {
+                    var layer = conf.layers[i];
+                    var layerId = layer.id;
+                    var layerStyle = layer.style;
+
+                    if(!me._features[layerId]) {
+                        me._features[layerId] = [];
+                    }
+
+                    var opacity = 100;
+                    var olLayer = new OpenLayers.Layer.Vector(me._olLayerPrefix + layerId);
+                    olLayer.events.register('click', this, function(e) {
+                        // clicking on map, check if feature is hit
+                        if (e.target && e.target._featureId) {
+                            me.__featureClicked([olLayer.getFeatureById(e.target._featureId)], olLayer);
+                        }
+                        return true;
+                    });
+                    olLayer.setOpacity(opacity);
+
+                    me._map.addLayer(olLayer);
+                    me._map.setLayerIndex(
+                        olLayer,
+                        me._map.layers.length
+                    );
+                    me._layers[layerId] = olLayer;
+                    me._layerStyles[layerId] = layerStyle;
+                }
+            }
+        },
+
         /**
         * @method _createEventHandlers
         * Create event handlers
@@ -221,11 +289,24 @@ Oskari.clazz.define(
                 format = me._supportedFormats[geometryType],
                 olLayer,
                 layer,
-                mapLayerService = me._sandbox.getService('Oskari.mapframework.service.MapLayerService');
+                mapLayerService = me._sandbox.getService('Oskari.mapframework.service.MapLayerService'),
+                featureInstance,
+                isOlLayerAdded = true,
+                styleMap = new OpenLayers.StyleMap();
+
             if (!format) {
                 return;
             }
+
             if (geometry) {
+                // if there's no layerId provided -> Just use a generic vector layer for all.
+                if (!options.layerId) {
+                    options.layerId = 'VECTOR';
+                };
+
+                if(!me._features[options.layerId]) {
+                  me._features[options.layerId] = [];
+                }
                 var features = format.read(geometry);
                 //if there's no layerId provided -> Just use a generic vector layer for all.
                 if (!options.layerId) {
@@ -233,7 +314,7 @@ Oskari.clazz.define(
                 }
                 if (options.attributes && options.attributes !== null) {
                     if(features instanceof Array && geometryType === 'GeoJSON'){
-                        //Remark: It is preferred to use GeoJSON properties for attributes
+                        // Remark: It is preferred to use GeoJSON properties for attributes
                         // There could be many features in GeoJson and now attributes are set only for 1st feature
                         features[0].attributes = options.attributes;
                     } else {
@@ -260,20 +341,58 @@ Oskari.clazz.define(
                     olLayer.setOpacity(opacity);
                     isOlLayerAdded = false;
                 }
+
                 if (options.clearPrevious === true) {
                     this._removeFeaturesByAttribute(olLayer);
                     olLayer.removeAllFeatures();
                     olLayer.refresh();
+                    me._features[options.layerId] = [];
                 }
 
-                if (options.featureStyle) {
-                    me.setDefaultStyle(options.featureStyle);
+                //set feature styles. For attribute dependent styles (=label text from property) we gotta use styleMap
+                for (i=0; i < features.length; i++) {
+                    featureInstance = features[i];
+                    styleMap.styles["default"] = new OpenLayers.Style(me.getStyle(options));
+                    featureInstance.style = styleMap.createSymbolizer(featureInstance, "default");
+                }
+
+                if(options.cursor){
                     for (i=0; i < features.length; i++) {
                         featureInstance = features[i];
-                        featureInstance.style = me._style;
+                        if(featureInstance.style) {
+                            featureInstance.style.cursor = options.cursor;
+                        } else {
+                            featureInstance.style = {
+                                cursor: options.cursor
+                            };
+                        }
                     }
                 }
-                olLayer.addFeatures(features);
+
+                // prio handling
+                var prio = options.prio || 0;
+                me._features[options.layerId].push({
+                  data: features,
+                  prio: prio
+                });
+
+                if(options.prio && !isNaN(options.prio)){
+                    this._removeFeaturesByAttribute(olLayer);
+                    olLayer.removeAllFeatures();
+                    olLayer.refresh();
+
+                    me._features[options.layerId].sort(function(a,b){
+                      return b.prio - a.prio;
+                    });
+
+                    _.forEach(me._features[options.layerId], function(featObj) {
+                        olLayer.addFeatures(featObj.data);
+                    });
+                } else {
+                    olLayer.addFeatures(features);
+                }
+
+
                 if(isOlLayerAdded === false) {
                     me._map.addLayer(olLayer);
                     me._map.setLayerIndex(
@@ -336,37 +455,48 @@ Oskari.clazz.define(
 
                     mapmoveRequest = me._sandbox.getRequestBuilder('MapMoveRequest')(center.x, center.y, bounds, false);
                     me._sandbox.request(me, mapmoveRequest);
+
+                    // Check scale if defined so. Scale decreases when the map is zoomed in. Scale increases when the map is zoomed out.
+                    if(options.minScale) {
+                        var currentScale = this.getMapModule().getMapScale();
+                        if(currentScale<options.minScale) {
+                            this.getMapModule().zoomToScale(options.minScale, true);
+                        }
+                    }
                 }
             }
         },
         /**
-         * @method setDefaultStyle
+         * @method getStyle
          *
-         * @param {Object} styles. If not given, will set default styles
+         * @param {Object} options. If option.featureStyle not given, will set default layer styles. If layer style not exist then use defaults.
+         * Wanted style object:
+         * {
+         *     fill: {
+         *         color: '#ff0000'
+         *     },
+         *     stroke: {
+         *         color: '#00ff00',
+         *         width: 3
+         *     },
+         *     text: {
+         *         fill: {
+         *             color: '#0000ff'
+         *         },
+         *         stroke: {
+         *             color: '#ff00ff',
+         *             width: 4
+         *         }
+         *     }
+         * }
          */
-        setDefaultStyle : function(styles) {
+        getStyle : function(options) {
             var me = this;
-            //overwriting default style if given
-            if(styles) {
-                if(Oskari.util.keyExists(styles, 'fill.color')) {
-                    me._style.fillColor = styles.fill.color;
-                }
-                if(Oskari.util.keyExists(styles, 'stroke.color')) {
-                    me._style.strokeColor = styles.stroke.color;
-                }
-                if(Oskari.util.keyExists(styles, 'stroke.width')) {
-                    me._style.strokeWidth = styles.stroke.width;
-                }
-                if(Oskari.util.keyExists(styles, 'text.fill.color')) {
-                    me._style.fontColor = styles.text.fill.color;
-                }
-                if(Oskari.util.keyExists(styles, 'text.stroke.color')) {
-                    me._style.labelOutlineColor = styles.text.stroke.color;
-                }
-                if(Oskari.util.keyExists(styles, 'text.stroke.width')) {
-                    me._style.getText().labelOutlineWidth = styles.text.stroke.width;
-                }
-            }
+            var styles = options.featureStyle || me._layerStyles[options.layerId];
+
+            // overriding default style with feature/layer style
+            var styleDef = jQuery.extend({}, this._defaultStyle, styles);
+            return me.getMapModule().getStyle(styleDef);
         },
         /**
          * @method _createRequestHandlers

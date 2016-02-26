@@ -42,7 +42,7 @@ Oskari.clazz.define(
         }
     }, {
         __templates: {
-            wrapper : '<div></div>'
+            wrapper : '<div class="gridMessageContainer" style="margin-top:30px; margin-left: 10px;"></div>'
         },
         /**
          * @method getName
@@ -232,15 +232,15 @@ Oskari.clazz.define(
                 me.instance.sandbox.notifyAll(event);
             });
 
-            me.aggregateAnalyseFilter = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.featuredata2.aggregateAnalyseFilter',
-                me.instance,
-                me.instance.getLocalization('layer'),
-                me.filterDialog
-            );
-
             if (me.service) {
-                me.filterDialog.createFilterDialog(layer, prevJson, function() {
+                me.aggregateAnalyseFilter = Oskari.clazz.create(
+                    'Oskari.analysis.bundle.analyse.aggregateAnalyseFilter',
+                    me.instance,
+                    me.instance.getLocalization('layer'),
+                    me.filterDialog
+                );
+
+                me.filterDialog.createFilterDialog(layer, prevJson, function () {
                     me.service._returnAnalysisOfTypeAggregate(_.bind(me.aggregateAnalyseFilter.addAggregateFilterFunctionality, me));
                 });
             } else {
@@ -588,8 +588,8 @@ Oskari.clazz.define(
                     this._enableResize();
                 }
 
-                // Extra footer message under grid
-                this._appendFooter(flyout, locales, layer);
+                // Extra header message on top of grid
+                this._appendHeaderMessage(panel, locales, layer);
 
             }
         },
@@ -762,7 +762,7 @@ Oskari.clazz.define(
          * @param {Boolean} isEnabled
          *
          */
-        setEnabled: function (isEnabled) {
+        setEnabled: function (isEnabled, clearContent) {
             if (this.active === isEnabled) {
                 return;
             }
@@ -783,31 +783,30 @@ Oskari.clazz.define(
             }
 
             // disabled
-            if (!this.active) {
-                if (this.selectedTab) {
-                    // dim possible highlighted layer
-                    var dimReqBuilder = sandbox.getRequestBuilder(
-                        'DimMapLayerRequest'
-                    );
-                    request = dimReqBuilder(this.selectedTab.layer.getId());
-                    sandbox.request(this.instance.getName(), request);
-                }
-                // clear panels
-                for (var panel in this.layers) {
-                    if (panel.getContainer) {
-                        panel.getContainer().empty();
-                    }
-                }
+            if (!this.active &&this.selectedTab) {
+                // dim possible highlighted layer
+                var dimReqBuilder = sandbox.getRequestBuilder(
+                    'DimMapLayerRequest'
+                );
+                request = dimReqBuilder(this.selectedTab.layer.getId());
+                sandbox.request(this.instance.getName(), request);
             }
             // enabled
-            else {
-                if (this.selectedTab) {
-                    // highlight layer if any
-                    var hlReqBuilder = sandbox.getRequestBuilder(
-                        'HighlightMapLayerRequest'
-                    );
-                    request = hlReqBuilder(this.selectedTab.layer.getId());
-                    sandbox.request(this.instance.getName(), request);
+            else if (this.selectedTab) {
+                // highlight layer if any
+                var hlReqBuilder = sandbox.getRequestBuilder(
+                    'HighlightMapLayerRequest'
+                );
+                request = hlReqBuilder(this.selectedTab.layer.getId());
+                sandbox.request(this.instance.getName(), request);
+
+                if(clearContent) {
+                    // clear panels
+                    for (var panel in this.layers) {
+                        if (panel.getContainer) {
+                            panel.getContainer().empty();
+                        }
+                    }
 
                     // update data
                     this.updateGrid();
@@ -857,21 +856,21 @@ Oskari.clazz.define(
             }
         },
         /**
-         * Add footer text under tab data grid, if analysislayer
-         * - Not the best solution, but ..
+         * Add message text over tab data grid, if analysislayer
          * @private
-         * @param  {jQuery} flyout
+         * @param  {Oskari.userinterface.component.TabPanel} panel
          * @param  {Array} locales localized field names
          * @param  {String} layer  Oskari layer
          */
-        _appendFooter: function (flyout, locales, layer) {
+        _appendHeaderMessage: function (panel, locales, layer) {
             var footer = this.template.wrapper.clone(),
                 sandbox = this.instance.getSandbox(),
                 inputid,
                 inputlayer,
                 loc = this.instance.getLocalization('gridFooter'),
                 message;
-
+            //clean up the old headermessage in case there was one
+            jQuery(panel.html).parent().find('div.gridMessageContainer').remove();
             if (!loc || !layer || layer.getLayerType().toUpperCase() !== 'ANALYSIS') {
                 return;
             }
@@ -883,9 +882,12 @@ Oskari.clazz.define(
                     if (inputlayer.getWpsLayerParams().no_data) {
                         message = loc.noDataCommonMessage + ' (' + inputlayer.getWpsLayerParams().no_data + ').';
                         if(locales){
+                            //TODO: better management for recognasing private data messages
                             _.forEach(locales, function (field) {
                                 if (field === loc.aggregateColumnField){
                                     message = loc.noDataMessage + ' (' + inputlayer.getWpsLayerParams().no_data + ').';
+                                } else if (field ===  'Muutos_t2-t1') {
+                                    message += ' '+loc.differenceMessage + ' -111111111.';
                                 }
                             });
                         }
@@ -894,9 +896,9 @@ Oskari.clazz.define(
                 }
             }
 
-
             if (message) {
-                flyout.find('div.tab-content').append(footer.html(message));
+                //insert header text into dom before tabcontent (=always visible when content scrolling)
+                jQuery(panel.html).before(footer.html(message));
             }
 
         }

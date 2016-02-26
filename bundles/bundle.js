@@ -45,6 +45,9 @@ if (!String.prototype.endsWith) {
  *
  */
 Oskari = (function () {
+
+    var oskariVersion = "1.35.0";
+
     var isDebug = false,
         isConsole = window.console && window.console.debug,
         logMsg = function (msg) {
@@ -982,10 +985,16 @@ Oskari = (function () {
                     if (constructors[i] === null || constructors[i] === undefined) {
                         throw new Error('Class ' + className + ' is missing super constructor ' + (i + 1) + '/' + constructors.length);
                     }
-                    constructors[i].apply(classInstance, instanceArguments);
+                    var returned = constructors[i].apply(classInstance, instanceArguments);
+                    if(returned) {
+                        classInstance = returned;
+                    }
                 }
             } else {
-                classInfo._constructor.apply(classInstance, instanceArguments);
+                var returned = classInfo._constructor.apply(classInstance, instanceArguments);
+                if(returned) {
+                    classInstance = returned;
+                }
             }
             return classInstance;
         },
@@ -2836,6 +2845,7 @@ D         * @param {Object} classInfo ClassInfo
         app: fcd,
         /* */
         clazz: cs,
+        VERSION : oskariVersion,
 
         /**
          * @public @method Oskari.$

@@ -72,10 +72,6 @@ Oskari.clazz.define(
                         // ask toolbar to select default tool
                         var toolbarRequest = me._toolbar.getSandbox().getRequestBuilder('Toolbar.SelectToolButtonRequest')();
                         me._toolbar.getSandbox().request(me._toolbar, toolbarRequest);
-                        //enable gfi
-                        if (me.gfiReqBuilder) {
-                            me.sandbox.request(me._toolbar, me.gfiReqBuilder(true));
-                        }
 
                         me._dialog.close(true);
                     });
@@ -85,7 +81,6 @@ Oskari.clazz.define(
                     dialog.setContent(me._content);
                     me._dialogShown = true;
                 }
-                /*dialog.addClass('myplaces2');*/
 
                 me._content.html(value);
             }
@@ -110,10 +105,6 @@ Oskari.clazz.define(
                         )();
                     me._toolbar.getSandbox().request(me._toolbar, toolbarRequest);
                     me._hideResultsInPlugin(true);
-                    //enable gfi
-                    if (me.gfiReqBuilder) {
-                        me.sandbox.request(me._toolbar, me.gfiReqBuilder(true));
-                    }
                 });
 
                 // store data for later reuse
