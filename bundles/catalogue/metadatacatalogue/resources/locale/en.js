@@ -53,7 +53,12 @@ Oskari.registerLocalization(
             "remove": "Remove from search results",
             "rating": "Rating"
         },
-        "licenseText": "Get licence"
+        "licenseText": "Get licence",
+        "identificationCode": {
+            "creation": "creation",
+            "publication": "publication",
+            "revision": "revision"
+        }
     }
 }
 );

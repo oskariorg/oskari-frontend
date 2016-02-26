@@ -332,6 +332,12 @@ div.basic_analyse div.buttons, div.analyse div.startview div.buttons {
 
 }
 
+/*additional info div*/
+div.basic_analyse div.analysis_additional_info {
+    padding: 5px;
+    font-style: italic;
+}
+
 label.params_checklabel {
     text-overflow: ellipsis;
     display: inline-block;

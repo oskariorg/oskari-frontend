@@ -384,17 +384,21 @@ Oskari.clazz.define(
         },
 
         /**
-         * Changes array to object
+         * Changes array to object and use Number values
+         * OL3 fails, if string type lon, lat values
          * @param  {Object | Number[]} lonlat [description]
          * @return {Object}        [description]
          */
         normalizeLonLat : function(lonlat) {
             if (_.isArray(lonlat)) {
                 return {
-                    lon : lonlat[0],
-                    lat : lonlat[1]
+                    lon : Number(lonlat[0]),
+                    lat : Number(lonlat[1])
                 };
             }
+            lonlat.lon = Number(lonlat.lon);
+            lonlat.lat = Number(lonlat.lat);
+
             return lonlat;
         },
         /**
@@ -1397,12 +1401,12 @@ Oskari.clazz.define(
                 keepLayersOrder = event.getKeepLayersOrder(),
                 isBaseMap = event.isBasemap(),
                 layerPlugins = this.getLayerPlugins(),
-                layerFunctions = [],
-                i;
+                layerFunctions = [];
 
             _.each(layerPlugins, function (plugin) {
-                //FIXME if (plugin && _.isFunction(plugin.addMapLayerToMap)) {
-                if (_.isFunction(plugin.addMapLayerToMap)) {
+                // true if either plugin doesn't have the function or says the layer is supported.
+                var isSupported = !_.isFunction(plugin.isLayerSupported) || plugin.isLayerSupported(layer);
+                if (_.isFunction(plugin.addMapLayerToMap) && isSupported) {
                     var layerFunction = plugin.addMapLayerToMap(layer, keepLayersOrder, isBaseMap);
                     if (_.isFunction(layerFunction)) {
                         layerFunctions.push(layerFunction);
@@ -1411,9 +1415,9 @@ Oskari.clazz.define(
             });
 
             // Execute each layer function
-            for (i = 0; i < layerFunctions.length; i += 1) {
-                layerFunctions[i].apply();
-            }
+            _.each(layerFunctions, function (func) {
+                func.apply();
+            });
         },
 
 
@@ -1423,31 +1427,23 @@ Oskari.clazz.define(
          * Handles AfterRearrangeSelectedMapLayerEvent.
          * Changes the layer order in Openlayers to match the selected layers list in
          * Oskari.
-         *
-         * @param
-         * {Oskari.mapframework.event.common.AfterRearrangeSelectedMapLayerEvent}
-         *            event
          */
-        afterRearrangeSelectedMapLayerEvent: function (event) {
-            var layers = this.getSandbox().findAllSelectedMapLayers(),
-                layerIndex = 0;
+        afterRearrangeSelectedMapLayerEvent: function () {
+            var me = this;
+            var layers = this.getSandbox().findAllSelectedMapLayers();
+            var layerIndex = 0;
 
-            var i,
-                ilen,
-                j,
-                jlen,
-                olLayers;
-
-            for (i = 0, ilen = layers.length; i < ilen; i += 1) {
-                if (layers[i] !== null && layers[i] !== undefined) {
-                    olLayers =
-                        this.getOLMapLayers(layers[i].getId());
-                    for (j = 0, jlen = olLayers.length; j < jlen; j += 1) {
-                        this.setLayerIndex(olLayers[j], layerIndex);
-                        layerIndex += 1;
-                    }
+            // setup new order based on the order we get from sandbox
+            _.each(layers, function (layer) {
+                if(!layer) {
+                    return;
                 }
-            }
+                var olLayers = me.getOLMapLayers(layer.getId());
+                _.each(olLayers, function (layerImpl) {
+                    me.setLayerIndex(layerImpl, layerIndex++);
+                });
+            });
+
             this.orderLayersByZIndex();
         }
 /* --------------- /MAP LAYERS ------------------------ */

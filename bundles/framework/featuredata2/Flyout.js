@@ -762,7 +762,7 @@ Oskari.clazz.define(
          * @param {Boolean} isEnabled
          *
          */
-        setEnabled: function (isEnabled) {
+        setEnabled: function (isEnabled, clearContent) {
             if (this.active === isEnabled) {
                 return;
             }
@@ -783,31 +783,30 @@ Oskari.clazz.define(
             }
 
             // disabled
-            if (!this.active) {
-                if (this.selectedTab) {
-                    // dim possible highlighted layer
-                    var dimReqBuilder = sandbox.getRequestBuilder(
-                        'DimMapLayerRequest'
-                    );
-                    request = dimReqBuilder(this.selectedTab.layer.getId());
-                    sandbox.request(this.instance.getName(), request);
-                }
-                // clear panels
-                for (var panel in this.layers) {
-                    if (panel.getContainer) {
-                        panel.getContainer().empty();
-                    }
-                }
+            if (!this.active &&this.selectedTab) {
+                // dim possible highlighted layer
+                var dimReqBuilder = sandbox.getRequestBuilder(
+                    'DimMapLayerRequest'
+                );
+                request = dimReqBuilder(this.selectedTab.layer.getId());
+                sandbox.request(this.instance.getName(), request);
             }
             // enabled
-            else {
-                if (this.selectedTab) {
-                    // highlight layer if any
-                    var hlReqBuilder = sandbox.getRequestBuilder(
-                        'HighlightMapLayerRequest'
-                    );
-                    request = hlReqBuilder(this.selectedTab.layer.getId());
-                    sandbox.request(this.instance.getName(), request);
+            else if (this.selectedTab) {
+                // highlight layer if any
+                var hlReqBuilder = sandbox.getRequestBuilder(
+                    'HighlightMapLayerRequest'
+                );
+                request = hlReqBuilder(this.selectedTab.layer.getId());
+                sandbox.request(this.instance.getName(), request);
+
+                if(clearContent) {
+                    // clear panels
+                    for (var panel in this.layers) {
+                        if (panel.getContainer) {
+                            panel.getContainer().empty();
+                        }
+                    }
 
                     // update data
                     this.updateGrid();
@@ -883,10 +882,11 @@ Oskari.clazz.define(
                     if (inputlayer.getWpsLayerParams().no_data) {
                         message = loc.noDataCommonMessage + ' (' + inputlayer.getWpsLayerParams().no_data + ').';
                         if(locales){
+                            //TODO: better management for recognasing private data messages
                             _.forEach(locales, function (field) {
                                 if (field === loc.aggregateColumnField){
                                     message = loc.noDataMessage + ' (' + inputlayer.getWpsLayerParams().no_data + ').';
-                                } else if (field === loc.differenceColumnField) {
+                                } else if (field ===  'Muutos_t2-t1') {
                                     message += ' '+loc.differenceMessage + ' -111111111.';
                                 }
                             });

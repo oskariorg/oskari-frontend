@@ -377,12 +377,17 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
         /**
          * @param {OpenLayers.Layer} layer ol2 specific!
+         * @param {Boolean} toBottom if false or missing adds the layer to the top, if true adds it to the bottom of the layer stack
          */
-        addLayer: function(layerImpl) {
+        addLayer: function(layerImpl, toBottom) {
             if(!layerImpl) {
                 return;
             }
             this.getMap().addLayer(layerImpl);
+            // check for boolean true instead of truthy value since some calls might send layer name as second parameter/functionality has changed
+            if(toBottom === true) {
+                this.setLayerIndex(layerImpl, 0);
+            }
         },
         /**
          * @param {OpenLayers.Layer} layer ol2 specific!
@@ -442,12 +447,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         },
         /**
          * Creates style based on JSON
-         * @return {OpenLayers.Style} style ol2 specific!
+         * @return {Object} ol2 specific style hash
          */
         getStyle : function(styleDef) {
             styleDef = styleDef || {};
             //create a blank style with default values
-            var olStyle = new OpenLayers.Style();
+            var olStyle = OpenLayers.Util.applyDefaults({}, OpenLayers.Feature.Vector.style["default"]);
             if(Oskari.util.keyExists(styleDef, 'fill.color')) {
                 olStyle.fill = true;
                 olStyle.fillColor = styleDef.fill.color;
@@ -487,8 +492,14 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                         olStyle.labelOutlineWidth = styleDef.text.stroke.width;
                     }
                 }
-            }
 
+                //label
+                if (styleDef.text.labelText) {
+                    olStyle.label = styleDef.text.labelText;
+                } else if (styleDef.text.labelProperty) {
+                    olStyle.label = "${"+styleDef.text.labelProperty+"}";
+                }
+            }
             return olStyle;
         }
 /* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */

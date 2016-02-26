@@ -393,10 +393,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 'EPSG:4326': '+title=WGS 84 +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs'
             };
 
+            epsgConfs = _.keys(defs);
+            _.forEach(epsgConfs, function (conf) {
+                if (!_.has(defaultDefs, conf)) {
+                    defaultDefs[conf] = defs[conf];
+                }
+            });
             // OL3 uses proj4
             if(window.proj4) {
                 // ensure static projections are defined
-                jQuery.each(defs || defaultDefs, function(srs, defs) {
+                jQuery.each(defaultDefs, function(srs, defs) {
                     window.proj4.defs(srs, defs);
                 });
             }
@@ -406,7 +412,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     window.Proj4js = {};
                 }
                 // ensure static projections are defined
-                Proj4js.defs = defs || defaultDefs;
+                Proj4js.defs = defaultDefs;
             }
         },
 
@@ -501,14 +507,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 rbAdd,
                 len,
                 i,
-                layer;
+                layer,
+                sandbox =  me.getSandbox(),
+                rbOpacity = sandbox.getRequestBuilder('ChangeMapLayerOpacityRequest'),
+                rbVisible = sandbox.getRequestBuilder('MapModulePlugin.MapLayerVisibilityRequest'),
+                rbStyle = sandbox.getRequestBuilder('ChangeMapLayerStyleRequest');
 
             me._teardownState(mapmodule);
 
             // map location needs to be set before layers are added
             // otherwise f.ex. wfs layers break on add
             if (state.hasOwnProperty('east') && ignoreLocation !== true) {
-                me.getSandbox().getMap().moveTo(
+               sandbox.getMap().moveTo(
                     state.east,
                     state.north,
                     state.zoom
@@ -516,31 +526,39 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             }
 
             // mapmodule needed to set also param, because without it max zoomlevel check not working
-            me.getSandbox().syncMapState(true, mapmodule);
+            sandbox.syncMapState(true, mapmodule);
 
             // setting state
             if (state.selectedLayers) {
-                rbAdd = me.getSandbox().getRequestBuilder('AddMapLayerRequest');
+                rbAdd = sandbox.getRequestBuilder('AddMapLayerRequest');
 
                 len = state.selectedLayers.length;
                 for (i = 0; i < len; i += 1) {
                     layer = state.selectedLayers[i];
-
-                    var oskariLayer = me.getSandbox().findMapLayerFromAllAvailable(layer.id);
-                    if(oskariLayer) {
-                        oskariLayer.setVisible(layer.hidden !== true);
-
-                        if (layer.opacity || layer.opacity === 0) {
-                            oskariLayer.setOpacity(layer.opacity);
-                        }
-                        if (layer.style) {
-                            oskariLayer.selectStyle(layer.style);
-                        }
-                    }
-                    me.getSandbox().request(
+                    
+                    sandbox.request(
                         mapModuleName,
                         rbAdd(layer.id, true)
                     );
+                    
+                    sandbox.request(
+                        mapModuleName,
+                        rbVisible(layer.id, !layer.hidden)
+                    );
+
+                    if (layer.opacity || layer.opacity === 0) {
+                        sandbox.request(
+                            mapModuleName,
+                            rbOpacity(layer.id, layer.opacity)
+                        );
+                    }
+
+                    if (layer.style) {
+                        sandbox.request(
+                            mapModuleName,
+                            rbStyle(layer.id, layer.style)
+                        );
+                    }                    
                 }
             }
 

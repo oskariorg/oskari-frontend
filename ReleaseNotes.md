@@ -1,6 +1,106 @@
 # Release Notes
 
+## 1.36
+
+### mapfull
+
+Fixed map layer opacity change in published maps when resetting map state to published state.
+
 ## 1.35
+
+### catalogue/metadataflyout
+
+Metadataflyout is now stateful.
+
+### myplaces2
+
+Myplaces adds own measuretools only if configured so:
+
+    {
+      measureTools:true
+    }
+
+### elf/metadataflyout
+
+*New bundle!* ELF metadataflyout bundle overrides catalogue/metadataflyout functionalities.
+
+### catalogue/metadatagatalogue
+
+Added data identification date and type to metadata search results.
+
+### elf/elf-license
+
+Added license general descriptions.
+
+### See Oskari/api/CHANGELOG for following changes:
+- RPC getAllLayers function now returns also minZoom and maxZoom if those are defined for layer.
+
+### infobox
+
+Fixed InfoBox.ShowInfoBoxRequest handling. Now all popups with no popup id really deleted if hidePrevious param is setted to true.
+
+Added new "InfoboxActionEvent" that notifies which link/button is clicked in the infobox.
+
+Link handling improvements on Openlayers 2 version. Links in infobox should no longer propagate to map to trigger new GFI requests.
+If you need to bind a clickhandler for an infobox element use a-tag with class "functional" and stop propagation on the clickhandler itself.
+The functional-class is a sign that event propagation should NOT be stopped <a class="functional"></a>.
+
+### coordinatetool
+
+Added funtionality to change the projection the map is displayed in, when the application supports multiple projections.
+
+### divmanazer/grid
+
+Fixed grid header style when column class name contains span word.
+
+### core
+
+Oskari.VERSION can now be used to detect the frontend version number.
+
+### published map (ol3)
+
+Fixed analysislayer's and userlayer's visibility issue in published map 
+
+### framework/admin-users
+
+Added user email to editable.
+
+### framework/findbycoordinates
+
+Now displays multiple results if available.
+
+## framework/featuredata2
+
+Now featuredata2 flyout not updated when opened again if map is not moved / zoomed.
+
+
+### mapping/mapwmts_ol3
+
+Fixed WmtsLayerService IE 9 capabilities formatting.
+
+### RPC
+
+Removed libraries/OskariRPC/*. The client now has it's own repository here: https://github.com/nls-oskari/rpc-client
+
+JSChannel-dependency updated. This requires new RPC-client to work (version 2.0.0).
+
+New function added getFeatures(). See bundle documentation for details.
+
+New request included in defaults "MapModulePlugin.ZoomToFeaturesRequest".
+
+New function added getInfo(clientVersion). See bundle documentation for details.
+
+New event included in defaults "InfoboxActionEvent".
+
+New event included in defaults "InfoBox.InfoBoxEvent".
+
+New request included in defaults 'InfoBox.HideInfoBoxRequest'.
+
+### mapping/mapmodule/plugin/vectorlayer
+
+New request added 'MapModulePlugin.ZoomToFeaturesRequest' that zooms to extent of all or specific features on the specified layers (only for ol3).
+
+Added functionality to provide a label text to vector features with the style object. See [api/CHANGELOG.md](api/CHANGELOG.md) for details (ol2 and ol3).
 
 ### mapmodule - LayerSelectionPlugin
 
@@ -14,7 +114,7 @@ DrawingEvent now returns drawed geometry as GeoJSON-object (before it's returns 
 
 'showMeasure' parameter is renamed to 'showMeasureOnMap' (if true - measure result will be displayed on map near feature. Default is false.)
 
-New parameter is added to plugin: 'noticeSelfIntersection'. (if true - user will see warning text if polygon has self-intersection. Features will be not sended to the event before polygon is valid. Default is true.))
+New parameter is added to plugin: 'selfIntersection'. (if true - user will see warning text if polygon has self-intersection. Default is true.))
 
 ### core
 
@@ -69,10 +169,15 @@ Fixed user search when one or many of these user data values  is not defined:
 
 Fixed error handling when cannot get roles from backend.
 
-### mapwfs2_ol3
+### mapwfs2
+
+Folder mapping/mapwfs2_ol3 has been renamed to mapping/mapwfs2.
+Code from framework/mapwfs2 has been moved to mapping/mapwfs2 and all Openlayers2 specific files have been renamed to have .ol2.js-postfix. 
+Lots of duplicate code has been removed.
 
 WFSRefreshManualLoadLayersEvent is now included in ol3 version as well and changing the size of the map no longer results in JS-error.
 Layer visibility information is now included in init-message to enable disabling queries to services that are visible to user.
+This fixes an issue where initially hidden WFS-layer was shown to the user. Now the layer is correctly hidden and any queries to the service are prevented while it's hidden.
 
 ### drawtools/ol3 and VectorLayerPlugin
 
@@ -133,6 +238,10 @@ Added functions so internal references don't need to be called:
 - getCurrentExtent()
 - getStyle() takes a json presentation of style and returns matching ol2/ol3 style object for plugins to use
 - getUserLocation() takes a callback which will receive lon and lat params with user location or no params if location query was denied.
+
+addLayer() function now takes a second parameter. If not given or false adds the layer on top of the layer stack, if true adds the layer to the bottom of the stack.
+
+Userlayer, analysislayer, wmslayer plugins for both ol2 and ol3 have been updated to take advantage of the AbstractMapLayerPlugin baseclass provided by mapmodule.
 
 ### mapping/mapmodule/plugin/vectorlayer
 

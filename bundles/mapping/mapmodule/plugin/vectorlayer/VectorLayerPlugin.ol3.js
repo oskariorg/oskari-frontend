@@ -322,16 +322,18 @@ Oskari.clazz.define(
                     features[0].setProperties(options.attributes);
                 }
                 _.forEach(features, function (feature) {
-                    if (!feature.getId()) {
+                    if (!feature.getId() && !feature.get('id')) {
                         var id = 'F' + me._nextFeatureId++;
                         feature.setId(id);
+                        //setting id using set(key, value) to make id-property asking by get('id') possible
+                        feature.set("id",  id);
                     }
                 });
 
                 var prio = options.prio || 0;
 
                 _.forEach(features, function (feature) {
-                    feature.setStyle(me.getStyle(options));
+                    me.setupFeatureStyle(options, feature);
                 });
 
                 if(!me._features[options.layerId]) {
@@ -425,7 +427,6 @@ Oskari.clazz.define(
                 }
             }
         },
-
         /**
          * Raises the marker layer above the other layers
          *
@@ -451,6 +452,11 @@ Oskari.clazz.define(
                 ),
                 'MapModulePlugin.RemoveFeaturesFromMapRequest': Oskari.clazz.create(
                     'Oskari.mapframework.bundle.mapmodule.request.RemoveFeaturesFromMapRequestHandler',
+                    sandbox,
+                    me
+                ),
+                'MapModulePlugin.ZoomToFeaturesRequest': Oskari.clazz.create(
+                    'Oskari.mapframework.bundle.mapmodule.request.ZoomToFeaturesRequestHandler',
                     sandbox,
                     me
                 )
@@ -536,6 +542,16 @@ Oskari.clazz.define(
                 }
             }
         },
+        setupFeatureStyle: function(options, feature) {
+            var style = this.getStyle(options);
+            //set up property-based labeling
+            if (Oskari.util.keyExists(options, 'featureStyle.text.labelProperty') && style.getText()) {
+                var label = feature.get(options.featureStyle.text.labelProperty) ? feature.get(options.featureStyle.text.labelProperty) : '';
+                style.getText().setText(label);
+            }
+            feature.setStyle(style);
+
+        },
         /**
          * @method getStyle
          *
@@ -567,6 +583,141 @@ Oskari.clazz.define(
             // overriding default style with feature/layer style
             var styleDef = jQuery.extend({}, this._defaultStyle, styles);
             return me.getMapModule().getStyle(styleDef);
+        },
+        /**
+         * @method zoomToFeatures
+         *  - zooms to features
+         * @param {Object} layer
+         * @param {Object} options
+         */
+        zoomToFeatures: function(layer, options) {
+            var me = this,
+                layers = me.getLayerIds(layer);
+                features = me.getFeaturesMatchingQuery(layers, options);
+            if(!_.isEmpty(features)) {
+                var vector = new ol.source.Vector({
+                    features: features
+                });
+                var extent = vector.getExtent();
+                extent = me.getBufferedExtent(extent, 35);
+                me.getMapModule().zoomToExtent(extent);
+            }
+            me.sendZoomFeatureEvent(features);
+        },
+        /**
+         * @method getBufferedExtent
+         * -  gets buffered extent
+         * @param {ol.Extent} extent
+         * @param {Number} percentage
+         * @return {ol.Extent} extent
+         */
+        getBufferedExtent: function(extent, percentage) {
+            var me = this,
+                line = new ol.geom.LineString([[extent[0], extent[1]], [extent[2], extent[3]]]),
+                buffer = line.getLength()*percentage/100;
+            if(buffer===0) {
+            	return extent;
+            }
+            var geometry = ol.geom.Polygon.fromExtent(extent),
+                reader = new jsts.io.WKTReader(),
+                wktFormat = new ol.format.WKT(),
+                wktFormatString = wktFormat.writeGeometry(geometry),
+                input = reader.read(wktFormatString),
+                bufferGeometry = input.buffer(buffer),
+                parser = new jsts.io.olParser();
+            bufferGeometry.CLASS_NAME = "jsts.geom.Polygon";
+            bufferGeometry = parser.write(bufferGeometry);
+            return bufferGeometry.getExtent();
+        },
+        /**
+         * @method sendZoomFeatureEvent
+         *  - sends FeatureEvent with the zoom operation
+         * @param {Array} features
+         */
+        sendZoomFeatureEvent: function(features) {
+            var me = this,
+                featureEvent = me._sandbox.getEventBuilder('FeatureEvent')().setOpZoom();
+            if(!_.isEmpty(features)) {
+                var formatter = me._supportedFormats['GeoJSON'];
+                _.each(features, function (feature) {
+                    var geojson = formatter.writeFeaturesObject([feature]);
+                    featureEvent.addFeature(feature.getId(), geojson, feature.layerId);
+                });
+            }
+            me._sandbox.notifyAll(featureEvent);
+        },
+        /**
+         * @method getFeaturesMatchingQuery
+         *  - gets features matching query
+         * @param {Array} layers, object like {layer: ['layer1', 'layer2']}
+         * @param {Object} featureQuery and object like { "id" : [123, "myvalue"] }
+         */
+        getFeaturesMatchingQuery: function(layers, featureQuery) {
+            var me = this,
+                features = [];
+            _.each(layers, function(layerId) {
+                if(!me._layers[layerId]) {
+                    // invalid layerId
+                    return;
+                }
+                var sourceFeatures = me._layers[layerId].getSource().getFeatures();
+                if(_.isEmpty(featureQuery)) {
+                    // no query requirements, add all features in layer
+                    features = features.concat(sourceFeatures);
+                    return;
+                }
+                _.each(sourceFeatures, function (feature) {
+                    feature.layerId = layerId;
+                    _.each(featureQuery, function(allowedValues, requestedProperty) {
+                        var featureValue = feature.get(requestedProperty);
+                        if(!featureValue) {
+                            // feature doesn't have the property, don't include it
+                            return;
+                        }
+                        _.each(allowedValues, function(value) {
+                            if(featureValue === value) {
+                                features.push(feature);
+                            }
+                        });
+                    });
+                });
+            });
+            return features;
+        },
+        /**
+         * @method getLayerIds
+         *  -
+         * @param {Object} layerIds
+         * @return {Array} layres
+         */
+        getLayerIds: function(layerIds) {
+            var me = this,
+                layers = [];
+            if(_.isEmpty(layerIds)) {
+                _.each(me._layers, function(key, value) {
+                    layers.push(value);
+                });
+            } else {
+                _.each(layerIds.layer, function(key, value) {
+                    layers.push(key);
+                });
+            }
+            return layers;
+        },
+        /**
+         * @method getLayerFeatures
+         *  - gets layer's features as geojson object
+         * @param {String} id
+         * @return {Object} geojson
+         */
+        getLayerFeatures: function(id) {
+
+        	var me = this;
+        	var features = me._layers[id].getSource().getFeatures();
+        	var formatter = me._supportedFormats['GeoJSON'];
+
+            var geojson = formatter.writeFeaturesObject(features);
+            return geojson;
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
@@ -579,4 +730,3 @@ Oskari.clazz.define(
         ]
     }
 );
-

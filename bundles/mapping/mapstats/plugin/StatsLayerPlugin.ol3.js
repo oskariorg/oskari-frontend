@@ -439,15 +439,17 @@ Oskari.clazz.define(
             if (!layer.isLayerOfType(me._layerType)) {
                 return;
             }
+            /* commented out because not working with ol3 and new plugin is coming soon
             me._removeMapLayerFromMap(layer);
             me._highlightCtrl.deactivate();
             me._getFeatureControlHover.deactivate();
             me._getFeatureControlSelect.deactivate();
             me.getMap().removeControl(me._highlightCtrl);
-//            me.getMap().removeControl(me._navCtrl);
+            me.getMap().removeControl(me._navCtrl);
             me.getMap().removeControl(me._getFeatureControlHover);
             me.getMap().removeControl(me._getFeatureControlSelect);
             me.getMap().removeLayer(me._statsDrawLayer);
+            */
         },
 
         /**

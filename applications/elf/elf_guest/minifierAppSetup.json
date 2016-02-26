@@ -98,16 +98,14 @@
                     },
                     "ui-components": {
                         "bundlePath": "../../../packages/framework/bundle/"
-                    }
-                }
-            }
-        }, {
-            "bundlename": "divmanazer",
-            "metadata": {
-                "Import-Bundle": {
-                    "divmanazer": {
+                    },
+                    "mapanalysis": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    },
+                    "mapstats": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     }
+
                 }
             }
         }, {
@@ -192,10 +190,10 @@
                 }
             }
         }, {
-            "bundlename": "publisher",
+            "bundlename": "publisher2",
             "metadata": {
                 "Import-Bundle": {
-                    "publisher": {
+                    "publisher2": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     }
                 }
@@ -232,7 +230,7 @@
             "metadata": {
                 "Import-Bundle": {
                     "metadataflyout": {
-                        "bundlePath": "../../../packages/catalogue/bundle/"
+                        "bundlePath": "../../../packages/elf/bundle/"
                     }
                 }
             }
@@ -336,6 +334,37 @@
             "metadata" : {
                 "Import-Bundle" : {
                     "myplacesimport" : {
+                        "bundlePath" : "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename" : "coordinatetool",
+            "bundleinstancename" : "coordinatetool",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "coordinatetool" : {
+                        "bundlePath" : "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        },
+        {
+            "bundlename" : "backendstatus",
+            "bundleinstancename" : "backendstatus",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "backendstatus" : {
+                        "bundlePath" : "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename" : "printout",
+            "bundleinstancename" : "printout",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "printout" : {
                         "bundlePath" : "../../../packages/framework/bundle/"
                     }
                 }

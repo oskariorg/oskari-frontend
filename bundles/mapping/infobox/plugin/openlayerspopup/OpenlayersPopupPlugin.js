@@ -127,7 +127,6 @@ Oskari.clazz.define(
             if (_.isEmpty(contentData)) {
                 return;
             }
-
             var me = this,
                 currPopup = me._popups[id],
                 refresh = (currPopup &&
@@ -246,7 +245,6 @@ Oskari.clazz.define(
          */
         _renderContentData: function (id, contentData) {
             var me = this;
-
             return _.foldl(contentData, function (contentDiv, datum, index) {
                 var useButtons = (datum.useButtons === true),
                     primaryButton = datum.primaryButton,
@@ -303,7 +301,13 @@ Oskari.clazz.define(
                         text = link.html();
                     }
                     if (contentData[i] && contentData[i].actions && contentData[i].actions[text]) {
-                        contentData[i].actions[text]();
+                        if(typeof key !== 'function') { 
+                        	var sandbox = me.getMapModule().getSandbox();
+                        	var event = sandbox.getEventBuilder('InfoboxActionEvent')(id, text, contentData[i].actions[text]);
+                        	sandbox.notifyAll(event);
+                        } else {
+                            contentData[i].actions[text]();
+                        }
                     }
                 }
             }
@@ -616,7 +620,8 @@ Oskari.clazz.define(
             // destroys all if id not given
             // deletes reference to the same id will work next time also
             var pid,
-                popup;
+                popup,
+            	sandbox = this.getMapModule().getSandbox();
             if (!id) {
                 for (pid in this._popups) {
                     if (this._popups.hasOwnProperty(pid)) {
@@ -626,6 +631,8 @@ Oskari.clazz.define(
                             position.lat !== popup.lonlat.lat) {
                             popup.popup.setPosition(undefined);  //destroy();
                             delete this._popups[pid];
+                            var event = sandbox.getEventBuilder('InfoBox.InfoBoxEvent')(pid, false);
+                        	sandbox.notifyAll(event);
                         }
                     }
                 }
@@ -637,6 +644,8 @@ Oskari.clazz.define(
                     this.getMapModule().getMap().removeOverlay(this._popups[id].popup);
                 }
                 delete this._popups[id];
+                var event = sandbox.getEventBuilder('InfoBox.InfoBoxEvent')(id, false);
+            	sandbox.notifyAll(event);
             }
             // else notify popup not found?
         },

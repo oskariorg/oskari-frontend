@@ -193,7 +193,8 @@ Oskari.registerLocalization(
                     }
                 ],
                 "attribute": "Valitse ominaisuustieto",
-                "footer": "Tietosuojatut kohteet eivät ole mukana laskennassa."
+                "footer": "Tietosuojatut kohteet eivät ole mukana laskennassa.",
+                "aggregateAdditionalInfo":"Huom! Olet valinnut tekstiä sisältäviä ominaisuustietoja. Niille voi laskea ainoastaan kohteiden lukumäärän. Jos kohteiden lukumäärä ei ole valittuna, tekstiä sisältäviä ominaisuustietoja ei oteta mukaan analyysin lopputulokseen."
             },
             "buffer_size": {
                 "label": "Vyöhykkeen koko",
@@ -280,7 +281,32 @@ Oskari.registerLocalization(
                 "mode": "Analyysimenetelmän tyyppi",
                 "modeTooltip": "Valitse haluatko käyttää yhdistämisessä tunnuslukuja.",
                 "normalMode": "Yhdistäminen sijainnin perusteella",
-                "aggregateMode": "Tunnuslukujen laskenta"
+                "aggregateMode": "Tunnuslukujen laskenta",
+                "backend_locale": [
+                    {
+                        "id": "count",
+                        "label": "Kohteiden lukumäärä"
+                    },
+                    {
+                        "id": "sum",
+                        "label": "Summa"
+                    },
+                    {
+                        "id": "min",
+                        "label": "Pienin arvo"
+                    },
+                    {
+                        "id": "max",
+                        "label": "Suurin arvo"
+                    },
+                    {
+                        "id": "avg",
+                        "label": "Keskiarvo"
+                    },
+                    {
+                        "id": "stddev",
+                        "label": "Keskihajonta"
+                    }]
             },
             "params": {
                 "label": "Mukaan otettavat ominaisuustiedot",

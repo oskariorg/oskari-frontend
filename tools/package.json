@@ -58,7 +58,8 @@
     "wrench": "1.5.8",
     "xml2js": "latest",
     "yuidocjs": "0.9.0",
-    "fs-extra": "~0.24.0"
+    "fs-extra": "~0.24.0",
+    "lodash.defaultsdeep": "latest"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -69,7 +70,8 @@
     "build-elf": "./node_modules/.bin/grunt release:elf:../applications/elf/elf_guest/minifierAppSetup.json,../applications/elf/elf_published/minifierAppSetup.json",
     "build-ol3": "./node_modules/.bin/grunt buildOskariOL3",
     "trim": "./node_modules/.bin/grunt trimtrailingspaces",
-    "lint": "./node_modules/.bin/jshint ../bundles"
+    "lint": "./node_modules/.bin/jshint ../bundles",
+    "genExcels" : "./node_modules/.bin/grunt genL10nExcels"
   },
   "devDependencies": {
     "grunt-contrib-copy": "^0.8.1",

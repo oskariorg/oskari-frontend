@@ -24,7 +24,7 @@ Oskari.clazz.define(
          */
         handleRequest: function (core, request) {
             if (request.getHidePrevious()) {
-                this.popupPlugin.close(undefined, request.getPosition());
+                this.popupPlugin.close(undefined);
             }
             this.popupPlugin.popup(
                 request.getId(),

@@ -149,3 +149,11 @@ table {
 	}
 }
 
+/**
+ * logoplugin with asdi logo
+ */
+ .logoplugin .icon {
+    background-image: url('asdi_logoplugin_logo.png') !important;
+    width: 23px !important;
+    height: 27px !important;
+ }

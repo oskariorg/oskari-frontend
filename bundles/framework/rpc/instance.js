@@ -10,7 +10,6 @@ Oskari.clazz.define(
     'Oskari.mapframework.bundle.rpc.RemoteProcedureCallInstance',
     function () {
         this._channel = null;
-        this._localization = {};
         this.eventHandlers = {};
         this.requestHandlers = {};
     },
@@ -27,7 +26,12 @@ Oskari.clazz.define(
         getSandbox: function () {
             return this.sandbox;
         },
-
+        isClientSupported : function(clientVer) {
+            if(!clientVer) {
+                return false;
+            }
+            return clientVer.indexOf("2.0.") === 0;
+        },
         /**
          * @public @method start
          * BundleInstance protocol method
@@ -139,7 +143,7 @@ Oskari.clazz.define(
 
             if (allowedEvents === null || allowedEvents === undefined) {
                 allowedEvents = ['AfterMapMoveEvent', 'MapClickedEvent', 'AfterAddMarkerEvent', 'MarkerClickEvent',
-                'RouteResultEvent','SearchResultEvent', 'UserLocationEvent', 'DrawingEvent', "FeatureEvent"];
+                'RouteResultEvent','SearchResultEvent', 'UserLocationEvent', 'DrawingEvent', "FeatureEvent", 'InfoboxActionEvent', 'InfoBox.InfoBoxEvent'];
             }
 
             if (allowedFunctions === null || allowedFunctions === undefined) {
@@ -156,6 +160,7 @@ Oskari.clazz.define(
 
             if (allowedRequests === null || allowedRequests === undefined) {
                 allowedRequests = ['InfoBox.ShowInfoBoxRequest',
+                    'InfoBox.HideInfoBoxRequest',
                     'MapModulePlugin.AddMarkerRequest',
                     'MapModulePlugin.AddFeaturesToMapRequest',
                     'MapModulePlugin.RemoveFeaturesFromMapRequest',
@@ -169,7 +174,8 @@ Oskari.clazz.define(
                     'ChangeMapLayerOpacityRequest',
                     'MyLocationPlugin.GetUserLocationRequest',
                     'DrawTools.StartDrawingRequest',
-                    'DrawTools.StopDrawingRequest'];
+                    'DrawTools.StopDrawingRequest',
+                    'MapModulePlugin.ZoomToFeaturesRequest'];
             }
             me._allowedFunctions = this.__arrayToObject(allowedFunctions);
             // try to get event/request builder for each of these to see that they really are supported!!
@@ -220,16 +226,41 @@ Oskari.clazz.define(
             getSupportedRequests : function() {
                 return this._allowedRequests;
             },
+            getInfo : function(clientVersion) {
+                var sbMap = this.sandbox.getMap();
+                return {
+                    version : Oskari.VERSION,
+                    clientSupported : this.isClientSupported(clientVersion),
+                    srs  : sbMap.getSrsName()
+                };
+            },
             getAllLayers : function() {
-                var mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+                var me = this;
+                var mapLayerService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService');
                 var layers = mapLayerService.getAllLayers();
+                mapModule = me.sandbox.findRegisteredModuleInstance("MainMapModule");
+                mapResolutions = mapModule.getResolutionArray();
                 return layers.map(function (layer) {
-                    return {
-                        id: layer.getId(),
-                        opacity: layer.getOpacity(),
-                        visible: layer.isVisible(),
-                        name : layer.getName()
-                    };
+                    if (layer.getMaxScale() && layer.getMinScale()) {
+                        var layerResolutions = mapModule.calculateLayerResolutions(layer.getMaxScale(), layer.getMinScale());
+                        var minZoomLevel = mapResolutions.indexOf(layerResolutions[0]);
+                        var maxZoomLevel = mapResolutions.indexOf(layerResolutions[layerResolutions.length - 1]);
+                        return {
+                            id: layer.getId(),
+                            opacity: layer.getOpacity(),
+                            visible: layer.isVisible(),
+                            name : layer.getName(),
+                            minZoom: minZoomLevel,
+                            maxZoom: maxZoomLevel
+                        };
+                    } else {
+                        return {
+                            id: layer.getId(),
+                            opacity: layer.getOpacity(),
+                            visible: layer.isVisible(),
+                            name : layer.getName()
+                        };
+                    }
                 });
             },
             getMapBbox : function() {
@@ -267,6 +298,24 @@ Oskari.clazz.define(
             },
             useState : function(state) {
                 this.sandbox.useState(state);
+            },
+            getFeatures: function(layerId) {
+                var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule'),
+                    plugin = mapModule.getLayerPlugins(['vectorlayer']),
+                    features = {};
+                if(!plugin) {
+                    return features;
+                }
+                var layers = plugin.getLayerIds();
+                layers.forEach(function(id) {
+                    if(layerId === true) {
+                        features[id] = plugin.getLayerFeatures(id);
+                    }
+                    else {
+                        features[id] = [];
+                    }
+                });
+                return features;
             }
         },
 

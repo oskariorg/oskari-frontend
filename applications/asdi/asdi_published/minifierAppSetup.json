@@ -1,77 +1,67 @@
 {
     "startupSequence": [{
-        "title": "OpenLayers",
-        "bundlename": "openlayers-default-theme",
-        "bundleinstancename": "openlayers-default-theme",
-        "metadata": {
-            "Import-Bundle": {
-                "openlayers-default-theme": {
-                    "bundlePath": "../../../packages/openlayers/bundle/"
-                },
-                "openlayers-full-map": {
-                    "bundlePath": "../../../packages/openlayers/bundle/"
-                }
-            }
-        }
-    }, {
-        "title": "Map",
         "bundlename": "mapfull",
-        "bundleinstancename": "mapfull",
         "metadata": {
-            "Import-Bundle": {
-                "mapwmts": {
-                    "bundlePath": "../../../packages/framework/bundle/"
+            "Import-Bundle" : {
+                "mapmodule" : {
+                    "bundlePath" : "../../../packages/mapping/ol3/"
+                },
+                "mapwmts" : {
+                    "bundlePath" : "../../../packages/mapping/ol3/"
+                },
+                "mapwfs2" : {
+                    "bundlePath" : "../../../packages/mapping/ol3/"
                 },
                 "maparcgis": {
-                    "bundlePath": "../../../packages/arcgis/bundle/"
+                    "bundlePath": "../../../packages/mapping/ol3/"
                 },
-                "service-base": {
-                    "bundlePath": "../../../packages/framework/bundle/"
+                "mapuserlayers" : {
+                    "bundlePath" : "../../../packages/mapping/ol3/"
                 },
-                "event-map-layer": {
-                    "bundlePath": "../../../packages/framework/bundle/"
+                "core-base" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
                 },
-                "request-map-layer": {
-                    "bundlePath": "../../../packages/framework/bundle/"
+                "core-map" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
                 },
-                "mapmodule-plugin": {
-                    "bundlePath": "../../../packages/framework/bundle/"
-                },               
-                "event-base": {
-                    "bundlePath": "../../../packages/framework/bundle/"
+                "sandbox-base" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
                 },
-                "mapfull": {
-                    "bundlePath": "../../../packages/framework/bundle/"
+                "sandbox-map" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
                 },
-                "core-base": {
-                    "bundlePath": "../../../packages/framework/bundle/"
+                "event-base" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
                 },
-                "oskariui": {
-                    "bundlePath": "../../../packages/framework/bundle/"
+                "event-map" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
                 },
-                "request-base": {
-                    "bundlePath": "../../../packages/framework/bundle/"
+                "event-map-layer" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
                 },
-                "domain": {
-                    "bundlePath": "../../../packages/framework/bundle/"
+                "request-base" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
                 },
-                "core-map": {
-                    "bundlePath": "../../../packages/framework/bundle/"
+                "request-map" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
                 },
-                "request-map": {
-                    "bundlePath": "../../../packages/framework/bundle/"
+                "request-map-layer" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
                 },
-                "sandbox-base": {
-                    "bundlePath": "../../../packages/framework/bundle/"
+                "service-base" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
                 },
-                "service-map": {
-                    "bundlePath": "../../../packages/framework/bundle/"
+                "service-map" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
                 },
-                "sandbox-map": {
-                    "bundlePath": "../../../packages/framework/bundle/"
+                "domain" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
                 },
-                "event-map": {
-                    "bundlePath": "../../../packages/framework/bundle/"
+                "oskariui" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
+                },
+                "mapfull" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
                 },
                 "ui-components": {
                     "bundlePath": "../../../packages/framework/bundle/"
@@ -79,9 +69,26 @@
             }
         }
     }, {
-        "title": "Oskari DIV Manazer",
+        "bundlename": "toolbar",
+        "metadata": {
+            "Import-Bundle": {
+                "toolbar": {
+                    "bundlePath": "../../../packages/mapping/ol3/"
+                }
+            }
+        }
+    }, {
+        "bundlename" : "publishedstatehandler",
+        "metadata" : {
+            "Import-Bundle" : {
+                "publishedstatehandler" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
+                }
+            }
+        }
+    },
+    {
         "bundlename": "divmanazer",
-        "bundleinstancename": "divmanazer",
         "metadata": {
             "Import-Bundle": {
                 "divmanazer": {
@@ -90,45 +97,40 @@
             }
         }
     }, {
-        "title": "InfoBox",
-        "bundlename": "infobox",
-        "bundleinstancename": "infobox",
+        "bundlename": "featuredata2",
         "metadata": {
             "Import-Bundle": {
-                "infobox": {
+                "featuredata2": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 }
             }
         }
-    }, {
-        "title": "PostProcessor",
-        "bundlename": "postprocessor",
-        "bundleinstancename": "postprocessor",
-        "metadata": {
-            "Import-Bundle": {
-                "postprocessor": {
-                    "bundlePath": "../../../packages/framework/bundle/"
-                }
-            }
-        }
-    }, {
-        "title": "Toolbar",
-        "bundleinstancename": "toolbar",
-        "bundlename": "toolbar",
-        "metadata": {
-            "Import-Bundle": {
-                "toolbar": {
-                    "bundlePath": "../../../packages/framework/bundle/"
-                }
-            }
-        }
-    }, {
-        "title" : "publishedstatehandler",
-        "bundlename" : "publishedstatehandler",
-        "bundleinstancename" : "publishedstatehandler",
+    },{
+        "bundlename" : "infobox",
+        "bundleinstancename" : "infobox",
         "metadata" : {
             "Import-Bundle" : {
-                "publishedstatehandler" : {
+                "infobox" : {
+                    "bundlePath" : "../../../packages/mapping/ol3/"
+                }
+            }
+        }
+    }, {
+        "bundlename" : "drawtools",
+        "bundleinstancename" : "drawtools",
+        "metadata" : {
+            "Import-Bundle" : {
+                "drawtools" : {
+                    "bundlePath" : "../../../packages/mapping/ol3/"
+                }
+            }
+        }
+    }, {
+        "bundlename" : "rpc",
+        "bundleinstancename" : "rpc",
+        "metadata" : {
+            "Import-Bundle" : {
+                "rpc" : {
                     "bundlePath" : "../../../packages/framework/bundle/"
                 }
             }
