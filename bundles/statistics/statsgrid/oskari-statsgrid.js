@@ -43,6 +43,10 @@ Polymer.require(["/Oskari/libraries/mathjs/math.2.4.1.min.js"], function(math) {
         "type": Array,
         "notify": true
       },
+      "cache": {
+        "type": Object,
+        "notify": true
+      },
       /**
        * For example the indicator selector can notify of selected indicator with this.
        */
@@ -78,10 +82,10 @@ Polymer.require(["/Oskari/libraries/mathjs/math.2.4.1.min.js"], function(math) {
     },
     "observers": [
                   "selectedLayerChanged(ajaxUrl, selectedLayer, sources)",
-                  "selectedIndicatorsChanged(ajaxUrl, selectedIndicators.splices, sources, selectedIndicators)",
+                  "selectedIndicatorsChanged(ajaxUrl, selectedIndicators.splices, sources, selectedIndicators, regionInfo)",
                   "sortChanged(sortColumnIdx, sortDirection)",
                   "updateSelectedIndicators(sources)",
-                  "selectedIndicatorChanged(selectedIndicatorKey, cache)"
+                  "selectedIndicatorChanged(selectedIndicatorKey, rows, rowHeaders)"
     ],
     "ajaxError": function(e) {
       var me = this;
@@ -316,7 +320,11 @@ Polymer.require(["/Oskari/libraries/mathjs/math.2.4.1.min.js"], function(math) {
           return;
         } else if (indicator.indicatorValues) {
           // This is a published indicator in an embedded view with inlined data.
-          me.cache[cacheKey] = indicator.indicatorValues;
+          // Making a new copy to trigger all the observers.
+          var newKeyVal = {};
+          newKeyVal[cacheKey] = indicator.indicatorValues;
+          me.set("cache", jQuery.extend({}, me.cache, newKeyVal));
+
           return;
         }
         ajaxCallMade = true;
