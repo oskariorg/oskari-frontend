@@ -315,9 +315,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             // sixth value.
             for (i = 0, ilen = keys.length, ilast = ilen - 1; i < ilen; i++) {
                 value = state[keys[i]];
-                if (value !== null && value !== undefined) {
+                if (value !== null && value !== undefined && value !== '') {
                     // skip undefined and null
                     stateValues += value;
+                } else {
+                    // There must always be some value inserted. We use 0 to designate null.
+                    // Don't use anything with - or +.
+                    stateValues += '0';
                 }
                 if (i !== ilast) {
                     stateValues += valueSeparator;
