@@ -81,11 +81,11 @@ Polymer.require(["/Oskari/libraries/mathjs/math.2.4.1.min.js"], function(math) {
       "onSelectionsChanged": "updateStatistics"
     },
     "observers": [
-                  "selectedLayerChanged(ajaxUrl, selectedLayer, sources)",
-                  "selectedIndicatorsChanged(ajaxUrl, selectedIndicators.splices, sources, selectedIndicators, regionInfo)",
-                  "sortChanged(sortColumnIdx, sortDirection)",
-                  "updateSelectedIndicators(sources)",
-                  "selectedIndicatorChanged(selectedIndicatorKey, rows, rowHeaders)"
+      "selectedLayerChanged(ajaxUrl, selectedLayer, sources)",
+      "selectedIndicatorsChanged(ajaxUrl, selectedIndicators.splices, sources, selectedIndicators, regionInfo)",
+      "sortChanged(sortColumnIdx, sortDirection)",
+      "updateSelectedIndicators(sources)",
+      "selectedIndicatorChanged(selectedIndicatorKey, rows, rowHeaders)"
     ],
     "ajaxError": function(e) {
       var me = this;

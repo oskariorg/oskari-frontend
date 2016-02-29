@@ -77,15 +77,19 @@ Polymer({
     },
     "dialog": Object
   },
+  "listeners": {
+    // This is fired when the user indicators have been changed, so the indicator info is fetched again.
+    "onUserIndicatorsChanged": "onUserIndicatorsChanged"
+  },
   "observers": [
-                "datasourceChanged(datasourceId)",
-                "indicatorChanged(indicatorId)",
-                "getSelectors(sources, datasourceId, indicatorId)",
-                "selectedIndicatorsChanged(ajaxUrl, selectedIndicators.splices, sources)",
-                "evaluateHideGrid(showUserIndicatorView, selectedIndicators.splices)",
-                "evaluateHideGrid(showUserIndicatorView, selectedIndicators)",
-                "selectorsChanged(selectorItems.splices)",
-                "selectorsChanged(selectors)"
+    "datasourceChanged(datasourceId)",
+    "indicatorChanged(indicatorId)",
+    "getSelectors(sources, datasourceId, indicatorId)",
+    "selectedIndicatorsChanged(ajaxUrl, selectedIndicators.splices, sources)",
+    "evaluateHideGrid(showUserIndicatorView, selectedIndicators.splices)",
+    "evaluateHideGrid(showUserIndicatorView, selectedIndicators)",
+    "selectorsChanged(selectorItems.splices)",
+    "selectorsChanged(selectors)"
   ],
   "ajaxError": function(e) {
     var me = this;
@@ -94,6 +98,9 @@ Polymer({
   },
   "hideSpinner": function(e, response) {
     this.showSpinner = false;
+  },
+  "onUserIndicatorsChanged": function() {
+    this.$.indicatorsAjax.generateRequest();
   },
   "sendTooltipData": function(feature) {
     return this.$.statsgrid.sendTooltipData(feature);
