@@ -126,6 +126,17 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                         }
                     };
                 sandbox.request(this, addBtnRequestBuilder('dialog', 'selectiontools', btn));
+
+                this.selectionPlugin = this.sandbox.findRegisteredModuleInstance("MainMapModuleMapSelectionPlugin");
+
+                if (!this.selectionPlugin) {
+                    var config = {
+                        id: "FeatureData"
+                    };
+                    this.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin', config, this.sandbox);
+                    mapModule.registerPlugin(this.selectionPlugin);
+                    mapModule.startPlugin(this.selectionPlugin);
+                }
             }
 
             // check if preselected layers included wfs layers -> act if they are added now
@@ -258,6 +269,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                     delete this.__loadingStatus['' + event.getLayerId()];
                     this.plugins['Oskari.userinterface.Flyout'].showLoadingIndicator(event.getLayerId(), false);
                     this.plugins['Oskari.userinterface.Flyout'].showErrorIndicator(event.getLayerId(), false);
+
                     if (layer) {
                         this.plugins['Oskari.userinterface.Flyout'].updateData(layer);
                     }
@@ -281,17 +293,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 }
                 // setup error indicator based on error statuses
                 this.plugin.showErrorIndicator(status.error.length > 0);
-
-                // TODO: For debugging, remove when stable
-                if(Oskari.__debugWFS === true) {
-                    console.log('WFSStatusChanged', event, status);
-                }
             },
             'MapLayerEvent': function (event) {
                 if(event.getOperation() !== 'add')  {
                     // only handle add layer
                     return;
                 }
+
                 if(event.getLayerId()) {
                     this.__addTool(event.getLayerId());
                 }
@@ -368,7 +376,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 } else if (event.getViewState() === "close") {
                     plugin.setEnabled(false);
                 } else {
-                    plugin.setEnabled(true);
+                    plugin.setEnabled(true, true);
                 }
             },
 
@@ -389,6 +397,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 var evt = me.sandbox.getEventBuilder("WFSSetFilter")(features);
                 me.sandbox.notifyAll(evt);
 
+            },
+
+            'AfterMapMoveEvent': function() {
+                var me = this;
+                me.plugin.mapStatusChanged();
             }
         },
 
@@ -472,17 +485,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
             mapModule.registerPlugin(plugin);
             mapModule.startPlugin(plugin);
             this.plugin = plugin;
-
-            this.selectionPlugin = this.sandbox.findRegisteredModuleInstance("MainMapModuleMapSelectionPlugin");
-
-            if (!this.selectionPlugin) {
-                var config = {
-                    id: "FeatureData"
-                };
-                this.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin', config, this.sandbox);
-                mapModule.registerPlugin(this.selectionPlugin);
-                mapModule.startPlugin(this.selectionPlugin);
-            }
         }
     }, {
         /**

@@ -16,7 +16,7 @@ Oskari.registerLocalization(
             "abstract": "Basisinformasjon",
             "inspire": "Inspire metadata",
             "jhs": "ISO 19115 metadata",
-            "quality": "NOT TRANSLATED",
+            "quality": "Datakvalitet",
             "xml": "ISO 19139 XML fil",
             "map": "Geografisk utstrekning",
             "pdf": "Utskrift",
@@ -381,12 +381,12 @@ Oskari.registerLocalization(
                 }
             },
             "qualityContent": {
-                "qualityPassTrue": "NOT TRANSLATED",
-                "qualityPassFalse": "NOT TRANSLATED"
+                "qualityPassTrue": "Datasettet samsvarer med spesifikasjonen",
+                "qualityPassFalse": "Datasettet samsvarer ikke med spesifikasjonen"
             },
             "heading": {
-                "abstractTextData": "NOT TRANSLATED",
-                "abstractTextService": "NOT TRANSLATED",
+                "abstractTextData": "Abstrakt tekst (data)",
+                "abstractTextService": "Abstrakt tekst (tjeneste)",
                 "accessConstraint": "Tilgangsrestriksjoner",
                 "citationDate": "Dato",
                 "classification": "Klassifikasjoner",
@@ -415,21 +415,21 @@ Oskari.registerLocalization(
                 "temporalExtent": "Temporær utstrekning",
                 "topicCategory": "Tematiske hovedkategorier",
                 "useLimitation": "Bruksbegrensninger",
-                "absoluteExternalPositionalAccuracy": "NOT TRANSLATED",
-                "accuracyOfTimeMeasurement": "NOT TRANSLATED",
-                "completenessCommission": "NOT TRANSLATED",
-                "completenessOmission": "NOT TRANSLATED",
-                "conceptualConsistency": "NOT TRANSLATED",
-                "domainConsistency": "NOT TRANSLATED",
-                "formatConsistency": "NOT TRANSLATED",
-                "griddedDataPositionalAccuracy": "NOT TRANSLATED",
-                "nonQuantitativeAttributeAccuracy": "NOT TRANSLATED",
-                "quantitativeAttributeAccuracy": "NOT TRANSLATED",
-                "relativeInternalPositionalAccuracy": "NOT TRANSLATED",
-                "temporalConsistency": "NOT TRANSLATED",
-                "temporalValidity": "NOT TRANSLATED",
-                "thematicClassificationCorrectness": "NOT TRANSLATED",
-                "topologicalConsistency": "NOT TRANSLATED"
+                "absoluteExternalPositionalAccuracy": "Absolutt stedfestingsnøyaktighet",
+                "accuracyOfTimeMeasurement": "Nøyaktighet til målingen av tid",
+                "completenessCommission": "Fullstendighet overskytende",
+                "completenessOmission": "Fullstendighet manglende objekter",
+                "conceptualConsistency": "Konseptuell konsistens",
+                "domainConsistency": "Domenekonsistens",
+                "formatConsistency": "Formell konsistens",
+                "griddedDataPositionalAccuracy": "Stedfestingsnøyaktighet rasterdata",
+                "nonQuantitativeAttributeAccuracy": "Nøyaktighet av ikke-kvantitative egenskaper",
+                "quantitativeAttributeAccuracy": "Nøyaktighet til kvantitative egenskaper",
+                "relativeInternalPositionalAccuracy": "Relativ nøyaktighet mellom nabopunkter",
+                "temporalConsistency": "Tidkonsistens",
+                "temporalValidity": "Tidgyldighet",
+                "thematicClassificationCorrectness": "Riktigheten til klassifiseringen av kvalitative egenskaper",
+                "topologicalConsistency": "Topologisk konsistens"
             }
         },
         "tile": {

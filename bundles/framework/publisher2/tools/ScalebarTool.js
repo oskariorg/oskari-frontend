@@ -21,7 +21,7 @@ function() {
     getTool: function(){
         return {
             id: 'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin',
-            name: 'ScaleBarPlugin',
+            title: 'ScaleBarPlugin',
             config: {}
         };
     },
@@ -49,16 +49,6 @@ function() {
         } else {
             return null;
         }
-    },
-    /**
-    * Is the tool toggled on by default.
-    * @method isDefaultTool
-    * @public
-    *
-    * @returns {Boolean} is the tool toggled on by default.
-    */
-    isDefaultTool: function() {
-        return true;
     }
 }, {
     'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],

@@ -155,14 +155,27 @@ Oskari.clazz.define('Oskari.mapframework.domain.Map',
         },
         /**
          * @method getBbox
-         * Bounding box in map implementation (openlayers)
+         * Bounding box for map viewport
          *
-         * @return {OpenLayers.Bounds}
+         * @return {Object}
          *            bounding box
          */
         getBbox: function () {
-            return this._bbox;
+            // bbox should be removed since it's the same as extent
+            return this._bbox || this.getExtent();
         },
+        /**
+         * @method getBbox
+         * Bounding box for map viewport
+         *
+         * @return {String}
+         *            bounding box as a string left, bottom, right, top
+         */
+        getBboxAsString: function () {
+            var bbox = this.getBbox() || {};
+            return [bbox.left, bbox.bottom, bbox.right, bbox.top].join(',');
+        },
+
         /**
          * @method setMarkerVisible
          * true if marker is shown on map

@@ -140,8 +140,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
          */
         setPublishMode: function (blnEnabled, deniedLayers, data) {
             var me = this,
-                map = jQuery('#contentMap'),
-                requestBuilder;
+                map = jQuery('#contentMap');
 
             var statsLayer = this._resetStatsUI();
             if (blnEnabled) {
@@ -175,6 +174,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             } else {
                 me._destroyGrid();
                 Oskari.setLang(me.oskariLang);
+
+                //change the mapmodule toolstyle back to normal
+                var mapModule = me.sandbox.findRegisteredModuleInstance("MainMapModule");
+                mapModule.changeToolStyle(null);
+
                 if (me.publisher) {
                     // show flyout?
                     // TODO: move to default flyout/extension as "mode functionality"?
@@ -196,11 +200,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 // return the layers that were removed for publishing.
                 me.getService().addLayers();
                 me.getFlyout().close();
-            }
-            // publishing mode should be sent to mapfull to disable resizing
-            requestBuilder = me.sandbox.getRequestBuilder('MapFull.MapResizeEnabledRequest');
-            if (requestBuilder) {
-                me.sandbox.request(me, requestBuilder(!blnEnabled));
             }
         },
         /**

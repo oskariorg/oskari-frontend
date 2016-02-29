@@ -22,7 +22,7 @@ function() {
     getTool: function(){
         return {
             id: 'Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
-            name: 'SearchPlugin',
+            title: 'SearchPlugin',
             config: {}
         };
     },

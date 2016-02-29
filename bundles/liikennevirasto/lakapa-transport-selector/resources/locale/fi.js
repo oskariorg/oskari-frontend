@@ -41,7 +41,6 @@ Oskari.registerLocalization({
 			"message_no_selected_layers_title" : "Ei valittua tasoa",
 			"message_no_selected_layers_message" : "Yhtään liikennemuodon karttatasoa ei ole valittuna, valitse vähintään yksi karttataso.",
 			"selection_data_title": "Valitse aineisto",
-			"transport_title" : "Aineistotyyppi",
 			"message_digiroad_not_found_title" : "Digiroad aineistoa ei löytynyt",
 			"message_digiroad_not_found_message1" : "Digiroad aineistoa ei löytynyt",
 			"message_digiroad_not_found_message2" : "-maakunnalle",

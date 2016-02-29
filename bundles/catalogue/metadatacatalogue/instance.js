@@ -886,14 +886,15 @@ Oskari.clazz.define(
             };
             var selectedLayers = me.sandbox.findAllSelectedMapLayers(),
                 i,
-                style = OpenLayers.Util.applyDefaults(style, OpenLayers.Feature.Vector.style['default']);
-            style.pointRadius = 8;
-            style.strokeColor = '#D3BB1B';
-            style.fillColor = '#FFDE00';
-            style.fillOpacity = 0.6;
-            style.strokeOpacity = 0.8;
-            style.strokeWidth = 2;
-            style.cursor = 'pointer';
+                style = {
+                    stroke: {
+                        color: 'rgba(211, 187, 27, 0.8)',
+                        width: 2
+                    },
+                    fill: {
+                        color: 'rgba(255,222,0, 0.6)'
+                    }
+                };
 
             for (i = 0; i < results.length; i += 1) {
                 if ((!results[i].name) || (results[i].name.length === 0)) {
@@ -919,6 +920,19 @@ Oskari.clazz.define(
                     // Include organization information if available
                     if ((row.organization) && (row.organization.length > 0)) {
                         titleText = titleText + ', ' + row.organization;
+                    }
+
+                    // Include identi
+                    var identification = row.identification;
+                    var isIdentificationCode = (identification && identification.code && identification.code.length>0) ? true : false;
+                    var isIdentificationDate = (identification && identification.date && identification.date.length>0) ? true : false;
+                    if(isIdentificationCode && isIdentificationDate) {
+                        var locIdentificationCode = me.getLocalization('identificationCode')[identification.code];
+                        if(!locIdentificationCode) {
+                            locIdentificationCode = identification.code;
+                        }
+
+                        titleText = titleText + ' (' + locIdentificationCode + ':' + identification.date + ')';
                     }
                     // Add title
                     jQuery(cells[0]).append(titleText);
@@ -1040,7 +1054,13 @@ Oskari.clazz.define(
                                 // Else show info area is not active, add geom to map
                                 else {
                                     var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
-                                    me.sandbox.postRequestByName(rn, [row.geom, 'WKT', {id:row.id}, null, 'replace', true, style, true]);
+                                    me.sandbox.postRequestByName(rn, [row.geom, {
+                                        layerId: 'METADATACATALOGUE_VECTORLAYER',
+                                        clearPrevious: true,
+                                        layerOptions: null,
+                                        centerTo: true,
+                                        featureStyle: style
+                                    }]);
                                     me._unactiveShowInfoAreaIcons();
                                     jQuery(this).removeClass('icon-info-area').addClass('icon-info-area-active');
                                     jQuery(this).parent().attr('title', me.getLocalization('grid').removeBBOX);

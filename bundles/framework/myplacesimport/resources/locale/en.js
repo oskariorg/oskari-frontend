@@ -4,46 +4,46 @@ Oskari.registerLocalization(
     "key": "MyPlacesImport",
     "value": {
         "title": "Dataset Import",
-        "desc": "You can import your own datasets in shp-, gpx- or mif/mid file format in a zip file or in kmz file format (zipped kml).",
+        "desc": "NOT TRANSLATED",
         "tool": {
-            "tooltip": "Import your own dataset"
+            "tooltip": "Import your own datasets."
         },
         "flyout": {
             "title": "Dataset Import",
-            "description": "You can import your own datasets in shp-, gpx- or mif/mid file format in a zip file or in kmz file format (zipped kml).",
-            "help": "Select a file from your computer or give a link to the file that contains your dataset. The file can be in the shp, zip or kml/kmz format. You can create zip files from shapefiles by zipping the files with suffix shp, shx, dbf and prj to the same zip file. \nAlso kml/kmz files from Google maps can be zipped same way.\nMif/mid data must be in current map CRS - look current CRS under zoombar ",
+            "description": "Upload a dataset from your computer as a zipped file. The dataset has to be in one of the following file formats: <br/>\r\nShapefile (*.shp, *.shx, *dbf, *prj) <br/>\r\nGPS-siirtotiedosto (*.gpx) <br/>\r\nMapInfo (*.mif, *mid) <br/>\r\nGoogle Map (*.kml, *.kmz) <br/>\r\nPlease check that all the files are in the correct coordinate reference system.",
+            "help": "Upload a dataset from your computer as a zipped file. Please check that all the files are in the correct file format and coordinate reference system.",
             "actions": {
                 "cancel": "Cancel",
                 "next": "Next"
             },
             "file": {
-                "submit": "Send",
+                "submit": "Import",
                 "fileOverSizeError": {
-                    "title": "Error",
-                    "message": "Your dataset is too large. Maximun size of the imported dataset is <xx> mb.",
+                    "title": "Virhe",
+                    "message": "The selected file is too large. It can be at most <xx> mb.",
                     "close": "Close"
                 }
             },
             "layer": {
-                "title": "Save the dataset information:",
+                "title": "Dataset Information",
                 "name": "Name",
                 "desc": "Description",
                 "source": "Data source",
-                "style": "Dataset style definitions:"
+                "style": "Style definitions"
             },
             "validations": {
                 "error": {
                     "title": "Error",
-                    "message": "The file has not been selected and the map layer name is missing."
+                    "message": "The dataset has not been imported. A file and a name are missing. Please correct them and try again."
                 }
             },
             "finish": {
                 "success": {
-                    "title": "The dataset import succeeded.",
-                    "message": "You can find the map layer from the menu \"My Data\"."
+                    "title": "Dataset Import Succeeded",
+                    "message": "The dataset has been imported. You can now find it in the \"My data\" menu."
                 },
                 "failure": {
-                    "title": "The dataset import did not succeed. Please try again later."
+                    "title": "The dataset could not be imported."
                 }
             }
         },
@@ -56,7 +56,7 @@ Oskari.registerLocalization(
                 "remove": "Delete",
                 "removeButton": "Delete"
             },
-            "confirmDeleteMsg": "Do you want to delete:",
+            "confirmDeleteMsg": "Do you want to delete the dataset:",
             "buttons": {
                 "ok": "OK",
                 "cancel": "Cancel",
@@ -67,13 +67,13 @@ Oskari.registerLocalization(
                 "deletedMsg": "The dataset has been deleted."
             },
             "error": {
-                "title": "Error!",
-                "generic": "System error occurred. Please try again later."
+                "title": "Error",
+                "generic": "A system error occurred."
             }
         },
         "layer": {
-            "organization": "Own Datasets",
-            "inspire": "Own Datasets"
+            "organization": "Own datasets",
+            "inspire": "Own datasets"
         }
     }
 }

@@ -82,13 +82,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
             me.fields.name.field.setRequired(true, me.loc.error.name);
             me.fields.name.field.setContentCheck(true, me.loc.error.nameIllegalCharacters);
 
-            if (pData) {
+            if (pData.metadata) {
                 // set initial values
                 me.fields.domain.field.setValue(pData.metadata.domain);
                 me.fields.name.field.setValue(pData.metadata.name);
-                if (pData.lang) {
+                if (pData.metadata.language) {
                     // if we get data as param -> use lang from it, otherwise use Oskari.getLang()
                     selectedLang = pData.metadata.language;
+                    languageChangedCB(selectedLang);
                 }
             }
 

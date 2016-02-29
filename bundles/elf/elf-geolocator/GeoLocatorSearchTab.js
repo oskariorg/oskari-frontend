@@ -69,7 +69,8 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
             '<input id="countries">' +
             '</div>',
             emptyDiv: '<div><br/></div>',
-            result: '<div class="result"></div>'
+            result: '<div class="result"></div>',
+            checkboxes: '<input type="checkbox" name="addresses" value="bar" checked>Addresses<br><input type="checkbox" name="geographical_names" checked>Geographical Names<br>'
         },
         /**
          * @method getTitle
@@ -117,6 +118,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
                 regionInput = Oskari.clazz.create('Oskari.userinterface.component.FormInput','elf-geolocator-region', this.sandbox),
                 searchButton = searchUi.find('div.commit input[type="submit"]'),
                 countryInput = this.templates.countryAutoInput.clone(),
+                checkBoxInput = this.templates.checkboxes.clone(),
                 backButton = resultsUi.find('div.header-results span.back');
 
             searchInput.setRequired(true, this.loc.errors.searchTermMissing);
@@ -129,6 +131,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
             regionInput.setLabel(this.loc.regionTitle);
             regionInput.setPlaceholder(this.loc.regionPlaceholder);
             regionInput.setEnabled(true);
+
 
             countryInput.find('label')
                 .text(this.loc.countryFilter);
@@ -154,6 +157,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
             container.find('div.search-fields')
                 .append(searchInput.getField())
                 .append(countryInput)
+                .append(checkBoxInput)
                 .append(this.templates.emptyDiv.clone()); // use later when data is available   .append(regionInput.getField());
 
             // Populate autocomplete countries
@@ -221,6 +225,8 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
 
             values.term = this.searchInput.getValue();
             values.region = this.regionInput.getValue();
+            values.addresses = jQuery(container).find('input[name=addresses]')[0].checked;
+            values.geographical_names = jQuery(container).find('input[name=geographical_names]')[0].checked;
             if (container.find('#countries').val()) {
             values.country = container
                 .find('#countries').attr('country');

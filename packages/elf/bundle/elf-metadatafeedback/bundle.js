@@ -57,7 +57,7 @@ function() {
         },
         {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/elf/elf-metadatafeedback/service/AddFeedbackService.js"
+            "src" : "../../../../bundles/elf/elf-metadatafeedback/service/FeedbackService.js"
         },
         {
             "type" : "text/javascript",

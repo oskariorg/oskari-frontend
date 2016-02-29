@@ -77,6 +77,8 @@ input.csvExportButton {
 input.excelExportButton {
   margin: 3px 10px 2px 5px; }
 
+table.oskari-grid [class*="span"] {
+  float: none; }
 table.oskari-grid td {
   padding: 5px; }
 table.oskari-grid td, table.oskari-grid th {

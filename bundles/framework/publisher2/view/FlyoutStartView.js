@@ -60,8 +60,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
                 if (!me.hasAcceptedTou) {
                     me._markTouAccepted();
                 }
-                var layers = me.service.getLayersWithoutPublishRights();
-                me.instance.setPublishMode(true, layers);
+
+                var publishMapEditorRequestBuilder = me.instance.sandbox.getRequestBuilder(
+                    'Publisher.PublishMapEditorRequest'
+                );
+                if (publishMapEditorRequestBuilder) {
+                    var req = publishMapEditorRequestBuilder();
+                    me.instance.sandbox.request(me.instance, req);
+                }
+
             });
             me.buttons['continue'] = continueButton;
             me._updateContinueButton();

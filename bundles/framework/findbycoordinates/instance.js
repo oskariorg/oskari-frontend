@@ -18,6 +18,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
         this.searchUrl = undefined;
     }, {
         __name : 'findbycoordinates',
+        __templates : {
+            item : _.template('<h3>${ name }</h3>' +
+                   '<h3>${ info }</h3>' +
+                   '<p>${ lat }, ${ lon }</p>')
+        },
         getName : function () {
             return this.__name;
         },
@@ -164,14 +169,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                 lat: lonlat.lat
             }, function (response) {
                 if (response) {
-                    me.resultClicked(_.first(response.locations));
+                    me.handleResponse(response.locations);
                 }
+                me.stopTool();
+                me.selectDefaultTool();
             }, function () {
                 me.getSandbox().printWarn(
                     'ReverseGeoCode search failed',
                     [].slice.call(arguments));
-                this.stopTool();
-                this.selectDefaultTool();
+                me.stopTool();
+                me.selectDefaultTool();
             });
         },
         /**
@@ -180,40 +187,41 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
          * @method resultClicked
          * @param  {Object} result
          */
-        resultClicked: function (result) {
-            if (!result) return;
+        handleResponse: function (results) {
+            if (!results || !results.length) {
+                return;
+            }
 
-            var loc = this.getLocalization(),
+            var me = this,
+                loc = this.getLocalization(),
                 sandbox = this.getSandbox(),
-                zoomLevel = sandbox.getMap().getZoom(),
-                srsName = sandbox.getMap().getSrsName(),
-                lonlat = new OpenLayers.LonLat(result.lon, result.lat),
-                popupId = "findbycoordinates-search-result",
-                moveReqBuilder = sandbox
-                    .getRequestBuilder('MapMoveRequest'),
-                infoBoxReqBuilder = sandbox
-                    .getRequestBuilder('InfoBox.ShowInfoBoxRequest'),
-                moveReq,
-                infoBoxReq,
-                infoBoxContent;
+                popupId = "findbycoordinates-search-result";
+            // get the location from first. This is error prone since locations may differ a bit
+            // Maybe find another way of doing this like a generic popup with markers for each location?
+            var lonlat =  {
+                lon: results[0].lon,
+                lat: results[0].lat
+            };
+            var moveReqBuilder = sandbox.getRequestBuilder('MapMoveRequest');
+            var infoBoxReqBuilder = sandbox.getRequestBuilder('InfoBox.ShowInfoBoxRequest');
 
             if (moveReqBuilder) {
-                moveReq = moveReqBuilder(
-                    result.lon, result.lat, zoomLevel, false, srsName);
-                sandbox.request(this, moveReq);
+                sandbox.request(this, moveReqBuilder(
+                    lonlat.lon, lonlat.lat, sandbox.getMap().getZoom(),
+                    false, sandbox.getMap().getSrsName()));
             }
             if (infoBoxReqBuilder) {
-                infoBoxContent = {
-                    html: this.__getInfoBoxHtml(result),
-                    actions: {}
-                };
-                infoBoxReq = infoBoxReqBuilder(
+                var contents = [];
+                results.forEach(function(result) {
+                    contents.push(me.__getInfoBoxHtml(result));
+                });
+                contents.sort(function(a,b ) {
+                    return a.prio < b.prio;
+                });
+                sandbox.request(this, infoBoxReqBuilder(
                     popupId, loc.resultsTitle,
-                    [infoBoxContent], lonlat, true);
-                sandbox.request(this, infoBoxReq);
+                    contents, lonlat, true));
             }
-            this.stopTool();
-            this.selectDefaultTool();
         },
         /**
          * Returns the content for the infobox.
@@ -224,10 +232,18 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
          * @return {String}
          */
         __getInfoBoxHtml: function (result) {
-            var template = '<h3><%= name %></h3>' +
-                            '<h3><%= village %></h3>' +
-                            '<p><%= lat %>, <%= lon %></p>';
-            return _.template(template, result);
+            var data = {
+                name : result.name,
+                info : result.village || result.type || "",
+                lon : result.lon,
+                lat : result.lat
+            };
+            return {
+                // use higher priority for ones with "village" info more than ones that don't
+                // this way "nice-to-know" features like "what 3 words" are at the bottom
+                prio : (result.village) ? 1 : -1,
+                html : this.__templates.item(data)
+            };
         }
     }, {
         "extend" : ["Oskari.userinterface.extension.DefaultExtension"]

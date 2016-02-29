@@ -123,6 +123,7 @@ Oskari.clazz.define(
          *
          */
         start: function () {
+            var me = this;
             if (this.started) {
                 return;
             }
@@ -155,6 +156,7 @@ Oskari.clazz.define(
             }
 
             /* request handler */
+            /*
             this._requestHandlers['catalogue.ShowMetadataRequest'] =
                 Oskari.clazz.create(
                     'Oskari.catalogue.bundle.metadataflyout.request.' +
@@ -162,11 +164,11 @@ Oskari.clazz.define(
                     sandbox,
                     this
                 );
-
             sandbox.addRequestHandler(
                 'catalogue.ShowMetadataRequest',
                 this._requestHandlers['catalogue.ShowMetadataRequest']
             );
+*/
 
             var request = sandbox.getRequestBuilder(
                 'userinterface.AddExtensionRequest'
@@ -174,8 +176,29 @@ Oskari.clazz.define(
 
             sandbox.request(this, request);
 
+            this._requestHandlers = {
+                'catalogue.ShowMetadataRequest': Oskari.clazz.create(
+                    'Oskari.catalogue.bundle.metadataflyout.request.ShowMetadataRequestHandler',
+                    sandbox,
+                    this
+                ),
+                'catalogue.AddTabRequest': Oskari.clazz.create(
+                    'Oskari.mapframework.bundle.catalogue.request.AddTabRequestHandler',
+                    sandbox,
+                    this.plugins['Oskari.userinterface.Flyout']
+                )
+            };
+
+            for (var key in this._requestHandlers) {
+                sandbox.addRequestHandler(key, this._requestHandlers[key])
+            }
+
             /* stateful */
             sandbox.registerAsStateful(this.mediator.bundleId, this);
+
+            // handle state
+            var state = me.getState();
+            me.setState(state);
 
         },
 
@@ -225,6 +248,23 @@ Oskari.clazz.define(
              */
             AfterMapMoveEvent: function (event) {
                 /* this might react when map moved */
+            },
+            /**
+             * @method userinterface.ExtensionUpdatedEvent
+             * Fetch when flyout is opened
+             */
+            'userinterface.ExtensionUpdatedEvent': function (event) {
+                var me = this,
+                    doOpen = event.getViewState() !== 'close',
+                    p;
+                if (event.getExtension().getName() !== me.getName()) {
+                    // not me -> do nothing
+                    return;
+                }
+                var viewState = event.getViewState();
+                if (viewState == 'close') {
+                    this.state = {};
+                }
             }
         },
 
@@ -238,10 +278,16 @@ Oskari.clazz.define(
                 p;
 
             /* request handler cleanup */
+            /*
             sandbox.removeRequestHandler(
                 'catalogue.ShowMetadataRequest',
                 this._requestHandlers['catalogue.ShowMetadataRequest']
             );
+            */
+            for (var key in this._requestHandlers) {
+                sandbox.removeRequestHandler(key, this._requestHandlers[key]
+                );
+            }
 
             /* sandbox cleanup */
             for (p in this.eventHandlers) {
@@ -355,7 +401,10 @@ Oskari.clazz.define(
          * @param {Object} state bundle state as JSON
          */
         setState: function (state) {
-            this.plugins['Oskari.userinterface.Flyout'].setContentState(state);
+            this.state = state;
+            if (state && state.current){
+                this.scheduleShowMetadata(state.current);
+            }
         },
 
         /**
@@ -363,9 +412,7 @@ Oskari.clazz.define(
          * @return {Object} bundle state as JSON
          */
         getState: function () {
-            return this.plugins[
-                'Oskari.userinterface.Flyout'
-            ].getContentState();
+            return this.state;
         }
     }, {
         protocol: [

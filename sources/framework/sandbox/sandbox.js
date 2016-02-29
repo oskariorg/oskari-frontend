@@ -141,9 +141,13 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
         /**
          * @method getAjaxUrl
          * Returns global ajax url for the application. See #setAjaxUrl
+         * @param {String} route optional route that's used as action_route parameter
          * @return {String}
          */
-        getAjaxUrl: function () {
+        getAjaxUrl: function (route) {
+            if(route) {
+                return this._ajaxUrl + 'action_route=' + route;
+            }
             return this._ajaxUrl;
         },
 

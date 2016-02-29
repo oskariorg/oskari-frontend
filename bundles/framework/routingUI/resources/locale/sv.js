@@ -2,44 +2,38 @@ Oskari.registerLocalization(
 {
     "lang": "sv",
     "key": "routingUI",
-   	"value": {
+    "value": {
         "tool": {
-            "tooltip": "Tee reittihaku"
+            "tooltip": "Make route search"
         },
         "popup": {
-            "title": "Hae reitti",
-            "instructions": "Hae reitti kahden pisteen välillä klikkaamalla kartalta lähtö- ja saapumispiste.",
+            "title": "Get route",
+            "instructions": "Get directions by clicking between two points on the map departure and entry point.",
             "button": {
-                "cancel": "Sulje",
-                "getRoute": "Hae reitti"
+                "cancel": "Close",
+                "getRoute": "Get route"
             },
-            "startingPointTooltip":"Lähtöpiste",
-            "finishingPointTooltip":"Saapumispiste"
+            "startingPointTooltip":"Starting point",
+            "finishingPointTooltip":"Finishing point",
+            "startingPoint": "Starting point",
+            "finishingPoint": "Finishing point"
+        },
+        "error": {
+            "title": "Route search was not successful",
+            "message": "Route search was not successful. Check the departure and the entry point and try again."
         },
         "routeInstructions": {
-            "length": "Reitin pituus: ",
-            "duration": "Reitin kesto: ",
-            "seconds": " s",
-            "meters":  " m"
-        },
-        "transportTypeIds": {
-            "walk": "Walk",
-            "1": "Helsinki internal bus lines",
-            "2": "Tram",
-            "3": "Espoo internal bus lines",
-            "4": "Vantaa internal bus lines",
-            "5": "regional bus lines",
-            "6": "Metro",
-            "7": "Ferry",
-            "8": "U-lines",
-            "12": "commuter trains",
-            "21": "Helsinki service lines",
-            "22": "Helsinki night buses",
-            "23": "Espoo service lines",
-            "24": "Vantaa service lines",
-            "25": "region night buses",
-            "36": "Kirkkonummi internal bus lines",
-            "39": "Kerava internal bus lines"
+            "titleOne": "Found one route",
+            "titleMulti": "Found {count} routes",
+            "route": "Route",
+            "duration": "Duration",
+            "startTime": "Start time",
+            "endTime": "End time",
+            "waitingTime": "Waiting time",
+            "walkingTime": "Walking time",
+            "transitTime": "Transit time",
+            "walkDistance": "Walk distance",
+            "showRoute": "Show route"
         }
     }
 }

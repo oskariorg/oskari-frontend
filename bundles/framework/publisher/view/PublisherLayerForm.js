@@ -2,8 +2,7 @@
  * @class Oskari.mapframework.bundle.publisher.view.PublisherLayerForm
  *
  * Represents a layer listing view for the publisher as an Oskari.userinterface.component.AccordionPanel
- * and control for the published map layer selection plugin. Has functionality to promote layers
- * to users and let the user select base layers for the published map.
+ * and control for the published map layer selection plugin. Lets the user select base layers for the published map.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerForm',
 
@@ -82,10 +81,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
 
         me.config = {
             layers: {
-                promote: [{
-                    text: me.loc.layerselection.promote,
-                    id: [24] // , 203
-                }],
                 preselect: ['base_35']
             }
         };
@@ -393,101 +388,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
             });
 
             contentPanel.append(buttonCont);
-            // There will be a button for adding more layers
-            //            if (this.config.layers.promote && this.config.layers.promote.length > 0) {
-            //                this._populateLayerPromotion(contentPanel);
-            //            }
         },
 
-        /**
-         * Populates the layer promotion part of the map layers panel in publisher
-         *
-         * @method _populateLayerPromotion
-         * @private
-         */
-        _populateLayerPromotion: function (contentPanel) {
-            var me = this,
-                sandbox = this.instance.getSandbox(),
-                addRequestBuilder = sandbox.getRequestBuilder(
-                    'AddMapLayerRequest'
-                ),
-                removeRequestBuilder = sandbox.getRequestBuilder(
-                    'RemoveMapLayerRequest'
-                ),
-                closureMagic = function (layer) {
-                    return function () {
-                        var checkbox = jQuery(this),
-                            isChecked = checkbox.is(':checked');
-                        if (isChecked) {
-                            sandbox.request(
-                                me.instance,
-                                addRequestBuilder(layer.getId(), true)
-                            );
-                            // promoted layers go directly to baselayers
-                            me.plugin.addBaseLayer(layer);
-                        } else {
-                            sandbox.request(
-                                me.instance,
-                                removeRequestBuilder(layer.getId())
-                            );
-                        }
-                    };
-                },
-                i,
-                promotion,
-                promoLayerList,
-                j,
-                layer,
-                layerContainer,
-                input;
-
-            for (i = 0; i < this.config.layers.promote.length; i += 1) {
-                promotion = this.config.layers.promote[i];
-                promoLayerList = this._getActualPromotionLayers(promotion.id);
-
-                if (promoLayerList.length > 0) {
-                    contentPanel.append(promotion.text);
-                    for (j = 0; j < promoLayerList.length; j += 1) {
-                        layer = promoLayerList[j];
-                        layerContainer = this.templateTool.clone();
-                        layerContainer.attr('data-id', layer.getId());
-                        layerContainer.find('label').attr(
-                            'for',
-                            'checkbox' + layer.getId()
-                        ).append(layer.getName());
-                        input = layerContainer.find('input');
-                        input.attr('id', 'checkbox' + layer.getId());
-                        input.change(closureMagic(layer));
-                        contentPanel.append(layerContainer);
-                    }
-                }
-            }
-        },
-        /**
-         * Checks given layer list and returns any layer that is found on the system but not yet selected.
-         * The returned list contains the list that we should promote.
-         *
-         * @method _getActualPromotionLayers
-         * @param {String[]} list - list of layer ids that we want to promote
-         * @return {Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Object[]} filtered list of promoted layers
-         * @private
-         */
-        _getActualPromotionLayers: function (list) {
-            var sandbox = this.instance.getSandbox(),
-                layersToPromote = [],
-                j,
-                layer;
-            for (j = 0; j < list.length; j += 1) {
-                if (!sandbox.isLayerAlreadySelected(list[j])) {
-                    layer = sandbox.findMapLayerFromAllAvailable(list[j]);
-                    // promo layer found in system
-                    if (layer) {
-                        layersToPromote.push(layer);
-                    }
-                }
-            }
-            return layersToPromote;
-        },
         /**
          * Clears previous layer listing and renders a new one to the view.
          *

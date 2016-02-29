@@ -90,6 +90,10 @@ Oskari.clazz.define(
                 '        <span></span>' +
                 '        <input type="text" name="user" required="required" />' +
                 '    </label>' +
+                '    <label>' +
+                '        <span></span>' +
+                '        <input type="text" name="email" />' +
+                '    </label>' +
                 // Make these two required if we're creating a new user
                 '    <label>' +
                 '        <span></span>' +
@@ -243,8 +247,8 @@ Oskari.clazz.define(
             me.users = users;
             for (i = 0; i < users.length; i += 1) {
                 user = users[i];
-                matches = !hasFilter || user.firstName.toLowerCase().indexOf(filter.toLowerCase()) > -1 ||
-                    user.lastName.toLowerCase().indexOf(filter.toLowerCase()) > -1 || user.user.toLowerCase().indexOf(filter.toLowerCase()) > -1;
+                matches = !hasFilter || (user.firstName && user.firstName.toLowerCase().indexOf(filter.toLowerCase()) > -1) ||
+                    (user.lastName && user.lastName.toLowerCase().indexOf(filter.toLowerCase()) > -1) || (user.user && user.user.toLowerCase().indexOf(filter.toLowerCase()) > -1);
 
                 if (matches) {
                     list.append(
@@ -437,16 +441,13 @@ Oskari.clazz.define(
             event.preventDefault(); // We don't want the form to submit
             var frm = jQuery(event.target);
             if (me._formIsValid(frm, me)) {
-                /**
-                if (data.roles )
-                    */
+
                 jQuery.ajax({
                     type: frm.attr('method'),
                     url: me.sandbox.getAjaxUrl() + me.instance.conf.restUrl,
                     data: frm.serialize(),
                     success: function (data) {
                         me._closeForm(frm);
-                        // FIXME fetch users
                         me.fetchUsers(me.container);
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
@@ -457,7 +458,7 @@ Oskari.clazz.define(
                         );
                         me._openPopup(
                             me._getLocalization('save_failed'),
-                            error
+                            me._getLocalization('save_failed_message')
                         );
                     }
                 });

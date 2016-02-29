@@ -10,7 +10,6 @@ div.mapplugin.coordinatetool {
 
 div.coordinatetool__popup {
   width: 280px;
-  height: 340px;
   display: none;
   z-index: 15000;
   background-color: #ffffff; }
@@ -18,8 +17,6 @@ div.coordinatetool__popup {
     position: absolute;
     top: 8px;
     right: 5px; }
-  div.coordinatetool__popup div.content {
-    height: 215px; }
   div.coordinatetool__popup div.actions {
     float: right; }
   div.coordinatetool__popup div.clear {
@@ -35,15 +32,21 @@ div.coordinatetool__popup {
     font-size: 12px; }
   div.coordinatetool__popup div.content .margintop {
     margin-top: 10px; }
+  div.coordinatetool__popup div.content .coordinatetool-divider {
+    margin-bottom: 5px;
+    height: 1px;
+    border-top: 1px solid #DDDDDD; }
+  div.coordinatetool__popup div.content .coordinatetool-projection-change-header {
+    font-style: italic; }
 
 .coordinate-label {
-  width: 56px;
+  width: 70px;
   padding-top: 7px; }
 
 div.mapplugin.coordinatetool.toolstyle-default {
-  background-image: url('../images/coordinates-style1-dark.png') !important; }
+  background-image: url('../images/coordinates-style1-dark.png'); }
   div.mapplugin.coordinatetool.toolstyle-default .active {
-    background-image: url('../images/coordinates-style1-dark-active.png') !important; }
+    background-image: url('../images/coordinates-style1-dark-active.png'); }
 div.mapplugin.coordinatetool.toolstyle-rounded-dark {
   background-image: url('../images/coordinates-style1-dark.png') !important; }
   div.mapplugin.coordinatetool.toolstyle-rounded-dark .active {

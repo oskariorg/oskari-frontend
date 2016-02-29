@@ -1,17 +1,19 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "sv",
     "key": "heatmap",
     "value": {
-        "tool_label" : "Heatmap",
-        "tool_label_settings" : "Settings",
-        "dialog" : {
-            "title" : "Heatmap settings",
-            "propertyLabel" : "Weight property",
-            "radiusLabel" : "Radius",
-            "colorThemesLabel" : "Color themes",
-            "colorPickerLabel" : "Choose colors",
-            "pixelsPerCellLabel" : "Pixels per cell",
-            "noneOption" : "None"
+        "tool_label": "Heatmap",
+        "tool_label_settings": "Inställningar",
+        "dialog": {
+            "title": "Heatmap inställningar",
+            "propertyLabel": "Vägt attribut",
+            "radiusLabel": "Radie",
+            "colorThemesLabel": "Färgtemor",
+            "colorPickerLabel": "Välj färg",
+            "pixelsPerCellLabel": "Pixel per cell",
+            "noneOption": "Ingen"
         }
     }
-});
+}
+);

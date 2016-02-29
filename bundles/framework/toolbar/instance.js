@@ -221,7 +221,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
             return handler.apply(this, [event]);
         },
         measureTools: {
-            "basictools": {
+            "default-basictools": {
                 "measureline": true,
                 "measurearea": true
             }

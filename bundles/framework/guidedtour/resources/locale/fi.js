@@ -13,58 +13,58 @@ Oskari.registerLocalization(
         "title": "Tervetuloa",
         "desc": "",
         "tourseen": {
-            "label": "Älä näytä tätä viestiä uudelleen"
+            "label": "Älä näytä tätä viestiä uudelleen."
         },
         "page1": {
-            "title": "Tervetuloa Paikkatietoikkunan karttanäkymään",
-            "message": "Jos olet ensimmäistä kertaa Paikkatietoikkunan karttapalvelussa, pikaoppaamme auttaa sinut alkuun."
+            "title": "Tervetuloa",
+            "message": "Oletko ensimmäistä kertaa karttapalvelussa? Pikaopas auttaa sinut alkuun."
         },
         "page2": {
             "title": "Haku",
-            "message": "Haku-toiminto sisältää sekä paikkahaun että metatietohaun. Paikkahaun avulla voit hakea paikkoja paikannimen, osoitteen tai kiinteistötunnuksen perusteella ja keskittää haun perusteella karttanäkymän haluamaasi paikkaan. Metatietohaun avulla voi hakea paikkatietoaineistoja useiden eri hakuehtojen perusteella. Metatietohaun tuloksissa näytetään myös sellaiset paikkatietoaineistot, jotka eivät ole saatavilla karttatasoina Paikkatietoikkunassa.",
-            "openLink": "Näytä haku",
-            "closeLink": "Piilota haku",
+            "message": "Haku-valikossa voit hakea paikkoja tai paikkatietoja. <br/><br/>  Paikkahaku: Hae paikkoja paikannimen, osoitteen tai kiinteistötunnuksen perusteella. Klikkaa hakutulosta ja kartta keskittyy valittuun paikkaan. <br/><br/> Metatietohaku: Hae paikkatietoaineistoja, -aineistosarjoja ja -palveluja. Käytä tekstihakua tai valmiiksi määriteltyjä hakuehtoja. Hakutuloksista pääset lukeemaan metatietokuvailun tai avaamaan valitun aineiston kartalla, jos karttataso on saatavilla.",
+            "openLink": "Näytä Haku",
+            "closeLink": "Piilota Haku",
             "tileText": "Haku"
         },
         "page3": {
             "title": "Karttatasot",
-            "message": "Karttatasot-valikosta voit valita näkyviin eri tiedontuottajien tuottamia karttatasoja. Voit listata karttatasot joko teemoittain tai tiedontuottajittain. Voit myös hakea karttatasoja karttatason nimen, tiedontuottajan nimen tai avainsanan perusteella. Valitut karttatasot näet Valitut tasot -valikon kautta.",
-            "openLink": "Näytä karttatasot",
-            "closeLink": "Piilota karttatasot",
+            "message": "Karttatasot-valikosta löydät kaikki karttapalvelussa saatavilla olevat karttatasot. <br/><br/> Järjestä karttatasot joko aiheen tai tiedontuottajan mukaan. <br/><br/> Hae karttatasoja karttatason nimen, tiedontuottajan nimen tai avainsanan perusteella. Löydät uusimmat karttatasot, vektoritasot ja julkaistavissa olevat karttatasot valmiiksi määritellyiltä listoilta. <br/><br/>  Avoinna olevat karttatasot voit tarkistaa Valitut tasot -valikosta.",
+            "openLink": "Näytä Karttatasot",
+            "closeLink": "Piilota Karttatasot",
             "tileText": "Karttatasot"
         },
         "page4": {
-            "title": "Valitut karttatasot",
-            "message": "Valitut karttatasot -valikossa voit säätää, miten valitut karttatasot esitetään. Voit järjestää karttatasoja raahaamalla niitä uuteen järjestykeen ja säätää karttatasojen läpinäkyvyyttä. Osalle karttatasoista on mahdollista valita toinen tyyli. Tietotuotteiden osalta on mahdollista näyttää kohdetiedot taulukossa. Karttataso on myös mahdollista piilottaa näkyvistä.",
-            "openLink": "Näytä valitut karttatasot",
-            "closeLink": "Piilota valitut karttatasot",
-            "tileText": "Valitut karttatasot"
+            "title": "Valitut tasot",
+            "message": "Valitut tasot -valikossa näet avoinna olevat karttatasot ja voit määritellä, miten ne esitetään karttanäkymässä. <br/> Raahaa karttatasot uuteen järjestykseen. <br/> Säädä tasojen läpinäkyvyyttä. <br/> Valitse karttatasolle toinen tyyli, jos karttatasolle on määritelty useampia tyylejä. <br/> Avaa tietotuotteiden kohdetiedot taulukkomuodossa. <br/> Näytä tai piilota karttataso tilapäisesti.",
+            "openLink": "Näytä Valitut tasot",
+            "closeLink": "Piilota Valitut tasot",
+            "tileText": "Valitut tasot"
         },
         "page5": {
             "title": "Omat tiedot",
-            "message": "Omat tiedot -valikossa näet tallentamasi omat kohteet, karttanäkymät, julkaistut kartat, indikaattorit, analyysit ja aineistot. Lisäksi voit tarkistaa omat käyttäjätietosi. Omat tiedot näkyvät ainoastaan kirjautuneille käyttäjille.",
-            "openLink": "Näytä omat tiedot",
-            "closeLink": "Piilota omat tiedot",
+            "message": "Omat tiedot -valikosta voit tarkistaa tallentamasi paikkatiedot ja käyttäjätilisi tiedot. <br/><br/> Tarkista ja päivitä omat kohteet, karttanäkymät, julkaistut kartat, indikaattorit, analyysit ja aineistot. <br/><br> Vain kirjautuneet käyttäjät voivat nähdä Omat tiedot.",
+            "openLink": "Näytä Omat tiedot",
+            "closeLink": "Piilota Omat tiedot",
             "tileText": "Omat tiedot"
         },
         "page6": {
             "title": "Karttajulkaisu",
-            "message": "Karttajulkaisu-toiminnon avulla voit helposti julkaista kartan omalla verkkosivullasi. Sinun tarvitsee vain valita haluamasi karttatasot, antaa kartan julkaisutiedot, määritellä kartalle koko, valita sopivat työkalut ja niille asettelut ja karttaikkunan ulkoasu. Tallennettuasi valintasi saat rivin html-koodia, jonka voit lisätä verkkosivullesi, ja kartta näkyy sivullasi. Muistathan tarkistaa etukäteen karttatasolistalta, että valitsemasi karttatasot ovat julkaistavissa.",
-            "openLink": "Näytä karttajulkaisu",
-            "closeLink": "Piilota karttajulkaisu",
+            "message": "Karttajulkaisu-toiminnolla voit julkaista karttoja omalla verkkosivullasi. <br/><br/> Valitse kartalla näytettävät karttatasot, kerro missä aiot julkaista kartan, valitse työkalut ja määrittele kartan ulkoasu. Paina Tallenna ja kartta on valmis julkaistavaksi. Kopioi vain saamasi html-koodi verkkosviullesi. <br/><br/> Voit myöhemmin päivittää karttaa Omat tiedot -valikon kautta. Muutokset näkyvät heti myös omalla verkkosivullasi.<br/><br/> Vain kirjautuneet käyttäjät voivat julkaista karttoja.",
+            "openLink": "Näytä Karttajulkaisu",
+            "closeLink": "Piilota Karttajulkaisu",
             "tileText": "Karttajulkaisu"
         },
         "page7": {
             "title": "Työkalut",
-            "message": "Työkalujen avulla voit mm. lisätä kohteita, tallentaa karttanäkymiä, lähettää karttalinkkejä tai mitata kohteiden välisen etäisyyden. Työkalujen selitteet näet, kun pidät hetken hiiren kursoria niiden päällä."
+            "message": "Työkalujen avulla voit muokata karttanäkymää. Pidä hiiren kursoroa työkalun päällä ja saat ohjeet sen käyttöön. <br/> <br/> Osa työkaluista on saatavilla vain kirjautuneille käyttäjille."
         },
         "page8": {
             "title": "Kartan liikuttaminen",
-            "message": "Voit liikuttaa karttaa raahamalla sitä hiirellä tai käyttämällä nuolinäppäimiä panorointityökalussa (vieressä) tai näppäimistöllä. Panorointityökalun keskellä olevasta painikkeesta pääset takaisin oletusnäkymään."
+            "message": "Kartan liikuttaminen onnistuu kolmella eri tavalla. <br/> Raahaa karttaa hiirellä, kun käsi-työkalu on valittuna. <br/> Liikuta karttaa näppäimistön nuolinäppäimillä. <br/> Klikkaa nuolia oikeassa yläkulmassa olevassa panorointityökalussa."
         },
         "page9": {
             "title": "Lähentäminen ja loitontaminen",
-            "message": "Voit lähentää ja loitontaa karttaa mittakaavasäätimellä joko valitsemalla sopivan mittakaavatason tai klikkaamalla (+)- tai (-)-painikkeita. Voit myös käyttää näppäimistön (+)- ja (-)-näppäimiä tai hiiren rullaa. Kartan lähentäminen onnistuu myös kaksoisklikkaamalla karttaa."
+            "message": "Lähentämällä voit tarkentaa karttanäkymää. Loitontamalla saat näkyviin suuremman alueen. Nämä onnistuvat usealla eri tavalla. <br/> <br/> Valitse mittakaava mittakaavasäätimestä. Voit myös käyttää (+)- ja (-)-painikkeita mittakaavasäätimen päissä. <br/> <br/>  Käytä näppäimistön (+)- ja (-)-painikkeita. <br/> <br/>  Kaksoisklikkaa karttanäkymää tai käytä suurennuslasi-työkalua lähentääksesi karttaa."
         }
     }
 }

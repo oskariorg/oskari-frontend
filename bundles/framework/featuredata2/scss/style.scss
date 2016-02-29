@@ -12,6 +12,7 @@
 
 .featuredata {
 
+
     div.tab-content {
         max-height: 535px;
         overflow: auto;
@@ -49,6 +50,9 @@
         cursor: pointer;
     }
 
+    div.gridMessageContainer {
+        margin: 30px 10px 10px 10px;
+    }
 }
 
 div.analyse-filter-popup-content div.filter-option {

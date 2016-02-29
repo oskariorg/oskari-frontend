@@ -10,6 +10,29 @@ function () {
     this.started = false;
     this.toolActive = false;
     this.countMapClicked = null;
+    this.__templates = {
+        itinerary: jQuery(
+                '<div class="itinerary">' +
+                '<div class="duration"><div class="itinerary__title"></div><div class="itinerary__content"></div><div class="itinerary__clear"></div></div>'+
+                '<div class="start-time"><div class="itinerary__title"></div><div class="itinerary__content"></div><div class="itinerary__clear"></div></div>'+
+                '<div class="end-time"><div class="itinerary__title"></div><div class="itinerary__content"></div><div class="itinerary__clear"></div></div>'+
+                '<div class="waiting-time"><div class="itinerary__title"></div><div class="itinerary__content"></div><div class="itinerary__clear"></div></div>'+
+                '<div class="walk-time"><div class="itinerary__title"></div><div class="itinerary__content"></div><div class="itinerary__clear"></div></div>'+
+                '<div class="transit-time"><div class="itinerary__title"></div><div class="itinerary__content"></div><div class="itinerary__clear"></div></div>'+
+                '<div class="walk-distance"><div class="itinerary__title"></div><div class="itinerary__content"></div><div class="itinerary__clear"></div></div>'+
+                '<div class="actions"></div>'+
+                '</div>'
+            )
+    };
+    this.routeColors = [
+        '#ff00ff',
+        '#7d26cd',
+        '#ffb600',
+        '#737373',
+        '#ff0000',
+        '#00ff00',
+        '#0000ff'
+    ];
 }, {
     __name: 'routingUI',
     /**
@@ -69,6 +92,7 @@ function () {
 
         this.registerTool();
     },
+
     /**
      * Requests the tool to be added to the toolbar.
      *
@@ -113,71 +137,201 @@ function () {
         return handler.apply(this, [event]);
     },
 
+    /**
+     * @method  @private __isPopupVisible is popup visible
+     * @return {Boolean} is visible
+     */
+    __isPopupVisible: function(){
+        var popup = jQuery('.tools_routing_selection:visible');
+        return popup.length>0;
+    },
+
+    /**
+     * eventHandlers event handlers
+     */
     eventHandlers: {
         'MapClickedEvent': function (event) {
             if (!this.toolActive) {
                 return;
             }
+
+            if(!this.__isPopupVisible()) {
+                return;
+            }
+
+            var me = this,
+                roundToDecimals = 0,
+                conf = me.conf,
+                lonlat;
+
+            if(conf && conf.roundToDecimals) {
+                roundToDecimals = conf.roundToDecimals;
+            }
+
+            lonlat = event.getLonLat();
+            lonlat.lon = lonlat.lon.toFixed(roundToDecimals)
+            lonlat.lat = lonlat.lat.toFixed(roundToDecimals)
+
             if (this.countMapClicked === null) {
                 this.countMapClicked += 1;
-                this.popup.setStartingPoint(event.getLonLat());
+                this.popup.setStartingPoint(lonlat);
             } else if (this.countMapClicked === 1) {
                 this.countMapClicked = null;
-                this.popup.setFinishingPoint(event.getLonLat());
+                this.popup.setFinishingPoint(lonlat);
             }
         },
-        'RouteSuccessEvent': function (event) {
-            var geom = event.getGeoJson();
-            this.renderRoute(geom);
+        'RouteResultEvent': function (event) {
+            var me = this,
+                loc = me.localization;
+            if(!me.__isPopupVisible()) {
+                return;
+            }
 
-            var instructions = event.getRouteInstructions();
-            this.renderInstructions(instructions);
+            me.popup.progressSpinner.stop();
+            if(event.getSuccess()) {
+                me.__renderPlan(event.getPlan());
+            } else {
+                me.__showMessage(loc.error.title, loc.error.message);
+            }
         }
     },
 
-    renderRoute: function (geom) {
+    /**
+     * @method  @private __showMessage show wanted message
+     * @param  {String} title   message title
+     * @param  {String} message message
+     */
+    __showMessage: function(title, message){
+        var me = this,
+            routeDiv = me.popup.popupContent.find('.route-instructions'),
+            titleDiv = routeDiv.find('.title'),
+            instructionsDiv = routeDiv.find('.instructions');
+        titleDiv.empty();
+        instructionsDiv.empty();
+        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        dialog.show(title, message);
+        dialog.fadeout();
+    },
+
+    /**
+     * @method @private __renderPlan render plan
+     * @param  {Object} plan plan object
+     */
+    __renderPlan: function(plan){
+        var me = this,
+            loc = me.localization
+            accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
+            panel = null,
+            titlePanel = jQuery('<div>'),
+            routeDiv = me.popup.popupContent.find('.route-instructions'),
+            titleDiv = routeDiv.find('.title'),
+            instructionsDiv = routeDiv.find('.instructions');
+
+            titleDiv.empty();
+            instructionsDiv.empty();
+
+            var title = loc.routeInstructions.titleOne;
+            if(plan.itineraries.length>1){
+                title = loc.routeInstructions.titleMulti.replace('{count}',plan.itineraries.length);
+            }
+            titleDiv.html('<h4>' + title + '</h4>');
+
+            _.forEach(plan.itineraries, function (itinerary, index) {
+                panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+                var panelTitle = loc.routeInstructions.route + ' ' + (index+1);
+                panel.setTitle(panelTitle);
+
+                var content = me.__templates.itinerary.clone();
+                content.find('div.duration div.itinerary__title').html(loc.routeInstructions.duration + ':');
+                content.find('div.duration div.itinerary__content').html(me._formatTime(itinerary.duration));
+
+                content.find('div.start-time div.itinerary__title').html(loc.routeInstructions.startTime + ':');
+                content.find('div.start-time div.itinerary__content').html(me._formatDate(itinerary.startTime));
+
+                content.find('div.end-time div.itinerary__title').html(loc.routeInstructions.endTime + ':');
+                content.find('div.end-time div.itinerary__content').html(me._formatDate(itinerary.endTime));
+
+                content.find('div.waiting-time div.itinerary__title').html(loc.routeInstructions.waitingTime + ':');
+                content.find('div.waiting-time div.itinerary__content').html(me._formatTime(itinerary.waitingTime));
+
+                content.find('div.walking-time div.itinerary__title').html(loc.routeInstructions.walkingTime + ':');
+                content.find('div.walking-time div.itinerary__content').html(me._formatTime(itinerary.walkTime));
+
+                content.find('div.transit-time div.itinerary__title').html(loc.routeInstructions.transitTime + ':');
+                content.find('div.transit-time div.itinerary__content').html(me._formatTime(itinerary.transitTime));
+
+                content.find('div.walk-distance div.itinerary__title').html(loc.routeInstructions.walkDistance + ':');
+                content.find('div.walk-distance div.itinerary__content').html(me._formatLenght(itinerary.walkDistance));
+
+                var btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                btn.setTitle(loc.routeInstructions.showRoute);
+                btn.setHandler(function() {
+                    var routeColorIndex = index;
+                    if(index>me.routeColors.length-1) {
+                        var a = index % (me.routeColors.length-1);
+                        var b = index % (me.routeColors.length-1-a);
+                        routeColorIndex = b + a;
+                    }
+                    me._renderRoute(itinerary.geoJSON, me.routeColors[routeColorIndex]);
+                });
+                btn.insertTo(content.find('div.actions'));
+
+                panel.setContent(content);
+                panel.setVisible(true);
+                panel.close();
+                accordion.addPanel(panel);
+            });
+
+            accordion.insertTo(instructionsDiv);
+    },
+
+    /**
+     * @method  @private _renderRoute render toute to map
+     * @param  {String} geom  route geoJSON
+     * @param  {String} color route color
+     */
+    _renderRoute: function (geom, color) {
         var me = this,
             rn = 'MapModulePlugin.AddFeaturesToMapRequest',
-            style = OpenLayers.Util.applyDefaults(style, OpenLayers.Feature.Vector.style['default']);
-        style.strokeColor = '#9966FF';
-        style.strokeWidth = 5;
-        style.strokeOpacity = 0.7;
-        this.sandbox.postRequestByName(rn, [geom, 'GeoJSON', null, null, 'replace', true, style, false]);
-        me.popup.progressSpinner.stop();
+            colorRGB = Oskari.util.hexToRgb(color),
+            style = {
+                stroke: {
+                    width: 5,
+                    color: 'rgba('+colorRGB.r+', '+colorRGB.g+','+colorRGB.b+', 0.7)'
+                }
+            };
+        this.sandbox.postRequestByName(rn, [geom, {
+            layerId: null,
+            clearPrevious: true,
+            layerOptions: null,
+            centerTo: false,
+            attributes: null,
+            featureStyle: style
+        }]);
     },
 
-    renderInstructions: function (instructions) {
-        var me = this,
-            loc = me.localization,
-            routeLenght = me.formatLenght(instructions.length),
-            routeDuration = me.formatTime(instructions.duration),
-            legList = jQuery('<div><ul></ul></div>').clone(),
-            listElement = '<li></li>',
-            routeDiv = me.popup.popupContent.find('.route-instructions');
 
-        routeDiv.empty();
-        instructionDiv = '<div>' + loc.routeInstructions.length + routeLenght + ', ' + loc.routeInstructions.duration + routeDuration + '</div>';
-
-        _.forEach(instructions.legs, function (leg) {
-            var listEl = jQuery(listElement).clone(),
-                length = me.formatLenght(leg.length),
-                duration = me.formatTime(leg.duration);
-
-
-            listEl.html(loc.transportTypeIds[leg.type] + ', ' + length + ', ' + duration);
-            legList.append(listEl);
-        });
-
-        routeDiv.append(instructionDiv);
-        routeDiv.append(legList);
+    /**
+     * @method  @private _formatDate format date to string
+     * @param  {Float} dateMilliseconds millisecond presentation of day
+     * @return {String} date formatted string
+     */
+    _formatDate: function(dateMilliseconds){
+        var momentString = moment('' +dateMilliseconds, 'x').format('DD.MM.YYYY HH:mm:ss');
+        return momentString;
     },
 
-    formatLenght: function (length) {
+    /**
+     * [_formatLenght description]
+     * @param  {Float} length length in meters
+     * @return {String} string format presentation of length
+     */
+    _formatLenght: function (length) {
         if (length > 1000) {
-            var kilometers = this.decimalAdjust('round', length/1000, -1);
+            var kilometers = this._decimalAdjust('round', length/1000, -1);
             var newLength = kilometers + " km";
         } else {
-            var meters = this.decimalAdjust('round', length, 1);
+            var meters = this._decimalAdjust('round', length, 1);
             var newLength = meters + " m";
         }
         return newLength;
@@ -185,13 +339,13 @@ function () {
 
     /**
      * Decimal adjustment of a number.
-     *
+     * @method  @private _decimalAdjust
      * @param {String}  type  The type of adjustment.
      * @param {Number}  value The number.
      * @param {Integer} exp   The exponent (the 10 logarithm of the adjustment base).
      * @returns {Number} The adjusted value.
      */
-    decimalAdjust: function (type, value, exp) {
+    _decimalAdjust: function (type, value, exp) {
         // If the exp is undefined or zero...
         if (typeof exp === 'undefined' || +exp === 0) {
           return Math[type](value);
@@ -210,7 +364,12 @@ function () {
         return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
     },
 
-    formatTime: function (seconds) {
+    /**
+     * @method  @private _formatTime format time to string
+     * @param  {Float} seconds second to conver
+     * @return {string} formetted time
+     */
+    _formatTime: function (seconds) {
         var secs = Math.round(seconds);
         var hours = Math.floor(secs / (60 * 60));
 
