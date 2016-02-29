@@ -19,17 +19,6 @@
       id="indicatorsAjax"
       on-response="hideSpinner"
       on-error="ajaxError"></iron-ajax>
-    <template is="dom-if" if="{{user._loggedIn}}">
-    <iron-ajax
-      auto
-      url="{{ajaxUrl}}"
-      params='{"action_route": "GetUserIndicators"}'
-      handle-as="json"
-      last-response="{{userIndicators}}"
-      debounce-duration="300"
-      id="userIndicatorsAjax"
-      on-error="ajaxError"></iron-ajax>
-    </template>
     <oskari-spinner visible="[[showSpinner]]" spinner-id="indicatorsMetadataSpinner">
     </oskari-spinner>
     <div hidden$="{{hideIndicatorSelector(embedded, showUserIndicatorView)}}" id="indicatorSelectorDiv">
@@ -68,7 +57,7 @@
     </div>
     <oskari-statsgrid locale="[[locale]]" language="[[language]]" ajax-url="[[ajaxUrl]]"
       sources="{{sources}}" selected-indicators="{{selectedIndicators}}" selected-layer="{{selectedLayer}}"
-      layer-info="{{layerInfo}}" region-info="{{regionInfo}}" user-indicators="[[userIndicators]]"
+      layer-info="{{layerInfo}}" region-info="{{regionInfo}}"
       selector-selected-indicator-key="{{selectorSelectedIndicatorKey}}" selected-indicator-key="{{selectedIndicatorKey}}"
       sandbox="{{sandbox}}" hidden$="[[hideGrid]]"
       id="statsgrid" embedded="[[embedded]]"></oskari-statsgrid>

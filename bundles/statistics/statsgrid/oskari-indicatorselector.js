@@ -19,10 +19,6 @@ Polymer({
       "type": Object,
       "notify": true
     },
-    "userIndicators": {
-      "type": Object,
-      "notify": true
-    },
     "datasourceId": {
       "type": String,
       "notify": true

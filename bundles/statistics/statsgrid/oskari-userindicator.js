@@ -145,7 +145,9 @@ Polymer({
       var me = this,
         title = {},
         source = {},
-        description = {};
+        description = {},
+        layer = me.sandbox.findMapLayerFromAllAvailable(me.selectedLayer),
+        layerName = layer.getLayerName();
       title[this.language] = this.$.indicator_title.value;
       source[this.language] = this.$.indicator_sources.value;
       description[this.language] = this.$.indicator_description.value;
@@ -160,7 +162,8 @@ Polymer({
         "description=" + encodeURIComponent(JSON.stringify(description)) + "&" +
         "year=" + encodeURIComponent(this.$.indicator_year.value) + "&" +
         "published=" + encodeURIComponent(this.$.indicator_publicity.value) + "&" +
-        "category="+ encodeURIComponent(this.selectedLayer) + "&" +
+        "material="+ encodeURIComponent(this.selectedLayer) + "&" +
+        "category="+ encodeURIComponent(layerName) + "&" +
         "data=" + encodeURIComponent(JSON.stringify(rows));
       $.ajax({
         // For old jQuery.
