@@ -29,14 +29,7 @@ Oskari.registerLocalization(
             "selectValue": "Valitse tunniste"
         },
         "save": "Tallenna",
-        "selectRole": "Rooli",
-        "columns": {
-            "execute": "Suorittaa",
-            "download": "Latausoikeus",
-            "view_layer": "Katseluoikeus",
-            "publish": "Julkaisuoikeus",
-            "publish_view": "Katseluoikeus upotetussa kartassa"
-        }
+        "selectRole": "Rooli"
     }
 }
 );

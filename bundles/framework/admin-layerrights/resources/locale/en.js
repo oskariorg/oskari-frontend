@@ -29,14 +29,7 @@ Oskari.registerLocalization(
             "selectValue": "Select the value"
         },
         "save": "Save",
-        "selectRole": "Role",
-        "columns": {
-            "execute": "Execute",
-            "download": "Download",
-            "view_layer": "View",
-            "publish": "Publish",
-            "publish_view": "Publish view"
-        }
+        "selectRole": "Role"
     }
 }
 );

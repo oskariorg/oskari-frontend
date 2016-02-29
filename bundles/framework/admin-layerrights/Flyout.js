@@ -255,20 +255,19 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 thead = table.find('thead'),
                 tbody = table.find('tbody'),
                 service = this.instance.getSandbox().getService('Oskari.mapframework.service.MapLayerService'),
-                headerRow = me._templates.row.clone();
-
-            me.columnsLoc = this.instance._localization.columns;
+                headerRow = me._templates.row.clone(),
+                columnsLoc = this.instance.getLocalization('rights');
 
             // Create headers
             var thCell = me._templates.cellTh.clone();
-            thCell.html("name");
+            thCell.html(columnsLoc.name);
             headerRow.append(thCell);
             
             jQuery.each(layerRightsJSON[0].permissions, function(index, header) {
                 var thCell = me._templates.cellTh.clone();
-                var headerName = me.columnsLoc[header.id.toLowerCase()];
-                if (headerName === undefined) {
-                    headerName = header.name;
+                var headerName = header.name;
+                if (typeof columnsLoc[header.name] !== 'undefined') {
+                    headerName = columnsLoc[header.name];
                 }
                 thCell.html(headerName);
                 headerRow.append(thCell);
