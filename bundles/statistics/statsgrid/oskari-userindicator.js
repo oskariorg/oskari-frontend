@@ -188,9 +188,12 @@ Polymer({
                   // FIXME: This is duplicated to oskari-statsgrid. Store layerinfo as array and pass it instead.
                   var me = this,
                   array = [];
-                  Object.keys(layerInfo).forEach(function(layerName) {
+                  Object.keys(layerInfo).forEach(function(layerId) {
+                    var layer = me.sandbox.findMapLayerFromAllAvailable(layerId),
+                    layerName = layer.getLayerName();
+
                     array.push({
-                      "val": layerName,
+                      "val": layerId,
                       "text": me.localize(me.locale.regionCategories, layerName)
                     });
                   });
