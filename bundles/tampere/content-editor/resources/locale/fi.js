@@ -14,10 +14,10 @@ Oskari.registerLocalization(
                 "save": "Tallenna",
                 "cancel": "Peruuta",
                 "ok": "Ok",
-                "delete": "DeleteFi",
+                "delete": "Poista",
                 "addFeature": "Lisää kohde",
                 "editFeature": "Muokkaa kohdetta",
-                "deleteFeature": "Poistaa kohdetta"
+                "deleteFeature": "Poista kohde"
             },
             "featureUpdate": {
                 "header": "Kohde päivitetty",
@@ -25,34 +25,34 @@ Oskari.registerLocalization(
                 "error": "Kohteen päivittäminen epäonnistui"
             },
             "featureDelete": {
-                "header": "Feature deleteFi",
-                "success": "Feature deleted successfullyFi",
-                "error": "Error occured during feature deleteFi"
+                "header": "Poista kohde",
+                "success": "Kohteen poisto onnistui",
+                "error": "Kohteen poistossa tapahtui virhe"
             },
             "geometryDelete": {
-                "header": "Geometry deleteFi",
-                "success": "Geometry deleted successfullyFi",
-                "error": "Error occured during geometry deleteFi"
+                "header": "Poista geometria",
+                "success": "Geometrian poisto onnistui",
+                "error": "Geometrian poistossa tapahtui virhe
             },
             "unsavedChanges": {
-                "title": "Unsaved changesFi",
-                "text": "There are some unsaved changes. Please select below action to perform.Fi"
+                "title": "Tallentamattomia muutoksia",
+                "text": "Kohteella on tallentamattomia muutoksia."
             },
             "deleteGeometryDialog": {
-                "title": "Delete geometryFi",
-                "text": "Are you sure you want to delete geometry?Fi"
+                "title": "Poista geometria",
+                "text": "Haluatko poistaa valitun geometrian?"
             },
             "deleteFeature": {
-                "title": "Delete featureFi",
-                "text": "Are you sure you want to delete feature?Fi"
+                "title": "Poista kohde",
+                "text": "Haluatko poistaa valitun kohteen?"
             },
             "formValidationError": {
-                "title": "Form validation errorFi",
-                "text": "Please correct selected field valuesFi"
+                "title": "Virheellisiä arvoja lomakkeella",
+                "text": "Korjaa virheet korostetuissa kentissä"
             },
             "formValidationNumberError": {
-                "title": "Number validation errorFi",
-                "text": "Please put correct number valueFi"
+                "title": "Virheellinen numero",
+                "text": "Korjaa arvo numeroksi"
             }
         }
     }
