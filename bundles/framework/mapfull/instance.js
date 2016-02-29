@@ -535,6 +535,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 len = state.selectedLayers.length;
                 for (i = 0; i < len; i += 1) {
                     layer = state.selectedLayers[i];
+
+                    var oskariLayer = me.getSandbox().findMapLayerFromAllAvailable(layer.id);
                     
                     sandbox.request(
                         mapModuleName,
@@ -553,12 +555,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                         );
                     }
 
-                    if (layer.style) {
-                        sandbox.request(
-                            mapModuleName,
-                            rbStyle(layer.id, layer.style)
-                        );
-                    }                    
+                    if (layer.style && oskariLayer) {
+                        oskariLayer.selectStyle(layer.style);
+                    }
                 }
             }
 
