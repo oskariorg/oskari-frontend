@@ -39,10 +39,9 @@
         </fieldset>
         <hr/>
         <fieldset class="form-regions statsgrid-table">
-          <!-- FIXME: 300 px ok for all browsers? Should probably calculate this. -->
           <paper-scroll-header-panel class="statsgrid-table" style="min-height: 200px; height: 320px;">
             <legend>
-              [[getLayerName(locale, selectedLayer)]]
+              [[getLayerName(locale, selectedLayer, sandbox)]]
             </legend>
             <ul class="regions">
               <template is="dom-repeat" items="{{regionItems}}" as="regionItem">

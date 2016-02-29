@@ -36,7 +36,9 @@ Polymer({
                 "show(showUserIndicatorView)"
                 ],
                 "getLayerName": function(locale, layerKey) {
-                  return this.localize(this.locale.regionCategories, layerKey);
+                  var layer = this.sandbox.findMapLayerFromAllAvailable(layerKey),
+                    layerName = layer.getLayerName();
+                  return this.localize(this.locale.regionCategories, layerName);
                 },
                 "show": function() {
                   // This is needed to initialize the native dropdown to the correct value.
