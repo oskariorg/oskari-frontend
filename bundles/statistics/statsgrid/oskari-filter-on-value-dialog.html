@@ -5,32 +5,33 @@
 <dom-module id="oskari-filter-on-value-dialog">
 
   <template>
-    <paper-dialog id="oskari-filter-on-value-dialog" class="popup" on-keydown="stopWindowEvents" on-keyup="stopWindowEvents">
-      <p class="filter-desc">[[locale.indicatorFilterDesc]]</p>
-      <div class="filter-row">
-        <div class="filter-label">[[locale.filterIndicator]]</div>
-        <div class="filter-value">[[label]]</div>
-      </div>
-      <div class="filter-row">
-        <div class="filter-label">[[locale.filterCondition]]</div>
-        <div class="filter-value">
-          <div>
-            <select class="filter-select" value="{{filterCondition::change}}">
-              <template is="dom-repeat" items="[[filterConditions]]" as="filterCondition">
-                <option value="[[filterCondition.value]]">[[filterCondition.text]]</option>
-              </template>
-            </select>
-            <div class="filter-inputs-container">
-              <input type="text" class="filter-input filter-input1" value="{{input1::change}}"/>
-              <div hidden="[[!isRange(filterCondition)]]">
-                <span class="filter-between">-</span>
-                <input type="text" class="filter-input filter-input2" value="{{input2::change}}"/>
-              </div>
+    <paper-dialog id="oskari-filter-on-value-dialog" class="divmanazerpopup" on-keydown="stopWindowEvents" on-keyup="stopWindowEvents">
+      <h3 class="popupHeader">[[locale.filterIndicator]] [[label]]</h3>
+      <div class="content">
+        <p class="filter-desc">[[locale.indicatorFilterDesc]]</p>
+        <div class="filter-row">
+          <div class="filter-label">[[locale.filterCondition]]</div>
+          <div class="filter-value">
+            <div>
+              <select class="filter-select" value="{{filterCondition::change}}">
+                <template is="dom-repeat" items="[[filterConditions]]" as="filterCondition">
+                  <option value="[[filterCondition.value]]">[[filterCondition.text]]</option>
+                </template>
+              </select>
+              <div class="filter-inputs-container">
+                <input type="text" class="filter-input filter-input1" value="{{input1::change}}"/>
+                <div hidden="[[!isRange(filterCondition)]]">
+                  <span class="filter-between">-</span>
+                  <input type="text" class="filter-input filter-input2" value="{{input2::change}}"/>
+                </div>
+            </div>
           </div>
         </div>
+        <div class="actions">
+          <div class="button" on-tap="cancel">[[locale.buttons.cancel]]</div>
+          <div class="button" on-tap="filter">[[locale.buttons.filter]]</div>
+        </div>
       </div>
-      <button type="button" on-tap="cancel">[[locale.buttons.cancel]]</button>
-      <button type="button" class="primary" on-tap="filter">[[locale.buttons.filter]]</button>
       
       <content></content>
     </paper-dialog>
