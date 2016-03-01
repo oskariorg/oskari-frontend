@@ -4,7 +4,7 @@
 <dom-module id="oskari-grid">
 
   <template>
-    <table class="oskari-grid" id="oskariGrid" style="margin: 0px; overflow-x: scroll; display: block; max-width: 450px;">
+    <table class="oskari-grid" id="oskariGrid" style="margin: 0px; overflow-x: scroll; display: block; max-width: 650px;">
       <thead class="oskari-grid-width" id="oskari-grid-header" style="">
         <tr class="oskari-grid-width">
           <template is="dom-if" if="[[selection]]">
@@ -37,7 +37,7 @@
           </td>
         </tr>
         <tr class="oskari-grid-width"><td colspan$="[[numcols]]" class="oskari-grid-width" style="padding: 0px; border: 0px;">
-          <iron-collapse id="statscollapse">
+          <iron-collapse id="statsCollapse">
             <table id="oskari-grid-statistics" class="oskari-grid-width" style="display: block;">
               <template is="dom-repeat" items="{{statsrows}}" as="statsrow" id="statsRowsTemplate">
                 <tr class="oskari-grid-width">
@@ -52,8 +52,35 @@
           </iron-collapse>
         </td></tr>
       </tbody>
+      <template is="dom-if" if="[[selection]]">
+        <tbody class="oskari-grid-width" id="oskari-grid-unselected-container" style="display: block; overflow-y: scroll; overflow-x: hidden; max-height: 150px;">
+          <tr class="oskari-grid-width" id="unselectedContainer">
+            <td colspan$="[[numcols]]" class="oskari-grid-width">
+              <button on-click="toggleUnselected">Unselected</button>
+            </td>
+          </tr>
+          <tr class="oskari-grid-width"><td colspan$="[[numcols]]" class="oskari-grid-width" style="padding: 0px; border: 0px;">
+            <iron-collapse id="unselectedCollapse">
+              <table class="oskari-grid-width">
+                <tbody id="oskari-grid-unselected" class="oskari-grid-width" style="display: block; overflow-y: scroll; overflow-x: hidden;">
+                  <template is="dom-repeat" items="{{unselectedRows}}" as="unselectedRow" id="unselected-rows-template">
+                    <tr class="oskari-grid-width">
+                      <td style="width: 41px;"><input type="checkbox" checked="{{unselectedRow.selected::change}}" on-change="selectionsChanged"></input></td>
+                      <template is="dom-repeat" items="[[unselectedRow.data]]" as="datum">
+                        <td>
+                          <span>[[datum]]</span>
+                        </td>
+                      </template>
+                    </tr>
+                  </template>
+                </tbody>
+              </table>
+            </iron-collapse>
+          </td></tr>
+        </tbody>
+      </template>
       <tbody class="oskari-grid-width" id="oskari-grid-body" style="display: block; overflow-y: scroll; overflow-x: hidden;">
-        <template is="dom-repeat" items="{{rows}}" as="row" id="rowsTemplate">
+        <template is="dom-repeat" items="{{selectedRows}}" as="row" id="rowsTemplate">
           <tr class="oskari-grid-width">
             <template is="dom-if" if="[[selection]]">
               <td style="width: 41px;"><input type="checkbox" checked="{{row.selected::change}}" on-change="selectionsChanged"></input></td>

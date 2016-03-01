@@ -27,7 +27,7 @@ Polymer.require(["/Oskari/libraries/mathjs/math.2.4.1.min.js"], function(math) {
         "notify": true
       },
       "rowHeaders": {
-        "value": [],
+        "value": function() { return [];},
         "type": Array,
         "notify": true
       },

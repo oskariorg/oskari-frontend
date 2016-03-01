@@ -5,6 +5,16 @@ Polymer({
       "type": Array,
       "notify": true
     },
+    "selectedRows": {
+      "type": Array,
+      "notify": true,
+      "value": function() { return [];}
+    },
+    "unselectedRows": {
+      "type": Array,
+      "notify": true,
+      "value": function() { return [];}
+    },
     "headers": {
       "type": Array,
       "notify": true
@@ -39,7 +49,11 @@ Polymer({
     "rowsChanged(rows)"
   ],
   "toggleStats": function() {
-    this.$.statscollapse.toggle();
+    this.$.statsCollapse.toggle();
+    this.resize();
+  },
+  "toggleUnselected": function() {
+    this.$$('#unselectedCollapse').toggle();
     this.resize();
   },
   "allSelectedChanged": function() {
@@ -56,6 +70,18 @@ Polymer({
       }
     }
   },
+  "splitRows": function() {
+    var me = this;
+    me.set("selectedRows", []);
+    me.set("unselectedRows", []);
+    me.rows.forEach(function (row, index) {
+      if (row.selected) {
+        me.push("selectedRows", row);
+      } else {
+        me.push("unselectedRows", row);
+      }
+    });
+  },
   "selectionsChanged": function() {
     var me = this;
     me.allSelected = true;
@@ -68,6 +94,11 @@ Polymer({
     me.rows.forEach(function (row, index) {
       me.set("rows." + index + ".selected", row.selected);
     });
+    me.splitRows();
+    // $$ needed because these elements are dynamically created inside dom-if
+    if (this.$$('#unselectedRowsTemplate')) {
+      this.$$('#unselectedRowsTemplate').render();
+    }
     this.$.rowsTemplate.render();
     this.fire("onSelectionsChanged", {});
     setTimeout(this.resize.bind(this), 100);
@@ -78,6 +109,7 @@ Polymer({
   },
   "rowsChanged": function() {
     this.numcols = this.headers.length + 1;
+    this.splitRows();
     setTimeout(this.resize.bind(this), 100);
   },
   /**
@@ -86,6 +118,10 @@ Polymer({
   "refresh": function() {
     this.$.headersTemplate.render();
     this.$.rowsTemplate.render();
+    // $$ needed because these elements are dynamically created inside dom-if
+    if (this.$$('#unselectedRowsTemplate')) {
+      this.$$('#unselectedRowsTemplate').render();
+    }
     this.resize();
   },
   "onSort": function(event) {
@@ -109,10 +145,16 @@ Polymer({
     // table layout, which makes sure that the table cells resize based on horizontal and vertical content
     // in neighboring cells.
     var statsHeight = jQuery('#statisticsContainer').height();
-    if (this.$.statscollapse.opened) {
+    if (this.$.statsCollapse.opened) {
       // We have to add this height manually, because it takes time for the statisticsContainer to expand.
       var margin = 20;
       statsHeight += jQuery('#oskari-grid-statistics').height() + margin;
+    }
+    var unselectedHeight = jQuery('#unselectedContainer').height();
+    if (this.$$('#unselectedCollapse') && this.$$('#unselectedCollapse').opened) {
+      // We have to add this height manually, because it takes time for the statisticsContainer to expand.
+      var margin = 20;
+      unselectedHeight += Math.min(margin + jQuery('#oskari-grid-unselected').height(), 150);
     }
     var indicatorSelectorHeight = jQuery('#indicatorSelectorDiv').height();
     var headerHeight = jQuery('#oskari-grid-header').height();
@@ -121,7 +163,7 @@ Polymer({
     var bodyWidth = jQuery('.statsgrid_100').width() - 10;
 
     var gridHeight = totalHeight - indicatorSelectorHeight - regionSelectorHeight;
-    var bodyHeight = gridHeight - statsHeight - headerHeight - 20;
+    var bodyHeight = gridHeight - statsHeight - unselectedHeight - headerHeight - 20;
     jQuery('#oskariGrid').height(gridHeight);
     jQuery('#oskari-grid-body').height(bodyHeight);
     var colWidthNum = 120;
@@ -139,6 +181,7 @@ Polymer({
       var thisColWidth = thisColWidthNum + 'px';
       gridWidthNum += thisColWidthNum;
       var index = (headerIndex == 0)?(headerIndex + 1):(headerIndex + 2);
+      var unselectedColumnIndex = headerIndex + 1;
 
       jQuery('thead#oskari-grid-header th:nth-child(' + index + ')').css('max-width', thisColWidth);
       jQuery('thead#oskari-grid-header th:nth-child(' + index + ')').css('min-width', thisColWidth);
@@ -150,10 +193,16 @@ Polymer({
         jQuery('tbody#oskari-grid-body td:nth-child(' + index + ')').css('max-width', thisColWidth);
         jQuery('tbody#oskari-grid-body td:nth-child(' + index + ')').css('min-width', lastColMinWidth);
         jQuery('tbody#oskari-grid-body td:nth-child(' + index + ')').css('width', lastColStdWidth);
+        jQuery('tbody#oskari-grid-unselected td:nth-child(' + unselectedColumnIndex + ')').css('max-width', thisColWidth);
+        jQuery('tbody#oskari-grid-unselected td:nth-child(' + unselectedColumnIndex + ')').css('min-width', lastColMinWidth);
+        jQuery('tbody#oskari-grid-unselected td:nth-child(' + unselectedColumnIndex + ')').css('width', lastColStdWidth);
       } else {
         jQuery('tbody#oskari-grid-body td:nth-child(' + index + ')').css('max-width', thisColWidth);
         jQuery('tbody#oskari-grid-body td:nth-child(' + index + ')').css('min-width', thisColWidth);
         jQuery('tbody#oskari-grid-body td:nth-child(' + index + ')').css('width', thisColWidth);
+        jQuery('tbody#oskari-grid-unselected td:nth-child(' + unselectedColumnIndex + ')').css('max-width', thisColWidth);
+        jQuery('tbody#oskari-grid-unselected td:nth-child(' + unselectedColumnIndex + ')').css('min-width', thisColWidth);
+        jQuery('tbody#oskari-grid-unselected td:nth-child(' + unselectedColumnIndex + ')').css('width', thisColWidth);
       }
     });
     var gridWidth = gridWidthNum + "px";
@@ -181,6 +230,7 @@ Polymer({
   },
   "attached": function() {
     var me = this;
+    me.selectedRows = me.rows;
     this.resize();
     $(window).bind('resize', function(e) {
       me.resize();

@@ -39,17 +39,17 @@ Polymer({
     },
     "selectors": {
       "type": Array,
-      "value": [],
+      "value": function() { return [];},
       "notify": true
     },
     "selectorItems": {
       "type": Array,
-      "value": [],
+      "value": function() { return [];},
       "notify": true
     },
     "selectedIndicators": {
       "type": Array,
-      "value": [],
+      "value": function() { return [];},
       "notify": true
     },
     "showUserIndicatorView": {
