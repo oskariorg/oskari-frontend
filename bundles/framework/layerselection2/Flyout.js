@@ -359,6 +359,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 }
             }
         },
+
         /**
          * @private @method _createLayerContainer
          * Creates the layer containers
@@ -383,17 +384,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
 
             // setup id
             layerDiv.attr('layer_id', layerId);
-            layerDiv.find('div.layer-title').append(layer.getDescription());
             layerDiv.find('div.layer-title h4').append(layer.getName());
-            
-            if (layer.getPermission("edit") && layer.isLayerOfType("WFS")) {
-	            var contentEditorButton = $("<input type='button'>").addClass('content-editor-button').val(loc['content-editor']);
-	            contentEditorButton.on('click', function() {
-	            	var request = sandbox.getRequestBuilder('ContentEditor.ShowContentEditorRequest')(layerId);
-	                sandbox.request("ContentEditor", request);
-	            });
-	            layerDiv.find('div.layer-title').append(contentEditorButton);
-            }
+            layerDiv.find('div.layer-title').append(layer.getDescription());
+
             this._updateStyles(layer, layerDiv);
 
             // setup icon

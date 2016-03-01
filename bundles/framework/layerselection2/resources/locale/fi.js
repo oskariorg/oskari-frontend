@@ -103,8 +103,7 @@ Oskari.registerLocalization(
                     "value_missing": "Arvo puuttuu.",
                     "boolean_operator_missing": "Looginen operaattori puuttuu."
                 }
-            },
-            "content-editor": "Sisältöeditori"
+            }
         }
     }
 }

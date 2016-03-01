@@ -105,6 +105,8 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
                 'ContentEditor.ShowContentEditorRequest',
                 me.showContentEditorRequestHandler
             );
+            
+            this.__setupLayerTools();
         },
 
         /**
@@ -135,6 +137,58 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
             }
             return handler.apply(this, [event]);
         },
+        
+        /**
+         * Fetches reference to the map layer service
+         * @return {Oskari.mapframework.service.MapLayerService}
+         */
+        getLayerService : function() {
+            return this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+        },
+
+        /**
+         * Adds the Feature data tool for layer
+         * @param  {String| Number} layerId layer to process
+         * @param  {Boolean} suppressEvent true to not send event about updated layer (optional)
+         */
+        __addTool : function(layerModel, suppressEvent) {
+            var me = this;
+            var service = this.getLayerService();
+            if(typeof layerModel !== 'object') {
+                // detect layerId and replace with the corresponding layerModel
+                layerModel = service.findMapLayer(layerModel);
+            }
+            if(!layerModel || !layerModel.getPermission("editLayerContent") || !layerModel.isLayerOfType("WFS")) {
+                return;
+            }
+
+            // add feature data tool for layer
+            var label = this.getLocalization('title') || {},
+                tool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
+            tool.setName("content-editor");
+            tool.setTitle(label);
+            tool.setTooltip(label);
+            tool.setCallback(function () {
+                me.sandbox.postRequestByName('ContentEditor.ShowContentEditorRequest', [layerModel.getId()]);
+            });
+
+            service.addToolForLayer(layerModel, tool, suppressEvent);
+        },
+        /**
+         * Adds tools for all layers
+         */
+        __setupLayerTools : function() {
+            var me = this;
+            // add tools for feature data layers
+            var service = this.getLayerService();
+            var layers = service.getAllLayers();
+            _.each(layers, function(layer) {
+                me.__addTool(layer, true);
+            });
+            // update all layers at once since we suppressed individual events
+            var event = me.sandbox.getEventBuilder('MapLayerEvent')(null, 'tool');
+            me.sandbox.notifyAll(event);
+        },
 
         /**
          * @property {Object} eventHandlers
@@ -159,7 +213,20 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
                 if (this.sideContentEditor != null) {
                     this.sideContentEditor.setClickCoords({x: event.getLonLat().lon, y: event.getLonLat().lat});
                 }
-            }
+            },
+            'MapLayerEvent': function (event) {
+                if(event.getOperation() !== 'add')  {
+                    // only handle add layer
+                    return;
+                }
+                if(event.getLayerId()) {
+                    this.__addTool(event.getLayerId());
+                }
+                else {
+                    // ajax call for all layers
+                    this.__setupLayerTools();
+                }
+            },
         },
         /**
          * @method stop
