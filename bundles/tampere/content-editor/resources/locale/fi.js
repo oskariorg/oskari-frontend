@@ -3,7 +3,7 @@ Oskari.registerLocalization(
     "lang": "fi",
     "key": "ContentEditor",
     "value": {
-        "title": "Karttajulkaisu",
+        "title": "Sisältöeditori",
         "desc": "",
         "ContentEditorView": {
             "title": "Sisältöeditori",
