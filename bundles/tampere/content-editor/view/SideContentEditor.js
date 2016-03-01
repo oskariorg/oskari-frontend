@@ -193,7 +193,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             }
             me.getLayerGeometryType();
             me.sendStopDrawRequest(true);
-            var layer = me._getLayerById(me.selectedLayerId);
+            var layer = me._getLayerById(me.layerId);
             var fields = layer.getFields().slice();
             var featureData = [[]];
             for (var i = 0; i < fields.length; i++)
