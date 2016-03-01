@@ -105,7 +105,13 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
         _.each(this.requestsMap[url], function(args) {
             if(!invokeFailure) {
                 var layer = args[0];
-                var options = ol.source.WMTS.optionsFromCapabilities(caps, me.__getLayerConfig(caps, layer));
+                var config = me.__getLayerConfig(caps, layer);
+                var options = ol.source.WMTS.optionsFromCapabilities(caps, config);
+                if(config.url) {
+                    // override capabilities url with the configured one
+                    options.urls = null;
+                    options.url = config.url;
+                }
 
                 var wmtsLayer = new ol.layer.Tile({
                     opacity: layer.getOpacity() / 100.0,
