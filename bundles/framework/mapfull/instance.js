@@ -537,12 +537,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     layer = state.selectedLayers[i];
 
                     var oskariLayer = me.getSandbox().findMapLayerFromAllAvailable(layer.id);
-                    
+
                     sandbox.request(
                         mapModuleName,
                         rbAdd(layer.id, true)
                     );
-                    
+
                     sandbox.request(
                         mapModuleName,
                         rbVisible(layer.id, !layer.hidden)

@@ -71,7 +71,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '        <h2>' + this.locale.heading.metadataDateStamp + '</h2>' +
                     '        <p><%- metadataDateStamp %></p>' +
                     '    <% } %>' +
-                    
+
                     '    <% if (onlineResources.length) { %>' +
                     '        <h2>' + this.locale.heading.onlineResource + '</h2>' +
                     '        <ul>' +
@@ -211,7 +211,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '        <% }); %>' +
                     '        </ul>' +
                     '    <% } %>' +
-                    
+
                     '    <% if (scopeCodes.length) { %>' +
                     '        <h2>' + this.locale.heading.scopeCode + '</h2>' +
                     '        <ul>' +

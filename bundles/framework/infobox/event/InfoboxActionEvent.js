@@ -32,7 +32,7 @@ function(id, action, params) {
     },
     /**
      * Serialization for RPC
-     * @return 
+     * @return
      */
     getParams: function () {
         return {

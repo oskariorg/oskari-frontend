@@ -301,7 +301,7 @@ Oskari.clazz.define(
                         text = link.html();
                     }
                     if (contentData[i] && contentData[i].actions && contentData[i].actions[text]) {
-                        if(typeof key !== 'function') { 
+                        if(typeof key !== 'function') {
                         	var sandbox = me.getMapModule().getSandbox();
                         	var event = sandbox.getEventBuilder('InfoboxActionEvent')(id, text, contentData[i].actions[text]);
                         	sandbox.notifyAll(event);
