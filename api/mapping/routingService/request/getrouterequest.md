@@ -15,19 +15,22 @@ Request forwards route parameters to the request handler. Parameters include coo
   <th> Name</th><th> Type</th><th> Description</th><th> Default value</th>
 </tr>
 <tr>
-  <td>* SRS </td><td> String </td><td> Coordinate system of the route coordinates, for example EPSG:3067</td><td> </td>
+  <td>/* SRS </td><td> String </td><td> Coordinate system of the route coordinates, for example EPSG:3067</td><td> </td>
 </tr>
 <tr>
-  <td>* fromlat </td><td> Number </td><td> y coordinate of the starting point </td><td> </td>
+  <td>/* fromlat </td><td> Number </td><td> y coordinate of the starting point </td><td> </td>
 </tr>
 <tr>
-  <td>* fromlon </td><td> Number </td><td> x coordinate of the starting point </td><td> </td>
+  <td>/* fromlon </td><td> Number </td><td> x coordinate of the starting point </td><td> </td>
 </tr>
 <tr>
-  <td>* tolat </td><td> Number </td><td> y coordinate of the arrival point </td><td> </td>
+  <td>/* tolat </td><td> Number </td><td> y coordinate of the arrival point </td><td> </td>
 </tr>
 <tr>
-  <td>* tolon </td><td> Number </td><td> x coordinate of the arrival point </td><td> </td>
+  <td>/* tolon </td><td> Number </td><td> x coordinate of the arrival point </td><td> </td>
+</tr>
+<tr>
+  <td> lang </td><td> String </td><td> the language in which to get instructions </td><td> </td>
 </tr>
 </table>
 

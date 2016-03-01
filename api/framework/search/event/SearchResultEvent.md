@@ -15,13 +15,13 @@ Used to notify that the ``SearchRequest`` has received a reply from search.
   <th> Name</th><th> Type</th><th> Description</th><th> Default value</th>
 </tr>
 <tr>
-  <td>* success</td><td> Boolean </td><td> true if result was got successfully</td><td> </td>
+  <td>/* success</td><td> Boolean </td><td> true if result was got successfully</td><td> </td>
 </tr>
 <tr>
-  <td>* requestParameters</td><td> Object </td><td> request parameters</td><td> </td>
+  <td>/* requestParameters</td><td> Object </td><td> request parameters</td><td> </td>
 </tr>
 <tr>
-  <td>* result</td><td> Object </td><td> search result</td><td> </td>
+  <td>/* result</td><td> Object </td><td> search result</td><td> </td>
 </tr>
 </table>
 

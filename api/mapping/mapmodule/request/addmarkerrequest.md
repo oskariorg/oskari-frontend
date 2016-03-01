@@ -23,7 +23,7 @@ is on the map it will be modified instead of adding a new marker.
   <th> Name</th><th> Type</th><th> Description</th><th> Default value</th>
 </tr>
 <tr>
-  <td>* data </td><td> Object </td><td> the object should have atleast x and y keys with coordinates and can have color, msg, shape, size and iconUrl</td><td> </td>
+  <td>/* data </td><td> Object </td><td> the object should have atleast x and y keys with coordinates and can have color, msg, shape, size and iconUrl</td><td> </td>
 </tr>
 <tr>
   <td> id </td><td> String </td><td> id for marker. If a marker with same id exists, it will be replaced with this.</td><td> generated</td>
@@ -37,10 +37,10 @@ Parameters for data-object:
   <th> Name</th><th> Type</th><th> Description</th><th> Default value</th>
 </tr>
 <tr>
-  <td>* x</td><td> Number </td><td> x coordinate of the marker location </td><td> </td>
+  <td>/* x</td><td> Number </td><td> x coordinate of the marker location </td><td> </td>
 </tr>
 <tr>
-  <td>* y</td><td> Number </td><td> y coordinate of the marker location </td><td> </td>
+  <td>/* y</td><td> Number </td><td> y coordinate of the marker location </td><td> </td>
 </tr>
 <tr>
   <td> color </td><td> String </td><td> marker colour </td><td> ffde00 </td>

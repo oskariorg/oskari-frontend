@@ -19,13 +19,13 @@ Requests a map to be moved to certain zoom level and location. Triggers afterMap
   <th> Name</th><th> Type</th><th> Description</th><th> Default value</th>
 </tr>
 <tr>
-  <td>* x </td><td> Number </td><td> x coordinate of the desired map location </td><td> </td>
+  <td>/* x </td><td> Number </td><td> x coordinate of the desired map location </td><td> </td>
 </tr>
 <tr>
-  <td>* y </td><td> Number </td><td> y coordinate of the desired map location </td><td> </td>
+  <td>/* y </td><td> Number </td><td> y coordinate of the desired map location </td><td> </td>
 </tr>
 <tr>
-  <td>* zoomLevel </td><td> Number </td><td> desired zoom level </td><td> </td>
+  <td>/* zoomLevel </td><td> Number </td><td> desired zoom level </td><td> </td>
 </tr>
 </table>
 

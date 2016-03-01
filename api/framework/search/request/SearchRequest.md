@@ -15,7 +15,6 @@ Requests search results (addresses, locations) by given params. After the search
 
 ## Parameters
 
-[List here the parameters that need to (or can be) given to the request]
 (* means the parameter is required)
 
 <table class="table">
@@ -23,7 +22,7 @@ Requests search results (addresses, locations) by given params. After the search
   <th> Name</th><th> Type</th><th> Description</th><th> Default value</th>
 </tr>
 <tr>
-  <td>* query</td><td> String </td><td> address or location to be searched</td><td> </td>
+  <td>/* query</td><td> String </td><td> address or location to be searched</td><td> </td>
 </tr>
 </table>
 

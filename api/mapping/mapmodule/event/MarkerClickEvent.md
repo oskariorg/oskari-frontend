@@ -15,7 +15,7 @@ Used to notify the user about the id of the clicked marker.
   <th> Name</th><th> Type</th><th> Description</th><th> Default value</th>
 </tr>
 <tr>
-  <td>* id </td><td> String </td><td> id of the clicked marker </td><td> </td>
+  <td>/* id </td><td> String </td><td> id of the clicked marker </td><td> </td>
 </tr>
 </table>
 

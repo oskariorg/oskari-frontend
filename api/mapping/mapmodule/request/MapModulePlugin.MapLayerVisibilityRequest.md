@@ -19,10 +19,10 @@ Requests a layer to be shown or hidden on a map. Triggers mapLayerVisibilityChan
   <th> Name</th><th> Type</th><th> Description</th><th> Default value</th>
 </tr>
 <tr>
-  <td> * MapLayerId </td><td> String </td><td> id of map layer used in Oskari.mapframework.service.MapLayerService </td><td> </td>
+  <td>/* MapLayerId </td><td> String </td><td> id of map layer used in Oskari.mapframework.service.MapLayerService </td><td> </td>
 </tr>
 <tr>
-  <td> * visible </td><td> Boolean </td><td> should map layer be visible or not </td><td> </td>
+  <td>/* visible </td><td> Boolean </td><td> should map layer be visible or not </td><td> </td>
 </tr>
 </table>
 
