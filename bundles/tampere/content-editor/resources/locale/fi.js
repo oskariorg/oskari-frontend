@@ -32,7 +32,7 @@ Oskari.registerLocalization(
             "geometryDelete": {
                 "header": "Poista geometria",
                 "success": "Geometrian poisto onnistui",
-                "error": "Geometrian poistossa tapahtui virhe
+                "error": "Geometrian poistossa tapahtui virhe"
             },
             "unsavedChanges": {
                 "title": "Tallentamattomia muutoksia",
