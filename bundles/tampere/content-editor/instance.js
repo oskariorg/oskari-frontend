@@ -201,7 +201,8 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
         		}
             },
             'DrawPlugin.FinishedDrawingEvent': function (evt) {
-                this.sideContentEditor.prepareRequest(evt.getDrawing());
+                //Why this.sideContentEditor is null?
+                this.sandbox.findRegisteredModuleInstance("ContentEditor").sideContentEditor.prepareRequest(evt.getDrawing());
             },
             WFSFeatureGeometriesEvent: function (evt) 
             {
@@ -226,7 +227,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
                     // ajax call for all layers
                     this.__setupLayerTools();
                 }
-            },
+            }
         },
         /**
          * @method stop
