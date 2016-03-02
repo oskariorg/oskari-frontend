@@ -46,7 +46,7 @@ if (!String.prototype.endsWith) {
  */
 Oskari = (function () {
 
-    var oskariVersion = "1.35.1";
+    var oskariVersion = "1.36.0";
 
     var isDebug = false,
         isConsole = window.console && window.console.debug,
