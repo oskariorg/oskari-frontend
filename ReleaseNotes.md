@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.35.1
+
+### mapwmts
+
+Fixes an issue with wmts-layers when proxying the layer on OL3. Previously used the url from capabilities, the fix is to use the one provided by oskari-server as layer url so we can override the url with a proxied one. With OL2 this works correctly even before this.
+
 ## 1.35
 
 ### catalogue/metadataflyout
