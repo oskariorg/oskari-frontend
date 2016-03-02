@@ -2,6 +2,17 @@
 
 ## 1.36
 
+### timeseries
+
+Increased default animation speed from 2000 ms to 4000 ms. Also made possible to adjust animation speed. For example configuration:
+```javascript
+    // Adjust timeseries animation speed to 3000 ms
+    {
+        animationSpeed: 3000
+    }
+```
+
+
 ### mapfull
 
 Fixed map layer opacity change in published maps when resetting map state to published state.
